@@ -18,18 +18,22 @@
  */
 
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 /** print a UNI_CODE file name.
 */
+/*
 inline void printOUString( ::rtl::OUString const & _suStr )
 {
     rtl::OString aString;
 
-    t_print( "OUString: " );
+    printf( "OUString: " );
     aString = ::rtl::OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
-    t_print( "%s\n", aString.getStr( ) );
+    printf( "%s\n", aString.getStr( ) );
 }
+*/
 
 
 namespace rtl_ustr
@@ -258,7 +262,7 @@ namespace rtl_ustr
 //             {
 //                 rtl::OString aStr1 = "Line for a hashCode.";
 //                 sal_Int32 nHashCode = rtl_ustr_hashCode( aStr1.getStr() );
-//                 t_print("hashcode: %d\n", nHashCode);
+//                 printf("hashcode: %d\n", nHashCode);
 //                 // CPPUNIT_ASSERT_MESSAGE("failed.", nValue == 0);
 //             }
 //
@@ -679,8 +683,8 @@ namespace rtl_ustr
                 sal_Bool bResult = aShouldStr1.equals(suStr);
 
                 printOUString(suStr);
-                t_print("Result length: %d\n", suStr.getLength() );
-                t_print("Result: %d\n", bResult);
+                printf("Result length: %d\n", suStr.getLength() );
+                printf("Result: %d\n", bResult);
 
                 CPPUNIT_ASSERT_MESSAGE("failed", bResult == sal_True);
                 free(pStr);
@@ -758,7 +762,7 @@ namespace rtl_ustr
                 rtl_ustr_toAsciiUpperCase_WithLength( pStr, 10 );
                 rtl::OUString suStr(pStr, aStr1.getLength());
 
-                // t_print("Uppercase with length: '%s'\n", aStr1.getStr());
+                // printf("Uppercase with length: '%s'\n", aStr1.getStr());
                 CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(suStr) == sal_True);
                 free(pStr);
             }
@@ -1374,42 +1378,42 @@ namespace rtl_ustr
     }; // class ascii_compareIgnoreAsciiCase
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::compare, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::compareIgnoreAsciiCase, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compare);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::compareIgnoreAsciiCase);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::ascii_compare_WithLength, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compare_WithLength);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::shortenedCompareIgnoreAsciiCase_WithLength, "rtl_ustr");
-// CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::hashCode, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::shortenedCompareIgnoreAsciiCase_WithLength);
+// CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::hashCode);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::indexOfChar, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::lastIndexOfChar, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::indexOfStr, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::lastIndexOfStr, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::indexOfChar);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::lastIndexOfChar);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::indexOfStr);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::lastIndexOfStr);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::replaceChar, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::replaceChar_WithLength, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::replaceChar);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::replaceChar_WithLength);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::toAsciiLowerCase, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::toAsciiLowerCase_WithLength, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::toAsciiUpperCase, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::toAsciiUpperCase_WithLength, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::toAsciiLowerCase);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::toAsciiLowerCase_WithLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::toAsciiUpperCase);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::toAsciiUpperCase_WithLength);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::trim_WithLength, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::valueOfChar, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::trim_WithLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::valueOfChar);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::ascii_compare, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase_WithLength, "rtl_ustr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_ustr::ascii_shortenedCompareIgnoreAsciiCase_WithLength, "rtl_ustr");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compare);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_compareIgnoreAsciiCase_WithLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_ustr::ascii_shortenedCompareIgnoreAsciiCase_WithLength);
 
 } // namespace rtl_ustr
 
 // -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
+// this macro creates an empty function, which will called by the RegisterAllFunctions("")
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
