@@ -850,16 +850,23 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
     }
 }
 
-static const std::vector<rtl::OUString> PageKindVector = {"PK_STANDARD","PK_NOTES" , "PK_HANDOUT"};
-static const std::vector<rtl::OUString> PresObjKindVector = {"PRESOBJ_NONE", "PRESOBJ_TITLE", "PRESOBJ_OUTLINE",
-                                                             "PRESOBJ_TEXT" ,"PRESOBJ_GRAPHIC" , "PRESOBJ_OBJECT",
-                                                             "PRESOBJ_CHART", "PRESOBJ_ORGCHART", "PRESOBJ_TABLE",
-                                                             "PRESOBJ_IMAGE", "PRESOBJ_PAGE", "PRESOBJ_HANDOUT",
-                                                             "PRESOBJ_NOTES","PRESOBJ_HEADER", "PRESOBJ_FOOTER",
-                                                             "PRESOBJ_DATETIME", "PRESOBJ_SLIDENUMBER", "PRESOBJ_CALC",
-                                                             "PRESOBJ_MEDIA", "PRESOBJ_MAX" };
+namespace {
 
-void getPresObjProp( SdPage rPage, const rtl::OUString& sObjKind, const rtl::OUString& sPageKind, double presObjPropValue[])
+const char* PageKindVector[] = {
+    "PK_STANDARD","PK_NOTES" , "PK_HANDOUT"
+};
+
+const char* PresObjKindVector[] = {
+    "PRESOBJ_NONE", "PRESOBJ_TITLE", "PRESOBJ_OUTLINE",
+    "PRESOBJ_TEXT" ,"PRESOBJ_GRAPHIC" , "PRESOBJ_OBJECT",
+    "PRESOBJ_CHART", "PRESOBJ_ORGCHART", "PRESOBJ_TABLE",
+    "PRESOBJ_IMAGE", "PRESOBJ_PAGE", "PRESOBJ_HANDOUT",
+    "PRESOBJ_NOTES","PRESOBJ_HEADER", "PRESOBJ_FOOTER",
+    "PRESOBJ_DATETIME", "PRESOBJ_SLIDENUMBER", "PRESOBJ_CALC",
+    "PRESOBJ_MEDIA", "PRESOBJ_MAX"
+};
+
+void getPresObjProp( SdPage rPage, const char* sObjKind, const char* sPageKind, double presObjPropValue[] )
 {
     bool bNoObjectFound = true;  //used to break from outer loop
 
@@ -873,7 +880,7 @@ void getPresObjProp( SdPage rPage, const rtl::OUString& sObjKind, const rtl::OUS
             Reference<XNode> objectattr = objectattrlist->getNamedItem("type");
             rtl::OUString sObjType = objectattr->getNodeValue();
 
-            if(sObjType == sObjKind)
+            if (sObjType.equalsAscii(sObjKind))
             {
                 Reference<XNodeList> objectChildren = objectNode->getChildNodes();
                 const int objSize = objectChildren->getLength();
@@ -890,7 +897,7 @@ void getPresObjProp( SdPage rPage, const rtl::OUString& sObjKind, const rtl::OUS
                         Reference<XNode> ObjPageKind = ObjAttributes->getNamedItem("pagekind");
                         rtl::OUString sObjPageKind = ObjPageKind->getNodeValue();
 
-                        if(sObjPageKind == sPageKind)
+                        if (sObjPageKind.equalsAscii(sPageKind))
                         {
                             Reference<XNode> ObjSizeHeight = ObjAttributes->getNamedItem("relative-height");
                             rtl::OUString sValue = ObjSizeHeight->getNodeValue();
@@ -920,6 +927,8 @@ void getPresObjProp( SdPage rPage, const rtl::OUString& sObjKind, const rtl::OUS
     }
 }
 
+}
+
 SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 {
     double propvalue[] = {0,0,0,0};
@@ -941,8 +950,8 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
     {
-        rtl::OUString sObjKind = PresObjKindVector[eObjKind];
-        rtl::OUString sPageKind = PageKindVector[mePageKind];
+        const char* sObjKind = PresObjKindVector[eObjKind];
+        const char* sPageKind = PageKindVector[mePageKind];
         // create footer objects for standard master page
         if( mePageKind == PK_STANDARD )
         {
@@ -1026,7 +1035,7 @@ Rectangle SdPage::GetTitleRect() const
         Size aTitleSize ( GetSize() );
         aTitleSize.Width()  -= GetLftBorder() + GetRgtBorder();
         aTitleSize.Height() -= GetUppBorder() + GetLwrBorder();
-        rtl::OUString sPageKind = PageKindVector[mePageKind];
+        const char* sPageKind = PageKindVector[mePageKind];
 
         if (mePageKind == PK_STANDARD)
          {
@@ -1107,7 +1116,7 @@ Rectangle SdPage::GetLayoutRect() const
         Size aLayoutSize ( GetSize() );
         aLayoutSize.Width()  -= GetLftBorder() + GetRgtBorder();
         aLayoutSize.Height() -= GetUppBorder() + GetLwrBorder();
-        rtl::OUString sPageKind = PageKindVector[mePageKind];
+        const char* sPageKind = PageKindVector[mePageKind];
 
         if (mePageKind == PK_STANDARD)
         {
