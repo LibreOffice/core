@@ -12139,7 +12139,7 @@ fi
 AC_SUBST(WITH_COMPAT_OOWRAPPERS)
 
 AC_MSG_CHECKING([for product name])
-if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
+if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     PRODUCTNAME=AC_PACKAGE_NAME"Dev"
 else
     PRODUCTNAME=AC_PACKAGE_NAME
