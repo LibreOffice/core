@@ -41,7 +41,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/XChangesBatch.hpp"
 #include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/servicefactory.hxx"
 #include "osl/conditn.hxx"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
@@ -53,7 +52,9 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 namespace {
 
@@ -478,7 +479,7 @@ void Test::testReadCommands() {
         }
     }
     n = osl_getGlobalTimer() - n;
-    t_print("Reading elements took %" SAL_PRIuUINT32 " ms\n", n);
+    printf("Reading elements took %" SAL_PRIuUINT32 " ms\n", n);
     css::uno::Reference< css::lang::XComponent >(
         access, css::uno::UNO_QUERY_THROW)->dispose();
 }
@@ -629,10 +630,10 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltest");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

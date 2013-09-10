@@ -17,4 +17,8 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,configmgr,\
     JunitTest_configmgr_unoapi \
 ))
 
+#$(eval $(call gb_Module_add_check_targets,configmgr,\
+#	CppunitTest_configmgr_unit \
+#))
+
 # vim: set noet sw=4 ts=4:
