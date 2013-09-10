@@ -2034,6 +2034,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
                     }
                 }
             }
+            break;
         }
     }
     return pModule;
