@@ -338,7 +338,7 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
     public:
         NumberingTypeMgr(const NBOType aType);
         NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr);
-        virtual ~NumberingTypeMgr() {}
+        virtual ~NumberingTypeMgr();
         virtual void Init();
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0);
         virtual sal_Bool RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel=(sal_uInt16)0xFFFF);
@@ -347,12 +347,12 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
         virtual sal_Bool IsCustomized(sal_uInt16 nIndex);
         static NumberingTypeMgr* GetInstance()
         {
-             if ( _instance == 0 )
-                    {
-                        _instance = new NumberingTypeMgr(eNBOType::NUMBERING);
-                    }
+            if ( _instance == 0 )
+            {
+                _instance = new NumberingTypeMgr(eNBOType::NUMBERING);
+            }
 
-                    return _instance;
+            return _instance;
         }
 };
 

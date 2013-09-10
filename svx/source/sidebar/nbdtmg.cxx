@@ -1318,7 +1318,6 @@ NumberingTypeMgr* NumberingTypeMgr::_instance = 0;
 
 NumberingTypeMgr::NumberingTypeMgr(const NBOType aType):
     NBOTypeMgrBase(aType),
-    //pNumSettingsArr( new NumSettingsArr_Impl ),
     pNumberSettingsArr (new NumberSettingsArr_Impl)
 {
     Init();
@@ -1331,10 +1330,14 @@ NumberingTypeMgr::NumberingTypeMgr(const NBOType aType):
 
 NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr),
-    //pNumSettingsArr( new NumSettingsArr_Impl ),
     pNumberSettingsArr (new NumberSettingsArr_Impl)
 {
     ImplLoad(OUString("standard.syb"));
+}
+
+NumberingTypeMgr::~NumberingTypeMgr()
+{
+    delete pNumberSettingsArr;
 }
 
 void NumberingTypeMgr::Init()
