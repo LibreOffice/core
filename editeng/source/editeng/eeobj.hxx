@@ -32,9 +32,9 @@ class EditDataObject :  public ::com::sun::star::datatransfer::XTransferable,
 private:
     SvMemoryStream  maBinData;
     SvMemoryStream  maRTFData;
-    String          maText;
+    OUString        maText;
 
-    String          maOfficeBookmark;
+    OUString        maOfficeBookmark;
 
 public:
                     EditDataObject();
@@ -42,8 +42,8 @@ public:
 
     SvMemoryStream& GetStream() { return maBinData; }
     SvMemoryStream& GetRTFStream() { return maRTFData; }
-    String&         GetString() { return maText; }
-    String&         GetURL()    { return maOfficeBookmark; }
+    OUString&       GetString() { return maText; }
+    OUString&       GetURL()    { return maOfficeBookmark; }
 
 
     // ::com::sun::star::uno::XInterface
