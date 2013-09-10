@@ -799,13 +799,17 @@ namespace sw
             for (sal_Int32 nI = 0; nI < nLen; ++nI)
             {
                 if (rParams[nI] == '\\')
-                    nI++;
+                    ++nI;
                 else if (rParams[nI] == '\"')
                 {
                     ++nI;
-                    //While not at the end and not at an unescaped end quote
-                    while ((nI < nLen) && (!(rParams[nI] == '\"') && (rParams[nI-1] != '\\')))
+                    // While not at the end and not at an unescaped end quote
+                    while (nI < nLen)
+                    {
+                        if (rParams[nI] == '\"' && rParams[nI-1] != '\\')
+                            break;
                         ++nI;
+                    }
                 }
                 else //normal unquoted section
                 {
