@@ -42,7 +42,7 @@ $(readlicense_oo_DIR)/readme.xrm : \
 endif
 
 readlicense_oo_README_SED := \
-	-e 's,$${PRODUCTNAME},LibreOffice,g' \
+	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR),g' \
 
 $(readlicense_oo_DIR)/$(call gb_README,%) : \
