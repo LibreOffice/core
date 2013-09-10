@@ -339,6 +339,53 @@ namespace myImplHelpers
     };
 }
 
+// Some support functions
+namespace
+{
+
+sal_Bool lcl_IsPreviousAM(const OUString& rParams, sal_Int32 nPos)
+{
+    sal_Int32 nPos1 = nPos - 1;
+    sal_Int32 nPos2 = nPos - 2;
+
+    if(nPos1<0 || nPos2<0){
+        return sal_False;
+    }else{
+        return (
+             ( rParams[nPos1] == 'M' || rParams[nPos1] == 'm' ) &&
+             ( rParams[nPos2] == 'A' || rParams[nPos2] == 'a' )
+            );
+    }
+}
+
+sal_Bool lcl_IsNextPM(const OUString& rParams, sal_Int32 nPos)
+{
+    sal_Int32 nPos1 = nPos + 1;
+    sal_Int32 nPos2 = nPos + 2;
+
+    if(nPos1 >= rParams.getLength() - 1 || nPos2 > rParams.getLength() - 1){
+        return sal_False;
+    }else{
+        return (
+            ( rParams[nPos1] == 'P' || rParams[nPos1] == 'p' ) &&
+            ( rParams[nPos2] == 'M' || rParams[nPos2] == 'm' )
+            );
+    }
+}
+
+bool lcl_IsNotAM(const OUString& rParams, sal_Int32 nPos)
+{
+    return (
+            (nPos == rParams.getLength() - 1) ||
+            (
+            (rParams[nPos+1] != 'M') &&
+            (rParams[nPos+1] != 'm')
+            )
+        );
+}
+
+}
+
 namespace sw
 {
     namespace util
@@ -773,7 +820,7 @@ namespace sw
                 do
                 {
                     sal_Int32 nPos = rParams.indexOf( 'a', nLastPos + 1 );
-                    bForceJapanese |= ( nPos != -1 && IsNotAM( rParams, nPos ) );
+                    bForceJapanese |= ( nPos != -1 && lcl_IsNotAM( rParams, nPos ) );
                     nLastPos = nPos;
                 } while ( -1 != nLastPos );
             }
@@ -789,7 +836,7 @@ namespace sw
                 do
                 {
                     sal_Int32 nPos = rParams.indexOf( 'A', nLastPos + 1 );
-                    bool bIsCharA = ( nPos != -1 && IsNotAM( rParams, nPos ) );
+                    bool bIsCharA = ( nPos != -1 && lcl_IsNotAM( rParams, nPos ) );
                     bForceNatNum |= bIsCharA;
                     if ( bIsCharA )
                         rParams = rParams.replaceAt( nPos, 1, "D" );
@@ -818,7 +865,7 @@ namespace sw
                     switch ( nDocLang )
                     {
                         case LANGUAGE_FRENCH:
-                            if ( ( nChar == 'a' || nChar == 'A' ) && IsNotAM(rParams, nI) )
+                            if ( ( nChar == 'a' || nChar == 'A' ) && lcl_IsNotAM(rParams, nI) )
                                 rParams = rParams.replaceAt(nI, 1, "Y");
                             break;
                         default:
@@ -828,7 +875,7 @@ namespace sw
                     {
                         // MM: We have to escape '/' in case it's used as a char.
                         // But not if it's a '/' inside AM/PM
-                        if (!(IsPreviousAM(rParams, nI) && IsNextPM(rParams, nI)))
+                        if (!(lcl_IsPreviousAM(rParams, nI) && lcl_IsNextPM(rParams, nI)))
                         {
                             rParams = rParams.replaceAt(nI, 1, "\\/");
                         }
@@ -971,44 +1018,6 @@ namespace sw
             rParams = sTemp;
 
             return nKey;
-        }
-
-        sal_Bool IsPreviousAM(OUString& rParams, sal_Int32 nPos){
-            sal_uInt16 nPos1 = nPos - 1;
-            sal_uInt16 nPos2 = nPos - 2;
-
-            if(nPos1 > nPos || nPos2 > nPos){
-                return sal_False;
-            }else{
-                return (
-                    ( rParams[nPos1] == 'M' || rParams[nPos1] == 'm' ) &&
-                    ( rParams[nPos2] == 'A' || rParams[nPos2] == 'a' )
-                    );
-            }
-        }
-        sal_Bool IsNextPM(OUString& rParams, sal_Int32 nPos){
-            sal_Int32 nPos1 = nPos + 1;
-            sal_Int32 nPos2 = nPos + 2;
-
-            if(nPos1 >= rParams.getLength() - 1 || nPos2 > rParams.getLength() - 1){
-                return sal_False;
-            }else{
-                return (
-                    ( rParams[nPos1] == 'P' || rParams[nPos1] == 'p' ) &&
-                    ( rParams[nPos2] == 'M' || rParams[nPos2] == 'm' )
-                    );
-            }
-
-        }
-        bool IsNotAM(OUString& rParams, sal_Int32 nPos)
-        {
-            return (
-                    (nPos == rParams.getLength() - 1) ||
-                    (
-                    (rParams[nPos+1] != 'M') &&
-                    (rParams[nPos+1] != 'm')
-                    )
-                );
         }
 
         void SwapQuotesInField(OUString &rFmt)

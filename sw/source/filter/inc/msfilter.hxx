@@ -105,19 +105,6 @@ namespace sw
         */
         sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri, sal_uInt16 nDocLang);
 
-        /*Used to identify if the previous token is AM time field*/
-        sal_Bool IsPreviousAM(OUString& rParams, sal_Int32 nPos);
-
-        /*Used to identify if the next token is PM time field*/
-        sal_Bool IsNextPM(OUString& rParams, sal_Int32 nPos);
-
-        /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
-
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
-        */
-        bool IsNotAM(OUString& rParams, sal_Int32 nPos);
-
         /** Another function used by MSDateTimeFormatToSwFormat
 
             @author
