@@ -70,7 +70,7 @@ public:
     void testTableBorders();
     void testFdo51550();
     void testN789482();
-    void test1Table1Page();
+    //void test1Table1Page();
     void testTextFrames();
     void testTextFrameBorders();
     void testTextframeGradient();
@@ -640,7 +640,7 @@ void Test::testN789482()
     getRun(xParagraph, 5, " After.");
 }
 
-void Test::test1Table1Page()
+/*void Test::test1Table1Page()
 {
     // 2 problem for this document after export:
     //   - invalid sectPr inserted at the beginning of the page
@@ -650,7 +650,7 @@ void Test::test1Table1Page()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
-}
+}*/
 
 void Test::testTextFrames()
 {
