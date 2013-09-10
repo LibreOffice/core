@@ -3524,7 +3524,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
             // TODO/MBA: how can we get a BaseURL here?!
             OSL_FAIL("No BaseURL!");
             OUString aAbs = INetURLObject::GetAbsURL( "", aRel );
-            DBG_ASSERT( aAbs.getLength(), "Invalid URL!" );
+            DBG_ASSERT( !aAbs.isEmpty(), "Invalid URL!" );
             maStrLink = aAbs;
         }
 
