@@ -366,7 +366,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     {
         // If given Variant must be at least ll-Ssss and language must be 'qlt'
         OUString aVariant( variantNode->getValue());
-        if (!(aVariant.isEmpty() || (aVariant.getLength() >= 7 && aVariant.indexOf('-'))))
+        if (!(aVariant.isEmpty() || (aVariant.getLength() >= 7 && aVariant.indexOf('-') >= 2)))
             incErrorStr( "invalid Variant", aVariant);
         if (!(aVariant.isEmpty() || aLanguage == "qlt"))
             incErrorStrStr( "Variant '%s' given but Language '%s' is not 'qlt'", aVariant, aLanguage);
