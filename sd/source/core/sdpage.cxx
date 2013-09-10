@@ -852,11 +852,11 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
 
 namespace {
 
-const char* PageKindVector[] = {
-    "PK_STANDARD","PK_NOTES" , "PK_HANDOUT"
+const char* const PageKindVector[] = {
+    "PK_STANDARD", "PK_NOTES", "PK_HANDOUT"
 };
 
-const char* PresObjKindVector[] = {
+const char* const PresObjKindVector[] = {
     "PRESOBJ_NONE", "PRESOBJ_TITLE", "PRESOBJ_OUTLINE",
     "PRESOBJ_TEXT" ,"PRESOBJ_GRAPHIC" , "PRESOBJ_OBJECT",
     "PRESOBJ_CHART", "PRESOBJ_ORGCHART", "PRESOBJ_TABLE",
