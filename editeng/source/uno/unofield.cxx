@@ -448,9 +448,9 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case text::textfield::Type::AUTHOR:
     {
         OUString aContent;
-        String aFirstName;
-        String aLastName;
-        String aEmpty;
+        OUString aFirstName;
+        OUString aLastName;
+        OUString aEmpty;
 
         // do we have CurrentPresentation given?
         // mimic behaviour of writer, which means:

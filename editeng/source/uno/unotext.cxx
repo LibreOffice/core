@@ -392,7 +392,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
     {
         CheckSelection( maSelection, pForwarder );
 
-        String aConverted(convertLineEnd(aString, LINEEND_LF));  // Simply count the number of line endings
+        OUString aConverted(convertLineEnd(aString, LINEEND_LF));  // Simply count the number of line endings
 
         pForwarder->QuickInsertText( aConverted, maSelection );
         mpEditSource->UpdateData();
@@ -402,7 +402,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
         //! on QuickInsertText...
         CollapseToStart();
 
-        sal_uInt16 nLen = aConverted.Len();
+        sal_uInt16 nLen = aConverted.getLength();
         if (nLen)
             GoRight( nLen, sal_True );
     }
@@ -1891,7 +1891,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
 
                 if( bAbsorb )
                 {
-                    const String aEmpty;
+                    const OUString aEmpty;
                     pForwarder->QuickInsertText( aEmpty, aRange );
 
                     aRange.nEndPos = aRange.nStartPos;

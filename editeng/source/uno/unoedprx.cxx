@@ -472,7 +472,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
         ::std::swap( aStartIndex, aEndIndex );
     }
 
-    String sStr = mrTextForwarder->GetText( MakeEESelection(aStartIndex, aEndIndex) );
+    OUString sStr = mrTextForwarder->GetText( MakeEESelection(aStartIndex, aEndIndex) );
 
     // trim field text, if necessary
     if( aStartIndex.InField() )
@@ -481,15 +481,15 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
                    aStartIndex.GetFieldOffset() <= USHRT_MAX,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
-        sStr.Erase(0, static_cast< sal_uInt16 > (aStartIndex.GetFieldOffset()) );
+        sStr = sStr.copy( aStartIndex.GetFieldOffset() );
     }
     if( aEndIndex.InField() && aEndIndex.GetFieldOffset() )
     {
-        DBG_ASSERT(sStr.Len() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) >= 0 &&
-                   sStr.Len() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) <= USHRT_MAX,
+        DBG_ASSERT(sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) >= 0 &&
+                   sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) <= USHRT_MAX,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
-        sStr = sStr.Copy(0, static_cast< sal_uInt16 > (sStr.Len() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset())) );
+        sStr = sStr.copy(0, sStr.getLength() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset()) );
     }
 
     EBulletInfo aBulletInfo1 = GetBulletInfo( aStartIndex.GetParagraph() );
@@ -498,13 +498,13 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     if( aStartIndex.InBullet() )
     {
         // prepend leading bullet
-        String sBullet = aBulletInfo1.aText;
+        OUString sBullet = aBulletInfo1.aText;
 
         DBG_ASSERT(aStartIndex.GetBulletOffset() >= 0 &&
                    aStartIndex.GetBulletOffset() <= USHRT_MAX,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
-        sBullet.Erase(0, static_cast< sal_uInt16 > (aStartIndex.GetBulletOffset()) );
+        sBullet = sBullet.copy( aStartIndex.GetBulletOffset() );
 
         sBullet += sStr;
         sStr = sBullet;
@@ -515,26 +515,25 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
         // append trailing bullet
         sStr += aBulletInfo2.aText;
 
-        DBG_ASSERT(sStr.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
-                   sStr.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) <= USHRT_MAX,
+        DBG_ASSERT(sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
+                   sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) <= USHRT_MAX,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
-        sStr = sStr.Copy(0, static_cast< sal_uInt16 > (sStr.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset())) );
+        sStr = sStr.copy(0, sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) );
     }
     else if( aStartIndex.GetParagraph() != aEndIndex.GetParagraph() &&
              HaveTextBullet( aEndIndex.GetParagraph() ) )
     {
-        String sBullet = aBulletInfo2.aText;
+        OUString sBullet = aBulletInfo2.aText;
 
-        DBG_ASSERT(sBullet.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
-                   sBullet.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) <= USHRT_MAX,
+        DBG_ASSERT(sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
+                   sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) <= USHRT_MAX,
                    "SvxAccessibleTextIndex::GetText: index value overflow");
 
-        sBullet = sBullet.Copy(0, static_cast< sal_uInt16 > (sBullet.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset())) );
+        sBullet = sBullet.copy(0, sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) );
 
         // insert bullet
-        sStr.Insert( sBullet,
-                     static_cast< sal_uInt16 > (GetTextLen(aStartIndex.GetParagraph()) - aStartIndex.GetIndex()) );
+        sStr = sStr.replaceAt( GetTextLen(aStartIndex.GetParagraph()) - aStartIndex.GetIndex(), 0, sBullet );
     }
 
     return sStr;
