@@ -283,12 +283,12 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "CS", false },   // alias to be able to integrate localizations, rsc needs it
     { LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO,    "sr", "ME", false },
     { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr", "BA", false },
-    { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sh", "RS", false },   // Serbian Latin in Serbia; kludge, needed to be sr_Latn_RS instead, script codes not supported yet
-    { LANGUAGE_SERBIAN_LATIN,                       "sh", "YU", false },   // legacy Serbian Latin in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_Latn_CS instead, script codes not supported yet
-    { LANGUAGE_SERBIAN_LATIN,                       "sh", "CS", false },   // Serbian Latin in Serbia and Montenegro; kludge, needed to be sr_Latn_CS instead, script codes not supported yet
-    { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,       "sh", "ME", false },   // Serbian Latin in Montenegro; kludge, needed to be sr_Latn_ME instead, script codes not supported yet
-    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sh", "BA", false },
-    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sh", ""  , false },   // kludge, needed to be sr_Latn instead, script codes not supported yet
+    { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sh", "RS", true  },   // legacy kludge, is sr-Latn-RS now
+    { LANGUAGE_SERBIAN_LATIN,                       "sh", "YU", true  },   // legacy kludge, is sr-Latn-YU now
+    { LANGUAGE_SERBIAN_LATIN,                       "sh", "CS", true  },   // legacy kludge, is sr-Latn-CS now
+    { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,       "sh", "ME", true  },   // legacy kludge, is sr-Latn-ME now
+    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sh", "BA", true  },   // legacy kludge, is sr-Latn-BA now
+    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sh", ""  , true  },   // legacy kludge, is sr-Latn now
     { LANGUAGE_ARMENIAN,                    "hy", "AM", false },
     { LANGUAGE_AZERI_LATIN,                 "az", "AZ", false },
 //  { LANGUAGE_AZERI_CYRILLIC,              "az", "AZ", false },   // script codes not supported yet
@@ -575,9 +575,14 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 
 static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 {
-    // MS-LangID                      ISO639-ISO15924, ISO3166
-//  { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,   "sr-Latn", "RS" },  // for example, once we support it in l10n; TODO: adapt unit test in this case
-    { LANGUAGE_DONTKNOW,                    "",        ""   }   // marks end of table
+    // MS-LangID                          ISO639-ISO15924, ISO3166
+    { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,       "sr-Latn", "RS" },
+    { LANGUAGE_SERBIAN_LATIN,                   "sr-Latn", "CS" },  // Serbian Latin in Serbia and Montenegro; note that not all applications may know about the 'CS' reusage mess, see https://en.wikipedia.org/wiki/ISO_3166-2:CS
+    { LANGUAGE_SERBIAN_LATIN,                   "sr-Latn", "YU" },  // legacy Serbian Latin in Yugoslavia
+    { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,   "sr-Latn", "ME" },
+    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,"sr-Latn", "BA" },
+    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,           "sr-Latn", ""   },
+    { LANGUAGE_DONTKNOW,                        "",        ""   }   // marks end of table
 };
 
 static Bcp47CountryEntry const aImplBcp47CountryEntries[] =

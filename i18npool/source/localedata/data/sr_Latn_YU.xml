@@ -20,39 +20,40 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="yes" version="1.2">
   <LC_INFO>
     <Language>
-      <LangID>sh</LangID>
+      <LangID>qlt</LangID>
       <DefaultName>Serbian Latin</DefaultName>
     </Language>
     <Country>
-      <CountryID>ME</CountryID>
-      <DefaultName>Serbia</DefaultName>
+      <CountryID>YU</CountryID>
+      <DefaultName>Serbia and Montenegro</DefaultName>
     </Country>
+    <Variant>sr-Latn-YU</Variant>
   </LC_INFO>
-  <LC_CTYPE ref="sh_RS"/>
-  <LC_FORMAT ref="sh_RS" replaceTo="[$€-C81A]"/>
-  <LC_COLLATION ref="sh_RS"/>
-  <LC_SEARCH ref="sh_RS"/>
-  <LC_INDEX ref="sh_RS"/>
-  <LC_CALENDAR ref="sh_RS"/>
+  <LC_CTYPE ref="sr_Latn_RS"/>
+  <LC_FORMAT ref="sr_Latn_RS" replaceTo="[$Din-81A]"/>
+  <LC_COLLATION ref="sr_Latn_RS"/>
+  <LC_SEARCH ref="sr_Latn_RS"/>
+  <LC_INDEX ref="sr_Latn_RS"/>
+  <LC_CALENDAR ref="sr_Latn_RS"/>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>CSD</CurrencyID>
+      <CurrencySymbol>Din</CurrencySymbol>
+      <BankSymbol>CSD</BankSymbol>
+      <CurrencyName>Srpski Dinar</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false">
       <CurrencyID>EUR</CurrencyID>
       <CurrencySymbol>€</CurrencySymbol>
       <BankSymbol>EUR</BankSymbol>
       <CurrencyName>Euro</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="false">
-      <CurrencyID>DEM</CurrencyID>
-      <CurrencySymbol>DM</CurrencySymbol>
-      <BankSymbol>DEM</BankSymbol>
-      <CurrencyName>Deutsche Mark</CurrencyName>
-      <DecimalPlaces>2</DecimalPlaces>
-    </Currency>
   </LC_CURRENCY>
-  <LC_TRANSLITERATION ref="sh_RS"/>
-  <LC_MISC ref="sh_RS"/>
-  <LC_NumberingLevel ref="sh_RS"/>
-  <LC_OutLineNumberingLevel ref="sh_RS"/>
+  <LC_TRANSLITERATION ref="sr_Latn_RS"/>
+  <LC_MISC ref="sr_Latn_RS"/>
+  <LC_NumberingLevel ref="sr_Latn_RS"/>
+  <LC_OutLineNumberingLevel ref="sr_Latn_RS"/>
 </Locale>
 

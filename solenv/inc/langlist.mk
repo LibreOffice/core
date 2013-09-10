@@ -99,7 +99,7 @@ rw \
 sa-IN \
 sat \
 sd \
-sh \
+sr-Latn \
 si \
 sid \
 sk \

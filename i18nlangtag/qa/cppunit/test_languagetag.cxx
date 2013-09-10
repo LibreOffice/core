@@ -130,12 +130,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "RS" );
         CPPUNIT_ASSERT( aLocale.Variant == s_sr_Latn_RS );
-        /* TODO: conversion doesn't know this yet, once it does activate test. */
-#if 0
         CPPUNIT_ASSERT( sr_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
-#else
-        CPPUNIT_ASSERT( sr_RS.getLanguageType() == LANGUAGE_SYSTEM );
-#endif
         CPPUNIT_ASSERT( sr_RS.isValidBcp47() == true );
         CPPUNIT_ASSERT( sr_RS.isIsoLocale() == false );
         CPPUNIT_ASSERT( sr_RS.isIsoODF() == true );
@@ -143,6 +138,35 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( sr_RS.getCountry() == "RS" );
         CPPUNIT_ASSERT( sr_RS.getScript() == "Latn" );
         CPPUNIT_ASSERT( sr_RS.getLanguageAndScript() == "sr-Latn" );
+    }
+
+    {
+        OUString s_sh_RS( "sh-RS" );
+        LanguageTag sh_RS( s_sh_RS, true );
+        lang::Locale aLocale = sh_RS.getLocale();
+        CPPUNIT_ASSERT( sh_RS.getBcp47() == s_sh_RS );
+        CPPUNIT_ASSERT( aLocale.Language == "sh" );
+        CPPUNIT_ASSERT( aLocale.Country == "RS" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( sh_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
+        CPPUNIT_ASSERT( sh_RS.isValidBcp47() == true );
+        CPPUNIT_ASSERT( sh_RS.isIsoLocale() == true );
+        CPPUNIT_ASSERT( sh_RS.isIsoODF() == true );
+        CPPUNIT_ASSERT( sh_RS.getLanguage() == "sh" );
+        CPPUNIT_ASSERT( sh_RS.getCountry() == "RS" );
+        CPPUNIT_ASSERT( sh_RS.getScript() == "" );
+        CPPUNIT_ASSERT( sh_RS.getLanguageAndScript() == "sh" );
+        ::std::vector< OUString > sh_RS_Fallbacks( sh_RS.getFallbackStrings( true));
+        CPPUNIT_ASSERT( sh_RS_Fallbacks.size() == 6);
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[0] == "sh-RS");
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[1] == "sr-Latn-RS");
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[2] == "sr-Latn");
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[3] == "sr-RS");
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[4] == "sr");
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[5] == "sh");
+        CPPUNIT_ASSERT( sh_RS.makeFallback().getBcp47() == "sr-Latn-RS");
+        CPPUNIT_ASSERT( sh_RS.getBcp47() == "sr-Latn-RS");
+        CPPUNIT_ASSERT( sh_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
     }
 
     {

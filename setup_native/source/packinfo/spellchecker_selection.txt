@@ -74,8 +74,8 @@ sk = "sk"
 sl = "sl"
 sv = "sv,de"
 sr = "sr"
-# ! Note the package 'sr' also holds the dictionaries for 'sh' !
-sh = "sr"
+# ! Note the package 'sr' also holds the dictionaries for 'sr-Latn' (formerly 'sh') !
+sr-Latn = "sr"
 sw = "sw"
 te = "te"
 th = "th"

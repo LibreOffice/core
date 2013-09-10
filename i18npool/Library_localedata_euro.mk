@@ -76,11 +76,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_euro,\
 	CustomTarget/i18npool/localedata/localedata_rue_SK \
 	CustomTarget/i18npool/localedata/localedata_ru_RU \
 	CustomTarget/i18npool/localedata/localedata_sc_IT \
-	CustomTarget/i18npool/localedata/localedata_sh_ME \
-	CustomTarget/i18npool/localedata/localedata_sh_RS \
-	CustomTarget/i18npool/localedata/localedata_sh_YU \
 	CustomTarget/i18npool/localedata/localedata_sk_SK \
 	CustomTarget/i18npool/localedata/localedata_sl_SI \
+	CustomTarget/i18npool/localedata/localedata_sr_Latn_ME \
+	CustomTarget/i18npool/localedata/localedata_sr_Latn_RS \
+	CustomTarget/i18npool/localedata/localedata_sr_Latn_YU \
 	CustomTarget/i18npool/localedata/localedata_sr_ME \
 	CustomTarget/i18npool/localedata/localedata_sr_RS \
 	CustomTarget/i18npool/localedata/localedata_sr_YU \

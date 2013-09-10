@@ -1239,17 +1239,31 @@ LanguageTag & LanguageTag::makeFallback()
                     aVec.push_back( aLanguage + "-CN");
                 aVec.push_back( aLanguage);
             }
+            else if (aLanguage == "sh")
+            {
+                ::std::vector< OUString > aRep( LanguageTag( "sr-Latn-" + aCountry).getFallbackStrings( true));
+                aVec.insert( aVec.end(), aRep.begin(), aRep.end());
+                aVec.push_back( aLanguage);     // 'sh' after all 'sr...'?
+            }
             else if (aLanguage == "ca" && aCountry == "XV")
             {
-                ::std::vector< OUString > aCav( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
-                aVec.insert( aVec.end(), aCav.begin(), aCav.end());
+                ::std::vector< OUString > aRep( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
+                aVec.insert( aVec.end(), aRep.begin(), aRep.end());
                 // Already includes 'ca' language fallback.
             }
             else
                 aVec.push_back( aLanguage);
         }
-        else if (bIncludeFullBcp47)
-            aVec.push_back( aLanguage);
+        else
+        {
+            if (bIncludeFullBcp47)
+                aVec.push_back( aLanguage);
+            if (aLanguage == "sh")
+            {
+                ::std::vector< OUString > aRep( LanguageTag( "sr-Latn").getFallbackStrings( true));
+                aVec.insert( aVec.end(), aRep.begin(), aRep.end());
+            }
+        }
         return aVec;
     }
 

@@ -20,13 +20,14 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
   <LC_INFO>
     <Language>
-      <LangID>sh</LangID>
+      <LangID>qlt</LangID>
       <DefaultName>Serbian Latin</DefaultName>
     </Language>
     <Country>
       <CountryID>RS</CountryID>
       <DefaultName>Serbia</DefaultName>
     </Country>
+    <Variant>sr-Latn-RS</Variant>
   </LC_INFO>
   <LC_CTYPE>
     <Separators>
