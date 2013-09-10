@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.Server;
+import org.libreoffice.impressremote.util.SavedStates;
 
 public class ComputersFragment extends SherlockListFragment implements ServiceConnection, Runnable {
     private static final int SHOWING_PROGRESS_MESSAGE_DELAY_IN_SECONDS = 10;
@@ -87,6 +89,25 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     @Override
     public View onCreateView(LayoutInflater aInflater, ViewGroup aContainer, Bundle aSavedInstanceState) {
         return aInflater.inflate(R.layout.fragment_computers_list, aContainer, false);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle aSavedInstanceState) {
+        super.onViewStateRestored(aSavedInstanceState);
+
+        if (aSavedInstanceState == null) {
+            return;
+        }
+
+        loadProgressMessage(aSavedInstanceState);
+    }
+
+    private void loadProgressMessage(Bundle aSavedInstanceState) {
+        boolean aProgressMessageDisplayed = aSavedInstanceState.getBoolean(SavedStates.Keys.PROGRESS_MESSAGE);
+
+        if (aProgressMessageDisplayed) {
+            showProgressMessage();
+        }
     }
 
     @Override
@@ -432,6 +453,19 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         }
 
         mCommunicationService.stopServersSearch();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle aOutState) {
+        super.onSaveInstanceState(aOutState);
+
+        saveProgressMessage(aOutState);
+    }
+
+    private void saveProgressMessage(Bundle aOutState) {
+        boolean aProgressMessageDisplayed = !TextUtils.isEmpty(getProgressMessageView().getText().toString());
+
+        aOutState.putBoolean(SavedStates.Keys.PROGRESS_MESSAGE, aProgressMessageDisplayed);
     }
 
     @Override

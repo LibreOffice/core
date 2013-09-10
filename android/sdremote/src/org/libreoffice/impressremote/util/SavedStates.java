@@ -8,6 +8,8 @@ public final class SavedStates {
         private Keys() {
         }
 
+        public static final String PROGRESS_MESSAGE = "PROGRESS_MESSAGE";
+
         public static final String LAYOUT_INDEX = "LAYOUT_INDEX";
 
         public static final String PIN = "PIN";
