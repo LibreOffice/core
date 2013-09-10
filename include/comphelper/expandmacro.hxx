@@ -29,29 +29,8 @@ namespace comphelper
 
      @param path to operate on. Both system file path and file URIs are accepted.
 
-     @return macro-expanded system file path.
+     @return macro-expanded file URI.
     */
     COMPHELPER_DLLPUBLIC rtl::OUString getExpandedFilePath(const rtl::OUString& filepath);
-
-    /**
-     A helper function to get expanded version of macro for filepaths.
-
-     If the given path is prefixed by "vnd.sun.star.expand:", this
-     function substitutes contained macro references. It then always
-     returns a system file path, if necessary converting file
-     URIs. Example:
-     vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR gets
-     converted to e.g. /usr/lib64/libreoffice/share.
-
-     Use this version if you have a local reference of a component
-     context at hand, saves us the extra lookup.
-
-     @param path to operate on. Both system file path and file URIs are accepted.
-     @param xContext refers to the component context of the process.
-
-     @return macro-expanded system file path.
-    */
-    COMPHELPER_DLLPUBLIC rtl::OUString getExpandedFilePath(const rtl::OUString& filepath,
-                                                           const ::com::sun::star::uno::Reference<css::uno::XComponentContext>& xContext);
 }
 #endif
