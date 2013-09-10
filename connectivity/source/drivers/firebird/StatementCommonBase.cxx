@@ -45,7 +45,7 @@ using namespace ::rtl;
 using namespace ::std;
 
 OStatementCommonBase::OStatementCommonBase(Connection* _pConnection)
-    : OStatementCommonBase_Base(_pConnection->getMutex()),
+    : OStatementCommonBase_Base(m_aMutex),
       OPropertySetHelper(OStatementCommonBase_Base::rBHelper),
       m_pConnection(_pConnection),
       m_aStatementHandle( 0 ),
@@ -102,7 +102,7 @@ Sequence< Type > SAL_CALL OStatementCommonBase::getTypes(  ) throw(RuntimeExcept
 
 void SAL_CALL OStatementCommonBase::cancel(  ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
+    MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     // cancel the current sql statement
 }
@@ -113,7 +113,7 @@ void SAL_CALL OStatementCommonBase::close()
     SAL_INFO("connectivity.firebird", "close");
 
     {
-        MutexGuard aGuard(m_pConnection->getMutex());
+        MutexGuard aGuard(m_aMutex);
         checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
         disposeResultSet();
         freeStatementHandle();
@@ -127,7 +127,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                                                       XSQLDA* pInSqlda)
     throw (SQLException)
 {
-    MutexGuard aGuard(m_pConnection->getMutex());
+    MutexGuard aGuard(m_aMutex);
 
     freeStatementHandle();
 
@@ -214,7 +214,7 @@ uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet() throw
 {
     // TODO: verify we really can't support this
 //     return uno::Reference< XResultSet >();
-    MutexGuard aGuard(m_pConnection->getMutex());
+    MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     return m_xResultSet;

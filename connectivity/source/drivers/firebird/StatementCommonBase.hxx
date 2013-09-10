@@ -53,6 +53,8 @@ namespace connectivity
 
         {
         protected:
+            ::osl::Mutex        m_aMutex;
+
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             //  for this Statement
 

@@ -167,7 +167,6 @@ namespace connectivity
             ::rtl::OUString getConnectionURL()  const   {return m_sConnectionURL;}
             sal_Bool        isEmbedded()        const   {return m_bIsEmbedded;}
             ::rtl::OUString getUserName()       const   {return m_sUser;}
-            ::osl::Mutex&   getMutex()                  {return m_aMutex;}
             isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
             isc_tr_handle&  getTransaction()
                 throw(::com::sun::star::sdbc::SQLException);
