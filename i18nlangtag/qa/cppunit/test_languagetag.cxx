@@ -209,6 +209,11 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
         CPPUNIT_ASSERT( de_DE.getScript() == "" );
         CPPUNIT_ASSERT( de_DE.getLanguageAndScript() == "de" );
+        ::std::vector< OUString > de_DE_Fallbacks( de_DE.getFallbackStrings( true));
+        CPPUNIT_ASSERT( de_DE_Fallbacks.size() == 2);
+        CPPUNIT_ASSERT( de_DE_Fallbacks[0] == "de-DE");
+        CPPUNIT_ASSERT( de_DE_Fallbacks[1] == "de");
+        CPPUNIT_ASSERT( de_DE.makeFallback().getBcp47() == "de-DE");
     }
 
     {

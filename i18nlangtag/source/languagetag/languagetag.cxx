@@ -1238,6 +1238,7 @@ LanguageTag & LanguageTag::makeFallback()
                 else if (aCountry != "CN")
                     aVec.push_back( aLanguage + "-CN");
             }
+            aVec.push_back( aLanguage);
         }
         else if (bIncludeFullBcp47)
             aVec.push_back( aLanguage);
