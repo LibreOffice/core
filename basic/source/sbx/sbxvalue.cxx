@@ -326,12 +326,23 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     }
     else if(rRes.eType == SbxDATE && GetType() == SbxOBJECT)
     {
-        // FIXME we need this to fail in some sense when this does not contain a css.util.Date
-        Any aAny (sbxToUnoValue(this, ::getCppuType( (com::sun::star::util::Date*)0 )));
+        Any aAny (sbxToUnoValue(this));
+        com::sun::star::util::DateTime aUnoDT;
         com::sun::star::util::Date aUnoDate;
-        aAny >>= aUnoDate;
-        // FIXME: set error if this fails?
-        implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, rRes.nDouble );
+        com::sun::star::util::Time aUnoTime;
+        if(aAny >>= aUnoDT)
+            // FIXME: set error if this fails?
+            implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
+                                aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
+                                rRes.nDouble );
+        else if(aAny >>= aUnoDate)
+            // FIXME: set error if this fails?
+            implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, rRes.nDouble );
+        else if(aAny >>= aUnoTime)
+            rRes.nDouble = implTimeSerial(aUnoTime.Hours, aUnoTime.Minutes, aUnoTime.Seconds);
+        else
+            //FIXME: set error
+            ;
     }
     else
     {

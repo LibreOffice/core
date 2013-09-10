@@ -1858,7 +1858,7 @@ sal_Int16 implGetDateMonth( double aDate )
     return nRet;
 }
 
-::com::sun::star::util::Date SbxDateToUNO( const SbxValue* const pVal )
+::com::sun::star::util::Date SbxDateToUNODate( const SbxValue* const pVal )
 {
     double aDate = pVal->GetDate();
 
@@ -1870,7 +1870,7 @@ sal_Int16 implGetDateMonth( double aDate )
     return aUnoDate;
 }
 
-void SbxDateFromUNO( SbxValue *pVal, const ::com::sun::star::util::Date& aUnoDate)
+void SbxDateFromUNODate( SbxValue *pVal, const ::com::sun::star::util::Date& aUnoDate)
 {
     double dDate;
     if( implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, dDate ) )
@@ -1880,7 +1880,7 @@ void SbxDateFromUNO( SbxValue *pVal, const ::com::sun::star::util::Date& aUnoDat
 }
 
 // Function to convert date to UNO date (com.sun.star.util.Date)
-RTLFUNC(CDateToUno)
+RTLFUNC(CDateToUnoDate)
 {
     (void)pBasic;
     (void)bWrite;
@@ -1891,11 +1891,11 @@ RTLFUNC(CDateToUno)
         return;
     }
 
-    unoToSbxValue(rPar.Get(0), Any(SbxDateToUNO(rPar.Get(1))));
+    unoToSbxValue(rPar.Get(0), Any(SbxDateToUNODate(rPar.Get(1))));
 }
 
 // Function to convert date from UNO date (com.sun.star.util.Date)
-RTLFUNC(CDateFromUno)
+RTLFUNC(CDateFromUnoDate)
 {
     (void)pBasic;
     (void)bWrite;
@@ -1910,7 +1910,120 @@ RTLFUNC(CDateFromUno)
     com::sun::star::util::Date aUnoDate;
     aAny >>= aUnoDate;
 
-    SbxDateFromUNO(rPar.Get(0), aUnoDate);
+    SbxDateFromUNODate(rPar.Get(0), aUnoDate);
+}
+
+::com::sun::star::util::Time SbxDateToUNOTime( const SbxValue* const pVal )
+{
+    double aDate = pVal->GetDate();
+
+    com::sun::star::util::Time aUnoTime;
+    aUnoTime.Hours       = implGetHour      ( aDate );
+    aUnoTime.Minutes     = implGetMinute    ( aDate );
+    aUnoTime.Seconds     = implGetSecond    ( aDate );
+    aUnoTime.NanoSeconds = 0;
+
+    return aUnoTime;
+}
+
+void SbxDateFromUNOTime( SbxValue *pVal, const ::com::sun::star::util::Time& aUnoTime)
+{
+    pVal->PutDate( implTimeSerial(aUnoTime.Hours, aUnoTime.Minutes, aUnoTime.Seconds) );
+}
+
+// Function to convert date to UNO time (com.sun.star.util.Time)
+RTLFUNC(CDateToUnoTime)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() != 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    unoToSbxValue(rPar.Get(0), Any(SbxDateToUNOTime(rPar.Get(1))));
+}
+
+// Function to convert date from UNO time (com.sun.star.util.Time)
+RTLFUNC(CDateFromUnoTime)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() != 2 || rPar.Get(1)->GetType() != SbxOBJECT )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    Any aAny (sbxToUnoValue(rPar.Get(1), ::getCppuType( (com::sun::star::util::Time*)0 )));
+    com::sun::star::util::Time aUnoTime;
+    aAny >>= aUnoTime;
+
+    SbxDateFromUNOTime(rPar.Get(0), aUnoTime);
+}
+
+::com::sun::star::util::DateTime SbxDateToUNODateTime( const SbxValue* const pVal )
+{
+    double aDate = pVal->GetDate();
+
+    com::sun::star::util::DateTime aUnoDT;
+    aUnoDT.Day   = implGetDateDay  ( aDate );
+    aUnoDT.Month = implGetDateMonth( aDate );
+    aUnoDT.Year  = implGetDateYear ( aDate );
+    aUnoDT.Hours       = implGetHour      ( aDate );
+    aUnoDT.Minutes     = implGetMinute    ( aDate );
+    aUnoDT.Seconds     = implGetSecond    ( aDate );
+    aUnoDT.NanoSeconds = 0;
+
+    return aUnoDT;
+}
+
+void SbxDateFromUNODateTime( SbxValue *pVal, const ::com::sun::star::util::DateTime& aUnoDT)
+{
+    double dDate;
+    if( implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
+                            aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
+                            dDate ) )
+    {
+        pVal->PutDate( dDate );
+    }
+}
+
+// Function to convert date to UNO date (com.sun.star.util.Date)
+RTLFUNC(CDateToUnoDateTime)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() != 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    unoToSbxValue(rPar.Get(0), Any(SbxDateToUNODateTime(rPar.Get(1))));
+}
+
+// Function to convert date from UNO date (com.sun.star.util.Date)
+RTLFUNC(CDateFromUnoDateTime)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() != 2 || rPar.Get(1)->GetType() != SbxOBJECT )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    Any aAny (sbxToUnoValue(rPar.Get(1), ::getCppuType( (com::sun::star::util::DateTime*)0 )));
+    com::sun::star::util::DateTime aUnoDT;
+    aAny >>= aUnoDT;
+
+    SbxDateFromUNODateTime(rPar.Get(0), aUnoDT);
 }
 
 // Function to convert date to ISO 8601 date format
@@ -2010,12 +2123,7 @@ RTLFUNC(TimeSerial)
         return;
     }
 
-    sal_Int32 nSeconds = nHour;
-    nSeconds *= 3600;
-    nSeconds += nMinute * 60;
-    nSeconds += nSecond;
-    double nDays = ((double)nSeconds) / (double)(86400.0);
-    rPar.Get(0)->PutDate( nDays ); // JSM
+    rPar.Get(0)->PutDate( implTimeSerial(nHour, nMinute, nSecond) ); // JSM
 }
 
 RTLFUNC(DateValue)
@@ -4862,6 +4970,27 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& 
 
     long nDiffDays = GetDayDiff( aCurDate );
     rdRet = (double)nDiffDays;
+    return true;
+}
+
+double implTimeSerial( sal_Int16 nHours, sal_Int16 nMinutes, sal_Int16 nSeconds )
+{
+    return
+        static_cast<double>( nHours * ::Time::secondPerHour +
+                             nMinutes * ::Time::secondPerMinute +
+                             nSeconds)
+        /
+        static_cast<double>( ::Time::secondPerDay );
+}
+
+bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
+                         sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
+                         double& rdRet )
+{
+    double dDate;
+    if(!implDateSerial(nYear, nMonth, nDay, dDate))
+        return false;
+    rdRet += dDate + implTimeSerial(nHour, nMinute, nSecond);
     return true;
 }
 

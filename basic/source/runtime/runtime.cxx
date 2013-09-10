@@ -3307,10 +3307,23 @@ void SbiRuntime::StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt )
     SbxVariableRef refVar = PopVar();
     OUString aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
 
-    if (aClass == "com.sun.star.util.Date" && refVal->GetType() != SbxOBJECT && refVal->GetType() != SbxEMPTY )
+    if (refVal->GetType() != SbxOBJECT && refVal->GetType() != SbxEMPTY )
     {
-        unoToSbxValue(refVar, Any(SbxDateToUNO(refVal)));
-        return;
+        if (aClass == "com.sun.star.util.Date")
+        {
+            unoToSbxValue(refVar, Any(SbxDateToUNODate(refVal)));
+            return;
+        }
+        if (aClass == "com.sun.star.util.Time")
+        {
+            unoToSbxValue(refVar, Any(SbxDateToUNOTime(refVal)));
+            return;
+        }
+        if (aClass == "com.sun.star.util.DateTime")
+        {
+            unoToSbxValue(refVar, Any(SbxDateToUNODateTime(refVal)));
+            return;
+        }
     }
 
     bool bOk = checkClass_Impl( refVal, aClass, true );
