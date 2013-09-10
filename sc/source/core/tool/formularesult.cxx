@@ -263,6 +263,8 @@ inline bool isString( formula::StackVar sv )
         case formula::svHybridCell:
         case formula::svHybridValueCell:
             return true;
+        default:
+            break;
     }
 
     return false;
