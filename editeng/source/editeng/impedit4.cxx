@@ -1250,7 +1250,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
 
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
         DBG_ASSERT( pPortion, "Blind Portion in FastInsertText" );
-        pPortion->MarkInvalid( nStartPos, pC->GetText().Len() );
+        pPortion->MarkInvalid( nStartPos, pC->GetText().getLength() );
 
         // Character attributes ...
         sal_Bool bAllreadyHasAttribs = aPaM.GetNode()->GetCharAttribs().Count() ? sal_True : sal_False;
@@ -1298,7 +1298,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 UpdateFields();
 
             // Otherwise, quick format => no attributes!
-            pPortion->MarkSelectionInvalid( nStartPos, pC->GetText().Len() );
+            pPortion->MarkSelectionInvalid( nStartPos, pC->GetText().getLength() );
         }
 
         DBG_ASSERT( CheckOrderedList( aPaM.GetNode()->GetCharAttribs().GetAttribs(), sal_True ), "InsertBinTextObject: Start-Liste distorted" );
@@ -1311,7 +1311,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 // only style and ParaAttribs when new paragraph, or
                 // completely internal ...
                 bParaAttribs = pC->GetParaAttribs().Count() ? sal_True : sal_False;
-                if ( GetStyleSheetPool() && pC->GetStyle().Len() )
+                if ( GetStyleSheetPool() && pC->GetStyle().getLength() )
                 {
                     SfxStyleSheet* pStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() );
                     DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );

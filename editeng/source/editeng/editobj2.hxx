@@ -122,8 +122,8 @@ public:
     typedef boost::ptr_vector<XEditAttribute> XEditAttributesType;
 
 private:
-    String              aText;
-    String              aStyle;
+    OUString            aText;
+    OUString            aStyle;
 
     XEditAttributesType aAttribs;
     SfxStyleFamily      eFamily;
@@ -139,13 +139,13 @@ public:
     const XEditAttributesType& GetAttribs() const { return aAttribs; }
     XEditAttributesType& GetAttribs() { return aAttribs; }
 
-    const String&       GetText()           const   { return aText; }
-    const String&       GetStyle()          const   { return aStyle; }
+    const OUString&     GetText()           const   { return aText; }
+    const OUString&     GetStyle()          const   { return aStyle; }
     const SfxItemSet&   GetParaAttribs()    const   { return aParaAttribs; }
     SfxStyleFamily      GetFamily()         const   { return eFamily; }
 
-    String&             GetText()           { return aText; }
-    String&             GetStyle()          { return aStyle; }
+    OUString&           GetText()           { return aText; }
+    OUString&           GetStyle()          { return aStyle; }
     SfxItemSet&         GetParaAttribs()    { return aParaAttribs; }
     SfxStyleFamily&     GetFamily()         { return eFamily; }
 
@@ -216,7 +216,7 @@ public:
                                 { pPortionInfo = pP; }
 
     sal_Int32 GetParagraphCount() const;
-    String GetText(sal_Int32 nParagraph) const;
+    OUString GetText(sal_Int32 nParagraph) const;
 
     void ClearPortionInfo();
 

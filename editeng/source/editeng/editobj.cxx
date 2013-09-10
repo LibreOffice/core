@@ -664,10 +664,10 @@ sal_Int32 EditTextObjectImpl::GetParagraphCount() const
     return static_cast<sal_Int32>(nSize);
 }
 
-String EditTextObjectImpl::GetText(sal_Int32 nPara) const
+OUString EditTextObjectImpl::GetText(sal_Int32 nPara) const
 {
     if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
-        return String();
+        return OUString();
 
     return aContents[nPara].GetText();
 }
@@ -721,7 +721,7 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
     if (aContents.size() == 1)
     {
         const ContentInfo& rC = aContents[0];
-        if (rC.GetText().Len() == 1)
+        if (rC.GetText().getLength() == 1)
         {
             size_t nAttribs = rC.aAttribs.size();
             for (size_t nAttr = nAttribs; nAttr; )
@@ -876,7 +876,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
         const ContentInfo& rC = aContents[nPara];
         SectionBordersType& rBorders = aParaBorders[nPara];
         rBorders.push_back(0);
-        rBorders.push_back(rC.GetText().Len());
+        rBorders.push_back(rC.GetText().getLength());
         for (size_t nAttr = 0; nAttr < rC.aAttribs.size(); ++nAttr)
         {
             const XEditAttribute& rAttr = rC.aAttribs[nAttr];
@@ -1120,7 +1120,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                     // SvxFontItem::Store() to store StarBats instead of StarSymbol!
                     for (sal_uInt16 nChar = rAttr.GetStart(); nChar < rAttr.GetEnd(); ++nChar)
                     {
-                        sal_Unicode cOld = rC.GetText().GetChar( nChar );
+                        sal_Unicode cOld = rC.GetText()[ nChar ];
                         char cConv = OUStringToOString(OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                         if ( cConv )
                             aBuffer[nChar] = cConv;
@@ -1141,7 +1141,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         }
         if ( hConv )
         {
-            for ( sal_uInt16 nChar = 0; nChar < rC.GetText().Len(); nChar++ )
+            for ( sal_uInt16 nChar = 0; nChar < rC.GetText().getLength(); nChar++ )
             {
                 const ContentInfo::XEditAttributesType& rAttribs = rC.aAttribs;
                 ContentInfo::XEditAttributesType::const_iterator it =
@@ -1150,7 +1150,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
                 if (it == rAttribs.end())
                 {
-                    sal_Unicode cOld = rC.GetText().GetChar( nChar );
+                    sal_Unicode cOld = rC.GetText()[ nChar ];
                     char cConv = OUStringToOString(OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                     if ( cConv )
                         aBuffer[nChar] = cConv;
@@ -1205,16 +1205,16 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         for ( size_t nPara = 0; nPara < nParagraphs_Stream; nPara++ )
         {
             const ContentInfo& rC = aContents[nPara];
-            sal_uInt16 nL = rC.GetText().Len();
+            sal_uInt16 nL = rC.GetText().getLength();
             rOStream << nL;
-            rOStream.Write(rC.GetText().GetBuffer(), nL*sizeof(sal_Unicode));
+            rOStream.Write(rC.GetText().getStr(), nL*sizeof(sal_Unicode));
 
             // StyleSheetName must be Unicode too!
             // Copy/Paste from EA3 to BETA or from BETA to EA3 not possible, not needed...
             // If needed, change nL back to sal_uLong and increase version...
-            nL = rC.GetStyle().Len();
+            nL = rC.GetStyle().getLength();
             rOStream << nL;
-            rOStream.Write(rC.GetStyle().GetBuffer(), nL*sizeof(sal_Unicode));
+            rOStream.Write(rC.GetStyle().getStr(), nL*sizeof(sal_Unicode));
         }
     }
 }
@@ -1299,7 +1299,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     sal_Char cEncodedChar = aByteString[nStart];
                     sal_Unicode cChar = OUString(&cEncodedChar, 1,
                         ((SvxCharSetColorItem*)pItem)->GetCharSet()).toChar();
-                    pC->GetText().SetChar(nStart, cChar);
+                    pC->GetText() = pC->GetText().replaceAt(nStart, 1, OUString(cChar));
                 }
                 else
                 {
@@ -1311,7 +1311,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                         // Convert CH_FEATURE to CH_FEATURE_OLD
                         DBG_ASSERT( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
                         if ( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD )
-                            pC->GetText().SetChar( nStart, CH_FEATURE );
+                            pC->GetText() = pC->GetText().replaceAt( nStart, 1, OUString(CH_FEATURE) );
                     }
                 }
             }
@@ -1343,8 +1343,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     // Not correctly converted
                     OString aPart(aByteString.copy(rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart()));
                     OUString aNew(OStringToOUString(aPart, rFontItem.GetCharSet()));
-                    pC->GetText().Erase( rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart() );
-                    pC->GetText().Insert( aNew, rAttr.GetStart() );
+                    pC->GetText() = pC->GetText().replaceAt( rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart(), aNew );
                 }
 
                 // Convert StarMath and StarBats to StarSymbol
@@ -1363,11 +1362,11 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
                     for ( sal_uInt16 nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
                     {
-                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
+                        sal_Unicode cOld = pC->GetText()[ nChar ];
                         DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
                         sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
                         if ( cConv )
-                            pC->GetText().SetChar( nChar, cConv );
+                            pC->GetText() = pC->GetText().replaceAt( nChar, 1, OUString(cConv) );
                     }
 
                     DestroyFontToSubsFontConverter( hConv );
@@ -1388,7 +1387,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 aNewFontItem.SetFamilyName( GetFontToSubsFontName( hConv ) );
                 pC->GetParaAttribs().Put( aNewFontItem );
 
-                for ( sal_uInt16 nChar = 0; nChar < pC->GetText().Len(); nChar++ )
+                for ( sal_uInt16 nChar = 0; nChar < pC->GetText().getLength(); nChar++ )
                 {
                     const ContentInfo::XEditAttributesType& rAttribs = pC->aAttribs;
                     ContentInfo::XEditAttributesType::const_iterator it =
@@ -1397,11 +1396,11 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
                     if (it == rAttribs.end())
                     {
-                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
+                        sal_Unicode cOld = pC->GetText()[ nChar ];
                         DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
                         sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
                         if ( cConv )
-                            pC->GetText().SetChar( nChar, cConv );
+                            pC->GetText() = pC->GetText().replaceAt( nChar, 1, OUString(cConv) );
                     }
                 }
 
