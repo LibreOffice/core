@@ -52,9 +52,8 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <comphelper/processfactory.hxx>
+#include <unotest/bootstrapfixturebase.hxx>
 
 namespace {
 
@@ -141,11 +140,13 @@ TestThread::TestThread(
     stop_(stop), success_(true)
 {}
 
-bool TestThread::getSuccess() const {
+bool TestThread::getSuccess() const
+{
     return success_;
 }
 
-void TestThread::run() {
+void TestThread::run()
+{
     try {
         while (!stop_.check()) {
             if (!iteration()) {
@@ -179,7 +180,8 @@ ReaderThread::ReaderThread(
     create();
 }
 
-bool ReaderThread::iteration() {
+bool ReaderThread::iteration()
+{
     return test_.getKey(path_, relative_).hasValue();
 }
 
@@ -251,7 +253,8 @@ RecursiveTest::RecursiveTest(
     test_(theTest), count_(count), destroyed_(destroyed)
 {}
 
-void RecursiveTest::test() {
+void RecursiveTest::test()
+{
     properties_ = css::uno::Reference< css::beans::XPropertySet >(
         test_.createUpdateAccess(
             OUString(
@@ -267,7 +270,8 @@ void RecursiveTest::test() {
         properties_, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
-RecursiveTest::~RecursiveTest() {
+RecursiveTest::~RecursiveTest()
+{
     *destroyed_ = true;
 }
 
@@ -301,7 +305,8 @@ SimpleRecursiveTest::SimpleRecursiveTest(
     RecursiveTest(theTest, count, destroyed)
 {}
 
-void SimpleRecursiveTest::step() const {
+void SimpleRecursiveTest::step() const
+{
     test_.setKey(
         OUString(
             RTL_CONSTASCII_USTRINGPARAM(
@@ -324,7 +329,8 @@ CrossThreadTest::CrossThreadTest(
     RecursiveTest(theTest, count, destroyed)
 {}
 
-void CrossThreadTest::step() const {
+void CrossThreadTest::step() const
+{
     osl::Condition stop;
     stop.set();
     WriterThread(
@@ -342,32 +348,18 @@ void CrossThreadTest::step() const {
         OUString("Label"));
 }
 
-void Test::setUp() {
-    char const * forward = getForwardString();
-    rtl_uString * registry = 0;
-    CPPUNIT_ASSERT(
-        rtl_convertStringToUString(
-            &registry, forward, rtl_str_getLength(forward),
-            osl_getThreadTextEncoding(),
-            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
-             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
-             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
-    context_ = css::uno::Reference< css::uno::XComponentContext >(
-        css::uno::Reference< css::beans::XPropertySet >(
-            cppu::createRegistryServiceFactory(
-                OUString(registry, SAL_NO_ACQUIRE)),
-            css::uno::UNO_QUERY_THROW)->getPropertyValue(
-                OUString("DefaultContext")),
-        css::uno::UNO_QUERY_THROW);
-    provider_ = css::configuration::theDefaultProvider::get(context_);
+void Test::setUp()
+{
+    provider_ = css::configuration::theDefaultProvider::get(
+                        comphelper::getProcessComponentContext() );
 }
 
-void Test::tearDown() {
-    css::uno::Reference< css::lang::XComponent >(
-        context_, css::uno::UNO_QUERY_THROW)->dispose();
+void Test::tearDown()
+{
 }
 
-void Test::testKeyFetch() {
+void Test::testKeyFetch()
+{
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
@@ -381,7 +373,8 @@ void Test::testKeyFetch() {
         s);
 }
 
-void Test::testKeySet() {
+void Test::testKeySet()
+{
     setKey(
         OUString("/org.openoffice.Setup/Test"),
         OUString("AString"),
@@ -395,7 +388,8 @@ void Test::testKeySet() {
     CPPUNIT_ASSERT( s == "baa" );
 }
 
-void Test::testKeyReset() {
+void Test::testKeyReset()
+{
     if (resetKey(
             OUString("/org.openoffice.Setup/Test"),
             OUString("AString")))
@@ -410,7 +404,8 @@ void Test::testKeyReset() {
     }
 }
 
-void Test::testSetSetMemberName() {
+void Test::testSetSetMemberName()
+{
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
@@ -452,7 +447,8 @@ void Test::testSetSetMemberName() {
     CPPUNIT_ASSERT( s == "Fontwork Gallery" );
 }
 
-void Test::testReadCommands() {
+void Test::testReadCommands()
+{
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
             OUString(
@@ -484,7 +480,8 @@ void Test::testReadCommands() {
         access, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
-void Test::testThreads() {
+void Test::testThreads()
+{
     struct Entry { OUString path; OUString relative; };
     Entry list[] = {
         { OUString("/org.openoffice.Setup"),
@@ -546,14 +543,16 @@ void Test::testThreads() {
     CPPUNIT_ASSERT(success);
 }
 
-void Test::testRecursive() {
+void Test::testRecursive()
+{
     bool destroyed = false;
     rtl::Reference< RecursiveTest >(
         new SimpleRecursiveTest(*this, 100, &destroyed))->test();
     CPPUNIT_ASSERT(destroyed);
 }
 
-void Test::testCrossThreads() {
+void Test::testCrossThreads()
+{
     bool destroyed = false;
     rtl::Reference< RecursiveTest >(
         new SimpleRecursiveTest(*this, 10, &destroyed))->test();

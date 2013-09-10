@@ -19,7 +19,7 @@ $(eval $(call gb_CppunitTest_use_library_objects,configmgr_unit,configmgr))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,configmgr_unit,))
 
-$(eval $(call gb_Library_use_libraries,configmgr_unit, \
+$(eval $(call gb_CppunitTest_use_libraries,configmgr_unit, \
 	    comphelper \
 	    cppu \
 	    cppuhelper \
