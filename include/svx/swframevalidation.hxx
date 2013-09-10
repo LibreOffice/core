@@ -70,6 +70,7 @@ struct SvxSwFrameValidation
         nMinWidth(0),
         nMaxWidth(SAL_MAX_INT32),
         nHeight( 283 ), //0.5 cm
+        nMinHeight(0),
         nMaxHeight(SAL_MAX_INT32)
     {
     }
