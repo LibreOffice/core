@@ -21,7 +21,7 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 
-#define USE_DUMMY_INTERPRETER 1
+#define USE_DUMMY_INTERPRETER 0
 
 #if USE_DUMMY_INTERPRETER
 #include <cstdio>
