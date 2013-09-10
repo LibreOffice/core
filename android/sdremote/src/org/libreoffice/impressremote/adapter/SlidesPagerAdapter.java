@@ -25,11 +25,15 @@ public class SlidesPagerAdapter extends PagerAdapter {
 
     private final SlideShow mSlideShow;
 
-    public SlidesPagerAdapter(Context aContext, SlideShow aSlideShow) {
+    private final View.OnClickListener mSlideClickListener;
+
+    public SlidesPagerAdapter(Context aContext, SlideShow aSlideShow, View.OnClickListener aSlideClickListener) {
         mLayoutInflater = LayoutInflater.from(aContext);
         mImageLoader = new ImageLoader(aContext.getResources(), R.drawable.slide_unknown);
 
         mSlideShow = aSlideShow;
+
+        mSlideClickListener = aSlideClickListener;
     }
 
     @Override
@@ -47,6 +51,10 @@ public class SlidesPagerAdapter extends PagerAdapter {
         else {
             setUpUnknownSlidePreview(aSlideView);
         }
+
+        // ViewPager itself cannot handle click events,
+        // so we need to use hacks. Android is good.
+        aSlideView.setOnClickListener(mSlideClickListener);
 
         aViewGroup.addView(aSlideView);
 

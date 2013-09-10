@@ -33,7 +33,7 @@ import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.adapter.SlidesPagerAdapter;
 import org.libreoffice.impressremote.communication.CommunicationService;
 
-public class SlidesPagerFragment extends SherlockFragment implements ServiceConnection, ViewPager.OnPageChangeListener {
+public class SlidesPagerFragment extends SherlockFragment implements ServiceConnection, ViewPager.OnPageChangeListener, View.OnClickListener {
     private CommunicationService mCommunicationService;
     private BroadcastReceiver mIntentsReceiver;
 
@@ -92,7 +92,25 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     private PagerAdapter buildSlidesAdapter() {
         SlideShow aSlideShow = mCommunicationService.getSlideShow();
 
-        return new SlidesPagerAdapter(getActivity(), aSlideShow);
+        return new SlidesPagerAdapter(getActivity(), aSlideShow, this);
+    }
+
+    @Override
+    public void onClick(View aView) {
+        if (!isLastSlideDisplayed()) {
+            showNextTransition();
+        }
+    }
+
+    private boolean isLastSlideDisplayed() {
+        int aCurrentSlideIndex = mCommunicationService.getSlideShow().getHumanCurrentSlideIndex();
+        int aSlidesCount = mCommunicationService.getSlideShow().getSlidesCount();
+
+        return aCurrentSlideIndex == aSlidesCount;
+    }
+
+    private void showNextTransition() {
+        mCommunicationService.getTransmitter().performNextTransition();
     }
 
     private int getSlidesMargin() {
