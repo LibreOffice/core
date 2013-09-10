@@ -2050,6 +2050,26 @@ void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nR
 
 namespace {
 
+template<typename _Blk>
+void getBlockIterators(
+    sc::CellStoreType::iterator it, size_t& rLenRemain,
+    typename _Blk::iterator& rData, typename _Blk::iterator& rDataEnd )
+{
+    rData = _Blk::begin(*it->data);
+    if (rLenRemain >= it->size)
+    {
+        // Block is shorter than the remaining requested length.
+        rDataEnd = _Blk::end(*it->data);
+        rLenRemain -= it->size;
+    }
+    else
+    {
+        rDataEnd = rData;
+        std::advance(rDataEnd, rLenRemain);
+        rLenRemain = 0;
+    }
+}
+
 bool appendDouble(
     sc::FormulaGroupContext::NumArrayType& rArray, size_t nLen,
     sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
@@ -2064,20 +2084,8 @@ bool appendDouble(
         {
             case sc::element_type_numeric:
             {
-                sc::numeric_block::iterator itData = sc::numeric_block::begin(*it->data);
-                sc::numeric_block::iterator itDataEnd;
-                if (nLenRemain >= it->size)
-                {
-                    // Block is shorter than the remaining requested length.
-                    itDataEnd = sc::numeric_block::end(*it->data);
-                    nLenRemain -= it->size;
-                }
-                else
-                {
-                    itDataEnd = itData;
-                    std::advance(itDataEnd, nLenRemain);
-                    nLenRemain = 0;
-                }
+                sc::numeric_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::numeric_block>(it, nLenRemain, itData, itDataEnd);
 
                 for (; itData != itDataEnd; ++itData)
                     rArray.push_back(*itData);
@@ -2085,20 +2093,8 @@ bool appendDouble(
             break;
             case sc::element_type_formula:
             {
-                sc::formula_block::iterator itData = sc::formula_block::begin(*it->data);
-                sc::formula_block::iterator itDataEnd;
-                if (nLenRemain >= it->size)
-                {
-                    // Block is shorter than the remaining requested length.
-                    itDataEnd = sc::formula_block::end(*it->data);
-                    nLenRemain -= it->size;
-                }
-                else
-                {
-                    itDataEnd = itData;
-                    std::advance(itDataEnd, nLenRemain);
-                    nLenRemain = 0;
-                }
+                sc::formula_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::formula_block>(it, nLenRemain, itData, itDataEnd);
 
                 sal_uInt16 nErr;
                 double fVal;
@@ -2161,20 +2157,8 @@ bool appendStrings(
         {
             case sc::element_type_string:
             {
-                sc::string_block::iterator itData = sc::string_block::begin(*it->data);
-                sc::string_block::iterator itDataEnd;
-                if (nLenRemain >= it->size)
-                {
-                    // Block is shorter than the remaining requested length.
-                    itDataEnd = sc::string_block::end(*it->data);
-                    nLenRemain -= it->size;
-                }
-                else
-                {
-                    itDataEnd = itData;
-                    std::advance(itDataEnd, nLenRemain);
-                    nLenRemain = 0;
-                }
+                sc::string_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::string_block>(it, nLenRemain, itData, itDataEnd);
 
                 for (; itData != itDataEnd; ++itData)
                     rArray.push_back(rCxt.intern(*itData));
@@ -2182,20 +2166,8 @@ bool appendStrings(
             break;
             case sc::element_type_edittext:
             {
-                sc::edittext_block::iterator itData = sc::edittext_block::begin(*it->data);
-                sc::edittext_block::iterator itDataEnd;
-                if (nLenRemain >= it->size)
-                {
-                    // Block is shorter than the remaining requested length.
-                    itDataEnd = sc::edittext_block::end(*it->data);
-                    nLenRemain -= it->size;
-                }
-                else
-                {
-                    itDataEnd = itData;
-                    std::advance(itDataEnd, nLenRemain);
-                    nLenRemain = 0;
-                }
+                sc::edittext_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::edittext_block>(it, nLenRemain, itData, itDataEnd);
 
                 for (; itData != itDataEnd; ++itData)
                 {
@@ -2206,20 +2178,8 @@ bool appendStrings(
             break;
             case sc::element_type_formula:
             {
-                sc::formula_block::iterator itData = sc::formula_block::begin(*it->data);
-                sc::formula_block::iterator itDataEnd;
-                if (nLenRemain >= it->size)
-                {
-                    // Block is shorter than the remaining requested length.
-                    itDataEnd = sc::formula_block::end(*it->data);
-                    nLenRemain -= it->size;
-                }
-                else
-                {
-                    itDataEnd = itData;
-                    std::advance(itDataEnd, nLenRemain);
-                    nLenRemain = 0;
-                }
+                sc::formula_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::formula_block>(it, nLenRemain, itData, itDataEnd);
 
                 sal_uInt16 nErr;
                 OUString aStr;
