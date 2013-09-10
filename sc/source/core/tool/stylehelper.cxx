@@ -124,10 +124,7 @@ OUString ScStyleNameConversion::DisplayToProgrammaticName( const OUString& rDisp
     {
         //  add the (user) suffix if the display name matches any style's programmatic name
         //  or if it already contains the suffix
-
-        String aRet(rDispName);
-        aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SC_SUFFIX_USER ) );
-        return aRet;
+        return rDispName + SC_SUFFIX_USER;
     }
 
     return rDispName;
