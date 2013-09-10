@@ -7,24 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "openclwrapper.hxx"
+
+#include "sal/config.h"
+#include "random.hxx"
+#include "oclkernels.hxx"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
-#include "sal/config.h"
-#include "random.hxx"
-#include "openclwrapper.hxx"
-#include "oclkernels.hxx"
-#ifdef SAL_WIN32
+
+#ifdef WIN32
 #include <Windows.h>
-#endif
-//#define USE_MAP_BUFFER
-using namespace std;
-GPUEnv OpenclDevice::gpuEnv;
-int OpenclDevice::isInited =0;
-
-
-#ifdef SAL_WIN32
 
 #define OPENCL_DLL_NAME "opencllo.dll"
 #define OCLERR -1
@@ -40,6 +35,16 @@ int OpenclDevice::isInited =0;
 #define OCL_CHECK(value1,value2,str) \
     if(value1!=value2) \
         fprintf(stderr,"[OCL_ERROR] %s\n",str);
+#endif
+
+using namespace std;
+
+namespace sc { namespace opencl {
+
+GPUEnv OpenclDevice::gpuEnv;
+int OpenclDevice::isInited =0;
+
+#ifdef WIN32
 
 HINSTANCE HOpenclDll = NULL;
 void * OpenclDll = NULL;
@@ -69,7 +74,7 @@ void OpenclDevice::freeOpenclDll()
 
 int OpenclDevice::initEnv()
 {
-#ifdef SAL_WIN32
+#ifdef WIN32
     while( 1 )
     {
         if( 1 == loadOpencl() )
@@ -83,14 +88,14 @@ int OpenclDevice::initEnv()
 int OpenclDevice::releaseOpenclRunEnv()
 {
     releaseOpenclEnv( &gpuEnv );
-#ifdef SAL_WIN32
+#ifdef WIN32
     freeOpenclDll();
 #endif
     return 1;
 }
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
-inline int OpenclDevice::addKernelConfig( int kCount, const char *kName )
+int OpenclDevice::addKernelConfig( int kCount, const char *kName )
 {
     if ( kCount < 1 )
         fprintf(stderr,"Error: ( KCount < 1 )" SAL_DETAIL_WHERE "addKernelConfig\n" );
@@ -2659,5 +2664,7 @@ int OclCalc::oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMa
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     return 0;
 }
+
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

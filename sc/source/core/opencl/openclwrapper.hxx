@@ -39,47 +39,6 @@
 #define CL_QUEUE_THREAD_HANDLE_AMD 0x403E
 #define CL_MAP_WRITE_INVALIDATE_REGION (1 << 2)
 
-#if defined(_MSC_VER)
-#ifndef strcasecmp
-#define strcasecmp strcmp
-#endif
-#endif
-
-#include <cstdio>
-#include <vector>
-
-typedef unsigned int uint;
-
-typedef struct _KernelEnv
-{
-    cl_context mpkContext;
-    cl_command_queue mpkCmdQueue;
-    cl_program mpkProgram;
-    cl_kernel mpkKernel;
-    char mckKernelName[150];
-} KernelEnv;
-
-typedef struct _OpenCLEnv
-{
-    cl_platform_id mpOclPlatformID;
-    cl_context mpOclContext;
-    cl_device_id mpOclDevsID;
-    cl_command_queue mpOclCmdQueue;
-} OpenCLEnv;
-
-#if defined __cplusplus
-extern "C" {
-#endif
-
-//user defined, this is function wrapper which is used to set the input parameters,
-//luanch kernel and copy data from GPU to CPU or CPU to GPU.
-typedef int ( *cl_kernel_function )( void **userdata, KernelEnv *kenv );
-
-#if defined __cplusplus
-
-}
-#endif
-
 #define CHECK_OPENCL(status,name)    \
 if( status != CL_SUCCESS )    \
 {    \
@@ -105,6 +64,44 @@ if( status != CL_SUCCESS )    \
 #define MAX_CLFILE_NUM 50
 #define MAX_CLKERNEL_NUM 200
 #define MAX_KERNEL_NAME_LEN 64
+
+#if defined(_MSC_VER)
+#ifndef strcasecmp
+#define strcasecmp strcmp
+#endif
+#endif
+
+#include <cstdio>
+#include <vector>
+
+typedef struct _KernelEnv
+{
+    cl_context mpkContext;
+    cl_command_queue mpkCmdQueue;
+    cl_program mpkProgram;
+    cl_kernel mpkKernel;
+    char mckKernelName[150];
+} KernelEnv;
+
+extern "C" {
+
+// user defined, this is function wrapper which is used to set the input
+// parameters, launch kernel and copy data from GPU to CPU or CPU to GPU.
+typedef int ( *cl_kernel_function )( void **userdata, KernelEnv *kenv );
+
+}
+
+namespace sc { namespace opencl {
+
+typedef unsigned int uint;
+
+typedef struct _OpenCLEnv
+{
+    cl_platform_id mpOclPlatformID;
+    cl_context mpOclContext;
+    cl_device_id mpOclDevsID;
+    cl_command_queue mpOclCmdQueue;
+} OpenCLEnv;
 
 typedef struct _GPUEnv
 {
@@ -214,14 +211,12 @@ public:
 
 #ifdef WIN32
     static int loadOpencl();
-    static int openclInite();
     static void freeOpenclDll();
 #endif
 
     int getOpenclState();
     void setOpenclState( int state );
-    inline static int addKernelConfig( int kCount, const char *kName );
-
+    static int addKernelConfig( int kCount, const char *kName );
 };
 
 class OclCalc: public OpenclDevice,OpenclCalcBase
@@ -293,5 +288,8 @@ public:
     friend class agency;
 };
 
+}}
+
 #endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

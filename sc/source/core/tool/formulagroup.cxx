@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
 #include "formulagroup.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
@@ -17,6 +16,7 @@
 #include "scmatrix.hxx"
 
 #include "formula/vectortoken.hxx"
+#include "config_features.h"
 
 #include <vector>
 #include <boost/unordered_map.hpp>

@@ -12,6 +12,9 @@
 
 #ifndef USE_EXTERNAL_KERNEL
 #define KERNEL( ... )# __VA_ARGS__
+
+namespace sc { namespace opencl {
+
 // Double precision is a default of spreadsheets
 // cl_khr_fp64: Khronos extension
 // cl_amd_fp64: AMD extension
@@ -379,6 +382,8 @@ __kernel void oclSub( fp_t ltData, __global fp_t *rtData, __global fp_t *outData
     outData[id] = ltData - rtData[id];
 }
 );
+
+}}
 
 #endif // USE_EXTERNAL_KERNEL
 #endif //_OCL_KERNEL_H_

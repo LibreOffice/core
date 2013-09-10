@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
 #include "formulagroup.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
@@ -23,12 +22,11 @@
 #define SINGLEARRAYLEN 100
 #define DOUBLEARRAYLEN 100
 #define SVDOUBLELEN 100
-namespace sc {
+
+namespace sc { namespace opencl {
 
 // A single public entry point for a factory function:
-namespace opencl {
-    extern sc::FormulaGroupInterpreter *createFormulaGroupInterpreter();
-}
+extern sc::FormulaGroupInterpreter *createFormulaGroupInterpreter();
 
 /////time test dbg
 double getTimeDiff(const TimeValue& t1, const TimeValue& t2)
@@ -1063,17 +1061,15 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
         return true;
 }
 
-namespace opencl {
-
 sc::FormulaGroupInterpreter *createFormulaGroupInterpreter()
 {
     if (getenv("SC_SOFTWARE"))
         return NULL;
 
     if (getenv("SC_GROUNDWATER"))
-        return new sc::FormulaGroupInterpreterGroundwater();
+        return new FormulaGroupInterpreterGroundwater();
 
-    return new sc::FormulaGroupInterpreterOpenCL();
+    return new FormulaGroupInterpreterOpenCL();
 }
 
 } // namespace opencl
