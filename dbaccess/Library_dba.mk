@@ -20,12 +20,6 @@ $(eval $(call gb_Library_add_defs,dba,\
     -DOOO_DLLIMPLEMENTATION_DBA \
 ))
 
-ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
-$(eval $(call gb_Library_add_defs,dba,\
-    -DENABLE_FIREBIRD_SDBC \
-))
-endif
-
 $(eval $(call gb_Library_use_external,dba,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,dba))
