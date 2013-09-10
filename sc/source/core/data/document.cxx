@@ -1024,7 +1024,7 @@ SCROW ScDocument::GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2 ) const
     if (!pTab)
         return -1;
 
-    pTab->GetLastDataRow(nCol1, nCol2);
+    return pTab->GetLastDataRow(nCol1, nCol2);
 }
 
 // connected area
