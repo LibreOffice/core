@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7D8\u003d",
+        "filename": "sw/source/filter/ww8/writerwordglue.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000120
+      },
+      "writtenOn": "2013-09-10T17:39:24Z",
+      "side": 1,
+      "message": "I assume we want sal_uInt32 here now given that this deals with string lengths/positions?",
+      "revId": "4d10d3d231002cd4d745fb76be77b2f61163b236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7EI\u003d",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000120
+      },
+      "writtenOn": "2013-09-10T17:39:24Z",
+      "side": 1,
+      "message": "Maybe we could avoid the +\u003d by just having sParams \u003d GetWordDefaultDateStringAsUS(pFormatter, rLang) + \" HH:MM:SS AM/PM\"; ?",
+      "revId": "4d10d3d231002cd4d745fb76be77b2f61163b236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
