@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7Dc\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-09-10T19:53:29Z",
+      "side": 1,
+      "message": "should detect error here right?\ne.g.\nif ( ! aAny\u003e\u003e\u003d aUnoData )\n{\n    SbxBase::SetError( SbxERR_CONVERSION );\n    return;\n}",
+      "revId": "a6a8413ab3ddb8738f13d5a418a35ba866ca167e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Do\u003d",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3312,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-09-10T19:53:29Z",
+      "side": 1,
+      "message": "This makes me uneasy, treating this specific uno structure differently from other uno struct feels wrong. This coercing of the type ( and actually I am not totally sure of which scenarios this is called ) could be error prone, I\u0027d worry that this might happen unexpectedly ( and also there afaik is no similar precedent in libreoffice basic )",
+      "revId": "a6a8413ab3ddb8738f13d5a418a35ba866ca167e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Dk\u003d",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-09-10T19:53:29Z",
+      "side": 1,
+      "message": "Same as previous, I think this could lead to some unexpected results. I really would prefer that uno structures are treated just as structures and no special conversion especially in such a core base value function. Also there is the issue of the lack of symmetry now between ::Get \u0026 ::Put\n\nIf one wanted to set an error then SbxBase::SetError( SbxERR_CONVERSION ) probably would be the appropriate one",
+      "revId": "a6a8413ab3ddb8738f13d5a418a35ba866ca167e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
