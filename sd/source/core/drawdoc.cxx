@@ -1000,8 +1000,7 @@ void SdDrawDocument::InitLayoutVector()
     rtl::OUString sFilename;
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
-        rtl::OUString filepath = aFiles[i];
-        sFilename= ::comphelper::getExpandedFilePath(filepath,xContext);
+        sFilename = ::comphelper::getExpandedFilePath(aFiles[i]);
 
         // load layout file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(
@@ -1030,8 +1029,7 @@ void SdDrawDocument::InitObjectVector()
     rtl::OUString sFilename;
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
-        rtl::OUString filepath = aFiles[i];
-        sFilename= ::comphelper::getExpandedFilePath(filepath,xContext);
+        sFilename = ::comphelper::getExpandedFilePath(aFiles[i]);
 
         // load presentation object file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(

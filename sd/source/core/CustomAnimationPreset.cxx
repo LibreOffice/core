@@ -33,6 +33,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/expandmacro.hxx>
 
 #include <tools/debug.hxx>
 #include <rtl/uri.hxx>
@@ -291,8 +292,6 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
     return xRootNode;
 }
 
-#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
-
 void CustomAnimationPresets::importEffects()
 {
     try
@@ -324,16 +323,7 @@ void CustomAnimationPresets::importEffects()
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
-            OUString aURL = aFiles[i];
-            if( aURL.startsWith( EXPAND_PROTOCOL ) )
-            {
-                // cut protocol
-                OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-                // decode uric class chars
-                aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                // expand macro string
-                aURL = xMacroExpander->expandMacros( aMacro );
-            }
+            OUString aURL = ::comphelper::getExpandedFilePath(aFiles[i]);
 
             mxRootNode = implImportEffects( xServiceFactory, aURL );
 

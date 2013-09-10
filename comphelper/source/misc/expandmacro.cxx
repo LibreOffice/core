@@ -10,29 +10,17 @@
 #include <comphelper/expandmacro.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
-#include <osl/file.h>
-#include <comphelper/processfactory.hxx>
+#include <rtl/bootstrap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::com::sun::star::lang::XMultiServiceFactory;
 
 namespace comphelper
 {
     rtl::OUString getExpandedFilePath(const rtl::OUString& filepath)
     {
-        const Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-        return getExpandedFilePath(filepath, xContext);
-    }
-
-    rtl::OUString getExpandedFilePath(const rtl::OUString& filepath, const Reference<XComponentContext>& xContext)
-    {
-        Reference< util::XMacroExpander > xMacroExpander = util::theMacroExpander::get( xContext );
-
         rtl::OUString aFilename = filepath;
 
         if( aFilename.startsWith( "vnd.sun.star.expand:" ) )
@@ -44,16 +32,10 @@ namespace comphelper
             aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 
             // expand macro string
-            aFilename = xMacroExpander->expandMacros( aMacro );
-        }
+            rtl::Bootstrap::expandMacros( aMacro);
 
-        if( aFilename.startsWith( "file://" ) )
-        {
-            rtl::OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aFilename.pData, &aSysPath.pData ) == osl_File_E_None )
-                aFilename = aSysPath;
+            aFilename = aMacro;
         }
-
         return aFilename;
     }
 }
