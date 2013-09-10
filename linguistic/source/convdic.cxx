@@ -123,18 +123,18 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     }
 }
 
-sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
+sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
 {
     sal_Bool bRes = sal_False;
 
-    if (rFileURL.Len() == 0)
+    if (rFileURL.isEmpty())
         return bRes;
 
     // check if file extension matches CONV_DIC_EXT
     String aExt;
-    xub_StrLen nPos = rFileURL.SearchBackward( '.' );
-    if (STRING_NOTFOUND != nPos)
-        aExt = rFileURL.Copy( nPos + 1 );
+    sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
+    if (-1 != nPos)
+        aExt = rFileURL.copy( nPos + 1 );
     aExt.ToLowerAscii();
     if (!aExt.EqualsAscii( CONV_DIC_EXT ))
         return bRes;
@@ -164,11 +164,11 @@ sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvTy
 
 
 ConvDic::ConvDic(
-        const String &rName,
+        const OUString &rName,
         sal_Int16 nLang,
         sal_Int16 nConvType,
-             sal_Bool bBiDirectional,
-        const String &rMainURL) :
+        sal_Bool bBiDirectional,
+        const OUString &rMainURL) :
     aFlushListeners( GetLinguMutex() )
 {
     aName           = rName;
@@ -188,7 +188,7 @@ ConvDic::ConvDic(
     bIsModified  = bIsActive = sal_False;
     bIsReadonly = sal_False;
 
-    if( rMainURL.Len() > 0 )
+    if( !rMainURL.isEmpty() )
     {
         sal_Bool bExists = sal_False;
         bIsReadonly = IsReadOnly( rMainURL, &bExists );
@@ -232,7 +232,7 @@ void ConvDic::Load()
 void ConvDic::Save()
 {
     DBG_ASSERT( !bNeedEntries, "saving while entries missing" );
-    if (aMainURL.Len() == 0 || bNeedEntries)
+    if (aMainURL.isEmpty() || bNeedEntries)
         return;
     DBG_ASSERT(!INetURLObject( aMainURL ).HasError(), "invalid URL");
 

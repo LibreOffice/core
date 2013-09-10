@@ -40,7 +40,7 @@
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
 
-sal_Bool    IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
+sal_Bool    IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
 
 struct StrLT
 {
@@ -87,9 +87,9 @@ protected:
 
     std::auto_ptr< PropTypeMap >    pConvPropType;
 
-    String          aMainURL;   // URL to file
-    OUString   aName;
-    sal_Int16           nLanguage;
+    OUString        aMainURL;   // URL to file
+    OUString        aName;
+    sal_Int16       nLanguage;
     sal_Int16       nConversionType;
     sal_Int16       nMaxLeftCharCount;
     sal_Int16       nMaxRightCharCount;
@@ -108,11 +108,11 @@ protected:
     void    Save();
 
 public:
-    ConvDic( const String &rName,
+    ConvDic( const OUString &rName,
              sal_Int16 nLanguage,
              sal_Int16 nConversionType,
              sal_Bool bBiDirectional,
-             const String &rMainURL);
+             const OUString &rMainURL);
     virtual ~ConvDic();
 
     // XConversionDictionary
