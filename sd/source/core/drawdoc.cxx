@@ -73,6 +73,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <comphelper/expandmacro.hxx>
+#include <osl/file.h>
 
 #include <editeng/outliner.hxx>
 #include "drawdoc.hxx"
@@ -1001,7 +1002,14 @@ void SdDrawDocument::InitLayoutVector()
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
         rtl::OUString filepath = aFiles[i];
-        sFilename= ::comphelper::getExpandedFilePath(filepath,xContext);
+        sFilename= ::comphelper::getExpandedFilePath(filepath);
+
+        if( sFilename.startsWith( "file://" ) )
+        {
+            rtl::OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( sFilename.pData, &aSysPath.pData ) == osl_File_E_None )
+                sFilename = aSysPath;
+        }
 
         // load layout file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(
@@ -1031,7 +1039,14 @@ void SdDrawDocument::InitObjectVector()
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
         rtl::OUString filepath = aFiles[i];
-        sFilename= ::comphelper::getExpandedFilePath(filepath,xContext);
+        sFilename= ::comphelper::getExpandedFilePath(filepath);
+
+        if( sFilename.startsWith( "file://" ) )
+        {
+            rtl::OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( sFilename.pData, &aSysPath.pData ) == osl_File_E_None )
+                sFilename = aSysPath;
+        }
 
         // load presentation object file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(
