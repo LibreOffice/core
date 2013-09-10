@@ -30,6 +30,7 @@
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sot/storage.hxx>
 #include <svtools/imagemgr.hxx>
+#include <svtools/langhelp.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 #include <tools/urlobj.hxx>
@@ -41,6 +42,7 @@
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -53,6 +55,8 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
 #include "doc.hrc"
@@ -63,6 +67,8 @@
 #define TM_SETTING_MANAGER "TemplateManager"
 #define TM_SETTING_LASTFOLDER "LastFolder"
 #define TM_SETTING_FILTER "SelectedFilter"
+
+const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -448,7 +454,7 @@ void SfxTemplateManagerDlg::Resize()
 
     long nToolbarsHeight = std::max(std::max(aViewSize.getHeight(), aActionSize.getHeight()), aTemplateSize.getHeight());
 
-    aActionSize.setWidth(2.5*aActionSize.getWidth());
+    aActionSize.setWidth(3.35*aActionSize.getWidth());
     aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
     aTemplateSize.setWidth(aWinSize.getWidth());
 
@@ -515,6 +521,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXActionHdl)
     {
     case TBI_TEMPLATE_SEARCH:
         OnTemplateSearch();
+        break;
+    case TBI_TEMPLATE_LINK:
+        OnTemplateLink();
         break;
     default:
         break;
@@ -1173,6 +1182,40 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     mpSearchEdit->SetText(OUString());
     if (!bVisible)
         mpSearchEdit->GrabFocus();
+}
+
+void SfxTemplateManagerDlg::OnTemplateLink ()
+{
+    OUString sNode("TemplateRepositoryURL");
+    OUString sNodePath("/org.openoffice.Office.Common/Help/StartCenter");
+    try
+    {
+        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+        Sequence<Any> args(1);
+        PropertyValue val(
+            "nodepath",
+            0,
+            Any(sNodePath),
+            PropertyState_DIRECT_VALUE);
+        args.getArray()[0] <<= val;
+        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
+        if( xNameAccess.is() )
+        {
+            OUString sURL;
+            //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+            Any value( xNameAccess->getByName(sNode) );
+            sURL = value.get<OUString> ();
+            localizeWebserviceURI(sURL);
+
+            Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
+            //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+            xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+        }
+    }
+    catch (const Exception&)
+    {
+    }
 }
 
 void SfxTemplateManagerDlg::OnTemplateOpen ()

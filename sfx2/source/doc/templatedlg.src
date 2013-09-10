@@ -215,6 +215,17 @@ TabPage TAB_TEMPLATE_MANAGER
                     ImageBitmap = Bitmap { File = "actionaction013.png" ; };
                 };
             };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_LINK;
+                Text [en-US] = "Get more templates for %PRODUCTNAME";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actionview010.png" ; };
+                };
+            };
         };
     };
 
