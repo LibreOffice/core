@@ -283,7 +283,8 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
                 pRet = pTmp;
                 break;
             }
-        } while( mpExtInputRing != (pTmp = (SwExtTextInput*)mpExtInputRing ) );
+            pTmp = static_cast<SwExtTextInput*>(pTmp->GetNext());
+        } while ( pTmp!=mpExtInputRing );
     }
     return pRet;
 }
