@@ -209,6 +209,24 @@
       "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7F0\u003d",
+        "filename": "scp2/source/ooo/common_brand.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-10T09:22:30Z",
+      "side": 1,
+      "message": "\"how can I see SAL_WARN messages under Windows\": at least when starting soffice.exe from a cygwin shell, stderr output is printed to the shell (though apparently buffered, so SAL_WARN output sometimes shows up delayed, latest when soffice is closed)",
+      "parentUuid": "AAAAXn//7WY\u003d",
+      "revId": "7f430bac927460ed889f0ebf5f3725fe4d0bc7cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
