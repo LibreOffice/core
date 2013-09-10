@@ -56,9 +56,6 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
         y = -y;
     }
 
-    // LLA: due to a bug in printf with '%f' and long double within linux environment
-    //      we have to use %lf instead.
-
     if (_nPrec != PREC_long_double)
     {
         printf("double equal: %.20f\n", x);
@@ -76,18 +73,18 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
     if (_nPrec != PREC_long_double)
         printf("nPrecOfN is  %d\n", nPrecOfN);
 
-    long double nPrec = pow(0.1, -nPrecOfN);
+    double nPrec = pow(0.1, -nPrecOfN);
 
     if (_nPrec != PREC_long_double)
         printf("        prec: %.20f\n", nPrec);
 
-    long double nDelta = fabs( x - y ) ;
+    double nDelta = fabs( x - y ) ;
 
     if (_nPrec != PREC_long_double)
     {
         printf("       delta: %.20f\n", nDelta);
         printf("       nPrec: %.20f\n", nPrec);
-        printf("delta must be less or equal to prec!\n\n");
+        printf("delta must be less or equal to prec\n\n");
     }
 
     if (nDelta > nPrec)
