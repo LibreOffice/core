@@ -92,13 +92,13 @@ void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
             sal_Int32 nLen = aEntries.getLength();
             for (sal_Int32 k = 0;  k < nLen;  ++k)
             {
-                String aEntryTxt;
+                OUString aEntryTxt;
                 if (pEntries[k].is())
                 {
                     // remove characters used to determine hyphenation positions
                     aEntryTxt = comphelper::string::remove(pEntries[k]->getDictionaryWord(), '=');
                 }
-                if (aEntryTxt.Len() > 0  &&  LevDistance( rText, aEntryTxt ) <= 2)
+                if (!aEntryTxt.isEmpty()  &&  LevDistance( rText, aEntryTxt ) <= 2)
                     rDicListProps.push_back( aEntryTxt );
             }
         }

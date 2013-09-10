@@ -269,10 +269,10 @@ Reference< XHyphenatedWord > SAL_CALL
         OUString aChkWord( rWord );
 
         // replace typographical apostroph by ascii apostroph
-        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
-        if (aSingleQuote.Len())
-            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+        OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        if (!aSingleQuote.isEmpty())
+            aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
@@ -405,10 +405,10 @@ Reference< XHyphenatedWord > SAL_CALL
         OUString aChkWord( rWord );
 
         // replace typographical apostroph by ascii apostroph
-        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
-        if (aSingleQuote.Len())
-            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+        OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        if (!aSingleQuote.isEmpty())
+            aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
@@ -529,10 +529,10 @@ Reference< XPossibleHyphens > SAL_CALL
         OUString aChkWord( rWord );
 
         // replace typographical apostroph by ascii apostroph
-        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
-        if (aSingleQuote.Len())
-            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+        OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        if (!aSingleQuote.isEmpty())
+            aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))

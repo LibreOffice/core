@@ -51,7 +51,7 @@ using namespace linguistic;
 
 
 
-static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg );
+static sal_Bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg );
 
 static void AddInternal( const uno::Reference< XDictionary > &rDic,
                          const OUString& rNew );
@@ -316,16 +316,16 @@ void DicList::SearchForDictionaries(
     OUString aDCP("dcp");
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
-        String  aURL( pDirCnt[i] );
+        OUString  aURL( pDirCnt[i] );
         sal_uInt16  nLang = LANGUAGE_NONE;
         sal_Bool    bNeg  = sal_False;
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
             // When not
-            xub_StrLen nPos  = aURL.Search('.');
-            String aExt(aURL.Copy(nPos + 1));
-            aExt.ToLowerAscii();
+            sal_Int32 nPos  = aURL.indexOf('.');
+            OUString aExt(aURL.copy(nPos + 1));
+            aExt = aExt.toAsciiLowerCase();
 
             if (aDCN.equals(aExt))       // negativ
                 bNeg = sal_True;
@@ -338,11 +338,11 @@ void DicList::SearchForDictionaries(
         // Record in the list of Dictoinaries
         // When it already exists don't record
         sal_Int16 nSystemLanguage = MsLangId::getSystemLanguage();
-        String aTmp1 = ToLower( aURL, nSystemLanguage );
-        xub_StrLen nPos = aTmp1.SearchBackward( '/' );
-        if (STRING_NOTFOUND != nPos)
-            aTmp1 = aTmp1.Copy( nPos + 1 );
-        String aTmp2;
+        OUString aTmp1 = ToLower( aURL, nSystemLanguage );
+        sal_Int32 nPos = aTmp1.lastIndexOf( '/' );
+        if (-1 != nPos)
+            aTmp1 = aTmp1.copy( nPos + 1 );
+        OUString aTmp2;
         size_t j;
         size_t nCount = rDicList.size();
         for(j = 0;  j < nCount;  j++)
@@ -356,7 +356,7 @@ void DicList::SearchForDictionaries(
         {
             // get decoded dictionary file name
             INetURLObject aURLObj( aURL );
-            String aDicName = aURLObj.getName( INetURLObject::LAST_SEGMENT,
+            OUString aDicName = aURLObj.getName( INetURLObject::LAST_SEGMENT,
                         true, INetURLObject::DECODE_WITH_CHARSET,
                         RTL_TEXTENCODING_UTF8 );
 
@@ -788,32 +788,32 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
 }
 
 
-xub_StrLen lcl_GetToken( String &rToken,
-            const String &rText, xub_StrLen nPos, const String &rDelim )
+xub_StrLen lcl_GetToken( OUString &rToken,
+            const OUString &rText, xub_StrLen nPos, const OUString &rDelim )
 {
     xub_StrLen nRes = STRING_LEN;
 
-    if (rText.Len() == 0  ||  nPos >= rText.Len())
-        rToken = String();
-    else if (rDelim.Len() == 0)
+    if (rText.isEmpty() ||  nPos >= rText.getLength())
+        rToken = "";
+    else if (rDelim.isEmpty())
     {
         rToken = rText;
-        if (rToken.Len())
-            nRes = rText.Len();
+        if (!rToken.isEmpty())
+            nRes = rText.getLength();
     }
     else
     {
         xub_StrLen  i;
-        for (i = nPos;  i < rText.Len();  ++i)
+        for (i = nPos;  i < rText.getLength();  ++i)
         {
-            if (STRING_NOTFOUND != rDelim.Search( rText.GetChar(i) ))
+            if (-1 != rDelim.indexOf( rText[i] ))
                 break;
         }
 
-        if (i >= rText.Len())   // delimeter not found
-            rToken  = rText.Copy( nPos );
+        if (i >= rText.getLength())   // delimeter not found
+            rToken  = rText.copy( nPos );
         else
-            rToken  = rText.Copy( nPos, sal::static_int_cast< xub_StrLen >((sal_Int32) i - nPos) );
+            rToken  = rText.copy( nPos, (sal_Int32) i - nPos );
         nRes    = i + 1;    // continue after found delimeter
     }
 
@@ -834,12 +834,12 @@ static void AddInternal(
         OSL_ENSURE(aDelim.indexOf(static_cast<sal_Unicode>('.')) == -1,
             "ensure no '.'");
 
-        String      aToken;
+        OUString      aToken;
         xub_StrLen  nPos = 0;
         while (STRING_LEN !=
                     (nPos = lcl_GetToken( aToken, rNew, nPos, aDelim )))
         {
-            if( aToken.Len()  &&  !IsNumeric( aToken ) )
+            if( !aToken.isEmpty()  &&  !IsNumeric( aToken ) )
             {
                 rDic->add( aToken, sal_False, OUString() );
             }
@@ -862,16 +862,16 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic )
     }
 }
 
-static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg )
+static sal_Bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg )
 {
-    if (rFileURL.Len() == 0)
+    if (rFileURL.isEmpty())
         return sal_False;
     OUString aDIC("dic");
-    String aExt;
-    xub_StrLen nPos = rFileURL.SearchBackward( '.' );
-    if (STRING_NOTFOUND != nPos)
-        aExt = rFileURL.Copy( nPos + 1 );
-    aExt.ToLowerAscii();
+    OUString aExt;
+    sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
+    if (-1 != nPos)
+        aExt = rFileURL.copy( nPos + 1 );
+    aExt = aExt.toAsciiLowerCase();
 
     if (!aDIC.equals(aExt))
         return sal_False;

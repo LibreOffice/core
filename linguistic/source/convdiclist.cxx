@@ -64,7 +64,7 @@ bool operator == ( const Locale &r1, const Locale &r2 )
 }
 
 
-String GetConvDicMainURL( const String &rDicName, const String &rDirectoryURL )
+OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectoryURL )
 {
     // build URL to use for new (persistent) dictionaries
 
@@ -76,7 +76,7 @@ String GetConvDicMainURL( const String &rDicName, const String &rDirectoryURL )
     aURLObj.Append( aFullDicName, INetURLObject::ENCODE_ALL );
     DBG_ASSERT(!aURLObj.HasError(), "invalid URL");
     if (aURLObj.HasError())
-        return String();
+        return OUString();
     else
         return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 }
@@ -120,7 +120,7 @@ public:
 
     // looks for conversion dictionaries with the specified extension
     // in the directory and adds them to the container
-    void AddConvDics( const String &rSearchDirPathURL, const String &rExtension );
+    void AddConvDics( const OUString &rSearchDirPathURL, const OUString &rExtension );
 
     // calls Flush for the dictionaries that support XFlushable
     void    FlushDics() const;
@@ -293,8 +293,8 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
 
     // physically remove dictionary
     uno::Reference< XConversionDictionary > xDel = aConvDics.getArray()[nRplcIdx];
-    String aName( xDel->getName() );
-    String aDicMainURL( GetConvDicMainURL( aName, GetDictionaryWriteablePath() ) );
+    OUString aName( xDel->getName() );
+    OUString aDicMainURL( GetConvDicMainURL( aName, GetDictionaryWriteablePath() ) );
     INetURLObject aObj( aDicMainURL );
     DBG_ASSERT( aObj.GetProtocol() == INET_PROT_FILE, "+HangulHanjaOptionsDialog::OkHdl(): non-file URLs cannot be deleted" );
     if( aObj.GetProtocol() == INET_PROT_FILE )
@@ -325,8 +325,8 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
 
 
 void ConvDicNameContainer::AddConvDics(
-        const String &rSearchDirPathURL,
-        const String &rExtension )
+        const OUString &rSearchDirPathURL,
+        const OUString &rExtension )
 {
     const Sequence< OUString > aDirCnt(
                 utl::LocalFileHelper::GetFolderContents( rSearchDirPathURL, sal_False ) );
@@ -335,13 +335,13 @@ void ConvDicNameContainer::AddConvDics(
 
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
-        String  aURL( pDirCnt[i] );
+        OUString  aURL( pDirCnt[i] );
 
-        xub_StrLen nPos  = aURL.SearchBackward('.');
-        String  aExt(aURL.Copy(nPos + 1));
-        aExt.ToLowerAscii();
-        String  aSearchExt( rExtension );
-        aSearchExt.ToLowerAscii();
+        sal_Int32 nPos  = aURL.lastIndexOf('.');
+        OUString  aExt(aURL.copy(nPos + 1));
+        aExt = aExt.toAsciiLowerCase();
+        OUString  aSearchExt( rExtension );
+        aSearchExt = aSearchExt.toAsciiLowerCase();
         if(aExt != aSearchExt)
             continue;          // skip other files
 
@@ -351,7 +351,7 @@ void ConvDicNameContainer::AddConvDics(
         {
             // get decoded dictionary file name
             INetURLObject aURLObj( aURL );
-            String aDicName = aURLObj.getBase( INetURLObject::LAST_SEGMENT,
+            OUString aDicName = aURLObj.getBase( INetURLObject::LAST_SEGMENT,
                         true, INetURLObject::DECODE_WITH_CHARSET,
                         RTL_TEXTENCODING_UTF8 );
 
@@ -486,7 +486,7 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
         throw ElementExistException();
 
     uno::Reference< XConversionDictionary > xRes;
-    String aDicMainURL( GetConvDicMainURL( rName, GetDictionaryWriteablePath() ) );
+    OUString aDicMainURL( GetConvDicMainURL( rName, GetDictionaryWriteablePath() ) );
     if (nLang == LANGUAGE_KOREAN &&
         nConvDicType == ConversionDictionaryType::HANGUL_HANJA)
     {

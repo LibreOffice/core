@@ -48,16 +48,16 @@ HyphenatedWord::HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16
     nHyphenationPos (nHPos),
     nLanguage       (nLang)
 {
-    String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-    DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
-    if (aSingleQuote.Len())
+    OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+    DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+    if (!aSingleQuote.isEmpty())
     {
         // ignore typographical apostrophes (which got replaced in original
         // word when being checked for hyphenation) in results.
         OUString aTmpWord( rWord );
         OUString aTmpHyphWord( rHyphWord );
-        aTmpWord        = aTmpWord    .replace( aSingleQuote.GetChar(0), '\'' );
-        aTmpHyphWord    = aTmpHyphWord.replace( aSingleQuote.GetChar(0), '\'' );
+        aTmpWord        = aTmpWord    .replace( aSingleQuote[0], '\'' );
+        aTmpHyphWord    = aTmpHyphWord.replace( aSingleQuote[0], '\'' );
         bIsAltSpelling  = aTmpWord != aTmpHyphWord;
     }
     else

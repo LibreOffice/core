@@ -1291,8 +1291,8 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    String aPrefix( aNode );
-    aPrefix.Append( (sal_Unicode) '/' );
+    OUString aPrefix( aNode );
+    aPrefix += "/";
     for (int i = 0;  i < nLen;  ++i)
     {
         OUString aTmp( aPrefix );
@@ -1309,9 +1309,9 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
             uno::Sequence< OUString > aSvcImplNames;
             if (pValues[i] >>= aSvcImplNames)
             {
-                String aLocaleStr( pNames[i] );
-                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
+                OUString aLocaleStr( pNames[i] );
+                sal_Int32 nSeparatorPos = aLocaleStr.lastIndexOf( '/' );
+                aLocaleStr = aLocaleStr.copy( nSeparatorPos + 1 );
                 rSpellDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }
@@ -1329,8 +1329,8 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    String aPrefix( aNode );
-    aPrefix.Append( (sal_Unicode) '/' );
+    OUString aPrefix( aNode );
+    aPrefix += "/";
     for (int i = 0;  i < nLen;  ++i)
     {
         OUString aTmp( aPrefix );
@@ -1351,9 +1351,9 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
                 if (aSvcImplNames.getLength() > 1)
                     aSvcImplNames.realloc(1);
 
-                String aLocaleStr( pNames[i] );
-                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
+                OUString aLocaleStr( pNames[i] );
+                sal_Int32 nSeparatorPos = aLocaleStr.lastIndexOf( '/' );
+                aLocaleStr = aLocaleStr.copy( nSeparatorPos + 1 );
                 rGrammarDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }
@@ -1371,8 +1371,8 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    String aPrefix( aNode );
-    aPrefix.Append( (sal_Unicode) '/' );
+    OUString aPrefix( aNode );
+    aPrefix += "/";
     for (int i = 0;  i < nLen;  ++i)
     {
         OUString aTmp( aPrefix );
@@ -1393,9 +1393,9 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
                 if (aSvcImplNames.getLength() > 1)
                     aSvcImplNames.realloc(1);
 
-                String aLocaleStr( pNames[i] );
-                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
+                OUString aLocaleStr( pNames[i] );
+                sal_Int32 nSeparatorPos = aLocaleStr.lastIndexOf( '/' );
+                aLocaleStr = aLocaleStr.copy( nSeparatorPos + 1 );
                 rHyphDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }
@@ -1413,8 +1413,8 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    String aPrefix( aNode );
-    aPrefix.Append( (sal_Unicode) '/' );
+    OUString aPrefix( aNode );
+    aPrefix += "/";
     for (int i = 0;  i < nLen;  ++i)
     {
         OUString aTmp( aPrefix );
@@ -1431,9 +1431,9 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
             uno::Sequence< OUString > aSvcImplNames;
             if (pValues[i] >>= aSvcImplNames)
             {
-                String aLocaleStr( pNames[i] );
-                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
+                OUString aLocaleStr( pNames[i] );
+                sal_Int32 nSeparatorPos = aLocaleStr.lastIndexOf( '/' );
+                aLocaleStr = aLocaleStr.copy( nSeparatorPos + 1 );
                 rThesDsp.SetServiceList( LanguageTag::convertToLocale(aLocaleStr), aSvcImplNames );
             }
         }

@@ -71,12 +71,12 @@ static const OUString ConversionTypeToText( sal_Int16 nConversionType )
     return aRes;
 }
 
-static sal_Int16 GetConversionTypeFromText( const String &rText )
+static sal_Int16 GetConversionTypeFromText( const OUString &rText )
 {
     sal_Int16 nRes = -1;
-    if (rText.EqualsAscii( CONV_TYPE_HANGUL_HANJA ))
+    if (rText == CONV_TYPE_HANGUL_HANJA)
         nRes = ConversionDictionaryType::HANGUL_HANJA;
-    else if (rText.EqualsAscii( CONV_TYPE_SCHINESE_TCHINESE ))
+    else if (rText == CONV_TYPE_SCHINESE_TCHINESE)
         nRes = ConversionDictionaryType::SCHINESE_TCHINESE;
     return nRes;
 }

@@ -68,9 +68,9 @@ using namespace linguistic;
 
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
-void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
+void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
 {
-    if (rMainURL.Len() == 0)
+    if (rMainURL.isEmpty())
         return;
     DBG_ASSERT(!INetURLObject( rMainURL ).HasError(), "invalid URL");
 
@@ -131,12 +131,12 @@ sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConv
         return bRes;
 
     // check if file extension matches CONV_DIC_EXT
-    String aExt;
+    OUString aExt;
     sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
     if (-1 != nPos)
         aExt = rFileURL.copy( nPos + 1 );
-    aExt.ToLowerAscii();
-    if (!aExt.EqualsAscii( CONV_DIC_EXT ))
+    aExt = aExt.toAsciiLowerCase();
+    if (aExt != CONV_DIC_EXT)
         return bRes;
 
     // first argument being 0 should stop the file from being parsed

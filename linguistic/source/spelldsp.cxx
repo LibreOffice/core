@@ -302,10 +302,10 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
         Locale aLocale( LanguageTag::convertToLocale( nLanguage ) );
 
         // replace typographical apostroph by ascii apostroph
-        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
-        if (aSingleQuote.Len())
-            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+        OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        if (!aSingleQuote.isEmpty())
+            aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
@@ -469,10 +469,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         Locale aLocale( LanguageTag::convertToLocale( nLanguage ) );
 
         // replace typographical apostroph by ascii apostroph
-        String aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
-        DBG_ASSERT( 1 == aSingleQuote.Len(), "unexpectend length of quotation mark" );
-        if (aSingleQuote.Len())
-            aChkWord = aChkWord.replace( aSingleQuote.GetChar(0), '\'' );
+        OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
+        DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
+        if (!aSingleQuote.isEmpty())
+            aChkWord = aChkWord.replace( aSingleQuote[0], '\'' );
 
         RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
