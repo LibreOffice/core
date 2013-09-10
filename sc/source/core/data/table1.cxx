@@ -987,20 +987,20 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
             (rStartRow != rEndRow || aCol[rStartCol].HasDataAt( rStartRow)));
 }
 
-SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2 ) const
+SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const
 {
     if (!ValidCol(nCol1) || !ValidCol(nCol2))
         return -1;
 
-    SCROW nLastRow = 0;
+    SCROW nNewLastRow = 0;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
     {
-        SCROW nThis = aCol[i].GetLastDataPos();
-        if (nLastRow < nThis)
-            nLastRow = nThis;
+        SCROW nThis = aCol[i].GetLastDataPos(nLastRow);
+        if (nNewLastRow < nThis)
+            nNewLastRow = nThis;
     }
 
-    return nLastRow;
+    return nNewLastRow;
 }
 
 SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,

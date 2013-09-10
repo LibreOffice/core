@@ -1255,6 +1255,19 @@ SCROW ScColumn::GetLastDataPos() const
     return MAXROW - static_cast<SCROW>(it->size);
 }
 
+SCROW ScColumn::GetLastDataPos( SCROW nLastRow ) const
+{
+    sc::CellStoreType::const_position_type aPos = maCells.position(nLastRow);
+    if (aPos.first->type != sc::element_type_empty)
+        return nLastRow;
+
+    if (aPos.first == maCells.begin())
+        // This is the first block, and is empty.
+        return 0;
+
+    return static_cast<SCROW>(aPos.first->position - 1);
+}
+
 bool ScColumn::GetPrevDataPos(SCROW& rRow) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(rRow);

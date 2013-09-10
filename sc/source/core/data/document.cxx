@@ -1018,13 +1018,13 @@ bool ScDocument::ShrinkToUsedDataArea( bool& o_bShrunk, SCTAB nTab, SCCOL& rStar
     return maTabs[nTab]->ShrinkToUsedDataArea( o_bShrunk, rStartCol, rStartRow, rEndCol, rEndRow, bColumnsOnly);
 }
 
-SCROW ScDocument::GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2 ) const
+SCROW ScDocument::GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return -1;
 
-    return pTab->GetLastDataRow(nCol1, nCol2);
+    return pTab->GetLastDataRow(nCol1, nCol2, nLastRow);
 }
 
 // connected area

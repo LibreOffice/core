@@ -3365,7 +3365,8 @@ class GroupTokenConverter
 
     SCROW trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCROW nRowLen)
     {
-        SCROW nLastRow = mrDoc.GetLastDataRow(nTab, nCol1, nCol2);
+        SCROW nLastRow = nRow + nRowLen - 1; // current last row.
+        nLastRow = mrDoc.GetLastDataRow(nTab, nCol1, nCol2, nLastRow);
         if (nLastRow < (nRow + nRowLen - 1))
             nRowLen = nLastRow - nRow + 1;
         else if (nLastRow == 0)

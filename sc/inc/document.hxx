@@ -1028,11 +1028,16 @@ public:
                                           SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     /**
-     * Return the last non-empty row position in given columns, or 0 if the
-     * columns are empty. A negative value is returned if the given sheet or
-     * column positions are invalid.
+     * Return the last non-empty row position in given columns that's no
+     * greater than the initial last row position, or 0 if the columns are
+     * empty. A negative value is returned if the given sheet or column
+     * positions are invalid.
+     *
+     * <p>It starts from the specified last row position, and finds the first
+     * non-empty row position in the upward direction if the start row
+     * position is empty.</p>
      */
-    SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2 ) const;
+    SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 
     SC_DLLPUBLIC void           GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow, bool bIncludeOld, bool bOnlyDown ) const;
