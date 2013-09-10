@@ -84,7 +84,7 @@ sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 
 
 
-HHConvDic::HHConvDic( const String &rName, const String &rMainURL ) :
+HHConvDic::HHConvDic( const OUString &rName, const OUString &rMainURL ) :
     ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, sal_True, rMainURL )
 {
 }

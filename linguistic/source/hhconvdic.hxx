@@ -40,7 +40,7 @@ class HHConvDic :
     HHConvDic & operator = (const HHConvDic &);
 
 public:
-    HHConvDic( const String &rName, const String &rMainURL );
+    HHConvDic( const OUString &rName, const OUString &rMainURL );
     virtual ~HHConvDic();
 
     // XConversionDictionary
