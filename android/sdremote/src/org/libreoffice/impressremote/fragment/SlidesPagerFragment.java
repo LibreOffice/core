@@ -21,12 +21,10 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextSwitcher;
-import android.widget.ViewAnimator;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import org.libreoffice.impressremote.communication.SlideShow;
@@ -84,6 +82,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         aSlidesPager.setOnPageChangeListener(this);
 
         setUpCurrentSlide();
+        setUpCurrentSlideNotes();
     }
 
     private ViewPager getSlidesPager() {
@@ -104,6 +103,12 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         SlideShow aSlideShow = mCommunicationService.getSlideShow();
 
         getSlidesPager().setCurrentItem(aSlideShow.getCurrentSlideIndex());
+    }
+
+    private void setUpCurrentSlideNotes() {
+        SlideShow aSlideShow = mCommunicationService.getSlideShow();
+
+        setUpSlideNotes(aSlideShow.getCurrentSlideIndex());
     }
 
     @Override
@@ -129,28 +134,20 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private void showSlideNotes(int aSlideIndex) {
-        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
-        ViewGroup aNotesLayout = (ViewGroup) getView().findViewById(R.id.layout_notes);
-
-        if (aViewAnimator.getDisplayedChild() != aViewAnimator.indexOfChild(aNotesLayout)) {
-            aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aNotesLayout));
-        }
-
-        setSlideNotes(aSlideIndex);
-    }
-
-    private void setSlideNotes(int aSlideIndex) {
-        TextSwitcher aSlideNotesTextSwitcher = (TextSwitcher) getView().findViewById(R.id.text_switcher_notes);
+        TextSwitcher aSlideNotesSwitcher = getSlideNotesSwitcher();
         String aSlideNotes = mCommunicationService.getSlideShow().getSlideNotes(aSlideIndex);
 
-        aSlideNotesTextSwitcher.setText(Html.fromHtml(aSlideNotes));
+        aSlideNotesSwitcher.setText(Html.fromHtml(aSlideNotes));
+    }
+
+    private TextSwitcher getSlideNotesSwitcher() {
+        return (TextSwitcher) getView().findViewById(R.id.text_switcher_notes);
     }
 
     private void hideSlideNotes() {
-        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
-        View aEmptyView = getView().findViewById(R.id.view_empty);
+        TextSwitcher aSlideNotesSwitcher = getSlideNotesSwitcher();
 
-        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aEmptyView));
+        aSlideNotesSwitcher.setText(getString(R.string.message_notes_empty));
     }
 
     @Override

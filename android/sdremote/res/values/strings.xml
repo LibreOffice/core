@@ -43,6 +43,7 @@
     <string name="message_search_wifi">Make sure LibreOffice is running on a computer on the same WiFi network.</string>
     <string name="message_search_bluetooth">Make sure LibreOffice is running on a computer with Bluetooth enabled.</string>
     <string name="message_paused">Paused</string>
+    <string name="message_notes_empty">Nothing here.</string>
 
     <string name="hint_ip_address">IP address</string>
     <string name="hint_name">Name (optional)</string>

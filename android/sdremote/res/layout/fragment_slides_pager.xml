@@ -13,59 +13,46 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 
-    <ViewAnimator
-        android:id="@+id/view_animator"
-        android:inAnimation="@android:anim/fade_in"
-        android:outAnimation="@android:anim/fade_out"
+    <LinearLayout
+        android:id="@+id/layout_notes"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_slides_pager"
+        android:paddingRight="@dimen/padding_slides_pager"
         android:layout_weight="3"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <View
-            android:id="@+id/view_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        <TextView
+            style="@style/SectionHeader"
+            android:text="@string/header_notes"
+            android:paddingTop="@dimen/padding_header"/>
 
-        <LinearLayout
-            android:id="@+id/layout_notes"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/padding_slides_pager"
-            android:paddingRight="@dimen/padding_slides_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <TextView
-                style="@style/SectionHeader"
-                android:text="@string/header_notes"
-                android:paddingTop="@dimen/padding_header"/>
-
-            <ScrollView
-                android:layout_width="wrap_content"
+            <TextSwitcher
+                android:id="@+id/text_switcher_notes"
+                android:inAnimation="@android:anim/fade_in"
+                android:outAnimation="@android:anim/fade_out"
+                android:paddingTop="@dimen/padding_slide_notes"
+                android:paddingLeft="@dimen/padding_slide_notes"
+                android:paddingRight="@dimen/padding_slide_notes"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextSwitcher
-                    android:id="@+id/text_switcher_notes"
-                    android:inAnimation="@android:anim/fade_in"
-                    android:outAnimation="@android:anim/fade_out"
-                    android:paddingTop="@dimen/padding_slide_notes"
-                    android:paddingLeft="@dimen/padding_slide_notes"
-                    android:paddingRight="@dimen/padding_slide_notes"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-                </TextSwitcher>
+            </TextSwitcher>
 
-            </ScrollView>
+        </ScrollView>
 
-        </LinearLayout>
-
-    </ViewAnimator>
+    </LinearLayout>
 
 </LinearLayout>
