@@ -2095,7 +2095,7 @@ OUString EditDoc::GetSepStr( LineEnd eEnd )
     return aSep;
 }
 
-XubString EditDoc::GetText( LineEnd eEnd ) const
+OUString EditDoc::GetText( LineEnd eEnd ) const
 {
     sal_uLong nLen = GetTextLen();
     sal_Int32 nNodes = Count();

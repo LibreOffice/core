@@ -779,8 +779,8 @@ public:
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );
 
-    String          GetText( LineEnd eEnd ) const;
-    sal_uLong           GetTextLen() const;
+    OUString        GetText( LineEnd eEnd ) const;
+    sal_uLong       GetTextLen() const;
 
     XubString       GetParaAsString( sal_Int32 nNode ) const;
     XubString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
