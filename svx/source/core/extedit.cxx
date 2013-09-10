@@ -102,8 +102,8 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilter(rGraphicFilter.GetExportFormatNumber(fExtension));
 
-    String aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
-    String sPath(aTempFileName);
+    OUString aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
+    OUString sPath(aTempFileName);
 
     // Write the Graphic to the file now
     XOutBitmap::WriteGraphic(aGraphic, sPath, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE | XOUTBMP_DONT_EXPAND_FILENAME);

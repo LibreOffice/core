@@ -419,16 +419,16 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
         aGraphicSize.Width() = aGraphicSize.Height() = 0;
 }
 
-void SvxNumberFormat::SetGraphic( const String& rName )
+void SvxNumberFormat::SetGraphic( const OUString& rName )
 {
-    const String* pName;
+    const OUString* pName;
     if( pGraphicBrush &&
             0 != (pName = pGraphicBrush->GetGraphicLink())
                 && *pName == rName )
         return ;
 
     delete pGraphicBrush;
-    String sTmp;
+    OUString sTmp;
     pGraphicBrush = new SvxBrushItem( rName, sTmp, GPOS_AREA, 0 );
     pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
     if( eVertOrient == text::VertOrientation::NONE )
@@ -916,13 +916,13 @@ sal_Bool SvxNumRule::UnLinkGraphics()
     {
         SvxNumberFormat aFmt(GetLevel(i));
         const SvxBrushItem* pBrush = aFmt.GetBrush();
-        const String* pLinkStr;
+        const OUString* pLinkStr;
         const Graphic* pGraphic;
         if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
         {
             if(pBrush &&
                 0 != (pLinkStr = pBrush->GetGraphicLink()) &&
-                    pLinkStr->Len() &&
+                    !pLinkStr->isEmpty() &&
                     0 !=(pGraphic = pBrush->GetGraphic()))
             {
                 SvxBrushItem aTempItem(*pBrush);

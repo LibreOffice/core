@@ -3406,7 +3406,7 @@ SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj,
 // -----------------------------------------------------------------------
 
 SvxBrushItem::SvxBrushItem(
-    const String& rLink, const String& rFilter,
+    const OUString& rLink, const OUString& rFilter,
     SvxGraphicPosition ePos, sal_uInt16 _nWhich ) :
 
     SfxPoolItem( _nWhich ),
@@ -3414,8 +3414,8 @@ SvxBrushItem::SvxBrushItem(
     aColor            ( COL_TRANSPARENT ),
     nShadingValue     ( ShadingPattern::CLEAR ),
     pImpl             ( new SvxBrushItem_Impl( NULL ) ),
-    pStrLink          ( new String( rLink ) ),
-    pStrFilter        ( new String( rFilter ) ),
+    pStrLink          ( new OUString( rLink ) ),
+    pStrFilter        ( new OUString( rFilter ) ),
     eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
     bLoadAgain        ( sal_True )
 
@@ -3519,18 +3519,18 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
         if ( nDoLoad & LOAD_LINK )
         {
             // UNICODE: rStream >> aRel;
-            String aRel = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
+            OUString aRel = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
 
             // TODO/MBA: how can we get a BaseURL here?!
             OSL_FAIL("No BaseURL!");
-            String aAbs = INetURLObject::GetAbsURL( String(), aRel );
-            DBG_ASSERT( aAbs.Len(), "Invalid URL!" );
-            pStrLink = new String( aAbs );
+            OUString aAbs = INetURLObject::GetAbsURL( OUString(), aRel );
+            DBG_ASSERT( !aAbs.isEmpty(), "Invalid URL!" );
+            pStrLink = new OUString( aAbs );
         }
 
         if ( nDoLoad & LOAD_FILTER )
         {
-            pStrFilter = new String;
+            pStrFilter = new OUString;
             // UNICODE: rStream >> *pStrFilter;
             *pStrFilter = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
         }
@@ -3830,9 +3830,9 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
     if ( GPOS_NONE != eGraphicPos )
     {
         if ( rItem.pStrLink )
-            pStrLink = new String( *rItem.pStrLink );
+            pStrLink = new OUString( *rItem.pStrLink );
         if ( rItem.pStrFilter )
-            pStrFilter = new String( *rItem.pStrFilter );
+            pStrFilter = new OUString( *rItem.pStrFilter );
         if ( rItem.pImpl->pGraphicObject )
         {
             pImpl->pGraphicObject = new GraphicObject( *rItem.pImpl->pGraphicObject );
@@ -3930,7 +3930,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
     {
         OSL_FAIL("No BaseURL!");
         // TODO/MBA: how to get a BaseURL?!
-        String aRel = INetURLObject::GetRelURL( String(), *pStrLink );
+        OUString aRel = INetURLObject::GetRelURL( OUString(), *pStrLink );
         // UNICODE: rStream << aRel;
         rStream.WriteUniOrByteString(aRel, rStream.GetStreamCharSet());
     }
@@ -3957,7 +3957,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject() const
     // when graphics already loaded, use as a cache
     {
         // only with "valid" names - empty names now allowed
-        if( pStrLink->Len() )
+        if( !pStrLink->isEmpty() )
         {
             pImpl->pStream = utl::UcbStreamHelper::CreateStream( *pStrLink, STREAM_STD_READ );
             if( pImpl->pStream && !pImpl->pStream->GetError() )
@@ -4065,16 +4065,16 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
 
 // -----------------------------------------------------------------------
 
-void SvxBrushItem::SetGraphicLink( const String& rNew )
+void SvxBrushItem::SetGraphicLink( const OUString& rNew )
 {
-    if ( !rNew.Len() )
+    if ( rNew.isEmpty() )
         DELETEZ( pStrLink );
     else
     {
         if ( pStrLink )
             *pStrLink = rNew;
         else
-            pStrLink = new String( rNew );
+            pStrLink = new OUString( rNew );
 
         DELETEZ( pImpl->pGraphicObject );
     }
@@ -4082,16 +4082,16 @@ void SvxBrushItem::SetGraphicLink( const String& rNew )
 
 // -----------------------------------------------------------------------
 
-void SvxBrushItem::SetGraphicFilter( const String& rNew )
+void SvxBrushItem::SetGraphicFilter( const OUString& rNew )
 {
-    if ( !rNew.Len() )
+    if ( rNew.isEmpty() )
         DELETEZ( pStrFilter );
     else
     {
         if ( pStrFilter )
             *pStrFilter = rNew;
         else
-            pStrFilter = new String( rNew );
+            pStrFilter = new OUString( rNew );
     }
 }
 
@@ -4159,7 +4159,7 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
 
     if (!rItem.GetBitmapURL().isEmpty())
     {
-        pStrLink    = new String( rItem.GetBitmapURL() );
+        pStrLink    = new OUString( rItem.GetBitmapURL() );
         SetGraphicPos( WallpaperStyle2GraphicPos((WallpaperStyle)rItem.GetStyle() ) );
     }
 }

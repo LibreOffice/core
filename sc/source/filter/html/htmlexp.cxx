@@ -125,7 +125,6 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
                                 << GetIndentStr())
 
 #define OUT_SP_CSTR_ASS( s )    rStrm << ' ' << s << '='
-#define APPEND_SPACE( s )   s.AppendAscii(" ")
 
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
@@ -163,7 +162,7 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
 }
 
 
-static void lcl_AddStamp( String& rStr, const String& rName,
+static void lcl_AddStamp( OUString& rStr, const OUString& rName,
     const ::com::sun::star::util::DateTime& rDateTime,
     const LocaleDataWrapper& rLoc )
 {
@@ -172,33 +171,30 @@ static void lcl_AddStamp( String& rStr, const String& rName,
             rDateTime.NanoSeconds);
     DateTime aDateTime(aD,aT);
 
-    String          aStrDate    = rLoc.getDate( aDateTime );
-    String          aStrTime    = rLoc.getTime( aDateTime );
+    OUString        aStrDate    = rLoc.getDate( aDateTime );
+    OUString        aStrTime    = rLoc.getTime( aDateTime );
 
-    rStr += GLOBSTR( STR_BY );
-    APPEND_SPACE( rStr );
-    if (rName.Len())
+    rStr += GLOBSTR( STR_BY ) + " ";
+    if (!rName.isEmpty())
         rStr += rName;
     else
-        rStr.AppendAscii( "???" );
-    APPEND_SPACE( rStr );
-    rStr += GLOBSTR( STR_ON );
-    APPEND_SPACE( rStr );
-    if (aStrDate.Len())
+        rStr += "???";
+    rStr += " " + GLOBSTR( STR_ON ) + " ";
+    if (!aStrDate.isEmpty())
         rStr += aStrDate;
     else
-        rStr.AppendAscii( "???" );
-    rStr.AppendAscii( ", " );
-    if (aStrTime.Len())
+        rStr += "???";
+    rStr += ", ";
+    if (!aStrTime.isEmpty())
         rStr += aStrTime;
     else
-        rStr.AppendAscii( "???" );
+        rStr += "???";
 }
 
 
 static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 {
-    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("\"#"));
+    OStringBuffer aStr( "\"#" );
     // <font COLOR="#00FF40">hello</font>
     sal_Char    buf[64];
     sal_Char*   p = buf;
@@ -259,7 +255,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
         if( pItem )
         {
             aCId = ((const SfxStringItem *)pItem)->GetValue();
-            OSL_ENSURE( aCId.Len(), "CID without length!" );
+            OSL_ENSURE( !aCId.isEmpty(), "CID without length!" );
         }
     }
 }
@@ -356,8 +352,7 @@ void ScHTMLExport::WriteHeader()
         if (!xDocProps->getPrintedBy().isEmpty())
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
-            String aStrOut( GLOBSTR( STR_DOC_PRINTED ) );
-            aStrOut.AppendAscii( ": " );
+            OUString aStrOut = ( GLOBSTR( STR_DOC_PRINTED ) ) + ": ";
             lcl_AddStamp( aStrOut, xDocProps->getPrintedBy(),
                 xDocProps->getPrintDate(), *ScGlobal::pLocaleData );
             OUT_COMMENT( aStrOut );
@@ -566,8 +561,8 @@ void ScHTMLExport::WriteBody()
 
     if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
     {
-        const String* pLink = pBrushItem->GetGraphicLink();
-        String aGrfNm;
+        const OUString* pLink( pBrushItem->GetGraphicLink() );
+        OUString aGrfNm;
 
         // Embedded graphic -> write using WriteGraphic
         if( !pLink )
@@ -578,7 +573,7 @@ void ScHTMLExport::WriteBody()
                 // Save graphic as (JPG) file
                 aGrfNm = aStreamPath;
                 sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
-                    String("JPG"), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                    "JPG", XOUTBMP_USE_NATIVE_IF_POSSIBLE );
                 if( !nErr ) // Contains errors, as we have nothing to output
                 {
                     aGrfNm = URIHelper::SmartRel2Abs(
@@ -1249,8 +1244,8 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
 }
 
 
-sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
-        const String& rTargetNm, sal_Bool bFileToFile )
+sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
+        const OUString& rTargetNm, sal_Bool bFileToFile )
 {
     sal_Bool bRet = false;
     INetURLObject aFileUrl, aTargetUrl;
@@ -1279,8 +1274,8 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
 
         SvFileStream aTmp( aFileUrl.PathToFileName(), STREAM_READ );
 
-        String aSrc = rFileNm;
-        String aDest = aTargetUrl.GetPartBeforeLastName();
+        OUString aSrc = rFileNm;
+        OUString aDest = aTargetUrl.GetPartBeforeLastName();
         aDest += String(aFileUrl.GetName());
 
         if( bFileToFile )
@@ -1319,23 +1314,20 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( String& rFileNm,
 }
 
 
-void ScHTMLExport::MakeCIdURL( String& rURL )
+void ScHTMLExport::MakeCIdURL( OUString& rURL )
 {
-    if( !aCId.Len() )
+    if( !aCId.getLength() )
         return;
 
     INetURLObject aURLObj( rURL );
     if( INET_PROT_FILE != aURLObj.GetProtocol() )
         return;
 
-    String aLastName( aURLObj.GetLastName() );
-    OSL_ENSURE( aLastName.Len(), "filename without length!" );
-    aLastName.ToLowerAscii();
+    OUString aLastName( aURLObj.GetLastName() );
+    OSL_ENSURE( aLastName.getLength(), "filename without length!" );
+    aLastName.toAsciiLowerCase();
 
-    rURL.AssignAscii( "cid:" );
-    rURL += aLastName;
-    rURL.AppendAscii( "." );
-    rURL += aCId;
+    rURL = "cid:" + aLastName + "." + aCId;
 }
 
 

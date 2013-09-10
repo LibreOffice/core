@@ -670,8 +670,7 @@ sal_Bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIn
 
     if ( pGrf )
     {
-        const String* pGrfName = pBrsh->GetGraphicLink();
-        //String* pGrfName = (String*)(pBrsh->GetGraphicLink());
+        const OUString* pGrfName = pBrsh->GetGraphicLink();
         GrfBulDataRelation* pEntry = aGrfDataLst[nIndex];
         if ( pGrfName )
             pEntry->sGrfName = *pGrfName;
@@ -1059,7 +1058,7 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
         String sEmpty;
         if ( pGrf )
         {
-            const String* pGrfName = pBrsh->GetGraphicLink();
+            const OUString* pGrfName = pBrsh->GetGraphicLink();
             GrfBulDataRelation* pEntry = (GrfBulDataRelation*) (pActualBullets[nIndex]->pBullets);
             if ( pGrfName )
                 pEntry->sGrfName = *pGrfName;
@@ -1134,7 +1133,7 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
             else
                 return sal_False;
 
-            const String* pGrfName = 0;
+            const OUString* pGrfName = 0;
             if ( pGrf )
             {
                 pGrfName = pBrsh->GetGraphicLink();
