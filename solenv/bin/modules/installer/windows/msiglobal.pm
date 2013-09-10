@@ -1014,15 +1014,9 @@ sub set_uuid_into_component_table
             else
             {
                 # Calculating new GUID with the help of the component name.
-                my $useproductversion = 1;
-                if ( exists($installer::globals::base_independent_components{$componentname})) { $useproductversion = 0; }
-                my $sourcestring = $componentname;
 
-                if ( $useproductversion )
-                {
-                    if ( ! exists($allvariables->{'PRODUCTVERSION'}) ) { installer::exiter::exit_program("ERROR: Could not find variable \"PRODUCTVERSION\" (required value for GUID creation)!", "set_uuid_into_component_table"); }
-                    $sourcestring = $sourcestring . "_" . $allvariables->{'PRODUCTVERSION'};
-                }
+                if ( ! exists($allvariables->{'PRODUCTVERSION'}) ) { installer::exiter::exit_program("ERROR: Could not find variable \"PRODUCTVERSION\" (required value for GUID creation)!", "set_uuid_into_component_table"); }
+                my $sourcestring = $componentname . "_" . $allvariables->{'PRODUCTVERSION'};
                 $uuid = calculate_guid($sourcestring);
                 $counter++;
 

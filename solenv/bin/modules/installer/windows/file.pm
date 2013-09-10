@@ -917,13 +917,6 @@ sub create_files_table
         # Collecting also all tree conditions for multilayer products
         get_tree_condition_for_component($onefile, $file{'Component_'});
 
-        # Collecting all component names, that have flag VERSION_INDEPENDENT_COMP_ID
-        # This should be all components with constant API, for example URE
-        if ( $styles =~ /\bVERSION_INDEPENDENT_COMP_ID\b/ )
-        {
-            $installer::globals::base_independent_components{$onefile->{'componentname'}} = 1;
-        }
-
         unless ( $file{'Version'} )
         {
             my $path = $onefile->{'sourcepath'};

@@ -436,13 +436,13 @@ File gid_File_Moz_Msvcp80
     LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("msvcp80");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 File gid_File_Moz_Msvcr80
     LIB_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = SCP2_URE_DL_NORMAL("msvcr80");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 File gid_File_Moz_Msvc80crt_Manifest
     BIN_FILE_BODY;

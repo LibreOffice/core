@@ -98,7 +98,7 @@ File gid_File_Dl_Cppu
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_VER("cppu", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 
 #ifdef AIX
@@ -106,7 +106,7 @@ Unixlink gid_Unixlink_File_Dl_Cppu
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_NORMAL("cppu");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = SCP2_URE_DL_UNO_VER("cppu", "3");
 End
 #endif
@@ -115,7 +115,7 @@ File gid_File_Dl_Cppuhelper
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 
 #ifdef AIX
@@ -123,7 +123,7 @@ Unixlink gid_Unixlink_File_Dl_Cppuhelper
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_NORMAL("cppuhelper");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
 End
 #endif
@@ -132,7 +132,7 @@ File gid_File_Dl_PurpEnvHelper
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 
 #ifdef AIX
@@ -140,7 +140,7 @@ Unixlink gid_Unixlink_File_Dl_PurpEnvHelper
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_NORMAL("purpenvhelper");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
 End
 #endif
@@ -149,7 +149,7 @@ File gid_File_Dl_Sal
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_VER("sal", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 
 #ifdef AIX
@@ -157,7 +157,7 @@ Unixlink gid_Unixlink_File_Dl_Sal
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_NORMAL("sal");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = SCP2_URE_DL_UNO_VER("sal", "3");
 End
 #endif
@@ -166,7 +166,7 @@ File gid_File_Dl_Salhelper
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 
 #ifdef AIX
@@ -174,7 +174,7 @@ Unixlink gid_Unixlink_File_Dl_Salhelper
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_NORMAL("salhelper");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
 End
 #endif
@@ -268,7 +268,7 @@ End
 File gid_File_ure_install
     Dir = FILELIST_DIR;
     Name = "ure_install.filelist";
-    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED);
 End
 
 
@@ -277,7 +277,7 @@ File gid_File_Dl_JrepropertiesClass
     TXT_FILE_BODY;
     Dir = FILELIST_DIR;
     Name = "jvmfwk_jreproperties.filelist";
-    Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (FILELIST, PACKED);
 End
 #endif
 
@@ -297,7 +297,7 @@ File gid_File_Dl_Cli_Uno
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("cli_uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 
 End
 
@@ -444,7 +444,7 @@ File gid_File_Dl_Jpipe
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_JDL_NORMAL("jpipe");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 #endif
 
@@ -472,7 +472,7 @@ File gid_File_Dl_Libxml2
 #else
     Name = SCP2_URE_DL_VER("xml2", "2");
 #endif
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 #endif
 
@@ -481,7 +481,7 @@ Unixlink gid_Unixlink_File_Dl_Libxml2
     BIN_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_NORMAL("xml2");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = SCP2_URE_DL_VER("xml2", "2");
 End
 #endif
@@ -494,7 +494,7 @@ File gid_File_Lib_Mingw_GccS_Ure
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = MINGW_GCCDLL;
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 
 #endif
@@ -505,7 +505,7 @@ File gid_File_Lib_Mingw_Stdcpp_Ure
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = MINGW_GXXDLL;
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 
 #endif
@@ -519,7 +519,7 @@ File gid_File_Java_UnoloaderJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
     Name = "unoloader.jar";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 #endif
 
@@ -528,7 +528,7 @@ File gid_File_Java_JuhJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
     Name = "juh.jar";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 #endif
 
@@ -537,7 +537,7 @@ File gid_File_Java_JurtJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
     Name = "jurt.jar";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 #endif
 
@@ -546,7 +546,7 @@ File gid_File_Java_RidlJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
     Name = "ridl.jar";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 #endif
 
@@ -557,7 +557,7 @@ File gid_File_Java_JavaUnoJar
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_JAVA;
     Name = "java_uno.jar";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
 End
 #endif
 
@@ -568,7 +568,7 @@ File gid_File_Misc_TypesRdb
     Dir = GID_DIR_URE_SHARE_MISC;
     Name = "udkapi.rdb";
     InstallName = "types.rdb";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID, SUBST_FILENAME);
+    Styles = (PACKED, SUBST_FILENAME);
 End
 
 File gid_File_Misc_ServicesRdb
@@ -585,7 +585,7 @@ File gid_File_Misc_JavavendorsXml
     TXT_FILE_BODY;
     Dir = FILELIST_DIR;
     Name = "jvmfwk_javavendors.filelist";
-    Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (FILELIST, PACKED);
 End
 #endif
 

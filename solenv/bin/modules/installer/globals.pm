@@ -264,7 +264,6 @@ BEGIN
     %dontdeletecomponents = ();
     %allcalculated_guids = ();
     %calculated_component_guids = ();
-    %base_independent_components = ();
     %all_english_languagestrings = ();
     %all_required_english_languagestrings = ();
 

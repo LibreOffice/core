@@ -26,7 +26,7 @@ Unixlink gid_Unixlink_File_Lib_Curl
     BIN_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libcurl,UNXSUFFIX));
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = STRING(CONCAT3(libcurl,UNXSUFFIX,.3));
 End
 #endif
@@ -35,7 +35,7 @@ Unixlink gid_Unixlink_File_Lib_Raptor
     BIN_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libraptor,UNXSUFFIX));
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = STRING(CONCAT3(libraptor,UNXSUFFIX,.1));
 End
 
@@ -43,7 +43,7 @@ Unixlink gid_Unixlink_File_Lib_Rasqal
     BIN_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(librasqal,UNXSUFFIX));
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = STRING(CONCAT3(librasqal,UNXSUFFIX,.1));
 End
 
@@ -51,7 +51,7 @@ Unixlink gid_Unixlink_File_Lib_Rdf
     BIN_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(librdf,UNXSUFFIX));
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = STRING(CONCAT3(librdf,UNXSUFFIX,.0));
 End
 #endif
@@ -60,14 +60,14 @@ Unixlink gid_Unixlink_File_Lib_Xslt
     BIN_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libxslt,UNXSUFFIX));
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
 End
 Unixlink gid_Unixlink_File_Lib_eXslt
     BIN_FILE_BODY;
     Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(libexslt,UNXSUFFIX));
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Styles = (PACKED);
     Target = STRING(CONCAT3(libexslt,UNXSUFFIX,.0));
 End
 #endif

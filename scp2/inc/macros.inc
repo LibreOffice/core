@@ -494,7 +494,7 @@ End
         LIB_FILE_BODY; \
         Dir = SCP2_URE_DL_DIR; \
         Name = name; \
-        Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
+        Styles = (PACKED); \
     End
 
 #define URE_EXECUTABLE(id,name) \
@@ -502,7 +502,7 @@ End
         BIN_FILE_BODY; \
         Dir = GID_DIR_URE_BIN; \
         Name = name; \
-        Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
+        Styles = (PACKED); \
     End
 
 #define LIBO_EXECUTABLE(id,name) \
