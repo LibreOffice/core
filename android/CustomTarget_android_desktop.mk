@@ -17,9 +17,9 @@ $(call gb_CustomTarget_get_target,android/desktop) : \
 # in Module_android.mk, so lo4android_DIR is defined. We want that to
 # be built completely first, so that we can serialize Ant access to
 # Bootstrap and abs-lib, which are used by Desktop (this makefile),
-# LibreOffice4Android, DocumentLoader and sdremote. We don't want one
-# Ant to be cleaning out one place while another is building stuff
-# that depends on it. Yeah, this sucks
+# LibreOffice4Android and sdremote. We don't want one Ant to be
+# cleaning out one place while another is building stuff that depends
+# on it. Yeah, this sucks
 
 $(android_desktop_DIR)/done : $(lo4android_DIR)/done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)

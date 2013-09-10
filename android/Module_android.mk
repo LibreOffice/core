@@ -12,7 +12,6 @@ ifeq ($(OS),ANDROID)
 
 $(eval $(call gb_Module_add_targets,android,\
     CustomTarget_sdremote \
-    CustomTarget_docloader \
     CustomTarget_lo4android \
     CustomTarget_android_desktop \
 ))
