@@ -124,6 +124,9 @@ class DataAware(object):
                 if useUno:
                     uno.invoke(self._dataObject, "set" + self._field, (ui,))
                 else:
+                    if isinstance(ui,tuple):
+                        #Listbox Element
+                        ui = ui[0]
                     setattr(self._dataObject, self._field, ui)
             self.enableControls(ui)
         except Exception:
