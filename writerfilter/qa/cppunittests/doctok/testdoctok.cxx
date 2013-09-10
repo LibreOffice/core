@@ -20,8 +20,8 @@
 #include <sal/config.h>
 
 #include <osl/process.h>
-#include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/std_inputstream.hxx>
+#include <ucb/ucb.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
@@ -91,7 +91,7 @@ namespace testdoctok
             if (xServiceFactory.is())
             {
                 sal_Bool bRet =
-                    ::ucb::ContentBroker::initialize(xServiceFactory,
+                    ::ucb::UniversalContentBroker::initialize(xServiceFactory,
                                                      aUcbInitSequence);
 
                 OSL_ASSERT(bRet);
@@ -209,7 +209,7 @@ namespace testdoctok
 
         void testEnd()
         {
-            ::ucb::ContentBroker::deinitialize();
+            ::ucb::UniversalContentBroker::deinitialize();
         }
 
         // Change the following lines only, if you add, remove or rename
@@ -233,6 +233,6 @@ namespace testdoctok
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
