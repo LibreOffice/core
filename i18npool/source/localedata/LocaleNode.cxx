@@ -393,6 +393,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     const LocaleNode * sepNode = 0;
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
         of.writeRefFunction("getLocaleItem_", useLocale);
         return;
     }
@@ -642,6 +643,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty())
     {
+        useLocale = useLocale.replace( '-', '_');
         switch (mnSection)
         {
             case 0:
@@ -753,6 +755,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                                 OUString aRef( pCtype->getAttr().getValueByName("ref"));
                                 if (!aRef.isEmpty())
                                 {
+                                    aRef = aRef.replace( '-', '_');
                                     if (!bCtypeIsRef)
                                         fprintf( stderr,
                                                 "Warning: Can't check separators used in FormatCode due to LC_CTYPE ref=\"%s\".\n"
@@ -1279,6 +1282,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
         of.writeRefFunction("getCollatorImplementation_", useLocale);
         of.writeRefFunction("getCollationOptions_", useLocale);
         return;
@@ -1352,6 +1356,7 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
         of.writeRefFunction("getSearchOptions_", useLocale);
         return;
     }
@@ -1390,6 +1395,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
         of.writeRefFunction("getIndexAlgorithm_", useLocale);
         of.writeRefFunction("getUnicodeScripts_", useLocale);
         of.writeRefFunction("getFollowPageWords_", useLocale);
@@ -1550,6 +1556,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
         of.writeRefFunction("getAllCalendars_", useLocale);
         return;
     }
@@ -1581,6 +1588,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         const sal_Char *elementTag;
         LocaleNode * daysNode = NULL;
         OUString ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
+        ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1613,6 +1621,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // Generate Months of Year
         LocaleNode * monthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
+        ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1648,6 +1657,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             --nChild;
         LocaleNode * genitiveMonthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
+        ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1684,6 +1694,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             --nChild;
         LocaleNode * partitiveMonthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
+        ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1716,6 +1727,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // Generate Era name
         LocaleNode * erasNode = NULL;
         ref_name =   calNode -> getChildAt(nChild) ->getAttr().getValueByName("ref");
+        ref_name = ref_name.replace( '-', '_');
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1865,6 +1877,7 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
         of.writeRefFunction("getAllCurrencies_", useLocale);
         return;
     }
@@ -1966,6 +1979,7 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
         of.writeRefFunction("getTransliterations_", useLocale);
         return;
     }
@@ -2015,6 +2029,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
 {
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
     of.writeRefFunction("getForbiddenCharacters_", useLocale);
     of.writeRefFunction("getBreakIteratorRules_", useLocale);
     of.writeRefFunction("getReservedWords_", useLocale);
@@ -2112,6 +2127,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
      of.writeAsciiString("// ---> ContinuousNumbering\n");
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
     of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
     return;
     }
@@ -2182,6 +2198,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
      of.writeAsciiString("// ---> OutlineNumbering\n");
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
+        useLocale = useLocale.replace( '-', '_');
     of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
     return;
     }
