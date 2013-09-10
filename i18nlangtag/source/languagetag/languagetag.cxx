@@ -1237,8 +1237,16 @@ LanguageTag & LanguageTag::makeFallback()
                     aVec.push_back( aLanguage + "-TW");
                 else if (aCountry != "CN")
                     aVec.push_back( aLanguage + "-CN");
+                aVec.push_back( aLanguage);
             }
-            aVec.push_back( aLanguage);
+            else if (aLanguage == "ca" && aCountry == "XV")
+            {
+                ::std::vector< OUString > aCav( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
+                aVec.insert( aVec.end(), aCav.begin(), aCav.end());
+                // Already includes 'ca' language fallback.
+            }
+            else
+                aVec.push_back( aLanguage);
         }
         else if (bIncludeFullBcp47)
             aVec.push_back( aLanguage);
