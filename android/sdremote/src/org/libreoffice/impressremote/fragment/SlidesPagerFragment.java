@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextSwitcher;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -143,6 +144,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
 
         if (areSlideNotesAvailable(aSlideIndex)) {
             showSlideNotes(aSlideIndex);
+            scrollSlideNotes();
         }
         else {
             hideSlideNotes();
@@ -170,6 +172,12 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
 
     private TextSwitcher getSlideNotesSwitcher() {
         return (TextSwitcher) getView().findViewById(R.id.text_switcher_notes);
+    }
+
+    private void scrollSlideNotes() {
+        ScrollView aSlideNotesScroll = (ScrollView) getView().findViewById(R.id.scroll_notes);
+
+        aSlideNotesScroll.scrollTo(0, 0);
     }
 
     private void hideSlideNotes() {

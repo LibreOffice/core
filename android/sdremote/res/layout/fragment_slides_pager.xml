@@ -28,6 +28,7 @@
             android:paddingTop="@dimen/padding_header"/>
 
         <ScrollView
+            android:id="@+id/scroll_notes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -35,6 +36,7 @@
                 android:id="@+id/text_switcher_notes"
                 android:inAnimation="@android:anim/fade_in"
                 android:outAnimation="@android:anim/fade_out"
+                android:measureAllChildren="false"
                 android:paddingTop="@dimen/padding_slide_notes"
                 android:paddingLeft="@dimen/padding_slide_notes"
                 android:paddingRight="@dimen/padding_slide_notes"
