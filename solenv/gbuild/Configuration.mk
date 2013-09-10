@@ -40,18 +40,6 @@
 #       => *.po
 #    => XcsTarget (schema)
 
-# Per-repo pattern rules for each repository do not work for all targets
-# because the prerequisites of some targets need to have the stem mangled
-# and this does not seem to be possible in GNU make because when the stem is
-# matched variables have already been expanded (this was possible in dmake).
-#
-# So to keep things consistent the Configuration takes a parameter for the
-# repository and all targets use that to find the source file.
-#
-# Targets where % rule per repo works: XcsTarget XcuDataTarget XcuMergeTarget
-# fails: XcuModuleTarget XcuLangpackTarget XcuResTarget
-#
-
 # The main LibreOffice registry (cf. officecfg/Configuration_officecfg.mk):
 gb_Configuration_PRIMARY_REGISTRY_NAME := registry
 gb_Configuration_PRIMARY_REGISTRY_SCHEMA_ROOT = \
