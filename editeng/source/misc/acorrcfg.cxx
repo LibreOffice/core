@@ -48,10 +48,10 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     bSearchInAllCategories(sal_False)
 {
     SvtPathOptions aPathOpt;
-    String sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
+    OUString sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
 
-    sSharePath = sAutoPath.GetToken(0, ';');
-    sUserPath = sAutoPath.GetToken(1, ';');
+    sSharePath = sAutoPath.getToken(0, ';');
+    sUserPath = sAutoPath.getToken(1, ';');
 
     //fdo#67743 ensure the userdir exists so that any later attempt to copy the
     //shared autocorrect file into the user dir will succeed
@@ -59,7 +59,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     Reference < ucb::XCommandEnvironment > xEnv;
     ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, sUserPath, aContent);
 
-    String* pS = &sSharePath;
+    OUString* pS = &sSharePath;
     for( sal_uInt16 n = 0; n < 2; ++n, pS = &sUserPath )
     {
         INetURLObject aPath( *pS );

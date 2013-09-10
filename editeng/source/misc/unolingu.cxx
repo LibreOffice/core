@@ -122,7 +122,7 @@ void ThesDummy_Impl::GetCfgLocales()
     if (!pLocaleSeq)
     {
         SvtLinguConfig aCfg;
-        String  aNode("ServiceManager/ThesaurusList");
+        OUString  aNode("ServiceManager/ThesaurusList");
         Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
         const OUString *pNodeNames = aNodeNames.getConstArray();
         sal_Int32 nLen = aNodeNames.getLength();
@@ -678,7 +678,7 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
                         _xDicList->createDictionary(
                             "ChangeAllList",
                             LanguageTag::convertToLocale( LANGUAGE_NONE ),
-                            DictionaryType_NEGATIVE, String() ), UNO_QUERY );
+                            DictionaryType_NEGATIVE, OUString() ), UNO_QUERY );
     }
     return xChangeAll;
 }

@@ -836,7 +836,7 @@ namespace editeng
 
         if ( m_pConversionDialog )
         {
-            String sCurrentUnit = m_pConversionDialog->GetCurrentString();
+            OUString sCurrentUnit = m_pConversionDialog->GetCurrentString();
             DBG_ASSERT( m_sIgnoreList.end() == m_sIgnoreList.find( sCurrentUnit ),
                 "HangulHanjaConversion_Impl, OnIgnoreAll: shouldn't this have been ignored before" );
 

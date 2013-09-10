@@ -129,7 +129,7 @@ SvXMLWordContext::SvXMLWordContext(
     if( !bOnlyTxt )
     {
         const OUString sLongSave( sRight );
-        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.xStorage, String(), sWrong, sRight ) &&
+        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.xStorage, OUString(), sWrong, sRight ) &&
             !sLongSave.isEmpty() )
         {
             sRight = sLongSave;
@@ -212,7 +212,7 @@ SvXMLExceptionContext::SvXMLExceptionContext(
    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
    rLocalRef(rImport)
 {
-    String sWord;
+    OUString sWord;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
     for (sal_Int16 i=0; i < nAttrCount; i++)
@@ -229,7 +229,7 @@ SvXMLExceptionContext::SvXMLExceptionContext(
             }
         }
     }
-    if (!sWord.Len() )
+    if (sWord.isEmpty() )
         return;
 
     rLocalRef.rList.insert( sWord );

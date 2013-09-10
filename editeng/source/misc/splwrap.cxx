@@ -112,14 +112,14 @@ void SvxSpellWrapper::ShowLanguageErrors()
 
         if (SVX_LANG_MISSING_DO_WARN == nTmpSpell)
         {
-            String aErr( SvtLanguageTable::GetLanguageString( nLang ) );
+            OUString aErr( SvtLanguageTable::GetLanguageString( nLang ) );
             ErrorHandler::HandleError(
                 *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
             nTmpSpell = SVX_LANG_MISSING;
         }
         if (SVX_LANG_MISSING_DO_WARN == nTmpHyph)
         {
-            String aErr( SvtLanguageTable::GetLanguageString( nLang ) );
+            OUString aErr( SvtLanguageTable::GetLanguageString( nLang ) );
             ErrorHandler::HandleError(
                 *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
             nTmpHyph = SVX_LANG_MISSING;
