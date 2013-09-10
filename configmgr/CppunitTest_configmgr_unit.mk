@@ -32,18 +32,19 @@ $(eval $(call gb_CppunitTest_use_libraries,configmgr_unit, \
 		$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_CppunitTest_use_ure,configmgr_unit))
+
+$(eval $(call gb_CppunitTest_use_configuration,configmgr_unit))
+
 $(eval $(call gb_CppunitTest_use_components,configmgr_unit,\
     configmgr/source/configmgr \
     fileaccess/source/fileacc \
-    framework/util/fwk \
     i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \
     sax/source/expatwrap/expwrap \
-    sfx2/util/sfx \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
-    uui/util/uui \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,configmgr_unit,\
