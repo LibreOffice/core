@@ -2069,10 +2069,10 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
     {
         case MWT_IDENTITY :
         {
-            maXForm.eM11 = maXForm.eM12 = maXForm.eM21 = maXForm.eM22 = 1.0f;
-            maXForm.eDx = maXForm.eDy = 0.0f;
+            maXForm.eM11 = maXForm.eM22 = 1.0f;
+            maXForm.eM12 = maXForm.eM21 = maXForm.eDx = maXForm.eDy = 0.0f;
+            break;
         }
-        break;
 
         case MWT_RIGHTMULTIPLY :
         case MWT_LEFTMULTIPLY :
@@ -2131,8 +2131,13 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
             maXForm.eM22 = cF[1][1];
             maXForm.eDx = cF[2][0];
             maXForm.eDy = cF[2][1];
+            break;
         }
-        break;
+        case MWT_SET:
+        {
+            SetWorldTransform(rXForm);
+            break;
+        }
     }
  }
 

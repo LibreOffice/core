@@ -52,6 +52,7 @@
 #define MWT_IDENTITY            1
 #define MWT_LEFTMULTIPLY        2
 #define MWT_RIGHTMULTIPLY       3
+#define MWT_SET                 4
 
 #define ENHMETA_STOCK_OBJECT    0x80000000
 

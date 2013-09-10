@@ -45,6 +45,13 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
     {
         WMFReader( rStreamWMF, rGDIMetaFile, pConfigItem, pExtHeader ).ReadWMF( );
     }
+
+#ifdef DBG_UTIL
+    // #i123216# allow a look at CheckSum and ByteSize for debugging
+    SAL_INFO("vcl.emf", "\t\t\tchecksum: 0x" << std::hex << rGDIMetaFile.GetChecksum() << std::dec);
+    SAL_INFO("vcl.emf", "\t\t\tsize: " << rGDIMetaFile.GetSizeBytes());
+#endif
+
     rStreamWMF.SetNumberFormatInt( nOrigNumberFormat );
     return !rStreamWMF.GetError();
 }
