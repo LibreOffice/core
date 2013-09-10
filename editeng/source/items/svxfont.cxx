@@ -28,10 +28,7 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>
 
-#ifndef REDUCEDSVXFONT
-    const sal_Unicode CH_BLANK = sal_Unicode(' ');  // ' ' Space character
-    static sal_Char const sDoubleSpace[] = "  ";
-#endif
+const sal_Unicode CH_BLANK = sal_Unicode(' ');  // ' ' Space character
 
 
 SvxFont::SvxFont()
@@ -685,7 +682,7 @@ void SvxDoDrawCapital::DoSpace( const sal_Bool bDraw )
             pFont->SetWordLineMode( sal_False );
             pFont->SetTransparent( sal_True );
             pFont->SetPhysFont( pOut );
-            pOut->DrawStretchText( aSpacePos, nDiff, XubString( sDoubleSpace,
+            pOut->DrawStretchText( aSpacePos, nDiff, XubString( "  ",
                             RTL_TEXTENCODING_MS_1252 ), 0, 2 );
             pFont->SetWordLineMode( bWordWise );
             pFont->SetTransparent( bTrans );
