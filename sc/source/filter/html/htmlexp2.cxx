@@ -151,7 +151,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
                 nXOutFlags |= XOUTBMP_MIRROR_HORZ;
             if ( bVMirr )
                 nXOutFlags |= XOUTBMP_MIRROR_VERT;
-            String aLinkName;
+            OUString aLinkName;
             if ( pSGO->IsLinkedGraphic() )
                 aLinkName = pSGO->GetFileName();
             WriteImage( aLinkName, pSGO->GetGraphic(), aOpt, nXOutFlags );
@@ -163,7 +163,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
             const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pObject)->GetGraphic();
             if ( pGraphic )
             {
-                String aLinkName;
+                OUString aLinkName;
                 WriteImage( aLinkName, *pGraphic, aOpt );
                 pE->bWritten = sal_True;
             }
@@ -173,7 +173,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         {
             Graphic aGraph( SdrExchangeView::GetObjGraphic(
                 pDoc->GetDrawLayer(), pObject ) );
-            String aLinkName;
+            OUString aLinkName;
             WriteImage( aLinkName, aGraph, aOpt );
             pE->bWritten = sal_True;
         }
@@ -181,19 +181,19 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 }
 
 
-void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
+void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
             const OString& rImgOptions, sal_uLong nXOutFlags )
 {
     // Embedded graphic -> create an image file
-    if( !rLinkName.Len() )
+    if( rLinkName.isEmpty() )
     {
-        if( aStreamPath.Len() > 0 )
+        if( !aStreamPath.isEmpty() )
         {
             // Save as a PNG
             OUString aGrfNm( aStreamPath );
             nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
-                OUString( "PNG" ), nXOutFlags );
+                "PNG", nXOutFlags );
 
             // If it worked, create a URL for the IMG tag
             if( !nErr )
@@ -225,7 +225,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
 
     // If a URL was set, output the IMG tag.
     // <IMG SRC="..."[ rImgOptions]>
-    if( rLinkName.Len() )
+    if( !rLinkName.isEmpty() )
     {
         rStrm << '<' << OOO_STRING_SVTOOLS_HTML_image << ' ' << OOO_STRING_SVTOOLS_HTML_O_src << "=\"";
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
