@@ -50,6 +50,13 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
     {
         WMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadWMF();
     }
+
+#ifdef DBG_UTIL
+    // #123216# allow a look at CheckSum and ByteSize for debugging
+    const sal_uLong aC(rGDIMetaFile.GetChecksum());
+    const sal_uLong aB(rGDIMetaFile.GetSizeBytes());
+#endif
+
     rStreamWMF.SetNumberFormatInt( nOrigNumberFormat );
     return !rStreamWMF.GetError();
 }
