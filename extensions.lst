@@ -59,7 +59,7 @@
 
 # Italian dictionary.
 [ language=it || language=de || language=de_DE ]
-    e7ad2666a727b594948cb672a31ba22d http://sourceforge.net/projects/aoo-extensions/files/1204/11/dict-it.oxt/download "dict-it.oxt"
+    67eb02751dda7b2d312a66bcb0505fd2 http://sourceforge.net/projects/aoo-extensions/files/1204/13/dict-it.oxt/download "dict-it.oxt"
 
 # Spanish dictionary.
 [ language=es ]
