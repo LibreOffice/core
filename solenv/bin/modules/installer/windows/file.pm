@@ -924,36 +924,6 @@ sub create_files_table
             $installer::globals::base_independent_components{$onefile->{'componentname'}} = 1;
         }
 
-        # Collecting all component ids, that are defined at files in scp project (should not be used anymore)
-        if ( $onefile->{'CompID'} )
-        {
-            if ( ! exists($installer::globals::componentid{$onefile->{'componentname'}}))
-            {
-                $installer::globals::componentid{$onefile->{'componentname'}} = $onefile->{'CompID'};
-            }
-            else
-            {
-                if ( $installer::globals::componentid{$onefile->{'componentname'}} ne $onefile->{'CompID'} )
-                {
-                    installer::exiter::exit_program("ERROR: There is already a ComponentID for component \"$onefile->{'componentname'}\" : \"$installer::globals::componentid{$onefile->{'componentname'}}\" . File \"$onefile->{'gid'}\" uses \"$onefile->{'CompID'}\" !", "create_files_table");
-                }
-            }
-
-            # Also checking vice versa. Is this ComponentID already used? If yes, is the componentname the same?
-
-            if ( ! exists($installer::globals::comparecomponentname{$onefile->{'CompID'}}))
-            {
-                $installer::globals::comparecomponentname{$onefile->{'CompID'}} = $onefile->{'componentname'};
-            }
-            else
-            {
-                if ( $installer::globals::comparecomponentname{$onefile->{'CompID'}} ne $onefile->{'componentname'} )
-                {
-                    installer::exiter::exit_program("ERROR: There is already a component for ComponentID \"$onefile->{'CompID'}\" : \"$installer::globals::comparecomponentname{$onefile->{'CompID'}}\" . File \"$onefile->{'gid'}\" has same component id but is included in component \"$onefile->{'componentname'}\" !", "create_files_table");
-                }
-            }
-        }
-
         unless ( $file{'Version'} )
         {
             my $path = $onefile->{'sourcepath'};

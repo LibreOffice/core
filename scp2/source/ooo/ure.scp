@@ -99,7 +99,6 @@ File gid_File_Dl_Cppu
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_VER("cppu", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "36C01AC6-BB0A-4181-A8B8-50B793ADEDB7";
 End
 
 #ifdef AIX
@@ -117,7 +116,6 @@ File gid_File_Dl_Cppuhelper
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "D2A191E6-2023-41F5-9032-B98C50C37964";
 End
 
 #ifdef AIX
@@ -135,7 +133,6 @@ File gid_File_Dl_PurpEnvHelper
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "C80146A8-A14C-44D1-AB9F-D9D8BF22277E";
 End
 
 #ifdef AIX
@@ -153,7 +150,6 @@ File gid_File_Dl_Sal
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_VER("sal", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "B1EF3AB6-611E-4027-958A-736583EB82E6";
 End
 
 #ifdef AIX
@@ -171,7 +167,6 @@ File gid_File_Dl_Salhelper
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "879B80E0-F6E1-4931-8EE6-7CF867CB6AA5";
 End
 
 #ifdef AIX
@@ -274,7 +269,6 @@ File gid_File_ure_install
     Dir = FILELIST_DIR;
     Name = "ure_install.filelist";
     Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "1124A984-F905-47DC-ACEF-EDEC037F9B38";
 End
 
 
@@ -284,7 +278,6 @@ File gid_File_Dl_JrepropertiesClass
     Dir = FILELIST_DIR;
     Name = "jvmfwk_jreproperties.filelist";
     Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "0C4B8DCF-18D1-47D9-8BB7-A5C1D9268016";
 End
 #endif
 
@@ -452,7 +445,6 @@ File gid_File_Dl_Jpipe
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_JDL_NORMAL("jpipe");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "B1A60DD4-51D7-4898-B899-9BD05DE2DA8F";
 End
 #endif
 
@@ -481,7 +473,6 @@ File gid_File_Dl_Libxml2
     Name = SCP2_URE_DL_VER("xml2", "2");
 #endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "BE6FAD97-F84C-43E3-8392-6FE2CDA04D8E";
 End
 #endif
 
@@ -529,7 +520,6 @@ File gid_File_Java_UnoloaderJar
     Dir = GID_DIR_URE_JAVA;
     Name = "unoloader.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "90F99ED3-814C-4B45-894B-D9248848CEB4";
 End
 #endif
 
@@ -539,7 +529,6 @@ File gid_File_Java_JuhJar
     Dir = GID_DIR_URE_JAVA;
     Name = "juh.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "E77CC8B5-0345-4B7F-ABED-5EB9DC94E492";
 End
 #endif
 
@@ -549,7 +538,6 @@ File gid_File_Java_JurtJar
     Dir = GID_DIR_URE_JAVA;
     Name = "jurt.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "EA63EDCC-9152-4560-AB7A-BFC367442E50";
 End
 #endif
 
@@ -559,7 +547,6 @@ File gid_File_Java_RidlJar
     Dir = GID_DIR_URE_JAVA;
     Name = "ridl.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "4A915C83-6BE3-41B9-BAF9-13AA27034955";
 End
 #endif
 
@@ -571,7 +558,6 @@ File gid_File_Java_JavaUnoJar
     Dir = GID_DIR_URE_JAVA;
     Name = "java_uno.jar";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "ABDC8DDA-5D2B-424C-ABD8-FD22D59658FE";
 End
 #endif
 
@@ -583,7 +569,6 @@ File gid_File_Misc_TypesRdb
     Name = "udkapi.rdb";
     InstallName = "types.rdb";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID, SUBST_FILENAME);
-    // CompID = "E5086F6A-855B-4CAE-AD3A-A85A21C5AE44";
 End
 
 File gid_File_Misc_ServicesRdb
@@ -601,7 +586,6 @@ File gid_File_Misc_JavavendorsXml
     Dir = FILELIST_DIR;
     Name = "jvmfwk_javavendors.filelist";
     Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "403FCCFE-545B-44F6-91D1-5C75F846E587";
 End
 #endif
 
