@@ -2030,10 +2030,10 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-    of.writeRefFunction("getForbiddenCharacters_", useLocale);
-    of.writeRefFunction("getBreakIteratorRules_", useLocale);
-    of.writeRefFunction("getReservedWords_", useLocale);
-    return;
+        of.writeRefFunction("getForbiddenCharacters_", useLocale);
+        of.writeRefFunction("getBreakIteratorRules_", useLocale);
+        of.writeRefFunction("getReservedWords_", useLocale);
+        return;
     }
     const LocaleNode * reserveNode = findNode("ReservedWords");
     if (!reserveNode)
@@ -2124,209 +2124,209 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
 
 void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
-     of.writeAsciiString("// ---> ContinuousNumbering\n");
+    of.writeAsciiString("// ---> ContinuousNumbering\n");
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-    of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
-    return;
+        of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
+        return;
     }
 
-     // hard code number of attributes per style.
-     const int   nAttributes = 5;
-     const char* attr[ nAttributes ] = { "Prefix", "NumType", "Suffix", "Transliteration", "NatNum" };
+    // hard code number of attributes per style.
+    const int   nAttributes = 5;
+    const char* attr[ nAttributes ] = { "Prefix", "NumType", "Suffix", "Transliteration", "NatNum" };
 
-     // record each attribute of each style in a static C++ variable.
-     // determine number of styles on the fly.
-     sal_Int32 nStyles = getNumberOfChildren();
-     sal_Int32 i;
+    // record each attribute of each style in a static C++ variable.
+    // determine number of styles on the fly.
+    sal_Int32 nStyles = getNumberOfChildren();
+    sal_Int32 i;
 
-     for( i = 0; i < nStyles; ++i )
-     {
-          const Attr &q = getChildAt( i )->getAttr();
-          for( sal_Int32 j=0; j<nAttributes; ++j )
-          {
-               const char* name = attr[j];
-               OUString   value = q.getValueByName( name );
-               of.writeParameter("continuous", name, value, sal::static_int_cast<sal_Int16>(i) );
-          }
-     }
+    for( i = 0; i < nStyles; ++i )
+    {
+        const Attr &q = getChildAt( i )->getAttr();
+        for( sal_Int32 j=0; j<nAttributes; ++j )
+        {
+            const char* name = attr[j];
+            OUString   value = q.getValueByName( name );
+            of.writeParameter("continuous", name, value, sal::static_int_cast<sal_Int16>(i) );
+        }
+    }
 
-     // record number of styles and attributes.
-     of.writeAsciiString("static const sal_Int16 continuousNbOfStyles = ");
-     of.writeInt( sal::static_int_cast<sal_Int16>( nStyles ) );
-     of.writeAsciiString(";\n\n");
-     of.writeAsciiString("static const sal_Int16 continuousNbOfAttributesPerStyle = ");
-     of.writeInt( nAttributes );
-     of.writeAsciiString(";\n\n");
+    // record number of styles and attributes.
+    of.writeAsciiString("static const sal_Int16 continuousNbOfStyles = ");
+    of.writeInt( sal::static_int_cast<sal_Int16>( nStyles ) );
+    of.writeAsciiString(";\n\n");
+    of.writeAsciiString("static const sal_Int16 continuousNbOfAttributesPerStyle = ");
+    of.writeInt( nAttributes );
+    of.writeAsciiString(";\n\n");
 
-     // generate code. (intermediate arrays)
-     for( i=0; i<nStyles; i++ )
-     {
-          of.writeAsciiString("\nstatic const sal_Unicode* continuousStyle" );
-          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-          of.writeAsciiString("[] = {\n");
-          for( sal_Int32 j=0; j<nAttributes; j++)
-          {
-               of.writeAsciiString("\t");
-               of.writeAsciiString( "continuous" );
-               of.writeAsciiString( attr[j] );
-               of.writeInt(sal::static_int_cast<sal_Int16>(i));
-               of.writeAsciiString(",\n");
-          }
-          of.writeAsciiString("\t0\n};\n\n");
-     }
+    // generate code. (intermediate arrays)
+    for( i=0; i<nStyles; i++ )
+    {
+        of.writeAsciiString("\nstatic const sal_Unicode* continuousStyle" );
+        of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+        of.writeAsciiString("[] = {\n");
+        for( sal_Int32 j=0; j<nAttributes; j++)
+        {
+            of.writeAsciiString("\t");
+            of.writeAsciiString( "continuous" );
+            of.writeAsciiString( attr[j] );
+            of.writeInt(sal::static_int_cast<sal_Int16>(i));
+            of.writeAsciiString(",\n");
+        }
+        of.writeAsciiString("\t0\n};\n\n");
+    }
 
-     // generate code. (top-level array)
-     of.writeAsciiString("\n");
-     of.writeAsciiString("static const sal_Unicode** LCContinuousNumberingLevelsArray[] = {\n" );
-     for( i=0; i<nStyles; i++ )
-     {
-          of.writeAsciiString( "\t" );
-          of.writeAsciiString( "continuousStyle" );
-          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-          of.writeAsciiString( ",\n");
-     }
-     of.writeAsciiString("\t0\n};\n\n");
-     of.writeFunction2("getContinuousNumberingLevels_", "continuousNbOfStyles",
+    // generate code. (top-level array)
+    of.writeAsciiString("\n");
+    of.writeAsciiString("static const sal_Unicode** LCContinuousNumberingLevelsArray[] = {\n" );
+    for( i=0; i<nStyles; i++ )
+    {
+        of.writeAsciiString( "\t" );
+        of.writeAsciiString( "continuousStyle" );
+        of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+        of.writeAsciiString( ",\n");
+    }
+    of.writeAsciiString("\t0\n};\n\n");
+    of.writeFunction2("getContinuousNumberingLevels_", "continuousNbOfStyles",
             "continuousNbOfAttributesPerStyle", "LCContinuousNumberingLevelsArray");
 }
 
 
 void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
-     of.writeAsciiString("// ---> OutlineNumbering\n");
+    of.writeAsciiString("// ---> OutlineNumbering\n");
     OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         useLocale = useLocale.replace( '-', '_');
-    of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
-    return;
+        of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
+        return;
     }
 
-     // hardcode number of attributes per level
-     const int   nAttributes = 11;
-     const char* attr[ nAttributes ] =
-     {
-          "Prefix",
-          "NumType",
-          "Suffix",
-          "BulletChar",
-          "BulletFontName",
-          "ParentNumbering",
-          "LeftMargin",
-          "SymbolTextDistance",
-          "FirstLineOffset",
-          "Transliteration",
-          "NatNum",
-     };
+    // hardcode number of attributes per level
+    const int   nAttributes = 11;
+    const char* attr[ nAttributes ] =
+    {
+        "Prefix",
+        "NumType",
+        "Suffix",
+        "BulletChar",
+        "BulletFontName",
+        "ParentNumbering",
+        "LeftMargin",
+        "SymbolTextDistance",
+        "FirstLineOffset",
+        "Transliteration",
+        "NatNum",
+    };
 
-     // record each attribute of each level of each style in a static C++ variable.
-     // determine number of styles and number of levels per style on the fly.
-     sal_Int32 nStyles = getNumberOfChildren();
-     vector<sal_Int32> nLevels; // may be different for each style?
-     for( sal_Int32 i = 0; i < nStyles; i++ )
-     {
-          LocaleNode* p = getChildAt( i );
-          nLevels.push_back( p->getNumberOfChildren() );
-          for( sal_Int32 j=0; j<nLevels.back(); j++ )
-          {
-               const Attr& q = p->getChildAt( j )->getAttr();
-               for( sal_Int32 k=0; k<nAttributes; ++k )
-               {
-                    const char* name = attr[k];
-                    OUString   value = q.getValueByName( name );
-                    of.writeParameter("outline", name, value,
-                                        sal::static_int_cast<sal_Int16>(i),
-                                        sal::static_int_cast<sal_Int16>(j) );
-               }
-          }
-     }
+    // record each attribute of each level of each style in a static C++ variable.
+    // determine number of styles and number of levels per style on the fly.
+    sal_Int32 nStyles = getNumberOfChildren();
+    vector<sal_Int32> nLevels; // may be different for each style?
+    for( sal_Int32 i = 0; i < nStyles; i++ )
+    {
+        LocaleNode* p = getChildAt( i );
+        nLevels.push_back( p->getNumberOfChildren() );
+        for( sal_Int32 j=0; j<nLevels.back(); j++ )
+        {
+            const Attr& q = p->getChildAt( j )->getAttr();
+            for( sal_Int32 k=0; k<nAttributes; ++k )
+            {
+                const char* name = attr[k];
+                OUString   value = q.getValueByName( name );
+                of.writeParameter("outline", name, value,
+                        sal::static_int_cast<sal_Int16>(i),
+                        sal::static_int_cast<sal_Int16>(j) );
+            }
+        }
+    }
 
-     // verify that each style has the same number of levels.
-     for( size_t i=0; i<nLevels.size(); i++ )
-     {
-          if( nLevels[0] != nLevels[i] )
-          {
-               incError( "Numbering levels don't match.");
-          }
-     }
+    // verify that each style has the same number of levels.
+    for( size_t i=0; i<nLevels.size(); i++ )
+    {
+        if( nLevels[0] != nLevels[i] )
+        {
+            incError( "Numbering levels don't match.");
+        }
+    }
 
-     // record number of attributes, levels, and styles.
-     of.writeAsciiString("static const sal_Int16 outlineNbOfStyles = ");
-     of.writeInt( sal::static_int_cast<sal_Int16>( nStyles ) );
-     of.writeAsciiString(";\n\n");
-     of.writeAsciiString("static const sal_Int16 outlineNbOfLevelsPerStyle = ");
-     of.writeInt( sal::static_int_cast<sal_Int16>( nLevels.back() ) );
-     of.writeAsciiString(";\n\n");
-     of.writeAsciiString("static const sal_Int16 outlineNbOfAttributesPerLevel = ");
-     of.writeInt( nAttributes );
-     of.writeAsciiString(";\n\n");
+    // record number of attributes, levels, and styles.
+    of.writeAsciiString("static const sal_Int16 outlineNbOfStyles = ");
+    of.writeInt( sal::static_int_cast<sal_Int16>( nStyles ) );
+    of.writeAsciiString(";\n\n");
+    of.writeAsciiString("static const sal_Int16 outlineNbOfLevelsPerStyle = ");
+    of.writeInt( sal::static_int_cast<sal_Int16>( nLevels.back() ) );
+    of.writeAsciiString(";\n\n");
+    of.writeAsciiString("static const sal_Int16 outlineNbOfAttributesPerLevel = ");
+    of.writeInt( nAttributes );
+    of.writeAsciiString(";\n\n");
 
-     // too complicated for now...
-//     of.writeAsciiString("static const sal_Int16 nbOfOutlineNumberingLevels[] = { ");
-//     for( sal_Int32 j=0; j<nStyles; j++ )
-//     {
-//          of.writeInt( nLevels[j] );
-//          of.writeAsciiString(", ");
-//     }
-//     of.writeAsciiString("};\n\n");
-
-
-     for( sal_Int32 i=0; i<nStyles; i++ )
-     {
-          for( sal_Int32 j=0; j<nLevels.back(); j++ )
-          {
-               of.writeAsciiString("static const sal_Unicode* outline");
-               of.writeAsciiString("Style");
-               of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-               of.writeAsciiString("Level");
-               of.writeInt( sal::static_int_cast<sal_Int16>(j) );
-               of.writeAsciiString("[] = { ");
-
-               for( sal_Int32 k=0; k<nAttributes; k++ )
-               {
-                    of.writeAsciiString( "outline" );
-                    of.writeAsciiString( attr[k] );
-                    of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-                    of.writeInt( sal::static_int_cast<sal_Int16>(j) );
-                    of.writeAsciiString(", ");
-               }
-               of.writeAsciiString("NULL };\n");
-          }
-     }
-
-     of.writeAsciiString("\n");
+    // too complicated for now...
+    //     of.writeAsciiString("static const sal_Int16 nbOfOutlineNumberingLevels[] = { ");
+    //     for( sal_Int32 j=0; j<nStyles; j++ )
+    //     {
+    //          of.writeInt( nLevels[j] );
+    //          of.writeAsciiString(", ");
+    //     }
+    //     of.writeAsciiString("};\n\n");
 
 
-     for( sal_Int32 i=0; i<nStyles; i++ )
-     {
-          of.writeAsciiString("static const sal_Unicode** outline");
-          of.writeAsciiString( "Style" );
-          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-          of.writeAsciiString("[] = { ");
+    for( sal_Int32 i=0; i<nStyles; i++ )
+    {
+        for( sal_Int32 j=0; j<nLevels.back(); j++ )
+        {
+            of.writeAsciiString("static const sal_Unicode* outline");
+            of.writeAsciiString("Style");
+            of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+            of.writeAsciiString("Level");
+            of.writeInt( sal::static_int_cast<sal_Int16>(j) );
+            of.writeAsciiString("[] = { ");
 
-          for( sal_Int32 j=0; j<nLevels.back(); j++ )
-          {
-               of.writeAsciiString("outlineStyle");
-               of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-               of.writeAsciiString("Level");
-               of.writeInt( sal::static_int_cast<sal_Int16>(j) );
-               of.writeAsciiString(", ");
-          }
-          of.writeAsciiString("NULL };\n");
-     }
-     of.writeAsciiString("\n");
+            for( sal_Int32 k=0; k<nAttributes; k++ )
+            {
+                of.writeAsciiString( "outline" );
+                of.writeAsciiString( attr[k] );
+                of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+                of.writeInt( sal::static_int_cast<sal_Int16>(j) );
+                of.writeAsciiString(", ");
+            }
+            of.writeAsciiString("NULL };\n");
+        }
+    }
 
-     of.writeAsciiString("static const sal_Unicode*** LCOutlineNumberingLevelsArray[] = {\n" );
-     for( sal_Int32 i=0; i<nStyles; i++ )
-     {
-          of.writeAsciiString( "\t" );
-          of.writeAsciiString( "outlineStyle" );
-          of.writeInt( sal::static_int_cast<sal_Int16>(i) );
-          of.writeAsciiString(",\n");
-     }
-     of.writeAsciiString("\tNULL\n};\n\n");
-     of.writeFunction3("getOutlineNumberingLevels_", "outlineNbOfStyles", "outlineNbOfLevelsPerStyle",
+    of.writeAsciiString("\n");
+
+
+    for( sal_Int32 i=0; i<nStyles; i++ )
+    {
+        of.writeAsciiString("static const sal_Unicode** outline");
+        of.writeAsciiString( "Style" );
+        of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+        of.writeAsciiString("[] = { ");
+
+        for( sal_Int32 j=0; j<nLevels.back(); j++ )
+        {
+            of.writeAsciiString("outlineStyle");
+            of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+            of.writeAsciiString("Level");
+            of.writeInt( sal::static_int_cast<sal_Int16>(j) );
+            of.writeAsciiString(", ");
+        }
+        of.writeAsciiString("NULL };\n");
+    }
+    of.writeAsciiString("\n");
+
+    of.writeAsciiString("static const sal_Unicode*** LCOutlineNumberingLevelsArray[] = {\n" );
+    for( sal_Int32 i=0; i<nStyles; i++ )
+    {
+        of.writeAsciiString( "\t" );
+        of.writeAsciiString( "outlineStyle" );
+        of.writeInt( sal::static_int_cast<sal_Int16>(i) );
+        of.writeAsciiString(",\n");
+    }
+    of.writeAsciiString("\tNULL\n};\n\n");
+    of.writeFunction3("getOutlineNumberingLevels_", "outlineNbOfStyles", "outlineNbOfLevelsPerStyle",
             "outlineNbOfAttributesPerLevel", "LCOutlineNumberingLevelsArray");
 }
 
