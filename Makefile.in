@@ -230,6 +230,9 @@ bootstrap: compilerplugins
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
+ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
+	install-gdb-printers -a $(INSTDIR)
+endif
 ifeq ($(OS),IOS)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
 endif

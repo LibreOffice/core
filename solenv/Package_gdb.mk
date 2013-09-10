@@ -9,21 +9,25 @@
 
 $(eval $(call gb_Package_Package,solenv_gdb,$(call gb_CustomTarget_get_workdir,solenv/gdb)))
 
+# keep in sync with solenv/bin/install-gdb-printers
 $(eval $(call gb_Package_add_files,solenv_gdb,lib,\
 	$(if $(MERGELIBS), \
-	$(if $(filter ALL,$(MERGELIBS)), \
-		$(call gb_Library_get_runtime_filename,urelibs)-gdb.py, \
+		$(call gb_Library_get_runtime_filename,merged)-gdb.py \
+		$(if $(filter ALL,$(MERGELIBS)), \
+			$(call gb_Library_get_runtime_filename,urelibs)-gdb.py \
+		, \
+			$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
+			$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
+			$(call gb_Library_get_runtime_filename,sw)-gdb.py \
+		) \
+	, \
+		$(call gb_Library_get_runtime_filename,basegfx).3-gdb.py \
 		$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
 		$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
+		$(call gb_Library_get_runtime_filename,svl)-gdb.py \
 		$(call gb_Library_get_runtime_filename,sw)-gdb.py \
-		$(call gb_Library_get_runtime_filename,writerfilter)-gdb.py \
+		$(call gb_Library_get_runtime_filename,tl)-gdb.py \
 	) \
-	$(call gb_Library_get_runtime_filename,merged)-gdb.py, \
-	$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
-	$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
-	$(call gb_Library_get_runtime_filename,svl)-gdb.py \
-	$(call gb_Library_get_runtime_filename,sw)-gdb.py \
-	$(call gb_Library_get_runtime_filename,tl)-gdb.py) \
 	$(call gb_Library_get_runtime_filename,writerfilter)-gdb.py \
 ))
 

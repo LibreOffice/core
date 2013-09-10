@@ -26,7 +26,6 @@ ifneq ($(filter-out WNT IOS ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,solenv,\
 	CustomTarget_gdb \
 	Package_gdb \
-	Package_gdb_install \
 ))
 endif
 
