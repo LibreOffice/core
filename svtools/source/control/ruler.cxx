@@ -100,21 +100,6 @@ public:
     ImplRulerData& operator=( const ImplRulerData& rData );
 };
 
-struct ImplRulerHitTest
-{
-    long        nPos;
-    RulerType   eType;
-    sal_uInt16  nAryPos;
-    sal_uInt16  mnDragSize;
-    bool        bSize;
-    bool        bSizeBar;
-    bool        bExpandTest;
-
-    ImplRulerHitTest() :
-        bExpandTest( false )
-    {}
-};
-
 ImplRulerData::ImplRulerData() :
     nNullVirOff       (0),
     nRulVirOff        (0),
@@ -435,7 +420,7 @@ void Ruler::ImplInvertLines( sal_Bool bErase )
 
 void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nBottom )
 {
-    long nCenter = nTop + ((nBottom - nTop) / 2);
+    double nCenter = nTop + ((nBottom - nTop) / 2);
 
     long nTickLength3 = (nBottom - nTop) * 0.5;
     long nTickLength2 = nTickLength3 * 0.66;
@@ -626,7 +611,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
                          (nTickLength == nTickLength2 && nTickGap2 > 6) ||
                          (nTickLength == nTickLength3 && nTickGap3 > 6) )
                     {
-                        long nT1 = nCenter - (nTickLength / 2);
+                        long nT1 = nCenter - (nTickLength / 2.0);
                         long nT2 = nT1 + nTickLength - 1;
                         long nT;
 
@@ -1410,7 +1395,7 @@ void Ruler::ImplUpdate( sal_Bool bMustCalc )
     }
 }
 
-sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
+sal_Bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
                          sal_Bool bRequireStyle, sal_uInt16 nRequiredStyle ) const
 {
     sal_Int32   i;
@@ -1713,7 +1698,7 @@ sal_Bool Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
 }
 
 sal_Bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
-                            ImplRulerHitTest* pHitTest ) const
+                                RulerSelection* pHitTest ) const
 {
     Point aPos = rPos;
     sal_Bool bRequiredStyle = sal_False;
@@ -1780,7 +1765,7 @@ sal_Bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
     return sal_False;
 }
 
-sal_Bool Ruler::ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier )
+sal_Bool Ruler::ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier )
 {
     // don't trigger drag if a border that was clicked can not be changed
     if ( (pHitTest->eType == RULER_TYPE_BORDER) &&
@@ -1972,7 +1957,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            boost::scoped_ptr<ImplRulerHitTest> pHitTest(new ImplRulerHitTest);
+            boost::scoped_ptr<RulerSelection> pHitTest(new RulerSelection);
             bool bHitTestResult = ImplHitTest(aMousePos, pHitTest.get());
 
             if ( nMouseClicks == 1 )
@@ -2019,10 +2004,14 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 {
     PointerStyle ePtrStyle = POINTER_ARROW;
 
-    mpCurrentHitTest.reset(new ImplRulerHitTest);
+    mpCurrentHitTest.reset(new RulerSelection);
+
+    maHoverSelection.eType = RULER_TYPE_DONTKNOW;
 
     if (ImplHitTest( rMEvt.GetPosPixel(), mpCurrentHitTest.get() ))
     {
+        maHoverSelection = *mpCurrentHitTest.get();
+
         if (mpCurrentHitTest->bSize)
         {
             if (mnWinStyle & WB_HORZ)
@@ -2280,10 +2269,11 @@ sal_Bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
 {
     if ( !mbDrag )
     {
-        Point               aMousePos = rMEvt.GetPosPixel();
-        sal_uInt16              nMouseClicks = rMEvt.GetClicks();
-        sal_uInt16              nMouseModifier = rMEvt.GetModifier();
-        ImplRulerHitTest    aHitTest;
+        Point          aMousePos = rMEvt.GetPosPixel();
+        sal_uInt16     nMouseClicks = rMEvt.GetClicks();
+        sal_uInt16     nMouseModifier = rMEvt.GetModifier();
+        RulerSelection aHitTest;
+
         if(eDragType != RULER_TYPE_DONTKNOW)
             aHitTest.bExpandTest = true;
 
@@ -2351,7 +2341,7 @@ void Ruler::CancelDrag()
 
 RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos ) const
 {
-    ImplRulerHitTest aHitTest;
+    RulerSelection aHitTest;
 
     // update ruler
     if ( IsReallyVisible() && mbFormat )

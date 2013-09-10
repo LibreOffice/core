@@ -474,16 +474,11 @@ Tips zur Benutzung des Lineals:
 
 *************************************************************************/
 
-// -----------
 // - WinBits -
-// -----------
 
-#define WB_EXTRAFIELD       ((WinBits)0x00004000)
-#define WB_RIGHT_ALIGNED    ((WinBits)0x00008000)
-#define WB_STDRULER         WB_HORZ
-
-struct ImplRulerHitTest;
-
+#define WB_EXTRAFIELD     ((WinBits)0x00004000)
+#define WB_RIGHT_ALIGNED  ((WinBits)0x00008000)
+#define WB_STDRULER       WB_HORZ
 
 // - Ruler-Type -
 
@@ -541,7 +536,7 @@ struct RulerBorder
 
 struct RulerIndent
 {
-    long    nPos;
+    long        nPos;
     sal_uInt16  nStyle;
 };
 
@@ -570,6 +565,21 @@ struct RulerLine
 {
     long    nPos;
     sal_uInt16  nStyle;
+};
+
+struct RulerSelection
+{
+    long        nPos;
+    RulerType   eType;
+    sal_uInt16  nAryPos;
+    sal_uInt16  mnDragSize;
+    bool        bSize;
+    bool        bSizeBar;
+    bool        bExpandTest;
+
+    RulerSelection() :
+        bExpandTest( false )
+    {}
 };
 
 struct RulerUnitData
@@ -635,6 +645,9 @@ private:
     sal_Bool        mbAutoWinWidth;
     sal_Bool        mbActive;
     sal_uInt8       mnUpdateFlags;
+
+    RulerSelection  maHoverSelection;
+
     Link            maStartDragHdl;
     Link            maDragHdl;
     Link            maEndDragHdl;
@@ -642,8 +655,8 @@ private:
     Link            maDoubleClickHdl;
     Link            maExtraDownHdl;
 
-    boost::scoped_ptr<ImplRulerHitTest> mpCurrentHitTest;
-    boost::scoped_ptr<ImplRulerHitTest> mpPreviousHitTest;
+    boost::scoped_ptr<RulerSelection> mpCurrentHitTest;
+    boost::scoped_ptr<RulerSelection> mpPreviousHitTest;
 
     SVT_DLLPRIVATE void ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
     SVT_DLLPRIVATE void ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 );
@@ -669,11 +682,11 @@ private:
 
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_Bool ImplHitTest( const Point& rPosition,
-                                         ImplRulerHitTest* pHitTest,
+                                         RulerSelection* pHitTest,
                                          sal_Bool bRequiredStyle = sal_False,
                                          sal_uInt16 nRequiredStyle = 0 ) const;
-    SVT_DLLPRIVATE sal_Bool ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
-    SVT_DLLPRIVATE sal_Bool ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier );
+    SVT_DLLPRIVATE sal_Bool ImplDocHitTest( const Point& rPos, RulerType eDragType, RulerSelection* pHitTest ) const;
+    SVT_DLLPRIVATE sal_Bool ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier );
     SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void     ImplEndDrag();
 
@@ -750,6 +763,8 @@ public:
     long            GetClickPos() const { return mnDragPos; }
     RulerType       GetClickType() const { return meDragType; }
     sal_uInt16      GetClickAryPos() const { return mnDragAryPos; }
+
+    RulerSelection  GetHoverSelection() const { return maHoverSelection; }
 
     using Window::GetType;
     RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = NULL ) const;

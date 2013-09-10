@@ -101,6 +101,9 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     sal_Bool        bListening;
     sal_Bool        bActive;
 
+    bool mbCoarseSnapping;
+    bool mbSnapping;
+
     void StartListening_Impl();
     long GetCorrectedDragPos(sal_Bool bLeft = sal_True, sal_Bool bRight = sal_True );
     void DrawLine_Impl(long &lTabPos, int, sal_Bool Horizontal=sal_True);
@@ -135,7 +138,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateObject();
 
     // Convert position to stick to ruler ticks
-    long MakePositionSticky(long rValue, bool aSnapToFrameMargin = true) const;
+    long MakePositionSticky(long rValue, long aPointOfReference, bool aSnapToFrameMargin = true) const;
 
     long PixelHAdjust(long lPos, long lPos2) const;
     long PixelVAdjust(long lPos, long lPos2) const;
@@ -156,6 +159,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 
     long ConvertPosLogic(long lPos) const;
     long ConvertSizeLogic(long lSize) const;
+
+    long RoundToCurrentMapMode(long lValue) const;
 
     long GetFirstLineIndent() const;
     long GetLeftIndent() const;
