@@ -129,7 +129,7 @@ class LngSvcMgr :
     void    SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp );
     void    SetCfgServiceLists( ThesaurusDispatcher &rThesDsp );
 
-    sal_Bool    SaveCfgSvcs( const String &rServiceName );
+    sal_Bool    SaveCfgSvcs( const OUString &rServiceName );
 
     static void clearSvcInfoArray(SvcInfoArray *&rpInfo);
 

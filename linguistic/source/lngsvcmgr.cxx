@@ -1733,7 +1733,7 @@ void SAL_CALL
 }
 
 
-sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
+sal_Bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SaveCfgSvcs" );
 
@@ -1742,28 +1742,28 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
     LinguDispatcher *pDsp = 0;
     uno::Sequence< lang::Locale > aLocales;
 
-    if (0 == rServiceName.CompareToAscii( SN_SPELLCHECKER ))
+    if (rServiceName == SN_SPELLCHECKER)
     {
         if (!pSpellDsp)
             GetSpellCheckerDsp_Impl();
         pDsp = pSpellDsp;
         aLocales = getAvailableLocales( SN_SPELLCHECKER );
     }
-    else if (0 == rServiceName.CompareToAscii( SN_GRAMMARCHECKER ))
+    else if (rServiceName == SN_GRAMMARCHECKER)
     {
         if (!pGrammarDsp)
             GetGrammarCheckerDsp_Impl();
         pDsp = pGrammarDsp;
         aLocales = getAvailableLocales( SN_GRAMMARCHECKER );
     }
-    else if (0 == rServiceName.CompareToAscii( SN_HYPHENATOR ))
+    else if (rServiceName == SN_HYPHENATOR)
     {
         if (!pHyphDsp)
             GetHyphenatorDsp_Impl();
         pDsp = pHyphDsp;
         aLocales = getAvailableLocales( SN_HYPHENATOR );
     }
-    else if (0 == rServiceName.CompareToAscii( SN_THESAURUS ))
+    else if (rServiceName == SN_THESAURUS)
     {
         if (!pThesDsp)
             GetThesaurusDsp_Impl();
