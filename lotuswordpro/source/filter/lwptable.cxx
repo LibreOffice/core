@@ -197,7 +197,6 @@ void LwpGlossary::Read()
     sal_uInt16 FiledEntries = m_pObjStrm->QuickReaduInt16();
     sal_uInt16 NumIndexRows = GetNumIndexRows();
 
-    sal_uInt16 * cpIndex = NULL;
     if (FiledEntries < NumIndexRows)
     {
         /* We'll have to do sequential (slow) searches. */
@@ -207,23 +206,13 @@ void LwpGlossary::Read()
     {
         if (NumIndexRows)
         {
-            sal_uInt16 EntriesRead, EntryCount;
-            sal_uInt16 *pRowID;
+            sal_uInt16 EntriesRead = (FiledEntries > NumIndexRows)? NumIndexRows:FiledEntries;
 
-            cpIndex = new sal_uInt16[NumIndexRows];
+            for (sal_uInt16 EntryCount = 1; EntryCount <= EntriesRead; EntryCount++)
+                m_pObjStrm->QuickReaduInt16();
 
-            if (cpIndex)
-            {
-                pRowID = cpIndex;
-
-                EntriesRead = (FiledEntries > NumIndexRows)? NumIndexRows:FiledEntries;
-
-                for (EntryCount = 1; EntryCount <= EntriesRead; EntryCount++)
-                    *pRowID++ = m_pObjStrm->QuickReaduInt16();
-
-                if (FiledEntries > EntriesRead)
-                    m_pObjStrm->SeekRel((FiledEntries - EntriesRead)* sizeof(sal_uInt16));
-            }
+            if (FiledEntries > EntriesRead)
+                m_pObjStrm->SeekRel((FiledEntries - EntriesRead)* sizeof(sal_uInt16));
         }
         else
             m_pObjStrm->SeekRel(FiledEntries * sizeof(sal_uInt16));
