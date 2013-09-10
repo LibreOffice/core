@@ -3440,7 +3440,7 @@ public:
                 case svDoubleRef:
                 {
                     ScComplexRefData aRef = pToken->GetDoubleRef();
-                    ScRange aAbs = aRef.toAbs(mrCell.aPos);
+                    ScRange aAbs = aRef.toAbs(mrPos);
 
                     // Check for self reference.
                     if (aRef.Ref1.IsRowRel())
@@ -3466,12 +3466,16 @@ public:
                     size_t nCols = aAbs.aEnd.Col() - aAbs.aStart.Col() + 1;
                     std::vector<formula::VectorRefArray> aArrays;
                     aArrays.reserve(nCols);
-                    SCROW nArrayLength = nLen;
                     SCROW nRefRowSize = aAbs.aEnd.Row() - aAbs.aStart.Row() + 1;
+                    SCROW nArrayLength = nRefRowSize;
                     if (!bAbsLast)
                     {
                         // range end position is relative. Extend the array length.
-                        nArrayLength += nRefRowSize - 1;
+                        SCROW nLastRefRowOffset = aAbs.aEnd.Row() - mrPos.Row();
+                        SCROW nLastRefRow = mrPos.Row() + nLen - 1 + nLastRefRowOffset;
+                        SCROW nNewLength = nLastRefRow - aAbs.aStart.Row() + 1;
+                        if (nNewLength > nArrayLength)
+                            nArrayLength = nNewLength;
                     }
 
                     // Trim trailing empty rows.

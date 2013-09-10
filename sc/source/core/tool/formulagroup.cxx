@@ -204,9 +204,14 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         nRowEnd += i;
                     size_t nRowSize = nRowEnd - nRowStart + 1;
                     ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize));
-                    if (p2->GetArrayLength() < nRowSize)
-                        // Data array is shorter than the row size of the reference. Truncate it.
-                        nRowSize = p2->GetArrayLength();
+
+                    size_t nDataRowEnd = p2->GetArrayLength() - 1;
+                    if (nRowStart > nDataRowEnd)
+                        // Referenced rows are all empty.
+                        nRowSize = 0;
+                    else if (nRowEnd > nDataRowEnd)
+                        // Data array is shorter than the row size of the reference. Truncate it to the data.
+                        nRowSize -= nRowEnd - nDataRowEnd;
 
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
