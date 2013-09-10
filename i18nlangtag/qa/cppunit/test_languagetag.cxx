@@ -194,6 +194,29 @@ void TestLanguageTag::testAllTags()
     }
 
     {
+        OUString s_ca_XV( "ca-XV" );
+        LanguageTag ca_XV( s_ca_XV, true );
+        lang::Locale aLocale = ca_XV.getLocale();
+        CPPUNIT_ASSERT( ca_XV.getBcp47() == s_ca_XV );
+        CPPUNIT_ASSERT( aLocale.Language == "ca" );
+        CPPUNIT_ASSERT( aLocale.Country == "XV" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( ca_XV.getLanguageType() == LANGUAGE_CATALAN_VALENCIAN );
+        CPPUNIT_ASSERT( ca_XV.isValidBcp47() == true );
+        CPPUNIT_ASSERT( ca_XV.isIsoLocale() == true );
+        CPPUNIT_ASSERT( ca_XV.isIsoODF() == true );
+        CPPUNIT_ASSERT( ca_XV.getLanguage() == "ca" );
+        CPPUNIT_ASSERT( ca_XV.getCountry() == "XV" );
+        CPPUNIT_ASSERT( ca_XV.getScript() == "" );
+        CPPUNIT_ASSERT( ca_XV.getLanguageAndScript() == "ca" );
+        ::std::vector< OUString > ca_XV_Fallbacks( ca_XV.getFallbackStrings( true));
+        CPPUNIT_ASSERT( ca_XV_Fallbacks.size() == 2);
+        CPPUNIT_ASSERT( ca_XV_Fallbacks[0] == "ca-XV");
+        CPPUNIT_ASSERT( ca_XV_Fallbacks[1] == "ca");
+        CPPUNIT_ASSERT( ca_XV.makeFallback().getBcp47() == "ca-ES-valencia");
+    }
+
+    {
         OUString s_de_DE( "de-DE" );
         LanguageTag de_DE( s_de_DE, true );
         lang::Locale aLocale = de_DE.getLocale();

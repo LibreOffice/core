@@ -27,6 +27,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <vector>
 
+struct IsoLanguageCountryEntry;
+
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
 class I18NLANGTAG_DLLPUBLIC MsLangId
@@ -230,6 +232,11 @@ public:
                 const OString& rLang, const OString& rCountry );
 
 
+        /** Used by lookupFallbackLocale(Locale) */
+        I18NLANGTAG_DLLPRIVATE static com::sun::star::lang::Locale getLocale(
+                const IsoLanguageCountryEntry * pEntry );
+
+
         /** Convert a LanguageType to a Locale.
 
             @param bResolveSystem
@@ -240,7 +247,8 @@ public:
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocale(
                 LanguageType nLang, bool bResolveSystem );
 
-        /** Used by convertLanguageToLocale(LanguageType,bool)
+        /** Used by convertLanguageToLocale(LanguageType,bool) and
+            getLocale(IsoLanguageCountryEntry*)
 
             @return rLocale set to mapped values, unchanged if no mapping was
                     found. E.g. pass empty Locale to obtain empty SYSTEM locale
