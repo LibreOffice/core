@@ -27,8 +27,8 @@ class EditEngine;
 
 struct AnchorInfo
 {
-    String  aHRef;
-    String  aText;
+    OUString  aHRef;
+    OUString  aText;
 };
 
 class EditHTMLParser : public HTMLParser
@@ -37,7 +37,7 @@ class EditHTMLParser : public HTMLParser
 private:
     OUStringBuffer maStyleSource;
     EditSelection           aCurSel;
-    String                  aBaseURL;
+    OUString                aBaseURL;
     EditEngine* mpEditEngine;
     AnchorInfo*             pCurAnchor;
 
@@ -61,7 +61,7 @@ private:
     bool                    HasTextInCurrentPara();
 
     void                    ImpInsertParaBreak();
-    void                    ImpInsertText( const String& rText );
+    void                    ImpInsertText( const OUString& rText );
     void                    ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = 0 );
     void                    ImpSetStyleSheet( sal_uInt16 nHeadingLevel );
 
@@ -69,7 +69,7 @@ protected:
     virtual void            NextToken( int nToken );
 
 public:
-    EditHTMLParser(SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);
+    EditHTMLParser(SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);
     ~EditHTMLParser();
 
     SvParserState CallParser(EditEngine* pEE, const EditPaM& rPaM);

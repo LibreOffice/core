@@ -38,7 +38,7 @@
 
 #define STYLE_PRE               101
 
-EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
+EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
     : HTMLParser( rIn, true ),
     aBaseURL( rBaseURL ),
     mpEditEngine(NULL),
@@ -667,7 +667,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
     mpEditEngine->SetParaAttribsOnly(nNode, aItems);
 }
 
-void EditHTMLParser::ImpInsertText( const String& rText )
+void EditHTMLParser::ImpInsertText( const OUString& rText )
 {
     String aText( rText );
     if (mpEditEngine->IsImportHandlerSet())
