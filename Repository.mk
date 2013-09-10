@@ -156,6 +156,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	scui \
 	solver \
 	$(if $(DISABLE_SCRIPTING),,vbaobj) \
+	$(if $(ENABLE_TELEPATHY),tubes) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
@@ -332,7 +333,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	textfd \
 	tk \
 	tl \
-	$(if $(ENABLE_TELEPATHY),tubes) \
 	ucpexpand1 \
 	ucpext \
 	ucpcmis1 \
