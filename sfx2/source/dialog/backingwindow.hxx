@@ -55,7 +55,20 @@ class BackingWindow
     com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
 
     PushButton*                     mpOpenButton;
+    PushButton*                     mpOpenWriterButton;
+    PushButton*                     mpOpenCalcButton;
+    PushButton*                     mpOpenImpressButton;
+    PushButton*                     mpOpenDrawButton;
+    PushButton*                     mpOpenDatabaseButton;
+    PushButton*                     mpOpenMathButton;
+
     PushButton*                     mpTemplateButton;
+    PushButton*                     mpTemplateWriterButton;
+    PushButton*                     mpTemplateCalcButton;
+    PushButton*                     mpTemplateImpressButton;
+    PushButton*                     mpTemplateDrawButton;
+    PushButton*                     mpTemplateDatabaseButton;
+    PushButton*                     mpTemplateMathButton;
 
     TabControl*                     mpModuleNotebook;
 
@@ -72,10 +85,6 @@ class BackingWindow
     PushButton*                     mpDrawAllButton;
     PushButton*                     mpDBAllButton;
     PushButton*                     mpMathAllButton;
-
-    PushButton*                     mpExtensionsButton;
-    PushButton*                     mpInfoButton;
-    PushButton*                     mpTplRepButton;
 
     PushButton*                     mpWriterShowTemplateButton;
     PushButton*                     mpCalcShowTemplateButton;
@@ -114,7 +123,6 @@ class BackingWindow
     void setupButton( PushButton* pButton );
     void setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter,
                             PushButton* pRecentButton, PushButton* pTemplateButton );
-    void setupExternalLink( PushButton* pButton );
 
     void dispatchURL( const OUString& i_rURL,
                       const OUString& i_rTarget = OUString( "_default" ),
@@ -125,7 +133,6 @@ class BackingWindow
     DECL_LINK( ClickHdl, Button* );
     DECL_LINK( RecentTemplateToggleHdl, Button* );
     DECL_LINK( OpenTemplateHdl, ThumbnailViewItem* );
-    DECL_LINK( ExtLinkClickHdl, Button* );
 
     void initControls();
 

@@ -23,7 +23,6 @@
 #include <vcl/virdev.hxx>
 
 #include <unotools/dynamicmenuoptions.hxx>
-#include <svtools/langhelp.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 
@@ -38,8 +37,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
@@ -82,8 +79,21 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
       "sfx/ui/startcenter.ui",
       "StartCenter" );
 
-    get(mpOpenButton,       "open");
-    get(mpTemplateButton,   "templates");
+    get(mpOpenButton,               "open_all");
+    get(mpOpenWriterButton,         "open_writer");
+    get(mpOpenCalcButton,           "open_calc");
+    get(mpOpenImpressButton,        "open_impress");
+    get(mpOpenDrawButton,           "open_draw");
+    get(mpOpenDatabaseButton,       "open_database");
+    get(mpOpenMathButton,           "open_math");
+
+    get(mpTemplateButton,           "templates_all");
+    get(mpTemplateWriterButton,     "templates_writer");
+    get(mpTemplateCalcButton,       "templates_calc");
+    get(mpTemplateImpressButton,    "templates_impress");
+    get(mpTemplateDrawButton,       "templates_draw");
+    get(mpTemplateDatabaseButton,   "templates_database");
+    get(mpTemplateMathButton,       "templates_math");
 
     get(mpModuleNotebook,   "modules_notebook");
 
@@ -100,10 +110,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpDrawAllButton,    "draw_all");
     get(mpDBAllButton,      "database_all");
     get(mpMathAllButton,    "math_all");
-
-    get(mpExtensionsButton, "extension");
-    get(mpInfoButton,       "info");
-    get(mpTplRepButton,     "add_temp");
 
     get(mpWriterShowTemplateButton,     "show_writer_template");
     get(mpCalcShowTemplateButton,       "show_calc_template");
@@ -176,19 +182,35 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
 
-    mpTemplateButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpOpenButton->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenButton            ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenWriterButton      ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenCalcButton        ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenImpressButton     ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenDrawButton        ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenDatabaseButton    ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    mpOpenMathButton        ->SetHelpId( ".HelpId:StartCenter:OpenButton" );
 
-    mpWriterButton->SetHelpId( ".HelpId:StartCenter:WriterButton" );
-    mpCalcButton->SetHelpId( ".HelpId:StartCenter:CalcButton" );
-    mpImpressButton->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
-    mpDrawButton->SetHelpId( ".HelpId:StartCenter:DrawButton" );
-    mpDBButton->SetHelpId( ".HelpId:StartCenter:DBButton" );
-    mpMathButton->SetHelpId( ".HelpId:StartCenter:MathButton" );
+    mpTemplateButton        ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    mpTemplateWriterButton  ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    mpTemplateCalcButton    ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    mpTemplateImpressButton ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    mpTemplateDrawButton    ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    mpTemplateDatabaseButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    mpTemplateMathButton    ->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
 
-    mpExtensionsButton->SetHelpId( ".HelpId:StartCenter:Extensions" );
-    mpInfoButton->SetHelpId( ".HelpId:StartCenter:Info" );
-    mpTplRepButton->SetHelpId( ".HelpId:StartCenter:TemplateRepository" );
+    mpWriterButton      ->SetHelpId( ".HelpId:StartCenter:WriterButton" );
+    mpCalcButton        ->SetHelpId( ".HelpId:StartCenter:CalcButton" );
+    mpImpressButton     ->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
+    mpDrawButton        ->SetHelpId( ".HelpId:StartCenter:DrawButton" );
+    mpDBButton          ->SetHelpId( ".HelpId:StartCenter:DBButton" );
+    mpMathButton        ->SetHelpId( ".HelpId:StartCenter:MathButton" );
+
+    mpWriterAllButton   ->SetHelpId( ".HelpId:StartCenter:WriterButton" );
+    mpCalcAllButton     ->SetHelpId( ".HelpId:StartCenter:CalcButton" );
+    mpImpressAllButton  ->SetHelpId( ".HelpId:StartCenter:ImpressButton" );
+    mpDrawAllButton     ->SetHelpId( ".HelpId:StartCenter:DrawButton" );
+    mpDBAllButton       ->SetHelpId( ".HelpId:StartCenter:DBButton" );
+    mpMathAllButton     ->SetHelpId( ".HelpId:StartCenter:MathButton" );
 
     // init background
     SetBackground();
@@ -286,11 +308,20 @@ void BackingWindow::initControls()
     setupButton( mpMathAllButton );
 
     setupButton( mpOpenButton );
-    setupButton( mpTemplateButton );
+    setupButton( mpOpenWriterButton );
+    setupButton( mpOpenCalcButton );
+    setupButton( mpOpenImpressButton );
+    setupButton( mpOpenDrawButton );
+    setupButton( mpOpenDatabaseButton );
+    setupButton( mpOpenMathButton );
 
-    setupExternalLink( mpExtensionsButton );
-    setupExternalLink( mpInfoButton );
-    setupExternalLink( mpTplRepButton );
+    setupButton( mpTemplateButton );
+    setupButton( mpTemplateWriterButton );
+    setupButton( mpTemplateCalcButton );
+    setupButton( mpTemplateImpressButton );
+    setupButton( mpTemplateDrawButton );
+    setupButton( mpTemplateDatabaseButton );
+    setupButton( mpTemplateMathButton );
 
     setupTemplateView( mpWriterTemplateThumbnails,  FILTER_APP_WRITER,
                        mpWriterShowRecentButton,    mpWriterShowTemplateButton );
@@ -326,14 +357,6 @@ void BackingWindow::setupModuleTab(const OString& rTabName, RecentDocsView* pRec
 void BackingWindow::setupButton( PushButton* pButton )
 {
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
-
-    // setup text - slighly larger font than normal labels on the texts
-    Font aFont;
-    aFont.SetSize( Size( 0, 11 ) );
-    aFont.SetWeight( WEIGHT_NORMAL );
-
-    pButton->SetFont( aFont );
-    pButton->SetControlFont( aFont );
 }
 
 void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICATION eFilter,
@@ -356,30 +379,8 @@ void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICAT
     pRecentButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
     pTemplateButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
 
-    // button text - slighly larger font than normal labels on the texts
-    Font aFont;
-    aFont.SetSize( Size( 0, 11 ) );
-    aFont.SetWeight( WEIGHT_NORMAL );
-
-    pRecentButton->SetFont( aFont );
-    pRecentButton->SetControlFont( aFont );
-
-    pTemplateButton->SetFont( aFont );
-    pTemplateButton->SetControlFont( aFont );
-
     pRecentButton->Hide();  // hidden by default
 }
-
-void BackingWindow::setupExternalLink( PushButton* pButton )
-{
-    if( mnHideExternalLinks == 0 )
-        pButton->Show();
-    else
-        pButton->Hide();
-
-    pButton->SetClickHdl( LINK( this, BackingWindow, ExtLinkClickHdl ) );
-}
-
 void BackingWindow::Paint( const Rectangle& )
 {
     Resize();
@@ -460,52 +461,6 @@ void BackingWindow::Resize()
         Invalidate();
 }
 
-IMPL_LINK( BackingWindow, ExtLinkClickHdl, Button*, pButton )
-{
-    const char* pNode = NULL;
-
-    if( pButton == mpExtensionsButton )
-        pNode = "AddFeatureURL";
-    else if( pButton == mpInfoButton )
-        pNode = "InfoURL";
-    else if( pButton == mpTplRepButton )
-        pNode = "TemplateRepositoryURL";
-
-    if( pNode )
-    {
-        const char* pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
-        try
-        {
-            Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-            Sequence<Any> args(1);
-            PropertyValue val(
-                "nodepath",
-                0,
-                Any(OUString::createFromAscii(pNodePath)),
-                PropertyState_DIRECT_VALUE);
-            args.getArray()[0] <<= val;
-            Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
-            if( xNameAccess.is() )
-            {
-                OUString sURL;
-                //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-                Any value( xNameAccess->getByName(OUString::createFromAscii(pNode)) );
-                sURL = value.get<OUString> ();
-                localizeWebserviceURI(sURL);
-
-                Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-                    com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-                //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-                xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
-            }
-        }
-        catch (const Exception&)
-        {
-        }
-    }
-    return 0;
-}
-
 IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
     // dispatch the appropriate URL and end the dialog
@@ -521,7 +476,10 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         dispatchURL( BASE_URL );
     else if( pButton == mpMathButton    || pButton == mpMathAllButton )
         dispatchURL( MATH_URL );
-    else if( pButton == mpOpenButton )
+    else if( pButton == mpOpenButton         ||
+             pButton == mpOpenWriterButton   || pButton == mpOpenCalcButton ||
+             pButton == mpOpenImpressButton  || pButton == mpOpenDrawButton ||
+             pButton == mpOpenDatabaseButton || pButton == mpOpenMathButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
@@ -532,7 +490,10 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         dispatchURL( OPEN_URL, OUString(), xFrame, aArgs );
     }
-    else if( pButton == mpTemplateButton )
+    else if( pButton == mpTemplateButton            ||
+             pButton == mpTemplateWriterButton      || pButton == mpTemplateCalcButton  ||
+             pButton == mpTemplateImpressButton     || pButton == mpTemplateDrawButton  ||
+             pButton == mpTemplateDatabaseButton    || pButton == mpTemplateMathButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
