@@ -885,8 +885,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[17] = new ORowSetValueDecorator();             // Unused
         aRow[18] = new ORowSetValueDecorator(sal_Int16(10));// Radix
 
-        // TODO: sort by DATA_TYPE
-
         // SQL_TEXT
         aRow[1] = new ORowSetValueDecorator(OUString("CHAR"));
         aRow[2] = new ORowSetValueDecorator(getColumnTypeFromFBType(SQL_TEXT));
