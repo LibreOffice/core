@@ -145,8 +145,11 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         getConnection()->createStatement()->execute(sSql);
     }
 
-    if (bTypeChanged || bTypeNameChanged)
+    if (bTypeChanged || bTypeNameChanged || bPrecisionChanged || bScaleChanged)
     {
+        // If bPrecisionChanged this will only succeed if we have increased the
+        // precision, otherwise an exception is thrown -- however the base
+        // gui then offers to delete and recreate the column.
         OUString sSql(getAlterTableColumn(rColName) + "TYPE " +
                 ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
         getConnection()->createStatement()->execute(sSql);
@@ -192,7 +195,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         }
     }
 
-    if (bPrecisionChanged || bScaleChanged || bIsAutoIncrementChanged)
+    if (bIsAutoIncrementChanged)
     {
         // TODO: changeType
     }
@@ -213,7 +216,6 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     }
 
     m_pColumns->refresh();
-    // TODO: implement me
 }
 
 // ----- XRename --------------------------------------------------------------
