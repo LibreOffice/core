@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7CM\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-09-11T10:22:41Z",
+      "side": 1,
+      "message": "Done\n\nI took the the example of e.g. CInt, which returns zero instead of an error. But now I see that e.g. CDate and CDateToIso do return errors, so makes sense here also.",
+      "parentUuid": "AAAAXn//7Dc\u003d",
+      "revId": "a6a8413ab3ddb8738f13d5a418a35ba866ca167e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7Do\u003d",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7Bw\u003d",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3312,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-09-11T10:22:41Z",
+      "side": 1,
+      "message": "IMHO, from the user\u0027s POV, having LibreOffice\u0027s built-in and developed-only-for-LibreOffice scripting language (StarBasic) have datatypes that don\u0027t ~automatically convert to/from corresponding datatypes of LibreOffice\u0027s API (UNO) is just annoying / suboptimal design / unnecessarily complicated.\n(Actually, let\u0027s even say \u0027datatypes that don\u0027t match with the ones in the API\u0027, but this is something that we cannot fix, so I settle for automatic / implicit conversion.)\n\nMy goal is to have stuff like:\n\n aDateControl.DateMax \u003d CDate(\"2013-07-06\")\n aRecordSet.updateDate(3, CDate(\"2013-07-06\"))\n\nThat is, from the user\u0027s POV, UNO APIs that want a Date just take a Basic Date.\n\nIn my view, such kind of automatic / implicit conversion is far safer, far less error prone, and far less unexpected than any of:\n\n Dim i as Integer\n i \u003d \"34\"\n\nor\n\n Dim d as Date\n d \u003d \"2013-05-06\"\n\nor even worse:\n\n Dim i as Integer\n i \u003d \"2 people is the minimum; thou shalt not have more than 2\"\n\n\nI\u0027m splitting that into another change for better discussion.",
+      "parentUuid": "AAAAXn//7Do\u003d",
+      "revId": "a6a8413ab3ddb8738f13d5a418a35ba866ca167e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXn//7Dk\u003d",
         "filename": "basic/source/sbx/sbxvalue.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2013-09-10T19:53:29Z",
       "side": 1,
       "message": "Same as previous, I think this could lead to some unexpected results. I really would prefer that uno structures are treated just as structures and no special conversion especially in such a core base value function. Also there is the issue of the lack of symmetry now between ::Get \u0026 ::Put\n\nIf one wanted to set an error then SbxBase::SetError( SbxERR_CONVERSION ) probably would be the appropriate one",
+      "revId": "a6a8413ab3ddb8738f13d5a418a35ba866ca167e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7Bg\u003d",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-09-11T10:22:41Z",
+      "side": 1,
+      "message": "Same answer as previous :)\n\nLack of symmetry: \n\nI tried to change Put, but that didn\u0027t work right (possibly because I don\u0027t fully understand the business with TheRealValue and/or because I did not find how to get the class name of this when this-\u003eaData.eType\u003d\u003dSbxOBJECT and/or the same for rVal). I ended up changing SbiRuntime::StepSETCLASS_impl instead and there, from a code POV, it \"flows\" better.",
+      "parentUuid": "AAAAXn//7Dk\u003d",
       "revId": "a6a8413ab3ddb8738f13d5a418a35ba866ca167e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
