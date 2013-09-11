@@ -310,10 +310,8 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         {
             bool bPercent = false;
             if( mrModel.maNumberFormat.maFormatCode.indexOf('%') >= 0)
-            {
-                mrModel.maNumberFormat.mbSourceLinked = false;
                 bPercent = true;
-            }
+            mrModel.maNumberFormat.mbSourceLinked = false;
             getFormatter().convertNumberFormat( aAxisProp, mrModel.maNumberFormat, bPercent );
         }
 
