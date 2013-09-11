@@ -52,8 +52,7 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Registry_Lang,
              gid_File_Registry_Spool_Langpack_Lang,
              gid_File_Share_Registry_Ctl_Xcd,
-             gid_File_Share_Registry_Ctlseqcheck_Xcd,
-             gid_File_InfoPlist_Lang);
+             gid_File_Share_Registry_Ctlseqcheck_Xcd);
     Dirs = (gid_Dir_Samples_Language,
             gid_Dir_Autotext_Language);
 End

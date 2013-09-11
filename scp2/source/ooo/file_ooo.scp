@@ -721,19 +721,11 @@ End
 #endif
 
 #ifdef MACOSX 
-File gid_File_App_PkgInfo
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents;
-    Name = "PkgInfo";
-End
-#endif
-
-#ifdef MACOSX 
 File gid_File_App_InfoPlist
     TXT_FILE_BODY;
     Dir = gid_Dir_Bundle_Contents;
-    Name = "Info.plist";
-    Styles = (SCPZIP_REPLACE);
+    Name = "infoplist.filelist";
+    Styles = (FILELIST);
 End
 #endif
 
@@ -753,10 +745,6 @@ File gid_File_Res_Bundle
     Styles = (FILELIST);
     Name = "vcl_osxres.filelist";
 End
-#endif
-
-#ifdef MACOSX
-ITERATE_ALL_LANG_FILE(InfoPlist_Lang,Bundle_Contents_Resources_Lang,ARCHIVE_TXT_FILE_BODY,InfoPlist,.zip)
 #endif
 
 #ifdef MACOSX
