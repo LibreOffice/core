@@ -871,9 +871,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         // Common data
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
         aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue(); // Literal quote marks
-        aRow[7] = new ORowSetValueDecorator(sal_Bool(true)); // Nullable
-        aRow[8] = new ORowSetValueDecorator(sal_Bool(true)); // Case sensitive
-        aRow[10] = new ORowSetValueDecorator(sal_Bool(false)); // Is unsigned
+        aRow[7] = new ORowSetValueDecorator(sal_True); // Nullable
+        aRow[8] = new ORowSetValueDecorator(sal_True); // Case sensitive
+        aRow[10] = new ORowSetValueDecorator(sal_False); // Is unsigned
         // FIXED_PREC_SCALE: docs state "can it be a money value? " however
         // in reality this causes Base to treat all numbers as money formatted
         // by default which is wrong (and formatting as money value is still
@@ -894,7 +894,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
-        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[12] = new ORowSetValueDecorator(sal_False); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
@@ -906,7 +906,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[6] = new ORowSetValueDecorator(OUString("length")); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
-        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[12] = new ORowSetValueDecorator(sal_False); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
@@ -916,7 +916,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
             aRow[6] = new ORowSetValueDecorator(); // Create Params
             aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
-            aRow[12] = new ORowSetValueDecorator(sal_Bool(true)); // Autoincrement
+            aRow[12] = new ORowSetValueDecorator(sal_True); // Autoincrement
             aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
             aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         }
@@ -941,7 +941,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
             aRow[6] = new ORowSetValueDecorator(); // Create Params
             aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
-            aRow[12] = new ORowSetValueDecorator(sal_Bool(true)); // Autoincrement
+            aRow[12] = new ORowSetValueDecorator(sal_True); // Autoincrement
         }
         // SQL_FLOAT
         aRow[1] = new ORowSetValueDecorator(OUString("FLOAT"));
@@ -974,7 +974,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
-        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[12] = new ORowSetValueDecorator(sal_False); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
@@ -987,7 +987,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
-        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[12] = new ORowSetValueDecorator(sal_False); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
@@ -1000,7 +1000,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::FULL)); // Searchable
-        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[12] = new ORowSetValueDecorator(sal_False); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
@@ -1013,7 +1013,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[6] = new ORowSetValueDecorator(); // Create Params
         aRow[9] = new ORowSetValueDecorator(
                 sal_Int16(ColumnSearch::NONE)); // Searchable
-        aRow[12] = new ORowSetValueDecorator(sal_Bool(false)); // Autoincrement
+        aRow[12] = new ORowSetValueDecorator(sal_False); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
         aResults.push_back(aRow);
