@@ -37,6 +37,8 @@
 #include "pq_resultset.hxx"
 #include "pq_resultsetmetadata.hxx"
 
+#include <connectivity/dbexception.hxx>
+
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -165,6 +167,11 @@ sal_Int32 ResultSet::findColumn( const OUString& columnName )
     if(res >= 0)
     {
         res += 1;
+    }
+    else
+    {
+        ::dbtools::throwInvalidColumnException( columnName, *this );
+        assert(false);
     }
     return res;
 }
