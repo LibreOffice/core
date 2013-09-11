@@ -562,10 +562,10 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr()
 GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr):
     NBOTypeMgrBase(aTypeMgr)
 {
-    for (sal_uInt16 i=0;i< aTypeMgr.aGrfDataLst.size();++i)
+    for (size_t i=0, n = aTypeMgr.aGrfDataLst.size(); i < n; ++i)
     {
         GrfBulDataRelation* pEntry = new GrfBulDataRelation(eNBType::GRAPHICBULLETS);
-        GrfBulDataRelation* pSrcEntry = i < aTypeMgr.aGrfDataLst.size() ? aTypeMgr.aGrfDataLst[i] : NULL;
+        GrfBulDataRelation* pSrcEntry = aTypeMgr.aGrfDataLst[i];
         if ( pEntry && pSrcEntry)
         {
             pEntry->bIsCustomized = pSrcEntry->bIsCustomized;
@@ -575,6 +575,8 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTy
             pEntry->sDescription = pSrcEntry->sDescription;
             aGrfDataLst.push_back(pEntry);
         }
+        else
+            delete pEntry;
     }
 }
 
