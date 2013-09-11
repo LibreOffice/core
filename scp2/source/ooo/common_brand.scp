@@ -514,14 +514,8 @@ End
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-#if defined MACOSX
-    Name = "soffice.bin";
-    InstallName = "soffice";
-    Styles = (PACKED, SUBST_FILENAME);
-#else
     Name = EXENAME(soffice);
     Styles = (PACKED);
-#endif
 End
 
 #endif
