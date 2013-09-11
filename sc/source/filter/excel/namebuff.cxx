@@ -79,7 +79,6 @@ void SharedFormulaBuffer::Clear()
 
 void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rArray )
 {
-    SCROW nGroupLen = rRange.aEnd.Row() - rRange.aStart.Row() + 1;
     for (SCCOL i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); ++i)
     {
         // Create one group per column.
@@ -88,7 +87,7 @@ void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rArr
 
         ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
         xNewGroup->mnStart = rRange.aStart.Row();
-        xNewGroup->mnLength = nGroupLen;
+        xNewGroup->mnLength = 1;
         xNewGroup->setCode(rArray);
         maFormulaGroups.insert(FormulaGroupsType::value_type(aPos, xNewGroup));
     }

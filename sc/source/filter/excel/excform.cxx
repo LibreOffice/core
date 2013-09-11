@@ -115,27 +115,28 @@ void ImportExcel::Formula(
     {
         // This is a shared formula. Get the token array from the shared formula pool.
         ScFormulaCellGroupRef xGroup = pFormConv->GetSharedFormula(maStrm, aScPos.Col(), nFormLen);
-        if (!xGroup)
-            return;
-
-        if (xGroup->mnStart == aScPos.Row())
-            // Generate code for the top cell only.
-            xGroup->compileCode(*pD, aScPos, formula::FormulaGrammar::GRAM_DEFAULT);
-
-        ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, xGroup);
-        pD->EnsureTable(aScPos.Tab());
-        bool bInserted = pD->SetGroupFormulaCell(aScPos, pCell);
-        if (!bInserted)
+        if (xGroup)
         {
-            delete pCell;
+            if (xGroup->mnStart == aScPos.Row())
+                // Generate code for the top cell only.
+                xGroup->compileCode(*pD, aScPos, formula::FormulaGrammar::GRAM_DEFAULT);
+
+            ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, xGroup);
+            pD->EnsureTable(aScPos.Tab());
+            bool bInserted = pD->SetGroupFormulaCell(aScPos, pCell);
+            if (!bInserted)
+            {
+                delete pCell;
+                return;
+            }
+            xGroup->mnLength = aScPos.Row() - xGroup->mnStart + 1;
+            pCell->SetNeedNumberFormat(false);
+            if (!rtl::math::isNan(fCurVal))
+                pCell->SetResultDouble(fCurVal);
+
+            GetXFRangeBuffer().SetXF(aScPos, nXF);
             return;
         }
-        pCell->SetNeedNumberFormat(false);
-        if (!rtl::math::isNan(fCurVal))
-            pCell->SetResultDouble(fCurVal);
-
-        GetXFRangeBuffer().SetXF(aScPos, nXF);
-        return;
     }
 
     ConvErr eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true, FT_CellFormula);
