@@ -1050,6 +1050,8 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
         sal_Int32 nLen = aElementNames.getLength();
         const OUString *pElementNames = aElementNames.getConstArray();
 
+        const uno::Sequence< OUString > aDisabledDics( GetDisabledDictionaries() );
+
         SvtLinguConfigDictionaryEntry aDicEntry;
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
@@ -1059,7 +1061,6 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
             {
                 // check if it is active or not
                 bool bDicIsActive = true;
-                const uno::Sequence< OUString > aDisabledDics( GetDisabledDictionaries() );
                 for (sal_Int32 k = 0;  bDicIsActive && k < aDisabledDics.getLength();  ++k)
                 {
                     if (aDisabledDics[k] == pElementNames[i])
