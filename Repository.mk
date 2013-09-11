@@ -155,9 +155,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	sc \
 	scd \
 	scfilt \
+	scopencl \
 	scui \
 	solver \
-	$(if $(ENABLE_OPENCL),scopencl) \
 	$(if $(DISABLE_SCRIPTING),,vbaobj) \
 	$(if $(ENABLE_TELEPATHY),tubes) \
 ))

@@ -29,23 +29,6 @@
 
 # External headers
 
-ifeq ($(ENABLE_OPENCL),TRUE)
-
-define gb_LinkTarget__use_opencl
-$(call gb_LinkTarget_set_include,$(1),\
-	$$(INCLUDE) \
-    $(OPENCL_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(OPENCL_LIBS))
-
-endef
-
-else # ENABLE_OPENCL != TRUE
-
-gb_LinkTarget__use_opencl :=
-
-endif
-
 ifeq ($(SYSTEM_MARIADB),YES)
 
 define gb_LinkTarget__use_mariadb

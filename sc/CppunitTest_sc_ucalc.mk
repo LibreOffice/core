@@ -26,9 +26,6 @@ $(eval $(call gb_CppunitTest_use_library_objects,sc_ucalc, \
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,tubes))
 endif
-ifeq ($(ENABLE_OPENCL),TRUE)
-$(eval $(call gb_CppunitTest_use_externals,sc_ucalc,opencl))
-endif
 
 $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	boost_headers \

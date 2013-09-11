@@ -15,15 +15,10 @@ $(eval $(call gb_Module_add_targets,sc,\
 	Library_sc \
 	Library_scd \
 	Library_scfilt \
+	Library_scopencl \
 	Library_scui \
 	UIConfig_scalc \
 ))
-
-ifeq ($(ENABLE_OPENCL),TRUE)
-$(eval $(call gb_Module_add_targets,sc,\
-	Library_scopencl \
-))
-endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,sc,\
