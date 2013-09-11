@@ -25,7 +25,7 @@
 # NOTE: SDKBIN executables are already packaged in module odk
 gb_Executable_LAYER_DIRS := \
 	OOO:$(gb_PROGRAMDIRNAME) \
-	UREBIN:ure/bin
+	UREBIN:$(LIBO_URE_BIN_FOLDER) \
 
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))

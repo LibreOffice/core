@@ -13,8 +13,8 @@ $(eval $(call gb_Package_set_outdir,ure_install,$(gb_INSTROOT)))
 
 ifneq (WNT,$(OS))
 ifeq ($(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE),)
-$(eval $(call gb_Package_add_file,ure_install,ure/bin/startup.sh,startup.sh))
-$(eval $(call gb_Package_add_symbolic_link,ure_install,ure/bin/uno,startup.sh))
+$(eval $(call gb_Package_add_file,ure_install,$(LIBO_URE_BIN_FOLDER)/startup.sh,startup.sh))
+$(eval $(call gb_Package_add_symbolic_link,ure_install,$(LIBO_URE_BIN_FOLDER)/uno,startup.sh))
 endif
 endif
 
