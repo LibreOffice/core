@@ -426,6 +426,34 @@ void lo_tap(int x, int y)
 }
 
 extern "C"
+void lo_mouse_drag(int x, int y, LOMouseButtonState state)
+{
+    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+
+    if (pFocus) {
+        MouseEvent aEvent;
+        sal_uLong nEvent;
+
+        switch(state) {
+        case DOWN:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
+            break;
+        case MOVE:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
+            nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
+            break;
+        case UP:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
+            break;
+        }
+
+        Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
+    }
+}
+
+extern "C"
 void lo_pan(int deltaX, int deltaY)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();

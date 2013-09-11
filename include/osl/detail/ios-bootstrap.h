@@ -41,6 +41,8 @@ extern "C" {
 
 /* 1) */
 
+typedef enum { DOWN, MOVE, UP} LOMouseButtonState;
+
 void lo_damaged(CGRect rect);
 
 /* 2) */
@@ -51,6 +53,7 @@ void lo_render_windows(CGContextRef context, CGRect rect);
 void lo_tap(int x, int y);
 void lo_pan(int deltaX, int deltaY);
 void lo_zoom(int x, int y, float scale);
+void lo_mouse_drag(int x, int y, LOMouseButtonState state);
 void lo_keyboard_input(int c);
 
 #ifdef __cplusplus
