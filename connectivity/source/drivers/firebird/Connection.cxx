@@ -830,11 +830,11 @@ void Connection::rebuildIndexes() throw(SQLException)
     // and its ResultSet become invalidated) hence we use the native api.
     while (xCharIndices->next())
     {
-        OUString sIndexName(xRow->getString(1));
+        OUString sIndexName(sanitizeIdentifier(xRow->getString(1)));
         SAL_INFO("connectivity.firebird", "rebuilding index " + sIndexName);
-        OString sAlterIndex = "ALTER INDEX "
+        OString sAlterIndex = "ALTER INDEX \""
                                + OUStringToOString(sIndexName, RTL_TEXTENCODING_UTF8)
-                               + " ACTIVE";
+                               + "\" ACTIVE";
 
         ISC_STATUS_ARRAY aStatusVector;
         ISC_STATUS aErr;
