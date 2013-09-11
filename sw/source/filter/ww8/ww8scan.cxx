@@ -2496,7 +2496,15 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                                 {
                                     aEntry.mnLen-=6; //PHE
                                     //skipi stc, len byte + 6 byte PHE
-                                    aEntry.mpData = maRawData + nOfs + 8;
+                                    unsigned int nOffset = nOfs + 8;
+                                    if (nOffset >= 511) //Bad offset
+                                        aEntry.mnLen=0;
+                                    if (aEntry.mnLen)   //start is ok
+                                    {
+                                        if (nOffset + aEntry.mnLen > 512)   //Bad end, clip
+                                            aEntry.mnLen = 512 - nOffset;
+                                        aEntry.mpData = maRawData + nOffset;
+                                    }
                                 }
                                 else
                                     aEntry.mnLen=0; //Too short
