@@ -1709,7 +1709,7 @@ void ContentNode::Append(const XubString& rStr)
 
 void ContentNode::Erase(sal_uInt16 nPos)
 {
-    maString = maString.replaceAt(nPos, 1, "");
+    maString = maString.copy(0, nPos);
 }
 
 void ContentNode::Erase(sal_uInt16 nPos, sal_uInt16 nCount)
