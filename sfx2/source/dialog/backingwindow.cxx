@@ -369,11 +369,19 @@ void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICAT
     pView->showRootRegion();
     pView->setOpenTemplateHdl( LINK( this, BackingWindow, OpenTemplateHdl ) );
 
-    // setup buttons
-    pRecentButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    pTemplateButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    if( pView->HasUnfilteredItems(eFilter) )
+    {
+        // setup buttons
+        pRecentButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+        pTemplateButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
 
-    pRecentButton->Hide();  // hidden by default
+        pRecentButton->Hide();  // hidden by default
+    }
+    else // no templates, hide toggle button
+    {
+        pTemplateButton->Hide();
+        pRecentButton->Hide();
+    }
 }
 void BackingWindow::Paint( const Rectangle& )
 {
