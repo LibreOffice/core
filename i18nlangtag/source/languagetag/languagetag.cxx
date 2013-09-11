@@ -1267,8 +1267,9 @@ LanguageTag & LanguageTag::makeFallback()
         return aVec;
     }
 
+    getBcp47();     // have maBcp47 now
     if (bIncludeFullBcp47)
-        aVec.push_back( getBcp47());
+        aVec.push_back( maBcp47);
     OUString aVariants( getVariants());
     OUString aTmp;
     if (hasScript())
@@ -1280,27 +1281,27 @@ LanguageTag & LanguageTag::makeFallback()
             if (!aVariants.isEmpty())
             {
                 aTmp = aLanguage + "-" + aScript + "-" + aCountry + "-" + aVariants;
-                if (aVec.empty() || aTmp != aVec[0])
+                if (aTmp != maBcp47)
                     aVec.push_back( aTmp);
                 // Language with variant but without country before language
                 // without variant but with country.
                 aTmp = aLanguage + "-" + aScript + "-" + aVariants;
-                if (aVec.empty() || aTmp != aVec[0])
+                if (aTmp != maBcp47)
                     aVec.push_back( aTmp);
                 bHaveLanguageScriptVariant = true;
             }
             aTmp = aLanguage + "-" + aScript + "-" + aCountry;
-            if (aVec.empty() || aTmp != aVec[0])
+            if (aTmp != maBcp47)
                 aVec.push_back( aTmp);
         }
         if (!aVariants.isEmpty() && !bHaveLanguageScriptVariant)
         {
             aTmp = aLanguage + "-" + aScript + "-" + aVariants;
-            if (aVec.empty() || aTmp != aVec[0])
+            if (aTmp != maBcp47)
                 aVec.push_back( aTmp);
         }
         aTmp = aLanguage + "-" + aScript;
-        if (aVec.empty() || aTmp != aVec[0])
+        if (aTmp != maBcp47)
             aVec.push_back( aTmp);
     }
     bool bHaveLanguageVariant = false;
@@ -1309,27 +1310,27 @@ LanguageTag & LanguageTag::makeFallback()
         if (!aVariants.isEmpty())
         {
             aTmp = aLanguage + "-" + aCountry + "-" + aVariants;
-            if (aVec.empty() || aTmp != aVec[0])
+            if (aTmp != maBcp47)
                 aVec.push_back( aTmp);
             // Language with variant but without country before language
             // without variant but with country.
             aTmp = aLanguage + "-" + aVariants;
-            if (aVec.empty() || aTmp != aVec[0])
+            if (aTmp != maBcp47)
                 aVec.push_back( aTmp);
             bHaveLanguageVariant = true;
         }
         aTmp = aLanguage + "-" + aCountry;
-        if (aVec.empty() || aTmp != aVec[0])
+        if (aTmp != maBcp47)
             aVec.push_back( aTmp);
     }
     if (!aVariants.isEmpty() && !bHaveLanguageVariant)
     {
         aTmp = aLanguage + "-" + aVariants;
-        if (aVec.empty() || aTmp != aVec[0])
+        if (aTmp != maBcp47)
             aVec.push_back( aTmp);
     }
     aTmp = aLanguage;
-    if (aVec.empty() || aTmp != aVec[0])
+    if (aTmp != maBcp47)
         aVec.push_back( aTmp);
     return aVec;
 }
