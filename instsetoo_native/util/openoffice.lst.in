@@ -82,7 +82,7 @@ LibreOffice
         downloadname    LibreOffice_{productversion}_{os}_install_{languages}
         langpackdownloadname    LibreOffice_{productversion}_languagepack_{os}_install_{languages}
         helppackdownloadname    LibreOffice_{productversion}_helppack_{os}_install_{languages}
-        include         {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{solarpath}/xml.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath},{shlxthdlpath}
+        include         {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{solarpath}/xml.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{shlxthdlpath},{instdir},{extensionsdir}
     }
 }
 
@@ -138,7 +138,7 @@ LibreOffice_Dev
         downloadname    LibreOfficeDev_{productversion}_{os}_install_{languages}
         langpackdownloadname    LibreOfficeDev_{productversion}_languagepack_{os}_install_{languages}
         helppackdownloadname    LibreOfficeDev_{productversion}_helppack_{os}_install_{languages}
-        include         {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor},{solarpath}/xml.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath},{shlxthdlpath}
+        include         {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor},{solarpath}/xml.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{shlxthdlpath},{instdir},{extensionsdir}
     }
 }
 
@@ -177,7 +177,7 @@ LibreOffice_SDK
         active 1
         compression 5
         script sdkoo
-        include {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}
+        include {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{instdir}
     }
 }
 
@@ -223,7 +223,7 @@ LibreOffice_Dev_SDK
         active 1
         compression 5
         script sdkoo
-        include {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}
+        include {solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{instdir}
     }
 }
 
@@ -262,7 +262,7 @@ LibreOffice_Test
         active 1
         compression 5
         script test
-        include {solarpath}/bin.{minor}/cppunit,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{filelistpath}
+        include {solarpath}/bin.{minor}/cppunit,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor}
     }
 }
 
@@ -308,6 +308,6 @@ LibreOffice_Dev_Test
         active 1
         compression 5
         script test
-        include {solarpath}/bin.{minor}/cppunit,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{filelistpath}
+        include {solarpath}/bin.{minor}/cppunit,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor}
     }
 }

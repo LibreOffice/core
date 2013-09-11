@@ -646,35 +646,35 @@ File gid_File_Txt_Pagein_Calc
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "Pagein/pagein-calc";
+    Name = "pagein-calc";
 End
 
 File gid_File_Txt_Pagein_Common
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "Pagein/pagein-common";
+    Name = "pagein-common";
 End
 
 File gid_File_Txt_Pagein_Draw
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "Pagein/pagein-draw";
+    Name = "pagein-draw";
 End
 
 File gid_File_Txt_Pagein_Impress
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "Pagein/pagein-impress";
+    Name = "pagein-impress";
 End
 
 File gid_File_Txt_Pagein_Writer
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "Pagein/pagein-writer";
+    Name = "pagein-writer";
 End
 
 #endif
@@ -688,7 +688,7 @@ End
 
 File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
-    Name = "Rdb/services.rdb";
+    Name = "services.rdb";
     Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End

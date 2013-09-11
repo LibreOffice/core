@@ -30,7 +30,7 @@ File gid_File_Oxt_Presentation_Minimizer
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_Presentation_Minimizer;
-    Name = "Extension/presentation-minimizer.oxt";
+    Name = "presentation-minimizer.oxt";
 End
 
 #endif
@@ -43,7 +43,7 @@ File gid_File_Oxt_MediaWiki
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_MediaWiki;
-    Name = "Extension/wiki-publisher.oxt";
+    Name = "wiki-publisher.oxt";
 End
 
 #endif
@@ -173,7 +173,7 @@ File gid_File_Oxt_NLPSolver
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_NLPSolver;
-    Name = "Extension/nlpsolver.oxt";
+    Name = "nlpsolver.oxt";
 End
 
 #endif
@@ -199,7 +199,7 @@ File gid_File_Oxt_MySQLConnector
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_MySQLConnector;
-    Name = "Extension/mysql-connector-ooo.oxt";
+    Name = "mysql-connector-ooo.oxt";
 End
 
 #endif
@@ -234,7 +234,7 @@ STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShel
 
 File gid_File_Rdb_Scriptproviderforbeanshell
     TXT_FILE_BODY;
-    Name = "Rdb/scriptproviderforbeanshell.rdb";
+    Name = "scriptproviderforbeanshell.rdb";
     Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End
@@ -251,7 +251,7 @@ STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScr
 
 File gid_File_Rdb_Scriptproviderforjavascript
     TXT_FILE_BODY;
-    Name = "Rdb/scriptproviderforjavascript.rdb";
+    Name = "scriptproviderforjavascript.rdb";
     Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End

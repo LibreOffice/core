@@ -1068,8 +1068,23 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 
         my $sourcepathref = "";
 
+        my $destination = $onefile->{'destination'};
+        my $instdirdestination;
+        if ($destination)
+        {
+            $instdirdestination = $ENV{'INSTDIR'} . $installer::globals::separator . $onefile->{'destination'};
+        }
+        if ($instdirdestination && -f $instdirdestination)
+        {
+            $infoline = "SUCCESS: INSTDIR Source for $onefilename: $instdirdestination\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            $$sourcepathref = $instdirdestination;
+        }
+        else
+        {
         if ( $file_can_miss ) { $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 0); }
         else { $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1); }
+        }
 
         $onefile->{'sourcepath'} = $$sourcepathref; # This $$sourcepathref is empty, if no source was found
     }

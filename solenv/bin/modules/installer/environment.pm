@@ -58,6 +58,12 @@ sub create_pathvariables
     my $platformname  = $environment->{'OUTPATH'};
     $variables{'platformname'} = $platformname;
 
+    my $instdir = $ENV{'INSTDIR'};
+    $variables{'instdir'} = $instdir;
+
+    my $extensionsdir = $environment->{'WORKDIR'} . $installer::globals::separator . "Extension";
+    $variables{'extensionsdir'} = $extensionsdir;
+
     my $filelistpath = $environment->{'WORKDIR'};
     $variables{'filelistpath'} = $filelistpath;
 
