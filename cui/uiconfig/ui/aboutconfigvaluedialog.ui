@@ -69,7 +69,6 @@
         </child>
         <child>
           <object class="GtkBox" id="box1">
-            <property name="width_request">500</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
