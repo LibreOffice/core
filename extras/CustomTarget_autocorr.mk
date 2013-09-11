@@ -188,18 +188,6 @@ extras_AUTOCORR_XMLFILES := \
 	ru/acor/META-INF/manifest.xml \
 	ru/acor/SentenceExceptList.xml \
 	ru/acor/WordExceptList.xml \
-	sr-Latn-ME/acor/DocumentList.xml \
-	sr-Latn-ME/acor/META-INF/manifest.xml \
-	sr-Latn-ME/acor/SentenceExceptList.xml \
-	sr-Latn-ME/acor/WordExceptList.xml \
-	sr-Latn-RS/acor/DocumentList.xml \
-	sr-Latn-RS/acor/META-INF/manifest.xml \
-	sr-Latn-RS/acor/SentenceExceptList.xml \
-	sr-Latn-RS/acor/WordExceptList.xml \
-	sr-Latn-CS/acor/DocumentList.xml \
-	sr-Latn-CS/acor/META-INF/manifest.xml \
-	sr-Latn-CS/acor/SentenceExceptList.xml \
-	sr-Latn-CS/acor/WordExceptList.xml \
 	sk/acor/DocumentList.xml \
 	sk/acor/META-INF/manifest.xml \
 	sk/acor/SentenceExceptList.xml \
@@ -208,6 +196,22 @@ extras_AUTOCORR_XMLFILES := \
 	sl/acor/META-INF/manifest.xml \
 	sl/acor/SentenceExceptList.xml \
 	sl/acor/WordExceptList.xml \
+	sr-CS/acor/DocumentList.xml \
+	sr-CS/acor/META-INF/manifest.xml \
+	sr-CS/acor/SentenceExceptList.xml \
+	sr-CS/acor/WordExceptList.xml \
+	sr-Latn-CS/acor/DocumentList.xml \
+	sr-Latn-CS/acor/META-INF/manifest.xml \
+	sr-Latn-CS/acor/SentenceExceptList.xml \
+	sr-Latn-CS/acor/WordExceptList.xml \
+	sr-Latn-ME/acor/DocumentList.xml \
+	sr-Latn-ME/acor/META-INF/manifest.xml \
+	sr-Latn-ME/acor/SentenceExceptList.xml \
+	sr-Latn-ME/acor/WordExceptList.xml \
+	sr-Latn-RS/acor/DocumentList.xml \
+	sr-Latn-RS/acor/META-INF/manifest.xml \
+	sr-Latn-RS/acor/SentenceExceptList.xml \
+	sr-Latn-RS/acor/WordExceptList.xml \
 	sr-ME/acor/DocumentList.xml \
 	sr-ME/acor/META-INF/manifest.xml \
 	sr-ME/acor/SentenceExceptList.xml \
@@ -216,10 +220,6 @@ extras_AUTOCORR_XMLFILES := \
 	sr-RS/acor/META-INF/manifest.xml \
 	sr-RS/acor/SentenceExceptList.xml \
 	sr-RS/acor/WordExceptList.xml \
-	sr-CS/acor/DocumentList.xml \
-	sr-CS/acor/META-INF/manifest.xml \
-	sr-CS/acor/SentenceExceptList.xml \
-	sr-CS/acor/WordExceptList.xml \
 	sv/acor/BlockList.xml \
 	sv/acor/DocumentList.xml \
 	sv/acor/META-INF/manifest.xml \
