@@ -25,6 +25,10 @@ gb_Executable_FILENAMES := $(foreach group,$(gb_Executable_VALIDGROUPS),\
 gb_Executable_FILENAMES := $(patsubst uno:uno,uno:uno.bin,$(gb_Executable_FILENAMES))
 gb_Executable_FILENAMES := $(patsubst gengal:gengal,gengal:gengal.bin,$(gb_Executable_FILENAMES))
 
+ifeq ($(OS),MACOSX)
+gb_Executable_FILENAMES := $(patsubst soffice.bin:soffice.bin,soffice.bin:soffice,$(gb_Executable_FILENAMES))
+endif
+
 gb_Executable_FILENAMES_FOR_BUILD := $(subst $(gb_Executable_EXT),$(gb_Executable_EXT_for_build),$(gb_Executable_FILENAMES))
 
 # fixes for all the libraries that are named with too much creativity and do
