@@ -142,7 +142,7 @@ public:
             osl_Process_E_None == osl_error
         );
 
-    printf("the exit code is %d.\n", pInfo->Code );
+    printf("the exit code is %" SAL_PRIuUINT32 ".\n", pInfo->Code );
     CPPUNIT_ASSERT_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", pInfo->Code == 2);
     delete pInfo;
     }
