@@ -37,8 +37,8 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : $(call g
 		-d $(dir $@) \
 		-sourcepath "$(SRCDIR)/ridljar/source/unoloader$(gb_CLASSPATHSEP)$(SRCDIR)/ridljar$(gb_CLASSPATHSEP)$(SRCDIR)/jurt$(gb_CLASSPATHSEP)$(SRCDIR)/javaunohelper" \
 		-classpath $(OUTDIR)/bin/ridl.jar \
-		-linkoffline ../../common/reg $(SRCDIR)/odk/pack/gendocu/uno \
-		-linkoffline http://java.sun.com/j2se/1.5/docs/api $(SRCDIR)/odk/pack/gendocu/java \
+		-linkoffline ../../common/reg $(SRCDIR)/odk/docs/java-uno \
+		-linkoffline http://java.sun.com/j2se/1.5/docs/api $(SRCDIR)/odk/docs/java \
 		$(odk_JAVAPACKAGES) \
 		$(if $(JAVADOCISGJDOC),,-notimestamp) \
 		> $@

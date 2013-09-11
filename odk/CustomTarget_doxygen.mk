@@ -25,7 +25,8 @@ odk_cpp_INCFILELIST := com/sun/star/uno/Any.h \
 # Cygwin Doxygen needs unix paths
 odk_cygwin_path = $(if $(filter WNT,$(OS)),$(shell cygpath -u $(1)),$(1))
 odk_cpp_PREFIX := $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/
-odk_cpp_DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/log-areas.dox \
+odk_cpp_DOXY_INPUT := $(SRCDIR)/odk/docs/cpp/main.dox \
+	$(SRCDIR)/include/sal/log-areas.dox \
 	$(addprefix $(odk_cpp_PREFIX),$(odk_cpp_INCDIRLIST) $(odk_cpp_INCFILELIST))
 odk_cpp_DOXY_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref
 
@@ -35,7 +36,7 @@ $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
 ))
 
 $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
-		$(SRCDIR)/odk/pack/gendocu/Doxyfile \
+		$(SRCDIR)/odk/docs/cpp/Doxyfile \
 		$(gb_Module_CURRENTMAKEFILE)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e 's!^INPUT = %$$!INPUT = $(call odk_cygwin_path,$(odk_cpp_DOXY_INPUT))!' \
@@ -49,7 +50,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile : \
 $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/doxygen.log : \
 		$(call gb_CustomTarget_get_workdir,odk/docs)/cpp/Doxyfile \
 		$(SRCDIR)/include/sal/log-areas.dox \
-		$(SRCDIR)/odk/pack/gendocu/main.dox \
+		$(SRCDIR)/odk/docs/cpp/main.dox \
 		$(call gb_PackageSet_get_target,odk_headers)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
 	rm -rf $(odk_cpp_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
@@ -62,15 +63,15 @@ $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
 odk_idl_PREFIX := $(SRCDIR)/udkapi/ $(SRCDIR)/offapi/
 # note: generated_idl_chapter_refs.idl must be the _last_ input file!
 # otherwise spurious references to it will appear in the output
-odk_idl_DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/idl/main.dox \
+odk_idl_DOXY_INPUT := $(SRCDIR)/odk/docs/idl/main.dox \
 	$(addsuffix com,$(odk_idl_PREFIX)) \
-	$(SRCDIR)/odk/pack/gendocu/idl/generated_idl_chapter_refs.idl
+	$(SRCDIR)/odk/docs/idl/generated_idl_chapter_refs.idl
 odk_idl_DOXY_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/docs/idl)/ref
 
 # don't depend on the IDL files directly but instead on the udkapi/offapi
 # which will get rebuilt when any IDL file changes
 $(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
-		$(SRCDIR)/odk/pack/gendocu/idl/Doxyfile \
+		$(SRCDIR)/odk/docs/idl/Doxyfile \
 		$(call gb_UnoApi_get_target,udkapi) \
 		$(call gb_UnoApi_get_target,offapi) \
 		$(gb_Module_CURRENTMAKEFILE)
@@ -86,7 +87,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
 
 $(call gb_CustomTarget_get_workdir,odk/docs)/idl/doxygen.log : \
 		$(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile \
-		$(SRCDIR)/odk/pack/gendocu/idl/main.dox
+		$(SRCDIR)/odk/docs/idl/main.dox
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
 	rm -rf $(odk_idl_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
 
