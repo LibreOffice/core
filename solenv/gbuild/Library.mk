@@ -31,7 +31,7 @@
 
 gb_Library_LAYER_DIRS := \
     OOO:$(gb_PROGRAMDIRNAME) \
-    URELIB:ure/$(notdir $(gb_Helper_OUTDIRLIBDIR))
+    URELIB:$(LIBO_URE_LIB_FOLDER)
 
 # doesn't do anything, just used for hooking up component target
 .PHONY: $(call gb_Library__get_final_target,%)
