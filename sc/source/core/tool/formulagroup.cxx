@@ -128,6 +128,15 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
 
 }
 
+class FormulaGroupInterpreterOpenCLMissing : public FormulaGroupInterpreter
+{
+public:
+    FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
+    virtual ~FormulaGroupInterpreterOpenCLMissing() {}
+    virtual ScMatrixRef inverseMatrix(const ScMatrix&) { return ScMatrixRef(); }
+    virtual bool interpret(ScDocument&, const ScAddress&, const ScFormulaCellGroupRef&, ScTokenArray&) { return false; }
+};
+
 ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
 {
     return ScMatrixRef();
@@ -340,7 +349,14 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     {
 #if HAVE_FEATURE_OPENCL
         if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
+        {
+#ifdef DISABLE_DYNLOADING
             msInstance = sc::opencl::createFormulaGroupInterpreter();
+#else
+            // TODO : Dynamically load scopencl shared object, and instantiate the opencl interpreter.
+            msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
+#endif
+        }
 #endif
         if ( !msInstance ) // software fallback
         {

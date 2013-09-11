@@ -1745,7 +1745,7 @@ public:
      * @param pResults array of numeric results.
      * @param nLen length of numeric results.
      */
-    void SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
+    void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
 
 private:
     ScDocument(const ScDocument& r); // disabled with no definition

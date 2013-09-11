@@ -19,6 +19,12 @@ $(eval $(call gb_Module_add_targets,sc,\
 	UIConfig_scalc \
 ))
 
+ifeq ($(ENABLE_OPENCL),TRUE)
+$(eval $(call gb_Module_add_targets,sc,\
+	Library_scopencl \
+))
+endif
+
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_scqahelper \

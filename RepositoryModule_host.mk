@@ -246,7 +246,7 @@ endef
 # the default goal is all (see Module.mk)
 ifeq (,$(filter-out all,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
-	scfilt \
+	scfilt scopencl \
 	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
 	sc msword swui sw sd \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \

@@ -10,7 +10,6 @@
 #include "openclwrapper.hxx"
 
 #include "sal/config.h"
-#include "random.hxx"
 #include "oclkernels.hxx"
 
 #include <stdio.h>
