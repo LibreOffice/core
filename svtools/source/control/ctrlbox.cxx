@@ -625,8 +625,8 @@ namespace svtools
             case STYLE_FINE_DASHED:
                 if ( eUnit == MAP_PIXEL )
                 {
-                    aPattern.push_back( 4 );
-                    aPattern.push_back( 1 );
+                    aPattern.push_back( 8 );
+                    aPattern.push_back( 2 );
                 }
                 else if ( eUnit == MAP_TWIP )
                 {
