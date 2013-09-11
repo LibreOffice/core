@@ -278,7 +278,7 @@ public:
    /// load xml-based impress master presentation object definitions into document
     void InitObjectVector();
     /// return reference to vector of master presentation object definitions
-    const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>>& GetObjectVector() const { return maPresObjectInfo; }
+    const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
