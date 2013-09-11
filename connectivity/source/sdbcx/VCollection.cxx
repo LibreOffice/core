@@ -444,12 +444,8 @@ sal_Int32 SAL_CALL OCollection::findColumn( const OUString& columnName ) throw(S
 {
     if ( !m_pElements->exists(columnName) )
     {
-        ::connectivity::SharedResources aResources;
-        const OUString sError( aResources.getResourceStringWithSubstitution(
-                            STR_UNKNOWN_COLUMN_NAME,
-                            "$columnname$", columnName
-                         ) );
-        ::dbtools::throwGenericSQLException(sError,static_cast< XIndexAccess*>(this));
+        ::dbtools::throwInvalidColumnException( columnName, static_cast< XIndexAccess*>(this) );
+        assert(false);
     }
 
     return m_pElements->findColumn(columnName) + 1; // because columns start at one

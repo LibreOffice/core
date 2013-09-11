@@ -37,6 +37,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include "connectivity/dbexception.hxx"
+#include "resource/common_res.hrc"
 #include "TConnection.hxx"
 
 using namespace connectivity;
@@ -168,13 +169,16 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
+    {
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
             columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i))
             )
-            break;
-    /* FIXME: should throw in case of not found ? */
+            return i;
+    }
 
-    return i;
+    ::dbtools::throwInvalidColumnException( columnName, *this );
+    assert(false);
+    return 0; // Never reached
 }
 // -----------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)

@@ -163,11 +163,15 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQ
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
+    {
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
             columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
-            break;
-    /* FIXME: should throw in case of not found ? */
-    return i;
+            return i;
+    }
+
+    ::dbtools::throwInvalidColumnException( columnName, *this );
+    assert(false);
+    return 0; // Never reached
 }
 #define BLOCK_SIZE 256
 // -------------------------------------------------------------------------
