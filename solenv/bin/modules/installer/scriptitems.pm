@@ -1062,7 +1062,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $styles = "";
         my $file_can_miss = 0;
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-        if ( $styles =~ /\bFILE_CAN_MISS\b/ ) { $file_can_miss = 1; }
 
         if (( $installer::globals::languagepack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))) { $file_can_miss = 1; }
         if (( $installer::globals::helppack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCEHELPPACK\b/ ))) { $file_can_miss = 1; }

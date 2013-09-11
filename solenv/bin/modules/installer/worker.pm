@@ -513,10 +513,6 @@ sub put_scpactions_into_installset
         my $sourcefile = $onescpaction->{'sourcepath'};
         my $destfile = $destdir . $installer::globals::separator . $onescpaction->{'DestinationName'};
 
-        my $styles = "";
-        if ( $onescpaction->{'Styles'} ) { $styles = $onescpaction->{'Styles'}; }
-        if (( $styles =~ /\bFILE_CAN_MISS\b/ ) && ( $sourcefile eq "" )) { next; }
-
         if (( $subdir =~ /\// ) || ( $subdir =~ /\\/ ))
         {
             installer::systemactions::create_directory_structure($destdir);
