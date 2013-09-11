@@ -166,7 +166,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
                     // shared formulas across multiple columns.
                     ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
                     xNewGroup->mnStart = rRange.StartRow;
-                    xNewGroup->mnLength = rRange.EndRow - rRange.StartRow + 1;
+                    xNewGroup->mnLength = 1; // Length gets updated as we go.
                     xNewGroup->setCode(*pArray);
                     aGroups.set(nId, nCol, xNewGroup);
                 }
@@ -200,6 +200,9 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
                 continue;
             }
 
+            // Update the length of shared formula span as we go. The length
+            // that Excel gives is not always correct.
+            xGroup->mnLength = aPos.Row() - xGroup->mnStart + 1;
             pCell->StartListeningTo(&rDoc);
 
             if (it->maCellValue.isEmpty())
