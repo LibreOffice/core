@@ -17,6 +17,8 @@
 - (void)drawRect:(CGRect)rect;
 - (void)tapGesture:(UITapGestureRecognizer *)gestureRecognizer;
 - (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer;
+- (void)longPressGesture:(UILongPressGestureRecognizer *)gestureRecognizer;
+
 
 @end
 
