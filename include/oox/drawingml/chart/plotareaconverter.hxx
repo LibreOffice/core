@@ -79,11 +79,11 @@ public:
     void                convertPositionFromModel();
 
     /** Returns the automatic chart title if the chart contains only one series. */
-    inline const OUString& getAutomaticTitle() const { return maAutoTitle; }
+    const OUString& getAutomaticTitle() const { return maAutoTitle; }
     /** Returns true, if the chart is three-dimensional. */
-    inline bool         is3dChart() const { return mb3dChart; }
+    bool         is3dChart() const { return mb3dChart; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
-    inline bool         isWall3dChart() const { return mbWall3dChart; }
+    bool         isWall3dChart() const { return mbWall3dChart; }
 
 private:
     OUString     maAutoTitle;

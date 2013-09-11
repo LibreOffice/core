@@ -83,7 +83,7 @@ public:
     virtual             ~FragmentHandler();
 
     /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
                         getFastContextHandler() { return static_cast< ContextHandler* >( this ); }
 
     // com.sun.star.xml.sax.XFastDocumentHandler interface --------------------

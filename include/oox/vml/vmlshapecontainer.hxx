@@ -54,7 +54,7 @@ public:
                         ~ShapeContainer();
 
     /** Returns the drawing this shape container is part of. */
-    inline Drawing&     getDrawing() { return mrDrawing; }
+    Drawing&     getDrawing() { return mrDrawing; }
 
     /** Creates and returns a new shape template object. */
     ShapeType&          createShapeType();
@@ -66,7 +66,7 @@ public:
     void                finalizeFragmentImport();
 
     /** Returns true, if this container does not contain any shapes. */
-    inline bool         empty() const { return maShapes.empty(); }
+    bool         empty() const { return maShapes.empty(); }
 
     /** Returns the shape template with the passed identifier.
         @param bDeep  True = searches in all group shapes too. */

@@ -144,12 +144,12 @@ public:
 
     /** Returns true, if nElement contains the identifier of the currently
         processed element. */
-    inline bool         isCurrentElement( sal_Int32 nElement ) const
+    bool         isCurrentElement( sal_Int32 nElement ) const
                             { return getCurrentElement() == nElement; }
 
     /** Returns true, if either nElement1 or nElement2 contain the identifier
         of the currently processed element. */
-    inline bool         isCurrentElement( sal_Int32 nElement1, sal_Int32 nElement2 ) const
+    bool         isCurrentElement( sal_Int32 nElement1, sal_Int32 nElement2 ) const
                             { return isCurrentElement( nElement1 ) || isCurrentElement( nElement2 ); }
 
     /** Returns the identifier of the specified parent element. */
@@ -157,7 +157,7 @@ public:
 
     /** Returns true, if nElement contains the identifier of the specified
         parent element. */
-    inline sal_Int32    isParentElement( sal_Int32 nElement, sal_Int32 nCountBack = 1 ) const
+    sal_Int32    isParentElement( sal_Int32 nElement, sal_Int32 nCountBack = 1 ) const
                             { return getParentElement( nCountBack ) == nElement; }
 
     /** Returns true, if the element currently processed is the root element of

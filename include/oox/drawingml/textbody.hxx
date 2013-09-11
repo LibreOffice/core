@@ -43,14 +43,14 @@ public:
     TextBody( TextBodyPtr pBody );
     ~TextBody();
 
-    inline const TextParagraphVector&   getParagraphs() const { return maParagraphs; }
+    const TextParagraphVector&          getParagraphs() const { return maParagraphs; }
     TextParagraph&                      addParagraph();
 
-    inline const TextListStyle&         getTextListStyle() const { return maTextListStyle; }
-    inline TextListStyle&               getTextListStyle() { return maTextListStyle; }
+    const TextListStyle&                getTextListStyle() const { return maTextListStyle; }
+    TextListStyle&                      getTextListStyle() { return maTextListStyle; }
 
-    inline const TextBodyProperties&    getTextProperties() const { return maTextProperties; }
-    inline TextBodyProperties&          getTextProperties() { return maTextProperties; }
+    const TextBodyProperties&           getTextProperties() const { return maTextProperties; }
+    TextBodyProperties&                 getTextProperties() { return maTextProperties; }
 
     /** insert the text body at the text cursor */
     void                insertAt(

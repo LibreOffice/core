@@ -51,11 +51,11 @@ public:
     void                moveRelative( const AxPairData& rDistance );
 
     /** Returns the programmatical name of the control. */
-    inline const OUString& getName() const { return maName; }
+    const OUString& getName() const { return maName; }
     /** Returns the position of the control in its parent. */
-    inline const AxPairData& getPosition() const { return maPos; }
+    const AxPairData& getPosition() const { return maPos; }
     /** Returns the unique identifier of this control. */
-    inline sal_Int32    getId() const { return mnId; }
+    sal_Int32    getId() const { return mnId; }
     /** Returns true, if this control is a container control. */
     bool                isContainer() const;
     /** Returns the length of the stream data for stream based controls. */
@@ -63,7 +63,7 @@ public:
     /** Returns the name of the substorage for the container control data. */
     OUString     getSubStorageName() const;
     /** Returns the tab index of the control. */
-    inline sal_Int16    getTabIndex() const { return mnTabIndex; }
+    sal_Int16    getTabIndex() const { return mnTabIndex; }
 
     /** Tries to create the control model according to the site model. */
     ControlModelRef     createControlModel( const AxClassTable& rClassTable ) const;
@@ -73,8 +73,8 @@ public:
                             const ControlConverter& rConv,
                             ApiControlType eCtrlType,
                             sal_Int32 nCtrlIndex ) const;
-    inline ::rtl::OUString getControlSource() { return  maControlSource; }
-    inline ::rtl::OUString getRowSource() { return  maRowSource; }
+    ::rtl::OUString getControlSource() { return  maControlSource; }
+    ::rtl::OUString getRowSource() { return  maRowSource; }
 protected:
     OUString     maName;             ///< Name of the control.
     OUString     maTag;              ///< User defined tag.

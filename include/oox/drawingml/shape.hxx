@@ -62,7 +62,7 @@ struct ChartShapeInfo
     OUString     maFragmentPath;     ///< Path to related XML stream, e.g. for charts.
     bool                mbEmbedShapes;      ///< True = load chart shapes into chart, false = load into parent drawpage.
 
-    inline explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
+    explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
 };
 
 // ============================================================================
@@ -81,14 +81,14 @@ public:
 
     PropertyMap&                    getShapeProperties(){ return maShapeProperties; }
 
-    inline LineProperties&          getLineProperties() { return *mpLinePropertiesPtr; }
-    inline const LineProperties&    getLineProperties() const { return *mpLinePropertiesPtr; }
+    LineProperties&          getLineProperties() { return *mpLinePropertiesPtr; }
+    const LineProperties&    getLineProperties() const { return *mpLinePropertiesPtr; }
 
-    inline FillProperties&          getFillProperties() { return *mpFillPropertiesPtr; }
-    inline const FillProperties&    getFillProperties() const { return *mpFillPropertiesPtr; }
+    FillProperties&          getFillProperties() { return *mpFillPropertiesPtr; }
+    const FillProperties&    getFillProperties() const { return *mpFillPropertiesPtr; }
 
-    inline GraphicProperties&       getGraphicProperties() { return *mpGraphicPropertiesPtr; }
-    inline const GraphicProperties& getGraphicProperties() const { return *mpGraphicPropertiesPtr; }
+    GraphicProperties&       getGraphicProperties() { return *mpGraphicPropertiesPtr; }
+    const GraphicProperties& getGraphicProperties() const { return *mpGraphicPropertiesPtr; }
 
     CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
@@ -97,7 +97,7 @@ public:
 
     table::TablePropertiesPtr       getTableProperties();
 
-    inline EffectProperties&        getEffectProperties() { return *mpEffectPropertiesPtr; }
+    EffectProperties&        getEffectProperties() { return *mpEffectPropertiesPtr; }
 
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
@@ -139,8 +139,8 @@ public:
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
     TextListStylePtr    getMasterTextListStyle() const { return mpMasterTextListStyle; }
 
-    inline ShapeStyleRefMap&        getShapeStyleRefs() { return maShapeStyleRefs; }
-    inline const ShapeStyleRefMap&  getShapeStyleRefs() const { return maShapeStyleRefs; }
+    ShapeStyleRefMap&        getShapeStyleRefs() { return maShapeStyleRefs; }
+    const ShapeStyleRefMap&  getShapeStyleRefs() const { return maShapeStyleRefs; }
     const ShapeStyleRef*            getShapeStyleRef( sal_Int32 nRefType ) const;
 
     // addShape is creating and inserting the corresponding XShape.

@@ -128,7 +128,7 @@ public:
     virtual             ~TypeGroupConverter();
 
     /** Returns the type info struct that describes this chart type group. */
-    inline const TypeGroupInfo& getTypeInfo() const { return maTypeInfo; }
+    const TypeGroupInfo& getTypeInfo() const { return maTypeInfo; }
 
     /** Returns true, if the series in this chart type group are stacked on each other (no percentage). */
     bool                isStacked() const;

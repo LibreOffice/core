@@ -38,17 +38,15 @@ public:
     TextParagraph();
     ~TextParagraph();
 
-    inline TextRunVector&       getRuns() { return maRuns; }
-    inline const TextRunVector& getRuns() const { return maRuns; }
-    inline void                 addRun( const TextRunPtr & pRun ) { maRuns.push_back( pRun ); }
+    TextRunVector&       getRuns() { return maRuns; }
+    const TextRunVector& getRuns() const { return maRuns; }
+    void                 addRun( const TextRunPtr & pRun ) { maRuns.push_back( pRun ); }
 
-    inline TextParagraphProperties&         getProperties() { return maProperties; }
-    inline const TextParagraphProperties&   getProperties() const { return maProperties; }
+    TextParagraphProperties&         getProperties() { return maProperties; }
+    const TextParagraphProperties&   getProperties() const { return maProperties; }
 
-    inline TextCharacterProperties&         getEndProperties() { return maEndProperties; }
-    inline const TextCharacterProperties&   getEndProperties() const { return maEndProperties; }
-
-    //inline void                        setProperties( TextParagraphPropertiesPtr pProps ) { mpProperties = pProps; }
+    TextCharacterProperties&         getEndProperties() { return maEndProperties; }
+    const TextCharacterProperties&   getEndProperties() const { return maEndProperties; }
 
     void                        insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,

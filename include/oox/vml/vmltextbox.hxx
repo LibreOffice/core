@@ -83,7 +83,7 @@ public:
     void                appendPortion( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText );
 
     /** Returns the current number of text portions. */
-    inline size_t       getPortionCount() const { return maPortions.size(); }
+    size_t       getPortionCount() const { return maPortions.size(); }
     /** Returns the font settings of the first text portion. */
     const TextFontModel* getFirstFont() const;
     /** Returns the entire text of all text portions. */

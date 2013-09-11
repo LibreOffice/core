@@ -84,22 +84,22 @@ public:
         All data types supported by the ByteOrderConverter class can be used.
      */
     template< typename Type >
-    inline Type         readValue() { Type nValue; readValue( nValue ); return nValue; }
+    Type         readValue() { Type nValue; readValue( nValue ); return nValue; }
 
     /** Stream operator for all data types supported by the readValue() function. */
     template< typename Type >
-    inline BinaryInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+    BinaryInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
-    inline sal_Int8     readInt8() { return readValue< sal_Int8 >(); }
-    inline sal_uInt8    readuInt8() { return readValue< sal_uInt8 >(); }
-    inline sal_Int16    readInt16() { return readValue< sal_Int16 >(); }
-    inline sal_uInt16   readuInt16() { return readValue< sal_uInt16 >(); }
-    inline sal_Int32    readInt32() { return readValue< sal_Int32 >(); }
-    inline sal_uInt32   readuInt32() { return readValue< sal_uInt32 >(); }
-    inline sal_Int64    readInt64() { return readValue< sal_Int64 >(); }
-    inline sal_uInt64   readuInt64() { return readValue< sal_uInt64 >(); }
-    inline float        readFloat() { return readValue< float >(); }
-    inline double       readDouble() { return readValue< double >(); }
+    sal_Int8     readInt8() { return readValue< sal_Int8 >(); }
+    sal_uInt8    readuInt8() { return readValue< sal_uInt8 >(); }
+    sal_Int16    readInt16() { return readValue< sal_Int16 >(); }
+    sal_uInt16   readuInt16() { return readValue< sal_uInt16 >(); }
+    sal_Int32    readInt32() { return readValue< sal_Int32 >(); }
+    sal_uInt32   readuInt32() { return readValue< sal_uInt32 >(); }
+    sal_Int64    readInt64() { return readValue< sal_Int64 >(); }
+    sal_uInt64   readuInt64() { return readValue< sal_uInt64 >(); }
+    float        readFloat() { return readValue< float >(); }
+    double       readDouble() { return readValue< double >(); }
 
     /** Reads a (preallocated!) C array of values from the stream.
 
@@ -218,7 +218,7 @@ public:
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instanciated directly. */
-    inline explicit     BinaryInputStream() : BinaryStreamBase( false ) {}
+    BinaryInputStream() : BinaryStreamBase( false ) {}
 };
 
 typedef ::boost::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
@@ -309,7 +309,7 @@ public:
 
     /** Stream operator for all data types supported by the readValue() function. */
     template< typename Type >
-    inline BinaryXInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+    BinaryXInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in readMemory() function.
@@ -350,11 +350,11 @@ public:
 
     /** Stream operator for all data types supported by the readValue() function. */
     template< typename Type >
-    inline SequenceInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+    SequenceInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
 private:
     /** Returns the number of bytes available in the sequence for the passed byte count. */
-    inline sal_Int32    getMaxBytes( sal_Int32 nBytes ) const
+    sal_Int32    getMaxBytes( sal_Int32 nBytes ) const
                             { return getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mpData->getLength() - mnPos ); }
 };
 
@@ -415,11 +415,11 @@ public:
 
     /** Stream operator for all data types supported by the readValue() function. */
     template< typename Type >
-    inline RelativeInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+    RelativeInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
 private:
     /** Returns the number of bytes available in the sequence for the passed byte count. */
-    inline sal_Int32    getMaxBytes( sal_Int32 nBytes ) const
+    sal_Int32    getMaxBytes( sal_Int32 nBytes ) const
                             { return getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnSize - mnRelPos ); }
 
 private:

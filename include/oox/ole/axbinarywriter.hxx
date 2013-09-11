@@ -57,10 +57,10 @@ public:
     void         pad( sal_Int32 nBytes, size_t nAtomSize = 1);
     /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
-    inline void         writeAligned( Type nVal ) { align( sizeof( Type ) ); writeValue( nVal ); }
+    void         writeAligned( Type nVal ) { align( sizeof( Type ) ); writeValue( nVal ); }
     /** Aligns the stream according to the passed type and skips the size of the type. */
     template< typename Type >
-    inline void         padAligned() { align( sizeof( Type ) ); pad( sizeof( Type ) ); }
+    void         padAligned() { align( sizeof( Type ) ); pad( sizeof( Type ) ); }
 
 private:
     BinaryOutputStream*  mpOutStrm;           ///< The wrapped input stream.
@@ -87,7 +87,7 @@ public:
     /** Write an integer property value to the stream, the
         respective flag in the property mask is set. */
     template< typename StreamType, typename DataType >
-    inline void         writeIntProperty( DataType& ornValue )
+    void                writeIntProperty( DataType& ornValue )
                             { if( startNextProperty() ) maOutStrm.writeAligned< StreamType >( ornValue ); }
     /** Write a boolean property value to the stream, the
         respective flag in the property mask is set. */
@@ -101,7 +101,7 @@ public:
 
     /** Skips the next property clears the respective
         flag in the property mask. */
-    inline void         skipProperty() { startNextProperty( true ); }
+    void                skipProperty() { startNextProperty( true ); }
 
     /** Final processing, write contents of all complex properties, writes record size */
     bool                finalizeExport();
@@ -123,7 +123,7 @@ private:
     {
         AxPairData&         mrPairData;
 
-        inline explicit     PairProperty( AxPairData& rPairData ) :
+        explicit            PairProperty( AxPairData& rPairData ) :
                                 mrPairData( rPairData ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm );
     };
@@ -134,7 +134,7 @@ private:
         OUString&    mrValue;
         sal_uInt32          mnSize;
 
-        inline explicit     StringProperty( OUString& rValue, sal_uInt32 nSize ) :
+        explicit            StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm );
     };
@@ -144,7 +144,7 @@ private:
     {
         StreamDataSequence& mrPicData;
 
-        inline explicit     PictureProperty( StreamDataSequence& rPicData ) :
+        explicit            PictureProperty( StreamDataSequence& rPicData ) :
                                 mrPicData( rPicData ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm );
     };

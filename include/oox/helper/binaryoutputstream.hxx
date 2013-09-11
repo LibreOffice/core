@@ -66,7 +66,7 @@ public:
 
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >
-    inline BinaryOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+    BinaryOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 
     void writeCompressedUnicodeArray( const OUString& rString, bool bCompressed, bool bAllowNulChars = false );
 
@@ -77,7 +77,7 @@ public:
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instanciated directly. */
-    inline explicit     BinaryOutputStream() : BinaryStreamBase( false ) {}
+    BinaryOutputStream() : BinaryStreamBase( false ) {}
 };
 
 template< typename Type >
@@ -136,10 +136,10 @@ public:
 
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >
-    inline BinaryXOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+    BinaryXOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 
     /** Returns the XOutputStream interface of the wrapped output stream. */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         getXOutputStream() const { return mxOutStrm; }
 
 private:
@@ -177,7 +177,7 @@ public:
 
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >
-    inline SequenceOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+    SequenceOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 };
 
 // ============================================================================

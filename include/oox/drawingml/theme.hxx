@@ -45,46 +45,46 @@ typedef RefMap< sal_Int32, TextCharacterProperties >    FontScheme;
 class OOX_DLLPUBLIC Theme
 {
 public:
-    explicit            Theme();
+                        Theme();
                         ~Theme();
 
-    inline void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
-    inline const OUString&   getStyleName() const { return maStyleName; }
+    void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
+    const OUString&          getStyleName() const { return maStyleName; }
 
-    inline ClrScheme&               getClrScheme() { return maClrScheme; }
-    inline const ClrScheme&         getClrScheme() const { return maClrScheme; }
+    ClrScheme&               getClrScheme() { return maClrScheme; }
+    const ClrScheme&         getClrScheme() const { return maClrScheme; }
 
-    inline FillStyleList&           getFillStyleList() { return maFillStyleList; }
-    inline const FillStyleList&     getFillStyleList() const { return maFillStyleList; }
-    inline FillStyleList&           getBgFillStyleList() { return maBgFillStyleList; }
-    inline const FillStyleList&     getBgFillStyleList() const { return maBgFillStyleList; }
+    FillStyleList&           getFillStyleList() { return maFillStyleList; }
+    const FillStyleList&     getFillStyleList() const { return maFillStyleList; }
+    FillStyleList&           getBgFillStyleList() { return maBgFillStyleList; }
+    const FillStyleList&     getBgFillStyleList() const { return maBgFillStyleList; }
     /** Returns the fill properties of the passed one-based themed style index. */
     const FillProperties*           getFillStyle( sal_Int32 nIndex ) const;
 
-    inline LineStyleList&           getLineStyleList() { return maLineStyleList; }
-    inline const LineStyleList&     getLineStyleList() const { return maLineStyleList; }
+    LineStyleList&           getLineStyleList() { return maLineStyleList; }
+    const LineStyleList&     getLineStyleList() const { return maLineStyleList; }
     /** Returns the line properties of the passed one-based themed style index. */
     const LineProperties*           getLineStyle( sal_Int32 nIndex ) const;
 
-    inline EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
-    inline const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
+    EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
+    const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
     const EffectProperties*         getEffectStyle( sal_Int32 nIndex ) const;
 
-    inline FontScheme&              getFontScheme() { return maFontScheme; }
-    inline const FontScheme&        getFontScheme() const { return maFontScheme; }
+    FontScheme&              getFontScheme() { return maFontScheme; }
+    const FontScheme&        getFontScheme() const { return maFontScheme; }
     /** Returns theme font properties by scheme type (major/minor). */
     const TextCharacterProperties*  getFontStyle( sal_Int32 nSchemeType ) const;
     /** Returns theme font by placeholder name, e.g. the major latin theme font for the font name '+mj-lt'. */
     const TextFont*                 resolveFont( const OUString& rName ) const;
 
-    inline Shape&                   getSpDef() { return maSpDef; }
-    inline const Shape&             getSpDef() const { return maSpDef; }
+    Shape&                   getSpDef() { return maSpDef; }
+    const Shape&             getSpDef() const { return maSpDef; }
 
-    inline Shape&                   getLnDef() { return maLnDef; }
-    inline const Shape&             getLnDef() const { return maLnDef; }
+    Shape&                   getLnDef() { return maLnDef; }
+    const Shape&             getLnDef() const { return maLnDef; }
 
-    inline Shape&                   getTxDef() { return maTxDef; }
-    inline const Shape&             getTxDef() const { return maTxDef; }
+    Shape&                   getTxDef() { return maTxDef; }
+    const Shape&             getTxDef() const { return maTxDef; }
 
     void                            setFragment( const ::com::sun::star::uno::Reference<
                                                     ::com::sun::star::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }

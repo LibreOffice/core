@@ -118,12 +118,12 @@ public:
     virtual             ~ShapeType();
 
     /** Returns read/write access to the shape template model structure. */
-    inline ShapeTypeModel& getTypeModel() { return maTypeModel; }
+    ShapeTypeModel& getTypeModel() { return maTypeModel; }
     /** Returns read access to the shape template model structure. */
-    inline const ShapeTypeModel& getTypeModel() const { return maTypeModel; }
+    const ShapeTypeModel& getTypeModel() const { return maTypeModel; }
 
     /** Returns the shape identifier (which is unique through the containing drawing). */
-    inline const OUString& getShapeId() const { return maTypeModel.maShapeId; }
+    const OUString& getShapeId() const { return maTypeModel.maShapeId; }
     /** Returns the application defined shape type. */
     sal_Int32           getShapeType() const;
     /** Returns the fragment path to the embedded graphic used by this shape. */
@@ -222,14 +222,14 @@ class OOX_DLLPUBLIC ShapeBase : public ShapeType
 {
 public:
     /** Returns read/write access to the shape model structure. */
-    inline ShapeModel&  getShapeModel() { return maShapeModel; }
+    ShapeModel&  getShapeModel() { return maShapeModel; }
     /** Returns read access to the shape model structure. */
-    inline const ShapeModel& getShapeModel() const { return maShapeModel; }
+    const ShapeModel& getShapeModel() const { return maShapeModel; }
 
     /** Returns read access to the shape textbox. */
-    inline const TextBox* getTextBox() const { return maShapeModel.mxTextBox.get(); }
+    const TextBox* getTextBox() const { return maShapeModel.mxTextBox.get(); }
     /** Returns read access to the shape client data structure. */
-    inline const ClientData* getClientData() const { return maShapeModel.mxClientData.get(); }
+    const ClientData* getClientData() const { return maShapeModel.mxClientData.get(); }
 
     /** Final processing after import of the drawing fragment. */
     virtual void        finalizeFragmentImport();
@@ -411,9 +411,9 @@ public:
     virtual             ~GroupShape();
 
     /** Returns read/write access to the container of child shapes and templates. */
-    inline ShapeContainer& getChildren() { return *mxChildren; }
+    ShapeContainer& getChildren() { return *mxChildren; }
     /** Returns read access to the container of child shapes and templates. */
-    inline const ShapeContainer& getChildren() const { return *mxChildren; }
+    const ShapeContainer& getChildren() const { return *mxChildren; }
 
     /** Final processing after import of the drawing fragment. */
     virtual void        finalizeFragmentImport();

@@ -142,16 +142,16 @@ public:
 class BinaryInputStreamRef : public ::oox::BinaryInputStreamRef
 {
 public:
-    inline              BinaryInputStreamRef() {}
+    BinaryInputStreamRef() {}
 
-    inline /*implicit*/ BinaryInputStreamRef( BinaryInputStream* pInStrm ) :
+    /*implicit*/ BinaryInputStreamRef( BinaryInputStream* pInStrm ) :
                             ::oox::BinaryInputStreamRef( pInStrm ) {}
 
-    inline /*implicit*/ BinaryInputStreamRef( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) :
+    /*implicit*/ BinaryInputStreamRef( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm ) :
                             ::oox::BinaryInputStreamRef( new BinaryXInputStream( rxInStrm, true ) ) {}
 
     template< typename StreamType >
-    inline /*implicit*/ BinaryInputStreamRef( const ::boost::shared_ptr< StreamType >& rxInStrm ) :
+    /*implicit*/ BinaryInputStreamRef( const ::boost::shared_ptr< StreamType >& rxInStrm ) :
                             ::oox::BinaryInputStreamRef( rxInStrm ) {}
 };
 
@@ -256,8 +256,8 @@ struct Address
 {
     sal_Int32           mnCol;
     sal_Int32           mnRow;
-    inline explicit     Address() : mnCol( 0 ), mnRow( 0 ) {}
-    inline explicit     Address( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
+                        Address() : mnCol( 0 ), mnRow( 0 ) {}
+    explicit            Address( sal_Int32 nCol, sal_Int32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
 };
 
 // ----------------------------------------------------------------------------
@@ -266,7 +266,7 @@ struct Range
 {
     Address             maFirst;
     Address             maLast;
-    inline explicit     Range() {}
+    Range() {}
 };
 
 // ----------------------------------------------------------------------------
@@ -279,7 +279,7 @@ struct TokenAddress : public Address
 {
     bool                mbRelCol;
     bool                mbRelRow;
-    inline explicit     TokenAddress() : mbRelCol( false ), mbRelRow( false ) {}
+    TokenAddress() : mbRelCol( false ), mbRelRow( false ) {}
 };
 
 // ----------------------------------------------------------------------------
@@ -288,7 +288,7 @@ struct TokenRange
 {
     TokenAddress        maFirst;
     TokenAddress        maLast;
-    inline explicit     TokenRange() {}
+    TokenRange() {}
 };
 
 // ============================================================================
@@ -432,13 +432,13 @@ void StringHelper::appendValue( OUStringBuffer& rStr, Type nData, FormatType eFm
 class String : public OUString
 {
 public:
-    inline              String() {}
-    inline /*implicit*/ String( const OUString& rStr ) : OUString( rStr ) {}
-    inline /*implicit*/ String( const sal_Char* pcStr ) : OUString( OUString::createFromAscii( pcStr ? pcStr : "" ) ) {}
-    inline /*implicit*/ String( sal_Unicode cChar ) : OUString( cChar ) {}
+                 String() {}
+    /*implicit*/ String( const OUString& rStr ) : OUString( rStr ) {}
+    /*implicit*/ String( const sal_Char* pcStr ) : OUString( OUString::createFromAscii( pcStr ? pcStr : "" ) ) {}
+    /*implicit*/ String( sal_Unicode cChar ) : OUString( cChar ) {}
 
-    inline bool         has() const { return getLength() > 0; }
-    inline OUString operator()( const sal_Char* pcDefault ) const { if( has() ) return *this; return String( pcDefault ); }
+    bool         has() const { return getLength() > 0; }
+    OUString operator()( const sal_Char* pcDefault ) const { if( has() ) return *this; return String( pcDefault ); }
 };
 
 static const String EMPTY_STRING;
@@ -503,11 +503,11 @@ class Base
 public:
     virtual             ~Base();
 
-    inline bool         isValid() const { return implIsValid(); }
-    inline static bool  isValid( const BaseRef& rxBase ) { return rxBase.get() && rxBase->isValid(); }
+    bool         isValid() const { return implIsValid(); }
+    static bool  isValid( const BaseRef& rxBase ) { return rxBase.get() && rxBase->isValid(); }
 
 protected:
-    inline explicit     Base() {}
+                        Base() {}
 
     virtual bool        implIsValid() const = 0;
 };
@@ -522,7 +522,7 @@ public:
     void                readConfigBlock( TextInputStream& rStrm );
 
 protected:
-    inline explicit     ConfigItemBase() {}
+                        ConfigItemBase() {}
 
     virtual void        implProcessConfigItemStr(
                             TextInputStream& rStrm,
@@ -584,25 +584,25 @@ public:
 
     /** Returns true, if the map contains an entry for the passed key. */
     template< typename Type >
-    inline bool         hasName( Type nKey ) const
+    bool         hasName( Type nKey ) const
         { return maMap.count( static_cast< sal_Int64 >( nKey ) ) != 0; }
 
     /** Returns the name for the passed key. */
     template< typename Type >
-    inline OUString getName( const Config& rCfg, Type nKey ) const
+    OUString getName( const Config& rCfg, Type nKey ) const
         { return implGetName( rCfg, static_cast< sal_Int64 >( nKey ) ); }
 
     /** Returns a display name for the passed double value. */
-    inline OUString getName( const Config& rCfg, double fValue ) const
+    OUString getName( const Config& rCfg, double fValue ) const
         { return implGetNameDbl( rCfg, fValue ); }
 
     /** Returns a map iterator pointing to the first contained name. */
-    inline const_iterator begin() const { return maMap.begin(); }
+    const_iterator begin() const { return maMap.begin(); }
     /** Returns a map iterator pointing one past the last contained name. */
-    inline const_iterator end() const { return maMap.end(); }
+    const_iterator end() const { return maMap.end(); }
 
 protected:
-    inline explicit     NameListBase( const SharedConfigData& rCfgData ) : mrCfgData( rCfgData ) {}
+    explicit            NameListBase( const SharedConfigData& rCfgData ) : mrCfgData( rCfgData ) {}
 
     virtual bool        implIsValid() const;
 
@@ -649,9 +649,9 @@ public:
     explicit            ConstList( const SharedConfigData& rCfgData );
 
     /** Sets a default name for unknown keys. */
-    inline void         setDefaultName( const String& rDefName ) { maDefName = rDefName; }
+    void                setDefaultName( const String& rDefName ) { maDefName = rDefName; }
     /** Enables or disables automatic quotation of returned names. */
-    inline void         setQuoteNames( bool bQuoteNames ) { mbQuoteNames = bQuoteNames; }
+    void                setQuoteNames( bool bQuoteNames ) { mbQuoteNames = bQuoteNames; }
 
 protected:
     virtual void        implProcessConfigItemStr(
@@ -669,7 +669,7 @@ protected:
     virtual void        implIncludeList( const NameListBase& rList );
 
 private:
-    OUString     maDefName;
+    OUString            maDefName;
     bool                mbQuoteNames;
 };
 
@@ -705,9 +705,9 @@ public:
     explicit            FlagsList( const SharedConfigData& rCfgData );
 
     /** Returns the flags to be ignored on output. */
-    inline sal_Int64    getIgnoreFlags() const { return mnIgnore; }
+    sal_Int64           getIgnoreFlags() const { return mnIgnore; }
     /** Sets flags to be ignored on output. */
-    inline void         setIgnoreFlags( sal_Int64 nIgnore ) { mnIgnore = nIgnore; }
+    void                setIgnoreFlags( sal_Int64 nIgnore ) { mnIgnore = nIgnore; }
 
 protected:
     virtual void        implProcessConfigItemStr(
@@ -748,14 +748,14 @@ private:
     {
         sal_Int64           mnKey;
         Int64Pair           maFilter;
-        inline explicit     ExtItemFormatKey( sal_Int64 nKey ) : mnKey( nKey ), maFilter( 0, 0 ) {}
+        explicit            ExtItemFormatKey( sal_Int64 nKey ) : mnKey( nKey ), maFilter( 0, 0 ) {}
         bool                operator<( const ExtItemFormatKey& rRight ) const;
 
     };
     struct ExtItemFormat : public ItemFormat
     {
         bool                mbShiftValue;
-        inline explicit     ExtItemFormat() : mbShiftValue( true ) {}
+                            ExtItemFormat() : mbShiftValue( true ) {}
     };
     typedef ::std::map< ExtItemFormatKey, ExtItemFormat > ExtItemFormatMap;
     ExtItemFormatMap    maFmtMap;
@@ -768,8 +768,8 @@ class UnitConverter : public NameListBase
 public:
     explicit            UnitConverter( const SharedConfigData& rCfgData );
 
-    inline void         setUnitName( const String& rUnitName ) { maUnitName = rUnitName; }
-    inline void         setFactor( double fFactor ) { mfFactor = fFactor; }
+    void                setUnitName( const String& rUnitName ) { maUnitName = rUnitName; }
+    void                setFactor( double fFactor ) { mfFactor = fFactor; }
 
 protected:
     /** Sets the name for the passed key. */
@@ -791,13 +791,13 @@ private:
 class NameListWrapper
 {
 public:
-    inline              NameListWrapper() {}
-    inline /*implicit*/ NameListWrapper( const OUString& rListName ) : maName( rListName ) {}
-    inline /*implicit*/ NameListWrapper( const sal_Char* pcListName ) : maName( pcListName ) {}
-    inline /*implicit*/ NameListWrapper( const NameListRef& rxList ) : mxList( rxList ) {}
+                 NameListWrapper() {}
+    /*implicit*/ NameListWrapper( const OUString& rListName ) : maName( rListName ) {}
+    /*implicit*/ NameListWrapper( const sal_Char* pcListName ) : maName( pcListName ) {}
+    /*implicit*/ NameListWrapper( const NameListRef& rxList ) : mxList( rxList ) {}
 
-    inline bool         isEmpty() const { return !mxList && !maName.has(); }
-    NameListRef         getNameList( const Config& rCfg ) const;
+    bool         isEmpty() const { return !mxList && !maName.has(); }
+    NameListRef  getNameList( const Config& rCfg ) const;
 
 private:
     String              maName;
@@ -811,10 +811,10 @@ static const NameListWrapper NO_LIST;
 class ItemFormatMap : public ::std::map< sal_Int64, ItemFormat >
 {
 public:
-    inline explicit     ItemFormatMap() {}
-    inline explicit     ItemFormatMap( const NameListRef& rxNameList ) { insertFormats( rxNameList ); }
+                 ItemFormatMap() {}
+    explicit     ItemFormatMap( const NameListRef& rxNameList ) { insertFormats( rxNameList ); }
 
-    void                insertFormats( const NameListRef& rxNameList );
+    void         insertFormats( const NameListRef& rxNameList );
 };
 
 // ============================================================================
@@ -831,9 +831,9 @@ public:
 
     virtual             ~SharedConfigData();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxContext; }
-    inline const StorageRef& getRootStorage() const { return mxRootStrg; }
-    inline const OUString& getSysFileName() const { return maSysFileName; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxContext; }
+    const StorageRef& getRootStorage() const { return mxRootStrg; }
+    const OUString& getSysFileName() const { return maSysFileName; }
 
     void                setOption( const OUString& rKey, const OUString& rData );
     const OUString* getOption( const OUString& rKey ) const;
@@ -844,7 +844,7 @@ public:
     void                eraseNameList( const OUString& rListName );
     NameListRef         getNameList( const OUString& rListName ) const;
 
-    inline bool         isPasswordCancelled() const { return mbPwCancelled; }
+    bool                isPasswordCancelled() const { return mbPwCancelled; }
 
 protected:
     virtual bool        implIsValid() const;
@@ -915,9 +915,9 @@ public:
 
     virtual             ~Config();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
-    inline const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
-    inline const OUString& getSysFileName() const { return mxCfgData->getSysFileName(); }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const { return mxCfgData->getContext(); }
+    const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
+    const OUString& getSysFileName() const { return mxCfgData->getSysFileName(); }
 
     const OUString& getStringOption( const String& rKey, const OUString& rDefault ) const;
     bool                getBoolOption( const String& rKey, bool bDefault ) const;
@@ -942,7 +942,7 @@ public:
     bool                isPasswordCancelled() const;
 
 protected:
-    inline explicit     Config() {}
+                        Config() {}
     void                construct( const Config& rParent );
     void                construct(
                             const sal_Char* pcEnvVar,
@@ -1009,7 +1009,7 @@ public:
 
     void                newLine();
     void                emptyLine( size_t nCount = 1 );
-    inline OUStringBuffer& getLine() { return maLine; }
+    OUStringBuffer&     getLine() { return maLine; }
 
     void                incIndent();
     void                decIndent();
@@ -1026,7 +1026,7 @@ public:
     void                startItem( const String& rItemName );
     void                contItem();
     void                endItem();
-    inline const OUString& getLastItemValue() const { return maLastItem; }
+    const OUString&     getLastItemValue() const { return maLastItem; }
 
     void                startMultiItems();
     void                endMultiItems();
@@ -1041,25 +1041,25 @@ public:
     void                writeDateTime( const ::com::sun::star::util::DateTime& rDateTime );
 
     template< typename Type >
-    inline void         writeDec( Type nData, sal_Int32 nWidth = 0, sal_Unicode cFill = ' ' )
+    void                writeDec( Type nData, sal_Int32 nWidth = 0, sal_Unicode cFill = ' ' )
                             { StringHelper::appendDec( maLine, nData, nWidth, cFill ); }
     template< typename Type >
-    inline void         writeHex( Type nData, bool bPrefix = true )
+    void                writeHex( Type nData, bool bPrefix = true )
                             { StringHelper::appendHex( maLine, nData, bPrefix ); }
     template< typename Type >
-    inline void         writeShortHex( Type nData, bool bPrefix = true )
+    void                writeShortHex( Type nData, bool bPrefix = true )
                             { StringHelper::appendShortHex( maLine, nData, bPrefix ); }
     template< typename Type >
-    inline void         writeBin( Type nData, bool bDots = true )
+    void                writeBin( Type nData, bool bDots = true )
                             { StringHelper::appendBin( maLine, nData, bDots ); }
     template< typename Type >
-    inline void         writeFix( Type nData, sal_Int32 nWidth = 0 )
+    void                writeFix( Type nData, sal_Int32 nWidth = 0 )
                             { StringHelper::appendFix( maLine, nData, nWidth ); }
     template< typename Type >
-    inline void         writeValue( Type nData, FormatType eFmtType )
+    void                writeValue( Type nData, FormatType eFmtType )
                             { StringHelper::appendValue( maLine, nData, eFmtType ); }
     template< typename Type >
-    inline void         writeName( const Config& rCfg, Type nData, const NameListWrapper& rListWrp )
+    void                writeName( const Config& rCfg, Type nData, const NameListWrapper& rListWrp )
                             { writeString( rCfg.getName( rListWrp, nData ) ); }
 
     // ------------------------------------------------------------------------
@@ -1091,8 +1091,8 @@ typedef ::boost::shared_ptr< Output > OutputRef;
 class IndentGuard
 {
 public:
-    inline explicit     IndentGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.incIndent(); }
-    inline              ~IndentGuard() { mrOut.decIndent(); }
+    explicit            IndentGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.incIndent(); }
+                        ~IndentGuard() { mrOut.decIndent(); }
 private:
                         IndentGuard( const IndentGuard& );
     IndentGuard&        operator=( const IndentGuard& );
@@ -1105,18 +1105,18 @@ private:
 class TableGuard
 {
 public:
-    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1 ) :
+    explicit            TableGuard( const OutputRef& rxOut, sal_Int32 nW1 ) :
                             mrOut( *rxOut ) { mrOut.startTable( nW1 ); }
-    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2 ) :
+    explicit            TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2 ) :
                             mrOut( *rxOut ) { mrOut.startTable( nW1, nW2 ); }
-    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 ) :
+    explicit            TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 ) :
                             mrOut( *rxOut ) { mrOut.startTable( nW1, nW2, nW3, nW4 ); }
-    inline explicit     TableGuard( const OutputRef& rxOut, size_t nColCount,
+    explicit            TableGuard( const OutputRef& rxOut, size_t nColCount,
                                 const sal_Int32* pnColWidths ) :
                             mrOut( *rxOut ) { mrOut.startTable( nColCount, pnColWidths ); }
-    inline              ~TableGuard() { mrOut.endTable(); }
-    inline void         tab() { mrOut.tab(); }
-    inline void         tab( size_t nCol ) { mrOut.tab( nCol ); }
+                        ~TableGuard() { mrOut.endTable(); }
+    void                tab() { mrOut.tab(); }
+    void                tab( size_t nCol ) { mrOut.tab( nCol ); }
 private:
                         TableGuard( const TableGuard& );
     TableGuard&         operator=( const TableGuard& );
@@ -1129,10 +1129,10 @@ private:
 class ItemGuard
 {
 public:
-    inline explicit     ItemGuard( const OutputRef& rxOut, const String& rName = EMPTY_STRING ) :
-                            mrOut( *rxOut ) { mrOut.startItem( rName ); }
-    inline              ~ItemGuard() { mrOut.endItem(); }
-    inline void         cont() { mrOut.contItem(); }
+    explicit            ItemGuard( const OutputRef& rxOut, const String& rName = EMPTY_STRING ) :
+                     mrOut( *rxOut ) { mrOut.startItem( rName ); }
+                        ~ItemGuard() { mrOut.endItem(); }
+    void                cont() { mrOut.contItem(); }
 private:
                         ItemGuard( const ItemGuard& );
     ItemGuard&          operator=( const ItemGuard& );
@@ -1145,8 +1145,8 @@ private:
 class MultiItemsGuard
 {
 public:
-    inline explicit     MultiItemsGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.startMultiItems(); }
-    inline              ~MultiItemsGuard() { mrOut.endMultiItems(); }
+    explicit            MultiItemsGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.startMultiItems(); }
+                        ~MultiItemsGuard() { mrOut.endMultiItems(); }
 private:
                         MultiItemsGuard( const MultiItemsGuard& );
     MultiItemsGuard&    operator=( const MultiItemsGuard& );
@@ -1185,14 +1185,14 @@ class ObjectBase : public Base
 public:
     virtual             ~ObjectBase();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                         getContext() const { return mxConfig->getContext(); }
 
     void                dump();
 
     // ------------------------------------------------------------------------
 protected:
-    inline explicit     ObjectBase() {}
+                        ObjectBase() {}
 
     void                construct( const ConfigRef& rxConfig );
     void                construct( const ObjectBase& rParent );
@@ -1202,7 +1202,7 @@ protected:
 
     // ------------------------------------------------------------------------
 
-    inline Config&      cfg() const { return *mxConfig; }
+    Config&             cfg() const { return *mxConfig; }
 
 private:
     ConfigRef           mxConfig;
@@ -1216,7 +1216,7 @@ typedef ::boost::shared_ptr< ObjectBase > ObjectRef;
 class StorageObjectBase : public ObjectBase
 {
 protected:
-    inline explicit     StorageObjectBase() {}
+                        StorageObjectBase() {}
 
 protected:
     using               ObjectBase::construct;
@@ -1272,7 +1272,7 @@ private:
         OUString     maName;
         bool                mbStorage;
 
-        inline explicit     PreferredItem( const OUString rName, bool bStorage ) :
+        explicit     PreferredItem( const OUString rName, bool bStorage ) :
                                 maName( rName ), mbStorage( bStorage ) {}
     };
     typedef ::std::vector< PreferredItem > PreferredItemVector;
@@ -1294,7 +1294,7 @@ public:
 
     // ------------------------------------------------------------------------
 protected:
-    inline explicit     OutputObjectBase() {}
+                        OutputObjectBase() {}
 
     using               ObjectBase::construct;
     void                construct( const ObjectBase& rParent, const OUString& rSysFileName );
@@ -1464,7 +1464,7 @@ public:
 
     // ------------------------------------------------------------------------
 protected:
-    inline explicit     InputObjectBase() {}
+                        InputObjectBase() {}
 
     using               OutputObjectBase::construct;
     void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
@@ -1489,8 +1489,8 @@ protected:
     void                dumpRemainingStream();
 
     void                dumpArray( const String& rName, sal_Int32 nBytes, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    inline void         dumpUnused( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNUSED, nBytes ); }
-    inline void         dumpUnknown( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNKNOWN, nBytes ); }
+    void                dumpUnused( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNUSED, nBytes ); }
+    void                dumpUnknown( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNKNOWN, nBytes ); }
 
     sal_Unicode         dumpUnicode( const String& rName );
 
@@ -1689,7 +1689,7 @@ protected:
 class TextStreamObjectBase : public InputObjectBase
 {
 protected:
-    inline              TextStreamObjectBase() {}
+                        TextStreamObjectBase() {}
 
     using               InputObjectBase::construct;
     void                construct(
@@ -1755,7 +1755,7 @@ protected:
 class RecordObjectBase : public InputObjectBase
 {
 protected:
-    inline explicit     RecordObjectBase() {}
+                        RecordObjectBase() {}
 
     using               InputObjectBase::construct;
     void                construct(
@@ -1766,13 +1766,13 @@ protected:
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
 
-    inline sal_Int64    getRecPos() const { return mnRecPos; }
-    inline sal_Int64    getRecId() const { return mnRecId; }
-    inline sal_Int64    getRecSize() const { return mnRecSize; }
-    inline NameListRef  getRecNames() const { return maRecNames.getNameList( cfg() ); }
+    sal_Int64           getRecPos() const { return mnRecPos; }
+    sal_Int64           getRecId() const { return mnRecId; }
+    sal_Int64           getRecSize() const { return mnRecSize; }
+    NameListRef         getRecNames() const { return maRecNames.getNameList( cfg() ); }
 
-    inline void         setBinaryOnlyMode( bool bBinaryOnly ) { mbBinaryOnly = bBinaryOnly; }
-    inline bool         isBinaryOnlyMode() const { return mbBinaryOnly; }
+    void                setBinaryOnlyMode( bool bBinaryOnly ) { mbBinaryOnly = bBinaryOnly; }
+    bool                isBinaryOnlyMode() const { return mbBinaryOnly; }
 
     virtual bool        implIsValid() const;
     virtual void        implDump();
@@ -1805,9 +1805,9 @@ private:
 class SequenceRecordObjectBase : public RecordObjectBase
 {
 protected:
-    inline explicit     SequenceRecordObjectBase() : mxRecData( new StreamDataSequence ) {}
+                        SequenceRecordObjectBase() : mxRecData( new StreamDataSequence ) {}
 
-    inline StreamDataSequence& getRecordDataSequence() { return *mxRecData; }
+    StreamDataSequence& getRecordDataSequence() { return *mxRecData; }
 
     using               RecordObjectBase::construct;
     void                construct(
@@ -1840,7 +1840,7 @@ public:
     bool                isImportCancelled() const;
 
 protected:
-    inline explicit     DumperBase() {}
+                        DumperBase() {}
 
     using               ObjectBase::construct;
     void                construct( const ConfigRef& rxConfig );

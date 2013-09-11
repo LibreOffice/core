@@ -354,9 +354,9 @@ public:
     virtual             ~ControlModelBase();
 
     /** Sets this control model to AWT model mode. */
-    inline void         setAwtModelMode() { mbAwtModel = true; }
+    void         setAwtModelMode() { mbAwtModel = true; }
     /** Sets this control model to form component mode. */
-    inline void         setFormComponentMode() { mbAwtModel = false; }
+    void         setFormComponentMode() { mbAwtModel = false; }
 
     /** Returns the UNO service name used to construct the AWT control model,
         or the control form component. */
@@ -505,7 +505,7 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
     /** Returns the font height in points. */
-    inline sal_Int16    getFontHeight() const { return maFontData.getHeightPoints(); }
+    sal_Int16           getFontHeight() const { return maFontData.getHeightPoints(); }
 
 public: // direct access needed for legacy VML drawing controls
     AxFontData          maFontData;         ///< The font settings.
@@ -692,7 +692,7 @@ public:
     explicit            AxOptionButtonModel();
 
     /** Returns the group name used to goup several option buttons gogether. */
-    inline const OUString& getGroupName() const { return maGroupName; }
+    const OUString& getGroupName() const { return maGroupName; }
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
@@ -945,11 +945,11 @@ public:
     ControlModelBase*   createModelFromGuid( const OUString& rClassId );
 
     /** Returns true, if the internal control model exists. */
-    inline bool         hasModel() const { return mxModel.get() != 0; }
+    bool         hasModel() const { return mxModel.get() != 0; }
     /** Returns read-only access to the internal control model. */
-    inline const ControlModelBase* getModel() const { return mxModel.get(); }
+    const ControlModelBase* getModel() const { return mxModel.get(); }
     /** Returns read/write access to the internal control model. */
-    inline ControlModelBase* getModel() { return mxModel.get(); }
+    ControlModelBase* getModel() { return mxModel.get(); }
 
     /** Returns the UNO service name needed to construct the control model. */
     OUString     getServiceName() const;
@@ -1006,7 +1006,7 @@ public:
                         convertAndInsert( const EmbeddedControl& rControl, sal_Int32& rnCtrlIndex );
 
     /** Returns the XIndexContainer interface of the UNO control form, if existing. */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
                         getXForm() const { return mxFormIC; }
 
 private:

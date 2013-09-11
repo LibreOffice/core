@@ -32,12 +32,12 @@ namespace dump {
 class DffStreamObject : public SequenceRecordObjectBase
 {
 public:
-    inline sal_uInt16   getVer() const { return mnInstVer & 0x000F; }
-    inline sal_uInt16   getInst() const { return (mnInstVer & 0xFFF0) >> 4; }
-    inline bool         isContainer() const { return getVer() == 15; }
+    sal_uInt16   getVer() const { return mnInstVer & 0x000F; }
+    sal_uInt16   getInst() const { return (mnInstVer & 0xFFF0) >> 4; }
+    bool         isContainer() const { return getVer() == 15; }
 
 protected:
-    inline explicit     DffStreamObject() {}
+                        DffStreamObject() {}
 
     using               SequenceRecordObjectBase::construct;
 

@@ -45,14 +45,14 @@ struct ValueRange
     sal_Int32           mnFirst;
     sal_Int32           mnLast;
 
-    inline explicit     ValueRange( sal_Int32 nValue = 0 ) : mnFirst( nValue ), mnLast( nValue ) {}
-    inline explicit     ValueRange( sal_Int32 nFirst, sal_Int32 nLast ) : mnFirst( nFirst ), mnLast( nLast ) {}
+    explicit     ValueRange( sal_Int32 nValue = 0 ) : mnFirst( nValue ), mnLast( nValue ) {}
+    explicit     ValueRange( sal_Int32 nFirst, sal_Int32 nLast ) : mnFirst( nFirst ), mnLast( nLast ) {}
 
-    inline bool         operator==( const ValueRange& rRange ) const { return (mnFirst == rRange.mnFirst) && (mnLast == rRange.mnLast); }
-    inline bool         operator!=( const ValueRange& rRange ) const { return !(*this == rRange); }
-    inline bool         contains( sal_Int32 nValue ) const { return (mnFirst <= nValue) && (nValue <= mnLast); }
-    inline bool         contains( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnFirst) && (rRange.mnLast <= mnLast); }
-    inline bool         intersects( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnLast) && (rRange.mnFirst <= mnLast); }
+    bool         operator==( const ValueRange& rRange ) const { return (mnFirst == rRange.mnFirst) && (mnLast == rRange.mnLast); }
+    bool         operator!=( const ValueRange& rRange ) const { return !(*this == rRange); }
+    bool         contains( sal_Int32 nValue ) const { return (mnFirst <= nValue) && (nValue <= mnLast); }
+    bool         contains( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnFirst) && (rRange.mnLast <= mnLast); }
+    bool         intersects( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnLast) && (rRange.mnFirst <= mnLast); }
 };
 
 // ----------------------------------------------------------------------------
@@ -67,15 +67,15 @@ typedef ::std::vector< ValueRange > ValueRangeVector;
 class OOX_DLLPUBLIC ValueRangeSet
 {
 public:
-    inline explicit     ValueRangeSet() {}
+                        ValueRangeSet() {}
 
     /** Inserts the passed value into the range list. */
-    inline void         insert( sal_Int32 nValue ) { insert( ValueRange( nValue ) ); }
+    void                insert( sal_Int32 nValue ) { insert( ValueRange( nValue ) ); }
     /** Inserts the passed value range into the range list. */
     void                insert( const ValueRange& rRange );
 
     /** Returns the ordered list of all value ranges. */
-    inline const ValueRangeVector& getRanges() const { return maRanges; }
+    const ValueRangeVector& getRanges() const { return maRanges; }
 
 private:
     ValueRangeVector    maRanges;
@@ -101,49 +101,49 @@ public:
     typedef typename container_type::iterator           iterator;
     typedef typename container_type::const_iterator     const_iterator;
 
-    inline explicit     Matrix() : mnWidth( 0 ) {}
-    inline explicit     Matrix( size_type nWidth, size_type nHeight ) { this->resize( nWidth, nHeight ); }
-    inline explicit     Matrix( size_type nWidth, size_type nHeight, const_reference rData ) { this->resize( nWidth, nHeight, rData ); }
+                 Matrix() : mnWidth( 0 ) {}
+    explicit     Matrix( size_type nWidth, size_type nHeight ) { this->resize( nWidth, nHeight ); }
+    explicit     Matrix( size_type nWidth, size_type nHeight, const_reference rData ) { this->resize( nWidth, nHeight, rData ); }
 
-    inline size_type    capacity() const { return maData.capacity(); }
-    inline bool         empty() const { return maData.empty(); }
-    inline size_type    size() const { return maData.size(); }
-    inline size_type    width() const { return mnWidth; }
-    inline size_type    height() const { return this->empty() ? 0 : (this->size() / this->width()); }
-    inline bool         has( size_type nX, size_type nY ) const { return (nX < this->width()) && (nY < this->height()); }
+    size_type    capacity() const { return maData.capacity(); }
+    bool         empty() const { return maData.empty(); }
+    size_type    size() const { return maData.size(); }
+    size_type    width() const { return mnWidth; }
+    size_type    height() const { return this->empty() ? 0 : (this->size() / this->width()); }
+    bool         has( size_type nX, size_type nY ) const { return (nX < this->width()) && (nY < this->height()); }
 
-    inline void         reserve( size_type nWidth, size_type nHeight ) { maData.reserve( nWidth * nHeight ); }
-    inline void         clear() { this->resize( 0, 0 ); }
-    inline void         resize( size_type nWidth, size_type nHeight ) { mnWidth = nWidth; maData.resize( nWidth * nHeight ); }
-    inline void         resize( size_type nWidth, size_type nHeight, const_reference rData ) { mnWidth = nWidth; maData.resize( nWidth * nHeight, rData ); }
+    void         reserve( size_type nWidth, size_type nHeight ) { maData.reserve( nWidth * nHeight ); }
+    void         clear() { this->resize( 0, 0 ); }
+    void         resize( size_type nWidth, size_type nHeight ) { mnWidth = nWidth; maData.resize( nWidth * nHeight ); }
+    void         resize( size_type nWidth, size_type nHeight, const_reference rData ) { mnWidth = nWidth; maData.resize( nWidth * nHeight, rData ); }
 
-    inline iterator     at( size_type nX, size_type nY ) { return maData.begin() + mnWidth * nY + nX; }
-    inline const_iterator at( size_type nX, size_type nY ) const { return maData.begin() + mnWidth * nY + nX; }
+    iterator     at( size_type nX, size_type nY ) { return maData.begin() + mnWidth * nY + nX; }
+    const_iterator at( size_type nX, size_type nY ) const { return maData.begin() + mnWidth * nY + nX; }
 
-    inline reference    operator()( size_type nX, size_type nY ) { return *this->at( nX, nY ); }
-    inline const_reference operator()( size_type nX, size_type nY ) const { return *this->at( nX, nY ); }
+    reference    operator()( size_type nX, size_type nY ) { return *this->at( nX, nY ); }
+    const_reference operator()( size_type nX, size_type nY ) const { return *this->at( nX, nY ); }
 
-    inline iterator     begin() { return maData.begin(); }
-    inline const_iterator begin() const { return maData.begin(); }
-    inline iterator     end() { return maData.end(); }
-    inline const_iterator end() const { return maData.end(); }
+    iterator     begin() { return maData.begin(); }
+    const_iterator begin() const { return maData.begin(); }
+    iterator     end() { return maData.end(); }
+    const_iterator end() const { return maData.end(); }
 
-    inline reference    front() { return maData.front(); }
-    inline const_reference front() const { return maData.front(); }
-    inline reference    back() { return maData.back(); }
-    inline const_reference back() const { return maData.back(); }
+    reference    front() { return maData.front(); }
+    const_reference front() const { return maData.front(); }
+    reference    back() { return maData.back(); }
+    const_reference back() const { return maData.back(); }
 
-    inline iterator     row_begin( size_type nY ) { return this->at( 0, nY ); }
-    inline const_iterator row_begin( size_type nY ) const { return this->at( 0, nY ); }
-    inline iterator     row_end( size_type nY ) { return this->at( mnWidth, nY ); }
-    inline const_iterator row_end( size_type nY ) const { return this->at( mnWidth, nY ); }
+    iterator     row_begin( size_type nY ) { return this->at( 0, nY ); }
+    const_iterator row_begin( size_type nY ) const { return this->at( 0, nY ); }
+    iterator     row_end( size_type nY ) { return this->at( mnWidth, nY ); }
+    const_iterator row_end( size_type nY ) const { return this->at( mnWidth, nY ); }
 
-    inline reference    row_front( size_type nY ) { return (*this)( 0, nY ); }
-    inline const_reference row_front( size_type nY ) const { return (*this)( 0, nY ); }
-    inline reference    row_back( size_type nY ) { return (*this)( mnWidth - 1, nY ); }
-    inline const_reference row_back( size_type nY ) const { return (*this)( mnWidth - 1, nY ); }
+    reference    row_front( size_type nY ) { return (*this)( 0, nY ); }
+    const_reference row_front( size_type nY ) const { return (*this)( 0, nY ); }
+    reference    row_back( size_type nY ) { return (*this)( mnWidth - 1, nY ); }
+    const_reference row_back( size_type nY ) const { return (*this)( mnWidth - 1, nY ); }
 
-    inline void         swap( Matrix& rMatrix ) { maData.swap( rMatrix.maData ); }
+    void         swap( Matrix& rMatrix ) { maData.swap( rMatrix.maData ); }
 
 private:
     container_type      maData;

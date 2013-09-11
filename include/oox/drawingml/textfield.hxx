@@ -35,11 +35,11 @@ class TextField
 public:
     TextField();
 
-    inline TextParagraphProperties& getTextParagraphProperties() { return maTextParagraphProperties; }
-    inline const TextParagraphProperties& getTextParagraphProperties() const { return maTextParagraphProperties; }
+    TextParagraphProperties& getTextParagraphProperties() { return maTextParagraphProperties; }
+    const TextParagraphProperties& getTextParagraphProperties() const { return maTextParagraphProperties; }
 
-    inline void setType( const OUString& sType ) { msType = sType; }
-    inline void setUuid( const OUString & sUuid ) { msUuid = sUuid; }
+    void setType( const OUString& sType ) { msType = sType; }
+    void setUuid( const OUString & sUuid ) { msUuid = sUuid; }
 
     virtual sal_Int32    insertAt(
                         const ::oox::core::XmlFilterBase& rFilterBase,

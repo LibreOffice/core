@@ -191,27 +191,27 @@ template< typename Type >
 class OptValue
 {
 public:
-    inline explicit     OptValue() : maValue(), mbHasValue( false ) {}
-    inline explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
-    inline explicit     OptValue( bool bHasValue, const Type& rValue ) : maValue( rValue ), mbHasValue( bHasValue ) {}
+                 OptValue() : maValue(), mbHasValue( false ) {}
+    explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
+    explicit     OptValue( bool bHasValue, const Type& rValue ) : maValue( rValue ), mbHasValue( bHasValue ) {}
 
-    inline bool         has() const { return mbHasValue; }
-    inline bool         operator!() const { return !mbHasValue; }
-    inline bool         differsFrom( const Type& rValue ) const { return mbHasValue && (maValue != rValue); }
+    bool         has() const { return mbHasValue; }
+    bool         operator!() const { return !mbHasValue; }
+    bool         differsFrom( const Type& rValue ) const { return mbHasValue && (maValue != rValue); }
 
-    inline const Type&  get() const { return maValue; }
-    inline const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
+    const Type&  get() const { return maValue; }
+    const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
 
-    inline void         reset() { mbHasValue = false; }
-    inline void         set( const Type& rValue ) { maValue = rValue; mbHasValue = true; }
-    inline Type&        use() { mbHasValue = true; return maValue; }
+    void         reset() { mbHasValue = false; }
+    void         set( const Type& rValue ) { maValue = rValue; mbHasValue = true; }
+    Type&        use() { mbHasValue = true; return maValue; }
 
-    inline OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
-    inline bool         operator==( const OptValue& rValue ) const {
-                                    return ( ( mbHasValue == false && rValue.mbHasValue == false ) ||
-                                        ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
-                        }
-    inline void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) set( rValue.maValue ); }
+    OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
+    bool         operator==( const OptValue& rValue ) const {
+                             return ( ( mbHasValue == false && rValue.mbHasValue == false ) ||
+                                 ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
+                 }
+    void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) set( rValue.maValue ); }
 
 private:
     Type                maValue;
@@ -234,29 +234,29 @@ class ByteOrderConverter
 {
 public:
 #ifdef OSL_BIGENDIAN
-    inline static void  convertLittleEndian( sal_Int8& ) {}     // present for usage in templates
-    inline static void  convertLittleEndian( sal_uInt8& ) {}    // present for usage in templates
-    inline static void  convertLittleEndian( sal_Int16& rnValue )  { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
-    inline static void  convertLittleEndian( sal_uInt16& rnValue ) { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
-    inline static void  convertLittleEndian( sal_Int32& rnValue )  { swap4( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
-    inline static void  convertLittleEndian( sal_uInt32& rnValue ) { swap4( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
-    inline static void  convertLittleEndian( sal_Int64& rnValue )  { swap8( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
-    inline static void  convertLittleEndian( sal_uInt64& rnValue ) { swap8( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
-    inline static void  convertLittleEndian( float& rfValue )      { swap4( reinterpret_cast< sal_uInt8* >( &rfValue ) ); }
-    inline static void  convertLittleEndian( double& rfValue )     { swap8( reinterpret_cast< sal_uInt8* >( &rfValue ) ); }
+    static void  convertLittleEndian( sal_Int8& ) {}     // present for usage in templates
+    static void  convertLittleEndian( sal_uInt8& ) {}    // present for usage in templates
+    static void  convertLittleEndian( sal_Int16& rnValue )  { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
+    static void  convertLittleEndian( sal_uInt16& rnValue ) { swap2( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
+    static void  convertLittleEndian( sal_Int32& rnValue )  { swap4( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
+    static void  convertLittleEndian( sal_uInt32& rnValue ) { swap4( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
+    static void  convertLittleEndian( sal_Int64& rnValue )  { swap8( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
+    static void  convertLittleEndian( sal_uInt64& rnValue ) { swap8( reinterpret_cast< sal_uInt8* >( &rnValue ) ); }
+    static void  convertLittleEndian( float& rfValue )      { swap4( reinterpret_cast< sal_uInt8* >( &rfValue ) ); }
+    static void  convertLittleEndian( double& rfValue )     { swap8( reinterpret_cast< sal_uInt8* >( &rfValue ) ); }
 
     template< typename Type >
     inline static void  convertLittleEndianArray( Type* pnArray, size_t nElemCount );
 
-    inline static void  convertLittleEndianArray( sal_Int8*, size_t ) {}
-    inline static void  convertLittleEndianArray( sal_uInt8*, size_t ) {}
+    static void  convertLittleEndianArray( sal_Int8*, size_t ) {}
+    static void  convertLittleEndianArray( sal_uInt8*, size_t ) {}
 
 #else
     template< typename Type >
-    inline static void  convertLittleEndian( Type& ) {}
+    static void  convertLittleEndian( Type& ) {}
 
     template< typename Type >
-    inline static void  convertLittleEndianArray( Type*, size_t ) {}
+    static void  convertLittleEndianArray( Type*, size_t ) {}
 
 #endif
 

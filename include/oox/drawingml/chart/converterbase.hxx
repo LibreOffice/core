@@ -106,10 +106,10 @@ template< typename ModelType >
 class ConverterBase : public ConverterRoot
 {
 public:
-    inline const ModelType& getModel() const { return mrModel; }
+    const ModelType& getModel() const { return mrModel; }
 
 protected:
-    inline explicit     ConverterBase( const ConverterRoot& rParent, ModelType& rModel ) :
+    explicit            ConverterBase( const ConverterRoot& rParent, ModelType& rModel ) :
                             ConverterRoot( rParent ), mrModel( rModel ) {}
     virtual             ~ConverterBase() {}
 

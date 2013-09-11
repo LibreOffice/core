@@ -47,7 +47,7 @@ struct RecordInputSource
 class RecordParser
 {
 public:
-    explicit            RecordParser();
+                        RecordParser();
     virtual             ~RecordParser();
 
     void                setFragmentHandler( const ::rtl::Reference< FragmentHandler >& rxHandler );
@@ -57,7 +57,7 @@ public:
                                     ::com::sun::star::io::IOException,
                                     ::com::sun::star::uno::RuntimeException );
 
-    inline const RecordInputSource& getInputSource() const { return maSource; }
+    const RecordInputSource& getInputSource() const { return maSource; }
 
 private:
     /** Returns a RecordInfo struct that contains the passed record identifier

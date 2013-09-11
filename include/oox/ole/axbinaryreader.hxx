@@ -70,10 +70,10 @@ public:
 
     /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
-    inline Type         readAligned() { align( sizeof( Type ) ); return readValue< Type >(); }
+    Type                readAligned() { align( sizeof( Type ) ); return readValue< Type >(); }
     /** Aligns the stream according to the passed type and skips the size of the type. */
     template< typename Type >
-    inline void         skipAligned() { align( sizeof( Type ) ); skip( sizeof( Type ) ); }
+    void                skipAligned() { align( sizeof( Type ) ); skip( sizeof( Type ) ); }
 
 private:
     BinaryInputStream*  mpInStrm;           ///< The wrapped input stream.
@@ -101,7 +101,7 @@ public:
     /** Reads the next integer property value from the stream, if the
         respective flag in the property mask is set. */
     template< typename StreamType, typename DataType >
-    inline void         readIntProperty( DataType& ornValue )
+    void         readIntProperty( DataType& ornValue )
                             { if( startNextProperty() ) ornValue = maInStrm.readAligned< StreamType >(); }
     /** Reads the next boolean property value from the stream, if the
         respective flag in the property mask is set. */
@@ -128,31 +128,31 @@ public:
     /** Skips the next integer property value in the stream, if the respective
         flag in the property mask is set. */
     template< typename StreamType >
-    inline void         skipIntProperty() { if( startNextProperty() ) maInStrm.skipAligned< StreamType >(); }
+    void                skipIntProperty() { if( startNextProperty() ) maInStrm.skipAligned< StreamType >(); }
     /** Skips the next boolean property value in the stream, if the respective
         flag in the property mask is set. */
-    inline void         skipBoolProperty() { startNextProperty(); }
+    void                skipBoolProperty() { startNextProperty(); }
     /** Skips the next pair property in the stream, if the respective flag in
         the property mask is set. */
     void                skipPairProperty() { readPairProperty( maDummyPairData ); }
     /** Skips the next string property in the stream, if the respective flag in
         the property mask is set. */
-    inline void         skipStringProperty() { readStringProperty( maDummyString ); }
+    void                skipStringProperty() { readStringProperty( maDummyString ); }
     /** Skips the next ArrayString property in the stream, if the respective flag in
         the property mask is set. */
-    inline void         skipArrayStringProperty() { readArrayStringProperty( maDummyArrayString ); }
+    void                skipArrayStringProperty() { readArrayStringProperty( maDummyArrayString ); }
     /** Skips the next GUID property in the stream, if the respective flag in
         the property mask is set. */
-    inline void         skipGuidProperty() { readGuidProperty( maDummyString ); }
+    void                skipGuidProperty() { readGuidProperty( maDummyString ); }
     /** Skips the next font property in the stream, if the respective flag in
         the property mask is set. */
-    inline void         skipFontProperty() { readFontProperty( maDummyFontData ); }
+    void                skipFontProperty() { readFontProperty( maDummyFontData ); }
     /** Skips the next picture property in the stream, if the respective flag
         in the property mask is set. */
-    inline void         skipPictureProperty() { readPictureProperty( maDummyPicData ); }
+    void                skipPictureProperty() { readPictureProperty( maDummyPicData ); }
     /** Has to be called for undefined properties. If the respective flag in
         the mask is set, the property import cannot be finished successfully. */
-    inline void         skipUndefinedProperty() { ensureValid( !startNextProperty() ); }
+    void                skipUndefinedProperty() { ensureValid( !startNextProperty() ); }
 
     /** Final processing, reads contents of all complex properties. */
     bool                finalizeImport();
@@ -174,7 +174,7 @@ private:
     {
         AxPairData&         mrPairData;
 
-        inline explicit     PairProperty( AxPairData& rPairData ) :
+        explicit            PairProperty( AxPairData& rPairData ) :
                                 mrPairData( rPairData ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -185,7 +185,7 @@ private:
         OUString&    mrValue;
         sal_uInt32          mnSize;
 
-        inline explicit     StringProperty( OUString& rValue, sal_uInt32 nSize ) :
+        explicit            StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -195,7 +195,7 @@ private:
     {
         AxArrayString&      mrArray;
         sal_uInt32          mnSize;
-        inline explicit     ArrayStringProperty( AxArrayString& rArray, sal_uInt32 nSize ) :
+        explicit            ArrayStringProperty( AxArrayString& rArray, sal_uInt32 nSize ) :
                                 mrArray( rArray ), mnSize( nSize ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -205,7 +205,7 @@ private:
     {
         OUString&    mrGuid;
 
-        inline explicit     GuidProperty( OUString& rGuid ) :
+        explicit            GuidProperty( OUString& rGuid ) :
                                 mrGuid( rGuid ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -215,7 +215,7 @@ private:
     {
         AxFontData&         mrFontData;
 
-        inline explicit     FontProperty( AxFontData& rFontData ) :
+        explicit            FontProperty( AxFontData& rFontData ) :
                                 mrFontData( rFontData ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -225,7 +225,7 @@ private:
     {
         StreamDataSequence& mrPicData;
 
-        inline explicit     PictureProperty( StreamDataSequence& rPicData ) :
+        explicit            PictureProperty( StreamDataSequence& rPicData ) :
                                 mrPicData( rPicData ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };

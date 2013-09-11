@@ -76,12 +76,12 @@ public:
         Implementations may still implement size() and tell() even if the
         stream is not seekable.
      */
-    inline bool         isSeekable() const { return mbSeekable; }
+    bool         isSeekable() const { return mbSeekable; }
 
     /** Returns true, if the stream position is invalid (EOF). This flag turns
         true *after* the first attempt to seek/read beyond the stream end.
      */
-    inline bool         isEof() const { return mbEof; }
+    bool         isEof() const { return mbEof; }
 
     /** Returns the size of the remaining data available in the stream, if
         stream supports size() and tell(), otherwise -1.
@@ -90,11 +90,11 @@ public:
 
     /** Seeks the stream to the beginning, if stream is seekable.
      */
-    inline void         seekToStart() { seek( 0 ); }
+    void         seekToStart() { seek( 0 ); }
 
     /** Seeks the stream to the end, if stream is seekable.
      */
-    inline void         seekToEnd() { seek( size() ); }
+    void         seekToEnd() { seek( size() ); }
 
     /** Seeks the stream forward to a position that is a multiple of the passed
         block size, if stream is seekable.
@@ -108,7 +108,7 @@ public:
     void                alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos = 0 );
 
 protected:
-    inline explicit     BinaryStreamBase( bool bSeekable ) : mbEof( false ), mbSeekable( bSeekable ) {}
+    explicit            BinaryStreamBase( bool bSeekable ) : mbEof( false ), mbSeekable( bSeekable ) {}
 
 private:
                         BinaryStreamBase( const BinaryStreamBase& );

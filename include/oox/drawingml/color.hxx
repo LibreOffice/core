@@ -75,7 +75,7 @@ public:
     void                clearTransparence();
 
     /** Overwrites this color with the passed color, if it is used. */
-    inline void         assignIfUsed( const Color& rColor ) { if( rColor.isUsed() ) *this = rColor; }
+    void                assignIfUsed( const Color& rColor ) { if( rColor.isUsed() ) *this = rColor; }
 
     /** Returns true, if the color is initialized. */
     bool                isUsed() const { return meMode != COLOR_UNUSED; }

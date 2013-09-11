@@ -38,7 +38,7 @@ namespace dump {
 class OleInputObjectBase : public InputObjectBase
 {
 protected:
-    inline explicit     OleInputObjectBase() {}
+    OleInputObjectBase() {}
 
     OUString     dumpAnsiString32( const String& rName );
     OUString     dumpUniString32( const String& rName );
@@ -144,7 +144,7 @@ public:
     explicit            OleStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
 
 protected:
-    inline explicit     OleStorageObject() {}
+    OleStorageObject() {}
 
     using               StorageObjectBase::construct;
     void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
@@ -290,7 +290,7 @@ protected:
 class AxPropertyObjectBase : public OleInputObjectBase
 {
 protected:
-    inline explicit     AxPropertyObjectBase() {}
+    AxPropertyObjectBase() {}
 
     using               OleInputObjectBase::construct;
     void                construct(
@@ -324,19 +324,19 @@ protected:
     template< typename Type >
     Type                dumpHexProperty( Type nDefault, const NameListWrapper& rListWrp = NO_LIST );
 
-    inline bool         dumpBoolProperty() { return startNextProperty(); }
-    inline sal_Int32    dumpHmmProperty() { return dumpDecProperty< sal_Int32 >( 0, "CONV-HMM-TO-CM" ); }
-    inline sal_uInt8    dumpMousePtrProperty() { return dumpDecProperty< sal_uInt8 >( 0, "OLE-MOUSEPTR" ); }
+    bool         dumpBoolProperty() { return startNextProperty(); }
+    sal_Int32    dumpHmmProperty() { return dumpDecProperty< sal_Int32 >( 0, "CONV-HMM-TO-CM" ); }
+    sal_uInt8    dumpMousePtrProperty() { return dumpDecProperty< sal_uInt8 >( 0, "OLE-MOUSEPTR" ); }
     template< typename Type >
-    inline Type         dumpBorderStyleProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "AX-BORDERSTYLE" ); }
+    Type         dumpBorderStyleProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "AX-BORDERSTYLE" ); }
     template< typename Type >
-    inline Type         dumpSpecialEffectProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "AX-SPECIALEFFECT" ); }
-    inline sal_uInt32   dumpEnabledProperty() { return dumpDecProperty< sal_uInt32 >( 1, "AX-ENABLED" ); }
-    inline sal_Int32    dumpOrientationProperty() { return dumpDecProperty< sal_Int32 >( -1, "AX-ORIENTATION" ); }
-    inline sal_Int32    dumpDelayProperty() { return dumpDecProperty< sal_Int32 >( 50, "AX-CONV-MS" ); }
-    inline sal_uInt32   dumpImagePosProperty() { return dumpHexProperty< sal_uInt32 >( 0x00070001, "AX-IMAGEPOS" ); }
-    inline sal_uInt8    dumpImageSizeModeProperty() { return dumpDecProperty< sal_uInt8 >( 0, "AX-IMAGESIZEMODE" ); }
-    inline sal_uInt8    dumpImageAlignProperty() { return dumpDecProperty< sal_uInt8 >( 2, "AX-IMAGEALIGN" ); }
+    Type         dumpSpecialEffectProperty( Type nDefault ) { return dumpDecProperty< Type >( nDefault, "AX-SPECIALEFFECT" ); }
+    sal_uInt32   dumpEnabledProperty() { return dumpDecProperty< sal_uInt32 >( 1, "AX-ENABLED" ); }
+    sal_Int32    dumpOrientationProperty() { return dumpDecProperty< sal_Int32 >( -1, "AX-ORIENTATION" ); }
+    sal_Int32    dumpDelayProperty() { return dumpDecProperty< sal_Int32 >( 50, "AX-CONV-MS" ); }
+    sal_uInt32   dumpImagePosProperty() { return dumpHexProperty< sal_uInt32 >( 0x00070001, "AX-IMAGEPOS" ); }
+    sal_uInt8    dumpImageSizeModeProperty() { return dumpDecProperty< sal_uInt8 >( 0, "AX-IMAGESIZEMODE" ); }
+    sal_uInt8    dumpImageAlignProperty() { return dumpDecProperty< sal_uInt8 >( 2, "AX-IMAGEALIGN" ); }
 
     sal_uInt32          dumpFlagsProperty( sal_uInt32 nDefault, const sal_Char* pcNameList = "AX-FLAGS" );
     sal_uInt32          dumpColorProperty( sal_uInt32 nDefault );
@@ -357,7 +357,7 @@ private:
     void                constructAxPropObj( const String& rPropNameList, bool b64BitPropFlags );
 
     void                dumpVersion();
-    OUString     dumpString( const String& rName, sal_uInt32 nSize, bool bArray );
+    OUString            dumpString( const String& rName, sal_uInt32 nSize, bool bArray );
     void                dumpShortProperties();
     void                dumpLargeProperties();
 
@@ -370,7 +370,7 @@ private:
         OUString     maItemName;
         sal_uInt32          mnDataSize;
         OUString*    mpItemValue;
-        inline explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = 0 ) :
+        explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = 0 ) :
                                 mePropType( ePropType ), maItemName( rItemName ), mnDataSize( nDataSize ), mpItemValue( pItemValue ) {}
     };
     typedef ::std::vector< LargeProperty > LargePropertyVector;
@@ -379,7 +379,7 @@ private:
     {
         OUString     maItemName;
         sal_uInt16          mnData;
-        inline explicit     StreamProperty( const String& rItemName, sal_uInt16 nData ) :
+        explicit     StreamProperty( const String& rItemName, sal_uInt16 nData ) :
                                 maItemName( rItemName ), mnData( nData ) {}
     };
     typedef ::std::vector< StreamProperty > StreamPropertyVector;
@@ -575,7 +575,7 @@ struct VbaFormSiteInfo
     sal_uInt32          mnLength;
     bool                mbInStream;
 
-    inline explicit     VbaFormSiteInfo() : mnId( 0 ), mnLength( 0 ), mbInStream( false ) {}
+    VbaFormSiteInfo() : mnId( 0 ), mnLength( 0 ), mbInStream( false ) {}
 };
 
 typedef ::std::vector< VbaFormSiteInfo > VbaFormSiteInfoVector;
@@ -754,7 +754,7 @@ struct VbaSharedData
     StreamOffsetMap     maStrmOffsets;
     rtl_TextEncoding    meTextEnc;
 
-    explicit            VbaSharedData();
+                        VbaSharedData();
 
     bool                isModuleStream( const OUString& rStrmName ) const;
     sal_Int32           getStreamOffset( const OUString& rStrmName ) const;

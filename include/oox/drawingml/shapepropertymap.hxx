@@ -85,8 +85,8 @@ struct OOX_DLLPUBLIC ShapePropertyInfo
                             bool bNamedFillGradient,
                             bool bNamedFillBitmapUrl );
 
-    inline bool         has( ShapePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
-    inline sal_Int32    operator[]( ShapePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
+    bool         has( ShapePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
+    sal_Int32    operator[]( ShapePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
 };
 
 // ============================================================================
@@ -110,7 +110,7 @@ public:
 
     /** Sets the specified shape property to the passed value. */
     template< typename Type >
-    inline bool         setProperty( ShapePropertyId ePropId, const Type& rValue )
+    bool         setProperty( ShapePropertyId ePropId, const Type& rValue )
                             { return setAnyProperty( ePropId, ::com::sun::star::uno::Any( rValue ) ); }
 
     using PropertyMap::setAnyProperty;

@@ -36,19 +36,19 @@ template< typename ModelType >
 class ModelRef : public ::boost::shared_ptr< ModelType >
 {
 public:
-    inline explicit     ModelRef() {}
-    inline              ModelRef( const ::boost::shared_ptr< ModelType >& rxModel ) : ::boost::shared_ptr< ModelType >( rxModel ) {}
-    inline              ~ModelRef() {}
+                 ModelRef() {}
+                 ModelRef( const ::boost::shared_ptr< ModelType >& rxModel ) : ::boost::shared_ptr< ModelType >( rxModel ) {}
+                 ~ModelRef() {}
 
-    inline bool         is() const { return this->get() != 0; }
+    bool         is() const { return this->get() != 0; }
 
-    inline ModelType&   create() { this->reset( new ModelType ); return **this; }
+    ModelType&   create() { this->reset( new ModelType ); return **this; }
     template< typename Param1Type >
-    inline ModelType&   create( const Param1Type& rParam1 ) { this->reset( new ModelType( rParam1 ) ); return **this; }
+    ModelType&   create( const Param1Type& rParam1 ) { this->reset( new ModelType( rParam1 ) ); return **this; }
 
-    inline ModelType&   getOrCreate() { if( !*this ) this->reset( new ModelType ); return **this; }
+    ModelType&   getOrCreate() { if( !*this ) this->reset( new ModelType ); return **this; }
     template< typename Param1Type >
-    inline ModelType&   getOrCreate( const Param1Type& rParam1 ) { if( !*this ) this->reset( new ModelType( rParam1 ) ); return **this; }
+    ModelType&   getOrCreate( const Param1Type& rParam1 ) { if( !*this ) this->reset( new ModelType( rParam1 ) ); return **this; }
 };
 
 // ============================================================================
@@ -60,15 +60,15 @@ public:
     typedef typename RefVector< ModelType >::value_type value_type;
     typedef typename RefVector< ModelType >::size_type  size_type;
 
-    inline explicit     ModelVector() {}
-    inline              ~ModelVector() {}
+                 ModelVector() {}
+                 ~ModelVector() {}
 
-    inline ModelType&   create() { return append( new ModelType ); }
+    ModelType&   create() { return append( new ModelType ); }
     template< typename Param1Type >
-    inline ModelType&   create( const Param1Type& rParam1 ) { return append( new ModelType( rParam1 ) ); }
+    ModelType&   create( const Param1Type& rParam1 ) { return append( new ModelType( rParam1 ) ); }
 
 private:
-    inline ModelType&   append( ModelType* pModel ) { this->push_back( value_type( pModel ) ); return *pModel; }
+    ModelType&   append( ModelType* pModel ) { this->push_back( value_type( pModel ) ); return *pModel; }
 };
 
 // ============================================================================
@@ -81,15 +81,15 @@ public:
     typedef typename RefMap< KeyType, ModelType >::mapped_type  mapped_type;
     typedef typename RefMap< KeyType, ModelType >::value_type   value_type;
 
-    inline explicit     ModelMap() {}
-    inline              ~ModelMap() {}
+                 ModelMap() {}
+                 ~ModelMap() {}
 
-    inline ModelType&   create( KeyType eKey ) { return insert( eKey, new ModelType ); }
+    ModelType&   create( KeyType eKey ) { return insert( eKey, new ModelType ); }
     template< typename Param1Type >
-    inline ModelType&   create( KeyType eKey, const Param1Type& rParam1 ) { return insert( eKey, new ModelType( rParam1 ) ); }
+    ModelType&   create( KeyType eKey, const Param1Type& rParam1 ) { return insert( eKey, new ModelType( rParam1 ) ); }
 
 private:
-    inline ModelType&   insert( KeyType eKey, ModelType* pModel ) { (*this)[ eKey ].reset( pModel ); return *pModel; }
+    ModelType&   insert( KeyType eKey, ModelType* pModel ) { (*this)[ eKey ].reset( pModel ); return *pModel; }
 };
 
 // ============================================================================
@@ -99,7 +99,7 @@ struct NumberFormat
     OUString     maFormatCode;       /// Number format code.
     bool                mbSourceLinked;     /// True = number format linked to source data.
 
-    explicit            NumberFormat();
+                        NumberFormat();
 
     void                setAttributes( const AttributeList& rAttribs );
 };
@@ -119,7 +119,7 @@ struct LayoutModel
     sal_Int32           mnTarget;           /// Layout target for plot area.
     bool                mbAutoLayout;       /// True = automatic positioning.
 
-    explicit            LayoutModel();
+                        LayoutModel();
                         ~LayoutModel();
 };
 

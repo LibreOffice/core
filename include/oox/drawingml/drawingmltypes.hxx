@@ -162,8 +162,8 @@ struct EmuPoint
     sal_Int64           X;
     sal_Int64           Y;
 
-    inline explicit     EmuPoint() : X( 0 ), Y( 0 ) {}
-    inline explicit     EmuPoint( sal_Int64 nX, sal_Int64 nY ) : X( nX ), Y( nY ) {}
+                 EmuPoint() : X( 0 ), Y( 0 ) {}
+    explicit     EmuPoint( sal_Int64 nX, sal_Int64 nY ) : X( nX ), Y( nY ) {}
 };
 
 // ============================================================================
@@ -174,8 +174,8 @@ struct EmuSize
     sal_Int64           Width;
     sal_Int64           Height;
 
-    inline explicit     EmuSize() : Width( 0 ), Height( 0 ) {}
-    inline explicit     EmuSize( sal_Int64 nWidth, sal_Int64 nHeight ) : Width( nWidth ), Height( nHeight ) {}
+                 EmuSize() : Width( 0 ), Height( 0 ) {}
+    explicit     EmuSize( sal_Int64 nWidth, sal_Int64 nHeight ) : Width( nWidth ), Height( nHeight ) {}
 };
 
 // ============================================================================
@@ -183,12 +183,12 @@ struct EmuSize
 /** A structure for a rectangle with 64-bit interger components. */
 struct EmuRectangle : public EmuPoint, public EmuSize
 {
-    inline explicit     EmuRectangle() {}
-    inline explicit     EmuRectangle( const EmuPoint& rPos, const EmuSize& rSize ) : EmuPoint( rPos ), EmuSize( rSize ) {}
-    inline explicit     EmuRectangle( sal_Int64 nX, sal_Int64 nY, sal_Int64 nWidth, sal_Int64 nHeight ) : EmuPoint( nX, nY ), EmuSize( nWidth, nHeight ) {}
+                 EmuRectangle() {}
+    explicit     EmuRectangle( const EmuPoint& rPos, const EmuSize& rSize ) : EmuPoint( rPos ), EmuSize( rSize ) {}
+    explicit     EmuRectangle( sal_Int64 nX, sal_Int64 nY, sal_Int64 nWidth, sal_Int64 nHeight ) : EmuPoint( nX, nY ), EmuSize( nWidth, nHeight ) {}
 
-    inline void         setPos( const EmuPoint& rPos ) { static_cast< EmuPoint& >( *this ) = rPos; }
-    inline void         setSize( const EmuSize& rSize ) { static_cast< EmuSize& >( *this ) = rSize; }
+    void         setPos( const EmuPoint& rPos ) { static_cast< EmuPoint& >( *this ) = rPos; }
+    void         setSize( const EmuSize& rSize ) { static_cast< EmuSize& >( *this ) = rSize; }
 };
 
 // ============================================================================

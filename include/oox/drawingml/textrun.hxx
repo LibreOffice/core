@@ -33,13 +33,13 @@ public:
     TextRun();
     virtual ~TextRun();
 
-    inline OUString&         getText() { return msText; }
-    inline const OUString&   getText() const { return msText; }
+    OUString&         getText() { return msText; }
+    const OUString&   getText() const { return msText; }
 
-    inline TextCharacterProperties&         getTextCharacterProperties() { return maTextCharacterProperties; }
-    inline const TextCharacterProperties&   getTextCharacterProperties() const { return maTextCharacterProperties; }
+    TextCharacterProperties&         getTextCharacterProperties() { return maTextCharacterProperties; }
+    const TextCharacterProperties&   getTextCharacterProperties() const { return maTextCharacterProperties; }
 
-    inline void                 setLineBreak() { mbIsLineBreak = true; }
+    void                 setLineBreak() { mbIsLineBreak = true; }
 
     virtual sal_Int32               insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,

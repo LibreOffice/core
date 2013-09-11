@@ -54,7 +54,7 @@ struct Relation
     OUString     maTarget;
     bool                mbExternal;
 
-    inline explicit     Relation() : mbExternal( false ) {}
+    Relation() : mbExternal( false ) {}
 };
 
 // ============================================================================
@@ -68,7 +68,7 @@ public:
     explicit            Relations( const OUString& rFragmentPath );
 
     /** Returns the path of the fragment this relations collection is related to. */
-    inline const OUString& getFragmentPath() const { return maFragmentPath; }
+    const OUString& getFragmentPath() const { return maFragmentPath; }
 
     /** Returns the relation with the passed relation identifier. */
     const Relation*     getRelationFromRelId( const OUString& rId ) const;

@@ -36,11 +36,11 @@ public:
 
     void apply( const TextListStyle& rTextListStyle );
 
-    inline const TextParagraphPropertiesVector& getListStyle() const { return maListStyle; };
-    inline TextParagraphPropertiesVector&       getListStyle() { return maListStyle; };
+    const TextParagraphPropertiesVector& getListStyle() const { return maListStyle; };
+    TextParagraphPropertiesVector&       getListStyle() { return maListStyle; };
 
-    inline const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
-    inline TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
+    const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
+    TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
 
 #if defined(DBG_UTIL) && OSL_DEBUG_LEVEL > 1
     void dump() const;

@@ -49,7 +49,7 @@ public:
 public:
     /** Returns true, if the object associated to the passed key exists.
         Returns false, if the key exists but points to an empty reference. */
-    inline bool         has( key_type nKey ) const
+    bool                has( key_type nKey ) const
                         {
                             const mapped_type* pxRef = getRef( nKey );
                             return pxRef && pxRef->get();
@@ -57,7 +57,7 @@ public:
 
     /** Returns a reference to the object associated to the passed key, or an
         empty reference on error. */
-    inline mapped_type  get( key_type nKey ) const
+    mapped_type         get( key_type nKey ) const
                         {
                             if( const mapped_type* pxRef = getRef( nKey ) ) return *pxRef;
                             return mapped_type();
@@ -66,7 +66,7 @@ public:
     /** Calls the passed functor for every contained object, automatically
         skips all elements that are empty references. */
     template< typename FunctorType >
-    inline void         forEach( const FunctorType& rFunctor ) const
+    void                forEach( const FunctorType& rFunctor ) const
                         {
                             ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
                         }
@@ -74,7 +74,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
     template< typename FuncType >
-    inline void         forEachMem( FuncType pFunc ) const
+    void                forEachMem( FuncType pFunc ) const
                         {
                             forEach( ::boost::bind( pFunc, _1 ) );
                         }
@@ -82,7 +82,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType >
-    inline void         forEachMem( FuncType pFunc, ParamType aParam ) const
+    void                forEachMem( FuncType pFunc, ParamType aParam ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam ) );
                         }
@@ -90,7 +90,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType1, typename ParamType2 >
-    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
+    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
                         }
@@ -98,7 +98,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
-    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
+    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3 ) );
                         }
@@ -106,7 +106,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object,
         automatically skips all elements that are empty references. */
     template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3, typename ParamType4 >
-    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3, ParamType4 aParam4 ) const
+    void                forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3, ParamType4 aParam4 ) const
                         {
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3, aParam4 ) );
                         }
@@ -115,7 +115,7 @@ public:
     /** Calls the passed functor for every contained object. Passes the key as
         first argument and the object reference as second argument to rFunctor. */
     template< typename FunctorType >
-    inline void         forEachWithKey( const FunctorType& rFunctor ) const
+    void                forEachWithKey( const FunctorType& rFunctor ) const
                         {
                             ::std::for_each( this->begin(), this->end(), ForEachFunctorWithKey< FunctorType >( rFunctor ) );
                         }
@@ -123,7 +123,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object.
         Passes the object key as argument to the member function. */
     template< typename FuncType >
-    inline void         forEachMemWithKey( FuncType pFunc ) const
+    void                forEachMemWithKey( FuncType pFunc ) const
                         {
                             forEachWithKey( ::boost::bind( pFunc, _2, _1 ) );
                         }
@@ -131,7 +131,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object.
         Passes the object key as first argument to the member function. */
     template< typename FuncType, typename ParamType >
-    inline void         forEachMemWithKey( FuncType pFunc, ParamType aParam ) const
+    void                forEachMemWithKey( FuncType pFunc, ParamType aParam ) const
                         {
                             forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam ) );
                         }
@@ -139,7 +139,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object.
         Passes the object key as first argument to the member function. */
     template< typename FuncType, typename ParamType1, typename ParamType2 >
-    inline void         forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
+    void                forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
                         {
                             forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam1, aParam2 ) );
                         }
@@ -147,7 +147,7 @@ public:
     /** Calls the passed member function of ObjType on every contained object.
         Passes the object key as first argument to the member function. */
     template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3 >
-    inline void         forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
+    void                forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3 ) const
                         {
                             forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam1, aParam2, aParam3 ) );
                         }
@@ -157,19 +157,19 @@ private:
     struct ForEachFunctor
     {
         FunctorType         maFunctor;
-        inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
-        inline void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( *rValue.second ); }
+        explicit     ForEachFunctor( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
+        void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( *rValue.second ); }
     };
 
     template< typename FunctorType >
     struct ForEachFunctorWithKey
     {
         FunctorType         maFunctor;
-        inline explicit     ForEachFunctorWithKey( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
-        inline void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( rValue.first, *rValue.second ); }
+        explicit     ForEachFunctorWithKey( const FunctorType& rFunctor ) : maFunctor( rFunctor ) {}
+        void         operator()( const value_type& rValue ) { if( rValue.second.get() ) maFunctor( rValue.first, *rValue.second ); }
     };
 
-    inline const mapped_type* getRef( key_type nKey ) const
+    const mapped_type* getRef( key_type nKey ) const
     {
         typename container_type::const_iterator aIt = this->find( nKey );
         return (aIt == this->end()) ? 0 : &aIt->second;

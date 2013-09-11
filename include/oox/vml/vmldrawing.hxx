@@ -102,13 +102,13 @@ public:
     virtual             ~Drawing();
 
     /** Returns the filter object that imports/exports this VML drawing. */
-    inline ::oox::core::XmlFilterBase& getFilter() const { return mrFilter; }
+    ::oox::core::XmlFilterBase& getFilter() const { return mrFilter; }
     /** Returns the application type containing the drawing. */
-    inline DrawingType  getType() const { return meType; }
+    DrawingType  getType() const { return meType; }
     /** Returns read/write access to the container of shapes and templates. */
-    inline ShapeContainer& getShapes() { return *mxShapes; }
+    ShapeContainer& getShapes() { return *mxShapes; }
     /** Returns read access to the container of shapes and templates. */
-    inline const ShapeContainer& getShapes() const { return *mxShapes; }
+    const ShapeContainer& getShapes() const { return *mxShapes; }
     /** Returns the form object used to process ActiveX form controls. */
     ::oox::ole::EmbeddedForm& getControlForm() const;
 

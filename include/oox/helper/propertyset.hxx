@@ -49,30 +49,30 @@ class PropertyMap;
 class OOX_DLLPUBLIC PropertySet
 {
 public:
-    inline explicit     PropertySet() {}
+    PropertySet() {}
 
     /** Constructs a property set wrapper with the passed UNO property set. */
-    inline explicit     PropertySet(
+    explicit     PropertySet(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxPropSet )
                                 { set( rxPropSet ); }
 
     /** Constructs a property set wrapper after querying the XPropertySet interface. */
     template< typename Type >
-    inline explicit     PropertySet( const Type& rObject ) { set( rObject ); }
+    explicit     PropertySet( const Type& rObject ) { set( rObject ); }
 
     /** Sets the passed UNO property set and releases the old UNO property set. */
     void                set( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rxPropSet );
 
     /** Queries the passed object (interface or any) for an XPropertySet and releases the old UNO property set. */
     template< typename Type >
-    inline void         set( const Type& rObject )
+    void         set( const Type& rObject )
                             { set( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >( rObject, ::com::sun::star::uno::UNO_QUERY ) ); }
 
     /** Returns true, if the contained XPropertySet interface is valid. */
-    inline bool         is() const { return mxPropSet.is(); }
+    bool         is() const { return mxPropSet.is(); }
 
     /** Returns the contained XPropertySet interface. */
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getXPropertySet() const { return mxPropSet; }
 
     /** Returns true, if the specified property is supported by the property set. */
@@ -87,12 +87,12 @@ public:
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
-    inline bool         getProperty( Type& orValue, sal_Int32 nPropId ) const
+    bool         getProperty( Type& orValue, sal_Int32 nPropId ) const
                             { return getAnyProperty( nPropId ) >>= orValue; }
 
     /** Gets the specified boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occurred. */
-    inline bool         getBoolProperty( sal_Int32 nPropId ) const
+    bool         getBoolProperty( sal_Int32 nPropId ) const
                             { bool bValue = false; return getProperty( bValue, nPropId ) && bValue; }
     // Set properties ---------------------------------------------------------
 
@@ -101,7 +101,7 @@ public:
 
     /** Puts the passed value into the property set. */
     template< typename Type >
-    inline bool         setProperty( sal_Int32 nPropId, const Type& rValue )
+    bool         setProperty( sal_Int32 nPropId, const Type& rValue )
                             { return setAnyProperty( nPropId, ::com::sun::star::uno::Any( rValue ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.

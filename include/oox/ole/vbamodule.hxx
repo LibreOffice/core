@@ -51,14 +51,14 @@ public:
                             bool bExecutable );
 
     /** Returns the module type (com.sun.star.script.ModuleType constant). */
-    inline sal_Int32    getType() const { return mnType; }
+    sal_Int32    getType() const { return mnType; }
     /** Sets the passed module type. */
-    inline void         setType( sal_Int32 nType ) { mnType = nType; }
+    void         setType( sal_Int32 nType ) { mnType = nType; }
 
     /** Returns the name of the module. */
-    inline const OUString& getName() const { return maName; }
+    const OUString& getName() const { return maName; }
     /** Returns the stream name of the module. */
-    inline const OUString& getStreamName() const { return maStreamName; }
+    const OUString& getStreamName() const { return maStreamName; }
 
     /** Imports all records for this module until the MODULEEND record. */
     void                importDirRecords( BinaryInputStream& rDirStrm );

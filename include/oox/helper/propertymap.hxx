@@ -51,28 +51,28 @@ typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
 class OOX_DLLPUBLIC PropertyMap : public PropertyMapBase
 {
 public:
-    explicit            PropertyMap();
+    PropertyMap();
 
     /** Returns the name of the passed property identifier. */
     static const OUString& getPropertyName( sal_Int32 nPropId );
 
     /** Returns true, if the map contains a property with the passed identifier. */
-    inline bool         hasProperty( sal_Int32 nPropId ) const
+    bool                hasProperty( sal_Int32 nPropId ) const
                             { return find( nPropId ) != end(); }
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
-    inline bool         setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue )
+    bool                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue )
                             { if( nPropId < 0 ) return false; (*this)[ nPropId ] = rValue; return true; }
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
     template< typename Type >
-    inline bool         setProperty( sal_Int32 nPropId, const Type& rValue )
+    bool                setProperty( sal_Int32 nPropId, const Type& rValue )
                             { if( nPropId < 0 ) return false; (*this)[ nPropId ] <<= rValue; return true; }
 
     /** Inserts all properties contained in the passed property map. */
-    inline void         assignUsed( const PropertyMap& rPropMap )
+    void                assignUsed( const PropertyMap& rPropMap )
                             { insert( rPropMap.begin(), rPropMap.end() ); }
 
     /** Inserts all properties contained in the passed property map */

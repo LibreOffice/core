@@ -34,7 +34,7 @@ template< typename ModelType >
 class ContextBase : public ::oox::core::ContextHandler2
 {
 public:
-    inline explicit     ContextBase( ::oox::core::ContextHandler2Helper& rParent, ModelType& rModel ) :
+    explicit            ContextBase( ::oox::core::ContextHandler2Helper& rParent, ModelType& rModel ) :
                             ::oox::core::ContextHandler2( rParent ), mrModel( rModel ) {}
     virtual             ~ContextBase() {}
 

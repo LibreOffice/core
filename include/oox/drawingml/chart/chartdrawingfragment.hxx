@@ -35,8 +35,8 @@ struct AnchorPosModel
     double              mfX;                /// X coordinate relative to chart object (0.0 to 1.0).
     double              mfY;                /// Y coordinate relative to chart object (0.0 to 1.0).
 
-    inline explicit     AnchorPosModel() : mfX( -1.0 ), mfY( -1.0 ) {}
-    inline bool         isValid() const { return (0.0 <= mfX) && (mfX <= 1.0) && (0.0 <= mfY) && (mfY <= 1.0); }
+                 AnchorPosModel() : mfX( -1.0 ), mfY( -1.0 ) {}
+    bool         isValid() const { return (0.0 <= mfX) && (mfX <= 1.0) && (0.0 <= mfY) && (mfY <= 1.0); }
 };
 
 // ----------------------------------------------------------------------------
@@ -44,8 +44,8 @@ struct AnchorPosModel
 /** Absolute shape size in a chart object (in EMUs). */
 struct AnchorSizeModel : public EmuSize
 {
-    inline explicit     AnchorSizeModel() : EmuSize( -1, -1 ) {}
-    inline bool         isValid() const { return (Width >= 0) && (Height >= 0); }
+                 AnchorSizeModel() : EmuSize( -1, -1 ) {}
+    bool         isValid() const { return (Width >= 0) && (Height >= 0); }
 };
 
 // ============================================================================
