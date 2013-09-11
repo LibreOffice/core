@@ -9,7 +9,9 @@
 
 $(eval $(call gb_Package_Package,infoplist,$(call gb_CustomTarget_get_workdir,sysui/infoplist)))
 
-$(eval $(call gb_Package_add_files,infoplist,pck,\
+$(eval $(call gb_Package_set_outdir,infoplist,$(gb_INSTROOT)))
+
+$(eval $(call gb_Package_add_files,infoplist,,\
 	PkgInfo \
 	Info.plist \
 ))
