@@ -917,6 +917,10 @@ AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
         [Determines whether to build the OpenGL 3D slide transitions component.]))
 
+AC_ARG_ENABLE(opencl,
+    AS_HELP_STRING([--disable-opencl],
+        [Determines whether to build with OpenCL support.]))
+
 AC_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
         [Determines whether to enable features that depend on dbus.
@@ -10221,6 +10225,26 @@ fi
 
 AC_SUBST(SYSTEM_MESA_HEADERS)
 AC_SUBST(ENABLE_OPENGL)
+
+dnl =================================================
+dnl Check whether to build with OpenCL support.
+dnl =================================================
+
+AC_MSG_CHECKING([whether to build with the OpenCL support.])
+ENABLE_OPENCL=
+
+if test "x$enable_opencl" != "xno"; then
+    AC_MSG_RESULT([yes])
+    enable_opencl=yes
+    ENABLE_OPENCL=TRUE
+    AC_DEFINE(HAVE_FEATURE_OPENCL)
+else
+    AC_MSG_RESULT([no])
+    enable_opencl=no
+    ENABLE_OPENCL=FALSE
+fi
+
+AC_SUBST(ENABLE_OPENCL)
 
 # presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])

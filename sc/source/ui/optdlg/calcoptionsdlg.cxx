@@ -196,7 +196,9 @@ void ScCalcOptionsDialog::FillOptionsList()
     }
 
     pModel->Insert(createBoolItem(maCaptionEmptyStringAsZero,maConfig.mbEmptyStringAsZero));
+#if HAVE_FEATURE_OPENCL
     pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
+#endif
 
     mpLbSettings->SetUpdateMode(true);
 }

@@ -358,6 +358,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 
     if ( !msInstance )
     {
+#if HAVE_FEATURE_OPENCL
         if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
         {
 #ifdef DISABLE_DYNLOADING
@@ -382,7 +383,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
                 msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
 #endif
         }
-
+#endif
         if ( !msInstance ) // software fallback
         {
             fprintf(stderr, "Create S/W interp\n");
