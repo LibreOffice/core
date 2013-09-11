@@ -118,7 +118,7 @@ namespace formula
         virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
                                 sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) = 0;
 
-        virtual String          GetEntryText(SvTreeListEntry* pEntry) const = 0;
+        virtual OUString        GetEntryText(SvTreeListEntry* pEntry) const = 0;
         virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const = 0;
 
     protected:
@@ -132,14 +132,14 @@ namespace formula
         virtual void notifyChange() = 0;
         virtual void fill() = 0;
 
-        virtual String  getCurrentFormula() const = 0;
-        virtual void    setCurrentFormula(const String& _sReplacement) = 0;
+        virtual OUString getCurrentFormula() const = 0;
+        virtual void     setCurrentFormula(const OUString& _sReplacement) = 0;
 
         virtual void getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const = 0;
         virtual void setSelection(xub_StrLen _nStart,xub_StrLen _nEnd) = 0;
 
         virtual FormEditData* getFormEditData() const = 0;
-        virtual bool calculateValue(const String& _sExpression,String& _rResult) = 0;
+        virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult) = 0;
 
         virtual void switchBack() = 0;
 
@@ -158,7 +158,7 @@ namespace formula
         virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked) = 0;
         virtual void doClose(sal_Bool _bOk) = 0;
         virtual void insertEntryToLRUList(const IFunctionDescription*   pDesc) = 0;
-        virtual void showReference(const String& _sFormula) = 0;
+        virtual void showReference(const OUString& _sFormula) = 0;
 
     protected:
         ~IFormulaEditorHelper() {}

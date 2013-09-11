@@ -96,7 +96,7 @@ public:
     virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
                                 sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL);
 
-    virtual String              GetEntryText(SvTreeListEntry* pEntry) const;
+    virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const;
     virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const;
 
     void            SetSelectionHdl( const Link& rLink ) { aSelLink = rLink; }

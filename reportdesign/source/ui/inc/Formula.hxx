@@ -63,10 +63,10 @@ public:
     // IFormulaEditorHelper
     virtual void notifyChange();
     virtual void fill();
-    virtual bool calculateValue(const String& _sExpression,String& _rResult);
+    virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult);
     virtual void doClose(sal_Bool _bOk);
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
-    virtual void showReference(const String& _sFormula);
+    virtual void showReference(const OUString& _sFormula);
     virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked);
     virtual void setDispatcherLock( sal_Bool bLock );
     virtual void setReferenceInput(const formula::FormEditData* _pData);
@@ -74,10 +74,10 @@ public:
     virtual void clear();
     virtual void switchBack();
     virtual formula::FormEditData* getFormEditData() const;
-    virtual void setCurrentFormula(const String& _sReplacement);
+    virtual void setCurrentFormula(const OUString& _sReplacement);
     virtual void setSelection(xub_StrLen _nStart,xub_StrLen _nEnd);
     virtual void getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const;
-    virtual String getCurrentFormula() const;
+    virtual OUString getCurrentFormula() const;
 
     virtual formula::IFunctionManager* getFunctionManager();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const;

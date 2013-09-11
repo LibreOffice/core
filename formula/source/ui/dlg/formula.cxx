@@ -91,8 +91,8 @@ namespace formula
                         RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
         void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
         void            RefInputDoneAfter( sal_Bool bForced );
-        sal_Bool            CalcValue( const String& rStrExp, String& rStrResult );
-        sal_Bool            CalcStruct( const String& rStrExp);
+        sal_Bool        CalcValue( const OUString& rStrExp, OUString& rStrResult );
+        sal_Bool        CalcStruct( const String& rStrExp);
         void            UpdateValues();
         void            DeleteArgs();
         xub_StrLen      GetFunctionPos(xub_StrLen nPos);
@@ -572,11 +572,11 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
     return nFuncPos;
 }
 // -----------------------------------------------------------------------------
-sal_Bool FormulaDlg_Impl::CalcValue( const String& rStrExp, String& rStrResult )
+sal_Bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult )
 {
     sal_Bool bResult = sal_True;
 
-    if ( rStrExp.Len() > 0 )
+    if ( !rStrExp.isEmpty() )
     {
         // Only calculate the value when there isn't any more keyboard input:
 
@@ -593,17 +593,17 @@ sal_Bool FormulaDlg_Impl::CalcValue( const String& rStrExp, String& rStrResult )
 
 void FormulaDlg_Impl::UpdateValues()
 {
-    String aStrResult;
+    OUString aStrResult;
 
     if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
         aWndResult.SetValue( aStrResult );
 
-    aStrResult.Erase();
+    aStrResult = "";
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
         aWndFormResult.SetValue( aStrResult );
     else
     {
-        aStrResult.Erase();
+        aStrResult = "";
         aWndFormResult.SetValue( aStrResult );
     }
     CalcStruct(pMEdit->GetText());
@@ -629,7 +629,7 @@ sal_Bool FormulaDlg_Impl::CalcStruct( const String& rStrExp)
             }
 
             aString = comphelper::string::remove(aString, '\n');
-            String aStrResult;
+            OUString aStrResult;
 
             if ( CalcValue(aString, aStrResult ) )
                 aWndFormResult.SetValue( aStrResult );
@@ -770,13 +770,13 @@ void FormulaDlg_Impl::FillDialog(sal_Bool nFlag)
         aBtnForward.Enable(bNext);
     }
 
-    String aStrResult;
+    OUString aStrResult;
 
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
         aWndFormResult.SetValue( aStrResult );
     else
     {
-        aStrResult.Erase();
+        aStrResult = "";
         aWndFormResult.SetValue( aStrResult );
     }
 }
@@ -1273,15 +1273,15 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
     m_pHelper->setCurrentFormula(aString);
     m_pHelper->setSelection((xub_StrLen)aSel.Min(),(xub_StrLen)aSel.Max());
 
-    xub_StrLen nPos=(xub_StrLen)aSel.Min()-1;
+    xub_StrLen nPos = (xub_StrLen)aSel.Min()-1;
 
-    String aStrResult;
+    OUString aStrResult;
 
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
         aWndFormResult.SetValue( aStrResult );
     else
     {
-        aStrResult.Erase();
+        aStrResult = "";
         aWndFormResult.SetValue( aStrResult );
     }
     CalcStruct(aString);

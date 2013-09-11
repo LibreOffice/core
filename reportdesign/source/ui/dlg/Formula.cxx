@@ -99,7 +99,7 @@ FormulaDialog::~FormulaDialog()
 //  --------------------------------------------------------------------------
 //                          Funktionen fuer rechte Seite
 //  --------------------------------------------------------------------------
-bool FormulaDialog::calculateValue( const String& rStrExp, String& rStrResult )
+bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
     rStrResult = rStrExp;
     return false;
@@ -111,7 +111,7 @@ void FormulaDialog::doClose(sal_Bool _bOk)
 void FormulaDialog::insertEntryToLRUList(const IFunctionDescription*    /*_pDesc*/)
 {
 }
-void FormulaDialog::showReference(const String& /*_sFormula*/)
+void FormulaDialog::showReference(const OUString& /*_sFormula*/)
 {
 }
 void FormulaDialog::dispatch(sal_Bool /*_bOK*/,sal_Bool /*_bMartixChecked*/)
@@ -136,10 +136,10 @@ FormEditData* FormulaDialog::getFormEditData() const
 {
     return m_pFormulaData;
 }
-void FormulaDialog::setCurrentFormula(const String& _sReplacement)
+void FormulaDialog::setCurrentFormula(const OUString& _sReplacement)
 {
     const xub_StrLen nOldLen = m_nEnd - m_nStart;
-    const xub_StrLen nNewLen = _sReplacement.Len();
+    const sal_Int32 nNewLen = _sReplacement.getLength();
     if (nOldLen)
         m_sFormula = m_sFormula.replaceAt( m_nStart, nOldLen, "" );
     if (nNewLen)
@@ -164,7 +164,7 @@ void FormulaDialog::getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const
     _nStart = m_nStart;
     _nEnd = m_nEnd;
 }
-String FormulaDialog::getCurrentFormula() const
+OUString FormulaDialog::getCurrentFormula() const
 {
     return m_sFormula;
 }

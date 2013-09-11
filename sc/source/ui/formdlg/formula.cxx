@@ -308,7 +308,7 @@ sal_Bool ScFormulaDlg::Close()
 //  --------------------------------------------------------------------------
 //                          Funktionen fuer rechte Seite
 //  --------------------------------------------------------------------------
-bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
+bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
     boost::scoped_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator( pDoc, aCursorPos, rStrExp ) );
 
@@ -362,7 +362,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 
         ScRange aTestRange;
         if ( bColRowName || (aTestRange.Parse(rStrExp) & SCA_VALID) )
-            rStrResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ..." ));
+            rStrResult += " ...";
             // Bereich
     }
     else
@@ -492,7 +492,7 @@ void ScFormulaDlg::insertEntryToLRUList(const formula::IFunctionDescription*    
     const ScFuncDesc* pDesc = dynamic_cast<const ScFuncDesc*>(_pDesc);
     SaveLRUEntry(pDesc);
 }
-void ScFormulaDlg::showReference(const String& _sFormula)
+void ScFormulaDlg::showReference(const OUString& _sFormula)
 {
     ShowReference(_sFormula);
 }
@@ -605,7 +605,7 @@ formula::FormEditData* ScFormulaDlg::getFormEditData() const
     ScModule* pScMod = SC_MOD();
     return pScMod->GetFormEditData();
 }
-void ScFormulaDlg::setCurrentFormula(const String& _sReplacement)
+void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
 {
     ScModule* pScMod = SC_MOD();
     pScMod->InputReplaceSelection(_sReplacement);
@@ -620,7 +620,7 @@ void ScFormulaDlg::getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const
     ScModule* pScMod = SC_MOD();
     pScMod->InputGetSelection( _nStart, _nEnd );
 }
-String ScFormulaDlg::getCurrentFormula() const
+OUString ScFormulaDlg::getCurrentFormula() const
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->InputGetFormulaStr();

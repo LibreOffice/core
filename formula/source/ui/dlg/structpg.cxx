@@ -133,11 +133,11 @@ SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry
     return pEntry;
 }
 
-String StructPage::GetEntryText(SvTreeListEntry* pEntry) const
+OUString StructPage::GetEntryText(SvTreeListEntry* pEntry) const
 {
-    String aString;
+    OUString aString;
     if(pEntry!=NULL)
-        aString=aTlbStruct.GetEntryText(pEntry);
+        aString = aTlbStruct.GetEntryText(pEntry);
     return  aString;
 }
 
