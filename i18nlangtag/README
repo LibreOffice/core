@@ -65,3 +65,9 @@ If locale data exists:
 
 * i18npool/Library_localedata_*.mk      for example i18npool/Library_localedata_euro.mk
 ** change the entry for the changed .xml file, for example CustomTarget/i18npool/localedata/localedata_sh_RS to CustomTarget/i18npool/localedata/localedata_sr_Latn_RS, sort the list alphabetically
+
+If dictionary exists:
+
+* dictionaries/*/dictionaries.xcu       for example dictionaries/sr/dictionaries.xcu
+** change the affected <node oor:name="..."> elements to something corresponding, for example <node oor:name="HunSpellDic_sh" ...> to <node oor:name="HunSpellDic_sr_Latn" ...>
+** in the "Locales" properties change the <value> element, for example <value>sh-RS</value> to <value>sr-Latn-RS</value>
