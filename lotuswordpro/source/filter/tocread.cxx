@@ -141,7 +141,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
     unsigned long CurrOffset = Length - BEN_LABEL_SIZE + BEN_MAGIC_BYTES_SIZE -
       1;
 
-    char Buffer[LABEL_READ_BUFFER_SIZE];
+    char Buffer[LABEL_READ_BUFFER_SIZE] = {0};
 
     unsigned long BufferStartOffset = Length;   // Init to big value
 
