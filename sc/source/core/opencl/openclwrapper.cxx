@@ -73,6 +73,11 @@ void OpenclDevice::freeOpenclDll()
 
 int OpenclDevice::initEnv()
 {
+    // TODO: Make the path configurable.
+    int status = clewInit("/opt/AMDAPP/lib/x86_64/libOpenCL.so");
+    if (status < 0)
+        return 1;
+
 #ifdef WIN32
     while( 1 )
     {
@@ -707,10 +712,6 @@ int OpenclDevice::runKernel( const char *kernelName, void **userdata)
 
 int OpenclDevice::initOpenclRunEnv( int argc )
 {
-    int status = clewInit("/opt/AMDAPP/lib/x86_64/libOpenCL.so");
-    if (status < 0)
-        return 1;
-
     if ( MAX_CLKERNEL_NUM <= 0 )
     {
         return 1;
@@ -722,7 +723,7 @@ int OpenclDevice::initOpenclRunEnv( int argc )
     {
         registOpenclKernel();
         //initialize devices, context, comand_queue
-        status = initOpenclRunEnv( &gpuEnv );
+        int status = initOpenclRunEnv( &gpuEnv );
         if ( status )
         {
             printf("init_opencl_env failed.\n");
