@@ -28,29 +28,6 @@
 
 namespace
 {
-    sal_Int32 impl_pow(sal_Int32 x, sal_Int32 y)
-    {
-        if (y == 1)
-            return x;
-        if ( y % 2 == 0)
-        {
-            return impl_pow(x*x, y/2);
-        }
-        else
-        {
-            return x * impl_pow(x*x, y/2);
-        }
-    }
-    // computes x^y
-    sal_Int32 pow(sal_Int32 x, sal_Int32 y)
-    {
-        if (y < 0)
-            throw std::invalid_argument("negative power is not defined in integers");
-        if (y == 0)
-            return 1;
-        return impl_pow(x, y);
-    }
-
     /** convert string to number with optional min and max values */
     template <typename T>
     bool convertNumber( T& rValue,
@@ -378,7 +355,7 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 sal_Int64 fracNumerator;
                 if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
                 {
-                    double frac = static_cast<double>(fracNumerator) / static_cast<double>(pow(10, tokFrac.getLength()));
+                    double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
                     // minutes
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac hours (of hours) not between 0 and 1");
                     frac *= 60;
@@ -414,7 +391,7 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 sal_Int64 fracNumerator;
                 if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
                 {
-                    double frac = static_cast<double>(fracNumerator) / static_cast<double>(pow(10, tokFrac.getLength()));
+                    double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
                     // seconds
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac minutes (of minutes) not between 0 and 1");
                     frac *= 60;
@@ -445,7 +422,7 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 sal_Int64 fracNumerator;
                 if ( (bSuccess = convertNumber(fracNumerator, tokFrac)) )
                 {
-                    double frac = static_cast<double>(fracNumerator) / static_cast<double>(pow(10, tokFrac.getLength()));
+                    double frac = static_cast<double>(fracNumerator) / pow(static_cast<double>(10), static_cast<double>(tokFrac.getLength()));
                     // nanoseconds
                     OSL_ENSURE(frac < 1 && frac >= 0, "ISO8601parse internal error frac seconds (of seconds) not between 0 and 1");
                     frac *= 1000000000;
