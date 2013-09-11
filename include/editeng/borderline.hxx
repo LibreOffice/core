@@ -62,9 +62,6 @@ namespace editeng {
         long m_nDiv;
 
         SvxBorderStyle   m_nStyle;
-        sal_uInt16 nOutWidth;
-        sal_uInt16 nInWidth;
-        sal_uInt16 nDistance;
 
         bool             m_bUseLeftTop;
         Color            (*m_pColorOutFn)( Color );
