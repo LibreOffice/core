@@ -24,6 +24,7 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
@@ -134,6 +135,7 @@ public:
     void testFdo68607();
     void testVmlTextVerticalAdjust();
     void testGroupshapeSdt();
+    void testDefaultSectBreakCols();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -233,6 +235,7 @@ void Test::run()
         {"fdo68607.docx", &Test::testFdo68607},
         {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
+        {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1612,6 +1615,20 @@ void Test::testGroupshapeSdt()
     CPPUNIT_ASSERT_EQUAL(OUString("placeholder text"), xShape->getString());
     // w:spacing was ignored in oox, this was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), "CharKerning"));
+}
+
+void Test::testDefaultSectBreakCols()
+{
+    // First problem: the first two paragraphs did not have their own text section, so the whole document had two columns.
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First."), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+
+    // Second problem: the page style had two columns, while it shouldn't have any.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

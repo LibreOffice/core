@@ -907,7 +907,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
 
     //depending on the break type no page styles should be created
-    if(m_nBreakType == 0)
+    // If the section type is missing, but we have columns, then this should be
+    // handled as a continuous section break.
+    if(m_nBreakType == 0 || (m_nBreakType == -1 && m_nColumnCount > 0))
     {
         //todo: insert a section or access the already inserted section
         uno::Reference< beans::XPropertySet > xSection =
