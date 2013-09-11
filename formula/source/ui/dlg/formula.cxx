@@ -120,7 +120,7 @@ namespace formula
 
         FormulaDlgMode  SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,sal_Bool bMatrix,sal_Bool _bSelect,sal_Bool _bUpdate);
         void            SetMeText(const String& _sText);
-        sal_Bool            CheckMatrix(String& aFormula /*IN/OUT*/);
+        sal_Bool        CheckMatrix(OUString& aFormula /*IN/OUT*/);
 
         void            SetEdSelection();
 
@@ -1511,18 +1511,17 @@ FormulaDlgMode FormulaDlg_Impl::SetMeText(const String& _sText,xub_StrLen PrivSt
     } // if ( _bUpdate )
     return eMode;
 }
-sal_Bool FormulaDlg_Impl::CheckMatrix(String& aFormula)
+sal_Bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
 {
     pMEdit->GrabFocus();
-    xub_StrLen nLen = aFormula.Len();
+    sal_Int32 nLen = aFormula.getLength();
     sal_Bool bMatrix =  nLen > 3                    // Matrix-Formula
-            && aFormula.GetChar(0) == '{'
-            && aFormula.GetChar(1) == '='
-            && aFormula.GetChar(nLen-1) == '}';
+            && aFormula[0] == '{'
+            && aFormula[1] == '='
+            && aFormula[nLen-1] == '}';
     if ( bMatrix )
     {
-        aFormula.Erase( 0, 1 );
-        aFormula.Erase( aFormula.Len()-1, 1);
+        aFormula = aFormula.copy( 1, aFormula.getLength()-2 );
         aBtnMatrix.Check( bMatrix );
         aBtnMatrix.Disable();
     } // if ( bMatrix )
@@ -1658,19 +1657,19 @@ FormulaModalDialog::~FormulaModalDialog()
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaModalDialog::Update(const String& _sExp)
+void FormulaModalDialog::Update(const OUString& _sExp)
 {
     m_pImpl->Update(_sExp);
 }
 
 // -----------------------------------------------------------------------------
-void FormulaModalDialog::SetMeText(const String& _sText)
+void FormulaModalDialog::SetMeText(const OUString& _sText)
 {
     m_pImpl->SetMeText(_sText);
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool FormulaModalDialog::CheckMatrix(String& aFormula)
+sal_Bool FormulaModalDialog::CheckMatrix(OUString& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);
 }
@@ -1747,19 +1746,19 @@ FormulaDlg::~FormulaDlg()
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaDlg::Update(const String& _sExp)
+void FormulaDlg::Update(const OUString& _sExp)
 {
     m_pImpl->Update(_sExp);
 }
 
 // -----------------------------------------------------------------------------
-void FormulaDlg::SetMeText(const String& _sText)
+void FormulaDlg::SetMeText(const OUString& _sText)
 {
     m_pImpl->SetMeText(_sText);
 }
 
 // -----------------------------------------------------------------------------
-FormulaDlgMode FormulaDlg::SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,sal_Bool bMatrix,sal_Bool _bSelect,sal_Bool _bUpdate)
+FormulaDlgMode FormulaDlg::SetMeText(const OUString& _sText, xub_StrLen PrivStart, xub_StrLen PrivEnd, sal_Bool bMatrix, sal_Bool _bSelect, sal_Bool _bUpdate)
 {
     return m_pImpl->SetMeText(_sText,PrivStart, PrivEnd,bMatrix,_bSelect,_bUpdate);
 }
@@ -1769,12 +1768,12 @@ void FormulaDlg::CheckMatrix()
     m_pImpl->aBtnMatrix.Check();
 }
 // -----------------------------------------------------------------------------
-sal_Bool FormulaDlg::CheckMatrix(String& aFormula)
+sal_Bool FormulaDlg::CheckMatrix(OUString& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);
 }
 // -----------------------------------------------------------------------------
-String FormulaDlg::GetMeText() const
+OUString FormulaDlg::GetMeText() const
 {
     return m_pImpl->pMEdit->GetText();
 }
@@ -1846,7 +1845,7 @@ const IFunctionDescription* FormulaDlg::getCurrentFunctionDescription() const
     return m_pImpl->pFuncDesc;
 }
 // -----------------------------------------------------------------------------
-void FormulaDlg::UpdateParaWin(const Selection& _rSelection,const String& _sRefStr)
+void FormulaDlg::UpdateParaWin(const Selection& _rSelection,const OUString& _sRefStr)
 {
     m_pImpl->UpdateParaWin(_rSelection,_sRefStr);
 }

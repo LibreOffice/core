@@ -53,14 +53,14 @@ FormulaDialog::FormulaDialog(Window* pParent
     ,m_pAddField(NULL)
     ,m_xRowSet(_xRowSet)
     ,m_pEdit(NULL)
-    ,m_sFormula(OUString("="))
+    ,m_sFormula("=")
     ,m_nStart(0)
     ,m_nEnd(1)
 {
     if ( !_sFormula.isEmpty() )
     {
-        if ( _sFormula.getStr()[0] != '=' )
-            m_sFormula += String(_sFormula);
+        if ( _sFormula[0] != '=' )
+            m_sFormula += _sFormula;
         else
             m_sFormula = _sFormula;
     }
@@ -141,9 +141,9 @@ void FormulaDialog::setCurrentFormula(const String& _sReplacement)
     const xub_StrLen nOldLen = m_nEnd - m_nStart;
     const xub_StrLen nNewLen = _sReplacement.Len();
     if (nOldLen)
-        m_sFormula.Erase( m_nStart, nOldLen );
+        m_sFormula = m_sFormula.replaceAt( m_nStart, nOldLen, "" );
     if (nNewLen)
-        m_sFormula.Insert( _sReplacement, m_nStart );
+        m_sFormula = m_sFormula.replaceAt( m_nStart, 0, _sReplacement );
     m_nEnd = m_nStart + nNewLen;
 }
 void FormulaDialog::setSelection(xub_StrLen _nStart,xub_StrLen _nEnd)

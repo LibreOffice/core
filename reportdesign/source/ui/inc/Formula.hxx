@@ -47,7 +47,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
     ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFormulaParser>   m_xParser;
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
     formula::RefEdit*           m_pEdit;
-    String                      m_sFormula;
+    OUString                    m_sFormula;
     xub_StrLen                  m_nStart;
     xub_StrLen                  m_nEnd;
 

@@ -142,9 +142,9 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
         //  Formel vorhanden? Dann editieren
 
-        String aFormula;
+        OUString aFormula;
         pDoc->GetFormula( nCol, nRow, nTab, aFormula );
-        sal_Bool bEdit   = ( aFormula.Len() > 1 );
+        sal_Bool bEdit   = ( aFormula.getLength() > 1 );
         sal_Bool bMatrix = false;
         if ( bEdit )
         {
@@ -169,7 +169,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         if ( !bEdit )
         {
             OUString aNewFormula('=');
-            if ( aFormula.Len() > 0 && aFormula.GetChar(0) == '=' )
+            if ( !aFormula.isEmpty() && aFormula[0] == '=' )
                 aNewFormula = aFormula;
 
             pScMod->InputReplaceSelection( aNewFormula );
