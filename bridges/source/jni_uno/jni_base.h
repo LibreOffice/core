@@ -115,8 +115,11 @@ inline bool JNI_context::assert_no_exception() const
 {
     if (JNI_FALSE != m_env->ExceptionCheck())
     {
+        SAL_WARN("bridges", "unexpected java exception occurred");
+#if OSL_DEBUG_LEVEL > 0
+        m_env->ExceptionDescribe();
+#endif
         m_env->ExceptionClear();
-        OSL_FAIL( "unexpected java exception occurred!" );
         return false;
     }
     return true;
