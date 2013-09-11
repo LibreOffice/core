@@ -46,27 +46,27 @@ namespace formula
 
         inline const CharClass* GetCharClass() const { return m_pCharClass; }
 
-        sal_Bool                GetNextFunc( const String&  rFormula,
+        sal_Bool                GetNextFunc( const OUString&  rFormula,
                                                  sal_Bool           bBack,
                                                  xub_StrLen&    rFStart, // Ein- und Ausgabe
                                                  xub_StrLen*    pFEnd = NULL,
                                                  const IFunctionDescription** ppFDesc = NULL,
                                                  ::std::vector< OUString>*      pArgs = NULL ) const;
 
-        xub_StrLen          GetFunctionStart( const String& rFormula, xub_StrLen nStart,
-                                                        sal_Bool bBack, String* pFuncName = NULL ) const;
+        xub_StrLen          GetFunctionStart( const OUString& rFormula, xub_StrLen nStart,
+                                                        sal_Bool bBack, OUString* pFuncName = NULL ) const;
 
-        xub_StrLen          GetFunctionEnd  ( const String& rFormula, xub_StrLen nStart ) const;
+        xub_StrLen          GetFunctionEnd  ( const OUString& rFormula, xub_StrLen nStart ) const;
 
-        xub_StrLen          GetArgStart     ( const String& rFormula, xub_StrLen nStart,
+        xub_StrLen          GetArgStart     ( const OUString& rFormula, xub_StrLen nStart,
                                                       sal_uInt16 nArg ) const;
 
         void                GetArgStrings   ( ::std::vector< OUString >& _rArgs,
-                                                      const String& rFormula,
+                                                      const OUString& rFormula,
                                                       xub_StrLen    nFuncPos,
                                                       sal_uInt16        nArgs ) const;
 
-        void                FillArgStrings  ( const String& rFormula,
+        void                FillArgStrings  ( const OUString& rFormula,
                                                       xub_StrLen    nFuncPos,
                                                       sal_uInt16        nArgs,
                                                       ::std::vector< OUString >&      _rArgs ) const;

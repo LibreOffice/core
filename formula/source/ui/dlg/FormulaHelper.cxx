@@ -65,7 +65,8 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
 {
     m_pCharClass = m_pSysLocale->GetCharClassPtr();
 }
-sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
+
+sal_Bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
                                  sal_Bool           bBack,
                                  xub_StrLen&    rFStart,   // Input and output
                                  xub_StrLen*    pFEnd,     // = NULL
@@ -73,7 +74,7 @@ sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
                                  ::std::vector< OUString>*   pArgs )  const // = NULL
 {
     xub_StrLen  nOldStart = rFStart;
-    String      aFname;
+    OUString      aFname;
 
     rFStart = GetFunctionStart( rFormula, rFStart, bBack, ppFDesc ? &aFname : NULL );
     sal_Bool bFound  = ( rFStart != FUNC_NOTFOUND );
@@ -121,7 +122,7 @@ sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
 
 //------------------------------------------------------------------------
 
-void FormulaHelper::FillArgStrings( const String&   rFormula,
+void FormulaHelper::FillArgStrings( const OUString&   rFormula,
                                     xub_StrLen      nFuncPos,
                                     sal_uInt16          nArgs,
                                     ::std::vector< OUString >& _rArgs ) const
@@ -140,31 +141,31 @@ void FormulaHelper::FillArgStrings( const String&   rFormula,
             nEnd = GetArgStart( rFormula, nFuncPos, i+1 );
 
             if ( nEnd != nStart )
-                _rArgs.push_back(rFormula.Copy( nStart, nEnd-1-nStart ));
+                _rArgs.push_back(rFormula.copy( nStart, nEnd-1-nStart ));
             else
-                _rArgs.push_back(String()), bLast = sal_True;
+                _rArgs.push_back(OUString()), bLast = sal_True;
         }
         else
         {
             nEnd = GetFunctionEnd( rFormula, nFuncPos )-1;
             if ( nStart < nEnd )
-                _rArgs.push_back( rFormula.Copy( nStart, nEnd-nStart ) );
+                _rArgs.push_back( rFormula.copy( nStart, nEnd-nStart ) );
             else
-                _rArgs.push_back(String());
+                _rArgs.push_back(OUString());
         }
     }
 
     if ( bLast )
         for ( ; i<nArgs; i++ )
-            _rArgs.push_back(String());
+            _rArgs.push_back(OUString());
 }
 
 //------------------------------------------------------------------------
 
-void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs
-                                      ,const String& rFormula,
-                                       xub_StrLen nFuncPos,
-                                       sal_uInt16 nArgs ) const
+void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
+                                   const OUString& rFormula,
+                                   xub_StrLen nFuncPos,
+                                   sal_uInt16 nArgs ) const
 {
     if (nArgs)
     {
@@ -187,12 +188,12 @@ inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const String& rStr, 
 
 }
 
-xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
-                                        xub_StrLen      nStart,
-                                        sal_Bool            bBack,
-                                        String*         pFuncName ) const
+xub_StrLen FormulaHelper::GetFunctionStart( const OUString&   rFormula,
+                                            xub_StrLen        nStart,
+                                            sal_Bool          bBack,
+                                            OUString*         pFuncName ) const
 {
-    xub_StrLen nStrLen = rFormula.Len();
+    xub_StrLen nStrLen = rFormula.getLength();
 
     if ( nStrLen < nStart )
         return nStart;
@@ -210,15 +211,15 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
         {
             while ( !bFound && (nParPos > 0) )
             {
-                if ( rFormula.GetChar(nParPos) == '"' )
+                if ( rFormula[nParPos] == '"' )
                 {
                     nParPos--;
-                    while ( (nParPos > 0) && rFormula.GetChar(nParPos) != '"' )
+                    while ( (nParPos > 0) && rFormula[nParPos] != '"' )
                         nParPos--;
                     if (nParPos > 0)
                         nParPos--;
                 }
-                else if ( (bFound = ( rFormula.GetChar(nParPos) == '(' ) ) == sal_False )
+                else if ( (bFound = ( rFormula[nParPos] == '(' ) ) == sal_False )
                     nParPos--;
             }
         }
@@ -226,14 +227,14 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
         {
             while ( !bFound && (nParPos < nStrLen) )
             {
-                if ( rFormula.GetChar(nParPos) == '"' )
+                if ( rFormula[nParPos] == '"' )
                 {
                     nParPos++;
-                    while ( (nParPos < nStrLen) && rFormula.GetChar(nParPos) != '"' )
+                    while ( (nParPos < nStrLen) && rFormula[nParPos] != '"' )
                         nParPos++;
                     nParPos++;
                 }
-                else if ( (bFound = ( rFormula.GetChar(nParPos) == '(' ) ) == sal_False )
+                else if ( (bFound = ( rFormula[nParPos] == '(' ) ) == sal_False )
                     nParPos++;
             }
         }
@@ -254,7 +255,7 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
             {
                                     //  Function found
                 if ( pFuncName )
-                    *pFuncName = rFormula.Copy( nFStart, nParPos-nFStart );
+                    *pFuncName = rFormula.copy( nFStart, nParPos-nFStart );
             }
             else                    // Brackets without function -> keep searching
             {
@@ -271,7 +272,7 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
         {
             nFStart = FUNC_NOTFOUND;
             if ( pFuncName )
-                pFuncName->Erase();
+                (*pFuncName) = "";
         }
     }
     while(bRepeat);
@@ -281,9 +282,9 @@ xub_StrLen FormulaHelper::GetFunctionStart( const String&   rFormula,
 
 //------------------------------------------------------------------------
 
-xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart ) const
+xub_StrLen  FormulaHelper::GetFunctionEnd( const OUString& rStr, xub_StrLen nStart ) const
 {
-    xub_StrLen nStrLen = rStr.Len();
+    xub_StrLen nStrLen = rStr.getLength();
 
     if ( nStrLen < nStart )
         return nStart;
@@ -294,12 +295,12 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart
 
     while ( !bFound && (nStart < nStrLen) )
     {
-        sal_Unicode c = rStr.GetChar(nStart);
+        sal_Unicode c = rStr[nStart];
 
         if ( c == '"' )
         {
             nStart++;
-            while ( (nStart < nStrLen) && rStr.GetChar(nStart) != '"' )
+            while ( (nStart < nStrLen) && rStr[nStart] != '"' )
                 nStart++;
         }
         else if ( c == open )
@@ -339,9 +340,9 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const String& rStr, xub_StrLen nStart
 
 //------------------------------------------------------------------
 
-xub_StrLen FormulaHelper::GetArgStart( const String& rStr, xub_StrLen nStart, sal_uInt16 nArg ) const
+xub_StrLen FormulaHelper::GetArgStart( const OUString& rStr, xub_StrLen nStart, sal_uInt16 nArg ) const
 {
-    xub_StrLen nStrLen = rStr.Len();
+    xub_StrLen nStrLen = rStr.getLength();
 
     if ( nStrLen < nStart )
         return nStart;
@@ -352,12 +353,12 @@ xub_StrLen FormulaHelper::GetArgStart( const String& rStr, xub_StrLen nStart, sa
 
     while ( !bFound && (nStart < nStrLen) )
     {
-        sal_Unicode c = rStr.GetChar(nStart);
+        sal_Unicode c = rStr[nStart];
 
         if ( c == '"' )
         {
             nStart++;
-            while ( (nStart < nStrLen) && rStr.GetChar(nStart) != '"' )
+            while ( (nStart < nStrLen) && rStr[nStart] != '"' )
                 nStart++;
         }
         else if ( c == open )
