@@ -32,7 +32,8 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/simptabl.hxx>
+#include <svtools/treelistentry.hxx>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -53,7 +54,6 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>
-#include <addresslistdialog.hrc>
 #include <dbui.hrc>
 
 #include <helpid.h>
@@ -139,72 +139,80 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProp
     return sURL;
 }
 
-SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_ADDRESSLISTDIALOG)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aDescriptionFI( this, SW_RES(  FI_DESCRIPTION    )),
-    m_aListFT( this, SW_RES(         FT_LIST           )),
-    m_aListHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aListLB( this, SW_RES(         LB_LIST           )),
-    m_aLoadListPB( this, SW_RES(     PB_LOADLIST       )),
-    m_aCreateListPB(this, SW_RES(    PB_CREATELIST     )),
-    m_aFilterPB( this, SW_RES(       PB_FILTER         )),
-    m_aEditPB(this, SW_RES(          PB_EDIT           )),
-    m_aTablePB(this, SW_RES(         PB_TABLE          )),
-    m_aSeparatorFL(this, SW_RES(    FL_SEPARATOR      )),
-    m_aOK( this, SW_RES(             PB_OK             )),
-    m_aCancel( this, SW_RES(         PB_CANCEL         )),
-    m_aHelp( this, SW_RES(           PB_HELP           )),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-    m_sName(        SW_RES( ST_NAME )),
-    m_sTable(       SW_RES( ST_TABLE )),
-    m_sConnecting(  SW_RES( ST_CONNECTING )),
+class SwAddrSourceLB : public SvSimpleTable
+{
+public:
+    SwAddrSourceLB(SvSimpleTableContainer& rParent, WinBits nBits = 0)
+        : SvSimpleTable(rParent, nBits)
+    {
+    }
+    virtual void Resize();
+    void setColSizes();
+};
+
+void SwAddrSourceLB::Resize()
+{
+    SvSimpleTable::Resize();
+    setColSizes();
+}
+
+void SwAddrSourceLB::setColSizes()
+{
+    HeaderBar &rHB = GetTheHeaderBar();
+    if (rHB.GetItemCount() < 2)
+        return;
+
+    long nWidth = rHB.GetSizePixel().Width();
+
+    long nTabs[] = { 2, 0, nWidth/2 };
+
+    SvSimpleTable::SetTabs(&nTabs[0], MAP_PIXEL);
+}
+
+SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
+    : SfxModalDialog(pParent, "SelectAddressDialog",
+        "modules/swriter/ui/selectaddressdialog.ui")
+
+    ,
+
     m_pCreatedDataSource(0),
     m_bInSelectHdl(false),
     m_pAddressPage(pParent)
 {
-    FreeResource();
-    String sTemp(m_aDescriptionFI.GetText());
-    sTemp.SearchAndReplaceAscii("%1", m_aLoadListPB.GetText());
-    sTemp.SearchAndReplaceAscii("%2", m_aCreateListPB.GetText());
-    m_aDescriptionFI.SetText(sTemp);
-    m_aFilterPB.SetClickHdl( LINK( this, SwAddressListDialog,    FilterHdl_Impl ));
-    m_aLoadListPB.SetClickHdl( LINK( this, SwAddressListDialog,  LoadHdl_Impl ));
-    m_aCreateListPB.SetClickHdl( LINK( this, SwAddressListDialog,CreateHdl_Impl ));
-    m_aEditPB.SetClickHdl(LINK( this, SwAddressListDialog, EditHdl_Impl));
-    m_aTablePB.SetClickHdl(LINK( this, SwAddressListDialog, TableSelectHdl_Impl));
+    get(m_pDescriptionFI, "desc");
+    get(m_pLoadListPB, "add");
+    get(m_pCreateListPB, "create");
+    get(m_pFilterPB, "filter");
+    get(m_pEditPB, "edit");
+    get(m_pTablePB, "changetable");
+    get(m_pOK, "ok");
 
-    Size aLBSize(m_aListLB.GetSizePixel());
-    m_aListHB.SetSizePixel(aLBSize);
-    Size aHeadSize(m_aListHB.CalcWindowSizePixel());
-    aHeadSize.Width() = aLBSize.Width();
-    m_aListHB.SetSizePixel(aHeadSize);
-    Point aLBPos(m_aListLB.GetPosPixel());
-    m_aListHB.SetPosPixel(aLBPos);
-    aLBPos.Y() += aHeadSize.Height();
-    aLBSize.Height() -= aHeadSize.Height();
-    m_aListLB.SetPosSizePixel(aLBPos, aLBSize);
+    m_sName = get<FixedText>("name")->GetText();
+    m_sTable = get<FixedText>("table")->GetText();
+    m_sConnecting = get<FixedText>("connecting")->GetText();
 
-    Size aSz(m_aListHB.GetOutputSizePixel());
-    m_aListHB.InsertItem( ITEMID_NAME, m_sName,
-                            aSz.Width()/2,
-                            HIB_LEFT | HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS/*| HIB_CLICKABLE | HIB_UPARROW */);
-    m_aListHB.InsertItem( ITEMID_TABLE, m_sTable,
-                            aSz.Width()/2,
-                            HIB_LEFT | HIB_VCENTER | HIB_FIXED | HIB_FIXEDPOS /*| HIB_CLICKABLE | HIB_UPARROW */);
-    m_aListHB.SetHelpId(HID_MM_ADDRESSLIST_HB );
-    m_aListHB.Show();
+    OUString sTemp(m_pDescriptionFI->GetText());
+    sTemp = sTemp.replaceFirst("%1", m_pLoadListPB->GetText());
+    sTemp = sTemp.replaceFirst("%2", m_pCreateListPB->GetText());
+    m_pDescriptionFI->SetText(sTemp);
+    m_pFilterPB->SetClickHdl( LINK( this, SwAddressListDialog,    FilterHdl_Impl ));
+    m_pLoadListPB->SetClickHdl( LINK( this, SwAddressListDialog,  LoadHdl_Impl ));
+    m_pCreateListPB->SetClickHdl( LINK( this, SwAddressListDialog,CreateHdl_Impl ));
+    m_pEditPB->SetClickHdl(LINK( this, SwAddressListDialog, EditHdl_Impl));
+    m_pTablePB->SetClickHdl(LINK( this, SwAddressListDialog, TableSelectHdl_Impl));
 
-    m_aListLB.SetHelpId(HID_MM_ADDRESSLIST_TLB);
-    static long nTabs[] = {2, 0, aSz.Width()/2 };
-    m_aListLB.SetStyle( m_aListLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
-    m_aListLB.SetSelectionMode( SINGLE_SELECTION );
-    m_aListLB.SetTabs(&nTabs[0], MAP_PIXEL);
-    m_aOK.SetClickHdl( LINK( this, SwAddressListDialog, OKHdl_Impl));
+    SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("sources");
+    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(182 , 102), MAP_APPFONT);
+    pHeaderTreeContainer->set_width_request(aSize.Width());
+    pHeaderTreeContainer->set_height_request(aSize.Height());
+    m_pListLB = new SwAddrSourceLB(*pHeaderTreeContainer);
+
+    m_pListLB->InsertHeaderEntry(m_sName + "\t" + m_sTable);
+    m_pListLB->setColSizes();
+
+    m_pListLB->SetStyle( m_pListLB->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_pListLB->SetSelectionMode( SINGLE_SELECTION );
+    m_pOK->SetClickHdl( LINK( this, SwAddressListDialog, OKHdl_Impl));
 
     uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
     m_xDBContext = DatabaseContext::create(xContext);
@@ -214,7 +222,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
 
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
-    m_aListLB.SelectAll( sal_False );
+    m_pListLB->SelectAll( sal_False );
 
     SwDBConfig aDb;
     OUString sBibliography = aDb.GetBibliographySource().sDataSource;
@@ -224,13 +232,13 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     {
         if ( pNames[nName] == sBibliography )
             continue;
-        SvTreeListEntry* pEntry = m_aListLB.InsertEntry(pNames[nName]);
+        SvTreeListEntry* pEntry = m_pListLB->InsertEntry(pNames[nName]);
         AddressUserData_Impl* pUserData = new AddressUserData_Impl();
         pEntry->SetUserData(pUserData);
         if(pNames[nName] == rCurrentData.sDataSource)
         {
-            m_aListLB.Select(pEntry);
-            m_aListLB.SetEntryText(rCurrentData.sCommand, pEntry, ITEMID_TABLE - 1);
+            m_pListLB->Select(pEntry);
+            m_pListLB->SetEntryText(rCurrentData.sCommand, pEntry, ITEMID_TABLE - 1);
             pUserData->nCommandType = rCurrentData.nCommandType;
             pUserData->xSource = rConfigItem.GetSource();
             pUserData->xConnection = rConfigItem.GetConnection();
@@ -255,31 +263,32 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
         }
     }
 
-    m_aOK.Enable(m_aListLB.GetEntryCount()>0 && bEnableOK);
-    m_aEditPB.Enable(bEnableEdit);
-    m_aListLB.SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
+    m_pOK->Enable(m_pListLB->GetEntryCount()>0 && bEnableOK);
+    m_pEditPB->Enable(bEnableEdit);
+    m_pListLB->SetSelectHdl(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
     TableSelectHdl_Impl(NULL);
 }
 
 SwAddressListDialog::~SwAddressListDialog()
 {
-    SvTreeListEntry* pEntry = m_aListLB.First();
+    SvTreeListEntry* pEntry = m_pListLB->First();
     while(pEntry)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pEntry->GetUserData());
         delete pUserData;
-        pEntry = m_aListLB.Next( pEntry );
+        pEntry = m_pListLB->Next( pEntry );
     }
+    delete m_pListLB;
 }
 
 IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 {
-    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if(pSelect)
     {
-        String sCommand = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
-        if ( !sCommand.Len() )
+        OUString sCommand = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        if (sCommand.isEmpty())
             return 0;
 
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -295,7 +304,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
                         xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
                 uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
                 xRowProperties->setPropertyValue("DataSourceName",
-                        makeAny(OUString(m_aListLB.GetEntryText(pSelect, ITEMID_NAME - 1))));
+                        makeAny(OUString(m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1))));
                 xRowProperties->setPropertyValue("Command", makeAny(
                         OUString(sCommand)));
                 xRowProperties->setPropertyValue("CommandType", makeAny(pUserData->nCommandType));
@@ -332,9 +341,9 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
     String sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
     if(sNewSource.Len())
     {
-        SvTreeListEntry* pNewSource = m_aListLB.InsertEntry(sNewSource);
+        SvTreeListEntry* pNewSource = m_pListLB->InsertEntry(sNewSource);
         pNewSource->SetUserData(new AddressUserData_Impl());
-        m_aListLB.Select(pNewSource);
+        m_pListLB->Select(pNewSource);
     }
     return 0;
 }
@@ -413,12 +422,12 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             String sEntry(sFind);
             sEntry += '\t';
             sEntry += String(aFilters[0]);
-            m_pCreatedDataSource = m_aListLB.InsertEntry(sEntry);
+            m_pCreatedDataSource = m_pListLB->InsertEntry(sEntry);
             AddressUserData_Impl* pUserData = new AddressUserData_Impl();
             pUserData->sURL = sURL;
             m_pCreatedDataSource->SetUserData(pUserData);
-            m_aListLB.Select(m_pCreatedDataSource);
-            m_aCreateListPB.Enable(sal_False);
+            m_pListLB->Select(m_pCreatedDataSource);
+            m_pCreateListPB->Enable(sal_False);
 
         }
         catch (const Exception&)
@@ -431,7 +440,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 {
-    SvTreeListEntry* pEntry = m_aListLB.FirstSelected();
+    SvTreeListEntry* pEntry = m_pListLB->FirstSelected();
     AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : 0;
     if(pUserData && !pUserData->sURL.isEmpty())
     {
@@ -463,7 +472,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
 {
-    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     Application::PostUserEvent( STATIC_LINK( this, SwAddressListDialog,
                                                 StaticListBoxSelectHdl_Impl ), pSelect );
     return 0;
@@ -479,12 +488,12 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
     AddressUserData_Impl* pUserData = 0;
     if(pSelect)
     {
-        String sTable = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+        String sTable = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         if(!sTable.Len())
         {
-            pThis->m_aListLB.SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
+            pThis->m_pListLB->SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
             // allow painting of the new entry
-            pThis->m_aListLB.Window::Invalidate(INVALIDATE_UPDATE);
+            pThis->m_pListLB->Window::Invalidate(INVALIDATE_UPDATE);
             for (sal_uInt16 i = 0; i < 10; i++)
                 Application::Reschedule();
         }
@@ -503,22 +512,22 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
              * Most expedient thing to do is to manually end the parent selection
              * here.
              */
-            pThis->m_aListLB.EndSelection();
+            pThis->m_pListLB->EndSelection();
             pThis->DetectTablesAndQueries(pSelect, !sTable.Len());
         }
         else
         {
             //otherwise set the selected db-data
-            pThis->m_aDBData.sDataSource = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_NAME - 1);
-            pThis->m_aDBData.sCommand = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+            pThis->m_aDBData.sDataSource = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1);
+            pThis->m_aDBData.sCommand = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
             pThis->m_aDBData.nCommandType = pUserData->nCommandType;
-            pThis->m_aOK.Enable(sal_True);
+            pThis->m_pOK->Enable(sal_True);
         }
-        sTable = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+        sTable = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         if(sTable == pThis->m_sConnecting)
-           pThis->m_aListLB.SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
+           pThis->m_pListLB->SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
     }
-    pThis->m_aEditPB.Enable(pUserData && !pUserData->sURL.isEmpty() &&
+    pThis->m_pEditPB->Enable(pUserData && !pUserData->sURL.isEmpty() &&
                     SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL ) );
     pThis->m_bInSelectHdl = false;
@@ -538,7 +547,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
         uno::Reference<XCompletedConnection> xComplConnection;
         if(!pUserData->xConnection.is())
         {
-            m_aDBData.sDataSource = m_aListLB.GetEntryText(pSelect, ITEMID_NAME - 1);
+            m_aDBData.sDataSource = m_pListLB->GetEntryText(pSelect, ITEMID_NAME - 1);
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xComplConnection;
             pUserData->xSource = uno::Reference<XDataSource>(xComplConnection, UNO_QUERY);
 
@@ -570,7 +579,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             {
                 //now call the table select dialog - if more than one table exists
                 SwSelectDBTableDialog* pDlg = new SwSelectDBTableDialog(this, pUserData->xConnection);
-                String sTable = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+                String sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(sTable.Len())
                     pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);
                 if(RET_OK == pDlg->Execute())
@@ -608,32 +617,32 @@ void SwAddressListDialog::DetectTablesAndQueries(
                                             SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
             //#i97577#
             if( pUserData->xColumnsSupplier.is() )
-                m_aListLB.SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
+                m_pListLB->SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
             else
-                m_aListLB.SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
+                m_pListLB->SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
         }
-        String sCommand = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
-        m_aOK.Enable(pSelect && sCommand.Len());
-        m_aFilterPB.Enable( pUserData->xConnection.is() && sCommand.Len() );
-        m_aTablePB.Enable( pUserData->nTableAndQueryCount > 1 );
+        String sCommand = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        m_pOK->Enable(pSelect && sCommand.Len());
+        m_pFilterPB->Enable( pUserData->xConnection.is() && sCommand.Len() );
+        m_pTablePB->Enable( pUserData->nTableAndQueryCount > 1 );
     }
     catch (const Exception&)
     {
         OSL_FAIL("exception caught in SwAddressListDialog::DetectTablesAndQueries");
-        m_aOK.Enable( sal_False );
+        m_pOK->Enable( sal_False );
     }
 }
 
 IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
 {
     EnterWait();
-    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         //only call the table select dialog if tables have not been searched for or there
         //are more than 1
-        String sTable = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
+        String sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         if( pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
             DetectTablesAndQueries(pSelect, (pButton != 0) || (!sTable.Len()));
@@ -653,7 +662,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, OKHdl_Impl)
 uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 {
     uno::Reference< XDataSource>  xRet;
-    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -666,7 +675,7 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 SharedConnection    SwAddressListDialog::GetConnection()
 {
     SharedConnection xRet;
-    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -678,7 +687,7 @@ SharedConnection    SwAddressListDialog::GetConnection()
 uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
 {
     uno::Reference< XColumnsSupplier> xRet;
-    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -690,7 +699,7 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
 OUString     SwAddressListDialog::GetFilter()
 {
     OUString sRet;
-    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());

@@ -43,32 +43,27 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 class SwMailMergeAddressBlockPage;
+class SwAddrSourceLB;
 
 class SwAddressListDialog : public SfxModalDialog
 {
-    FixedInfo       m_aDescriptionFI;
+    FixedText*      m_pDescriptionFI;
 
-    FixedInfo       m_aListFT;
-    HeaderBar       m_aListHB;
-    SvTabListBox    m_aListLB;
+    SwAddrSourceLB* m_pListLB;
 
-    PushButton      m_aLoadListPB;
-    PushButton      m_aCreateListPB;
-    PushButton      m_aFilterPB;
-    PushButton      m_aEditPB;
-    PushButton      m_aTablePB;
+    PushButton*     m_pLoadListPB;
+    PushButton*     m_pCreateListPB;
+    PushButton*     m_pFilterPB;
+    PushButton*     m_pEditPB;
+    PushButton*     m_pTablePB;
 
-    FixedLine       m_aSeparatorFL;
+    OKButton*       m_pOK;
 
-    OKButton        m_aOK;
-    CancelButton    m_aCancel;
-    HelpButton      m_aHelp;
+    OUString        m_sName;
+    OUString        m_sTable;
+    OUString        m_sConnecting;
 
-    String          m_sName;
-    String          m_sTable;
-    String          m_sConnecting;
-
-    String          m_sCreatedURL;
+    OUString        m_sCreatedURL;
     SvTreeListEntry*    m_pCreatedDataSource;
 
     bool            m_bInSelectHdl;

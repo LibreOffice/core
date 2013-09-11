@@ -562,7 +562,6 @@ sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 
 class SwIndexTreeLB : public SvSimpleTable
 {
-private:
 public:
     SwIndexTreeLB(SvSimpleTableContainer& rParent, WinBits nBits = 0);
     virtual void KeyInput( const KeyEvent& rKEvt );
@@ -688,7 +687,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MAP_APPFONT);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
-    m_pHeaderTree = new SwIndexTreeLB(*get<SvSimpleTableContainer>("styles"));
+    m_pHeaderTree = new SwIndexTreeLB(*pHeaderTreeContainer);
 
     m_pOk->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     m_pLeftPB->SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));

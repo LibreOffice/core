@@ -171,6 +171,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/saveashtmldialog \
 	sw/uiconfig/swriter/ui/savelabeldialog \
 	sw/uiconfig/swriter/ui/sectionpage \
+	sw/uiconfig/swriter/ui/selectaddressdialog \
 	sw/uiconfig/swriter/ui/selectautotextdialog \
 	sw/uiconfig/swriter/ui/selectindexdialog \
 	sw/uiconfig/swriter/ui/sidebarpage \
