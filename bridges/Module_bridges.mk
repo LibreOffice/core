@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	$(if $(ENABLE_JAVA),\
 		Jar_java_uno \
 		Library_java_uno \
+		$(if $(filter MACOSX,$(OS)),Package_jnilib_java_uno) \
 	) \
 	$(if $(filter R,$(CPU)),\
 		$(if $(filter IOS,$(OS)),\
