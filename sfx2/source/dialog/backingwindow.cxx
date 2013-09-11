@@ -352,22 +352,30 @@ void BackingWindow::setupTemplateView( TemplateLocalView* pView, FILTER_APPLICAT
     pView->showRootRegion();
     pView->setOpenTemplateHdl( LINK( this, BackingWindow, OpenTemplateHdl ) );
 
-    // setup buttons
-    pRecentButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
-    pTemplateButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+    if( pView->HasUnfilteredItems(eFilter) )
+    {
+        // setup buttons
+        pRecentButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
+        pTemplateButton->SetClickHdl( LINK( this, BackingWindow, RecentTemplateToggleHdl ) );
 
-    // button text - slighly larger font than normal labels on the texts
-    Font aFont;
-    aFont.SetSize( Size( 0, 11 ) );
-    aFont.SetWeight( WEIGHT_NORMAL );
+        // button text - slighly larger font than normal labels on the texts
+        Font aFont;
+        aFont.SetSize( Size( 0, 11 ) );
+        aFont.SetWeight( WEIGHT_NORMAL );
 
-    pRecentButton->SetFont( aFont );
-    pRecentButton->SetControlFont( aFont );
+        pRecentButton->SetFont( aFont );
+        pRecentButton->SetControlFont( aFont );
 
-    pTemplateButton->SetFont( aFont );
-    pTemplateButton->SetControlFont( aFont );
+        pTemplateButton->SetFont( aFont );
+        pTemplateButton->SetControlFont( aFont );
 
-    pRecentButton->Hide();  // hidden by default
+        pRecentButton->Hide();  // hidden by default
+    }
+    else // no templates, hide toggle button
+    {
+        pTemplateButton->Hide();
+        pRecentButton->Hide();
+    }
 }
 
 void BackingWindow::setupExternalLink( PushButton* pButton )
