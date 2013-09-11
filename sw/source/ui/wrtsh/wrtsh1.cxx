@@ -1325,8 +1325,15 @@ void SwWrtShell::NumOrBulletOff()
 
             if (pTxtNode)
             {
-                sal_uInt16 nLevel = sal::static_int_cast<sal_uInt16, sal_Int32>(pTxtNode->GetActualListLevel());
-                SwNumFmt aFmt(aNumRule.Get(nLevel));
+                int nLevel = pTxtNode->GetActualListLevel();
+
+                if (nLevel < 0)
+                    nLevel = 0;
+
+                if (nLevel >= MAXLEVEL)
+                    nLevel = MAXLEVEL - 1;
+
+                SwNumFmt aFmt(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
 
                 aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
                 aNumRule.Set(nLevel, aFmt);
