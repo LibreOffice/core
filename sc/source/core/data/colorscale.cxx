@@ -1165,7 +1165,8 @@ ScIconSetMap* ScIconSetFormat::getIconSetMap()
         { "3Signs", IconSet_3Signs, 3 },
         { "3Symbols", IconSet_3Symbols, 3 },
         { "3Symbols2", IconSet_3Symbols2, 3 },
-        { "ColorSmilies", IconSet_ColorSmilies, 3 },
+        { "3Smilies", IconSet_3Smilies, 3 },
+        { "3ColorSmilies", IconSet_3ColorSmilies, 3 },
         { "4Arrows", IconSet_4Arrows, 4 },
         { "4ArrowsGray", IconSet_4ArrowsGray, 4 },
         { "4RedToBlack", IconSet_4RedToBlack, 4 },
@@ -1201,6 +1202,10 @@ const sal_Int32 a3ArrowsGray[] = {
 
 const sal_Int32 a3Flags[] = {
     BMP_ICON_SET_FLAGS_RED, BMP_ICON_SET_FLAGS_YELLOW, BMP_ICON_SET_FLAGS_GREEN
+};
+
+const sal_Int32 a3Smilies[] {
+    BMP_ICON_SET_POSITIVE_YELLOW_SMILIE, BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE
 };
 
 const sal_Int32 a3ColorSmilies[] {
@@ -1272,7 +1277,8 @@ static const ScIconSetBitmapMap aBitmapMap[] = {
     { IconSet_3Symbols2, a3Symbols1 },
     { IconSet_3TrafficLights1, a3TrafficLights1 },
     { IconSet_3TrafficLights2, a3TrafficLights2 },
-    { IconSet_ColorSmilies, a3ColorSmilies },
+    { IconSet_3Smilies, a3Smilies },
+    { IconSet_3ColorSmilies, a3ColorSmilies },
     { IconSet_4Arrows, a4Arrows },
     { IconSet_4ArrowsGray, a4ArrowsGray },
     { IconSet_4Rating, a4Ratings },

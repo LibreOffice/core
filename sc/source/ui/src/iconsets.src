@@ -225,5 +225,13 @@ Bitmap BMP_ICON_SET_NEGATIVE_RED_SMILIE
 {
     File = "icon-set-negative-red-smilie.png";
 };
+Bitmap BMP_ICON_SET_POSITIVE_YELLOW_SMILIE
+{
+    File = "icon-set-positive-yellow-smilie.png";
+};
+Bitmap BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE
+{
+    File = "icon-set-negative-yellow-smilie.png";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
