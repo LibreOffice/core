@@ -43,14 +43,14 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_pt-PT.dat \
 	acor_ro-RO.dat \
 	acor_ru-RU.dat \
-	acor_sh-ME.dat \
-	acor_sh-RS.dat \
-	acor_sh-YU.dat \
 	acor_sk-SK.dat \
 	acor_sl-SI.dat \
+	acor_sr-CS.dat \
+	acor_sr-Latn-CS.dat \
+	acor_sr-Latn-ME.dat \
+	acor_sr-Latn-RS.dat \
 	acor_sr-ME.dat \
 	acor_sr-RS.dat \
-	acor_sr-YU.dat \
 	acor_sv-SE.dat \
 	acor_tr-TR.dat \
 	acor_vi-VN.dat \

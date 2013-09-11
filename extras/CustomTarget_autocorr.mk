@@ -41,14 +41,14 @@ extras_AUTOCORR_LANGS := \
 	pt-BR:pt-BR \
 	ro:ro-RO \
 	ru:ru-RU \
-	sh-ME:sh-ME \
-	sh-RS:sh-RS \
-	sh-YU:sh-YU \
 	sk:sk-SK \
 	sl:sl-SI \
+	sr-CS:sr-CS \
+	sr-Latn-CS:sr-Latn-CS \
+	sr-Latn-ME:sr-Latn-ME \
+	sr-Latn-RS:sr-Latn-RS \
 	sr-ME:sr-ME \
 	sr-RS:sr-RS \
-	sr-YU:sr-YU \
 	sv:sv-SE \
 	tr:tr-TR \
 	vi:vi-VN \
@@ -188,18 +188,18 @@ extras_AUTOCORR_XMLFILES := \
 	ru/acor/META-INF/manifest.xml \
 	ru/acor/SentenceExceptList.xml \
 	ru/acor/WordExceptList.xml \
-	sh-ME/acor/DocumentList.xml \
-	sh-ME/acor/META-INF/manifest.xml \
-	sh-ME/acor/SentenceExceptList.xml \
-	sh-ME/acor/WordExceptList.xml \
-	sh-RS/acor/DocumentList.xml \
-	sh-RS/acor/META-INF/manifest.xml \
-	sh-RS/acor/SentenceExceptList.xml \
-	sh-RS/acor/WordExceptList.xml \
-	sh-YU/acor/DocumentList.xml \
-	sh-YU/acor/META-INF/manifest.xml \
-	sh-YU/acor/SentenceExceptList.xml \
-	sh-YU/acor/WordExceptList.xml \
+	sr-Latn-ME/acor/DocumentList.xml \
+	sr-Latn-ME/acor/META-INF/manifest.xml \
+	sr-Latn-ME/acor/SentenceExceptList.xml \
+	sr-Latn-ME/acor/WordExceptList.xml \
+	sr-Latn-RS/acor/DocumentList.xml \
+	sr-Latn-RS/acor/META-INF/manifest.xml \
+	sr-Latn-RS/acor/SentenceExceptList.xml \
+	sr-Latn-RS/acor/WordExceptList.xml \
+	sr-Latn-CS/acor/DocumentList.xml \
+	sr-Latn-CS/acor/META-INF/manifest.xml \
+	sr-Latn-CS/acor/SentenceExceptList.xml \
+	sr-Latn-CS/acor/WordExceptList.xml \
 	sk/acor/DocumentList.xml \
 	sk/acor/META-INF/manifest.xml \
 	sk/acor/SentenceExceptList.xml \
@@ -216,10 +216,10 @@ extras_AUTOCORR_XMLFILES := \
 	sr-RS/acor/META-INF/manifest.xml \
 	sr-RS/acor/SentenceExceptList.xml \
 	sr-RS/acor/WordExceptList.xml \
-	sr-YU/acor/DocumentList.xml \
-	sr-YU/acor/META-INF/manifest.xml \
-	sr-YU/acor/SentenceExceptList.xml \
-	sr-YU/acor/WordExceptList.xml \
+	sr-CS/acor/DocumentList.xml \
+	sr-CS/acor/META-INF/manifest.xml \
+	sr-CS/acor/SentenceExceptList.xml \
+	sr-CS/acor/WordExceptList.xml \
 	sv/acor/BlockList.xml \
 	sv/acor/DocumentList.xml \
 	sv/acor/META-INF/manifest.xml \
@@ -269,14 +269,14 @@ extras_AUTOCORR_MIMETYPEFILES := \
 	pt/acor/mimetype \
 	ro/acor/mimetype \
 	ru/acor/mimetype \
-	sh-ME/acor/mimetype \
-	sh-RS/acor/mimetype \
-	sh-YU/acor/mimetype \
 	sk/acor/mimetype \
 	sl/acor/mimetype \
+	sr-CS/acor/mimetype \
+	sr-Latn-CS/acor/mimetype \
+	sr-Latn-ME/acor/mimetype \
+	sr-Latn-RS/acor/mimetype \
 	sr-ME/acor/mimetype \
 	sr-RS/acor/mimetype \
-	sr-YU/acor/mimetype \
 	sv/acor/mimetype \
 	tr/acor/mimetype \
 	vi/acor/mimetype \
