@@ -648,14 +648,6 @@ sub run {
 
         installer::scpzipfiles::resolving_scpzip_replace_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
 
-        #####################################
-        # Files with flag HIDDEN
-        #####################################
-
-        installer::logger::print_message( "... analyzing files with flag HIDDEN ...\n" );
-
-        installer::worker::resolving_hidden_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
-
         ############################################
         # Collecting directories for epm list file
         ############################################
