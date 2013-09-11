@@ -48,7 +48,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/excel,\
 	Button \
-	SheetObjects \
+	Buttons \
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
@@ -241,6 +241,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/excel,\
 	XDataLabels \
 	XDialog \
 	XDialogs \
+	XDrawings \
 	XFont \
 	XFormat \
 	XFormatCondition \
@@ -252,6 +253,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/excel,\
 	XHyperlink \
 	XHyperlinks \
 	XInterior \
+	XLineObjects \
     XlApplicationInternational \
     XlApplyNamesOrder \
     XlArabicModes \

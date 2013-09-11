@@ -1,0 +1,54 @@
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __ooo_vba_excel_XLineObjects_idl__
+#define __ooo_vba_excel_XLineObjects_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module ooo {  module vba { module excel {
+
+/** Collections that implement this interface provide access to a specific type
+    of drawing objects in a single sheet.
+
+    <p>The following sheet symbols represent collections of line objects, and
+    therefore implement this interface:</p>
+    <ul><li>Arcs: arc objects, and</li>
+    <li>Lines: straight line ojects.</li></ul>
+
+    <p>This symbol is now deprecated in VBA but kept for compatibility with old
+    VBA scripts.</p>
+ */
+interface XLineObjects : com::sun::star::uno::XInterface
+{
+    /** Adds a new line object to the sheet this collection belongs to. The
+        type of the object is determined by the type of the collection.
+
+        @param X1  Position of the first X coordinate in points (1/72 inch).
+        @param Y1  Position of the first Y coordinate in points (1/72 inch).
+        @param X2  Position of the last X coordinate in points (1/72 inch).
+        @param Y2  Position of the last Y coordinate in points (1/72 inch).
+
+        @return  The created line object.
+     */
+    any Add( [in] any X1, [in] any Y1, [in] any X2, [in] any Y2 );
+};
+
+}; }; };
+
+#endif
