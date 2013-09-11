@@ -27,6 +27,12 @@
 #include <cstdio>
 #endif
 
+#ifdef DISABLE_DYNLOADING
+
+extern sc::FormulaGroupInterpreter* SAL_CALL createFormulaGroupOpenCLInterpreter();
+
+#endif
+
 namespace sc {
 
 rtl_uString* FormulaGroupContext::intern( const OUString& rStr )
@@ -127,15 +133,6 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
 }
 
 }
-
-class FormulaGroupInterpreterOpenCLMissing : public FormulaGroupInterpreter
-{
-public:
-    FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
-    virtual ~FormulaGroupInterpreterOpenCLMissing() {}
-    virtual ScMatrixRef inverseMatrix(const ScMatrix&) { return ScMatrixRef(); }
-    virtual bool interpret(ScDocument&, const ScAddress&, const ScFormulaCellGroupRef&, ScTokenArray&) { return false; }
-};
 
 ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
 {
@@ -278,12 +275,6 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     return true;
 }
 
-// TODO: load module, hook symbol out, check it works, UI on failure etc.
-namespace opencl {
-    extern sc::FormulaGroupInterpreter *createFormulaGroupInterpreter();
-}
-FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
-
 #if USE_DUMMY_INTERPRETER
 class FormulaGroupInterpreterDummy : public FormulaGroupInterpreter
 {
@@ -322,7 +313,27 @@ public:
         return true;
     }
 };
+
 #endif
+
+#ifndef DISABLE_DYNLOADING
+
+class FormulaGroupInterpreterOpenCLMissing : public FormulaGroupInterpreter
+{
+public:
+    FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
+    virtual ~FormulaGroupInterpreterOpenCLMissing() {}
+    virtual ScMatrixRef inverseMatrix(const ScMatrix&) { return ScMatrixRef(); }
+    virtual bool interpret(ScDocument&, const ScAddress&, const ScFormulaCellGroupRef&, ScTokenArray&) { return false; }
+};
+
+static void SAL_CALL thisModule() {}
+
+typedef FormulaGroupInterpreter* (*LoaderFn)(void);
+
+#endif
+
+FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
 
 /// load and/or configure the correct formula group interpreter
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
@@ -351,10 +362,25 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
         if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
         {
 #ifdef DISABLE_DYNLOADING
-            msInstance = sc::opencl::createFormulaGroupInterpreter();
+            msInstance = createFormulaGroupOpenCLInterpreter();
 #else
-            // TODO : Dynamically load scopencl shared object, and instantiate the opencl interpreter.
-            msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
+            // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
+
+            OUString aLibName(SVLIBRARY("scopencl"));
+            static osl::Module aModule;
+            bool bLoaded = aModule.loadRelative(&thisModule, aLibName);
+            if (!bLoaded)
+                bLoaded = aModule.load(aLibName);
+
+            if (bLoaded)
+            {
+                oslGenericFunction fn = aModule.getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
+                if (fn)
+                    msInstance = reinterpret_cast<LoaderFn>(fn)();
+            }
+
+            if (!msInstance)
+                msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
 #endif
         }
 #endif

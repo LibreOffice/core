@@ -27,9 +27,6 @@
 
 namespace sc { namespace opencl {
 
-// A single public entry point for a factory function:
-extern sc::FormulaGroupInterpreter *createFormulaGroupInterpreter();
-
 /////time test dbg
 double getTimeDiff(const TimeValue& t1, const TimeValue& t2)
 {
@@ -1067,21 +1064,25 @@ bool FormulaGroupInterpreterGroundwater::interpret(ScDocument& rDoc, const ScAdd
 
 #endif
 
-sc::FormulaGroupInterpreter *createFormulaGroupInterpreter()
+} // namespace opencl
+
+} // namespace sc
+
+extern "C" {
+
+SAL_DLLPUBLIC_EXPORT sc::FormulaGroupInterpreter* SAL_CALL createFormulaGroupOpenCLInterpreter()
 {
     if (getenv("SC_SOFTWARE"))
         return NULL;
 
 #if USE_GROUNDWATER_INTERPRETER
     if (getenv("SC_GROUNDWATER"))
-        return new FormulaGroupInterpreterGroundwater();
+        return new sc::opencl::FormulaGroupInterpreterGroundwater();
 #endif
 
-    return new FormulaGroupInterpreterOpenCL();
+    return new sc::opencl::FormulaGroupInterpreterOpenCL();
 }
 
-} // namespace opencl
-
-} // namespace sc
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
