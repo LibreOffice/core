@@ -2485,14 +2485,14 @@
         </prop>
         <prop oor:name="WarnSaveOrSendDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies wether to warn when saving or sending documents with
+            <desc>Specifies whether to warn when saving or sending documents with
             personal/hidden data.</desc>
           </info>
           <value>false</value>
         </prop>
         <prop oor:name="WarnSignDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies wether to warn when signing documents with
+            <desc>Specifies whether to warn when signing documents with
             personal/hidden data.</desc>
           </info>
           <value>true</value>
@@ -2504,28 +2504,28 @@
         </prop>
         <prop oor:name="WarnPrintDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies wether to warn when printing documents with
+            <desc>Specifies whether to warn when printing documents with
             personal/hidden data.</desc>
           </info>
           <value>false</value>
         </prop>
         <prop oor:name="WarnCreatePDF" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies wether to warn when creating PDF documents with
+            <desc>Specifies whether to warn when creating PDF documents with
             personal/hidden data.</desc>
           </info>
           <value>false</value>
         </prop>
         <prop oor:name="RemovePersonalInfoOnSaving" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies wether to remove personal information on
+            <desc>Specifies whether to remove personal information on
             saving.</desc>
           </info>
           <value>false</value>
         </prop>
         <prop oor:name="RecommendPasswordProtection" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies wether to recommend password protection when saving
+            <desc>Specifies whether to recommend password protection when saving
             documents.</desc>
           </info>
           <value>false</value>
@@ -3422,7 +3422,7 @@
       </info>
       <prop oor:name="ShowBasic" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Determines wether basic help should be shown.</desc>
+          <desc>Determines whether basic help should be shown.</desc>
         </info>
         <value>true</value>
       </prop>

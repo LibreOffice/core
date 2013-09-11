@@ -292,7 +292,7 @@
       <prop oor:name="IsUseCharacterVariants" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
-          <desc>Specifies wether Taiwan, Hongkong SAR, and Macao SAR character
+          <desc>Specifies whether Taiwan, Hongkong SAR, and Macao SAR character
           variants should be used for translation.</desc>
           <label>Use character variants</label>
         </info>
@@ -301,7 +301,7 @@
       <prop oor:name="IsTranslateCommonTerms" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldLocation: NEW -->
         <info>
-          <desc>Specifies wether common terms should be detected and translated
+          <desc>Specifies whether common terms should be detected and translated
           as whole words.</desc>
           <label>Translate Common Terms</label>
         </info>

@@ -50,7 +50,7 @@ begin
 					currentfile 1 string readstring % s bool
 					pop								% s
 					0 get							% s[0]
-													% --- check wether s[0] is CR, LF ...
+													% --- check whether s[0] is CR, LF ...
 					dup 32 gt						% s > ' ' ? then read on
 					{ exit }
 					{ pop  }

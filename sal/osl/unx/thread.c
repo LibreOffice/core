@@ -1031,7 +1031,7 @@ static void osl_thread_textencoding_init_Impl (void)
 
     /*
     Tools string functions call abort() on an unknown encoding so ASCII
-    is a meaningfull fallback regardless wether the assertion makes sense.
+    is a meaningfull fallback regardless whether the assertion makes sense.
     */
 
     if ( RTL_TEXTENCODING_DONTKNOW == defaultEncoding )
