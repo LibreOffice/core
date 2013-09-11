@@ -203,6 +203,15 @@ public:
 
     sal_Int32 mnU1, mnU3, mnU4;
 
+    AnimationNode()
+        : mnGroupType(0)
+        , mnRestart(0)
+        , mnFill(0)
+        , mnNodeType(0)
+        , mnDuration(0)
+        , mnU1(0), mnU3(0), mnU4(0)
+    {
+    }
 public:
 
     friend SvStream& operator>>(SvStream& rIn, AnimationNode& rAtom);
