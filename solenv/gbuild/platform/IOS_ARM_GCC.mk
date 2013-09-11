@@ -28,6 +28,9 @@ endif
 
 gb_COMPILERDEFAULTOPTFLAGS := -O3
 
+gb_INSTROOT := $(INSTDIR)
+gb_DEVINSTALLROOT := $(gb_INSTROOT)
+
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 # Darwin mktemp -t expects a prefix, not a pattern
