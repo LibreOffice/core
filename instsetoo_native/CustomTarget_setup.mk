@@ -83,12 +83,24 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,pythonloader.uno) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
-		echo '[Bootstrap]' && \
-		$(if $(filter YES,$(SYSTEM_PYTHON)),\
-			echo PYUNO_LOADER_PYTHONPATH='$$ORIGIN',\
-			echo PYUNO_LOADER_PYTHONHOME='$$ORIGIN/python-core-$(PYTHON_VERSION)' && \
-			echo PYUNO_LOADER_PYTHONPATH='$(foreach dir,lib lib/lib-dynload lib/lib-tk lib/site-packages,$$ORIGIN/python-core-$(PYTHON_VERSION)/$(dir)) $$ORIGIN' \
-		) \
+		printf '[Bootstrap]\n' && \
+		$(if $(filter YES,$(SYSTEM_PYTHON)),, \
+			printf 'PYUNO_LOADER_PYTHONHOME=%s\n' \
+				$(if $(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE), \
+					'$$ORIGIN/../Frameworks/LibreOfficePython.framework', \
+				$(if $(filter MACOSX,$(OS)), \
+					'$$ORIGIN/LibreOfficePython.framework', \
+					'$$ORIGIN/python-core-$(PYTHON_VERSION)')) &&) \
+		printf 'PYUNO_LOADER_PYTHONPATH=%s$$ORIGIN\n' \
+			$(if $(filter YES,$(SYSTEM_PYTHON)), \
+				'', \
+			$(if $(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE), \
+				'$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(dir))) ', \
+			$(if $(filter MACOSX,$(OS)), \
+				'$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/LibreOfficePython.framework/Versions/Current/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(dir))) ', \
+			$(if $(filter WNTMSC,$(OS)$(COM)), \
+				'$(foreach dir,/ /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) ', \
+				'$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/$(dir))) ')))) \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) :
