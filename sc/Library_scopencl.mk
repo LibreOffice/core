@@ -21,7 +21,6 @@ $(eval $(call gb_Library_use_sdk_api,scopencl))
 
 $(eval $(call gb_Library_use_libraries,scopencl,\
 	for \
-	forui \
 	sal \
 	sc \
 	$(gb_UWINAPI) \
