@@ -661,8 +661,8 @@ OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
 
 bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
 {
-    const sal_uInt16 nThisSize = GetOutWidth() + GetDistance() + GetInWidth();
-    const sal_uInt16 nOtherSize = rOtherLine.GetOutWidth() + rOtherLine.GetDistance() + rOtherLine.GetInWidth();
+    const sal_uInt16 nThisSize = GetScaledWidth();
+    const sal_uInt16 nOtherSize = rOtherLine.GetScaledWidth();
 
     if ( nThisSize > nOtherSize )
     {

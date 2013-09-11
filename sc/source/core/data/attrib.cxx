@@ -67,8 +67,8 @@ bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxB
     if (!pOther)
         return true;
 
-    sal_uInt16 nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
-    sal_uInt16 nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
+    sal_uInt16 nThisSize = pThis->GetScaledWidth();
+    sal_uInt16 nOtherSize = pOther->GetScaledWidth();
 
     if (nThisSize > nOtherSize)
         return true;

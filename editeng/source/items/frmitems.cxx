@@ -2461,7 +2461,7 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine ) c
 
     if( pTmp )
     {
-        nDist = nDist + (sal_uInt16)(pTmp->GetOutWidth()) + (sal_uInt16)(pTmp->GetInWidth()) + (sal_uInt16)(pTmp->GetDistance());
+        nDist = nDist + pTmp->GetScaledWidth();
     }
     else if( !bIgnoreLine )
         nDist = 0;

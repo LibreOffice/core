@@ -204,8 +204,7 @@ bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
            else
            {
                if (!bHasWidth)
-                   nWidth = rpLine->GetInWidth() + rpLine->GetDistance() +
-                       rpLine->GetOutWidth();
+                   nWidth = rpLine->GetScaledWidth();
 
                rpLine->SetWidth( nWidth );
            }
