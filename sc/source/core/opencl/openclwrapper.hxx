@@ -14,11 +14,8 @@
 #include <formula/opcode.hxx>
 #include <sal/detail/log.h>
 #include <cassert>
-#ifdef __APPLE__
-#include <OpenCL/cl.h>
-#else
-#include <CL/cl.h>
-#endif
+
+#include "clcc/clew.h"
 
 // CL_MAP_WRITE_INVALIDATE_REGION is new in OpenCL 1.2.
 

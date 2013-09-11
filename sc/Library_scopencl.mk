@@ -27,11 +27,16 @@ $(eval $(call gb_Library_use_libraries,scopencl,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_externals,scopencl,opencl))
-
 $(eval $(call gb_Library_add_exception_objects,scopencl,\
 	sc/source/core/opencl/formulagroupcl \
 	sc/source/core/opencl/openclwrapper \
+	sc/source/core/opencl/clcc/clew \
 ))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,scopencl,\
+	-ldl \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

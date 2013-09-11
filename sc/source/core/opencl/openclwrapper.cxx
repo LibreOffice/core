@@ -707,7 +707,10 @@ int OpenclDevice::runKernel( const char *kernelName, void **userdata)
 
 int OpenclDevice::initOpenclRunEnv( int argc )
 {
-    int status = 0;
+    int status = clewInit("/opt/AMDAPP/lib/x86_64/libOpenCL.so");
+    if (status < 0)
+        return 1;
+
     if ( MAX_CLKERNEL_NUM <= 0 )
     {
         return 1;
