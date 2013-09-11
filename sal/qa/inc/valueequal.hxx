@@ -71,7 +71,7 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
     sal_Int32 nPrecOfN = -nPRECISION + nBeforeDot;
 
     if (_nPrec != PREC_long_double)
-        printf("nPrecOfN is  %d\n", nPrecOfN);
+        printf("nPrecOfN is  %" SAL_PRIdINT32 "\n", nPrecOfN);
 
     double nPrec = pow(0.1, -nPrecOfN);
 

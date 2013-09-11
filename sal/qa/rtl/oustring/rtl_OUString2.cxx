@@ -862,7 +862,7 @@ public:
                 rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
             }
             while ( nIndex >= 0 );
-            printf("Index %d\n", nIndex);
+            printf("Index %" SAL_PRIdINT32 "\n", nIndex);
             // should not GPF
         }
 
