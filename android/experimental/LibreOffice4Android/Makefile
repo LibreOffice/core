@@ -23,13 +23,13 @@ copy-stuff:
 # android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
 # extent).
 #
-	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
+	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program/services assets/ure/share/misc assets/ComponentTarget/i18npool/util
 	gzip -9 <$(OUTDIR)/bin/offapi.rdb >assets/gz.unpack/program/offapi.rdb
 	gzip -9 <$(OUTDIR)/bin/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
 	gzip -9 <$(OUTDIR)/bin/udkapi.rdb >assets/gz.unpack/program/udkapi.rdb
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
-	for F in xml/services xml/ure/services; do \
-		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
+	for F in program/services/services ure/share/misc/services; do \
+		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(INSTDIR)/$$F.rdb >assets/$$F.rdb; \
 	done
 	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt \
 	   $(SRC_ROOT)/sc/qa/unit/data/xls/border.xls \
@@ -69,7 +69,7 @@ copy-stuff:
 	echo '[Bootstrap]' > assets/program/unorc
 	echo 'URE_INTERNAL_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/unorc
 	echo 'UNO_TYPES=file://$$APP_DATA_DIR/program/udkapi.rdb file://$$APP_DATA_DIR/program/offapi.rdb file://$$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/unorc
-	echo 'UNO_SERVICES=file:///assets/xml/ure/services.rdb file:///assets/xml/services.rdb <$$BRAND_BASE_DIR/program/services>*' >> assets/program/unorc
+	echo 'UNO_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb' >> assets/program/unorc
 #
 # Set up bootstraprc
 	echo '[Bootstrap]' > assets/program/bootstraprc
@@ -88,7 +88,7 @@ copy-stuff:
 #
 # .res files
 	mkdir -p assets/program/resource
-	cp $(OUTDIR)/bin/*en-US.res assets/program/resource
+	cp $(INSTDIR)/$(LIBO_SHARE_RESOURCE_FOLDER)/*en-US.res assets/program/resource
 #
 # Assets that are unpacked at run-time into the app's data directory. These
 # are files read by non-LO code, fontconfig and freetype for now, that doesn't
