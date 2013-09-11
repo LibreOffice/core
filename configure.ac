@@ -5786,14 +5786,6 @@ if test "$GCC" = "yes"; then
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_VISIBILITY_FEATURE=TRUE ],[])
     CFLAGS=$save_CFLAGS
 
-    if test "$COM_GCC_IS_CLANG" = TRUE -a $_os = Darwin; then
-        # It seems that with Apple's Clang, visibility doesn't work as
-        # we would want at least in the connectivity and dbaccess
-        # modules. This might be because of something peculiar in
-        # those modules? Whatever.
-        HAVE_GCC_VISIBILITY_FEATURE=
-    fi
-
     if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
