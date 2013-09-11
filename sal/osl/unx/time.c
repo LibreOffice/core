@@ -155,6 +155,10 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
     aTime.tm_wday  = 0;
     aTime.tm_yday  = 0;
 
+#if defined(STRUCT_TM_HAS_GMTOFF)
+    aTime.tm_gmtoff = 0;
+#endif
+
     /* Convert time to calendar value */
     nSeconds = mktime( &aTime );
 
