@@ -124,6 +124,10 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/data/ww8/"),
             rtl::OUString(FILTER_WW8));
 
+    testDir(rtl::OUString("MS WinWord 5"),
+            getURLFromSrc("/sw/qa/core/data/ww5/"),
+            rtl::OUString(sWW5));
+
     testDir(rtl::OUString("Text (encoded)"),
             getURLFromSrc("/sw/qa/core/data/txt/"),
             rtl::OUString(FILTER_TEXT_DLG));
