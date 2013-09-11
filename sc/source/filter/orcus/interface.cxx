@@ -378,7 +378,7 @@ void ScOrcusSheet::set_shared_formula(
         // formulas across multiple columns.
         ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
         xNewGroup->mnStart = aRange.aStart.Row();
-        xNewGroup->mnLength = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
+        xNewGroup->mnLength = 1;
         xNewGroup->setCode(*pArray);
         maFormulaGroups.set(sindex, nCol, xNewGroup);
     }
@@ -406,6 +406,7 @@ void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sinde
     if (!xGroup)
         return;
 
+    xGroup->mnLength = aPos.Row() - xGroup->mnStart + 1;
     ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, xGroup);
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
