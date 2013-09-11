@@ -231,7 +231,10 @@ sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw
     Reference< ::com::sun::star::sdbc::XColumnLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         return xIface->findColumn(columnName);
-    return 0;
+
+    ::dbtools::throwInvalidColumnException( columnName, *this );
+    assert(false);
+    return 0; // Never reached
 }
 
 // ::com::sun::star::sdbcx::XColumnsSupplier

@@ -446,6 +446,15 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
     );
 }
 
+void throwInvalidColumnException( const OUString& _rColumnName, const Reference< XInterface >& _rxContext)
+    throw (SQLException)
+{
+    ::connectivity::SharedResources aResources;
+    OUString sErrorMessage( aResources.getResourceStringWithSubstitution(
+                                STR_INVALID_COLUMNNAME,
+                                "$columnname$",_rColumnName) );
+    throwSQLException( sErrorMessage, SQL_COLUMN_NOT_FOUND, _rxContext );
+}
 // -----------------------------------------------------------------------------
 void throwSQLException( const sal_Char* _pAsciiMessage, const sal_Char* _pAsciiState,
         const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException ) throw (SQLException)

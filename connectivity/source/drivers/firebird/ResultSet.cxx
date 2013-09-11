@@ -331,15 +331,9 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& rColumnName)
             return i;
     }
 
-    // The API documentation (XRowLocate) doesn't specify what should happen
-    // if the column name isn't found. The JDBC api specifies that an SQLException
-    // should be thrown. Most drivers return either -1 (some don't check for this
-    // case and just return nLen), however the JDBC specification seems more
-    // correct (in the case of the JDBC/HSQLDB drivers the SQLException is
-    // just propagated from the JDBC call, hence should be expected by any
-    // SDBC user too).
-    ::dbtools::throwSQLException("Invalid column name", SQL_COLUMN_NOT_FOUND, *this);
-    return -1; // Never reached
+    ::dbtools::throwInvalidColumnException(rColumnName, *this);
+    assert(false);
+    return 0; // Never reached
 }
 // -------------------------------------------------------------------------
 uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)

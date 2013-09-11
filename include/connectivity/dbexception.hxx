@@ -308,6 +308,19 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedException(
     throw (::com::sun::star::sdbc::SQLException);
 
 //----------------------------------------------------------------------------------
+/** throw a SQLException with SQLState 42S22 (Column Not Found)
+    @param _rColumnNameName
+        The column that couldn't be found.
+    @param _rxContext
+        the context of the exception
+*/
+OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
+        const OUString& _rColumnName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+    )
+    throw (::com::sun::star::sdbc::SQLException);
+
+//----------------------------------------------------------------------------------
 /** throws an SQLException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwSQLException(

@@ -1122,11 +1122,15 @@ sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) thr
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
+    {
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
                 columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
-            break;
-    /* FXIME ? should trow when not found no? */
-    return i;
+            return i;
+    }
+
+    ::dbtools::throwInvalidColumnException( columnName, *this );
+    assert(false);
+    return 0; // Never reached
 }
 // -------------------------------------------------------------------------
 //XColumnLocate interface ends
