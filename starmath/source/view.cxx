@@ -76,7 +76,10 @@
 #define MAXZOOM         800
 
 // space around the edit window, in pixels
-#define CMD_BOX_PADDING 10
+// fdo#69111: Increased border on the top so that the window is
+// easier to tear off.
+#define CMD_BOX_PADDING 4
+#define CMD_BOX_PADDING_TOP 10
 
 #define SmViewShell
 #include "smslots.hxx"
@@ -732,7 +735,7 @@ void SmCmdBoxWindow::Resize()
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
     aRect.Left()   += CMD_BOX_PADDING;
-    aRect.Top()    += CMD_BOX_PADDING;
+    aRect.Top()    += CMD_BOX_PADDING_TOP;
     aRect.Right()  -= CMD_BOX_PADDING;
     aRect.Bottom() -= CMD_BOX_PADDING;
 
@@ -749,7 +752,7 @@ void SmCmdBoxWindow::Paint(const Rectangle& /*rRect*/)
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
     aRect.Left()   += CMD_BOX_PADDING;
-    aRect.Top()    += CMD_BOX_PADDING;
+    aRect.Top()    += CMD_BOX_PADDING_TOP;
     aRect.Right()  -= CMD_BOX_PADDING;
     aRect.Bottom() -= CMD_BOX_PADDING;
 
