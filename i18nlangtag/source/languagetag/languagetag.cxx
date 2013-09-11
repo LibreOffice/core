@@ -1280,27 +1280,27 @@ LanguageTag & LanguageTag::makeFallback()
             if (!aVariants.isEmpty())
             {
                 aTmp = aLanguage + "-" + aScript + "-" + aCountry + "-" + aVariants;
-                if (aTmp != aVec[0])
+                if (aVec.empty() || aTmp != aVec[0])
                     aVec.push_back( aTmp);
                 // Language with variant but without country before language
                 // without variant but with country.
                 aTmp = aLanguage + "-" + aScript + "-" + aVariants;
-                if (aTmp != aVec[0])
+                if (aVec.empty() || aTmp != aVec[0])
                     aVec.push_back( aTmp);
                 bHaveLanguageScriptVariant = true;
             }
             aTmp = aLanguage + "-" + aScript + "-" + aCountry;
-            if (aTmp != aVec[0])
+            if (aVec.empty() || aTmp != aVec[0])
                 aVec.push_back( aTmp);
         }
         if (!aVariants.isEmpty() && !bHaveLanguageScriptVariant)
         {
             aTmp = aLanguage + "-" + aScript + "-" + aVariants;
-            if (aTmp != aVec[0])
+            if (aVec.empty() || aTmp != aVec[0])
                 aVec.push_back( aTmp);
         }
         aTmp = aLanguage + "-" + aScript;
-        if (aTmp != aVec[0])
+        if (aVec.empty() || aTmp != aVec[0])
             aVec.push_back( aTmp);
     }
     bool bHaveLanguageVariant = false;
@@ -1309,27 +1309,27 @@ LanguageTag & LanguageTag::makeFallback()
         if (!aVariants.isEmpty())
         {
             aTmp = aLanguage + "-" + aCountry + "-" + aVariants;
-            if (aTmp != aVec[0])
+            if (aVec.empty() || aTmp != aVec[0])
                 aVec.push_back( aTmp);
             // Language with variant but without country before language
             // without variant but with country.
             aTmp = aLanguage + "-" + aVariants;
-            if (aTmp != aVec[0])
+            if (aVec.empty() || aTmp != aVec[0])
                 aVec.push_back( aTmp);
             bHaveLanguageVariant = true;
         }
         aTmp = aLanguage + "-" + aCountry;
-        if (aTmp != aVec[0])
+        if (aVec.empty() || aTmp != aVec[0])
             aVec.push_back( aTmp);
     }
     if (!aVariants.isEmpty() && !bHaveLanguageVariant)
     {
         aTmp = aLanguage + "-" + aVariants;
-        if (aTmp != aVec[0])
+        if (aVec.empty() || aTmp != aVec[0])
             aVec.push_back( aTmp);
     }
     aTmp = aLanguage;
-    if (aTmp != aVec[0])
+    if (aVec.empty() || aTmp != aVec[0])
         aVec.push_back( aTmp);
     return aVec;
 }
