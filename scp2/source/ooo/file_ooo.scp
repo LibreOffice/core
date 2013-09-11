@@ -723,7 +723,7 @@ End
 #ifdef MACOSX 
 File gid_File_App_InfoPlist
     TXT_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents;
+    Dir = FILELIST_DIR;
     Name = "infoplist.filelist";
     Styles = (FILELIST);
 End
