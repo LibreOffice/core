@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//7AE\u003d",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-11T14:03:36Z",
+      "side": 1,
+      "message": "will inevitably trigger this assert:\nassert(isAscii(nChar1) \u0026\u0026 isAscii(nChar2));\n\nthere is no guarantee that c1 and c2 are limited to ASCII.",
+      "revId": "9fc149e6d8ce928344caa04ecd435277613e885a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7AA\u003d",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-11T14:03:36Z",
+      "side": 1,
+      "message": "same problem as above",
+      "revId": "9fc149e6d8ce928344caa04ecd435277613e885a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
