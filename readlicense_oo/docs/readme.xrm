@@ -34,23 +34,7 @@
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
 					<li>
-						<p id="macxiOSX" xml:lang="en-US">MacOSX 10.4 (Tiger) or higher</p>
-					</li>
-
-					<li>
-						<p id="macxicpu" xml:lang="en-US">Intel or PowerPC processor</p>
-					</li>
-
-					<li>
-						<p id="macxiRAM" xml:lang="en-US">512 MB RAM</p>
-					</li>
-
-					<li>
-						<p id="macxHardDiksSpace" xml:lang="en-US">Up to 800 MB available hard disk space</p>
-					</li>
-
-					<li>
-						<p id="macxivideo" xml:lang="en-US">1024 x 768 graphic device with 256 colors (higher resolution recommended)</p>
+						<p id="macxiOSX" xml:lang="en-US">MacOSX 10.6 or higher</p>
 					</li>
 				</ul>
 			</div>
@@ -58,22 +42,6 @@
 				<ul>
 					<li>
 						<p id="s2s3sdf21" xml:lang="en-US">Microsoft Windows XP, Vista, Windows 7, or Windows 8</p>
-					</li>
-
-					<li>
-						<p id="utzu6" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</p>
-					</li>
-
-					<li>
-						<p id="ghuj67" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
-					</li>
-
-					<li>
-						<p id="jzjtzu6" xml:lang="en-US">Up to 1.5 GB available hard disk space</p>
-					</li>
-
-					<li>
-						<p id="jtzu56" xml:lang="en-US">1024x768 resolution (higher resolution recommended), at least 256 colors</p>
 					</li>
 				</ul>
 				<p class="note" id="edssc3d" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
