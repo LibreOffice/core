@@ -21,7 +21,10 @@ $(eval $(call gb_Library_set_precompiled_header,vbaobj,$(SRCDIR)/sc/inc/pch/prec
 
 $(eval $(call gb_Library_set_componentfile,vbaobj,sc/util/vbaobj))
 
-$(eval $(call gb_Library_use_external,vbaobj,boost_headers))
+$(eval $(call gb_Library_use_externals,vbaobj,\
+	boost_headers \
+	mdds_headers \
+))
 
 $(eval $(call gb_Library_use_api,vbaobj,\
     offapi \

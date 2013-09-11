@@ -48,6 +48,8 @@
 #include <boost/scoped_ptr.hpp>
 #include "markdata.hxx"
 
+#include "mtvelements.hxx"
+
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
@@ -162,11 +164,11 @@ struct ScColWidthParam;
 class ScSheetEvents;
 class ScProgress;
 class SvtListener;
-class ScNotes;
 class ScEditDataArray;
 class EditTextObject;
 struct ScRefCellValue;
 class ScDocumentImport;
+class ScPostIt;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -549,6 +551,7 @@ public:
     SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const OUString& rName );
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
+
     OUString   GetCopyTabName(SCTAB nTab) const;
 
     SC_DLLPUBLIC void SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
@@ -889,12 +892,21 @@ public:
     /** Returns true, if there is any data to create a selection list for rPos. */
     bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
-    /** Returns a table notes container. */
-    SC_DLLPUBLIC ScNotes*       GetNotes(SCTAB nTab);
-
-    /** Creates the captions of all uninitialized cell notes in the specified sheet.
-        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
-    void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );
+    /** Notes **/
+    SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);
+    SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
+    void                         SetNote(const ScAddress& rPos, ScPostIt* pNote);
+    void                         SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote);
+    bool                         HasNote(const ScAddress& rPos);
+    bool                         HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
+    SC_DLLPUBLIC bool            HasColNotes(SCCOL nCol, SCTAB nTab);
+    SC_DLLPUBLIC bool            HasTabNotes(SCTAB nTab);
+    SC_DLLPUBLIC ScPostIt*       ReleaseNote(const ScAddress& rPos);
+    SC_DLLPUBLIC ScPostIt*       ReleaseNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
+    SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
+    SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);
+    sal_uLong                    CountNotes();
+    SC_DLLPUBLIC sc::CellNoteStoreType&  GetColNotes(SCCOL nCol, SCTAB nTab);
 
     SC_DLLPUBLIC void            SetDrawPageSize(SCTAB nTab);
 

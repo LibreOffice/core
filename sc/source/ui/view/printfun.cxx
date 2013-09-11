@@ -1863,7 +1863,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
         {
             ScAddress &rPos = aNotePosList[ nNoteStart + nCount ];
 
-            if( const ScPostIt* pNote = pDoc->GetNotes(rPos.Tab())->findByAddress( rPos ) )
+            if( const ScPostIt* pNote = pDoc->GetNote( rPos ) )
             {
                 if(const EditTextObject *pEditText = pNote->GetEditTextObject())
                     pEditEngine->SetText(*pEditText);
@@ -2465,8 +2465,6 @@ long ScPrintFunc::CountNotePages()
     if ( !aTableParam.bNotes || !bPrintCurrentTable )
         return 0;
 
-    long nCount=0;
-
     sal_Bool bError = false;
     if (!aAreaParam.bPrintArea)
         bError = !AdjustPrintArea(sal_True);            // completely search in Doc
@@ -2495,20 +2493,16 @@ long ScPrintFunc::CountNotePages()
 
         if (bDoThis)
         {
-            ScNotes::const_iterator itr = pDoc->GetNotes(nPrintTab)->begin();
-            ScNotes::const_iterator itrEnd = pDoc->GetNotes(nPrintTab)->end();
-            for (; itr != itrEnd; ++itr)
+            for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
             {
-                SCCOL nCol = itr->first.first;
-                SCROW nRow = itr->first.second;
-                if (nCol > nEndCol || nRow > nEndRow)
-                    continue;
-
-                if (nCol < nStartCol || nRow < nStartRow)
-                    continue;
-
-                aNotePosList.push_back( ScAddress( nCol, nRow, nPrintTab ) );
-                ++nCount;
+                if (pDoc->HasColNotes(nCol, nPrintTab))
+                {
+                    for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
+                        {
+                            if ( pDoc->HasNote(nCol, nRow, nPrintTab) )
+                                aNotePosList.push_back( ScAddress( nCol, nRow, nPrintTab ) );
+                        }
+                }
             }
         }
     }

@@ -29,7 +29,10 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     ClipContextBase(rDoc),
     mnTabStart(-1), mnTabEnd(-1),
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
-    mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells) {}
+    mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
+    mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES) )
+{
+}
 
 CopyFromClipContext::~CopyFromClipContext()
 {
@@ -74,6 +77,11 @@ bool CopyFromClipContext::isAsLink() const
 bool CopyFromClipContext::isSkipAttrForEmptyCells() const
 {
     return mbSkipAttrForEmptyCells;
+}
+
+bool CopyFromClipContext::isCloneNotes() const
+{
+    return mbCloneNotes;
 }
 
 CopyToClipContext::CopyToClipContext(

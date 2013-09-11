@@ -417,15 +417,35 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
     mxCellTable.reset( new XclExpCellTable( GetRoot() ) );
 
     //export cell notes
-    ScNotes::iterator itr = rDoc.GetNotes(mnScTab)->begin();
-    ScNotes::iterator itrEnd = rDoc.GetNotes(mnScTab)->end();
-    for (; itr != itrEnd; ++itr)
-    {
-        // notes
-        const ScPostIt* pScNote = itr->second;
-        ScAddress aScPos( itr->first.first, itr->first.second, mnScTab );
-        mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, OUString() ) );
-    }
+        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        {
+            if ( rDoc.HasColNotes(nCol, mnScTab) )
+            {
+                sc::CellNoteStoreType& maCellNotes = rDoc.GetColNotes(nCol, mnScTab);
+
+                sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
+                sc::cellnote_block::const_iterator itData, itDataEnd;
+
+                for(;itBlk != itBlkEnd; ++itBlk)
+                {
+                    if (itBlk->data)
+                    {
+                        SCROW nRow = itBlk->position;
+                        itData = sc::cellnote_block::begin(*itBlk->data);
+                        itDataEnd = sc::cellnote_block::end(*itBlk->data);
+                        for (; itData != itDataEnd; ++itData, ++nRow)
+                        {
+                            ScPostIt* pScNote = *itData;
+                            if (pScNote)
+                            {
+                                ScAddress aScPos( nCol, nRow, mnScTab );
+                                mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, OUString() ) );
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     if( GetOutput() != EXC_OUTPUT_BINARY )
     {

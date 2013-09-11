@@ -655,7 +655,6 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
 
     for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
     {
-        pDoc->GetNotes(nTable)->CreateAllNoteCaptions(nTable);
         nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIndex->getByIndex(nTable), uno::UNO_QUERY);
         if (!xDrawPageSupplier.is())
@@ -2433,7 +2432,7 @@ void ScXMLExport::_ExportAutoStyles()
                 {
                     //! separate method AddStyleFromNote needed?
 
-                    ScPostIt* pNote = pDoc->GetNotes( nTable )->findByAddress(aPos);
+                    ScPostIt* pNote = pDoc->GetNote(aPos);
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2479,7 +2478,7 @@ void ScXMLExport::_ExportAutoStyles()
                 bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
-                    ScPostIt* pNote = pDoc->GetNotes(nTable)->findByAddress( aPos );
+                    ScPostIt* pNote = pDoc->GetNote( aPos );
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2514,7 +2513,7 @@ void ScXMLExport::_ExportAutoStyles()
                 bool bCopySheet = pDoc->IsStreamValid( nTable );
                 if (bCopySheet)
                 {
-                    ScPostIt* pNote = pDoc->GetNotes(nTable)->findByAddress( aPos );
+                    ScPostIt* pNote = pDoc->GetNote( aPos );
                     OSL_ENSURE( pNote, "note not found" );
                     if (pNote)
                     {
@@ -2764,7 +2763,7 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
             // collect note caption objects from all layers (internal or hidden)
             if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, static_cast< SCTAB >( nCurrentTable ) ) )
             {
-                if(pDoc->GetNotes(nCurrentTable)->findByAddress(pCaptData->maStart))
+                if(pDoc->GetNote(pCaptData->maStart))
                 {
                     pSharedData->AddNoteObj( xShape, pCaptData->maStart );
 
@@ -3643,9 +3642,22 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
 
 void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >& xShape)
 {
-    if (pCurrentCell && pCurrentCell->xNoteShape.is() && pCurrentCell->xNoteShape.get() == xShape.get() && pCurrentCell->xAnnotation.is())
+    ScAddress aCellPos;
+    ScUnoConversion::FillScAddress( aCellPos, pCurrentCell->aCellAddress );
+
+    ScPostIt* pNote = pCurrentCell->pNote;
+
+    if (pNote)
     {
-        OUString sAuthor(pCurrentCell->xAnnotation->getAuthor());
+        // TODO : notes
+        //is it still usefull, as this call back is only called from ScXMLExport::WriteAnnotation
+        // and should be in sync with pCurrentCell
+        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(aCellPos);
+        Reference<drawing::XShape> xCurrentShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
+        if (xCurrentShape.get()!=xShape.get())
+            return;
+
+        OUString sAuthor(pNote->GetAuthor());
         if (!sAuthor.isEmpty())
         {
             SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
@@ -3654,7 +3666,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
             Characters(sAuthor);
         }
 
-        OUString aDate(pCurrentCell->xAnnotation->getDate());
+        OUString aDate(pNote->GetDate());
         if (pDoc)
         {
             SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
@@ -3689,20 +3701,25 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
 
 void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 {
-    if( rMyCell.bHasAnnotation && rMyCell.xAnnotation.is())
-    {
 
-        if (rMyCell.xAnnotation->getIsVisible())
+    ScAddress aCellPos;
+    ScUnoConversion::FillScAddress( aCellPos, rMyCell.aCellAddress );
+
+    ScPostIt* pNote = pDoc->GetNote(aCellPos);
+    if (pNote)
+    {
+        if (pNote->IsCaptionShown())
             AddAttribute(XML_NAMESPACE_OFFICE, XML_DISPLAY, XML_TRUE);
 
         pCurrentCell = &rMyCell;
 
-        if(rMyCell.xNoteShape.is())
-            GetShapeExport()->exportShape(rMyCell.xNoteShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
+        SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(aCellPos);
+        Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
+
+        GetShapeExport()->exportShape(xShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
 
         pCurrentCell = NULL;
 
-        rMyCell.xNoteShape.clear();
     }
 }
 

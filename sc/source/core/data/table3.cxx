@@ -559,44 +559,6 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
             }
         }
     }
-
-    ScNotes aNoteMap(pDocument);
-    ScNotes::iterator itr = maNotes.begin();
-    while(itr != maNotes.end())
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        if(nRow >= nRowStart && nRow <= nRowEnd)
-        {
-            if (nCol == nCol1)
-            {
-                aNoteMap.insert(nCol2, nRow, pPostIt);
-                maNotes.ReleaseNote(nCol, nRow);
-            }
-            else if (nCol == nCol2)
-            {
-                aNoteMap.insert(nCol1, nRow, pPostIt);
-                maNotes.ReleaseNote(nCol, nRow);
-
-            }
-        }
-    }
-
-    itr = aNoteMap.begin();
-    while(itr != aNoteMap.end())
-    {
-        //we can here assume that there is no note in the target location
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        maNotes.insert(nCol, nRow, pPostIt);
-        aNoteMap.ReleaseNote(nCol, nRow);
-    }
 }
 
 void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
@@ -630,43 +592,6 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
         bool bRow2Filtered = RowFiltered(nRow2);
         SetRowFiltered(nRow1, nRow1, bRow2Filtered);
         SetRowFiltered(nRow2, nRow2, bRow1Filtered);
-    }
-
-    ScNotes aNoteMap(pDocument);
-    ScNotes::iterator itr = maNotes.begin();
-    while(itr != maNotes.end())
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        if( nCol >= nColStart && nCol <= nColEnd )
-        {
-            if (nRow == nRow1)
-            {
-                aNoteMap.insert(nCol, nRow2, pPostIt);
-                maNotes.ReleaseNote(nCol, nRow);
-            }
-            else if (nRow == nRow2)
-            {
-                aNoteMap.insert(nCol, nRow1, pPostIt);
-                maNotes.ReleaseNote(nCol, nRow);
-            }
-        }
-    }
-
-    itr = aNoteMap.begin();
-    while(itr != aNoteMap.end())
-    {
-        //we can here assume that there is no note in the target location
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        maNotes.insert(nCol, nRow, pPostIt);
-        aNoteMap.ReleaseNote(nCol, nRow);
     }
 }
 
@@ -743,8 +668,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
             QuickSort( pArray, nRow1, nLastRow );
             SortReorder( pArray, pProgress );
             delete pArray;
-            // #i59745# update position of caption objects of cell notes
-            ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( aSortParam.nCol1, nRow1, nTab, aSortParam.nCol2, nLastRow, nTab ) );
+            // #i59745# update position of caption objects of cell notes --> reported at (SortReorder) ScColumn::SwapCellNotes level
         }
     }
     else
@@ -764,8 +688,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* p
             QuickSort( pArray, nCol1, nLastCol );
             SortReorder( pArray, pProgress );
             delete pArray;
-            // #i59745# update position of caption objects of cell notes
-            ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( nCol1, aSortParam.nRow1, nTab, nLastCol, aSortParam.nRow2, nTab ) );
+            // #i59745# update position of caption objects of cell notes --> reported at (SortReorder) ScColumn::SwapCellNotes level
         }
     }
     DestroySortCollator();
@@ -1923,10 +1846,6 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
             CopyData( aParam.nCol1, aParam.nRow1, aParam.nCol2, aParam.nRow1,
                             aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
-
-
-    if (aParam.bInplace)
-        InitializeNoteCaptions();
 
     SCROW nRealRow2 = aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)

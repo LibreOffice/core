@@ -182,7 +182,7 @@ sal_Int32 ScNotesChildren::AddNotes(const ScPreviewLocationData& rData, const Re
                 }
                 else
                 {
-                    if( ScPostIt* pNote = pDoc->GetNotes( aNote.maNoteCell.Tab() )->findByAddress( aNote.maNoteCell ) )
+                    if( ScPostIt* pNote = pDoc->GetNote( aNote.maNoteCell ) )
                         aNote.maNoteText = pNote->GetText();
                     aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
                     if (aNote.mpTextHelper)
@@ -359,7 +359,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
                 }
                 else
                 {
-                    if( ScPostIt* pNote = pDoc->GetNotes( aNote.maNoteCell.Tab() )->findByAddress( aNote.maNoteCell ) )
+                    if( ScPostIt* pNote = pDoc->GetNote( aNote.maNoteCell ) )
                         aNote.maNoteText = pNote->GetText();
                 }
 

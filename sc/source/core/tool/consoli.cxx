@@ -767,7 +767,6 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 SCROW nOutEnd = nRow+nArrY+nNeeded-1;
                 bool bSize = false;
                 pOutArr->Insert( nOutStart, nOutEnd, bSize );
-                pDestDoc->InitializeNoteCaptions(nTab);
                 for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
                     pDestDoc->ShowRow( nOutRow, nTab, false );
                 pDestDoc->SetDrawPageSize(nTab);

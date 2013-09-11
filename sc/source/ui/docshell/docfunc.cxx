@@ -1155,7 +1155,7 @@ bool ScDocFunc::SetCellText(
 bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 {
     ScDocument& rDoc = *rDocShell.GetDocument();
-    ScPostIt* pNote = rDoc.GetNotes( rPos.Tab() )->findByAddress( rPos );
+    ScPostIt* pNote = rDoc.GetNote( rPos );
     if( !pNote || (bShow == pNote->IsCaptionShown()) ) return false;
 
     // move the caption to internal or hidden layer and create undo action
@@ -1188,7 +1188,7 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, sal_B
 
     OUString aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! ist das noetig ???
 
-    if( ScPostIt* pNote = (!aNewText.isEmpty()) ? pDoc->GetNotes(rPos.Tab())->GetOrCreateNote( rPos ) : pDoc->GetNotes( rPos.Tab() )->findByAddress(rPos) )
+    if( ScPostIt* pNote = (!aNewText.isEmpty()) ? pDoc->GetOrCreateNote( rPos ) : pDoc->GetNote(rPos) )
         pNote->SetText( rPos, aNewText );
 
     //! Undo !!!
@@ -1217,7 +1217,7 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         ::svl::IUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
 
         ScNoteData aOldData;
-        ScPostIt* pOldNote = rDoc.GetNotes(rPos.Tab())->ReleaseNote( rPos );
+        ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
         if( pOldNote )
         {
             // ensure existing caption object before draw undo tracking starts
@@ -1724,8 +1724,6 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     itr = aMark.begin();
     for (; itr != itrEnd && nTabCount; ++itr)
     {
-        pDoc->InitializeNoteCaptions(*itr);
-
         i = *itr;
         if( pDoc->HasAttrib( nMergeTestStartCol, nMergeTestStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
         {
@@ -2141,8 +2139,6 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     itr = aMark.begin();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
-        pDoc->InitializeNoteCaptions(*itr);
-
         SCTAB i = *itr;
         if ( pDoc->HasAttrib( nUndoStartCol, nUndoStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i, HASATTR_MERGED | HASATTR_OVERLAPPED ))
         {
@@ -2715,13 +2711,13 @@ sal_Bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos
         aDestMark.SelectTable( nTab, sal_True );        // Destination selektieren
     aDestMark.SetMarkArea( aPasteDest );
 
-    /*  Do not copy cell notes and drawing objects here. While pasting, the
+    /*  Do not drawing objects here. While pasting, the
         function ScDocument::UpdateReference() is called which calls
         ScDrawLayer::MoveCells() which may move away inserted objects to wrong
-        positions (e.g. if source and destination range overlaps). Cell notes
-        and drawing objects are pasted below after doing all adjusting. */
-    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS),
+        positions (e.g. if source and destination range overlaps).*/
+    pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_ALL & ~(IDF_OBJECTS),
                         pRefUndoDoc, pClipDoc, sal_True, false, bIncludeFiltered );
+
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
@@ -2732,15 +2728,11 @@ sal_Bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos
                             ScRange( 0,nDestRow,nDestTab, MAXCOL,nDestEndRow,nDestEndTab ),
                             false );
 
-    /*  Paste cell notes and drawing objects after adjusting formula references
+    /*  Paste drawing objects after adjusting formula references
         and row heights. There are no cell notes or drawing objects, if the
-        clipdoc does not contain a drawing layer.
-        #i102056# Passing IDF_NOTE only would overwrite cell contents with
-        empty note cells, therefore the special modifier IDF_ADDNOTES is passed
-        here too which changes the behaviour of ScColumn::CopyFromClip() to not
-        touch existing cells. */
+        clipdoc does not contain a drawing layer.*/
     if ( pClipDoc->GetDrawLayer() )
-        pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_NOTE | IDF_ADDNOTES | IDF_OBJECTS,
+        pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_OBJECTS,
                             pRefUndoDoc, pClipDoc, sal_True, false, bIncludeFiltered );
 
     if (bRecord)
@@ -3407,7 +3399,6 @@ sal_Bool ScDocFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOL
     sal_Bool bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
     sal_Bool bOutline = false;
 
-    pDoc->InitializeNoteCaptions(nTab);
     for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
     {
         SCCOLROW nStartNo = *(pRanges++);
@@ -4693,7 +4684,7 @@ sal_Bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, sal_Bool bCont
             bool bHasNotes = false;
             for( ScAddress aPos( nStartCol, nStartRow, nTab ); !bHasNotes && (aPos.Col() <= nEndCol); aPos.IncCol() )
                 for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
-                    bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->GetNotes( aPos.Tab() )->findByAddress(aPos) != 0);
+                    bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (pDoc->HasNote(aPos));
 
             if (!pUndoDoc)
             {

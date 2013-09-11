@@ -76,6 +76,7 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 
 ScColumn::ScColumn() :
     maCellTextAttrs(MAXROWCOUNT),
+    maCellNotes(MAXROWCOUNT),
     maBroadcasters(MAXROWCOUNT),
     maCells(MAXROWCOUNT),
     nCol( 0 ),
@@ -887,6 +888,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         }
 
         SwapCellTextAttrs(nRow1, nRow2);
+        SwapCellNotes(nRow1, nRow2);
         CellStorageModified();
         BroadcastCells(aRows);
         return;
@@ -934,6 +936,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         }
 
         SwapCellTextAttrs(nRow1, nRow2);
+        SwapCellNotes(nRow1, nRow2);
         CellStorageModified();
         BroadcastCells(aRows);
         return;
@@ -978,6 +981,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         }
 
         SwapCellTextAttrs(nRow1, nRow2);
+        SwapCellNotes(nRow1, nRow2);
         CellStorageModified();
         BroadcastCells(aRows);
         return;
@@ -1111,6 +1115,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     }
 
     SwapCellTextAttrs(nRow1, nRow2);
+    SwapCellNotes(nRow1, nRow2);
     CellStorageModified();
     BroadcastCells(aRows);
 }
@@ -1153,6 +1158,7 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
 
     maCells.swap(nRow, nRow, rCol.maCells, nRow);
     maCellTextAttrs.swap(nRow, nRow, rCol.maCellTextAttrs, nRow);
+    maCellNotes.swap(nRow, nRow, rCol.maCellNotes, nRow);
 
     aPos1 = maCells.position(nRow);
     aPos2 = rCol.maCells.position(nRow);
@@ -1232,6 +1238,9 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 {
     pAttrArray->InsertRow( nStartRow, nSize );
 
+    maCellNotes.insert_empty(nStartRow, nSize);
+    maCellNotes.resize(MAXROWCOUNT);
+
     maBroadcasters.insert_empty(nStartRow, nSize);
     maBroadcasters.resize(MAXROWCOUNT);
 
@@ -1255,6 +1264,7 @@ class CopyToClipHandler
     ScColumn& mrDestCol;
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
+    bool mbCopyNotes;
 
     void setDefaultAttrsToDest(size_t nRow, size_t nSize)
     {
@@ -1293,9 +1303,14 @@ class CopyToClipHandler
         }
     }
 
+    void duplicateNotes(SCROW nStartRow, size_t nDataSize )
+    {
+        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos);
+    }
+
 public:
-    CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos) :
-        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos)
+    CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, bool bCopyNotes) :
+        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mbCopyNotes(bCopyNotes)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -1313,6 +1328,8 @@ public:
     {
         size_t nTopRow = aNode.position + nOffset;
 
+        bool bSet = true;
+
         switch (aNode.type)
         {
             case sc::element_type_numeric:
@@ -1322,7 +1339,6 @@ public:
                 sc::numeric_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nTopRow, it, itEnd);
-                setDefaultAttrsToDest(nTopRow, nDataSize);
             }
             break;
             case sc::element_type_string:
@@ -1332,7 +1348,7 @@ public:
                 sc::string_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nTopRow, it, itEnd);
-                setDefaultAttrsToDest(nTopRow, nDataSize);
+
             }
             break;
             case sc::element_type_edittext:
@@ -1349,8 +1365,6 @@ public:
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
                     maDestPos.miCellPos, nTopRow, aCloned.begin(), aCloned.end());
-
-                setDefaultAttrsToDest(nTopRow, nDataSize);
             }
             break;
             case sc::element_type_formula:
@@ -1391,13 +1405,17 @@ public:
                     aPos = rDestCells.position(maDestPos.miCellPos, nLastRow+1);
                     sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
                 }
-
-                setDefaultAttrsToDest(nTopRow, nDataSize);
             }
             break;
             default:
-                ;
+                bSet = false;
         }
+
+        if (bSet)
+            setDefaultAttrsToDest(nTopRow, nDataSize);
+
+        if (mbCopyNotes)
+            duplicateNotes(nTopRow, nDataSize);
     }
 };
 
@@ -1409,8 +1427,9 @@ void ScColumn::CopyToClip(
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                           rCxt.isKeepScenarioFlags() ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
 
-    CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
+    CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), rCxt.isCloneNotes());
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+
     rColumn.CellStorageModified();
 }
 
@@ -1421,6 +1440,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
 
     sc::ColumnBlockPosition aDestPos;
     CopyCellTextAttrsToDocument(nRow1, nRow2, rDestCol);
+    CopyCellNotesToDocument(nRow1, nRow2, rDestCol);
 
     // First, clear the destination column for the specified row range.
     rDestCol.maCells.set_empty(nRow1, nRow2);
@@ -1567,9 +1587,17 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
     }
 
     if (bSet)
+    {
         rDestCol.maCellTextAttrs.set(nDestRow, maCellTextAttrs.get<sc::CellTextAttr>(nSrcRow));
+        ScPostIt* pNote = maCellNotes.get<ScPostIt*>(nSrcRow);
+        rDestCol.maCellNotes.set(nDestRow, pNote);
+        pNote->UpdateCaptionPos(ScAddress(rDestCol.nCol, nDestRow, rDestCol.nTab));
+    }
     else
+    {
         rDestCol.maCellTextAttrs.set_empty(nDestRow, nDestRow);
+        rDestCol.maCellNotes.set_empty(nDestRow, nDestRow);
+    }
 
     rDestCol.CellStorageModified();
 }
@@ -1631,6 +1659,11 @@ class CopyAsLinkHandler
         setDefaultAttrsToDest(nTopRow, nDataSize);
     }
 
+    void duplicateNotes(SCROW nStartRow, size_t nDataSize, bool bCloneCaption )
+    {
+        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
+    }
+
 public:
     CopyAsLinkHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, sal_uInt16 nCopyFlags) :
         mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mnCopyFlags(nCopyFlags)
@@ -1648,6 +1681,12 @@ public:
     void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
     {
         size_t nRow = aNode.position + nOffset;
+
+        if (mnCopyFlags & (IDF_NOTE|IDF_ADDNOTES))
+        {
+            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == 0;
+            duplicateNotes(nRow, nDataSize, bCloneCaption );
+        }
 
         switch (aNode.type)
         {
@@ -1808,6 +1847,11 @@ class CopyByCloneHandler
         }
     }
 
+    void duplicateNotes(SCROW nStartRow, size_t nDataSize, bool bCloneCaption )
+    {
+        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestPos, bCloneCaption);
+    }
+
 public:
     CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, sal_uInt16 nCopyFlags) :
         mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mnCopyFlags(nCopyFlags)
@@ -1825,6 +1869,12 @@ public:
     void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
     {
         size_t nRow = aNode.position + nOffset;
+
+        if (mnCopyFlags & (IDF_NOTE|IDF_ADDNOTES))
+        {
+            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == 0;
+            duplicateNotes(nRow, nDataSize, bCloneCaption );
+        }
 
         switch (aNode.type)
         {
@@ -1891,7 +1941,7 @@ public:
 
                 std::vector<EditTextObject*> aCloned;
                 aCloned.reserve(nDataSize);
-                for (; it != itEnd; ++it)
+                for (; it != itEnd; ++it, ++nRow)
                     aCloned.push_back(ScEditUtil::Clone(**it, mrDestCol.GetDoc()));
 
                 maDestPos.miCellPos = mrDestCol.GetCellStore().set(
@@ -2011,7 +2061,8 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     sc::SingleColumnSpanSet::SpansType aRanges;
     aRangeSet.getSpans(aRanges);
 
-    CopyToClipHandler aFunc(*this, rDestCol, NULL);
+    bool bCopyNotes = true;
+    CopyToClipHandler aFunc(*this, rDestCol, NULL, bCopyNotes);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
     sc::SingleColumnSpanSet::SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
     for (; it != itEnd; ++it)
@@ -2144,11 +2195,44 @@ void resetColumnPosition(sc::CellStoreType& rCells, SCCOL nCol)
 
 }
 
+void ScColumn::UpdateNoteCaptions()
+{
+    sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
+    sc::cellnote_block::const_iterator itData, itDataEnd;
+
+    SCROW curRow = 0;
+    for (;itBlk==itBlkEnd;++itBlk)
+    {
+        if (itBlk->data)
+        {
+            // non empty block
+            itData = sc::cellnote_block::begin(*itBlk->data);
+            itDataEnd = sc::cellnote_block::end(*itBlk->data);
+            for(;itData==itDataEnd; ++itData)
+            {
+                ScPostIt* pNote = *itData;
+                pNote->UpdateCaptionPos(ScAddress(nCol, curRow, nTab));
+                curRow +=1;
+            }
+        }
+        else
+        {
+            // empty block
+            curRow += itBlk->size;
+        }
+    }
+}
+
 void ScColumn::SwapCol(ScColumn& rCol)
 {
     maBroadcasters.swap(rCol.maBroadcasters);
     maCells.swap(rCol.maCells);
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
+    maCellNotes.swap(rCol.maCellNotes);
+
+    // notes update caption
+    UpdateNoteCaptions();
+    rCol.UpdateNoteCaptions();
 
     ScAttrArray* pTempAttr = rCol.pAttrArray;
     rCol.pAttrArray = pAttrArray;
@@ -2194,6 +2278,10 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     maBroadcasters.transfer(nStartRow, nEndRow, rCol.maBroadcasters, nStartRow);
     maCells.transfer(nStartRow, nEndRow, rCol.maCells, nStartRow);
     maCellTextAttrs.transfer(nStartRow, nEndRow, rCol.maCellTextAttrs, nStartRow);
+
+    // move the notes to the destination column
+    maCellNotes.transfer(nStartRow, nEndRow, rCol.maCellNotes, nStartRow);
+    UpdateNoteCaptions();
 
     // Re-group transferred formula cells.
     aPos = rCol.maCells.position(nStartRow);

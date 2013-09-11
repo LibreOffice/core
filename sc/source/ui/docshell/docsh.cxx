@@ -247,7 +247,7 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         bool bFound = false;
         for (SCTAB nTab = 0; nTab < nTableCount && !bFound; ++nTab)
         {
-            if (!aDocument.GetNotes(nTab)->empty())
+            if (aDocument.HasTabNotes(nTab)) //TODO:
                 bFound = true;
         }
 

@@ -850,9 +850,9 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        OSL_ENSURE( !rDoc.GetNotes( maPos.Tab() )->findByAddress(maPos), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
+        OSL_ENSURE( !rDoc.GetNote(maPos), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
         ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
-        rDoc.GetNotes(maPos.Tab())->insert( maPos, pNote );
+        rDoc.SetNote( maPos, pNote );
     }
 }
 
@@ -861,8 +861,8 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
     if( rNoteData.mpCaption )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
-        OSL_ENSURE( rDoc.GetNotes( maPos.Tab() )->findByAddress(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
-        if( ScPostIt* pNote = rDoc.GetNotes(maPos.Tab())->ReleaseNote( maPos ) )
+        OSL_ENSURE( rDoc.GetNote(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
+        if( ScPostIt* pNote = rDoc.ReleaseNote( maPos ) )
         {
             /*  Forget pointer to caption object to suppress removing the
                 caption object from the drawing layer while deleting pNote
@@ -887,7 +887,7 @@ ScUndoShowHideNote::~ScUndoShowHideNote()
 void ScUndoShowHideNote::Undo()
 {
     BeginUndo();
-    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNotes( maPos.Tab() )->findByAddress(maPos) )
+    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote(maPos) )
         pNote->ShowCaption( maPos, !mbShown );
     EndUndo();
 }
@@ -895,7 +895,7 @@ void ScUndoShowHideNote::Undo()
 void ScUndoShowHideNote::Redo()
 {
     BeginRedo();
-    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNotes( maPos.Tab() )->findByAddress(maPos) )
+    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote(maPos) )
         pNote->ShowCaption( maPos, mbShown );
     EndRedo();
 }

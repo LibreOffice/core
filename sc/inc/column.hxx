@@ -108,6 +108,9 @@ class ScColumn
     // type value or SC_SCRIPTTYPE_UNKNOWN.
     sc::CellTextAttrStoreType maCellTextAttrs;
 
+    // Cell notes
+    sc::CellNoteStoreType maCellNotes;
+
     // Broadcasters for formula cells.
     sc::BroadcasterStoreType maBroadcasters;
 
@@ -488,6 +491,24 @@ public:
     void Broadcast( SCROW nRow );
     void BroadcastCells( const std::vector<SCROW>& rRows );
 
+    // cell notes
+    ScPostIt* GetCellNote( SCROW nRow );
+    const ScPostIt* GetCellNote( SCROW nRow ) const;
+    void DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
+    void DeleteCellNote( SCROW nRow );
+    bool HasCellNotes() const;
+    void SetCellNote( SCROW nRow, ScPostIt* pNote);
+    bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
+
+    SCROW GetCellNotesMaxRow() const;
+    SCROW GetCellNotesMinRow() const;
+
+    void CopyCellNotesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption = true,
+                                     SCROW nRowOffsetDest=0) const;
+    void DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
+                            sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption = true, SCROW nRowOffsetDest=0 ) const;
+    void UpdateNoteCaptions();
+
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 
     void JoinNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
@@ -533,8 +554,11 @@ private:
     void CellStorageModified();
 
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
-
     void SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 );
+
+    // cell notes
+    void SwapCellNotes( SCROW nRow1, SCROW nRow2 );
+
 };
 
 #endif

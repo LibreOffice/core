@@ -38,6 +38,7 @@
 #include <svx/sdsxyitm.hxx>
 #include <tools/gen.hxx>
 
+#include "table.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
@@ -792,16 +793,6 @@ void ScPostIt::RemoveCaption()
 
 // ============================================================================
 
-void ScNoteUtil::UpdateCaptionPositions( ScDocument& rDoc, const ScRange& rRange )
-{
-    // do not use ScCellIterator, it skips filtered and subtotal cells
-    for( ScAddress aPos( rRange.aStart ); aPos.Tab() <= rRange.aEnd.Tab(); aPos.IncTab() )
-        for( aPos.SetCol( rRange.aStart.Col() ); aPos.Col() <= rRange.aEnd.Col(); aPos.IncCol() )
-            for( aPos.SetRow( rRange.aStart.Row() ); aPos.Row() <= rRange.aEnd.Row(); aPos.IncRow() )
-                if( ScPostIt* pNote = rDoc.GetNotes(aPos.Tab())->findByAddress( aPos ) )
-                    pNote->UpdateCaptionPos( aPos );
-}
-
 SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,
         const OUString& rUserText, const Rectangle& rVisRect, bool bTailFront )
@@ -809,7 +800,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     OUStringBuffer aBuffer( rUserText );
     // add plain text of invisible (!) cell note (no formatting etc.)
     SdrCaptionObj* pNoteCaption = 0;
-    const ScPostIt* pNote = rDoc.GetNotes(rPos.Tab())->findByAddress( rPos );
+    const ScPostIt* pNote = rDoc.GetNote( rPos );
     if( pNote && !pNote->IsCaptionShown() )
     {
         if( !aBuffer.isEmpty() )
@@ -873,7 +864,8 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     pNote->AutoStamp();
 
     // if pNote still points to the note after TakeNote(), insertion was successful
-    if( rDoc.GetNotes(rPos.Tab())->insert( rPos, pNote ) )
+    rDoc.SetNote(rPos, pNote);
+    if( pNote )
     {
         // ScNoteCaptionCreator c'tor updates the caption object to be part of a note
         ScNoteCaptionCreator aCreator( rDoc, rPos, rCaption, bShown );
@@ -911,7 +903,10 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         visible, the caption object will be created automatically. */
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption );
     pNote->AutoStamp();
-    if(rDoc.GetNotes(rPos.Tab())->insert( rPos, pNote ))
+
+    rDoc.SetNote(rPos, pNote);
+
+    if(pNote)
         return pNote;
     else
         return NULL;
@@ -935,207 +930,10 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
         pNote = new ScPostIt( rDoc, rPos, aNoteData, bAlwaysCreateCaption );
         pNote->AutoStamp();
         //insert takes ownership
-        if(!rDoc.GetNotes(rPos.Tab())->insert( rPos, pNote ))
+        rDoc.SetNote(rPos, pNote);
+        if(!pNote)
             pNote = NULL;
     }
     return pNote;
 }
-
-// ============================================================================
-// ScNotes
-// ============================================================================
-
-ScNotes::ScNotes(ScDocument* pDoc):
-    mpDoc(pDoc)
-{
-
-}
-
-ScNotes::~ScNotes()
-{
-    clear();
-}
-
-ScNotes::iterator ScNotes::begin()
-{
-    return maNoteMap.begin();
-}
-
-ScNotes::iterator ScNotes::end()
-{
-    return maNoteMap.end();
-}
-
-ScNotes::const_iterator ScNotes::begin() const
-{
-    return maNoteMap.begin();
-}
-
-ScNotes::const_iterator ScNotes::end() const
-{
-    return maNoteMap.end();
-}
-
-size_t ScNotes::size() const
-{
-    return maNoteMap.size();
-}
-
-bool ScNotes::empty() const
-{
-    return maNoteMap.empty();
-}
-
-ScPostIt* ScNotes::findByAddress(SCCOL nCol, SCROW nRow)
-{
-    ScNoteMap::iterator itr = maNoteMap.find(std::pair<SCCOL, SCROW>(nCol, nRow));
-    if (itr != maNoteMap.end())
-        return itr->second;
-
-    return NULL;
-}
-
-const ScPostIt* ScNotes::findByAddress(SCCOL nCol, SCROW nRow) const
-{
-    ScNoteMap::const_iterator itr = maNoteMap.find(std::pair<SCCOL, SCROW>(nCol, nRow));
-    if (itr != maNoteMap.end())
-        return itr->second;
-
-    return NULL;
-}
-
-ScPostIt* ScNotes::findByAddress(const ScAddress& rPos)
-{
-    return findByAddress(rPos.Col(), rPos.Row());
-}
-
-const ScPostIt* ScNotes::findByAddress(const ScAddress& rPos) const
-{
-    return findByAddress(rPos.Col(), rPos.Row());
-}
-
-bool ScNotes::insert(SCCOL nCol, SCROW nRow, ScPostIt* pPostIt)
-{
-    std::pair<iterator, bool> aResult = maNoteMap.insert(std::pair<ScAddress2D, ScPostIt*>(std::pair<SCCOL, SCROW>(nCol, nRow), pPostIt));
-    if (!aResult.second)
-        delete pPostIt;
-
-    return aResult.second;
-}
-
-bool ScNotes::insert(const ScAddress& rPos, ScPostIt* pPostIt)
-{
-    return insert(rPos.Col(), rPos.Row(), pPostIt);
-}
-
-void ScNotes::erase(SCCOL nCol, SCROW nRow, bool bForgetCaption)
-{
-    iterator itr = maNoteMap.find(std::pair<SCCOL, SCROW>(nCol, nRow));
-    if (itr != maNoteMap.end())
-    {
-        if (bForgetCaption)
-            itr->second->ForgetCaption();
-
-        delete itr->second;
-        maNoteMap.erase(itr);
-    }
-}
-
-void ScNotes::erase(const ScAddress& rPos)
-{
-    erase(rPos.Col(), rPos.Row());
-}
-
-ScPostIt* ScNotes::ReleaseNote(SCCOL nCol, SCROW nRow)
-{
-    ScPostIt* pPostIt = NULL;
-    iterator itr = maNoteMap.find(std::pair<SCCOL, SCROW>(nCol, nRow));
-    if (itr!= maNoteMap.end())
-    {
-        pPostIt = itr->second;
-        maNoteMap.erase(itr);
-    }
-    return pPostIt;
-}
-
-ScPostIt* ScNotes::ReleaseNote(const ScAddress& rPos)
-{
-    return ReleaseNote(rPos.Col(), rPos.Row());
-}
-
-ScPostIt* ScNotes::GetOrCreateNote(const ScAddress& rPos)
-{
-    iterator itr = maNoteMap.find(std::pair<SCCOL, SCROW>(rPos.Col(), rPos.Row()));
-    if (itr != maNoteMap.end())
-        return itr->second;
-    else
-    {
-        ScPostIt* pPostIt = new ScPostIt(*mpDoc, rPos, false);
-        if(!insert(rPos, pPostIt))
-            assert(false);
-        return pPostIt;
-    }
-}
-
-void ScNotes::clear()
-{
-    for (iterator itr = maNoteMap.begin(); itr != maNoteMap.end(); ++itr)
-    {
-        delete itr->second;
-    }
-    maNoteMap.clear();
-}
-
-void ScNotes::clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bCloneNoteCaption, SCTAB nTab, ScNotes& rTarget)
-{
-    rTarget.clear();
-    for (ScNotes::iterator itr = maNoteMap.begin(); itr != maNoteMap.end(); ++itr)
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-
-        if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
-        {
-            rTarget.insert(nCol, nRow, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pDoc, ScAddress(nCol, nRow, nTab), bCloneNoteCaption));
-        }
-    }
-}
-
-void ScNotes::CopyFromClip(const ScNotes& rNotes, ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy, SCTAB nTab, bool bCloneCaption)
-{
-    for (ScNotes::const_iterator itr = rNotes.begin(); itr != rNotes.end(); ++itr)
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        if (nCol+nDx >= nCol1 && nCol+nDx <= nCol2 && nRow+nDy >= nRow1 && nRow+nDy <= nRow2)
-        {
-            erase(nCol+nDx, nRow+nDy);
-            insert(nCol+nDx, nRow+nDy, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pDoc, ScAddress(nCol+nDx, nRow+nDy, nTab), bCloneCaption ));
-        }
-    }
-}
-
-void ScNotes::erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bForgetCaption)
-{
-    ScNotes::iterator itr = maNoteMap.begin();
-    while(itr != maNoteMap.end())
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ++itr;
-        if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
-        {
-            erase(nCol, nRow, bForgetCaption);
-        }
-    }
-}
-
-void ScNotes::CreateAllNoteCaptions(SCTAB nTab)
-{
-    for(iterator itr = begin(), itrEnd = end(); itr != itrEnd; ++itr)
-    {
-        itr->second->GetOrCreateCaption(ScAddress(itr->first.first, itr->first.second, nTab));
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

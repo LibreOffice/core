@@ -57,6 +57,7 @@ struct SC_DLLPUBLIC ScNoteData
 class SC_DLLPUBLIC ScPostIt
 {
 public:
+
     /** Creates an empty note and its caption object and places it according to
         the passed cell position. */
     explicit            ScPostIt( ScDocument& rDoc, const ScAddress& rPos, bool bShown );
@@ -159,8 +160,6 @@ private:
 class SC_DLLPUBLIC ScNoteUtil
 {
 public:
-    /** Tries to update the position of note caption objects in the specified range. */
-    static void         UpdateCaptionPositions( ScDocument& rDoc, const ScRange& rRange );
 
     /** Creates and returns a caption object for a temporary caption. */
     static SdrCaptionObj* CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
@@ -242,64 +241,8 @@ public:
                             ScDocument& rDoc, const ScAddress& rPos,
                             const OUString& rNoteText, bool bShown,
                             bool bAlwaysCreateCaption );
-};
 
-class SC_DLLPUBLIC ScNotes
-{
-private:
-    typedef std::pair<SCCOL, SCROW> ScAddress2D;
-    typedef std::map<ScAddress2D, ScPostIt*> ScNoteMap;
-    ScNoteMap maNoteMap;
-
-    ScNotes(const ScNotes& rNotes);
-    ScNotes operator=(const ScNotes& rNotes);
-    ScDocument* mpDoc;
-public:
-    ScNotes(ScDocument* pDoc);
-    ~ScNotes();
-
-    typedef ScNoteMap::iterator iterator;
-    typedef ScNoteMap::const_iterator const_iterator;
-
-    iterator begin();
-    iterator end();
-
-    const_iterator begin() const;
-    const_iterator end() const;
-
-    size_t size() const;
-    bool empty() const;
-
-    ScPostIt* findByAddress(SCCOL nCol, SCROW nRow);
-    const ScPostIt* findByAddress(SCCOL nCol, SCROW nRow) const;
-
-    ScPostIt* findByAddress(const ScAddress& rAddress);
-    const ScPostIt* findByAddress(const ScAddress& rAddress) const;
-    /**
-     * takes ownership of the
-     */
-    bool insert( SCCOL nCol, SCROW nRow, ScPostIt* );
-    bool insert( const ScAddress& rPos, ScPostIt* );
-
-    void erase(SCCOL, SCROW, bool bForgetCaption = false);
-    void erase(const ScAddress& rPos);
-
-    /** Returns and forgets the cell note object at the passed cell address. */
-    ScPostIt*       ReleaseNote( const ScAddress& rPos );
-    ScPostIt*       ReleaseNote( SCCOL nCol, SCROW nRow );
-    /** Returns the pointer to an existing or created cell note object at the passed cell address. */
-    ScPostIt* GetOrCreateNote( const ScAddress& rPos );
-
-    void clear();
-
-    void clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bCloneNoteCaption, SCTAB nTab, ScNotes& rTarget);
-    void CopyFromClip(const ScNotes& maNotes, ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy, SCTAB nTab, bool bCloneCaption);
-
-    void erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bForgetCaption = false);
-
-    void CreateAllNoteCaptions(SCTAB nTab);
 };
 
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

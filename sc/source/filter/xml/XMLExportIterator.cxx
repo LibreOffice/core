@@ -160,14 +160,12 @@ bool ScMyNoteShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress 
 
 void ScMyNoteShapesContainer::SetCellData( ScMyCell& rMyCell )
 {
-    rMyCell.xNoteShape.clear();
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rMyCell.aCellAddress );
 
     ScMyNoteShapeList::iterator aItr = aNoteShapeList.begin();
     while( (aItr != aNoteShapeList.end()) && (aItr->aPos == aAddress) )
     {
-        rMyCell.xNoteShape = aItr->xShape;
         aItr = aNoteShapeList.erase(aItr);
     }
 }
@@ -618,15 +616,6 @@ ScMyCell::~ScMyCell()
 
 //==============================================================================
 
-bool ScMyExportAnnotation::operator<(const ScMyExportAnnotation& rAnno) const
-{
-    if( aCellAddress.Row != rAnno.aCellAddress.Row )
-        return (aCellAddress.Row < rAnno.aCellAddress.Row);
-    else
-        return (aCellAddress.Column < rAnno.aCellAddress.Column);
-}
-
-
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
     : pShapes(NULL),
     pNoteShapes(NULL),
@@ -648,12 +637,6 @@ ScMyNotEmptyCellsIterator::~ScMyNotEmptyCellsIterator()
 
 void ScMyNotEmptyCellsIterator::Clear()
 {
-    if (!aAnnotations.empty())
-    {
-        OSL_FAIL("not all Annotations saved");
-        aAnnotations.clear();
-    }
-    maNoteExportList.clear();
     mpCellItr.reset();
     pShapes = NULL;
     pNoteShapes = NULL;
@@ -720,39 +703,27 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 {
     aCell.bHasAnnotation = false;
-    if (!aAnnotations.empty())
-    {
-        ScMyExportAnnotationList::iterator aItr(aAnnotations.begin());
-        if ((aCell.aCellAddress.Column == aItr->aCellAddress.Column) &&
-            (aCell.aCellAddress.Row == aItr->aCellAddress.Row))
-        {
-            aCell.xAnnotation.set(aItr->xAnnotation);
-            uno::Reference<text::XSimpleText> xSimpleText(aCell.xAnnotation, uno::UNO_QUERY);
-            if (aCell.xAnnotation.is() && xSimpleText.is())
-            {
-                if (!xSimpleText->getString().isEmpty())
-                    aCell.bHasAnnotation = true;
-            }
-            aAnnotations.erase(aItr);
-        }
-    }
+    ScAddress aAddress;
+    ScUnoConversion::FillScAddress( aAddress, aCell.aCellAddress );
 
-    // test - bypass the API
-    // if (xCellRange.is())
-    //  aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
+    ScPostIt* pNote = rExport.GetDocument()->GetNote(aAddress);
+
+    if(pNote)
+    {
+        aCell.bHasAnnotation = true;
+        aCell.pNote = pNote;
+    }
 }
 
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     uno::Reference<sheet::XSpreadsheet>& rxTable)
 {
-    OSL_ENSURE(aAnnotations.empty(), "not all Annotations saved");
     aLastAddress.Row = 0;
     aLastAddress.Column = 0;
     aLastAddress.Sheet = nTable;
     if (nCurrentTable != nTable)
     {
-        maNoteExportList.clear();
         nCurrentTable = nTable;
 
         mpCellItr.reset(
@@ -761,53 +732,15 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
                 static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)),
                 static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable))));
 
-        ScNotes* pNotes = rExport.GetDocument()->GetNotes(nTable);
-        if(pNotes)
-        {
-            for(ScNotes::iterator itr = pNotes->begin(), itrEnd = pNotes->end(); itr != itrEnd; ++itr)
-            {
-                ScNoteExportData aExportData;
-                aExportData.nCol = itr->first.first;
-                aExportData.nRow = itr->first.second;
-                aExportData.pNote = itr->second;
-                maNoteExportList.insert( aExportData );
-            }
-        }
-        maNoteExportListItr = maNoteExportList.begin();
-
         xTable.set(rxTable);
         xCellRange.set(xTable, uno::UNO_QUERY);
-        uno::Reference<sheet::XSheetAnnotationsSupplier> xSheetAnnotationsSupplier (xTable, uno::UNO_QUERY);
-        if (xSheetAnnotationsSupplier.is())
-        {
-            uno::Reference<container::XEnumerationAccess> xAnnotationAccess ( xSheetAnnotationsSupplier->getAnnotations(), uno::UNO_QUERY);
-            if (xAnnotationAccess.is())
-            {
-                uno::Reference<container::XEnumeration> xAnnotations(xAnnotationAccess->createEnumeration());
-                if (xAnnotations.is())
-                {
-                    while (xAnnotations->hasMoreElements())
-                    {
-                        ScMyExportAnnotation aAnnotation;
-                        aAnnotation.xAnnotation.set(xAnnotations->nextElement(), uno::UNO_QUERY);
-                        if (aAnnotation.xAnnotation.is())
-                        {
-                            aAnnotation.aCellAddress = aAnnotation.xAnnotation->getPosition();
-                            aAnnotations.push_back(aAnnotation);
-                        }
-                    }
-                    if (!aAnnotations.empty())
-                        aAnnotations.sort();
-                }
-            }
-        }
     }
 }
 
 void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
 {
     // Skip entries for a sheet that is copied instead of saving normally.
-    // Cells (including aAnnotations) are handled separately in SetCurrentTable.
+    // Cells are handled separately in SetCurrentTable.
 
     if( pShapes )
         pShapes->SkipTable(nSkip);

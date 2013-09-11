@@ -2043,7 +2043,6 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
         nTab = *itr;
         const SCCOLROW* pTabRanges = pRanges;
 
-        pDoc->InitializeNoteCaptions( nTab );
         for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
         {
             SCCOLROW nStartNo = *(pTabRanges++);

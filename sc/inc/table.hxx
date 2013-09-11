@@ -106,8 +106,6 @@ class ScTable : boost::noncopyable
 {
 private:
     typedef ::std::vector< ScRange > ScRangeVec;
-    typedef ::std::pair< SCCOL, SCROW > ScAddress2D;
-    typedef ::std::vector< ScAddress2D > ScAddress2DVec;
 
     ScColumn        aCol[MAXCOLCOUNT];
 
@@ -160,8 +158,6 @@ private:
 
     mutable OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
 
-    boost::scoped_ptr<ScAddress2DVec> mxUninitNotes;
-
     // sort parameter to minimize stack size of quicksort
     ScSortParam     aSortParam;
     CollatorWrapper*    pSortCollator;
@@ -181,8 +177,6 @@ private:
     mutable ScRangeName* mpRangeName;
 
     boost::scoped_ptr<ScConditionalFormatList> mpCondFormatList;
-
-    ScNotes         maNotes;
 
     bool            bScenario:1;
     bool            bLayoutRTL:1;
@@ -379,10 +373,7 @@ public:
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
-    ScNotes*    GetNotes();
-    /** Creates the captions of all uninitialized cell notes.
-        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
-    void        InitializeNoteCaptions( bool bForced = false );
+    ScPostIt*   GetNote(const SCCOL nCol, const SCROW nRow);
 
     bool TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
@@ -1021,6 +1012,9 @@ private:
     SCCOL       FindNextVisibleColWithContent(SCCOL nCol, bool bRight, SCROW nRow) const;
 
     SCCOL       FindNextVisibleCol(SCCOL nCol, bool bRight) const;
+
+    // Clipboard transpose for notes
+    void TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2);
 
     /**
      * Use this to iterate through non-empty visible cells in a single column.

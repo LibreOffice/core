@@ -374,7 +374,6 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel ) );
     }
 
-    pDoc->InitializeNoteCaptions(nTab);
     ScSubOutlineIterator aIter( pArray );                   // alle Eintraege
     ScOutlineEntry* pEntry;
     while ((pEntry=aIter.GetNext()) != NULL)
@@ -469,8 +468,6 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
                                         pUndoDoc, pUndoTab, sal_True ) );
         }
 
-        pDoc->InitializeNoteCaptions(nTab);
-
         //  Spalten
 
         nMin=MAXCOL;
@@ -498,7 +495,6 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
         nMax=0;
         pArray = pTable->GetRowArray();
         ScSubOutlineIterator aRowIter( pArray );
-        pDoc->InitializeNoteCaptions(nTab);
         while ((pEntry=aRowIter.GetNext()) != NULL)
         {
             nStart = pEntry->GetStart();
@@ -588,8 +584,6 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
                                         pUndoDoc, pUndoTab, false ) );
         }
 
-        pDoc->InitializeNoteCaptions(nTab);
-
         //  Spalten
 
         nCount = pColArray->GetCount(nColLevel);
@@ -667,7 +661,6 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel, nEntry, sal_True ) );
     }
 
-    pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(false);
     SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
@@ -752,7 +745,6 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel, nEntry, false ) );
     }
 
-    pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(true);
     SCCOLROW i;
     if ( bColumns )

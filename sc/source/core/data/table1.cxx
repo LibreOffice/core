@@ -259,7 +259,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     pDBDataNoName(NULL),
     mpRangeName(NULL),
     mpCondFormatList( new ScConditionalFormatList() ),
-    maNotes(pDoc),
     bScenario(false),
     bLayoutRTL(false),
     bLoadingRTL(false),
@@ -520,25 +519,30 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (!aCol[i].IsEmptyData())
         {
-            bFound = true;
-            nMaxX = i;
-            SCROW nColY = aCol[i].GetLastDataPos();
-            if (nColY > nMaxY)
-                nMaxY = nColY;
+            if (!aCol[i].IsEmptyData())
+            {
+                bFound = true;
+                nMaxX = i;
+                SCROW nRow = aCol[i].GetLastDataPos();
+                if (nRow > nMaxY)
+                    nMaxY = nRow;
+            }
+            if ( aCol[i].HasCellNotes() )
+            {
+                SCROW maxNoteRow = aCol[i].GetCellNotesMaxRow();
+                if (maxNoteRow >= nMaxY)
+                {
+                    bFound = true;
+                    nMaxY = maxNoteRow;
+                }
+                if (i>nMaxX)
+                {
+                    bFound = true;
+                    nMaxX = i;
+                }
+            }
         }
-
-    for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-
-        if (nMaxX < nCol)
-            nMaxX = nCol;
-        if (nMaxY < nRow)
-            nMaxY = nRow;
-    }
 
     rEndCol = nMaxX;
     rEndRow = nMaxY;
@@ -568,29 +572,34 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bF
     SCCOL i;
 
     for (i=0; i<=MAXCOL; i++)               // Daten testen
-        if (!aCol[i].IsEmptyData())
         {
-            bFound = true;
-            if (i>nMaxX)
-                nMaxX = i;
-            SCROW nColY = aCol[i].GetLastDataPos();
-            if (nColY > nMaxY)
-                nMaxY = nColY;
+            if (!aCol[i].IsEmptyData())
+            {
+                bFound = true;
+                if (i>nMaxX)
+                    nMaxX = i;
+                SCROW nColY = aCol[i].GetLastDataPos();
+                if (nColY > nMaxY)
+                    nMaxY = nColY;
+            }
+            if (bNotes)
+            {
+                if ( aCol[i].HasCellNotes() )
+                {
+                    SCROW maxNoteRow = aCol[i].GetCellNotesMaxRow();
+                    if (maxNoteRow >= nMaxY)
+                    {
+                        bFound = true;
+                        nMaxY = maxNoteRow;
+                    }
+                    if (i>nMaxX)
+                    {
+                        bFound = true;
+                        nMaxX = i;
+                    }
+                }
+            }
         }
-
-    if (bNotes)
-    {
-        for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
-        {
-            SCCOL nCol = itr->first.first;
-            SCROW nRow = itr->first.second;
-
-            if (nMaxX < nCol)
-                nMaxX = nCol;
-            if (nMaxY < nRow)
-                nMaxY = nRow;
-        }
-    }
 
     SCCOL nMaxDataX = nMaxX;
 
@@ -701,6 +710,7 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
     }
 
     for (i=nStartCol; i<=nEndCol; i++)              // Daten testen
+    {
         if (!aCol[i].IsEmptyData())
         {
             bFound = true;
@@ -708,19 +718,17 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
-
-    if (bNotes)
-    {
-        for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+        if (bNotes)
         {
-            SCCOL nCol = itr->first.first;
-            SCROW nRow = itr->first.second;
-
-            if (nStartCol > nCol || nEndCol < nCol)
-                continue;
-
-            if (nMaxY < nRow)
-                nMaxY = nRow;
+            if ( aCol[i].HasCellNotes() )
+            {
+                SCROW maxNoteRow =aCol[i].GetCellNotesMaxRow();
+                if (maxNoteRow > nMaxY)
+                {
+                    bFound = true;
+                    nMaxY = maxNoteRow;
+                }
+            }
         }
     }
 
@@ -760,28 +768,31 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 
     bool bDatFound = false;
     for (i=0; i<=MAXCOL; i++)                   // Daten testen
+    {
         if (!aCol[i].IsEmptyData())
         {
             if (!bDatFound && i<nMinX)
                 nMinX = i;
             bFound = bDatFound = true;
-            SCROW nColY = aCol[i].GetFirstDataPos();
-            if (nColY < nMinY)
-                nMinY = nColY;
+            SCROW nRow = aCol[i].GetFirstDataPos();
+            if (nRow < nMinY)
+                nMinY = nRow;
         }
-
-    for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
-    {
-        bFound = bDatFound = true;
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-
-        if (nMinX > nCol)
-            nMinX = nCol;
-        if (nMinY > nRow)
-            nMinY = nRow;
+        if ( aCol[i].HasCellNotes() )
+        {
+            SCROW minNoteRow = aCol[i].GetCellNotesMinRow();
+            if (minNoteRow <= nMinY)
+            {
+                bFound = true;
+                nMinY = minNoteRow;
+            }
+            if (i<nMinX)
+            {
+                bFound = true;
+                nMinX = i;
+            }
+        }
     }
-
     rStartCol = nMinX;
     rStartRow = nMinY;
     return bFound;
@@ -1447,7 +1458,6 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
 {
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
     {
-        InitializeNoteCaptions();
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if ( eUpdateRefMode != URM_COPY && pDrawLayer )
         {

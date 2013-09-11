@@ -119,6 +119,7 @@ void ScColumn::Delete( SCROW nRow )
     }
     maCells.set_empty(nRow, nRow);
     maCellTextAttrs.set_empty(nRow, nRow);
+    maCellNotes.set_empty(nRow, nRow);
 
     Broadcast(nRow);
     CellStorageModified();
@@ -131,6 +132,8 @@ void ScColumn::FreeAll()
     maCells.resize(MAXROWCOUNT);
     maCellTextAttrs.clear();
     maCellTextAttrs.resize(MAXROWCOUNT);
+    maCellNotes.clear();
+    maCellNotes.resize(MAXROWCOUNT);
     CellStorageModified();
 }
 
@@ -216,6 +219,9 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     maBroadcasters.erase(nStartRow, nEndRow);
     maBroadcasters.resize(MAXROWCOUNT);
 
+    maCellNotes.erase(nStartRow, nEndRow);
+    maCellNotes.resize(MAXROWCOUNT);
+
     // See if we have any cells that would get deleted or shifted by deletion.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
     sc::CellStoreType::iterator itCell = aPos.first;
@@ -284,6 +290,10 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     // Shift the text attribute array too (before the broadcast).
     maCellTextAttrs.erase(nStartRow, nEndRow);
     maCellTextAttrs.resize(MAXROWCOUNT);
+
+    // Shift the cell notes array too (before the broadcast).
+    maCellNotes.erase(nStartRow, nEndRow);
+    maCellNotes.resize(MAXROWCOUNT);
 
     CellStorageModified();
 
@@ -588,6 +598,10 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
         sc::ColumnBlockPosition aBlockPos;
         aBlockPos.miCellPos = itPos;
         aBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
+        aBlockPos.miCellNotePos = maCellNotes.begin();
+
+        if ( nDelFlag & IDF_NOTE )
+            DeleteCellNotes( aBlockPos, nStartRow, nEndRow );
 
         // Delete the cells for real.
         std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(aBlockPos, *this));
@@ -614,6 +628,7 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
 bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
 {
     rBlockPos.miBroadcasterPos = maBroadcasters.begin();
+    rBlockPos.miCellNotePos = maCellNotes.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();
     return true;
@@ -622,6 +637,7 @@ bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
 bool ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const
 {
     rBlockPos.miBroadcasterPos = maBroadcasters.begin();
+    rBlockPos.miCellNotePos = maCellNotes.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();
     return true;
@@ -652,6 +668,8 @@ class CopyCellsFromClipHandler
     ScColumn& mrDestCol;
     SCTAB mnTab;
     SCCOL mnCol;
+    SCTAB mnSrcTab;
+    SCCOL mnSrcCol;
     long mnRowOffset;
     sc::ColumnBlockPosition maDestBlockPos;
     sc::ColumnBlockPosition* mpDestBlockPos; // to save it for next iteration.
@@ -679,6 +697,11 @@ class CopyCellsFromClipHandler
             maDestBlockPos, nDestRow, new ScFormulaCell(&mrDestCol.GetDoc(), aDestPos, &aArr));
     }
 
+    void duplicateNotes(SCROW nStartRow, size_t nDataSize, bool bCloneCaption )
+    {
+        mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestBlockPos, bCloneCaption, mnRowOffset);
+    }
+
 public:
     CopyCellsFromClipHandler(sc::CopyFromClipContext& rCxt, ScColumn& rSrcCol, ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, long nRowOffset) :
         mrCxt(rCxt),
@@ -686,6 +709,8 @@ public:
         mrDestCol(rDestCol),
         mnTab(nDestTab),
         mnCol(nDestCol),
+        mnSrcTab(rSrcCol.GetTab()),
+        mnSrcCol(rSrcCol.GetCol()),
         mnRowOffset(nRowOffset),
         mpDestBlockPos(mrCxt.getBlockPosition(nDestTab, nDestCol))
     {
@@ -704,12 +729,22 @@ public:
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
-        if (node.type == sc::element_type_empty)
-            return;
 
         SCROW nSrcRow1 = node.position + nOffset;
+        bool bCopyCellNotes = mrCxt.isCloneNotes();
 
         sal_uInt16 nFlags = mrCxt.getInsertFlag();
+
+        if (node.type == sc::element_type_empty)
+        {
+            if (bCopyCellNotes)
+            {
+                bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+                duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
+            }
+            return;
+        }
+
         bool bNumeric = (nFlags & IDF_VALUE) != 0;
         bool bDateTime = (nFlags & IDF_DATETIME) != 0;
         bool bString   = (nFlags & IDF_STRING) != 0;
@@ -870,6 +905,11 @@ public:
             break;
             default:
                 ;
+        }
+        if (bCopyCellNotes)
+        {
+            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+            duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
         }
     }
 };
@@ -1622,6 +1662,7 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, Edit
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pEditText);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
+
     CellStorageModified();
 
     BroadcastNewCell(nRow);
@@ -1672,6 +1713,9 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
+//    ScPostIt* pPostIt;
+//    maCellNotes.set(nRow, pPostIt);
+
     CellStorageModified();
 
     ActivateNewFormulaCell(it, nRow, *pCell);
@@ -1688,6 +1732,9 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
+//    ScPostIt* pPostIt;
+//    maCellNotes.set(nRow, pPostIt);
+
     CellStorageModified();
 
     ActivateNewFormulaCell(it, nRow, *pCell);
@@ -1701,6 +1748,9 @@ ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
+//    ScPostIt* pPostIt;
+//    maCellNotes.set(nRow, pPostIt);
+
     CellStorageModified();
 
     ActivateNewFormulaCell(it, nRow, *pCell);
@@ -1716,6 +1766,7 @@ ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCR
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pCell);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
+
     CellStorageModified();
 
     ActivateNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell);
@@ -1730,6 +1781,9 @@ bool ScColumn::SetGroupFormulaCell( SCROW nRow, ScFormulaCell* pCell )
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
+//    ScPostIt* pPostIt;
+//    maCellNotes.set(nRow, pPostIt);
+
     CellStorageModified();
 
     ActivateNewFormulaCell(it, nRow, *pCell, false);
@@ -2148,6 +2202,9 @@ void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
+//    ScPostIt* pPostIt;
+//    maCellNotes.set(nRow, pPostIt);
+
     CellStorageModified();
 
     ActivateNewFormulaCell(it, nRow, *pCell);
@@ -2173,6 +2230,9 @@ void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBr
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     maCells.set(it, nRow, rStr);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
+//    ScPostIt* pPostIt;
+//    maCellNotes.set(nRow, pPostIt);
+
     CellStorageModified();
 
     if (bBroadcast)
@@ -2199,6 +2259,7 @@ void ScColumn::SetRawString(
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, rStr);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
+
     CellStorageModified();
 
     if (bBroadcast)
@@ -2213,6 +2274,9 @@ void ScColumn::SetValue( SCROW nRow, double fVal )
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     maCells.set(it, nRow, fVal);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
+//    ScPostIt* pPostIt;
+//    maCellNotes.set(nRow, pPostIt);
+
     CellStorageModified();
 
     BroadcastNewCell(nRow);
@@ -2228,6 +2292,7 @@ void ScColumn::SetValue(
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, fVal);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
+
     CellStorageModified();
 
     if (bBroadcast)

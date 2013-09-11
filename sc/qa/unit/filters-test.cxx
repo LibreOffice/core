@@ -275,7 +275,7 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
 
         //check notes import
         ScAddress aAddress(7, 2, 0);
-        ScPostIt* pNote = pDoc->GetNotes(aAddress.Tab())->findByAddress(aAddress);
+        ScPostIt* pNote = pDoc->GetNote(aAddress);
         CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", pNote->GetText(), OUString("Test"));
     }

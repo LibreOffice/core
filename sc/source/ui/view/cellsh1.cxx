@@ -2113,7 +2113,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                if( ScPostIt* pNote = pDoc->GetNotes( aPos.Tab() )->findByAddress(aPos) )
+                if( ScPostIt* pNote = pDoc->GetNote(aPos) )
                 {
                     bool bShow;
                     const SfxPoolItem* pItem;
@@ -2148,7 +2148,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     // Check current cell
                     ScAddress aPos( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
-                    if( pDoc->GetNotes( aPos.Tab() )->findByAddress(aPos) )
+                    if( pDoc->GetNote(aPos) )
                     {
                         pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
                         bDone = true;
@@ -2173,35 +2173,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         const SCCOL nCol0 = pRange->aStart.Col();
                         const SCCOL nCol1 = pRange->aEnd.Col();
                         const SCTAB nRangeTab = pRange->aStart.Tab();
-                        const size_t nCellNumber = ( nRow1 - nRow0 ) * ( nCol1 - nCol0 );
-                        ScNotes *pNotes = pDoc->GetNotes(nRangeTab);
-
-                        if ( nCellNumber < pNotes->size() )
+                        // Check by each cell
+                        for ( SCROW nRow = nRow0; nRow <= nRow1; ++nRow )
                         {
-                            // Check by each cell
-                            for ( SCROW nRow = nRow0; nRow <= nRow1; ++nRow )
+                            for ( SCCOL nCol = nCol0; nCol <= nCol1; ++nCol )
                             {
-                                for ( SCCOL nCol = nCol0; nCol <= nCol1; ++nCol )
-                                {
-                                    ScPostIt* pNote = pNotes->findByAddress(nCol, nRow);
-                                    if ( pNote && pDoc->IsBlockEditable( nRangeTab, nCol,nRow, nCol,nRow ) )
-                                    {
-                                        ScAddress aPos( nCol, nRow, nRangeTab );
-                                        pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );
-                                        bDone = true;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Check by each document note
-                            for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
-                            {
-                                SCCOL nCol = itr->first.first;
-                                SCROW nRow = itr->first.second;
-
-                                if ( nCol <= nCol1 && nRow <= nRow1 && nCol >= nCol0 && nRow >= nRow0 )
+                                if ( pDoc->HasNote(nCol, nRow, nRangeTab) && pDoc->IsBlockEditable( nRangeTab, nCol,nRow, nCol,nRow ) )
                                 {
                                     ScAddress aPos( nCol, nRow, nRangeTab );
                                     pData->GetDocShell()->GetDocFunc().ShowNote( aPos, bShowNote );

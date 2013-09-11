@@ -46,6 +46,7 @@ class CopyFromClipContext : public ClipContextBase
     sal_uInt16  mnInsertFlag;
     bool        mbAsLink:1;
     bool        mbSkipAttrForEmptyCells:1;
+    bool        mbCloneNotes;
 
     CopyFromClipContext(); // disabled
 
@@ -66,6 +67,7 @@ public:
     sal_uInt16 getInsertFlag() const;
     bool isAsLink() const;
     bool isSkipAttrForEmptyCells() const;
+    bool  isCloneNotes() const;
 };
 
 class CopyToClipContext : public ClipContextBase

@@ -294,8 +294,6 @@ public:
 // contains data to export for the current cell position
 struct ScMyCell
 {
-    com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xNoteShape;
     com::sun::star::table::CellAddress      aCellAddress;
     com::sun::star::table::CellRangeAddress aMergeRange;
     com::sun::star::table::CellRangeAddress aMatrixRange;
@@ -304,6 +302,8 @@ struct ScMyCell
     ScMyShapeList               aShapeList;
     ScMyDetectiveObjVec         aDetectiveObjVec;
     ScMyDetectiveOpVec          aDetectiveOpVec;
+
+    ScPostIt*                   pNote;
 
     sal_Int32                   nValidationIndex;
     sal_Int32                   nStyleIndex;
@@ -332,44 +332,11 @@ struct ScMyCell
 
 //==============================================================================
 
-struct ScMyExportAnnotation
-{
-    com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
-    com::sun::star::table::CellAddress      aCellAddress;
-    bool operator<(const ScMyExportAnnotation& rAnno) const;
-};
-
-struct ScNoteExportData
-{
-    SCROW nRow;
-    SCCOL nCol;
-    ScPostIt* pNote;
-
-    bool operator<(const ScNoteExportData& r) const
-    {
-        if(nRow < r.nRow)
-            return true;
-        else if(nRow > r.nRow)
-            return false;
-        else
-        {
-            if(nCol < r.nCol)
-                return true;
-            else
-                return false;
-        }
-    }
-};
-
-typedef ::std::list< ScMyExportAnnotation > ScMyExportAnnotationList;
-typedef ::std::set< ScNoteExportData > ScMyNoteExportDataList;
-
 class ScMyNotEmptyCellsIterator : boost::noncopyable
 {
     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet> xTable;
     com::sun::star::uno::Reference<com::sun::star::table::XCellRange> xCellRange;
     com::sun::star::table::CellAddress  aLastAddress;
-    ScMyExportAnnotationList            aAnnotations;
 
     ScMyShapesContainer*                pShapes;
     ScMyNoteShapesContainer*            pNoteShapes;
@@ -378,8 +345,6 @@ class ScMyNotEmptyCellsIterator : boost::noncopyable
     ScMyAreaLinksContainer*             pAreaLinks;
     ScMyDetectiveObjContainer*          pDetectiveObj;
     ScMyDetectiveOpContainer*           pDetectiveOp;
-    ScMyNoteExportDataList              maNoteExportList;
-    ScMyNoteExportDataList::iterator  maNoteExportListItr;
 
     ScXMLExport&                rExport;
     boost::scoped_ptr<ScHorizontalCellIterator> mpCellItr;

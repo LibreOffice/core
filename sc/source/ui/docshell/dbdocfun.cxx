@@ -1134,7 +1134,6 @@ sal_Bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 Sort( nTab, aSortParam, false, false, bApi );
             }
 
-            pDoc->InitializeNoteCaptions(nTab);
             bSuccess = pDoc->DoSubTotals( nTab, aNewParam );
             pDoc->SetDrawPageSize(nTab);
         }

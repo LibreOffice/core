@@ -749,7 +749,7 @@ void ScDrawView::DeleteMarked()
         bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now
-        ScPostIt* pNote = pDoc->GetNotes(pCaptData->maStart.Tab())->ReleaseNote( pCaptData->maStart );
+        ScPostIt* pNote = pDoc->ReleaseNote( pCaptData->maStart );
         OSL_ENSURE( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
         if( pNote )
         {

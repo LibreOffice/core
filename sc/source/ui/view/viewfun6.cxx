@@ -292,7 +292,7 @@ void ScViewFunc::EditNote()
     // generated undo action is processed in FuText::StopEditMode
 
     // get existing note or create a new note (including caption drawing object)
-    if( ScPostIt* pNote = pDoc->GetNotes(aPos.Tab())->GetOrCreateNote( aPos ) )
+    if( ScPostIt* pNote = pDoc->GetOrCreateNote( aPos ) )
     {
         // hide temporary note caption
         HideNoteMarker();

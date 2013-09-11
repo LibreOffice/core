@@ -188,36 +188,6 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     for (SCCOL j=nStartCol; j<=nEndCol; j++)
         aCol[j].InsertRow( nStartRow, nSize );
 
-    // Transfer those notes that will get shifted into another container.
-    ScNotes aNotes(pDocument);
-    ScNotes::iterator itr = maNotes.begin();
-    while( itr != maNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        if (nStartRow <= nRow && nStartCol <= nCol && nCol <= nEndCol)
-        {
-            aNotes.insert(nCol, nRow + nSize, pPostIt);
-            maNotes.ReleaseNote(nCol, nRow);
-        }
-    }
-
-    // Re-insert the shifted notes.
-    itr = aNotes.begin();
-    while( itr != aNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        maNotes.insert( nCol, nRow, pPostIt);
-        aNotes.ReleaseNote( nCol, nRow);
-    }
-
     mpCondFormatList->InsertRow(nTab, nStartCol, nEndCol, nStartRow, nSize);
 
     InvalidatePageBreaks();
@@ -272,44 +242,6 @@ void ScTable::DeleteRow(
     std::vector<SCCOL> aRegroupCols;
     rRegroupCols.getColumns(nTab, aRegroupCols);
     std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
-
-    // Transfer those notes that will get shifted into another container.
-    ScNotes aNotes(pDocument);
-    ScNotes::iterator itr = maNotes.begin();
-    while( itr != maNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        if (nStartRow <= nRow && nStartCol <= nCol && nCol <= nEndCol)
-        {
-            SCROW nEndRow = nStartRow + nSize - 1; // last row of deleted region
-            if (nEndRow < nRow)
-            {
-                // This note will get shifted.
-                aNotes.insert(nCol, nRow - nSize, pPostIt);
-                maNotes.ReleaseNote(nCol, nRow);
-            }
-            else
-                // Note is in the deleted area. Remove it.
-                maNotes.erase(nCol, nRow);
-        }
-    }
-
-    // Re-insert the shifted notes.
-    itr = aNotes.begin();
-    while( itr != aNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        maNotes.insert( nCol, nRow, pPostIt);
-        aNotes.ReleaseNote( nCol, nRow);
-    }
 
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
@@ -395,36 +327,6 @@ void ScTable::InsertCol(
     rRegroupCols.getColumns(nTab, aRegroupCols);
     std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
 
-    // Transfer those notes that will get shifted into another container.
-    ScNotes aNotes(pDocument);
-    ScNotes::iterator itr = maNotes.begin();
-    while( itr != maNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        if (nStartCol <= nCol && nStartRow <= nRow && nRow <= nEndRow)
-        {
-            aNotes.insert(nCol + nSize, nRow, pPostIt);
-            maNotes.ReleaseNote(nCol, nRow);
-        }
-    }
-
-    // Re-insert the shifted notes.
-    itr = aNotes.begin();
-    while( itr != aNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        maNotes.insert( nCol, nRow, pPostIt);
-        aNotes.ReleaseNote( nCol, nRow);
-    }
-
     if (nStartCol>0)                        // copy old attributes
     {
         sal_uInt16 nWhichArray[2];
@@ -508,44 +410,6 @@ void ScTable::DeleteCol(
     rRegroupCols.getColumns(nTab, aRegroupCols);
     std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
 
-    // Transfer those notes that will get shifted into another container.
-    ScNotes aNotes(pDocument);
-    ScNotes::iterator itr = maNotes.begin();
-    while( itr != maNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        if (nStartCol <= nCol && nStartRow <= nRow && nRow <= nEndRow)
-        {
-            SCCOL nEndCol = nStartCol + nSize - 1;
-            if (nEndCol < nCol)
-            {
-                // This note will get shifted.
-                aNotes.insert(nCol - nSize, nRow, pPostIt);
-                maNotes.ReleaseNote(nCol, nRow);
-            }
-            else
-                // The note is in the deleted region. Remove it.
-                maNotes.erase(nCol, nRow);
-        }
-    }
-
-    // Re-insert the shifted notes.
-    itr = aNotes.begin();
-    while( itr != aNotes.end() )
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-        ++itr;
-
-        maNotes.insert( nCol, nRow, pPostIt);
-        aNotes.ReleaseNote( nCol, nRow);
-    }
-
     InvalidatePageBreaks();
 
     if (IsStreamValid())
@@ -582,9 +446,6 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
             mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
     }
 
-    if (nDelFlag & IDF_NOTE)
-        maNotes.erase( nCol1, nRow1, nCol2, nRow2 );
-
     if (IsStreamValid())
         // TODO: In the future we may want to check if the table has been
         // really modified before setting the stream invalid.
@@ -606,10 +467,6 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
     for (size_t i = 0; i < aRangeList.size(); ++i)
     {
         ScRange* pRange = aRangeList[i];
-        if (nDelFlag & IDF_NOTE && pRange)
-        {
-            maNotes.erase(pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row(), nDelFlag & IDF_NOCAPTIONS);
-        }
 
         if((nDelFlag & IDF_ATTRIB) && pRange && pRange->aStart.Tab() == nTab)
             mpCondFormatList->DeleteArea( pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row() );
@@ -647,14 +504,10 @@ void ScTable::CopyToClip(
         if (!pTable->mpRangeName && mpRangeName)
             pTable->mpRangeName = new ScRangeName(*mpRangeName);
 
-        // notes
-        maNotes.clone(
-            pTable->pDocument, nCol1, nRow1, nCol2, nRow2, rCxt.isCloneNotes(), nTab, pTable->maNotes);
-
         SCCOL i;
 
         for ( i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->aCol[i]);
+            aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->aCol[i]);  // notes are handled at column level
 
         //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
         //  also for all preceding columns/rows, to have valid positions for drawing objects
@@ -807,8 +660,7 @@ void ScTable::CopyFromClip(
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         for ( SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]);
-
+            aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]); // notes are handles at column level
 
         if (rCxt.getInsertFlag() == IDF_ATTRIB)
         {
@@ -819,18 +671,6 @@ void ScTable::CopyFromClip(
             for ( SCCOL i = nCol1; i <= nCol2; ++i)
                 aCol[i].ClearItems(nRow1, nRow2, nWhichArray);
         }
-
-        //remove old notes
-        if (rCxt.getInsertFlag() & (IDF_NOTE|IDF_ADDNOTES))
-            maNotes.erase(nCol1, nRow1, nCol2, nRow2);
-
-        bool bAddNotes = rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES);
-        if (bAddNotes)
-        {
-            bool bCloneCaption = (rCxt.getInsertFlag() & IDF_NOCAPTIONS) == 0;
-            maNotes.CopyFromClip(pTable->maNotes, pDocument, nCol1, nRow1, nCol2, nRow2, nDx, nDy, nTab, bCloneCaption);
-        }
-
 
         if ((rCxt.getInsertFlag() & IDF_ATTRIB) != 0)
         {
@@ -1087,23 +927,100 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
             }
         }
-    }
 
-    // fdo#68381 paste cell notes on Transpose
-    bool bCloneCaption = true;
-    for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
-        {
-            ScAddress aDestPos( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
-            pTransClip->maNotes.erase(aDestPos);
-            pTransClip->maNotes.insert(aDestPos, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pTransClip->pDocument, aDestPos, bCloneCaption ));
-        }
+        // Cell Notes - fdo#68381 paste cell notes on Transpose
+        if ( pDocument->HasColNotes(nCol, nTab) )
+            TransposeColNotes(pTransClip, nCol1, nCol, nRow1, nRow2);
     }
 }
 
+void ScTable::TransposeColNotes(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol, SCROW nRow1, SCROW nRow2)
+{
+    bool bCloneCaption = true;
+
+    sc::CellNoteStoreType::const_iterator itBlk = aCol[nCol].maCellNotes.begin(), itBlkEnd = aCol[nCol].maCellNotes.end();
+
+    // Locate the top row position.
+    size_t nOffsetInBlock = 0;
+    size_t nBlockStart = 0, nBlockEnd = 0, nRowPos = static_cast<size_t>(nRow1);
+    for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd)
+    {
+        nBlockEnd = nBlockStart + itBlk->size;
+        if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
+        {
+            // Found.
+            nOffsetInBlock = nRowPos - nBlockStart;
+            break;
+        }
+    }
+
+    if (itBlk != itBlkEnd)
+        // Specified range found
+    {
+        nRowPos = static_cast<size_t>(nRow2); // End row position.
+
+        // Keep processing until we hit the end row position.
+        sc::cellnote_block::const_iterator itData, itDataEnd;
+        for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
+        {
+            nBlockEnd = nBlockStart + itBlk->size;
+
+            if (itBlk->data)
+            {
+                itData = sc::cellnote_block::begin(*itBlk->data);
+                std::advance(itData, nOffsetInBlock);
+
+                if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
+                {
+                    // This block contains the end row. Only process partially.
+                    size_t nOffsetEnd = nRowPos - nBlockStart + 1;
+                    itDataEnd = sc::cellnote_block::begin(*itBlk->data);
+                    std::advance(itDataEnd, nOffsetEnd);
+                    size_t curRow = nBlockStart + nOffsetInBlock;
+                    for (; itData != itDataEnd; ++itData, ++curRow)
+                    {
+                        ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                        pTransClip->pDocument->ReleaseNote(aDestPos);
+                        ScPostIt* pNote = *itData;
+                        if (pNote)
+                        {
+                            ScPostIt* pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, bCloneCaption );
+                            pTransClip->pDocument->SetNote(aDestPos, pClonedNote);
+                        }
+                    }
+                    break; // we reached the last valid block
+                }
+                else
+                {
+                    itDataEnd = sc::cellnote_block::end(*itBlk->data);
+                    size_t curRow = nBlockStart + nOffsetInBlock;
+                    for (; itData != itDataEnd; ++itData, ++curRow)
+                    {
+                        ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                        pTransClip->pDocument->ReleaseNote(aDestPos);
+                        ScPostIt* pNote = *itData;
+                        if (pNote)
+                        {
+                            ScPostIt* pClonedNote = pNote->Clone( ScAddress(nCol, curRow, nTab), *pTransClip->pDocument, aDestPos, bCloneCaption );
+                            pTransClip->pDocument->SetNote(aDestPos, pClonedNote);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                size_t curRow;
+                for ( curRow = nBlockStart + nOffsetInBlock; curRow <= nBlockEnd && curRow <= nRowPos; ++curRow)
+                {
+                    ScAddress aDestPos( static_cast<SCCOL>(curRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
+                    pTransClip->pDocument->ReleaseNote(aDestPos);
+                }
+                if (curRow == nRowPos)
+                    break;
+            }
+        }
+    }
+}
 
 void ScTable::StartAllListeners()
 {
@@ -1156,17 +1073,6 @@ void ScTable::CopyToTable(
 
     if (!bColRowFlags)      // Spaltenbreiten/Zeilenhoehen/Flags
         return;
-
-    //remove old notes
-    if (nFlags & IDF_NOTE)
-        pDestTab->maNotes.erase(nCol1, nRow1, nCol2, nRow2);
-
-    bool bAddNotes = nFlags & (IDF_NOTE | IDF_ADDNOTES);
-    if (bAddNotes)
-    {
-        bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
-        pDestTab->maNotes.CopyFromClip(maNotes, pDestTab->pDocument, nCol1, nRow1, nCol2, nRow2, 0, 0, pDestTab->nTab, bCloneCaption);
-    }
 
     if(pDestTab->pDocument->IsUndo() && (nFlags & IDF_ATTRIB))
     {
@@ -1290,19 +1196,9 @@ void ScTable::UndoToTable(
                 aCol[i].CopyToColumn(rCxt, 0, MAXROW, IDF_FORMULA, false, pDestTab->aCol[i]);
         }
 
-        //remove old notes
-        if (nFlags & IDF_CONTENTS)
-            pDestTab->maNotes.erase(nCol1, nRow1, nCol2, nRow2);
-
         if (nFlags & IDF_ATTRIB)
             pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->pDocument, *mpCondFormatList));
 
-        bool bAddNotes = nFlags & (IDF_NOTE | IDF_ADDNOTES);
-        if (bAddNotes)
-        {
-            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
-            pDestTab->maNotes.CopyFromClip(maNotes, pDocument, nCol1, nRow1, nCol2, nRow2, 0, 0, pDestTab->nTab, bCloneCaption);
-        }
 
         if (bWidth||bHeight)
         {
@@ -1326,16 +1222,6 @@ void ScTable::CopyUpdated( const ScTable* pPosTab, ScTable* pDestTab ) const
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].CopyUpdated( pPosTab->aCol[i], pDestTab->aCol[i] );
-
-    // insert notes with captions
-    for(ScNotes::iterator itr = pDestTab->maNotes.begin(); itr != pDestTab->maNotes.end(); ++itr)
-    {
-        SCCOL nCol = itr->first.first;
-        SCROW nRow = itr->first.second;
-        ScPostIt* pPostIt = itr->second;
-
-        pDestTab->maNotes.insert(nCol, nRow, pPostIt->Clone( ScAddress(nCol, nRow, nTab),*pDestTab->pDocument, ScAddress(nCol, nRow, pDestTab->nTab), true ));
-    }
 }
 
 void ScTable::InvalidateTableArea()
@@ -1611,21 +1497,9 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetFormulaCell(nRow);
 }
 
-ScNotes* ScTable::GetNotes()
+ScPostIt* ScTable::GetNote(const SCCOL nCol, const SCROW nRow)
 {
-    return &maNotes;
-}
-
-
-void ScTable::InitializeNoteCaptions( bool bForced )
-{
-    if( mxUninitNotes.get() && (bForced || pDocument->IsUndoEnabled()) )
-    {
-        for( ScAddress2DVec::iterator aIt = mxUninitNotes->begin(), aEnd = mxUninitNotes->end(); aIt != aEnd; ++aIt )
-            if( ScPostIt* pNote = maNotes.findByAddress( aIt->first, aIt->second ) )
-                pNote->GetOrCreateCaption( ScAddress( aIt->first, aIt->second, nTab ) );
-        mxUninitNotes.reset();
-    }
+    return pDocument->GetNote(nCol, nRow, nTab);
 }
 
 CellType ScTable::GetCellType( SCCOL nCol, SCROW nRow ) const
@@ -1954,16 +1828,9 @@ bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, 
     for (SCCOL i=nCol1; i<=nCol2 && bEmpty; i++)
     {
         bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2 );
-        if (!bIgnoreNotes)
+        if (!bIgnoreNotes && bEmpty)
         {
-            for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end() && bEmpty; ++itr)
-            {
-                SCCOL nCol = itr->first.first;
-                SCROW nRow = itr->first.second;
-
-                if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
-                    bEmpty = false;
-            }
+            bEmpty = aCol[i].IsNotesEmptyBlock(nRow1, nRow2);
         }
     }
     return bEmpty;

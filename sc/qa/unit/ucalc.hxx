@@ -217,6 +217,8 @@ public:
     void testDataArea();
     void testAutofilter();
     void testCopyPaste();
+    void testCopyPasteTranspose();
+    void testMoveBlock();
     void testCopyPasteRelativeFormula();
     void testMergedCells();
     void testUpdateReference();
@@ -270,9 +272,9 @@ public:
     void testSort();
     void testSortWithFormulaRefs();
     void testShiftCells();
-    void testDeleteRow();
-    void testDeleteCol();
-    void testDeleteArea();
+    void testNoteDeleteRow();
+    void testNoteDeleteCol();
+    void testAerasWithNotes();
     void testAnchoredRotatedShape();
     void testCellTextWidth();
     void testEditTextIterator();
@@ -353,6 +355,8 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testCopyPaste);
+    CPPUNIT_TEST(testMoveBlock);
+    CPPUNIT_TEST(testCopyPasteTranspose);
     CPPUNIT_TEST(testCopyPasteRelativeFormula);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
@@ -373,9 +377,9 @@ public:
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortWithFormulaRefs);
     CPPUNIT_TEST(testShiftCells);
-    CPPUNIT_TEST(testDeleteRow);
-    CPPUNIT_TEST(testDeleteCol);
-    CPPUNIT_TEST(testDeleteArea);
+    CPPUNIT_TEST(testNoteDeleteRow);
+    CPPUNIT_TEST(testNoteDeleteCol);
+    CPPUNIT_TEST(testAerasWithNotes);
     CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST(testCellTextWidth);
     CPPUNIT_TEST(testEditTextIterator);

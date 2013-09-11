@@ -101,6 +101,8 @@
 #include <limits>
 #include <boost/scoped_ptr.hpp>
 
+#include "mtvelements.hxx"
+
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -3501,12 +3503,6 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 }
 
 
-void ScDocument::InitializeNoteCaptions( SCTAB nTab, bool bForced )
-{
-    if( ValidTab( nTab ) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[ nTab ] )
-        maTabs[ nTab ]->InitializeNoteCaptions( bForced );
-}
-
 void ScDocument::SetDirty()
 {
     bool bOldAutoCalc = GetAutoCalc();
@@ -6064,12 +6060,102 @@ bool ScDocument::IsInVBAMode() const
     return false;
 }
 
-ScNotes* ScDocument::GetNotes(SCTAB nTab)
+ScPostIt* ScDocument::GetNote(const ScAddress& rPos)
+{
+    return GetNote(rPos.Col(), rPos.Row(), rPos.Tab());
+}
+
+ScPostIt* ScDocument::GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
-        return maTabs[nTab]->GetNotes();
+        return maTabs[nTab]->aCol[nCol].GetCellNote(nRow);
+    else
+        return NULL;
 
-    return NULL;
+}
+sc::CellNoteStoreType& ScDocument::GetColNotes(SCCOL nCol, SCTAB nTab)
+{
+        return maTabs[nTab]->aCol[nCol].maCellNotes;
+}
+void ScDocument::SetNote(const ScAddress& rPos, ScPostIt* pNote)
+{
+    return SetNote(rPos.Col(), rPos.Row(), rPos.Tab(), pNote);
+}
+
+void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt* pNote)
+{
+        return maTabs[nTab]->aCol[nCol].SetCellNote(nRow, pNote);
+}
+
+bool ScDocument::HasNote(const ScAddress& rPos)
+{
+    return HasNote(rPos.Col(), rPos.Row(), rPos.Tab());
+}
+bool ScDocument::HasNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    ScPostIt* pNote = maTabs[nTab]->aCol[nCol].GetCellNote(nRow);
+    return pNote != NULL;
+}
+bool ScDocument::HasColNotes(SCCOL nCol, SCTAB nTab)
+{
+    return maTabs[nTab]->aCol[nCol].HasCellNotes();
+}
+
+bool ScDocument::HasTabNotes(SCTAB nTab)
+{
+    bool hasNotes = false;
+    for (SCCOL nCol=0; nCol<MAXCOLCOUNT && !hasNotes; ++nCol)
+        hasNotes = HasColNotes(nCol, nTab);
+
+    return hasNotes;
+}
+
+ScPostIt* ScDocument::ReleaseNote(const ScAddress& rPos)
+{
+        return ReleaseNote(rPos.Col(), rPos.Row(), rPos.Tab());
+}
+ScPostIt* ScDocument::ReleaseNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+
+    ScPostIt* pPostIt = GetNote(nCol, nRow, nTab);
+    if (pPostIt != NULL)
+        maTabs[nTab]->aCol[nCol].DeleteCellNote(nRow);
+
+    return pPostIt;
+}
+
+ScPostIt* ScDocument::GetOrCreateNote(const ScAddress& rPos)
+{
+    if (HasNote(rPos))
+        return GetNote(rPos);
+    else
+        return CreateNote(rPos);
+}
+ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
+{
+    ScPostIt* pPostIt = new ScPostIt(*this, rPos, false);
+    SetNote(rPos, pPostIt);
+    return pPostIt;
+}
+
+sal_uLong ScDocument::CountNotes()
+{
+    sal_uLong nCount = 0;
+    SCTAB nTabCount = GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+    {
+        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        {
+            sc::CellNoteStoreType& maCellNotes = GetColNotes(nCol, nTab);
+            sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+            for (; it != itEnd; ++it)
+            {
+               if (it->type == sc::element_type_cellnote)
+                    nCount +=it->size;
+            }
+        }
+    }
+    return nCount;
 }
 
 void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )

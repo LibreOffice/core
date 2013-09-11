@@ -251,6 +251,6 @@ SvxUnoText& ScAnnotationObj::GetUnoText()
 
 const ScPostIt* ScAnnotationObj::ImplGetNote() const
 {
-    return pDocShell ? pDocShell->GetDocument()->GetNotes( aCellPos.Tab() )->findByAddress(aCellPos) : 0;
+    return pDocShell ? pDocShell->GetDocument()->GetNote(aCellPos) : 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

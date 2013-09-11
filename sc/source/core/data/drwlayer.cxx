@@ -627,7 +627,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 where cell note is already deleted (thus document cannot find
                 the note object anymore). The caption will be deleted later
                 with drawing undo. */
-            if( ScPostIt* pNote = pDoc->GetNotes( rData.maStart.Tab() )->findByAddress( rData.maStart ) )
+            if( ScPostIt* pNote = pDoc->GetNote( rData.maStart ) )
                 pNote->UpdateCaptionPos( rData.maStart );
         return;
     }

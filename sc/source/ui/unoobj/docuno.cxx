@@ -3433,15 +3433,33 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
     {
         sal_Int32 nFound = 0;
         ScDocument* pDoc = pDocShell->GetDocument();
-        const ScNotes* pNotes = pDoc->GetNotes(nTab);
-        for (ScNotes::const_iterator itr = pNotes->begin(); itr != pNotes->end(); ++itr)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB aTab=0; aTab<nTabCount; aTab++)
         {
-            if (nFound == nIndex)
+            for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
             {
-                rPos = ScAddress( itr->first.first, itr->first.second, nTab );
-                return true;
+                sc::CellNoteStoreType& maNotes = pDoc->GetColNotes(nCol, aTab);
+                std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maNotes.position(0);
+                sc::CellNoteStoreType::const_iterator it = aPos.first;
+                size_t nOffset = aPos.second;
+                size_t nDataSize = 0;
+                size_t nRow = 0;
+                if (nFound + maNotes.size() >= nIndex)
+                {
+                    for (; it != maNotes.end(); ++it, nOffset = 0, nRow += nDataSize)
+                    {
+                        nDataSize = it->size - nOffset;
+                        if (nFound == nIndex)
+                        {
+                            rPos = ScAddress(nCol, nRow, nTab);
+                            return true;
+                        }
+                        ++nFound;
+                    }
+                }
+                else
+                    nFound += maNotes.size();
             }
-            ++nFound;
         }
     }
     return false;
@@ -3510,7 +3528,7 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        nCount = pDoc->GetNotes(nTab)->size();
+        nCount = pDoc->CountNotes();
     }
     return nCount;
 }

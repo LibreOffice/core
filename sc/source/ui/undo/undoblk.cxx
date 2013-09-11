@@ -1284,8 +1284,9 @@ void ScUndoDragDrop::Redo()
         aSourceMark.SelectTable( nTab, sal_True );
 
     // do not clone objects and note captions into clipdoc (see above)
+    // but at least copy notes
     ScClipParam aClipParam(aSrcRange, bCut);
-    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bKeepScenarioFlags, false, false);
+    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bKeepScenarioFlags, false, true);
 
     if (bCut)
     {

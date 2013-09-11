@@ -137,7 +137,7 @@ SvxEditSource* ScAnnotationEditSource::Clone() const
 
 SdrObject* ScAnnotationEditSource::GetCaptionObj()
 {
-    ScPostIt* pNote = pDocShell->GetDocument()->GetNotes( aCellPos.Tab() )->findByAddress(aCellPos);
+    ScPostIt* pNote = pDocShell->GetDocument()->GetNote(aCellPos);
     return pNote ? pNote->GetOrCreateCaption( aCellPos ) : 0;
 }
 
@@ -163,7 +163,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         return pForwarder;
 
     if ( pDocShell )
-        if ( ScPostIt* pNote = pDocShell->GetDocument()->GetNotes( aCellPos.Tab() )->findByAddress(aCellPos) )
+        if ( ScPostIt* pNote = pDocShell->GetDocument()->GetNote(aCellPos) )
             if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
                 pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
 

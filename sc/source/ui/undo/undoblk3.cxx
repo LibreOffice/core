@@ -999,7 +999,7 @@ void ScUndoReplace::Undo()
     }
     else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
     {
-        ScPostIt* pNote = pDoc->GetNotes( aCursorPos.Tab() )->findByAddress( aCursorPos );
+        ScPostIt* pNote = pDoc->GetNote(aCursorPos);
         OSL_ENSURE( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
         if (pNote)
             pNote->SetText( aCursorPos, aUndoStr );

@@ -2356,7 +2356,7 @@ void ScOutputData::DrawNoteMarks()
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( mpDoc->GetNotes(nTab)->findByAddress(nX, pRowInfo[nArrY].nRowNo) && ( bIsMerged ||
+                if ( mpDoc->GetNote(nX, pRowInfo[nArrY].nRowNo, nTab) && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     if (bFirst)
@@ -2432,7 +2432,7 @@ void ScOutputData::AddPDFNotes()
                     // use origin's pCell for NotePtr test below
                 }
 
-                if ( mpDoc->GetNotes(nTab)->findByAddress(nMergeX, nMergeY) && ( bIsMerged ||
+                if ( mpDoc->GetNote(nMergeX, nMergeY, nTab) && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     long nNoteWidth = (long)( SC_CLIPMARK_SIZE * mnPPTX );
@@ -2452,7 +2452,7 @@ void ScOutputData::AddPDFNotes()
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                     {
                         Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
-                        const ScPostIt* pNote = mpDoc->GetNotes(nTab)->findByAddress(nMergeX, nMergeY);
+                        const ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
 
                         // Note title is the cell address (as on printed note pages)
                         ScAddress aAddress( nMergeX, nMergeY, nTab );

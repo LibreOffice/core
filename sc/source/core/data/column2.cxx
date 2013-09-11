@@ -1197,6 +1197,23 @@ bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
     return nEndRow < nNextRow;
 }
 
+bool ScColumn::IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
+{
+    std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maCellNotes.position(nStartRow);
+    sc::CellNoteStoreType::const_iterator it = aPos.first;
+    if (it == maCellNotes.end())
+        // Invalid row number.
+        return false;
+
+    if (it->type != sc::element_type_empty)
+        // Non-empty cell at the start position.
+        return false;
+
+    // start position of next block which is not empty.
+    SCROW nNextRow = nStartRow + it->size - aPos.second;
+    return nEndRow < nNextRow;
+}
+
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
 {
     // Given a range of rows, find a top or bottom empty segment.
@@ -1629,21 +1646,107 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
     }
 }
 
+void ScColumn::CopyCellNotesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest) const
+{
+    SCCOL nDestCol = rDestCol.GetCol();
+    SCTAB nDestTab = rDestCol.GetTab();
+
+    rDestCol.maCellNotes.set_empty(nRow1 + nRowOffsetDest, nRow2 + nRowOffsetDest); // Empty the destination range first.
+
+    sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
+
+    // Locate the top row position.
+    size_t nOffsetInBlock = 0;
+    size_t nBlockStart = 0, nBlockEnd = 0, nRowPos = static_cast<size_t>(nRow1);
+    for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd)
+    {
+        nBlockEnd = nBlockStart + itBlk->size;
+        if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
+        {
+            // Found.
+            nOffsetInBlock = nRowPos - nBlockStart;
+            break;
+        }
+    }
+
+    if (itBlk == itBlkEnd)
+        // Specified range not found. Bail out.
+        return;
+
+    nRowPos = static_cast<size_t>(nRow2); // End row position.
+
+    // Keep copying until we hit the end row position.
+    sc::cellnote_block::const_iterator itData, itDataEnd;
+    for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
+    {
+        nBlockEnd = nBlockStart + itBlk->size;
+
+        if (itBlk->data) // Non-empty block.
+        {
+            itData = sc::cellnote_block::begin(*itBlk->data);
+            itDataEnd = sc::cellnote_block::end(*itBlk->data);
+            std::advance(itData, nOffsetInBlock);
+
+            if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
+            {
+                // This block contains the end row. Only copy partially.
+                size_t nOffset = nRowPos - nBlockStart + 1;
+                itDataEnd = sc::cellnote_block::begin(*itBlk->data);
+                std::advance(itDataEnd, nOffset);
+                // need to clone notes
+                std::vector<ScPostIt*> vCloned;
+                vCloned.reserve(nOffset);
+                SCROW curRow = nBlockStart + nOffsetInBlock;
+                for (; itData != itDataEnd; ++itData, ++curRow)
+                {
+                    ScPostIt* pSrcNote = *itData;
+                    ScAddress aDestAddress = ScAddress(nDestCol, curRow + nRowOffsetDest, nDestTab);
+                    ScAddress aSrcAddress = ScAddress(nCol, curRow, nTab );
+                    ScPostIt* pClonedNote = pSrcNote->Clone(aSrcAddress, rDestCol.GetDoc(), aDestAddress, bCloneCaption );
+                    vCloned.push_back(pClonedNote);
+                }
+
+                rDestCol.maCellNotes.set(rDestCol.maCellNotes.begin(), nBlockStart + nOffsetInBlock + nRowOffsetDest, vCloned.begin(), vCloned.end());
+                break;
+            }
+            // need to clone notes
+            std::vector<ScPostIt*> vCloned;
+            vCloned.reserve(itBlk->size - nOffsetInBlock);
+            SCROW curRow = nBlockStart + nOffsetInBlock;
+            for (; itData != itDataEnd; ++itData, ++curRow)
+            {
+                ScPostIt* pSrcNote = *itData;
+                ScAddress aDestAddress = ScAddress(nDestCol, curRow + nRowOffsetDest, nDestTab);
+                ScAddress aSrcAddress = ScAddress(nCol, curRow, nTab );
+                ScPostIt* pClonedNote = pSrcNote->Clone(aSrcAddress, rDestCol.GetDoc(), aDestAddress, bCloneCaption );
+                vCloned.push_back(pClonedNote);
+            }
+            rDestCol.maCellNotes.set(rDestCol.maCellNotes.begin(), nBlockStart + nOffsetInBlock + nRowOffsetDest, vCloned.begin(), vCloned.end());
+
+        }
+    }
+}
+
+void ScColumn::DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol, sc::ColumnBlockPosition& maDestBlockPos,
+                              bool bCloneCaption, SCROW nRowOffsetDest ) const
+{
+        CopyCellNotesToDocument(nStartRow, nStartRow + nDataSize -1, rDestCol, bCloneCaption, nRowOffsetDest);
+        maDestBlockPos.miCellNotePos = rDestCol.maCellNotes.begin();
+}
+
 void ScColumn::SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 )
 {
-    typedef std::pair<sc::CellTextAttrStoreType::iterator,size_t> PosType;
-
     if (nRow1 == nRow2)
         return;
 
     if (nRow1 > nRow2)
         std::swap(nRow1, nRow2);
 
-    PosType aPos1 = maCellTextAttrs.position(nRow1);
+    sc::CellTextAttrStoreType::position_type aPos1 = maCellTextAttrs.position(nRow1);
     if (aPos1.first == maCellTextAttrs.end())
         return;
 
-    PosType aPos2 = maCellTextAttrs.position(aPos1.first, nRow2);
+    sc::CellTextAttrStoreType::position_type aPos2 = maCellTextAttrs.position(aPos1.first, nRow2);
     if (aPos2.first == maCellTextAttrs.end())
         return;
 
@@ -1680,6 +1783,66 @@ void ScColumn::SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 )
     CellStorageModified();
 }
 
+void ScColumn::SwapCellNotes( SCROW nRow1, SCROW nRow2 )
+{
+    if (nRow1 == nRow2)
+        return;
+
+    if (nRow1 > nRow2)
+        std::swap(nRow1, nRow2);
+
+    sc::CellNoteStoreType::position_type aPos1 = maCellNotes.position(nRow1);
+    if (aPos1.first == maCellNotes.end())
+        return;
+
+    sc::CellNoteStoreType::position_type aPos2 = maCellNotes.position(aPos1.first, nRow2);
+    if (aPos2.first == maCellNotes.end())
+        return;
+
+    ScPostIt* aNote;
+
+    sc::CellNoteStoreType::iterator it1 = aPos1.first, it2 = aPos2.first;
+    if (it1->type == it2->type)
+    {
+        if (it1->type == sc::element_type_empty)
+            // Both are empty. Nothing to swap.
+            return;
+
+        // Both are non-empty. Simply swap their values.
+        std::swap(
+            sc::cellnote_block::at(*it1->data, aPos1.second),
+            sc::cellnote_block::at(*it2->data, aPos2.second));
+
+        //update Note caption with position
+        aNote = sc::cellnote_block::at(*it1->data, aPos1.second);
+        aNote->UpdateCaptionPos(ScAddress(nCol,nRow2,nTab));
+        aNote = sc::cellnote_block::at(*it2->data, aPos2.second);
+        aNote->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab));
+
+        return;
+    }
+
+    // One is empty while the other isn't.
+    if (it1->type == sc::element_type_empty)
+    {
+        // row 1 is empty while row 2 is non-empty.
+        ScPostIt* pVal2 = sc::cellnote_block::at(*it2->data, aPos2.second);
+        it1 = maCellNotes.set(it1, nRow1, pVal2);
+        maCellNotes.set_empty(it1, nRow2, nRow2);
+        pVal2->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab)); //update Note caption with position
+
+        return;
+    }
+
+    // row 1 is non-empty while row 2 is empty.
+    ScPostIt* pVal1 = sc::cellnote_block::at(*it1->data, aPos1.second);
+    it1 = maCellNotes.set_empty(it1, nRow1, nRow1);
+    maCellNotes.set(it1, nRow2, pVal1);
+    pVal1->UpdateCaptionPos(ScAddress(nCol,nRow1,nTab));     //update Note caption with position
+
+    CellStorageModified();
+}
+
 SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow)
 {
     return maBroadcasters.get<SvtBroadcaster*>(nRow);
@@ -1706,6 +1869,72 @@ bool ScColumn::HasBroadcaster() const
             return true;
     }
     return false;
+}
+
+ScPostIt* ScColumn::GetCellNote(SCROW nRow)
+{
+    return maCellNotes.get<ScPostIt*>(nRow);
+}
+
+const ScPostIt* ScColumn::GetCellNote(SCROW nRow) const
+{
+    return maCellNotes.get<ScPostIt*>(nRow);
+}
+
+void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)
+{
+    //pNote->UpdateCaptionPos(ScAddress(nCol, nRow, nTab)); // TODO notes usefull ? slow import with many notes
+    maCellNotes.set(nRow, pNote);
+}
+void ScColumn::DeleteCellNote(SCROW nRow)
+{
+    maCellNotes.set_empty(nRow, nRow);
+}
+void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 )
+{
+    rBlockPos.miCellNotePos =
+        maCellNotes.set_empty(rBlockPos.miCellNotePos, nRow1, nRow2);
+}
+
+bool ScColumn::HasCellNotes() const
+{
+    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->type == sc::element_type_cellnote)
+            // Having a cellnote block automatically means there is at least one cell note.
+            return true;
+    }
+    return false;
+}
+
+SCROW ScColumn::GetCellNotesMaxRow() const
+{
+    // hypothesis : the column has cell notes (should be checked before)
+    SCROW maxRow = 0;
+    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->type == sc::element_type_cellnote)
+            maxRow = it->position + it->size -1;
+    }
+    return maxRow;
+}
+SCROW ScColumn::GetCellNotesMinRow() const
+{
+    // hypothesis : the column has cell notes (should be checked before)
+    SCROW minRow = 0;
+    bool bFound = false;
+    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+    for (; it != itEnd && !bFound; ++it)
+    {
+        if (it->type == sc::element_type_cellnote)
+        {
+            bFound = true;
+            minRow = it->position;
+        }
+    }
+    return minRow;
 }
 
 sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
