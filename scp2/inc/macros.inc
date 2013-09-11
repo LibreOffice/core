@@ -460,7 +460,7 @@ End
 #endif
 
 #if defined MACOSX
-#define FILELIST_DIR gid_Dir_Bundle_Contents
+#define FILELIST_DIR PREDEFINED_PROGDIR
 #define FILELIST_SDK_DIR PREDEFINED_PROGDIR
 #else
 #define FILELIST_DIR gid_Dir_Brand_Root
