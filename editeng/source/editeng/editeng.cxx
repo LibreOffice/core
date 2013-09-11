@@ -1976,7 +1976,9 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                 {
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
                     const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
-                    bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? !pNode->GetWrongList()->empty() : false;
+                    bool bWrongs = false;
+                    if (pNode->GetWrongList() != NULL && ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ))
+                        bWrongs = !pNode->GetWrongList()->empty();
                     if ( bSpellingChanged )
                         pNode->DestroyWrongList();
                     if ( bWrongs )
