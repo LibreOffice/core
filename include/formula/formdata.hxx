@@ -36,14 +36,14 @@ public:
     virtual void            SaveValues();
     sal_Bool                    HasParent() const   { return pParent != NULL; }
 
-    inline sal_uInt16           GetMode() const     { return nMode; }
+    inline sal_uInt16       GetMode() const     { return nMode; }
     inline xub_StrLen       GetFStart() const   { return nFStart; }
-    inline sal_uInt16           GetCatSel() const   { return nCatSel; }
-    inline sal_uInt16           GetFuncSel() const  { return nFuncSel; }
-    inline sal_uInt16           GetOffset() const   { return nOffset; }
-    inline sal_uInt16           GetEdFocus() const  { return nEdFocus; }
-    inline const String&    GetUndoStr() const  { return aUndoStr; }
-    inline sal_Bool             GetMatrixFlag()const{ return bMatrix;}
+    inline sal_uInt16       GetCatSel() const   { return nCatSel; }
+    inline sal_uInt16       GetFuncSel() const  { return nFuncSel; }
+    inline sal_uInt16       GetOffset() const   { return nOffset; }
+    inline sal_uInt16       GetEdFocus() const  { return nEdFocus; }
+    inline const OUString&  GetUndoStr() const  { return aUndoStr; }
+    inline sal_Bool         GetMatrixFlag()const{ return bMatrix;}
     inline OString     GetUniqueId()const  { return aUniqueId;}
     inline const Selection& GetSelection()const { return aSelection;}
 
@@ -53,7 +53,7 @@ public:
     inline void             SetFuncSel( sal_uInt16 nNew )               { nFuncSel = nNew; }
     inline void             SetOffset( sal_uInt16 nNew )                { nOffset = nNew; }
     inline void             SetEdFocus( sal_uInt16 nNew )               { nEdFocus = nNew; }
-    inline void             SetUndoStr( const String& rNew )        { aUndoStr = rNew; }
+    inline void             SetUndoStr( const OUString& rNew )        { aUndoStr = rNew; }
     inline void             SetMatrixFlag(sal_Bool bNew)                { bMatrix=bNew;}
     inline void             SetUniqueId(const OString nNew)    { aUniqueId=nNew;}
     inline void             SetSelection(const Selection& aSel)     { aSelection=aSel;}
@@ -64,15 +64,15 @@ protected:
 
     FormEditData*   pParent;            // fuer Verschachtelung
 private:
-    sal_uInt16              nMode;              // enum ScFormulaDlgMode
+    sal_uInt16          nMode;              // enum ScFormulaDlgMode
     xub_StrLen          nFStart;
-    sal_uInt16              nCatSel;
-    sal_uInt16              nFuncSel;
-    sal_uInt16              nOffset;
-    sal_uInt16              nEdFocus;
-    String              aUndoStr;
-    sal_Bool                bMatrix;
-    OString        aUniqueId;
+    sal_uInt16          nCatSel;
+    sal_uInt16          nFuncSel;
+    sal_uInt16          nOffset;
+    sal_uInt16          nEdFocus;
+    OUString            aUndoStr;
+    sal_Bool            bMatrix;
+    OString             aUniqueId;
     Selection           aSelection;
 };
 

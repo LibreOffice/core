@@ -1903,7 +1903,7 @@ void FormEditData::Reset()
     aUniqueId=OString();
     aSelection.Min()=0;
     aSelection.Max()=0;
-    aUndoStr.Erase();
+    aUndoStr = "";
 }
 // -----------------------------------------------------------------------------
 const FormEditData& FormEditData::operator=( const FormEditData& r )
