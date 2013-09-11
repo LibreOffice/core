@@ -42,46 +42,38 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
 : ContextHandler2( rParent )
 , mrTextCharacterProperties( rTextCharacterProperties )
 {
-    if ( rAttribs.hasAttribute( XML_lang ) )
-        mrTextCharacterProperties.moLang = rAttribs.getString( XML_lang );
-    if ( rAttribs.hasAttribute( XML_sz ) )
-        mrTextCharacterProperties.moHeight = rAttribs.getInteger( XML_sz );
-    if ( rAttribs.hasAttribute( XML_spc ) )
-        mrTextCharacterProperties.moSpacing = rAttribs.getInteger( XML_spc );
-    if ( rAttribs.hasAttribute( XML_u ) )
-        mrTextCharacterProperties.moUnderline = rAttribs.getToken( XML_u );
-    if ( rAttribs.hasAttribute( XML_strike ) )
-        mrTextCharacterProperties.moStrikeout = rAttribs.getToken( XML_strike );
+    AttributeList aAttribs( rXAttributes );
+    if ( aAttribs.hasAttribute( XML_lang ) )
+        mrTextCharacterProperties.moLang = aAttribs.getString( XML_lang );
+    if ( aAttribs.hasAttribute( XML_sz ) )
+        mrTextCharacterProperties.moHeight = aAttribs.getInteger( XML_sz );
+    if ( aAttribs.hasAttribute( XML_spc ) )
+        mrTextCharacterProperties.moSpacing = aAttribs.getInteger( XML_spc );
+    if ( aAttribs.hasAttribute( XML_u ) )
+        mrTextCharacterProperties.moUnderline = aAttribs.getToken( XML_u );
+    if ( aAttribs.hasAttribute( XML_strike ) )
+        mrTextCharacterProperties.moStrikeout = aAttribs.getToken( XML_strike );
+    if ( aAttribs.hasAttribute( XML_baseline ) )
+        mrTextCharacterProperties.moBaseline = aAttribs.getInteger( XML_baseline );
 
-//  mrTextCharacterProperties.moCaseMap     = rAttribs.getToken( XML_cap );
-    if ( rAttribs.hasAttribute( XML_b ) )
-        mrTextCharacterProperties.moBold = rAttribs.getBool( XML_b );
-    if ( rAttribs.hasAttribute( XML_i ) )
-        mrTextCharacterProperties.moItalic = rAttribs.getBool( XML_i );
+    if ( aAttribs.hasAttribute( XML_b ) )
+        mrTextCharacterProperties.moBold = aAttribs.getBool( XML_b );
+    if ( aAttribs.hasAttribute( XML_i ) )
+        mrTextCharacterProperties.moItalic = aAttribs.getBool( XML_i );
 
-// TODO
-/*   todo: we need to be able to iterate over the XFastAttributes
-
-  // ST_TextNonNegativePoint
-    const OUString sCharKerning( "CharKerning" );
-    //case A_TOKEN( kern ):
-
-  // ST_TextLanguageID
-    OUString sAltLang = rAttribs.getString( XML_altLang ).get();
-
-        case A_TOKEN( kumimoji ):       // xsd:boolean
-            break;
-        case A_TOKEN( spc ):            // ST_TextPoint
-        case A_TOKEN( normalizeH ):     // xsd:boolean
-        case A_TOKEN( baseline ):       // ST_Percentage
-        case A_TOKEN( noProof ):        // xsd:boolean
-        case A_TOKEN( dirty ):          // xsd:boolean
-        case A_TOKEN( err ):            // xsd:boolean
-        case A_TOKEN( smtClean ):       // xsd:boolean
-        case A_TOKEN( smtId ):          // xsd:unsignedInt
-            break;
-*/
-
+    /* TODO / unhandled so far:
+       XML_cap
+       A_TOKEN( kern )
+       XML_altLang
+       A_TOKEN( kumimoji )
+       A_TOKEN( spc )
+       A_TOKEN( normalizeH )
+       A_TOKEN( noProof )
+       A_TOKEN( dirty )
+       A_TOKEN( err )
+       A_TOKEN( smtClean )
+       A_TOKEN( smtId )
+    */
 }
 
 TextCharacterPropertiesContext::~TextCharacterPropertiesContext()

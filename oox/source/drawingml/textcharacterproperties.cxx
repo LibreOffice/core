@@ -52,6 +52,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moHeight.assignIfUsed( rSourceProps.moHeight );
     moSpacing.assignIfUsed( rSourceProps.moSpacing );
     moUnderline.assignIfUsed( rSourceProps.moUnderline );
+    moBaseline.assignIfUsed( rSourceProps.moBaseline );
     moStrikeout.assignIfUsed( rSourceProps.moStrikeout );
     moCaseMap.assignIfUsed( rSourceProps.moCaseMap );
     moBold.assignIfUsed( rSourceProps.moBold );
@@ -111,6 +112,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap[ PROP_CharKerning ] <<= (sal_Int16) GetTextSpacingPoint( moSpacing.get( 0 ) );
 
     rPropMap[ PROP_CharUnderline ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
+    rPropMap[ PROP_CharUnderline ] <<= GetFontUnderline( moBaseline.get( 0 ) );
     rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
     rPropMap[ PROP_CharCaseMap ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
 
