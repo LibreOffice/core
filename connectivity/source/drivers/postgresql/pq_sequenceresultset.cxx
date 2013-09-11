@@ -38,7 +38,7 @@
 #include "pq_sequenceresultset.hxx"
 #include "pq_sequenceresultsetmetadata.hxx"
 
-
+#include <connectivity/dbexception.hxx>
 
 using com::sun::star::sdbc::XResultSetMetaData;
 
@@ -113,15 +113,15 @@ sal_Int32 SAL_CALL SequenceResultSet::findColumn(
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     // no need to guard, as all members are readonly !
-    sal_Int32 ret = -1;
     for( int i = 0 ;i < m_fieldCount ; i ++ )
     {
         if( columnName == m_columnNames[i] )
         {
-            ret = i+1;
-            break;
+            return i+1;
         }
     }
-    return ret;
+    ::dbtools::throwInvalidColumnException( columnName, *this );
+    assert(false);
+    return 0; // Never reached
 }
 }

@@ -185,20 +185,16 @@ sal_Int32 SAL_CALL MacabResultSet::findColumn(const OUString& columnName) throw(
     sal_Int32 nLen = xMeta->getColumnCount();
 
     for (sal_Int32 i = 1; i <= nLen; ++i)
+    {
         if (xMeta->isCaseSensitive(i) ?
             columnName == xMeta->getColumnName(i) :
             columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
                 return i;
+    }
 
-    ::connectivity::SharedResources aResources;
-    const OUString sError( aResources.getResourceStringWithSubstitution(
-            STR_NO_ELEMENT_NAME,
-            "$name$", columnName
-         ) );
-    ::dbtools::throwGenericSQLException(sError , *this);
-    // Unreachable:
-    OSL_ASSERT(false);
-    return 0;
+    ::dbtools::throwInvalidColumnException( columnName, *this );
+    assert(false);
+    return 0; // Never reached
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
