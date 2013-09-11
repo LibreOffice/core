@@ -95,6 +95,23 @@
     }
 }
 
+- (void)longPressGesture:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint point = [gestureRecognizer locationInView:self];
+
+    UIGestureRecognizerState state = gestureRecognizer.state;
+
+    NSLog(@"longPressGesture: state %d cords (%d,%d)",state ,(int)point.x,(int)point.y);
+
+    if (state == UIGestureRecognizerStateBegan) {
+        lo_mouse_drag(point.x, point.y, DOWN);
+    } else if (state == UIGestureRecognizerStateChanged) {
+        lo_mouse_drag(point.x, point.y, MOVE);
+    } else if (state == UIGestureRecognizerStateEnded) {
+        lo_mouse_drag(point.x, point.y, UP);
+    }
+}
+
 @end
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

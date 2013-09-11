@@ -60,9 +60,11 @@ static View *theView;
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(tapGesture:)];
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.view action:@selector(panGesture:)];
+    UILongPressGestureRecognizer * longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self.view action:@selector(longPressGesture:)];
 
     [self.window addGestureRecognizer: tapRecognizer];
     [self.window addGestureRecognizer: panRecognizer];
+    [self.window addGestureRecognizer: longPressRecognizer];
 
     NSLog(@"statusBarOrientation: %ld", (long) [[UIApplication sharedApplication] statusBarOrientation]);
 
