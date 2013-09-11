@@ -309,7 +309,12 @@ Image TabBar::GetItemImage (const DeckDescriptor& rDeckDescriptor) const
 
 IMPL_LINK(TabBar::Item, HandleClick, Button*, EMPTYARG)
 {
-    maDeckActivationFunctor(msDeckId);
+    try
+    {
+        maDeckActivationFunctor(msDeckId);
+    }
+    catch( const ::com::sun::star::uno::Exception&) {} // workaround for #i123198#
+
     return 1;
 }
 
