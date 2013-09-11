@@ -39,7 +39,6 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(call gb_Package_get_target,odk_html) \
 		$(if $(ENABLE_JAVA),$(call gb_Package_get_target,odk_javadoc)) \
 		$(call gb_Package_get_target,odk_lib) \
-		$(if $(filter MACOSX,$(OS)),$(call gb_Package_get_target,odk_macosx)) \
 		$(call gb_Package_get_target,odk_settings) \
 		$(call gb_Package_get_target,odk_settings_generated) \
 		$(call gb_Package_get_target,odk_uno_loader_classes) \

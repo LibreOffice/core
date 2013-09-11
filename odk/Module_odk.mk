@@ -43,12 +43,6 @@ $(eval $(call gb_Module_add_targets,odk,\
 ))
 endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,odk,\
-	Package_macosx \
-))
-endif
-
 ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,odk,\
 	$(if $(filter YESGCC,$(BUILD_UNOWINREG)$(COM)),CustomTarget_unowinreg) \

@@ -121,15 +121,6 @@ File gid_File_Package_odk_lib
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
-#if defined(MACOSX)
-File gid_File_Package_odk_macosx
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "odk_macosx.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-#endif
-
 File gid_File_Package_odk_settings
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;

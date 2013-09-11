@@ -70,14 +70,6 @@ if (-d "$SdkDir") {
         print "+";
         }
     }
-    if ($OperatingSystem eq "macosx") {
-        if (!check_file("bin/addsym-macosx.sh")) {
-        $return++;
-        print "\nERROR: \"bin/addsym-macosx.sh\" is missing\n";
-        } else {
-        print "+";
-        }
-    }
     } else {
         print "\nERROR: \"bin\" is missing\n";
         $return++;
