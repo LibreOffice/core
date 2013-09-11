@@ -13,6 +13,7 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -24,6 +25,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 using namespace svx;
 using namespace ::com::sun::star;
@@ -67,10 +69,44 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
         const KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
         sal_uInt16 nGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
-        bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||
-                 ( KEYGROUP_MISC == nGroup &&
-                 ( nKey == KEY_SUBTRACT || nKey == KEY_COMMA || nKey == KEY_POINT
-                   || nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
+
+        switch ( nGroup ) {
+            case KEYGROUP_NUM :
+            case KEYGROUP_CURSOR :
+            {
+                bValid = true;
+                break;
+            }
+
+            case KEYGROUP_MISC :
+            {
+                switch ( nKey ) {
+                    case KEY_SUBTRACT :
+                    case KEY_COMMA :
+                    case KEY_POINT :
+                    {
+                        bValid = true;
+                        break;
+                    }
+
+                    default :
+                    {
+                        if( nKey < KEY_ADD || nKey > KEY_EQUAL )
+                            bValid = true;
+                        break;
+                    }
+                }
+                break;
+            }
+
+            default :
+            {
+                bValid = false;
+                break;
+            }
+        }
+
+        //Select all, Copy, Paste, Cut, Undo Keys
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
             bValid = sal_True;
@@ -81,10 +117,9 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
         Edit::KeyInput( rKeyEvent );
 }
 
-void CuiCustomMultilineEdit::setBehaviour( bool bNumeric, int nLimit )
+Size CuiCustomMultilineEdit::GetOptimalSize() const
 {
-    bNumericOnly = bNumeric;
-    SetMaxTextLen(nLimit);
+    return LogicToPixel(Size(150,30),MAP_APPFONT);
 }
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet ) :
@@ -158,7 +193,7 @@ sal_Bool CuiAboutConfigTabPage::FillItemSet( SfxItemSet& )
 
     for( size_t nInd = 0; nInd < m_vectorOfModified.size(); ++nInd )
     {
-        Prop_Impl* aNamedValue = m_vectorOfModified[ nInd ];
+        boost::shared_ptr< Prop_Impl > aNamedValue = m_vectorOfModified[ nInd ];
 
         xUpdateAccess = getConfigAccess( aNamedValue->Name , sal_True );
         Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
@@ -347,7 +382,7 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     return xNameAccess;
 }
 
-void CuiAboutConfigTabPage::AddToModifiedVector( Prop_Impl* rProp )
+void CuiAboutConfigTabPage::AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp )
 {
     bool isModifiedBefore = false;
     //Check if value modified before
@@ -365,22 +400,32 @@ void CuiAboutConfigTabPage::AddToModifiedVector( Prop_Impl* rProp )
 
     if( !isModifiedBefore )
         m_vectorOfModified.push_back( rProp );
-    //property is not modified be
+    //property is not modified before
+}
+
+std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( const OUString& rCommaSepString )
+{
+    std::vector<OUString> tempVector;
+
+    int index = 0;
+    do
+    {
+        OUString word = rCommaSepString.getToken(0, static_cast<sal_Unicode> (','), index);
+        word = word.trim();
+        if( !word.isEmpty())
+            tempVector.push_back(word);
+    }while( index >= 0 );
+    return tempVector;
 }
 
 CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( Window* pWindow,
                                                       const OUString& rValue,
                                                       int limit ) :
-    ModalDialog( pWindow, "AboutConfigValueDialog", "cui/ui/aboutconfigvalue   dialog.ui" ),
+    ModalDialog( pWindow, "AboutConfigValueDialog", "cui/ui/aboutconfigvaluedialog.ui" ),
     m_pEDValue( get<CuiCustomMultilineEdit>("valuebox") )
 {
-    if( limit != 0)
-    {
-        //numericonly, limit
-        m_pEDValue->setBehaviour( true, limit );
-    }
-    else if ( limit == 0 )
-        m_pEDValue->setBehaviour( false, EDIT_NOLIMIT );
+    m_pEDValue->bNumericOnly = ( limit !=0 );
+    m_pEDValue->SetMaxTextLen( limit == 0 ? EDIT_NOLIMIT : limit);
     m_pEDValue->SetText( rValue );
 
 }
@@ -424,7 +469,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
     OUString sPropertyType = m_pPrefBox->GetEntryText( pEntry, 2 );
     OUString sPropertyValue = m_pPrefBox->GetEntryText( pEntry, 3 );
 
-    Prop_Impl* pProperty = new Prop_Impl( sPropertyPath, sPropertyName, makeAny( sPropertyValue ) );
+    boost::shared_ptr< Prop_Impl > pProperty (new Prop_Impl( sPropertyPath, sPropertyName, makeAny( sPropertyValue ) ) );
 
     bool bOpenDialog;
     OUString sDialogValue;
@@ -447,9 +492,12 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
         pProperty->Value = uno::makeAny( bValue );
         bOpenDialog = false;
     }
-    else// if ( sPropertyType == OUString( "string" ) )
+    else if ( sPropertyType == OUString( "void" ) )
     {
-        //TODO: handle void etc.
+        bOpenDialog = false;
+    }
+    else
+    {
         sDialogValue = sPropertyValue;
         bOpenDialog = true;
     }
@@ -518,24 +566,89 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         else
                             throw uno::Exception();
                     }
-                    else
+                    else if( sPropertyType == "string" )
+                    {
                         pProperty->Value = uno::makeAny( sNewValue );
+                    }
+                    else if( sPropertyType == OUString("[]short") )
+                    {
+                        //create string sequence from comma seperated string
+                        //uno::Sequence< OUString > seqStr;
+                        std::vector< OUString > seqStr;
+                        seqStr = commaStringToSequence( sNewValue );
+
+                        //create appropriate sequence with same size as string sequence
+                        uno::Sequence< sal_Int16 > seqShort( seqStr.size() );
+                        //convert all strings to appropriate type
+                        for( size_t i = 0; i < seqStr.size(); ++i )
+                        {
+                            seqShort[i] = (sal_Int16) seqStr[i].toInt32();
+                        }
+                        pProperty->Value = uno::makeAny( seqShort );
+                    }
+                    else if( sPropertyType == OUString("[]long") )
+                    {
+                        std::vector< OUString > seqStrLong;
+                        seqStrLong = commaStringToSequence( sNewValue );
+
+                        uno::Sequence< sal_Int32 > seqLong( seqStrLong.size() );
+                        for( size_t i = 0; i < seqStrLong.size(); ++i )
+                        {
+                            seqLong[i] = seqStrLong[i].toInt32();
+                        }
+                        pProperty->Value = uno::makeAny( seqLong );
+                    }
+                    else if( sPropertyType == OUString("[]hyper") )
+                    {
+                        std::vector< OUString > seqStrHyper;
+                        seqStrHyper = commaStringToSequence( sNewValue );
+                        uno::Sequence< sal_Int64 > seqHyper( seqStrHyper.size() );
+                        for( size_t i = 0; i < seqStrHyper.size(); ++i )
+                        {
+                            seqHyper[i] = seqStrHyper[i].toInt64();
+                        }
+                        pProperty->Value = uno::makeAny( seqHyper );
+                    }
+                    else if( sPropertyType == OUString("[]double") )
+                    {
+                        std::vector< OUString > seqStrDoub;
+                        seqStrDoub = commaStringToSequence( sNewValue );
+                        uno::Sequence< double > seqDoub( seqStrDoub.size() );
+                        for( size_t i = 0; i < seqStrDoub.size(); ++i )
+                        {
+                            seqDoub[i] = seqStrDoub[i].toDouble();
+                        }
+                        pProperty->Value = uno::makeAny( seqDoub );
+                    }
+                    else if( sPropertyType == OUString("[]float") )
+                    {
+                        std::vector< OUString > seqStrFloat;
+                        seqStrFloat = commaStringToSequence( sNewValue );
+                        uno::Sequence< sal_Int16 > seqFloat( seqStrFloat.size() );
+                        for( size_t i = 0; i < seqStrFloat.size(); ++i )
+                        {
+                            seqFloat[i] = seqStrFloat[i].toFloat();
+                        }
+                        pProperty->Value = uno::makeAny( seqFloat );
+                    }
+                    else if( sPropertyType == OUString("[]string"))
+                    {
+                        pProperty->Value = uno::makeAny( comphelper::containerToSequence( commaStringToSequence( sNewValue )));
+                    }
+                    else //unknown
+                        throw uno::Exception();
+
 
                 AddToModifiedVector( pProperty );
                 sDialogValue = sNewValue;
             }
-            else
-                delete pProperty;
         }
-        else
-            delete pProperty;
 
         //update listbox value.
         m_pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
     }
     catch( uno::Exception& )
     {
-        delete pProperty;
     }
 
     return 0;

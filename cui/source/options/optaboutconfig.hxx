@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace svx { class OptHeaderTabListBox; }
 class CuiAboutConfigTabPage;
@@ -27,18 +28,16 @@ struct Prop_Impl;
 
 class CuiCustomMultilineEdit : public Edit
 {
-private:
-    bool bNumericOnly;
-
 public:
+    bool bNumericOnly;
     CuiCustomMultilineEdit( Window* pParent, WinBits nStyle )
         : Edit( pParent, nStyle )
         , bNumericOnly(false)
     {}
 
     virtual void KeyInput( const KeyEvent& rKeyEvent );
-    //virtual void Modify();
-    void setBehaviour( bool bNumeric, int nLengthLimit);
+    virtual Size GetOptimalSize() const;
+    //void setBehaviour( bool bNumeric, int nLengthLimit);
 };
 
 class CuiAboutConfigTabPage : public SfxTabPage
@@ -48,11 +47,12 @@ private:
     PushButton* m_pDefaultBtn;
     PushButton* m_pEditBtn;
 
-    std::vector< Prop_Impl* > m_vectorOfModified;
+    std::vector< boost::shared_ptr< Prop_Impl > > m_vectorOfModified;
     boost::scoped_ptr< svx::OptHeaderTabListBox > m_pPrefBox;
 
     CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
-    void AddToModifiedVector( Prop_Impl* rProp );
+    void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
+    std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
     DECL_LINK( StandardHdl_Impl, void * );
