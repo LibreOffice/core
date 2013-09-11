@@ -22,10 +22,15 @@
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
+#include <basic/sbuno.hxx>
+#include <com/sun/star/util/Date.hpp>
 #include "sbxconv.hxx"
 #include "runtime.hxx"
+#include "date.hxx"
 
 TYPEINIT1(SbxValue,SbxBase)
+
+using namespace com::sun::star::uno;
 
 ///////////////////////////// constructors //////////////////////////////
 
@@ -318,6 +323,29 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     {
         SetError( SbxERR_PROP_WRITEONLY );
         rRes.pObj = NULL;
+    }
+    else if(rRes.eType == SbxDATE && GetType() == SbxOBJECT)
+    {
+        Any aAny (sbxToUnoValue(this));
+        com::sun::star::util::DateTime aUnoDT;
+        com::sun::star::util::Date aUnoDate;
+        com::sun::star::util::Time aUnoTime;
+        if(aAny >>= aUnoDT)
+        {
+            if (!implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
+                                     aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
+                                     rRes.nDouble ))
+                SbxBase::SetError( SbxERR_CONVERSION );
+        }
+        else if(aAny >>= aUnoDate)
+        {
+            if (!implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, rRes.nDouble ))
+                SbxBase::SetError( SbxERR_CONVERSION );
+        }
+        else if(aAny >>= aUnoTime)
+            rRes.nDouble = implTimeSerial(aUnoTime.Hours, aUnoTime.Minutes, aUnoTime.Seconds);
+        else
+            SbxBase::SetError( SbxERR_CONVERSION );
     }
     else
     {
