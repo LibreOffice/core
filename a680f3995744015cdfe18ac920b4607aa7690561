@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn//6/4\u003d",
+        "filename": "sal/osl/unx/thread.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-11T14:08:28Z",
+      "side": 0,
+      "message": "Why do you delete the above comment?  It is still relevant in the non-FAST_THREAD_ID_IMPL case",
+      "revId": "a680f3995744015cdfe18ac920b4607aa7690561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
