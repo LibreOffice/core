@@ -315,6 +315,7 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType
 {
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    ensurePrepared();
 
     setParameterNull(nIndex, true);
 }
