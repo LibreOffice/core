@@ -213,5 +213,17 @@ Bitmap BMP_ICON_SET_TRIANGLES_UP
 {
     File = "icon-set-triangles-up.png";
 };
+Bitmap BMP_ICON_SET_POSITIVE_GREEN_SMILIE
+{
+    File = "icon-set-positive-green-smilie.png";
+};
+Bitmap BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE
+{
+    File = "icon-set-neutral-yellow-smilie.png";
+};
+Bitmap BMP_ICON_SET_NEGATIVE_RED_SMILIE
+{
+    File = "icon-set-negative-red-smilie.png";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

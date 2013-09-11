@@ -178,6 +178,7 @@ enum ScIconSetType
     IconSet_3Signs,
     IconSet_3Symbols,
     IconSet_3Symbols2,
+    IconSet_ColorSmilies,
     IconSet_4Arrows,
     IconSet_4ArrowsGray,
     IconSet_4RedToBlack,
