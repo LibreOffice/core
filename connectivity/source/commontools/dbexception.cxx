@@ -394,9 +394,11 @@ void throwFunctionNotSupportedException( const OUString& _rFunctionName, const :
             STR_UNSUPPORTED_FUNCTION,
             "$functionname$", _rFunctionName
          ) );
-    throwFunctionNotSupportedException(
+    throw SQLException(
         sError,
         _rxContext,
+        getStandardSQLState( SQL_FUNCTION_NOT_SUPPORTED ),
+        0,
         _rNextException
     );
 }
