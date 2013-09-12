@@ -17,6 +17,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+gb_INSTROOT := $(INSTDIR)
+gb_DEVINSTALLROOT := $(gb_INSTROOT)
+
 gb_RC := $(WINDRES)
 
 gb_COMPILERDEFS += \
