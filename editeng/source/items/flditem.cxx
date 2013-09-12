@@ -50,171 +50,171 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
         aAny = xPropSet->getPropertyValue(UNO_TC_PROP_TEXTFIELD_TYPE);
         if ( !aAny.has<sal_Int32>() )
             return NULL;
+
+        sal_Int32 nFieldType = aAny.get<sal_Int32>();
+
+        switch (nFieldType)
+        {
+            case text::textfield::Type::TIME:
+            case text::textfield::Type::EXTENDED_TIME:
+            case text::textfield::Type::DATE:
+                {
+                    sal_Bool bIsDate = false;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_IS_DATE) >>= bIsDate;
+
+                    if (bIsDate)
+                    {
+                        util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
+                        Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
+                        sal_Bool bIsFixed = false;
+                        xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
+
+                        SvxDateField* pData = new SvxDateField(aDate, bIsFixed ? SVXDATETYPE_FIX : SVXDATETYPE_VAR);
+                        sal_Int32 nNumFmt = -1;
+                        xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
+                        if (nNumFmt >= SVXDATEFORMAT_APPDEFAULT && nNumFmt <= SVXDATEFORMAT_F)
+                            pData->SetFormat(static_cast<SvxDateFormat>(nNumFmt));
+
+                        return pData;
+                    }
+
+                    if (nFieldType != text::textfield::Type::TIME && nFieldType != text::textfield::Type::DATE)
+                    {
+                        util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
+                        Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
+
+                        sal_Bool bIsFixed = false;
+                        xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
+
+                        SvxExtTimeField* pData = new SvxExtTimeField(aTime, bIsFixed ? SVXTIMETYPE_FIX : SVXTIMETYPE_VAR);
+
+                        sal_Int32 nNumFmt = -1;
+                        xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
+                        if (nNumFmt >= SVXTIMEFORMAT_APPDEFAULT && nNumFmt <= SVXTIMEFORMAT_AM_HMSH)
+                            pData->SetFormat(static_cast<SvxTimeFormat>(nNumFmt));
+
+                        return pData;
+                    }
+
+                    return new SvxTimeField();
+                }
+            case text::textfield::Type::URL:
+                {
+                    OUString aRep, aTarget, aURL;
+                    sal_Int16 nFmt = -1;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_URL_REPRESENTATION) >>= aRep;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_URL_TARGET) >>= aTarget;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_URL) >>= aURL;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_URL_FORMAT) >>= nFmt;
+                    SvxURLField* pData = new SvxURLField(aURL, aRep, aRep.isEmpty() ? SVXURLFORMAT_URL : SVXURLFORMAT_REPR);
+                    pData->SetTargetFrame(aTarget);
+                    if (nFmt >= SVXURLFORMAT_APPDEFAULT && nFmt <= SVXURLFORMAT_REPR)
+                        pData->SetFormat(static_cast<SvxURLFormat>(nFmt));
+
+                    return pData;
+                }
+            case text::textfield::Type::PAGE:
+                return new SvxPageField();
+            case text::textfield::Type::PAGES:
+                return new SvxPagesField();
+            case text::textfield::Type::DOCINFO_TITLE:
+                return new SvxFileField();
+            case text::textfield::Type::TABLE:
+                {
+                    sal_Int32 nTab = 0;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_TABLE_POSITION) >>= nTab;
+                    return new SvxTableField(nTab);
+                }
+            case text::textfield::Type::EXTENDED_FILE:
+                {
+                    OUString aPresentation;
+                    sal_Bool bIsFixed = false;
+                    sal_Int16 nFmt = text::FilenameDisplayFormat::FULL;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_CURRENT_PRESENTATION) >>= aPresentation;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_FILE_FORMAT) >>= nFmt;
+
+                    SvxFileFormat eFmt = SVXFILEFORMAT_NAME_EXT;
+                    switch (nFmt)
+                    {
+                        case text::FilenameDisplayFormat::FULL: eFmt = SVXFILEFORMAT_FULLPATH; break;
+                        case text::FilenameDisplayFormat::PATH: eFmt = SVXFILEFORMAT_PATH;     break;
+                        case text::FilenameDisplayFormat::NAME: eFmt = SVXFILEFORMAT_NAME;     break;
+                        default:;
+                    }
+
+                    // pass fixed attribute to constructor
+                    return new SvxExtFileField(
+                            aPresentation, bIsFixed ? SVXFILETYPE_FIX : SVXFILETYPE_VAR, eFmt);
+                }
+            case text::textfield::Type::AUTHOR:
+                {
+                    sal_Bool bIsFixed = false;
+                    sal_Bool bFullName = false;
+                    sal_Int16 nFmt = -1;
+                    OUString aPresentation, aContent, aFirstName, aLastName;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_AUTHOR_FULLNAME) >>= bFullName;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_CURRENT_PRESENTATION) >>= aPresentation;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_AUTHOR_CONTENT) >>= aContent;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_AUTHOR_FORMAT) >>= nFmt;
+
+                    // do we have CurrentPresentation given?  Mimic behaviour of
+                    // writer, which means: prefer CurrentPresentation over Content
+                    // if both are given.
+                    if (!aPresentation.isEmpty())
+                        aContent = aPresentation;
+
+                    sal_Int32 nPos = aContent.lastIndexOf(sal_Unicode(' '), 0);
+                    if (nPos > 0)
+                    {
+                        aFirstName = aContent.copy(0, nPos);
+                        aLastName = aContent.copy(nPos + 1);
+                    }
+                    else
+                    {
+                        aLastName = aContent;
+                    }
+
+                    // #92009# pass fixed attribute to constructor
+                    SvxAuthorField* pData = new SvxAuthorField(
+                            aFirstName, aLastName, OUString(), bIsFixed ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR);
+
+                    if (!bFullName)
+                    {
+                        pData->SetFormat(SVXAUTHORFORMAT_SHORTNAME);
+                    }
+                    else if (nFmt >= SVXAUTHORFORMAT_FULLNAME || nFmt <= SVXAUTHORFORMAT_SHORTNAME)
+                    {
+                        pData->SetFormat(static_cast<SvxAuthorFormat>(nFmt));
+                    }
+
+                    return pData;
+                }
+            case text::textfield::Type::MEASURE:
+                {
+                    SdrMeasureFieldKind eKind = SDRMEASUREFIELD_VALUE;
+                    sal_Int16 nTmp = -1;
+                    xPropSet->getPropertyValue(UNO_TC_PROP_MEASURE_KIND) >>= nTmp;
+                    if (nTmp == static_cast<sal_Int16>(SDRMEASUREFIELD_UNIT) ||
+                            nTmp == static_cast<sal_Int16>(SDRMEASUREFIELD_ROTA90BLANCS))
+                        eKind = static_cast<SdrMeasureFieldKind>(nTmp);
+
+                    return new SdrMeasureField(eKind);
+                }
+            case text::textfield::Type::PRESENTATION_HEADER:
+                return new SvxHeaderField();
+            case text::textfield::Type::PRESENTATION_FOOTER:
+                return new SvxFooterField();
+            case text::textfield::Type::PRESENTATION_DATE_TIME:
+                return new SvxDateTimeField();
+            default:
+                ;
+        };
     } catch ( const beans::UnknownPropertyException& )
     {
         return NULL;
     }
-
-    sal_Int32 nFieldType = aAny.get<sal_Int32>();
-
-    switch (nFieldType)
-    {
-        case text::textfield::Type::TIME:
-        case text::textfield::Type::EXTENDED_TIME:
-        case text::textfield::Type::DATE:
-        {
-            sal_Bool bIsDate = false;
-            xPropSet->getPropertyValue(UNO_TC_PROP_IS_DATE) >>= bIsDate;
-
-            if (bIsDate)
-            {
-                util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
-                Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
-                sal_Bool bIsFixed = false;
-                xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
-
-                SvxDateField* pData = new SvxDateField(aDate, bIsFixed ? SVXDATETYPE_FIX : SVXDATETYPE_VAR);
-                sal_Int32 nNumFmt = -1;
-                xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                if (nNumFmt >= SVXDATEFORMAT_APPDEFAULT && nNumFmt <= SVXDATEFORMAT_F)
-                    pData->SetFormat(static_cast<SvxDateFormat>(nNumFmt));
-
-                return pData;
-            }
-
-            if (nFieldType != text::textfield::Type::TIME && nFieldType != text::textfield::Type::DATE)
-            {
-                util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
-                Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
-
-                sal_Bool bIsFixed = false;
-                xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
-
-                SvxExtTimeField* pData = new SvxExtTimeField(aTime, bIsFixed ? SVXTIMETYPE_FIX : SVXTIMETYPE_VAR);
-
-                sal_Int32 nNumFmt = -1;
-                xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                if (nNumFmt >= SVXTIMEFORMAT_APPDEFAULT && nNumFmt <= SVXTIMEFORMAT_AM_HMSH)
-                    pData->SetFormat(static_cast<SvxTimeFormat>(nNumFmt));
-
-                return pData;
-            }
-
-            return new SvxTimeField();
-        }
-        case text::textfield::Type::URL:
-        {
-            OUString aRep, aTarget, aURL;
-            sal_Int16 nFmt = -1;
-            xPropSet->getPropertyValue(UNO_TC_PROP_URL_REPRESENTATION) >>= aRep;
-            xPropSet->getPropertyValue(UNO_TC_PROP_URL_TARGET) >>= aTarget;
-            xPropSet->getPropertyValue(UNO_TC_PROP_URL) >>= aURL;
-            xPropSet->getPropertyValue(UNO_TC_PROP_URL_FORMAT) >>= nFmt;
-            SvxURLField* pData = new SvxURLField(aURL, aRep, aRep.isEmpty() ? SVXURLFORMAT_URL : SVXURLFORMAT_REPR);
-            pData->SetTargetFrame(aTarget);
-            if (nFmt >= SVXURLFORMAT_APPDEFAULT && nFmt <= SVXURLFORMAT_REPR)
-                pData->SetFormat(static_cast<SvxURLFormat>(nFmt));
-
-            return pData;
-        }
-        case text::textfield::Type::PAGE:
-            return new SvxPageField();
-        case text::textfield::Type::PAGES:
-            return new SvxPagesField();
-        case text::textfield::Type::DOCINFO_TITLE:
-            return new SvxFileField();
-        case text::textfield::Type::TABLE:
-        {
-            sal_Int32 nTab = 0;
-            xPropSet->getPropertyValue(UNO_TC_PROP_TABLE_POSITION) >>= nTab;
-            return new SvxTableField(nTab);
-        }
-        case text::textfield::Type::EXTENDED_FILE:
-        {
-            OUString aPresentation;
-            sal_Bool bIsFixed = false;
-            sal_Int16 nFmt = text::FilenameDisplayFormat::FULL;
-            xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
-            xPropSet->getPropertyValue(UNO_TC_PROP_CURRENT_PRESENTATION) >>= aPresentation;
-            xPropSet->getPropertyValue(UNO_TC_PROP_FILE_FORMAT) >>= nFmt;
-
-            SvxFileFormat eFmt = SVXFILEFORMAT_NAME_EXT;
-            switch (nFmt)
-            {
-                case text::FilenameDisplayFormat::FULL: eFmt = SVXFILEFORMAT_FULLPATH; break;
-                case text::FilenameDisplayFormat::PATH: eFmt = SVXFILEFORMAT_PATH;     break;
-                case text::FilenameDisplayFormat::NAME: eFmt = SVXFILEFORMAT_NAME;     break;
-                default:;
-            }
-
-            // pass fixed attribute to constructor
-            return new SvxExtFileField(
-                aPresentation, bIsFixed ? SVXFILETYPE_FIX : SVXFILETYPE_VAR, eFmt);
-        }
-        case text::textfield::Type::AUTHOR:
-        {
-            sal_Bool bIsFixed = false;
-            sal_Bool bFullName = false;
-            sal_Int16 nFmt = -1;
-            OUString aPresentation, aContent, aFirstName, aLastName;
-            xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
-            xPropSet->getPropertyValue(UNO_TC_PROP_AUTHOR_FULLNAME) >>= bFullName;
-            xPropSet->getPropertyValue(UNO_TC_PROP_CURRENT_PRESENTATION) >>= aPresentation;
-            xPropSet->getPropertyValue(UNO_TC_PROP_AUTHOR_CONTENT) >>= aContent;
-            xPropSet->getPropertyValue(UNO_TC_PROP_AUTHOR_FORMAT) >>= nFmt;
-
-            // do we have CurrentPresentation given?  Mimic behaviour of
-            // writer, which means: prefer CurrentPresentation over Content
-            // if both are given.
-            if (!aPresentation.isEmpty())
-                aContent = aPresentation;
-
-            sal_Int32 nPos = aContent.lastIndexOf(sal_Unicode(' '), 0);
-            if (nPos > 0)
-            {
-                aFirstName = aContent.copy(0, nPos);
-                aLastName = aContent.copy(nPos + 1);
-            }
-            else
-            {
-                aLastName = aContent;
-            }
-
-            // #92009# pass fixed attribute to constructor
-            SvxAuthorField* pData = new SvxAuthorField(
-                aFirstName, aLastName, OUString(), bIsFixed ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR);
-
-            if (!bFullName)
-            {
-                pData->SetFormat(SVXAUTHORFORMAT_SHORTNAME);
-            }
-            else if (nFmt >= SVXAUTHORFORMAT_FULLNAME || nFmt <= SVXAUTHORFORMAT_SHORTNAME)
-            {
-                pData->SetFormat(static_cast<SvxAuthorFormat>(nFmt));
-            }
-
-            return pData;
-        }
-        case text::textfield::Type::MEASURE:
-        {
-            SdrMeasureFieldKind eKind = SDRMEASUREFIELD_VALUE;
-            sal_Int16 nTmp = -1;
-            xPropSet->getPropertyValue(UNO_TC_PROP_MEASURE_KIND) >>= nTmp;
-            if (nTmp == static_cast<sal_Int16>(SDRMEASUREFIELD_UNIT) ||
-                nTmp == static_cast<sal_Int16>(SDRMEASUREFIELD_ROTA90BLANCS))
-                eKind = static_cast<SdrMeasureFieldKind>(nTmp);
-
-            return new SdrMeasureField(eKind);
-        }
-        case text::textfield::Type::PRESENTATION_HEADER:
-            return new SvxHeaderField();
-        case text::textfield::Type::PRESENTATION_FOOTER:
-            return new SvxFooterField();
-        case text::textfield::Type::PRESENTATION_DATE_TIME:
-            return new SvxDateTimeField();
-        default:
-            ;
-    };
 
     return NULL;
 }
