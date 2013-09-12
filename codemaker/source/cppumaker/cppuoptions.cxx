@@ -94,6 +94,16 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     m_options["-O"] = OString(s);
                     break;
+                case 'n':
+                    if (av[i][2] != 'D' || av[i][3] != '\0')
+                    {
+                        OString tmp("'-nD', please check");
+                            tmp += " your input '" + OString(av[i]) + "'";
+                        throw IllegalArgument(tmp);
+                    }
+
+                    m_options["-nD"] = OString("");
+                    break;
                 case 'T':
                     if (av[i][2] == '\0')
                     {
@@ -321,6 +331,7 @@ OString CppuOptions::prepareHelp()
     help += "                 '-L' should be the default for external components.\n";
     help += "    -C         = UNO type functions are generated comprehensive that means all\n";
     help += "                 necessary information is available for bridging the type in UNO.\n";
+    help += "    -nD        = no dependent types are generated.\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -Gc        = generate only target files which content will be changed.\n";
     help += "    -X<file>   = extra types which will not be taken into account for generation.\n\n";

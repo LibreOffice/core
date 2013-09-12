@@ -409,12 +409,15 @@ void CppuType::dumpFile(
 void CppuType::dumpDependedTypes(
     codemaker::GeneratedTypeSet & generated, CppuOptions const & options)
 {
-    codemaker::cppumaker::Dependencies::Map const & map
-        = m_dependencies.getMap();
-    for (codemaker::cppumaker::Dependencies::Map::const_iterator i(map.begin());
-         i != map.end(); ++i)
-    {
-        produce(i->first, m_typeMgr, generated, options);
+    if (!options.isValid("-nD")) {
+        codemaker::cppumaker::Dependencies::Map const & map
+            = m_dependencies.getMap();
+        for (codemaker::cppumaker::Dependencies::Map::const_iterator i(
+                 map.begin());
+             i != map.end(); ++i)
+        {
+            produce(i->first, m_typeMgr, generated, options);
+        }
     }
 }
 

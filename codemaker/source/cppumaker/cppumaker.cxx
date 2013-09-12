@@ -78,13 +78,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         } else {
             produce("", typeMgr, generated, options);
         }
-        // C++ header files generated for the following UNO types are included
-        // in header files in cppu/inc/com/sun/star/uno (Any.hxx, Reference.hxx,
-        // Type.h), so it seems best to always generate those C++ header files:
-        produce(
-            "com.sun.star.uno.RuntimeException", typeMgr, generated, options);
-        produce("com.sun.star.uno.TypeClass", typeMgr, generated, options);
-        produce("com.sun.star.uno.XInterface", typeMgr, generated, options);
+        if (!options.isValid("-nD")) {
+            // C++ header files generated for the following UNO types are
+            // included in header files in cppu/inc/com/sun/star/uno (Any.hxx,
+            // Reference.hxx, Type.h), so it seems best to always generate those
+            // C++ header files:
+            produce(
+                "com.sun.star.uno.RuntimeException", typeMgr, generated,
+                options);
+            produce(
+                "com.sun.star.uno.TypeClass", typeMgr, generated, options);
+            produce(
+                "com.sun.star.uno.XInterface", typeMgr, generated, options);
+        }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << '\n';
         return EXIT_FAILURE;
