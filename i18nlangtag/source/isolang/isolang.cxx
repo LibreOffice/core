@@ -277,7 +277,6 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_CROATIAN,                    "hr", "HR", false },   // Croatian in Croatia
     { LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA, "hr", "BA", false },
     { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,        "bs", "BA", false },
-//  { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_AND_HERZEGOVINA, "bs", "BA", false },   // script codes not supported yet
     { LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA,        "sr", "RS", false },   // Serbian Cyrillic in Serbia
     { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "CS", false },   // Serbian Cyrillic in Serbia and Montenegro
     { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "YU", true  },   // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, sr_CS not supported by ICU 2.6 (3.4 does)
@@ -290,10 +289,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sh", "BA", true  },   // legacy kludge, is sr-Latn-BA now
     { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sh", ""  , true  },   // legacy kludge, is sr-Latn now
     { LANGUAGE_ARMENIAN,                    "hy", "AM", false },
-    { LANGUAGE_AZERI_LATIN,                 "az", "AZ", false },
-//  { LANGUAGE_AZERI_CYRILLIC,              "az", "AZ", false },   // script codes not supported yet
-    { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ", false },
-//  { LANGUAGE_UZBEK_CYRILLIC,              "uz", "UZ", false },   // script codes not supported yet
+    { LANGUAGE_AZERI_LATIN,                 "az", "AZ", false },    // macrolanguage code
+    { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ", false },    // macrolanguage code
     { LANGUAGE_BENGALI_BANGLADESH,          "bn", "BD", false },
     { LANGUAGE_BENGALI,                     "bn", "IN", false },
     { LANGUAGE_BURMESE,                     "my", "MM", false },
@@ -582,6 +579,9 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,   "sr-Latn", "ME" },
     { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,"sr-Latn", "BA" },
     { LANGUAGE_SERBIAN_LATIN_NEUTRAL,           "sr-Latn", ""   },
+    { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA" },
+    { LANGUAGE_AZERI_CYRILLIC,                  "az-Cyrl", "AZ" },  // macrolanguage code
+    { LANGUAGE_UZBEK_CYRILLIC,                  "uz-Cyrl", "UZ" },  // macrolanguage code
     { LANGUAGE_DONTKNOW,                        "",        ""   }   // marks end of table
 };
 
