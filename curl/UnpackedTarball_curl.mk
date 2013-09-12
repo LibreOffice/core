@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	curl/curl-7.26.0_win.patch \
 	curl/curl-7.26.0_mingw.patch \
 	curl/curl-7.26.0_win-proxy.patch \
+	curl/curl-7.26.0_strlcat.patch \
 ))
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\

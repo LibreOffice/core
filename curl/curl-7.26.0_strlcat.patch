@@ -1,0 +1,9 @@
+--- curl-7.26.0/lib/strequal.h
++++ misc/build/curl-7.26.0/strequal.h
+@@ -30,6 +30,5 @@
+ #ifndef HAVE_STRLCAT
+ #define strlcat(x,y,z) Curl_strlcat(x,y,z)
+ #endif
+-size_t strlcat(char *dst, const char *src, size_t siz);
+ 
+ #endif
