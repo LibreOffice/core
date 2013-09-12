@@ -268,7 +268,7 @@ SAL_IMPLEMENT_MAIN()
     for (std::vector< OString >::const_iterator i(registries.begin());
          i != registries.end(); ++i)
     {
-        manager->loadProvider(convertToFileUrl(*i), true);
+        manager->loadProvider(convertToFileUrl(*i), false, true);
     }
 
     if ( options.dump ) {

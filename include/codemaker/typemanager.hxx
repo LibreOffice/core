@@ -42,7 +42,7 @@ class TypeManager: public salhelper::SimpleReferenceObject {
 public:
     TypeManager();
 
-    void loadProvider(OUString const & uri, bool primary);
+    void loadProvider(OUString const & uri, bool source, bool primary);
 
     bool foundAtPrimaryProvider(OUString const & name) const;
 
