@@ -152,9 +152,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                 // ctor as that triggers use of liblangtag and initializes its
                 // database which we do not want during startup. Convert
                 // instead.
-                sal_Int32 nPos;
-                if (sChunk.indexOf('-') < 0 && ((nPos = sChunk.indexOf('_')) > 0))
-                    sChunk = sChunk.replaceAt( nPos, 1, OUString('-'));
+                sChunk = sChunk.replace( '_', '-');
                 LanguageTag aLangTag(sChunk, true);
                 if (!aLangTag.isValidBcp47())
                     continue;
