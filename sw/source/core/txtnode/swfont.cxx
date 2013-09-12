@@ -1080,15 +1080,15 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     {
         SV_STAT( nGetTextSize );
         long nOldKern = rInf.GetKern();
-        const XubString &rOldTxt = rInf.GetText();
+        const OUString &rOldTxt = rInf.GetText();
         rInf.SetKern( CheckKerning() );
         if ( !IsCaseMap() )
             aTxtSize = pLastFont->GetTextSize( rInf );
         else
         {
-            String aTmp = CalcCaseMap( rInf.GetText() );
-            const XubString &rOldStr = rInf.GetText();
-            bool bCaseMapLengthDiffers(aTmp.Len() != rOldStr.Len());
+            OUString aTmp = CalcCaseMap( rInf.GetText() );
+            const OUString &rOldStr = rInf.GetText();
+            bool bCaseMapLengthDiffers(aTmp.getLength() != rOldStr.getLength());
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
@@ -1098,12 +1098,12 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
                 // a single snippet since its size may differ, too.
                 xub_StrLen nOldIdx(rInf.GetIdx());
                 xub_StrLen nOldLen(rInf.GetLen());
-                const XubString aSnippet(rOldStr, nOldIdx, nOldLen);
-                XubString aNewText(CalcCaseMap(aSnippet));
+                const OUString aSnippet(rOldStr.copy(nOldIdx, nOldLen));
+                OUString aNewText(CalcCaseMap(aSnippet));
 
                 rInf.SetText( aNewText );
                 rInf.SetIdx( 0 );
-                rInf.SetLen( aNewText.Len() );
+                rInf.SetLen( aNewText.getLength() );
 
                 aTxtSize = pLastFont->GetTextSize( rInf );
 
@@ -1201,9 +1201,9 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
             pLastFont->DrawText( rInf );
         else
         {
-            const XubString &rOldStr = rInf.GetText();
-            XubString aString( CalcCaseMap( rOldStr ) );
-            bool bCaseMapLengthDiffers(aString.Len() != rOldStr.Len());
+            const OUString &rOldStr = rInf.GetText();
+            OUString aString( CalcCaseMap( rOldStr ) );
+            bool bCaseMapLengthDiffers(aString.getLength() != rOldStr.getLength());
 
             if(bCaseMapLengthDiffers && rInf.GetLen())
             {
@@ -1213,12 +1213,12 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
                 // a single snippet since its size may differ, too.
                 xub_StrLen nOldIdx(rInf.GetIdx());
                 xub_StrLen nOldLen(rInf.GetLen());
-                const XubString aSnippet(rOldStr, nOldIdx, nOldLen);
-                XubString aNewText = CalcCaseMap(aSnippet);
+                const OUString aSnippet(rOldStr.copy(nOldIdx, nOldLen));
+                OUString aNewText = CalcCaseMap(aSnippet);
 
                 rInf.SetText( aNewText );
                 rInf.SetIdx( 0 );
-                rInf.SetLen( aNewText.Len() );
+                rInf.SetLen( aNewText.getLength() );
 
                 pLastFont->DrawText( rInf );
 
@@ -1237,10 +1237,9 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
-static sal_Char const sDoubleSpace[] = "  ";
         Size aFontSize = _GetTxtSize( rInf );
-        const XubString &rOldStr = rInf.GetText();
-        XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
+        const OUString &rOldStr = rInf.GetText();
+        OUString aStr("  ");
 
         xub_StrLen nOldIdx = rInf.GetIdx();
         xub_StrLen nOldLen = rInf.GetLen();
@@ -1248,8 +1247,8 @@ static sal_Char const sDoubleSpace[] = "  ";
         if( rInf.GetSpace() )
         {
             xub_StrLen nTmpEnd = nOldIdx + nOldLen;
-            if( nTmpEnd > rOldStr.Len() )
-                nTmpEnd = rOldStr.Len();
+            if( nTmpEnd > rOldStr.getLength() )
+                nTmpEnd = rOldStr.getLength();
 
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
@@ -1257,8 +1256,8 @@ static sal_Char const sDoubleSpace[] = "  ";
                 ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() );
             for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
             {
-                if( CH_BLANK == rOldStr.GetChar( nTmp ) || bAsianFont ||
-                    ( nTmp + 1 < rOldStr.Len() && pSI &&
+                if( CH_BLANK == rOldStr[nTmp] || bAsianFont ||
+                    ( nTmp + 1 < rOldStr.getLength() && pSI &&
                       i18n::ScriptType::ASIAN == pSI->ScriptType( nTmp + 1 ) ) )
                     ++nSpace;
             }
@@ -1350,9 +1349,8 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
-static sal_Char const sDoubleSpace[] = "  ";
-        const XubString &rOldStr = rInf.GetText();
-        XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
+        const OUString &rOldStr = rInf.GetText();
+        OUString aStr("  ");
         xub_StrLen nOldIdx = rInf.GetIdx();
         xub_StrLen nOldLen = rInf.GetLen();
         rInf.SetText( aStr );
@@ -1390,7 +1388,7 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
         nCrsr = GetCapitalCrsrOfst( rInf );
     else
     {
-        const XubString &rOldTxt = rInf.GetText();
+        const OUString &rOldTxt = rInf.GetText();
         long nOldKern = rInf.GetKern();
         rInf.SetKern( CheckKerning() );
         SV_STAT( nGetTextSize );

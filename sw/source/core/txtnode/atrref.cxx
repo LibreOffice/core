@@ -33,7 +33,7 @@ SwFmtRefMark::~SwFmtRefMark( )
 {
 }
 
-SwFmtRefMark::SwFmtRefMark( const XubString& rName )
+SwFmtRefMark::SwFmtRefMark( const OUString& rName )
     : SfxPoolItem( RES_TXTATR_REFMARK ),
     pTxtAttr( 0 ),
     aRefName( rName )

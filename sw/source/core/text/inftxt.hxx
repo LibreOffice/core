@@ -276,7 +276,7 @@ public:
     // GetTxtSize
     //
     SwPosSize GetTxtSize( OutputDevice* pOut, const SwScriptInfo* pSI,
-                          const XubString& rTxt, const xub_StrLen nIdx,
+                          const OUString& rTxt, const xub_StrLen nIdx,
                           const xub_StrLen nLen, const sal_uInt16 nComp ) const;
     SwPosSize GetTxtSize() const;
     void GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
@@ -284,7 +284,7 @@ public:
                       sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff ) const;
     inline SwPosSize GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
                                  const xub_StrLen nLen, const sal_uInt16 nComp ) const;
-    inline SwPosSize GetTxtSize( const XubString &rTxt ) const;
+    inline SwPosSize GetTxtSize( const OUString &rTxt ) const;
 
     //
     // GetTxtBreak
@@ -383,7 +383,7 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     SwRect      aPaintRect; // Original paint rect (from Layout paint)
 
     MSHORT nSpaceIdx;
-    void _DrawText( const XubString &rText, const SwLinePortion &rPor,
+    void _DrawText( const OUString &rText, const SwLinePortion &rPor,
                    const xub_StrLen nIdx, const xub_StrLen nLen,
                    const sal_Bool bKern, const sal_Bool bWrong = sal_False,
                    const sal_Bool bSmartTag = sal_False,
@@ -421,7 +421,7 @@ public:
 
     inline SwTxtFly *GetTxtFly() { return &aTxtFly; }
     inline const SwTxtFly *GetTxtFly() const { return &aTxtFly; }
-    inline void DrawText( const XubString &rText, const SwLinePortion &rPor,
+    inline void DrawText( const OUString &rText, const SwLinePortion &rPor,
                           const xub_StrLen nIdx = 0,
                           const xub_StrLen nLen = STRING_LEN,
                           const sal_Bool bKern = sal_False) const;
@@ -804,9 +804,9 @@ inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
     return ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
 }
 
-inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
+inline SwPosSize SwTxtSizeInfo::GetTxtSize( const OUString &rTxt ) const
 {
-    return GetTxtSize( m_pOut, 0, rTxt, 0, rTxt.Len(), 0 );
+    return GetTxtSize( m_pOut, 0, rTxt, 0, rTxt.getLength(), 0 );
 }
 
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
@@ -832,7 +832,7 @@ inline void SwTxtPaintInfo::SetPaintOfst( const SwTwips nNew )
 }
 
 
-inline void SwTxtPaintInfo::DrawText( const XubString &rText,
+inline void SwTxtPaintInfo::DrawText( const OUString &rText,
                             const SwLinePortion &rPor,
                             const xub_StrLen nStart, const xub_StrLen nLength,
                             const sal_Bool bKern ) const

@@ -104,8 +104,8 @@ class SwSubFont : public SvxFont
     inline void SetProportion( const sal_uInt8 nNewPropr );
 
     inline void SetFamily( const FontFamily eFamily );
-    inline void SetName( const XubString& rName );
-    inline void SetStyleName( const XubString& rStyleName );
+    inline void SetName( const OUString& rName );
+    inline void SetStyleName( const OUString& rStyleName );
     inline void SetSize( const Size& rSize );
     inline void SetWeight( const FontWeight eWeight );
     inline void SetLanguage( LanguageType eNewLang );
@@ -227,8 +227,8 @@ public:
     inline void SetPropWidth( const sal_uInt16 nNew );
 
     inline void SetFamily( const FontFamily eFamily, const sal_uInt8 nWhich );
-    inline void SetName( const XubString& rName, const sal_uInt8 nWhich );
-    inline void SetStyleName( const XubString& rStyleName, const sal_uInt8 nWhich );
+    inline void SetName( const OUString& rName, const sal_uInt8 nWhich );
+    inline void SetStyleName( const OUString& rStyleName, const sal_uInt8 nWhich );
     inline void SetSize( const Size& rSize, const sal_uInt8 nWhich );
     inline void SetWeight( const FontWeight eWeight, const sal_uInt8 nWhich );
     inline void SetItalic( const FontItalic eItalic, const sal_uInt8 nWhich );
@@ -329,7 +329,7 @@ public:
         { return aSub[nActual].GetCapitalSize( rInf ); }
 
     xub_StrLen GetCapitalBreak( ViewShell* pSh,  const OutputDevice* pOut,
-        const SwScriptInfo* pScript, const XubString& rTxt,
+        const SwScriptInfo* pScript, const OUString& rTxt,
         long nTextWidth, const xub_StrLen nIdx,
         const xub_StrLen nLen );
 
@@ -485,26 +485,26 @@ inline void SwFont::SetFamily( const FontFamily eFamily, const sal_uInt8 nWhich 
 }
 
 // gekapselte SV-Font-Methode
-inline void SwSubFont::SetName( const XubString& rName )
+inline void SwSubFont::SetName( const OUString& rName )
 {
     pMagic = 0;
     Font::SetName( rName );
 }
 
-inline void SwFont::SetName( const XubString& rName, const sal_uInt8 nWhich )
+inline void SwFont::SetName( const OUString& rName, const sal_uInt8 nWhich )
 {
     bFntChg = sal_True;
     aSub[nWhich].SetName( rName );
 }
 
 // gekapselte SV-Font-Methode
-inline void SwSubFont::SetStyleName( const XubString& rStyleName )
+inline void SwSubFont::SetStyleName( const OUString& rStyleName )
 {
     pMagic = 0;
     Font::SetStyleName( rStyleName );
 }
 
-inline void SwFont::SetStyleName( const XubString& rStyle, const sal_uInt8 nWhich )
+inline void SwFont::SetStyleName( const OUString& rStyle, const sal_uInt8 nWhich )
 {
     bFntChg = sal_True;
     aSub[nWhich].SetStyleName( rStyle );

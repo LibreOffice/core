@@ -730,7 +730,7 @@ void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
     {
         SwCharRange &rReformat = *(pPara->GetReformat());
         rReformat.Start() = 0;
-        rReformat.Len() = GetTxt().Len();
+        rReformat.Len() = GetTxt().getLength();
         *(pPara->GetDelta()) = rReformat.Len();
     }
     InvalidateSize();
@@ -1243,8 +1243,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     rLine.SetUnclipped( sal_False );
 
     // That was too complicated for the C30: aString( GetTxt() );
-    const XubString &rString = GetTxtNode()->GetTxt();
-    const xub_StrLen nStrLen = rString.Len();
+    const OUString &rString = GetTxtNode()->GetTxt();
+    const xub_StrLen nStrLen = rString.getLength();
 
     SwCharRange &rReformat = *(pPara->GetReformat());
     SwRepaint   &rRepaint = *(pPara->GetRepaint());
@@ -1308,7 +1308,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         if( nNew )
         {
             --nNew;
-            if( CH_BREAK == rString.GetChar( nNew ) )
+            if( CH_BREAK == rString[nNew] )
             {
                 ++nNew;
                 rLine.Next();
@@ -1620,9 +1620,9 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
 void SwTxtFrm::_Format( SwParaPortion *pPara )
 {
-    const xub_StrLen nStrLen = GetTxt().Len();
+    const bool bIsEmpty = GetTxt().isEmpty();
 
-    if ( !nStrLen )
+    if ( bIsEmpty )
     {
         // Empty lines do not get tortured for very long:
         // pPara is cleared, which is the same as:
@@ -1865,7 +1865,7 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
             "SwTxtFrm::FormatQuick with swapped frame" );
 
 #if OSL_DEBUG_LEVEL > 1
-    const XubString aXXX = GetTxtNode()->GetTxt();
+    const OUString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
     (void)nDbgY;
     // nStopAt allows CV to alter it

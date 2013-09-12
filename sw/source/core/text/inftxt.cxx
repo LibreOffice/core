@@ -363,7 +363,7 @@ void SwTxtSizeInfo::NoteAnimation() const
 
 SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
-                                     const XubString& rTxt,
+                                     const OUString& rTxt,
                                      const xub_StrLen nIndex,
                                      const xub_StrLen nLength,
                                      const sal_uInt16 nComp ) const
@@ -540,7 +540,7 @@ static sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
  * SwTxtPaintInfo::_DrawText()
  *************************************************************************/
 
-void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPor,
+void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor,
                                 const xub_StrLen nStart, const xub_StrLen nLength,
                                 const sal_Bool bKern, const sal_Bool bWrong,
                                 const sal_Bool bSmartTag,
@@ -1638,7 +1638,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
 {
     if( pCh )
     {
-        aTxt = XubString( pCh, RTL_TEXTENCODING_MS_1252 );
+        aTxt = OUString( pCh, strlen(pCh), RTL_TEXTENCODING_MS_1252 );
         bOn = sal_True;
     }
     else

@@ -263,7 +263,7 @@ private:
 
 public:
                     ContentNode( SfxItemPool& rItemPool );
-                    ContentNode( const XubString& rStr, const ContentAttribs& rContentAttribs );
+                    ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs );
                     ~ContentNode();
 
     ContentAttribs& GetContentAttribs()     { return aContentAttribs; }
@@ -297,12 +297,12 @@ public:
     const OUString& GetString() const;
 
     void SetChar(sal_uInt16 nPos, sal_Unicode c);
-    void Insert(const XubString& rStr, sal_uInt16 nPos);
-    void Append(const XubString& rStr);
+    void Insert(const OUString& rStr, sal_uInt16 nPos);
+    void Append(const OUString& rStr);
     void Erase(sal_uInt16 nPos);
     void Erase(sal_uInt16 nPos, sal_uInt16 nCount);
-    XubString Copy(sal_uInt16 nPos) const;
-    XubString Copy(sal_uInt16 nPos, sal_uInt16 nCount) const;
+    OUString Copy(sal_uInt16 nPos) const;
+    OUString Copy(sal_uInt16 nPos, sal_uInt16 nCount) const;
     sal_Unicode GetChar(sal_uInt16 nPos) const;
 };
 
@@ -774,7 +774,7 @@ public:
     EditPaM         Clear();
     EditPaM         RemoveText();
     EditPaM         RemoveChars( EditPaM aPaM, sal_uInt16 nChars );
-    EditPaM         InsertText( EditPaM aPaM, const XubString& rStr );
+    EditPaM         InsertText( EditPaM aPaM, const OUString& rStr );
     EditPaM         InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs );
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );
@@ -782,8 +782,8 @@ public:
     OUString        GetText( LineEnd eEnd ) const;
     sal_uLong       GetTextLen() const;
 
-    XubString       GetParaAsString( sal_Int32 nNode ) const;
-    XubString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
+    OUString       GetParaAsString( sal_Int32 nNode ) const;
+    OUString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
 
     EditPaM GetStartPaM() const;
     EditPaM GetEndPaM() const;

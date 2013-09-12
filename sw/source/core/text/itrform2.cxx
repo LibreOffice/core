@@ -1759,7 +1759,7 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
     // Zeile am Absatzende geben (bei leeren Abs?tzen oder nach einem
     // Shift-Return), die das Register durchaus beachten soll.
     if( !pCurr->IsDummy() || ( !pCurr->GetNext() &&
-        GetStart() >= GetTxtFrm()->GetTxt().Len() && !bNewLine ) )
+        GetStart() >= GetTxtFrm()->GetTxt().getLength() && !bNewLine ) )
     {
         const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
         if( pSpace )

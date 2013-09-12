@@ -72,7 +72,7 @@ namespace {
                                                : 0;
         const xub_StrLen nTxtFrmTextEndPos = rTxtFrm.HasFollow()
                                              ? rTxtFrm.GetFollow()->GetOfst()
-                                             : rTxtFrm.GetTxt().Len();
+                                             : rTxtFrm.GetTxt().getLength();
 
         // iteration over the redlines which overlap with the text node.
         const SwRedlineTbl& rRedlineTbl = pIDocChangeTrack->GetRedlineTbl();

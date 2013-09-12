@@ -760,7 +760,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
     SwDropPortionPart* pCurrPart = pDrop->GetPart();
     const bool bUseCache = ! pCurrPart->GetFollow() && !pCurrPart->GetFont().HasBorder();
     xub_StrLen nIdx = rInf.GetIdx();
-    XubString aStr( rInf.GetTxt(), nIdx, pCurrPart->GetLen() );
+    OUString aStr(rInf.GetTxt().copy(nIdx, pCurrPart->GetLen()));
 
     long nAscent = 0;
     long nDescent = 0;

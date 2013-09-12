@@ -1301,7 +1301,7 @@ ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
     DBG_CTOR( EE_ContentNode, 0 );
 }
 
-ContentNode::ContentNode( const XubString& rStr, const ContentAttribs& rContentAttribs ) :
+ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs ) :
     maString(rStr), aContentAttribs(rContentAttribs)
 {
     DBG_CTOR( EE_ContentNode, 0 );
@@ -1697,12 +1697,12 @@ void ContentNode::SetChar(sal_uInt16 nPos, sal_Unicode c)
     maString = maString.replaceAt(nPos, 1, OUString(c));
 }
 
-void ContentNode::Insert(const XubString& rStr, sal_uInt16 nPos)
+void ContentNode::Insert(const OUString& rStr, sal_uInt16 nPos)
 {
     maString = maString.replaceAt(nPos, 0, rStr);
 }
 
-void ContentNode::Append(const XubString& rStr)
+void ContentNode::Append(const OUString& rStr)
 {
     maString += rStr;
 }
@@ -1717,12 +1717,12 @@ void ContentNode::Erase(sal_uInt16 nPos, sal_uInt16 nCount)
     maString = maString.replaceAt(nPos, nCount, "");
 }
 
-XubString ContentNode::Copy(sal_uInt16 nPos) const
+OUString ContentNode::Copy(sal_uInt16 nPos) const
 {
     return maString.copy(nPos);
 }
 
-XubString ContentNode::Copy(sal_uInt16 nPos, sal_uInt16 nCount) const
+OUString ContentNode::Copy(sal_uInt16 nPos, sal_uInt16 nCount) const
 {
     return maString.copy(nPos, nCount);
 }
@@ -2126,12 +2126,12 @@ OUString EditDoc::GetText( LineEnd eEnd ) const
     return OUString(newStr, SAL_NO_ACQUIRE);
 }
 
-XubString EditDoc::GetParaAsString( sal_Int32 nNode ) const
+OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 {
     return GetParaAsString( GetObject( nNode ) );
 }
 
-XubString EditDoc::GetParaAsString(
+OUString EditDoc::GetParaAsString(
     const ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, bool bResolveFields) const
 {
     if ( nEndPos > pNode->Len() )
@@ -2140,7 +2140,7 @@ XubString EditDoc::GetParaAsString(
     DBG_ASSERT( nStartPos <= nEndPos, "Start and End reversed?" );
 
     sal_uInt16 nIndex = nStartPos;
-    XubString aStr;
+    OUString aStr;
     const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( nIndex );
     while ( nIndex < nEndPos )
     {
@@ -2154,15 +2154,15 @@ XubString EditDoc::GetParaAsString(
         //!! beware of sub string length  of -1 which is also defined as STRING_LEN and
         //!! thus would result in adding the whole sub string up to the end of the node !!
         if (nEnd > nIndex)
-            aStr += XubString(pNode->GetString(), nIndex, nEnd - nIndex);
+            aStr += pNode->GetString().copy(nIndex, nEnd - nIndex);
 
         if ( pNextFeature )
         {
             switch ( pNextFeature->GetItem()->Which() )
             {
-                case EE_FEATURE_TAB:    aStr += '\t';
+                case EE_FEATURE_TAB:    aStr += "\t";
                 break;
-                case EE_FEATURE_LINEBR: aStr += '\x0A';
+                case EE_FEATURE_LINEBR: aStr += "\x0A";
                 break;
                 case EE_FEATURE_FIELD:
                     if ( bResolveFields )
@@ -2266,16 +2266,16 @@ EditPaM EditDoc::RemoveText()
     return aPaM;
 }
 
-EditPaM EditDoc::InsertText( EditPaM aPaM, const XubString& rStr )
+EditPaM EditDoc::InsertText( EditPaM aPaM, const OUString& rStr )
 {
-    DBG_ASSERT( rStr.Search( 0x0A ) == STRING_NOTFOUND, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-    DBG_ASSERT( rStr.Search( 0x0D ) == STRING_NOTFOUND, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-    DBG_ASSERT( rStr.Search( '\t' ) == STRING_NOTFOUND, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.indexOf( 0x0A ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.indexOf( 0x0D ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
+    DBG_ASSERT( rStr.indexOf( '\t' ) == -1, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
     DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertText1" );
 
     aPaM.GetNode()->Insert( rStr, aPaM.GetIndex() );
-    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.Len(), GetItemPool() );
-    aPaM.GetIndex() = aPaM.GetIndex() + rStr.Len();
+    aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), rStr.getLength(), GetItemPool() );
+    aPaM.GetIndex() = aPaM.GetIndex() + rStr.getLength();
 
     SetModified( sal_True );
 
@@ -2287,7 +2287,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
     DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertParaBreak" );
     ContentNode* pCurNode = aPaM.GetNode();
     sal_Int32 nPos = GetPos( pCurNode );
-    XubString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
+    OUString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
     aPaM.GetNode()->Erase( aPaM.GetIndex() );
 
     // the paragraph attributes...
@@ -2304,8 +2304,8 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
     SfxStyleSheet* pStyle = aPaM.GetNode()->GetStyleSheet();
     if ( pStyle )
     {
-        XubString aFollow( pStyle->GetFollow() );
-        if ( aFollow.Len() && ( aFollow != pStyle->GetName() ) )
+        OUString aFollow( pStyle->GetFollow() );
+        if ( !aFollow.isEmpty() && ( aFollow != pStyle->GetName() ) )
         {
             SfxStyleSheetBase* pNext = pStyle->GetPool().Find( aFollow, pStyle->GetFamily() );
             pNode->SetStyleSheet( (SfxStyleSheet*)pNext );

@@ -155,8 +155,8 @@ class SwTxtFrm: public SwCntntFrm
     sal_Bool CalcFollow(  const xub_StrLen nTxtOfst );
 
     // korrigiert die Stelle ab der formatiert werden muss.
-    xub_StrLen FindBrk(const String &rTxt, const xub_StrLen nStart,
-                                       const xub_StrLen nEnd) const;
+    xub_StrLen FindBrk(const OUString &rTxt, const sal_Int32 nStart,
+                                       const sal_Int32 nEnd) const;
 
     // inline-Weiche
     SwTwips _GetFtnFrmHeight() const;
@@ -316,7 +316,7 @@ public:
         { return GetFollow() && !GetFollow()->GetOfst(); }
 
     // Liefert den zu bearbeitenden Textausschnitt zurueck (inline, s.u.)
-    const String& GetTxt() const;
+    const OUString& GetTxt() const;
     inline SwTxtNode *GetTxtNode()
         { return static_cast< SwTxtNode* >( SwCntntFrm::GetNode()); }
     inline const SwTxtNode *GetTxtNode() const

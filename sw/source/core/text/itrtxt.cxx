@@ -435,7 +435,7 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
     }
     if( pCurr->IsDummy() &&
         !pCurr->GetLen() &&
-         nStart < GetTxtFrm()->GetTxt().Len() )
+         nStart < GetTxtFrm()->GetTxt().getLength() )
         pCurr->SetRealHeight( 1 );
     if( GetHints() )
         pFrm->RemoveFtn( nEnd );

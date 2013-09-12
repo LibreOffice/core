@@ -27,14 +27,14 @@
 
 xub_StrLen SwTxtMargin::GetTxtStart() const
 {
-    const XubString &rTxt = GetInfo().GetTxt();
+    const OUString &rTxt = GetInfo().GetTxt();
     const xub_StrLen nTmpPos = nStart;
     const xub_StrLen nEnd = nTmpPos + pCurr->GetLen();
     xub_StrLen i;
 
     for( i = nTmpPos; i < nEnd; ++i )
     {
-        const sal_Unicode aChar = rTxt.GetChar( i );
+        const sal_Unicode aChar = rTxt[i];
         if( CH_TAB != aChar && ' ' != aChar )
             return i;
     }
@@ -47,13 +47,13 @@ xub_StrLen SwTxtMargin::GetTxtStart() const
 
 xub_StrLen SwTxtMargin::GetTxtEnd() const
 {
-    const XubString &rTxt = GetInfo().GetTxt();
+    const OUString &rTxt = GetInfo().GetTxt();
     const xub_StrLen nTmpPos = nStart;
     const xub_StrLen nEnd = nTmpPos + pCurr->GetLen();
-    long i;
+    sal_Int32 i;
     for( i = nEnd - 1; i >= nTmpPos; --i )
     {
-        sal_Unicode aChar = rTxt.GetChar( static_cast<xub_StrLen>(i) );
+        sal_Unicode aChar = rTxt[i];
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
             return static_cast<xub_StrLen>(i + 1);
     }
@@ -337,20 +337,20 @@ KSHORT SwTxtFrmInfo::GetBigIndent( xub_StrLen& rFndPos,
         return 0;
 
     // Is on front of a non-space
-    const XubString& rTxt = aInf.GetTxt();
-    sal_Unicode aChar = rTxt.GetChar( rFndPos );
+    const OUString& rTxt = aInf.GetTxt();
+    sal_Unicode aChar = rTxt[rFndPos];
     if( CH_TAB == aChar || CH_BREAK == aChar || ' ' == aChar ||
         (( CH_TXTATR_BREAKWORD == aChar || CH_TXTATR_INWORD == aChar ) &&
             aInf.HasHint( rFndPos ) ) )
         return 0;
 
     // and after a space
-    aChar = rTxt.GetChar( rFndPos - 1 );
+    aChar = rTxt[rFndPos - 1];
     if( CH_TAB != aChar && CH_BREAK != aChar &&
         ( ( CH_TXTATR_BREAKWORD != aChar && CH_TXTATR_INWORD != aChar ) ||
             !aInf.HasHint( rFndPos - 1 ) ) &&
         // More than two Blanks!
-        ( ' ' != aChar || ' ' != rTxt.GetChar( rFndPos - 2 ) ) )
+        ( ' ' != aChar || ' ' != rTxt[rFndPos - 2] ) )
         return 0;
 
     SwRect aRect;

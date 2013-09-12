@@ -37,7 +37,7 @@ class SwFmtRefMark : public SfxPoolItem
     OUString aRefName;
 
 public:
-    SwFmtRefMark( const String& rTxt );
+    SwFmtRefMark( const OUString& rTxt );
     SwFmtRefMark( const SwFmtRefMark& rRefMark );
     ~SwFmtRefMark( );
 

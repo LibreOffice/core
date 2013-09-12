@@ -388,9 +388,9 @@ SwTxtFrm::~SwTxtFrm()
     ClearPara();
 }
 
-const XubString& SwTxtFrm::GetTxt() const
+const OUString& SwTxtFrm::GetTxt() const
 {
-    return reinterpret_cast<const XubString&>(GetTxtNode()->GetTxt()); //FIXME
+    return GetTxtNode()->GetTxt();
 }
 
 void SwTxtFrm::ResetPreps()
@@ -643,17 +643,15 @@ void SwTxtFrm::HideAndShowObjects()
  * nFound ist <= nEndLine.
  *************************************************************************/
 
-xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
-                              const xub_StrLen nStart,
-                              const xub_StrLen nEnd ) const
+xub_StrLen SwTxtFrm::FindBrk( const OUString &rTxt,
+                              const sal_Int32 nStart,
+                              const sal_Int32 nEnd ) const
 {
-    // #i104291# - applying patch to avoid overflow.
-    unsigned long nFound = nStart;
-    const xub_StrLen nEndLine = std::min( nEnd, rTxt.Len() );
+    sal_Int32 nFound = nStart;
+    const sal_Int32 nEndLine = std::min( nEnd, rTxt.getLength() );
 
     // Wir ueberlesen erst alle Blanks am Anfang der Zeile (vgl. Bug 2235).
-    while( nFound <= nEndLine &&
-           ' ' == rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    while( nFound <= nEndLine && ' ' == rTxt[nFound] )
     {
          nFound++;
     }
@@ -662,8 +660,7 @@ xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
     // "Dr.$Meyer" am Anfang der zweiten Zeile. Dahinter ein Blank eingegeben
     // und das Wort rutscht nicht in die erste Zeile, obwohl es ginge.
     // Aus diesem Grund nehmen wir das Dummy-Zeichen noch mit.
-    while( nFound <= nEndLine &&
-           ' ' != rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    while( nFound <= nEndLine && ' ' != rTxt[nFound] )
     {
         nFound++;
     }
@@ -689,7 +686,7 @@ sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) c
 
     // der Bereich liegt nicht komplett hinter uns bzw.
     // unser Text ist geloescht worden.
-    if( nMax > nPos || nMax > GetTxt().Len() )
+    if( nMax > nPos || nMax > GetTxt().getLength() )
         return sal_True;
 
     // changes made in the first line of a follow can modify the master
@@ -1465,7 +1462,7 @@ static bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint e
         if( pFrm->HasFollow() )
             rPos = pFrm->GetFollow()->GetOfst();
         else
-            rPos = pFrm->GetTxt().Len();
+            rPos = pFrm->GetTxt().getLength();
         if( rPos )
             --rPos; // unser letztes Zeichen
     }
@@ -2059,7 +2056,7 @@ KSHORT SwTxtFrm::GetParHeight() const
         KSHORT nRet = (KSHORT)Prt().SSize().Height();
         if( IsUndersized() )
         {
-            if( IsEmpty() || GetTxt().Len() == 0 )
+            if( IsEmpty() || GetTxt().isEmpty() )
                 nRet = (KSHORT)EmptyHeight();
             else
                 ++nRet;
@@ -2324,7 +2321,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         else
         {
             bool bCalcHeightOfLastLine = true;
-            if ( ( !HasPara() && IsEmpty( ) ) || GetTxt().Len( ) == 0 )
+            if ( ( !HasPara() && IsEmpty( ) ) || GetTxt().isEmpty() )
             {
                 mnHeightOfLastLine = EmptyHeight();
                 bCalcHeightOfLastLine = false;
@@ -2477,7 +2474,7 @@ void SwTxtFrm::ChgThisLines()
 
     sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
-    if ( GetTxt().Len() && HasPara() )
+    if ( !GetTxt().isEmpty() && HasPara() )
     {
         SwTxtSizeInfo aInf( this );
         SwTxtMargin aLine( this, &aInf );

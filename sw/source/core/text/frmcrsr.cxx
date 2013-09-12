@@ -462,7 +462,7 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
     // get position offset
     xub_StrLen nOffset = _rPos.nContent.GetIndex();
 
-    if ( GetTxt().Len() < nOffset )
+    if ( GetTxt().getLength() < nOffset )
     {
         bRet = false;
     }

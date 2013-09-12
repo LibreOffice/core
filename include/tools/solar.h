@@ -119,7 +119,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
 #endif
 
 #define UniString       String
-#define XubString       String
 #define xub_StrLen      sal_uInt16
 
 #define STRING_CONCAT3( s1, s2, s3 ) \

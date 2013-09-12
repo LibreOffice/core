@@ -2339,7 +2339,7 @@ SwCacheObj *SwFntAccess::NewObj( )
 }
 
 extern xub_StrLen sw_CalcCaseMap( const SwFont& rFnt,
-                                   const XubString& rOrigString,
+                                   const OUString& rOrigString,
                                    xub_StrLen nOfst,
                                    xub_StrLen nLen,
                                    xub_StrLen nIdx );
@@ -2450,7 +2450,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         }
         else
         {
-            const XubString aSnippet( rInf.GetText(), rInf.GetIdx(), nLn );
+            const OUString aSnippet(rInf.GetText().copy(rInf.GetIdx(), nLn));
             aTmpText = aSub[nActual].CalcCaseMap( aSnippet );
             const bool bTitle = SVX_CASEMAP_TITEL == aSub[nActual].GetCaseMap() &&
                                 g_pBreakIt->GetBreakIter().is();
@@ -2465,9 +2465,9 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                      i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
                 {
                     // In this case, the beginning of aTmpText is wrong.
-                    XubString aSnippetTmp( aSnippet, 0, 1 );
+                    OUString aSnippetTmp(aSnippet.copy(0, 1));
                     aSnippetTmp = aSub[nActual].CalcCaseMap( aSnippetTmp );
-                    aTmpText = aTmpText.replaceAt( 0, aSnippetTmp.Len(), OUString(aSnippet.GetChar( 0 )) );
+                    aTmpText = aTmpText.replaceAt( 0, aSnippetTmp.getLength(), OUString(aSnippet[0]) );
                 }
             }
 

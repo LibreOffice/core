@@ -952,13 +952,13 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
                             nBegin, nEnd );
         while( !pArgs->xSpellAlt.is() && aScanner.NextWord() )
         {
-            const XubString& rWord = aScanner.GetWord();
+            const OUString& rWord = aScanner.GetWord();
 
             // get next language for next word, consider language attributes
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
-            if( rWord.Len() > 0 && LANGUAGE_NONE != eActLang )
+            if( rWord.getLength() > 0 && LANGUAGE_NONE != eActLang )
             {
                 if (pArgs->xSpeller.is())
                 {
@@ -979,11 +979,11 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
                         // left and right in order to preserve those. Therefore
                         // count those "in words" in order to modify the
                         // selection accordingly.
-                        const sal_Unicode* pChar = rWord.GetBuffer();
+                        const sal_Unicode* pChar = rWord.getStr();
                         xub_StrLen nLeft = 0;
                         while (pChar && *pChar++ == CH_TXTATR_INWORD)
                             ++nLeft;
-                        pChar = rWord.Len() ? rWord.GetBuffer() + rWord.Len() - 1 : 0;
+                        pChar = rWord.getLength() ? rWord.getStr() + rWord.getLength() - 1 : 0;
                         xub_StrLen nRight = 0;
                         while (pChar && *pChar-- == CH_TXTATR_INWORD)
                             ++nRight;
@@ -1282,7 +1282,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
         while( aScanner.NextWord() )
         {
-            const XubString& rWord = aScanner.GetWord();
+            const OUString& rWord = aScanner.GetWord();
             nBegin = aScanner.GetBegin();
             xub_StrLen nLen = aScanner.GetLen();
 
@@ -1291,7 +1291,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
             sal_Bool bSpell = xSpell.is() ? xSpell->hasLanguage( eActLang ) : sal_False;
-            if( bSpell && rWord.Len() > 0 )
+            if( bSpell && !rWord.isEmpty() )
             {
                 // check for: bAlter => xHyphWord.is()
                 OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
@@ -1317,11 +1317,11 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
                         }
                     }
                 }
-                else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.Len() )
+                else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.getLength() )
                 {
                     if ( bRedlineChg )
                     {
-                        XubString rNewWord( rWord );
+                        OUString rNewWord( rWord );
                         rACW.InsertWord( rNewWord, *pDoc );
                     }
                     else
@@ -1519,11 +1519,11 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
             nLen = aScanner.GetLen();
             if( rACW.GetMinWordLen() <= nLen )
             {
-                const XubString& rWord = aScanner.GetWord();
+                const OUString& rWord = aScanner.GetWord();
 
                 if( nActPos < nBegin || ( nBegin + nLen ) < nActPos )
                 {
-                    if( rACW.GetMinWordLen() <= rWord.Len() )
+                    if( rACW.GetMinWordLen() <= rWord.getLength() )
                         rACW.InsertWord( rWord, *pDoc );
                     bAnyWrd = true;
                 }
