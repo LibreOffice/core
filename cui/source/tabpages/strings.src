@@ -199,5 +199,13 @@ String RID_SVXSTR_DEL_SPACES_BETWEEN_LINES
 {
     Text [ en-US ] = "Delete spaces and tabs at end and start of line";
 };
+String RID_SVXSTR_CONNECTOR
+{
+    Text [en-US ] = "Connector";
+};
+String RID_SVXSTR_DIMENSION_LINE
+{
+    Text [en-US ] = "Dimension line";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
