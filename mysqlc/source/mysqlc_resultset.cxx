@@ -179,7 +179,13 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0;
+    throw SQLException(
+        "The column name '" + columnName + "' is not valid.",
+        *this,
+        OUString("42S22"),
+        0,
+        Any()
+    );
 }
 /* }}} */
 
