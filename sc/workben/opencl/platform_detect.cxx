@@ -9,7 +9,8 @@ using namespace std;
 
 int main()
 {
-    const char* dllname = "OpenCL.dll"; // from GPU driver.
+    const char* dllname = "libOpenCL.so"; // on Linux
+//  const char* dllname = "OpenCL.dll"; // from GPU driver.
 //  const char* dllname = "amdocl.dll"; // from AMD SDK
 //  const char* dllname = "intelocl.dll"; // from Intel SDK
     int status = clewInit(dllname);
