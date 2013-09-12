@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="XiK-Ye-iB8">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <development version="4600" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -482,7 +481,7 @@
                                     </scrollView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cOI-Hc-1QU">
                                         <rect key="frame" x="731" y="22" width="64" height="53"/>
-                                        <autoresizingMask key="autoresizingMask"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="14" maxY="0.0"/>
@@ -639,6 +638,98 @@
         <image name="timer_settime_btn.png" width="60" height="60"/>
         <image name="timer_start_btn_dark.png" width="60" height="60"/>
     </resources>
+    <classes>
+        <class className="AboutViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AboutViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="aboutWebView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+        <class className="BasePresentationViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="popOverUp:"/>
+                <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
+                <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="currentSlideImageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="gearButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="horizontalTableView" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="movingPointer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="nextButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="previousButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="stopWatchTimerScrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="stopWatchView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="timeLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timerClearButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="timerSetTimeButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="timerStartButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="timerTimeLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timerView" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="EditableTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditableTableViewCell.h"/>
+        </class>
+        <class className="LibONavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LibONavigationController.h"/>
+        </class>
+        <class className="MainSplitViewController" superclassName="UISplitViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainSplitViewController.h"/>
+        </class>
+        <class className="WalkThroughContainerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/WalkThroughContainerViewController.h"/>
+        </class>
+        <class className="autoDismissKeyboardNavigationViewController" superclassName="LibONavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/autoDismissKeyboardNavigationViewController.h"/>
+        </class>
+        <class className="newServerViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/newServerViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="pinValidation_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/pinValidation_vc.h"/>
+            <relationships>
+                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="server_list_vc" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="onClickMenuButton:"/>
+                <relationship kind="outlet" name="menuButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="serverTable" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="server_list_vc_ipad" superclassName="server_list_vc">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc_ipad.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelModalView:"/>
+            </relationships>
+        </class>
+        <class className="slideShowPreviewTable_vc" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
+            <relationships>
+                <relationship kind="action" name="startPrefSettings:"/>
+                <relationship kind="action" name="startPresentationAction:"/>
+                <relationship kind="outlet" name="prefButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="slideShowPreviewTable_vc_ipad" superclassName="slideShowPreviewTable_vc">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc_ipad.h"/>
+        </class>
+        <class className="slideShowSwipeInList_ipad" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList_ipad.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
