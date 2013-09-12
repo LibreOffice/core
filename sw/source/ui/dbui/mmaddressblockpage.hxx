@@ -143,8 +143,9 @@ class DDListBox : public SvTreeListBox
 {
     SwCustomizeAddressBlockDialog*   m_pParentDialog;
 public:
-    DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId);
-    ~DDListBox();
+    DDListBox(Window* pParent, const WinBits nStyle);
+
+    void SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 };
@@ -154,22 +155,26 @@ public:
 #define MOVE_ITEM_UP             4
 #define MOVE_ITEM_DOWN           8
 
-class AddressMultiLineEdit : public MultiLineEdit, public SfxListener
+class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
 {
     Link                            m_aSelectionLink;
     SwCustomizeAddressBlockDialog*  m_pParentDialog;
 
-    using MultiLineEdit::Notify;
+    using VclMultiLineEdit::Notify;
 
-    using MultiLineEdit::SetText;
+    using VclMultiLineEdit::SetText;
 
 protected:
     long            PreNotify( NotifyEvent& rNEvt );
 public:
-    AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId);
+    AddressMultiLineEdit(Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
     ~AddressMultiLineEdit();
 
+    void            SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
+
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual Size    GetOptimalSize() const;
 
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
@@ -196,10 +201,10 @@ protected:
     virtual void KeyInput( const KeyEvent& );
     virtual void        Modify();
 public:
-    SwRestrictedComboBox(Window* pParent, const ResId& rResId):
-        ComboBox( pParent, rResId ){}
-
-    ~SwRestrictedComboBox();
+    SwRestrictedComboBox(Window* pParent, WinBits nStyle = 0)
+        : ComboBox( pParent, nStyle )
+    {
+    }
 
     void SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
 
@@ -217,30 +222,25 @@ public:
         GREETING_MALE
     };
 private:
-    FixedText       m_aAddressElementsFT;
-    DDListBox       m_aAddressElementsLB;
+    FixedText*              m_pAddressElementsFT;
+    DDListBox*              m_pAddressElementsLB;
 
-    ImageButton     m_aInsertFieldIB;
-    ImageButton     m_aRemoveFieldIB;
+    PushButton*             m_pInsertFieldIB;
+    PushButton*             m_pRemoveFieldIB;
 
-    FixedText               m_aDragFT;
-    AddressMultiLineEdit    m_aDragED;
-    ImageButton             m_aUpIB;
-    ImageButton             m_aLeftIB;
-    ImageButton             m_aRightIB;
-    ImageButton             m_aDownIB;
+    FixedText*              m_pDragFT;
+    AddressMultiLineEdit*   m_pDragED;
+    PushButton*             m_pUpIB;
+    PushButton*             m_pLeftIB;
+    PushButton*             m_pRightIB;
+    PushButton*             m_pDownIB;
 
-    FixedText               m_aFieldFT;
-    SwRestrictedComboBox    m_aFieldCB;
+    FixedText*              m_pFieldFT;
+    SwRestrictedComboBox*   m_pFieldCB;
 
-    FixedInfo               m_aPreviewFI;
-    SwAddressPreview        m_aPreviewWIN;
+    SwAddressPreview*       m_pPreviewWIN;
 
-    FixedLine               m_aSeparatorFL;
-
-    OKButton                m_aOK;
-    CancelButton            m_aCancel;
-    HelpButton              m_aHelp;
+    OKButton*               m_pOK;
 
     ::std::vector<String>   m_aSalutations;
     ::std::vector<String>   m_aPunctuations;
@@ -262,7 +262,6 @@ private:
     bool            HasItem_Impl(sal_Int32 nUserData);
     sal_Int32       GetSelectedItem_Impl();
     void            UpdateImageButtons_Impl();
-    void            MoveFocus( Window* pMember, bool bNext );
 
 public:
     SwCustomizeAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);

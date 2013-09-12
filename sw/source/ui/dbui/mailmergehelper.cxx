@@ -200,23 +200,48 @@ struct  SwAddressPreview_Impl
     }
 };
 
-SwAddressPreview::SwAddressPreview(Window* pParent, const ResId rResId) :
-    Window( pParent, rResId ),
-    aVScrollBar(this, WB_VSCROLL),
-    pImpl(new SwAddressPreview_Impl())
+SwAddressPreview::SwAddressPreview(Window* pParent, const ResId& rResId)
+    : Window( pParent, rResId )
+    , aVScrollBar(this, WB_VSCROLL)
+    , pImpl(new SwAddressPreview_Impl())
 {
     aVScrollBar.SetScrollHdl(LINK(this, SwAddressPreview, ScrollHdl));
-    Size aSize(GetOutputSizePixel());
-    Size aScrollSize(aVScrollBar.GetSizePixel());
-    aScrollSize.Height() = aSize.Height();
-    aVScrollBar.SetSizePixel(aScrollSize);
-    Point aSrollPos(aSize.Width() - aScrollSize.Width(), 0);
-    aVScrollBar.SetPosPixel(aSrollPos);
+    positionScrollBar();
     Show();
 }
 
-SwAddressPreview::~SwAddressPreview()
+SwAddressPreview::SwAddressPreview(Window* pParent, WinBits nStyle)
+    : Window( pParent, nStyle )
+    , aVScrollBar(this, WB_VSCROLL)
+    , pImpl(new SwAddressPreview_Impl())
 {
+    aVScrollBar.SetScrollHdl(LINK(this, SwAddressPreview, ScrollHdl));
+    positionScrollBar();
+    Show();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwAddressPreview(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_NOTABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SwAddressPreview(pParent, nWinStyle);
+}
+
+void SwAddressPreview::positionScrollBar()
+{
+    Size aSize(GetOutputSizePixel());
+    Size aScrollSize(aVScrollBar.get_preferred_size().Width(), aSize.Height());
+    aVScrollBar.SetSizePixel(aScrollSize);
+    Point aSrollPos(aSize.Width() - aScrollSize.Width(), 0);
+    aVScrollBar.SetPosPixel(aSrollPos);
+}
+
+void SwAddressPreview::Resize()
+{
+    Window::Resize();
+    positionScrollBar();
 }
 
 IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl)

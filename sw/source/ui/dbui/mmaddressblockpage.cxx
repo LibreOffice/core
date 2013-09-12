@@ -498,8 +498,18 @@ IMPL_LINK(SwSelectAddressBlockDialog, IncludeHdl_Impl, RadioButton*, pButton)
     return 0;
 }
 
-SwRestrictedComboBox::~SwRestrictedComboBox()
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwRestrictedComboBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
+    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
+
+    if (bDropdown)
+        nBits |= WB_DROPDOWN;
+
+    SwRestrictedComboBox* pComboBox = new SwRestrictedComboBox(pParent, nBits);
+    pComboBox->EnableAutoSize(true);
+    return pComboBox;
 }
 
 void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
@@ -541,46 +551,39 @@ void SwRestrictedComboBox::Modify()
 #define USER_DATA_NONE              -4
 
 SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
-        Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZEADDRESSBLOCK)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aAddressElementsFT( this, SW_RES(       FT_ADDRESSELEMENTS             )),
-    m_aAddressElementsLB( this, SW_RES(       LB_ADDRESSELEMENTS             )),
-    m_aInsertFieldIB( this, SW_RES(           IB_INSERTFIELD                 )),
-    m_aRemoveFieldIB( this, SW_RES(           IB_REMOVEFIELD                 )),
-    m_aDragFT( this, SW_RES(                  FT_DRAG                        )),
-    m_aDragED( this, SW_RES(                  ED_DRAG                        )),
-    m_aUpIB( this, SW_RES(                    IB_UP                          )),
-    m_aLeftIB( this, SW_RES(                  IB_LEFT                        )),
-    m_aRightIB( this, SW_RES(                 IB_RIGHT                       )),
-    m_aDownIB( this, SW_RES(                  IB_DOWN                        )),
-    m_aFieldFT( this, SW_RES(                 FT_FIELD                       )),
-    m_aFieldCB( this, SW_RES(                 CB_FIELD                       )),
-    m_aPreviewFI( this, SW_RES(               FI_PREVIEW                     )),
-    m_aPreviewWIN( this, SW_RES(               WIN_PREVIEW                    )),
-    m_aSeparatorFL( this, SW_RES(             FL_SEPARATOR                   )),
-    m_aOK( this, SW_RES(                      PB_OK                          )),
-    m_aCancel( this, SW_RES(                  PB_CANCEL                      )),
-    m_aHelp( this, SW_RES(                    PB_HELP                        )),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-    m_rConfigItem(rConfig),
-    m_eType(eType)
+        Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType)
+    : SfxModalDialog(pParent, "AddressBlockDialog",
+        "modules/swriter/ui/addressblockdialog.ui")
+    , m_rConfigItem(rConfig)
+    , m_eType(eType)
 {
-    m_aFieldCB.SetForbiddenChars( OUString("<>"));
-    m_aDragED.SetStyle(m_aDragED.GetStyle() |WB_NOHIDESELECTION);
+    get(m_pOK, "ok");
+    get(m_pPreviewWIN, "addrpreview");
+    get(m_pFieldCB, "custom");
+    get(m_pFieldFT, "customft");
+    get(m_pDownIB, "down");
+    get(m_pRightIB, "right");
+    get(m_pLeftIB, "left");
+    get(m_pUpIB, "up");
+    get(m_pDragED, "addressdest");
+    m_pDragED->SetAddressDialog(this);
+    get(m_pDragFT, "addressdestft");
+    get(m_pRemoveFieldIB, "fromaddr");
+    get(m_pInsertFieldIB, "toaddr");
+    get(m_pAddressElementsLB, "addresses");
+    m_pAddressElementsLB->set_height_request(16 * m_pAddressElementsLB->GetTextHeight());
+    m_pAddressElementsLB->SetAddressDialog(this);
+    get(m_pAddressElementsFT, "addressesft");
+
     if( eType >= GREETING_FEMALE )
     {
-        m_aFieldFT.Show();
-        m_aFieldCB.Show();
-        SvTreeListEntry* pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_SALUTATION )));
+        m_pFieldFT->Show();
+        m_pFieldCB->Show();
+        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(String(SW_RES(ST_SALUTATION )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_SALUTATION );
-        pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_PUNCTUATION)));
+        pEntry = m_pAddressElementsLB->InsertEntry(String(SW_RES(ST_PUNCTUATION)));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_PUNCTUATION );
-        pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_TEXT       )));
+        pEntry = m_pAddressElementsLB->InsertEntry(String(SW_RES(ST_TEXT       )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_TEXT       );
         ResStringArray aSalutArr(SW_RES(
                     eType == GREETING_MALE ? RA_SALUTATION_MALE : RA_SALUTATION_FEMALE));
@@ -590,50 +593,41 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         ResStringArray aPunctArr(SW_RES(RA_PUNCTUATION));
         for(i = 0; i < aPunctArr.Count(); ++i)
             m_aPunctuations.push_back(aPunctArr.GetString(i));
-        m_aDragED.SetText(OUString("            "));
+        m_pDragED->SetText(OUString("            "));
         SetText( String( SW_RES( eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE)));
-        m_aAddressElementsFT.SetText(String(SW_RES(ST_SALUTATIONELEMENTS)));
-        m_aInsertFieldIB.SetQuickHelpText(String(SW_RES(ST_INSERTSALUTATIONFIELD)));
-        m_aRemoveFieldIB.SetQuickHelpText(String(SW_RES(ST_REMOVESALUTATIONFIELD)));
-        m_aDragFT.SetText(String(SW_RES(ST_DRAGSALUTATION)));
+        m_pAddressElementsFT->SetText(String(SW_RES(ST_SALUTATIONELEMENTS)));
+        m_pInsertFieldIB->SetQuickHelpText(String(SW_RES(ST_INSERTSALUTATIONFIELD)));
+        m_pRemoveFieldIB->SetQuickHelpText(String(SW_RES(ST_REMOVESALUTATIONFIELD)));
+        m_pDragFT->SetText(String(SW_RES(ST_DRAGSALUTATION)));
     }
     else
     {
         if(eType == ADDRESSBLOCK_EDIT)
             SetText(String(SW_RES(ST_TITLE_EDIT)));
-
-        //resize the preview
-        Point aFieldPos(m_aFieldFT.GetPosPixel());
-        long nDiff = m_aPreviewFI.GetPosPixel().Y() - aFieldPos.Y();
-        m_aPreviewFI.SetPosPixel(aFieldPos);
-        Size aPreviewSize = m_aPreviewWIN.GetSizePixel();
-        aPreviewSize.Height() += nDiff;
-        m_aPreviewWIN.SetSizePixel(aPreviewSize);
-        m_aPreviewWIN.SetPosPixel(m_aFieldCB.GetPosPixel());
-        m_aDragED.SetText(OUString("\n\n\n\n\n"));
+        m_pDragED->SetText(OUString("\n\n\n\n\n"));
     }
-    FreeResource();
+
     const ResStringArray& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
         const OUString rHeader = rHeaders.GetString( i );
-        SvTreeListEntry* pEntry = m_aAddressElementsLB.InsertEntry(rHeader);
+        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(rHeader);
         pEntry->SetUserData((void*)(sal_IntPtr)i);
     }
-    m_aOK.SetClickHdl(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
-    m_aAddressElementsLB.SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl ));
-    m_aDragED.SetModifyHdl(LINK(this, SwCustomizeAddressBlockDialog, EditModifyHdl_Impl));
-    m_aDragED.SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
+    m_pOK->SetClickHdl(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
+    m_pAddressElementsLB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl ));
+    m_pDragED->SetModifyHdl(LINK(this, SwCustomizeAddressBlockDialog, EditModifyHdl_Impl));
+    m_pDragED->SetSelectionChangedHdl( LINK( this, SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl));
     Link aFieldsLink = LINK(this, SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl);
-    m_aFieldCB.SetModifyHdl(aFieldsLink);
-    m_aFieldCB.SetSelectHdl(aFieldsLink);
+    m_pFieldCB->SetModifyHdl(aFieldsLink);
+    m_pFieldCB->SetSelectHdl(aFieldsLink);
     Link aImgButtonHdl = LINK(this, SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl);
-    m_aInsertFieldIB.SetClickHdl(aImgButtonHdl);
-    m_aRemoveFieldIB.SetClickHdl(aImgButtonHdl);
-    m_aUpIB.SetClickHdl(aImgButtonHdl);
-    m_aLeftIB.SetClickHdl(aImgButtonHdl);
-    m_aRightIB.SetClickHdl(aImgButtonHdl);
-    m_aDownIB.SetClickHdl(aImgButtonHdl);
+    m_pInsertFieldIB->SetClickHdl(aImgButtonHdl);
+    m_pRemoveFieldIB->SetClickHdl(aImgButtonHdl);
+    m_pUpIB->SetClickHdl(aImgButtonHdl);
+    m_pLeftIB->SetClickHdl(aImgButtonHdl);
+    m_pRightIB->SetClickHdl(aImgButtonHdl);
+    m_pDownIB->SetClickHdl(aImgButtonHdl);
     UpdateImageButtons_Impl();
 }
 
@@ -651,7 +645,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox
 {
     sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pBox->FirstSelected()->GetUserData();
     // Check if the selected entry is already in the address and then forbid inserting
-    m_aInsertFieldIB.Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
+    m_pInsertFieldIB->Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
     return 0;
 }
 
@@ -660,38 +654,38 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl)
     String sAddress = SwAddressPreview::FillData(
             GetAddress(),
             m_rConfigItem);
-    m_aPreviewWIN.SetAddress(sAddress);
+    m_pPreviewWIN->SetAddress(sAddress);
     UpdateImageButtons_Impl();
     return 0;
 }
 
 IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pButton)
 {
-    if(&m_aInsertFieldIB == pButton)
+    if (m_pInsertFieldIB == pButton)
     {
-        SvTreeListEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
+        SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
         if(pEntry)
         {
-            String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
+            String sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
             sEntry.Insert('<', 0);
             sEntry += '>';
-            m_aDragED.InsertNewEntry(sEntry);
+            m_pDragED->InsertNewEntry(sEntry);
         }
     }
-    else if(&m_aRemoveFieldIB == pButton)
+    else if (m_pRemoveFieldIB == pButton)
     {
-        m_aDragED.RemoveCurrentEntry();
+        m_pDragED->RemoveCurrentEntry();
     }
     else
     {
         sal_uInt16 nMove = MOVE_ITEM_DOWN;
-        if(&m_aUpIB == pButton)
+        if (m_pUpIB == pButton)
             nMove = MOVE_ITEM_UP;
-        else if(&m_aLeftIB == pButton)
+        else if (m_pLeftIB == pButton)
             nMove = MOVE_ITEM_LEFT;
-        else if(&m_aRightIB == pButton)
+        else if (m_pRightIB == pButton)
             nMove = MOVE_ITEM_RIGHT;
-        m_aDragED.MoveCurrentItem(nMove);
+        m_pDragED->MoveCurrentItem(nMove);
     }
     UpdateImageButtons_Impl();
     return 0;
@@ -700,12 +694,12 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pBut
 sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
 {
     sal_Int32 nRet = USER_DATA_NONE;
-    String sSelected = m_aDragED.GetCurrentItem();
+    String sSelected = m_pDragED->GetCurrentItem();
     if(sSelected.Len())
-        for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
+        for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
         {
-            SvTreeListEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
-            String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
+            SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
+            String sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
             if( sSelected.Equals( sEntry, 1, sSelected.Len() - 2 ) )
             {
                 nRet = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
@@ -719,12 +713,12 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
 {
     //get the entry from the ListBox
     String sEntry;
-    for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
+    for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
     {
-        SvTreeListEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
         if((sal_Int32)(sal_IntPtr)pEntry->GetUserData() == nUserData)
         {
-            sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
+            sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
             break;
         }
     }
@@ -732,7 +726,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     sEntry += '>';
     sEntry.Insert( '<', 0);
     //search for this entry in the content
-    String sText = m_aDragED.GetText();
+    String sText = m_pDragED->GetText();
     bool bRet = sText.Search(sEntry) != STRING_NOTFOUND;
     return bRet;
 }
@@ -751,7 +745,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
     if(USER_DATA_NONE != nSelected)
         pEdit->SelectCurrentItem();
 
-    if(m_aFieldCB.IsVisible() && (USER_DATA_NONE != nSelected) && (nSelected < 0))
+    if(m_pFieldCB->IsVisible() && (USER_DATA_NONE != nSelected) && (nSelected < 0))
     {
         //search in ListBox if it's one of the first entries
         String sSelect;
@@ -769,20 +763,20 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
                 sSelect =  m_sCurrentText;
                 break;
         }
-        m_aFieldCB.Clear();
+        m_pFieldCB->Clear();
         if(pVector) {
             ::std::vector<String>::iterator  aIterator;
             for( aIterator = pVector->begin(); aIterator != pVector->end(); ++aIterator)
-                m_aFieldCB.InsertEntry(*aIterator);
+                m_pFieldCB->InsertEntry(*aIterator);
         }
-        m_aFieldCB.SetText(sSelect);
-        m_aFieldCB.Enable(sal_True);
-        m_aFieldFT.Enable(sal_True);
+        m_pFieldCB->SetText(sSelect);
+        m_pFieldCB->Enable(sal_True);
+        m_pFieldFT->Enable(sal_True);
     }
     else
     {
-        m_aFieldCB.Enable(sal_False);
-        m_aFieldFT.Enable(sal_False);
+        m_pFieldCB->Enable(sal_False);
+        m_pFieldFT->Enable(sal_False);
     }
 
     UpdateImageButtons_Impl();
@@ -794,7 +788,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
 {
     //changing the field content changes the related members, too
     sal_Int32 nSelected = GetSelectedItem_Impl();
-    String sContent = m_aFieldCB.GetText();
+    String sContent = m_pFieldCB->GetText();
     switch(nSelected) {
         case USER_DATA_SALUTATION:
             m_sCurrentSalutation = sContent;
@@ -807,41 +801,41 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
             break;
     }
     UpdateImageButtons_Impl();
-    m_aPreviewWIN.SetAddress(GetAddress());
-    m_aDragED.Modify();
+    m_pPreviewWIN->SetAddress(GetAddress());
+    m_pDragED->Modify();
     return 0;
 }
 
 void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
 {
-    sal_uInt16 nMove = m_aDragED.IsCurrentItemMoveable();
-    m_aUpIB.Enable(nMove & MOVE_ITEM_UP );
-    m_aLeftIB.Enable(nMove & MOVE_ITEM_LEFT );
-    m_aRightIB.Enable(nMove & MOVE_ITEM_RIGHT );
-    m_aDownIB.Enable(nMove & MOVE_ITEM_DOWN);
-    m_aRemoveFieldIB.Enable(m_aDragED.HasCurrentItem() ? sal_True : sal_False);
-    SvTreeListEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
-    m_aInsertFieldIB.Enable( pEntry &&
-            (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || !m_aFieldCB.GetText().isEmpty()));
+    sal_uInt16 nMove = m_pDragED->IsCurrentItemMoveable();
+    m_pUpIB->Enable(nMove & MOVE_ITEM_UP );
+    m_pLeftIB->Enable(nMove & MOVE_ITEM_LEFT );
+    m_pRightIB->Enable(nMove & MOVE_ITEM_RIGHT );
+    m_pDownIB->Enable(nMove & MOVE_ITEM_DOWN);
+    m_pRemoveFieldIB->Enable(m_pDragED->HasCurrentItem() ? sal_True : sal_False);
+    SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
+    m_pInsertFieldIB->Enable( pEntry &&
+            (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || !m_pFieldCB->GetText().isEmpty()));
 }
 
 void SwCustomizeAddressBlockDialog::SetAddress(const OUString& rAddress)
 {
-    m_aDragED.SetText( rAddress );
+    m_pDragED->SetText( rAddress );
     UpdateImageButtons_Impl();
-    m_aDragED.Modify();
+    m_pDragED->Modify();
 }
 
 OUString SwCustomizeAddressBlockDialog::GetAddress()
 {
-    String sAddress(m_aDragED.GetAddress());
+    String sAddress(m_pDragED->GetAddress());
     //remove placeholders by the actual content
-    if(m_aFieldFT.IsVisible())
+    if(m_pFieldFT->IsVisible())
     {
-        for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
+        for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
         {
-            SvTreeListEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
-            String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
+            SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
+            String sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
             sEntry += '>';
             sEntry.Insert('<', 0);
             sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
@@ -854,70 +848,6 @@ OUString SwCustomizeAddressBlockDialog::GetAddress()
         }
     }
     return sAddress;
-}
-
-void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
-{
-    ::std::vector< Window* > aControls;
-
-    aControls.push_back(&m_aAddressElementsLB);
-    aControls.push_back(&m_aInsertFieldIB);
-    aControls.push_back(&m_aRemoveFieldIB);
-    aControls.push_back(&m_aDragED);
-    aControls.push_back(&m_aUpIB);
-    aControls.push_back(&m_aLeftIB);
-    aControls.push_back(&m_aRightIB);
-    aControls.push_back(&m_aDownIB);
-    aControls.push_back(&m_aFieldCB);
-    aControls.push_back(&m_aOK);
-    aControls.push_back(&m_aCancel);
-    aControls.push_back(&m_aHelp);
-
-    ::std::vector< Window* >::iterator aMemberIter = aControls.begin();
-    for( ; aMemberIter != aControls.end(); ++aMemberIter)
-    {
-        if(*aMemberIter == pMember)
-            break;
-    }
-    if( aMemberIter == aControls.end() )
-    {
-        OSL_FAIL("Window not found?" );
-        return;
-    }
-
-    if( bNext )
-    {
-        ::std::vector< Window* >::iterator aSearch = aMemberIter;
-        ++aSearch;
-        while( true )
-        {
-            if( aSearch == aControls.end())
-                aSearch = aControls.begin();
-            else if( (*aSearch)->IsEnabled() )
-            {
-                (*aSearch)->GrabFocus();
-                break;
-            }
-            else
-                ++aSearch;
-        }
-    }
-    else
-    {
-        ::std::vector< Window* >::iterator aSearch = aMemberIter;
-        while( true )
-        {
-            if(aSearch == aControls.begin())
-                aSearch = aControls.end();
-            --aSearch;
-            if( (*aSearch)->IsEnabled() )
-            {
-                (*aSearch)->GrabFocus();
-                break;
-            }
-        }
-    }
-
 }
 
 class SwAssignFieldsControl : public Control
@@ -1319,9 +1249,9 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl)
     return 0;
 }
 
-DDListBox::DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId) :
-        SvTreeListBox(pParent, rResId),
-        m_pParentDialog(pParent)
+DDListBox::DDListBox(Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle)
+    , m_pParentDialog(NULL)
 {
     SetStyle( GetStyle() | /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
                             WB_CLIPCHILDREN );
@@ -1335,8 +1265,18 @@ DDListBox::DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId)
 
 }
 
-DDListBox::~DDListBox()
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDDListBox(Window *pParent, VclBuilder::stringmap &rMap)
 {
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new DDListBox(pParent, nWinStyle);
+}
+
+void DDListBox::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
+{
+    m_pParentDialog = pParent;
 }
 
 void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
@@ -1367,14 +1307,32 @@ void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
     }
 }
 
-AddressMultiLineEdit::AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId) :
-    MultiLineEdit(pParent, rResId),
-    m_pParentDialog(pParent)
-
+AddressMultiLineEdit::AddressMultiLineEdit(Window* pParent, WinBits nBits)
+    : VclMultiLineEdit(pParent, nBits)
+    , m_pParentDialog(NULL)
 {
     GetTextView()->SupportProtectAttribute(sal_True);
     StartListening(*GetTextEngine());
     EnableFocusSelectionHide(sal_False);
+}
+
+Size AddressMultiLineEdit::GetOptimalSize() const
+{
+    return LogicToPixel(Size(160, 60), MapMode(MAP_APPFONT));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAddressMultiLineEdit(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_LEFT|WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new AddressMultiLineEdit(pParent, nWinStyle);
+}
+
+void AddressMultiLineEdit::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
+{
+    m_pParentDialog = pParent;
 }
 
 AddressMultiLineEdit::~AddressMultiLineEdit()
@@ -1398,12 +1356,6 @@ long  AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
     if( EVENT_KEYINPUT == rNEvt.GetType()  &&
         rNEvt.GetKeyEvent()->GetCharCode())
     {
-        const KeyEvent* pKEvent = rNEvt.GetKeyEvent();
-        if('\t' == pKEvent->GetCharCode() &&
-            0 == (pKEvent->GetKeyCode().GetModifier() & (KEY_MOD1|KEY_MOD2)))
-        {
-            m_pParentDialog->MoveFocus(this, !pKEvent->GetKeyCode().IsShift());
-        }
         nHandled = 1;
     }
     else if(EVENT_MOUSEBUTTONDOWN == rNEvt.GetType()) {
@@ -1412,14 +1364,14 @@ long  AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
             nHandled = 1;
     }
     if(!nHandled)
-        nHandled = MultiLineEdit::PreNotify( rNEvt );
+        nHandled = VclMultiLineEdit::PreNotify( rNEvt );
     return nHandled;
 
 }
 
 void AddressMultiLineEdit::SetText( const OUString& rStr )
 {
-    MultiLineEdit::SetText(rStr);
+    VclMultiLineEdit::SetText(rStr);
     //set attributes to all address tokens
 
     ExtTextEngine* pTextEngine = GetTextEngine();

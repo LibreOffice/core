@@ -53,33 +53,6 @@
 #define PB_CANCEL               31
 #define PB_HELP                 32
 
-#define FT_ADDRESSELEMENTS      40
-#define LB_ADDRESSELEMENTS      41
-#define IB_INSERTFIELD          42
-#define IB_REMOVEFIELD          43
-#define FT_DRAG                 48
-#define ED_DRAG                 49
-#define IB_UP                   50
-#define IB_LEFT                 51
-#define IB_RIGHT                52
-#define IB_DOWN                 53
-#define FT_FIELD                54
-#define CB_FIELD                55
-#define ST_SALUTATION           56
-#define ST_PUNCTUATION          57
-#define ST_TEXT                 58
-#define RA_SALUTATION_MALE      59
-#define RA_SALUTATION_FEMALE    60
-#define RA_PUNCTUATION          61
-#define ST_TITLE_MALE           62
-#define ST_TITLE_FEMALE         63
-#define ST_SALUTATIONELEMENTS   64
-#define ST_INSERTSALUTATIONFIELD 65
-#define ST_REMOVESALUTATIONFIELD 66
-#define ST_DRAGSALUTATION       67
-#define ST_TITLE_EDIT           68
-
-
 #define FI_MATCHING             70
 #define CT_FIELDS               71
 #define ST_SALUTATIONPREVIEW    72

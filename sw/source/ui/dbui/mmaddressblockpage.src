@@ -293,230 +293,96 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
 #define WORKAROUND\
     Text [ en-US ] = "New Address Block";
 
-
-ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
+String ST_TITLE_EDIT
 {
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_MM_CUSTOMIZEADDRESSBLOCK;
-    Size = MAP_APPFONT ( 320 , 176 ) ;
-    Moveable = TRUE ;
+    Text [ en-US ] = "Edit Address Block";
+};
 
-    WORKAROUND
-
-    String ST_TITLE_EDIT
+String ST_TITLE_MALE
+{
+    Text [ en-US ] = "Custom Salutation (Male Recipients)";
+};
+String ST_TITLE_FEMALE
+{
+    Text [ en-US ] = "Custom Salutation (Female Recipients)";
+};
+String  ST_SALUTATIONELEMENTS
+{
+    Text[ en-US ] = "Salutation e~lements" ;
+};
+String ST_INSERTSALUTATIONFIELD
+{
+    Text[ en-US ] = "Add to salutation";
+};
+String ST_REMOVESALUTATIONFIELD
+{
+    Text[ en-US ] = "Remove from salutation";
+};
+String ST_DRAGSALUTATION
+{
+    Text[ en-US ] = "1. ~Drag salutation elements into the box below" ;
+};
+String ST_SALUTATION
+{
+    Text[ en-US ] = "Salutation";
+};
+String ST_PUNCTUATION
+{
+    Text[ en-US ] = "Punctuation Mark";
+};
+String ST_TEXT
+{
+    Text[ en-US ] = "Text";
+};
+StringArray RA_SALUTATION_MALE
+{
+    ItemList =
     {
-        Text [ en-US ] = "Edit Address Block";
+        < "Sehr geehrter Herr <2>," ; > ;
+        < "Lieber Herr <2>," ; > ;
+        < "Hallo Herr <2>," ; > ;
+        < "Hallo <1>," ; > ;
     };
-
-    String ST_TITLE_MALE
+    ItemList [en-US]=
     {
-        Text [ en-US ] = "Custom Salutation (Male Recipients)";
+        < "Dear Mr. <2>," ; > ;
+        < "Mr. <2>," ; > ;
+        < "Dear <1>," ; > ;
+        < "Hello <1>," ; > ;
     };
-    String ST_TITLE_FEMALE
+};
+StringArray RA_SALUTATION_FEMALE
+{
+    ItemList =
     {
-        Text [ en-US ] = "Custom Salutation (Female Recipients)";
+        < "Sehr geehrte Frau <2>," ; > ;
+        < "Liebe Frau <2>," ; > ;
+        < "Hallo Frau <2>," ; > ;
+        < "Hallo <1>," ; > ;
     };
-    FixedText       FT_ADDRESSELEMENTS
+    ItemList [en-US]=
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text[ en-US ] = "Address ~elements" ;
+        < "Dear Mrs. <2>," ; > ;
+        < "Ms. <2>," ; > ;
+        < "Dear <1>," ; > ;
+        < "Hello <1>," ; > ;
     };
-    String  ST_SALUTATIONELEMENTS
+};
+StringArray RA_PUNCTUATION
+{
+    ItemList =
     {
-        Text[ en-US ] = "Salutation e~lements" ;
+        < "," ; > ;
+        < ":" ; > ;
+        < "!" ; > ;
+        < "(kein)" ; > ;
     };
-    Control LB_ADDRESSELEMENTS
+    ItemList [en-US]=
     {
-        Pos = MAP_APPFONT ( 6 , 14 ) ;
-        Size = MAP_APPFONT ( 68 , 121 ) ;
-        TabStop = TRUE;
-        Border = TRUE;
-    };
-    ImageButton     IB_INSERTFIELD
-    {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_INSERTFIELD";
-        Pos = MAP_APPFONT ( 80 , 29 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Symbol = IMAGEBUTTON_ARROW_RIGHT;
-        QuickHelpText[ en-US ] = "Add to address";
-    };
-    String ST_INSERTSALUTATIONFIELD
-    {
-        Text[ en-US ] = "Add to salutation";
-    };
-    ImageButton     IB_REMOVEFIELD
-    {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_REMOVEFIELD";
-        Pos = MAP_APPFONT ( 80 , 46 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Symbol = IMAGEBUTTON_ARROW_LEFT;
-        QuickHelpText[ en-US ] = "Remove from address";
-    };
-    String ST_REMOVESALUTATIONFIELD
-    {
-        Text[ en-US ] = "Remove from salutation";
-    };
-    FixedText       FT_DRAG
-    {
-        Pos = MAP_APPFONT ( 100 , 3 ) ;
-        Size = MAP_APPFONT ( 210 , 8 ) ;
-        Text[ en-US ] = "1. Drag address elements here" ;
-    };
-    String ST_DRAGSALUTATION
-    {
-        Text[ en-US ] = "1. ~Drag salutation elements into the box below" ;
-    };
-    MultiLineEdit ED_DRAG
-    {
-        HelpID = "sw:MultiLineEdit:DLG_MM_CUSTOMIZEADDRESSBLOCK:ED_DRAG";
-        Pos = MAP_APPFONT ( 106 , 14 ) ;
-        Size = MAP_APPFONT ( 160 , 60 ) ;
-        Border = TRUE;
-    };
-    ImageButton     IB_UP
-    {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_UP";
-        Pos = MAP_APPFONT ( 285 , 14 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Symbol = IMAGEBUTTON_ARROW_UP;
-        QuickHelpText[ en-US ] = "Move up";
-    };
-    ImageButton     IB_LEFT
-    {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_LEFT";
-        Pos = MAP_APPFONT ( 270 , 29 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Symbol = IMAGEBUTTON_ARROW_LEFT;
-        QuickHelpText[ en-US ] = "Move left";
-    };
-    ImageButton     IB_RIGHT
-    {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_RIGHT";
-        Pos = MAP_APPFONT ( 300 , 29 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Symbol = IMAGEBUTTON_ARROW_RIGHT;
-        QuickHelpText[ en-US ] = "Move right";
-    };
-    ImageButton     IB_DOWN
-    {
-        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZEADDRESSBLOCK:IB_DOWN";
-        Pos = MAP_APPFONT ( 285 , 48 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Symbol = IMAGEBUTTON_ARROW_DOWN;
-        QuickHelpText[ en-US ] = "Move down";
-    };
-    FixedText FT_FIELD
-    {
-        Pos = MAP_APPFONT ( 100 , 78 ) ;
-        Size = MAP_APPFONT ( 160 , 8 ) ;
-        Hide = TRUE;
-        Text[ en-US ] = "2. Customi~ze salutation";
-    };
-    ComboBox  CB_FIELD
-    {
-        HelpID = "sw:ComboBox:DLG_MM_CUSTOMIZEADDRESSBLOCK:CB_FIELD";
-        Pos = MAP_APPFONT ( 106 , 89 ) ;
-        Size = MAP_APPFONT ( 160 , 50 ) ;
-        Border = TRUE;
-        DropDown = TRUE;
-        Hide = TRUE;
-    };
-    FixedText       FI_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 106 , 105 ) ;
-        Size = MAP_APPFONT ( 160 , 8 ) ;
-        Text[ en-US ] = "Preview";
-    };
-    Window WIN_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 106 , 116 ) ;
-        Size = MAP_APPFONT ( 160 , 19 ) ;
-        Border = TRUE;
-    };
-    FixedLine       FL_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( 0 , 145 ) ;
-        Size = MAP_APPFONT ( 320 , 8 ) ;
-    };
-    OKButton        PB_OK
-    {
-        Pos = MAP_APPFONT ( 155 , 156 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    CancelButton    PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 208 , 156 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton      PB_HELP
-    {
-        Pos = MAP_APPFONT ( 264 , 156 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String ST_SALUTATION
-    {
-        Text[ en-US ] = "Salutation";
-    };
-    String ST_PUNCTUATION
-    {
-        Text[ en-US ] = "Punctuation Mark";
-    };
-    String ST_TEXT
-    {
-        Text[ en-US ] = "Text";
-    };
-    StringArray RA_SALUTATION_MALE
-    {
-        ItemList =
-        {
-            < "Sehr geehrter Herr <2>," ; > ;
-            < "Lieber Herr <2>," ; > ;
-            < "Hallo Herr <2>," ; > ;
-            < "Hallo <1>," ; > ;
-        };
-        ItemList [en-US]=
-        {
-            < "Dear Mr. <2>," ; > ;
-            < "Mr. <2>," ; > ;
-            < "Dear <1>," ; > ;
-            < "Hello <1>," ; > ;
-        };
-    };
-    StringArray RA_SALUTATION_FEMALE
-    {
-        ItemList =
-        {
-            < "Sehr geehrte Frau <2>," ; > ;
-            < "Liebe Frau <2>," ; > ;
-            < "Hallo Frau <2>," ; > ;
-            < "Hallo <1>," ; > ;
-        };
-        ItemList [en-US]=
-        {
-            < "Dear Mrs. <2>," ; > ;
-            < "Ms. <2>," ; > ;
-            < "Dear <1>," ; > ;
-            < "Hello <1>," ; > ;
-        };
-    };
-    StringArray RA_PUNCTUATION
-    {
-        ItemList =
-        {
-            < "," ; > ;
-            < ":" ; > ;
-            < "!" ; > ;
-            < "(kein)" ; > ;
-        };
-        ItemList [en-US]=
-        {
-            < "," ; > ;
-            < ":" ; > ;
-            < "!" ; > ;
-            < "(none)" ; > ;
-        };
+        < "," ; > ;
+        < ":" ; > ;
+        < "!" ; > ;
+        < "(none)" ; > ;
     };
 };
 

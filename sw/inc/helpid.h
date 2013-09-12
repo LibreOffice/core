@@ -379,7 +379,6 @@
 #define HID_MM_SELECTDBTABLEDDIALOG_LISTBOX                     "SW_HID_MM_SELECTDBTABLEDDIALOG_LISTBOX"
 #define HID_MM_DBTABLEPREVIEWDIALOG                             "SW_HID_MM_DBTABLEPREVIEWDIALOG"
 #define HID_MM_CREATEADDRESSLIST                                "SW_HID_MM_CREATEADDRESSLIST"
-#define HID_MM_CUSTOMIZEADDRESSBLOCK                            "SW_HID_MM_CUSTOMIZEADDRESSBLOCK"
 #define HID_MM_SELECTADDRESSBLOCK                               "SW_HID_MM_SELECTADDRESSBLOCK"
 #define HID_MM_ASSIGNFIELDS                                     "SW_HID_MM_ASSIGNFIELDS"
 #define HID_MM_LAYOUT_PAGE                                      "SW_HID_MM_LAYOUT_PAGE"

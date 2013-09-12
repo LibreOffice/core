@@ -266,6 +266,9 @@
     <glade-widget-class title="MultiLine Edit" name="svtlo-MultiLineEditSyntaxHighlight"
                         generic-name="MultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
+    <glade-widget-class title="Address MultiLine Edit" name="swuilo-AddressMultiLineEdit"
+                        generic-name="AddressMultiLineEdit" parent="GtkTextView"
+                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="ValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -338,6 +341,9 @@
     <glade-widget-class title="Presentation Preview" name="sduilo-PresLayoutPreview"
                         generic-name="Presentation Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Address Preview" name="swlo-SwAddressPreview"
+                        generic-name="Address Preview" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Rectangle Control" name="svxlo-SvxRectCtl"
                         generic-name="Rectangle Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -354,7 +360,10 @@
                         generic-name="CategoryComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Bookmark Combo" name="swuilo-BookmarkCombo"
-                        generic-name="BookmarkComboBox" parent="GtkTreeView"
+                        generic-name="BookmarkComboBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Restricted ComboBox" name="swuilo-SwRestrictedComboBox"
+                        generic-name="Restricted ComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Category Edit" name="swuilo-FEdit"
                         generic-name="CategoryEdit" parent="GtkEntry"
@@ -379,6 +388,9 @@
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tree List" name="svtlo-SvTreeListBox"
                         generic-name="Tree List" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="DD ListBox" name="swuilo-DDListBox"
+                        generic-name="DD ListBox" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tab List" name="svtlo-SvTabListBox"
                         generic-name="Tab List" parent="svtlo-SvTreeListBox"

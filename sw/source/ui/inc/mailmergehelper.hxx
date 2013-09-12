@@ -74,6 +74,7 @@ class SW_DLLPUBLIC SwAddressPreview : public Window
     void DrawText_Impl( const OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected);
 
     virtual void        Paint(const Rectangle&);
+    virtual void        Resize();
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
@@ -82,8 +83,11 @@ class SW_DLLPUBLIC SwAddressPreview : public Window
     DECL_LINK(ScrollHdl, void*);
 
 public:
-    SwAddressPreview(Window* pParent, const ResId rResId);
-    ~SwAddressPreview();
+    SwAddressPreview(Window* pParent, const ResId& rResId);
+
+    SwAddressPreview(Window* pParent, WinBits nStyle=WB_BORDER);
+
+    void positionScrollBar();
 
     /** The address string is a list of address elements separated by spaces
     and breaks. The addresses fit into the given layout. If more addresses then
