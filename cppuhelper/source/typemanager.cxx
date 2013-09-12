@@ -1905,7 +1905,7 @@ css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
                     new SimpleTypeDescription(simple[i].typeClass, name));
         }
     }
-    if (name.match("[]")) {
+    if (name.startsWith("[]")) {
         return getSequenceType(name);
     }
     sal_Int32 i = name.indexOf('<');
@@ -2163,7 +2163,7 @@ void cppuhelper::TypeManager::readRdbFile(
 css::uno::Any cppuhelper::TypeManager::getSequenceType(
     rtl::OUString const & name)
 {
-    assert(name.match("[]"));
+    assert(name.startsWith("[]"));
     return css::uno::makeAny<
         css::uno::Reference< css::reflection::XTypeDescription > >(
             new SequenceTypeDescription(
