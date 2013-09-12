@@ -2833,6 +2833,12 @@ dnl ===================================================================
 
 if test $_os = iOS; then
 
+    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
+        :
+    else
+        BITNESS_OVERRIDE=64
+    fi
+
     AC_MSG_CHECKING([what iOS SDK to use])
 
     xcode_developer=`xcode-select -print-path`
@@ -2840,11 +2846,20 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = yes; then
         platform=iPhoneSimulator
         versionmin=-mmacosx-version-min=10.7
-        arch=i386
+        if test "$BITNESS_OVERRIDE" = 64; then
+            arch=x86_64
+        else
+            arch=i386
+        fi
     else
         platform=iPhoneOS
-        versionmin=-miphoneos-version-min=5.0
-        arch=armv7
+        if test "$BITNESS_OVERRIDE" = 64; then
+            arch=arm64
+            versionmin=-miphoneos-version-min=7.0
+        else
+            arch=armv7
+            versionmin=-miphoneos-version-min=5.0
+        fi
     fi
 
     pref_sdk_ver=6.1
