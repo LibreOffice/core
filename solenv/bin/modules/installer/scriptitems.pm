@@ -1014,10 +1014,11 @@ sub get_sourcepath_from_filename_and_includepath
 
 sub get_Source_Directory_For_Files_From_Includepathlist
 {
-    my ($filesarrayref, $includepatharrayref, $dirsref, $item) = @_;
+    my ($filesarrayref, $includepatharrayref, $dirsref, $item, $allvariables) = @_;
 
     installer::logger::include_header_into_logfile("$item:");
 
+    my $extrarootdir = $allvariables->{'WINDOWSBASISROOTNAME'};
     my $infoline = "";
 
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
@@ -1044,7 +1045,11 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $instdirdestination;
         if ($destination)
         {
-            $instdirdestination = $ENV{'INSTDIR'} . $installer::globals::separator . $onefile->{'destination'};
+            if ($extrarootdir)
+            {
+                $destination =~ s,$extrarootdir/,,; # remove it from path
+            }
+            $instdirdestination = $ENV{'INSTDIR'} . $installer::globals::separator . $destination;
         }
         if ($instdirdestination && -f $instdirdestination)
         {
