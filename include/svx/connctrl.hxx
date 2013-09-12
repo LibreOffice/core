@@ -37,7 +37,6 @@ class SVX_DLLPUBLIC SvxXConnectionPreview : public Control
  friend class SvxConnectionPage;
 
 private:
-    const SfxItemSet&   rAttrs;
     SdrEdgeObj*         pEdgeObj;
     SdrObjList*         pObjList;
     const SdrView*      pView;
@@ -46,13 +45,15 @@ private:
 public:
             SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                                 const SfxItemSet& rInAttrs );
+            SvxXConnectionPreview( Window* pParent, WinBits nStyle);
             ~SvxXConnectionPreview();
 
     virtual void Paint( const Rectangle& rRect );
+    virtual void Resize();
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
     void         SetAttributes( const SfxItemSet& rInAttrs );
-    sal_uInt16       GetLineDeltaAnz();
+    sal_uInt16   GetLineDeltaAnz();
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }

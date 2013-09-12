@@ -32,10 +32,18 @@
 #include <svx/sxelditm.hxx>
 #include <svx/sxmkitm.hxx>
 
+#include <vcl/builder.hxx>
+
 SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                             const SfxItemSet& rInAttrs ) :
-                            Control ( pParent, rResId ),
-                            rAttrs  ( rInAttrs ),
+                            Control ( pParent, rResId )
+{
+    SetMapMode( MAP_100TH_MM );
+    SetStyles();
+}
+
+SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, WinBits nStyle):
+                            Control ( pParent, nStyle ),
                             pEdgeObj( NULL ),
                             pObjList( NULL ),
                             pView   ( NULL )
@@ -44,10 +52,31 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
     SetStyles();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxXConnectionPreview(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SvxXConnectionPreview(pParent, nWinStyle);
+}
+
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {
     delete pObjList;
 }
+
+void SvxXConnectionPreview::Resize()
+{
+    Control::Resize();
+
+//     Size aSize = GetOutputSize();
+//     Point aPt1 = Point( aSize.Width() / 2, (long) ( aSize.Height() / 2 ) );
+//     pObjList->SetPoint(aPt1, 0);
+//     Point aPt2 = Point( aSize.Width() / 2, (long) ( aSize.Height() / 2 ) );
+//     pObjList->SetPoint(aPt2, 1);
+}
+
 
 void SvxXConnectionPreview::Construct()
 {

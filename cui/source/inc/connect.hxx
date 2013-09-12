@@ -33,28 +33,21 @@ class SdrView;
 class SvxConnectionPage : public SfxTabPage
 {
 private:
-    FixedText           aFtType;
-    ListBox             aLbType;
+    ListBox*             m_pLbType;
 
-    FixedLine           aFlDelta;
-    FixedText           aFtLine1;
-    MetricField         aMtrFldLine1;
-    FixedText           aFtLine2;
-    MetricField         aMtrFldLine2;
-    FixedText           aFtLine3;
-    MetricField         aMtrFldLine3;
+    FixedText*           m_pFtLine1;
+    MetricField*         m_pMtrFldLine1;
+    FixedText*           m_pFtLine2;
+    MetricField*         m_pMtrFldLine2;
+    FixedText*           m_pFtLine3;
+    MetricField*         m_pMtrFldLine3;
 
-    FixedLine           aFlDistance;
-    FixedText           aFtHorz1;
-    MetricField         aMtrFldHorz1;
-    FixedText           aFtVert1;
-    MetricField         aMtrFldVert1;
-    FixedText           aFtHorz2;
-    MetricField         aMtrFldHorz2;
-    FixedText           aFtVert2;
-    MetricField         aMtrFldVert2;
+    MetricField*         m_pMtrFldHorz1;
+    MetricField*         m_pMtrFldVert1;
+    MetricField*         m_pMtrFldHorz2;
+    MetricField*         m_pMtrFldVert2;
 
-    SvxXConnectionPreview   aCtlPreview;
+    SvxXConnectionPreview*   m_pCtlPreview;
 
     const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
@@ -63,7 +56,7 @@ private:
 
     void                FillTypeLB();
 
-                        DECL_LINK( ChangeAttrHdl_Impl, void * );
+    DECL_LINK( ChangeAttrHdl_Impl, void * );
 
 public:
 
@@ -83,7 +76,7 @@ public:
 
 /* Derived from SfxNoLayoutSingleTabDialog, in order to be informed about
    virtual methods by the control. */
-class SvxConnectionDialog : public SfxNoLayoutSingleTabDialog
+class SvxConnectionDialog : public SfxSingleTabDialog
 {
 public:
     SvxConnectionDialog( Window* pParent, const SfxItemSet& rAttr,
