@@ -2245,7 +2245,7 @@ css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
 }
 
 css::uno::Any cppuhelper::TypeManager::getNamed(
-    rtl::OUString const & name, rtl::Reference< unoidl::Entity > entity)
+    rtl::OUString const & name, rtl::Reference< unoidl::Entity > const & entity)
 {
     assert(entity.is());
     switch (entity->getSort()) {
@@ -2337,7 +2337,7 @@ css::uno::Any cppuhelper::TypeManager::getNamed(
 }
 
 css::uno::Any cppuhelper::TypeManager::getEnumMember(
-    rtl::Reference< unoidl::EnumTypeEntity > entity,
+    rtl::Reference< unoidl::EnumTypeEntity > const & entity,
     rtl::OUString const & member)
 {
     for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(
@@ -2353,7 +2353,7 @@ css::uno::Any cppuhelper::TypeManager::getEnumMember(
 
 css::uno::Any cppuhelper::TypeManager::getConstant(
     rtl::OUString const & constantGroupName,
-    rtl::Reference< unoidl::ConstantGroupEntity > entity,
+    rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
     rtl::OUString const & member)
 {
     for (std::vector< unoidl::ConstantGroupEntity::Member >::const_iterator i(

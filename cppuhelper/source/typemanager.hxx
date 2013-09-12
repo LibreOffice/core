@@ -131,15 +131,16 @@ private:
         rtl::OUString const & name, sal_Int32 separator);
 
     css::uno::Any getNamed(
-        rtl::OUString const & name, rtl::Reference< unoidl::Entity > entity);
+        rtl::OUString const & name,
+        rtl::Reference< unoidl::Entity > const & entity);
 
     css::uno::Any getEnumMember(
-        rtl::Reference< unoidl::EnumTypeEntity > entity,
+        rtl::Reference< unoidl::EnumTypeEntity > const & entity,
         rtl::OUString const & member);
 
     css::uno::Any getConstant(
         rtl::OUString const & constantGroupName,
-        rtl::Reference< unoidl::ConstantGroupEntity > entity,
+        rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
         rtl::OUString const & member);
 
     rtl::Reference< unoidl::Entity > findEntity(rtl::OUString const & name);
