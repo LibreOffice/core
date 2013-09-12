@@ -1630,14 +1630,17 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
                                                                         sal_uInt32 nResId
                                                                         )
 {
+
+// TODO will fix this ugly hack when all cases are in SfxSingleTabDialog
     SfxNoLayoutSingleTabDialog* pDlg=NULL;
+    SfxSingleTabDialog* pDlg1=NULL;
     switch ( nResId )
     {
         case RID_SVXPAGE_MEASURE :
-            pDlg = new SvxMeasureDialog( pParent, rAttr, pView );
+            pDlg1 = new SvxMeasureDialog( pParent, rAttr, pView );
             break;
         case RID_SVXPAGE_CONNECTION :
-            pDlg = new SvxConnectionDialog( pParent, rAttr, pView );
+            pDlg1 = new SvxConnectionDialog( pParent, rAttr, pView );
             break;
         case RID_SFXPAGE_DBREGISTER :
             pDlg = new DatabaseRegistrationDialog( pParent, rAttr );
@@ -1648,6 +1651,10 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
 
     if ( pDlg )
         return new CuiAbstractSfxDialog_Impl( pDlg );
+
+    if ( pDlg1 )
+        return new CuiAbstractSfxDialog_Impl( pDlg1 );
+
     return 0;
 }
 

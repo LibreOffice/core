@@ -251,6 +251,9 @@
     <glade-widget-class title="SvxXMeasurePreview" name="svxlo-SvxXMeasurePreview"
                         generic-name="Dimension Line Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="SvxXConnectionPreview" name="svxlo-SvxXConnectionPreview"
+                        generic-name="Connector Line Preview Window" parent="GtkDrawingArea"
+                            icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Shadow Preview" name="svxlo-SvxXShadowPreview"
                         generic-name="Shadow Preview Window" parent="GtkDrawingArea"
                             icon-name="widget-gtk-drawingarea"/>

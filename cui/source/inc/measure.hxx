@@ -83,7 +83,7 @@ public:
 
 /* Derived from SfxNoLayoutSingleTabDialog, in order to be able to be
    informed about virtual methods by the control. */
-class SvxMeasureDialog : public SfxNoLayoutSingleTabDialog
+class SvxMeasureDialog : public SfxSingleTabDialog
 {
 public:
     SvxMeasureDialog( Window* pParent, const SfxItemSet& rAttr,

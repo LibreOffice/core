@@ -61,16 +61,16 @@ static sal_uInt16 pRanges[] =
 \************************************************************************/
 
 SvxMeasureDialog::SvxMeasureDialog( Window* pParent, const SfxItemSet& rInAttrs,
-                                const SdrView* pSdrView ) :
-        SfxNoLayoutSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_MEASURE )
+                                const SdrView* pSdrView )
+    : SfxSingleTabDialog(pParent, rInAttrs)
 {
-    SvxMeasurePage* _pPage = new SvxMeasurePage( this, rInAttrs );
+    SvxMeasurePage* _pPage = new SvxMeasurePage( get_content_area(), rInAttrs );
 
     _pPage->SetView( pSdrView );
     _pPage->Construct();
 
-    SetTabPage( _pPage );
-    SetText( _pPage->GetText() );
+    setTabPage(_pPage );
+    SetText(CUI_RESSTR(RID_SVXSTR_DIMENSION_LINE));
 }
 
 /*************************************************************************
@@ -91,12 +91,9 @@ SvxMeasureDialog::~SvxMeasureDialog()
 
 SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
                 SvxTabPage      ( pWindow
-                                 ,"DimensionLines"
-                                 ,"cui/ui/dimensionlines.ui"
+                                 ,"DimensionLinesTabPage"
+                                 ,"cui/ui/dimensionlinestabpage.ui"
                                  ,rInAttrs ),
-
-//         aCtlPreview             ( this, CUI_RES( CTL_PREVIEW ), rInAttrs ),
-
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() ),
         pView( 0 ),
