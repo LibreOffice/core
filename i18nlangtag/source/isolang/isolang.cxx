@@ -34,8 +34,8 @@ struct IsoLanguageCountryEntry
     LanguageType  mnLang;
     sal_Char      maLanguage[4];
     sal_Char      maCountry[3];
-    /** If TRUE, a higher (! else infinite recursion occurs!) level override
-        with the same mnLang (!) exists that should be used instead. */
+    /** If TRUE, a higher (!) level override with the same mnLang (!) exists
+        that should be used instead. */
     bool          mbOverrideExists;
 
     /** Obtain a language tag string with '-' separator. */
