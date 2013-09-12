@@ -92,7 +92,11 @@ namespace svx
         if( aColor.GetColor() == COL_AUTO )
             aColor = Color( COL_TRANSPARENT );
 
-        if( ( maCurColor != aColor ) || bSizeChanged || bDisplayModeChanged )
+        // For a shape selected in 'Draw', when color selected in Sidebar > Line > Color
+        // is COL_BLACK, then (maCurColor != aColor) becomes 'false', therefore we take
+        // explicit care of COL_BLACK from the last argument in the condition so that the
+        // Update() does its routine job appropriately !
+        if( ( maCurColor != aColor ) || bSizeChanged || bDisplayModeChanged || ( aColor == COL_BLACK ) )
         {
             // create an empty bitmap, and copy the original bitmap inside
             // (so that it grows in case the original bitmap was smaller)
