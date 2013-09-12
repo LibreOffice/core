@@ -5,7 +5,7 @@ This script takes several sources of information:
 
 * the list of images used in every .src file that is compiled
 * the configuration XML describing every command that is used
-* [[packimages/pack/iamge-sort.lst]] which provides a profile based
+* [[packimages/pack/image-sort.lst]] which provides a profile based
   ordering of images.
 
 It then tries to pack the images together into the .zip file into an
