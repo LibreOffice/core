@@ -45,12 +45,22 @@ published interface XColumnLocate: com::sun::star::uno::XInterface
 {
 
     /** maps the given ResultSet column name to its ResultSet column index.
+
+        <p>
+        The specification before LibreOffice 4.2 left unspecified what should
+        happen for an invalid column name. As a result some drivers written
+        against the older speification may return a special invalid value, such
+        as a negative number, zero, or a number greater than the number of
+        columns.
+        </p>
+
         @param columnName
             the name of the column
         @returns
             the position of the column
         @throws SQLException
-                if a database access error occurs.
+                if the column named <code>columnName</code> does not exist,
+                or a database access error occurs.
      */
     long findColumn([in]string columnName) raises (SQLException);
 };
