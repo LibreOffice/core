@@ -280,18 +280,18 @@ void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
 IMPL_LINK_TYPED( SwAutoFormatDlg, CheckHdl, Button *, pBtn, void )
 {
     SwTableAutoFormat* pData  = &(*pTableTable)[nIndex];
-    bool bCheck = static_cast<CheckBox*>(pBtn)->IsChecked(), bDataChgd = true;
+    sal_Bool bDataChgd = true;
 
     if( pBtn == m_pBtnNumFormat )
-        pData->SetValueFormat( bCheck );
+        ;
     else if ( pBtn == m_pBtnBorder )
-        pData->SetFrame( bCheck );
+        ;
     else if ( pBtn == m_pBtnFont )
-        pData->SetFont( bCheck );
+        ;
     else if ( pBtn == m_pBtnPattern )
-        pData->SetBackground( bCheck );
+        ;
     else if ( pBtn == m_pBtnAlignment )
-        pData->SetJustify( bCheck );
+        ;
     else
         bDataChgd = false;
 
@@ -489,12 +489,6 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
         if ( !pStyle )
             pStyle = pShell->GetDoc()->MakeTableFrameFormat(sNm, NULL);
         SwTableAutoFormat aTmp( sNm, pStyle );
-        aTmp.SetFont( false );
-        aTmp.SetJustify( false );
-        aTmp.SetFrame( false );
-        aTmp.SetBackground( false );
-        aTmp.SetValueFormat( false );
-        aTmp.SetWidthHeight( false );
 
         if( nOldIdx != nIndex )
             m_pWndPreview->NotifyChange( *(SwTableAutoFormat*)0 );

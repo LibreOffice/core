@@ -112,16 +112,6 @@ class SW_DLLPUBLIC SwTableAutoFormat
     SwTableFormat* m_pTableStyle;
     sal_uInt16 nStrResId;
 
-    // Common flags of Calc and Writer.
-    bool bInclFont : 1;
-    bool bInclJustify : 1;
-    bool bInclFrame : 1;
-    bool bInclBackground : 1;
-    bool bInclValueFormat : 1;
-
-    // Calc specific flags.
-    bool bInclWidthHeight : 1;
-
 public:
     SwTableAutoFormat( const OUString& rName, SwTableFormat* pTableStyle );
     SwTableAutoFormat( const SwTableAutoFormat& rNew );
@@ -151,13 +141,6 @@ public:
     bool IsFrame() const        { return m_pTableStyle->IsFrame(); }
     bool IsBackground() const   { return m_pTableStyle->IsBackground(); }
     bool IsValueFormat() const  { return m_pTableStyle->IsValueFormat(); }
-
-    void SetFont( const sal_Bool bNew )         { bInclFont = bNew; }
-    void SetJustify( const  sal_Bool bNew )     { bInclJustify = bNew; }
-    void SetFrame( const sal_Bool bNew )        { bInclFrame = bNew; }
-    void SetBackground( const sal_Bool bNew )   { bInclBackground = bNew; }
-    void SetValueFormat( const sal_Bool bNew )  { bInclValueFormat = bNew; }
-    void SetWidthHeight( const sal_Bool bNew )  { bInclWidthHeight = bNew; }
 
     static SwTableAutoFormat* Load( SvStream& rStream, const SwAfVersions&, SwDoc* pDoc );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;

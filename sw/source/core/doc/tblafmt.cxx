@@ -550,13 +550,6 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName, SwTableFormat* pTab
     : m_pTableStyle( pTableStyle )
     , nStrResId( USHRT_MAX )
 {
-    bInclFont = true;
-    bInclJustify = true;
-    bInclFrame = true;
-    bInclBackground = true;
-    bInclValueFormat = true;
-    bInclWidthHeight = true;
-
     m_pTableStyle->SetName( rName );
 }
 
@@ -572,12 +565,6 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
 
     m_pTableStyle = rNew.m_pTableStyle;
     nStrResId = rNew.nStrResId;
-    bInclFont = rNew.bInclFont;
-    bInclJustify = rNew.bInclJustify;
-    bInclFrame = rNew.bInclFrame;
-    bInclBackground = rNew.bInclBackground;
-    bInclValueFormat = rNew.bInclValueFormat;
-    bInclWidthHeight = rNew.bInclWidthHeight;
 
     return *this;
 }
@@ -847,12 +834,13 @@ SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersion
 
         pRet->nStrResId = nStrResId;
 
-        rStream.ReadCharAsBool( b ); pRet->bInclFont = b;
-        rStream.ReadCharAsBool( b ); pRet->bInclJustify = b;
-        rStream.ReadCharAsBool( b ); pRet->bInclFrame = b;
-        rStream.ReadCharAsBool( b ); pRet->bInclBackground = b;
-        rStream.ReadCharAsBool( b ); pRet->bInclValueFormat = b;
-        rStream.ReadCharAsBool( b ); pRet->bInclWidthHeight = b;
+        // No longer needed, but still read to not misread other data
+        rStream.ReadCharAsBool( b );
+        rStream.ReadCharAsBool( b );
+        rStream.ReadCharAsBool( b );
+        rStream.ReadCharAsBool( b );
+        rStream.ReadCharAsBool( b );
+        rStream.ReadCharAsBool( b );
 
         bRet = pStyle->Load( rStream, rVersions, pDoc, nVal );
     }
@@ -872,12 +860,12 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, GetName(),
         RTL_TEXTENCODING_UTF8 );
     rStream.WriteUInt16( nStrResId );
-    rStream.WriteBool( bInclFont );
-    rStream.WriteBool( bInclJustify );
-    rStream.WriteBool( bInclFrame );
-    rStream.WriteBool( bInclBackground );
-    rStream.WriteBool( bInclValueFormat );
-    rStream.WriteBool( bInclWidthHeight );
+    rStream.WriteBool( false );
+    rStream.WriteBool( false );
+    rStream.WriteBool( false );
+    rStream.WriteBool( false );
+    rStream.WriteBool( false );
+    rStream.WriteBool( false );
 
     {
         WriterSpecificAutoFormatBlock block(rStream);
