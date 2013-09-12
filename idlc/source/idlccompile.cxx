@@ -38,6 +38,8 @@
 #else
 #include <wait.h>
 #endif
+#include <sys/types.h>
+#include <sys/stat.h>
 #endif
 
 #include <string.h>
@@ -154,7 +156,9 @@ OString makeTempName(const OString& prefix)
     strncat(tmpFilePattern, "XXXXXX", sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
 
 #ifdef SAL_UNX
+    mode_t nOrigMode = umask(S_IRWXG | S_IRWXO);
     int nDescriptor = mkstemp(tmpFilePattern);
+    umask(nOrigMode);
     if( -1 == nDescriptor )
     {
         fprintf(stderr, "idlc: mkstemp(\"%s\") failed: %s\n", tmpFilePattern, strerror(errno));
