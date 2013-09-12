@@ -905,19 +905,6 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     TableDefinition(pTableTextNodeInfoInner);
 
-    SvtMiscOptions aMiscOptions;
-    if (aMiscOptions.IsExperimentalMode())
-    {
-        m_aTables.push_back(m_aRowDefs.toString());
-        // Emit row properties at the start of the row as well for non-nested
-        // tables, to support old readers.
-        if ( nCurrentDepth <= 1 )
-            m_rExport.Strm() << m_aRowDefs.makeStringAndClear().getStr();
-        m_aRowDefs.setLength(0);
-        return;
-    }
-    else
-    {
     if (!m_bLastTable)
         m_aTables.push_back(m_aRowDefs.makeStringAndClear());
 
@@ -928,7 +915,6 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // necessary for subtables.
     m_rExport.Strm() << m_aAfterRuns.makeStringAndClear().getStr();
     m_rExport.Strm() << m_aRowDefs.makeStringAndClear().getStr();
-    }
 }
 
 void RtfAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
