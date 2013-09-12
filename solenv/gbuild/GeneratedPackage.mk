@@ -19,8 +19,8 @@
 # If you know the filenames in advance, use Package. Laziness is not an
 # excuse.
 
-gb_GeneratedPackage__get_srcdir = $(lastword $(subst :, ,$(1)))
-gb_GeneratedPackage__get_destdir = $(firstword $(subst :, ,$(1)))
+gb_GeneratedPackage__get_srcdir = $(lastword $(subst ;, ,$(1)))
+gb_GeneratedPackage__get_destdir = $(firstword $(subst ;, ,$(1)))
 
 define gb_GeneratedPackage__command_cp
 mkdir -p $(dir $(2)) && \
@@ -111,7 +111,7 @@ endef
 #
 # gb_GeneratedPackage_add_dir package destdir srcdir
 define gb_GeneratedPackage_add_dir
-$(call gb_GeneratedPackage_get_target,$(1)) : PACKAGE_DIRS += $(strip $(2)):$(strip $(3))
+$(call gb_GeneratedPackage_get_target,$(1)) : PACKAGE_DIRS += $(strip $(2));$(strip $(3))
 $(call gb_GeneratedPackage_get_clean_target,$(1)) : PACKAGE_DIRS += $(2)
 
 endef
