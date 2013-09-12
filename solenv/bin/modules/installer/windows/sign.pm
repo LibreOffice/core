@@ -654,9 +654,7 @@ sub sign_files
 
     my $productname = "";
     if ( $followmeinfohash->{'allvariableshash'}->{'PRODUCTNAME'} ) { $productname = "/d " . "\"$followmeinfohash->{'allvariableshash'}->{'PRODUCTNAME'}\""; }
-    my $url = "";
-    if (( ! exists($followmeinfohash->{'allvariableshash'}->{'OPENSOURCE'}) ) || ( $followmeinfohash->{'allvariableshash'}->{'OPENSOURCE'} == 0 )) { $url = "/du " . "\"http://www.sun.com\""; }
-    else { $url = "/du " . "\"http://www.openoffice.org\""; }
+    my $url = "/du " . "\"http://www.openoffice.org\"";
     my $timestampurl = "http://timestamp.verisign.com/scripts/timestamp.dll";
 
     my $pfxfilepath = $installer::globals::pfxfile;
