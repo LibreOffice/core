@@ -22,7 +22,7 @@ public class Server implements Parcelable {
     private final String mAddress;
     private final String mName;
 
-    public Server(Protocol aProtocol, String aAddress, String aName) {
+    private Server(Protocol aProtocol, String aAddress, String aName) {
         this.mProtocol = aProtocol;
         this.mAddress = aAddress;
         this.mName = aName;

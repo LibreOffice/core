@@ -69,7 +69,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent aIntent) {
         return mBinder;
     }
 
@@ -96,7 +96,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     public void connectServer(Server aServer) {
         mServer = aServer;
 
-        new Thread(this).start();
+        Thread aConnectionThread = new Thread(this);
+        aConnectionThread.start();
     }
 
     @Override

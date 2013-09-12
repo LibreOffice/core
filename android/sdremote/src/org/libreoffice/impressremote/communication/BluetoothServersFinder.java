@@ -96,7 +96,7 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
     private void startDiscoveryDelayed() {
         // Start discovery again after a small delay.
         // Check whether device is on in case the user manually
-        // disabled bluetooth
+        // disabled Bluetooth.
 
         if (!BluetoothOperator.getAdapter().isEnabled()) {
             return;

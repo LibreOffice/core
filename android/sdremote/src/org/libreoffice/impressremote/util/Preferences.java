@@ -77,24 +77,24 @@ public final class Preferences {
         return mPreferences.getAll();
     }
 
-    public String getString(String aKey) {
-        return mPreferences.getString(aKey, Defaults.STRING);
+    public boolean getBoolean(String aKey) {
+        return mPreferences.getBoolean(aKey, Defaults.BOOLEAN);
     }
 
     public int getInt(String aKey) {
         return mPreferences.getInt(aKey, Defaults.INT);
     }
 
-    public void setString(String aKey, String aValue) {
-        mPreferences.edit().putString(aKey, aValue).commit();
-    }
-
-    public boolean getBoolean(String aKey) {
-        return mPreferences.getBoolean(aKey, Defaults.BOOLEAN);
+    public String getString(String aKey) {
+        return mPreferences.getString(aKey, Defaults.STRING);
     }
 
     public void setInt(String aKey, int aValue) {
         mPreferences.edit().putInt(aKey, aValue).commit();
+    }
+
+    public void setString(String aKey, String aValue) {
+        mPreferences.edit().putString(aKey, aValue).commit();
     }
 
     public void remove(String aKey) {
