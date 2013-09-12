@@ -245,6 +245,8 @@ public:
 
     void CreateStringFromTokenArray( String& rFormula );
     void CreateStringFromTokenArray( OUStringBuffer& rBuffer );
+    FormulaToken* CreateStringFromToken( OUString& rFormula, FormulaToken* pToken,
+                                    bool bAllowArrAdvance = false );
     FormulaToken* CreateStringFromToken( String& rFormula, FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
     FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pToken,
@@ -306,7 +308,7 @@ protected:
     bool MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 );
 
     String              aCorrectedFormula;      // autocorrected Formula
-    String              aCorrectedSymbol;       // autocorrected Symbol
+    OUString            aCorrectedSymbol;       // autocorrected Symbol
 
     OpCodeMapPtr        mxSymbols;              // which symbols are used
 

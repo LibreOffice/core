@@ -3232,33 +3232,33 @@ bool ScCompiler::IsErrorConstant( const String& rName ) const
 
 void ScCompiler::AutoCorrectParsedSymbol()
 {
-    xub_StrLen nPos = aCorrectedSymbol.Len();
+    sal_Int32 nPos = aCorrectedSymbol.getLength();
     if ( nPos )
     {
         nPos--;
         const sal_Unicode cQuote = '\"';
         const sal_Unicode cx = 'x';
         const sal_Unicode cX = 'X';
-        sal_Unicode c1 = aCorrectedSymbol.GetChar( 0 );
-        sal_Unicode c2 = aCorrectedSymbol.GetChar( nPos );
-        sal_Unicode c2p = nPos > 0 ? aCorrectedSymbol.GetChar( nPos-1 ) : 0;
+        sal_Unicode c1 = aCorrectedSymbol[0];
+        sal_Unicode c2 = aCorrectedSymbol[nPos];
+        sal_Unicode c2p = nPos > 0 ? aCorrectedSymbol[nPos-1] : 0;
         if ( c1 == cQuote && c2 != cQuote  )
         {   // "...
             // What's not a word doesn't belong to it.
             // Don't be pedantic: c < 128 should be sufficient here.
-            while ( nPos && ((aCorrectedSymbol.GetChar(nPos) < 128) &&
-                    ((GetCharTableFlags(aCorrectedSymbol.GetChar(nPos), aCorrectedSymbol.GetChar(nPos-1)) &
+            while ( nPos && ((aCorrectedSymbol[nPos] < 128) &&
+                    ((GetCharTableFlags(aCorrectedSymbol[nPos], aCorrectedSymbol[nPos-1]) &
                     (SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_DONTCARE)) == 0)) )
                 nPos--;
             if ( nPos == MAXSTRLEN - 2 )
-                aCorrectedSymbol.SetChar( nPos, cQuote );   // '"' the 255th character
+                aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, OUString(cQuote) );   // '"' the 255th character
             else
-                aCorrectedSymbol.Insert( cQuote, nPos + 1 );
+                aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos + 1, 0, OUString(cQuote) );
             bCorrected = true;
         }
         else if ( c1 != cQuote && c2 == cQuote )
         {   // ..."
-            aCorrectedSymbol.Insert( cQuote, 0 );
+            aCorrectedSymbol = OUString(cQuote) + aCorrectedSymbol;
             bCorrected = true;
         }
         else if ( nPos == 0 && (c1 == cx || c1 == cX) )
@@ -3272,20 +3272,14 @@ void ScCompiler::AutoCorrectParsedSymbol()
             xub_StrLen nXcount;
             if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cx)) > 1 )
             {   // x => *
-                xub_StrLen nIndex = 0;
                 sal_Unicode c = mxSymbols->getSymbol(ocMul).GetChar(0);
-                while ( (nIndex = aCorrectedSymbol.SearchAndReplace(
-                        cx, c, nIndex )) != STRING_NOTFOUND )
-                    nIndex++;
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUString(cx), OUString(c));
                 bCorrected = true;
             }
             if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cX)) > 1 )
             {   // X => *
-                xub_StrLen nIndex = 0;
                 sal_Unicode c = mxSymbols->getSymbol(ocMul).GetChar(0);
-                while ( (nIndex = aCorrectedSymbol.SearchAndReplace(
-                        cX, c, nIndex )) != STRING_NOTFOUND )
-                    nIndex++;
+                aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUString(cX), OUString(c));
                 bCorrected = true;
             }
         }
@@ -3412,7 +3406,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     aCorrectedSymbol += aRef[0];
                     if ( nRefs == 2 )
                     {
-                        aCorrectedSymbol += ':';
+                        aCorrectedSymbol += ":";
                         aCorrectedSymbol += aTab[1];
                         aCorrectedSymbol += aRef[1];
                     }
@@ -3671,7 +3665,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     if ( bAutoCorrect )
     {
         aCorrectedFormula.Erase();
-        aCorrectedSymbol.Erase();
+        aCorrectedSymbol = "";
     }
     sal_uInt8 nForced = 0;   // ==formula forces recalc even if cell is not visible
     if( aFormula.GetChar(nSrcPos) == '=' )
@@ -3732,7 +3726,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                     if ( bAutoCorrect )
                     {
                         bCorrected = true;
-                        aCorrectedSymbol.Erase();
+                        aCorrectedSymbol = "";
                     }
                 }
                 else
@@ -3774,7 +3768,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                     if ( bAutoCorrect )
                     {
                         bCorrected = true;
-                        aCorrectedSymbol.Erase();
+                        aCorrectedSymbol = "";
                     }
                 }
                 if (bPODF && nFunction)

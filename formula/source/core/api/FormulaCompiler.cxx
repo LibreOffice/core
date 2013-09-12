@@ -978,7 +978,7 @@ bool FormulaCompiler::GetToken()
     if ( bAutoCorrect && !pStack )
     {   // don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
-        aCorrectedSymbol.Erase();
+        aCorrectedSymbol = "";
     }
     bool bStop = false;
     if( pArr->GetCodeError() && !bIgnoreErrors )
@@ -1361,7 +1361,7 @@ void FormulaCompiler::Factor()
             SetError( errParameterExpected );
             if ( bAutoCorrect && !pStack )
             {
-                aCorrectedSymbol.Erase();
+                aCorrectedSymbol = "";
                 bCorrected = true;
             }
         }
@@ -1380,7 +1380,7 @@ void FormulaCompiler::Factor()
                     xub_StrLen nLen = aCorrectedFormula.Len();
                     if ( nLen )
                         aCorrectedFormula.Erase( nLen - 1 );
-                    aCorrectedSymbol.Erase();
+                    aCorrectedSymbol = "";
                     bCorrected = true;
                 }
             }
@@ -1588,7 +1588,7 @@ bool FormulaCompiler::CompileTokenArray()
         if ( bAutoCorrect )
         {
             aCorrectedFormula.Erase();
-            aCorrectedSymbol.Erase();
+            aCorrectedSymbol = "";
         }
         pArr->nRefs = 0;    // count from start
         pArr->DelRPN();
@@ -1701,6 +1701,13 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 }
 
 FormulaToken* FormulaCompiler::CreateStringFromToken( String& rFormula, FormulaToken* pTokenP, bool bAllowArrAdvance )
+{
+    OUStringBuffer aBuffer;
+    FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
+    rFormula += aBuffer.makeStringAndClear();
+    return p;
+}
+FormulaToken* FormulaCompiler::CreateStringFromToken( OUString& rFormula, FormulaToken* pTokenP,bool bAllowArrAdvance )
 {
     OUStringBuffer aBuffer;
     FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
@@ -1930,7 +1937,7 @@ OpCode FormulaCompiler::NextToken()
             {
                 if ( eOp == eLastOp || eLastOp == ocOpen )
                 {   // throw away duplicated operator
-                    aCorrectedSymbol.Erase();
+                    aCorrectedSymbol = "";
                     bCorrected = true;
                 }
                 else
@@ -1947,7 +1954,7 @@ OpCode FormulaCompiler::NextToken()
                                 {   // >= instead of =>
                                     aCorrectedFormula.SetChar( nPos,
                                         mxSymbols->getSymbol( ocGreater).GetChar(0) );
-                                    aCorrectedSymbol = c;
+                                    aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                             break;
@@ -1956,14 +1963,14 @@ OpCode FormulaCompiler::NextToken()
                                 {   // <= instead of =<
                                     aCorrectedFormula.SetChar( nPos,
                                         mxSymbols->getSymbol( ocLess).GetChar(0) );
-                                    aCorrectedSymbol = c;
+                                    aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                                 else if ( c == mxSymbols->getSymbol( ocGreater).GetChar(0) )
                                 {   // <> instead of ><
                                     aCorrectedFormula.SetChar( nPos,
                                         mxSymbols->getSymbol( ocLess).GetChar(0) );
-                                    aCorrectedSymbol = c;
+                                    aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                             break;
@@ -1972,7 +1979,7 @@ OpCode FormulaCompiler::NextToken()
                                 {   // *- instead of -*
                                     aCorrectedFormula.SetChar( nPos,
                                         mxSymbols->getSymbol( ocMul).GetChar(0) );
-                                    aCorrectedSymbol = c;
+                                    aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                             break;
@@ -1981,7 +1988,7 @@ OpCode FormulaCompiler::NextToken()
                                 {   // /- instead of -/
                                     aCorrectedFormula.SetChar( nPos,
                                         mxSymbols->getSymbol( ocDiv).GetChar(0) );
-                                    aCorrectedSymbol = c;
+                                    aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                             break;
@@ -2067,7 +2074,7 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     if ( bAutoCorrect && !pStack )
     {   // don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
-        aCorrectedSymbol.Erase();
+        aCorrectedSymbol = "";
     }
     FormulaArrayStack* p = new FormulaArrayStack;
     p->pNext      = pStack;
