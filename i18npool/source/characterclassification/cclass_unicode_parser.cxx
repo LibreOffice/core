@@ -666,6 +666,19 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( const sal_Unicode* aStr, sal_Int
         case U_SPACE_SEPARATOR :
             return ((nTypes & KParseTokens::IGNORE_LEADING_WS) ?
                 TOKEN_CHAR_DONTCARE : (bStart ? TOKEN_CHAR_WORD : (TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP) ));
+        case U_OTHER_PUNCTUATION:
+            // fdo#61754 Lets see (if we not at the start) if this is midletter
+            // punctuation and allow it in a word if it is similarly to
+            // U_NON_SPACING_MARK
+            if (bStart || U_WB_MIDLETTER != u_getIntPropertyValue(c, UCHAR_WORD_BREAK))
+                return TOKEN_ILLEGAL;
+            else
+            {
+                //allowing it to continue the word
+                return (nTypes & KParseTokens::UNI_OTHER_LETTER) ?
+                    TOKEN_WORD : TOKEN_ILLEGAL;
+            }
+            break;
     }
 
     return TOKEN_ILLEGAL;
