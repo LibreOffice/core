@@ -48,6 +48,7 @@
 //! TODO ExcelToSc usage
 #include "excform.hxx"
 #include "xltable.hxx"
+#include "documentimport.hxx"
 
 #include <vector>
 
@@ -82,25 +83,26 @@ XclImpPCItem::XclImpPCItem( XclImpStream& rStrm )
 
 namespace {
 
-void lclSetValue( const XclImpRoot& rRoot, const ScAddress& rScPos, double fValue, short nFormatType )
+void lclSetValue( XclImpRoot& rRoot, const ScAddress& rScPos, double fValue, short nFormatType )
 {
-    ScDocument& rDoc = rRoot.GetDoc();
-    rDoc.SetValue( rScPos.Col(), rScPos.Row(), rScPos.Tab(), fValue );
+    ScDocumentImport& rDoc = rRoot.GetDocImport();
+    rDoc.setNumericCell(rScPos, fValue);
     sal_uInt32 nScNumFmt = rRoot.GetFormatter().GetStandardFormat( nFormatType, rRoot.GetDocLanguage() );
-    rDoc.ApplyAttr( rScPos.Col(), rScPos.Row(), rScPos.Tab(), SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ) );
+    rDoc.getDoc().ApplyAttr(
+        rScPos.Col(), rScPos.Row(), rScPos.Tab(), SfxUInt32Item(ATTR_VALUE_FORMAT, nScNumFmt));
 }
 
 } // namespace
 
-void XclImpPCItem::WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScPos ) const
+void XclImpPCItem::WriteToSource( XclImpRoot& rRoot, const ScAddress& rScPos ) const
 {
-    ScDocument& rDoc = rRoot.GetDoc();
+    ScDocumentImport& rDoc = rRoot.GetDocImport();
     if( const OUString* pText = GetText() )
-        rDoc.SetString( rScPos.Col(), rScPos.Row(), rScPos.Tab(), *pText );
+        rDoc.setStringCell(rScPos, *pText);
     else if( const double* pfValue = GetDouble() )
-        rDoc.SetValue( rScPos.Col(), rScPos.Row(), rScPos.Tab(), *pfValue );
+        rDoc.setNumericCell(rScPos, *pfValue);
     else if( const sal_Int16* pnValue = GetInteger() )
-        rDoc.SetValue( rScPos.Col(), rScPos.Row(), rScPos.Tab(), *pnValue );
+        rDoc.setNumericCell(rScPos, *pnValue);
     else if( const bool* pbValue = GetBool() )
         lclSetValue( rRoot, rScPos, *pbValue ? 1.0 : 0.0, NUMBERFORMAT_LOGICAL );
     else if( const DateTime* pDateTime = GetDateTime() )
@@ -119,9 +121,9 @@ void XclImpPCItem::WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScP
         sal_uInt8 nErrCode = static_cast< sal_uInt8 >( *pnError );
         const ScTokenArray* pScTokArr = rRoot.GetOldFmlaConverter().GetBoolErr(
             XclTools::ErrorToEnum( fValue, EXC_BOOLERR_ERROR, nErrCode ) );
-        ScFormulaCell* pCell = new ScFormulaCell( &rDoc, rScPos, pScTokArr );
+        ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), rScPos, pScTokArr);
         pCell->SetHybridDouble( fValue );
-        rDoc.SetFormulaCell(rScPos, pCell);
+        rDoc.setFormulaCell(rScPos, pCell);
     }
 }
 
@@ -217,20 +219,20 @@ const XclImpPCItem* XclImpPCField::GetLimitItem( sal_uInt16 nItemIdx ) const
     return (nItemIdx < maNumGroupItems.size()) ? maNumGroupItems[ nItemIdx ].get() : 0;
 }
 
-void XclImpPCField::WriteFieldNameToSource( SCCOL nScCol, SCTAB nScTab ) const
+void XclImpPCField::WriteFieldNameToSource( SCCOL nScCol, SCTAB nScTab )
 {
     OSL_ENSURE( HasOrigItems(), "XclImpPCField::WriteFieldNameToSource - only for standard fields" );
-    GetDoc().SetString( nScCol, 0, nScTab, maFieldInfo.maName );
+    GetDocImport().setStringCell(ScAddress(nScCol, 0, nScTab), maFieldInfo.maName);
     mnSourceScCol = nScCol;
 }
 
-void XclImpPCField::WriteOrigItemToSource( SCROW nScRow, SCTAB nScTab, sal_uInt16 nItemIdx ) const
+void XclImpPCField::WriteOrigItemToSource( SCROW nScRow, SCTAB nScTab, sal_uInt16 nItemIdx )
 {
     if( nItemIdx < maOrigItems.size() )
         maOrigItems[ nItemIdx ]->WriteToSource( GetRoot(), ScAddress( mnSourceScCol, nScRow, nScTab ) );
 }
 
-void XclImpPCField::WriteLastOrigItemToSource( SCROW nScRow, SCTAB nScTab ) const
+void XclImpPCField::WriteLastOrigItemToSource( SCROW nScRow, SCTAB nScTab )
 {
     if( !maOrigItems.empty() )
         maOrigItems.back()->WriteToSource( GetRoot(), ScAddress( mnSourceScCol, nScRow, nScTab ) );

@@ -58,6 +58,7 @@ class XclImpDocProtectBuffer;
 
 class _ScRangeListTabs;
 class ExcelToSc;
+class ScDocumentImport;
 
 /** Stores global buffers and data needed for Excel import filter. */
 struct XclImpRootData : public XclRootData
@@ -111,6 +112,8 @@ struct XclImpRootData : public XclRootData
     XclImpTabProtectRef mxTabProtect;       /// Sheet protection options for current sheet.
     XclImpDocProtectRef mxDocProtect;       /// Document protection options.
 
+    boost::shared_ptr<ScDocumentImport> mxDocImport;
+
     bool                mbHasCodePage;      /// true = CODEPAGE record exists.
     bool                mbHasBasic;         /// true = document contains VB project.
 
@@ -129,6 +132,7 @@ public:
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclImpRoot& GetRoot() const { return *this; }
+    inline XclImpRoot& GetRoot() { return *this; }
 
     /** Sets a code page read from a CODEPAGE record for byte string import. */
     void                SetCodePage( sal_uInt16 nCodePage );
@@ -207,6 +211,8 @@ public:
     inline void         SetHasBasic() { mrImpData.mbHasBasic = true; }
     /** Reads the CODENAME record and inserts the codename into the document. */
     void                ReadCodeName( XclImpStream& rStrm, bool bGlobals );
+
+    ScDocumentImport& GetDocImport();
 
 private:
     XclImpRootData& mrImpData;      /// Reference to the global import data struct.

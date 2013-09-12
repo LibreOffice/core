@@ -57,6 +57,7 @@
 
 #include "excform.hxx"
 #include "tabprotection.hxx"
+#include "documentimport.hxx"
 
 #include <memory>
 
@@ -151,25 +152,25 @@ void lclGetAbsPath( OUString& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShel
 }
 
 /** Inserts the URL into a text cell. Does not modify value or formula cells. */
-void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SCROW nScRow, SCTAB nScTab )
+void lclInsertUrl( XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SCROW nScRow, SCTAB nScTab )
 {
-    ScDocument& rDoc = rRoot.GetDoc();
+    ScDocumentImport& rDoc = rRoot.GetDocImport();
     ScAddress aScPos( nScCol, nScRow, nScTab );
-    CellType eCellType = rDoc.GetCellType( aScPos );
+    CellType eCellType = rDoc.getDoc().GetCellType(aScPos);
     switch( eCellType )
     {
         // #i54261# hyperlinks in string cells
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
         {
-            OUString aDisplText = rDoc.GetString(nScCol, nScRow, nScTab);
+            OUString aDisplText = rDoc.getDoc().GetString(nScCol, nScRow, nScTab);
             if (aDisplText.isEmpty())
                 aDisplText = rUrl;
 
             ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
             SvxURLField aUrlField( rUrl, aDisplText, SVXURLFORMAT_APPDEFAULT );
 
-            const EditTextObject* pEditObj = rDoc.GetEditText(aScPos);
+            const EditTextObject* pEditObj = rDoc.getDoc().GetEditText(aScPos);
             if( pEditObj )
             {
                 rEE.SetText( *pEditObj );
@@ -179,7 +180,7 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
             {
                 rEE.SetText( EMPTY_STRING );
                 rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection() );
-                if( const ScPatternAttr* pPattern = rDoc.GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
+                if( const ScPatternAttr* pPattern = rDoc.getDoc().GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
                 {
                     SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
                     pPattern->FillEditItemSet( &aItemSet );
@@ -188,7 +189,7 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
             }
 
             // The cell will own the text object instance.
-            rDoc.SetEditText(aScPos, rEE.CreateTextObject());
+            rDoc.setEditCell(aScPos, rEE.CreateTextObject());
         }
         break;
 
@@ -204,7 +205,7 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
         // attribute ) for better interoperability.
         {
             SfxStringItem aItem( ATTR_HYPERLINK, rUrl );
-            rDoc.ApplyAttr( nScCol, nScRow, nScTab, aItem );
+            rDoc.getDoc().ApplyAttr(nScCol, nScRow, nScTab, aItem);
             break;
         }
     }
@@ -396,7 +397,7 @@ void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
     rUrl = aNewUrl;
 }
 
-void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl )
+void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl )
 {
     String aUrl(rUrl);
     ConvertToValidTabName(aUrl);

@@ -34,6 +34,7 @@
 #include "xihelper.hxx"
 #include "xilink.hxx"
 #include "xiname.hxx"
+#include "documentimport.hxx"
 
 using ::std::vector;
 
@@ -110,6 +111,7 @@ void ImportExcel::Formula(
     const ScTokenArray* pResult = NULL;
 
     pFormConv->Reset( aScPos );
+    ScDocumentImport& rDoc = GetDocImport();
 
     if (bShrFmla)
     {
@@ -119,16 +121,11 @@ void ImportExcel::Formula(
         {
             if (xGroup->mnStart == aScPos.Row())
                 // Generate code for the top cell only.
-                xGroup->compileCode(*pD, aScPos, formula::FormulaGrammar::GRAM_DEFAULT);
+                xGroup->compileCode(rDoc.getDoc(), aScPos, formula::FormulaGrammar::GRAM_DEFAULT);
 
             ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, xGroup);
-            pD->EnsureTable(aScPos.Tab());
-            bool bInserted = pD->SetGroupFormulaCell(aScPos, pCell);
-            if (!bInserted)
-            {
-                delete pCell;
-                return;
-            }
+            rDoc.getDoc().EnsureTable(aScPos.Tab());
+            rDoc.setFormulaCell(aScPos, pCell);
             xGroup->mnLength = aScPos.Row() - xGroup->mnStart + 1;
             pCell->SetNeedNumberFormat(false);
             if (!rtl::math::isNan(fCurVal))
@@ -145,18 +142,13 @@ void ImportExcel::Formula(
 
     if (pResult)
     {
-        pCell = new ScFormulaCell( pD, aScPos, pResult );
-        pD->EnsureTable(aScPos.Tab());
-        bool bInserted = pD->SetGroupFormulaCell(aScPos, pCell);
-        if (!bInserted)
-        {
-            delete pCell;
-            return;
-        }
+        pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, pResult);
+        rDoc.getDoc().EnsureTable(aScPos.Tab());
+        rDoc.setFormulaCell(aScPos, pCell);
     }
     else
     {
-        pCell = pD->GetFormulaCell(aScPos);
+        pCell = rDoc.getDoc().GetFormulaCell(aScPos);
         if (pCell)
             pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
     }

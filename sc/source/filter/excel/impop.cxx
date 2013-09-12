@@ -75,6 +75,7 @@
 
 #include "excimp8.hxx"
 #include "excform.hxx"
+#include "documentimport.hxx"
 
 #if defined( WNT )
 #include <math.h>
@@ -308,7 +309,7 @@ void ImportExcel::ReadNumber()
         maStrm >> fValue;
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        GetDoc().SetValue(aScPos, fValue);
+        GetDocImport().setNumericCell(aScPos, fValue);
     }
 }
 
@@ -338,7 +339,7 @@ void ImportExcel::ReadLabel()
         SetTextEncoding( eOldTextEnc );
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        XclImpStringHelper::SetToDocument(GetDoc(), aScPos, GetRoot(), aString, nXFIdx);
+        XclImpStringHelper::SetToDocument(GetDocImport(), aScPos, GetRoot(), aString, nXFIdx);
     }
 }
 
@@ -380,7 +381,7 @@ void ImportExcel::ReadRk()
         maStrm >> nRk;
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        GetDoc().SetValue(aScPos, XclTools::GetDoubleFromRK(nRk));
+        GetDocImport().setNumericCell(aScPos, XclTools::GetDoubleFromRK(nRk));
     }
 }
 
@@ -853,7 +854,7 @@ void ImportExcel::Mulrk( void )
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
         {
             GetXFRangeBuffer().SetXF( aScPos, nXF );
-            GetDoc().SetValue(aScPos, XclTools::GetDoubleFromRK(nRkNum));
+            GetDocImport().setNumericCell(aScPos, XclTools::GetDoubleFromRK(nRkNum));
         }
     }
 }
@@ -901,7 +902,7 @@ void ImportExcel::Rstring( void )
             aString.ReadFormats( maStrm );
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        XclImpStringHelper::SetToDocument(GetDoc(), aScPos, *this, aString, nXFIdx);
+        XclImpStringHelper::SetToDocument(GetDocImport(), aScPos, *this, aString, nXFIdx);
     }
 }
 

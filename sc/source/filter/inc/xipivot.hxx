@@ -39,7 +39,7 @@ public:
     explicit            XclImpPCItem( XclImpStream& rStrm );
 
     /** Inserts the item data into the passed document. */
-    void                WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScPos ) const;
+    void WriteToSource( XclImpRoot& rRoot, const ScAddress& rScPos ) const;
 
 private:
     /** Reads an SXDOUBLE record describing a floating-point item. */
@@ -89,11 +89,11 @@ public:
     const XclImpPCItem* GetLimitItem( sal_uInt16 nItemIdx ) const;
 
     /** Inserts the field name into the document. */
-    void                WriteFieldNameToSource( SCCOL nScCol, SCTAB nScTab ) const;
+    void WriteFieldNameToSource( SCCOL nScCol, SCTAB nScTab );
     /** Inserts the specified item data into the document. */
-    void                WriteOrigItemToSource( SCROW nScRow, SCTAB nScTab, sal_uInt16 nItemIdx ) const;
+    void WriteOrigItemToSource( SCROW nScRow, SCTAB nScTab, sal_uInt16 nItemIdx );
     /** Inserts the data of the last inserted item into the document. */
-    void                WriteLastOrigItemToSource( SCROW nScRow, SCTAB nScTab ) const;
+    void WriteLastOrigItemToSource( SCROW nScRow, SCTAB nScTab );
 
     // records ----------------------------------------------------------------
 

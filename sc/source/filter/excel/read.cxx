@@ -34,6 +34,7 @@
 #include "xiescher.hxx"
 #include "xipivot.hxx"
 #include "XclImpChangeTrack.hxx"
+#include "documentimport.hxx"
 
 #include "root.hxx"
 #include "imp_op.hxx"
@@ -747,6 +748,7 @@ FltError ImportExcel::Read( void )
     {
         pProgress.reset();
 
+        GetDocImport().finalize();
         AdjustRowHeight();
         PostDocLoad();
 
@@ -1284,7 +1286,8 @@ FltError ImportExcel8::Read( void )
         if( GetBiff() == EXC_BIFF8 )
             GetPivotTableManager().ConvertPivotTables();
 
-        pD->RebuildFormulaGroups();
+        ScDocumentImport& rDoc = GetDocImport();
+        rDoc.finalize();
         pProgress.reset();
 #if 0
         // Excel documents look much better without this call; better in the

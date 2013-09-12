@@ -34,6 +34,7 @@
 #include "excform.hxx"
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
+#include "documentimport.hxx"
 
 // Excel->Calc cell address/range conversion ==================================
 
@@ -221,7 +222,7 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
 }
 
 void XclImpStringHelper::SetToDocument(
-        ScDocument& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
+        ScDocumentImport& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
         const XclImpString& rString, sal_uInt16 nXFIndex )
 {
     if (!rString.GetText().Len())
@@ -231,7 +232,7 @@ void XclImpStringHelper::SetToDocument(
 
     if (pTextObj.get())
     {
-        rDoc.SetEditText(rPos, pTextObj.release());
+        rDoc.setEditCell(rPos, pTextObj.release());
     }
     else
     {
@@ -239,16 +240,14 @@ void XclImpStringHelper::SetToDocument(
         if (aStr.indexOf('\n') != -1 || aStr.indexOf(CHAR_CR) != -1)
         {
             // Multiline content.
-            ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+            ScFieldEditEngine& rEngine = rDoc.getDoc().GetEditEngine();
             rEngine.SetText(aStr);
-            rDoc.SetEditText(rPos, rEngine.CreateTextObject());
+            rDoc.setEditCell(rPos, rEngine.CreateTextObject());
         }
         else
         {
             // Normal text cell.
-            ScSetStringParam aParam;
-            aParam.setTextInput();
-            rDoc.SetString(rPos, aStr, &aParam);
+            rDoc.setStringCell(rPos, aStr);
         }
     }
 }

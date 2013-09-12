@@ -109,7 +109,7 @@ public:
                             const XclImpString& rString );
 
     static void SetToDocument(
-        ScDocument& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
+        ScDocumentImport& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
         const XclImpString& rString, sal_uInt16 nXFIndex = 0 );
 
 private:

@@ -35,12 +35,14 @@
 
 #include "root.hxx"
 #include "excimp8.hxx"
+#include "documentimport.hxx"
 
 // Global data ================================================================
 
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
+    mxDocImport(new ScDocumentImport(rDoc)),
     mbHasCodePage( false ),
     mbHasBasic( false )
 {
@@ -293,6 +295,11 @@ void XclImpRoot::ReadCodeName( XclImpStream& rStrm, bool bGlobals )
             }
         }
     }
+}
+
+ScDocumentImport& XclImpRoot::GetDocImport()
+{
+    return *mrImpData.mxDocImport;
 }
 
 // ============================================================================

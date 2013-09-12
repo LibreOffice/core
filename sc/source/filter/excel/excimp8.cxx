@@ -297,7 +297,7 @@ void ImportExcel8::Labelsst( void )
         GetXFRangeBuffer().SetXF( aScPos, nXF );
         const XclImpString* pXclStr = GetSst().GetString(nSst);
         if (pXclStr)
-            XclImpStringHelper::SetToDocument(GetDoc(), aScPos, *this, *pXclStr, nXF);
+            XclImpStringHelper::SetToDocument(GetDocImport(), aScPos, *this, *pXclStr, nXF);
     }
 }
 
