@@ -910,7 +910,7 @@ sal_Bool SvxNumRule::UnLinkGraphics()
     {
         SvxNumberFormat aFmt(GetLevel(i));
         const SvxBrushItem* pBrush = aFmt.GetBrush();
-        const Graphic* pGraphic;
+        const Graphic* pGraphic = NULL;
         if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
         {
             if(pBrush &&
