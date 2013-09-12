@@ -14,9 +14,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+
+import org.libreoffice.impressremote.util.BluetoothOperator;
 
 class BluetoothServerConnection implements ServerConnection {
     // Standard UUID for the Serial Port Profile.
@@ -31,18 +32,31 @@ class BluetoothServerConnection implements ServerConnection {
 
     private BluetoothSocket buildServerConnection(Server aServer) {
         try {
-            BluetoothDevice aBluetoothServer = BluetoothAdapter
-                .getDefaultAdapter().getRemoteDevice(aServer.getAddress());
+            BluetoothDevice aBluetoothServer = BluetoothOperator.getAdapter()
+                .getRemoteDevice(aServer.getAddress());
 
-            BluetoothSocket aServerConnection = aBluetoothServer
-                .createRfcommSocketToServiceRecord(
-                    UUID.fromString(STANDARD_SPP_UUID));
-
-            aServerConnection.connect();
-
-            return aServerConnection;
+            return aBluetoothServer.createRfcommSocketToServiceRecord(
+                UUID.fromString(STANDARD_SPP_UUID));
         } catch (IOException e) {
-            throw new RuntimeException("Unable to connect to Bluetooth host.");
+            throw new RuntimeException("Unable to create server connection.");
+        }
+    }
+
+    @Override
+    public void open() {
+        try {
+            mServerConnection.connect();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to open server connection.");
+        }
+    }
+
+    @Override
+    public void close() {
+        try {
+            mServerConnection.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to close server connection.");
         }
     }
 
@@ -61,15 +75,6 @@ class BluetoothServerConnection implements ServerConnection {
             return mServerConnection.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException("Unable to open commands stream.");
-        }
-    }
-
-    @Override
-    public void close() {
-        try {
-            mServerConnection.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to close server connection.");
         }
     }
 }

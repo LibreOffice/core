@@ -37,7 +37,11 @@ import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.util.SavedStates;
 
 public class ComputerConnectionFragment extends SherlockFragment implements ServiceConnection {
-    private Server mComputer;
+    public static enum Result {
+        CONNECTED, NOT_CONNECTED
+    }
+
+    private Result mResult = Result.NOT_CONNECTED;
 
     private CommunicationService mCommunicationService;
     private BroadcastReceiver mIntentsReceiver;
@@ -61,8 +65,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     @Override
     public void onCreate(Bundle aSavedInstance) {
         super.onCreate(aSavedInstance);
-
-        mComputer = getArguments().getParcelable(Fragments.Arguments.COMPUTER);
 
         setUpActionBarMenu();
     }
@@ -136,10 +138,10 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
         mCommunicationService = aServiceBinder.getService();
 
-        connectToComputer();
+        connectComputer();
     }
 
-    private void connectToComputer() {
+    private void connectComputer() {
         if (!isServiceBound()) {
             return;
         }
@@ -148,7 +150,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
             return;
         }
 
-        mCommunicationService.connectTo(mComputer);
+        mCommunicationService.connectServer(getComputer());
     }
 
     private boolean isServiceBound() {
@@ -161,6 +163,10 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
 
     private ProgressBar getProgressBar() {
         return (ProgressBar) getView().findViewById(R.id.progress_bar);
+    }
+
+    private Server getComputer() {
+        return getArguments().getParcelable(Fragments.Arguments.COMPUTER);
     }
 
     @Override
@@ -247,6 +253,8 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void setUpPresentation() {
+        mResult = Result.CONNECTED;
+
         Intent aIntent = Intents.buildSlideShowIntent(getActivity());
         startActivity(aIntent);
 
@@ -261,7 +269,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private String buildSecondaryErrorMessage() {
-        switch (mComputer.getProtocol()) {
+        switch (getComputer().getProtocol()) {
             case BLUETOOTH:
                 return getString(R.string.message_impress_pairing_check);
 
@@ -311,7 +319,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         switch (aMenuItem.getItemId()) {
             case R.id.menu_reconnect:
                 showProgressBar();
-                connectToComputer();
+                connectComputer();
                 refreshActionBarMenu();
                 return true;
 
@@ -374,7 +382,25 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     public void onDestroy() {
         super.onDestroy();
 
+        disconnectComputer();
+
         unbindService();
+    }
+
+    private void disconnectComputer() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        if (!isDisconnectRequired()) {
+            return;
+        }
+
+        mCommunicationService.disconnectServer();
+    }
+
+    private boolean isDisconnectRequired() {
+        return mResult == Result.NOT_CONNECTED;
     }
 
     private void unbindService() {

@@ -11,26 +11,45 @@ package org.libreoffice.impressremote.communication;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.SocketAddress;
 
 class TcpServerConnection implements ServerConnection {
+    private final Server mServer;
     private final Socket mServerConnection;
 
     public TcpServerConnection(Server aServer) {
-        mServerConnection = buildServerConnection(aServer);
+        mServer = aServer;
+        mServerConnection = buildServerConnection();
     }
 
-    private Socket buildServerConnection(Server aServer) {
-        try {
-            String aServerAddress = aServer.getAddress();
-            int aServerPort = Protocol.Ports.CLIENT_CONNECTION;
+    private Socket buildServerConnection() {
+        return new Socket();
+    }
 
-            return new Socket(aServerAddress, aServerPort);
-        } catch (UnknownHostException e) {
-            throw new RuntimeException("Unable to connect to unknown host.");
+    @Override
+    public void open() {
+        try {
+            mServerConnection.connect(buildServerAddress());
         } catch (IOException e) {
-            throw new RuntimeException("Unable to connect to host.");
+            throw new RuntimeException("Unable to open server connection.");
+        }
+    }
+
+    private SocketAddress buildServerAddress() {
+        String aServerAddress = mServer.getAddress();
+        int aServerPort = Protocol.Ports.CLIENT_CONNECTION;
+
+        return new InetSocketAddress(aServerAddress, aServerPort);
+    }
+
+    @Override
+    public void close() {
+        try {
+            mServerConnection.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to close server connection.");
         }
     }
 
@@ -49,15 +68,6 @@ class TcpServerConnection implements ServerConnection {
             return mServerConnection.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException("Unable to open commands stream.");
-        }
-    }
-
-    @Override
-    public void close() {
-        try {
-            mServerConnection.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to close server connection.");
         }
     }
 }

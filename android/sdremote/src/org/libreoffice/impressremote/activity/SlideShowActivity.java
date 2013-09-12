@@ -502,8 +502,6 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
         stopTimer();
 
-        // TODO: disconnect computer
-
         unbindService();
     }
 

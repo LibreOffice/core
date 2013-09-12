@@ -20,43 +20,23 @@ import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.Intents;
 
 public class CommunicationService extends Service implements Runnable, MessagesListener, Timer.TimerListener {
-    public static enum State {
-        DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
-    }
-
-    /**
-     * Used to protect all writes to mState, mStateDesired, and mServerDesired.
-     */
-    private final Object mConnectionVariableMutex = new Object();
-
-    private State mState;
-    private State mStateDesired;
-
-    private Server mServerDesired;
-
     private IBinder mBinder;
 
     private ServersManager mServersManager;
-
-    private ServerConnection mServerConnection;
-
-    private MessagesReceiver mMessagesReceiver;
-    private CommandsTransmitter mCommandsTransmitter;
 
     private BluetoothOperator.State mBluetoothState;
 
     private Timer mTimer;
     private SlideShow mSlideShow;
 
-    private Thread mThread;
+    private Server mServer;
+    private ServerConnection mServerConnection;
+
+    private MessagesReceiver mMessagesReceiver;
+    private CommandsTransmitter mCommandsTransmitter;
 
     @Override
     public void onCreate() {
-        mState = State.DISCONNECTED;
-        mStateDesired = State.DISCONNECTED;
-
-        mServerDesired = null;
-
         mBinder = new CBinder();
 
         mServersManager = new ServersManager(this);
@@ -66,9 +46,6 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         mTimer = new Timer(this);
         mSlideShow = new SlideShow(mTimer);
-
-        mThread = new Thread(this);
-        mThread.start();
     }
 
     public class CBinder extends Binder {
@@ -90,134 +67,12 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         return mBinder;
     }
 
-    @Override
-    public void run() {
-        synchronized (this) {
-            while (true) {
-                // Condition
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    // We have finished
-                    return;
-                }
-
-                // Work
-                synchronized (mConnectionVariableMutex) {
-                    if ((mStateDesired == State.CONNECTED) && (mState == State.CONNECTED)) {
-                        closeConnection();
-                    }
-
-                    if ((mStateDesired == State.DISCONNECTED) && (mState == State.CONNECTED)) {
-                        closeConnection();
-                    }
-
-                    if (mStateDesired == State.CONNECTED) {
-                        mState = State.CONNECTING;
-
-                        try {
-                            openConnection();
-                        }
-                        catch (RuntimeException e) {
-                            connectionFailed();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void closeConnection() {
-        mServerConnection.close();
-
-        mState = State.DISCONNECTED;
-    }
-
-    private void openConnection() {
-        mServerConnection = buildServerConnection();
-
-        mMessagesReceiver = new MessagesReceiver(mServerConnection, this);
-        mCommandsTransmitter = new CommandsTransmitter(mServerConnection);
-
-        if (PairingProvider.isPairingNecessary(mServerDesired)) {
-            pair();
-        }
-
-        mState = State.CONNECTED;
-    }
-
-    private ServerConnection buildServerConnection() {
-        switch (mServerDesired.getProtocol()) {
-            case TCP:
-                return new TcpServerConnection(mServerDesired);
-
-            case BLUETOOTH:
-                return new BluetoothServerConnection(mServerDesired);
-
-            default:
-                throw new RuntimeException("Unknown desired protocol.");
-        }
-    }
-
-    private void pair() {
-        String aPairingDeviceName = PairingProvider.getPairingDeviceName(this);
-        String aPairingPin = PairingProvider.getPairingPin(this, mServerDesired);
-
-        mCommandsTransmitter.pair(aPairingDeviceName, aPairingPin);
-    }
-
-    private void connectionFailed() {
-        mState = State.DISCONNECTED;
-
-        Intent aIntent = Intents.buildConnectionFailedIntent();
-        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
-    }
-
     public void startServersSearch() {
-        mState = State.SEARCHING;
-
         mServersManager.startServersSearch();
     }
 
     public void stopServersSearch() {
         mServersManager.stopServersSearch();
-    }
-
-    public List<Server> getServers() {
-        return mServersManager.getServers();
-    }
-
-    public void connectTo(Server aServer) {
-        synchronized (mConnectionVariableMutex) {
-            if (mState == State.SEARCHING) {
-                mServersManager.stopServersSearch();
-                mState = State.DISCONNECTED;
-            }
-            mServerDesired = aServer;
-            mStateDesired = State.CONNECTED;
-            synchronized (this) {
-                notify();
-            }
-
-        }
-        // TODO: connect
-    }
-
-    public void disconnect() {
-        synchronized (mConnectionVariableMutex) {
-            mStateDesired = State.DISCONNECTED;
-            synchronized (this) {
-                notify();
-            }
-        }
-    }
-
-    public CommandsTransmitter getTransmitter() {
-        return mCommandsTransmitter;
-    }
-
-    public SlideShow getSlideShow() {
-        return mSlideShow;
     }
 
     public void addServer(String aAddress, String aName) {
@@ -228,9 +83,87 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         mServersManager.removeServer(aServer);
     }
 
+    public List<Server> getServers() {
+        return mServersManager.getServers();
+    }
+
+    public void connectServer(Server aServer) {
+        mServer = aServer;
+
+        new Thread(this).start();
+    }
+
+    @Override
+    public void run() {
+        try {
+            disconnectServer();
+            connectServer();
+        }
+        catch (RuntimeException e) {
+            sendConnectionFailedMessage();
+        }
+    }
+
+    private void connectServer() {
+        mServerConnection = buildServerConnection();
+        mServerConnection.open();
+
+        mMessagesReceiver = new MessagesReceiver(mServerConnection, this);
+        mCommandsTransmitter = new CommandsTransmitter(mServerConnection);
+
+        if (PairingProvider.isPairingNecessary(mServer)) {
+            pair();
+        }
+    }
+
+    private ServerConnection buildServerConnection() {
+        switch (mServer.getProtocol()) {
+            case TCP:
+                return new TcpServerConnection(mServer);
+
+            case BLUETOOTH:
+                return new BluetoothServerConnection(mServer);
+
+            default:
+                throw new RuntimeException("Unknown desired protocol.");
+        }
+    }
+
+    private void pair() {
+        String aPairingDeviceName = PairingProvider.getPairingDeviceName(this);
+        String aPairingPin = PairingProvider.getPairingPin(this, mServer);
+
+        mCommandsTransmitter.pair(aPairingDeviceName, aPairingPin);
+    }
+
+    private void sendConnectionFailedMessage() {
+        Intent aIntent = Intents.buildConnectionFailedIntent();
+        LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
+    }
+
+    public void disconnectServer() {
+        if (!isServerConnectionAvailable()) {
+            return;
+        }
+
+        mServerConnection.close();
+    }
+
+    private boolean isServerConnectionAvailable() {
+        return mServerConnection != null;
+    }
+
+    public CommandsTransmitter getTransmitter() {
+        return mCommandsTransmitter;
+    }
+
+    public SlideShow getSlideShow() {
+        return mSlideShow;
+    }
+
     @Override
     public void onPinValidation() {
-        String aPin = PairingProvider.getPairingPin(this, mServerDesired);
+        String aPin = PairingProvider.getPairingPin(this, mServer);
 
         Intent aIntent = Intents.buildPairingValidationIntent(aPin);
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
@@ -294,11 +227,9 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     @Override
     public void onDestroy() {
         stopServersSearch();
+        disconnectServer();
 
         restoreBluetoothState();
-
-        mThread.interrupt();
-        mThread = null;
     }
 
     private void restoreBluetoothState() {
@@ -310,6 +241,10 @@ public class CommunicationService extends Service implements Runnable, MessagesL
             return;
         }
 
+        disableBluetooth();
+    }
+
+    private void disableBluetooth() {
         BluetoothOperator.disable();
     }
 }
