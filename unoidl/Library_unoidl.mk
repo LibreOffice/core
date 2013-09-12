@@ -13,8 +13,22 @@ $(eval $(call gb_Library_add_defs,unoidl,-DLO_DLLIMPLEMENTATION_UNOIDL))
 
 $(eval $(call gb_Library_add_exception_objects,unoidl, \
     unoidl/source/legacyprovider \
+    unoidl/source/sourceprovider \
     unoidl/source/unoidl \
     unoidl/source/unoidlprovider \
+))
+
+$(eval $(call gb_Library_add_grammars,unoidl, \
+    unoidl/source/sourceprovider-parser \
+))
+
+$(eval $(call gb_Library_add_scanners,unoidl, \
+    unoidl/source/sourceprovider-scanner \
+))
+
+$(eval $(call gb_Library_set_include,unoidl, \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/unoidl/source \
 ))
 
 $(eval $(call gb_Library_use_libraries,unoidl, \
