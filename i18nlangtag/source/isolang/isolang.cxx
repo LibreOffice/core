@@ -279,13 +279,13 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,        "bs", "BA", false },
 //  { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_AND_HERZEGOVINA, "bs", "BA", false },   // script codes not supported yet
     { LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA,        "sr", "RS", false },   // Serbian Cyrillic in Serbia
-    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "YU", false },   // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_CS instead, sr_CS not supported by ICU 2.6 (3.4 does)
-    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "CS", false },   // alias to be able to integrate localizations, rsc needs it
+    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "CS", false },   // Serbian Cyrillic in Serbia and Montenegro
+    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "YU", true  },   // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, sr_CS not supported by ICU 2.6 (3.4 does)
     { LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO,    "sr", "ME", false },
     { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr", "BA", false },
     { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sh", "RS", true  },   // legacy kludge, is sr-Latn-RS now
-    { LANGUAGE_SERBIAN_LATIN,                       "sh", "YU", true  },   // legacy kludge, is sr-Latn-YU now
     { LANGUAGE_SERBIAN_LATIN,                       "sh", "CS", true  },   // legacy kludge, is sr-Latn-CS now
+    { LANGUAGE_SERBIAN_LATIN,                       "sh", "YU", true  },   // legacy kludge, is sr-Latn-YU now
     { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,       "sh", "ME", true  },   // legacy kludge, is sr-Latn-ME now
     { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sh", "BA", true  },   // legacy kludge, is sr-Latn-BA now
     { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sh", ""  , true  },   // legacy kludge, is sr-Latn now
