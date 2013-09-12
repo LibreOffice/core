@@ -98,6 +98,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include "svtools/treelistentry.hxx"
+#include <comphelper/expandmacro.hxx>
 
 #ifdef LINUX
 #include <sys/stat.h>
@@ -853,13 +854,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                     && !sPageURL.isEmpty()
                     && sPageURL.startsWith( sExpand ) )
                 {
-                    // cut protocol
-                    OUString sTemp( sPageURL.copy( sExpand.getLength() ) );
-                    // decode uri class chars
-                    sTemp = ::rtl::Uri::decode(
-                        sTemp, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                    // expand string
-                    sPageURL = xMacroExpander->expandMacros( sTemp );
+                    sPageURL = ::comphelper::getExpandedFilePath( sPageURL );
                 }
 
                 if ( ( !bIsFromExtensionManager
