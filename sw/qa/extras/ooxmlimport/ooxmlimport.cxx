@@ -551,7 +551,7 @@ void Test::testSmartart()
     xGroupPropertySet->getPropertyValue(OUString::createFromAscii("InteropGrabBag")) >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
-    sal_Bool bData, bLayout, bQStyle, bColor, bDrawing = sal_False;
+    sal_Bool bData = sal_False, bLayout = sal_False, bQStyle = sal_False, bColor = sal_False, bDrawing = sal_False;
     for(int i = 0; i < aGrabBag.getLength(); ++i)
     {
       if (aGrabBag[i].Name == OUString::createFromAscii("OOXData"))
