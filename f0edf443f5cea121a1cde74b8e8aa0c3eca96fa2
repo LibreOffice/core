@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYH///9A\u003d",
+        "filename": "cui/source/dialogs/hlinettp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-12T17:52:40Z",
+      "side": 1,
+      "message": "could  be startsWith(sAnonymous)",
+      "revId": "f0edf443f5cea121a1cde74b8e8aa0c3eca96fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYH///88\u003d",
+        "filename": "cui/source/dialogs/hlmailtp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-12T17:52:40Z",
+      "side": 1,
+      "message": "startsWith here too",
+      "revId": "f0edf443f5cea121a1cde74b8e8aa0c3eca96fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYH///84\u003d",
+        "filename": "cui/source/dialogs/hlmailtp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-12T17:52:40Z",
+      "side": 1,
+      "message": "i don\u0027t think it\u0027s legal to call indexOf with nPos\u003d-1 so checking for that is probably a good idea",
+      "revId": "f0edf443f5cea121a1cde74b8e8aa0c3eca96fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYH///8s\u003d",
+        "filename": "vcl/win/source/window/salframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4617,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-09-12T17:52:40Z",
+      "side": 1,
+      "message": "is there a \"Case\" missing here? toAsciiLower doesnt exist",
+      "revId": "f0edf443f5cea121a1cde74b8e8aa0c3eca96fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
