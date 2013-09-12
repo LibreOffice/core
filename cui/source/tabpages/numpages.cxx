@@ -1446,10 +1446,26 @@ void SvxNumOptionsTabPage::InitControls()
             aNumFmtArr[i] = 0;
 
         nMask <<= 1 ;
-
     }
     SwitchNumberType(bShowBullet ? 1 : bShowBitmap ? 2 : 0);
-    CheckForStartValue_Impl(aNumFmtArr[nLvl]->GetNumberingType());
+
+    sal_uInt16 nNumberingType;
+    if (nLvl != USHRT_MAX)
+        nNumberingType = aNumFmtArr[nLvl]->GetNumberingType();
+    else
+    {
+        nNumberingType = SVX_NUM_NUMBER_NONE;
+        bAllLevel = false;
+        bSameAdjust = false;
+        bSameBulRelSize = false;
+        bSameBulColor = false;
+        bSameStart = false;
+        bSamePrefix = false;
+        bSameSuffix = false;
+    }
+
+    CheckForStartValue_Impl(nNumberingType);
+
     if(bShowBitmap)
     {
         if(!bSameVOrient || eFirstOrient == text::VertOrientation::NONE)
@@ -1473,7 +1489,7 @@ void SvxNumOptionsTabPage::InitControls()
 
     if(bSameType)
     {
-        sal_uInt16 nLBData = (sal_uInt16) aNumFmtArr[nLvl]->GetNumberingType();
+        sal_uInt16 nLBData = nNumberingType;
         m_pFmtLB->SelectEntryPos(m_pFmtLB->GetEntryPos( (void*)sal::static_int_cast<sal_uIntPtr>( nLBData ) ));
     }
     else
