@@ -2,7 +2,7 @@
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
   <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkDialog" id="VersionsOfDialog">
+  <object class="GtkDialog" id="VersionsCmisDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="type_hint">dialog</property>
@@ -18,9 +18,11 @@
             <child>
               <object class="GtkButton" id="close">
                 <property name="label">gtk-close</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -32,9 +34,11 @@
             <child>
               <object class="GtkButton" id="open">
                 <property name="label">gtk-open</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -46,9 +50,11 @@
             <child>
               <object class="GtkButton" id="show">
                 <property name="label" translatable="yes">_Show...</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -60,9 +66,11 @@
             <child>
               <object class="GtkButton" id="delete">
                 <property name="label">gtk-delete</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -75,9 +83,11 @@
             <child>
               <object class="GtkButton" id="compare">
                 <property name="label" translatable="yes">_Compare</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -87,25 +97,16 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cmis">
-                <property name="label" translatable="yes">CMIS</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
-              </packing>
+              <placeholder/>
             </child>
-
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -151,9 +152,11 @@
                         <child>
                           <object class="GtkButton" id="save">
                             <property name="label" translatable="yes">Save _New Version</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -166,9 +169,11 @@
                         <child>
                           <object class="GtkCheckButton" id="always">
                             <property name="label" translatable="yes">_Always save a new version on closing</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>

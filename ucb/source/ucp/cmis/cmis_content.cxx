@@ -1054,6 +1054,46 @@ namespace cmis
         return aRet;
     }
 
+    uno::Sequence< document::CmisVersion> Content::getAllVersions( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+            throw( uno::Exception )
+    {
+        try
+        {
+            // get the document
+            libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
+            if ( pDoc.get( ) == NULL )
+            {
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_GENERAL,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    "Can not get the document" );
+            }
+            vector< libcmis::DocumentPtr > aCmisVersions = pDoc->getAllVersions( );
+            uno::Sequence< document::CmisVersion > aVersions( aCmisVersions.size( ) );
+            int i = 0;
+            for ( vector< libcmis::DocumentPtr >::iterator it = aCmisVersions.begin();
+                    it != aCmisVersions.end( ); ++it, ++i )
+            {
+                libcmis::DocumentPtr pVersion = *it;
+                aVersions[i].Id = STD_TO_OUSTR( pVersion->getId( ) );
+                aVersions[i].Author = STD_TO_OUSTR( pVersion->getCreatedBy( ) );
+                aVersions[i].TimeStamp = lcl_boostToUnoTime( pVersion->getCreationDate( ) );
+            }
+            return aVersions;
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            SAL_INFO( "ucb.ucp.cmis", "Unexpected libcmis exception: " << e.what( ) );
+            ucbhelper::cancelCommandExecution(
+                    ucb::IOErrorCode_GENERAL,
+                    uno::Sequence< uno::Any >( 0 ),
+                    xEnv,
+                    OUString::createFromAscii( e.what() ) );
+        }
+        return uno::Sequence< document::CmisVersion > ( );
+    }
+
     void Content::transfer( const ucb::TransferInfo& rTransferInfo,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
