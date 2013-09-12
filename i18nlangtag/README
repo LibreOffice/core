@@ -71,3 +71,14 @@ If dictionary exists:
 * dictionaries/*/dictionaries.xcu       for example dictionaries/sr/dictionaries.xcu
 ** change the affected <node oor:name="..."> elements to something corresponding, for example <node oor:name="HunSpellDic_sh" ...> to <node oor:name="HunSpellDic_sr_Latn" ...>
 ** in the "Locales" properties change the <value> element, for example <value>sh-RS</value> to <value>sr-Latn-RS</value>
+
+If extras exist, for example extras/source/autotext/*:
+
+* extras/Package_autocorr.mk
+** replace acor_* entry, for example acor_sh-RS.dat to acor_sr-Latn-RS.dat, sort alphabetically
+
+* extras/CustomTarget_autocorr.mk
+** in extras_AUTOCORR_LANGS change map entry, for example sh-RS:sh-RS to sr-Latn-RS:sr-Latn-Rs
+** in extras_AUTOCORR_XMLFILES change directory entries, for example sh-RS/acor/DocumentList.xml to sr-Latn-RS/acor/DocumentList.xml
+
+* rename files accordingly, for example in extras/source/autotext/lang/  git mv sh-RS sr-Latn-RS
