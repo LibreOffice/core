@@ -45,7 +45,6 @@
 #include "tools/datetime.hxx"
 #include "tools/debug.hxx"
 #include "tools/link.hxx"
-#include "tools/string.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/configmgr.hxx"
 #include "unotools/pathoptions.hxx"

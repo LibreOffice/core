@@ -19,8 +19,8 @@
 #ifndef _IMPLDDE_HXX
 #define _IMPLDDE_HXX
 
+#include <rtl/ustring.hxx>
 #include <sfx2/linksrc.hxx>
-#include <tools/string.hxx>
 
 class DdeConnection;
 class DdeData;

@@ -19,11 +19,11 @@
 #ifndef _SFX_APPDATA_HXX
 #define _SFX_APPDATA_HXX
 
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/lstner.hxx>
-#include <vcl/timer.hxx>
-#include <tools/string.hxx>
 #include <svtools/ehdl.hxx>
-#include "rtl/ref.hxx"
+#include <vcl/timer.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 

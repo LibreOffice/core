@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <rtl/ustring.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
-#include "tools/string.hxx"
 
 #include <string.h>
 #include <ctype.h>

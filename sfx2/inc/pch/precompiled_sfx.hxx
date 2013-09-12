@@ -100,7 +100,6 @@
 #include "toolkit/awt/vclxdevice.hxx"
 #include "tools/datetime.hxx"
 #include "tools/debug.hxx"
-#include "tools/string.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
 #include <algorithm>
@@ -760,7 +759,6 @@
 #include <tools/rtti.hxx>
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/svborder.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/time.hxx>

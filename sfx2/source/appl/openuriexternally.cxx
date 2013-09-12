@@ -21,7 +21,6 @@
 #include "rtl/ustring.hxx"
 #include "sfx2/app.hxx"
 #include "sfx2/sfxresid.hxx"
-#include "tools/string.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
 

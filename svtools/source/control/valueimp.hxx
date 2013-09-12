@@ -19,7 +19,6 @@
 
 #include <osl/mutex.hxx>
 #include <tools/color.hxx>
-#include <tools/string.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/compbase6.hxx>

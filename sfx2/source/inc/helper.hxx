@@ -21,8 +21,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/NameClash.hpp>
-
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/errcode.hxx>
 
 #include <vector>

@@ -19,8 +19,9 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
+#include <osl/thread.h>
+#include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
-#include <tools/string.hxx>
 #include <vcl/bitmapex.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>

@@ -26,7 +26,7 @@
 
 #include <stdlib.h>
 #include <vcl/msgbox.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/itempool.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/slstitm.hxx>

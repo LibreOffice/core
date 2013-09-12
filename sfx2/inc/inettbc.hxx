@@ -20,12 +20,10 @@
 #ifndef _SFX_INETTBC_HXX
 #define _SFX_INETTBC_HXX
 
-#include <tools/string.hxx>
-
-#include <vcl/combobox.hxx>
-#include <svtools/acceleratorexecute.hxx>
-
+#include <rtl/ustring.hxx>
 #include <sfx2/tbxctrl.hxx>
+#include <svtools/acceleratorexecute.hxx>
+#include <vcl/combobox.hxx>
 
 class SvtURLBox;
 

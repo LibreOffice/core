@@ -19,7 +19,6 @@
 #ifndef _FILEOBJ_HXX
 #define _FILEOBJ_HXX
 
-#include <tools/string.hxx>
 #include <sfx2/linksrc.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>

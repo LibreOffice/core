@@ -13,8 +13,8 @@
 #include <vector>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include "tools/link.hxx"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/link.hxx>
 #include "sfx2/dllapi.h"
 #include "mailmodelapi.hxx"
 

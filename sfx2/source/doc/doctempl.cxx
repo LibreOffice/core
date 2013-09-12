@@ -28,7 +28,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/resary.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
