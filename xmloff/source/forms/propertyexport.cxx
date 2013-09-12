@@ -674,7 +674,8 @@ namespace xmloff
             // the property must exist
             if (!m_xPropertyInfo->hasPropertyByName(_rPropertyName))
             {
-                OSL_FAIL("OPropertyExport::dbg_implCheckProperty: no property with the name " + OUStringToOString(_rPropertyName, RTL_TEXTENCODING_ASCII_US) + "!");
+                SAL_WARN("xmloff.forms", "OPropertyExport: "
+                        "no property with the name " + _rPropertyName + "!");
                 return;
             }
 
