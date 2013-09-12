@@ -2849,7 +2849,7 @@ void Ruler::SetTabs( sal_uInt32 aTabArraySize, const RulerTab* pTabArray )
                 {
                     break;
                 }
-                aTabIterator++;
+                ++aTabIterator;
                 pInputArray++;
                 i--;
             }
