@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYH///+Q\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-09-12T14:10:20Z",
+      "side": 1,
+      "message": "Probably want #if HAVE_FEATURE_DESKTOP here",
+      "revId": "071b7b2cd7f0131ffb3f82d42a7c0e796c490a17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYH///+M\u003d",
+        "filename": "sw/source/ui/uiview/viewport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-09-12T14:10:20Z",
+      "side": 1,
+      "message": "if this code block really is relevant only for mobile/non-desktop platforms, put it inside #if !HAVE_FEATURE_DESKTOP so it isn\u0027t unnecessarily compiled for desktop platforms. Or do you see that there will be a use for COMMAND_WHEEL_ZOOM_SCALE potentially on desktop OSes too?",
+      "revId": "071b7b2cd7f0131ffb3f82d42a7c0e796c490a17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
