@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #define RCFILE ".crash_reportrc"
 
@@ -206,8 +208,12 @@ namespace svx{
             OUString strSubject(GetDocType());
             osl_setEnvironment(sSubEnvVar.pData, strSubject.pData);
 
-            char szBodyFile[L_tmpnam] = "";
-            FILE *fp = fopen( tmpnam( szBodyFile ), "w" );
+            char szBodyFile[]="/tmp/locrsXXXXXXX";
+            mode_t nOrigMode = umask(S_IRWXG | S_IRWXO);
+            int nDescriptor = mkstemp(szBodyFile);
+            umask(nOrigMode);
+
+            FILE *fp = nDescriptor != -1 ? fdopen(nDescriptor, "w") : NULL;
 
             if ( fp )
             {
