@@ -1181,38 +1181,6 @@ sub remove_complete_directory
 }
 
 ######################################################
-# Creating a unique directory with number extension
-######################################################
-
-sub create_unique_directory
-{
-    my ($directory) = @_;
-
-    $directory =~ s/\Q$installer::globals::separator\E\s*$//;
-    $directory = $directory . "_INCREASINGNUMBER";
-
-    my $counter = 1;
-    my $created = 0;
-    my $localdirectory = "";
-
-    do
-    {
-        $localdirectory = $directory;
-        $localdirectory =~ s/INCREASINGNUMBER/$counter/;
-        $counter++;
-
-        if ( ! -d $localdirectory )
-        {
-            create_directory($localdirectory);
-            $created = 1;
-        }
-    }
-    while ( ! $created );
-
-    return $localdirectory;
-}
-
-######################################################
 # Creating a unique directory with pid extension
 ######################################################
 

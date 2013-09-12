@@ -76,28 +76,6 @@ sub get_info_about_languages
     analyze_languagelist();
 }
 
-#############################################################################
-# Checking whether all elements of an array A are also member of array B
-#############################################################################
-
-sub all_elements_of_array1_in_array2
-{
-    my ($array1, $array2) = @_;
-
-    my $array2_contains_all_elements_of_array1 = 1;
-
-    for ( my $i = 0; $i <= $#{$array1}; $i++ )
-    {
-        if (! grep {$_ eq ${$array1}[$i]} @{$array2})
-        {
-            $array2_contains_all_elements_of_array1 = 0;
-            last;
-        }
-    }
-
-    return $array2_contains_all_elements_of_array1;
-}
-
 #############################################
 # All languages defined for one product
 #############################################

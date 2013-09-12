@@ -35,39 +35,12 @@ sub get_media_diskid
 }
 
 ##############################################################
-# Returning the lastsequence for the media table.
-##############################################################
-
-sub get_media_lastsequence
-{
-    my ($fileref) = @_;
-
-    return $fileref->{'sequencenumber'};
-}
-
-##############################################################
 # Returning the diskprompt for the media table.
 ##############################################################
 
 sub get_media_diskprompt
 {
     return 1;
-}
-
-##############################################################
-# Returning the cabinet file name for the media table.
-##############################################################
-
-sub get_media_cabinet
-{
-    my ($id) = @_;
-
-    my $number = 1000 + $id;
-    my $filename = "f_" . $number . ".cab";
-
-    if ( $installer::globals::include_cab_in_msi ) { $filename = "\#" . $filename; }
-
-    return $filename;
 }
 
 ##############################################################
@@ -88,97 +61,6 @@ sub get_media_source
     return "";
 }
 
-##############################################################
-# Saving the cabinet file name in the files collector.
-# This is useful for making a list to connect the
-# source of each file with the destination cabinet file.
-##############################################################
-
-sub set_cabinetfilename_for_component_in_file_collector
-{
-    my ($cabinetfilename, $filesref, $componentname, $max) = @_;
-
-    for ( my $i = 0; $i <= $max; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        my $component = $onefile->{'componentname'};
-
-        if ( $component eq $componentname )
-        {
-            my $cabinet = "";
-
-            if ( $onefile->{'cabinet'} ) { $cabinet = $onefile->{'cabinet'}; }
-
-            if ( $cabinet eq "" )
-            {
-                $onefile->{'cabinet'} = $cabinetfilename;
-            }
-        }
-    }
-}
-
-#################################################
-# Creating the cab file name dynamically
-#################################################
-
-sub generate_cab_filename_for_some_cabs
-{
-    my ( $allvariables, $id ) = @_;
-
-    my $name = $allvariables->{'PRODUCTNAME'};
-
-    $name = lc($name);
-    $name =~ s/\.//g;
-    $name =~ s/\s//g;
-
-    # possibility to overwrite the name with variable CABFILENAME
-    if ( $allvariables->{'CABFILENAME'} ) { $name = $allvariables->{'CABFILENAME'}; }
-
-    $name = $name . $id . ".cab";
-
-    if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
-
-    return $name;
-}
-
-#################################################
-# Creating the cab file name for cab files
-# defined in packages.
-#################################################
-
-sub get_cabfilename
-{
-    my ($name) = @_;
-
-    if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
-
-    return $name;
-}
-
-#################################################
-# Creating the cab file name dynamically
-#################################################
-
-sub generate_cab_filename
-{
-    my ( $allvariables ) = @_;
-
-    my $name = $allvariables->{'PRODUCTNAME'};
-
-    $name = lc($name);
-    $name =~ s/\.//g;
-    $name =~ s/\s//g;
-
-    # possibility to overwrite the name with variable CABFILENAME
-    if ( $allvariables->{'CABFILENAME'} ) { $name = $allvariables->{'CABFILENAME'}; }
-
-    $name = $name . ".cab";
-
-    if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
-
-    return $name;
-}
-
 sub get_maximum_filenumber
 {
     my ($allfiles, $maxcabfilenumber) = @_;
@@ -195,28 +77,6 @@ sub get_maximum_filenumber
     $maxfile++;                 # for securitry
 
     return $maxfile;
-}
-
-#################################################################################
-# Setting the last sequence for the cabinet files
-#################################################################################
-
-sub get_last_sequence
-{
-    my ( $cabfilename, $alludpatelastsequences ) = @_;
-
-    my $sequence = 0;
-
-    if (( $installer::globals::updatedatabase ) && ( exists($alludpatelastsequences->{$cabfilename}) ))
-    {
-        $sequence = $alludpatelastsequences->{$cabfilename};
-    }
-    else
-    {
-        $sequence = $installer::globals::lastsequence{$cabfilename};
-    }
-
-    return $sequence;
 }
 
 #################################################################################

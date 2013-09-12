@@ -67,22 +67,6 @@ sub convert_stringlist_into_hash
 }
 
 #############################################################################
-# Converting a string list with separator $listseparator
-# into an array
-#############################################################################
-
-sub convert_whitespace_stringlist_into_array
-{
-    my ( $includestringref ) = @_;
-
-    my $tmp = ${$includestringref};
-    $tmp = s/^\s+//;
-    $tmp = s/\s+$//;
-
-    return [map "$_\n", split /\s+/, $tmp];
-}
-
-#############################################################################
 # Converting an array into a space separated string
 #############################################################################
 

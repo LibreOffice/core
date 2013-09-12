@@ -1311,28 +1311,6 @@ sub make_prototypefile_relocatable
 }
 
 #########################################################################
-# Replacing the variables in the Solaris patch shell scripts.
-# Taking care, that multiple slashes are not always removed.
-#########################################################################
-
-sub replace_variables_in_shellscripts_for_patch
-{
-    my ($scriptfile, $scriptfilename, $oldstring, $newstring) = @_;
-
-    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
-    {
-        if ( ${$scriptfile}[$i] =~ /\Q$oldstring\E/ )
-        {
-            my $oldline = ${$scriptfile}[$i];
-            if (( $oldstring eq "PRODUCTDIRECTORYNAME" ) && ( $newstring eq "" )) { $oldstring = $oldstring . "/"; }
-            ${$scriptfile}[$i] =~ s/\Q$oldstring\E/$newstring/g;
-            my $infoline = "Info: Substituting in $scriptfilename $oldstring by $newstring\n";
-            push(@installer::globals::logfileinfo, $infoline);
-        }
-    }
-}
-
-#########################################################################
 # Replacing the variables in the shell scripts or in the epm list file
 # Linux: spec file
 # Solaris: preinstall, postinstall, preremove, postremove
@@ -2364,40 +2342,6 @@ sub remove_modules_without_package
     }
 
     return \@allmodules;
-}
-
-######################################################
-# Unpacking tar.gz file and setting new packagename.
-######################################################
-
-sub unpack_tar_gz_file
-{
-    my ($packagename, $destdir) = @_;
-
-    my $newpackagename = "";
-
-    if ( $packagename =~ /\.tar\.gz\s*$/ )
-    {
-        # Collecting all packages in directory "packages"
-        my $oldcontent = installer::systemactions::read_directory($destdir);
-
-        # unpacking gunzip
-        my $systemcall = "cd $destdir; cat $packagename | gunzip | tar -xf -";
-        installer::systemactions::make_systemcall($systemcall);
-
-        # deleting the tar.gz files
-        $systemcall = "cd $destdir; rm -f $packagename";
-        installer::systemactions::make_systemcall($systemcall);
-
-        # Finding new content -> that is the package name
-        my ($newcontent, $allcontent ) = installer::systemactions::find_new_content_in_directory($destdir, $oldcontent);
-        $newpackagename = ${$newcontent}[0];
-        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$newpackagename);
-    }
-
-    if ( $newpackagename ne "" ) { $packagename = $newpackagename; }
-
-    return $packagename;
 }
 
 ######################################################

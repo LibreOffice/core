@@ -62,35 +62,6 @@ sub get_msiassembly_component
 }
 
 ##############################################################
-# Returning the file name as manifest file
-##############################################################
-
-sub get_msiassembly_filemanifest
-{
-    my ( $onefile ) = @_;
-
-    my $filemanifest = "";
-
-    $filemanifest = $onefile->{'uniquename'};
-
-    return $filemanifest;
-}
-
-
-##############################################################
-# Returning the file application
-##############################################################
-
-sub get_msiassembly_fileapplication
-{
-    my ( $onefile ) = @_;
-
-    my $fileapplication = "";
-
-    return $fileapplication;
-}
-
-##############################################################
 # Returning the file attributes
 ##############################################################
 
@@ -103,35 +74,6 @@ sub get_msiassembly_attributes
     if ( $onefile->{'Attributes'} ne "" ) { $fileattributes = $onefile->{'Attributes'}; }
 
     return $fileattributes;
-}
-
-##############################################################
-# Returning the file object for the msiassembly table.
-##############################################################
-
-sub get_msiassembly_file
-{
-    my ( $filesref, $filename ) = @_;
-
-    my $foundfile = 0;
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        $onefile = ${$filesref}[$i];
-        my $name = $onefile->{'Name'};
-
-        if ( $name eq $filename )
-        {
-            $foundfile = 1;
-            last;
-        }
-    }
-
-    # It does not need to exist. For example products that do not contain the libraries.
-    if (! $foundfile ) { $onefile  = ""; }
-
-    return $onefile;
 }
 
 ####################################################################################

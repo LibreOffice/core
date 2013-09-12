@@ -185,36 +185,6 @@ sub get_feature_attributes
 }
 
 #################################################################################
-# Replacing one variable in one files
-#################################################################################
-
-sub replace_one_variable
-{
-    my ($translationfile, $variable, $searchstring) = @_;
-
-    for ( my $i = 0; $i <= $#{$translationfile}; $i++ )
-    {
-        ${$translationfile}[$i] =~ s/\%$searchstring/$variable/g;
-    }
-}
-
-#################################################################################
-# Replacing the variables in the feature names and descriptions
-#################################################################################
-
-sub replace_variables
-{
-    my ($translationfile, $variableshashref) = @_;
-
-    # we want to substitute FOO_BR before FOO to avoid floating _BR suffixes
-    foreach $key (sort { length ($b) <=> length ($a) } keys %{$variableshashref})
-    {
-        my $value = $variableshashref->{$key};
-        replace_one_variable($translationfile, $value, $key);
-    }
-}
-
-#################################################################################
 # Collecting the feature recursively.
 #################################################################################
 

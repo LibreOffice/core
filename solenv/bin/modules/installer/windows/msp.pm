@@ -281,20 +281,6 @@ sub check_and_save_tables
 }
 
 ####################################################################
-# Setting the languages for the service packs
-####################################################################
-
-sub create_langstring
-{
-    my ( $languagesarrayref ) = @_;
-
-    my $langstring = "";
-    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ ) { $langstring = $langstring . "_" . ${$languagesarrayref}[$i]; }
-
-    return $langstring;
-}
-
-####################################################################
 # Setting the name of the msp database
 ####################################################################
 

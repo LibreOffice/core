@@ -29,8 +29,6 @@ package SourceConfig;
 
 use strict;
 
-use constant SOURCE_CONFIG_VERSION => 3;
-
 use Carp;
 use Cwd;
 use RepositoryHelper;
@@ -66,19 +64,9 @@ sub new {
     $self->{DEBUG} = 0;
     $self->{VERBOSE} = 0;
     $self->{REPOSITORIES} = {};
-    $self->{ACTIVATED_REPOSITORIES} = {};
     $self->{MODULE_PATHS} = {};
-    $self->{MODULE_GBUILDIFIED} = {};
-    $self->{MODULE_BUILD_LIST_PATHS} = {};
     $self->{MODULE_REPOSITORY} = {};
     $self->{REAL_MODULES} = {};
-    $self->{NEW_MODULES} = [];
-    $self->{REMOVE_MODULES} = {};
-    $self->{REMOVE_REPOSITORIES} = {};
-    $self->{NEW_REPOSITORIES} = [];
-    $self->{WARNINGS} = [];
-    $self->{REPORT_MESSAGES} = [];
-    $self->{CONFIG_FILE_CONTENT} = [];
     if (defined $self->{USER_SOURCE_ROOT})
     {
         ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
@@ -98,10 +86,6 @@ sub new {
 }
 
 ##### methods #####
-
-sub get_version {
-    return SOURCE_CONFIG_VERSION;
-};
 
 sub get_repositories
 {
@@ -131,36 +115,6 @@ sub get_module_path {
     };
 }
 
-sub get_module_build_list {
-    my $self = shift;
-    my $module = shift;
-    if (defined ${$self->{MODULE_BUILD_LIST_PATHS}}{$module}) {
-        return ${$self->{MODULE_BUILD_LIST_PATHS}}{$module};
-    }
-    else
-    {
-        my $module_path = ${$self->{MODULE_PATHS}}{$module};
-        if ( -e $module_path . "/prj/build.lst")
-        {
-            ${$self->{MODULE_BUILD_LIST_PATHS}}{$module} = $module_path . "/prj/build.lst";
-
-            if (!-e $module_path . "/prj/dmake" )
-            {
-#                print "module $module -> gbuild\n";
-                ${$self->{MODULE_GBUILDIFIED}}{$module} = 1;
-            }
-            else
-            {
-#                print "module $module -> dmake\n";
-                ${$self->{MODULE_GBUILDIFIED}}{$module} = 0;
-            }
-            return $module_path . "/prj/build.lst";
-        };
-        Carp::cluck("No build list in module $module found!!\n") if ($self->{DEBUG});
-        return undef;
-    };
-}
-
 sub get_all_modules
 {
     my $self = shift;
@@ -179,17 +133,6 @@ sub is_active
     my $self        = shift;
     my $module      = shift;
     return exists ($self->{REAL_MODULES}{$module});
-}
-
-sub is_gbuild
-{
-    my $self        = shift;
-    my $module      = shift;
-    if (defined ${$self->{MODULE_GBUILDIFIED}}{$module})
-    {
-        return ${$self->{MODULE_GBUILDIFIED}}{$module};
-    };
-    return undef;
 }
 
 ##### private methods #####

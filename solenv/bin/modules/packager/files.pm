@@ -96,38 +96,6 @@ sub create_directory
 }
 
 ######################################################
-# Creating a unique directory with number extension
-######################################################
-
-sub create_unique_directory
-{
-    my ($directory) = @_;
-
-    $directory =~ s/\Q$packager::globals::separator\E\s*$//;
-    $directory = $directory . "_INCREASINGNUMBER";
-
-    my $counter = 1;
-    my $created = 0;
-    my $localdirectory = "";
-
-    do
-    {
-        $localdirectory = $directory;
-        $localdirectory =~ s/INCREASINGNUMBER/$counter/;
-        $counter++;
-
-        if ( ! -d $localdirectory )
-        {
-            create_directory($localdirectory);
-            $created = 1;
-        }
-    }
-    while ( ! $created );
-
-    return $localdirectory;
-}
-
-######################################################
 # Removing a complete directory with subdirectories
 ######################################################
 

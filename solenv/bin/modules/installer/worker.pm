@@ -245,31 +245,6 @@ sub collect_all_items_with_special_flag
 }
 
 ##############################################################
-# Collecting all items without a defined flag
-##############################################################
-
-sub collect_all_items_without_special_flag
-{
-    my ($itemsref, $flag) = @_;
-
-    my @allitems = ();
-
-    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
-    {
-        my $oneitem = ${$itemsref}[$i];
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
-
-        if ( !( $styles =~ /\b$flag\b/ ))
-        {
-            push( @allitems, $oneitem );
-        }
-    }
-
-    return \@allitems;
-}
-
-##############################################################
 # Removing all items with a defined flag from collector
 ##############################################################
 
@@ -650,34 +625,6 @@ sub collect_all_files_from_includepaths
 
     installer::logger::globallog("Reading all directories: End");
     push( @installer::globals::globallogfileinfo, "\n");
-}
-
-##############################################
-# Searching for a file with the gid
-##############################################
-
-sub find_file_by_id
-{
-    my ( $filesref, $gid ) = @_;
-
-    my $foundfile = 0;
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        $onefile = ${$filesref}[$i];
-        my $filegid = $onefile->{'gid'};
-
-        if ( $filegid eq $gid )
-        {
-            $foundfile = 1;
-            last;
-        }
-    }
-
-    if (! $foundfile ) { $onefile  = ""; }
-
-    return $onefile;
 }
 
 #################################################

@@ -1010,32 +1010,6 @@ sub get_sourcepath_from_filename_and_includepath
 }
 
 ##############################################################
-# Determining, whether a specified directory is language
-# dependent
-##############################################################
-
-sub determine_directory_language_dependency
-{
-    my($directorygid, $dirsref) = @_;
-
-    my $is_multilingual = 0;
-
-    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
-    {
-        my $onedir = ${$dirsref}[$i];
-        my $gid = $onedir->{'gid'};
-
-        if ( $gid eq $directorygid )
-        {
-            $is_multilingual = $onedir->{'ismultilingual'};
-            last;
-        }
-    }
-
-    return $is_multilingual;
-}
-
-##############################################################
 # Getting all source paths for all files to be packed
 # $item can be "Files" or "ScpActions"
 ##############################################################
