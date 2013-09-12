@@ -31,7 +31,7 @@ class XMLStyleOASISTContext : public XMLPersElemContentTContext
     ::rtl::Reference< XMLPropertiesTContext_Impl > m_xPropContext;
 
     sal_Bool m_bPersistent;
-    sal_Bool m_bControlStyle;
+    bool m_bControlStyle;
 
     OUString m_aStyleFamily;
 public:

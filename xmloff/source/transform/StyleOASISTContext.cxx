@@ -65,7 +65,7 @@ class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
     XMLPropType m_ePropType;
-    sal_Bool    m_bControlStyle;
+    bool        m_bControlStyle;
     OUString m_aStyleFamily;
 
 public:
@@ -83,7 +83,7 @@ public:
                            const OUString& rQName,
                            XMLPropType eP,
                            const OUString& rStyleFamily,
-                           sal_Bool _bControlStyle = sal_False );
+                           bool _bControlStyle = false );
 
     virtual ~XMLPropertiesTContext_Impl();
 
@@ -94,9 +94,9 @@ public:
     static XMLPropType GetPropType( const OUString& rLocalName );
 
     static OUString MergeUnderline( XMLTokenEnum eUnderline,
-                                           sal_Bool bBold, sal_Bool bDouble );
+                                           bool bBold, bool bDouble );
     static OUString MergeLineThrough( XMLTokenEnum eLineThrough,
-                                        sal_Bool bBold, sal_Bool bDouble,
+                                        bool bBold, bool bDouble,
                                            sal_Unicode c );
 };
 
@@ -104,7 +104,7 @@ TYPEINIT1( XMLPropertiesTContext_Impl, XMLPersElemContentTContext );
 
 XMLPropertiesTContext_Impl::XMLPropertiesTContext_Impl(
     XMLTransformerBase& rImp, const OUString& rQName, XMLPropType eP,
-        const OUString& rStyleFamily, sal_Bool _bControlStyle ) :
+        const OUString& rStyleFamily, bool _bControlStyle ) :
     XMLPersElemContentTContext( rImp, rQName, XML_NAMESPACE_STYLE,
                                 XML_PROPERTIES),
     m_ePropType( eP ),
@@ -143,9 +143,9 @@ void XMLPropertiesTContext_Impl::StartElement(
         }
 
         XMLTokenEnum eUnderline = XML_TOKEN_END;
-        sal_Bool bBoldUnderline = sal_False, bDoubleUnderline = sal_False;
+        bool bBoldUnderline = false, bDoubleUnderline = false;
         XMLTokenEnum eLineThrough = XML_TOKEN_END;
-        sal_Bool bBoldLineThrough = sal_False, bDoubleLineThrough = sal_False;
+        bool bBoldLineThrough = false, bDoubleLineThrough = false;
         sal_Unicode cLineThroughChar = 0;
 
         bool bIntervalMinorFound = false;
@@ -285,22 +285,22 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_UNDERLINE_WIDTH:
                     if( IsXMLToken( rAttrValue, XML_BOLD ) )
-                        bBoldUnderline = sal_True;
+                        bBoldUnderline = true;
                     break;
                 case XML_OPTACTION_UNDERLINE_TYPE:
                     if( IsXMLToken( rAttrValue, XML_DOUBLE ) )
-                        bDoubleUnderline = sal_True;
+                        bDoubleUnderline = true;
                     break;
                 case XML_OPTACTION_UNDERLINE_STYLE:
                     eUnderline = GetTransformer().GetToken( rAttrValue );
                     break;
                 case XML_OPTACTION_LINETHROUGH_WIDTH:
                     if( IsXMLToken( rAttrValue, XML_BOLD ) )
-                        bBoldLineThrough = sal_True;
+                        bBoldLineThrough = true;
                     break;
                 case XML_OPTACTION_LINETHROUGH_TYPE:
                     if( IsXMLToken( rAttrValue, XML_DOUBLE ) )
-                        bDoubleLineThrough = sal_True;
+                        bDoubleLineThrough = true;
                     break;
                 case XML_OPTACTION_LINETHROUGH_STYLE:
                     eLineThrough = GetTransformer().GetToken( rAttrValue );
@@ -661,7 +661,7 @@ XMLPropType XMLPropertiesTContext_Impl::GetPropType( const OUString& rLocalName 
 }
 
 OUString XMLPropertiesTContext_Impl::MergeUnderline(
-            XMLTokenEnum eUnderline, sal_Bool bBold, sal_Bool bDouble )
+            XMLTokenEnum eUnderline, bool bBold, bool bDouble )
 {
     if( bDouble )
     {
@@ -726,7 +726,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
 }
 
 OUString XMLPropertiesTContext_Impl::MergeLineThrough(
-            XMLTokenEnum eLineThrough, sal_Bool bBold, sal_Bool bDouble,
+            XMLTokenEnum eLineThrough, bool bBold, bool bDouble,
                sal_Unicode c )
 {
     if( c )
@@ -820,7 +820,7 @@ void XMLStyleOASISTContext::StartElement(
     XMLMutableAttributeList *pMutableAttrList = 0;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     sal_Int16 nFamilyAttr = -1;
-    m_bControlStyle = sal_False;
+    m_bControlStyle = false;
 
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {

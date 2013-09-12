@@ -1134,8 +1134,8 @@ void XMLDocumentTransformerContext_Impl::StartElement(
     m_aOldClass = GetTransformer().GetClass();
 
     XMLMutableAttributeList *pMutableAttrList = 0;
-    sal_Bool bOOo = sal_False, bOOoW = sal_False, bOOoC = sal_False,
-             bDOM=sal_False, bDC = sal_False, bSVG = sal_False;
+    bool bOOo = false, bOOoW = false, bOOoC = false,
+        bDOM=false, bDC = false, bSVG = false;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -1163,17 +1163,17 @@ void XMLDocumentTransformerContext_Impl::StartElement(
         {
             const OUString& rAttrValue = xAttrList->getValueByIndex( i );
             if( IsXMLToken( rAttrValue, XML_N_OOO ) )
-                bOOo = sal_True;
+                bOOo = true;
             else if( IsXMLToken( rAttrValue, XML_N_OOOW ) )
-                bOOoW = sal_True;
+                bOOoW = true;
             else if( IsXMLToken( rAttrValue, XML_N_OOOC ) )
-                bOOoC = sal_True;
+                bOOoC = true;
             else if( IsXMLToken( rAttrValue, XML_N_DOM ) )
-                bDOM = sal_True;
+                bDOM = true;
             else if( IsXMLToken( rAttrValue, XML_N_DC ) )
-                bDC = sal_True;
+                bDC = true;
             else if( IsXMLToken( rAttrValue, XML_N_SVG ) )
-                bSVG = sal_True;
+                bSVG = true;
         }
     }
     if( !(bOOo && bOOoW && bOOoC && bDOM && bDC && bSVG) )
@@ -1509,7 +1509,7 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
         GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
     if( rAttrList->getLength() && IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
     {
-        sal_Bool bPrintRanges(sal_False);
+        bool bPrintRanges(false);
 
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1522,7 +1522,7 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
             if( XML_NAMESPACE_TABLE == nPrefix &&
                 IsXMLToken( aLocalName, XML_PRINT_RANGES ) )
             {
-                bPrintRanges = sal_True;
+                bPrintRanges = true;
             }
         }
         if (!bPrintRanges && pMutableAttrList)
