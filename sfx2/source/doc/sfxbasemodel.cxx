@@ -2604,6 +2604,29 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
     }
 }
 
+uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( ) throw ( RuntimeException )
+{
+    uno::Sequence< document::CmisVersion > aVersions;
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName(),
+                Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );
+
+            Any aResult = aContent.executeCommand( "getAllVersions", Any( ) );
+            aResult >>= aVersions;
+        }
+        catch ( const Exception & e )
+        {
+            throw RuntimeException( e.Message, e.Context );
+        }
+    }
+    return aVersions;
+}
+
 sal_Bool SfxBaseModel::getBoolPropertyValue( const OUString& rName ) throw ( RuntimeException )
 {
     sal_Bool bValue = sal_False;

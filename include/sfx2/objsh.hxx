@@ -37,6 +37,7 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/CmisVersion.hpp>
 #include <boost/shared_ptr.hpp>
 
 //________________________________________________________________________________________________________________
@@ -714,6 +715,7 @@ public:
     SAL_DLLPRIVATE void CheckOut( );
     SAL_DLLPRIVATE void CancelCheckOut( );
     SAL_DLLPRIVATE void CheckIn( );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisVersion > GetCmisVersions();
 };
 
 #define SFX_GLOBAL_CLASSID \

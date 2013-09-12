@@ -405,6 +405,21 @@ void SfxObjectShell::CheckIn( )
     }
 }
 
+uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
+{
+    try
+    {
+        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
+        return xCmisDoc->getAllVersions( );
+    }
+    catch ( const uno::RuntimeException& e )
+    {
+        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        pErrorBox->Execute( );
+        delete pErrorBox;
+    }
+    return uno::Sequence< document::CmisVersion > ( );
+}
 //--------------------------------------------------------------------
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
