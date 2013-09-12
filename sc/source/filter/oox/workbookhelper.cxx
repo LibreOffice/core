@@ -77,6 +77,8 @@
 #include "editutil.hxx"
 #include "editeng/editstat.hxx"
 
+#include <boost/noncopyable.hpp>
+
 namespace oox {
 namespace xls {
 
@@ -107,7 +109,7 @@ bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rNam
 
 // ============================================================================
 
-class WorkbookGlobals
+class WorkbookGlobals : boost::noncopyable
 {
 public:
     explicit            WorkbookGlobals( ExcelFilter& rFilter );
@@ -143,24 +145,7 @@ public:
         return *mxEditEngine.get();
     }
 
-    inline ScDocument& getScDocument() const
-    {
-        if ( !mpDoc )
-        {
-            if ( mxDoc.get() )
-            {
-                ScModelObj* pModel = dynamic_cast< ScModelObj* >( mxDoc.get() );
-                ScDocShell* pDocShell = NULL;
-                if ( pModel )
-                    pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
-                if ( pDocShell )
-                    mpDoc = pDocShell->GetDocument();
-            }
-        }
-        if ( !mpDoc )
-            throw RuntimeException( OUString( "Workbookhelper::getScDocument(): Failed to access ScDocument from model" ), Reference< XInterface >() );
-        return *mpDoc;
-    }
+    ScDocument& getScDocument() const { return *mpDoc; }
 
     /** Returns a reference to the source/target spreadsheet document model. */
     inline Reference< XSpreadsheetDocument > getDocument() const { return mxDoc; }
@@ -314,7 +299,7 @@ private:
     BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
     bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.
-    mutable ScDocument* mpDoc;
+    ScDocument* mpDoc;
 };
 
 // ----------------------------------------------------------------------------
@@ -338,7 +323,6 @@ WorkbookGlobals::~WorkbookGlobals()
     mrExcelFilter.unregisterWorkbookGlobals();
 }
 
-// document model -------------------------------------------------------------
 
 Reference< XNameContainer > WorkbookGlobals::getStyleFamily( bool bPageStyles ) const
 {
@@ -534,6 +518,19 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     // the spreadsheet document
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
     OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
+
+    if (mxDoc.get())
+    {
+        ScModelObj* pModel = dynamic_cast<ScModelObj*>(mxDoc.get());
+        ScDocShell* pDocShell = NULL;
+        if (pModel)
+            pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
+        if (pDocShell)
+            mpDoc = pDocShell->GetDocument();
+    }
+
+    if (!mpDoc)
+        throw RuntimeException("Workbookhelper::getScDocument(): Failed to access ScDocument from model", Reference<XInterface>());
 
     mxFormulaBuffer.reset( new FormulaBuffer( *this ) );
     mxWorkbookSettings.reset( new WorkbookSettings( *this ) );
