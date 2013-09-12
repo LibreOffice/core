@@ -44,7 +44,7 @@ ifeq ($(EXECUTABLE_NAME),LibreOffice)
 $(call gb_CustomTarget_get_target,ios/LibreOffice_app) : $(SCRIPT_OUTPUT_FILE_0)
 
 appdir=$(dir $(SCRIPT_OUTPUT_FILE_0))
-buildid=$(shell git log -1 --format=%H)
+buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)
 
 $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)

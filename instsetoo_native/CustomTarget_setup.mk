@@ -130,7 +130,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		echo '[Version]' \
 		&& echo 'AllLanguages=$(if $(gb_WITH_LANG),$(gb_WITH_LANG),en-US)' \
 		&& echo 'BuildVersion=$(BUILD_VER_STRING)' \
-		&& echo 'buildid=$(shell git log -1 --format=%H)' \
+		&& echo 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)' \
 		&& echo 'ExtensionUpdateURL=http://updateexte.libreoffice.org/ExtensionUpdateService/check.Update' \
 		&& echo 'ProductMajor=$(LIBO_VERSION_MAJOR)$(LIBO_VERSION_MINOR)$(LIBO_VERSION_MICRO)' \
 		&& echo 'ProductMinor=$(LIBO_VERSION_PATCH)' \
