@@ -859,7 +859,7 @@ public:
             sal_Int32 nIndex = 0;
             do
             {
-                rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+                suTokenStr.getToken( 0, ';', nIndex );
             }
             while ( nIndex >= 0 );
             printf("Index %" SAL_PRIdINT32 "\n", nIndex);
@@ -1000,8 +1000,8 @@ public:
     void intern()
     {
         // The empty string is 'static' a special case ...
-        rtl::OUString aEmpty = rtl::OUString().intern();
-        rtl::OUString aEmpty2 = rtl::OUString::intern( "",strlen(""),RTL_TEXTENCODING_ASCII_US );
+        rtl::OUString().intern();
+        rtl::OUString::intern( "",strlen(""),RTL_TEXTENCODING_ASCII_US );
 
         ::rtl::OUString aFoo( "foo" );
         ::rtl::OUString aFooIntern = aFoo.intern();
