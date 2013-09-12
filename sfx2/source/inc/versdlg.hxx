@@ -52,6 +52,7 @@ class SfxVersionDialog : public SfxModalDialog
     PushButton*                 m_pViewButton;
     PushButton*                 m_pDeleteButton;
     PushButton*                 m_pCompareButton;
+    PushButton*                 m_pCmisButton;
     SfxViewFrame*               pViewFrame;
     SfxVersionTableDtor*        m_pTable;
     bool                        m_bIsSaveVersionOnClose;
@@ -82,6 +83,29 @@ class SfxViewVersionDialog_Impl : public SfxModalDialog
 
 public:
     SfxViewVersionDialog_Impl(Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
+};
+
+class SfxCmisVersionsDialog : public SfxModalDialog
+{
+    PushButton*                 m_pSaveButton;
+    CheckBox*                   m_pSaveCheckBox;
+    SfxVersionsTabListBox_Impl* m_pVersionBox;
+    PushButton*                 m_pOpenButton;
+    PushButton*                 m_pViewButton;
+    PushButton*                 m_pDeleteButton;
+    PushButton*                 m_pCompareButton;
+    SfxViewFrame*               pViewFrame;
+    SfxVersionTableDtor*        m_pTable;
+    bool                        m_bIsSaveVersionOnClose;
+
+    DECL_LINK(DClickHdl_Impl, void *);
+    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK(                  ButtonHdl_Impl, Button* );
+    void                        LoadVersions();
+
+public:
+                                SfxCmisVersionsDialog ( SfxViewFrame* pFrame, sal_Bool );
+    virtual                     ~SfxCmisVersionsDialog ();
 };
 
 #endif

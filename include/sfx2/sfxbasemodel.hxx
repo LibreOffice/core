@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
+#include <com/sun/star/document/CmisVersion.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
@@ -1320,6 +1321,9 @@ public:
             const css::uno::Sequence<
                 css::document::CmisProperty >& _cmisproperties )
         throw (css::uno::RuntimeException);
+
+    virtual css::uno::Sequence< css::document::CmisVersion > SAL_CALL getAllVersions ( )
+        throw (css::uno::RuntimeException );
 
     virtual void SAL_CALL checkOut(  ) throw ( css::uno::RuntimeException );
     virtual void SAL_CALL cancelCheckOut(  ) throw ( css::uno::RuntimeException );

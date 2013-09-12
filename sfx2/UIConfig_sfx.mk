@@ -27,6 +27,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/singletabdialog \
 	sfx2/uiconfig/ui/versionsofdialog \
 	sfx2/uiconfig/ui/versioncommentdialog \
+	sfx2/uiconfig/ui/versionscmis \
 	sfx2/uiconfig/ui/startcenter \
 	sfx2/uiconfig/ui/cmisinfopage \
 	sfx2/uiconfig/ui/cmisline \

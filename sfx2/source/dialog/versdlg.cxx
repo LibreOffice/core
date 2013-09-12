@@ -81,7 +81,7 @@ public:
                             { *this = rCpy; }
 
                             SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
-
+                            SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );
                             ~SfxVersionTableDtor()
                             { DelDtor(); }
 
@@ -103,6 +103,23 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTa
     {
         SfxVersionInfo* pInfo = new SfxVersionInfo;
         pInfo->aName = rInfo[n].Identifier;
+        pInfo->aComment = rInfo[n].Comment;
+        pInfo->aAuthor = rInfo[n].Author;
+
+        Date aDate ( rInfo[n].TimeStamp.Day,   rInfo[n].TimeStamp.Month,   rInfo[n].TimeStamp.Year );
+        Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.NanoSeconds );
+
+        pInfo->aCreationDate = DateTime( aDate, aTime );
+        aTableList.push_back( pInfo );
+    }
+}
+
+SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVersion >& rInfo )
+{
+    for ( sal_Int32 n=0; n<(sal_Int32)rInfo.getLength(); n++ )
+    {
+        SfxVersionInfo* pInfo = new SfxVersionInfo;
+        pInfo->aName = rInfo[n].Id;
         pInfo->aComment = rInfo[n].Comment;
         pInfo->aAuthor = rInfo[n].Author;
 
@@ -218,6 +235,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
     get(m_pViewButton, "show");
     get(m_pDeleteButton, "delete");
     get(m_pCompareButton, "compare");
+    get(m_pCmisButton, "cmis");
 
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("versions");
     Size aControlSize(260, 114);
@@ -234,6 +252,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
     m_pCompareButton->SetClickHdl ( aClickLink );
     m_pOpenButton->SetClickHdl ( aClickLink );
     m_pSaveCheckBox->SetClickHdl ( aClickLink );
+    m_pCmisButton->SetClickHdl ( aClickLink );
 
     m_pVersionBox->SetSelectHdl( LINK( this, SfxVersionDialog, SelectHdl_Impl ) );
     m_pVersionBox->SetDoubleClickHdl( LINK( this, SfxVersionDialog, DClickHdl_Impl ) );
@@ -329,6 +348,7 @@ void SfxVersionDialog::Init_Impl()
     m_pViewButton->Disable();
     m_pDeleteButton->Disable();
     m_pCompareButton->Disable();
+    m_pCmisButton->Enable();
 
     SelectHdl_Impl(m_pVersionBox);
 }
@@ -456,6 +476,12 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
         pViewFrame->GetDispatcher()->Execute( SID_DOCUMENT_COMPARE, SFX_CALLMODE_ASYNCHRON, aSet );
         Close();
     }
+    else if (pButton == m_pCmisButton)
+    {
+        SfxCmisVersionsDialog* pDlg = new SfxCmisVersionsDialog(pViewFrame, false);
+        pDlg->Execute();
+        delete pDlg;
+    }
 
     return 0L;
 }
@@ -502,6 +528,89 @@ IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton)
     m_rInfo.aComment = m_pEdit->GetText();
     EndDialog(RET_OK);
     return 0L;
+}
+
+SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVersionOnClose )
+    : SfxModalDialog(NULL, "VersionsCmisDialog", "sfx/ui/versionscmis.ui")
+    , pViewFrame(pVwFrame)
+    , m_pTable(NULL)
+    , m_bIsSaveVersionOnClose(bIsSaveVersionOnClose)
+{
+    get(m_pSaveButton, "save");
+    get(m_pSaveCheckBox, "always");
+    get(m_pOpenButton, "open");
+    get(m_pViewButton, "show");
+    get(m_pDeleteButton, "delete");
+    get(m_pCompareButton, "compare");
+
+    SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("versions");
+    Size aControlSize(260, 114);
+    aControlSize = pContainer->LogicToPixel(aControlSize, MAP_APPFONT);
+    pContainer->set_width_request(aControlSize.Width());
+    pContainer->set_height_request(aControlSize.Height());
+
+    m_pVersionBox = new SfxVersionsTabListBox_Impl(*pContainer, WB_TABSTOP);
+
+    m_pVersionBox->GrabFocus();
+    m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
+    m_pVersionBox->SetSelectionMode( SINGLE_SELECTION );
+
+    long nTabs_Impl[] = { 3, 0, 0, 0 };
+
+    m_pVersionBox->SvSimpleTable::SetTabs(&nTabs_Impl[0]);
+    OUString sHeader1(get<FixedText>("datetime")->GetText());
+    OUString sHeader2(get<FixedText>("savedby")->GetText());
+    OUString sHeader3(get<FixedText>("comments")->GetText());
+    OUStringBuffer sHeader;
+    sHeader.append(sHeader1).append("\t").append(sHeader2)
+        .append("\t ").append(sHeader3);
+    m_pVersionBox->InsertHeaderEntry(sHeader.makeStringAndClear());
+
+    HeaderBar &rBar = m_pVersionBox->GetTheHeaderBar();
+    HeaderBarItemBits nBits = rBar.GetItemBits(1) | HIB_FIXEDPOS | HIB_FIXED;
+    nBits &= ~HIB_CLICKABLE;
+    rBar.SetItemBits(1, nBits);
+    rBar.SetItemBits(2, nBits);
+    rBar.SetItemBits(3, nBits);
+
+    m_pVersionBox->Resize();
+
+    OUString sText = GetText();
+    sText = sText + " " + pViewFrame->GetObjectShell()->GetTitle();
+    SetText( sText );
+
+    LoadVersions();
+
+    m_pVersionBox->setColSizes();
+
+}
+
+SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
+{
+    delete m_pTable;
+    delete m_pVersionBox;
+}
+
+void SfxCmisVersionsDialog::LoadVersions()
+{
+    SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
+    uno::Sequence < document::CmisVersion > aVersions = pObjShell->GetCmisVersions( );
+    delete m_pTable;
+    m_pTable = new SfxVersionTableDtor( aVersions );
+    {
+        for ( size_t n = 0; n < m_pTable->size(); ++n )
+        {
+            SfxVersionInfo *pInfo = m_pTable->at( n );
+            OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
+            aEntry += "\t";
+            aEntry += pInfo->aAuthor;
+            aEntry += "\t";
+            aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
+            SvTreeListEntry *pEntry = m_pVersionBox->InsertEntry( aEntry );
+            pEntry->SetUserData( pInfo );
+        }
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

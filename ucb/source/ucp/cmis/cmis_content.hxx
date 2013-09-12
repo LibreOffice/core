@@ -20,6 +20,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
+#include <com/sun/star/document/CmisVersion.hpp>
 #include <ucbhelper/contenthelper.hxx>
 #include <libcmis/libcmis.hxx>
 
@@ -117,6 +118,10 @@ private:
             com::sun::star::beans::PropertyValue >& rValues,
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& xEnv );
+
+    com::sun::star::uno::Sequence< com::sun::star::document::CmisVersion >
+        getAllVersions( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+            throw( com::sun::star::uno::Exception );
 
     sal_Bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
