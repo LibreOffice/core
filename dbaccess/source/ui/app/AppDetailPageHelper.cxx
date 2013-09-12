@@ -346,12 +346,11 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< OUString>& _
 
 void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
 {
-    enum ElementType eType = E_TABLE;
-    for ( size_t i=0; i < E_ELEMENT_TYPE_COUNT; eType = static_cast< ElementType >( ++i ) )
+    for (size_t i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
     {
-        if ( m_pLists[eType] == &_rControl )
+        if ( m_pLists[i] == &_rControl )
         {
-            describeCurrentSelectionForType( eType, _out_rSelectedObjects );
+            describeCurrentSelectionForType(static_cast<ElementType>(i), _out_rSelectedObjects);
             return;
         }
     }
