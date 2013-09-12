@@ -106,6 +106,19 @@ bool LinguIsUnspecified( LanguageType nLanguage )
     return false;
 }
 
+// When adding anything keep both LinguIsUnspecified() methods in sync!
+// For mappings between language code string and LanguageType see
+// i18nlangtag/source/isolang/isolang.cxx
+
+bool LinguIsUnspecified( const OUString & rBcp47 )
+{
+    if (rBcp47.getLength() != 3)
+        return false;
+    if (rBcp47 == "zxx" || rBcp47 == "und" || rBcp47 == "mul")
+        return true;
+    return false;
+}
+
 static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 {
     sal_Int32 nMin = n1 < n2 ? n1 : n2;

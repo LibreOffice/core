@@ -208,11 +208,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!");
         if (nOldStyleDics > 0)
         {
-            /* TODO: this conversion exists only to check with
-             * LinguIsUnspecified(), add another check that takes the tag
-             * string instead. */
-            LanguageType nLang = LanguageTag::convertToLanguageTypeWithFallback( aIt2->aLocaleNames[0] );
-            if (nLang == LANGUAGE_DONTKNOW || linguistic::LinguIsUnspecified( nLang))
+            if (linguistic::LinguIsUnspecified( aIt2->aLocaleNames[0]))
             {
                 OSL_FAIL( "old style dictionary with invalid language found!" );
                 continue;

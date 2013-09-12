@@ -111,6 +111,10 @@ LNG_DLLPUBLIC ::com::sun::star::lang::Locale LinguLanguageToLocale( LanguageType
  */
 LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
 
+/** The same as LinguIsUnspecified(LanguageType) but taking a BCP 47 language
+    tag string instead. */
+LNG_DLLPUBLIC bool LinguIsUnspecified( const OUString & rBcp47 );
+
 ::com::sun::star::uno::Sequence< sal_Int16 >
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
         ::com::sun::star::lang::Locale > &rLocaleSeq );
