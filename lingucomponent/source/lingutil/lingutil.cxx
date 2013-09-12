@@ -218,7 +218,7 @@ void MergeNewStyleDicsAndOldStyleDics(
             }
 
             // language not yet added?
-            if (aNewStyleLanguages.count( nLang ) == 0)
+            if (aNewStyleLanguages.find( nLang ) == aNewStyleLanguages.end())
                 rNewStyleDics.push_back( *aIt2 );
         }
         else
