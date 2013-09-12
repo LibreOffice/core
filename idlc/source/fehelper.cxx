@@ -50,7 +50,6 @@ sal_Bool FeDeclarator::checkType(AstDeclaration const * type)
 
 AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 {
-    AstArray*   pArray;
     AstType*    pType;
 
     if ( pDecl == 0 )
@@ -68,7 +67,7 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 
     if (m_pComplexPart->getNodeType() == NT_array)
     {
-        pArray = (AstArray*)m_pComplexPart;
+        AstArray* pArray = (AstArray*)m_pComplexPart;
         pArray->setType(pType);
 
         // insert array type in global scope
@@ -80,6 +79,7 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
             {
                 delete m_pComplexPart;
                 m_pComplexPart = pDecl2;
+                return (AstType*)pDecl2;
             }
         }
         return pArray;
