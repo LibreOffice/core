@@ -59,6 +59,8 @@
 
 #if defined USE_DOUBLE_MMAP
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #endif
 
 using bridges::cpp_uno::shared::VtableFactory;
@@ -239,6 +241,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     if (aSecurity.getHomeDir(strURLDirectory))
         osl::File::getSystemPathFromFileURL(strURLDirectory, strDirectory);
 
+    mode_t nOrigMode = umask(S_IRWXG | S_IRWXO);
     for (int i = strDirectory.isEmpty() ? 1 : 0; i < 2; ++i)
     {
         if (strDirectory.isEmpty())
@@ -290,6 +293,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 
         strDirectory = OUString();
     }
+    umask(nOrigMode);
     if (!block.start || !block.exec || block.fd == -1)
     {
        //Fall back to non-doublemmaped allocation
