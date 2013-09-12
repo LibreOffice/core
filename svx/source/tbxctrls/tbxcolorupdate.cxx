@@ -36,7 +36,7 @@ namespace svx
     /* Note:
        The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
        (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
-       The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
+       The initial color used by the button is set in /core/svx/source/tbxctrls/tbcontrl.cxx
        (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
        and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
        (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
@@ -148,7 +148,16 @@ namespace svx
                     maUpdRect.Bottom() = maBmpSize.Height() - 3;
                 }
                 else
-                    maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
+                {
+                    maUpdRect = Rectangle( Point( 0, 0 ), Size( maBmpSize.Width(), maBmpSize.Height() ) );
+
+                    // Now, fit the selected color inside the toolbox color-rectangle such that
+                    // the distinct boundaries of the rectangle of toolbox are also clearly visible.
+                    maUpdRect.Left() += 21;
+                    maUpdRect.Top() += 1;
+                    maUpdRect.Bottom() -= 1;
+                    maUpdRect.Right() -= 4;
+                }
 
                 pBmpAcc->DrawRect( maUpdRect );
 
