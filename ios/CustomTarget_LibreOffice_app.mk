@@ -56,8 +56,8 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 	cp $(OUTDIR)/bin/offapi.rdb $(appdir)
 	cp $(OUTDIR)/bin/udkapi.rdb $(appdir)
 	cp $(OUTDIR)/bin/oovbaapi.rdb $(appdir)
-	cp $(OUTDIR)/xml/services.rdb $(appdir)
-	cp $(OUTDIR)/xml/ure/services.rdb $(appdir)/ure
+	cp $(INSTDIR)/program/services/services.rdb $(appdir)
+	cp $(INSTDIR)/ure/share/misc/services.rdb $(appdir)/ure
 #
 # Copy "registry" files
 #
@@ -72,12 +72,12 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 # we could set STAR_RESOURCE_PATH instead. sigh...
 #
 	mkdir -p $(appdir)/program/resource
-	cp $(OUTDIR)/bin/*en-US.res $(appdir)/program/resource
+	cp $(INSTDIR)/$(LIBO_SHARE_RESOURCE_FOLDER)/*en-US.res $(appdir)/program/resource
 #
 # Artwork
 #
 	mkdir -p $(appdir)/share/config
-	cp -R $(OUTDIR)/bin/images_tango.zip $(appdir)/share/config/images.zip
+	cp -R $(INSTDIR)/$(LIBO_SHARE_FOLDER)/config/images_tango.zip $(appdir)/share/config/images.zip
 #
 # soffice.cfg
 #
