@@ -1268,6 +1268,12 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( "sr-Latn");
                 aVec.push_back( "sr");
             }
+            else if (aLanguage == "pli")
+            {
+                // a special case for Pali dictionary, see fdo#41599
+                aVec.push_back( "pi-Latn");
+                aVec.push_back( "pi");
+            }
         }
         return aVec;
     }
@@ -1311,6 +1317,8 @@ LanguageTag & LanguageTag::makeFallback()
                 else
                     aVec.push_back( "sh-" + aCountry);
             }
+            else if (aLanguage == "pi" && aScript == "Latn")
+                aVec.push_back( "pli");     // a special case for Pali dictionary, see fdo#41599
         }
         if (!aVariants.isEmpty() && !bHaveLanguageScriptVariant)
         {

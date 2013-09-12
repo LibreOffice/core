@@ -522,8 +522,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_MANX,                   "gv", "GB", false },
     { LANGUAGE_USER_ARAGONESE,              "an", "ES", false },
     { LANGUAGE_USER_KEYID,                 "qtz", ""  , false },   // key id pseudolanguage used for UI testing
-    { LANGUAGE_USER_PALI_LATIN,             "pi", ""  , false },   // Pali with Latin script, ISO 639-1
-    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , true  },   // Pali with Latin script, ISO 639-3 (sigh..) back-compat
+    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , true  },   // Pali with Latin script, ISO 639-3 (sigh..) back-compat, Latin is not a default script though..
     { LANGUAGE_USER_KYRGYZ_CHINA,           "ky", "CN", false },
     { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", "RU", false },
     { LANGUAGE_USER_KOMI_PERMYAK,          "koi", "RU", false },
@@ -582,6 +581,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA" },
     { LANGUAGE_AZERI_CYRILLIC,                  "az-Cyrl", "AZ" },  // macrolanguage code
     { LANGUAGE_UZBEK_CYRILLIC,                  "uz-Cyrl", "UZ" },  // macrolanguage code
+    { LANGUAGE_USER_PALI_LATIN,                 "pi-Latn", ""   },
     { LANGUAGE_DONTKNOW,                        "",        ""   }   // marks end of table
 };
 
