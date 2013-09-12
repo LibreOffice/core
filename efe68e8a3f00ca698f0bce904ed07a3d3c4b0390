@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYH///+A\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-12T14:31:13Z",
+      "side": 1,
+      "message": "The below again introduces duplicated code",
+      "revId": "efe68e8a3f00ca698f0bce904ed07a3d3c4b0390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
