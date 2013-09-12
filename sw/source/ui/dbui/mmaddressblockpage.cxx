@@ -1581,9 +1581,9 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
         InsertNewEntryAtPosition( sCurrentItem, nPara, nIndex );
 
         // select the new entry [#i40817]
-        const TextCharAttrib *pAttrib;
-        pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
-        aEntrySel = TextSelection(TextPaM(nPara, nIndex), TextPaM(nPara, pAttrib->GetEnd()));
+        const TextCharAttrib *pAttrib = pTextEngine->FindCharAttrib(TextPaM(nPara, nIndex),TEXTATTR_PROTECTED);
+        if (pAttrib)
+            aEntrySel = TextSelection(TextPaM(nPara, nIndex), TextPaM(nPara, pAttrib->GetEnd()));
         pTextView->SetSelection(aEntrySel);
         Invalidate();
         Modify();
