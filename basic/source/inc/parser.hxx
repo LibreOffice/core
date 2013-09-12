@@ -77,7 +77,8 @@ public:
     bool          bClassModule;     // true: OPTION ClassModule
     StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
     StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
-    SbxDataType   eDefTypes[26];    // DEFxxx data types
+#   define N_DEF_TYPES 26
+    SbxDataType   eDefTypes[N_DEF_TYPES];    // DEFxxx data types
 
     SbiParser( StarBASIC*, SbModule* );
     bool Parse();

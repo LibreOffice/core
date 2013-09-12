@@ -350,7 +350,10 @@ void SbiSymDef::SetType( SbxDataType t )
             unsigned char c = (unsigned char)ch2;
             if( c > 0 && c < 128 )
             {
-                t = pIn->pParser->eDefTypes[ ch2 - 'A' ];
+                int nIndex = ch2 - 'A';
+                assert(nIndex >= 0 && nIndex < N_DEF_TYPES);
+                if (nIndex >= 0 && nIndex < N_DEF_TYPES)
+                    t = pIn->pParser->eDefTypes[nIndex];
             }
         }
     }
