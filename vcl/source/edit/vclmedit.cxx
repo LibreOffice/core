@@ -1573,6 +1573,8 @@ bool VclMultiLineEdit::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "cursor-visible")
         EnableCursor(toBool(rValue));
+    else if (rKey == "accepts-tab")
+        pImpVclMEdit->GetTextWindow()->SetIgnoreTab(!toBool(rValue));
     else
         return Edit::set_property(rKey, rValue);
     return true;
