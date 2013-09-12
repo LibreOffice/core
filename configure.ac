@@ -337,8 +337,8 @@ dnl Also --with-android-sdk is mandatory
 dnl ===================================================================
 ANDROID_SDK_HOME=
 if test -n "$with_android_sdk"; then
-   ANDROID_SDK_HOME=$with_android_sdk
-   PATH="$ANDROID_SDK_HOME/platform-tools:$ANDROID_SDK_HOME/tools:$PATH"
+    ANDROID_SDK_HOME=$with_android_sdk
+    PATH="$ANDROID_SDK_HOME/platform-tools:$ANDROID_SDK_HOME/tools:$PATH"
 fi
 AC_SUBST(ANDROID_SDK_HOME)
 
@@ -2313,13 +2313,13 @@ if test -n "${with_galleries}"; then
         AC_MSG_ERROR([unknown value --with-galleries=$with_galleries])
     fi
 else
-   if test $_os != iOS -a $_os != Android; then
+    if test $_os != iOS -a $_os != Android; then
         WITH_GALLERY_BUILD=YES
         AC_MSG_RESULT([internal src images for desktop])
-   else
+    else
         WITH_GALLERY_BUILD=
         AC_MSG_RESULT([disable src imgage build])
-   fi
+    fi
 fi
 AC_SUBST(WITH_GALLERY_BUILD)
 
@@ -4431,7 +4431,7 @@ if test "$cross_compiling" = "yes"; then
         enable_winegcc_for_build=
         for pkgformat in $PKGFORMAT; do
             case "$pkgformat" in
-                msi|native) enable_winegcc_for_build=yes ;;
+            msi|native) enable_winegcc_for_build=yes ;;
             esac
         done
         test -n "$enable_winegcc_for_build" && sub_conf_opts="$sub_conf_opts --enable-winegcc"
@@ -7127,7 +7127,7 @@ if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
 
         case "$host_cpu" in
 
-    arm|armel)
+        arm|armel)
             JAVA_ARCH="arm"
             JAVA_TOOLKIT="server"
             ;;
@@ -7405,8 +7405,8 @@ fi
 
 ENABLE_LWP=
 if test "$enable_lotuswordpro" = "yes"; then
-   ENABLE_LWP="TRUE"
-   SCPDEFS="$SCPDEFS -DDISABLE_LWP"
+    ENABLE_LWP="TRUE"
+    SCPDEFS="$SCPDEFS -DDISABLE_LWP"
 fi
 AC_SUBST(ENABLE_LWP)
 
@@ -10599,30 +10599,30 @@ AC_SUBST(COMMONS_LOGGING_JAR)
 # scripting provider for BeanShell?
 AC_MSG_CHECKING([whether to build support for scripts in BeanShell])
 if test "${enable_scripting_beanshell}" != "no" -a "x$with_java" != "xno"; then
-   AC_MSG_RESULT([yes])
-   ENABLE_SCRIPTING_BEANSHELL=TRUE
+    AC_MSG_RESULT([yes])
+    ENABLE_SCRIPTING_BEANSHELL=TRUE
 
-   dnl ===================================================================
-   dnl Check for system beanshell
-   dnl ===================================================================
-   AC_MSG_CHECKING([which beanshell to use])
-   if test "$with_system_beanshell" = "yes"; then
-       AC_MSG_RESULT([external])
-       SYSTEM_BSH=YES
-       if test -z $BSH_JAR; then
-           BSH_JAR=/usr/share/java/bsh.jar
-       fi
-       AC_CHECK_FILE($BSH_JAR, [],
-                  [AC_MSG_ERROR(bsh.jar not found.)], [])
-   else
-       AC_MSG_RESULT([internal])
-       SYSTEM_BSH=NO
-       BUILD_TYPE="$BUILD_TYPE BSH"
-   fi
+    dnl ===================================================================
+    dnl Check for system beanshell
+    dnl ===================================================================
+    AC_MSG_CHECKING([which beanshell to use])
+    if test "$with_system_beanshell" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_BSH=YES
+        if test -z $BSH_JAR; then
+            BSH_JAR=/usr/share/java/bsh.jar
+        fi
+        AC_CHECK_FILE($BSH_JAR, [],
+                   [AC_MSG_ERROR(bsh.jar not found.)], [])
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_BSH=NO
+        BUILD_TYPE="$BUILD_TYPE BSH"
+    fi
 else
-   AC_MSG_RESULT([no])
-   ENABLE_SCRIPTING_BEANSHELL=
-   SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_BEANSHELL"
+    AC_MSG_RESULT([no])
+    ENABLE_SCRIPTING_BEANSHELL=
+    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_BEANSHELL"
 fi
 AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
 AC_SUBST(SYSTEM_BSH)
@@ -10631,30 +10631,30 @@ AC_SUBST(BSH_JAR)
 # scripting provider for JavaScript?
 AC_MSG_CHECKING([whether to build support for scripts in JavaScript])
 if test "${enable_scripting_javascript}" != "no" -a "x$with_java" != "xno"; then
-   AC_MSG_RESULT([yes])
-   ENABLE_SCRIPTING_JAVASCRIPT=TRUE
+    AC_MSG_RESULT([yes])
+    ENABLE_SCRIPTING_JAVASCRIPT=TRUE
 
-   dnl ===================================================================
-   dnl Check for system rhino
-   dnl ===================================================================
-   AC_MSG_CHECKING([which rhino to use])
-   if test "$with_system_rhino" = "yes"; then
-       AC_MSG_RESULT([external])
-       SYSTEM_RHINO=YES
-       if test -z $RHINO_JAR; then
-           RHINO_JAR=/usr/share/java/js.jar
-       fi
-       AC_CHECK_FILE($RHINO_JAR, [],
-                  [AC_MSG_ERROR(js.jar not found.)], [])
-   else
-       AC_MSG_RESULT([internal])
-       SYSTEM_RHINO=NO
-       BUILD_TYPE="$BUILD_TYPE RHINO"
-   fi
+    dnl ===================================================================
+    dnl Check for system rhino
+    dnl ===================================================================
+    AC_MSG_CHECKING([which rhino to use])
+    if test "$with_system_rhino" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_RHINO=YES
+        if test -z $RHINO_JAR; then
+            RHINO_JAR=/usr/share/java/js.jar
+        fi
+        AC_CHECK_FILE($RHINO_JAR, [],
+                   [AC_MSG_ERROR(js.jar not found.)], [])
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_RHINO=NO
+        BUILD_TYPE="$BUILD_TYPE RHINO"
+    fi
 else
-   AC_MSG_RESULT([no])
-   ENABLE_SCRIPTING_JAVASCRIPT=
-   SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_JAVASCRIPT"
+    AC_MSG_RESULT([no])
+    ENABLE_SCRIPTING_JAVASCRIPT=
+    SCPDEFS="$SCPDEFS -DWITHOUT_SCRIPTING_JAVASCRIPT"
 fi
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
@@ -11209,8 +11209,8 @@ WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-            crystal|default|galaxy|hicontrast|human|industrial|oxygen|sifr|tango|tango_testing) : ;;
-            *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
+        crystal|default|galaxy|hicontrast|human|industrial|oxygen|sifr|tango|tango_testing) : ;;
+        *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
         WITH_THEMES="$WITH_THEMES $theme"
     done
@@ -12165,7 +12165,7 @@ AC_SUBST(PRODUCTNAME)
 INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr '[[:upper:]]' '[[:lower:]]'`
 AC_MSG_CHECKING([for install dirname])
 if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes"; then
-   INSTALLDIRNAME="$with_install_dirname"
+    INSTALLDIRNAME="$with_install_dirname"
 fi
 AC_MSG_RESULT([$INSTALLDIRNAME])
 AC_SUBST(INSTALLDIRNAME)
@@ -12381,55 +12381,55 @@ AC_MSG_CHECKING([MPL subset])
 MPL_SUBSET=
 
 if test "$enable_mpl_subset" = "yes"; then
-   warn_report=false
-   if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
+    warn_report=false
+    if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
         warn_report=true
-   elif test "$ENABLE_REPORTBUILDER" = "TRUE"; then
+    elif test "$ENABLE_REPORTBUILDER" = "TRUE"; then
         warn_report=true
-   fi
-   if test "$warn_report" = "true"; then
+    fi
+    if test "$warn_report" = "true"; then
         AC_MSG_ERROR([need to --disable-report-builder - extended database report builder.])
-   fi
-   if test "x$enable_postgresql_sdbc" != "xno"; then
+    fi
+    if test "x$enable_postgresql_sdbc" != "xno"; then
         AC_MSG_ERROR([need to --disable-postgresql-sdbc - the postgress database backend.])
-   fi
-   if test "$enable_lotuswordpro" = "yes"; then
+    fi
+    if test "$enable_lotuswordpro" = "yes"; then
         AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
-   fi
-   if test "$enable_neon" != "no" -o "x$DISABLE_NEON" != "xTRUE"; then
+    fi
+    if test "$enable_neon" != "no" -o "x$DISABLE_NEON" != "xTRUE"; then
         AC_MSG_ERROR([need to --disable-neon - webdav support.])
-   fi
-   if test "x$enable_ext_mariadb_connector" = "xyes"; then
+    fi
+    if test "x$enable_ext_mariadb_connector" = "xyes"; then
         AC_MSG_ERROR([need to --disable-ext-mariadb-connector - mariadb/mysql support.])
-   fi
-   if test "x$ENABLE_PDFIMPORT" != "xFALSE"; then
+    fi
+    if test "x$ENABLE_PDFIMPORT" != "xFALSE"; then
         if test "x$SYSTEM_POPPLER" != "xNO"; then
-                AC_MSG_ERROR([need to disable PDF import via poppler or use system library])
+            AC_MSG_ERROR([need to disable PDF import via poppler or use system library])
         fi
-   fi
-   # cf. m4/libo_check_extension.m4
-   if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
+    fi
+    # cf. m4/libo_check_extension.m4
+    if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
         AC_MSG_ERROR([need to disable extra extensions '$WITH_EXTRA_EXTENSIONS'])
-   fi
-   for theme in $WITH_THEMES; do
+    fi
+    for theme in $WITH_THEMES; do
         case $theme in
-            crystal|default|hicontrast|human|oxygen|sifr)
-                AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=tango]) ;;
-            *) : ;;
+        crystal|default|hicontrast|human|oxygen|sifr)
+            AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=tango]) ;;
+        *) : ;;
         esac
-   done
-   if test "$enable_opengl" != "no" -o "x$ENABLE_OPENGL" == "xTRUE"; then
+    done
+    if test "$enable_opengl" != "no" -o "x$ENABLE_OPENGL" == "xTRUE"; then
         AC_MSG_ERROR([need to --disable-opengl - GL transitions support.])
-   fi
-   if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" == "xTRUE"; then
+    fi
+    if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" == "xTRUE"; then
         AC_MSG_ERROR([need to --disable-lpsolve - calc linear programming solver.])
-   fi
+    fi
 
-   MPL_SUBSET="TRUE"
-   AC_DEFINE(MPL_HAVE_SUBSET)
-   AC_MSG_RESULT([only])
+    MPL_SUBSET="TRUE"
+    AC_DEFINE(MPL_HAVE_SUBSET)
+    AC_MSG_RESULT([only])
 else
-   AC_MSG_RESULT([no restrictions])
+    AC_MSG_RESULT([no restrictions])
 fi
 AC_SUBST(MPL_SUBSET)
 
