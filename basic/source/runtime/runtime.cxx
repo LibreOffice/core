@@ -2268,7 +2268,7 @@ void SbiRuntime::StepREDIMP()
             {
                 StarBASIC::Error( SbERR_OUT_OF_RANGE );
             }
-            else
+            else if (nDims > 0)
             {
                 // Store dims to use them for copying later
                 sal_Int32* pLowerBounds = new sal_Int32[nDims];
