@@ -33,6 +33,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
+#include <comphelper/expandmacro.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <algorithm>
@@ -186,8 +187,6 @@ using namespace ::com::sun::star;
 #define OFFSET_MERGESTATUSBAR_MERGEFALLBACK             3
 #define OFFSET_MERGESTATUSBAR_MERGECONTEXT              4
 #define OFFSET_MERGESTATUSBAR_STATUSBARITEMS            5
-
-#define EXPAND_PROTOCOL                                 "vnd.sun.star.expand:"
 
 //  private declarations!
 
@@ -1345,16 +1344,7 @@ bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 
 void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 {
-    if ( aURL.startsWith( EXPAND_PROTOCOL ) )
-    {
-        // cut protocol
-        OUString macro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-        // decode uric class chars
-        macro = ::rtl::Uri::decode(
-            macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
-        aURL = m_xMacroExpander->expandMacros( macro );
-    }
+    OUString aURL = ::comphelper::getExpandedFilePath(aURL);
 }
 
 Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)

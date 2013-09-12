@@ -30,6 +30,7 @@
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/expandmacro.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -49,8 +50,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
-
-#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
 
 const ::Size  aImageSizeSmall( 16, 16 );
 const ::Size  aImageSizeBig( 26, 26 );
@@ -81,17 +80,7 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
 
 static void SubstituteVariables( OUString& aURL )
 {
-    if ( aURL.startsWith( EXPAND_PROTOCOL ) )
-    {
-        uno::Reference< util::XMacroExpander > xMacroExpander = GetMacroExpander();
-
-        // cut protocol
-        OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-        // decode uric class chars
-        aMacro = ::rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
-        aURL = xMacroExpander->expandMacros( aMacro );
-    }
+    OUString aURL = ::comphelper::getExpandedFilePath( aURL );
 }
 
 ImageButtonToolbarController::ImageButtonToolbarController(
