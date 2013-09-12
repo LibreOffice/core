@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYH///7w\u003d",
+        "filename": "sd/source/core/CustomAnimationPreset.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-12T22:26:31Z",
+      "side": 1,
+      "message": "no strong opinion - but to my eyes, looks a tad gratuitous to have an extra copy of afIles[i] here. why not stick aFiles[i] directly into the below method?",
+      "revId": "3728735366af468e0443b94fef472caaa6ac8aba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYH///7s\u003d",
+        "filename": "sd/source/core/TransitionPreset.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-12T22:26:31Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "3728735366af468e0443b94fef472caaa6ac8aba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYH///7o\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-12T22:26:31Z",
+      "side": 1,
+      "message": "did you check what happens if you\u0027re not converting the file url? is parseURI not fixable?",
+      "revId": "3728735366af468e0443b94fef472caaa6ac8aba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
