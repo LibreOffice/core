@@ -1241,9 +1241,14 @@ LanguageTag & LanguageTag::makeFallback()
             }
             else if (aLanguage == "sh")
             {
-                ::std::vector< OUString > aRep( LanguageTag( "sr-Latn-" + aCountry).getFallbackStrings( true));
-                aVec.insert( aVec.end(), aRep.begin(), aRep.end());
-                aVec.push_back( aLanguage);     // 'sh' after all 'sr...'?
+                // Manual list instead of calling
+                // LanguageTag( "sr-Latn-" + aCountry).getFallbackStrings( true)
+                // that would also include "sh-*" again.
+                aVec.push_back( "sr-Latn-" + aCountry);
+                aVec.push_back( "sr-Latn");
+                aVec.push_back( "sh");  // legacy with script, before default script with country
+                aVec.push_back( "sr-" + aCountry);
+                aVec.push_back( "sr");
             }
             else if (aLanguage == "ca" && aCountry == "XV")
             {
@@ -1260,8 +1265,8 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( aLanguage);
             if (aLanguage == "sh")
             {
-                ::std::vector< OUString > aRep( LanguageTag( "sr-Latn").getFallbackStrings( true));
-                aVec.insert( aVec.end(), aRep.begin(), aRep.end());
+                aVec.push_back( "sr-Latn");
+                aVec.push_back( "sr");
             }
         }
         return aVec;
@@ -1270,11 +1275,12 @@ LanguageTag & LanguageTag::makeFallback()
     getBcp47();     // have maBcp47 now
     if (bIncludeFullBcp47)
         aVec.push_back( maBcp47);
+    OUString aScript;
     OUString aVariants( getVariants());
     OUString aTmp;
     if (hasScript())
     {
-        OUString aScript( getScript());
+        aScript = getScript();
         bool bHaveLanguageScriptVariant = false;
         if (!aCountry.isEmpty())
         {
@@ -1293,6 +1299,18 @@ LanguageTag & LanguageTag::makeFallback()
             aTmp = aLanguage + "-" + aScript + "-" + aCountry;
             if (aTmp != maBcp47)
                 aVec.push_back( aTmp);
+            if (aLanguage == "sr" && aScript == "Latn")
+            {
+                // sr-Latn-CS => sr-Latn-YU, sh-CS, sh-YU
+                if (aCountry == "CS")
+                {
+                    aVec.push_back( "sr-Latn-YU");
+                    aVec.push_back( "sh-CS");
+                    aVec.push_back( "sh-YU");
+                }
+                else
+                    aVec.push_back( "sh-" + aCountry);
+            }
         }
         if (!aVariants.isEmpty() && !bHaveLanguageScriptVariant)
         {
@@ -1303,6 +1321,10 @@ LanguageTag & LanguageTag::makeFallback()
         aTmp = aLanguage + "-" + aScript;
         if (aTmp != maBcp47)
             aVec.push_back( aTmp);
+        // 'sh' actually denoted a script, so have it here instead of appended
+        // at the end as language-only.
+        if (aLanguage == "sr" && aScript == "Latn")
+            aVec.push_back( "sh");
     }
     bool bHaveLanguageVariant = false;
     if (!aCountry.isEmpty())
@@ -1329,9 +1351,19 @@ LanguageTag & LanguageTag::makeFallback()
         if (aTmp != maBcp47)
             aVec.push_back( aTmp);
     }
-    aTmp = aLanguage;
-    if (aTmp != maBcp47)
-        aVec.push_back( aTmp);
+
+    // Insert legacy fallbacks with country before language-only, but only
+    // default script, script was handled already above.
+    if (!aCountry.isEmpty())
+    {
+        if (aLanguage == "sr" && aCountry == "CS")
+            aVec.push_back( "sr-YU");
+    }
+
+    // Original language-only.
+    if (aLanguage != maBcp47)
+        aVec.push_back( aLanguage);
+
     return aVec;
 }
 
