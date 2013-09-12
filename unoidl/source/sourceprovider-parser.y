@@ -1654,7 +1654,7 @@ attributeAccessDecl:
       assert(!pad->attributes.empty());
       pad->attributes.back().getExceptions = *$2;
       delete $2;
-      $$ = unoidl::detail::SourceProviderAccessDecls::ACCESS_DECL_GET;
+      $$ = unoidl::detail::ACCESS_DECL_GET;
   }
 | TOK_SET exceptionSpec ';'
   {
@@ -1673,7 +1673,7 @@ attributeAccessDecl:
                + " cannot have set access declaration"));
           YYERROR;
       }
-      $$ = unoidl::detail::SourceProviderAccessDecls::ACCESS_DECL_SET;
+      $$ = unoidl::detail::ACCESS_DECL_SET;
   }
 ;
 
