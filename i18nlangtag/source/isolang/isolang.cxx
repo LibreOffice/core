@@ -214,7 +214,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BASQUE,                      "eu", ""  , false },
     { LANGUAGE_BULGARIAN,                   "bg", "BG", false },
     { LANGUAGE_CZECH,                       "cs", "CZ", false },
-    { LANGUAGE_CZECH,                       "cz", ""  , false },
+    { LANGUAGE_CZECH,                       "cz", ""  , true  },
     { LANGUAGE_ENGLISH_JAMAICA,             "en", "JM", false },
     { LANGUAGE_ENGLISH_CARRIBEAN,           "en", "BS", false },   // not 100%, because AG is Bahamas
     { LANGUAGE_ENGLISH_BELIZE,              "en", "BZ", false },
@@ -229,11 +229,11 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_GERMAN_LUXEMBOURG,           "de", "LU", false },
     { LANGUAGE_GERMAN_LIECHTENSTEIN,        "de", "LI", false },
     { LANGUAGE_HEBREW,                      "he", "IL", false },   // new: old was "iw"
-    { LANGUAGE_HEBREW,                      "iw", "IL", false },   // old: new is "he"
+    { LANGUAGE_HEBREW,                      "iw", "IL", true  },   // old: new is "he"
     { LANGUAGE_HUNGARIAN,                   "hu", "HU", false },
     { LANGUAGE_ICELANDIC,                   "is", "IS", false },
     { LANGUAGE_INDONESIAN,                  "id", "ID", false },   // new: old was "in"
-    { LANGUAGE_INDONESIAN,                  "in", "ID", false },   // old: new is "id"
+    { LANGUAGE_INDONESIAN,                  "in", "ID", true  },   // old: new is "id"
     { LANGUAGE_NORWEGIAN,                   "no", "NO", false },
     { LANGUAGE_NORWEGIAN_BOKMAL,            "nb", "NO", false },
     { LANGUAGE_NORWEGIAN_NYNORSK,           "nn", "NO", false },
@@ -360,13 +360,13 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_WELSH,                       "cy", "GB", false },
     { LANGUAGE_SESOTHO,                     "st", "ZA", false },
     { LANGUAGE_SEPEDI,                     "nso", "ZA", false },
-    { LANGUAGE_SEPEDI,                      "ns", "ZA", false },   // fake "ns" for compatibility with existing OOo1.1.x localization to be able to read those documents
+    { LANGUAGE_SEPEDI,                      "ns", "ZA", true  },   // fake "ns" for compatibility with existing OOo1.1.x localization to be able to read those documents
     { LANGUAGE_TSONGA,                      "ts", "ZA", false },
     { LANGUAGE_TSWANA,                      "tn", "ZA", false },
     { LANGUAGE_ENGLISH_SAFRICA,             "en", "ZA", false },
     { LANGUAGE_AFRIKAANS,                   "af", "ZA", false },
     { LANGUAGE_VENDA,                       "ve", "ZA", false },   // default 639-1
-    { LANGUAGE_VENDA,                      "ven", "ZA", false },   // 639-2 may have been used temporarily since 2004-07-23
+    { LANGUAGE_VENDA,                      "ven", "ZA", true  },   // 639-2 may have been used temporarily since 2004-07-23
     { LANGUAGE_XHOSA,                       "xh", "ZA", false },
     { LANGUAGE_ZULU,                        "zu", "ZA", false },
     { LANGUAGE_QUECHUA_ECUADOR,             "qu", "EC", false },
@@ -396,7 +396,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG", false },
     { LANGUAGE_USER_YIDDISH_US,             "yi", "US", false },
     { LANGUAGE_YIDDISH,                     "yi", "IL", false },   // new: old was "ji"
-    { LANGUAGE_YIDDISH,                     "ji", "IL", false },   // old: new is "yi"
+    { LANGUAGE_YIDDISH,                     "ji", "IL", true  },   // old: new is "yi"
     { LANGUAGE_SYRIAC,                     "syr", "TR", false },   // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC
     { LANGUAGE_SINHALESE_SRI_LANKA,         "si", "LK", false },
     { LANGUAGE_CHEROKEE_UNITED_STATES,     "chr", "US", false },
@@ -526,7 +526,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_ARAGONESE,              "an", "ES", false },
     { LANGUAGE_USER_KEYID,                 "qtz", ""  , false },   // key id pseudolanguage used for UI testing
     { LANGUAGE_USER_PALI_LATIN,             "pi", ""  , false },   // Pali with Latin script, ISO 639-1
-    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , false },   // Pali with Latin script, ISO 639-3 (sigh..) back-compat
+    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , true  },   // Pali with Latin script, ISO 639-3 (sigh..) back-compat
     { LANGUAGE_USER_KYRGYZ_CHINA,           "ky", "CN", false },
     { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", "RU", false },
     { LANGUAGE_USER_KOMI_PERMYAK,          "koi", "RU", false },
