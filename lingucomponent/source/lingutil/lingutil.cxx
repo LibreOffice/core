@@ -160,11 +160,8 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                 // Thus we first get the language of the dictionary
                 OUString aLocaleName(aLangTag.getBcp47());
 
-                if (aDicLangInUse.count(aLocaleName) == 0)
+                if (aDicLangInUse.insert(aLocaleName).second)
                 {
-                    // remember the new language in use
-                    aDicLangInUse.insert(aLocaleName);
-
                     // add the dictionary to the resulting vector
                     SvtLinguConfigDictionaryEntry aDicEntry;
                     aDicEntry.aLocations.realloc(1);
