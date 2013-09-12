@@ -247,6 +247,13 @@ void SwCommentRuler::UpdateCommentHelpText()
 Rectangle SwCommentRuler::GetCommentControlRegion()
 {
     SwPostItMgr *pPostItMgr = mpViewShell->GetPostItMgr();
+
+    //rhbz#1006850 When the SwPostItMgr ctor is called from SwView::SwView it
+    //triggers an update of the uiview, but the result of the ctor hasn't been
+    //set into the mpViewShell yet, so GetPostItMgr is temporarily still NULL
+    if (!pPostItMgr)
+        return Rectangle();
+
     //FIXME When the page width is larger then screen, the ruler is misplaced by one pixel
     long nLeft   = GetWinOffset() + GetPageOffset() + mpSwWin->LogicToPixel(Size(GetPageWidth(), 0)).Width();
     long nTop    = 0 + 4; // Ruler::ImplDraw uses RULER_OFF (value: 3px) as offset, and Ruler::ImplFormat adds one extra pixel
