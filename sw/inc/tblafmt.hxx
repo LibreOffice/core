@@ -127,12 +127,6 @@ public:
     void SetName( const OUString& rNew ) { m_pTableStyle->SetName( rNew ); nStrResId = USHRT_MAX; }
     OUString GetName() const { return m_pTableStyle->GetName(); }
 
-    enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
-    void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
-                                UpdateFlags eFlags, SvNumberFormatter* );
-    void UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet, UpdateFlags eFlags,
-                        SvNumberFormatter* ) const ;
-
     void RestoreTableProperties(SwTable &table) const;
     void StoreTableProperties(const SwTable &table);
 
