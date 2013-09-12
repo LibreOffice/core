@@ -10,31 +10,38 @@
 $(eval $(call gb_Library_Library,scopencl))
 
 $(eval $(call gb_Library_set_include,scopencl,\
-	-I$(SRCDIR)/sc/source/core/inc \
-	-I$(SRCDIR)/sc/inc \
-	$$(INCLUDE) \
+        -I$(SRCDIR)/sc/source/core/inc \
+        -I$(SRCDIR)/sc/inc \
+        $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,scopencl,$(SRCDIR)/sc/inc/pch/precompiled_scopencl))
 
 $(eval $(call gb_Library_use_sdk_api,scopencl))
 
+$(eval $(call gb_Library_use_externals,scopencl,\
+        boost_headers \
+))
+
 $(eval $(call gb_Library_use_libraries,scopencl,\
-	for \
-	sal \
-	sc \
-	$(gb_UWINAPI) \
+        cppu \
+        cppuhelper \
+        for \
+        sal \
+        sc \
+        tl \
+        $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scopencl,\
-	sc/source/core/opencl/formulagroupcl \
-	sc/source/core/opencl/openclwrapper \
-	sc/source/core/opencl/clcc/clew \
+        sc/source/core/opencl/formulagroupcl \
+        sc/source/core/opencl/openclwrapper \
+        sc/source/core/opencl/clcc/clew \
 ))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,scopencl,\
-	-ldl \
+        -ldl \
 ))
 endif
 
