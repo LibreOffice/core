@@ -75,7 +75,7 @@ void FirebirdTest::testIntegerDatabase()
         xRow->getShort(xColumnLocate->findColumn("_SMALLINT")));
     CPPUNIT_ASSERT(sal_Int32(-2100000000) ==
         xRow->getInt(xColumnLocate->findColumn("_INT")));
-    CPPUNIT_ASSERT(sal_Int64(-9000000000000000000) ==
+    CPPUNIT_ASSERT(SAL_CONST_INT64(-9000000000000000000) ==
         xRow->getLong(xColumnLocate->findColumn("_BIGINT")));
     CPPUNIT_ASSERT(OUString("5") ==
         xRow->getString(xColumnLocate->findColumn("_CHAR")));
