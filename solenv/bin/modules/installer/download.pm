@@ -1107,7 +1107,7 @@ sub put_website_into_template
 {
     my ($templatefile) = @_;
 
-    my $website = "http\:\/\/www\.sun\.com\/staroffice";
+    my $website = "http\:\/\/www\.openoffice\.org";
 
     replace_one_variable($templatefile, "WEBSITEPLACEHOLDER", $website);
 }
