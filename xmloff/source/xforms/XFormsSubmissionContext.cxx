@@ -47,7 +47,7 @@ using namespace xmloff::token;
 
 
 
-static struct SvXMLTokenMapEntry aAttributeMap[] =
+static const struct SvXMLTokenMapEntry aAttributeMap[] =
 {
     TOKEN_MAP_ENTRY( NONE, ID ),
     TOKEN_MAP_ENTRY( NONE, BIND ),

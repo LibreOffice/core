@@ -60,7 +60,7 @@ const sal_uInt16 MAX_PROP_TYPES = 4;
     { XML_PROP_TYPE_##a, XML_PROP_TYPE_##END, \
         XML_PROP_TYPE_END, XML_PROP_TYPE_END }
 
-static XMLPropType aPropTypes[XML_FAMILY_TYPE_END][MAX_PROP_TYPES] =
+static const XMLPropType aPropTypes[XML_FAMILY_TYPE_END][MAX_PROP_TYPES] =
 {
     ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_GRAPHIC,
     ENTRY3( GRAPHIC, PARAGRAPH, TEXT ),         // XML_FAMILY_TYPE_PRESENTATION,
@@ -87,7 +87,7 @@ static XMLPropType aPropTypes[XML_FAMILY_TYPE_END][MAX_PROP_TYPES] =
     ENTRY1( END )                               // XML_FAMILY_TYPE_PRESENTATION_PAGE_LAYOUT,
 };
 
-static XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
+static const XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
 {
     XML_GRAPHIC_PROPERTIES,
     XML_DRAWING_PAGE_PROPERTIES,
@@ -105,7 +105,7 @@ static XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =
     XML_CHART_PROPERTIES
 };
 
-static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
+static const sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OOO_GRAPHIC_ATTR_ACTIONS,
     PROP_OOO_DRAWING_PAGE_ATTR_ACTIONS,     // DRAWING_PAGE
@@ -123,7 +123,7 @@ static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
     PROP_OOO_CHART_ATTR_ACTIONS
 };
 
-static sal_uInt16 aElemActionMaps[XML_PROP_TYPE_END] =
+static const sal_uInt16 aElemActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OOO_GRAPHIC_ELEM_ACTIONS,
     MAX_OOO_PROP_ACTIONS,
@@ -240,7 +240,7 @@ public:
 
     XMLPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
-                               XMLPropTypes& rTypes,
+                               const XMLPropTypes& rTypes,
                                sal_Bool bPersistent );
 
     virtual ~XMLPropertiesOOoTContext_Impl();
@@ -372,7 +372,7 @@ XMLTypedPropertiesOOoTContext_Impl
 XMLPropertiesOOoTContext_Impl::XMLPropertiesOOoTContext_Impl(
     XMLTransformerBase& rImp,
     const OUString& rQName,
-    XMLPropTypes& rTypes,
+    const XMLPropTypes& rTypes,
     sal_Bool bPersistent    ) :
     XMLTransformerContext( rImp, rQName ),
     m_bPersistent( bPersistent )

@@ -41,7 +41,7 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-static sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
+static const sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 {
     PROP_OASIS_GRAPHIC_ATTR_ACTIONS,
     PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,               // DRAWING_PAGE

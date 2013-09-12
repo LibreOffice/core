@@ -47,14 +47,14 @@ using namespace xmloff::token;
 
 
 
-static SvXMLTokenMapEntry aAttributes[] =
+static const SvXMLTokenMapEntry aAttributes[] =
 {
     TOKEN_MAP_ENTRY( NONE, ID ),
     TOKEN_MAP_ENTRY( NONE, SCHEMA ),
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aChildren[] =
+static const SvXMLTokenMapEntry aChildren[] =
 {
     TOKEN_MAP_ENTRY( XFORMS, INSTANCE ),
     TOKEN_MAP_ENTRY( XFORMS, BIND ),

@@ -58,13 +58,13 @@ using namespace xmloff::token;
 
 
 
-static SvXMLTokenMapEntry aAttributes[] =
+static const SvXMLTokenMapEntry aAttributes[] =
 {
     TOKEN_MAP_ENTRY( NONE, BASE ),
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aChildren[] =
+static const SvXMLTokenMapEntry aChildren[] =
 {
     TOKEN_MAP_ENTRY( XSD, LENGTH         ),
     TOKEN_MAP_ENTRY( XSD, MINLENGTH      ),

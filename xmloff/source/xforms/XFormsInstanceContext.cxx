@@ -52,7 +52,7 @@ using xmloff::token::XML_INSTANCE;
 using xmloff::token::XML_SRC;
 using xmloff::token::XML_ID;
 
-static SvXMLTokenMapEntry aAttributes[] =
+static const SvXMLTokenMapEntry aAttributes[] =
 {
     TOKEN_MAP_ENTRY( NONE, SRC ),
     TOKEN_MAP_ENTRY( NONE, ID ),
