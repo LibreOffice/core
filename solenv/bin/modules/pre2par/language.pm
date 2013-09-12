@@ -121,7 +121,6 @@ sub localize
 #       print "line '$oneline' split to '$language' '$variable'\n";
 
         if (defined $replace_hash->{$variable}) {
-                    my $languageblock = $replace_hash->{$variable};
                     my $newstring = get_language_string_from_language_block($replace_hash->{$variable}, $language);
                     if ( $newstring eq "" ) { $newstring = "\"" . $variable . "\""; }
 

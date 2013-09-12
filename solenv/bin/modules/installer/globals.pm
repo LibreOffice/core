@@ -120,9 +120,7 @@ BEGIN
     $updatesequencecounter = 0;
     $updatedatabase = 0;
     $updatedatabasepath = "";
-    $pfffileexists = 0;
     $pffcabfilename = "ooobasis3.0_pff.cab";
-    $mergemodulenumber = 0;
     %allmergemodulefilesequences = ();
     %newupdatefiles = ();
     %allusedupdatesequences = ();
@@ -138,7 +136,6 @@ BEGIN
     @globallogfileinfo = ();
     $ignore_error_in_logfile = 0;
     $exitlog = "";
-    $globalinfo_copied = 0;
     $quiet = 0;
 
     $ismultilingual = 0;
@@ -174,7 +171,6 @@ BEGIN
     @binarytableonlyfiles = ();
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
-    $patchaddon = "Patch";
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";
@@ -239,24 +235,18 @@ BEGIN
     $localinstalldirset = 0;
     $localinstalldir = "";
 
-    $urefile = "";
-
     $postprocess_specialepm = 0;
     $postprocess_standardepm = 0;
     $mergemodules_analyzed = 0;
 
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
-    @languagepackfeature =();
-    @helppackfeature =();
     @featurecollector =();
     $msiassemblyfiles = "";
     $macinstallfilename = "macinstall.ulf";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
-    @requiredpackages = ();
     %componentcondition = ();
     %componentid = ();
-    %comparecomponentname = ();
     %allcabinets = ();
     %allcabinetassigns = ();
     %cabfilecounter = ();

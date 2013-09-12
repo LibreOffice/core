@@ -544,8 +544,6 @@ sub shift_basis_directory_parents
     my ($dirsref) = @_;
 
     my @alldirs = ();
-    my @savedirs = ();
-    my @shifteddirs = ();
 
     my $officedirgid = "";
 

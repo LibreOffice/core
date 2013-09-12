@@ -609,7 +609,6 @@ sub get_sequence_for_file
             $fileentry->{'Component_'} = $onefile->{'componentname'};
             if ( ! exists($allfilecomponents->{$fileentry->{'Component_'}}) ) { $allfilecomponents->{$fileentry->{'Component_'}} = 1; }
             $onefile->{'PostFinalFile'} = 1;
-            # $installer::globals::pfffileexists = 1;
             # The sequence for this file has changed. It has to be inserted at the end of the files collector.
             $installer::globals::insert_file_at_end = 1;
             $installer::globals::newfilescollector{$sequence} = $onefile; # Adding new files to the end of the filescollector

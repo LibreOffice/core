@@ -199,13 +199,6 @@ sub resolving_archive_flag
 
             if ( $onefile->{'Selectfiles'} ) { $onefile->{'Selectfiles'} = ""; } # Selected files list no longer required
 
-            # mechanism to define patch files inside an archive files
-            my $select_patch_files = 0;
-            my $patchlistfiles = "";
-            my @keptpatchflags = ();
-
-            if ( $onefile->{'Patchfiles'} ) { $onefile->{'Patchfiles'} = ""; } # Patch file list no longer required
-
             # creating directories
 
             my $onelanguage = $onefile->{'specificlanguage'};
@@ -298,7 +291,6 @@ sub resolving_archive_flag
                     }
                 }
 
-                my $zipfileref = \@zipfile;
                 my $unziperror = 0;
 
                 foreach my $zipname ( $zip->memberNames() )

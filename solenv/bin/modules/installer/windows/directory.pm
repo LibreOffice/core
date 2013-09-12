@@ -145,7 +145,6 @@ sub create_unique_directorynames
     my %shortdirhash = ();
     my %shortdirhashreverse = ();
     my $infoline = "";
-    my $errorcount = 0;
 
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {

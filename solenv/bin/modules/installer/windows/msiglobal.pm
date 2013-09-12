@@ -169,7 +169,6 @@ sub generate_cab_file_list
         my $sequenceorder = get_sequenceorder($filesref);
 
         my $counter = 1;
-        my $currentcabfile = "";
 
         while ( ( exists($sequenceorder->{$counter}) ) || ( exists($installer::globals::allmergemodulefilesequences{$counter}) ) ) # Taking care of files from merge modules
         {
@@ -1547,7 +1546,7 @@ sub read_saved_mappings
         my $errorstring = "";
         my $error_occurred = 0;
         my $file_error_occurred = 0;
-        my $dir_error = 0;
+        my $dir_error_occurred = 0;
 
         my $idtdir = $installer::globals::previous_idt_dir;
         $idtdir =~ s/\Q$installer::globals::separator\E\s*$//;

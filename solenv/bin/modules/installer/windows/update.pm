@@ -420,8 +420,6 @@ sub readmergedatabase
 
     my %allmergefiles = ();
 
-    $installer::globals::mergemodulenumber = $#{$mergemodules} + 1;
-
     foreach my $mergemodule ( @{$mergemodules} )
     {
         my $filename = $mergemodule->{'Name'};

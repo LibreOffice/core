@@ -193,8 +193,6 @@ sub collect_definitions
         $i++;
     }
 
-    my $allitemhash = \$par2script::globals::definitions{$oneitem};
-
     # test of uniqueness
     if ( defined ($par2script::globals::definitions{$oneitem}->{$gid}) )
     {

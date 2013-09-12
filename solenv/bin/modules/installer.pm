@@ -458,7 +458,6 @@ sub run {
 
         @installer::globals::logfileinfo = ();  # new logfile array and new logfile name
         installer::logger::copy_globalinfo_into_logfile();
-        $installer::globals::globalinfo_copied = 1;
 
         my $logminor = "";
         $logminor = $installer::globals::minor;
