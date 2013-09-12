@@ -6,6 +6,31 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
+        <!--About View Controller-->
+        <scene sceneID="QsO-mW-ttp">
+            <objects>
+                <viewController id="FKS-tU-MC6" customClass="AboutViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FOc-OL-5wQ">
+                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" id="07n-0U-kuj">
+                                <rect key="frame" x="0.0" y="0.0" width="540" height="556"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="diX-6k-klE"/>
+                    <connections>
+                        <outlet property="aboutWebView" destination="07n-0U-kuj" id="nNC-oi-dgh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SyX-dh-Yof" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="254" y="-2200"/>
+        </scene>
         <!--Server list vc ipad - 连接-->
         <scene sceneID="ydU-fu-qHI">
             <objects>
@@ -44,9 +69,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="连接" id="wYh-MF-Ao6">
-                        <barButtonItem key="leftBarButtonItem" title="帮助" id="JjD-di-uqV">
+                        <barButtonItem key="leftBarButtonItem" title="帮助" image="more_icon.png" id="JjD-di-uqV">
                             <connections>
-                                <segue destination="Grm-Od-s6s" kind="push" id="YbL-aj-gxv"/>
+                                <action selector="onClickMenuButton:" destination="5QV-E7-KNT" id="k4j-0Z-IEW"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="add.png" id="pU6-XF-laS">
@@ -61,6 +86,7 @@
                         <segue destination="m26-i1-eiL" kind="push" identifier="pinValidation" id="yUv-cB-P15"/>
                         <segue destination="Grm-Od-s6s" kind="push" identifier="howtoSegue" id="hRz-3h-McA"/>
                         <segue destination="M9Q-tM-7CQ" kind="push" identifier="SlideShowPreview" id="jsD-4W-bFm"/>
+                        <segue destination="FKS-tU-MC6" kind="push" identifier="aboutSegue" id="4eY-jZ-bpg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KBf-aZ-Hhk" sceneMemberID="firstResponder"/>
@@ -318,21 +344,6 @@
                                 <rect key="frame" x="0.0" y="906" width="768" height="98"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jBq-0A-D38">
-                                        <rect key="frame" x="736" y="23" width="58" height="59"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="more_ipad.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="popOverUp:" destination="TYh-Hw-m1Q" eventType="touchUpInside" id="0Zm-gv-gne"/>
-                                        </connections>
-                                    </button>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" bounces="NO" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="DUv-gH-oAo">
                                         <rect key="frame" x="0.0" y="-1" width="698" height="102"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
@@ -469,6 +480,23 @@
                                             </view>
                                         </subviews>
                                     </scrollView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cOI-Hc-1QU">
+                                        <rect key="frame" x="731" y="22" width="64" height="53"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="14" maxY="0.0"/>
+                                        <state key="normal" image="more_ipad.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="popOverUp:" destination="TYh-Hw-m1Q" eventType="touchUpInside" id="Urz-2a-EqX"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.66274509800000003" green="0.71764705880000002" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
@@ -481,7 +509,7 @@
                         <outlet property="NotesView" destination="Pk1-fD-KAi" id="2ZD-si-fls"/>
                         <outlet property="clearButton" destination="MKb-4h-13P" id="7Xz-n6-sre"/>
                         <outlet property="currentSlideImageView" destination="x7C-rs-s4K" id="Qtf-99-j0C"/>
-                        <outlet property="gearButton" destination="jBq-0A-D38" id="ATa-gU-YT0"/>
+                        <outlet property="gearButton" destination="cOI-Hc-1QU" id="rH8-CG-Jdb"/>
                         <outlet property="horizontalTableView" destination="Iok-mu-c0T" id="SJT-pa-4Hb"/>
                         <outlet property="movingPointer" destination="2SJ-3f-E3k" id="mxV-zz-hjx"/>
                         <outlet property="nextButton" destination="bfp-PJ-NrP" id="1Uf-1g-iQl"/>
@@ -601,6 +629,7 @@
         <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
         <image name="buttonBackground.png" width="45" height="45"/>
+        <image name="more_icon.png" width="30" height="30"/>
         <image name="more_ipad.png" width="60" height="60"/>
         <image name="nextButton_normal.png" width="42" height="230"/>
         <image name="nextButton_pressed.png" width="42" height="230"/>
@@ -610,99 +639,12 @@
         <image name="timer_settime_btn.png" width="60" height="60"/>
         <image name="timer_start_btn_dark.png" width="60" height="60"/>
     </resources>
-    <classes>
-        <class className="BasePresentationViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/BasePresentationViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="nextSlideAction:"/>
-                <relationship kind="action" name="popOverUp:"/>
-                <relationship kind="action" name="previousSlideAction:"/>
-                <relationship kind="outlet" name="NoteWebView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="NotesView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="clearButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="currentSlideImageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="gearButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="horizontalTableView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="movingPointer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="nextButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="previousButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="slideNumber" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="stopWatchTimerScrollView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="stopWatchView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="timeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timerClearButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="timerSetTimeButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="timerStartButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="timerTimeLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timerView" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="EditableTableViewCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditableTableViewCell.h"/>
-        </class>
-        <class className="LibONavigationController" superclassName="UINavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LibONavigationController.h"/>
-        </class>
-        <class className="MainSplitViewController" superclassName="UISplitViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainSplitViewController.h"/>
-        </class>
-        <class className="WalkThroughContainerViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/WalkThroughContainerViewController.h"/>
-        </class>
-        <class className="autoDismissKeyboardNavigationViewController" superclassName="LibONavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/autoDismissKeyboardNavigationViewController.h"/>
-        </class>
-        <class className="newServerViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/newServerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="save:"/>
-                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="pinValidation_vc" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/pinValidation_vc.h"/>
-            <relationships>
-                <relationship kind="outlet" name="pinLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="server_list_vc" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc.h"/>
-            <relationships>
-                <relationship kind="outlet" name="serverTable" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-        <class className="server_list_vc_ipad" superclassName="server_list_vc">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/server_list_vc_ipad.h"/>
-            <relationships>
-                <relationship kind="action" name="cancelModalView:"/>
-            </relationships>
-        </class>
-        <class className="slideShowPreviewTable_vc" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc.h"/>
-            <relationships>
-                <relationship kind="action" name="startPrefSettings:"/>
-                <relationship kind="action" name="startPresentationAction:"/>
-                <relationship kind="outlet" name="prefButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="startButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="titleLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="slideShowPreviewTable_vc_ipad" superclassName="slideShowPreviewTable_vc">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowPreviewTable_vc_ipad.h"/>
-        </class>
-        <class className="slideShowSwipeInList_ipad" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/slideShowSwipeInList_ipad.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="YbL-aj-gxv"/>
         <segue reference="jsD-4W-bFm"/>
     </inferredMetricsTieBreakers>
 </document>

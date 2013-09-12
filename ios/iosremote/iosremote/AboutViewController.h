@@ -8,13 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface server_list_vc : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface AboutViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UITableView *serverTable;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
-
-- (void)disableSpinner;
-- (IBAction)onClickMenuButton:(id)sender;
-- (void) startSearching;
+@property (weak, nonatomic) IBOutlet UIWebView *aboutWebView;
 
 @end

@@ -7,6 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "Timer.h"
+#import <AudioToolbox/AudioServices.h>
 
 @interface Timer ()
 
@@ -28,6 +29,7 @@
 int hours, minutes, seconds;
 int secondsLeft;
 int initSecondsLeft;
+int vibrationCount;
 
 - (Timer *) init
 {
@@ -104,6 +106,13 @@ int initSecondsLeft;
             disappear = NO;
             self.timeLabel.text = @"00:00:00";
             [self.delegate setTitle:@"00:00:00" sender:self];
+            // Vibrate the phone if supported (i.e. this works on iPhone but not iPad)
+            // On ipad this just get ignored
+            if (kCountDownTimerVibration && vibrationCount < 3){
+                vibrationCount++;
+                NSLog(@"Vibrating...");
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            }
         }
     }
 }
@@ -111,6 +120,8 @@ int initSecondsLeft;
 
 - (void) start
 {
+    // Reset vibration count to 0 on each start so that we vibrate 3 times maxi.
+    vibrationCount = 0;
     switch (self.state) {
         case TIMER_STATE_RUNNING:
             self.state = TIMER_STATE_PAUSED;

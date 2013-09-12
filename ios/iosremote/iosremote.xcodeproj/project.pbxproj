@@ -137,6 +137,10 @@
 		8CBF9DFF17DDBFA70044D949 /* IASKSpecifierValuesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF9DEA17DDBFA70044D949 /* IASKSpecifierValuesView.xib */; };
 		8CBF9E0117DDC1A80044D949 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF9E0017DDC1A80044D949 /* MessageUI.framework */; };
 		8CBF9E0317DDD2230044D949 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0217DDD2230044D949 /* Settings.bundle */; };
+		8CBF9E0517DE022F0044D949 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF9E0417DE022F0044D949 /* AudioToolbox.framework */; };
+		8CBF9E0817DE79EB0044D949 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0717DE79EB0044D949 /* AboutViewController.m */; };
+		8CBF9E0A17E103B50044D949 /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0917E103B40044D949 /* licenses.html */; };
+		8CBF9E0F17E1133B0044D949 /* libreoffice_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0E17E1133A0044D949 /* libreoffice_logo.png */; };
 		8CD6EC6817CBBAF40071827A /* WalkThroughPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */; };
 		8CD6EC6917CBBAF40071827A /* WalkThroughPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */; };
 		8CD6EC7017CC3FA00071827A /* WalkThroughContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */; };
@@ -271,12 +275,6 @@
 		8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timer_settime_btn@2x.png"; path = "iosremote/timer_settime_btn@2x.png"; sourceTree = "<group>"; };
 		8C23B46E17DB419300FB4DE6 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = iosremote/Timer.h; sourceTree = "<group>"; };
 		8C23B46F17DB419300FB4DE6 /* Timer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Timer.m; path = iosremote/Timer.m; sourceTree = "<group>"; };
-		8C26E5BE17A525FC007DA4B7 /* MGSplitCornersView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSplitCornersView.h; sourceTree = "<group>"; };
-		8C26E5BF17A525FC007DA4B7 /* MGSplitCornersView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGSplitCornersView.m; sourceTree = "<group>"; };
-		8C26E5C017A525FC007DA4B7 /* MGSplitDividerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSplitDividerView.h; sourceTree = "<group>"; };
-		8C26E5C117A525FC007DA4B7 /* MGSplitDividerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGSplitDividerView.m; sourceTree = "<group>"; };
-		8C26E5C217A525FC007DA4B7 /* MGSplitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGSplitViewController.h; sourceTree = "<group>"; };
-		8C26E5C317A525FC007DA4B7 /* MGSplitViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGSplitViewController.m; sourceTree = "<group>"; };
 		8C26E5C517A5539D007DA4B7 /* UserDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = UserDefaults.plist; path = ../UserDefaults.plist; sourceTree = "<group>"; };
 		8C26E5C717A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = autoDismissKeyboardNavigationViewController.h; path = iosremote/autoDismissKeyboardNavigationViewController.h; sourceTree = "<group>"; };
 		8C26E5C817A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = autoDismissKeyboardNavigationViewController.m; path = iosremote/autoDismissKeyboardNavigationViewController.m; sourceTree = "<group>"; };
@@ -352,7 +350,12 @@
 		8CBF9DE917DDBFA70044D949 /* IASKPSToggleSwitchSpecifierViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKPSToggleSwitchSpecifierViewCell.xib; sourceTree = "<group>"; };
 		8CBF9DEA17DDBFA70044D949 /* IASKSpecifierValuesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IASKSpecifierValuesView.xib; sourceTree = "<group>"; };
 		8CBF9E0017DDC1A80044D949 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		8CBF9E0217DDD2230044D949 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		8CBF9E0217DDD2230044D949 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Settings.bundle; sourceTree = "<group>"; };
+		8CBF9E0417DE022F0044D949 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		8CBF9E0617DE79EB0044D949 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = iosremote/AboutViewController.h; sourceTree = "<group>"; };
+		8CBF9E0717DE79EB0044D949 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = iosremote/AboutViewController.m; sourceTree = "<group>"; };
+		8CBF9E0917E103B40044D949 /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
+		8CBF9E0E17E1133A0044D949 /* libreoffice_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = libreoffice_logo.png; sourceTree = "<group>"; };
 		8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughPageViewController.h; path = iosremote/WalkThroughPageViewController.h; sourceTree = "<group>"; };
 		8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughPageViewController.m; path = iosremote/WalkThroughPageViewController.m; sourceTree = "<group>"; };
 		8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewController.xib; path = iosremote/WalkThroughPageViewController.xib; sourceTree = "<group>"; };
@@ -375,6 +378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CBF9E0517DE022F0044D949 /* AudioToolbox.framework in Frameworks */,
 				8CBF9E0117DDC1A80044D949 /* MessageUI.framework in Frameworks */,
 				8C19F41F17B02A8A005BDB61 /* QuartzCore.framework in Frameworks */,
 				8C19F41D17B00899005BDB61 /* SystemConfiguration.framework in Frameworks */,
@@ -426,6 +430,8 @@
 		57AEEDAA1788D7B2007F4F97 /* Ressources */ = {
 			isa = PBXGroup;
 			children = (
+				8CBF9E0E17E1133A0044D949 /* libreoffice_logo.png */,
+				8CBF9E0917E103B40044D949 /* licenses.html */,
 				8C06B31A17B7EC6C002F5CF8 /* localizations */,
 				8C06B31917B7EC62002F5CF8 /* assets */,
 			);
@@ -445,10 +451,6 @@
 		57C6E3E6175E06E800E8BC5F = {
 			isa = PBXGroup;
 			children = (
-				8CBF9E0217DDD2230044D949 /* Settings.bundle */,
-				8CBF9E0017DDC1A80044D949 /* MessageUI.framework */,
-				8C19F41E17B02A8A005BDB61 /* QuartzCore.framework */,
-				8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */,
 				8C1A170217A28AB900B4BB3C /* Shared */,
 				8C1A170917A28E6500B4BB3C /* iPhone */,
 				8C1A170817A28E5E00B4BB3C /* iPad */,
@@ -480,6 +482,7 @@
 		57C6E3F9175E06E800E8BC5F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8CBF9E0217DDD2230044D949 /* Settings.bundle */,
 				57C6E3FA175E06E800E8BC5F /* iosremote-Info.plist */,
 				8C26E5C517A5539D007DA4B7 /* UserDefaults.plist */,
 				57C6E3FB175E06E800E8BC5F /* InfoPlist.strings */,
@@ -615,6 +618,8 @@
 				5753DD9817834D7100DB71BB /* newServer_vc.m */,
 				5753DD8E1781EA0300DB71BB /* serverList_vc.h */,
 				5753DD8F1781EA0300DB71BB /* serverList_vc.m */,
+				8CBF9E0617DE79EB0044D949 /* AboutViewController.h */,
+				8CBF9E0717DE79EB0044D949 /* AboutViewController.m */,
 				571BFAD2178AB7BA00EF1BDB /* slideShow */,
 				57AEEDAB1789443D007F4F97 /* slideShowPreview */,
 			);
@@ -624,10 +629,14 @@
 		8C1A170517A28B0E00B4BB3C /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				8CBF9DC117DDBFA70044D949 /* InAppSettingsKit */,
+				8CBF9E0417DE022F0044D949 /* AudioToolbox.framework */,
+				8CBF9E0017DDC1A80044D949 /* MessageUI.framework */,
+				8C19F41E17B02A8A005BDB61 /* QuartzCore.framework */,
+				8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */,
 				BE9EBD061765BF0800283FD2 /* CoreImage.framework */,
 				57DC7006178D84490050FC58 /* CoreMotion.framework */,
-				8C26E5C417A52607007DA4B7 /* MGSplitViewController */,
+				8CBF9E1017E1247D0044D949 /* WEPopoverView */,
+				8CBF9DC117DDBFA70044D949 /* InAppSettingsKit */,
 				571102671794127E007D343B /* TestFlightSDK1.2.6 */,
 				57701736178AC83E00B99793 /* SWRevealViewController */,
 			);
@@ -637,10 +646,6 @@
 		8C1A170617A28DDF00B4BB3C /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				8C19F42017B02AA9005BDB61 /* PopoverView.h */,
-				8C19F42217B02C2E005BDB61 /* PopoverView_Configuration.h */,
-				8C19F42317B02C2E005BDB61 /* PopoverViewCompatibility.h */,
-				8C19F42117B02AA9005BDB61 /* PopoverView.m */,
 				57B152971764703500EECC67 /* Base64.h */,
 				57B152981764703500EECC67 /* Base64.m */,
 				57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */,
@@ -712,19 +717,6 @@
 			children = (
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		8C26E5C417A52607007DA4B7 /* MGSplitViewController */ = {
-			isa = PBXGroup;
-			children = (
-				8C26E5BE17A525FC007DA4B7 /* MGSplitCornersView.h */,
-				8C26E5BF17A525FC007DA4B7 /* MGSplitCornersView.m */,
-				8C26E5C017A525FC007DA4B7 /* MGSplitDividerView.h */,
-				8C26E5C117A525FC007DA4B7 /* MGSplitDividerView.m */,
-				8C26E5C217A525FC007DA4B7 /* MGSplitViewController.h */,
-				8C26E5C317A525FC007DA4B7 /* MGSplitViewController.m */,
-			);
-			name = MGSplitViewController;
 			sourceTree = "<group>";
 		};
 		8CAD658217A2E81F00CFB661 /* Controllers */ = {
@@ -831,6 +823,17 @@
 				8CBF9DEA17DDBFA70044D949 /* IASKSpecifierValuesView.xib */,
 			);
 			path = Xibs;
+			sourceTree = "<group>";
+		};
+		8CBF9E1017E1247D0044D949 /* WEPopoverView */ = {
+			isa = PBXGroup;
+			children = (
+				8C19F42017B02AA9005BDB61 /* PopoverView.h */,
+				8C19F42217B02C2E005BDB61 /* PopoverView_Configuration.h */,
+				8C19F42317B02C2E005BDB61 /* PopoverViewCompatibility.h */,
+				8C19F42117B02AA9005BDB61 /* PopoverView.m */,
+			);
+			name = WEPopoverView;
 			sourceTree = "<group>";
 		};
 		8CD6EC6A17CBBAFF0071827A /* Views */ = {
@@ -977,6 +980,8 @@
 				8CBF9DFE17DDBFA70044D949 /* IASKPSToggleSwitchSpecifierViewCell.xib in Resources */,
 				8CBF9DFF17DDBFA70044D949 /* IASKSpecifierValuesView.xib in Resources */,
 				8CBF9E0317DDD2230044D949 /* Settings.bundle in Resources */,
+				8CBF9E0A17E103B50044D949 /* licenses.html in Resources */,
+				8CBF9E0F17E1133B0044D949 /* libreoffice_logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1056,6 +1061,7 @@
 				8CBF9DF717DDBFA70044D949 /* IASKSlider.m in Sources */,
 				8CBF9DF817DDBFA70044D949 /* IASKSwitch.m in Sources */,
 				8CBF9DF917DDBFA70044D949 /* IASKTextField.m in Sources */,
+				8CBF9E0817DE79EB0044D949 /* AboutViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-@interface server_list_vc () <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
+@interface server_list_vc () <NSNetServiceBrowserDelegate, NSNetServiceDelegate, PopoverViewDelegate>
 
 @property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, weak) NSNotificationCenter* center;
@@ -44,6 +44,27 @@
 @synthesize slideShowPreviewStartObserver = _slideShowPreviewStartObserver;
 @synthesize pinValidationObserver = _pinValidationObserver;
 @synthesize serviceBrowser = _serviceBrowser;
+
+- (IBAction)onClickMenuButton:(id)sender {
+    [PopoverView showPopoverAtPoint:CGPointMake([[sender view] center].x, [[sender view] center].y + [[sender view] frame].size.height * 0.5) inView:[sender view].superview withStringArray:
+     [NSArray arrayWithObjects:NSLocalizedString(@"Connection Help", @"Popover option"), NSLocalizedString(@"About Impress Remote", @"Popover option"), nil]
+                           delegate:self];
+}
+
+- (void)popoverView:(PopoverView *)popoverView didSelectItemAtIndex:(NSInteger)index
+{
+    [popoverView dismiss];
+    switch (index) {
+        case 0:
+            [self performSegueWithIdentifier:@"howtoSegue" sender:self];
+            break;
+        case 1:
+            [self performSegueWithIdentifier:@"aboutSegue" sender:self];
+            break;
+        default:
+            break;
+    }
+}
 
 #pragma mark - helper
 - (void) startSearching
@@ -358,6 +379,7 @@
 
 - (void)viewDidUnload {
     [self setServerTable:nil];
+    [self setMenuButton:nil];
     [super viewDidUnload];
 }
 

@@ -322,6 +322,7 @@
     [self.timerView setShadowLight];
     self.timer.delegate = self;
     self.stopWatchTimerScrollView.contentSize = CGSizeMake(1240, 62);
+    [self.gearButton setShadowLight];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -497,13 +498,12 @@
 static BOOL isBlank = NO;
 #pragma mark - Popover toggle
 - (IBAction)popOverUp:(id)sender {
-    CGPoint popOverPoint = CGPointMake([self.gearButton.superview convertPoint:self.gearButton.center toView:self.view].x, [self.gearButton.superview convertPoint:self.gearButton.center toView:self.view].y - self.gearButton.frame.size.height/2);
     if (!isBlank) {
-        [PopoverView showPopoverAtPoint:popOverPoint inView:self.view withStringArray:
+        [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.gearButton.superview withStringArray:
          [NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", @"Popover option"), NSLocalizedString(@"Restart", @"Popover option"), NSLocalizedString(@"Blank Screen", @"Popover option"), nil]
                                delegate:self];
     } else {
-        [PopoverView showPopoverAtPoint:popOverPoint inView:self.view withStringArray:
+        [PopoverView showPopoverAtPoint:self.gearButton.frame.origin inView:self.gearButton.superview withStringArray:
          [NSArray arrayWithObjects:NSLocalizedString(@"Stop Presentation", @"Popover option"), NSLocalizedString(@"Restart", @"Popover option"), NSLocalizedString(@"Resume from blank Screen", @"Popover option"), nil]
                                delegate:self];
     }
