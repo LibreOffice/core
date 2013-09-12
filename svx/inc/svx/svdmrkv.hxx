@@ -113,9 +113,12 @@ protected:
     basegfx::B2DPoint           maRef2;            // Persistent
     basegfx::B2DPoint           maLastCrookCenter; // Persistent
 
+private:
+    // make private; access should be limited since it is dependent of selection and thus from
+    // the selection to be up-to-date. Before using a call to isSelectionChangePending() and
+    // evtl. to forceSelectionChange() may be done which will potentially recreate all SdrHdl objects
     SdrHdlList                  maViewHandleList;
 
-private:
     // new selection abstraction. Private to guarantee isolation
     sdr::selection::Selection   maSelection;
 
@@ -137,7 +140,7 @@ protected:
     virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
 
     // add custom handles (used by other apps, e.g. AnchorPos)
-    virtual void AddCustomHdl();
+    virtual void AddCustomHdl(SdrHdlList& rTarget);
     void ForceRefToMarked();
 
     virtual SdrObject* CheckSingleSdrObjectHit(const basegfx::B2DPoint& rPnt, double fTol, SdrObject* pObj, sal_uInt32 nOptions, const SetOfByte* pMVisLay) const;
@@ -209,31 +212,24 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // new interface to selection, a direct wrapper to sdr::selection::Selection
 
+    // validity of selection check and force
+    bool isSelectionChangePending() const { return maSelection.isSelectionChangePending(); }
+    void forceSelectionChange() { maSelection.forceSelectionChange(); }
+
     // selection const accesses
     SdrObjectVector getSelectedSdrObjectVectorFromSdrMarkView() const { return maSelection.getVector(); }
     SdrObject* getSelectedIfSingle() const { return maSelection.getSingle(); }
     bool areSdrObjectsSelected() const { return !maSelection.empty(); }
     sal_uInt32 getSelectedSdrObjectCount() const { return maSelection.size(); }
     bool isSdrObjectSelected(const SdrObject& rObject) const { return maSelection.isSdrObject(rObject); }
-
-    // selection const accesses: possibility to ask for pending SelectionChange and to force it
-    bool isSelectionChangePending() const { return maSelection.isSelectionChangePending(); }
-    void forceSelectionChange() { maSelection.forceSelectionChange(); }
-
-    // selection const accesses: point selection
     sdr::selection::Indices getSelectedPointsForSelectedSdrObject(const SdrObject& rObject) const { return maSelection.getIndicesForSdrObject(rObject, true); }
     String getSelectedPointsDescription() const { return maSelection.getIndexDescription(true); }
     bool arePointsSelected() const { return maSelection.hasIndices(true); }
-
-    // selection const accesses: gluepoint selection
     sdr::selection::Indices getSelectedGluesForSelectedSdrObject(const SdrObject& rObject) const { return maSelection.getIndicesForSdrObject(rObject, false); }
     String getSelectedGluesDescription() const { return maSelection.getIndexDescription(false); }
     bool areGluesSelected() const { return maSelection.hasIndices(false); }
 
-    // selection changers. These will trigger a delayedSelectionChanged() which will
-    // on forceSelectionChange() or timer event trigger handleSelectionChange(). This will
-    // recreate e.g. the SdrHdl. This means that ALL code which works with SdrHdl and selection
-    // has to take care of working woith valid SdrHdl when changing the selection (!)
+    // selection changers. These will trigger a delayedSelectionChanged()
     void removeSdrObjectFromSelection(const SdrObject& rObject) { maSelection.removeSdrObject(rObject); }
     void addSdrObjectToSelection(const SdrObject& rObject) { maSelection.addSdrObject(rObject); }
     void setSdrObjectSelection(const SdrObjectVector& rSdrObjectVector) { maSelection.setSdrObjects(rSdrObjectVector); }
@@ -307,7 +303,7 @@ public:
     // Dazu muessen die Handles ggf. verkleinert dargestellt werden. Mit der
     // MinMarkHdlSize kann man hierfuer eine Mindestgroesse angeben.
     // Defaultwert ist 3, Mindestwert 3 Pixel.
-    bool IsSolidMarkHdl() const { return maViewHandleList.IsFineHdl(); }
+    bool IsSolidMarkHdl() const;
     void SetSolidMarkHdl(bool bOn);
 
     virtual bool HasMarkablePoints() const;
@@ -341,9 +337,9 @@ public:
 
     // Die Nummer des passenden Handles raussuchen. Nicht gefunden
     // liefert CONTAINER_ENTRY_NOTFOUND.
-    sal_uInt32 GetHdlNum(SdrHdl* pHdl) const { return maViewHandleList.GetHdlNum(pHdl); }
-    SdrHdl* GetHdlByIndex(sal_uInt32 nHdlNum)  const { if(nHdlNum < maViewHandleList.GetHdlCount()) return maViewHandleList.GetHdlByIndex(nHdlNum); return 0; }
-    const SdrHdlList& GetHdlList() const { return maViewHandleList; }
+    sal_uInt32 GetHdlNum(SdrHdl* pHdl) const;
+    SdrHdl* GetHdlByIndex(sal_uInt32 nHdlNum) const;
+    const SdrHdlList& GetHdlList() const;
 
     // Selektionsrahmen fuer Punktmarkierung aufziehen.
     // Wird nur gestartet, wenn HasMarkablePoints() true liefert.

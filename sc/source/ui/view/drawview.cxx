@@ -152,7 +152,7 @@ __EXPORT ScDrawView::~ScDrawView()
     ImplClearCalcDropMarker();
 }
 
-void ScDrawView::AddCustomHdl()
+void ScDrawView::AddCustomHdl(SdrHdlList& rTarget)
 {
     sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
     const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
@@ -193,7 +193,7 @@ void ScDrawView::AddCustomHdl()
 
             ScTabView* pView = pViewData->GetView();
             ScAddress aScAddress(nCol, nRow, nTab);
-            pView->CreateAnchorHandles(maViewHandleList, aScAddress);
+            pView->CreateAnchorHandles(rTarget, aScAddress);
         }
     }
 }

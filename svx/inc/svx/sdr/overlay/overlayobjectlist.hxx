@@ -59,6 +59,7 @@ namespace sdr
             void remove(OverlayObject& rOverlayObject);
 
             // access to objects
+            bool isEmpty() const { return maVector.empty(); }
             sal_uInt32 count() const { return maVector.size(); }
             OverlayObject& getOverlayObject(sal_uInt32 nIndex) const { return *(maVector[nIndex]); }
 

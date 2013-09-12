@@ -1536,8 +1536,9 @@ Pointer SdrView::GetPreferedPointer(const basegfx::B2DPoint& rMousePos, const Ou
             {
                 if(bCorner || bVertex || bMov)
                 {
-                    SdrHdl* pH1 = maViewHandleList.GetHdlByKind(HDL_REF1);
-                    SdrHdl* pH2 = maViewHandleList.GetHdlByKind(HDL_REF2);
+                    const SdrHdlList& rHdlList = GetHdlList();
+                    SdrHdl* pH1 = rHdlList.GetHdlByKind(HDL_REF1);
+                    SdrHdl* pH2 = rHdlList.GetHdlByKind(HDL_REF2);
                     bool b90(false);
                     bool b45(false);
                     basegfx::B2DPoint aDif(0.0, 0.0);

@@ -767,9 +767,9 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 /*nIdx*/, const b
         {
             mbInsPolyPoint = true;
             MarkPoints(0, true); // unmarkall
-            SetMarkHandles();
+            // SetMarkHandles(); TTTT should be triggered by GetHdlList() below
 
-            bRetval = BegDragObj(rPnt, maViewHandleList.GetHdlByIndex(mnInsPointNum), 0.0);
+            bRetval = BegDragObj(rPnt, GetHdlList().GetHdlByIndex(mnInsPointNum), 0.0);
 
             if (bRetval)
             {

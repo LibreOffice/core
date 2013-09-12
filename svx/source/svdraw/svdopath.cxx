@@ -402,9 +402,8 @@ public:
     bool IsCreating() const { return mbCreating; }
 
     // get the polygon
-    basegfx::B2DPolyPolygon TakeObjectPolyPolygon(const SdrDragStat& rDrag) const;
+    basegfx::B2DPolyPolygon TakeObjectPolyPolygon(const SdrDragStat& rDrag, bool bAdaptToSdrPathObjType) const;
     basegfx::B2DPolyPolygon TakeDragPolyPolygon(const SdrDragStat& rDrag) const;
-    basegfx::B2DPolyPolygon getModifiedPolyPolygon() const { return  aPathPolygon.getB2DPolyPolygon(); }
 };
 
 ImpPathForDragAndCreate::ImpPathForDragAndCreate(const SdrPathObj& rSdrPathObject, SdrPathObjType ePathType, bool bFreehandMode)
@@ -1208,6 +1207,13 @@ bool ImpPathForDragAndCreate::BegCreate(SdrDragStat& rDrag)
 bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rDrag)
 {
     ImpPathCreateUser* pU=(ImpPathCreateUser*)rDrag.GetUser();
+
+    if(!pU)
+    {
+        OSL_ENSURE(false, "MovCreate but no ImpPathCreateUser instance in pU, probably BegCreate call missing (!)");
+        return false;
+    }
+
     SdrView& rView = rDrag.GetSdrViewFromSdrDragStat();
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
     sal_uInt16 nActPoint=rXPoly.GetPointCount();
@@ -1321,6 +1327,13 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rDrag)
 bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rDrag, SdrCreateCmd eCmd)
 {
     ImpPathCreateUser* pU=(ImpPathCreateUser*)rDrag.GetUser();
+
+    if(!pU)
+    {
+        OSL_ENSURE(false, "EndCreate but no ImpPathCreateUser instance in pU, probably BegCreate call missing (!)");
+        return false;
+    }
+
     bool bRet(false);
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
     sal_uInt16 nActPoint=rXPoly.GetPointCount()-1;
@@ -1459,6 +1472,12 @@ bool ImpPathForDragAndCreate::BckCreate(SdrDragStat& rDrag)
 {
     ImpPathCreateUser* pU=(ImpPathCreateUser*)rDrag.GetUser();
 
+    if(!pU)
+    {
+        OSL_ENSURE(false, "BckCreate but no ImpPathCreateUser instance in pU, probably BegCreate call missing (!)");
+        return false;
+    }
+
     if (aPathPolygon.Count()>0)
     {
         XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
@@ -1524,38 +1543,55 @@ void ImpPathForDragAndCreate::BrkCreate(SdrDragStat& rDrag)
     rDrag.SetUser(NULL);
 }
 
-basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const SdrDragStat& rDrag) const
+basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const SdrDragStat& rDrag, bool bAdaptToSdrPathObjType) const
 {
     basegfx::B2DPolyPolygon aRetval(aPathPolygon.getB2DPolyPolygon());
-    ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
-    basegfx::B2DPolygon aNewPolygon(aRetval.count() ? aRetval.getB2DPolygon(aRetval.count() - 1L) : basegfx::B2DPolygon());
-
-    if(pU->IsFormFlag() && aNewPolygon.count() > 1L)
-    {
-        // remove last segment and replace with current
-        // do not forget to rescue the previous control point which will be lost when
-        // the point it's associated with is removed
-        const sal_uInt32 nChangeIndex(aNewPolygon.count() - 2);
-        const basegfx::B2DPoint aSavedPrevCtrlPoint(aNewPolygon.getPrevControlPoint(nChangeIndex));
-
-        aNewPolygon.remove(nChangeIndex, 2L);
-        aNewPolygon.append(pU->GetFormPoly().getB2DPolygon());
-
-        if(nChangeIndex < aNewPolygon.count())
-        {
-            // if really something was added, set the saved prev control point at the
-            // point where it belongs
-            aNewPolygon.setPrevControlPoint(nChangeIndex, aSavedPrevCtrlPoint);
-        }
-    }
 
     if(aRetval.count())
     {
-        aRetval.setB2DPolygon(aRetval.count() - 1L, aNewPolygon);
-    }
-    else
-    {
-        aRetval.append(aNewPolygon);
+        ImpPathCreateUser* pU = static_cast< ImpPathCreateUser* >(rDrag.GetUser());
+
+        if(pU && pU->IsFormFlag())
+        {
+            basegfx::B2DPolygon aNewPolygon(aRetval.getB2DPolygon(aRetval.count() - 1));
+
+            if(aNewPolygon.count() > 1)
+            {
+                // remove last segment and replace with current
+                // do not forget to rescue the previous control point which will be lost when
+                // the point it's associated with is removed
+                const sal_uInt32 nChangeIndex(aNewPolygon.count() - 2);
+                const basegfx::B2DPoint aSavedPrevCtrlPoint(aNewPolygon.getPrevControlPoint(nChangeIndex));
+
+                aNewPolygon.remove(nChangeIndex, 2L);
+                aNewPolygon.append(pU->GetFormPoly().getB2DPolygon());
+
+                if(nChangeIndex < aNewPolygon.count())
+                {
+                    // if really something was added, set the saved prev control point at the
+                    // point where it belongs
+                    aNewPolygon.setPrevControlPoint(nChangeIndex, aSavedPrevCtrlPoint);
+                }
+
+                aRetval.setB2DPolygon(aRetval.count() - 1, aNewPolygon);
+            }
+        }
+
+        if(bAdaptToSdrPathObjType)
+        {
+            const bool bShouldBeClosed(isClosed());
+
+            for(sal_uInt32 a(0); a < aRetval.count(); a++)
+            {
+                if(aRetval.getB2DPolygon(a).isClosed() != bShouldBeClosed)
+                {
+                    basegfx::B2DPolygon aCandidate(aRetval.getB2DPolygon(a));
+
+                    aCandidate.setClosed(bShouldBeClosed);
+                    aRetval.setB2DPolygon(a, aCandidate);
+                }
+            }
+        }
     }
 
     return aRetval;
@@ -2164,7 +2200,7 @@ bool SdrPathObj::applySpecialDrag(SdrDragStat& rDrag)
 
     if(bRetval)
     {
-           setB2DPolyPolygonInObjectCoordinates(aDragAndCreate.getModifiedPolyPolygon());
+        setB2DPolyPolygonInObjectCoordinates(aDragAndCreate.TakeObjectPolyPolygon(rDrag, false));
     }
 
     return bRetval;
@@ -2230,7 +2266,7 @@ bool SdrPathObj::EndCreate(SdrDragStat& rDrag, SdrCreateCmd eCmd)
 
     if(bRetval && mpDAC)
     {
-        setB2DPolyPolygonInObjectCoordinates(mpDAC->getModifiedPolyPolygon());
+        setB2DPolyPolygonInObjectCoordinates(mpDAC->TakeObjectPolyPolygon(rDrag, true));
 
         // #i75974# Check for AutoClose feature. Moved here from ImpPathForDragAndCreate::EndCreate
         // to be able to use the type-changing ImpSetClosed method
@@ -2288,7 +2324,7 @@ basegfx::B2DPolyPolygon SdrPathObj::TakeCreatePoly(const SdrDragStat& rDrag) con
 
     if(mpDAC)
     {
-        aRetval = mpDAC->TakeObjectPolyPolygon(rDrag);
+        aRetval = mpDAC->TakeObjectPolyPolygon(rDrag, false);
         aRetval.append(mpDAC->TakeDragPolyPolygon(rDrag));
     }
 
@@ -2302,7 +2338,7 @@ basegfx::B2DPolyPolygon SdrPathObj::getObjectPolyPolygon(const SdrDragStat& rDra
 
     if(mpDAC)
     {
-        aRetval = mpDAC->TakeObjectPolyPolygon(rDrag);
+        aRetval = mpDAC->TakeObjectPolyPolygon(rDrag, true);
     }
 
     return aRetval;

@@ -879,9 +879,6 @@ void SdrEditView::CheckPossibilities()
 
 void SdrEditView::ForcePossibilities() const
 {
-    // trigger evtl. delayed selection changes
-    const_cast< SdrEditView* >(this)->forceSelectionChange();
-
     if(mbPossibilitiesDirty)
     {
         const_cast< SdrEditView* >(this)->CheckPossibilities();

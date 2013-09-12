@@ -403,6 +403,12 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         }
                     }
 
+                    // refresh mbMoveAllowedOnSelection when selection has changed
+                    if(mpView->isSelectionChangePending())
+                    {
+                        mpView->forceSelectionChange();
+                    }
+
                     if( !bDeactivateOLE )
                     {
                         if ( !bReadOnly &&
@@ -495,8 +501,13 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 if (!rMEvt.IsShift())
                 {
-                    mpView->MarkPoints(0, true); // unmarkall
+                    // unmarkall
+                    mpView->MarkPoints(0, true);
+
+                    // update all SdrHdl before getting one
                     mpView->forceSelectionChange();
+
+                    // get one
                     pHdl = mpView->PickHandle(aMDPos);
                 }
                 else
@@ -520,14 +531,12 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if ( ! rMEvt.IsRight())
                     {
-                        // here HAVE to check for pending selection change; if this
-                        // is the case, pHdl WILL be deleted on the next execution of this
-                        // pending change and a new one will be created. Need to force
-                        // that change to get the new created pHdl to not continue
-                        // processing on the dying one
-                        if(mpView->isSelectionChangePending()) // TTTT: Check again: Is this needed?
+                        if(mpView->isSelectionChangePending())
                         {
+                            // trigger evtl. outstanding selection change
+                            // to get a valid SdrHdl with the next call
                             mpView->forceSelectionChange();
+
                             pHdl = mpView->PickHandle(aMDPos);
                         }
 
@@ -697,12 +706,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if( !mpView )
         return false;
 
-    if(mpView->isSelectionChangePending())
-    {
-        // force trigger selection change to get bSelectionChanged
-        // set in FuSelection::SelectionHasChanged() call eventually
-        mpView->forceSelectionChange();
-    }
+    // force trigger selection change to get bSelectionChanged
+    // set in FuSelection::SelectionHasChanged() call eventually
+    mpView->forceSelectionChange();
 
     const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
     const double fDrgLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());

@@ -547,7 +547,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, bool /*bNoPaint*
 
     if(bTextFrame)
     {
-        sal_uInt16 nPixSiz = maViewHandleList.GetHdlSize() * 2 + 1;
+        sal_uInt16 nPixSiz = GetHdlList().GetHdlSize() * 2 + 1;
         nStat|=EV_CNTRL_INVONEMORE;
         pOutlView->SetInvalidateMore(nPixSiz);
     }
@@ -808,8 +808,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
             maMinTextEditArea.transform(aTextEditOffsetTransform);
 
             mpTextEditCursorMerker = pWin->GetCursor();
-            maViewHandleList.SetMoveOutside(true);
-            SetMarkHandles();
+            SetMoveOutside(true);
+            // SetMarkHandles(); TTTT: Should be triggered by SetMoveOutside directly
 
             mpTextEditOutlinerView = ImpMakeOutlinerView(pWin, !bEmpty, pGivenOutlinerView);
 
@@ -829,8 +829,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
                 GetTextEditOutliner()->InsertView(GetTextEditOutlinerView(), 0);
             }
 
-            maViewHandleList.SetMoveOutside(false);
-            maViewHandleList.SetMoveOutside(true);
+            SetMoveOutside(false);
+            SetMoveOutside(true);
 
             // alle Wins als OutlinerView beim Outliner anmelden
             if(!bOnlyOneView)
@@ -959,7 +959,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
     mpTextEditOutlinerView = 0;
     mxTextEditObj.reset(0);
     mpTextEditWin = 0;
-    maViewHandleList.SetMoveOutside(false);
+    SetMoveOutside(false);
 
     return false;
 }
@@ -1208,7 +1208,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             pTEWin->SetCursor(pTECursorMerker);
         }
 
-        maViewHandleList.SetMoveOutside(false);
+        SetMoveOutside(false);
 
 #ifdef DBG_UTIL
         if(GetItemBrowser())

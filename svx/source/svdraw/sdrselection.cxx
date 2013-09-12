@@ -159,8 +159,11 @@ namespace sdr
         void Selection::delayedSelectionChanged()
         {
             // trigger a delayed selection change
-            SetTimeout(1);
-            Start();
+            if(!IsActive())
+            {
+                SetTimeout(1);
+                Start();
+            }
         }
 
         bool Selection::isSelectionChangePending() const

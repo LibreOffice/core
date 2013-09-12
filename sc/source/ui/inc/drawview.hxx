@@ -54,7 +54,7 @@ protected:
     virtual void    LazyReactOnObjectChanges();
 
     // add custom handles (used by other apps, e.g. AnchorPos)
-    virtual void AddCustomHdl();
+    virtual void AddCustomHdl(SdrHdlList& rTarget);
 
     void ImplClearCalcDropMarker();
 

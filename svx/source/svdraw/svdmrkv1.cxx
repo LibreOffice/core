@@ -158,7 +158,7 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, bool bUnmark)
     }
 
     setSelectedPointsForSelectedSdrObject(*pObj, aMarkedPoints);
-    pHdl->SetSelected(!bUnmark);
+    // pHdl->SetSelected(!bUnmark); TTTT: not needed, setSelectedPointsForSelectedSdrObject already triggers selection change and starts recreation
 
     return true;
 }
@@ -175,7 +175,7 @@ bool SdrMarkView::MarkPoint(SdrHdl& rHdl, bool bUnmark)
 
     if(IsPointMarkable(rHdl) && rHdl.IsSelected() == bUnmark)
     {
-    const SdrObject* pObj=rHdl.GetObj();
+        const SdrObject* pObj = rHdl.GetObj();
 
         if(isSdrObjectSelected(*pObj))
         {
@@ -192,14 +192,15 @@ bool SdrMarkView::MarkPoint(SdrHdl& rHdl, bool bUnmark)
 void SdrMarkView::MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark)
 {
     const SdrObject* pObj0 = 0;
+    const SdrHdlList& rHdlList = GetHdlList();
+    const sal_uInt32 nHdlAnz(rHdlList.GetHdlCount());
 
     maViewHandleList.Sort();
-    const sal_uInt32 nHdlAnz(maViewHandleList.GetHdlCount());
 
     for(sal_uInt32 nHdlNum(nHdlAnz); nHdlNum > 0;)
     {
         nHdlNum--;
-        SdrHdl* pHdl = maViewHandleList.GetHdlByIndex(nHdlNum);
+        SdrHdl* pHdl = rHdlList.GetHdlByIndex(nHdlNum);
 
         if(IsPointMarkable(*pHdl) && pHdl->IsSelected() == bUnmark)
         {
@@ -234,11 +235,12 @@ void SdrMarkView::impCreatePointRanges() const
 {
     basegfx::B2DRange aNewMarkedPointRange;
     basegfx::B2DRange aNewMarkedGluePointRange;
-    const sal_uInt32 nCount(maViewHandleList.GetHdlCount());
+    const SdrHdlList& rHdlList = GetHdlList();
+    const sal_uInt32 nCount(rHdlList.GetHdlCount());
 
     for(sal_uInt32 a(0); a < nCount; a++)
-                {
-        const SdrHdl* pHdl = maViewHandleList.GetHdlByIndex(a);
+    {
+        const SdrHdl* pHdl = rHdlList.GetHdlByIndex(a);
         const SdrHdlKind eKind(pHdl->GetKind());
 
         if(HDL_POLY == eKind && pHdl->IsSelected())
@@ -515,11 +517,12 @@ bool SdrMarkView::UnmarkGluePoint(const SdrHdl& rHdl)
 
 SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt32 nId) const
 {
-    const sal_uInt32 nHdlAnz(maViewHandleList.GetHdlCount());
+    const SdrHdlList& rHdlList = GetHdlList();
+    const sal_uInt32 nHdlAnz(rHdlList.GetHdlCount());
 
     for(sal_uInt32 nHdlNum(0); nHdlNum < nHdlAnz; nHdlNum++)
     {
-        SdrHdl* pHdl = maViewHandleList.GetHdlByIndex(nHdlNum);
+        SdrHdl* pHdl = rHdlList.GetHdlByIndex(nHdlNum);
 
         if (pHdl->GetObj()==pObj &&
             HDL_GLUE == pHdl->GetKind() &&

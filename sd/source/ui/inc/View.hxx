@@ -167,7 +167,7 @@ public:
     /** returns true if we have an undo manager and there is an open list undo action */
     bool isRecordingUndo() const;
 
-    virtual void AddCustomHdl();
+    virtual void AddCustomHdl(SdrHdlList& rTarget);
 
     SmartTagSet& getSmartTags() { return maSmartTags; }
     void selectSmartTag( const SmartTagReference& xTag );

@@ -43,8 +43,10 @@
 class SdrHdlList;
 class SdrMarkView;
 class SdrObject;
-//class SdrPageView;
 class MouseEvent;
+
+#define SDR_HANDLE_COLOR_SIZE_NORMAL            Size(13, 13)
+#define SDR_HANDLE_COLOR_SIZE_SELECTED          Size(17, 17)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Jedes Objekt muss in der Lage seine Handles zu erzeugen. Diese werden dann
@@ -271,7 +273,7 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrHdlList : private boost::noncopyable, public Timer
+class SVX_DLLPUBLIC SdrHdlList : private boost::noncopyable
 {
 private:
     typedef ::std::vector< SdrHdl* > SdrHdlContainerType;
@@ -279,12 +281,6 @@ private:
 
     SVX_DLLPRIVATE bool operator==(const SdrHdlList&);
     SVX_DLLPRIVATE bool operator!=(const SdrHdlList&);
-
-    // derived from Timer; starts timer to call a delayed Timeout
-    // which then calls CreateB2dIAObject for each handle. Only to be called
-    // from SdrHdl itself
-    virtual void Timeout();
-    void SdrHdlVisualisationChanged();
 
 protected:
     sal_uInt32              mnFocusIndex;
@@ -303,6 +299,7 @@ public:
     ~SdrHdlList();
 
     void Clear();
+    void CreateVisualizations();
 
     // #97016# II
     void TravelFocusHdl(bool bForward);
@@ -343,9 +340,6 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define SDR_HANDLE_COLOR_SIZE_NORMAL            Size(13, 13)
-#define SDR_HANDLE_COLOR_SIZE_SELECTED          Size(17, 17)
 
 class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
 {

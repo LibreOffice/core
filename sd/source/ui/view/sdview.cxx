@@ -1199,9 +1199,9 @@ bool View::isRecordingUndo() const
     }
 }
 
-void View::AddCustomHdl()
+void View::AddCustomHdl(SdrHdlList& rTarget)
 {
-    maSmartTags.addCustomHandles(maViewHandleList);
+    maSmartTags.addCustomHandles(rTarget);
 }
 
 SdrViewContext View::GetContext() const

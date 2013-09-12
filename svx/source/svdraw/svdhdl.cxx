@@ -312,10 +312,6 @@ SdrHdl::SdrHdl(
 {
     // add to owning list
     mrHdlList.maList.push_back(this);
-
-    // make sure graphical representation gets created. Cannot call
-    // CreateB2dIAObject() here since it's a virtual function
-    mrHdlList.SdrHdlVisualisationChanged();
 }
 
 SdrHdl::~SdrHdl()
@@ -377,8 +373,14 @@ void SdrHdl::SetSelected(bool bJa)
 
 void SdrHdl::Touch()
 {
-    // force update of graphic representation
-    CreateB2dIAObject();
+    // force update of graphic representation, but only when not empty. When
+    // it is empty, the finishing call to CreateVisualizations() is not yet
+    // done but can be expected. If not empty, attributes are changed outside
+    // handle creation (SdrMarkView::SetMarkHandles()), e.g. blinking or MouseOver
+    if(!getOverlayObjectList().isEmpty())
+    {
+        CreateB2dIAObject();
+    }
 }
 
 void SdrHdl::GetRidOfIAObject()
@@ -1084,23 +1086,8 @@ extern "C" int __LOADONCALLAPI ImplSortHdlFunc( const void* pVoid1, const void* 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrHdlList::Timeout()
-{
-    for(sal_uInt32 a(0); a < maList.size(); a++)
-    {
-        maList[a]->CreateB2dIAObject();
-    }
-}
-
-void SdrHdlList::SdrHdlVisualisationChanged()
-{
-    SetTimeout(1);
-    Start();
-}
-
 SdrHdlList::SdrHdlList(SdrMarkView& rV)
 :   boost::noncopyable(),
-    Timer(),
     mnFocusIndex(CONTAINER_ENTRY_NOTFOUND),
     mrView(rV),
     maList(),
@@ -1115,6 +1102,14 @@ SdrHdlList::SdrHdlList(SdrMarkView& rV)
 SdrHdlList::~SdrHdlList()
 {
     Clear();
+}
+
+void SdrHdlList::CreateVisualizations()
+{
+    for(sal_uInt32 a(0); a < maList.size(); a++)
+    {
+        maList[a]->CreateB2dIAObject();
+    }
 }
 
 SdrHdl* SdrHdlList::GetHdlByIndex(sal_uInt32 nNum) const

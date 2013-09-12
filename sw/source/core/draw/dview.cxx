@@ -237,7 +237,7 @@ SdrObject* SwDrawView::CheckSingleSdrObjectHit(const basegfx::B2DPoint& rPnt, do
 
 /*************************************************************************
 |*
-|*  SwDrawView::AddCustomHdl()
+|*  SwDrawView::AddCustomHdl(SdrHdlList& rTarget)
 |*
 |*  Gets called every time the handles need to be build
 |*
@@ -246,7 +246,7 @@ SdrObject* SwDrawView::CheckSingleSdrObjectHit(const basegfx::B2DPoint& rPnt, do
 |*
 *************************************************************************/
 
-void SwDrawView::AddCustomHdl()
+void SwDrawView::AddCustomHdl(SdrHdlList& rTarget)
 {
     SdrObject *pObj = getSelectedIfSingle();
 
@@ -288,7 +288,7 @@ void SwDrawView::AddCustomHdl()
     // add anchor handle:
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     new SwSdrHdl(
-        maViewHandleList,
+        rTarget,
         *pObj,
         basegfx::B2DPoint(aPos.X(),aPos.Y()),
         ( pAnch->IsVertical() && !pAnch->IsVertLR() ) || pAnch->IsRightToLeft());
@@ -898,9 +898,9 @@ const SwFrm* SwDrawView::CalcAnchor()
 
 void SwDrawView::ShowDragAnchor()
 {
-    SdrHdl* pHdl = maViewHandleList.GetHdlByKind(HDL_ANCHOR);
+    SdrHdl* pHdl = GetHdlList().GetHdlByKind(HDL_ANCHOR);
     if ( ! pHdl )
-        pHdl = maViewHandleList.GetHdlByKind(HDL_ANCHOR_TR);
+        pHdl = GetHdlList().GetHdlByKind(HDL_ANCHOR_TR);
 
     if(pHdl)
     {

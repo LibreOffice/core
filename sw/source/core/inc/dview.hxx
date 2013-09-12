@@ -82,7 +82,7 @@ class SwDrawView : public FmFormView
 
 protected:
     // add custom handles (used by other apps, e.g. AnchorPos)
-    virtual void AddCustomHdl();
+    virtual void AddCustomHdl(SdrHdlList& rTarget);
 
     // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
     using FmFormView::CheckSingleSdrObjectHit;

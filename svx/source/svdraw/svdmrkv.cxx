@@ -400,6 +400,30 @@ void SdrMarkView::BrkMarkObj()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+sal_uInt32 SdrMarkView::GetHdlNum(SdrHdl* pHdl) const
+{
+    return GetHdlList().GetHdlNum(pHdl);
+}
+
+SdrHdl* SdrMarkView::GetHdlByIndex(sal_uInt32 nHdlNum)  const
+{
+    const SdrHdlList& rHdlList = GetHdlList();
+
+    if(nHdlNum < rHdlList.GetHdlCount())
+    {
+        return rHdlList.GetHdlByIndex(nHdlNum);
+    }
+
+    return 0;
+}
+
+const SdrHdlList& SdrMarkView::GetHdlList() const
+{
+    return maViewHandleList;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool SdrMarkView::BegMarkPoints(const basegfx::B2DPoint& rPnt, bool bUnmark)
 {
     if(HasMarkablePoints())
@@ -873,7 +897,7 @@ void SdrMarkView::SetMarkHandles()
     AddDragModeHdl(GetDragMode());
 
     // add custom handles (used by other apps, e.g. AnchorPos)
-    AddCustomHdl();
+    AddCustomHdl(maViewHandleList);
 
     // sort handles
     maViewHandleList.Sort();
@@ -896,9 +920,12 @@ void SdrMarkView::SetMarkHandles()
             }
         }
     }
+
+    // create overlay objects
+    maViewHandleList.CreateVisualizations();
 }
 
-void SdrMarkView::AddCustomHdl()
+void SdrMarkView::AddCustomHdl(SdrHdlList& /*rTarget*/)
 {
     // add custom handles (used by other apps, e.g. AnchorPos)
 }
@@ -1039,7 +1066,9 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
 
 bool SdrMarkView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 {
-    if(maViewHandleList.GetHdlCount())
+    const SdrHdlList& rHdlList = GetHdlList();
+
+    if(rHdlList.GetHdlCount())
     {
         SdrHdl* pMouseOverHdl(0);
 
@@ -1052,7 +1081,7 @@ bool SdrMarkView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         }
 
         // notify last mouse over handle that he lost the mouse
-        const sal_uInt32 nHdlCount(maViewHandleList.GetHdlCount());
+        const sal_uInt32 nHdlCount(rHdlList.GetHdlCount());
 
         for(sal_uInt32 nHdl(0); nHdl < nHdlCount; nHdl++)
         {
@@ -1208,7 +1237,7 @@ void SdrMarkView::SetRef1(const basegfx::B2DPoint& rPt)
     if(SDRDRAG_ROTATE == GetDragMode() || SDRDRAG_MIRROR == GetDragMode())
     {
         maRef1 = rPt;
-        SdrHdl* pH = maViewHandleList.GetHdlByKind(HDL_REF1);
+        SdrHdl* pH = GetHdlList().GetHdlByKind(HDL_REF1);
 
         if(pH)
         {
@@ -1222,7 +1251,7 @@ void SdrMarkView::SetRef2(const basegfx::B2DPoint& rPt)
     if(SDRDRAG_MIRROR == GetDragMode())
     {
         maRef2 = rPt;
-        SdrHdl* pH = maViewHandleList.GetHdlByKind(HDL_REF2);
+        SdrHdl* pH = GetHdlList().GetHdlByKind(HDL_REF2);
 
         if(pH)
         {
@@ -1314,7 +1343,7 @@ bool SdrMarkView::IsMarkedObjHit(const basegfx::B2DPoint& rPnt, double fTol) con
 
 SdrHdl* SdrMarkView::PickHandle(const basegfx::B2DPoint& rPnt) const
 {
-    return maViewHandleList.IsHdlListHit(rPnt);
+    return GetHdlList().IsHdlListHit(rPnt);
 }
 
 bool SdrMarkView::MarkObj(const basegfx::B2DPoint& rPnt, double fTol, bool bToggle, bool bDeep)
@@ -1602,11 +1631,17 @@ sal_uInt16 SdrMarkView::GetMarkHdlSizePixel() const
     return maViewHandleList.GetHdlSize()*2+1;
 }
 
+bool SdrMarkView::IsSolidMarkHdl() const
+{
+    return maViewHandleList.IsFineHdl();
+}
+
 void SdrMarkView::SetSolidMarkHdl(bool bOn)
 {
     if(bOn != maViewHandleList.IsFineHdl())
     {
         maViewHandleList.SetFineHdl(bOn);
+        SetMarkHandles();
     }
 }
 
@@ -1617,6 +1652,7 @@ void SdrMarkView::SetMarkHdlSizePixel(sal_uInt16 nSiz)
     if (nSiz!=maViewHandleList.GetHdlSize())
     {
         maViewHandleList.SetHdlSize(nSiz);
+        SetMarkHandles();
     }
 }
 
@@ -2146,6 +2182,7 @@ void SdrMarkView::handleSelectionChange()
 void SdrMarkView::SetMoveOutside(bool bOn)
 {
     maViewHandleList.SetMoveOutside(bOn);
+    SetMarkHandles();
 }
 
 bool SdrMarkView::IsMoveOutside() const
