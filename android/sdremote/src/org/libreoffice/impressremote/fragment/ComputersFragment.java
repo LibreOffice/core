@@ -124,7 +124,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     @Override
     public void onServiceConnected(ComponentName aComponentName, IBinder aBinder) {
-        CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
+        CommunicationService.ServiceBinder aServiceBinder = (CommunicationService.ServiceBinder) aBinder;
         mCommunicationService = aServiceBinder.getService();
 
         startComputersSearch();

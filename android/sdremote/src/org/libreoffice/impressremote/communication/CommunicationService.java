@@ -20,6 +20,18 @@ import org.libreoffice.impressremote.util.BluetoothOperator;
 import org.libreoffice.impressremote.util.Intents;
 
 public class CommunicationService extends Service implements Runnable, MessagesListener, Timer.TimerListener {
+    public static final class ServiceBinder extends Binder {
+        private final CommunicationService mCommunicationService;
+
+        public ServiceBinder(CommunicationService aCommunicationService) {
+            mCommunicationService = aCommunicationService;
+        }
+
+        public CommunicationService getService() {
+            return mCommunicationService;
+        }
+    }
+
     private IBinder mBinder;
 
     private ServersManager mServersManager;
@@ -37,7 +49,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onCreate() {
-        mBinder = new CBinder();
+        mBinder = new ServiceBinder(this);
 
         mServersManager = new ServersManager(this);
 
@@ -46,12 +58,6 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         mTimer = new Timer(this);
         mSlideShow = new SlideShow(mTimer);
-    }
-
-    public class CBinder extends Binder {
-        public CommunicationService getService() {
-            return CommunicationService.this;
-        }
     }
 
     private void saveBluetoothState() {

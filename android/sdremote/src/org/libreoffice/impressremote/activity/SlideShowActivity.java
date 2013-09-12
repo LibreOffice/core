@@ -111,7 +111,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
     @Override
     public void onServiceConnected(ComponentName mComponentName, IBinder aBinder) {
-        CommunicationService.CBinder aServiceBinder = (CommunicationService.CBinder) aBinder;
+        CommunicationService.ServiceBinder aServiceBinder = (CommunicationService.ServiceBinder) aBinder;
         mCommunicationService = aServiceBinder.getService();
 
         startSlideShow();
