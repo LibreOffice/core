@@ -1010,7 +1010,10 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
             }
         }
         else
+        {
+            SetWindow(pLayout);
             pLayout = 0;
+        }
         if ( bUpdateTabBar )
         {
             sal_uLong nKey = GetWindowId( pCurWin );
