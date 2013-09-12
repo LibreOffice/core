@@ -209,6 +209,12 @@ $(2) : $(3) | $(dir $(2)).dir
 $(call gb_Deliver_add_deliverable,$(2),$(3),$(2))
 endef
 
+# use if the installed target is the final target
+define gb_Helper_install_final
+$(1) : $(2) | $(dir $(1)).dir
+$(call gb_Deliver_add_deliverable,$(1),$(2),$(1))
+endef
+
 # 4th parameter overrides 3rd for the dependency, necessary for Library
 # which needs to copy DLL but that must not be a real target...
 define gb_Library__install
