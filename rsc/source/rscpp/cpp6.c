@@ -626,6 +626,7 @@ defendel(char* name, int delete)
                     if (dp->repl != NULL)       /* Free the replacement */
                         free(dp->repl);         /* if any, and then     */
                     free((char *) dp);          /* Free the symbol      */
+                    dp = NULL;
                 }
                 break;
             }
