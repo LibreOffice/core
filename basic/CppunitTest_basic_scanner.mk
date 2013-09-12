@@ -8,6 +8,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basic_scanner))
 
+$(eval $(call gb_CppunitTest_use_ure,basic_scanner))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,basic_scanner, \
     basic/qa/cppunit/test_scanner \
 ))

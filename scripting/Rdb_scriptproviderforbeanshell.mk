@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Rdb_Rdb,scriptproviderforbeanshell))
-
-$(eval $(call gb_Rdb_install,scriptproviderforbeanshell))
+$(eval $(call gb_Rdb_Rdb_install,scriptproviderforbeanshell))
 
 $(eval $(call gb_Rdb_add_components,scriptproviderforbeanshell,\
 	scripting/java/ScriptProviderForBeanShell \

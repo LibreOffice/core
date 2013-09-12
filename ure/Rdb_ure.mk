@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Rdb_Rdb,ure/services))
-
-$(eval $(call gb_Rdb_install,ure/services,$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb))
+$(eval $(call gb_Rdb_Rdb_install,ure/services,$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb))
 
 $(eval $(call gb_Rdb_add_components,ure/services,\
 	$(if $(filter IOS,$(OS)),, \
