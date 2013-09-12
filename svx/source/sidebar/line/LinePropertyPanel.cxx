@@ -337,6 +337,9 @@ void LinePropertyPanel::NotifyItemUpdate(
     (void)bIsEnabled;
     const bool bDisabled(SFX_ITEM_DISABLED == eState);
 
+    // By default, fill and show the color of existing line-color
+    mpColorUpdater->Update( maColor );
+
     switch(nSID)
     {
         case SID_ATTR_LINE_COLOR:
@@ -359,7 +362,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 {
                     maColor = pItem->GetColorValue();
                     mbColorAvailable = true;
-                    mpColorUpdater->Update(maColor);
+                    mpColorUpdater->Update( maColor );
                     break;
                 }
             }
