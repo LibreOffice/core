@@ -1421,7 +1421,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     sal_uInt8* pScanline(mpScanline);
                     sal_uInt8* pScanlineAlpha(mpScanlineAlpha);
 
-                    for(sal_uInt32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 4)
+                    for(sal_Int32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 4)
                     {
                         // prepare content line as BGR by reordering when copying
                         // do not forget to invert alpha (source is alpha, target is opacity)
@@ -1556,7 +1556,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 #endif
                     sal_uInt8* pScanline(mpScanline);
 
-                    for(sal_uInt32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
+                    for(sal_Int32 nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
                     {
                         // prepare content line as BGR by reordering when copying
                         if(bCustomColorTable)
