@@ -112,16 +112,6 @@ class SW_DLLPUBLIC SwTableAutoFmt
     SwTableFmt* m_pTableStyle;
     sal_uInt16 nStrResId;
 
-    // Common flags of Calc and Writer.
-    sal_Bool bInclFont : 1;
-    sal_Bool bInclJustify : 1;
-    sal_Bool bInclFrame : 1;
-    sal_Bool bInclBackground : 1;
-    sal_Bool bInclValueFormat : 1;
-
-    // Calc specific flags.
-    sal_Bool bInclWidthHeight : 1;
-
 public:
     SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle );
     SwTableAutoFmt( const SwTableAutoFmt& rNew );
@@ -151,13 +141,6 @@ public:
     sal_Bool IsFrame() const        { return m_pTableStyle->IsFrame(); }
     sal_Bool IsBackground() const   { return m_pTableStyle->IsBackground(); }
     sal_Bool IsValueFormat() const  { return m_pTableStyle->IsValueFormat(); }
-
-    void SetFont( const sal_Bool bNew )         { bInclFont = bNew; }
-    void SetJustify( const  sal_Bool bNew )     { bInclJustify = bNew; }
-    void SetFrame( const sal_Bool bNew )        { bInclFrame = bNew; }
-    void SetBackground( const sal_Bool bNew )   { bInclBackground = bNew; }
-    void SetValueFormat( const sal_Bool bNew )  { bInclValueFormat = bNew; }
-    void SetWidthHeight( const sal_Bool bNew )  { bInclWidthHeight = bNew; }
 
     static SwTableAutoFmt* Load( SvStream& rStream, const SwAfVersions&, SwDoc* pDoc );
     sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;

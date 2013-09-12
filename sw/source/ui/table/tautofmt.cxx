@@ -255,18 +255,18 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
     SwTableAutoFmt* pData  = &(*pTableTbl)[nIndex];
-    sal_Bool bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = sal_True;
+    sal_Bool bDataChgd = sal_True;
 
     if( pBtn == m_pBtnNumFormat )
-        pData->SetValueFormat( bCheck );
+        ;
     else if ( pBtn == m_pBtnBorder )
-        pData->SetFrame( bCheck );
+        ;
     else if ( pBtn == m_pBtnFont )
-        pData->SetFont( bCheck );
+        ;
     else if ( pBtn == m_pBtnPattern )
-        pData->SetBackground( bCheck );
+        ;
     else if ( pBtn == m_pBtnAlignment )
-        pData->SetJustify( bCheck );
+        ;
     else
         bDataChgd = sal_False;
 
@@ -479,12 +479,6 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
         if ( !pStyle )
             pStyle = pShell->GetDoc()->MakeTblFrmFmt(sNm, NULL);
         SwTableAutoFmt aTmp( sNm, pStyle );
-        aTmp.SetFont( sal_False );
-        aTmp.SetJustify( sal_False );
-        aTmp.SetFrame( sal_False );
-        aTmp.SetBackground( sal_False );
-        aTmp.SetValueFormat( sal_False );
-        aTmp.SetWidthHeight( sal_False );
 
         if( nOldIdx != nIndex )
             m_pWndPreview->NotifyChange( *(SwTableAutoFmt*)0 );

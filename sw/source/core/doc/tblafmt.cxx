@@ -553,13 +553,6 @@ SwTableAutoFmt::SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle )
     : m_pTableStyle( pTableStyle )
     , nStrResId( USHRT_MAX )
 {
-    bInclFont = sal_True;
-    bInclJustify = sal_True;
-    bInclFrame = sal_True;
-    bInclBackground = sal_True;
-    bInclValueFormat = sal_True;
-    bInclWidthHeight = sal_True;
-
     m_pTableStyle->SetName( rName );
 }
 
@@ -576,12 +569,6 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
 
     m_pTableStyle = rNew.m_pTableStyle;
     nStrResId = rNew.nStrResId;
-    bInclFont = rNew.bInclFont;
-    bInclJustify = rNew.bInclJustify;
-    bInclFrame = rNew.bInclFrame;
-    bInclBackground = rNew.bInclBackground;
-    bInclValueFormat = rNew.bInclValueFormat;
-    bInclWidthHeight = rNew.bInclWidthHeight;
 
     return *this;
 }
@@ -851,12 +838,14 @@ SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVe
 
         pRet->nStrResId = nStrResId;
 
-        rStream >> b; pRet->bInclFont = b;
-        rStream >> b; pRet->bInclJustify = b;
-        rStream >> b; pRet->bInclFrame = b;
-        rStream >> b; pRet->bInclBackground = b;
-        rStream >> b; pRet->bInclValueFormat = b;
-        rStream >> b; pRet->bInclWidthHeight = b;
+        // No longer needed, but still read to not misread other data
+        rStream >> b;
+        rStream >> b;
+        rStream >> b;
+        rStream >> b;
+        rStream >> b;
+        rStream >> b;
+        // <- close
 
         bRet = pStyle->Load( rStream, rVersions, pDoc, nVal );
     }
@@ -871,18 +860,11 @@ SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVe
 sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    sal_Bool b;
     rStream << nVal;
     // --- from 680/dr25 on: store strings as UTF-8
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStream, GetName(),
         RTL_TEXTENCODING_UTF8 );
     rStream << nStrResId;
-    rStream << ( b = bInclFont );
-    rStream << ( b = bInclJustify );
-    rStream << ( b = bInclFrame );
-    rStream << ( b = bInclBackground );
-    rStream << ( b = bInclValueFormat );
-    rStream << ( b = bInclWidthHeight );
 
     {
         WriterSpecificAutoFormatBlock block(rStream);
