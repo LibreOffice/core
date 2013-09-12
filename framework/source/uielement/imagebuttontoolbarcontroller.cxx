@@ -25,11 +25,11 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -50,48 +50,16 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 
-#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
-
 const ::Size  aImageSizeSmall( 16, 16 );
 const ::Size  aImageSizeBig( 26, 26 );
 
 namespace framework
 {
 
-static uno::WeakReference< util::XMacroExpander > m_xMacroExpander;
-
-uno::Reference< util::XMacroExpander > GetMacroExpander()
-{
-    uno::Reference< util::XMacroExpander > xMacroExpander( m_xMacroExpander );
-    if ( !xMacroExpander.is() )
-    {
-        SolarMutexGuard aSolarMutexGuard;
-
-        if ( !xMacroExpander.is() )
-        {
-            uno::Reference< uno::XComponentContext > xContext(
-                comphelper::getProcessComponentContext() );
-            m_xMacroExpander =  util::theMacroExpander::get(xContext);
-            xMacroExpander = m_xMacroExpander;
-        }
-    }
-
-    return xMacroExpander;
-}
-
 static void SubstituteVariables( OUString& aURL )
 {
-    if ( aURL.startsWith( EXPAND_PROTOCOL ) )
-    {
-        uno::Reference< util::XMacroExpander > xMacroExpander = GetMacroExpander();
-
-        // cut protocol
-        OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-        // decode uric class chars
-        aMacro = ::rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
-        aURL = xMacroExpander->expandMacros( aMacro );
-    }
+    aURL = comphelper::getExpandedUri(
+        comphelper::getProcessComponentContext(), aURL);
 }
 
 ImageButtonToolbarController::ImageButtonToolbarController(

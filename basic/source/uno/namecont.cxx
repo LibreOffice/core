@@ -33,6 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
 
@@ -2892,13 +2893,8 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
         {
             return url;
         }
-        // cut protocol
-        OUString macro( url.copy( sizeof (EXPAND_PROTOCOL ":") -1 ) );
-        // decode uric class chars
-        macro = Uri::decode( macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
-        OUString ret( mxMacroExpander->expandMacros( macro ) );
-        return ret;
+
+        return comphelper::getExpandedUri(mxContext, url);
     }
     else if( mxStringSubstitution.is() )
     {

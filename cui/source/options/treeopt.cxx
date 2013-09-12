@@ -67,6 +67,7 @@
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/setup/UpdateCheck.hpp>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/optitems.hxx>
@@ -854,13 +855,8 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                     && !sPageURL.isEmpty()
                     && sPageURL.startsWith( sExpand ) )
                 {
-                    // cut protocol
-                    OUString sTemp( sPageURL.copy( sExpand.getLength() ) );
-                    // decode uri class chars
-                    sTemp = ::rtl::Uri::decode(
-                        sTemp, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                    // expand string
-                    sPageURL = xMacroExpander->expandMacros( sTemp );
+                    sPageURL = comphelper::getExpandedUri(
+                        comphelper::getProcessComponentContext(), sPageURL);
                 }
 
                 if ( ( !bIsFromExtensionManager

@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
@@ -185,8 +186,6 @@ using namespace ::com::sun::star;
 #define OFFSET_MERGESTATUSBAR_MERGEFALLBACK             3
 #define OFFSET_MERGESTATUSBAR_MERGECONTEXT              4
 #define OFFSET_MERGESTATUSBAR_STATUSBARITEMS            5
-
-#define EXPAND_PROTOCOL                                 "vnd.sun.star.expand:"
 
 //  private declarations!
 
@@ -1340,16 +1339,8 @@ bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 
 void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 {
-    if ( aURL.startsWith( EXPAND_PROTOCOL ) )
-    {
-        // cut protocol
-        OUString macro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-        // decode uric class chars
-        macro = ::rtl::Uri::decode(
-            macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
-        aURL = m_xMacroExpander->expandMacros( macro );
-    }
+    aURL = comphelper::getExpandedUri(
+        comphelper::getProcessComponentContext(), aURL);
 }
 
 Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)

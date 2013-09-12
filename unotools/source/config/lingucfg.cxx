@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
@@ -37,7 +36,7 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <sal/macros.h>
-
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "itemholder1.hxx"
@@ -46,7 +45,6 @@ using namespace com::sun::star;
 
 using ::rtl::Uri;
 
-#define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define FILE_PROTOCOL       "file:///"
 
 namespace
@@ -933,17 +931,10 @@ static bool lcl_GetFileUrlFromOrigin(
     if (!rOrigin.isEmpty())
     {
         OUString aURL( rOrigin );
-        if ( aURL.startsWith( EXPAND_PROTOCOL ) )
+        if ( aURL.startsWith( "vnd.sun.star.expand:" ) )
         {
-            // cut protocol
-            OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-            // decode uric class chars
-            aMacro = Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-            // expand macro string
-            aURL = util::theMacroExpander::get(
-                comphelper::getProcessComponentContext() )->expandMacros(
-                    aMacro );
-
+            aURL = comphelper::getExpandedUri(
+                comphelper::getProcessComponentContext(), aURL);
             bool bIsFileUrl = aURL.startsWith( FILE_PROTOCOL );
             if (bIsFileUrl)
             {
