@@ -185,7 +185,7 @@ void MergeNewStyleDicsAndOldStyleDics(
     const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics )
 {
     // get list of languages supported by new style dictionaries
-    std::set< LanguageType > aNewStyleLanguages;
+    std::set< OUString > aNewStyleLanguages;
     std::list< SvtLinguConfigDictionaryEntry >::const_iterator aIt;
     for (aIt = rNewStyleDics.begin() ;  aIt != rNewStyleDics.end();  ++aIt)
     {
@@ -193,8 +193,7 @@ void MergeNewStyleDicsAndOldStyleDics(
         sal_Int32 nLocaleNames = aLocaleNames.getLength();
         for (sal_Int32 k = 0;  k < nLocaleNames; ++k)
         {
-            LanguageType nLang = LanguageTag::convertToLanguageTypeWithFallback( aLocaleNames[k] );
-            aNewStyleLanguages.insert( nLang );
+            aNewStyleLanguages.insert( aLocaleNames[k] );
         }
     }
 
@@ -209,8 +208,10 @@ void MergeNewStyleDicsAndOldStyleDics(
         DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!");
         if (nOldStyleDics > 0)
         {
+            /* TODO: this conversion exists only to check with
+             * LinguIsUnspecified(), add another check that takes the tag
+             * string instead. */
             LanguageType nLang = LanguageTag::convertToLanguageTypeWithFallback( aIt2->aLocaleNames[0] );
-
             if (nLang == LANGUAGE_DONTKNOW || linguistic::LinguIsUnspecified( nLang))
             {
                 OSL_FAIL( "old style dictionary with invalid language found!" );
@@ -218,7 +219,7 @@ void MergeNewStyleDicsAndOldStyleDics(
             }
 
             // language not yet added?
-            if (aNewStyleLanguages.find( nLang ) == aNewStyleLanguages.end())
+            if (aNewStyleLanguages.find( aIt2->aLocaleNames[0] ) == aNewStyleLanguages.end())
                 rNewStyleDics.push_back( *aIt2 );
         }
         else
