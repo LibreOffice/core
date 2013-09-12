@@ -61,6 +61,30 @@ sub get_media_source
     return "";
 }
 
+#################################################
+# Creating the cab file name dynamically
+#################################################
+
+sub generate_cab_filename_for_some_cabs
+{
+    my ( $allvariables, $id ) = @_;
+
+    my $name = $allvariables->{'PRODUCTNAME'};
+
+    $name = lc($name);
+    $name =~ s/\.//g;
+    $name =~ s/\s//g;
+
+    # possibility to overwrite the name with variable CABFILENAME
+    if ( $allvariables->{'CABFILENAME'} ) { $name = $allvariables->{'CABFILENAME'}; }
+
+    $name = $name . $id . ".cab";
+
+    if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
+
+    return $name;
+}
+
 sub get_maximum_filenumber
 {
     my ($allfiles, $maxcabfilenumber) = @_;
