@@ -72,7 +72,7 @@ endif
 
 # $(call gb_CustomTarget_ulfex_rule,ulftargetpattern,ulfsource,pofiles)
 define gb_CustomTarget_ulfex_rule
-$(1) : $(2) $(if $(WITH_LANG),$(call gb_Executable_get_runtime_dependencies,ulfex))
+$(1) : $(2) $(if $(WITH_LANG),$(call gb_Executable_get_runtime_dependencies,ulfex)) | $(dir $(1)).dir
 	$$(call gb_CustomTarget_ulfex__command,$$@,$(subst %,$$*,$(strip $(2))),$(strip $(3)))
 
 endef
