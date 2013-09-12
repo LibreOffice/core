@@ -585,12 +585,15 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
                     else
                         aNumString = OUString::number( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
 
-                    ImplVDrawText( nStart + n, nCenter, aNumString, nMin, nMax );
-                    ImplVDrawText( nStart - n, nCenter, aNumString, nMin, nMax );
+                    long nHorizontalLocation = nStart + n;
+                    ImplVDrawText( nHorizontalLocation, nCenter, aNumString,          nMin, nMax );
+                    ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1 );
+                    ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1 );
 
-                    ImplVDrawLine( nStart + n, nBottom, nStart + n, nBottom - 1 );
-                    ImplVDrawLine( nStart + n, nTop,    nStart + n, nTop    + 1 );
-
+                    nHorizontalLocation = nStart - n;
+                    ImplVDrawText( nHorizontalLocation, nCenter, aNumString,          nMin, nMax );
+                    ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1 );
+                    ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1 );
                 }
                 // Tick/Tick2 - Output (Strokes)
                 else
