@@ -123,6 +123,12 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
+    sal_Bool IsFont() const;
+    sal_Bool IsJustify() const;
+    sal_Bool IsFrame() const;
+    sal_Bool IsBackground() const;
+    sal_Bool IsValueFormat() const;
+
     static void RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &rTable );
     static SwTableFmt* StoreTableProperties( const SwTable &rTable );
 
@@ -179,7 +185,7 @@ class SW_DLLPUBLIC SwTableBoxFmt : public SwFrmFmt
 {
     friend class SwDoc;
 
-    String              sNumFmtString;
+    OUString            sNumFmtString;
     LanguageType        eSysLanguage, eNumFmtLanguage;
 
 protected:
@@ -230,6 +236,12 @@ public:
     const SwFmtVertOrient& GetVerticalAlignment() const;
 
     void GetValueFormat( String& rFmt, LanguageType& rLng, LanguageType& rSys ) const;
+
+    sal_Bool IsFont() const;
+    sal_Bool IsJustify() const;
+    sal_Bool IsFrame() const;
+    sal_Bool IsBackground() const;
+    sal_Bool IsValueFormat() const;
 
     sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;

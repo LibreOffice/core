@@ -230,6 +230,56 @@ sal_uInt16 SwTableFmt::GetRepeatHeading() const
     return 0;
 }
 
+sal_Bool SwTableFmt::IsFont() const
+{
+    for( sal_uInt8 n = 0; n < 16; ++n )
+    {
+        if( GetBoxFmt( n )->IsFont() )
+            return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool SwTableFmt::IsJustify() const
+{
+    for( sal_uInt8 n = 0; n < 16; ++n )
+    {
+        if( GetBoxFmt( n )->IsJustify() )
+            return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool SwTableFmt::IsFrame() const
+{
+    for( sal_uInt8 n = 0; n < 16; ++n )
+    {
+        if( GetBoxFmt( n )->IsFrame() )
+            return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool SwTableFmt::IsBackground() const
+{
+    for( sal_uInt8 n = 0; n < 16; ++n )
+    {
+        if( GetBoxFmt( n )->IsBackground() )
+            return sal_True;
+    }
+    return sal_False;
+}
+
+sal_Bool SwTableFmt::IsValueFormat() const
+{
+    for( sal_uInt8 n = 0; n < 16; ++n )
+    {
+        if( GetBoxFmt( n )->IsValueFormat() )
+            return sal_True;
+    }
+    return sal_False;
+}
+
 void SwTableFmt::RestoreTableProperties( SwTableFmt* pSrcFmt, SwTable &rTable )
 {
     SwTableFmt *pHardFmt = rTable.GetTableFmt();
@@ -635,6 +685,48 @@ void SwTableBoxFmt::GetValueFormat( String& rFmt, LanguageType& rLng, LanguageTy
     rFmt = sNumFmtString;
     rLng = eNumFmtLanguage;
     rSys = eSysLanguage;
+}
+
+sal_Bool SwTableBoxFmt::IsFont() const
+{
+    return ( SFX_ITEM_SET == GetItemState( RES_CHRATR_FONT ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_FONTSIZE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_WEIGHT ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_POSTURE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CJK_FONT ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CJK_FONTSIZE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CJK_WEIGHT ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CJK_POSTURE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CTL_FONT ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CTL_FONTSIZE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CTL_WEIGHT ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CTL_POSTURE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_UNDERLINE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_OVERLINE ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CROSSEDOUT ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_CONTOUR ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_SHADOWED ) )
+        || ( SFX_ITEM_SET == GetItemState( RES_CHRATR_COLOR ) );
+}
+
+sal_Bool SwTableBoxFmt::IsJustify() const
+{
+    return ( SFX_ITEM_SET == GetItemState( RES_PARATR_ADJUST ) );
+}
+
+sal_Bool SwTableBoxFmt::IsFrame() const
+{
+    return ( SFX_ITEM_SET == GetItemState( RES_BOX ) );
+}
+
+sal_Bool SwTableBoxFmt::IsBackground() const
+{
+    return ( SFX_ITEM_SET == GetItemState( RES_BACKGROUND ) );
+}
+
+sal_Bool SwTableBoxFmt::IsValueFormat() const
+{
+    return !sNumFmtString.isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

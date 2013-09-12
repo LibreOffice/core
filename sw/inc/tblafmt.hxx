@@ -146,11 +146,11 @@ public:
     void RestoreTableProperties(SwTable &table) const;
     void StoreTableProperties(const SwTable &table);
 
-    sal_Bool IsFont() const         { return bInclFont; }
-    sal_Bool IsJustify() const      { return bInclJustify; }
-    sal_Bool IsFrame() const        { return bInclFrame; }
-    sal_Bool IsBackground() const   { return bInclBackground; }
-    sal_Bool IsValueFormat() const  { return bInclValueFormat; }
+    sal_Bool IsFont() const         { return m_pTableStyle->IsFont(); }
+    sal_Bool IsJustify() const      { return m_pTableStyle->IsJustify(); }
+    sal_Bool IsFrame() const        { return m_pTableStyle->IsFrame(); }
+    sal_Bool IsBackground() const   { return m_pTableStyle->IsBackground(); }
+    sal_Bool IsValueFormat() const  { return m_pTableStyle->IsValueFormat(); }
 
     void SetFont( const sal_Bool bNew )         { bInclFont = bNew; }
     void SetJustify( const  sal_Bool bNew )     { bInclJustify = bNew; }
