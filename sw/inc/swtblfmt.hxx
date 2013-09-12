@@ -121,6 +121,12 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
+    bool IsFont() const;
+    bool IsJustify() const;
+    bool IsFrame() const;
+    bool IsBackground() const;
+    bool IsValueFormat() const;
+
     static void RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &rTable );
     static SwTableFormat* StoreTableProperties( const SwTable &rTable );
 
@@ -229,6 +235,12 @@ public:
     const SwFormatVertOrient& GetVerticalAlignment() const;
 
     void GetValueFormat( OUString& rFormat, LanguageType& rLng, LanguageType& rSys ) const;
+
+    bool IsFont() const;
+    bool IsJustify() const;
+    bool IsFrame() const;
+    bool IsBackground() const;
+    bool IsValueFormat() const;
 
     bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;

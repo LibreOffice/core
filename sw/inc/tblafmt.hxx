@@ -146,18 +146,18 @@ public:
     void RestoreTableProperties(SwTable &table) const;
     void StoreTableProperties(const SwTable &table);
 
-    bool IsFont() const         { return bInclFont; }
-    bool IsJustify() const      { return bInclJustify; }
-    bool IsFrame() const        { return bInclFrame; }
-    bool IsBackground() const   { return bInclBackground; }
-    bool IsValueFormat() const  { return bInclValueFormat; }
+    bool IsFont() const         { return m_pTableStyle->IsFont(); }
+    bool IsJustify() const      { return m_pTableStyle->IsJustify(); }
+    bool IsFrame() const        { return m_pTableStyle->IsFrame(); }
+    bool IsBackground() const   { return m_pTableStyle->IsBackground(); }
+    bool IsValueFormat() const  { return m_pTableStyle->IsValueFormat(); }
 
-    void SetFont( const bool bNew )         { bInclFont = bNew; }
-    void SetJustify( const  bool bNew )     { bInclJustify = bNew; }
-    void SetFrame( const bool bNew )        { bInclFrame = bNew; }
-    void SetBackground( const bool bNew )   { bInclBackground = bNew; }
-    void SetValueFormat( const bool bNew )  { bInclValueFormat = bNew; }
-    void SetWidthHeight( const bool bNew )  { bInclWidthHeight = bNew; }
+    void SetFont( const sal_Bool bNew )         { bInclFont = bNew; }
+    void SetJustify( const  sal_Bool bNew )     { bInclJustify = bNew; }
+    void SetFrame( const sal_Bool bNew )        { bInclFrame = bNew; }
+    void SetBackground( const sal_Bool bNew )   { bInclBackground = bNew; }
+    void SetValueFormat( const sal_Bool bNew )  { bInclValueFormat = bNew; }
+    void SetWidthHeight( const sal_Bool bNew )  { bInclWidthHeight = bNew; }
 
     static SwTableAutoFormat* Load( SvStream& rStream, const SwAfVersions&, SwDoc* pDoc );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
