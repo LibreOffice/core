@@ -87,11 +87,11 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     sal_uInt16      nTabBufSize;
     long            lDefTabDist;
     long            lTabPos;
-    boost::scoped_array<RulerTab>    mpTabs;    // tab positions in pixel
-    boost::scoped_array<RulerIndent> mpIndents; // paragraph margins in pixel
-    boost::scoped_array<RulerBorder> mpBorders;
-    sal_uInt16      nBorderCount;
-    boost::scoped_array<RulerBorder> mpObjectBorders;
+
+    std::vector<RulerTab>    mpTabs;    // tab positions in pixel
+    std::vector<RulerIndent> mpIndents; // paragraph margins in pixel
+    std::vector<RulerBorder> mpBorders;
+    std::vector<RulerBorder> mpObjectBorders;
 
     SfxBindings*    pBindings;
     long            nDragOffset;
@@ -167,7 +167,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long GetRightIndent() const;
     long GetLogicRightIndent() const;
 
-    inline long GetLeftFrameMargin() const;
+    long GetLeftFrameMargin() const;
     long GetRightFrameMargin() const;
 
     void CalcMinMax();

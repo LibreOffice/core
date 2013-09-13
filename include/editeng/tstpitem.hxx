@@ -140,6 +140,11 @@ public:
     const SvxTabStop& operator[]( const sal_uInt16 nPos ) const
                         { return maTabStops[nPos]; }
 
+    const SvxTabStop& At( const sal_uInt16 nPos ) const
+    {
+        return maTabStops[nPos];
+    }
+
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
