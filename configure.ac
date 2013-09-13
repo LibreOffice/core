@@ -2595,8 +2595,8 @@ if test $_os = Darwin; then
                 MACOSX_SDK_PATH=/Developer-old/SDKs/MacOSX10.6.sdk
             elif test -d /Xcode3/SDKs/MacOSX10.6.sdk; then
                 MACOSX_SDK_PATH=/Xcode3/SDKs/MacOSX10.6.sdk
-            elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$with_macosx_sdk.sdk"; then
-                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$with_macosx_sdk.sdk
+            elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
+                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
             elif test -x /usr/bin/xcode-select; then
                 xcodepath="`xcode-select -print-path`"
                 if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
@@ -2607,8 +2607,8 @@ if test $_os = Darwin; then
         10.7)
             if test -d /Developer/SDKs/MacOSX$with_macosx_sdk.sdk; then
                 MACOSX_SDK_PATH=/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
-            elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$with_macosx_sdk.sdk"; then
-                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$with_macosx_sdk.sdk
+            elif test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
+                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
             elif test -x /usr/bin/xcode-select; then
                 xcodepath="`xcode-select -print-path`"
                 if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
@@ -2617,8 +2617,8 @@ if test $_os = Darwin; then
             fi
             ;;
         10.8|10.9)
-            if test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$with_macosx_sdk.sdk"; then
-                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/$with_macosx_sdk.sdk
+            if test -d "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
+                MACOSX_SDK_PATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
             else
                 xcodepath="`xcode-select -print-path`"
                 if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
