@@ -190,7 +190,6 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = HID_MM_SELECTADDRESSBLOCK;
     Size = MAP_APPFONT ( 260 , 219 ) ;
     Moveable = TRUE ;
 
