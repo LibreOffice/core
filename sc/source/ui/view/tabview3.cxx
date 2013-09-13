@@ -2162,7 +2162,7 @@ void ScTabView::DoChartSelection(
     const uno::Sequence< chart2::data::HighlightedRange > & rHilightRanges )
 {
     ClearHighlightRanges();
-    const sal_Unicode sep = ::formula::FormulaCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode sep = ::formula::FormulaCompiler::GetNativeSymbolChar(ocSep);
 
     for( sal_Int32 i=0; i<rHilightRanges.getLength(); ++i )
     {

@@ -839,7 +839,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
 {
     FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     const sal_Unicode cSep = ' ';
-    const sal_Unicode cSepNew = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSepNew = ScCompiler::GetNativeSymbolChar(ocSep);
     const sal_Unicode cQuote = '\'';
 
     OUStringBuffer aRetStr;

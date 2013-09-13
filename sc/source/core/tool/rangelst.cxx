@@ -186,7 +186,7 @@ sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 
     if ( rStr.Len() )
     {
         if (!cDelimiter)
-            cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+            cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
         nMask |= SCA_VALID;             // falls das jemand vergessen sollte
         sal_uInt16 nResult = (sal_uInt16)~0;    // alle Bits setzen
@@ -231,7 +231,7 @@ void ScRangeList::Format( String& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
     rStr.Erase();
 
     if (!cDelimiter)
-        cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+        cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
     FormatString func(rStr, nFlags, pDoc, eConv, cDelimiter);
     for_each(maRanges.begin(), maRanges.end(), func);
@@ -243,7 +243,7 @@ void ScRangeList::Format( OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
 {
 
     if (!cDelimiter)
-        cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+        cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
     String aStr;
     FormatString func(aStr, nFlags, pDoc, eConv, cDelimiter);

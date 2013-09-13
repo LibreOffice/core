@@ -808,7 +808,7 @@ void ScInputHandler::ShowTipCursor()
     HideTipBelow();
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
@@ -1034,7 +1034,7 @@ void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     //  Formeln duerfen nur 1 Absatz haben
@@ -2897,7 +2897,7 @@ bool ScInputHandler::IsModalMode( SfxObjectShell* pDocSh )
 
 void ScInputHandler::AddRefEntry()
 {
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     UpdateActiveView();
     if (!pTableView && !pTopView)
         return;                             // z.B. FillMode

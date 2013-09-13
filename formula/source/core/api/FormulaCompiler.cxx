@@ -118,7 +118,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
 }
 
 inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
-        const String* pTable, sal_uInt16 nOpCode )
+        const OUString* pTable, sal_uInt16 nOpCode )
 {
     sheet::FormulaOpCodeMapEntry aEntry;
     aEntry.Token.OpCode = nOpCode;
@@ -127,14 +127,14 @@ inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >
 }
 
 void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
-        const String* pTable, sal_uInt16 nOpCodeBeg, sal_uInt16 nOpCodeEnd )
+        const OUString* pTable, sal_uInt16 nOpCodeBeg, sal_uInt16 nOpCodeEnd )
 {
     for (sal_uInt16 nOpCode = nOpCodeBeg; nOpCode < nOpCodeEnd; ++nOpCode)
         lclPushOpCodeMapEntry( rVec, pTable, nOpCode );
 }
 
 void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
-        const String* pTable, const sal_uInt16* pnOpCodes, size_t nCount )
+        const OUString* pTable, const sal_uInt16* pnOpCodes, size_t nCount )
 {
     for (const sal_uInt16* pnEnd = pnOpCodes + nCount; pnOpCodes < pnEnd; ++pnOpCodes)
         lclPushOpCodeMapEntry( rVec, pTable, *pnOpCodes );
@@ -497,7 +497,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eO
     DBG_ASSERT( 0 < eOp && sal_uInt16(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
     {
-        SAL_WARN_IF( !((mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) ||
+        SAL_WARN_IF( !(mpTable[eOp].isEmpty() || (mpTable[eOp] == rStr) ||
                     (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
                     (eOp == ocArrayRowSep)), "formula.core",
                 "OpCodeMap::putOpCode: reusing OpCode " << eOp
@@ -642,11 +642,16 @@ void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bD
     xMap = s_SymbolMap;
 }
 
-const String& FormulaCompiler::GetNativeSymbol( OpCode eOp )
+const OUString& FormulaCompiler::GetNativeSymbol( OpCode eOp )
 {
     NonConstOpCodeMapPtr xSymbolsNative;
     lcl_fillNativeSymbols( xSymbolsNative);
     return xSymbolsNative->getSymbol( eOp );
+}
+
+sal_Unicode FormulaCompiler::GetNativeSymbolChar( OpCode eOp )
+{
+    return GetNativeSymbol(eOp)[0];
 }
 
 void FormulaCompiler::InitSymbolsNative() const
@@ -822,9 +827,9 @@ FormulaCompiler::OpCodeMap::~OpCodeMap()
 
 void FormulaCompiler::OpCodeMap::putCopyOpCode( const String& rSymbol, OpCode eOp )
 {
-    SAL_WARN_IF( mpTable[eOp].Len() && !rSymbol.Len(), "formula.core",
+    SAL_WARN_IF( !mpTable[eOp].isEmpty() && !rSymbol.Len(), "formula.core",
             "OpCodeMap::putCopyOpCode: NOT replacing OpCode " << eOp << " '" << mpTable[eOp] << "' with empty name!");
-    if (mpTable[eOp].Len() && !rSymbol.Len())
+    if (!mpTable[eOp].isEmpty() && !rSymbol.Len())
         mpHashMap->insert( OpCodeHashMap::value_type( mpTable[eOp], eOp));
     else
     {
@@ -845,7 +850,7 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKno
         n = mnSymbols;
 
     // OpCode 0 (ocPush) should never be in a map.
-    SAL_WARN_IF( mpTable[0].Len() || r.mpTable[0].Len(), "formula.core",
+    SAL_WARN_IF( !mpTable[0].isEmpty() || !r.mpTable[0].isEmpty(), "formula.core",
             "OpCodeMap::copyFrom: OpCode 0 assigned, this: '"
             << mpTable[0] << "'  that: '" << r.mpTable[0] << "'");
 
@@ -1950,44 +1955,44 @@ OpCode FormulaCompiler::NextToken()
                         switch ( eOp )
                         {   // swap operators
                             case ocGreater:
-                                if ( c == mxSymbols->getSymbol( ocEqual).GetChar(0) )
+                                if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // >= instead of =>
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol( ocGreater).GetChar(0) );
+                                        mxSymbols->getSymbolChar( ocGreater) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                             break;
                             case ocLess:
-                                if ( c == mxSymbols->getSymbol( ocEqual).GetChar(0) )
+                                if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // <= instead of =<
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol( ocLess).GetChar(0) );
+                                        mxSymbols->getSymbolChar( ocLess) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
-                                else if ( c == mxSymbols->getSymbol( ocGreater).GetChar(0) )
+                                else if ( c == mxSymbols->getSymbolChar( ocGreater) )
                                 {   // <> instead of ><
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol( ocLess).GetChar(0) );
+                                        mxSymbols->getSymbolChar( ocLess) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                             break;
                             case ocMul:
-                                if ( c == mxSymbols->getSymbol( ocSub).GetChar(0) )
+                                if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // *- instead of -*
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol( ocMul).GetChar(0) );
+                                        mxSymbols->getSymbolChar( ocMul) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                             break;
                             case ocDiv:
-                                if ( c == mxSymbols->getSymbol( ocSub).GetChar(0) )
+                                if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // /- instead of -/
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol( ocDiv).GetChar(0) );
+                                        mxSymbols->getSymbolChar( ocDiv) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }

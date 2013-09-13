@@ -1806,9 +1806,9 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     mnRangeOpPosInSymbol = -1;
     ScanState eState = ssGetChar;
     xub_StrLen nSpaces = 0;
-    sal_Unicode cSep = mxSymbols->getSymbol( ocSep).GetChar(0);
-    sal_Unicode cArrayColSep = mxSymbols->getSymbol( ocArrayColSep).GetChar(0);
-    sal_Unicode cArrayRowSep = mxSymbols->getSymbol( ocArrayRowSep).GetChar(0);
+    sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
+    sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
+    sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
     sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' :
             ScGlobal::pLocaleData->getNumDecimalSep()[0]);
 
@@ -3272,13 +3272,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
             xub_StrLen nXcount;
             if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cx)) > 1 )
             {   // x => *
-                sal_Unicode c = mxSymbols->getSymbol(ocMul).GetChar(0);
+                sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
                 aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUString(cx), OUString(c));
                 bCorrected = true;
             }
             if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cX)) > 1 )
             {   // X => *
-                sal_Unicode c = mxSymbols->getSymbol(ocMul).GetChar(0);
+                sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
                 aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUString(cX), OUString(c));
                 bCorrected = true;
             }

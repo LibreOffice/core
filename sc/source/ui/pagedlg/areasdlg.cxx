@@ -229,7 +229,7 @@ void ScPrintAreasDlg::AddRefEntry()
 {
     if ( pRefInputEdit == pEdPrintArea )
     {
-        const sal_Unicode sep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+        const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
         String aVal = pEdPrintArea->GetText();
         aVal += sep;
         pEdPrintArea->SetText(aVal);
@@ -302,7 +302,7 @@ void ScPrintAreasDlg::Impl_Reset()
     aStrRange.Erase();
     String aOne;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    const sal_Unicode sep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
     sal_uInt16 nRangeCount = pDoc->GetPrintRangeCount( nCurTab );
     for (sal_uInt16 i=0; i<nRangeCount; i++)
     {
@@ -377,7 +377,7 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
         const sal_uInt16 nValidAddr  = SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
         const sal_uInt16 nValidRange = nValidAddr | SCA_VALID_ROW2 | SCA_VALID_COL2;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        const sal_Unicode sep  = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+        const sal_Unicode sep  = ScCompiler::GetNativeSymbolChar(ocSep);
 
         ScAddress aAddr;
         ScRange aRange;
@@ -784,7 +784,7 @@ static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bI
     // Col: [valid col] rsep [valid col]
 
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    const sal_Unicode rsep = ScCompiler::GetNativeSymbol(ocRange).GetChar(0);
+    const sal_Unicode rsep = ScCompiler::GetNativeSymbolChar(ocRange);
 
     if (pRange)
     {

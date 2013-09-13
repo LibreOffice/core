@@ -87,11 +87,11 @@ public:
     class FORMULA_DLLPUBLIC OpCodeMap
     {
         OpCodeHashMap         * mpHashMap;                 /// Hash map of symbols, String -> OpCode
-        String              *   mpTable;                   /// Array of symbols, OpCode -> String, offset==OpCode
+        OUString              * mpTable;                   /// Array of symbols, OpCode -> String, offset==OpCode
         ExternalHashMap       * mpExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
         ExternalHashMap       * mpReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
         FormulaGrammar::Grammar meGrammar;                  /// Grammar, language and reference convention
-        sal_uInt16                  mnSymbols;                  /// Count of OpCode symbols
+        sal_uInt16              mnSymbols;                  /// Count of OpCode symbols
         bool                    mbCore      : 1;            /// If mapping was setup by core, not filters
         bool                    mbEnglish   : 1;            /// If English symbols and external names
 
@@ -103,7 +103,7 @@ public:
 
         OpCodeMap(sal_uInt16 nSymbols, bool bCore, FormulaGrammar::Grammar eGrammar ) :
             mpHashMap( new OpCodeHashMap( nSymbols)),
-            mpTable( new String[ nSymbols ]),
+            mpTable( new OUString[ nSymbols ]),
             mpExternalHashMap( new ExternalHashMap),
             mpReverseExternalHashMap( new ExternalHashMap),
             meGrammar( eGrammar),
@@ -133,14 +133,17 @@ public:
         inline const ExternalHashMap* getReverseExternalHashMap() const { return mpReverseExternalHashMap; }
 
         /// Get the symbol string matching an OpCode.
-        inline const String& getSymbol( const OpCode eOp ) const
+        inline const OUString& getSymbol( const OpCode eOp ) const
         {
             DBG_ASSERT( sal_uInt16(eOp) < mnSymbols, "OpCodeMap::getSymbol: OpCode out of range");
             if (sal_uInt16(eOp) < mnSymbols)
                 return mpTable[ eOp ];
-            static String s_sEmpty;
+            static OUString s_sEmpty;
             return s_sEmpty;
         }
+
+        /// Get the first character of the symbol string matching an OpCode.
+        inline sal_Unicode getSymbolChar( const OpCode eOp ) const {  return getSymbol(eOp)[0]; };
 
         /// Get the grammar.
         inline FormulaGrammar::Grammar getGrammar() const { return meGrammar; }
@@ -237,7 +240,8 @@ public:
     static bool DeQuote( String& rStr );
 
 
-    static const String&    GetNativeSymbol( OpCode eOp );
+    static const OUString&  GetNativeSymbol( OpCode eOp );
+    static sal_Unicode      GetNativeSymbolChar( OpCode eOp );
     static  bool            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
 
     short GetNumFormatType() const { return nNumFmt; }

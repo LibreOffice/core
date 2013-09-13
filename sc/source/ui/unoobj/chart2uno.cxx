@@ -999,7 +999,7 @@ private:
 
 void lcl_convertTokensToString(OUString& rStr, const vector<ScTokenRef>& rTokens, ScDocument* pDoc)
 {
-    const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbolChar(ocSep);
     FormulaGrammar::Grammar eGrammar = pDoc->GetGrammar();
     Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
     func = ::std::for_each(rTokens.begin(), rTokens.end(), func);
@@ -1052,7 +1052,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 
     vector<ScTokenRef> aTokens;
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     return !aTokens.empty();
@@ -1478,7 +1478,7 @@ ScChart2DataProvider::createDataSource(
     }
 
     vector<ScTokenRef> aRefTokens;
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     if (aRefTokens.empty())
@@ -1812,7 +1812,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 {
                     bFirstCellAsLabel = true;
                     vector<ScTokenRef> aTokens;
-                    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+                    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
                     ScRefTokenHelper::compileRangeRepresentation(
                         aTokens, xLabel->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar(), true);
                     aLabel.initRangeAnalyzer(aTokens);
@@ -1831,7 +1831,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 if( xValues.is())
                 {
                     vector<ScTokenRef> aTokens;
-                    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+                    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
                     ScRefTokenHelper::compileRangeRepresentation(
                         aTokens, xValues->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar(), true);
                     aValues.initRangeAnalyzer(aTokens);
@@ -2040,7 +2040,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         return false;
 
     vector<ScTokenRef> aTokens;
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     return !aTokens.empty();
@@ -2060,7 +2060,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
         return xResult;
 
     vector<ScTokenRef> aRefTokens;
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     if (aRefTokens.empty())
@@ -2231,7 +2231,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const OUString& sRang
         return aRet;
 
     vector<ScTokenRef> aRefTokens;
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
     ScRefTokenHelper::compileRangeRepresentation(
         aRefTokens, sRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     if (aRefTokens.empty())

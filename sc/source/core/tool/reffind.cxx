@@ -38,7 +38,7 @@ inline bool IsText( sal_Unicode c )
         return false;
 
     // argument separator is configurable.
-    const sal_Unicode sep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
     return c != sep;
 }
 

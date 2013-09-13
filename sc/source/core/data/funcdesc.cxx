@@ -821,15 +821,15 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
     switch(_eToken)
     {
         case eOk:
-            return ScCompiler::GetNativeSymbol(ocOpen).GetChar(0);
+            return ScCompiler::GetNativeSymbolChar(ocOpen);
         case eClose:
-            return ScCompiler::GetNativeSymbol(ocClose).GetChar(0);
+            return ScCompiler::GetNativeSymbolChar(ocClose);
         case eSep:
-            return ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+            return ScCompiler::GetNativeSymbolChar(ocSep);
         case eArrayOpen:
-            return ScCompiler::GetNativeSymbol(ocArrayOpen).GetChar(0);
+            return ScCompiler::GetNativeSymbolChar(ocArrayOpen);
         case eArrayClose:
-            return ScCompiler::GetNativeSymbol(ocArrayClose).GetChar(0);
+            return ScCompiler::GetNativeSymbolChar(ocArrayClose);
     }
     return 0;
 }
