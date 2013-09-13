@@ -496,35 +496,6 @@ void ScRefCellValue::assign( ScDocument& rDoc, const ScAddress& rPos )
     *this = rDoc.GetRefCellValue(rPos);
 }
 
-void ScRefCellValue::assign( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
-{
-    switch (itPos->type)
-    {
-        case sc::element_type_numeric:
-            // Numeric cell
-            mfValue = sc::numeric_block::at(*itPos->data, nOffset);
-            meType = CELLTYPE_VALUE;
-        break;
-        case sc::element_type_string:
-            // String cell
-            mpString = &sc::string_block::at(*itPos->data, nOffset);
-            meType = CELLTYPE_STRING;
-        break;
-        case sc::element_type_edittext:
-            // Edit cell
-            mpEditText = sc::edittext_block::at(*itPos->data, nOffset);
-            meType = CELLTYPE_EDIT;
-        break;
-        case sc::element_type_formula:
-            // Formula cell
-            mpFormula = sc::formula_block::at(*itPos->data, nOffset);
-            meType = CELLTYPE_FORMULA;
-        break;
-        default:
-            clear();
-    }
-}
-
 void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
 {
     switch (meType)

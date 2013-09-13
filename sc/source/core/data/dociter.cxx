@@ -400,8 +400,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
             continue;
         }
 
-        ScRefCellValue aCell;
-        aCell.assign(maCurPos.first, maCurPos.second);
+        ScRefCellValue aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
 
         if (ScDBQueryDataIterator::IsQueryValid(*mpDoc, *mpParam, nTab, nRow, aCell))
         {
@@ -920,7 +919,7 @@ bool ScCellIterator::getCurrent()
             }
         }
 
-        maCurCell.assign(maCurColPos.first, maCurColPos.second);
+        maCurCell = sc::toRefCell(maCurColPos.first, maCurColPos.second);
         return true;
     }
     return false;
@@ -1154,8 +1153,7 @@ bool ScQueryCellIterator::GetThis()
             continue;
         }
 
-        ScRefCellValue aCell;
-        aCell.assign(maCurPos.first, maCurPos.second);
+        ScRefCellValue aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
 
         if (bAllStringIgnore && aCell.hasString())
             IncPos();
@@ -1407,7 +1405,7 @@ bool ScQueryCellIterator::BinarySearch()
     {
         OUString aCellStr;
         sal_uLong nFormat = pCol->GetNumberFormat(toLogicalPos(aLoPos));
-        aCell.assign(aLoPos.first, aLoPos.second);
+        aCell = sc::toRefCell(aLoPos.first, aLoPos.second);
         ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
         sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
         if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
@@ -1450,7 +1448,7 @@ bool ScQueryCellIterator::BinarySearch()
         aLastInRangeString = OUString(sal_Unicode(0xFFFF));
     if (aLastInRange.first != pCol->maCells.end())
     {
-        aCell.assign(aLastInRange.first, aLastInRange.second);
+        aCell = sc::toRefCell(aLastInRange.first, aLastInRange.second);
         if (aCell.hasString())
         {
             sal_uLong nFormat = pCol->GetNumberFormat(toLogicalPos(aLastInRange));
@@ -1502,7 +1500,7 @@ bool ScQueryCellIterator::BinarySearch()
         if (!bStr && !bByString)
         {
             double nCellVal;
-            aCell.assign(aPos.first, aPos.second);
+            aCell = sc::toRefCell(aPos.first, aPos.second);
             switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
@@ -1557,7 +1555,7 @@ bool ScQueryCellIterator::BinarySearch()
         {
             OUString aCellStr;
             sal_uLong nFormat = pCol->GetNumberFormat(i);
-            aCell.assign(aPos.first, aPos.second);
+            aCell = sc::toRefCell(aPos.first, aPos.second);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
@@ -1735,7 +1733,7 @@ ScRefCellValue* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )
 
     ColParam& r = maColPositions[mnCol-nStartCol];
     size_t nOffset = static_cast<size_t>(mnRow) - r.maPos->position;
-    maCurCell.assign(r.maPos, nOffset);
+    maCurCell = sc::toRefCell(r.maPos, nOffset);
     Advance();
 
     return &maCurCell;

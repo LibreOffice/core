@@ -11,6 +11,7 @@
 #include "csv_handler.hxx"
 #include "drwlayer.hxx"
 #include "compiler.hxx"
+#include "formulacell.hxx"
 #include "svx/svdpage.hxx"
 #include "svx/svdoole2.hxx"
 

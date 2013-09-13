@@ -11,7 +11,6 @@
 #define SC_CELLVALUE_HXX
 
 #include "global.hxx"
-#include "mtvelements.hxx"
 
 class ScDocument;
 class ScFormulaCell;
@@ -118,8 +117,6 @@ struct SC_DLLPUBLIC ScRefCellValue
      * Take cell value from specified position in specified document.
      */
     void assign( ScDocument& rDoc, const ScAddress& rPos );
-
-    void assign( const sc::CellStoreType::const_iterator& itPos, size_t nOffset );
 
     /**
      * Set cell value at specified position in specified document.

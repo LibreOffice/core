@@ -31,6 +31,7 @@
 #include <boost/unordered_map.hpp>
 
 class ScDocument;
+struct ScRefCellValue;
 
 namespace sc {
 
@@ -132,6 +133,8 @@ public:
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
+
+ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset );
 
 }
 

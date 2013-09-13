@@ -10,6 +10,7 @@
 #include "mtvelements.hxx"
 #include "globalnames.hxx"
 #include "document.hxx"
+#include "cellvalue.hxx"
 
 namespace sc {
 
@@ -62,6 +63,30 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
         return NULL;
 
     return &it->second;
+}
+
+ScRefCellValue toRefCell( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
+{
+    switch (itPos->type)
+    {
+        case sc::element_type_numeric:
+            // Numeric cell
+            return ScRefCellValue(sc::numeric_block::at(*itPos->data, nOffset));
+        case sc::element_type_string:
+            // String cell
+            return ScRefCellValue(&sc::string_block::at(*itPos->data, nOffset));
+        case sc::element_type_edittext:
+            // Edit cell
+            return ScRefCellValue(sc::edittext_block::at(*itPos->data, nOffset));
+        break;
+        case sc::element_type_formula:
+            // Formula cell
+            return ScRefCellValue(sc::formula_block::at(*itPos->data, nOffset));
+        default:
+            ;
+    }
+
+    return ScRefCellValue();
 }
 
 }

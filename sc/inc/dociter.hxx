@@ -49,7 +49,7 @@ class ScFormulaCell;
 
 class ScValueIterator            // walk through all values in an area
 {
-    typedef std::pair<sc::CellStoreType::const_iterator, size_t> PositionType;
+    typedef sc::CellStoreType::const_position_type PositionType;
 
     ScDocument*     pDoc;
     const ScAttrArray*  pAttrArray;
@@ -253,7 +253,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
         nTestEqualConditionFulfilled = nTestEqualConditionEnabled | nTestEqualConditionMatched
     };
 
-    typedef std::pair<sc::CellStoreType::const_iterator, size_t> PositionType;
+    typedef sc::CellStoreType::const_position_type PositionType;
     PositionType maCurPos;
 
     boost::scoped_ptr<ScQueryParam> mpParam;
