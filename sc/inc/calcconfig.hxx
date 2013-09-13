@@ -29,6 +29,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     formula::FormulaGrammar::AddressConvention meStringRefAddressSyntax;
     bool mbEmptyStringAsZero:1;
     bool mbOpenCLEnabled:1;
+    bool mbOpenCLAutoSelect:1;
 
     ScCalcConfig();
 

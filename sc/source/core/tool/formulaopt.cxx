@@ -196,7 +196,8 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_OOXML_RECALC         7
 #define SCFORMULAOPT_ODF_RECALC           8
 #define SCFORMULAOPT_OPENCL_ENABLED       9
-#define SCFORMULAOPT_COUNT               10
+#define SCFORMULAOPT_OPENCL_AUTOSELECT   10
+#define SCFORMULAOPT_COUNT               11
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -211,7 +212,8 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_STRING_AS_ZERO
         "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
-        "Calculation/OpenCL"             // SCFORMULAOPT_OPENCL_ENABLED
+        "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
+        "Calculation/OpenCLAutoSelect"   // SCFORMULAOPT_OPENCL_AUTOSELECT
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -224,7 +226,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 {
     Sequence<OUString> aPropNames = GetPropertyNames();
-    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_STRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED };
+    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_STRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
     for ( sal_uInt16 i=0; i<aPropNames.getLength(); ++i )
@@ -409,6 +411,13 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     pValues[nProp] >>= bVal;
                     GetCalcConfig().mbOpenCLEnabled = bVal;
                 }
+                break;
+                case SCFORMULAOPT_OPENCL_AUTOSELECT:
+                {
+                    sal_Bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
+                    pValues[nProp] >>= bVal;
+                    GetCalcConfig().mbOpenCLAutoSelect = bVal;
+                }
                 default:
                     ;
                 }
@@ -514,6 +523,12 @@ void ScFormulaCfg::Commit()
             case SCFORMULAOPT_OPENCL_ENABLED:
             {
                 sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
+                pValues[nProp] <<= bVal;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_AUTOSELECT:
+            {
+                sal_Bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
                 pValues[nProp] <<= bVal;
             }
             break;

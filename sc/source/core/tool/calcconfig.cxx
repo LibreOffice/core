@@ -12,7 +12,8 @@
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
     mbEmptyStringAsZero(false),
-    mbOpenCLEnabled(false)
+    mbOpenCLEnabled(false),
+    mbOpenCLAutoSelect(true)
 {
 }
 
@@ -25,7 +26,8 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
            mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
-           mbOpenCLEnabled == r.mbOpenCLEnabled;
+           mbOpenCLEnabled == r.mbOpenCLEnabled &&
+           mbOpenCLAutoSelect == r.mbOpenCLAutoSelect;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

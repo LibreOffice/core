@@ -349,6 +349,8 @@ void ScCalcOptionsDialog::OpenclAutomaticSelectionChanged()
         mpOpenclInfoList->Disable();
     else
         mpOpenclInfoList->Enable();
+
+    maConfig.mbOpenCLAutoSelect = bValue;
 }
 
 void ScCalcOptionsDialog::RadioValueChanged()
