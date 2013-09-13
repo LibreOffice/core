@@ -29,6 +29,7 @@
 #include "com/sun/star/reflection/XIdlMethod.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include <basic/codecompletecache.hxx>
+#include <iostream>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1333,6 +1334,7 @@ void SbiParser::DefStatic( bool bPrivate )
 
 bool SbiParser::IsUnoInterface(const OUString& sTypeName)
 {
+    OUString sNewTypeName = CodeCompleteOptions::AddUnoPrefix( sTypeName );
     try
     {
         Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
@@ -1342,14 +1344,14 @@ bool SbiParser::IsUnoInterface(const OUString& sTypeName)
         {
             return false;
         }
-        Reference< reflection::XIdlClass > xClass = xRefl->forName(sTypeName);
+        Reference< reflection::XIdlClass > xClass = xRefl->forName(sNewTypeName);
         if( xClass != NULL )
         {
             return true;
         }
         return false;
     }
-    catch(const Exception& ex)
+    catch( const Exception& ex )
     {
         OSL_FAIL("Could not create reflection.CoreReflection.");
     }

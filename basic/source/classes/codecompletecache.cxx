@@ -97,6 +97,23 @@ void CodeCompleteOptions::SetAutoCorrectOn( const bool& b )
     theCodeCompleteOptions::get().bIsAutoCorrectOn = b;
 }
 
+OUString CodeCompleteOptions::AddUnoPrefix( const OUString& sTypeName )
+{
+    OUString sNewTypeName = sTypeName;
+    if( sNewTypeName.toAsciiLowerCase().startsWith("css.") )
+    {//enables shorthand "css" instead of "com.sun.star"
+        sNewTypeName = sNewTypeName.replaceFirst("css","com.sun.star");
+    }
+    else
+    {
+        if( !sNewTypeName.toAsciiLowerCase().startsWith("com.sun.star.") )
+        {//if "com.sun.star" left out, add it
+            sNewTypeName = OUString("com.sun.star.") + sTypeName;
+        }
+    }
+    return sNewTypeName;
+}
+
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
 {
     aStream << "Global variables" << std::endl;
