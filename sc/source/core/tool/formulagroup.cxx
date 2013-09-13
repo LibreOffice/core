@@ -16,6 +16,7 @@
 #include "scmatrix.hxx"
 
 #include "formula/vectortoken.hxx"
+#include "rtl/bootstrap.hxx"
 #include "config_features.h"
 
 #include <vector>
@@ -132,6 +133,10 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
     }
 }
 
+}
+
+FormulaGroupInterpreterSoftware::FormulaGroupInterpreterSoftware() : FormulaGroupInterpreter()
+{
 }
 
 ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMat*/)
@@ -359,7 +364,13 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     if ( !msInstance )
     {
 #if HAVE_FEATURE_OPENCL
-        if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
+
+        bool bSoftware = false;
+        OUString aVal;
+        if (rtl::Bootstrap::get("SC_SOFTWARE", aVal) && aVal == "1")
+            bSoftware = true;
+
+        if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled && !bSoftware)
         {
 #ifdef DISABLE_DYNLOADING
             msInstance = createFormulaGroupOpenCLInterpreter();

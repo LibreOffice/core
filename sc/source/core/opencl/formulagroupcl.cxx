@@ -1072,9 +1072,6 @@ extern "C" {
 
 SAL_DLLPUBLIC_EXPORT sc::FormulaGroupInterpreter* SAL_CALL createFormulaGroupOpenCLInterpreter()
 {
-    if (getenv("SC_SOFTWARE"))
-        return NULL;
-
 #if USE_GROUNDWATER_INTERPRETER
     if (getenv("SC_GROUNDWATER"))
         return new sc::opencl::FormulaGroupInterpreterGroundwater();

@@ -61,8 +61,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
 class SC_DLLPUBLIC FormulaGroupInterpreterSoftware : public FormulaGroupInterpreter
 {
 public:
-    FormulaGroupInterpreterSoftware() :
-        FormulaGroupInterpreter() {}
+    FormulaGroupInterpreterSoftware();
     virtual ~FormulaGroupInterpreterSoftware() {}
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat);
