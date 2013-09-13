@@ -421,7 +421,6 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
     // and we have to remember the position on the stack to return to it later.
     sal_Bool bIsFrmSel = sal_False;
 
-    bool bIsObjSel = false;
 
     //Target position is now within the viewable region -->
     //Place the cursor at the target position; remember that no target
@@ -436,7 +435,7 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
             EndSelect();
 
         bIsFrmSel = IsFrmSelected();
-        bIsObjSel = 0 != IsObjSelected();
+        bool bIsObjSel = 0 != IsObjSelected();
 
         // unselect frame
         if( bIsFrmSel || bIsObjSel )

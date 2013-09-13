@@ -1097,9 +1097,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if ( rInf.GetSpace() || rInf.GetKanaComp())
             {
                 long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
-                bool bSpecialJust = false;
                 if ( rInf.GetFont() && rInf.GetLen() )
                 {
+                    bool bSpecialJust = false;
                     const SwScriptInfo* pSI = rInf.GetScriptInfo();
                     const sal_uInt8 nActual = rInf.GetFont()->GetActual();
                     ///Kana Compression
