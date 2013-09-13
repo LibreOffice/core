@@ -587,12 +587,13 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
 {
     ResetableGuard aGuard( m_aLock );
 
-    char buffer[32];
 
     if ( m_xLocator.is() )
     {
-        snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
-        return OUString::createFromAscii( buffer );
+        OUStringBuffer buffer("Line: ");
+        buffer.append(m_xLocator->getLineNumber());
+        buffer.append(" - ");
+        return buffer.makeStringAndClear();
     }
     else
         return OUString();
