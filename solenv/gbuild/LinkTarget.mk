@@ -119,6 +119,8 @@ $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
 endif
 
+# Note: if the *Object_dep_target does not exist it will be created by
+# concat-deps as PHONY
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
@@ -291,7 +293,7 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $)
+	$(if $(wildcard $@),touch $@)
 
 endif
 endif
