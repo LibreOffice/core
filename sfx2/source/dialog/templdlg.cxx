@@ -2217,26 +2217,49 @@ void SfxCommonTemplateDialog_Impl::HideHdl(void *)
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        const OUString aTemplName( GetSelectedEntry() );
-        SfxStyleSheetBase* pStyle = GetSelectedStyle();
-        if ( pStyle )
+        OUString aRet;
+
+        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+
+        while (pEntry)
         {
+            if (pTreeBox)
+                aRet = pTreeBox->GetEntryText( pEntry );
+            else
+                aRet = aFmtLb.GetEntryText( pEntry );
+
+            const OUString aTemplName( aRet );
+
             Execute_Impl( SID_STYLE_HIDE, aTemplName,
                           OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+
+            pEntry = aFmtLb.NextSelected( pEntry );
         }
     }
 }
 
 void SfxCommonTemplateDialog_Impl::ShowHdl(void *)
 {
+
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        const OUString aTemplName( GetSelectedEntry() );
-        SfxStyleSheetBase* pStyle = GetSelectedStyle();
-        if ( pStyle )
+        OUString aRet;
+
+        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+
+        while (pEntry)
         {
+            if (pTreeBox)
+                aRet = pTreeBox->GetEntryText( pEntry );
+            else
+                aRet = aFmtLb.GetEntryText( pEntry );
+
+            const OUString aTemplName( aRet );
+
             Execute_Impl( SID_STYLE_SHOW, aTemplName,
                           OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+
+            pEntry = aFmtLb.NextSelected( pEntry );
         }
     }
 }
