@@ -1510,7 +1510,7 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     Graphic aGraphic( ((SwFrmFmt &)rFrmFmt).MakeGraphic( &aIMap ) );
     Size aSz( 0, 0 );
     OutHTML_Image( rWrt, rFrmFmt, aGraphic, rFrmFmt.GetName(), aSz,
-                    HTML_FRMOPTS_GENIMG, pMarkToFrame,
+                    HTML_FRMOPTS_GENIMG, "frame",
                     aIMap.GetIMapObjectCount() ? &aIMap : 0 );
 
     return rWrt;
@@ -1535,7 +1535,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     Graphic aGraphic = pGrfNd->GetGraphic();
     OutHTML_Image( rWrt, rFrmFmt, aGraphic, pGrfNd->GetTitle(),
-                  pGrfNd->GetTwipSize(), nFrmFlags, pMarkToGraphic );
+                  pGrfNd->GetTwipSize(), nFrmFlags, "graphic" );
 
     return rWrt;
 }
@@ -1685,18 +1685,18 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
     String aURL( rURL.Copy( 1 ) );
 
     // nPos-1+1/3 (-1 wg. Erase)
-    String sCmp(comphelper::string::remove(aURL.Copy(bEncoded ? nPos+2 : nPos),
+    OUString sCmp(comphelper::string::remove(aURL.Copy(bEncoded ? nPos+2 : nPos),
         ' '));
-    if( !sCmp.Len() )
+    if( sCmp.isEmpty() )
         return;
 
-    sCmp.ToLowerAscii();
+    sCmp = sCmp.toAsciiLowerCase();
 
-    if( sCmp.EqualsAscii( pMarkToRegion ) ||
-        sCmp.EqualsAscii( pMarkToFrame ) ||
-        sCmp.EqualsAscii( pMarkToGraphic ) ||
-        sCmp.EqualsAscii( pMarkToOLE ) ||
-        sCmp.EqualsAscii( pMarkToTable ) )
+    if( sCmp == "region" ||
+        sCmp == "frame" ||
+        sCmp == "graphic" ||
+        sCmp == "ole" ||
+        sCmp == "table" )
     {
         // Einfach nur in einem sortierten Array merken
         if( bEncoded )
@@ -1706,7 +1706,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
         }
         aImplicitMarks.insert( aURL );
     }
-    else if( sCmp.EqualsAscii( pMarkToOutline ) )
+    else if( sCmp == "outline" )
     {
         // Hier brauchen wir Position und Name. Deshalb sortieren wir
         // ein sal_uInt16 und ein String-Array selbst
@@ -1730,7 +1730,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
             aOutlineMarks.insert( aOutlineMarks.begin()+nIns, new String( aURL ) );
         }
     }
-    else if( sCmp.EqualsAscii( pMarkToText ) )
+    else if( sCmp == "text" )
     {
         //
     }

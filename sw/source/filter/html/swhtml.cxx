@@ -368,25 +368,25 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
                 sal_Int32 nLastPos = sJmpMark.lastIndexOf( cMarkSeparator );
                 sal_Int32 nPos =  nLastPos != -1 ? nLastPos : 0;
 
-                String sCmp;
+                OUString sCmp;
                 if (nPos)
                 {
                     sCmp = comphelper::string::remove(
                         sJmpMark.copy(nPos + 1), ' ');
                 }
 
-                if( sCmp.Len() )
+                if( !sCmp.isEmpty() )
                 {
-                    sCmp.ToLowerAscii();
-                    if( sCmp.EqualsAscii( pMarkToRegion ) )
+                    sCmp = sCmp.toAsciiLowerCase();
+                    if( sCmp == "region" )
                         eJumpTo = JUMPTO_REGION;
-                    else if( sCmp.EqualsAscii( pMarkToTable ) )
+                    else if( sCmp == "table" )
                         eJumpTo = JUMPTO_TABLE;
-                    else if( sCmp.EqualsAscii( pMarkToGraphic ) )
+                    else if( sCmp == "graphic" )
                         eJumpTo = JUMPTO_GRAPHIC;
-                    else if( sCmp.EqualsAscii( pMarkToOutline ) ||
-                            sCmp.EqualsAscii( pMarkToText ) ||
-                            sCmp.EqualsAscii( pMarkToFrame ) )
+                    else if( sCmp == "outline" ||
+                            sCmp == "text" ||
+                            sCmp == "frame" )
                         eJumpTo = JUMPTO_NONE;  // das ist nichts gueltiges!
                     else
                         // ansonsten ist das ein normaler (Book)Mark

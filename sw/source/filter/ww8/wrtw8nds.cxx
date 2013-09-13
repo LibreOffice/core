@@ -787,7 +787,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
                                 OUString());
 
         // #i21465# Only interested in outline references
-        if ( sRefType.equalsAscii( pMarkToOutline ) )
+        if ( sRefType == "outline" )
         {
             OUString sLink = sMark.copy(0, nPos);
             SwImplBookmarksIter bkmkIterEnd = GetExport().maImplicitBookmarks.end();
