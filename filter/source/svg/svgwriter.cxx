@@ -1444,10 +1444,10 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
 }
 
 void SVGTextWriter::writeTextPortion( const Point& rPos,
-                                      const String& rText,
+                                      const OUString& rText,
                                       sal_Bool bApplyMapping )
 {
-    if( rText.Len() == 0 )
+    if( rText.isEmpty() )
         return;
 
     mbLineBreak = sal_False;
@@ -1484,7 +1484,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 
             nStartPos = sContent.getLength() - mnLeftTextPortionLength;
             if( nStartPos < 0 ) nStartPos = 0;
-            mnLeftTextPortionLength -= rText.Len();
+            mnLeftTextPortionLength -= rText.getLength();
 
             if( sContent.isEmpty() )
                 continue;
@@ -1514,7 +1514,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 }
 
 void SVGTextWriter::implWriteTextPortion( const Point& rPos,
-                                          const String& rText,
+                                          const OUString& rText,
                                           Color aTextColor,
                                           sal_Bool bApplyMapping )
 {
@@ -2265,7 +2265,7 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
     }
 }
 
-void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
+void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                                      const sal_Int32* pDXArray, long nWidth,
                                      sal_Bool bApplyMapping )
 {
@@ -2355,11 +2355,11 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
     }
 }
 
-void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
+void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                                      const sal_Int32* pDXArray, long nWidth,
                                      Color aTextColor, sal_Bool bApplyMapping )
 {
-    sal_Int32                               nLen = rText.Len();
+    sal_Int32                               nLen = rText.getLength();
     Size                                    aNormSize;
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
@@ -2442,7 +2442,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
     {
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText.GetChar(nLen - 1)) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText[nLen - 1]) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -2469,11 +2469,11 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                                                 nCount, nCount );
 
                     nCount = nCurPos - nLastPos;
-                    bCont = ( nCurPos < rText.Len() ) && nCount;
+                    bCont = ( nCurPos < rText.getLength() ) && nCount;
 
                     if( nCount )
                     {
-                        const OUString aGlyph( rText.Copy( nLastPos, nCount ) );
+                        const OUString aGlyph( rText.copy( nLastPos, nCount ) );
 
                         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( nX ) );
                         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( aPos.Y() ) );

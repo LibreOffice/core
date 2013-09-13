@@ -245,9 +245,9 @@ class SVGTextWriter
     template< typename MetaBitmapActionType >
     void writeBitmapPlaceholder( const MetaBitmapActionType* pAction );
     void implWriteEmbeddedBitmaps();
-    void writeTextPortion( const Point& rPos, const String& rText,
+    void writeTextPortion( const Point& rPos, const OUString& rText,
                            sal_Bool bApplyMapping = sal_True );
-    void implWriteTextPortion( const Point& rPos, const String& rText,
+    void implWriteTextPortion( const Point& rPos, const OUString& rText,
                                Color aTextColor, sal_Bool bApplyMapping );
 
     void setVirtualDevice( VirtualDevice* pVDev, MapMode& rTargetMapMode )
@@ -368,8 +368,8 @@ private:
     Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
-    void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, sal_Bool bApplyMapping = sal_True );
-    void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, sal_Bool bApplyMapping );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor, sal_Bool bApplyMapping );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
                                           sal_Bool bApplyMapping = sal_True );
 
