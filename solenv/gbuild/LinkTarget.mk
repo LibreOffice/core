@@ -957,6 +957,7 @@ $(call gb_ObjCObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCObject_get_dep_target,$(2))
+$(call gb_ObjCObject_get_dep_target,$(2)) :| $(dir $(call gb_ObjCObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -975,6 +976,7 @@ $(call gb_ObjCxxObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCxxObject_get_dep_target,$(2))
+$(call gb_ObjCxxObject_get_dep_target,$(2)) :| $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))).dir
 endif
 
 endef
