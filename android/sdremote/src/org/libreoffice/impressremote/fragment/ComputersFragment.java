@@ -46,7 +46,7 @@ import org.libreoffice.impressremote.communication.Server;
 import org.libreoffice.impressremote.util.SavedStates;
 
 public class ComputersFragment extends SherlockListFragment implements ServiceConnection, Runnable {
-    private static final int SHOWING_PROGRESS_MESSAGE_DELAY_IN_SECONDS = 10;
+    private static final int SHOWING_PROGRESS_MESSAGE_DELAY_IN_SECONDS = 3;
 
     public static enum Type {
         WIFI, BLUETOOTH

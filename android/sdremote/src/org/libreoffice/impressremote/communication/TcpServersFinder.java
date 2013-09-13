@@ -95,6 +95,7 @@ class TcpServersFinder implements ServersFinder, Runnable {
 
             DatagramPacket aSearchPacket = new DatagramPacket(
                 aSearchCommand.getBytes(), aSearchCommand.length());
+
             aSearchPacket.setAddress(
                 InetAddress.getByName(Protocol.Addresses.SERVER_SEARCH));
             aSearchPacket.setPort(Protocol.Ports.SERVER_SEARCH);
