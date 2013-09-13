@@ -65,3 +65,14 @@
  
  MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
  DLL_SUFFIX	= dylib
+--- misc/nss-3.13.5/mozilla/security/coreconf/rules.mk
++++ misc/build/nss-3.13.5/mozilla/security/coreconf/rules.mk
+@@ -342,7 +342,7 @@
+ 	chmod +x $@
+ ifeq ($(OS_TARGET),Darwin)
+ ifdef MAPFILE
+-	nmedit -s $(MAPFILE) $@
++	$(NMEDIT) -s $(MAPFILE) $@
+ endif
+ endif
+ endif

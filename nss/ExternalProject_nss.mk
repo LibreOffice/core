@@ -71,7 +71,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(if $(filter YES,$(CROSS_COMPILING)),\
 		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 AR=$(AR) RANLIB=$(RANLIB) nss_build_all \
+		$(MAKE) -j1 AR=$(AR) RANLIB=$(RANLIB) NMEDIT=$(NM)edit nss_build_all \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libfreebl3.dylib \
