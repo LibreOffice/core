@@ -71,8 +71,8 @@ inline connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
         const sal_uInt32 nNodeID = 0);
 
 
-// yyi ist die interne Nr. der Regel, die gerade reduziert wird.
-// Ueber die Mapping-Tabelle yyrmap wird daraus eine externe Regel-Nr.
+// yyi is the internal number of the rule that is currently being reduced
+// This can be mapped to extrnal rule number via the yyrmap.
 #define SQL_NEW_RULE 			newNode("", SQL_NODE_RULE, yyr1[yyn])
 #define SQL_NEW_LISTRULE 		newNode("", SQL_NODE_LISTRULE, yyr1[yyn])
 #define SQL_NEW_COMMALISTRULE   newNode("", SQL_NODE_COMMALISTRULE, yyr1[yyn])
@@ -4652,7 +4652,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	m_pParseTree = NULL;
 	m_sErrorMessage = ::rtl::OUString();
 
-	// ... und den Parser anwerfen ...
+    // start parsing
 	if (SQLyyparse() != 0)
 	{
 		// only set the error message, if it's not already set
@@ -4671,16 +4671,12 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	{
 		(*s_pGarbageCollector)->clear();
 
-		// Das Ergebnis liefern (den Root Parse Node):
+        // return result:
+        // to work around a bug in MKS YACC return the member m_pParseTree
+        // instead of Sdbyyval.pParseNode
 
-		//	OSL_ENSURE(Sdbyyval.pParseNode != NULL,"OSQLParser: Parser hat keinen ParseNode geliefert");
-		//	return Sdbyyval.pParseNode;
-		// geht nicht wegen Bug in MKS YACC-erzeugtem Code (es wird ein falscher ParseNode
-		// geliefert).
-
-		// Stattdessen setzt die Parse-Routine jetzt den Member pParseTree
-		// - einfach diesen zurueckliefern:
-		OSL_ENSURE(m_pParseTree != NULL,"OSQLParser: Parser hat keinen ParseTree geliefert");
+        SAL_WARN_IF(!m_pParseTree, "connectivity",
+            "OSQLParser: Parser did not create ParseTree");
 		return m_pParseTree;
 	}
 }
