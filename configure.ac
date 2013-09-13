@@ -2698,11 +2698,11 @@ if test $_os = Darwin; then
             if test "$(echo $MACOSX_SDK_PATH | cut -c1-23)" = "/Applications/Xcode.app"; then
                 CC="`xcrun -find gcc` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
                 CXX="`xcrun -find g++` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-                XCRUN=xcrun
             else
                 CC="gcc-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
                 CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             fi
+            INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             LIBTOOL=libtool
             ;;
         10.7|10.8|10.9)
@@ -2719,7 +2719,7 @@ if test $_os = Darwin; then
             fi
             CC="`xcrun -find clang` $bitness $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             CXX="`xcrun -find clang++` $bitness $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            XCRUN=xcrun
+            INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             AR=`xcrun -find ar`
             LIBTOOL=`xcrun -find libtool`
             RANLIB=`xcrun -find ranlib`
@@ -2820,7 +2820,7 @@ AC_SUBST(MACOSX_SDK_VERSION)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
-AC_SUBST(XCRUN)
+AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
@@ -2866,7 +2866,7 @@ if test $_os = iOS; then
     fi
     CC="`xcrun -find clang` -arch $arch -isysroot $sysroot $lto $versionmin"
     CXX="`xcrun -find clang++` -arch $arch -isysroot $sysroot $lto $versionmin"
-    XCRUN=xcrun
+    INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
     LIBTOOL=`xcrun -find libtool`
     RANLIB=`xcrun -find ranlib`
