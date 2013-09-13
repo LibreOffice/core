@@ -724,7 +724,12 @@ void NumericFormatter::Reformat()
 void NumericFormatter::FieldUp()
 {
     sal_Int64 nValue = GetValue();
-    nValue += mnSpinSize;
+    sal_Int64 nRemainder = nValue % mnSpinSize;
+    if (nValue >= 0)
+        nValue = (nRemainder == 0) ? nValue + mnSpinSize : nValue + mnSpinSize - nRemainder;
+    else
+        nValue = (nRemainder == 0) ? nValue + mnSpinSize : nValue - nRemainder;
+
     if ( nValue > mnMax )
         nValue = mnMax;
 
@@ -736,7 +741,12 @@ void NumericFormatter::FieldUp()
 void NumericFormatter::FieldDown()
 {
     sal_Int64 nValue = GetValue();
-    nValue -= mnSpinSize;
+    sal_Int64 nRemainder = nValue % mnSpinSize;
+    if (nValue >= 0)
+        nValue = (nRemainder == 0) ? nValue - mnSpinSize : nValue - nRemainder;
+    else
+        nValue = (nRemainder == 0) ? nValue - mnSpinSize : nValue - mnSpinSize - nRemainder;
+
     if ( nValue < mnMin )
         nValue = mnMin;
 
