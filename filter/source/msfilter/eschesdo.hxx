@@ -36,7 +36,7 @@ class ImplEESdrObject
 //  XTextRef            mXText; // TextRef des globalen Text
     ::com::sun::star::uno::Any              mAny;
     Rectangle           maRect;
-    String              mType;
+    OUString            mType;
     sal_uInt32              mnShapeId;
     sal_uInt32              mnTextSize;
     sal_Int32               mnAngle;
@@ -62,8 +62,8 @@ public:
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
     const ::com::sun::star::uno::Any&       GetUsrAny() const       { return mAny; }
-    const String&       GetType() const         { return mType; }
-    void                SetType( const String& rS ) { mType = rS; }
+    const OUString&     GetType() const         { return mType; }
+    void                SetType( const OUString& rS ) { mType = rS; }
 
     const Rectangle&    GetRect() const         { return maRect; }
     void                SetRect( const Point& rPos, const Size& rSz );

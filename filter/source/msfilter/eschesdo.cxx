@@ -177,7 +177,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         Point aTextRefPoint;
 
-        if( rObj.GetType().EqualsAscii( "drawing.Group" ))
+        if( rObj.GetType() == "drawing.Group" )
         {
             Reference< XIndexAccess > xXIndexAccess( rObj.GetShapeRef(), UNO_QUERY );
 
@@ -202,7 +202,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         if( ( rObj.ImplGetPropertyValue( OUString( "IsFontwork" ) ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
-            rObj.GetType().EqualsAscii( "drawing.Measure" ) )
+            rObj.GetType() == "drawing.Measure" )
         {
             rObj.SetType( String("drawing.dontknow"));
         }
@@ -233,7 +233,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080008 );
         }
 
-        if ( rObj.GetType().EqualsAscii( "drawing.Custom" ) )
+        if ( rObj.GetType() == "drawing.Custom" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             sal_uInt32 nMirrorFlags;
@@ -275,7 +275,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 }
             }
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ))
+        else if ( rObj.GetType() == "drawing.Rectangle" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             sal_Int32 nRadius = (sal_Int32)rObj.ImplGetInt32PropertyValue(
@@ -304,7 +304,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     mpEscherEx->QueryTextID( rObj.GetShapeRef(),
                         rObj.GetShapeId() ), sal_False, sal_False );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Ellipse" ))
+        else if ( rObj.GetType() == "drawing.Ellipse" )
         {
             CircleKind  eCircleKind = CircleKind_FULL;
             PolyStyle   ePolyKind = PolyStyle();
@@ -401,11 +401,11 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                         rObj.GetShapeId() ), sal_False, sal_False );
 
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Control" ))
+        else if ( rObj.GetType() == "drawing.Control" )
         {
             break;
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Connector" ))
+        else if ( rObj.GetType() == "drawing.Connector" )
         {
             sal_uInt16 nSpType, nSpFlags;
             ::com::sun::star::awt::Rectangle aNewRect;
@@ -418,11 +418,11 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( nSpType, nSpFlags );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Measure" ))
+        else if ( rObj.GetType() == "drawing.Measure" )
         {
             break;
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Line" ))
+        else if ( rObj.GetType() == "drawing.Line" )
         {
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
@@ -441,7 +441,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.PolyPolygon" ))
+        else if ( rObj.GetType() == "drawing.PolyPolygon" )
         {
             if( rObj.ImplHasText() )
             {
@@ -456,7 +456,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             rObj.SetAngle( 0 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.PolyLine" ))
+        else if ( rObj.GetType() == "drawing.PolyLine" )
         {
             //i27942: Poly/Lines/Bezier do not support text.
 
@@ -468,7 +468,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.OpenBezier" ) )
+        else if ( rObj.GetType() == "drawing.OpenBezier" )
         {
             //i27942: Poly/Lines/Bezier do not support text.
 
@@ -480,7 +480,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.CreateLineProperties( rObj.mXPropSet, sal_False );
             rObj.SetAngle( 0 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.ClosedBezier" ) )
+        else if ( rObj.GetType() == "drawing.ClosedBezier" )
         {
             if ( rObj.ImplHasText() )
             {
@@ -495,7 +495,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             rObj.SetAngle( 0 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.GraphicObject" ))
+        else if ( rObj.GetType() == "drawing.GraphicObject" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
 
@@ -539,11 +539,11 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 }
             }
         }
-        else if ( rObj.GetType().EqualsAscii(  "drawing.Text" ))
+        else if ( rObj.GetType() == "drawing.Text" )
         {
             SHAPE_TEXT( sal_True );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Page" ))
+        else if ( rObj.GetType() == "drawing.Page" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );
@@ -553,11 +553,11 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90008 );
             aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x10001 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Frame" ))
+        else if ( rObj.GetType() == "drawing.Frame" )
         {
             break;
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.OLE2" ))
+        else if ( rObj.GetType() == "drawing.OLE2" )
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             if( rObj.IsEmptyPresObj() && ( ePageType == NORMAL ) )
@@ -593,8 +593,8 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 }
             }
         }
-        else if( '3' == rObj.GetType().GetChar(8 ) &&
-                 'D' == rObj.GetType().GetChar( 9 ) )   // drawing.3D
+        else if( '3' == rObj.GetType()[8] &&
+                 'D' == rObj.GetType()[9] )   // drawing.3D
         {
             // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
             if ( !rObj.ImplGetPropertyValue( OUString( "Bitmap" ) ) )
@@ -606,7 +606,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "Bitmap", sal_False ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Caption" ))
+        else if ( rObj.GetType() == "drawing.Caption" )
         {
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -614,7 +614,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, "MetaFile", sal_False ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.dontknow" ))
+        else if ( rObj.GetType() == "drawing.dontknow" )
         {
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -692,7 +692,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         EscherPropertyContainer aPropOpt( mpEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
         rObj.SetAngle( rObj.ImplGetInt32PropertyValue( OUString( "RotateAngle" )));
         sal_Int32 nAngle = rObj.GetAngle();
-        if( rObj.GetType().EqualsAscii( "drawing.Line" ))
+        if( rObj.GetType() == "drawing.Line" )
         {
 //2do: this does not work right
             double fDist = hypot( rObj.GetRect().GetWidth(),
@@ -1141,11 +1141,11 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
 
         // detect name first to make below test (is group) work
         mType = String( mXShape->getShapeType() );
-        mType.Erase( 0, nPrefix );  // strip "com.sun.star."
-        xub_StrLen nPos = mType.SearchAscii( "Shape" );
-        mType.Erase( nPos, 5 );
+        mType = mType.copy( nPrefix );  // strip "com.sun.star."
+        sal_Int32 nPos = mType.indexOf( "Shape" );
+        mType = mType.replaceAt( nPos, 5, "" );
 
-        if(GetType().EqualsAscii("drawing.Group"))
+        if(GetType() == "drawing.Group")
         {
             // if it's a group, the unrotated range is needed for that group
             const basegfx::B2DRange aUnroatedRange(getUnrotatedGroupBoundRange(mXShape));
