@@ -40,8 +40,6 @@ class XMLAutoStylePoolParent;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
 
-#define MAX_CACHE_SIZE 65536
-
 // Implementationclass for stylefamily-information
 
 struct XMLAutoStyleFamily : boost::noncopyable
