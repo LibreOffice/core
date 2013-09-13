@@ -33,6 +33,10 @@
 #define OCL_CHECK(value1,value2,str) \
     if(value1!=value2) \
         fprintf(stderr,"[OCL_ERROR] %s\n",str);
+
+#define OPENCL_DLL_NAME "OpenCL.dll"
+#else
+#define OPENCL_DLL_NAME "libOpenCL.so"
 #endif
 
 using namespace std;
@@ -46,7 +50,7 @@ int OpenclDevice::initEnv()
 {
     // TODO: This part needs more platform specific handling.  On Windows,
     // the GPU Driver itself  installs OpenCL.dll in the system folder.
-    int status = clewInit("OpenCL.dll");
+    int status = clewInit(OPENCL_DLL_NAME);
     if (status < 0)
         return 1;
 
@@ -2693,7 +2697,7 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatfor
 
 void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms)
 {
-    int status = clewInit("libOpenCL.so");
+    int status = clewInit(OPENCL_DLL_NAME);
     if (status < 0)
         return;
 
