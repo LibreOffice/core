@@ -29,7 +29,11 @@
  *
  *****************************************************************************/
 
+#include "sal/config.h"
+
 #import <Cocoa/Cocoa.h>
+
+#include "sal/types.h"
 
 // notifaction names that are being used to signal that an application wants to
 // have access to the remote control device or if the application has finished
@@ -82,7 +86,7 @@ typedef enum _RemoteControlEventIdentifier {
 /*
     Base Interface for Remote Control devices
 */
-@interface RemoteControl : NSObject {
+SAL_DLLPUBLIC_EXPORT @interface RemoteControl : NSObject {
     id delegate;
 }
 

@@ -29,7 +29,11 @@
  *
  *****************************************************************************/
 
+#include "sal/config.h"
+
 #import <Cocoa/Cocoa.h>
+
+#include "sal/types.h"
 
 #define AppleRemoteControlEvent 15
 
@@ -38,7 +42,7 @@
 
 //static void sendTheEvent( unichar, int );
 
-@interface MainController : NSObject {
+SAL_DLLPUBLIC_EXPORT @interface MainController : NSObject {
 @public // else remoteControl is not reachable from GetSalData()->mpMainController
     RemoteControl* remoteControl;
 @private
