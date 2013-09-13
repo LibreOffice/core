@@ -370,8 +370,6 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     void enablePermissionControls();
 
-    void                        ImplPwdPushButton( const String &, String & );
-
 public:
     ImpPDFTabSecurityPage( Window* pParent,
                            const SfxItemSet& rSet );
