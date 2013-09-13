@@ -587,9 +587,9 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
     return xMap;
 }
 
-String FormulaCompiler::FindAddInFunction( const String& /*rUpperName*/, bool /*bLocalFirst*/ ) const
+OUString FormulaCompiler::FindAddInFunction( const OUString& /*rUpperName*/, bool /*bLocalFirst*/ ) const
 {
-    return String();
+    return OUString();
 }
 
 FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
@@ -769,19 +769,13 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
 }
 
 // Remove quotes, escaped quotes are unescaped.
-bool FormulaCompiler::DeQuote( String& rStr )
+bool FormulaCompiler::DeQuote( OUString& rStr )
 {
-    xub_StrLen nLen = rStr.Len();
-    if ( nLen > 1 && rStr.GetChar(0) == '\'' && rStr.GetChar( nLen-1 ) == '\'' )
+    sal_Int32 nLen = rStr.getLength();
+    if ( nLen > 1 && rStr[0] == '\'' && rStr[ nLen-1 ] == '\'' )
     {
-        rStr.Erase( nLen-1, 1 );
-        rStr.Erase( 0, 1 );
-        xub_StrLen nPos = 0;
-        while ( (nPos = rStr.SearchAscii( "\\\'", nPos)) != STRING_NOTFOUND )
-        {
-            rStr.Erase( nPos, 1 );
-            ++nPos;
-        }
+        rStr = rStr.copy( 1, nLen-2 );
+        rStr = rStr.replaceAll( "\\\'", "\'" );
         return true;
     }
     return false;
@@ -893,7 +887,7 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKno
 }
 
 
-sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName ) const
+sal_uInt16 FormulaCompiler::GetErrorConstant( const OUString& rName ) const
 {
     sal_uInt16 nError = 0;
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
@@ -1665,7 +1659,7 @@ void FormulaCompiler::PopTokenArray()
     }
 }
 
-void FormulaCompiler::CreateStringFromTokenArray( String& rFormula )
+void FormulaCompiler::CreateStringFromTokenArray( OUString& rFormula )
 {
     OUStringBuffer aBuffer( pArr->GetLen() * 5 );
     CreateStringFromTokenArray( aBuffer );
@@ -1809,7 +1803,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
             case svExternal:
             {
                 // mapped or translated name of AddIns
-                String aAddIn( t->GetExternal() );
+                OUString aAddIn( t->GetExternal() );
                 bool bMapped = mxSymbols->isPODF();     // ODF 1.1 directly uses programmatical name
                 if (!bMapped && mxSymbols->hasExternals())
                 {
@@ -1875,16 +1869,15 @@ void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal )
     rBuffer.append( mxSymbols->getSymbol( static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
 }
 
-void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const String & rStr )
+void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rStr )
 {
     rBuffer.append( sal_Unicode('"'));
-    if ( lcl_UnicodeStrChr( rStr.GetBuffer(), '"' ) == NULL )
+    if ( lcl_UnicodeStrChr( rStr.getStr(), '"' ) == NULL )
         rBuffer.append( rStr );
     else
     {
-        String aStr( rStr );
-        aStr.SearchAndReplaceAll( OUString('"'), OUString("\"\"") );
-        rBuffer.append( aStr);
+        OUString aStr = rStr.replaceAll( "\"", "\"\"" );
+        rBuffer.append(aStr);
     }
     rBuffer.append( sal_Unicode('"'));
 }
@@ -2071,9 +2064,10 @@ void FormulaCompiler::CreateStringFromExternal( OUStringBuffer& /*rBuffer*/, For
 {
 }
 
-void FormulaCompiler::LocalizeString( String& /*rName*/ )
+void FormulaCompiler::LocalizeString( OUString& /*rName*/ )
 {
 }
+
 void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
 {
     if ( bAutoCorrect && !pStack )

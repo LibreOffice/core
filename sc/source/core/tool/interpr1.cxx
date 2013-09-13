@@ -2616,7 +2616,7 @@ void ScInterpreter::ScCellExternal()
         aArray.AddExternalSingleReference(nFileId, aTabName, aRef);
         ScCompiler aComp(pDok, aPos, aArray);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_ODFF_A1);
-        String aStr;
+        OUString aStr;
         aComp.CreateStringFromTokenArray(aStr);
         PushString(aStr);
     }

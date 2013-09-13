@@ -446,7 +446,7 @@ public:
 
 private:
     // FormulaCompiler
-    virtual String FindAddInFunction( const String& rUpperName, bool bLocalFirst ) const;
+    virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const;
@@ -463,7 +463,7 @@ private:
     virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
-    virtual void LocalizeString( String& rName );   // modify rName - input: exact name
+    virtual void LocalizeString( OUString& rName );   // modify rName - input: exact name
 
     /// Access the CharTable flags
     inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )

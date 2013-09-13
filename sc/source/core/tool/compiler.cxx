@@ -274,7 +274,7 @@ void ScCompiler::SetGrammarAndRefConvention(
         SetRefConvention( eConv );
 }
 
-String ScCompiler::FindAddInFunction( const String& rUpperName, bool bLocalFirst ) const
+OUString ScCompiler::FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const
 {
     return ScGlobal::GetAddInCollection()->FindFunction(rUpperName, bLocalFirst);    // bLocalFirst=false for english
 }
@@ -2953,7 +2953,7 @@ bool ScCompiler::IsColRowName( const String& rName )
     bool bInList = false;
     bool bFound = false;
     ScSingleRefData aRef;
-    String aName( rName );
+    OUString aName( rName );
     DeQuote( aName );
     SCTAB nThisTab = aPos.Tab();
     for ( short jThisTab = 1; jThisTab >= 0 && !bInList; jThisTab-- )
@@ -4235,11 +4235,9 @@ void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pT
         rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
 }
 
-void ScCompiler::LocalizeString( String& rName )
+void ScCompiler::LocalizeString( OUString& rName )
 {
-    OUString aName(rName);
-    ScGlobal::GetAddInCollection()->LocalizeString( aName );
-    rName = aName;
+    ScGlobal::GetAddInCollection()->LocalizeString( rName );
 }
 
 // Put quotes around string if non-alphanumeric characters are contained,

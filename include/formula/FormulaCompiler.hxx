@@ -230,14 +230,14 @@ public:
      */
     OpCode GetEnglishOpCode( const OUString& rName ) const;
 
-    sal_uInt16 GetErrorConstant( const String& rName ) const;
+    sal_uInt16 GetErrorConstant( const OUString& rName ) const;
 
     void            SetCompileForFAP( bool bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
     static bool IsOpCodeVolatile( OpCode eOp );
 
-    static bool DeQuote( String& rStr );
+    static bool DeQuote( OUString& rStr );
 
 
     static const OUString&  GetNativeSymbol( OpCode eOp );
@@ -247,18 +247,18 @@ public:
     short GetNumFormatType() const { return nNumFmt; }
     bool  CompileTokenArray();
 
-    void CreateStringFromTokenArray( String& rFormula );
+    void CreateStringFromTokenArray( OUString& rFormula );
     void CreateStringFromTokenArray( OUStringBuffer& rBuffer );
-    FormulaToken* CreateStringFromToken( OUString& rFormula, FormulaToken* pToken,
-                                    bool bAllowArrAdvance = false );
     FormulaToken* CreateStringFromToken( String& rFormula, FormulaToken* pToken,
+                                    bool bAllowArrAdvance = false );
+    FormulaToken* CreateStringFromToken( OUString& rFormula, FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
     FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
 
     void AppendBoolean( OUStringBuffer& rBuffer, bool bVal );
     void AppendDouble( OUStringBuffer& rBuffer, double fVal );
-    void AppendString( OUStringBuffer& rBuffer, const String & rStr );
+    void AppendString( OUStringBuffer& rBuffer, const OUString & rStr );
 
     /** Set symbol map corresponding to one of predefined formula::FormulaGrammar::Grammar,
         including an address reference convention. */
@@ -268,7 +268,7 @@ public:
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );
 protected:
-    virtual String FindAddInFunction( const String& rUpperName, bool bLocalFirst ) const;
+    virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, FormulaGrammar::Grammar _eGrammar ) const;
     virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
@@ -286,7 +286,7 @@ protected:
     virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromMatrix(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void LocalizeString( String& rName );   // modify rName - input: exact name
+    virtual void LocalizeString(OUString& rName );   // modify rName - input: exact name
 
     void AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError );
 

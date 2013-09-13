@@ -904,7 +904,7 @@ protected:
                     aCompiler.CompileString( sFormula );
                     // set desired convention to that of the document
                     aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_PODF_A1 );
-                    String sConverted;
+                    OUString sConverted;
                     aCompiler.CreateStringFromTokenArray(sConverted);
                     sFormula = EQUALS + sConverted;
                 }
@@ -947,7 +947,7 @@ public:
             aCompiler.CompileString( sVal );
             // set desired convention
             aCompiler.SetGrammar( m_eGrammar );
-            String sConverted;
+            OUString sConverted;
             aCompiler.CreateStringFromTokenArray(sConverted);
             sVal = EQUALS + sConverted;
             aValue <<= sVal;

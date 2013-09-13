@@ -186,7 +186,7 @@ void ScRangeData::CompileUnresolvedXML()
     if (pCode->GetCodeError() == errNoName)
     {
         // Reconstruct the symbol/formula and then recompile.
-        String aSymbol;
+        OUString aSymbol;
         ScCompiler aComp( pDoc, aPos, *pCode);
         aComp.SetGrammar( eTempGrammar);
         aComp.CreateStringFromTokenArray( aSymbol);
@@ -238,7 +238,9 @@ void ScRangeData::GetSymbol( String& rSymbol, const FormulaGrammar::Grammar eGra
 {
     ScCompiler aComp(pDoc, aPos, *pCode);
     aComp.SetGrammar(eGrammar);
-    aComp.CreateStringFromTokenArray( rSymbol );
+    OUString aTmpSymbol (rSymbol);
+    aComp.CreateStringFromTokenArray( aTmpSymbol );
+    rSymbol = aTmpSymbol;
 }
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
@@ -250,7 +252,7 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eG
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const FormulaGrammar::Grammar eGrammar ) const
 {
-    String aStr;
+    OUString aStr;
     ScCompiler aComp(pDoc, rPos, *pCode);
     aComp.SetGrammar(eGrammar);
     aComp.CreateStringFromTokenArray( aStr );
