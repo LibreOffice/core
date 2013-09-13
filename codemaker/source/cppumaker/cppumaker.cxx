@@ -52,15 +52,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                  options.getExtraInputFiles().begin());
              i != options.getExtraInputFiles().end(); ++i)
         {
-            typeMgr->loadProvider(
-                convertToFileUrl(*i), options.isValid("-U"), false);
+            typeMgr->loadProvider(convertToFileUrl(*i), false);
         }
         for (std::vector< OString >::const_iterator i(
                  options.getInputFiles().begin());
              i != options.getInputFiles().end(); ++i)
         {
-            typeMgr->loadProvider(
-                convertToFileUrl(*i), options.isValid("-U"), true);
+            typeMgr->loadProvider(convertToFileUrl(*i), true);
         }
         codemaker::GeneratedTypeSet generated;
         if (options.isValid("-T")) {

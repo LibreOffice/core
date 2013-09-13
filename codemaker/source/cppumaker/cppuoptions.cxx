@@ -139,19 +139,6 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         m_options["-T"] = OString(s);
                     }
                     break;
-                case 'U':
-                    if (av[i][2] != '\0')
-                    {
-                        OString tmp("'-U', please check");
-                        if (i <= ac - 1)
-                        {
-                            tmp += " your input '" + OString(av[i]) + "'";
-                        }
-
-                        throw IllegalArgument(tmp);
-                    }
-                    m_options["-U"] = "";
-                    break;
                 case 'L':
                     if (av[i][2] != '\0')
                     {
@@ -334,17 +321,9 @@ OString CppuOptions::prepareHelp()
     help += "    -O<path>   = path describes the root directory for the generated output.\n";
     help += "                 The output directory tree is generated under this directory.\n";
     help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
-    help += "      [t1;...]   type and all dependent types are generated. If no '-T' option is\n";
-    help += "                 specified, then output for all types is generated.\n";
+    help += "      [t1;...]   type is generated. If no '-T' option is specified,\n";
+    help += "                 then output for all types is generated.\n";
     help += "                 Example: 'com.sun.star.uno.XInterface' is a valid type.\n";
-    help += "    -U         = instead of interpreting file_1 ... file_n as type rdb files,\n";
-    help += "                 interpret them as (directories of) UNOIDL source files.  If no\n";
-    help += "                 '-T' option is given, each file_i must denote a UNOIDL file, and\n";
-    help += "                 headers are generated for all entities defined in those files.";
-    help += "                 Otherwise, each file_i must denote a directory, and an entity\n";
-    help += "                 com.sun.star.uno.XInterface specified with '-T' would be searched\n";
-    help += "                 for as com/sun/star/uno/XInterface.idl under each of those\n";
-    help += "                 directories in turn.";
     help += "    -L         = UNO type functions are generated lightweight, that means only\n";
     help += "                 the name and typeclass are given and everything else is retrieved\n";
     help += "                 from the type library dynamically. The default is that UNO type\n";

@@ -27,19 +27,15 @@
 #include "codemaker/typemanager.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "unoidl/sourceprovider.hxx"
 #include "unoidl/unoidl.hxx"
 
 TypeManager::TypeManager(): manager_(new unoidl::Manager) {}
 
 TypeManager::~TypeManager() {}
 
-void TypeManager::loadProvider(OUString const & uri, bool source, bool primary)
-{
+void TypeManager::loadProvider(OUString const & uri, bool primary) {
     rtl::Reference< unoidl::Provider > prov(
-        source
-        ? new unoidl::SourceProvider(manager_, uri)
-        : unoidl::loadProvider(manager_, uri));
+        unoidl::loadProvider(manager_, uri));
     manager_->addProvider(prov);
     if (primary) {
         primaryProviders_.push_back(prov);
