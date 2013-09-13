@@ -971,7 +971,7 @@ sal_uInt32 SwVirtFlyDrawObj::GetPlusHdlCount(const SdrHdl& rHdl) const
     return rRefObj.GetPlusHdlCount(rHdl);
 }
 
-void SwVirtFlyDrawObj::GetPlusHdl(SdrHdlList& rHdlList, SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const
+void SwVirtFlyDrawObj::GetPlusHdl(SdrHdlList& rHdlList, const SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const
 {
     rRefObj.GetPlusHdl(rHdlList, rSdrObject, rHdl, nPlNum);
     OSL_ENSURE(rHdlList.GetHdlCount(), "No PlusHdl added (!)");

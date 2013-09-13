@@ -2585,7 +2585,7 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeXorPoly() const
     return aRetval;
 }
 
-void SwDrawVirtObj::GetPlusHdl(SdrHdlList& rHdlList, SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const
+void SwDrawVirtObj::GetPlusHdl(SdrHdlList& rHdlList, const SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const
     {
     rRefObj.GetPlusHdl(rHdlList, rSdrObject, rHdl, nPlNum);
     OSL_ENSURE(rHdlList.GetHdlCount(), "No PlusHdl added (!)");

@@ -63,7 +63,7 @@ namespace sdr
         typedef ::std::set< SdrObject*, SelectionComparator > SelectionSet;
 
         // basic selection calss with minimal interface
-        class SVX_DLLPUBLIC Selection : private boost::noncopyable, public SfxListener, public Timer
+        class SVX_DLLPUBLIC Selection : private boost::noncopyable, public SfxListener
         {
         private:
             // view this incarnation belongs to exclusively
@@ -87,7 +87,6 @@ namespace sdr
             basegfx::B2DRange   maSnapRange;
 
             // local tooling
-            void delayedSelectionChanged();
             void createIndexDescription(bool bPoints);
             void checkPointIndexCorrection();
             void checkGlueIndexCorrection();
@@ -98,19 +97,13 @@ namespace sdr
             // derived from SfxListener
             virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-            // derived from Timer
-            virtual void Timeout();
+            // handle change
+            void handleChange();
 
         public:
             /// constructor
             Selection(SdrView& rSdrView);
             virtual ~Selection();
-
-            /// test if selection change is pending
-            bool isSelectionChangePending() const;
-
-            /// force evtl. delayed SelectionChange to be broadcasted
-            void forceSelectionChange();
 
             /// const accesses
             const SdrObjectVector& getVector() const;

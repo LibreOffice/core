@@ -1233,7 +1233,7 @@ bool DrawViewShell::SwitchPage(sal_uInt32 nSelectedPage)
         rBindings.Invalidate(SID_INSERTPAGE,true,false);
         UpdatePreview( mpActualPage );
 
-        mpDrawView->SetMarkHandles();
+        mpDrawView->RecreateAllMarkHandles();
     }
 
     return (bOK);

@@ -501,7 +501,7 @@ void SdrGlueEditView::MoveMarkedGluePoints(const basegfx::B2DVector& rDelta, boo
 
     ImpTransformMarkedGluePoints(ImpMove, &rDelta);
     EndUndo();
-    SetMarkHandles();
+    RecreateAllMarkHandles();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -532,7 +532,7 @@ void SdrGlueEditView::ResizeMarkedGluePoints(const basegfx::B2DPoint& rRef, cons
 
     ImpTransformMarkedGluePoints(ImpResize, &rRef, &rScale);
     EndUndo();
-    SetMarkHandles();
+    RecreateAllMarkHandles();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -570,7 +570,7 @@ void SdrGlueEditView::RotateMarkedGluePoints(const basegfx::B2DPoint& rRef, doub
 
     ImpTransformMarkedGluePoints(ImpRotate, &rRef, &fAngle, &fSin, &fCos);
     EndUndo();
-    SetMarkHandles();
+    RecreateAllMarkHandles();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

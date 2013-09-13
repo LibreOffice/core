@@ -99,7 +99,7 @@ void sortSdrObjectSelection(SdrObjectVector& rSdrObjectVector);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrMarkView : public SdrSnapView
+class SVX_DLLPUBLIC SdrMarkView : public SdrSnapView, public Timer
 {
 private:
     ImplMarkingOverlay*                                 mpMarkObjOverlay;
@@ -115,12 +115,17 @@ protected:
 
 private:
     // make private; access should be limited since it is dependent of selection and thus from
-    // the selection to be up-to-date. Before using a call to isSelectionChangePending() and
-    // evtl. to forceSelectionChange() may be done which will potentially recreate all SdrHdl objects
-    SdrHdlList                  maViewHandleList;
+    // the selection to be up-to-date
+    SdrHdlList                  maViewSdrHandleList;
 
     // new selection abstraction. Private to guarantee isolation
     sdr::selection::Selection   maSelection;
+
+    // stuff to save focus during SdrHdl recreation
+    sal_uInt32                  mnSavePolyNum;
+    sal_uInt32                  mnSavePointNum;
+    SdrHdlKind                  meSaveKind;
+    const SdrObject*            mpSaveObj;
 
 protected:
     basegfx::B2DRange           maMarkedPointRange;
@@ -135,8 +140,9 @@ protected:
     bool                        mbForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
     bool                        mbPlusHdlAlways : 1;   // Persistent
     bool                        mbInsPolyPoint : 1;     // z.Zt InsPolyPointDragging
+    bool                        mbSaveOldFocus : 1;
 
-    virtual void AddDragModeHdl(SdrDragMode eMode);
+    virtual void AddDragModeHdl(SdrHdlList& rTarget, SdrDragMode eMode);
     virtual bool MouseMove(const MouseEvent& rMEvt, Window* pWin);
 
     // add custom handles (used by other apps, e.g. AnchorPos)
@@ -147,8 +153,8 @@ protected:
     virtual SdrObject* CheckSingleSdrObjectHit(const basegfx::B2DPoint& rPnt, double fTol, SdrObjList* pOL, sal_uInt32 nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
     bool ImpIsFrameHandles() const;
 
-    // Macht aus einer Winkelangabe in 1/100deg einen String inkl. Grad-Zeichen
-    bool ImpMarkPoint(SdrHdl* pHdl, bool bUnmark);
+    // select or deselect points associated with given SdrHdl vector
+    bool ImpMarkPoints(const SdrHdlContainerType& rHdls, bool bUnmark);
 
     void SetMoveOutside(bool bOn);
     bool IsMoveOutside() const;
@@ -157,8 +163,20 @@ protected:
     SdrMarkView(SdrModel& rModel1, OutputDevice* pOut = 0);
     virtual ~SdrMarkView();
 
+    // helper stuff for the complete RecreateAllMarkHandles implementation
+    void OnDemandCreate(SdrHdlList& rTarget);
+    void SaveMarkHandleFocus(const SdrHdlList& rTarget);
+    virtual void CreateMarkHandles(SdrHdlList& rTarget);
+    void RestoreMarkHandleFocus(SdrHdlList& rTarget);
+
 public:
-    void SetMarkHandles();
+    // completely recreate all SdrHdl based controller objects for all views
+    virtual void RecreateAllMarkHandles();
+
+    // from time derivation; used for automatic on-demand SdrHdl creation after
+    // RecreateAllMarkHandles calls; either triggered from timer or by hand from
+    // GetHdlList() to ensure a new, correct SdrHdl list
+    virtual void Timeout();
 
     void MarkGluePoints(const basegfx::B2DRange* pRange, bool bUnmark);
     virtual void MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark);
@@ -211,10 +229,6 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // new interface to selection, a direct wrapper to sdr::selection::Selection
-
-    // validity of selection check and force
-    bool isSelectionChangePending() const { return maSelection.isSelectionChangePending(); }
-    void forceSelectionChange() { maSelection.forceSelectionChange(); }
 
     // selection const accesses
     SdrObjectVector getSelectedSdrObjectVectorFromSdrMarkView() const { return maSelection.getVector(); }

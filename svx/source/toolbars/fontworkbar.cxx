@@ -540,7 +540,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                             if( bUndo )
                                 pSdrView->EndUndo();
 
-                            pSdrView->SetMarkHandles();
+                            pSdrView->RecreateAllMarkHandles();
                             rBindings.Invalidate( SID_FONTWORK_SHAPE_TYPE );
                         }
                     }

@@ -63,10 +63,10 @@ public:
     OReportModel(::reportdesign::OReportDefinition* _pReportDefinition);
     virtual ~OReportModel();
 
-    virtual void        SetChanged(sal_Bool bFlg = sal_True);
+    virtual void        SetChanged(bool bFlg = true);
     virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual Window*     GetCurDocViewWin();
-    virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
+    virtual SdrPage*    RemovePage(sal_uInt32 nPgNum);
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const;
 

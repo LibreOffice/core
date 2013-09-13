@@ -58,8 +58,8 @@ namespace rptui
         virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
         // layer
-        virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
-        virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
+        virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
+        virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
 //      virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
 
         // page

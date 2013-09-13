@@ -1539,7 +1539,7 @@ void E3dView::Start3DCreation()
         SetRef2(basegfx::B2DPoint(GetRef1().getX(), nY2));
 
         // force re-creation of SdrHdls TTTT needed?
-        SetMarkHandles();
+        RecreateAllMarkHandles();
 
         // SpiegelPolygone SOFORT zeigen
         const SdrHdlList &aHdlList = GetHdlList();

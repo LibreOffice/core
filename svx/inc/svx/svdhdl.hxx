@@ -158,6 +158,8 @@ enum BitmapMarkerKind
 //      SwSdrHdl
 //
 
+typedef ::std::vector< SdrHdl* > SdrHdlContainerType;
+
 class SVX_DLLPUBLIC SdrHdl : private boost::noncopyable
 {
 private:
@@ -276,7 +278,6 @@ public:
 class SVX_DLLPUBLIC SdrHdlList : private boost::noncopyable
 {
 private:
-    typedef ::std::vector< SdrHdl* > SdrHdlContainerType;
     friend class SdrHdl;
 
     SVX_DLLPRIVATE bool operator==(const SdrHdlList&);

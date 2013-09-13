@@ -495,7 +495,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     mpView->ShowSdrPage( *mpPage );
     _SelectObjectsInView( xShapes );
     mpView->GroupMarked();
-    mpView->SetMarkHandles();
+    mpView->RecreateAllMarkHandles();
 
     SdrObject* pObj = mpView->getSelectedIfSingle();
         if( pObj )

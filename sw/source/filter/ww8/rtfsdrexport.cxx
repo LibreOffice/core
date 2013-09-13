@@ -168,7 +168,9 @@ inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPoi
     return nRet;
 }
 
-void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
+void RtfSdrExport::Commit(
+    EscherPropertyContainer& rProps,
+    const basegfx::B2DRange& rObjectRange)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -176,9 +178,9 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
         return;
 
     if ( m_nShapeType == ESCHER_ShpInst_Line )
-        AddLineDimensions( rRect );
+        AddLineDimensions(rObjectRange);
     else
-        AddRectangleDimensions( *m_pShapeStyle, rRect );
+        AddRectangleDimensions(*m_pShapeStyle, rObjectRange);
 
     // properties
     const EscherProperties &rOpts = rProps.GetOpts();
@@ -393,7 +395,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
     }
 }
 
-void RtfSdrExport::AddLineDimensions( const Rectangle& rRectangle )
+void RtfSdrExport::AddLineDimensions(const basegfx::B2DRange& rObjectRange)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -415,23 +417,23 @@ void RtfSdrExport::AddLineDimensions( const Rectangle& rRectangle )
     }
 
     // the actual dimensions
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(rRectangle.Top());
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(rRectangle.Right());
-    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
+    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(basegfx::fround(rObjectRange.getMinX()));
+    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(basegfx::fround(rObjectRange.getMinY()));
+    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(basegfx::fround(rObjectRange.getMaxX()));
+    m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(basegfx::fround(rObjectRange.getMaxY()));
 }
 
-void RtfSdrExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle )
+void RtfSdrExport::AddRectangleDimensions(rtl::OStringBuffer& rBuffer, const basegfx::B2DRange& rObjectRange)
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     // We get the position relative to (the current?) character
     m_aShapeProps.insert(std::pair<OString,OString>(OString("posrelh"), OString::valueOf(sal_Int32(3))));
 
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(rRectangle.Top());
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(rRectangle.Right());
-    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(basegfx::fround(rObjectRange.getMinX()));
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(basegfx::fround(rObjectRange.getMinY()));
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(basegfx::fround(rObjectRange.getMaxX()));
+    rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(basegfx::fround(rObjectRange.getMaxY()));
 }
 
 void RtfSdrExport::AddShapeAttribute( sal_Int32 /*nAttribute*/, const rtl::OString& /*rValue*/ )

@@ -403,12 +403,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         }
                     }
 
-                    // refresh mbMoveAllowedOnSelection when selection has changed
-                    if(mpView->isSelectionChangePending())
-                    {
-                        mpView->forceSelectionChange();
-                    }
-
                     if( !bDeactivateOLE )
                     {
                         if ( !bReadOnly &&
@@ -505,7 +499,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     mpView->MarkPoints(0, true);
 
                     // update all SdrHdl before getting one
-                    mpView->forceSelectionChange();
+                    // mpView->forceSelectionChange(); TTTT: Should be done in PickHandle
 
                     // get one
                     pHdl = mpView->PickHandle(aMDPos);
@@ -531,14 +525,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if ( ! rMEvt.IsRight())
                     {
-                        if(mpView->isSelectionChangePending())
-                        {
+                        //if(mpView->isSelectionChangePending())
+                        //{
                             // trigger evtl. outstanding selection change
                             // to get a valid SdrHdl with the next call
-                            mpView->forceSelectionChange();
+                            // mpView->forceSelectionChange(); TTTT: Should be done in PickHandle
 
                             pHdl = mpView->PickHandle(aMDPos);
-                        }
+                        //}
 
                         if(pHdl)
                         {
@@ -708,7 +702,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     // force trigger selection change to get bSelectionChanged
     // set in FuSelection::SelectionHasChanged() call eventually
-    mpView->forceSelectionChange();
+    // mpView->forceSelectionChange(); TTTT: Should be done in HasMarkablePoints
 
     const double fHitLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(HITPIX, 0.0)).getLength());
     const double fDrgLog(basegfx::B2DVector(mpWindow->GetInverseViewTransformation() * basegfx::B2DVector(DRGPIX, 0.0)).getLength());

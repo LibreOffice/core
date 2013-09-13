@@ -856,7 +856,7 @@ IMPL_LINK(AnnotationManagerImpl,UpdateTagsHdl, void *, EMPTYARG)
         CreateTags();
 
     if(  mrBase.GetDrawView() )
-        static_cast< ::sd::View* >( mrBase.GetDrawView() )->SetMarkHandles();
+        static_cast< ::sd::View* >( mrBase.GetDrawView() )->RecreateAllMarkHandles();
 
     invalidateSlots();
 

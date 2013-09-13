@@ -780,7 +780,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             ImpSetAttributesFitCommon(GetTextObj());
 
             // adapt handles
-            mpView->SetMarkHandles();
+            mpView->RecreateAllMarkHandles();
             mpView->PickHandle(aLogicPos);
             SetInEditMode(rMEvt, false);
         }

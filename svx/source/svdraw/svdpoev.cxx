@@ -757,7 +757,7 @@ void SdrPolyEditView::TransformMarkedPoints(
             EndUndo();
         }
 
-        SetMarkHandles();
+        RecreateAllMarkHandles();
     }
 }
 

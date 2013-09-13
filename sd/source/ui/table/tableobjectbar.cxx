@@ -199,7 +199,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         case SID_TABLE_INSERT_ROW:
         case SID_TABLE_INSERT_COL:
         {
-            pView->SetMarkHandles();
+            pView->RecreateAllMarkHandles();
             pBindings->Invalidate( SID_TABLE_DELETE_ROW );
             pBindings->Invalidate( SID_TABLE_DELETE_COL );
             pBindings->Invalidate( SID_FRAME_LINESTYLE );

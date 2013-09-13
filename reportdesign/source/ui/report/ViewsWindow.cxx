@@ -953,7 +953,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
             }
         }
 
-        pView->SetMarkHandles();
+        pView->RecreateAllMarkHandles();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1788,7 +1788,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                 }
             }
 
-            rView.SetMarkHandles();
+            rView.RecreateAllMarkHandles();
         }
     }
 }

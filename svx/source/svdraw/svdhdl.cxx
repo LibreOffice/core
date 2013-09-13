@@ -376,7 +376,7 @@ void SdrHdl::Touch()
     // force update of graphic representation, but only when not empty. When
     // it is empty, the finishing call to CreateVisualizations() is not yet
     // done but can be expected. If not empty, attributes are changed outside
-    // handle creation (SdrMarkView::SetMarkHandles()), e.g. blinking or MouseOver
+    // handle creation (SdrMarkView::RecreateAllMarkHandles()), e.g. blinking or MouseOver
     if(!getOverlayObjectList().isEmpty())
     {
         CreateB2dIAObject();

@@ -1586,7 +1586,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
     mpView->ShowSdrPage( *GetPage() );
     _SelectObjectsInView( xShapes );
     mpView->CombineMarkedObjects( sal_False );
-    mpView->SetMarkHandles();
+    mpView->RecreateAllMarkHandles();
 
     SdrObject* pSelected = mpView->getSelectedIfSingle();
 
@@ -1636,7 +1636,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
     mpView->ShowSdrPage( *GetPage() );
     _SelectObjectsInView( xShapes );
     mpView->CombineMarkedObjects( sal_True );
-    mpView->SetMarkHandles();
+    mpView->RecreateAllMarkHandles();
 
     SdrObject* pSelected = mpView->getSelectedIfSingle();
 

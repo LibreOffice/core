@@ -809,7 +809,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             mpTextEditCursorMerker = pWin->GetCursor();
             SetMoveOutside(true);
-            // SetMarkHandles(); TTTT: Should be triggered by SetMoveOutside directly
+            // RecreateAllMarkHandles(); TTTT: Should be triggered by SetMoveOutside directly
 
             mpTextEditOutlinerView = ImpMakeOutlinerView(pWin, !bEmpty, pGivenOutlinerView);
 
@@ -1166,7 +1166,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // #111096#
             // Switch on evtl. TextAnimation again after TextEdit
             pTEObj->SetTextAnimationAllowed(true);
-            SetMarkHandles();
+            RecreateAllMarkHandles();
         }
 
         // alle OutlinerViews loeschen

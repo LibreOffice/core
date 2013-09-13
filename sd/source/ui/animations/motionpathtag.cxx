@@ -459,7 +459,7 @@ void MotionPathTag::MovePath( double fDX, double fDY )
     {
         mpPathObj->setSdrObjectTransformation(basegfx::tools::createTranslateB2DHomMatrix(fDX, fDY) * mpPathObj->getSdrObjectTransformation());
         // sdr::legacy::MoveSdrObject(*mpPathObj, Size( nDX, nDY ) );
-        mrView.SetMarkHandles(); // TTTT: Neded?
+        mrView.RecreateAllMarkHandles(); // TTTT: Neded?
     }
 }
 
@@ -517,7 +517,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                 if(0xffffffff != nInsPointNum)
                 {
                     mrView.MarkPoints(0, true); // unmarkall
-                    mrView.SetMarkHandles();
+                    mrView.RecreateAllMarkHandles();
 
                     bool bRet = mrView.BegDragObj(aMDPos, mrView.GetHdlByIndex(nInsPointNum+1), 0.0, new PathDragObjOwn( mrView ) );
 
@@ -1023,7 +1023,7 @@ void MotionPathTag::disposing()
     {
         SdrPathObj* pPathObj = mpPathObj;
         mpPathObj = 0;
-        mrView.SetMarkHandles();
+        mrView.RecreateAllMarkHandles();
         deleteSdrObjectSafeAndClearPointer(pPathObj);
     }
 
@@ -1071,7 +1071,7 @@ void MotionPathTag::DeleteMarkedPoints()
                 }
 
                 mrView.MarkPoints(0, true); // unmarkall
-                mrView.SetMarkHandles();
+                mrView.RecreateAllMarkHandles();
             }
         }
     }
@@ -1120,7 +1120,7 @@ void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
             if(sdr::PolyPolygonEditor::SetSegmentsKind( aPolyPolygon, eKind, maSelectedPoints ) )
             {
                 mpPathObj->setB2DPolyPolygonInObjectCoordinates(aPolyPolygon);
-                mrView.SetMarkHandles();
+                mrView.RecreateAllMarkHandles();
             }
         }
     }
@@ -1172,7 +1172,7 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
             if(sdr::PolyPolygonEditor::SetPointsSmooth( aPolyPolygon, eFlags, maSelectedPoints ) )
             {
                 mpPathObj->setB2DPolyPolygonInObjectCoordinates(aPolyPolygon);
-                mrView.SetMarkHandles();
+                mrView.RecreateAllMarkHandles();
             }
         }
     }
@@ -1205,7 +1205,7 @@ void SAL_CALL MotionPathTag::changesOccurred( const ChangesEvent& /*Event*/ ) th
         mpEffect->updateSdrPathObjFromPath( *mpPathObj );
         mbInUpdatePath = false;
         updatePathAttributes();
-        mrView.SetMarkHandles();
+        mrView.RecreateAllMarkHandles();
     }
 }
 

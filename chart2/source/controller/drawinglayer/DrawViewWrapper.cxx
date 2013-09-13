@@ -220,17 +220,12 @@ SdrPageView* DrawViewWrapper::GetPageView() const
 };
 
 //virtual
-void DrawViewWrapper::SetMarkHandles()
+void DrawViewWrapper::CreateMarkHandles(SdrHdlList& rTarget)
 {
-    // hack for chart: It creates ominous own handles, and that by directly manipulating
-    // the normally not accessible maViewHandleList. For now, allow access to it by casting
-    // it to non-const
-    const SdrHdlList& rHdlList = GetHdlList();
-
-    if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( const_cast< SdrHdlList& >(rHdlList) ) )
+    if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( rTarget ) )
         return;
     else
-        SdrView::SetMarkHandles();
+        SdrView::CreateMarkHandles(rTarget);
 }
 
 SdrObject* DrawViewWrapper::getHitObject( const basegfx::B2DPoint& rPnt ) const

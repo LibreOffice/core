@@ -510,7 +510,7 @@ IMPL_LINK(ViewOverlayManager,UpdateTagsHdl, void *, EMPTYARG)
     bChanges |= CreateTags();
 
     if( bChanges && mrBase.GetDrawView() )
-        static_cast< ::sd::View* >( mrBase.GetDrawView() )->SetMarkHandles();
+        static_cast< ::sd::View* >( mrBase.GetDrawView() )->RecreateAllMarkHandles();
     return 0;
 }
 

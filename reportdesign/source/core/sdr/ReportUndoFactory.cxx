@@ -124,12 +124,12 @@ SdrUndoAction* OReportUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, 
 }
 
 // layer
-SdrUndoAction* OReportUndoFactory::CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+SdrUndoAction* OReportUndoFactory::CreateUndoNewLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return m_pUndoFactory->CreateUndoNewLayer( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
-SdrUndoAction* OReportUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
+SdrUndoAction* OReportUndoFactory::CreateUndoDeleteLayer(sal_uInt32 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return m_pUndoFactory->CreateUndoDeleteLayer( nLayerNum, rNewLayerAdmin, rNewModel );
 }

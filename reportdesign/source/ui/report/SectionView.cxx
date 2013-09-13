@@ -157,13 +157,15 @@ void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         const SdrObject* pObj = pSdrHint->GetSdrHintObject();
         const SdrHintKind eKind = pSdrHint->GetSdrHintKind();
-        // check for change of selected object
-        if((HINT_OBJCHG_MOVE == eKind || HINT_OBJCHG_RESIZE == eKind || HINT_OBJCHG_ATTR == eKind)
-            && pObj && IsObjMarked(*pObj))
-        {
-            SetMarkHandles();
-        }
-        else if ( eKind == HINT_OBJREMOVED )
+        // TTTT: Should be handled by Selection::Notify now
+        //// check for change of selected object
+        //if((HINT_OBJCHG_MOVE == eKind || HINT_OBJCHG_RESIZE == eKind || HINT_OBJCHG_ATTR == eKind)
+        //    && pObj && IsObjMarked(*pObj))
+        //{
+        //    RecreateAllMarkHandles();
+        //}
+        //else
+            if ( eKind == HINT_OBJREMOVED )
         {
             ObjectRemovedInAliveMode(pObj);
     }

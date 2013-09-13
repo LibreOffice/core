@@ -485,7 +485,7 @@ void ScTabView::UpdateAnchorHandles()
 {
     if ( pDrawView )
     {
-        pDrawView->SetMarkHandles();
+        pDrawView->RecreateAllMarkHandles();
     }
 }
 

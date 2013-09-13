@@ -327,7 +327,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         }
 
         // adapt handles
-        mpView->SetMarkHandles();
+        mpView->RecreateAllMarkHandles();
 
         mpView->EndUndo();
     }

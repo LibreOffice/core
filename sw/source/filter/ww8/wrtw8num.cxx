@@ -215,8 +215,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const String &rNumberingString,
-        const SvxBrushItem* pBrush //For i120928,to transfer graphic of bullet
-    )
+        const SvxBrushItem* pBrush) //For i120928,to transfer graphic of bullet
 {
     // Start value
     SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nStart );

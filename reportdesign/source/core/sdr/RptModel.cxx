@@ -100,7 +100,7 @@ SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 
 //----------------------------------------------------------------------------
 
-void OReportModel::SetChanged( sal_Bool bChanged )
+void OReportModel::SetChanged( bool bChanged )
 {
     SdrModel::SetChanged( bChanged );
     SetModified( bChanged );
@@ -125,7 +125,7 @@ void OReportModel::SetModified(sal_Bool _bModified)
         m_pController->setModified(_bModified);
 }
 // -----------------------------------------------------------------------------
-SdrPage* OReportModel::RemovePage(sal_uInt16 nPgNum)
+SdrPage* OReportModel::RemovePage(sal_uInt32 nPgNum)
 {
     OReportPage* pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum));
     //if ( pPage )

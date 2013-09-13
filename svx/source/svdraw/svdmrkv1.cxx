@@ -120,47 +120,91 @@ bool SdrMarkView::IsPointMarkable(const SdrHdl& rHdl) const
 
 bool SdrMarkView::MarkPointHelper(SdrHdl* pHdl, bool bUnmark)
 {
-    return ImpMarkPoint(pHdl, bUnmark);
+    SdrHdlContainerType aHdl;
+
+    if(pHdl)
+    {
+        aHdl.push_back(pHdl);
+    }
+
+    return ImpMarkPoints(aHdl, bUnmark);
 }
 
-bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, bool bUnmark)
+bool SdrMarkView::ImpMarkPoints(const SdrHdlContainerType& rHdls, bool bUnmark)
 {
-    if(!pHdl || pHdl->IsPlusHdl() || HDL_GLUE == pHdl->GetKind())
-    {
-        return false;
-    }
+    sdr::selection::Indices aMarkedPoints;
+    bool bRetval(true);
+    bool bChanged(false);
+    const SdrObject* pLastObj = 0;
 
-    if(pHdl->IsSelected() != bUnmark)
+    for(sal_uInt32 a(0); a < rHdls.size(); a++)
     {
-        return false;
-    }
+        const SdrHdl* pCandidate = rHdls[a];
 
-    const SdrObject* pObj = pHdl->GetObj();
-
-    if(!pObj || !pObj->IsPolygonObject())
-    {
-        return false;
-    }
-
-    sdr::selection::Indices aMarkedPoints(getSelectedPointsForSelectedSdrObject(*pObj));
-    const sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
-
-    if (!bUnmark)
-    {
-        aMarkedPoints.insert(nHdlNum);
-    }
-    else
-    {
-        if(!aMarkedPoints.erase(nHdlNum))
+        if(!pCandidate)
         {
-            return false;
+            OSL_ENSURE(false, "OOps, null-ptr in SdhHdl list (!)");
+            continue;
         }
+
+        if(!pCandidate || pCandidate->IsPlusHdl() || HDL_GLUE == pCandidate->GetKind())
+        {
+            continue;
+        }
+
+        if(pCandidate->IsSelected() != bUnmark)
+        {
+            continue;
+        }
+
+        const SdrObject* pObj = pCandidate->GetObj();
+
+        if(!pObj || !pObj->IsPolygonObject())
+        {
+            continue;
+        }
+
+        if(!pLastObj || pLastObj != pObj)
+        {
+            if(pLastObj && bChanged)
+            {
+                setSelectedPointsForSelectedSdrObject(*pLastObj, aMarkedPoints);
+            }
+
+            bChanged = false;
+            pLastObj = pObj;
+            aMarkedPoints = getSelectedPointsForSelectedSdrObject(*pObj);
+        }
+
+        const sal_uInt32 nHdlNum(pCandidate->GetObjHdlNum());
+
+        if (!bUnmark)
+        {
+            aMarkedPoints.insert(nHdlNum);
+            bChanged = true;
+        }
+        else
+        {
+            if(aMarkedPoints.erase(nHdlNum))
+            {
+                bChanged = true;
+            }
+            else
+            {
+                bRetval = false;
+            }
+        }
+
+        // TTTT: should not be needed, setSelectedPointsForSelectedSdrObject already triggers selection change and starts recreation
+        // pCandidate->SetSelected(!bUnmark);
     }
 
-    setSelectedPointsForSelectedSdrObject(*pObj, aMarkedPoints);
-    // pHdl->SetSelected(!bUnmark); TTTT: not needed, setSelectedPointsForSelectedSdrObject already triggers selection change and starts recreation
+    if(pLastObj && bChanged)
+    {
+        setSelectedPointsForSelectedSdrObject(*pLastObj, aMarkedPoints);
+    }
 
-    return true;
+    return bRetval;
 }
 
 
@@ -168,6 +212,7 @@ bool SdrMarkView::MarkPoint(SdrHdl& rHdl, bool bUnmark)
 {
     if(!(&rHdl))
     {
+        OSL_ENSURE(false, "OOps, a null-pointer to a SdrHdl as reference was handed over (!)");
         return false;
     }
 
@@ -179,7 +224,11 @@ bool SdrMarkView::MarkPoint(SdrHdl& rHdl, bool bUnmark)
 
         if(isSdrObjectSelected(*pObj))
         {
-            if(ImpMarkPoint(&rHdl, bUnmark))
+            SdrHdlContainerType aHdl;
+
+            aHdl.push_back(&rHdl);
+
+            if(ImpMarkPoints(aHdl, bUnmark))
             {
                 bRet = true;
             }
@@ -194,21 +243,25 @@ void SdrMarkView::MarkPoints(const basegfx::B2DRange* pRange, bool bUnmark)
     const SdrObject* pObj0 = 0;
     const SdrHdlList& rHdlList = GetHdlList();
     const sal_uInt32 nHdlAnz(rHdlList.GetHdlCount());
-
-    maViewHandleList.Sort();
+    SdrHdlContainerType aHdl;
 
     for(sal_uInt32 nHdlNum(nHdlAnz); nHdlNum > 0;)
     {
         nHdlNum--;
         SdrHdl* pHdl = rHdlList.GetHdlByIndex(nHdlNum);
 
-        if(IsPointMarkable(*pHdl) && pHdl->IsSelected() == bUnmark)
+        if(pHdl && IsPointMarkable(*pHdl) && pHdl->IsSelected() == bUnmark)
         {
             if(!pRange || pRange->isInside(pHdl->getPosition()))
             {
-                ImpMarkPoint(pHdl, bUnmark);
+                aHdl.push_back(pHdl);
             }
         }
+    }
+
+    if(aHdl.size())
+    {
+        ImpMarkPoints(aHdl, bUnmark);
     }
 }
 
@@ -227,7 +280,7 @@ void SdrMarkView::SetPlusHandlesAlwaysVisible(bool bOn)
     if(bOn != IsPlusHandlesAlwaysVisible())
     {
         mbPlusHdlAlways = bOn;
-        SetMarkHandles();
+        RecreateAllMarkHandles();
     }
 }
 

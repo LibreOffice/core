@@ -680,7 +680,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const basegfx::B2DRange& 
 
 void SdrPageView::AdjHdl()
 {
-    GetView().SetMarkHandles();
+    GetView().RecreateAllMarkHandles();
 }
 
 void SdrPageView::SetLayer(const XubString& rName, SetOfByte& rBS, bool bJa)
@@ -959,7 +959,7 @@ bool SdrPageView::EnterGroup(SdrObject* pObj)
         }
 
         // build new handles
-        GetView().SetMarkHandles();
+        GetView().RecreateAllMarkHandles();
 
         // invalidate only when view wants to visualize group entering
         if(GetView().DoVisualizeEnteredGroup())
@@ -1013,7 +1013,7 @@ void SdrPageView::LeaveOneGroup()
             }
         }
 
-        GetView().SetMarkHandles();
+        GetView().RecreateAllMarkHandles();
 
         // invalidate only when view wants to visualize group entering
         if(GetView().DoVisualizeEnteredGroup())
@@ -1061,7 +1061,7 @@ void SdrPageView::LeaveAllGroup()
             }
         }
 
-        GetView().SetMarkHandles();
+        GetView().RecreateAllMarkHandles();
 
         // invalidate only when view wants to visualize group entering
         if(GetView().DoVisualizeEnteredGroup())

@@ -220,7 +220,7 @@ void SmartTagSet::select( const SmartTagReference& xTag )
         if( mrView.areSdrObjectsSelected() )
             mrView.UnmarkAllObj();
         else
-            mrView.SetMarkHandles();
+            mrView.RecreateAllMarkHandles();
     }
 }
 
@@ -233,7 +233,7 @@ void SmartTagSet::deselect()
         mxSelectedTag->deselect();
         mxSelectedTag.clear();
         mrView.SetPossibilitiesDirty();
-        mrView.SetMarkHandles();
+        mrView.RecreateAllMarkHandles();
     }
 }
 

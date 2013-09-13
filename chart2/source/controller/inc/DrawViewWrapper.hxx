@@ -48,6 +48,10 @@ public:
 
 class DrawViewWrapper : public E3dView
 {
+private:
+    //fill list of selection handles
+    virtual void CreateMarkHandles(SdrHdlList& rTarget);
+
 public:
     DrawViewWrapper(SdrModel& rModel, OutputDevice* pOut, bool bPaintPageForEditMode);
     virtual ~DrawViewWrapper();
@@ -58,9 +62,6 @@ public:
     /// tries to get an OutputDevice from the XParent of the model to use as reference device
     void attachParentReferenceDevice(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
-
-    //fill list of selection handles 'maViewHandleList'
-    virtual void SetMarkHandles();
 
     SdrPageView*    GetPageView() const;
 

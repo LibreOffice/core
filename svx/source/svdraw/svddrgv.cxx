@@ -653,7 +653,8 @@ bool SdrDragView::EndDragObj(bool bCopy)
 
         if(mbInsPolyPoint)
         {
-            SetMarkHandles();
+            RecreateAllMarkHandles();
+
             mbInsPolyPoint = false;
 
             if( bUndo )
@@ -691,7 +692,7 @@ void SdrDragView::BrkDragObj()
             mpInsPointUndo->Undo(); // Den eingefuegten Punkt wieder raus
             delete mpInsPointUndo;
             mpInsPointUndo = 0;
-            SetMarkHandles();
+            RecreateAllMarkHandles();
             mbInsPolyPoint = false;
         }
 
@@ -767,7 +768,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 /*nIdx*/, const b
         {
             mbInsPolyPoint = true;
             MarkPoints(0, true); // unmarkall
-            // SetMarkHandles(); TTTT should be triggered by GetHdlList() below
+            // RecreateAllMarkHandles(); TTTT should be triggered by GetHdlList() below
 
             bRetval = BegDragObj(rPnt, GetHdlList().GetHdlByIndex(mnInsPointNum), 0.0);
 
@@ -980,14 +981,14 @@ bool SdrDragView::IsOrthoDesired() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrDragView::SetMarkHandles()
+void SdrDragView::RecreateAllMarkHandles()
 {
     if(GetDragHdl())
     {
         mpDragHdl = 0;
     }
 
-    SdrExchangeView::SetMarkHandles();
+    SdrExchangeView::RecreateAllMarkHandles();
 }
 
 bool SdrDragView::IsSolidDragging() const

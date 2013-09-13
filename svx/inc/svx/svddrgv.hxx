@@ -37,7 +37,6 @@ class ImpSdrDragViewExtraData;
 
 class SVX_DLLPUBLIC SdrDragView: public SdrExchangeView
 {
-private:
 protected:
     SdrHdl*                     mpDragHdl;
     SdrDragMethod*              mpCurrentSdrDragMethod;
@@ -69,7 +68,7 @@ protected:
     virtual ~SdrDragView();
 
 public:
-    virtual void SetMarkHandles();
+    virtual void RecreateAllMarkHandles();
 
     virtual bool IsAction() const;
     virtual void MovAction(const basegfx::B2DPoint& rPnt);

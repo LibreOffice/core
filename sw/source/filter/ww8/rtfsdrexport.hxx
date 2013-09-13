@@ -64,6 +64,10 @@ public:
     /// Call this when you need to export the object as Sdr in RTF.
     sal_uInt32 AddSdrObject( const SdrObject& rObj );
 
+    virtual void Commit(
+        EscherPropertyContainer& rProps,
+        const basegfx::B2DRange& rObjectRange);
+
 protected:
     /// Add an attribute to the generated shape element.
     ///
@@ -83,8 +87,6 @@ protected:
     using EscherEx::EndShape;
     virtual void        EndShape( sal_Int32 nShapeElement );
 
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
-
 private:
 
     virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );
@@ -98,10 +100,10 @@ private:
 
 private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.
-    void AddLineDimensions( const Rectangle& rRectangle );
+    void AddLineDimensions(const basegfx::B2DRange& rObjectRange);
 
     /// Add position and size to the OStringBuffer.
-    void AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle );
+    void AddRectangleDimensions(rtl::OStringBuffer& rBuffer, const basegfx::B2DRange& rObjectRange);
 
     void WriteOutliner(const OutlinerParaObject& rParaObj);
 };

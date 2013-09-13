@@ -1030,7 +1030,7 @@ void CustomAnimationPane::updateMotionPathTags()
 
     if( bChanges && pView )
     {
-        pView->SetMarkHandles();
+        pView->RecreateAllMarkHandles();
     }
 }
 

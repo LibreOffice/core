@@ -225,7 +225,8 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     // #i118524# refresh handles to suppress for activated OLE
     if(GetSdrView())
     {
-        GetSdrView()->forceSelectionChange();
+        // TTTT: Is this needed? Check for it...
+        GetSdrView()->handleSelectionChange();
     }
     //! SetDocumentName sollte schon im Sfx passieren ???
     //TODO/LATER: how "SetDocumentName"?

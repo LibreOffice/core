@@ -990,7 +990,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 // #101928# re-create handles to show new outfit
                 if(dynamic_cast< DrawViewShell* >(mpViewShell))
                 {
-                    mpViewShell->GetView()->SetMarkHandles();
+                    mpViewShell->GetView()->RecreateAllMarkHandles();
                 }
             }
         }

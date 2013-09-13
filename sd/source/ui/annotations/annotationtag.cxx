@@ -437,7 +437,7 @@ void AnnotationTag::Move( double fDX, double fDY )
         if( mrManager.GetDoc()->IsUndoEnabled() )
             mrManager.GetDoc()->EndUndo();
 
-        mrView.SetMarkHandles();
+        mrView.RecreateAllMarkHandles();
     }
 }
 

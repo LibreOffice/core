@@ -156,31 +156,7 @@ namespace sdr
             }
         }
 
-        void Selection::delayedSelectionChanged()
-        {
-            // trigger a delayed selection change
-            if(!IsActive())
-            {
-                SetTimeout(1);
-                Start();
-            }
-        }
-
-        bool Selection::isSelectionChangePending() const
-        {
-            return IsActive();
-        }
-
-        void Selection::forceSelectionChange()
-        {
-            if(IsActive())
-            {
-                Stop();
-                Timeout();
-            }
-        }
-
-        void Selection::Timeout()
+        void Selection::handleChange()
         {
             // check if marked points need to be corrected
             if(!maPointIndices.empty())
@@ -273,7 +249,6 @@ namespace sdr
         Selection::Selection(SdrView& rSdrView)
         :   boost::noncopyable(),
             SfxListener(),
-            Timer(),
             mrSdrView(rSdrView),
             maSet(),
             maPointIndices(),
@@ -287,7 +262,6 @@ namespace sdr
 
         Selection::~Selection()
         {
-            Stop();
         }
 
         void Selection::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
@@ -307,15 +281,12 @@ namespace sdr
                     case HINT_OBJCHG_RESIZE:
                     case HINT_OBJCHG_ATTR:
                     {
-                        // the BoundRange/SnapRange of a selected SdrObject
-                        // may have changed. Since this may happen often and
-                        // mainly based on the selection, do not trigger a
-                        // selection change immediately, but start a timer
-                        // to do so later
-                        delayedSelectionChanged();
-
                         // reset buffered SnapRange
                         resetBufferedSelectionInformation();
+
+                        // the BoundRange/SnapRange of a selected SdrObject
+                        // may have changed
+                        handleChange();
                         break;
                     }
                     case HINT_OBJINSERTED:
@@ -330,7 +301,7 @@ namespace sdr
                     {
                         // a selected SdrObject was removed from SdrObjList, thus is no
                         // longer active in the SdrModel. Remove from selection, too.
-                        // This also triggers a delayedSelectionChanged()
+                        // This also triggers handleChange()
                         if(pSdrHint->GetSdrHintObject())
                         {
                             removeSdrObject(*pSdrHint->GetSdrHintObject());
@@ -350,7 +321,7 @@ namespace sdr
                                     This should be avoided by managing the selection before calling changing methods (!)");
 
                                 // remove the deleted SdrObject from the selection. This will trigger
-                                // a delayedSelectionChanged to react. All selection
+                                // handleChange() to react. All selection
                                 // users have to forget the deleted SdrObject ASAP
                                 removeSdrObject(*pSdrHint->GetSdrHintObject());
                             }
@@ -452,7 +423,7 @@ namespace sdr
                     }
 
                     resetBufferedSelectionInformation();
-                    delayedSelectionChanged();
+                    handleChange();
                 }
             }
         }
@@ -470,7 +441,7 @@ namespace sdr
                 resetBufferedSelectionInformation();
                 resetBufferedPointInformation();
                 resetBufferedGlueInformation();
-                delayedSelectionChanged();
+                handleChange();
             }
         }
 
@@ -489,7 +460,7 @@ namespace sdr
                 resetBufferedSelectionInformation();
                 resetBufferedPointInformation();
                 resetBufferedGlueInformation();
-                delayedSelectionChanged();
+                handleChange();
             }
         }
 
@@ -524,7 +495,7 @@ namespace sdr
                         StartListening(const_cast< SdrObject& >(**aIter));
                     }
 
-                    delayedSelectionChanged();
+                    handleChange();
                 }
             }
         }
@@ -581,7 +552,7 @@ namespace sdr
                             resetBufferedGlueInformation();
                         }
 
-                        delayedSelectionChanged();
+                        handleChange();
                     }
                 }
                 else
@@ -618,7 +589,7 @@ namespace sdr
                                 resetBufferedGlueInformation();
                             }
 
-                            delayedSelectionChanged();
+                            handleChange();
                         }
                     }
                 }

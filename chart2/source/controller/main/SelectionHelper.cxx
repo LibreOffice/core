@@ -622,7 +622,6 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     //that object should be used to create handles from
     if( m_pMarkObj && m_pMarkObj != m_pSelectedObj)
     {
-        rHdlList.Clear();
         SdrPathObj* pSdrPathObj = dynamic_cast< SdrPathObj* >(m_pMarkObj);
 
         if( pSdrPathObj )
@@ -647,8 +646,6 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
 
     //@todo:
     //add and document good marking defaults ...
-
-    rHdlList.Clear();
 
     SdrObject* pObj = m_pSelectedObj;
     if(!pObj)

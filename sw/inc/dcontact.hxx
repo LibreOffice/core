@@ -329,7 +329,7 @@ public:
     // All overloaded methods which need to use the offset
     virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
-    virtual void GetPlusHdl(SdrHdlList& rHdlList, SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
+    virtual void GetPlusHdl(SdrHdlList& rHdlList, const SdrObject& rSdrObject, const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
     virtual basegfx::B2DPoint GetSnapPoint(sal_uInt32 i) const;
     virtual basegfx::B2DPoint GetObjectPoint(sal_uInt32 i) const;
     virtual void SetObjectPoint(const basegfx::B2DPoint& rPnt, sal_uInt32 i);
