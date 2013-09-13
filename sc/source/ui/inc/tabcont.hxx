@@ -46,6 +46,9 @@ private:
     sal_uInt16          GetMaxId() const;
     SCTAB           GetPrivatDropPos(const Point& rPos );
 
+    DECL_LINK(ShowPageList, const CommandEvent*);
+
+    void SwitchToPageId(sal_uInt16 nId);
 protected:
     virtual void    Select();
     virtual void    Command( const CommandEvent& rCEvt );

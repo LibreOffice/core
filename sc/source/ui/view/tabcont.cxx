@@ -81,6 +81,39 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
 
     EnableEditMode();
     UpdateInputContext();
+
+    SetScrollAlwaysEnabled(true);
+
+    SetScrollAreaContextHdl( LINK( this, ScTabControl, ShowPageList ) );
+}
+
+IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent *, pEvent)
+{
+    PopupMenu aPopup;
+
+    sal_uInt16 nCurPageId = GetCurPageId();
+
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCTAB nCount = pDoc->GetTableCount();
+    for (SCTAB i=0; i<nCount; ++i)
+    {
+        if (pDoc->IsVisible(i))
+        {
+            OUString aString;
+            if (pDoc->GetName(i, aString))
+            {
+                sal_uInt16 nId = static_cast<sal_uInt16>(i)+1;
+                aPopup.InsertItem(nId, aString, MIB_CHECKABLE);
+                if (nId == nCurPageId)
+                    aPopup.CheckItem(nId);
+            }
+        }
+    }
+
+    sal_uInt16 nItemId = aPopup.Execute( this, pEvent->GetMousePosPixel() );
+    SwitchToPageId(nItemId);
+
+    return 0;
 }
 
 ScTabControl::~ScTabControl()
@@ -368,6 +401,25 @@ void ScTabControl::SetSheetLayoutRTL( sal_Bool bSheetRTL )
     nSelPageIdByMouse = TabBar::PAGE_NOT_FOUND;
 }
 
+void ScTabControl::SwitchToPageId(sal_uInt16 nId)
+{
+    if (nId)
+    {
+        sal_Bool bAlreadySelected = IsPageSelected( nId );
+        //make the clicked page the current one
+        SetCurPageId( nId );
+        //change the selection when the current one is not already
+        //selected or part of a multi selection
+        if(!bAlreadySelected)
+        {
+            sal_uInt16 nCount = GetMaxId();
+
+            for (sal_uInt16 i=1; i<=nCount; i++)
+                SelectPage( i, i==nId );
+            Select();
+        }
+    }
+}
 
 void ScTabControl::Command( const CommandEvent& rCEvt )
 {
@@ -387,22 +439,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
             // if multiple tables are selected and the one under the cursor
             // is not part of them then unselect them
             sal_uInt16 nId = GetPageId( rCEvt.GetMousePosPixel() );
-            if (nId)
-            {
-                sal_Bool bAlreadySelected = IsPageSelected( nId );
-                //make the clicked page the current one
-                SetCurPageId( nId );
-                //change the selection when the current one is not already
-                //selected or part of a multi selection
-                if(!bAlreadySelected)
-                {
-                    sal_uInt16 nCount = GetMaxId();
-
-                    for (sal_uInt16 i=1; i<=nCount; i++)
-                        SelectPage( i, i==nId );
-                    Select();
-                }
-            }
+            SwitchToPageId(nId);
 
             // #i52073# OLE inplace editing has to be stopped before showing the sheet tab context menu
             pViewSh->DeactivateOle();

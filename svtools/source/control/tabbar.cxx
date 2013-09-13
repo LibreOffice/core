@@ -100,12 +100,32 @@ class ImplTabButton : public PushButton
 {
 public:
                     ImplTabButton( TabBar* pParent, WinBits nWinStyle = 0 ) :
-                        PushButton( pParent, nWinStyle | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS  ) {}
+                    PushButton( pParent, nWinStyle | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS  ) {}
 
     TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
+
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+
+    virtual void    Command( const CommandEvent& rCEvt );
 };
+
+void ImplTabButton::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    PushButton::MouseButtonDown(rMEvt);
+}
+
+void ImplTabButton::Command( const CommandEvent& rCEvt )
+{
+    sal_uInt16 nCmd = rCEvt.GetCommand();
+    if ( nCmd == COMMAND_CONTEXTMENU )
+    {
+        TabBar *pParent = GetParent();
+        pParent->maScrollAreaContextHdl.Call((void*)&rCEvt);
+    }
+    PushButton::Command(rCEvt);
+}
 
 // =======================================================================
 
@@ -398,6 +418,8 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbSelColor      = sal_False;
     mbSelTextColor  = sal_False;
     mbMirrored      = sal_False;
+    mbMirrored      = sal_False;
+    mbScrollAlwaysEnabled = false;
 
     if ( nWinStyle & WB_3DTAB )
         mnOffY++;
@@ -752,17 +774,23 @@ void TabBar::ImplEnableControls()
         return;
 
     // Buttons enablen/disblen
-    sal_Bool bEnableBtn = mnFirstPos > 0;
+    sal_Bool bEnableBtn = mbScrollAlwaysEnabled || mnFirstPos > 0;
     if ( mpFirstBtn )
         mpFirstBtn->Enable( bEnableBtn );
     if ( mpPrevBtn )
         mpPrevBtn->Enable( bEnableBtn );
 
-    bEnableBtn = mnFirstPos < ImplGetLastFirstPos();
+    bEnableBtn = mbScrollAlwaysEnabled || mnFirstPos < ImplGetLastFirstPos();
     if ( mpNextBtn )
         mpNextBtn->Enable( bEnableBtn );
     if ( mpLastBtn )
         mpLastBtn->Enable( bEnableBtn );
+}
+
+void TabBar::SetScrollAlwaysEnabled(bool bScrollAlwaysEnabled)
+{
+    mbScrollAlwaysEnabled = bScrollAlwaysEnabled;
+    ImplEnableControls();
 }
 
 // -----------------------------------------------------------------------

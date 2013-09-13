@@ -369,6 +369,7 @@ private:
     sal_Bool            mbSelTextColor;
     bool            mbMirrored;
     bool            mbHasInsertTab; // if true, the tab bar has an extra tab at the end.
+    bool            mbScrollAlwaysEnabled;
     Link            maSelectHdl;
     Link            maDoubleClickHdl;
     Link            maSplitHdl;
@@ -377,6 +378,7 @@ private:
     Link            maStartRenamingHdl;
     Link            maAllowRenamingHdl;
     Link            maEndRenamingHdl;
+    Link            maScrollAreaContextHdl;
     size_t          maCurrentItemList;
 
     using Window::ImplInit;
@@ -529,6 +531,8 @@ public:
     void            SetStyle( WinBits nStyle );
     WinBits         GetStyle() const { return mnWinStyle; }
 
+    void            SetScrollAlwaysEnabled(bool bScrollAlwaysEnabled);
+
     Size            CalcWindowSizePixel() const;
 
     void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
@@ -547,6 +551,8 @@ public:
     const Link&     GetAllowRenamingHdl() const { return maAllowRenamingHdl; }
     void            SetEndRenamingHdl( const Link& rLink ) { maEndRenamingHdl = rLink; }
     const Link&     GetEndRenamingHdl() const { return maEndRenamingHdl; }
+    void            SetScrollAreaContextHdl( const Link& rLink ) { maScrollAreaContextHdl = rLink; }
+    const Link&     GetScrollAreaContextHdl() const { return maScrollAreaContextHdl; }
 
     // accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
