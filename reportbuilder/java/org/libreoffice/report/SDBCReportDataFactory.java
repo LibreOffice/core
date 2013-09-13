@@ -234,67 +234,51 @@ public class SDBCReportDataFactory implements DataSourceFactory
     {
         final StringBuffer order = new StringBuffer();
         final int count = sortExpressions.size();
-        if (count != 0)
+        String quote;
+        try
         {
-            try
+            quote = connection.getMetaData().getIdentifierQuoteString();
+        }
+        catch (SQLException ex)
+        {
+            LOGGER.error("ReportProcessing failed / getOrderStatement could not get quote character", ex);
+            // fall back to the SQL standard
+            quote="";
+        }
+        for (int i = 0; i < count; i++)
+        {
+            final Object[] pair = (Object[]) sortExpressions.get(i);
+            String expression = (String) pair[0];
+
+            // LEM FIXME: ${EXPLETIVE}! Either the values we get are *always* already quoted
+            // (and then this whole work is not useful)
+            // or they are *never* quoted
+            // (and then just quote them unconditionally)
+            // The current mess gives an ambiguity when the column name starts with a quote character.
+            // It *seems* they are never quoted, but this needs further testing.
+            if (!expression.startsWith(quote))
             {
-                final String quote = connection.getMetaData().getIdentifierQuoteString();
-                final XComponent[] hold = new XComponent[1];
-                final XNameAccess columns = getFieldsByCommandDescriptor(commandType, command, hold);
-                if (columns != null)
-                {
-                    for (int i = 0; i < count; i++)
-                    {
-                        final Object[] pair = (Object[]) sortExpressions.get(i);
-                        String expression = (String) pair[0];
-
-                        if (!expression.startsWith(quote) && columns.hasByName(expression))
-                        {
-                            XPropertySet column;
-                            try
-                            {
-                                column = UnoRuntime.queryInterface(XPropertySet.class, columns.getByName(expression));
-                                String prefix;
-                                prefix = (String)column.getPropertyValue("TableName");
-                                if (prefix == null)
-                                    prefix = "";
-                                if (prefix.length() != 0)
-                                {
-                                    prefix = quote + prefix + quote + ".";
-                                }
-                                expression = prefix + quote + expression + quote;
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.getLogger(SDBCReportDataFactory.class.getName()).log(Level.SEVERE, null, ex);
-                                expression = quote + expression + quote;
-                            }
-                        }
-                        expression = expression.trim(); // Trim away white spaces
-
-                        if (expression.length() > 0)
-                        {
-                            order.append(expression);
-                            if (order.length() > 0)
-                            {
-                                order.append(' ');
-                            }
-                            final String sorting = (String) pair[1];
-                            if (sorting == null || sorting.equals(OfficeToken.FALSE))
-                            {
-                                order.append("DESC");
-                            }
-                            if ((i + 1) < count)
-                            {
-                                order.append(", ");
-                            }
-                        }
-                    }
-                }
+                expression = quote + expression + quote;
+                // LEM TODO: we should escape quotes in expression?
             }
-            catch (SQLException ex)
+            expression = expression.trim(); // Trim away white spaces
+
+            if (expression.length() > 0)
             {
-                LOGGER.error("ReportProcessing failed", ex);
+                order.append(expression);
+                if (order.length() > 0)
+                {
+                    order.append(' ');
+                }
+                final String sorting = (String) pair[1];
+                if (sorting == null || sorting.equals(OfficeToken.FALSE))
+                {
+                    order.append("DESC");
+                }
+                if ((i + 1) < count)
+                {
+                    order.append(", ");
+                }
             }
         }
         return order.toString();
