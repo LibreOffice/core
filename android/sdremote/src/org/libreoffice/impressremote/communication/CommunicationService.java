@@ -186,6 +186,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     public void onSlideShowStart(int aSlidesCount, int aCurrentSlideIndex) {
         mSlideShow = new SlideShow(mTimer);
         mSlideShow.setSlidesCount(aSlidesCount);
+        mSlideShow.setRunning(true);
 
         Intent aIntent = Intents.buildSlideShowRunningIntent();
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);

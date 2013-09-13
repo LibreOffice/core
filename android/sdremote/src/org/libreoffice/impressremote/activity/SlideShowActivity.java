@@ -118,6 +118,11 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void startSlideShow() {
+        if (mCommunicationService.getSlideShow().isRunning()) {
+            setUpSlideShowInformation();
+            return;
+        }
+
         mCommunicationService.getTransmitter().startPresentation();
     }
 

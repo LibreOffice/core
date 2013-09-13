@@ -12,6 +12,8 @@ import android.util.SparseArray;
 
 
 public class SlideShow {
+    private boolean mRunning;
+
     private int mSlidesCount;
     private int mCurrentSlideIndex;
 
@@ -21,13 +23,23 @@ public class SlideShow {
     private final Timer mTimer;
 
     public SlideShow(Timer aTimer) {
-        this.mSlidesCount = 0;
-        this.mCurrentSlideIndex = 0;
+        mRunning = false;
 
-        this.mSlidePreviewsBytes = new SparseArray<byte[]>();
-        this.mSlideNotes = new SparseArray<String>();
+        mSlidesCount = 0;
+        mCurrentSlideIndex = 0;
 
-        this.mTimer = aTimer;
+        mSlidePreviewsBytes = new SparseArray<byte[]>();
+        mSlideNotes = new SparseArray<String>();
+
+        mTimer = aTimer;
+    }
+
+    public void setRunning(boolean aRunning) {
+        mRunning = aRunning;
+    }
+
+    public boolean isRunning() {
+        return mRunning;
     }
 
     public void setSlidesCount(int aSlidesCount) {

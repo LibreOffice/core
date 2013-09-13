@@ -132,7 +132,9 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
 
     @Override
     public void onPageSelected(int aPosition) {
-        mCommunicationService.getTransmitter().setCurrentSlide(aPosition);
+        if (mCommunicationService.getSlideShow().getCurrentSlideIndex() != aPosition) {
+            mCommunicationService.getTransmitter().setCurrentSlide(aPosition);
+        }
 
         setUpSlideNotes(aPosition);
     }
