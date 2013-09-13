@@ -58,26 +58,17 @@
 # pragma GCC diagnostic ignored "-Wunused-function"
 #endif
 
-static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
-							     const connectivity::SQLNodeType eNodeType,
-								 const sal_uInt32 nNodeID = 0)
-{
-	return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
-}
+inline connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
+        const connectivity::SQLNodeType eNodeType,
+        const sal_uInt32 nNodeID = 0);
 
-static connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
-							    const connectivity::SQLNodeType eNodeType,
-								const sal_uInt32 nNodeID = 0)
-{
-	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
-}
+inline connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
+        const connectivity::SQLNodeType eNodeType,
+        const sal_uInt32 nNodeID = 0);
 
-static connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
-							    const connectivity::SQLNodeType eNodeType,
-								const sal_uInt32 nNodeID = 0)
-{
-	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
-}
+inline connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
+        const connectivity::SQLNodeType eNodeType,
+        const sal_uInt32 nNodeID = 0);
 
 
 // yyi ist die interne Nr. der Regel, die gerade reduziert wird.
@@ -4279,6 +4270,28 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::dbtools;
+
+connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
+        const connectivity::SQLNodeType eNodeType,
+        const sal_uInt32 nNodeID)
+{
+    return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
+}
+
+connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
+        const connectivity::SQLNodeType eNodeType,
+        const sal_uInt32 nNodeID)
+{
+    return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
+}
+
+connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
+        const connectivity::SQLNodeType eNodeType,
+        const sal_uInt32 nNodeID)
+{
+    return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
+}
+
 
 //============================================================
 //= a helper for static ascii pseudo-unicode strings
