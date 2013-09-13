@@ -82,3 +82,9 @@ If extras exist, for example extras/source/autotext/*:
 ** in extras_AUTOCORR_XMLFILES change directory entries, for example sh-RS/acor/DocumentList.xml to sr-Latn-RS/acor/DocumentList.xml
 
 * rename files accordingly, for example in extras/source/autotext/lang/  git mv sh-RS sr-Latn-RS
+
+If helpcontent exists:
+
+* helpcontent2/source/auxiliary/*/*       for example helpcontent2/source/auxiliary/sh/*
+** change Language=..., for example Language=sh to Language=sr-Latn in helpcontent2/source/auxiliary/sh/*.cfg
+** rename helpcontent2/source/auxiliary/sh/  git mv sh sr-Latn
