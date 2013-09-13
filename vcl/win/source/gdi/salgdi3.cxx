@@ -104,7 +104,8 @@ protected:
     enum{ MAGIC = 0x12349876 }; // change if fontattrcache format changes
 
 public:
-            ImplFontAttrCache( const String& rCacheFileName, const String& rBaseURL );
+            ImplFontAttrCache(const OUString& rCacheFileName,
+                              const OUString& rBaseURL);
             ~ImplFontAttrCache();
 
     ImplDevFontAttributes  GetFontAttr( const String& rFontFileName ) const;
