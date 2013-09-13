@@ -252,21 +252,21 @@ RefEdit* ParaWin::GetActiveEdit()
 }
 
 
-String ParaWin::GetArgument(sal_uInt16 no)
+OUString ParaWin::GetArgument(sal_uInt16 no)
 {
-    String aStr;
+    OUString aStr;
     if(no<aParaArray.size())
     {
         aStr=aParaArray[no];
-        if(no==nActiveLine && aStr.Len()==0)
-            aStr+=' ';
+        if(no==nActiveLine && aStr.isEmpty())
+            aStr += " ";
     }
     return aStr;
 }
 
-String  ParaWin::GetActiveArgName()
+OUString  ParaWin::GetActiveArgName()
 {
-    String aStr;
+    OUString aStr;
     if(nArgs>0 && nEdFocus!=NOT_FOUND)
     {
         aStr=aArgInput[nEdFocus].GetArgName();
@@ -275,7 +275,7 @@ String  ParaWin::GetActiveArgName()
 }
 
 
-void ParaWin::SetArgument(sal_uInt16 no, const String& aString)
+void ParaWin::SetArgument(sal_uInt16 no, const OUString& aString)
 {
     if (no < aParaArray.size())
         aParaArray[no] = comphelper::string::stripStart(aString, ' ');
@@ -283,7 +283,7 @@ void ParaWin::SetArgument(sal_uInt16 no, const String& aString)
 
 void ParaWin::DelParaArray()
 {
-    ::std::vector<String>().swap(aParaArray);
+    ::std::vector<OUString>().swap(aParaArray);
 }
 
 void ParaWin::SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont)
@@ -335,22 +335,22 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
 
 }
 
-void ParaWin::SetArgumentText(const String& aText)
+void ParaWin::SetArgumentText(const OUString& aText)
 {
     aFtArgName.SetText(aText);
 }
 
-void ParaWin::SetArgumentDesc(const String& aText)
+void ParaWin::SetArgumentDesc(const OUString& aText)
 {
     aFtArgDesc.SetText(aText);
 }
 
-void ParaWin::SetEditDesc(const String& aText)
+void ParaWin::SetEditDesc(const OUString& aText)
 {
     aFtEditDesc.SetText(aText);
 }
 
-void ParaWin::SetArgName(sal_uInt16 no,const String& aText)
+void ParaWin::SetArgName(sal_uInt16 no,const OUString& aText)
 {
     aArgInput[no].SetArgName(aText);
 }
@@ -360,7 +360,7 @@ void ParaWin::SetArgNameFont(sal_uInt16 no,const Font& aFont)
     aArgInput[no].SetArgNameFont(aFont);
 }
 
-void ParaWin::SetArgVal(sal_uInt16 no,const String& aText)
+void ParaWin::SetArgVal(sal_uInt16 no,const OUString& aText)
 {
     aArgInput[no].SetArgVal(aText);
 }

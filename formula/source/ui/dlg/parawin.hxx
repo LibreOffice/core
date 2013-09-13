@@ -81,16 +81,16 @@ private:
         RefButton       aRefBtn4;
 
         ScrollBar       aSlider;
-        String          m_sOptional;
-        String          m_sRequired;
-        sal_Bool            bRefMode;
+        OUString        m_sOptional;
+        OUString        m_sRequired;
+        sal_Bool        bRefMode;
 
-        sal_uInt16          nEdFocus;
-        sal_uInt16          nActiveLine;
+        sal_uInt16      nEdFocus;
+        sal_uInt16      nActiveLine;
 
         ArgInput        aArgInput[4];
-        String          aDefaultString;
-        ::std::vector<String>
+        OUString        aDefaultString;
+        ::std::vector<OUString>
                         aParaArray;
 
         DECL_LINK(ScrollHdl, void *);
@@ -109,13 +109,13 @@ protected:
                                         ArgEdit& rEdArg, RefButton& rRefBtn);
 
         void            DelParaArray();
-        void            SetArgumentDesc(const String& aText);
-        void            SetArgumentText(const String& aText);
+        void            SetArgumentDesc(const OUString& aText);
+        void            SetArgumentText(const OUString& aText);
 
 
-        void            SetArgName      (sal_uInt16 no,const String &aArg);
+        void            SetArgName      (sal_uInt16 no,const OUString &aArg);
         void            SetArgNameFont  (sal_uInt16 no,const Font&);
-        void            SetArgVal       (sal_uInt16 no,const String &aArg);
+        void            SetArgVal       (sal_uInt16 no,const OUString &aArg);
 
         void            HideParaLine(sal_uInt16 no);
         void            ShowParaLine(sal_uInt16 no);
@@ -128,7 +128,7 @@ public:
 
         void            SetFunctionDesc(const IFunctionDescription* pFDesc);
         void            SetArgumentOffset(sal_uInt16 nOffset);
-        void            SetEditDesc(const String& aText);
+        void            SetEditDesc(const OUString& aText);
         void            UpdateParas();
         void            ClearAll();
 
@@ -138,10 +138,10 @@ public:
         sal_uInt16          GetActiveLine();
         void            SetActiveLine(sal_uInt16 no);
         RefEdit*        GetActiveEdit();
-        String          GetActiveArgName();
+        OUString        GetActiveArgName();
 
-        String          GetArgument(sal_uInt16 no);
-        void            SetArgument(sal_uInt16 no, const String& aString);
+        OUString        GetArgument(sal_uInt16 no);
+        void            SetArgument(sal_uInt16 no, const OUString& aString);
         void            SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont);
 
         void            SetEdFocus(sal_uInt16 nEditLine); //Sichtbare Editzeilen

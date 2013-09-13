@@ -1165,25 +1165,24 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
 {
     if (nEd<nArgs)
     {
-        sal_uInt16 i;
-        for(i=0;i<=nEd;i++)
+        for(sal_uInt16 i=0; i<=nEd; i++)
         {
             if ( m_aArguments[i].isEmpty() )
                 m_aArguments[i] = OUString(" ");
         }
-        if(pParaWin->GetArgument(nEd).Len()!=0)
+        if(!pParaWin->GetArgument(nEd).isEmpty())
             m_aArguments[nEd] = pParaWin->GetArgument(nEd);
 
         sal_uInt16 nClearPos=nEd+1;
-        for(i=nEd+1;i<nArgs;i++)
+        for(sal_uInt16 i=nEd+1; i<nArgs; i++)
         {
-            if(pParaWin->GetArgument(i).Len()!=0)
+            if( !pParaWin->GetArgument(i).isEmpty() )
             {
                 nClearPos=i+1;
             }
         }
 
-        for(i=nClearPos;i<nArgs;i++)
+        for(sal_uInt16 i=nClearPos; i<nArgs; i++)
         {
             m_aArguments[i] = OUString();
         }
