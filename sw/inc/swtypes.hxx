@@ -172,14 +172,6 @@ SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 const sal_Unicode cMarkSeparator = '|';
 // Sequences names for jumps are <name of sequence>!<no>
 const sal_Unicode cSequenceMarkSeparator = '!';
-extern const sal_Char* pMarkToTable;        // Strings are
-extern const sal_Char* pMarkToFrame;        // in Init.cxx.
-extern const sal_Char* pMarkToRegion;
-SW_DLLPUBLIC extern const sal_Char* pMarkToOutline;
-extern const sal_Char* pMarkToText;
-extern const sal_Char* pMarkToGraphic;
-extern const sal_Char* pMarkToOLE;
-extern const sal_Char* pMarkToSequence;
 
 #ifndef DB_DELIM                            // This is defined in OFA!
 #define DB_DELIM ((sal_Unicode)0xff)        // Database <-> table separator.

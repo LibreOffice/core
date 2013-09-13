@@ -3365,7 +3365,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     String sSuffix = OUString('|');
     if(sToCompare == sTables)
     {
-        sSuffix += OUString::createFromAscii(pMarkToTable);
+        sSuffix += "table";
 
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextTables(), sToCompare, sSuffix );
@@ -3374,7 +3374,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sFrames)
     {
-        sSuffix += OUString::createFromAscii(pMarkToFrame);
+        sSuffix += "frame";
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextFrames(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3382,7 +3382,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sSections)
     {
-        sSuffix += OUString::createFromAscii(pMarkToRegion);
+        sSuffix += "region";
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextSections(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3390,7 +3390,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sGraphics)
     {
-        sSuffix += OUString::createFromAscii(pMarkToGraphic);
+        sSuffix += "graphic";
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getGraphicObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3398,7 +3398,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sOLEs)
     {
-        sSuffix += OUString::createFromAscii(pMarkToOLE);
+        sSuffix += "ole";
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getEmbeddedObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3406,7 +3406,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sOutlines)
     {
-        sSuffix += OUString::createFromAscii(pMarkToOutline);
+        sSuffix += "outline";
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         *pxDoc, sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3578,7 +3578,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
         String sSuffix = OUString('|');
-        sSuffix += OUString::createFromAscii(pMarkToOutline);
+        sSuffix += OUString::createFromAscii("outline");
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
         {
@@ -3678,26 +3678,26 @@ void SwXLinkNameAccessWrapper::setPropertyValue(
     throw UnknownPropertyException();
 }
 
-static Any lcl_GetDisplayBitmap(String sLinkSuffix)
+static Any lcl_GetDisplayBitmap(OUString sLinkSuffix)
 {
     Any aRet;
-    if(sLinkSuffix.Len())
-        sLinkSuffix.Erase(0, 1);
+    if(!sLinkSuffix.isEmpty())
+        sLinkSuffix = sLinkSuffix.copy(1);
     sal_uInt16 nImgId = USHRT_MAX;
 
-    if(COMPARE_EQUAL == sLinkSuffix.CompareToAscii(pMarkToOutline))
+    if(sLinkSuffix == "outline")
         nImgId = CONTENT_TYPE_OUTLINE;
-    else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToTable))
+    else if(sLinkSuffix == "table")
         nImgId = CONTENT_TYPE_TABLE;
-    else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToFrame))
+    else if(sLinkSuffix == "frame")
         nImgId = CONTENT_TYPE_FRAME;
-    else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToGraphic))
+    else if(sLinkSuffix == "graphic")
         nImgId = CONTENT_TYPE_GRAPHIC;
-    else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToRegion))
+    else if(sLinkSuffix == "region")
         nImgId = CONTENT_TYPE_REGION;
-    else if(COMPARE_EQUAL == sLinkSuffix.CompareToAscii(pMarkToOLE))
+    else if(sLinkSuffix == "ole")
         nImgId = CONTENT_TYPE_OLE;
-    else if(!sLinkSuffix.Len())
+    else if(sLinkSuffix.isEmpty())
         nImgId = CONTENT_TYPE_BOOKMARK;
     if(USHRT_MAX != nImgId)
     {
