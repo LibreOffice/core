@@ -1008,17 +1008,11 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                     // check if the column is also a parameter
                     traverseSearchCondition(pColumnRef); // num_value_exp
 
-                    // Do all involved columns of the function belong to one table?
-                    if (m_pImpl->m_pTables->size() == 1)
-                    {
-                        aTableRange = m_pImpl->m_pTables->begin()->first;
-                    }
-                    else
-                    {
-                        getColumnTableRange(pColumnRef,aTableRange);
-                    }
                     if ( pColumnRef->isRule() )
                     {
+                        // LEM FIXME: the if condition is not quite right
+                        //            many expressions are rules, e.g. "5+3"
+                        //            or even: "colName + 1"
                         bFkt = sal_True;
                         nType = getFunctionReturnType(pColumnRef);
                     }
@@ -1807,6 +1801,8 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                 pColumn->setFunction(sal_True);
                 pColumn->setAggregateFunction(bAggFkt);
                 pColumn->setRealName(rColumnName);
+                SAL_WARN("connectivity.parse", "Trying to construct a column with Function==true and a TableName; this makes no sense.");
+                assert(false);
                 pColumn->setTableName(aFind->first);
 
                 Reference< XPropertySet> xCol = pColumn;
