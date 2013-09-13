@@ -1883,7 +1883,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             // Known and handled grandfathered; ugly but effective ...
             // Note that nLen must have matched above.
             // Strictly not a variant, but so far we treat it as such.
-            if (rBcp47.equalsIgnoreAsciiCaseAscii( "en-GB-oed"))
+            if (rBcp47.equalsIgnoreAsciiCase( "en-GB-oed"))
             {
                 rLanguage = "en";
                 rScript   = OUString();
