@@ -323,8 +323,12 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
                 //set comment chars for last comment on slide
                 SlideFragmentHandler* comment_handler =
                     dynamic_cast<SlideFragmentHandler*>(xCommentsFragmentHandler.get());
+                // some comments have no text -> set empty string as text to avoid
+                // crash (back() on empty vector is undefined) and losing other
+                // comment data that might be there (author, position, timestamp etc.)
                 pCommentsPersistPtr->getCommentsList().cmLst.back().setText(
-                    comment_handler->getCharVector().back() );
+                        comment_handler->getCharVector().empty() ? "" :
+                        comment_handler->getCharVector().back() );
                 pCommentsPersistPtr->getCommentAuthors().setValues(maAuthorList);
 
                 //insert all comments from commentsList
