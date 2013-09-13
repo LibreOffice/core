@@ -316,8 +316,8 @@ lcl_NewUINameArray(sal_uInt16 nStt, sal_uInt16 const nEnd)
     pNameArray->reserve(nEnd - nStt);
     while( nStt < nEnd )
     {
-        const ResId rRId( nStt, *pSwResMgr );
-        pNameArray->push_back(OUString(rRId));
+        const ResId aRId( nStt, *pSwResMgr );
+        pNameArray->push_back(OUString(aRId));
         ++nStt;
     }
     return pNameArray;

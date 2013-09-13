@@ -365,30 +365,6 @@ STRING& STRING::Erase( xub_StrLen nIndex, xub_StrLen nCount )
     return *this;
 }
 
-STRING& STRING::ToLowerAscii()
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32 nIndex = 0;
-    sal_Int32 nLen = mpData->mnLen;
-    STRCODE*    pStr = mpData->maStr;
-    while ( nIndex < nLen )
-    {
-        // Convert if char is between 'A' and 'Z'
-        if ( (*pStr >= 65) && (*pStr <= 90) )
-        {
-            // allocate string of new size
-            pStr = ImplCopyStringData( pStr );
-            *pStr += 32;
-        }
-
-        ++pStr,
-        ++nIndex;
-    }
-
-    return *this;
-}
-
 xub_StrLen STRING::Search( STRCODE c, xub_StrLen nIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

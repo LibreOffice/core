@@ -106,7 +106,7 @@ void SearchThread::execute()
             nBeginFormat = nEndFormat = nFileNumber;
 
         for( sal_uInt16 i = nBeginFormat; i <= nEndFormat; ++i )
-            aFormats.push_back( mpBrowser->aFilterEntryList[ i ]->aFilterName.ToLowerAscii() );
+            aFormats.push_back( mpBrowser->aFilterEntryList[ i ]->aFilterName.toAsciiLowerCase() );
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
@@ -970,7 +970,7 @@ void TPGalleryThemeProperties::FillFilterList()
 #endif
 
     pFilterEntry = new FilterEntry;
-    pFilterEntry->aFilterName = String( CUI_RES( RID_SVXSTR_GALLERY_ALLFILES ) );
+    pFilterEntry->aFilterName = CUI_RESSTR(RID_SVXSTR_GALLERY_ALLFILES);
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
     size_t pos = aCbbFileType.InsertEntry( pFilterEntry->aFilterName, 0 );
     if ( pos < aFilterEntryList.size() ) {

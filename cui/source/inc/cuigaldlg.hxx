@@ -52,7 +52,7 @@ typedef ::std::vector< sal_uLong > TokenList_impl;
 
 struct FilterEntry
 {
-    String  aFilterName;
+    OUString  aFilterName;
 };
 
 class SearchThread: public salhelper::Thread

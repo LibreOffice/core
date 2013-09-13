@@ -225,8 +225,6 @@ public:
     UniString&          Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
-    UniString&          ToLowerAscii();
-
     StringCompare       CompareTo( const UniString& rStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareToAscii( const sal_Char* pAsciiStr,

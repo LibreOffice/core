@@ -1782,14 +1782,14 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     return sal_False;
 }
 
-static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
+static sal_Bool lcl_FindAbbreviation(const SvStringsISortDtor* pList, const OUString& sWord)
 {
     OUString sAbk('~');
     SvStringsISortDtor::const_iterator it = pList->find( sAbk );
     sal_uInt16 nPos = it - pList->begin();
     if( nPos < pList->size() )
     {
-        String sLowerWord( sWord ); sLowerWord.ToLowerAscii();
+        OUString sLowerWord(sWord.toAsciiLowerCase());
         OUString pAbk;
         for( sal_uInt16 n = nPos;
                 n < pList->size() &&
@@ -1797,15 +1797,15 @@ static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const Str
             ++n )
         {
             // ~ and ~. are not allowed!
-            if( 2 < pAbk.getLength() && pAbk.getLength() - 1 <= sWord.Len() )
+            if( 2 < pAbk.getLength() && pAbk.getLength() - 1 <= sWord.getLength() )
             {
-                String sLowerAbk( pAbk ); sLowerAbk.ToLowerAscii();
-                for( xub_StrLen i = sLowerAbk.Len(), ii = sLowerWord.Len(); i; )
+                OUString sLowerAbk(pAbk.toAsciiLowerCase());
+                for (sal_Int32 i = sLowerAbk.getLength(), ii = sLowerWord.getLength(); i;)
                 {
                     if( !--i )      // agrees
                         return sal_True;
 
-                    if( sLowerAbk.GetChar( i ) != sLowerWord.GetChar( --ii ))
+                    if( sLowerAbk[i] != sLowerWord[--ii])
                         break;
                 }
             }
