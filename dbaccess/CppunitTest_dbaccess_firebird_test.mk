@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_api,dbaccess_firebird_test,\
 $(eval $(call gb_CppunitTest_use_ure,dbaccess_firebird_test))
 
 $(eval $(call gb_CppunitTest_use_components,dbaccess_firebird_test,\
+    basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     connectivity/source/drivers/firebird/firebird_sdbc \
@@ -58,6 +59,7 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_firebird_test,\
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    unotools/util/utl \
     xmloff/util/xo \
 ))
 
