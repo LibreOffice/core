@@ -183,7 +183,7 @@ public:
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
 protected:
-    ScRefHdlModalImpl( Window* pParent, ResId& rResId );
+    ScRefHdlModalImpl( Window* pParent, const ResId& rResId );
 
 private:
 };
@@ -258,7 +258,7 @@ void ScRefHdlrImplBase<TWindow, bBindRef>::StateChanged( StateChangedType nState
 class ScAnyRefModalDlg : public ScRefHdlModalImpl
 {
 public:
-    ScAnyRefModalDlg(Window* pParent, ResId rResId);
+    ScAnyRefModalDlg(Window* pParent, const ResId& rResId);
 };
 
 //============================================================================

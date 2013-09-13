@@ -1031,8 +1031,8 @@ void ScRefHandler::RefInputDone( sal_Bool bForced )
 
 //-------------------------------------------------------------------------------
 
-ScRefHdlModalImpl::ScRefHdlModalImpl( Window* pParent, ResId& rResId ):
-    ModalDialog( pParent, rResId ),
+ScRefHdlModalImpl::ScRefHdlModalImpl( Window* pParent, const ResId& rResId )
+    : ModalDialog( pParent, rResId ),
     ScRefHandler(dynamic_cast<Window&>(*this), NULL, true) {}
 
 long ScRefHdlModalImpl::PreNotify( NotifyEvent& rNEvt )
@@ -1047,7 +1047,7 @@ void ScRefHdlModalImpl::StateChanged( StateChangedType nStateChange )
     ScRefHandler::stateChanged( nStateChange, true );
 }
 
-ScAnyRefModalDlg::ScAnyRefModalDlg( Window* pParent, ResId aResId ):
-    ScRefHdlModalImpl( pParent, aResId ) {}
+ScAnyRefModalDlg::ScAnyRefModalDlg( Window* pParent, const ResId &rResId ):
+    ScRefHdlModalImpl( pParent, rResId ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
