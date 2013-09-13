@@ -432,12 +432,12 @@ inline long SvxRuler::ConvertSizeLogic(long nVal) const
     return bHorz? ConvertHSizeLogic(nVal): ConvertVSizeLogic(nVal);
 }
 
-long SvxRuler::PixelHAdjust(long nVal, long /*nValOld*/) const
+long SvxRuler::PixelHAdjust(long nVal, long nValOld) const
 {
-    //if(ConvertHSizePixel(nVal) != ConvertHSizePixel(nValOld))
+    if(ConvertHSizePixel(nVal) != ConvertHSizePixel(nValOld))
         return  nVal;
-    //else
-    //    return  nValOld;
+    else
+        return  nValOld;
 }
 
 long SvxRuler::PixelVAdjust(long nVal, long nValOld) const
@@ -477,49 +477,59 @@ void SvxRuler::UpdateFrame()
         // if no initialization by default app behavior
         const long nOld = lLogicNullOffset;
         lLogicNullOffset = mpColumnItem.get() ? mpColumnItem->GetLeft(): mpLRSpaceItem->GetLeft();
+
         if(bAppSetNullOffset)
             lAppNullOffset += lLogicNullOffset - nOld;
+
         if(!bAppSetNullOffset || lAppNullOffset == LONG_MAX)
         {
             Ruler::SetNullOffset(ConvertHPosPixel(lLogicNullOffset));
-            SetMargin1( 0, nMarginStyle );
+            SetMargin1(0, nMarginStyle);
             lAppNullOffset = 0;
         }
         else
-            SetMargin1( ConvertHPosPixel( lAppNullOffset ), nMarginStyle );
+        {
+            SetMargin1(ConvertHPosPixel(lAppNullOffset), nMarginStyle);
+        }
+
         long lRight = 0;
-            // evaluate the table right edge of the table
+
+        // evaluate the table right edge of the table
         if(mpColumnItem.get() && mpColumnItem->IsTable())
             lRight = mpColumnItem->GetRight();
         else
             lRight = mpLRSpaceItem->GetRight();
 
-        sal_uIntPtr aWidth=
-            ConvertHPosPixel(mpPagePosItem->GetWidth() - lRight -
-                                    lLogicNullOffset + lAppNullOffset);
-        SetMargin2( aWidth, nMarginStyle );
+        long aWidth = mpPagePosItem->GetWidth() - lRight - lLogicNullOffset + lAppNullOffset;
+        long aWidthPixel = ConvertHPosPixel(aWidth);
+
+        SetMargin2(aWidthPixel, nMarginStyle);
     }
     else if(mpULSpaceItem.get() && mpPagePosItem.get())
     {
         // relative the upper edge of the surrounding frame
         const long nOld = lLogicNullOffset;
         lLogicNullOffset = mpColumnItem.get() ? mpColumnItem->GetLeft() : mpULSpaceItem->GetUpper();
+
         if(bAppSetNullOffset)
             lAppNullOffset += lLogicNullOffset - nOld;
+
         if(!bAppSetNullOffset || lAppNullOffset == LONG_MAX)
         {
             Ruler::SetNullOffset(ConvertVPosPixel(lLogicNullOffset));
             lAppNullOffset = 0;
-            SetMargin1( 0, nMarginStyle );
+            SetMargin1(0, nMarginStyle);
         }
         else
-            SetMargin1( ConvertVPosPixel( lAppNullOffset ),nMarginStyle );
+        {
+            SetMargin1(ConvertVPosPixel(lAppNullOffset), nMarginStyle);
+        }
 
         long lLower = mpColumnItem.get() ? mpColumnItem->GetRight() : mpULSpaceItem->GetLower();
+        long nMargin2 = mpPagePosItem->GetHeight() - lLower - lLogicNullOffset + lAppNullOffset;
+        long nMargin2Pixel = ConvertVPosPixel(nMargin2);
 
-        SetMargin2(
-            ConvertVPosPixel(mpPagePosItem->GetHeight() - lLower - lLogicNullOffset + lAppNullOffset),
-            nMarginStyle);
+        SetMargin2(nMargin2Pixel, nMarginStyle);
     }
     else
     {
@@ -754,10 +764,13 @@ void SvxRuler::UpdateColumns()
             nBorderCount = mpColumnItem->Count();
             mpBorders.reset(new RulerBorder[nBorderCount]);
         }
+
         sal_uInt16 nStyleFlags = RULER_BORDER_VARIABLE;
+
         sal_Bool bProtectColumns =
-            mpRulerImpl->aProtectItem.IsSizeProtected() ||
-            mpRulerImpl->aProtectItem.IsPosProtected();
+                    mpRulerImpl->aProtectItem.IsSizeProtected() ||
+                    mpRulerImpl->aProtectItem.IsPosProtected();
+
         if( !bProtectColumns )
             nStyleFlags |= RULER_BORDER_MOVEABLE;
 
@@ -767,15 +780,18 @@ void SvxRuler::UpdateColumns()
             nStyleFlags |= RULER_BORDER_SIZEABLE;
 
         sal_uInt16 nBorders = mpColumnItem->Count();
+
         if(!mpRulerImpl->bIsTableRows)
             --nBorders;
+
         for(sal_uInt16 i = 0; i < nBorders; ++i)
         {
             mpBorders[i].nStyle = nStyleFlags;
-            if(!(*mpColumnItem.get())[i].bVisible)
+            if(!mpColumnItem->At(i).bVisible)
                 mpBorders[i].nStyle |= RULER_STYLE_INVISIBLE;
-            mpBorders[i].nPos =
-                ConvertPosPixel((*mpColumnItem.get())[i].nEnd + lAppNullOffset);
+
+            mpBorders[i].nPos = ConvertPosPixel(mpColumnItem->At(i).nEnd + lAppNullOffset);
+
             if(mpColumnItem->Count() == i + 1)
             {
                 //with table rows the end of the table is contained in the
@@ -784,14 +800,10 @@ void SvxRuler::UpdateColumns()
             }
             else
             {
-                mpBorders[i].nWidth =
-                    ConvertSizePixel((*mpColumnItem.get())[i+1].nStart -
-                                 (*mpColumnItem.get())[i].nEnd);
+                mpBorders[i].nWidth = ConvertSizePixel(mpColumnItem->At(i + 1).nStart - mpColumnItem->At(i).nEnd);
             }
-            mpBorders[i].nMinPos =
-                ConvertPosPixel((*mpColumnItem.get())[i].nEndMin + lAppNullOffset);
-            mpBorders[i].nMaxPos =
-                ConvertPosPixel((*mpColumnItem.get())[i].nEndMax + lAppNullOffset);
+            mpBorders[i].nMinPos = ConvertPosPixel(mpColumnItem->At(i).nEndMin + lAppNullOffset);
+            mpBorders[i].nMaxPos = ConvertPosPixel(mpColumnItem->At(i).nEndMax + lAppNullOffset);
         }
         SetBorders(mpColumnItem->Count() - 1, mpBorders.get());
     }
@@ -1724,26 +1736,27 @@ void SvxRuler::SetActive(sal_Bool bOn)
 }
 
 void SvxRuler::UpdateParaContents_Impl(
-                            long l,            // Difference
+                            long lDifference,
                             UpdateType eType)  // Art (all, left or right)
 {
     /* Helper function; carry Tabs and Paragraph Margins */
-    switch(eType) {
-    case MOVE_RIGHT:
-        mpIndents[INDENT_RIGHT_MARGIN].nPos += l;
-        break;
-    case MOVE_ALL:
-        mpIndents[INDENT_RIGHT_MARGIN].nPos += l;
-        // no break
-    case MOVE_LEFT:
+    switch(eType)
+    {
+        case MOVE_RIGHT:
+            mpIndents[INDENT_RIGHT_MARGIN].nPos += lDifference;
+            break;
+        case MOVE_ALL:
+            mpIndents[INDENT_RIGHT_MARGIN].nPos += lDifference;
+            // no break
+        case MOVE_LEFT:
         {
-            mpIndents[INDENT_FIRST_LINE].nPos += l;
-            mpIndents[INDENT_LEFT_MARGIN].nPos += l;
+            mpIndents[INDENT_FIRST_LINE].nPos += lDifference;
+            mpIndents[INDENT_LEFT_MARGIN].nPos += lDifference;
             if (mpTabs.get())
             {
                 for(sal_uInt16 i = 0; i < nTabCount+TAB_GAP; ++i)
                 {
-                    mpTabs[i].nPos += l;
+                    mpTabs[i].nPos += lDifference;
                 }
                 SetTabs(nTabCount, mpTabs.get() + TAB_GAP);
             }

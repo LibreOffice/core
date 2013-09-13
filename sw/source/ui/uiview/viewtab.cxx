@@ -1610,19 +1610,38 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const SwRect aPrtRect = rSh.GetAnyCurRect(RECT_PAGE_PRT, pPt);
                     const SvxBoxItem& rBox = (const SvxBoxItem&)rMaster.GetFmtAttr(RES_BOX);
                     long nDist = rBox.GetDistance();
-                    ::lcl_FillSvxColumn(aCol,
+
+                    lcl_FillSvxColumn(
+                        aCol,
                         sal_uInt16(bVerticalWriting ? aPrtRect.Height() : aPrtRect.Width() ),
                         aColItem, nDist);
 
                     if(bBrowse)
                     {
-                        aColItem.SetLeft((sal_uInt16)rPagePrtRect.Left());
-                        aColItem.SetRight(sal_uInt16(nPageWidth - rPagePrtRect.Right()));
+                        if (bVerticalWriting)
+                        {
+                            aColItem.SetLeft((sal_uInt16)rPagePrtRect.Top());
+                            aColItem.SetRight(sal_uInt16(nPageHeight - rPagePrtRect.Bottom()));
+                        }
+                        else
+                        {
+                            aColItem.SetLeft((sal_uInt16)rPagePrtRect.Left());
+                            aColItem.SetRight(sal_uInt16(nPageWidth - rPagePrtRect.Right()));
+                        }
                     }
                     else
                     {
-                        aColItem.SetLeft (aPageLRSpace.GetLeft());
-                        aColItem.SetRight(aPageLRSpace.GetRight());
+                        if (bVerticalWriting)
+                        {
+                            SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
+                            aColItem.SetLeft (aUL.GetUpper());
+                            aColItem.SetRight(aUL.GetLower());
+                        }
+                        else
+                        {
+                            aColItem.SetLeft (aPageLRSpace.GetLeft());
+                            aColItem.SetRight(aPageLRSpace.GetRight());
+                        }
                     }
                     aColItem.SetOrtho(aColItem.CalcOrtho());
 
