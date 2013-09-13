@@ -13,6 +13,8 @@
 #include "tabfrm.hxx"
 #include "txtfrm.hxx"
 #include "hffrm.hxx"
+#include "rootfrm.hxx"
+#include "editsh.hxx"
 #include "porlin.hxx"
 #include "porlay.hxx"
 #include "portxt.hxx"
@@ -286,6 +288,28 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         xmlTextWriterStartElement( writer, ( const xmlChar * ) name );
 
         dumpAsXmlAttributes( writer );
+
+        if (IsRootFrm())
+        {
+            // Root frame has access to the edit shell, so dump the current selection ranges here.
+            SwRootFrm* const pRootFrm = static_cast<SwRootFrm* const>(this);
+            SwEditShell* pEditShell = pRootFrm->GetCurrShell()->GetDoc()->GetEditShell();
+            xmlTextWriterStartElement(writer, BAD_CAST("shellCrsr"));
+            SwPaM* pPaM = pEditShell->getShellCrsr(false);
+            do
+            {
+                xmlTextWriterStartElement(writer, BAD_CAST("swpam"));
+                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("pointNodeIndex"), "%ld", pPaM->GetPoint()->nNode.GetIndex());
+                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("pointContentIndex"), "%d", pPaM->GetPoint()->nContent.GetIndex());
+
+                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("markNodeIndex"), "%ld", pPaM->GetMark()->nNode.GetIndex());
+                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("markContentIndex"), "%d", pPaM->GetMark()->nContent.GetIndex());
+                xmlTextWriterEndElement(writer);
+                pPaM = static_cast<SwPaM*>(pPaM->GetNext());
+            }
+            while (pPaM && pPaM != pEditShell->getShellCrsr(false));
+            xmlTextWriterEndElement(writer);
+        }
 
         xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
         dumpInfosAsXml( writer );
