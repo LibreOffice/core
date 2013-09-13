@@ -366,6 +366,10 @@ void ScCalcOptionsDialog::RadioValueChanged()
             break;
         case CALC_OPTION_ENABLE_OPENCL:
             maConfig.mbOpenCLEnabled = bValue;
+            if(bValue)
+                mpOpenclInfoList->GetParent()->Disable();
+            else
+                mpOpenclInfoList->GetParent()->Enable();
             break;
     }
 
