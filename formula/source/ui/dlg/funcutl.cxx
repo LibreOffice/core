@@ -285,7 +285,7 @@ void ArgInput::SetArgName(const OUString &aArg)
 #************************************************************************/
 OUString ArgInput::GetArgName()
 {
-    String aPrivArgName;
+    OUString aPrivArgName;
     if(pFtArg !=NULL)
         aPrivArgName=pFtArg->GetText();
 

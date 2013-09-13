@@ -96,18 +96,18 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
 
     if ( (nArgs > 0) && (nArg<nArgs) )
     {
-        String  aArgDesc;
-        String  aArgName;
+        OUString  aArgDesc;
+        OUString  aArgName;
 
-        SetArgumentDesc( String() );
-        SetArgumentText( String() );
+        SetArgumentDesc( OUString() );
+        SetArgumentText( OUString() );
 
         if ( nArgs < VAR_ARGS )
         {
             sal_uInt16 nRealArg = (aVisibleArgMapping.size() < nArg) ? aVisibleArgMapping[nArg] : nArg;
             aArgDesc  = pFuncDesc->getParameterDescription(nRealArg);
             aArgName  = pFuncDesc->getParameterName(nRealArg);
-            aArgName += ' ';
+            aArgName += " ";
             aArgName += (pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
         }
         else if ( nArgs < PAIRED_VAR_ARGS )
@@ -120,7 +120,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             aArgName  = pFuncDesc->getParameterName(nRealArg);
             if ( nArg >= nFix )
                 aArgName += OUString::number( nArg-nFix+1 );
-            aArgName += ' ';
+            aArgName += " ";
 
             aArgName += (nArg > nFix || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
         }
@@ -138,7 +138,7 @@ void ParaWin::UpdateArgDesc( sal_uInt16 nArg )
             aArgName  = pFuncDesc->getParameterName(nRealArg);
             if ( nArg >= nFix )
                 aArgName += OUString::number( (nArg-nFix)/2 + 1 );
-            aArgName += ' ';
+            aArgName += " ";
 
             aArgName += (nArg > (nFix+1) || pFuncDesc->isParameterOptional(nRealArg)) ? m_sOptional : m_sRequired ;
         }
@@ -172,7 +172,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
                 aFntLight : aFntBold );
         if ( nArg >= nFix )
         {
-            String aArgName( pFuncDesc->getParameterName(nRealArg) );
+            OUString aArgName( pFuncDesc->getParameterName(nRealArg) );
             aArgName += OUString::number(nArg-nFix+1);
             SetArgName( i, aArgName );
         }
@@ -194,7 +194,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
                 aFntLight : aFntBold );
         if ( nArg >= nFix )
         {
-            String aArgName( pFuncDesc->getParameterName(nRealArg) );
+            OUString aArgName( pFuncDesc->getParameterName(nRealArg) );
             aArgName += OUString::number( (nArg-nFix)/2 + 1 );
             SetArgName( i, aArgName );
         }
@@ -296,9 +296,9 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
 {
     pFuncDesc=pFDesc;
 
-    SetArgumentDesc( String() );
-    SetArgumentText( String() );
-    SetEditDesc( String() );
+    SetArgumentDesc( OUString() );
+    SetArgumentText( OUString() );
+    SetEditDesc( OUString() );
     nArgs = 0;
     if ( pFuncDesc!=NULL)
     {
@@ -417,7 +417,7 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
     {
         for ( int i=0; i<4 && i<nArgs; i++ )
         {
-            String aString;
+            OUString aString;
             aArgInput[i].SetArgVal(aString);
             aArgInput[i].GetArgEdPtr()->Init(
                 (i==0)               ? (ArgEdit *)NULL : aArgInput[i-1].GetArgEdPtr(),

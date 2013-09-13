@@ -147,7 +147,7 @@ public:
     OpCodeList( sal_uInt16, FormulaCompiler::NonConstOpCodeMapPtr );
 
 private:
-    bool getOpCodeString( String& rStr, sal_uInt16 nOp );
+    bool getOpCodeString( OUString& rStr, sal_uInt16 nOp );
     void putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp );
 
 private:
@@ -165,7 +165,7 @@ OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr x
 {
     for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
-        String aOpStr;
+        OUString aOpStr;
         if ( getOpCodeString( aOpStr, i) )
             xMap->putOpCode( aOpStr, OpCode(i));
         else
@@ -175,7 +175,7 @@ OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr x
     FreeResource();
 }
 
-bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
+bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
 {
     switch (nOp)
     {
@@ -878,7 +878,7 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKno
         for (sal_uInt16 i = 1; i < n; ++i)
         {
             OpCode eOp = OpCode(i);
-            const String& rSymbol = r.mpTable[i];
+            const OUString& rSymbol = r.mpTable[i];
             putCopyOpCode( rSymbol, eOp);
         }
     }

@@ -175,14 +175,14 @@ void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
 
 //------------------------------------------------------------------------
 
-inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const String& rStr, xub_StrLen nPos )
+inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, xub_StrLen nPos )
 {
     if( _pCharClass->isLetterNumeric( rStr, nPos ) )
         return sal_True;
     else
     {   // In internationalized versions function names may contain a dot
         //  and in every version also an underscore... ;-)
-        sal_Unicode c = rStr.GetChar(nPos);
+        sal_Unicode c = rStr[nPos];
         return c == '.' || c == '_';
     }
 
