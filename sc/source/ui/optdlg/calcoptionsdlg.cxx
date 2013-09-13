@@ -199,18 +199,10 @@ void ScCalcOptionsDialog::fillOpenclList()
     for(std::vector<sc::OpenclPlatformInfo>::const_iterator it = aPlatformInfo.begin(),
             itEnd = aPlatformInfo.end(); it != itEnd; ++it)
     {
-        SvTreeListEntry* pEntry = new SvTreeListEntry;
-        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
-        pEntry->AddItem(new SvLBoxString(pEntry, 0, it->maVendor));
-        mpOpenclInfoList->GetModel()->Insert(pEntry);
-
         for(std::vector<sc::OpenclDeviceInfo>::const_iterator
                 itr = it->maDevices.begin(), itrEnd = it->maDevices.end(); itr != itrEnd; ++itr)
         {
-            SvTreeListEntry* pDeviceEntry = new SvTreeListEntry;
-pDeviceEntry->AddItem(new SvLBoxContextBmp(pDeviceEntry, 0, Image(), Image(), 0));
-pDeviceEntry->AddItem(new SvLBoxString(pDeviceEntry, 0, itr->maName));
-mpOpenclInfoList->GetModel()->Insert(pDeviceEntry, pEntry);
+            mpOpenclInfoList->InsertEntry(it->maVendor + " " + itr->maName);
         }
     }
 
