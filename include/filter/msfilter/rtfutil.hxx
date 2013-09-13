@@ -31,7 +31,7 @@ MSFILTER_DLLPUBLIC OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding
  * @param eDestEnc the legacy encoding to use
  * @param bUnicode if unicode output is wanted as well, or just legacy
  */
-MSFILTER_DLLPUBLIC OString OutString(const String &rStr, rtl_TextEncoding eDestEnc, bool bUnicode = true);
+MSFILTER_DLLPUBLIC OString OutString(const OUString &rStr, rtl_TextEncoding eDestEnc, bool bUnicode = true);
 
 /**
  * Handles correct unicode and legacy export of a string, when a
@@ -42,7 +42,7 @@ MSFILTER_DLLPUBLIC OString OutString(const String &rStr, rtl_TextEncoding eDestE
  * @param rStr the text to export
  * @param eDestEnc the legacy encoding to use
  */
-MSFILTER_DLLPUBLIC OString OutStringUpr(const sal_Char *pToken, const String &rStr, rtl_TextEncoding eDestEnc);
+MSFILTER_DLLPUBLIC OString OutStringUpr(const sal_Char *pToken, const OUString &rStr, rtl_TextEncoding eDestEnc);
 
 }
 }

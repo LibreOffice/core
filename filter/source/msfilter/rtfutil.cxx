@@ -116,13 +116,13 @@ OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc, bool* pS
     return aBuf.makeStringAndClear();
 }
 
-OString OutString(const String &rStr, rtl_TextEncoding eDestEnc, bool bUnicode)
+OString OutString(const OUString &rStr, rtl_TextEncoding eDestEnc, bool bUnicode)
 {
     SAL_INFO("filter.ms", OSL_THIS_FUNC << ", rStr = '" << OUString(rStr) << "'");
     OStringBuffer aBuf;
     int nUCMode = 1;
-    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
-        aBuf.append(OutChar(rStr.GetChar(n), &nUCMode, eDestEnc, 0, bUnicode));
+    for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
+        aBuf.append(OutChar(rStr[n], &nUCMode, eDestEnc, 0, bUnicode));
     if (nUCMode != 1) {
         aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);
         aBuf.append((sal_Int32)1);
@@ -145,7 +145,7 @@ static bool TryOutString(const String &rStr, rtl_TextEncoding eDestEnc)
     return true;
 }
 
-OString OutStringUpr(const sal_Char *pToken, const String &rStr, rtl_TextEncoding eDestEnc)
+OString OutStringUpr(const sal_Char *pToken, const OUString &rStr, rtl_TextEncoding eDestEnc)
 {
     if (TryOutString(rStr, eDestEnc))
         return OString("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";
