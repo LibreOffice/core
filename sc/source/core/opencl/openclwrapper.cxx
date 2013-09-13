@@ -2640,6 +2640,8 @@ namespace {
 void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
 {
     OpenclDeviceInfo aDeviceInfo;
+    aDeviceInfo.device = aDeviceId;
+
     char pName[64];
     cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_NAME, 64, pName, NULL);
     if(nState != CL_SUCCESS)
@@ -2680,7 +2682,7 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
 
 bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatformInfo)
 {
-    rPlatformInfo.mnId = nPlatformId;
+    rPlatformInfo.platform = nPlatformId;
     char pName[64];
     cl_int nState = clGetPlatformInfo(nPlatformId, CL_PLATFORM_NAME, 64,
              pName, NULL);

@@ -20,7 +20,7 @@ namespace sc {
 
 struct SC_DLLPUBLIC OpenclDeviceInfo
 {
-    size_t mnId;
+    void* device;
     OUString maName;
     OUString maVendor;
     size_t mnMemory;
@@ -30,7 +30,7 @@ struct SC_DLLPUBLIC OpenclDeviceInfo
 
 struct SC_DLLPUBLIC OpenclPlatformInfo
 {
-    void* mnId;
+    void* platform;
     OUString maVendor;
     OUString maName;
     std::vector<OpenclDeviceInfo> maDevices;
