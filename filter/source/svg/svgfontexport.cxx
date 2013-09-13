@@ -101,7 +101,7 @@ void SVGFontExport::implCollectGlyphs()
                     case( META_TEXT_ACTION ):
                     {
                         const MetaTextAction* pA = (const MetaTextAction*) pAction;
-                        aText = String( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                        aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                     }
                     break;
 
@@ -115,14 +115,14 @@ void SVGFontExport::implCollectGlyphs()
                     case( META_TEXTARRAY_ACTION ):
                     {
                         const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
-                        aText = String( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                        aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                     }
                     break;
 
                     case( META_STRETCHTEXT_ACTION ):
                     {
                         const MetaStretchTextAction* pA = (const MetaStretchTextAction*) pAction;
-                        aText = String( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                        aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
                     }
                     break;
 

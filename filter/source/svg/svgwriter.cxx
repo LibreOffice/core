@@ -727,12 +727,12 @@ void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
 
     if( maCurrentFont !=  maParentFont )
     {
-        const String& rsCurFontName                 = maCurrentFont.GetName();
+        const OUString& rsCurFontName               = maCurrentFont.GetName();
         long int nCurFontSize                       = maCurrentFont.GetHeight();
         FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
         FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
 
-        const String& rsParFontName                 = maParentFont.GetName();
+        const OUString& rsParFontName               = maParentFont.GetName();
         long int nParFontSize                       = maParentFont.GetHeight();
         FontItalic eParFontItalic                   = maParentFont.GetItalic();
         FontWeight eParFontWeight                   = maParentFont.GetWeight();
@@ -3386,9 +3386,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
                     const MetaTextAction*   pA = (const MetaTextAction*) pAction;
-                    const String            aText( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    const OUString          aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
-                    if( aText.Len() )
+                    if( !aText.isEmpty() )
                     {
                         if( mrExport.IsUsePositionedCharacters() )
                         {
@@ -3433,9 +3433,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
                     const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
-                    const String                aText( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    const OUString              aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
-                    if( aText.Len() )
+                    if( !aText.isEmpty() )
                     {
                         if( mrExport.IsUsePositionedCharacters() )
                         {
@@ -3457,9 +3457,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_TEXT )
                 {
                     const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pAction;
-                    const String                    aText( pA->GetText(), pA->GetIndex(), pA->GetLen() );
+                    const OUString                  aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
 
-                    if( aText.Len() )
+                    if( !aText.isEmpty() )
                     {
                         if( mrExport.IsUsePositionedCharacters() )
                         {

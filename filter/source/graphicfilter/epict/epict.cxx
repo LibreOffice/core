@@ -93,7 +93,7 @@ private:
     Color       aDstBkCol;          sal_Bool bDstBkColValid;
     Point       aDstPenPosition;    sal_Bool bDstPenPositionValid;
     Point       aDstTextPosition;   sal_Bool bDstTextPositionValid;
-    String      aDstFontName; sal_uInt16 nDstFontNameId; sal_Bool bDstFontNameValid;
+    OUString    aDstFontName; sal_uInt16 nDstFontNameId; sal_Bool bDstFontNameValid;
 
     sal_uLong nNumberOfActions;  // number of actions in the GDIMetafile
     sal_uLong nNumberOfBitmaps;  // number of bitmaps
@@ -117,7 +117,7 @@ private:
     void WritePoint(const Point & rPoint);
     void WriteSize(const Size & rSize);
     void WriteRGBColor(const Color & rColor);
-    void WriteString( const String & rString );
+    void WriteString( const OUString & rString );
     void WriteRectangle(const Rectangle & rRect);
     void WritePolygon(const Polygon & rPoly);
     void WriteArcAngles(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
@@ -137,7 +137,7 @@ private:
     void WriteOpcode_RGBBkCol(const Color & rColor);
     void WriteOpcode_Line(const Point & rLocPt, const Point & rNewPt);
     void WriteOpcode_LineFrom(const Point & rNewPt);
-    void WriteOpcode_Text(const Point & rPoint, const String& rString, sal_Bool bDelta);
+    void WriteOpcode_Text(const Point & rPoint, const OUString& rString, sal_Bool bDelta);
     void WriteOpcode_FontName(const Font & rFont);
     void WriteOpcode_ClipRect( const Rectangle& rRect );
     void WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & rRect);
@@ -158,7 +158,7 @@ private:
     void SetAttrForFrame();
     void SetAttrForText();
 
-    void WriteTextArray(Point & rPoint, const String& rString, const sal_Int32 * pDXAry);
+    void WriteTextArray(Point & rPoint, const OUString& rString, const sal_Int32 * pDXAry);
 
     void HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void WriteOpcodes(const GDIMetaFile & rMTF);
@@ -308,7 +308,7 @@ void PictWriter::WriteRGBColor(const Color & rColor)
     *pPict << nR << nG << nB;
 }
 
-void PictWriter::WriteString( const String & rString )
+void PictWriter::WriteString( const OUString & rString )
 {
     OString aString(OUStringToOString(rString, osl_getThreadTextEncoding()));
     sal_Int32 nLen = aString.getLength();
@@ -643,7 +643,7 @@ void PictWriter::WriteOpcode_LineFrom(const Point & rNewPt)
 }
 
 
-void PictWriter::WriteOpcode_Text(const Point & rPoint, const String& rString, sal_Bool bDelta)
+void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString, sal_Bool bDelta)
 {
     Point aPoint = OutputDevice::LogicToLogic( rPoint,
                                                aSrcMapMode,
@@ -1315,10 +1315,8 @@ void PictWriter::SetAttrForText()
 }
 
 
-void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const sal_Int32 * pDXAry)
+void PictWriter::WriteTextArray(Point & rPoint, const OUString& rString, const sal_Int32 * pDXAry)
 {
-    sal_uInt16 i,nLen;
-    sal_Unicode c;
     sal_Bool bDelta;
     Point aPt;
 
@@ -1327,10 +1325,10 @@ void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const sal
     else
     {
         bDelta = sal_False;
-        nLen = rString.Len();
-        for ( i = 0; i < nLen; i++ )
+        sal_Int32 nLen = rString.getLength();
+        for ( sal_Int32 i = 0; i < nLen; i++ )
         {
-            c = rString.GetChar( i );
+            sal_Unicode c = rString[ i ];
             if ( c && ( c != 0x20 ) )
             {
                 aPt = rPoint;
@@ -1723,7 +1721,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 }
 
                 SetAttrForText();
-                String aStr( pA->GetText(),pA->GetIndex(),pA->GetLen() );
+                OUString aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
                 WriteOpcode_Text( aPt, aStr, sal_False );
             }
             break;
@@ -1743,7 +1741,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                         aPt.Y()-=(long)aVirDev.GetFontMetric(aSrcFont).GetDescent();
                 }
                 SetAttrForText();
-                String aStr( pA->GetText(),pA->GetIndex(),pA->GetLen() );
+                OUString aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
                 WriteTextArray( aPt, aStr, pA->GetDXArray() );
                 break;
             }
@@ -1752,9 +1750,9 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
             {
                 const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pMA;
                 Point                           aPt( pA->GetPoint() );
-                String                          aStr( pA->GetText(),pA->GetIndex(),pA->GetLen() );
+                OUString                        aStr = pA->GetText().copy( pA->GetIndex(),pA->GetLen() );
                 VirtualDevice                   aVirDev;
-                sal_Int32*                      pDXAry = new sal_Int32[ aStr.Len() ];
+                sal_Int32*                      pDXAry = new sal_Int32[ aStr.getLength() ];
                 sal_Int32                       nNormSize( aVirDev.GetTextArray( aStr,pDXAry ) );
                 sal_uInt16                          i;
 
@@ -1766,7 +1764,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                         aPt.Y()-=(long)aVirDev.GetFontMetric(aSrcFont).GetDescent();
                 }
 
-                for ( i = 0; i < aStr.Len() - 1; i++ )
+                for ( i = 0; i < aStr.getLength() - 1; i++ )
                     pDXAry[ i ] = pDXAry[ i ] * ( (long)pA->GetWidth() ) / nNormSize;
 
                 SetAttrForText();

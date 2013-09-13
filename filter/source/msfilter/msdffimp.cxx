@@ -2820,7 +2820,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     //Intensity has been merged into color. So here just set is as 100
     aGrad.SetStartIntens( 100 );
     aGrad.SetEndIntens( 100 );
-    aSet.Put( XFillGradientItem( String(), aGrad ) );
+    aSet.Put( XFillGradientItem( OUString(), aGrad ) );
     //Construct tranparency item. This item can coodinate with both solid and gradient.
     if ( dTrans < 1.0 || dBackTrans < 1.0 )
     {
@@ -2830,7 +2830,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
         aCol2 = Color(nEndCol, nEndCol, nEndCol);
 
         XGradient aGrad2( aCol2 ,  aCol1 , eGrad, nAngle, nFocusX, nFocusY );
-        aSet.Put( XFillFloatTransparenceItem( String(), aGrad2 ) );
+        aSet.Put( XFillFloatTransparenceItem( OUString(), aGrad2 ) );
     }
 }
 
@@ -3527,7 +3527,7 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
                     {
                         bool bUniCode = ( aHd.nRecType == DFF_PST_TextCharsAtom );
                         sal_uInt32 nBytes = aHd.nRecLen;
-                        String aStr = MSDFFReadZString( rStream, nBytes, bUniCode );
+                        OUString aStr = MSDFFReadZString( rStream, nBytes, bUniCode );
                         ReadObjText( aStr, pObj );
                     }
                     break;

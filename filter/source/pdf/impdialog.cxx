@@ -1469,30 +1469,30 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
         {
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_PDFA ) ) );
+            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_VERSION ) ) );
+            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_VERSION ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_FORMACTION_PDFA ) ) );
+            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_FORMACTION_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Converted:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
+            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
         }
         break;
         default:
@@ -1505,8 +1505,8 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
     if( maErrors.GetEntryCount() > 0 )
     {
         maErrors.SelectEntryPos( 0 );
-        String* pStr = reinterpret_cast<String*>(maErrors.GetEntryData( 0 ));
-        maExplanation.SetText( pStr ? *pStr : String() );
+        OUString* pStr = reinterpret_cast<OUString*>(maErrors.GetEntryData( 0 ));
+        maExplanation.SetText( pStr ? *pStr : OUString() );
     }
 
     // adjust layout
@@ -1542,13 +1542,13 @@ ImplErrorDialog::~ImplErrorDialog()
 {
     // free strings again
     for( sal_uInt16 n = 0; n < maErrors.GetEntryCount(); n++ )
-        delete (String*)maErrors.GetEntryData( n );
+        delete (OUString*)maErrors.GetEntryData( n );
 }
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 {
-    String* pStr = reinterpret_cast<String*>(maErrors.GetEntryData( maErrors.GetSelectEntryPos() ));
-    maExplanation.SetText( pStr ? *pStr : String() );
+    OUString* pStr = reinterpret_cast<OUString*>(maErrors.GetEntryData( maErrors.GetSelectEntryPos() ));
+    maExplanation.SetText( pStr ? *pStr : OUString() );
     return 0;
 }
 

@@ -2128,7 +2128,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
 
                         if( eDateFormat )
                         {
-                            String sDate;
+                            OUString sDate;
                             LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
                             SvNumberFormatter * pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM );
                             // We always collect the characters obtained by using the SVXDATEFORMAT_B (as: 13.02.1996)

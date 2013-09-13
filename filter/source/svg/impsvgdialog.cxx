@@ -44,25 +44,25 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent/*, ResMgr& rResMgr*/, Sequence< Prop
     maBTOK( this, WB_DEF_OK ),
     maBTCancel( this ),
     maBTHelp( this ),
-    maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( SVG_EXPORTFILTER_CONFIGPATH ) ), &rFilterData ),
+    maConfigItem( SVG_EXPORTFILTER_CONFIGPATH, &rFilterData ),
     mbOldNativeDecoration( sal_False )
 {
-    SetText( String( RTL_CONSTASCII_USTRINGPARAM( "SVG Export Options" ) ) );
+    SetText( "SVG Export Options" );
     SetOutputSizePixel( Size( implMap( *this, 177 ), implMap( *this, 77 ) ) );
 
-    maFI.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Export" ) ) );
+    maFI.SetText( "Export" );
     maFI.SetPosSizePixel( Point( implMap( *this, 6 ), implMap( *this, 3 ) ),
                                  Size( implMap( *this, 165 ), implMap( *this, 8 ) ) );
 
-    maCBTinyProfile.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Use SVG Tiny profile" ) ) );
+    maCBTinyProfile.SetText( "Use SVG Tiny profile" );
     maCBTinyProfile.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 14 ) ),
                                      Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBEmbedFonts.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Embed fonts" ) ) );
+    maCBEmbedFonts.SetText( "Embed fonts" );
     maCBEmbedFonts.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 27 ) ),
                                     Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBUseNativeDecoration.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Use SVG native text decoration" ) ) );
+    maCBUseNativeDecoration.SetText( "Use SVG native text decoration" );
     maCBUseNativeDecoration.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
                                              Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 

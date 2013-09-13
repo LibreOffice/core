@@ -212,7 +212,7 @@ Sequence< PropertyValue > SAL_CALL SVGDialog::getPropertyValues()
     if( i == nCount )
     {
         maMediaDescriptor.realloc( ++nCount );
-        maMediaDescriptor[ i ].Name = String( RTL_CONSTASCII_USTRINGPARAM( SVG_FILTER_DATA_NAME ) );
+        maMediaDescriptor[ i ].Name = SVG_FILTER_DATA_NAME;
     }
 
     maMediaDescriptor[ i ].Value <<= maFilterData;

@@ -261,8 +261,8 @@ void XMLFilterTestDialog::initDialog()
     if( NULL == m_pFilterInfo )
         return;
 
-    String aTitle( m_sDialogTitle );
-    aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("%s") ), m_pFilterInfo->maFilterName );
+    OUString aTitle( m_sDialogTitle );
+    aTitle = aTitle.replaceFirst( "%s", m_pFilterInfo->maFilterName );
     SetText( aTitle );
 
     bool bImport = (m_pFilterInfo->maFlags & 1) == 1;

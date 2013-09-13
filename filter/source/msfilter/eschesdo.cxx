@@ -204,7 +204,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
             rObj.GetType() == "drawing.Measure" )
         {
-            rObj.SetType( String("drawing.dontknow"));
+            rObj.SetType("drawing.dontknow");
         }
 
         const ::com::sun::star::awt::Size   aSize100thmm( rObj.GetShapeRef()->getSize() );
@@ -1140,7 +1140,7 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
         static const xub_StrLen nPrefix = sizeof(aPrefix)-1;
 
         // detect name first to make below test (is group) work
-        mType = String( mXShape->getShapeType() );
+        mType = OUString( mXShape->getShapeType() );
         mType = mType.copy( nPrefix );  // strip "com.sun.star."
         sal_Int32 nPos = mType.indexOf( "Shape" );
         mType = mType.replaceAt( nPos, 5, "" );

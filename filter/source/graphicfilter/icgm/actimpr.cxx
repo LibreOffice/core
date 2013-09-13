@@ -857,7 +857,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
         uno::Any aFirstQuery( maXShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0) ));
         if( aFirstQuery >>= xText )
         {
-            String aStr( OUString::createFromAscii( pString ) );
+            OUString aStr( OUString::createFromAscii( pString ) );
 
             uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
             {
@@ -922,7 +922,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
             uno::Any aFirstQuery(  aShape->queryInterface( ::getCppuType((const uno::Reference< text::XText >*)0)) );
             if( aFirstQuery >>= xText )
             {
-                String aStr( OUString::createFromAscii( pString ) );
+                OUString aStr( OUString::createFromAscii( pString ) );
 
                 uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
                 if ( aXTextCursor.is() )

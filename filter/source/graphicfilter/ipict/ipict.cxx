@@ -686,7 +686,7 @@ sal_uLong PictReader::ReadAndDrawText()
     while ( nLen > 0 && ( (unsigned char)sText[ nLen - 1 ] ) < 32 )
             nLen--;
     sText[ nLen ] = 0;
-    String aString( (const sal_Char*)&sText, aActFont.GetCharSet());
+    OUString aString( (const sal_Char*)&sText, strlen(sText), aActFont.GetCharSet());
     pVirDev->DrawText( Point( aTextPosition.X(), aTextPosition.Y() ), aString );
     return nDataLen;
 }
@@ -1484,7 +1484,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         *pPict >> nByteLen; nLen=((sal_uInt16)nByteLen)&0x00ff;
         pPict->Read( &sFName, nLen );
         sFName[ nLen ] = 0;
-        String aString( (const sal_Char*)&sFName, osl_getThreadTextEncoding() );
+        OUString aString( (const sal_Char*)&sFName, strlen(sFName), osl_getThreadTextEncoding() );
         aActFont.SetName( aString );
         eActMethod=PDM_UNDEFINED;
         break;

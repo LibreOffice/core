@@ -104,7 +104,7 @@ struct METChrSet
 {
     struct METChrSet * pSucc;
     sal_uInt8 nSet;
-    String aName;
+    OUString aName;
     FontWeight eWeight;
 };
 
@@ -214,7 +214,7 @@ private:
     void METFullArc(Point aCenter, double fMultiplier);
     void METPartialArcAtCurPos(Point aCenter, double fMultiplier,
                                double fStartAngle, double fSweepAngle);
-    void METChrStr(Point aPt, String aStr);
+    void METChrStr(Point aPt, OUString aStr);
     void METSetArcParams(sal_Int32 nP, sal_Int32 nQ, sal_Int32 nR, sal_Int32 nS);
     void METSetColor(Color aColor);
     void METSetBackgroundColor(Color aColor);
@@ -1357,7 +1357,7 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
 }
 
 
-void METWriter::METChrStr( Point aPt, String aUniStr )
+void METWriter::METChrStr( Point aPt, OUString aUniStr )
 {
     OString aStr(OUStringToOString(aUniStr,
         osl_getThreadTextEncoding()));
@@ -1855,7 +1855,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrCellSize(aGDIFont.GetSize());
                 METSetChrAngle(aGDIFont.GetOrientation());
                 METSetChrSet(FindChrSet(aGDIFont));
-                METChrStr(aPt, String(pA->GetText(),pA->GetIndex(),pA->GetLen()));
+                METChrStr(aPt, pA->GetText().copy(pA->GetIndex(),pA->GetLen()));
             }
             break;
 
@@ -1863,7 +1863,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             {
                 const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pMA;
                 sal_uInt16                      i;
-                String                      aStr;
+                OUString                    aStr;
                 Polygon                     aPolyDummy(1);
                 short                       nOrientation;
                 Point                       aPt( pA->GetPoint() );
@@ -1889,7 +1889,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 {
                     Point aPt2;
 
-                    for( i=0; i < aStr.Len(); i++ )
+                    for( i=0; i < aStr.getLength(); i++ )
                     {
                         aPt2 = aPt;
                         if ( i > 0 )
@@ -1902,7 +1902,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                                 aPt2 = aPolyDummy.GetPoint( 0 );
                             }
                         }
-                        METChrStr( aPt2, OUString( aStr.GetChar( i ) ) );
+                        METChrStr( aPt2, OUString( aStr[ i ] ) );
                     }
                 }
                 else
@@ -1917,7 +1917,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 sal_uInt16                          i;
                 sal_Int32*                  pDXAry;
                 sal_Int32                       nNormSize;
-                String                          aStr;
+                OUString                        aStr;
                 Polygon                         aPolyDummy(1);
                 short                           nOrientation;
                 Point                           aPt( pA->GetPoint() );
@@ -1940,10 +1940,10 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
                 aStr=String(pA->GetText(),pA->GetIndex(),pA->GetLen());
-                pDXAry=new sal_Int32[aStr.Len()];
+                pDXAry = new sal_Int32[aStr.getLength()];
                 nNormSize = aVDev.GetTextArray( aStr, pDXAry );
 
-                for ( i = 0; i < aStr.Len(); i++ )
+                for ( i = 0; i < aStr.getLength(); i++ )
                 {
                     aPt2 = aPt;
                     if ( i > 0 )
@@ -1956,7 +1956,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                             aPt2 = aPolyDummy.GetPoint( 0 );
                         }
                     }
-                    METChrStr( aPt2, OUString( aStr.GetChar( i ) ) );
+                    METChrStr( aPt2, OUString( aStr[ i ] ) );
                 }
 
                 delete[] pDXAry;

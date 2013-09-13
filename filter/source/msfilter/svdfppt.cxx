@@ -1825,14 +1825,14 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                             xObjStor->SetClass( SvGlobalName( aId.n1, aId.n2, aId.n3, aId.n4, aId.n5, aId.n6, aId.n7, aId.n8, aId.n9, aId.n10, aId.n11 ),
                                 pObjStor->GetFormat(), pObjStor->GetUserName() );
                         }
-                        SotStorageStreamRef xSrcTst = xObjStor->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "\1Ole" ) ) );
+                        SotStorageStreamRef xSrcTst = xObjStor->OpenSotStream( "\1Ole" );
                         if ( xSrcTst.Is() )
                         {
                             sal_uInt8 aTestA[ 10 ];
                             sal_Bool bGetItAsOle = ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
                             if ( !bGetItAsOle )
                             {   // maybe there is a contentsstream in here
-                                xSrcTst = xObjStor->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Contents" ) ), STREAM_READWRITE | STREAM_NOCREATE );
+                                xSrcTst = xObjStor->OpenSotStream( "Contents", STREAM_READWRITE | STREAM_NOCREATE );
                                 bGetItAsOle = ( xSrcTst.Is() && sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
                             }
                             if ( bGetItAsOle )
@@ -1988,11 +1988,11 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                             if ( xSource.Is() && xDest.Is() )
                             {
                                 // is this a visual basic storage ?
-                                SotStorageRef xSubStorage = xSource->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM( "VBA" ) ),
+                                SotStorageRef xSubStorage = xSource->OpenSotStorage( "VBA",
                                     STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
                                 if( xSubStorage.Is() && ( SVSTREAM_OK == xSubStorage->GetError() ) )
                                 {
-                                    SotStorageRef xMacros = xDest->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM( "MACROS" ) ) );
+                                    SotStorageRef xMacros = xDest->OpenSotStorage( "MACROS" );
                                     if ( xMacros.Is() )
                                     {
                                         SvStorageInfoList aList;
@@ -2014,10 +2014,10 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                 SotStorageRef xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
                                                 if ( xVBA.Is() && ( xVBA->GetError() == SVSTREAM_OK ) )
                                                 {
-                                                    SotStorageRef xSubVBA = xVBA->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Overhead" ) ) );
+                                                    SotStorageRef xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
                                                     if ( xSubVBA.Is() && ( xSubVBA->GetError() == SVSTREAM_OK ) )
                                                     {
-                                                        SotStorageStreamRef xOriginal = xSubVBA->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Overhead2" ) ) );
+                                                        SotStorageStreamRef xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
                                                         if ( xOriginal.Is() && ( xOriginal->GetError() == SVSTREAM_OK ) )
                                                         {
                                                             if ( nPersistPtr && ( nPersistPtr < nPersistPtrAnz ) )
@@ -2249,7 +2249,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->pParaSet->mnDepth ] : pSheet;
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
-                rOutliner.Insert( String(), nParaIndex, pPara->pParaSet->mnDepth );
+                rOutliner.Insert( OUString(), nParaIndex, pPara->pParaSet->mnDepth );
                 rOutliner.QuickInsertText( OUString(pParaText, nCurrentIndex), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
@@ -2370,11 +2370,11 @@ sal_Bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStre
                 sal_uInt32  i = rContentHd.nRecLen >> 1;
                 if ( i > n )
                 {
-                    String aPre = read_uInt16s_ToOUString(rSt, n);
+                    OUString aPre = read_uInt16s_ToOUString(rSt, n);
                     n = (sal_uInt16)( i - 6 );
-                    String aSuf = read_uInt16s_ToOUString(rSt, n);
-                    sal_Int32 nV = aSuf.ToInt32();
-                    if ( ( nV == nVersion ) && ( aPre == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT" ) ) ) )
+                    OUString aSuf = read_uInt16s_ToOUString(rSt, n);
+                    sal_Int32 nV = aSuf.toInt32();
+                    if ( ( nV == nVersion ) && ( aPre == "___PPT" ) )
                     {
                         rContentHd.SeekToEndOfRecord( rSt );
                         rSt >> rContentHd;
@@ -2997,7 +2997,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                         DffObjData aObjData( aEscherObjectHd, Rectangle( 0, 0, 28000, 21000 ), 0 );
                         ApplyAttributes( rStCtrl, *pSet, aObjData );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
-                        pSet->Put( XFillColorItem( String(), aColor ) );
+                        pSet->Put( XFillColorItem( OUString(), aColor ) );
                     }
                 }
             }
@@ -3429,83 +3429,83 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
             case 0 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 1 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 2 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetSuffix( ")" );
             }
             break;
             case 3 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 4 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetPrefix( "(" );
             }
             break;
             case 5 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetSuffix( ")" );
             }
             break;
             case 6 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 7 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 8 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetPrefix( "(" );
             }
             break;
             case 9 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetSuffix( ")" );
             }
             break;
             case 10 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetPrefix( "(" );
             }
             break;
             case 11 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetSuffix( ")" );
             }
             break;
             case 12 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetPrefix( "(" );
             }
             break;
             case 13 :
@@ -3516,14 +3516,14 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
             case 14 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+                rNumberFormat.SetSuffix( ")" );
+                rNumberFormat.SetPrefix( "(" );
             }
             break;
             case 15 :
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetSuffix( ")" );
             }
             break;
             case 16: // Simplified Chinese.
@@ -3534,7 +3534,7 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
             case 17: // Simplified Chinese with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 18: // Double byte circle numbers.
@@ -3552,7 +3552,7 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
             case 22: // Traditional Chinese with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_UPPER_ZH_TW );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 26: // Japanese/Korean.
@@ -3563,7 +3563,7 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
             case 27: // Japanese/Korean with single-byte period.
             {
                 rNumberFormat.SetNumberingType( SVX_NUM_NUMBER_LOWER_ZH );
-                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+                rNumberFormat.SetSuffix( "." );
             }
             break;
             case 28: // Double-byte Arabic numbers.
@@ -5299,7 +5299,7 @@ struct FieldEntry
     sal_uInt32  nFieldType;
     sal_uInt32  nFieldStartPos;
     sal_uInt32  nFieldEndPos;
-    String  aFieldUrl;
+    OUString    aFieldUrl;
 
     FieldEntry( sal_uInt32 nType, sal_uInt32 nStart, sal_uInt32 nEnd )
     {
@@ -5507,9 +5507,9 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
             if ( pFontEnityAtom )
             {
                 rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName,
-                            String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CJK ) );
+                            OUString(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CJK ) );
                 rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName,
-                            String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CTL ) );
+                            OUString(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CTL ) );
             }
         }
     }
@@ -5518,13 +5518,13 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
         PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
         if ( pFontEnityAtom )
         {
-            rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO ) );
+            rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, OUString(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO ) );
 
             // #i119475# bullet font info for CJK and CTL
             if ( RTL_TEXTENCODING_SYMBOL ==  pFontEnityAtom->eCharSet )
             {
-                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CJK ) );
-                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CTL ) );
+                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, OUString(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CJK ) );
+                rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, OUString(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet, EE_CHAR_FONTINFO_CTL ) );
             }
         }
     }
@@ -6706,7 +6706,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     {
                                                         sal_Unicode n;
                                                         xub_StrLen nLen;
-                                                        String aStr;
+                                                        OUString aStr;
                                                         bool inquote = sal_False;
                                                         for (nLen = 0, n = 0; nLen < 64; nLen++)
                                                         {
@@ -6730,7 +6730,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                             else
                                                             {
-                                                                aStr += n;
+                                                                aStr += OUString(n);
                                                             }
                                                         }
                                                     }
@@ -6780,7 +6780,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 aTarget += "#";
                                                                 aTarget += pHyperlink->aConvSubString;
                                                             }
-                                                            pEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, String(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
+                                                            pEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, OUString(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                         }
                                                     }
                                                     break;
@@ -7317,7 +7317,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         {
             case XFILL_SOLID :
                 {
-                    static const OUString sFillColor( String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) );
+                    static const OUString sFillColor( "FillColor" );
                     eFS = com::sun::star::drawing::FillStyle_SOLID;
                     Color aFillColor( ((XFillColorItem&)pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
                     sal_Int32 nFillColor( aFillColor.GetColor() );
@@ -7341,7 +7341,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     aGradient.EndIntensity = aXGradient.GetEndIntens();
                     aGradient.StepCount = aXGradient.GetSteps();
 
-                    static const OUString sFillGradient( String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) );
+                    static const OUString sFillGradient( "FillGradient" );
                     xPropSet->setPropertyValue( sFillGradient, Any( aGradient ) );
                 }
                 break;
@@ -7375,12 +7375,12 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             break;
 
         }
-        static const OUString sFillStyle( String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) );
+        static const OUString sFillStyle( "FillStyle" );
         xPropSet->setPropertyValue( sFillStyle, Any( eFS ) );
         if ( eFillStyle != XFILL_NONE )
         {
             sal_Int16 nFillTransparence( ( (const XFillTransparenceItem&)pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
-            static const OUString sFillTransparence( String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
+            static const OUString sFillTransparence( "FillTransparence" );
             xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
         }
     }
@@ -7419,10 +7419,10 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
         std::vector< sal_Int32 >::const_iterator aIter( vPositions.begin() );
         while( aIter != vPositions.end() )
         {
-            static const OUString sTopBorder( String( RTL_CONSTASCII_USTRINGPARAM( "TopBorder" ) ) );
-            static const OUString sBottomBorder( String( RTL_CONSTASCII_USTRINGPARAM( "BottomBorder" ) ) );
-            static const OUString sLeftBorder( String( RTL_CONSTASCII_USTRINGPARAM( "LeftBorder" ) ) );
-            static const OUString sRightBorder( String( RTL_CONSTASCII_USTRINGPARAM( "RightBorder" ) ) );
+            static const OUString sTopBorder( "TopBorder" );
+            static const OUString sBottomBorder( "BottomBorder" );
+            static const OUString sLeftBorder( "LeftBorder" );
+            static const OUString sRightBorder( "RightBorder" );
             static const OUString  sDiagonalTLBR( "DiagonalTLBR" );
             static const OUString  sDiagonalBLTR( "DiagonalBLTR" );
 

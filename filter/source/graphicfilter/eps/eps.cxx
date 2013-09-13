@@ -61,7 +61,7 @@ struct ChrSet
 {
     struct ChrSet * pSucc;
     sal_uInt8 nSet;
-    String aName;
+    OUString aName;
     FontWeight eWeight;
 };
 
@@ -208,7 +208,7 @@ private:
 
     void                ImplSetClipRegion( Region& rRegion );
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
-    void                ImplText( const String& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
+    void                ImplText( const OUString& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
     void                ImplWriteString( const OString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, sal_Bool bStretch = sal_False );
@@ -759,8 +759,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 const MetaTextAction * pA = (const MetaTextAction*) pMA;
 
-                String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                Point   aPoint( pA->GetPoint() );
+                OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                Point     aPoint( pA->GetPoint() );
 
                 ImplText( aUniStr, aPoint, NULL, 0, rVDev );
             }
@@ -775,8 +775,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_STRETCHTEXT_ACTION :
             {
                 const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pMA;
-                String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                Point   aPoint( pA->GetPoint() );
+                OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                Point     aPoint( pA->GetPoint() );
 
                 ImplText( aUniStr, aPoint, NULL, pA->GetWidth(), rVDev );
             }
@@ -785,8 +785,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             case META_TEXTARRAY_ACTION:
             {
                 const MetaTextArrayAction* pA = (const MetaTextArrayAction*)pMA;
-                String  aUniStr( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                Point   aPoint( pA->GetPoint() );
+                OUString  aUniStr = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                Point     aPoint( pA->GetPoint() );
 
                 ImplText( aUniStr, aPoint, pA->GetDXArray(), 0, rVDev );
             }
@@ -2085,10 +2085,9 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, co
 
 // ------------------------------------------------------------------------
 
-void PSWriter::ImplText( const String& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
 {
-    sal_uInt16 nLen = rUniString.Len();
-    if ( !nLen )
+    if ( rUniString.isEmpty() )
         return;
     if ( mnTextMode == 0 )  // using glpyh outlines
     {
