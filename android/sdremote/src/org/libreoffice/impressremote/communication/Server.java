@@ -10,6 +10,7 @@ package org.libreoffice.impressremote.communication;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 public class Server implements Parcelable {
     private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
@@ -45,6 +46,14 @@ public class Server implements Parcelable {
     }
 
     public String getName() {
+        if (mName == null) {
+            return mAddress;
+        }
+
+        if (TextUtils.isEmpty(mName)) {
+            return mAddress;
+        }
+
         return mName;
     }
 
