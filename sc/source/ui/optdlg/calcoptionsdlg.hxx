@@ -28,6 +28,7 @@ public:
 
     DECL_LINK( SettingsSelHdl, Control* );
     DECL_LINK( BtnToggleHdl, void* );
+    DECL_LINK( BtnAutomaticSelectHdl, void* );
 
     const ScCalcConfig& GetConfig() const;
 
@@ -36,6 +37,7 @@ private:
     void SelectionChanged();
     void ListOptionValueChanged();
     void RadioValueChanged();
+    void OpenclAutomaticSelectionChanged();
 #if HAVE_FEATURE_OPENCL
     void fillOpenclList();
 #endif

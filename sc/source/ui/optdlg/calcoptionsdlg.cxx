@@ -124,6 +124,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     mpOpenclInfoList->SetHighlightRange();
     mpOpenclInfoList->GetParent()->Hide();
 
+    mpBtnAutomaticSelectionTrue->SetToggleHdl(LINK(this, ScCalcOptionsDialog, BtnAutomaticSelectHdl));
+
     maCaptionStringRefSyntax = get<Window>("ref_syntax_caption")->GetText();
     maDescStringRefSyntax = get<Window>("ref_syntax_desc")->GetText();
     maUseFormulaSyntax = get<Window>("use_formula_syntax")->GetText();
@@ -306,6 +308,8 @@ void ScCalcOptionsDialog::SelectionChanged()
                     mpOpenclInfoList->GetParent()->Enable();
                 else
                     mpOpenclInfoList->GetParent()->Disable();
+
+                OpenclAutomaticSelectionChanged();
             }
 
             if ( bValue )
@@ -344,6 +348,15 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
         case CALC_OPTION_ENABLE_OPENCL:
             break;
     }
+}
+
+void ScCalcOptionsDialog::OpenclAutomaticSelectionChanged()
+{
+    bool bValue = mpBtnAutomaticSelectionTrue->IsChecked();
+    if(bValue)
+        mpOpenclInfoList->Disable();
+    else
+        mpOpenclInfoList->Enable();
 }
 
 void ScCalcOptionsDialog::RadioValueChanged()
@@ -400,6 +413,12 @@ IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)
 IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnToggleHdl)
 {
     RadioValueChanged();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnAutomaticSelectHdl)
+{
+    OpenclAutomaticSelectionChanged();
     return 0;
 }
 
