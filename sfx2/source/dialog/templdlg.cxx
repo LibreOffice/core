@@ -2136,7 +2136,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
     if ( IsInitialized() && HasSelectedStyle() )
     {
         bool bUsedStyle = 0;     // one of the selected styles are used in the document?
-        OUString aRet;
+        OUString aTemplName;
 
         std::vector<SvTreeListEntry*> aList;
         SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
@@ -2150,11 +2150,9 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
             aList.push_back( pEntry );
             // check the style is used or not
             if (pTreeBox)
-                aRet = pTreeBox->GetEntryText( pEntry );
+                aTemplName = pTreeBox->GetEntryText( pEntry );
             else
-                aRet = aFmtLb.GetEntryText( pEntry );
-
-            const OUString aTemplName( aRet );
+                aTemplName = aFmtLb.GetEntryText( pEntry );
 
             SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
 
@@ -2190,11 +2188,10 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
             for (; it != itEnd; ++it)
             {
                 if (pTreeBox)
-                    aRet = pTreeBox->GetEntryText( *it );
+                    aTemplName = pTreeBox->GetEntryText( *it );
                 else
-                    aRet = aFmtLb.GetEntryText( *it );
+                    aTemplName = aFmtLb.GetEntryText( *it );
 
-                const OUString aTemplName( aRet );
                 PrepareDeleteAction();
                 bDontUpdate = sal_True; // To prevent the Treelistbox to shut down while deleting
                 Execute_Impl( SID_STYLE_DELETE, aTemplName,
@@ -2216,26 +2213,45 @@ void SfxCommonTemplateDialog_Impl::HideHdl(void *)
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        const OUString aTemplName( GetSelectedEntry() );
-        SfxStyleSheetBase* pStyle = GetSelectedStyle();
-        if ( pStyle )
+        OUString aTemplName;
+
+        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+
+        while (pEntry)
         {
+            if (pTreeBox)
+                aTemplName = pTreeBox->GetEntryText( pEntry );
+            else
+                aTemplName = aFmtLb.GetEntryText( pEntry );
+
             Execute_Impl( SID_STYLE_HIDE, aTemplName,
                           OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+
+            pEntry = aFmtLb.NextSelected( pEntry );
         }
     }
 }
 
 void SfxCommonTemplateDialog_Impl::ShowHdl(void *)
 {
+
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        const OUString aTemplName( GetSelectedEntry() );
-        SfxStyleSheetBase* pStyle = GetSelectedStyle();
-        if ( pStyle )
+        OUString aTemplName;
+
+        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+
+        while (pEntry)
         {
+            if (pTreeBox)
+                aTemplName = pTreeBox->GetEntryText( pEntry );
+            else
+                aTemplName = aFmtLb.GetEntryText( pEntry );
+
             Execute_Impl( SID_STYLE_SHOW, aTemplName,
                           OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+
+            pEntry = aFmtLb.NextSelected( pEntry );
         }
     }
 }
