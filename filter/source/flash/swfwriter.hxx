@@ -360,8 +360,8 @@ private:
     void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );
     void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, sal_uInt8 nTransparence = 0);
     void Impl_writePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );
-    void Impl_writeText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth );
-    void Impl_writeText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor );
+    void Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth );
+    void Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor );
     void Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL );
     void Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY );

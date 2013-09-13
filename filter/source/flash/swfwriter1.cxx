@@ -407,7 +407,7 @@ FlashFont& Writer::Impl_getFont( const Font& rFont )
 
 // -----------------------------------------------------------------------------
 
-void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth )
+void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth )
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
@@ -495,9 +495,9 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
     }
 }
 
-void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor )
+void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor )
 {
-    sal_uInt32 nLen = rText.Len();
+    sal_Int32 nLen = rText.getLength();
 
     if( !nLen )
         return;
@@ -547,14 +547,13 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText.GetChar((sal_uInt16) nLen - 1)) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText[nLen - 1]) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
                 const double fFactor = (double) nWidth / aNormSize.Width();
 
-                sal_uInt32 i;
-                for( i = 0; i < ( nLen - 1 ); i++ )
+                for( sal_Int32 i = 0; i < ( nLen - 1 ); i++ )
                     pDX[ i ] = FRound( pDX[ i ] * fFactor );
             }
         }
@@ -656,8 +655,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         sal_Int32 nLastDX = 0;
         sal_Int32 nAdvance;
-        sal_uInt32 i;
-        for( i = 0; i < nLen; i++  )
+        for( sal_Int32 i = 0; i < nLen; i++  )
         {
             if( i < (nLen-1) )
             {
@@ -669,7 +667,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
                 nAdvance = 0;
             }
 
-            aBits.writeUB( rFlashFont.getGlyph(rText.GetChar(_uInt16(i)),mpVDev), nGlyphBits );
+            aBits.writeUB( rFlashFont.getGlyph(rText[i],mpVDev), nGlyphBits );
             aBits.writeSB( _Int16(map( Size( (long)( nAdvance / scale ), 0 ) ).Width() ), nAdvanceBits );
         }
 
