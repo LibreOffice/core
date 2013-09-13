@@ -985,7 +985,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 sal_Int32 nType = DataType::VARCHAR;
                 sal_Bool bFkt(sal_False);
                 pColumnRef = pColumnRef->getChild(0);
-                if (
+                while (
                         pColumnRef->getKnownRuleID() != OSQLParseNode::subquery &&
                         pColumnRef->count() == 3 &&
                         SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
