@@ -422,7 +422,7 @@ namespace dbtools
         {
             const sal_Unicode *p = _sSQLString.getStr() + nSeparation;
             const sal_Unicode *const begin = p;
-            for(;isspace(*p);++p);
+            while (isspace(*p)) { ++p; }
             nSeparation += p - begin;
             aTime = toTime( _sSQLString.copy( nSeparation ) );
         }
