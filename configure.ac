@@ -2722,6 +2722,7 @@ if test $_os = Darwin; then
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             AR=`xcrun -find ar`
             NM=`xcrun -find nm`
+            STRIP=`xcrun -find strip`
             LIBTOOL=`xcrun -find libtool`
             RANLIB=`xcrun -find ranlib`
             ;;
@@ -2885,6 +2886,7 @@ if test $_os = iOS; then
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
     NM=`xcrun -find nm`
+    STRIP=`xcrun -find strip`
     LIBTOOL=`xcrun -find libtool`
     RANLIB=`xcrun -find ranlib`
 fi

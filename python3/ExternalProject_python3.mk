@@ -120,7 +120,7 @@ cd \"$$origpath\"\n\
 	touch $@
 
 $(call gb_ExternalProject_get_state_target,python3,fixinstallnames) : $(call gb_ExternalProject_get_state_target,python3,build)
-	install_name_tool -change \
+	$(INSTALL_NAME_TOOL) -change \
 		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
 		@executable_path/../../../../LibreOfficePython \
 		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
@@ -132,7 +132,7 @@ $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_Exte
 	for file in python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
 	            python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m \
 	            pythonw$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) ; do \
-	install_name_tool -change \
+	$(INSTALL_NAME_TOOL) -change \
 		$(python3_fw_prefix)/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
 		@executable_path/../LibreOfficePython $$file ; done
 	touch $@

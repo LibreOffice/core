@@ -24,3 +24,14 @@ diff -ru python3.old_/configure python3/configure
  		   ARCH_RUN_32BIT=""
  		   LIPO_32BIT_FLAGS=""
  	         elif test "$UNIVERSAL_ARCHS" = "64-bit" ; then
+--- python3/Mac/Makefile.in.orig	2013-09-13 20:16:50.558137603 +0200
++++ python3/Mac/Makefile.in	2013-09-13 21:57:14.790962423 +0200
+@@ -39,7 +39,7 @@
+ INSTALL_SCRIPT= @INSTALL_SCRIPT@
+ INSTALL_DATA=@INSTALL_DATA@
+ LN=@LN@
+-STRIPFLAG=-s
++STRIPFLAG=
+ CPMAC=CpMac
+ 
+ APPTEMPLATE=$(srcdir)/Resources/app
