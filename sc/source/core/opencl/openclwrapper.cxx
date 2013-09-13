@@ -2703,8 +2703,10 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatfor
     if(nState != CL_SUCCESS)
         return false;
 
-    boost::scoped_array<cl_device_id> pDevices(new cl_device_id[nDevices]);
-    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, nDevices, pDevices.get(), NULL);
+    // memory leak that does not matter
+    // memory is stored in static variable that lives through the whole program
+    cl_device_id* pDevices = new cl_device_id[nDevices];
+    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, nDevices, pDevices, NULL);
     if(nState != CL_SUCCESS)
         return false;
 
@@ -2733,30 +2735,109 @@ size_t getOpenCLPlatformCount()
     return nPlatforms;
 }
 
-void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms)
+const std::vector<OpenclPlatformInfo>& fillOpenCLInfo()
 {
+    static std::vector<OpenclPlatformInfo> aPlatforms;
+    if(!aPlatforms.empty())
+        return aPlatforms;
+
     int status = clewInit(OPENCL_DLL_NAME);
     if (status < 0)
-        return;
+        return aPlatforms;
 
     cl_uint nPlatforms;
     cl_int nState = clGetPlatformIDs(0, NULL, &nPlatforms);
 
     if(nState != CL_SUCCESS)
-        return;
+        return aPlatforms;
 
-    boost::scoped_array<cl_platform_id> pPlatforms(new cl_platform_id[nPlatforms]);
-    nState = clGetPlatformIDs(nPlatforms, pPlatforms.get(), NULL);
+    // memory leak that does not matter,
+    // memory is stored in static instance aPlatforms
+    cl_platform_id* pPlatforms = new cl_platform_id[nPlatforms];
+    nState = clGetPlatformIDs(nPlatforms, pPlatforms, NULL);
 
     if(nState != CL_SUCCESS)
-        return;
+        return aPlatforms;
 
     for(size_t i = 0; i < nPlatforms; ++i)
     {
         OpenclPlatformInfo aPlatformInfo;
         if(createPlatformInfo(pPlatforms[i], aPlatformInfo))
-            rPlatforms.push_back(aPlatformInfo);
+            aPlatforms.push_back(aPlatformInfo);
     }
+
+    return aPlatforms;
+}
+
+void switchOpenclDevice(void* pDevice, bool bAutoSelect)
+{
+    cl_device_id pDeviceId = reinterpret_cast<cl_device_id>(pDevice);
+    if(!pDeviceId || bAutoSelect)
+    {
+        size_t nComputeUnits = 0;
+        // clever algorithm
+        const std::vector<OpenclPlatformInfo>& rPlatform = fillOpenCLInfo();
+        for(std::vector<OpenclPlatformInfo>::const_iterator it =
+                rPlatform.begin(), itEnd = rPlatform.end(); it != itEnd; ++it)
+        {
+            for(std::vector<OpenclDeviceInfo>::const_iterator itr =
+                    it->maDevices.begin(), itrEnd = it->maDevices.end();
+                    itr != itrEnd; ++itr)
+            {
+                if(itr->mnComputeUnits > nComputeUnits)
+                {
+                    pDeviceId = reinterpret_cast<cl_device_id>(itr->device);
+                    nComputeUnits = itr->mnComputeUnits;
+                }
+            }
+        }
+    }
+
+    if(OpenclDevice::gpuEnv.mpDevID == pDeviceId)
+    {
+        // we don't need to change anything
+        // still the same device
+        return;
+    }
+
+    cl_platform_id platformId;
+    cl_int nState = clGetDeviceInfo(pDeviceId, CL_DEVICE_PLATFORM,
+            sizeof(platformId), &platformId, NULL);
+
+    cl_context_properties cps[3];
+    cps[0] = CL_CONTEXT_PLATFORM;
+    cps[1] = (cl_context_properties) platformId;
+    cps[2] = 0;
+    cl_context context = clCreateContext( cps, 1, &pDeviceId, NULL, NULL, &nState );
+
+    if(nState != CL_SUCCESS || context == NULL)
+    {
+        if(context != NULL)
+            clReleaseContext(context);
+
+        SAL_WARN("sc", "failed to set/switch opencl device");
+        return;
+    }
+
+    cl_command_queue command_queue = clCreateCommandQueue(
+            context, pDeviceId, 0, &nState);
+
+    if(command_queue == NULL || nState != CL_SUCCESS)
+    {
+        if(command_queue != NULL)
+            clReleaseCommandQueue(command_queue);
+
+        clReleaseContext(context);
+    }
+
+    OpenclDevice::releaseOpenclEnv(&OpenclDevice::gpuEnv);
+    OpenCLEnv env;
+    env.mpOclPlatformID = platformId;
+    env.mpOclContext = context;
+    env.mpOclDevsID = pDeviceId;
+    env.mpOclCmdQueue = command_queue;
+    OpenclDevice::initOpenclAttr(&env);
+    OpenclDevice::initOpenclRunEnv(&OpenclDevice::gpuEnv);
 }
 
 }}

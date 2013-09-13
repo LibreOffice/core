@@ -195,7 +195,7 @@ public:
     static int binaryGenerated( const char * clFileName, FILE ** fhandle );
     static int compileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
 
-    int initOpenclAttr( OpenCLEnv * env );
+    static int initOpenclAttr( OpenCLEnv * env );
     int releaseKernel( KernelEnv * env );
     int setKernelEnv( KernelEnv *envInfo );
     int createKernel( char * kernelname, KernelEnv * env );
@@ -281,7 +281,15 @@ public:
 };
 
 size_t getOpenCLPlatformCount();
-void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);
+const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
+
+/**
+ * Used to set or switch between OpenCL devices.
+ *
+ * @param pDeviceId the id of the opencl device of type cl_device_id, NULL means use software calculation
+ * @param bAutoSelect use the algorithm to select the best OpenCL device
+ */
+void switchOpenclDevice(void* pDeviceId, bool bAutoSelect);
 
 }}
 

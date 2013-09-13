@@ -1087,11 +1087,10 @@ SAL_DLLPUBLIC_EXPORT size_t getOpenCLPlatformCount()
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(sc::OpenclPlatformInfo* pInfos, size_t nInfoSize)
 {
-    std::vector<sc::OpenclPlatformInfo> aPlatforms;
-    sc::opencl::fillOpenCLInfo(aPlatforms);
-    size_t n = std::min(aPlatforms.size(), nInfoSize);
+    const std::vector<sc::OpenclPlatformInfo>& rPlatforms = sc::opencl::fillOpenCLInfo();
+    size_t n = std::min(rPlatforms.size(), nInfoSize);
     for (size_t i = 0; i < n; ++i)
-        pInfos[i] = aPlatforms[i];
+        pInfos[i] = rPlatforms[i];
 }
 
 }
