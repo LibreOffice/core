@@ -2135,8 +2135,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        bool bUsedStyle = 0;     // one of the selected styles are used in the document?
-        OUString aRet;
+        bool bUsedStyle = false;     // one of the selected styles are used in the document?
 
         std::vector<SvTreeListEntry*> aList;
         SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
@@ -2148,13 +2147,10 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
         while (pEntry)
         {
             aList.push_back( pEntry );
-            // check the style is used or not
-            if (pTreeBox)
-                aRet = pTreeBox->GetEntryText( pEntry );
-            else
-                aRet = aFmtLb.GetEntryText( pEntry );
 
-            const OUString aTemplName( aRet );
+            // check the style is used or not
+
+            OUString aTemplName = aFmtLb.GetEntryText( pEntry );
 
             SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
 
@@ -2163,13 +2159,13 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
                 if (bUsedStyle) // add a separator for the second and later styles
                     aMsg += ", ";
                 aMsg += aTemplName;
-                bUsedStyle = 1;
+                bUsedStyle = true;
             }
 
             pEntry = aFmtLb.NextSelected( pEntry );
         }
 
-        bool aApproved = 0;
+        bool aApproved = false;
 
         // we only want to show the dialog once and if we want to delete a style in use (UX-advice)
         if ( bUsedStyle )
@@ -2189,12 +2185,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 
             for (; it != itEnd; ++it)
             {
-                if (pTreeBox)
-                    aRet = pTreeBox->GetEntryText( *it );
-                else
-                    aRet = aFmtLb.GetEntryText( *it );
+                OUString aTemplName = aFmtLb.GetEntryText( *it );
 
-                const OUString aTemplName( aRet );
                 PrepareDeleteAction();
                 bDontUpdate = sal_True; // To prevent the Treelistbox to shut down while deleting
                 Execute_Impl( SID_STYLE_DELETE, aTemplName,
@@ -2216,26 +2208,35 @@ void SfxCommonTemplateDialog_Impl::HideHdl(void *)
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        const OUString aTemplName( GetSelectedEntry() );
-        SfxStyleSheetBase* pStyle = GetSelectedStyle();
-        if ( pStyle )
+        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+
+        while (pEntry)
         {
+            OUString aTemplName = aFmtLb.GetEntryText( pEntry );
+
             Execute_Impl( SID_STYLE_HIDE, aTemplName,
                           OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+
+            pEntry = aFmtLb.NextSelected( pEntry );
         }
     }
 }
 
 void SfxCommonTemplateDialog_Impl::ShowHdl(void *)
 {
+
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        const OUString aTemplName( GetSelectedEntry() );
-        SfxStyleSheetBase* pStyle = GetSelectedStyle();
-        if ( pStyle )
+        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+
+        while (pEntry)
         {
+            OUString aTemplName = aFmtLb.GetEntryText( pEntry );
+
             Execute_Impl( SID_STYLE_SHOW, aTemplName,
                           OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
+
+            pEntry = aFmtLb.NextSelected( pEntry );
         }
     }
 }
