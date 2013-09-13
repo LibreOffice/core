@@ -233,6 +233,9 @@ void ScCalcOptionsDialog::FillOptionsList()
 #if HAVE_FEATURE_OPENCL
     pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
     fillOpenclList();
+
+    mpBtnAutomaticSelectionFalse->Check(!maConfig.mbOpenCLAutoSelect);
+    mpBtnAutomaticSelectionTrue->Check(maConfig.mbOpenCLAutoSelect);
 #endif
 
     mpLbSettings->SetUpdateMode(true);
@@ -367,9 +370,10 @@ void ScCalcOptionsDialog::RadioValueChanged()
         case CALC_OPTION_ENABLE_OPENCL:
             maConfig.mbOpenCLEnabled = bValue;
             if(bValue)
-                mpOpenclInfoList->GetParent()->Disable();
-            else
                 mpOpenclInfoList->GetParent()->Enable();
+            else
+                mpOpenclInfoList->GetParent()->Disable();
+            OpenclAutomaticSelectionChanged();
             break;
     }
 
