@@ -1049,6 +1049,11 @@ sub get_Source_Directory_For_Files_From_Includepathlist
             {
                 $destination =~ s,$extrarootdir/,,; # remove it from path
             }
+            if (($installer::globals::languagepack) && ($installer::globals::ismacbuild))
+            {   # source files are in $(PRODUCTNAME).app where they will
+                # actually copied by the user executing the Language Pack.app
+                $destination =~ s, Language Pack.app/,.app/,;
+            }
             $instdirdestination = $ENV{'INSTDIR'} . $installer::globals::separator . $destination;
         }
         if ($instdirdestination && -f $instdirdestination)
