@@ -9,6 +9,9 @@
 
 #include "openclwrapper.hxx"
 
+#include <rtl/ustring.hxx>
+#include <boost/scoped_array.hpp>
+
 #include "sal/config.h"
 #include "oclkernels.hxx"
 
@@ -2626,6 +2629,92 @@ int OclCalc::oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMa
     clStatus = clReleaseMemObject( clpNData );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     return 0;
+}
+
+namespace {
+
+void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
+{
+    OpenclDeviceInfo aDeviceInfo;
+    char pName[64];
+    cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_NAME, 64, pName, NULL);
+    if(nState != CL_SUCCESS)
+        return;
+
+    aDeviceInfo.maName = OUString::createFromAscii(pName);
+
+    char pVendor[64];
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_VENDOR, 64, pName, NULL);
+    if(nState != CL_SUCCESS)
+        return;
+
+    aDeviceInfo.maVendor = OUString::createFromAscii(pVendor);
+
+    rPlatformInfo.maDevices.push_back(aDeviceInfo);
+}
+
+bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatformInfo)
+{
+    rPlatformInfo.mnId = nPlatformId;
+    char pName[64];
+    cl_int nState = clGetPlatformInfo(nPlatformId, CL_PLATFORM_NAME, 64,
+             pName, NULL);
+    if(nState != CL_SUCCESS)
+        return false;
+    rPlatformInfo.maName = OUString::createFromAscii(pName);
+
+    char pVendor[64];
+    nState = clGetPlatformInfo(nPlatformId, CL_PLATFORM_VENDOR, 64,
+             pVendor, NULL);
+    if(nState != CL_SUCCESS)
+        return false;
+
+    rPlatformInfo.maVendor = OUString::createFromAscii(pName);
+
+    cl_uint nDevices;
+    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, 0, NULL, &nDevices);
+    if(nState != CL_SUCCESS)
+        return false;
+
+    boost::scoped_array<cl_device_id> pDevices(new cl_device_id[nDevices]);
+    nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, nDevices, pDevices.get(), NULL);
+    if(nState != CL_SUCCESS)
+        return false;
+
+    for(size_t i = 0; i < nDevices; ++i)
+    {
+        createDeviceInfo(pDevices[i], rPlatformInfo);
+    }
+
+    return true;
+}
+
+}
+
+void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms)
+{
+    int status = clewInit("libOpenCL.so");
+    if (status < 0)
+        return;
+
+    cl_uint nPlatforms;
+    cl_int nState = clGetPlatformIDs(0, NULL, &nPlatforms);
+
+    if(nState != CL_SUCCESS)
+        return;
+
+    boost::scoped_array<cl_platform_id> pPlatforms(new cl_platform_id[nPlatforms]);
+    nState = clGetPlatformIDs(nPlatforms, pPlatforms.get(), NULL);
+
+    if(nState != CL_SUCCESS)
+        return;
+
+    for(size_t i = 0; i < nPlatforms; ++i)
+    {
+        OpenclPlatformInfo aPlatformInfo;
+        if(createPlatformInfo(pPlatforms[i], aPlatformInfo))
+            rPlatforms.push_back(aPlatformInfo);
+    }
 }
 
 }}

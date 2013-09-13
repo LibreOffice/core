@@ -7,14 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
-
 #include "calcoptionsdlg.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
 
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
+
+#if HAVE_FEATURE_OPENCL
+#include "platforminfo.hxx"
+#endif
 
 namespace {
 
@@ -113,6 +115,14 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     get(mpFtAnnotation, "annotation");
     get(mpBtnTrue, "true");
     get(mpBtnFalse, "false");
+    get(mpOpenclInfoList, "opencl_list");
+    get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
+    get(mpBtnAutomaticSelectionFalse, "automatic_select_false");
+
+    mpOpenclInfoList->set_height_request(4* mpOpenclInfoList->GetTextHeight());
+    mpOpenclInfoList->SetStyle(mpOpenclInfoList->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
+    mpOpenclInfoList->SetHighlightRange();
+    mpOpenclInfoList->GetParent()->Hide();
 
     maCaptionStringRefSyntax = get<Window>("ref_syntax_caption")->GetText();
     maDescStringRefSyntax = get<Window>("ref_syntax_desc")->GetText();
@@ -177,6 +187,36 @@ void ScCalcOptionsDialog::setValueAt(size_t nPos, const OUString &rValue)
     pModel->InvalidateEntry(pEntry);
 }
 
+#if HAVE_FEATURE_OPENCL
+
+void ScCalcOptionsDialog::fillOpenclList()
+{
+    mpOpenclInfoList->SetUpdateMode(false);
+    mpOpenclInfoList->Clear();
+    std::vector<sc::OpenclPlatformInfo> aPlatformInfo = sc::listAllOpenclPlatforms();
+    for(std::vector<sc::OpenclPlatformInfo>::const_iterator it = aPlatformInfo.begin(),
+            itEnd = aPlatformInfo.end(); it != itEnd; ++it)
+    {
+        SvTreeListEntry* pEntry = new SvTreeListEntry;
+        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
+        pEntry->AddItem(new SvLBoxString(pEntry, 0, it->maVendor));
+        mpOpenclInfoList->GetModel()->Insert(pEntry);
+
+        for(std::vector<sc::OpenclDeviceInfo>::const_iterator
+                itr = it->maDevices.begin(), itrEnd = it->maDevices.end(); itr != itrEnd; ++itr)
+        {
+            SvTreeListEntry* pDeviceEntry = new SvTreeListEntry;
+pDeviceEntry->AddItem(new SvLBoxContextBmp(pDeviceEntry, 0, Image(), Image(), 0));
+pDeviceEntry->AddItem(new SvLBoxString(pDeviceEntry, 0, itr->maName));
+mpOpenclInfoList->GetModel()->Insert(pDeviceEntry, pEntry);
+        }
+    }
+
+    mpOpenclInfoList->SetUpdateMode(true);
+}
+
+#endif
+
 void ScCalcOptionsDialog::FillOptionsList()
 {
     mpLbSettings->SetUpdateMode(false);
@@ -198,6 +238,7 @@ void ScCalcOptionsDialog::FillOptionsList()
     pModel->Insert(createBoolItem(maCaptionEmptyStringAsZero,maConfig.mbEmptyStringAsZero));
 #if HAVE_FEATURE_OPENCL
     pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
+    fillOpenclList();
 #endif
 
     mpLbSettings->SetUpdateMode(true);
@@ -214,6 +255,7 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpBtnTrue->Hide();
             mpBtnFalse->Hide();
             mpLbOptionEdit->Show();
+            mpOpenclInfoList->GetParent()->Hide();
 
             mpLbOptionEdit->Clear();
             mpLbOptionEdit->InsertEntry(maUseFormulaSyntax);
@@ -253,11 +295,17 @@ void ScCalcOptionsDialog::SelectionChanged()
             {
                 bValue = maConfig.mbEmptyStringAsZero;
                 mpFtAnnotation->SetText(maDescEmptyStringAsZero);
+                mpOpenclInfoList->GetParent()->Hide();
             }
             else
             {
                 bValue = maConfig.mbOpenCLEnabled;
                 mpFtAnnotation->SetText(maDescOpenCLEnabled);
+                mpOpenclInfoList->GetParent()->Show();
+                if(bValue)
+                    mpOpenclInfoList->GetParent()->Enable();
+                else
+                    mpOpenclInfoList->GetParent()->Disable();
             }
 
             if ( bValue )

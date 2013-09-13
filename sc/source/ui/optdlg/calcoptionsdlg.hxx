@@ -10,10 +10,13 @@
 #ifndef __SC_OPTDLG_CALCOPTIONSDLG_HXX__
 #define __SC_OPTDLG_CALCOPTIONSDLG_HXX__
 
+#include <config_features.h>
+
 #include "vcl/dialog.hxx"
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
 #include "svx/checklbx.hxx"
+#include "svtools/treelistbox.hxx"
 
 #include "calcconfig.hxx"
 
@@ -33,6 +36,9 @@ private:
     void SelectionChanged();
     void ListOptionValueChanged();
     void RadioValueChanged();
+#if HAVE_FEATURE_OPENCL
+    void fillOpenclList();
+#endif
 
     OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
     OUString toString(bool bVal) const;
@@ -47,6 +53,10 @@ private:
     RadioButton* mpBtnFalse;
 
     FixedText* mpFtAnnotation;
+
+    SvTreeListBox* mpOpenclInfoList;
+    RadioButton* mpBtnAutomaticSelectionTrue;
+    RadioButton* mpBtnAutomaticSelectionFalse;
 
     OUString maTrue;
     OUString maFalse;

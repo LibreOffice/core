@@ -14,6 +14,7 @@
 #include <formula/opcode.hxx>
 #include <sal/detail/log.h>
 #include <cassert>
+#include "platforminfo.hxx"
 
 #include "clcc/clew.h"
 
@@ -278,6 +279,8 @@ public:
     int releaseOclBuffer(void);
     friend class agency;
 };
+
+void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);
 
 }}
 
