@@ -86,7 +86,10 @@ sal_Bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& 
         else
         {
             if (!aLocale.Language.isEmpty() || aLocale.Variant[0] != '-')
-                SAL_WARN( "xmloff.style", "XMLCharLanguageHdl::importXML - attempt to import language twice");
+            {
+                SAL_WARN_IF( aLocale.Language != I18NLANGTAG_QLT, "xmloff.style",
+                        "XMLCharLanguageHdl::importXML - attempt to import language twice");
+            }
             else
             {
                 aLocale.Variant = rStrImpValue + aLocale.Variant;
