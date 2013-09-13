@@ -257,7 +257,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 define gb_Library__get_rpath
-$(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)))
+$(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' -Wl,-rpath-link,$(INSTDIR)/ure/lib -Wl,-rpath-link,$(INSTDIR)/program))
 endef
 
 define gb_Library_get_rpath
@@ -284,7 +284,7 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable__get_rpath
-$(strip -Wl,-z,origin $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION))
+$(strip -Wl,-z,origin $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') -Wl,-rpath-link,-Wl,-rpath-link,$(INSTDIR)/ure/lib -Wl,-rpath-link,$(INSTDIR)/program)
 endef
 
 define gb_Executable_get_rpath
