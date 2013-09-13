@@ -14,6 +14,10 @@
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
 
+#if HAVE_FEATURE_OPENCL
+#include "formulagroup.hxx"
+#endif
+
 namespace {
 
 typedef enum {
@@ -195,7 +199,7 @@ void ScCalcOptionsDialog::fillOpenclList()
 {
     mpOpenclInfoList->SetUpdateMode(false);
     mpOpenclInfoList->Clear();
-    maPlatformInfo = sc::listAllOpenclPlatforms();
+    sc::FormulaGroupInterpreter::fillOpenCLInfo(maPlatformInfo);
     for(std::vector<sc::OpenclPlatformInfo>::iterator it = maPlatformInfo.begin(),
             itEnd = maPlatformInfo.end(); it != itEnd; ++it)
     {

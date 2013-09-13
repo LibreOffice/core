@@ -26,6 +26,8 @@ struct SC_DLLPUBLIC OpenclDeviceInfo
     size_t mnMemory;
     size_t mnComputeUnits;
     size_t mnFrequency;
+
+    OpenclDeviceInfo();
 };
 
 struct SC_DLLPUBLIC OpenclPlatformInfo
@@ -34,9 +36,9 @@ struct SC_DLLPUBLIC OpenclPlatformInfo
     OUString maVendor;
     OUString maName;
     std::vector<OpenclDeviceInfo> maDevices;
-};
 
-SC_DLLPUBLIC std::vector<OpenclPlatformInfo> listAllOpenclPlatforms();
+    OpenclPlatformInfo();
+};
 
 }
 

@@ -12,7 +12,9 @@
 
 #include "address.hxx"
 #include "types.hxx"
+#include "platforminfo.hxx"
 
+#include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/unordered_set.hpp>
@@ -52,6 +54,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
 
  public:
     static FormulaGroupInterpreter *getStatic();
+    static void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;

@@ -334,11 +334,28 @@ public:
 
 static void SAL_CALL thisModule() {}
 
-typedef FormulaGroupInterpreter* (*LoaderFn)(void);
+typedef FormulaGroupInterpreter* (*__createFormulaGroupOpenCLInterpreter)(void);
+typedef size_t (*__getOpenCLPlatformCount)(void);
+typedef void (*__fillOpenCLInfo)(OpenclPlatformInfo*, size_t);
 
 #endif
 
 FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
+
+osl::Module* getOpenCLModule()
+{
+    static osl::Module aModule;
+    if (aModule.is())
+        // Already loaded.
+        return &aModule;
+
+    OUString aLibName(SVLIBRARY("scopencl"));
+    bool bLoaded = aModule.loadRelative(&thisModule, aLibName);
+    if (!bLoaded)
+        bLoaded = aModule.load(aLibName);
+
+    return bLoaded ? &aModule : NULL;
+}
 
 /// load and/or configure the correct formula group interpreter
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
@@ -376,18 +393,12 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
             msInstance = createFormulaGroupOpenCLInterpreter();
 #else
             // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
-
-            OUString aLibName(SVLIBRARY("scopencl"));
-            static osl::Module aModule;
-            bool bLoaded = aModule.loadRelative(&thisModule, aLibName);
-            if (!bLoaded)
-                bLoaded = aModule.load(aLibName);
-
-            if (bLoaded)
+            osl::Module* pModule = getOpenCLModule();
+            if (pModule)
             {
-                oslGenericFunction fn = aModule.getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
+                oslGenericFunction fn = pModule->getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
                 if (fn)
-                    msInstance = reinterpret_cast<LoaderFn>(fn)();
+                    msInstance = reinterpret_cast<__createFormulaGroupOpenCLInterpreter>(fn)();
             }
 
             if (!msInstance)
@@ -403,6 +414,29 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     }
 
     return msInstance;
+}
+
+void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms)
+{
+    osl::Module* pModule = getOpenCLModule();
+    if (!pModule)
+        return;
+
+    oslGenericFunction fn = pModule->getFunctionSymbol("getOpenCLPlatformCount");
+    if (!fn)
+        return;
+
+    size_t nPlatforms = reinterpret_cast<__getOpenCLPlatformCount>(fn)();
+    if (!nPlatforms)
+        return;
+
+    fn = pModule->getFunctionSymbol("fillOpenCLInfo");
+    if (!fn)
+        return;
+
+    std::vector<OpenclPlatformInfo> aPlatforms(nPlatforms);
+    reinterpret_cast<__fillOpenCLInfo>(fn)(&aPlatforms[0], aPlatforms.size());
+    rPlatforms.swap(aPlatforms);
 }
 
 void FormulaGroupInterpreter::generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode)

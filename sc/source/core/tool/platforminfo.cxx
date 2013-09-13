@@ -8,16 +8,13 @@
  */
 
 #include "platforminfo.hxx"
-#include "openclwrapper.hxx"
+#include "formulagroup.hxx"
 
 namespace sc {
 
-std::vector<OpenclPlatformInfo> listAllOpenclPlatforms()
-{
-    std::vector<OpenclPlatformInfo> aPlatforms;
-    opencl::fillOpenCLInfo(aPlatforms);
-    return aPlatforms;
-}
+OpenclDeviceInfo::OpenclDeviceInfo() {}
+
+OpenclPlatformInfo::OpenclPlatformInfo() {}
 
 }
 

@@ -227,6 +227,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/optutil \
 	sc/source/core/tool/orcusxml \
 	sc/source/core/tool/parclass \
+        sc/source/core/tool/platforminfo \
 	sc/source/core/tool/printopt \
 	sc/source/core/tool/prnsave \
 	sc/source/core/tool/progress \

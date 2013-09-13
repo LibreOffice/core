@@ -280,6 +280,7 @@ public:
     friend class agency;
 };
 
+size_t getOpenCLPlatformCount();
 void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);
 
 }}

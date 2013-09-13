@@ -35,7 +35,6 @@ $(eval $(call gb_Library_use_libraries,scui,\
 	i18nlangtag \
 	sal \
 	sc \
-	scopencl \
 	sfx \
 	sot \
 	svl \

@@ -1080,6 +1080,20 @@ SAL_DLLPUBLIC_EXPORT sc::FormulaGroupInterpreter* SAL_CALL createFormulaGroupOpe
     return new sc::opencl::FormulaGroupInterpreterOpenCL();
 }
 
+SAL_DLLPUBLIC_EXPORT size_t getOpenCLPlatformCount()
+{
+    return sc::opencl::getOpenCLPlatformCount();
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(sc::OpenclPlatformInfo* pInfos, size_t nInfoSize)
+{
+    std::vector<sc::OpenclPlatformInfo> aPlatforms;
+    sc::opencl::fillOpenCLInfo(aPlatforms);
+    size_t n = std::min(aPlatforms.size(), nInfoSize);
+    for (size_t i = 0; i < n; ++i)
+        pInfos[i] = aPlatforms[i];
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
