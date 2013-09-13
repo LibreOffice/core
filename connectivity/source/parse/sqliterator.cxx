@@ -803,7 +803,18 @@ void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const
+bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const
+{
+    OUString tmp;
+    if(impl_getColumnTableRange(pNode, tmp))
+    {
+        rTableRange = tmp;
+        return true;
+    }
+    else
+        return false;
+}
+bool OSQLParseTreeIterator::impl_getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseTreeIterator::getColumnTableRange" );
     // See if all columns belong to one table
