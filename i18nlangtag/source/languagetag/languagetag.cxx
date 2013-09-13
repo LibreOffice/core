@@ -307,6 +307,7 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
         maCachedLanguage( rLanguageTag.maCachedLanguage),
         maCachedScript( rLanguageTag.maCachedScript),
         maCachedCountry( rLanguageTag.maCachedCountry),
+        maCachedVariants( rLanguageTag.maCachedVariants),
         mpImplLangtag( rLanguageTag.mpImplLangtag ?
                 lt_tag_copy( LANGTAGCAST( rLanguageTag.mpImplLangtag)) : NULL),
         mnLangID( rLanguageTag.mnLangID),
@@ -336,6 +337,7 @@ LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
     maCachedLanguage    = rLanguageTag.maCachedLanguage;
     maCachedScript      = rLanguageTag.maCachedScript;
     maCachedCountry     = rLanguageTag.maCachedCountry;
+    maCachedVariants    = rLanguageTag.maCachedVariants;
     mpImplLangtag       = rLanguageTag.mpImplLangtag;
     mpImplLangtag       = rLanguageTag.mpImplLangtag ?
                             lt_tag_copy( LANGTAGCAST( rLanguageTag.mpImplLangtag)) : NULL;
@@ -387,6 +389,8 @@ void LanguageTag::resetVars()
         maCachedScript  = OUString();
     if (!maCachedCountry.isEmpty())
         maCachedCountry = OUString();
+    if (!maCachedVariants.isEmpty())
+        maCachedVariants = OUString();
     mnLangID            = LANGUAGE_DONTKNOW;
     meIsValid           = DECISION_DONTKNOW;
     meIsIsoLocale       = DECISION_DONTKNOW;
