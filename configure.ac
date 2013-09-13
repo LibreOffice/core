@@ -2721,6 +2721,7 @@ if test $_os = Darwin; then
             CXX="`xcrun -find clang++` $bitness $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             AR=`xcrun -find ar`
+            NM=`xcrun -find nm`
             LIBTOOL=`xcrun -find libtool`
             RANLIB=`xcrun -find ranlib`
             ;;
@@ -2868,6 +2869,7 @@ if test $_os = iOS; then
     CXX="`xcrun -find clang++` -arch $arch -isysroot $sysroot $lto $versionmin"
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
+    NM=`xcrun -find nm`
     LIBTOOL=`xcrun -find libtool`
     RANLIB=`xcrun -find ranlib`
 fi
