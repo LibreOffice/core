@@ -425,7 +425,7 @@ public:
     void            SetExtendedErrorDetection( ExtendedErrorDetection eVal ) { meExtendedErrorDetection = eVal; }
 
     bool            IsCorrected() { return bCorrected; }
-    const String&   GetCorrectedFormula() { return aCorrectedFormula; }
+    const OUString& GetCorrectedFormula() { return aCorrectedFormula; }
 
     // Use convention from this->aPos by default
     ScTokenArray* CompileString( const OUString& rFormula );

@@ -311,7 +311,7 @@ protected:
 
     bool MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 );
 
-    String              aCorrectedFormula;      // autocorrected Formula
+    OUString            aCorrectedFormula;      // autocorrected Formula
     OUString            aCorrectedSymbol;       // autocorrected Symbol
 
     OpCodeMapPtr        mxSymbols;              // which symbols are used

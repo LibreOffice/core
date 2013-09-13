@@ -3664,7 +3664,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     bCorrected = false;
     if ( bAutoCorrect )
     {
-        aCorrectedFormula.Erase();
+        aCorrectedFormula = "";
         aCorrectedSymbol = "";
     }
     sal_uInt8 nForced = 0;   // ==formula forces recalc even if cell is not visible
@@ -3673,14 +3673,14 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         nSrcPos++;
         nForced++;
         if ( bAutoCorrect )
-            aCorrectedFormula += '=';
+            aCorrectedFormula += "=";
     }
     if( aFormula.GetChar(nSrcPos) == '=' )
     {
         nSrcPos++;
         nForced++;
         if ( bAutoCorrect )
-            aCorrectedFormula += '=';
+            aCorrectedFormula += "=";
     }
     struct FunctionStack
     {

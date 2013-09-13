@@ -1382,9 +1382,9 @@ void FormulaCompiler::Factor()
             {
                 if ( eOp == ocStop )
                 {   // trailing operator w/o operand
-                    xub_StrLen nLen = aCorrectedFormula.Len();
+                    sal_Int32 nLen = aCorrectedFormula.getLength();
                     if ( nLen )
-                        aCorrectedFormula.Erase( nLen - 1 );
+                        aCorrectedFormula = aCorrectedFormula.copy( 0, nLen - 1 );
                     aCorrectedSymbol = "";
                     bCorrected = true;
                 }
@@ -1592,7 +1592,7 @@ bool FormulaCompiler::CompileTokenArray()
     {
         if ( bAutoCorrect )
         {
-            aCorrectedFormula.Erase();
+            aCorrectedFormula = "";
             aCorrectedSymbol = "";
         }
         pArr->nRefs = 0;    // count from start
@@ -1604,7 +1604,7 @@ bool FormulaCompiler::CompileTokenArray()
         if ( bWasForced )
         {
             if ( bAutoCorrect )
-                aCorrectedFormula = '=';
+                aCorrectedFormula = "=";
         }
         pArr->ClearRecalcMode();
         pArr->Reset();
@@ -1947,18 +1947,18 @@ OpCode FormulaCompiler::NextToken()
                 }
                 else
                 {
-                    xub_StrLen nPos = aCorrectedFormula.Len();
+                    sal_Int32 nPos = aCorrectedFormula.getLength();
                     if ( nPos )
                     {
                         nPos--;
-                        sal_Unicode c = aCorrectedFormula.GetChar( nPos );
+                        sal_Unicode c = aCorrectedFormula[ nPos ];
                         switch ( eOp )
                         {   // swap operators
                             case ocGreater:
                                 if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // >= instead of =>
-                                    aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbolChar( ocGreater) );
+                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                        OUString( mxSymbols->getSymbolChar(ocGreater) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
@@ -1966,15 +1966,15 @@ OpCode FormulaCompiler::NextToken()
                             case ocLess:
                                 if ( c == mxSymbols->getSymbolChar( ocEqual) )
                                 {   // <= instead of =<
-                                    aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbolChar( ocLess) );
+                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                        OUString( mxSymbols->getSymbolChar(ocLess) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
                                 else if ( c == mxSymbols->getSymbolChar( ocGreater) )
                                 {   // <> instead of ><
-                                    aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbolChar( ocLess) );
+                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                        OUString( mxSymbols->getSymbolChar(ocLess) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
@@ -1982,8 +1982,8 @@ OpCode FormulaCompiler::NextToken()
                             case ocMul:
                                 if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // *- instead of -*
-                                    aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbolChar( ocMul) );
+                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                        OUString( mxSymbols->getSymbolChar(ocMul) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
@@ -1991,8 +1991,8 @@ OpCode FormulaCompiler::NextToken()
                             case ocDiv:
                                 if ( c == mxSymbols->getSymbolChar( ocSub) )
                                 {   // /- instead of -/
-                                    aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbolChar( ocDiv) );
+                                    aCorrectedFormula = aCorrectedFormula.replaceAt( nPos, 1,
+                                        OUString( mxSymbols->getSymbolChar(ocDiv) ) );
                                     aCorrectedSymbol = OUString(c);
                                     bCorrected = true;
                                 }
