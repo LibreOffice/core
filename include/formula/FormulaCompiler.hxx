@@ -60,16 +60,16 @@ struct FormulaArrayStack
 };
 
 
-struct FORMULA_DLLPUBLIC StringHashCode
+struct FORMULA_DLLPUBLIC OUStringHashCode
 {
-    size_t operator()( const String& rStr ) const
+    size_t operator()( const OUString& rStr ) const
     {
-        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
+        return rtl_ustr_hashCode_WithLength( rStr.getStr(), rStr.getLength() );
     }
 };
 
-typedef ::boost::unordered_map< String, OpCode, StringHashCode, ::std::equal_to< String > > OpCodeHashMap;
-typedef ::boost::unordered_map< String, String, StringHashCode, ::std::equal_to< String > > ExternalHashMap;
+typedef ::boost::unordered_map< OUString, OpCode, OUStringHashCode, ::std::equal_to< OUString > > OpCodeHashMap;
+typedef ::boost::unordered_map< OUString, OUString, OUStringHashCode, ::std::equal_to< OUString > > ExternalHashMap;
 
 class FORMULA_DLLPUBLIC FormulaCompiler
 {
@@ -86,8 +86,8 @@ public:
     /** Mappings from strings to OpCodes and vice versa. */
     class FORMULA_DLLPUBLIC OpCodeMap
     {
-        OpCodeHashMap         * mpHashMap;                 /// Hash map of symbols, String -> OpCode
-        OUString              * mpTable;                   /// Array of symbols, OpCode -> String, offset==OpCode
+        OpCodeHashMap         * mpHashMap;                 /// Hash map of symbols, OUString -> OpCode
+        OUString              * mpTable;                   /// Array of symbols, OpCode -> OUString, offset==OpCode
         ExternalHashMap       * mpExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
         ExternalHashMap       * mpReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
         FormulaGrammar::Grammar meGrammar;                  /// Grammar, language and reference convention
@@ -168,14 +168,14 @@ public:
         inline bool hasExternals() const { return !mpExternalHashMap->empty(); }
 
         /// Put entry of symbol String and OpCode pair.
-        void putOpCode( const String & rStr, const OpCode eOp );
+        void putOpCode( const OUString & rStr, const OpCode eOp );
 
         /// Put entry of symbol String and AddIn international String pair.
-        void putExternal( const String & rSymbol, const String & rAddIn );
+        void putExternal( const OUString & rSymbol, const OUString & rAddIn );
 
         /** Put entry of symbol String and AddIn international String pair,
             failing silently if rAddIn name already exists. */
-        void putExternalSoftly( const String & rSymbol, const String & rAddIn );
+        void putExternalSoftly( const OUString & rSymbol, const OUString & rAddIn );
 
         /// Core implementation of XFormulaOpCodeMapper::getMappings()
         ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
@@ -228,7 +228,7 @@ public:
         @param rName
             Symbol to lookup. MUST be upper case.
      */
-    OpCode GetEnglishOpCode( const String& rName ) const;
+    OpCode GetEnglishOpCode( const OUString& rName ) const;
 
     sal_uInt16 GetErrorConstant( const String& rName ) const;
 

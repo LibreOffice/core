@@ -251,7 +251,7 @@ const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr, sal_Unicode c )
 } // namespace
 
 
-void FormulaCompiler::OpCodeMap::putExternal( const String & rSymbol, const String & rAddIn )
+void FormulaCompiler::OpCodeMap::putExternal( const OUString & rSymbol, const OUString & rAddIn )
 {
     // Different symbols may map to the same AddIn, but the same AddIn may not
     // map to different symbols, the first pair wins. Same symbol of course may
@@ -268,7 +268,7 @@ void FormulaCompiler::OpCodeMap::putExternal( const String & rSymbol, const Stri
     }
 }
 
-void FormulaCompiler::OpCodeMap::putExternalSoftly( const String & rSymbol, const String & rAddIn )
+void FormulaCompiler::OpCodeMap::putExternalSoftly( const OUString & rSymbol, const OUString & rAddIn )
 {
     bool bOk = mpReverseExternalHashMap->insert( ExternalHashMap::value_type( rAddIn, rSymbol)).second;
     if (bOk)
@@ -492,7 +492,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
 }
 
 
-void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eOp )
+void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode eOp )
 {
     DBG_ASSERT( 0 < eOp && sal_uInt16(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
@@ -730,7 +730,7 @@ void FormulaCompiler::fillFromAddInMap( NonConstOpCodeMapPtr /*xMap*/, FormulaGr
 {
 }
 
-OpCode FormulaCompiler::GetEnglishOpCode( const String& rName ) const
+OpCode FormulaCompiler::GetEnglishOpCode( const OUString& rName ) const
 {
     FormulaCompiler::OpCodeMapPtr xMap = GetOpCodeMap( sheet::FormulaLanguage::ENGLISH);
 
