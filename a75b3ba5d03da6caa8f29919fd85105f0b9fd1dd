@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYH///6c\u003d",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-09-13T10:48:53Z",
+      "side": 1,
+      "message": "I still feel uncomfortable with this change, I understand your specific user point of view but still I think automatically converting between a specific idl type to a native type is effectively promoting some random idl type to the level of a native basic type, this just feels very very wrong to me. Basic treats uno types in an agnostic fashion, it shouldn\u0027t really need to be aware of specific types\nAside from that you are probably realising at this stage in basic setting a value is weird ( and certainly not wonderful ) there are many places where this seems to happen.The practicalities of imposing this behaviour also need to be considered, the more places that need to be modified the more risk there is that either all cases are not covered or some unexpected side affect will occur ( with basic this is quite likely ) So even the place above where the value is coerced the fact that it is done in a Set operation should give the hint that conceptually something isn\u0027t right, what is expected here is that the object references are copied. So while this might work in this case it is just added yet another piece of special case hacking into a piece of code that is already badly abused in terms of special cases. At every one of these ( and I have added quite some, I weep more and more ) the code gets more brittle\nAn other part of the problem with basic is that so much is decided at runtime, when dealing with uno objects ( and uno idl structures the same ) this is especially true.\nTo apply this ( I still think it is a bad idea ) auto conversion one would need to be certain that the conversion would only happen under strict conditions e.g. where Type of the left and right hand side of the \u0027\u003d\u0027 ( or param initialisation or whatever ) are known and tested ( in the code above only one side is tested, no attempt should be made to unwrap the object if the reVal is not a date  )\nYou add to this the fact that uno objects( and uno structs )  especially when returned from other uno objects ( or uno structs ) are placeholders, they don\u0027t know their type, normally the value of such an uno member or property is not available until the time that they are used ( when the appropriate action is called on a parent ) there is quite some scope for problems. I would advise steering away from doing this",
+      "revId": "a75b3ba5d03da6caa8f29919fd85105f0b9fd1dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
