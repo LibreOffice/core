@@ -12,10 +12,13 @@
 #include <set>
 #include <vector>
 
+#include "osl/file.h"
+#include "osl/file.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "unoidl/legacyprovider.hxx"
+#include "unoidl/sourceprovider.hxx"
 #include "unoidl/unoidl.hxx"
 #include "unoidl/unoidlprovider.hxx"
 
@@ -104,6 +107,15 @@ Provider::~Provider() throw () {}
 rtl::Reference< Provider > loadProvider(
     rtl::Reference< Manager > const & manager, OUString const & uri)
 {
+    osl::DirectoryItem item;
+    if (osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None) {
+        osl::FileStatus status(osl_FileStatus_Mask_Type);
+        if (item.getFileStatus(status) == osl::FileBase::E_None
+            && status.getFileType() == osl::FileStatus::Directory)
+        {
+            return new SourceProvider(manager, uri);
+        }
+    }
     try {
         return new UnoidlProvider(uri);
     } catch (FileFormatException & e) {
