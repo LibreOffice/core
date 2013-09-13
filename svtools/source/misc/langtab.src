@@ -84,6 +84,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Dutch (Belgium)" ; LANGUAGE_DUTCH_BELGIAN ; > ;
         < "English (USA)" ; LANGUAGE_ENGLISH_US ; > ;
         < "English (UK)" ; LANGUAGE_ENGLISH_UK ; > ;
+        < "English, OED spelling (UK)" ; LANGUAGE_USER_ENGLISH_UK_OED ; > ;
         < "English (Australia)" ; LANGUAGE_ENGLISH_AUS ; > ;
         < "English (Canada)" ; LANGUAGE_ENGLISH_CAN ; > ;
         < "English (New Zealand)" ; LANGUAGE_ENGLISH_NZ ; > ;

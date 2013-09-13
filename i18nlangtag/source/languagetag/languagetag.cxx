@@ -1519,6 +1519,20 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
             rVariants = rBcp47.copy( nHyph1 + 1);
             eRet = EXTRACTED_LV;
         }
+        else
+        {
+            // Known and handled grandfathered; ugly but effective ...
+            // Note that nLen must have matched above.
+            // Strictly not a variant, but so far we treat it as such.
+            if (rBcp47.equalsIgnoreAsciiCaseAscii( "en-GB-oed"))
+            {
+                rLanguage = "en";
+                rScript   = OUString();
+                rCountry  = "GB";
+                rVariants = "oed";
+                eRet = EXTRACTED_LV;
+            }
+        }
     }
     if (eRet == EXTRACTED_NONE)
         rLanguage = rScript = rCountry = rVariants = OUString();

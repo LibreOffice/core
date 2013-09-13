@@ -590,6 +590,7 @@ static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     // MS-LangID                              full BCP47, ISO3166, ISO639-Variant or other fallback
     { LANGUAGE_CATALAN_VALENCIAN,       "ca-ES-valencia", "ES", "ca-valencia" },
     { LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN, "ca-ES-valencia", "ES", "" },   // In case MS format files using the old value escaped into the wild, map them back.
+    { LANGUAGE_USER_ENGLISH_UK_OED,          "en-GB-oed", "GB", "" },   // grandfathered
     { LANGUAGE_DONTKNOW,                    "", "", "" }    // marks end of table
 };
 

@@ -318,6 +318,22 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getLanguageType() == LANGUAGE_GERMAN );
     }
 
+    // 'en-GB-oed' is known grandfathered for English, Oxford English
+    // Dictionary spelling
+    {
+        OUString s_en_GB_oed( "en-GB-oed" );
+        LanguageTag en_GB_oed( s_en_GB_oed );
+        lang::Locale aLocale = en_GB_oed.getLocale();
+        CPPUNIT_ASSERT( en_GB_oed.getBcp47() == s_en_GB_oed );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "GB" );  // only 'GB' because we handle it, liblangtag would not fill this
+        CPPUNIT_ASSERT( aLocale.Variant == "en-GB-oed" );
+        CPPUNIT_ASSERT( en_GB_oed.getLanguageType() == LANGUAGE_USER_ENGLISH_UK_OED );
+        CPPUNIT_ASSERT( en_GB_oed.isValidBcp47() == true );
+        CPPUNIT_ASSERT( en_GB_oed.isIsoLocale() == false );
+        CPPUNIT_ASSERT( en_GB_oed.isIsoODF() == false );
+    }
+
     // 'qtz' is a local use known pseudolocale for key ID resource
     {
         OUString s_qtz( "qtz" );
