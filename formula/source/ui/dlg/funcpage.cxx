@@ -223,7 +223,7 @@ sal_uInt16 FuncPage::GetFunctionEntryCount()
     return aLbFunction.GetSelectEntryCount();
 }
 
-String FuncPage::GetSelFunctionName() const
+OUString FuncPage::GetSelFunctionName() const
 {
     return aLbFunction.GetSelectEntry();
 }
