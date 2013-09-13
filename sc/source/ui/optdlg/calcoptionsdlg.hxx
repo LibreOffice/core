@@ -20,6 +20,10 @@
 
 #include "calcconfig.hxx"
 
+#if HAVE_FEATURE_OPENCL
+#include "platforminfo.hxx"
+#endif
+
 class ScCalcOptionsDialog : public ModalDialog
 {
 public:
@@ -29,6 +33,7 @@ public:
     DECL_LINK( SettingsSelHdl, Control* );
     DECL_LINK( BtnToggleHdl, void* );
     DECL_LINK( BtnAutomaticSelectHdl, void* );
+    DECL_LINK( DeviceSelHdl, void* );
 
     const ScCalcConfig& GetConfig() const;
 
@@ -38,6 +43,7 @@ private:
     void ListOptionValueChanged();
     void RadioValueChanged();
     void OpenclAutomaticSelectionChanged();
+    void SelectedDeviceChanged();
 #if HAVE_FEATURE_OPENCL
     void fillOpenclList();
 #endif
@@ -55,6 +61,9 @@ private:
     RadioButton* mpBtnFalse;
 
     FixedText* mpFtAnnotation;
+    FixedText* mpFtFrequency;
+    FixedText* mpFtComputeUnits;
+    FixedText* mpFtMemory;
 
     SvTreeListBox* mpOpenclInfoList;
     RadioButton* mpBtnAutomaticSelectionTrue;
@@ -78,6 +87,9 @@ private:
     OUString maDescOpenCLEnabled;
 
     ScCalcConfig maConfig;
+#if HAVE_FEATURE_OPENCL
+    std::vector<sc::OpenclPlatformInfo> maPlatformInfo;
+#endif
 };
 
 #endif

@@ -2654,6 +2654,27 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
 
     aDeviceInfo.maVendor = OUString::createFromAscii(pVendor);
 
+    cl_ulong nMemSize;
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(nMemSize), &nMemSize, NULL);
+    if(nState != CL_SUCCESS)
+        return;
+
+    aDeviceInfo.mnMemory = nMemSize;
+
+    cl_uint nClockFrequency;
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(nClockFrequency), &nClockFrequency, NULL);
+    if(nState != CL_SUCCESS)
+        return;
+
+    aDeviceInfo.mnFrequency = nClockFrequency;
+
+    cl_uint nComputeUnits;
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(nComputeUnits), &nComputeUnits, NULL);
+    if(nState != CL_SUCCESS)
+        return;
+
+    aDeviceInfo.mnComputeUnits = nComputeUnits;
+
     rPlatformInfo.maDevices.push_back(aDeviceInfo);
 }
 

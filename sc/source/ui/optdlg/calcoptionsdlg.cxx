@@ -14,10 +14,6 @@
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
 
-#if HAVE_FEATURE_OPENCL
-#include "platforminfo.hxx"
-#endif
-
 namespace {
 
 typedef enum {
@@ -118,11 +114,15 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     get(mpOpenclInfoList, "opencl_list");
     get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
     get(mpBtnAutomaticSelectionFalse, "automatic_select_false");
+    get(mpFtFrequency, "frequency");
+    get(mpFtComputeUnits, "compute_units");
+    get(mpFtMemory, "memory");
 
     mpOpenclInfoList->set_height_request(4* mpOpenclInfoList->GetTextHeight());
     mpOpenclInfoList->SetStyle(mpOpenclInfoList->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
     mpOpenclInfoList->SetHighlightRange();
     mpOpenclInfoList->GetParent()->Hide();
+    mpOpenclInfoList->SetSelectHdl(LINK(this, ScCalcOptionsDialog, DeviceSelHdl));
 
     mpBtnAutomaticSelectionTrue->SetToggleHdl(LINK(this, ScCalcOptionsDialog, BtnAutomaticSelectHdl));
 
@@ -195,14 +195,15 @@ void ScCalcOptionsDialog::fillOpenclList()
 {
     mpOpenclInfoList->SetUpdateMode(false);
     mpOpenclInfoList->Clear();
-    std::vector<sc::OpenclPlatformInfo> aPlatformInfo = sc::listAllOpenclPlatforms();
-    for(std::vector<sc::OpenclPlatformInfo>::const_iterator it = aPlatformInfo.begin(),
-            itEnd = aPlatformInfo.end(); it != itEnd; ++it)
+    maPlatformInfo = sc::listAllOpenclPlatforms();
+    for(std::vector<sc::OpenclPlatformInfo>::iterator it = maPlatformInfo.begin(),
+            itEnd = maPlatformInfo.end(); it != itEnd; ++it)
     {
-        for(std::vector<sc::OpenclDeviceInfo>::const_iterator
+        for(std::vector<sc::OpenclDeviceInfo>::iterator
                 itr = it->maDevices.begin(), itrEnd = it->maDevices.end(); itr != itrEnd; ++itr)
         {
-            mpOpenclInfoList->InsertEntry(it->maVendor + " " + itr->maName);
+            SvTreeListEntry* pEntry = mpOpenclInfoList->InsertEntry(it->maVendor + " " + itr->maName);
+            pEntry->SetUserData(&(*itr));
         }
     }
 
@@ -299,6 +300,7 @@ void ScCalcOptionsDialog::SelectionChanged()
                 bValue = maConfig.mbOpenCLEnabled;
                 mpFtAnnotation->SetText(maDescOpenCLEnabled);
                 mpOpenclInfoList->GetParent()->Show();
+                setOptimalLayoutSize();
                 if(bValue)
                     mpOpenclInfoList->GetParent()->Enable();
                 else
@@ -354,6 +356,18 @@ void ScCalcOptionsDialog::OpenclAutomaticSelectionChanged()
         mpOpenclInfoList->Enable();
 
     maConfig.mbOpenCLAutoSelect = bValue;
+}
+
+void ScCalcOptionsDialog::SelectedDeviceChanged()
+{
+#if HAVE_FEATURE_OPENCL
+    SvTreeListEntry* pEntry = mpOpenclInfoList->GetModel()->GetView(0)->FirstSelected();
+    sc::OpenclDeviceInfo* pInfo = reinterpret_cast<sc::OpenclDeviceInfo*>(pEntry->GetUserData());
+    assert(pInfo);
+    mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));
+    mpFtComputeUnits->SetText(OUString::number(pInfo->mnComputeUnits));
+    mpFtMemory->SetText(OUString::number(pInfo->mnMemory/1024/1024));
+#endif
 }
 
 void ScCalcOptionsDialog::RadioValueChanged()
@@ -421,6 +435,12 @@ IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnToggleHdl)
 IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnAutomaticSelectHdl)
 {
     OpenclAutomaticSelectionChanged();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCalcOptionsDialog, DeviceSelHdl)
+{
+    SelectedDeviceChanged();
     return 0;
 }
 

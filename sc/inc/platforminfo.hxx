@@ -23,6 +23,9 @@ struct SC_DLLPUBLIC OpenclDeviceInfo
     size_t mnId;
     OUString maName;
     OUString maVendor;
+    size_t mnMemory;
+    size_t mnComputeUnits;
+    size_t mnFrequency;
 };
 
 struct SC_DLLPUBLIC OpenclPlatformInfo
