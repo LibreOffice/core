@@ -250,9 +250,15 @@ void ScCalcOptionsDialog::SelectionChanged()
 
             bool bValue = false;
             if ( nSelectedPos == CALC_OPTION_EMPTY_AS_ZERO )
+            {
                 bValue = maConfig.mbEmptyStringAsZero;
+                mpFtAnnotation->SetText(maDescEmptyStringAsZero);
+            }
             else
+            {
                 bValue = maConfig.mbOpenCLEnabled;
+                mpFtAnnotation->SetText(maDescOpenCLEnabled);
+            }
 
             if ( bValue )
             {
@@ -264,7 +270,6 @@ void ScCalcOptionsDialog::SelectionChanged()
                 mpBtnTrue->Check(false);
                 mpBtnFalse->Check(true);
             }
-            mpFtAnnotation->SetText(maDescEmptyStringAsZero);
         }
         break;
         default:
