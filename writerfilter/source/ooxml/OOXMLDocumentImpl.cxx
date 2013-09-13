@@ -20,6 +20,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLDocumentImpl.hxx"
@@ -43,7 +44,7 @@ using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl
 (OOXMLStream::Pointer_t pStream)
-: mpStream(pStream), mXNoteType(0), mbIsSubstream( false )
+: mpStream(pStream), mXNoteType(0), mxThemeDom(0), mbIsSubstream( false )
 {
 }
 
@@ -107,6 +108,44 @@ void OOXMLDocumentImpl::resolveFastSubStreamWithId(Stream & rStream,
                       sal_uInt32 nId)
 {
     rStream.substream(nId, pStream);
+}
+
+uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStream::StreamType_t nType)
+{
+    uno::Reference<xml::dom::XDocument> xRet;
+
+    OOXMLStream::Pointer_t pStream;
+    try
+    {
+        pStream = OOXMLDocumentFactory::createStream(mpStream, nType);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_INFO("writerfilter", "importSubStream: exception while "
+                "importing stream " << nType << " : " << e.Message);
+        return xRet;
+    }
+
+    uno::Reference<io::XInputStream> xInputStream =
+        pStream->getDocumentStream();
+
+    if (xInputStream.is())
+    {
+        try
+        {
+            uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
+            uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(xContext));
+            xRet = xDomBuilder->parse(xInputStream);
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_INFO("writerfilter", "importSubStream: exception while "
+                     "parsing stream " << nType << " : " << e.Message);
+            return xRet;
+        }
+    }
+
+    return xRet;
 }
 
 void OOXMLDocumentImpl::setXNoteId(const sal_Int32 nId)
@@ -333,6 +372,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             (mpStream->getFastTokenHandler(xContext));
 
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
+        mxThemeDom = importSubStream(OOXMLStream::THEME);
         resolveFastSubStream(rStream, OOXMLStream::THEME);
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
@@ -409,6 +449,16 @@ void OOXMLDocumentImpl::setShapeContext( uno::Reference<xml::sax::XFastShapeCont
 uno::Reference<xml::sax::XFastShapeContextHandler> OOXMLDocumentImpl::getShapeContext( )
 {
     return mxShapeContext;
+}
+
+void OOXMLDocumentImpl::setThemeDom( uno::Reference<xml::dom::XDocument> xThemeDom )
+{
+    mxThemeDom = xThemeDom;
+}
+
+uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )
+{
+    return mxThemeDom;
 }
 
 OOXMLDocument *

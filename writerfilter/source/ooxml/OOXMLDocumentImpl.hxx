@@ -22,6 +22,7 @@
 #include <ooxml/OOXMLDocument.hxx>
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include "OOXMLPropertySet.hxx"
 
@@ -40,6 +41,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Reference<frame::XModel> mxModel;
     uno::Reference<drawing::XDrawPage> mxDrawPage;
     uno::Reference<xml::sax::XFastShapeContextHandler> mxShapeContext;
+    uno::Reference<xml::dom::XDocument> mxThemeDom;
 
     bool mbIsSubstream;
 
@@ -50,6 +52,8 @@ protected:
     virtual void resolveFastSubStreamWithId(Stream & rStream,
                                       writerfilter::Reference<Stream>::Pointer_t pStream,
                       sal_uInt32 nId);
+
+    uno::Reference<xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
 
     writerfilter::Reference<Stream>::Pointer_t
     getSubStream(const OUString & rId);
@@ -104,6 +108,9 @@ public:
     virtual const OUString & getTarget() const;
     virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( );
     virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext );
+    virtual void setThemeDom(uno::Reference<xml::dom::XDocument> xThemeDom);
+    virtual uno::Reference<xml::dom::XDocument> getThemeDom();
+
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

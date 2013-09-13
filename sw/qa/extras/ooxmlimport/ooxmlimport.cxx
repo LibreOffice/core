@@ -539,6 +539,25 @@ void Test::testN764005()
 
 void Test::testSmartart()
 {
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGrabBag(0);
+    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+
+    sal_Bool bTheme = sal_False;
+    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    {
+      if (aGrabBag[i].Name == OUString("OOXTheme"))
+      {
+        bTheme = sal_True;
+        uno::Reference<xml::dom::XDocument> aThemeDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aThemeDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
+      }
+    }
+    CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
+
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
@@ -547,7 +566,6 @@ void Test::testSmartart()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
 
     uno::Reference<beans::XPropertySet> xGroupPropertySet(getShape(1), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGrabBag(0);
     xGroupPropertySet->getPropertyValue(OUString::createFromAscii("InteropGrabBag")) >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
