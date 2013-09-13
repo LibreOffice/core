@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYX////g\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-13T23:19:23Z",
+      "side": 1,
+      "message": "you can pass the boost ptr as a const reference here, saves a copy operation",
+      "revId": "9125ce90a9f39d520092b5cfb38f20552e996aa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYX////c\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-13T23:19:23Z",
+      "side": 1,
+      "message": "ok here, since Sequence is copy-on-write. but wouldn\u0027t be efficient for a std::vector ;)",
+      "revId": "9125ce90a9f39d520092b5cfb38f20552e996aa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYX////Y\u003d",
+        "filename": "cui/source/options/optaboutconfig.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-09-13T23:19:23Z",
+      "side": 1,
+      "message": "good thing is, that\u0027s all not needed. shared_ptr uses a mechanism called RAII - and auto-deletes what\u0027s still his when its dtor is called\n\nhttp://en.wikipedia.org/wiki/RAII :)",
+      "revId": "9125ce90a9f39d520092b5cfb38f20552e996aa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
