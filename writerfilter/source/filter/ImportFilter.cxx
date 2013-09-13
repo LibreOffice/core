@@ -116,6 +116,39 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->setDrawPage(xDrawPage);
 
         pDocument->resolve(*pStream);
+
+        // Adding the saved Theme DOM to the document's grab bag
+        try
+        {
+            uno::Reference<beans::XPropertySet> xDocProps(m_xDstDoc, uno::UNO_QUERY);
+            if (xDocProps.is())
+            {
+                uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+                const OUString& aGrabBagPropName = OUString("InteropGrabBag");
+                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
+                {
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+
+                    // We want to keep the previous items
+                    xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+                    sal_Int32 length = aGrabBag.getLength();
+                    aGrabBag.realloc(length+1);
+
+                    uno::Reference<xml::dom::XDocument> aThemeDom = pDocument->getThemeDom();
+
+                    beans::PropertyValue* pValue = aGrabBag.getArray();
+                    pValue[length].Name = OUString("OOXTheme");
+                    pValue[length].Value = uno::makeAny( aThemeDom );
+
+                    xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
+                }
+            }
+        }
+        catch(const uno::Exception&)
+        {
+        }
+
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( m_xContext, pVBAProjectStream->getDocumentStream(), false ) );
         if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )

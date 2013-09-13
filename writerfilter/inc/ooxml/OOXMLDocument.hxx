@@ -28,6 +28,7 @@
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
@@ -239,6 +240,8 @@ public:
     virtual const OUString & getTarget() const = 0;
     virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
     virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) = 0;
+    virtual uno::Reference<xml::dom::XDocument> getThemeDom( ) = 0;
+    virtual void setThemeDom( uno::Reference<xml::dom::XDocument> xThemeDom ) = 0;
 };
 
 
