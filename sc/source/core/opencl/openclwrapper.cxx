@@ -20,10 +20,6 @@
 #ifdef WIN32
 #include <Windows.h>
 
-#define OPENCL_DLL_NAME "opencllo.dll"
-#define OCLERR -1
-#define OCLSUCCESS 1
-
 #define TRUE 1
 #define FALSE 0
 
@@ -43,48 +39,14 @@ namespace sc { namespace opencl {
 GPUEnv OpenclDevice::gpuEnv;
 int OpenclDevice::isInited =0;
 
-#ifdef WIN32
-
-HINSTANCE HOpenclDll = NULL;
-void * OpenclDll = NULL;
-
-int OpenclDevice::loadOpencl()
-{
-    //fprintf(stderr, " loadOpenclDllxx... \n");
-    OpenclDll = static_cast<HINSTANCE>( HOpenclDll );
-    OpenclDll = LoadLibrary( OPENCL_DLL_NAME );
-    if ( !static_cast<HINSTANCE>( OpenclDll ) )
-    {
-        fprintf(stderr, " Load opencllo.dll failed! \n");
-        FreeLibrary( static_cast<HINSTANCE>( OpenclDll ) );
-        return OCLERR;
-    }
-    fprintf(stderr, " Load opencllo.dll successfully!\n");
-    return OCLSUCCESS;
-}
-
-void OpenclDevice::freeOpenclDll()
-{
-    fprintf(stderr, " Free opencllo.dll ... \n");
-    if ( !static_cast<HINSTANCE>( OpenclDll ) )
-        FreeLibrary( static_cast<HINSTANCE>( OpenclDll ) );
-}
-#endif
-
 int OpenclDevice::initEnv()
 {
-    // TODO: Make the path configurable.
-    int status = clewInit("/opt/AMDAPP/lib/x86_64/libOpenCL.so");
+    // TODO: This part needs more platform specific handling.  On Windows,
+    // the GPU Driver itself  installs OpenCL.dll in the system folder.
+    int status = clewInit("OpenCL.dll");
     if (status < 0)
         return 1;
 
-#ifdef WIN32
-    while( 1 )
-    {
-        if( 1 == loadOpencl() )
-            break;
-    }
-#endif
     initOpenclRunEnv( 0 );
     return 1;
 }
@@ -92,9 +54,7 @@ int OpenclDevice::initEnv()
 int OpenclDevice::releaseOpenclRunEnv()
 {
     releaseOpenclEnv( &gpuEnv );
-#ifdef WIN32
-    freeOpenclDll();
-#endif
+
     return 1;
 }
 ///////////////////////////////////////////////////////

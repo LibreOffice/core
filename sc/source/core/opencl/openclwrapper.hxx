@@ -205,12 +205,6 @@ public:
     int runKernelWrapper( cl_kernel_function function, const char * kernelName, void **usrdata );
     int getKernelEnvAndFunc( const char *kernelName, KernelEnv *env, cl_kernel_function *function );
 
-
-#ifdef WIN32
-    static int loadOpencl();
-    static void freeOpenclDll();
-#endif
-
     int getOpenclState();
     void setOpenclState( int state );
     static int addKernelConfig( int kCount, const char *kName );
