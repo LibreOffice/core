@@ -551,7 +551,6 @@ class VCL_DLLPUBLIC TriStateBox : public CheckBox
 
 public:
     explicit        TriStateBox( Window* pParent, WinBits nStyle = 0 );
-    explicit        TriStateBox( Window* pParent, const ResId& );
     virtual         ~TriStateBox();
 };
 

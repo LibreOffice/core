@@ -41,7 +41,6 @@ private:
     SdrModel*           pModel;
 
 public:
-    SvxXMeasurePreview(Window* pParent, const ResId& rResId, const SfxItemSet& rInAttrs);
     SvxXMeasurePreview(Window* pParent, WinBits nStyle);
     ~SvxXMeasurePreview();
 

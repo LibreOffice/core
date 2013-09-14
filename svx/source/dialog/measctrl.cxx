@@ -25,35 +25,6 @@
 #include "svx/dlgutil.hxx"
 #include <vcl/builder.hxx>
 
-SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent,const ResId& rResId,const SfxItemSet& rInAttrs)
-:    Control ( pParent, rResId )
-
-{
-    SetMapMode( MAP_100TH_MM );
-
-    Size aSize = GetOutputSize();
-
-    // Scale: 1:2
-    MapMode aMapMode = GetMapMode();
-    aMapMode.SetScaleX( Fraction( 1, 2 ) );
-    aMapMode.SetScaleY( Fraction( 1, 2 ) );
-    SetMapMode( aMapMode );
-
-    aSize = GetOutputSize();
-    Point aPt1 = Point( aSize.Width() / 5, (long) ( aSize.Height() / 2 ) );
-    Point aPt2 = Point( aSize.Width() * 4 / 5, (long) ( aSize.Height() / 2 ) );
-
-    pMeasureObj = new SdrMeasureObj( aPt1, aPt2 );
-    pModel = new SdrModel();
-    pMeasureObj->SetModel( pModel );
-
-    pMeasureObj->SetMergedItemSetAndBroadcast(rInAttrs);
-
-    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-
-    Invalidate();
-}
-
 SvxXMeasurePreview::SvxXMeasurePreview( Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
 {

@@ -6,6 +6,7 @@
 CodeCompleteDataCache::GetVars() const
 CodeCompleteDataCache::SetVars(boost::unordered::unordered_map<rtl::OUString, boost::unordered::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > >, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, boost::unordered::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > > > > > const&)
 CodeCompleteDataCache::print() const
+CuiAboutConfigTabPage::LinkStubHeaderSelect_Impl(void*, void*)
 EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
 ImplRegionBand::IsInside(long, long)
@@ -55,6 +56,8 @@ SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxGrabBagItem::SetGrabBag(std::__debug::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
 SfxTemplatePanelControl::SetParagraphFamily()
 SmFontPickList::Contains(Font const&) const
+SmParser::Insert(rtl::OUString const&, int)
+String::Search(unsigned short const*, unsigned short) const
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
 SvpSalInstance::PostedEventsInQueue()
@@ -117,7 +120,6 @@ connectivity::sdbcx::OGroup::OGroup(unsigned char)
 drawinglayer::attribute::SdrFillGraphicAttribute::getLogSize() const
 editeng::MisspellRange::MisspellRange()
 editeng::Section::Section()
-formula::DoubleVectorRefToken::GetArrayLength() const
 formula::FormulaDlg::CheckMatrix()
 formula::SingleVectorRefToken::SingleVectorRefToken(double const*, unsigned long)
 framework::MenuBarManager::getComponentContext()
@@ -128,6 +130,7 @@ oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
 oox::xls::WorksheetGlobals::getRows(oox::ValueRange const&) const
+rtl_OUString::convertFromString::test()
 sc::CellTextAttr::CellTextAttr(unsigned short, unsigned char)
 sc::ColumnSet::has(short, short) const
 sc::sidebar::CellLineStyleValueSet::SetImage(Image)
@@ -158,6 +161,7 @@ std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::Formu
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 svx::DialControl::GetModifyHdl() const
 svx::sidebar::LineWidthControl::GetValueSet()
+unoidl::SourceProvider::SourceProvider(rtl::Reference<unoidl::Manager> const&, rtl::OUString const&)
 unoidl::UnoidlProvider::getConstant(unsigned int) const
 utl::toISO8601(com::sun::star::util::Time const&)
 vclmain::createApplication()

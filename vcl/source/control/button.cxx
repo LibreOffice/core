@@ -4104,22 +4104,6 @@ TriStateBox::TriStateBox( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-TriStateBox::TriStateBox( Window* pParent, const ResId& rResId ) :
-    CheckBox( pParent, rResId.SetRT( RSC_TRISTATEBOX ) )
-{
-    EnableTriState( sal_True );
-
-    sal_uLong  nTriState        = ReadLongRes();
-    sal_uInt16 bDisableTriState = ReadShortRes();
-    //anderer Wert als Default ?
-    if ( (TriState)nTriState != STATE_NOCHECK )
-        SetState( (TriState)nTriState );
-    if ( bDisableTriState )
-        EnableTriState( sal_False );
-}
-
-// -----------------------------------------------------------------------
-
 TriStateBox::~TriStateBox()
 {
 }
