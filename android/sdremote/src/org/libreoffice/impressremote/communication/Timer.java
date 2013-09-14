@@ -45,24 +45,41 @@ public class Timer implements Runnable {
         return mTotalMinutes != 0;
     }
 
+    public int getMinutesLeft() {
+        return mTotalMinutes - mPassedMinutes;
+    }
+
+    public boolean isTimeUp() {
+        return getMinutesLeft() <= 0;
+    }
+
     public void start() {
         if (!isSet()) {
             return;
         }
 
+        tearDownTimerHandler();
+        setUpTimerHandler();
+    }
+
+    private void tearDownTimerHandler() {
+        mTimerHandler.removeCallbacks(this);
+    }
+
+    private void setUpTimerHandler() {
         mTimerHandler.postDelayed(this, TimeUnit.MINUTES.toMillis(UPDATE_PERIOD_IN_MINUTES));
     }
 
     @Override
     public void run() {
-        updatePassedMinutes();
+        increasePassedMinutes();
 
         mTimerListener.onTimerUpdated();
 
         start();
     }
 
-    private void updatePassedMinutes() {
+    private void increasePassedMinutes() {
         mPassedMinutes++;
     }
 
@@ -72,7 +89,7 @@ public class Timer implements Runnable {
     }
 
     public void pause() {
-        mTimerHandler.removeCallbacks(this);
+        tearDownTimerHandler();
     }
 
     public void reset() {
@@ -82,14 +99,6 @@ public class Timer implements Runnable {
 
     public void resume() {
         start();
-    }
-
-    public boolean isTimeUp() {
-        return getMinutesLeft() <= 0;
-    }
-
-    public int getMinutesLeft() {
-        return mTotalMinutes - mPassedMinutes;
     }
 }
 
