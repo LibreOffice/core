@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent">
 
-        <TextView
+        <org.libreoffice.impressremote.view.CapsTextView
             style="@style/Widget.Sherlock.ActionBar.TabText"
             android:text="@string/button_cancel"
             android:drawableLeft="@drawable/ic_action_cancel"
@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent">
 
-        <TextView
+        <org.libreoffice.impressremote.view.CapsTextView
             style="@style/Widget.Sherlock.ActionBar.TabText"
             android:text="@string/button_save"
             android:drawableLeft="@drawable/ic_action_save"

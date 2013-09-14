@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <org.libreoffice.impressremote.view.CapsTextView
             style="@style/SectionHeader"
             android:text="@string/title_generic"/>
 
@@ -21,7 +21,7 @@
             style="@style/SectionItem"
             android:text="@string/requirements_libreoffice_general_enabled"/>
 
-        <TextView
+        <org.libreoffice.impressremote.view.CapsTextView
             style="@style/SectionHeader"
             android:text="@string/title_wifi"/>
 
@@ -37,7 +37,7 @@
             style="@style/SectionItem"
             android:text="@string/requirements_network_ports"/>
 
-        <TextView
+        <org.libreoffice.impressremote.view.CapsTextView
             style="@style/SectionHeader"
             android:text="@string/title_bluetooth"/>
 

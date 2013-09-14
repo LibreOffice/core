@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <TextView
+        <org.libreoffice.impressremote.view.CapsTextView
             style="@style/SectionHeader"
             android:text="@string/header_notes"
             android:paddingTop="@dimen/padding_header"/>
