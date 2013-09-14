@@ -673,7 +673,6 @@ endif
 endif
 
 # Runtime dependency for unit-tests
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,vcl)) :| \
-	$(call gb_AllLangResTarget_get_target,vcl)
+$(eval $(call gb_Library_use_restarget,vcl,vcl))
 
 # vim: set noet sw=4 ts=4:

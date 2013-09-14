@@ -152,7 +152,6 @@ $(eval $(call gb_Library_use_externals,editeng,\
 ))
 
 # Runtime dependency for unit-tests
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,editeng)) :| \
-	$(call gb_AllLangResTarget_get_target,editeng)
+$(eval $(call gb_Library_use_restarget,editeng,editeng))
 
 # vim: set noet sw=4 ts=4:
