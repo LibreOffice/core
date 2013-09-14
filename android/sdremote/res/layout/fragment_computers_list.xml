@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:animateLayoutChanges="true"
-        android:id="@+id/container_progress"
+        android:id="@+id/layout_progress"
         android:orientation="vertical"
         android:gravity="center"
         android:paddingLeft="@dimen/padding_horizontal_progress_layout"

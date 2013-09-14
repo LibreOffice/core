@@ -52,8 +52,6 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         WIFI, BLUETOOTH
     }
 
-    private Type mType;
-
     private CommunicationService mCommunicationService;
     private BroadcastReceiver mIntentsReceiver;
 
@@ -77,8 +75,6 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     public void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
 
-        mType = (Type) getArguments().getSerializable(Fragments.Arguments.TYPE);
-
         setUpActionBar();
     }
 
@@ -95,11 +91,15 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     public void onViewStateRestored(Bundle aSavedInstanceState) {
         super.onViewStateRestored(aSavedInstanceState);
 
-        if (aSavedInstanceState == null) {
+        if (!isSavedInstanceValid(aSavedInstanceState)) {
             return;
         }
 
         loadProgressMessage(aSavedInstanceState);
+    }
+
+    private boolean isSavedInstanceValid(Bundle aSavedInstanceState) {
+        return aSavedInstanceState != null;
     }
 
     private void loadProgressMessage(Bundle aSavedInstanceState) {
@@ -108,6 +108,37 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         if (aProgressMessageDisplayed) {
             showProgressMessage();
         }
+    }
+
+    private void showProgressMessage() {
+        TextView aProgressMessageView = getProgressMessageView();
+        Animation aFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
+
+        aProgressMessageView.setText(getProgressMessage());
+
+        aProgressMessageView.startAnimation(aFadeInAnimation);
+        aProgressMessageView.setVisibility(View.VISIBLE);
+    }
+
+    private TextView getProgressMessageView() {
+        return (TextView) getView().findViewById(R.id.text_progress_message);
+    }
+
+    private String getProgressMessage() {
+        switch (getType()) {
+            case WIFI:
+                return getString(R.string.message_search_wifi);
+
+            case BLUETOOTH:
+                return getString(R.string.message_search_bluetooth);
+
+            default:
+                return "";
+        }
+    }
+
+    private Type getType() {
+        return (Type) getArguments().getSerializable(Fragments.Arguments.TYPE);
     }
 
     @Override
@@ -132,22 +163,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void startComputersSearch() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         mCommunicationService.startServersSearch();
     }
 
-    private boolean isServiceBound() {
-        return mCommunicationService != null;
-    }
-
     private void loadComputers() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         if (getComputers().isEmpty()) {
             hideComputersList();
             setUpProgressMessage();
@@ -173,7 +192,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private boolean isComputerSupportsRequiredType(Server aComputer) {
-        switch (mType) {
+        switch (getType()) {
             case WIFI:
                 return aComputer.getProtocol() == Server.Protocol.TCP;
 
@@ -186,28 +205,18 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void hideComputersList() {
-        showView(getProgressBarLayout());
+        setCurrentView(R.id.layout_progress);
     }
 
-    private void showView(View aView) {
-        ViewAnimator aViewAnimator = getViewAnimator();
+    private void setCurrentView(int aViewId) {
+        ViewAnimator aViewAnimator = (ViewAnimator) getView().findViewById(R.id.view_animator);
+        View aView = getView().findViewById(aViewId);
 
-        int aViewIndex = aViewAnimator.indexOfChild(aView);
-        int aCurrentViewIndex = aViewAnimator.getDisplayedChild();
-
-        if (aViewIndex == aCurrentViewIndex) {
+        if (aViewId == aViewAnimator.getCurrentView().getId()) {
             return;
         }
 
-        aViewAnimator.setDisplayedChild(aViewIndex);
-    }
-
-    private ViewAnimator getViewAnimator() {
-        return (ViewAnimator) getView().findViewById(R.id.view_animator);
-    }
-
-    private ViewGroup getProgressBarLayout() {
-        return (ViewGroup) getView().findViewById(R.id.container_progress);
+        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aView));
     }
 
     private void setUpProgressMessage() {
@@ -216,56 +225,19 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     @Override
     public void run() {
-        if (!isAdded()) {
+        if (!isShowingProgressMessageRequired()) {
             return;
         }
 
-        if (isShowingProgressMessageRequired()) {
-            showProgressMessage();
-        }
+        showProgressMessage();
     }
 
     private boolean isShowingProgressMessageRequired() {
         return getProgressMessageView().getVisibility() == View.INVISIBLE;
     }
 
-    private TextView getProgressMessageView() {
-        return (TextView) getView().findViewById(R.id.text_progress_message);
-    }
-
-    private void showProgressMessage() {
-        TextView aProgressMessageView = getProgressMessageView();
-        Animation aFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
-
-        aProgressMessageView.setText(getProgressMessage());
-
-        aProgressMessageView.startAnimation(aFadeInAnimation);
-        aProgressMessageView.setVisibility(View.VISIBLE);
-    }
-
-    private String getProgressMessage() {
-        switch (mType) {
-            case WIFI:
-                return getString(R.string.message_search_wifi);
-
-            case BLUETOOTH:
-                return getString(R.string.message_search_bluetooth);
-
-            default:
-                return "";
-        }
-    }
-
     private void tearDownComputersAdapter() {
         setListAdapter(null);
-    }
-
-    private void showComputersList() {
-        showView(getComputersList());
-    }
-
-    private ListView getComputersList() {
-        return (ListView) getView().findViewById(android.R.id.list);
     }
 
     private void setUpComputersAdapter() {
@@ -289,12 +261,25 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         getComputersAdapter().add(getComputers());
     }
 
+    private void showComputersList() {
+        setCurrentView(android.R.id.list);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName aComponentName) {
+        mCommunicationService = null;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
 
         registerIntentsReceiver();
         setUpContextMenu();
+
+        if (!isServiceBound()) {
+            return;
+        }
 
         startComputersSearch();
         loadComputers();
@@ -380,6 +365,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(aIntent);
     }
 
+    private boolean isServiceBound() {
+        return mCommunicationService != null;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem aMenuItem) {
         switch (aMenuItem.getItemId()) {
@@ -425,6 +414,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     public void onListItemClick(ListView aListView, View aView, int aPosition, long aId) {
         Server aComputer = getComputersAdapter().getItem(aPosition);
 
+       startConnectionActivity(aComputer);
+    }
+
+    private void startConnectionActivity(Server aComputer) {
         Intent aIntent = Intents.buildComputerConnectionIntent(getActivity(), aComputer);
         startActivity(aIntent);
     }
@@ -438,6 +431,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         unregisterIntentsReceiver();
     }
 
+    private void stopComputersSearch() {
+        mCommunicationService.stopServersSearch();
+    }
+
     private void unregisterIntentsReceiver() {
         try {
             getBroadcastManager().unregisterReceiver(mIntentsReceiver);
@@ -445,14 +442,6 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
             // Receiver not registered.
             // Fixed in Honeycomb: Android’s issue #6191.
         }
-    }
-
-    private void stopComputersSearch() {
-        if (!isServiceBound()) {
-            return;
-        }
-
-        mCommunicationService.stopServersSearch();
     }
 
     @Override
@@ -476,16 +465,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void unbindService() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         getActivity().unbindService(this);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName aComponentName) {
-        mCommunicationService = null;
     }
 }
 
