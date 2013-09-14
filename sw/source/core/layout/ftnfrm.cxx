@@ -24,22 +24,15 @@
 #include <pagefrm.hxx>
 #include <colfrm.hxx>
 #include <rootfrm.hxx>
-#include <cntfrm.hxx>
-#include <doc.hxx>
-#include <ndtxt.hxx>
 #include <frmtool.hxx>
-#include <swtable.hxx>
 #include <ftnfrm.hxx>
 #include <txtfrm.hxx>
 #include <tabfrm.hxx>
 #include <pagedesc.hxx>
 #include <ftninfo.hxx>
-#include <ndindex.hxx>
 #include <sectfrm.hxx>
-#include <pam.hxx>
 #include <objectformatter.hxx>
 #include "viewopt.hxx"
-#include "viewsh.hxx"
 #include <switerator.hxx>
 
 /*************************************************************************
