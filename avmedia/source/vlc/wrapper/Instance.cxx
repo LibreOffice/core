@@ -38,9 +38,7 @@ namespace VLC
 
     Instance::Instance( const Instance& other )
     {
-        libvlc_release( mInstance );
-        mInstance = other.mInstance;
-        libvlc_retain( mInstance );
+        operator=(other);
     }
 
     const Instance& Instance::operator=( const Instance& other )

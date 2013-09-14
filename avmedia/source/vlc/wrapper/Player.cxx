@@ -87,9 +87,8 @@ namespace VLC
     }
 
     Player::Player( const Player& other )
-        : mPlayer( other.mPlayer )
     {
-        libvlc_media_player_retain( mPlayer );
+        operator=( other );
     }
 
     const Player& Player::operator=( const Player& other )

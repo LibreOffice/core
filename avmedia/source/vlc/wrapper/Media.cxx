@@ -51,9 +51,8 @@ Media::Media( const rtl::OUString& url, Instance& instance )
 }
 
 Media::Media( const Media& other )
-    : mMedia( other.mMedia )
 {
-    libvlc_media_retain( mMedia );
+    operator=(other);
 }
 
 const Media& Media::operator=( const Media& other )
