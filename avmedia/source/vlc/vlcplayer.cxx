@@ -57,13 +57,12 @@ void SAL_CALL VLCPlayer::stop() throw ( ::com::sun::star::uno::RuntimeException 
 double SAL_CALL VLCPlayer::getDuration() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return static_cast<double>( mPlayer.getLength() ) / MS_IN_SEC;
+    return static_cast<double>( mMedia.getDuration() ) / MS_IN_SEC;
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime ) throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
     if ( fTime < 0.00000001 && !mPlayer.isPlaying() )
     {
         mPlayer.stop();
@@ -174,7 +173,6 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
      throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
     VLCWindow * const window = new VLCWindow;
 
     const intptr_t winID = GetWindowID( aArguments );

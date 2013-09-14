@@ -39,8 +39,6 @@ namespace VLC
         int getTime() const;
         bool isPlaying() const;
 
-        int getLength() const;
-
         float getRate() const;
 
         void setVolume( int volume );

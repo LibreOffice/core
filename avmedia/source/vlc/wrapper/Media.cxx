@@ -11,6 +11,7 @@
 #include "Media.hxx"
 #include "SymbolLoader.hxx"
 #include "Instance.hxx"
+#include "Types.hxx"
 
 struct libvlc_instance_t;
 namespace VLC
@@ -20,6 +21,7 @@ namespace VLC
         libvlc_media_t* ( *libvlc_media_new_path ) ( libvlc_instance_t *p_instance, const char *path );
         void ( *libvlc_media_release ) ( libvlc_media_t *p_md );
         void ( *libvlc_media_retain ) ( libvlc_media_t *p_md );
+        libvlc_time_t ( *libvlc_media_get_duration ) ( libvlc_media_t *p_md );
 
         libvlc_media_t* InitMedia( const rtl::OUString& url, VLC::Instance& instance )
         {
@@ -36,7 +38,8 @@ bool Media::LoadSymbols()
     {
         SYM_MAP( libvlc_media_new_path ),
         SYM_MAP( libvlc_media_release ),
-        SYM_MAP( libvlc_media_retain )
+        SYM_MAP( libvlc_media_retain ),
+        SYM_MAP( libvlc_media_get_duration )
     };
 
     return InitApiMap( VLC_MEDIA_API );
@@ -60,6 +63,15 @@ const Media& Media::operator=( const Media& other )
 
     libvlc_media_retain( mMedia );
     return *this;
+}
+
+int Media::getDuration() const
+{
+    const int duration = libvlc_media_get_duration( mMedia );
+    if (duration == -1)
+        return 0;
+
+    return duration;
 }
 
 Media::~Media()

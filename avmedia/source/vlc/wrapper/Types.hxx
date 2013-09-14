@@ -5,6 +5,12 @@
 #ifndef _WRAPPER_TYPES_HXX
 #define _WRAPPER_TYPES_HXX
 
+#if defined WNT
+        typedef __int64 libvlc_time_t;
+#else
+        typedef int64_t libvlc_time_t;
+#endif
+
 extern "C" {
 
 // basic callback / event types we use

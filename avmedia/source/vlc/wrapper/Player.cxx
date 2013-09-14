@@ -8,7 +8,7 @@
  */
 
 #include <rtl/ustring.h>
-
+#include "Types.hxx"
 #include "Player.hxx"
 #include "Media.hxx"
 #include "SymbolLoader.hxx"
@@ -18,12 +18,6 @@ namespace VLC
 {
     namespace
     {
-#if defined WNT
-        typedef __int64 libvlc_time_t;
-#else
-        typedef int64_t libvlc_time_t;
-#endif
-
         void ( *libvlc_media_player_retain ) ( libvlc_media_player_t *p_mi );
         libvlc_media_player_t * ( *libvlc_media_player_new_from_media ) ( libvlc_media_t *p_md );
         void ( *libvlc_media_player_release ) ( libvlc_media_player_t *p_mi );
@@ -33,7 +27,6 @@ namespace VLC
         void ( *libvlc_media_player_stop ) ( libvlc_media_player_t *p_mi );
         void ( *libvlc_media_player_set_time ) ( libvlc_media_player_t *p_mi, libvlc_time_t i_time );
         libvlc_time_t ( *libvlc_media_player_get_time ) ( libvlc_media_player_t *p_mi );
-        libvlc_time_t ( *libvlc_media_player_get_length ) ( libvlc_media_player_t *p_mi );
         float ( *libvlc_media_player_get_rate )( libvlc_media_player_t *p_mi );
         int ( *libvlc_audio_set_volume ) ( libvlc_media_player_t *p_mi, int i_volume );
         int ( *libvlc_audio_get_volume ) ( libvlc_media_player_t *p_mi );
@@ -67,7 +60,6 @@ namespace VLC
             SYM_MAP( libvlc_media_player_stop ),
             SYM_MAP( libvlc_media_player_set_time ),
             SYM_MAP( libvlc_media_player_get_time ),
-            SYM_MAP( libvlc_media_player_get_length ),
             SYM_MAP( libvlc_media_player_get_rate ),
             SYM_MAP( libvlc_audio_set_volume ),
             SYM_MAP( libvlc_audio_get_volume ),
@@ -135,7 +127,9 @@ namespace VLC
 
     int Player::getTime() const
     {
-        return libvlc_media_player_get_time( mPlayer );
+        const int time = libvlc_media_player_get_time( mPlayer );
+
+        return ( time == -1 ? 0 : time );
     }
 
     void Player::setMouseHandling(bool flag)
@@ -146,11 +140,6 @@ namespace VLC
     bool Player::isPlaying() const
     {
         return libvlc_media_player_is_playing( mPlayer ) == 1;
-    }
-
-    int Player::getLength() const
-    {
-        return libvlc_media_player_get_length( mPlayer );
     }
 
     float Player::getRate() const

@@ -25,6 +25,8 @@ namespace VLC
         Media( const Media& other );
         const Media& operator=( const Media& other );
 
+        int getDuration() const;
+
         virtual ~Media();
 
         inline operator libvlc_media_t*()
