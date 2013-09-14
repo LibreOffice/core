@@ -14,7 +14,11 @@ struct libvlc_media_t;
 
 namespace rtl { class OUString; }
 
-namespace VLC
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
 {
     class Instance;
     class Media
@@ -37,6 +41,8 @@ namespace VLC
     private:
         libvlc_media_t *mMedia;
     };
+}
+}
 }
 
 #endif

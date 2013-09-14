@@ -20,7 +20,11 @@ namespace rtl
     class OUString;
 }
 
-namespace VLC
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
 {
     class Media;
     class Player
@@ -62,6 +66,8 @@ namespace VLC
     private:
         libvlc_media_player_t *mPlayer;
     };
+}
+}
 }
 
 #endif

@@ -14,40 +14,47 @@
 #include "SymbolLoader.hxx"
 
 struct libvlc_media_t;
-namespace VLC
+
+namespace
 {
-    namespace
-    {
-        void ( *libvlc_media_player_retain ) ( libvlc_media_player_t *p_mi );
-        libvlc_media_player_t * ( *libvlc_media_player_new_from_media ) ( libvlc_media_t *p_md );
-        void ( *libvlc_media_player_release ) ( libvlc_media_player_t *p_mi );
-        int ( *libvlc_media_player_play ) ( libvlc_media_player_t *p_mi );
-        void ( *libvlc_media_player_pause ) ( libvlc_media_player_t *p_mi );
-        int ( *libvlc_media_player_is_playing ) ( libvlc_media_player_t *p_mi );
-        void ( *libvlc_media_player_stop ) ( libvlc_media_player_t *p_mi );
-        void ( *libvlc_media_player_set_time ) ( libvlc_media_player_t *p_mi, libvlc_time_t i_time );
-        libvlc_time_t ( *libvlc_media_player_get_time ) ( libvlc_media_player_t *p_mi );
-        float ( *libvlc_media_player_get_rate )( libvlc_media_player_t *p_mi );
-        int ( *libvlc_audio_set_volume ) ( libvlc_media_player_t *p_mi, int i_volume );
-        int ( *libvlc_audio_get_volume ) ( libvlc_media_player_t *p_mi );
-        int ( *libvlc_audio_get_mute ) ( libvlc_media_player_t *p_mi );
-        void ( *libvlc_audio_set_mute ) ( libvlc_media_player_t *p_mi, int status );
-        int ( *libvlc_video_take_snapshot ) ( libvlc_media_player_t *p_mi, unsigned num,
-                                const char *psz_filepath, unsigned int i_width,
-                                unsigned int i_height );
+    void ( *libvlc_media_player_retain ) ( libvlc_media_player_t *p_mi );
+    libvlc_media_player_t * ( *libvlc_media_player_new_from_media ) ( libvlc_media_t *p_md );
+    void ( *libvlc_media_player_release ) ( libvlc_media_player_t *p_mi );
+    int ( *libvlc_media_player_play ) ( libvlc_media_player_t *p_mi );
+    void ( *libvlc_media_player_pause ) ( libvlc_media_player_t *p_mi );
+    int ( *libvlc_media_player_is_playing ) ( libvlc_media_player_t *p_mi );
+    void ( *libvlc_media_player_stop ) ( libvlc_media_player_t *p_mi );
+    void ( *libvlc_media_player_set_time ) ( libvlc_media_player_t *p_mi, libvlc_time_t i_time );
+    libvlc_time_t ( *libvlc_media_player_get_time ) ( libvlc_media_player_t *p_mi );
+    float ( *libvlc_media_player_get_rate )( libvlc_media_player_t *p_mi );
+    int ( *libvlc_audio_set_volume ) ( libvlc_media_player_t *p_mi, int i_volume );
+    int ( *libvlc_audio_get_volume ) ( libvlc_media_player_t *p_mi );
+    int ( *libvlc_audio_get_mute ) ( libvlc_media_player_t *p_mi );
+    void ( *libvlc_audio_set_mute ) ( libvlc_media_player_t *p_mi, int status );
+    int ( *libvlc_video_take_snapshot ) ( libvlc_media_player_t *p_mi,
+                                          unsigned num,
+                                          const char *psz_filepath,
+                                          unsigned int i_width,
+                                          unsigned int i_height );
 #if defined UNX
-        void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
+    void ( *libvlc_media_player_set_xwindow ) ( libvlc_media_player_t *p_mi, uint32_t drawable );
 #elif defined MACOSX
-        void ( *libvlc_media_player_set_nsobject ) ( libvlc_media_player_t *p_mi, void *drawable );
+    void ( *libvlc_media_player_set_nsobject ) ( libvlc_media_player_t *p_mi, void *drawable );
 #elif defined WNT
-        void ( *libvlc_media_player_set_hwnd ) ( libvlc_media_player_t *p_mi, void *drawable );
+    void ( *libvlc_media_player_set_hwnd ) ( libvlc_media_player_t *p_mi, void *drawable );
 #else
 #error unknown OS
 #endif
-        unsigned ( *libvlc_media_player_has_vout ) ( libvlc_media_player_t *p_mi );
-        void ( *libvlc_video_set_mouse_input ) ( libvlc_media_player_t *p_mi, unsigned on);
-    }
+    unsigned ( *libvlc_media_player_has_vout ) ( libvlc_media_player_t *p_mi );
+    void ( *libvlc_video_set_mouse_input ) ( libvlc_media_player_t *p_mi, unsigned on);
+}
 
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
+{
     bool Player::LoadSymbols()
     {
         ApiMap VLC_PLAYER_API[] =
@@ -189,6 +196,8 @@ namespace VLC
     {
         return libvlc_media_player_has_vout( mPlayer );
     }
+}
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

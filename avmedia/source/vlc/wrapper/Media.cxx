@@ -14,23 +14,28 @@
 #include "Types.hxx"
 
 struct libvlc_instance_t;
-namespace VLC
+
+namespace avmedia
 {
-    namespace
+namespace vlc
+{
+namespace wrapper
+{
+namespace
+{
+    libvlc_media_t* ( *libvlc_media_new_path ) ( libvlc_instance_t *p_instance, const char *path );
+    void ( *libvlc_media_release ) ( libvlc_media_t *p_md );
+    void ( *libvlc_media_retain ) ( libvlc_media_t *p_md );
+    libvlc_time_t ( *libvlc_media_get_duration ) ( libvlc_media_t *p_md );
+
+    libvlc_media_t* InitMedia( const rtl::OUString& url, Instance& instance )
     {
-        libvlc_media_t* ( *libvlc_media_new_path ) ( libvlc_instance_t *p_instance, const char *path );
-        void ( *libvlc_media_release ) ( libvlc_media_t *p_md );
-        void ( *libvlc_media_retain ) ( libvlc_media_t *p_md );
-        libvlc_time_t ( *libvlc_media_get_duration ) ( libvlc_media_t *p_md );
+        rtl::OString dest;
+        url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
 
-        libvlc_media_t* InitMedia( const rtl::OUString& url, VLC::Instance& instance )
-        {
-            rtl::OString dest;
-            url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
-
-            return libvlc_media_new_path(instance, dest.getStr());
-        }
+        return libvlc_media_new_path(instance, dest.getStr());
     }
+}
 
 bool Media::LoadSymbols()
 {
@@ -52,7 +57,7 @@ Media::Media( const rtl::OUString& url, Instance& instance )
 
 Media::Media( const Media& other )
 {
-    operator=(other);
+    operator=( other );
 }
 
 const Media& Media::operator=( const Media& other )
@@ -77,7 +82,8 @@ Media::~Media()
 {
     libvlc_media_release( mMedia );
 }
-
+}
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

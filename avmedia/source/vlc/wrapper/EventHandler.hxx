@@ -10,12 +10,17 @@
 #ifndef _WRAPPER_EVENT_HANDLER_HXX
 #define _WRAPPER_EVENT_HANDLER_HXX
 #include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
 #include <salhelper/thread.hxx>
 #include "ThreadsafeQueue.hxx"
 
-namespace VLC
+namespace avmedia
 {
-    class EventHandler : public ::osl::Thread
+namespace vlc
+{
+namespace wrapper
+{
+    class EventHandler : public ::osl::Thread, boost::noncopyable
     {
     public:
         EventHandler();
@@ -26,8 +31,10 @@ namespace VLC
 
     public:
         typedef boost::function< void() > TCallback;
-        avmedia::vlc::ThreadsafeQueue< TCallback > mCallbackQueue;
+        ThreadsafeQueue< TCallback > mCallbackQueue;
     };
+}
+}
 }
 
 #endif // _WRAPPER_EVENT_HANDLER_HXX

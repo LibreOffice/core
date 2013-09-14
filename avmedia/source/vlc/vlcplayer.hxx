@@ -42,19 +42,19 @@ typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base
 {
-    VLC::Instance& mInstance;
-    VLC::EventHandler& mEventHandler;
+    wrapper::Instance& mInstance;
+    wrapper::EventHandler& mEventHandler;
 
-    VLC::Media mMedia;
-    VLC::Player mPlayer;
-    VLC::EventManager mEventManager;
+    wrapper::Media mMedia;
+    wrapper::Player mPlayer;
+    wrapper::EventManager mEventManager;
     const rtl::OUString mUrl;
     bool mPlaybackLoop;
     ::com::sun::star::uno::Reference< css::media::XFrameGrabber > mrFrameGrabber;
 public:
     VLCPlayer( const rtl::OUString& url,
-               VLC::Instance& instance,
-               VLC::EventHandler& eh );
+               wrapper::Instance& instance,
+               wrapper::EventHandler& eh );
 
     void SAL_CALL start() throw ( ::com::sun::star::uno::RuntimeException );
     void SAL_CALL stop() throw ( ::com::sun::star::uno::RuntimeException );

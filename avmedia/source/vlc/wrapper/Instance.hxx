@@ -12,7 +12,11 @@
 
 struct libvlc_instance_t;
 
-namespace VLC
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
 {
     class Instance
     {
@@ -31,6 +35,8 @@ namespace VLC
     private:
         libvlc_instance_t *mInstance;
     };
+}
+}
 }
 
 #endif

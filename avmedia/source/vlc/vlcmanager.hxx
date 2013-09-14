@@ -30,8 +30,8 @@ namespace vlc {
 class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManager,
                                                     ::com::sun::star::lang::XServiceInfo >
 {
-    boost::scoped_ptr<VLC::Instance> mInstance;
-    VLC::EventHandler mEventHandler;
+    boost::scoped_ptr<wrapper::Instance> mInstance;
+    wrapper::EventHandler mEventHandler;
 public:
     Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
     ~Manager();

@@ -26,11 +26,6 @@
 #include "vlccommon.hxx"
 #include "wrapper/Wrapper.hxx"
 
-namespace VLC
-{
-    class EventHandler;
-}
-
 namespace avmedia {
 namespace vlc {
 
@@ -39,18 +34,22 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::media::XFrameGrabber,
 
 class VLCFrameGrabber : public FrameGrabber_BASE
 {
-    VLC::Instance mInstance;
-    VLC::Media mMedia;
-    VLC::Player mPlayer;
-    VLC::EventHandler& mEventHandler;
+    wrapper::Instance mInstance;
+    wrapper::Media mMedia;
+    wrapper::Player mPlayer;
+    wrapper::EventHandler& mEventHandler;
 public:
-    VLCFrameGrabber( VLC::EventHandler& eh, const rtl::OUString& url );
+    VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString& url );
 
-    ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw ( ::com::sun::star::uno::RuntimeException );
+    ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime )
+            throw ( ::com::sun::star::uno::RuntimeException );
 
-    ::rtl::OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException );
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName ) throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( ::com::sun::star::uno::RuntimeException );
+    ::rtl::OUString SAL_CALL getImplementationName()
+            throw ( ::com::sun::star::uno::RuntimeException );
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
+            throw ( ::com::sun::star::uno::RuntimeException );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+            throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 }

@@ -22,8 +22,8 @@ namespace
 }
 
 VLCPlayer::VLCPlayer( const rtl::OUString& url,
-                      VLC::Instance& instance,
-                      VLC::EventHandler& eh )
+                      wrapper::Instance& instance,
+                      wrapper::EventHandler& eh )
     : VLC_Base( m_aMutex )
     , mInstance( instance )
     , mEventHandler( eh )

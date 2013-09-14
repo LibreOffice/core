@@ -35,7 +35,7 @@ namespace
     };
 }
 
-VLCFrameGrabber::VLCFrameGrabber( VLC::EventHandler& eh, const rtl::OUString& url )
+VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString& url )
     : FrameGrabber_BASE()
     , mInstance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS )
     , mMedia( url, mInstance )
@@ -51,7 +51,7 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::EventHandler& eh, const rtl::OUString& ur
 
     const rtl::OUString& fileName = utl::TempFile::CreateTempName();
     {
-        VLC::EventManager manager( mPlayer, mEventHandler );
+        wrapper::EventManager manager( mPlayer, mEventHandler );
         manager.onPaused(boost::bind(&osl::Condition::set, &condition));
 
         if ( !mPlayer.play() )

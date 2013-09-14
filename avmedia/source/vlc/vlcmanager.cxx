@@ -37,7 +37,7 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
     : mEventHandler()
     , mxMgr( rxMgr )
 {
-    using namespace VLC;
+    using namespace wrapper;
     static bool success = Instance::LoadSymbols() && EventManager::LoadSymbols()
                           && Media::LoadSymbols() && Player::LoadSymbols()
                           && Common::LoadSymbols();

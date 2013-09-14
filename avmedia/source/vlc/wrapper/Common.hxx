@@ -10,7 +10,11 @@
 #ifndef _WRAPPER_COMMON_HXX
 #define _WRAPPER_COMMON_HXX
 
-namespace VLC
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
 {
     class Common
     {
@@ -18,6 +22,8 @@ namespace VLC
         static bool LoadSymbols();
         static const char* Version();
     };
+}
+}
 }
 
 #endif

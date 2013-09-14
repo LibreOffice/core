@@ -24,9 +24,12 @@
 #include <osl/conditn.hxx>
 #include <boost/noncopyable.hpp>
 
-namespace avmedia {
-namespace vlc {
-
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
+{
 template<class T>
 class ThreadsafeQueue : boost::noncopyable
 {
@@ -70,7 +73,7 @@ void ThreadsafeQueue<T>::pop( T& data )
     data = mQueue.front();
     mQueue.pop();
 }
-
+}
 }
 }
 

@@ -9,13 +9,17 @@
 #include "Common.hxx"
 #include "SymbolLoader.hxx"
 
-namespace VLC
-{
 namespace
 {
-    const char* (*libvlc_get_version)(void);
+    const char* ( *libvlc_get_version ) (void);
 }
 
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
+{
 bool Common::LoadSymbols()
 {
     ApiMap VLC_COMMON_API[] =
@@ -29,5 +33,7 @@ bool Common::LoadSymbols()
 const char* Common::Version()
 {
     return libvlc_get_version();
+}
+}
 }
 }

@@ -11,30 +11,33 @@
 #define _WRAPPER_EVENT_MANAGER_HXX
 
 #include <boost/function.hpp>
-#include <boost/shared_ptr.hpp>
-
+#include <boost/noncopyable.hpp>
 #include "Player.hxx"
 
 struct libvlc_event_manager_t;
 struct libvlc_event_t;
 
-namespace VLC
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
 {
     class EventHandler;
-    class EventManager
+    class EventManager : boost::noncopyable
     {
 
     public:
         static bool LoadSymbols();
         typedef boost::function<void()> Callback;
 
-        EventManager( VLC::Player& player, VLC::EventHandler& eh );
+        EventManager( Player& player, EventHandler& eh );
 
         void onPaused( const Callback& callback = Callback() );
         void onEndReached( const Callback& callback = Callback() );
 
     private:
-        VLC::EventHandler& mEventHandler;
+        EventHandler& mEventHandler;
         typedef boost::function< void() > TCallback;
         libvlc_event_manager_t *mManager;
         TCallback mOnPaused;
@@ -44,6 +47,8 @@ namespace VLC
 
         static void Handler( const libvlc_event_t *event, void *pData );
     };
+}
+}
 }
 
 #endif

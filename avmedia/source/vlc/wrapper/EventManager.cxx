@@ -12,25 +12,28 @@
 #include "EventHandler.hxx"
 #include "Types.hxx"
 
-namespace VLC
+namespace
 {
-    namespace
-    {
-        libvlc_event_manager_t* ( *libvlc_media_player_event_manager ) ( libvlc_media_player_t *p_mi );
-        int ( *libvlc_event_attach ) ( libvlc_event_manager_t *p_event_manager,
-                                       libvlc_event_type_t i_event_type,
-                                       libvlc_callback_t f_callback,
-                                       void *user_data );
-        void ( *libvlc_event_detach ) ( libvlc_event_manager_t *p_event_manager,
-                                        libvlc_event_type_t i_event_type,
-                                        libvlc_callback_t f_callback,
-                                        void *p_user_data );
-    }
+    libvlc_event_manager_t* ( *libvlc_media_player_event_manager ) ( libvlc_media_player_t *p_mi );
+    int ( *libvlc_event_attach ) ( libvlc_event_manager_t *p_event_manager,
+                                   libvlc_event_type_t i_event_type,
+                                   libvlc_callback_t f_callback,
+                                   void *user_data );
+    void ( *libvlc_event_detach ) ( libvlc_event_manager_t *p_event_manager,
+                                    libvlc_event_type_t i_event_type,
+                                    libvlc_callback_t f_callback,
+                                    void *p_user_data );
+}
 
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
+{
 void EventManager::Handler( const libvlc_event_t *event, void *pData )
 {
     EventManager *instance = static_cast<EventManager*>( pData );
-    std::cout << "HANDLER" << std::endl;
     switch ( event->type )
     {
     case libvlc_MediaPlayerPaused:
@@ -54,7 +57,7 @@ bool EventManager::LoadSymbols()
     return InitApiMap( VLC_EVENT_MANAGER_API );
 }
 
-EventManager::EventManager( VLC::Player& player, VLC::EventHandler& eh )
+EventManager::EventManager( Player& player, EventHandler& eh )
     : mEventHandler( eh )
     , mManager( libvlc_media_player_event_manager( player ) )
 {
@@ -80,7 +83,8 @@ void EventManager::onEndReached( const Callback& callback )
     mOnEndReached = callback;
     registerSignal( libvlc_MediaPlayerEndReached, callback );
 }
-
+}
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -10,15 +10,19 @@
 #include "Instance.hxx"
 #include "SymbolLoader.hxx"
 
-namespace VLC
+namespace
 {
-    namespace
-    {
-        libvlc_instance_t* ( *libvlc_new ) ( int argc, const char * const *argv );
-        void ( *libvlc_release ) ( libvlc_instance_t *p_instance );
-        void ( *libvlc_retain ) ( libvlc_instance_t *p_instance );
-    }
+    libvlc_instance_t* ( *libvlc_new ) ( int argc, const char * const *argv );
+    void ( *libvlc_release ) ( libvlc_instance_t *p_instance );
+    void ( *libvlc_retain ) ( libvlc_instance_t *p_instance );
+}
 
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
+{
     bool Instance::LoadSymbols()
     {
         ApiMap VLC_INSTANCE_API[] =
@@ -38,7 +42,7 @@ namespace VLC
 
     Instance::Instance( const Instance& other )
     {
-        operator=(other);
+        operator=( other );
     }
 
     const Instance& Instance::operator=( const Instance& other )
@@ -53,7 +57,8 @@ namespace VLC
     {
         libvlc_release( mInstance );
     }
-
+}
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,6 +19,12 @@
 
 #define SYM_MAP(a) { #a, (SymbolFunc *)&a }
 
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
+{
 typedef void (*SymbolFunc) (void);
 
 struct ApiMap
@@ -70,7 +76,7 @@ namespace
                 ( aModule, OUString::createFromAscii( pMap[ i ].symName ).pData );
             if ( !aMethod )
             {
-                std::cerr << "Cannot load method " << pMap[ i ].symName << std::endl;
+                SAL_WARN("avmedia", "Cannot load method " << pMap[ i ].symName);
                 *pMap[ i ].refValue = NULL;
                 return false;
             }
@@ -82,8 +88,6 @@ namespace
     }
 }
 
-namespace VLC
-{
     template<size_t N>
     bool InitApiMap( const ApiMap ( &pMap )[N]  )
     {
@@ -98,7 +102,7 @@ namespace VLC
 
         if( aModule == NULL)
         {
-            std::cerr << "Cannot load libvlc" << std::endl;
+            SAL_WARN("avmedia", "Cannot load libvlc");
             return false;
         }
 
@@ -111,6 +115,8 @@ namespace VLC
 
         return false;
     }
+}
+}
 }
 
 #endif

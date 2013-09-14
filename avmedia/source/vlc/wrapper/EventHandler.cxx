@@ -9,7 +9,11 @@
 
 #include "EventHandler.hxx"
 
-namespace VLC
+namespace avmedia
+{
+namespace vlc
+{
+namespace wrapper
 {
 EventHandler::EventHandler()
     : ::osl::Thread()
@@ -35,7 +39,8 @@ void EventHandler::run()
         callback();
     } while ( true );
 }
-
+}
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
