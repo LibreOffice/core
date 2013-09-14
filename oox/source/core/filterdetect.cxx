@@ -286,8 +286,8 @@ PasswordVerifier::PasswordVerifier( DocumentDecryption& aDecryptor ) :
 
 comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OUString& rPassword, Sequence<NamedValue>& rEncryptionData )
 {
-    if( mDecryptor.generateEncryptionKey(rPassword) )
-        rEncryptionData = mDecryptor.createEncryptionData();
+    if(mDecryptor.generateEncryptionKey(rPassword))
+        rEncryptionData = mDecryptor.createEncryptionData(rPassword);
 
     return rEncryptionData.hasElements() ? comphelper::DocPasswordVerifierResult_OK : comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }

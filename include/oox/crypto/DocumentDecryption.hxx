@@ -59,7 +59,7 @@ public:
     bool readEncryptionInfo();
     bool generateEncryptionKey(const OUString& rPassword);
 
-    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > createEncryptionData();
+    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > createEncryptionData(const OUString& rPassword);
 
     static bool checkEncryptionData( const com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue >& rEncryptionData );
 };

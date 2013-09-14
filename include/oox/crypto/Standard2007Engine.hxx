@@ -89,11 +89,6 @@ public:
 
     StandardEncryptionInfo& getInfo();
 
-    static bool checkEncryptionData(
-                    std::vector<sal_uInt8> key, sal_uInt32 keySize,
-                    std::vector<sal_uInt8> encryptedVerifier, sal_uInt32 verifierSize,
-                    std::vector<sal_uInt8> encryptedHash, sal_uInt32 hashSize );
-
     virtual bool generateEncryptionKey(const OUString& rPassword);
 
     virtual bool writeEncryptionInfo(

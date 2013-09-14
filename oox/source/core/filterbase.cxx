@@ -545,7 +545,8 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "FilterName", OUString() );
     try
     {
-        Reference< XNameAccess > xFilters( Reference<XMultiServiceFactory>(getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance("com.sun.star.document.FilterFactory" ), UNO_QUERY_THROW );
+        Reference<XMultiServiceFactory> xFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);
+        Reference<XNameAccess> xFilters(xFactory->createInstance("com.sun.star.document.FilterFactory" ), UNO_QUERY_THROW );
         Any aValues = xFilters->getByName( sFilterName );
         Sequence<PropertyValue > aPropSeq;
         aValues >>= aPropSeq;

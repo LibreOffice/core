@@ -657,7 +657,7 @@ Reference<XStream> XmlFilterBase::implGetOutputStream( MediaDescriptor& rMediaDe
     OUString aPassword;
     for (int i=0; i<aMediaEncData.getLength(); i++)
     {
-        if (aMediaEncData[i].Name == "Password")
+        if (aMediaEncData[i].Name == "OOXPassword")
         {
             Any& any = aMediaEncData[i].Value;
             any >>= aPassword;
@@ -690,7 +690,7 @@ bool XmlFilterBase::implFinalizeExport( MediaDescriptor& rMediaDescriptor )
 
     for (int i=0; i<aMediaEncData.getLength(); i++)
     {
-        if (aMediaEncData[i].Name == "Password")
+        if (aMediaEncData[i].Name == "OOXPassword")
         {
             Any& any = aMediaEncData[i].Value;
             any >>= aPassword;

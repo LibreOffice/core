@@ -164,16 +164,22 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
         mInfo.verifier.encryptedVerifier + ENCRYPTED_VERIFIER_LENGTH,
         encryptedVerifier.begin());
 
-    vector<sal_uInt8> encryptedVerifierHash(ENCRYPTED_VERIFIER_HASH_LENGTH);
+    vector<sal_uInt8> encryptedHash(ENCRYPTED_VERIFIER_HASH_LENGTH);
     std::copy(
         mInfo.verifier.encryptedVerifierHash,
         mInfo.verifier.encryptedVerifierHash + ENCRYPTED_VERIFIER_HASH_LENGTH,
-        encryptedVerifierHash.begin());
+        encryptedHash.begin());
 
-    return checkEncryptionData(
-                mKey, mKey.size(),
-                encryptedVerifier, encryptedVerifier.size(),
-                encryptedVerifierHash, encryptedVerifierHash.size() );
+    vector<sal_uInt8> verifier(encryptedVerifier.size(), 0);
+    Decrypt::aes128ecb(verifier, encryptedVerifier, mKey);
+
+    vector<sal_uInt8> verifierHash(encryptedHash.size(), 0);
+    Decrypt::aes128ecb(verifierHash, encryptedHash, mKey);
+
+    vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1, 0);
+    sha1(hash, verifier);
+
+    return std::equal( hash.begin(), hash.end(), verifierHash.begin() );
 }
 
 bool Standard2007Engine::decrypt(
@@ -197,27 +203,6 @@ bool Standard2007Engine::decrypt(
         aOutputStream.writeMemory( &outputBuffer[0], outputLength );
     }
     return true;
-}
-
-bool Standard2007Engine::checkEncryptionData(
-            vector<sal_uInt8> key, sal_uInt32 keySize,
-            vector<sal_uInt8> encryptedVerifier, sal_uInt32 verifierSize,
-            vector<sal_uInt8> encryptedHash, sal_uInt32 hashSize )
-{
-    // the only currently supported algorithm needs key size 128
-    if ( keySize != 16 || verifierSize != 16 )
-        return false;
-
-    vector<sal_uInt8> verifier(verifierSize, 0);
-    Decrypt::aes128ecb(verifier, encryptedVerifier, key);
-
-    vector<sal_uInt8> verifierHash(hashSize, 0);
-    Decrypt::aes128ecb(verifierHash, encryptedHash, key);
-
-    vector<sal_uInt8> hash(RTL_DIGEST_LENGTH_SHA1, 0);
-    sha1(hash, verifier);
-
-    return std::equal( hash.begin(), hash.end(), verifierHash.begin() );
 }
 
 bool Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOutputStream& rStream)

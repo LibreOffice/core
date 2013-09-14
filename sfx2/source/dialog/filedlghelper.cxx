@@ -2625,7 +2625,7 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
                 if ( lclSupportsOOXMLEncryption( pCurrentFilter->GetFilterName() ) )
                 {
                     ::comphelper::SequenceAsHashMap aHashData;
-                    aHashData[ OUString( "Password"  ) ] <<= pPasswordRequest->getPassword();
+                    aHashData[ OUString( "OOXPassword"  ) ] <<= pPasswordRequest->getPassword();
                     pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
                 }
                 else

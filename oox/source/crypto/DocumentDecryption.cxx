@@ -202,23 +202,9 @@ DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage, Refere
     mCryptoType(UNKNOWN)
 {}
 
-bool DocumentDecryption::checkEncryptionData(const Sequence<NamedValue>& rEncryptionData)
+bool DocumentDecryption::checkEncryptionData(const Sequence<NamedValue>& /*rEncryptionData*/)
 {
-    SequenceAsHashMap aHashData( rEncryptionData );
-    OUString type = aHashData.getUnpackedValueOrDefault( "CryptoType", OUString("Unknown") );
-    if (type == "Standard")
-    {
-        Sequence<sal_Int8> aKeySeq      = aHashData.getUnpackedValueOrDefault( "AES128EncryptionKey", Sequence<sal_Int8>() );
-        Sequence<sal_Int8> aVerifierSeq = aHashData.getUnpackedValueOrDefault( "AES128EncryptionVerifier", Sequence<sal_Int8>() );
-        Sequence<sal_Int8> aHashSeq     = aHashData.getUnpackedValueOrDefault( "AES128EncryptionVerifierHash", Sequence<sal_Int8>() );
-
-        vector<sal_uInt8> key      = convertToVector(aKeySeq);
-        vector<sal_uInt8> verifier = convertToVector(aVerifierSeq);
-        vector<sal_uInt8> hash     = convertToVector(aHashSeq);
-
-        return Standard2007Engine::checkEncryptionData( key, key.size(), verifier, verifier.size(), hash, hash.size() );
-    }
-    return type == "Agile";
+    return false;
 }
 
 bool DocumentDecryption::generateEncryptionKey(const OUString& rPassword)
@@ -363,30 +349,21 @@ bool DocumentDecryption::readEncryptionInfo()
     return bResult;
 }
 
-Sequence<NamedValue> DocumentDecryption::createEncryptionData()
+Sequence<NamedValue> DocumentDecryption::createEncryptionData(const OUString& rPassword)
 {
-    Sequence<NamedValue> aResult;
+    SequenceAsHashMap aEncryptionData;
 
-    vector<sal_uInt8>& key = mEngine->getKey();
-
-    if (key.size() > 0)
+    if (mCryptoType == AGILE)
     {
-        SequenceAsHashMap aEncryptionData;
-        if (mCryptoType == AGILE)
-        {
-            aEncryptionData["CryptoType"] <<= OUString("Agile");
-            aEncryptionData["AES128EncryptionKey"] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( &key[0] ), key.size() );
-            aResult = aEncryptionData.getAsConstNamedValueList();
-        }
-        else if (mCryptoType == STANDARD_2007)
-        {
-            aEncryptionData["CryptoType"] <<= OUString("Standard");
-            aEncryptionData["AES128EncryptionKey"] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( &key[0] ), key.size() );
-            aResult = aEncryptionData.getAsConstNamedValueList();
-        }
+        aEncryptionData["CryptoType"] <<= OUString("Agile");
+    }
+    else if (mCryptoType == STANDARD_2007)
+    {
+        aEncryptionData["CryptoType"] <<= OUString("Standard");
     }
 
-    return aResult;
+    aEncryptionData["OOXPassword"] <<= rPassword;
+    return aEncryptionData.getAsConstNamedValueList();
 }
 
 bool DocumentDecryption::decrypt(Reference<XStream> xDocumentStream)
