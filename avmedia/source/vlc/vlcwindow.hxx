@@ -27,6 +27,7 @@ namespace vlc {
 class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayerWindow,
                                                    ::com::sun::star::lang::XServiceInfo >
 {
+    ::com::sun::star::media::ZoomLevel meZoomLevel;
 public:
     VLCWindow();
 

@@ -17,14 +17,27 @@ void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException)
 {
 }
 
-::sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel ) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL VLCWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel ) throw (css::uno::RuntimeException)
 {
-    return false;
+    sal_Bool bRet = false;
+
+    if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
+        media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
+    {
+        if( eZoomLevel != meZoomLevel )
+        {
+            meZoomLevel = eZoomLevel;
+        }
+
+        bRet = true;
+    }
+
+    return bRet;
 }
 
 css::media::ZoomLevel SAL_CALL VLCWindow::getZoomLevel() throw (css::uno::RuntimeException)
 {
-    return css::media::ZoomLevel_NOT_AVAILABLE;
+    return meZoomLevel;
 }
 
 void SAL_CALL VLCWindow::setPointerType( ::sal_Int32 ) throw (css::uno::RuntimeException)
@@ -70,7 +83,13 @@ void SAL_CALL VLCWindow::setPosSize( sal_Int32, sal_Int32, sal_Int32, sal_Int32,
 awt::Rectangle SAL_CALL VLCWindow::getPosSize()
     throw (uno::RuntimeException)
 {
-    return awt::Rectangle();
+    awt::Rectangle aRet;
+
+    aRet.X = aRet.Y = 0;
+    aRet.Width = 320;
+    aRet.Height = 240;
+
+    return aRet;
 }
 
 void SAL_CALL VLCWindow::setVisible( sal_Bool )
