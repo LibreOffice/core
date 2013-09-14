@@ -428,48 +428,6 @@ xub_StrLen STRING::Search( const STRING& rStr, xub_StrLen nIndex ) const
     return STRING_NOTFOUND;
 }
 
-xub_StrLen STRING::Search( const STRCODE* pCharStr, xub_StrLen nIndex ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32 nLen = mpData->mnLen;
-    xub_StrLen nStrLen  = ImplStringLen( pCharStr );
-
-    // rStr was not found if its length is zero
-    // or index is larger than searched string
-    if ( !nStrLen || (nIndex >= nLen) )
-        return STRING_NOTFOUND;
-
-    const STRCODE* pStr = mpData->maStr;
-    pStr += nIndex;
-
-    if ( nStrLen == 1 )
-    {
-        STRCODE cSearch = *pCharStr;
-        while ( nIndex < nLen )
-        {
-            if ( *pStr == cSearch )
-                return nIndex;
-            ++pStr,
-            ++nIndex;
-        }
-    }
-    else
-    {
-        // search only within string
-        while ( nLen - nIndex >= nStrLen )
-        {
-            // increase match if found
-            if ( ImplStringCompareWithoutZero( pStr, pCharStr, nStrLen ) == 0 )
-                return nIndex;
-            ++pStr,
-            ++nIndex;
-        }
-    }
-
-    return STRING_NOTFOUND;
-}
-
 void STRING::SearchAndReplaceAll( STRCODE c, STRCODE cRep )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

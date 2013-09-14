@@ -57,7 +57,6 @@ SfxGrabBagItem::SetGrabBag(std::__debug::map<rtl::OUString, com::sun::star::uno:
 SfxTemplatePanelControl::SetParagraphFamily()
 SmFontPickList::Contains(Font const&) const
 SmParser::Insert(rtl::OUString const&, int)
-String::Search(unsigned short const*, unsigned short) const
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
 SvpSalInstance::PostedEventsInQueue()

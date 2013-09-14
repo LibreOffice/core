@@ -137,6 +137,7 @@ private:
     TOOLS_DLLPRIVATE sal_Bool   Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
     TOOLS_DLLPRIVATE sal_Bool   EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
+    TOOLS_DLLPRIVATE xub_StrLen Search( const sal_Unicode* pCharStr, xub_StrLen nIndex = 0 ) const;
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -250,7 +251,6 @@ public:
 
     xub_StrLen          Search( sal_Unicode c, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const UniString& rStr, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          Search( const sal_Unicode* pCharStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          SearchBackward( sal_Unicode c, xub_StrLen nIndex = STRING_LEN ) const;
 
