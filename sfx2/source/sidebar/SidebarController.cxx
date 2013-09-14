@@ -361,22 +361,45 @@ void SidebarController::NotifyResize (void)
     else
         bIsDeckVisible = false;
 
-    // Place the deck.
-    if (mpCurrentDeck)
+    SfxSplitWindow* pSplitWindow = GetSplitWindow();
+    if ( mpCurrentDeck && pSplitWindow )
     {
-        if (bIsDeckVisible)
+        // Find out that which side of the Window do we need to attach the Sidebar?
+        if ( pSplitWindow->GetAlign() == WINDOWALIGN_RIGHT )        // attach the Sidebar towards the right-side of screen
         {
-            mpCurrentDeck->setPosSizePixel(0,0, nWidth-TabBar::GetDefaultWidth(), nHeight);
-            mpCurrentDeck->Show();
-            mpCurrentDeck->RequestLayout();
-        }
-        else
-            mpCurrentDeck->Hide();
-    }
+            // Place the deck first.
+            {
+                if (bIsDeckVisible)
+                {
+                    mpCurrentDeck->setPosSizePixel(0,0, nWidth-TabBar::GetDefaultWidth(), nHeight);
+                    mpCurrentDeck->Show();
+                    mpCurrentDeck->RequestLayout();
+                }
+                else
+                    mpCurrentDeck->Hide();
+            }
 
-    // Place the tab bar.
-    mpTabBar->setPosSizePixel(nWidth-TabBar::GetDefaultWidth(),0,TabBar::GetDefaultWidth(),nHeight);
-    mpTabBar->Show();
+            // Now place the tab bar.
+            mpTabBar->setPosSizePixel(nWidth-TabBar::GetDefaultWidth(),0,TabBar::GetDefaultWidth(),nHeight);
+            mpTabBar->Show();
+        }
+        else if ( pSplitWindow->GetAlign() == WINDOWALIGN_LEFT)     // attach the Sidebar towards the left-side of screen
+        {
+            // Place the tab bar first.
+            mpTabBar->setPosSizePixel(0,0,TabBar::GetDefaultWidth(),nHeight);
+            mpTabBar->Show();
+
+            // Now place the deck.
+            if (bIsDeckVisible)
+            {
+                mpCurrentDeck->setPosSizePixel(TabBar::GetDefaultWidth(),0, nWidth-TabBar::GetDefaultWidth(), nHeight);
+                mpCurrentDeck->Show();
+                mpCurrentDeck->RequestLayout();
+            }
+            else
+                mpCurrentDeck->Hide();
+        }
+    }
 
     // Determine if the closer of the deck can be shown.
     sal_Int32 nMinimalWidth = 0;
@@ -667,6 +690,7 @@ void SidebarController::SwitchToDeck (
         0,
         mpParentWindow->GetSizePixel().Width()-TabBar::GetDefaultWidth(),
         mpParentWindow->GetSizePixel().Height());
+
     mpCurrentDeck->SetPanels(aNewPanels);
     mpCurrentDeck->Show();
 
