@@ -19,16 +19,10 @@
 
 
 #include "doc.hxx"
-#include "node.hxx"
 #include <docary.hxx>
-#include <fmtanchr.hxx>
-#include "flypos.hxx"
-#include "frmfmt.hxx"
 #include "dcontact.hxx"
-#include "dview.hxx"
 #include "flyfrm.hxx"
 #include "dflyobj.hxx"
-#include "ndindex.hxx"
 #include "switerator.hxx"
 
 bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const
