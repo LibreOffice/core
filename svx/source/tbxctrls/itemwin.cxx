@@ -117,8 +117,8 @@ void SvxLineBox::Select()
                      SfxObjectShell::Current()  &&
                      SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
                 {
-                    // LineDashItem wird nur geschickt, wenn es auch einen Dash besitzt.
-                    // Notify k"ummert sich darum!
+                    // LineDashItem will only be sent if it also has a dash.
+                    // Notify cares!
                     SvxDashListItem aItem( *(const SvxDashListItem*)(
                         SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
                     XLineDashItem aLineDashItem( GetSelectEntry(),
@@ -497,7 +497,7 @@ void SvxMetricField::Down()
     sal_Int64 nValue = GetValue();
     nValue -= GetSpinSize();
 
-    // Um unter OS/2 einen Sprung auf Max zu verhindern
+    // To prevent OS/2 to jump on Max
     if ( nValue >= GetMin() )
         MetricField::Down();
 }
