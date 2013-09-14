@@ -191,7 +191,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
 ))
 
 # Runtime dependency for unit-tests
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,chartcontroller)) :| \
-	$(call gb_AllLangResTarget_get_target,chartcontroller)
+$(eval $(call gb_Library_use_restarget,chartcontroller,chartcontroller))
 
 # vim: set noet sw=4 ts=4:

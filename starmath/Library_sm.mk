@@ -99,7 +99,6 @@ $(eval $(call gb_SdiTarget_set_include,starmath/sdi/smslots,\
 ))
 
 # Runtime dependency for unit-tests
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,sm)) :| \
-	$(call gb_AllLangResTarget_get_target,sm)
+$(eval $(call gb_Library_use_restarget,sm,sm))
 
 # vim: set noet sw=4 ts=4:
