@@ -20,8 +20,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
@@ -82,19 +80,30 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     public void onViewStateRestored(Bundle aSavedInstanceState) {
         super.onViewStateRestored(aSavedInstanceState);
 
-        if (aSavedInstanceState == null) {
+        if (!isSavedInstanceValid(aSavedInstanceState)) {
             return;
         }
 
-        loadLayout(aSavedInstanceState);
+        loadCurrentView(aSavedInstanceState);
         loadPin(aSavedInstanceState);
         loadErrorMessage(aSavedInstanceState);
     }
 
-    private void loadLayout(Bundle aSavedInstanceState) {
-        int aLayoutIndex = aSavedInstanceState.getInt(SavedStates.Keys.LAYOUT_INDEX);
+    private boolean isSavedInstanceValid(Bundle aSavedInstanceState) {
+        return aSavedInstanceState != null;
+    }
 
-        getViewAnimator().setDisplayedChild(aLayoutIndex);
+    private void loadCurrentView(Bundle aSavedInstanceState) {
+        int aCurrentViewId = aSavedInstanceState.getInt(SavedStates.Keys.CURRENT_VIEW_ID);
+
+        setCurrentView(aCurrentViewId);
+    }
+
+    private void setCurrentView(int aViewId) {
+        ViewAnimator aViewAnimator = getViewAnimator();
+        View aView = getView().findViewById(aViewId);
+
+        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aView));
     }
 
     private ViewAnimator getViewAnimator() {
@@ -142,10 +151,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void connectComputer() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         if (!isComputerConnectionRequired()) {
             return;
         }
@@ -153,16 +158,8 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         mCommunicationService.connectServer(getComputer());
     }
 
-    private boolean isServiceBound() {
-        return mCommunicationService != null;
-    }
-
     private boolean isComputerConnectionRequired() {
-        return getViewAnimator().getDisplayedChild() == getViewAnimator().indexOfChild(getProgressBar());
-    }
-
-    private ProgressBar getProgressBar() {
-        return (ProgressBar) getView().findViewById(R.id.progress_bar);
+        return getViewAnimator().getCurrentView().getId() == R.id.progress_bar;
     }
 
     private Server getComputer() {
@@ -238,18 +235,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     private void setUpPinValidationInstructions(String aPin) {
         getPinTextView().setText(aPin);
 
-        showPinValidationLayout();
-    }
-
-    private void showPinValidationLayout() {
-        ViewAnimator aViewAnimator = getViewAnimator();
-        LinearLayout aValidationLayout = getPinValidationLayout();
-
-        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aValidationLayout));
-    }
-
-    private LinearLayout getPinValidationLayout() {
-        return (LinearLayout) getView().findViewById(R.id.layout_pin_validation);
+        setCurrentView(R.id.layout_pin_validation);
     }
 
     private void setUpPresentation() {
@@ -265,7 +251,7 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
         TextView aSecondaryMessageTextView = getSecondaryErrorMessageTextView();
         aSecondaryMessageTextView.setText(buildSecondaryErrorMessage());
 
-        showErrorMessageLayout();
+        setCurrentView(R.id.layout_error_message);
     }
 
     private String buildSecondaryErrorMessage() {
@@ -279,17 +265,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
             default:
                 return "";
         }
-    }
-
-    private void showErrorMessageLayout() {
-        ViewAnimator aViewAnimator = getViewAnimator();
-        LinearLayout aMessageLayout = getErrorMessageLayout();
-
-        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aMessageLayout));
-    }
-
-    private LinearLayout getErrorMessageLayout() {
-        return (LinearLayout) getView().findViewById(R.id.layout_error_message);
     }
 
     private void refreshActionBarMenu() {
@@ -311,14 +286,18 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
             return false;
         }
 
-        return getViewAnimator().getCurrentView().getId() == R.id.layout_error_message;
+        return getCurrentViewId() == R.id.layout_error_message;
+    }
+
+    private int getCurrentViewId() {
+        return getViewAnimator().getCurrentView().getId();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem aMenuItem) {
         switch (aMenuItem.getItemId()) {
             case R.id.menu_reconnect:
-                showProgressBar();
+                setCurrentView(R.id.progress_bar);
                 connectComputer();
                 refreshActionBarMenu();
                 return true;
@@ -326,13 +305,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
             default:
                 return super.onOptionsItemSelected(aMenuItem);
         }
-    }
-
-    private void showProgressBar() {
-        ViewAnimator aViewAnimator = getViewAnimator();
-        ProgressBar aProgressBar = getProgressBar();
-
-        aViewAnimator.setDisplayedChild(aViewAnimator.indexOfChild(aProgressBar));
     }
 
     @Override
@@ -355,15 +327,15 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     public void onSaveInstanceState(Bundle aOutState) {
         super.onSaveInstanceState(aOutState);
 
-        saveLayout(aOutState);
+        saveCurrentView(aOutState);
         savePin(aOutState);
         saveErrorMessage(aOutState);
     }
 
-    private void saveLayout(Bundle aOutState) {
-        int aLayoutIndex = getViewAnimator().getDisplayedChild();
+    private void saveCurrentView(Bundle aOutState) {
+        int aCurrentViewId = getCurrentViewId();
 
-        aOutState.putInt(SavedStates.Keys.LAYOUT_INDEX, aLayoutIndex);
+        aOutState.putInt(SavedStates.Keys.CURRENT_VIEW_ID, aCurrentViewId);
     }
 
     private void savePin(Bundle aOutState) {
@@ -388,10 +360,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void disconnectComputer() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         if (!isDisconnectRequired()) {
             return;
         }
@@ -404,10 +372,6 @@ public class ComputerConnectionFragment extends SherlockFragment implements Serv
     }
 
     private void unbindService() {
-        if (!isServiceBound()) {
-            return;
-        }
-
         getActivity().unbindService(this);
     }
 }
