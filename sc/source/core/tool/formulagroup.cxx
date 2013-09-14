@@ -337,6 +337,7 @@ static void SAL_CALL thisModule() {}
 typedef FormulaGroupInterpreter* (*__createFormulaGroupOpenCLInterpreter)(void);
 typedef size_t (*__getOpenCLPlatformCount)(void);
 typedef void (*__fillOpenCLInfo)(OpenclPlatformInfo*, size_t);
+typedef bool (*__switchOpenClDevice)(const OUString*, bool);
 
 #endif
 
@@ -360,8 +361,6 @@ osl::Module* getOpenCLModule()
 /// load and/or configure the correct formula group interpreter
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 {
-    static bool bOpenCLEnabled = false;
-
 #if USE_DUMMY_INTERPRETER
     if (getenv("FORMULA_GROUP_DUMMY"))
     {
@@ -370,42 +369,9 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     }
 #endif
 
-    if ( msInstance &&
-         bOpenCLEnabled != ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
-    {
-        bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
-        delete msInstance;
-        msInstance = NULL;
-    }
-
     if ( !msInstance )
     {
-#if HAVE_FEATURE_OPENCL
-
-        bool bSoftware = false;
-        OUString aVal;
-        if (rtl::Bootstrap::get("SC_SOFTWARE", aVal) && aVal == "1")
-            bSoftware = true;
-
-        if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled && !bSoftware)
-        {
-#ifdef DISABLE_DYNLOADING
-            msInstance = createFormulaGroupOpenCLInterpreter();
-#else
-            // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
-            osl::Module* pModule = getOpenCLModule();
-            if (pModule)
-            {
-                oslGenericFunction fn = pModule->getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
-                if (fn)
-                    msInstance = reinterpret_cast<__createFormulaGroupOpenCLInterpreter>(fn)();
-            }
-
-            if (!msInstance)
-                msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
-#endif
-        }
-#endif
+        switchOpenCLDevice(OUString(), ScInterpreter::GetGlobalConfig().mbOpenCLEnabled);
         if ( !msInstance ) // software fallback
         {
             fprintf(stderr, "Create S/W interp\n");
@@ -437,6 +403,58 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
     std::vector<OpenclPlatformInfo> aPlatforms(nPlatforms);
     reinterpret_cast<__fillOpenCLInfo>(fn)(&aPlatforms[0], aPlatforms.size());
     rPlatforms.swap(aPlatforms);
+}
+
+void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect)
+{
+    bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
+    if(!bOpenCLEnabled || rDeviceId == "Software")
+    {
+        if(msInstance)
+        {
+            // if we already have a software interpreter don't delete it
+            if(dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(msInstance))
+                return;
+
+            delete msInstance;
+        }
+
+        msInstance = new sc::FormulaGroupInterpreterSoftware();
+        return;
+    }
+
+    osl::Module* pModule = getOpenCLModule();
+    if (!pModule)
+        return;
+
+    oslGenericFunction fn = pModule->getFunctionSymbol("switchOpenclDevice");
+    if (!fn)
+        return;
+
+    bool bSuccess = reinterpret_cast<__switchOpenClDevice>(fn)(&rDeviceId, bAutoSelect);
+    if(!bSuccess)
+        return;
+
+    delete msInstance;
+    msInstance = NULL;
+
+#if HAVE_FEATURE_OPENCL
+
+    if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
+    {
+#ifdef DISABLE_DYNLOADING
+        msInstance = createFormulaGroupOpenCLInterpreter();
+#else
+        // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
+        fn = pModule->getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
+        if (fn)
+            msInstance = reinterpret_cast<__createFormulaGroupOpenCLInterpreter>(fn)();
+
+        if (!msInstance)
+            msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
+#endif
+    }
+#endif
 }
 
 void FormulaGroupInterpreter::generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode)

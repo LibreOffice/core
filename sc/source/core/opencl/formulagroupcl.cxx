@@ -132,11 +132,9 @@ public:
         mnOperatorCount = 0;
         mnPositonLen = 0;
         mnDoublePtrCount = 0;
-        OclCalc::initEnv();
     }
     virtual ~FormulaGroupInterpreterOpenCL()
     {
-        OclCalc::releaseOpenclRunEnv();
     }
 
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat );
@@ -959,11 +957,9 @@ public:
         FormulaGroupInterpreterSoftware()
     {
         fprintf(stderr,"\n\n ***** Groundwater Backend *****\n\n\n");
-        OclCalc::initEnv();
     }
     virtual ~FormulaGroupInterpreterGroundwater()
     {
-        OclCalc::releaseOpenclRunEnv();
     }
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& /* rMat */) { return ScMatrixRef(); }
@@ -1091,6 +1087,11 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(sc::OpenclPlatformInfo* pInfos
     size_t n = std::min(rPlatforms.size(), nInfoSize);
     for (size_t i = 0; i < n; ++i)
         pInfos[i] = rPlatforms[i];
+}
+
+SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(const OUString* pDeviceId, bool bAutoSelect)
+{
+    sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect);
 }
 
 }

@@ -2769,9 +2769,21 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo()
     return aPlatforms;
 }
 
-void switchOpenclDevice(void* pDevice, bool bAutoSelect)
+namespace {
+
+cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vector<OpenclPlatformInfo>& rPlatforms)
 {
-    cl_device_id pDeviceId = reinterpret_cast<cl_device_id>(pDevice);
+    return NULL;
+}
+
+}
+
+bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
+{
+    cl_device_id pDeviceId = NULL;
+    if(pDevice)
+        pDeviceId = findDeviceIdByDeviceString(*pDevice, fillOpenCLInfo());
+
     if(!pDeviceId || bAutoSelect)
     {
         size_t nComputeUnits = 0;
@@ -2797,7 +2809,7 @@ void switchOpenclDevice(void* pDevice, bool bAutoSelect)
     {
         // we don't need to change anything
         // still the same device
-        return;
+        return true;
     }
 
     cl_platform_id platformId;
@@ -2816,7 +2828,7 @@ void switchOpenclDevice(void* pDevice, bool bAutoSelect)
             clReleaseContext(context);
 
         SAL_WARN("sc", "failed to set/switch opencl device");
-        return;
+        return false;
     }
 
     cl_command_queue command_queue = clCreateCommandQueue(
@@ -2828,6 +2840,8 @@ void switchOpenclDevice(void* pDevice, bool bAutoSelect)
             clReleaseCommandQueue(command_queue);
 
         clReleaseContext(context);
+        SAL_WARN("sc", "failed to set/switch opencl device");
+        return false;
     }
 
     OpenclDevice::releaseOpenclEnv(&OpenclDevice::gpuEnv);
@@ -2837,7 +2851,7 @@ void switchOpenclDevice(void* pDevice, bool bAutoSelect)
     env.mpOclDevsID = pDeviceId;
     env.mpOclCmdQueue = command_queue;
     OpenclDevice::initOpenclAttr(&env);
-    OpenclDevice::initOpenclRunEnv(&OpenclDevice::gpuEnv);
+    return !OpenclDevice::initOpenclRunEnv(0);
 }
 
 }}

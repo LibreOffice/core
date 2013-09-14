@@ -288,8 +288,10 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
  *
  * @param pDeviceId the id of the opencl device of type cl_device_id, NULL means use software calculation
  * @param bAutoSelect use the algorithm to select the best OpenCL device
+ *
+ * @return returns true if there is a valid opencl device that has been set up
  */
-void switchOpenclDevice(void* pDeviceId, bool bAutoSelect);
+bool switchOpenclDevice(const OUString* pDeviceId, bool bAutoSelect);
 
 }}
 
