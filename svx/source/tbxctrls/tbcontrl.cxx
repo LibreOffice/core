@@ -2545,7 +2545,7 @@ void SvxColorExtToolBoxControl::StateChanged(
 
 {
     const SvxColorItem* pItem = 0;
-    if ( bChoiceFromPalette )
+    if ( bChoiceFromPalette && nSID == GetSlotId() )
     {
         bChoiceFromPalette = sal_False;
         switch( nSID )
