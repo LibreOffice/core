@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="SelectBlockDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -68,7 +69,221 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkGrid" id="grid1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
+            <child>
+              <object class="GtkButtonBox" id="buttonbox2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="layout_style">start</property>
+                <child>
+                  <object class="GtkButton" id="new">
+                    <property name="label" translatable="yes">_New...</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="edit">
+                    <property name="label" translatable="yes">_Edit...</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="delete">
+                    <property name="label" translatable="yes">_Delete</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Select your preferred address block</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">preview:border</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frame1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
+                    <property name="left_padding">12</property>
+                    <child>
+                      <object class="GtkGrid" id="grid2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
+                        <child>
+                          <object class="GtkRadioButton" id="never">
+                            <property name="label" translatable="yes">N_ever include the country/region</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">always</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="always">
+                            <property name="label" translatable="yes">_Always include the country/region</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">dependent</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="dependent">
+                            <property name="label" translatable="yes">Only _include the country/region if it is not:</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">never</property>
+                            <accessibility>
+                              <relation type="label-for" target="country"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="country">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="margin_left">12</property>
+                            <property name="hexpand">True</property>
+                            <property name="invisible_char">●</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="dependent"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Address block settings</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="swlo-SwAddressPreview" id="preview:border">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
     </child>
@@ -77,12 +292,5 @@
       <action-widget response="0">cancel</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">both</property>
-    <widgets>
-      <widget name="addressdest:border"/>
-      <widget name="addrpreview:border"/>
-    </widgets>
   </object>
 </interface>

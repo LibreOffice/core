@@ -98,23 +98,15 @@ public:
 
 class SwSelectAddressBlockDialog : public SfxModalDialog
 {
-    FixedText           m_aSelectFT;
-    SwAddressPreview    m_aPreview;
-    PushButton          m_aNewPB;
-    PushButton          m_aCustomizePB;
-    PushButton          m_aDeletePB;
+    SwAddressPreview*   m_pPreview;
+    PushButton*         m_pNewPB;
+    PushButton*         m_pCustomizePB;
+    PushButton*         m_pDeletePB;
 
-    FixedInfo           m_aSettingsFI;
-    RadioButton         m_aNeverRB;
-    RadioButton         m_aAlwaysRB;
-    RadioButton         m_aDependentRB;
-    Edit                m_aCountryED;
-
-    FixedLine           m_aSeparatorFL;
-
-    OKButton            m_aOK;
-    CancelButton        m_aCancel;
-    HelpButton          m_aHelp;
+    RadioButton*        m_pNeverRB;
+    RadioButton*        m_pAlwaysRB;
+    RadioButton*        m_pDependentRB;
+    Edit*               m_pCountryED;
 
     com::sun::star::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
@@ -134,7 +126,7 @@ public:
     const com::sun::star::uno::Sequence< OUString>&    GetAddressBlocks();
 
     void                SetSettings(sal_Bool bIsCountry, OUString sCountry);
-    sal_Bool            IsIncludeCountry() const {return !m_aNeverRB.IsChecked();}
+    sal_Bool            IsIncludeCountry() const {return !m_pNeverRB->IsChecked();}
     OUString     GetCountry() const;
 };
 

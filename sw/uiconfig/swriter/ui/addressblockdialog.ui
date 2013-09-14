@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires LibreOffice 1.0 -->
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="AddressBlockDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>

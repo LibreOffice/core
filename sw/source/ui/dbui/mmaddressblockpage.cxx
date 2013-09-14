@@ -338,44 +338,35 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
 }
 
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
-                Window* pParent, SwMailMergeConfigItem& rConfig) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTADDRESSBLOCK)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aSelectFT( this, SW_RES(         FT_SELECT)),
-    m_aPreview( this, SW_RES(          WIN_PREVIEW)),
-    m_aNewPB( this, SW_RES(            PB_NEW)),
-    m_aCustomizePB( this, SW_RES(      PB_CUSTOMIZE)),
-    m_aDeletePB( this, SW_RES(         PB_DELETE)),
-    m_aSettingsFI( this, SW_RES(       FI_SETTINGS)),
-    m_aNeverRB( this, SW_RES(          RB_NEVER)),
-    m_aAlwaysRB( this, SW_RES(         RB_ALWAYS)),
-    m_aDependentRB( this, SW_RES(      RB_DEPENDENT)),
-    m_aCountryED( this, SW_RES(        ED_COUNTRY)),
-    m_aSeparatorFL( this, SW_RES(      FL_SEPARATOR)),
-    m_aOK( this, SW_RES(               PB_OK)),
-    m_aCancel( this, SW_RES(           PB_CANCEL)),
-    m_aHelp( this, SW_RES(             PB_HELP)),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-    m_rConfig(rConfig)
+                Window* pParent, SwMailMergeConfigItem& rConfig)
+    : SfxModalDialog(pParent, "SelectBlockDialog",
+        "modules/swriter/ui/selectblockdialog.ui")
+    , m_rConfig(rConfig)
 {
-    FreeResource();
+    get(m_pPreview, "preview");
+    Size aSize(m_pPreview->LogicToPixel(Size(192, 100), MapMode(MAP_APPFONT)));
+    m_pPreview->set_width_request(aSize.Width());
+    m_pPreview->set_height_request(aSize.Height());
+    get(m_pNewPB, "new");
+    get(m_pCustomizePB, "edit");
+    get(m_pDeletePB, "delete");
+    get(m_pNeverRB, "never");
+    get(m_pAlwaysRB, "always");
+    get(m_pDependentRB, "dependent");
+    get(m_pCountryED, "country");
 
     Link aCustomizeHdl = LINK(this, SwSelectAddressBlockDialog, NewCustomizeHdl_Impl);
-    m_aNewPB.SetClickHdl(aCustomizeHdl);
-    m_aCustomizePB.SetClickHdl(aCustomizeHdl);
+    m_pNewPB->SetClickHdl(aCustomizeHdl);
+    m_pCustomizePB->SetClickHdl(aCustomizeHdl);
 
-    m_aDeletePB.SetClickHdl(LINK(this, SwSelectAddressBlockDialog, DeleteHdl_Impl));
+    m_pDeletePB->SetClickHdl(LINK(this, SwSelectAddressBlockDialog, DeleteHdl_Impl));
 
     Link aLk = LINK(this, SwSelectAddressBlockDialog, IncludeHdl_Impl);
-    m_aNeverRB.SetClickHdl(aLk);
-    m_aAlwaysRB.SetClickHdl(aLk);
-    m_aDependentRB.SetClickHdl(aLk);
-    m_aPreview.SetLayout(2, 2);
-    m_aPreview.EnableScrollBar();
+    m_pNeverRB->SetClickHdl(aLk);
+    m_pAlwaysRB->SetClickHdl(aLk);
+    m_pDependentRB->SetClickHdl(aLk);
+    m_pPreview->SetLayout(2, 2);
+    m_pPreview->EnableScrollBar();
 }
 
 SwSelectAddressBlockDialog::~SwSelectAddressBlockDialog()
@@ -387,15 +378,15 @@ void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< OUString>
 {
     m_aAddressBlocks = rBlocks;
     for(sal_Int32 nAddress = 0; nAddress < m_aAddressBlocks.getLength(); ++nAddress)
-        m_aPreview.AddAddress(m_aAddressBlocks[nAddress]);
-    m_aPreview.SelectAddress(nSelectedAddress);
+        m_pPreview->AddAddress(m_aAddressBlocks[nAddress]);
+    m_pPreview->SelectAddress(nSelectedAddress);
 }
 
 // return the address blocks and put the selected one to the first position
 const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks()
 {
     //put the selected block to the first position
-    sal_uInt16 nSelect = m_aPreview.GetSelectedAddress();
+    sal_uInt16 nSelect = m_pPreview->GetSelectedAddress();
     if(nSelect)
     {
         uno::Sequence< OUString >aTemp = m_aAddressBlocks;
@@ -418,21 +409,22 @@ const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks
 void SwSelectAddressBlockDialog::SetSettings(
         sal_Bool bIsCountry, OUString rCountry)
 {
+    RadioButton *pActive = m_pNeverRB;
     if(bIsCountry)
     {
-        !rCountry.isEmpty() ? m_aDependentRB.Check() : m_aAlwaysRB.Check();
-        m_aCountryED.SetText(rCountry);
+        pActive = !rCountry.isEmpty() ? m_pDependentRB : m_pAlwaysRB;
+        m_pCountryED->SetText(rCountry);
     }
-    else
-        m_aNeverRB.Check();
-    m_aDeletePB.Enable(m_aAddressBlocks.getLength() > 1);
+    pActive->Check();
+    IncludeHdl_Impl(pActive);
+    m_pDeletePB->Enable(m_aAddressBlocks.getLength() > 1);
 }
 
 OUString     SwSelectAddressBlockDialog::GetCountry() const
 {
     OUString sRet;
-    if(m_aDependentRB.IsChecked())
-        sRet = m_aCountryED.GetText();
+    if(m_pDependentRB->IsChecked())
+        sRet = m_pCountryED->GetText();
     return sRet;
 }
 
@@ -440,7 +432,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, PushButton*, pButton)
 {
     if(m_aAddressBlocks.getLength())
     {
-        sal_uInt16 nSelected = m_aPreview.GetSelectedAddress();
+        sal_uInt16 nSelected = m_pPreview->GetSelectedAddress();
         OUString* pAddressBlocks = m_aAddressBlocks.getArray();
         sal_Int32 nSource = 0;
         for(sal_Int32 nTarget = 0; nTarget < m_aAddressBlocks.getLength() - 1; nTarget++)
@@ -452,14 +444,14 @@ IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, PushButton*, pButton)
         m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() - 1);
         if(m_aAddressBlocks.getLength() <= 1)
             pButton->Enable(sal_False);
-        m_aPreview.RemoveSelectedAddress();
+        m_pPreview->RemoveSelectedAddress();
     }
     return 0;
 }
 
 IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton)
 {
-    bool bCustomize = pButton == &m_aCustomizePB;
+    bool bCustomize = pButton == m_pCustomizePB;
     SwCustomizeAddressBlockDialog::DialogType nType = bCustomize ?
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT :
         SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW;
@@ -467,26 +459,26 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
         new SwCustomizeAddressBlockDialog(pButton,m_rConfig,nType);
     if(bCustomize)
     {
-        pDlg->SetAddress(m_aAddressBlocks[m_aPreview.GetSelectedAddress()]);
+        pDlg->SetAddress(m_aAddressBlocks[m_pPreview->GetSelectedAddress()]);
     }
     if(RET_OK == pDlg->Execute())
     {
         if(bCustomize)
         {
             OUString sNew = pDlg->GetAddress();
-            m_aPreview.ReplaceSelectedAddress(sNew);
-            m_aAddressBlocks[m_aPreview.GetSelectedAddress()] = sNew;
+            m_pPreview->ReplaceSelectedAddress(sNew);
+            m_aAddressBlocks[m_pPreview->GetSelectedAddress()] = sNew;
         }
         else
         {
             OUString sNew = pDlg->GetAddress();
-            m_aPreview.AddAddress(sNew);
+            m_pPreview->AddAddress(sNew);
             m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() + 1);
             sal_uInt16 nSelect = (sal_uInt16)m_aAddressBlocks.getLength() - 1;
             m_aAddressBlocks[nSelect] = sNew;
-            m_aPreview.SelectAddress(nSelect);
+            m_pPreview->SelectAddress(nSelect);
         }
-        m_aDeletePB.Enable( m_aAddressBlocks.getLength() > 1);
+        m_pDeletePB->Enable( m_aAddressBlocks.getLength() > 1);
     }
     delete pDlg;
     return 0;
@@ -494,7 +486,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
 
 IMPL_LINK(SwSelectAddressBlockDialog, IncludeHdl_Impl, RadioButton*, pButton)
 {
-    m_aCountryED.Enable(&m_aDependentRB == pButton);
+    m_pCountryED->Enable(m_pDependentRB == pButton);
     return 0;
 }
 

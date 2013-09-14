@@ -39,15 +39,6 @@
 #define FI_THIRD                18
 #define FI_MATCH_FIELDS         19
 
-#define FT_SELECT               20
-#define PB_NEW                  21
-#define PB_DELETE               22
-#define PB_CUSTOMIZE            23
-
-#define RB_NEVER                25
-#define RB_ALWAYS               26
-#define RB_DEPENDENT            27
-#define ED_COUNTRY              28
 #define FL_SEPARATOR            29
 #define PB_OK                   30
 #define PB_CANCEL               31

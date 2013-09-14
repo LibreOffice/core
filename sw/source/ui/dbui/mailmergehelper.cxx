@@ -222,7 +222,7 @@ SwAddressPreview::SwAddressPreview(Window* pParent, WinBits nStyle)
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwAddressPreview(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    WinBits nWinStyle = WB_NOTABSTOP;
+    WinBits nWinStyle = WB_DIALOGCONTROL;
     OString sBorder = VclBuilder::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
