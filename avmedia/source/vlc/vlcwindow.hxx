@@ -23,13 +23,17 @@
 
 namespace avmedia {
 namespace vlc {
+class VLCPlayer;
 
 class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayerWindow,
                                                    ::com::sun::star::lang::XServiceInfo >
 {
+    VLCPlayer& mPlayer;
+    const intptr_t mPrevWinID;
     ::com::sun::star::media::ZoomLevel meZoomLevel;
 public:
-    VLCWindow();
+    VLCWindow( VLCPlayer& player, const intptr_t prevWinID );
+    virtual ~VLCWindow();
 
     void SAL_CALL update() throw (css::uno::RuntimeException);
     ::sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) throw (css::uno::RuntimeException);

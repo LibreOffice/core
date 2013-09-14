@@ -32,6 +32,7 @@ VLCPlayer::VLCPlayer( const rtl::OUString& url,
     , mEventManager( mPlayer, mEventHandler )
     , mUrl( url )
     , mPlaybackLoop( false )
+    , mPrevWinID( 0 )
 {
     mPlayer.setMouseHandling( false );
 }
@@ -169,17 +170,25 @@ namespace
     }
 }
 
+void SAL_CALL VLCPlayer::setWindowID( const intptr_t windowID )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    mPrevWinID = windowID;
+    mPlayer.stop();
+    mPlayer.setWindow( windowID );
+}
+
 uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
      throw ( ::com::sun::star::uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    VLCWindow * const window = new VLCWindow;
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     const intptr_t winID = GetWindowID( aArguments );
+    VLCWindow * const window = new VLCWindow( *this, mPrevWinID );
 
     if ( winID != -1 )
     {
-        mPlayer.setWindow( winID );
+        setWindowID( winID );
     }
 
     return uno::Reference< css::media::XPlayerWindow >( window );

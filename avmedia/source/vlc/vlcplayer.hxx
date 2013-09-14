@@ -51,10 +51,13 @@ class VLCPlayer : public ::cppu::BaseMutex,
     const rtl::OUString mUrl;
     bool mPlaybackLoop;
     ::com::sun::star::uno::Reference< css::media::XFrameGrabber > mrFrameGrabber;
+    intptr_t mPrevWinID;
 public:
     VLCPlayer( const rtl::OUString& url,
                wrapper::Instance& instance,
                wrapper::EventHandler& eh );
+
+    void SAL_CALL setWindowID( const intptr_t windowID );
 
     void SAL_CALL start() throw ( ::com::sun::star::uno::RuntimeException );
     void SAL_CALL stop() throw ( ::com::sun::star::uno::RuntimeException );

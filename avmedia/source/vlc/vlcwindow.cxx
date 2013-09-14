@@ -1,5 +1,6 @@
 #include <iostream>
 #include "vlcwindow.hxx"
+#include "vlcplayer.hxx"
 
 using namespace ::com::sun::star;
 
@@ -12,8 +13,16 @@ namespace
     const ::rtl::OUString AVMEDIA_VLC_WINDOW_SERVICENAME = "com.sun.star.media.Window_VLC";
 }
 
-VLCWindow::VLCWindow()
+VLCWindow::VLCWindow( VLCPlayer& player, const intptr_t prevWinID )
+    : mPlayer( player )
+    , mPrevWinID( prevWinID )
+    , meZoomLevel( media::ZoomLevel_ORIGINAL )
 {
+}
+
+VLCWindow::~VLCWindow()
+{
+    mPlayer.setWindowID( mPrevWinID );
 }
 
 void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException)
