@@ -17,25 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "doc.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
-#include "dview.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
-#include "flyfrm.hxx"
 #include "ftnfrm.hxx"
 #include "frmtool.hxx"
-#include "frmfmt.hxx"
 #include "hints.hxx"
-#include "pam.hxx"
 #include "sectfrm.hxx"
 
 
 #include <svx/svdpage.hxx>
 #include <editeng/ulspitem.hxx>
-#include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include "ndole.hxx"
@@ -46,7 +40,6 @@
 #include <environmentofanchoredobject.hxx>
 // #i28701#
 #include <sortedobjs.hxx>
-#include <viewsh.hxx>
 #include <viewimp.hxx>
 
 
