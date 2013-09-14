@@ -167,6 +167,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void loadComputers() {
+        if (!isVisible()) {
+            return;
+        }
+
         if (getComputers().isEmpty()) {
             hideComputersList();
             setUpProgressMessage();
@@ -225,6 +229,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     @Override
     public void run() {
+        if (!isVisible()) {
+            return;
+        }
+
         if (!isShowingProgressMessageRequired()) {
             return;
         }
