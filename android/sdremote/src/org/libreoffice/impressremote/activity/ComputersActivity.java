@@ -22,7 +22,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.adapter.ComputersPagerAdapter;
 import org.libreoffice.impressremote.fragment.ComputersFragment;
 import org.libreoffice.impressremote.util.BluetoothOperator;
-import org.libreoffice.impressremote.util.FragmentOperator;
+import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.util.Preferences;
@@ -153,7 +153,7 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void setUpComputersList() {
         Fragment aComputersFragment = ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
 
-        FragmentOperator.addFragment(this, aComputersFragment);
+        Fragments.Operator.add(this, aComputersFragment);
     }
 
     @Override

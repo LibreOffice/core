@@ -34,7 +34,7 @@ import org.libreoffice.impressremote.fragment.SlidesGridFragment;
 import org.libreoffice.impressremote.fragment.SlidesPagerFragment;
 import org.libreoffice.impressremote.fragment.TimerEditingDialog;
 import org.libreoffice.impressremote.fragment.TimerSettingDialog;
-import org.libreoffice.impressremote.util.FragmentOperator;
+import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.util.Preferences;
 import org.libreoffice.impressremote.util.SavedStates;
@@ -75,7 +75,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void setUpFragment() {
-        FragmentOperator.replaceFragmentAnimated(this, buildFragment());
+        Fragments.Operator.replaceAnimated(this, buildFragment());
     }
 
     private Fragment buildFragment() {
@@ -123,7 +123,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
             return;
         }
 
-        mCommunicationService.getTransmitter().startPresentation();
+        mCommunicationService.getCommandsTransmitter().startPresentation();
     }
 
     @Override
@@ -268,12 +268,12 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         switch (aKeyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (!isLastSlideDisplayed()) {
-                    mCommunicationService.getTransmitter().performNextTransition();
+                    mCommunicationService.getCommandsTransmitter().performNextTransition();
                 }
                 return true;
 
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                mCommunicationService.getTransmitter().performPreviousTransition();
+                mCommunicationService.getCommandsTransmitter().performPreviousTransition();
                 return true;
 
             default:
@@ -446,11 +446,11 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void resumeSlideShow() {
-        mCommunicationService.getTransmitter().resumePresentation();
+        mCommunicationService.getCommandsTransmitter().resumePresentation();
     }
 
     private void pauseSlideShow() {
-        mCommunicationService.getTransmitter().setUpBlankScreen();
+        mCommunicationService.getCommandsTransmitter().setUpBlankScreen();
     }
 
     private void setUpSlideShowPausedInformation() {
@@ -465,7 +465,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
     }
 
     private void stopSlideShow() {
-        mCommunicationService.getTransmitter().stopPresentation();
+        mCommunicationService.getCommandsTransmitter().stopPresentation();
 
         finish();
     }

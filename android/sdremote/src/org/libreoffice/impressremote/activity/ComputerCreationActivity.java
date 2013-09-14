@@ -89,8 +89,7 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
         String aName = getText(getNameEdit());
 
         if (!isIpAddressValid(aIpAddress)) {
-            getIpAddressEdit().setError(getText(R.string.message_ip_address_validation));
-            getIpAddressEdit().requestFocus();
+            setUpIpAddressErrorMessage();
             return;
         }
 
@@ -115,6 +114,13 @@ public class ComputerCreationActivity extends SherlockFragmentActivity implement
 
     private boolean isIpAddressValid(String aIpAddress) {
         return Patterns.IP_ADDRESS.matcher(aIpAddress).matches();
+    }
+
+    private void setUpIpAddressErrorMessage() {
+        EditText aIpAddressEdit = getIpAddressEdit();
+
+        aIpAddressEdit.setError(getString(R.string.message_ip_address_validation));
+        aIpAddressEdit.requestFocus();
     }
 
     private void finish(String aIpAddress, String aName) {

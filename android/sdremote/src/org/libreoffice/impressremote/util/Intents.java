@@ -52,15 +52,13 @@ public final class Intents {
         private Extras() {
         }
 
+        public static final String MINUTES = "MINUTES";
         public static final String PIN = "PIN";
+        public static final String SLIDE_INDEX = "SLIDE_INDEX";
 
         public static final String SERVER = "SERVER";
         public static final String SERVER_ADDRESS = "SERVER_ADDRESS";
         public static final String SERVER_NAME = "SERVER_NAME";
-
-        public static final String SLIDE_INDEX = "SLIDE_INDEX";
-
-        public static final String MINUTES = "MINUTES";
     }
 
     public static final class RequestCodes {

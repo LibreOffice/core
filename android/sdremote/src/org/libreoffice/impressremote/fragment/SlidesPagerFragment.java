@@ -111,7 +111,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private void showNextTransition() {
-        mCommunicationService.getTransmitter().performNextTransition();
+        mCommunicationService.getCommandsTransmitter().performNextTransition();
     }
 
     private int getSlidesMargin() {
@@ -133,7 +133,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     @Override
     public void onPageSelected(int aPosition) {
         if (mCommunicationService.getSlideShow().getCurrentSlideIndex() != aPosition) {
-            mCommunicationService.getTransmitter().setCurrentSlide(aPosition);
+            mCommunicationService.getCommandsTransmitter().setCurrentSlide(aPosition);
         }
 
         setUpSlideNotes(aPosition);

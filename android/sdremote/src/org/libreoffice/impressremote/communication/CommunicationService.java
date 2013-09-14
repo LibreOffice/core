@@ -111,6 +111,18 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         }
     }
 
+    public void disconnectServer() {
+        if (!isServerConnectionAvailable()) {
+            return;
+        }
+
+        mServerConnection.close();
+    }
+
+    private boolean isServerConnectionAvailable() {
+        return mServerConnection != null;
+    }
+
     private void connectServer() {
         mServerConnection = buildServerConnection();
         mServerConnection.open();
@@ -148,19 +160,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
         LocalBroadcastManager.getInstance(this).sendBroadcast(aIntent);
     }
 
-    public void disconnectServer() {
-        if (!isServerConnectionAvailable()) {
-            return;
-        }
-
-        mServerConnection.close();
-    }
-
-    private boolean isServerConnectionAvailable() {
-        return mServerConnection != null;
-    }
-
-    public CommandsTransmitter getTransmitter() {
+    public CommandsTransmitter getCommandsTransmitter() {
         return mCommandsTransmitter;
     }
 

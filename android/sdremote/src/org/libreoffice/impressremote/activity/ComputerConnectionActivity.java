@@ -14,7 +14,7 @@ import android.support.v4.app.Fragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import org.libreoffice.impressremote.fragment.ComputerConnectionFragment;
-import org.libreoffice.impressremote.util.FragmentOperator;
+import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.communication.Server;
 
@@ -33,20 +33,20 @@ public class ComputerConnectionActivity extends SherlockFragmentActivity {
     }
 
     private void setUpTitle() {
-        String aComputerName = extractReceivedComputer().getName();
+        String aComputerName = getComputer().getName();
 
         getSupportActionBar().setSubtitle(aComputerName);
     }
 
-    private Server extractReceivedComputer() {
+    private Server getComputer() {
         return getIntent().getParcelableExtra(Intents.Extras.SERVER);
     }
 
     private void setUpFragment() {
-        Server aComputer = extractReceivedComputer();
+        Server aComputer = getComputer();
         Fragment aFragment = ComputerConnectionFragment.newInstance(aComputer);
 
-        FragmentOperator.addFragment(this, aFragment);
+        Fragments.Operator.add(this, aFragment);
     }
 
     @Override

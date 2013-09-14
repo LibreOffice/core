@@ -45,16 +45,20 @@ public final class Preferences {
 
     private final SharedPreferences mPreferences;
 
-    public static Preferences getAuthorizedServersInstance(Context aContext) {
-        return new Preferences(aContext, Locations.AUTHORIZED_SERVERS);
+    private Preferences(Context context) {
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     private Preferences(Context aContext, String aLocation) {
-        mPreferences = getPreferences(aContext, aLocation);
+        mPreferences = aContext.getSharedPreferences(aLocation, Context.MODE_PRIVATE);
     }
 
-    private SharedPreferences getPreferences(Context aContext, String aLocation) {
-        return aContext.getSharedPreferences(aLocation, Context.MODE_PRIVATE);
+    public static Preferences getSettingsInstance(Context context) {
+        return new Preferences(context);
+    }
+
+    public static Preferences getAuthorizedServersInstance(Context aContext) {
+        return new Preferences(aContext, Locations.AUTHORIZED_SERVERS);
     }
 
     public static Preferences getSavedServersInstance(Context aContext) {
@@ -63,14 +67,6 @@ public final class Preferences {
 
     public static Preferences getApplicationStatesInstance(Context aContext) {
         return new Preferences(aContext, Locations.APPLICATION_STATES);
-    }
-
-    public static Preferences getSettingsInstance(Context context) {
-        return new Preferences(context);
-    }
-
-    private Preferences(Context context) {
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public Map<String, ?> getAll() {

@@ -102,8 +102,8 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
             return;
         }
 
-        Handler aHandler = new Handler();
-        aHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(SEARCH_DELAY_IN_SECONDS));
+        Handler aDiscoveryHandler = new Handler();
+        aDiscoveryHandler.postDelayed(this, TimeUnit.SECONDS.toMillis(SEARCH_DELAY_IN_SECONDS));
     }
 
     @Override

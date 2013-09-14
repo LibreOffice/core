@@ -32,6 +32,8 @@ public class SettingsActivity extends SherlockPreferenceActivity {
         // This action is deprecated
         // but we still need to target pre-Honeycomb devices.
 
+        // TODO: try to use a fragment depending on platform version
+
         addPreferencesFromResource(R.xml.preferences);
     }
 

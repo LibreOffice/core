@@ -86,7 +86,7 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
 
     @Override
     public void onItemClick(AdapterView<?> aAdapterView, View aView, int aPosition, long aId) {
-        mCommunicationService.getTransmitter().setCurrentSlide(aPosition);
+        mCommunicationService.getCommandsTransmitter().setCurrentSlide(aPosition);
     }
 
     @Override
