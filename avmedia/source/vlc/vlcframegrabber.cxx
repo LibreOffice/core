@@ -56,7 +56,7 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::EventHandler& eh, const rtl::OUString& ur
 
         if ( !mPlayer.play() )
         {
-            std::cerr << "Couldn't play when trying to grab frame" << std::endl;
+            SAL_WARN("avmedia", "Couldn't play when trying to grab frame");
             return ::uno::Reference< css::graphic::XGraphic >();
         }
 
@@ -68,7 +68,7 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::EventHandler& eh, const rtl::OUString& ur
 
         if ( !mPlayer.hasVout() )
         {
-            std::cerr << "Couldn't grab frame" << std::endl;
+            SAL_WARN("avmedia", "Couldn't grab frame");
             manager.onPaused();
             return ::uno::Reference< css::graphic::XGraphic >();
         }
