@@ -392,6 +392,9 @@
     <glade-widget-class title="DD ListBox" name="swuilo-DDListBox"
                         generic-name="DD ListBox" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Custom Animation ListBox" name="sdlo-CustomAnimationList"
+                        generic-name="Custom Animation ListBox" parent="svtlo-SvTreeListBox"
+                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tab List" name="svtlo-SvTabListBox"
                         generic-name="Tab List" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
