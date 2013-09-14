@@ -196,6 +196,7 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     @Override
     public void onSlideShowFinish() {
+        mTimer.stop();
         mSlideShow = new SlideShow(mTimer);
 
         Intent aIntent = Intents.buildSlideShowStoppedIntent();

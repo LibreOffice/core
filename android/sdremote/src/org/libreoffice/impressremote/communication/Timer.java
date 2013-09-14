@@ -66,16 +66,22 @@ public class Timer implements Runnable {
         mPassedMinutes++;
     }
 
+    public void stop() {
+        pause();
+        reset();
+    }
+
     public void pause() {
-        stop();
+        mTimerHandler.removeCallbacks(this);
+    }
+
+    public void reset() {
+        mTotalMinutes = 0;
+        mPassedMinutes = 0;
     }
 
     public void resume() {
         start();
-    }
-
-    public void stop() {
-        mTimerHandler.removeCallbacks(this);
     }
 
     public boolean isTimeUp() {

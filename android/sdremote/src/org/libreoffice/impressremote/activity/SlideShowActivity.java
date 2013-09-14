@@ -115,6 +115,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         mCommunicationService = aServiceBinder.getService();
 
         startSlideShow();
+        resumeTimer();
     }
 
     private void startSlideShow() {
@@ -126,9 +127,19 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         mCommunicationService.getCommandsTransmitter().startPresentation();
     }
 
+    private void resumeTimer() {
+        if (!isServiceBound()) {
+            return;
+        }
+
+        mCommunicationService.getSlideShow().getTimer().resume();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+
+        resumeTimer();
 
         registerIntentsReceiver();
     }
@@ -242,12 +253,12 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         aTimer.start();
     }
 
-    private void resumeTimer() {
-        mCommunicationService.getSlideShow().getTimer().resume();
-    }
-
     private void changeTimer(int aMinutesLength) {
         Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+
+        if (aTimer.isTimeUp()) {
+            aTimer.reset();
+        }
 
         aTimer.setMinutesLength(aMinutesLength);
     }
@@ -429,7 +440,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         DialogFragment aTimerDialog = buildTimerEditingDialog(aTimer);
         aTimerDialog.show(getSupportFragmentManager(), TimerEditingDialog.TAG);
 
-        aTimer.pause();
+        pauseTimer();
     }
 
     private DialogFragment buildTimerEditingDialog(Timer aTimer) {
@@ -505,13 +516,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
             return;
         }
 
-        stopTimer();
-
         unbindService();
-    }
-
-    private void stopTimer() {
-        mCommunicationService.getSlideShow().getTimer().stop();
     }
 
     private void unbindService() {

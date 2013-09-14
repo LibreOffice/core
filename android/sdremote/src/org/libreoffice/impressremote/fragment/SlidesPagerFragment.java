@@ -144,19 +144,27 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
             return;
         }
 
-        if (areSlideNotesAvailable(aSlideIndex)) {
-            showSlideNotes(aSlideIndex);
-            scrollSlideNotes();
+        if (!isSlideVisible(aSlideIndex)) {
+            return;
         }
-        else {
+
+        if (!areSlideNotesAvailable(aSlideIndex)) {
             hideSlideNotes();
+            return;
         }
+
+        showSlideNotes(aSlideIndex);
+        scrollSlideNotes();
     }
 
     private boolean isSlideNotesLayoutAvailable() {
         ViewGroup aSlideNotesLayout = (ViewGroup) getView().findViewById(R.id.layout_notes);
 
         return aSlideNotesLayout != null;
+    }
+
+    private boolean isSlideVisible(int aSlideIndex) {
+        return aSlideIndex == getSlidesPager().getCurrentItem();
     }
 
     private boolean areSlideNotesAvailable(int aSlideIndex) {
@@ -243,6 +251,14 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
                 int aSlideIndex = aIntent.getIntExtra(Intents.Extras.SLIDE_INDEX, 0);
 
                 mSlidesPagerFragment.refreshSlide(aSlideIndex);
+                return;
+            }
+
+            if (Intents.Actions.SLIDE_NOTES.equals(aIntent.getAction())) {
+                int aSlideIndex = aIntent.getIntExtra(Intents.Extras.SLIDE_INDEX, 0);
+
+                mSlidesPagerFragment.setUpSlideNotes(aSlideIndex);
+                return;
             }
         }
     }
@@ -253,6 +269,7 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
         aIntentFilter.addAction(Intents.Actions.SLIDE_SHOW_STOPPED);
         aIntentFilter.addAction(Intents.Actions.SLIDE_CHANGED);
         aIntentFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
+        aIntentFilter.addAction(Intents.Actions.SLIDE_NOTES);
 
         return aIntentFilter;
     }
