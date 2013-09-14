@@ -29,8 +29,6 @@ namespace
 
     const char * const VLC_ARGS[] = {
         "-Vdummy",
-        "--snapshot-format=png",
-        "--ffmpeg-threads",
         "--verbose=-1"
     };
 }

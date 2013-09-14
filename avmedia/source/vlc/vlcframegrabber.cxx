@@ -25,15 +25,23 @@ namespace
     const ::rtl::OUString AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.VLCFrameGrabber_VLC";
     const ::rtl::OUString AVMEDIA_VLC_GRABBER_SERVICENAME = "com.sun.star.media.VLCFrameGrabber_VLC";
     const int MSEC_IN_SEC = 1000;
+
+    const char * const VLC_ARGS[] = {
+        "-Vdummy",
+        "--snapshot-format=png",
+        "--ffmpeg-threads",
+        "--verbose=-1",
+        "--no-audio"
+    };
 }
 
-VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, const rtl::OUString& url )
+VLCFrameGrabber::VLCFrameGrabber( VLC::EventHandler& eh, const rtl::OUString& url )
     : FrameGrabber_BASE()
-    , mPlayer( player )
-    , mUrl( url )
+    , mInstance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS )
+    , mMedia( url, mInstance )
+    , mPlayer( mMedia )
     , mEventHandler( eh )
 {
-    std::cout << "URL: " << url << std::endl;
 }
 
 ::uno::Reference< css::graphic::XGraphic > SAL_CALL VLCFrameGrabber::grabFrame( double fMediaTime )
@@ -45,8 +53,6 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, co
     {
         VLC::EventManager manager( mPlayer, mEventHandler );
         manager.onPaused(boost::bind(&osl::Condition::set, &condition));
-
-        mPlayer.setMute( true );
 
         if ( !mPlayer.play() )
         {
@@ -60,19 +66,14 @@ VLCFrameGrabber::VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, co
         const TimeValue timeout = {2, 0};
         condition.wait(&timeout);
 
-        if ( mUrl.isEmpty() || !mPlayer.hasVout() )
+        if ( !mPlayer.hasVout() )
         {
             std::cerr << "Couldn't grab frame" << std::endl;
-            mPlayer.setMute( false );
-
             manager.onPaused();
             return ::uno::Reference< css::graphic::XGraphic >();
         }
 
-        std::cout << "Take snapshot " << fileName << std::endl;
-        std::cout << mPlayer.takeSnapshot( fileName ) << std::endl;
-
-        mPlayer.setMute( false );
+        mPlayer.takeSnapshot( fileName );
         mPlayer.stop();
 
         manager.onPaused();

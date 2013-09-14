@@ -50,6 +50,7 @@ class VLCPlayer : public ::cppu::BaseMutex,
     VLC::EventManager mEventManager;
     const rtl::OUString mUrl;
     bool mPlaybackLoop;
+    ::com::sun::star::uno::Reference< css::media::XFrameGrabber > mrFrameGrabber;
 public:
     VLCPlayer( const rtl::OUString& url,
                VLC::Instance& instance,

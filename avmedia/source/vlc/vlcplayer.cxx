@@ -189,8 +189,13 @@ uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabb
      throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mPlayer, mEventHandler, mUrl );
-    return uno::Reference< css::media::XFrameGrabber >( frameGrabber );
+    if ( !mrFrameGrabber.is() )
+    {
+        VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mEventHandler, mUrl );
+        mrFrameGrabber = uno::Reference< css::media::XFrameGrabber >( frameGrabber );
+    }
+
+    return mrFrameGrabber;
 }
 
 ::rtl::OUString SAL_CALL VLCPlayer::getImplementationName()

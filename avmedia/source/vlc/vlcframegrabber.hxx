@@ -24,10 +24,10 @@
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "vlccommon.hxx"
+#include "wrapper/Wrapper.hxx"
 
 namespace VLC
 {
-    class Player;
     class EventHandler;
 }
 
@@ -39,11 +39,12 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::media::XFrameGrabber,
 
 class VLCFrameGrabber : public FrameGrabber_BASE
 {
-    VLC::Player& mPlayer;
-    const rtl::OUString& mUrl;
+    VLC::Instance mInstance;
+    VLC::Media mMedia;
+    VLC::Player mPlayer;
     VLC::EventHandler& mEventHandler;
 public:
-    VLCFrameGrabber( VLC::Player& player, VLC::EventHandler& eh, const rtl::OUString& url );
+    VLCFrameGrabber( VLC::EventHandler& eh, const rtl::OUString& url );
 
     ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw ( ::com::sun::star::uno::RuntimeException );
 
