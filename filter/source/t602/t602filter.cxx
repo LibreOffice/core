@@ -23,6 +23,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
+#include <config_version.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/awt/Toolkit.hpp>
@@ -1104,7 +1105,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
 void T602ImportFilterDialog::initLocale()
 {
     OString aModName( "t602filter" );
-    aModName += OString::number( SUPD );
+    aModName += OString::number(LIBO_VERSION_ENCODED_IN_32BITS);
 
     mpResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( meLocale) );
 }

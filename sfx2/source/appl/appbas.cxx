@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_version.h>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -255,7 +256,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_UPDATE_VERSION:
-                rSet.Put( SfxUInt32Item( SID_UPDATE_VERSION, SUPD ) );
+                rSet.Put(SfxUInt32Item(SID_UPDATE_VERSION, LIBO_VERSION_ENCODED_IN_32BITS));
                 break;
 
             case SID_OFFICE_CUSTOMERNUMBER:

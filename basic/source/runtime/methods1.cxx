@@ -21,6 +21,7 @@
 
 #include <cstddef>
 
+#include <config_version.h>
 #include <stdlib.h> // getenv
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
@@ -731,7 +732,7 @@ RTLFUNC(GetSolarVersion)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get(0)->PutLong( (sal_Int32)SUPD );
+    rPar.Get(0)->PutLong(LIBO_VERSION_ENCODED_IN_32BITS);
 }
 
 RTLFUNC(TwipsPerPixelX)

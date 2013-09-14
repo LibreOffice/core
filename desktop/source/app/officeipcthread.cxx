@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_version.h>
 
 #include "app.hxx"
 #include "officeipcthread.hxx"
@@ -504,9 +505,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     if ( aPreloadData == "1" )
     {
-        sal_Char    szBuffer[32];
-        sprintf( szBuffer, "%d", SUPD );
-        aUserInstallPathHashCode = OUString( szBuffer, strlen(szBuffer), osl_getThreadTextEncoding() );
+        aUserInstallPathHashCode = OUString::number(LIBO_VERSION_ENCODED_IN_32BITS);
     }
     else
         aUserInstallPathHashCode = CreateMD5FromString( aDummy );
