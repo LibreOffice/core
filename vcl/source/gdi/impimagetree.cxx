@@ -270,13 +270,12 @@ bool ImplImageTree::checkStyleCacheLookup(
 bool ImplImageTree::iconCacheLookup(
     OUString const & name, bool localized, BitmapEx & bitmap)
 {
-    IconCache::iterator i(m_iconCache.find(name));
+    IconCache::iterator i(m_iconCache.find(getRealImageName(name)));
     if (i != m_iconCache.end() && i->second.first == localized) {
         bitmap = i->second.second;
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 bool ImplImageTree::find(
