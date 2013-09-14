@@ -16,13 +16,6 @@ $(eval $(call gb_Module_add_targets,jurt,\
     Library_jpipe \
 ))
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,jurt,\
-    CustomTarget_jnilib \
-    Package_jnilib \
-))
-endif
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,jurt,\
     Library_jpipx \

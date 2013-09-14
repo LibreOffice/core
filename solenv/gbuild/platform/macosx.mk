@@ -157,8 +157,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter Executable,$(TARGETTYPE)), \
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
-		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
-		ln -sf $(notdir $(1)) $(basename $(1)).jnilib &&) \
+		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) &&) \
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
 			(codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) || true) &&)) \

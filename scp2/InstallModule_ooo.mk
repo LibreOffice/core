@@ -171,7 +171,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/module_lang_template \
     scp2/source/ooo/profileitem_ooo \
     scp2/source/ooo/scpaction_ooo \
-    scp2/source/ooo/shortcut_ooo \
     $(if $(filter WNTGCC,$(OS)$(COM)),\
 		scp2/source/ooo/mingw_dlls \
 	) \

@@ -31,6 +31,16 @@ endif
 
 gb_Executable_FILENAMES_FOR_BUILD := $(subst $(gb_Executable_EXT),$(gb_Executable_EXT_for_build),$(gb_Executable_FILENAMES))
 
+# fixes for .jnilibs on Mac OS X that are not also needed as .dylibs:
+ifeq ($(OS),MACOSX)
+gb_Library_FILENAMES := \
+    $(subst jpipe:libjpipe.dylib,jpipe:libjpipe.jnilib,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := \
+    $(subst juh:libjuh.dylib,juh:libjuh.jnilib,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := \
+    $(subst hsqldb:libhsqldb.dylib,hsqldb:libhsqldb.jnilib,$(gb_Library_FILENAMES))
+endif
+
 # fixes for all the libraries that are named with too much creativity and do
 # not follow any of the established nameschemes
 
