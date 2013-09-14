@@ -87,14 +87,10 @@ public:
 
     friend BASIC_DLLPUBLIC std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache);
 
-    void SetVars( const CodeCompleteVarScopes& aScopes );
-    const CodeCompleteVarScopes& GetVars() const;
-
     void InsertGlobalVar( const OUString& sVarName, const OUString& sVarType );
     void InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType );
     OUString GetVarType( const OUString& sVarName ) const;
     OUString GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const;
-    void print() const; // wrapper for operator<<, prints to std::cerr
     void Clear();
 };
 

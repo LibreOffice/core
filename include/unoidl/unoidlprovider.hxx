@@ -42,9 +42,6 @@ public:
     // throws FileFormatException:
     rtl::Reference< Entity > getEntity(sal_uInt32 offset) const;
 
-    // throws FileFormatException:
-    ConstantValue getConstant(sal_uInt32 offset) const;
-
 private:
     virtual SAL_DLLPRIVATE ~UnoidlProvider() throw ();
 

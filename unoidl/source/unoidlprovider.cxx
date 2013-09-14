@@ -1261,10 +1261,6 @@ rtl::Reference< Entity > UnoidlProvider::getEntity(sal_uInt32 offset) const {
     return readEntity(file_, offset);
 }
 
-ConstantValue UnoidlProvider::getConstant(sal_uInt32 offset) const {
-    return readConstant(file_, offset);
-}
-
 UnoidlProvider::~UnoidlProvider() throw () {}
 
 }

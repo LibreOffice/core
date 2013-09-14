@@ -118,21 +118,6 @@ std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aC
     return aStream;
 }
 
-const CodeCompleteVarScopes& CodeCompleteDataCache::GetVars() const
-{
-    return aVarScopes;
-}
-
-void CodeCompleteDataCache::SetVars( const CodeCompleteVarScopes& aScopes )
-{
-    aVarScopes = aScopes;
-}
-
-void CodeCompleteDataCache::print() const
-{
-    std::cerr << *this << std::endl;
-}
-
 void CodeCompleteDataCache::Clear()
 {
     aVarScopes.clear();

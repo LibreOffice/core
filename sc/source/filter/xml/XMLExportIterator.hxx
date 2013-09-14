@@ -419,8 +419,6 @@ public:
     void                        SkipTable(SCTAB nSkip);
 
     bool                        GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
-
-    const ScRefCellValue* GetCell() const;
 };
 
 #endif

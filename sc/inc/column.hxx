@@ -437,7 +437,6 @@ public:
     void        EndListening( SvtListener& rLst, SCROW nRow );
     void StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
-    void        MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow );
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==true
     void        SetRelNameDirty();

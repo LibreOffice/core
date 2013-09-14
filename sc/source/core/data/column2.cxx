@@ -2629,29 +2629,6 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
     startListening(maBroadcasters, aPos.first, aPos.second, nRow, rLst);
 }
 
-void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
-{
-    // Move listeners from the source position to the destination position.
-    if (!rSource.HasListeners())
-        // No listeners to relocate. Bail out.
-        return;
-
-    // See if the destination position already has a broadcaster, if not, create one.
-    SvtBroadcaster* pBC = GetBroadcaster(nDestRow);
-    if (!pBC)
-    {
-        pBC = new SvtBroadcaster;
-        maBroadcasters.set(nDestRow, pBC);
-    }
-
-    SvtListenerIter aIter(rSource);
-    for (SvtListener* pLst = aIter.GoStart(); pLst; pLst = aIter.GoNext())
-    {
-        pLst->StartListening(*pBC);
-        pLst->EndListening(rSource);
-    }
-}
-
 void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 {
     SvtBroadcaster* pBC = GetBroadcaster(nRow);

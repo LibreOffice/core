@@ -3,10 +3,6 @@
 (anonymous namespace)::StringTokenizer::StringTokenizer(rtl::OUString const&, unsigned short)
 (anonymous namespace)::StringTokenizer::getNextToken()
 (anonymous namespace)::VBATest::testMiscOLEStuff()
-CodeCompleteDataCache::GetVars() const
-CodeCompleteDataCache::SetVars(boost::unordered::unordered_map<rtl::OUString, boost::unordered::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > >, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, boost::unordered::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, rtl::OUString> > > > > > const&)
-CodeCompleteDataCache::print() const
-EditTextObjectImpl::SetParaAttribs(int, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
@@ -31,7 +27,6 @@ ScCellValue::hasString() const
 ScCellValue::set(EditTextObject const&)
 ScCellValue::set(ScFormulaCell const&)
 ScColorScaleEntry::UpdateMoveTab(short, short, short)
-ScColumn::MoveListeners(SvtBroadcaster&, int)
 ScComplexRefData::IsDeleted() const
 ScDBQueryDataIterator::DataAccessInternal::setPos(unsigned long)
 ScDPFilteredCache::SingleFilter::getMatchValue() const
@@ -44,7 +39,6 @@ ScEditUtil::GetSpaceDelimitedString(EditTextObject const&)
 ScExtIButton::GetSelected() const
 ScFormulaCell::HasColRowName() const
 ScGlobal::GetStandardFormat(double, SvNumberFormatter&, unsigned long, short)
-ScMyNotEmptyCellsIterator::GetCell() const
 ScRangeStringConverter::GetRangeListFromString(com::sun::star::uno::Sequence<com::sun::star::table::CellRangeAddress>&, rtl::OUString const&, ScDocument const*, formula::FormulaGrammar::AddressConvention, unsigned short, unsigned short)
 ScRefCellValue::commit(ScColumn&, int) const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
@@ -54,7 +48,6 @@ ServerFont::GetGlyphBitmap8(int, RawBitmap&) const
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxGrabBagItem::SetGrabBag(std::__debug::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
 SfxTemplatePanelControl::SetParagraphFamily()
-SmFontPickList::Contains(Font const&) const
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostEvent(SalFrame const*, void*, unsigned short)
 SvpSalInstance::PostedEventsInQueue()
@@ -123,7 +116,6 @@ formula::SingleVectorRefToken::SingleVectorRefToken(double const*, unsigned long
 framework::MenuBarManager::getComponentContext()
 framework::MenuManager::getContext()
 jfw_plugin::VendorBase::createInstance()
-oox::core::Decrypt::aes128cbc(std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, std::__debug::vector<unsigned char, std::allocator<unsigned char> >&)
 oox::drawingml::TextListStyle::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 oox::xls::WorksheetGlobals::getColumns(oox::ValueRange const&) const
@@ -158,7 +150,5 @@ std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::Formu
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 svx::DialControl::GetModifyHdl() const
 svx::sidebar::LineWidthControl::GetValueSet()
-unoidl::UnoidlProvider::getConstant(unsigned int) const
-utl::toISO8601(com::sun::star::util::Time const&)
 vclmain::createApplication()
 writerfilter::ooxml::OOXMLFastContextHandler::mark(unsigned int const&, boost::shared_ptr<writerfilter::ooxml::OOXMLValue>)

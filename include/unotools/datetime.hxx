@@ -45,7 +45,6 @@ namespace utl
     UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut);
 
     UNOTOOLS_DLLPUBLIC ::rtl::OUString toISO8601(const starutil::DateTime& _rDateTime);
-    UNOTOOLS_DLLPUBLIC ::rtl::OUString toISO8601(const starutil::Time&     _rTime);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDateTime(const ::rtl::OUString &i_rIn, starutil::DateTime& o_rDateTime);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(const ::rtl::OUString &i_rIn, starutil::Date& o_rDate);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(const ::rtl::OUString &i_rIn, starutil::Time& o_Time);

@@ -882,9 +882,4 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
     return bFoundCell;
 }
 
-const ScRefCellValue* ScMyNotEmptyCellsIterator::GetCell() const
-{
-    return mpCell;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
