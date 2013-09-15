@@ -3113,7 +3113,7 @@ void ImpEditEngine::SetAddExtLeading( bool bExtLeading )
 
 
 
-sal_Bool ImpEditEngine::ImplHasText() const
+bool ImpEditEngine::ImplHasText() const
 {
     return ( ( GetEditDoc().Count() > 1 ) || GetEditDoc().GetObject(0)->Len() );
 }
