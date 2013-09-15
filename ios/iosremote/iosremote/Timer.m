@@ -37,6 +37,7 @@ int vibrationCount;
     self.state = TIMER_STATE_CLEARED;
     self.set = NO;
     secondsLeft = kCountDownTimerDefaultDuration * 60;
+    initSecondsLeft = secondsLeft;
     
     return self;
 }
@@ -54,6 +55,7 @@ int vibrationCount;
     self.timeLabel = timeLabel;
     
     [self setupActions];
+    [self clear];
     return self;
 }
 
@@ -63,8 +65,9 @@ int vibrationCount;
     self.clearButton = (UIButton *)[[cell viewWithTag:9] viewWithTag:3];
     self.setTimeButton = (UIButton *)[[cell viewWithTag:9] viewWithTag:4];
     self.timeLabel = (UILabel *)[[cell viewWithTag:9] viewWithTag:1];
-    
+
     [self setupActions];
+    [self clear];
 }
 
 - (void) setupActions

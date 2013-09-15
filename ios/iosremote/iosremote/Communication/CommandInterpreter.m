@@ -35,6 +35,7 @@ dispatch_queue_t backgroundQueue;
 
 // Received a set of instructions from server.
 - (void) parse:(NSArray*)command{
+//    NSLog(@"Command : %@", command);
     uint marker = 0;
     if ([command count] == 0) {
         return;
@@ -47,7 +48,6 @@ dispatch_queue_t backgroundQueue;
         marker = 2;
     }
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
-//        NSLog(@"Paired command: %@", command);
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
         marker = 2;
@@ -86,7 +86,6 @@ dispatch_queue_t backgroundQueue;
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:nil];
             marker = 3;
         } else if ([instruction isEqualToString:@"slide_preview"]){
-//            NSLog(@"Interpreter: slide_preview");
             backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", NULL);
             dispatch_async(backgroundQueue, ^(void) {
                 uint slideNumber = [[command objectAtIndex:1] integerValue];
@@ -96,13 +95,12 @@ dispatch_queue_t backgroundQueue;
             });
             marker = 4;
         } else if ([instruction isEqualToString:@"slide_notes"]){
-//            NSLog(@"Interpreter: slide_notes");
             backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", NULL);
             uint slideNumber = [[command objectAtIndex:1] integerValue];
             NSMutableString *notes = [[NSMutableString alloc] init];
             for (int i = 2; i<command.count; ++i) {
                 [notes appendString:[command objectAtIndex:i]];
-                if ([notes hasSuffix:@"</body>"]) {
+                if ([notes hasSuffix:@"</html>"] || [notes hasSuffix:@"</body>"]) {
                     marker = i+2;
                     break;
                 }

@@ -207,6 +207,7 @@ int count = 0;
             backgroundQueue = dispatch_queue_create("com.libreoffice.iosremote", DISPATCH_QUEUE_CONCURRENT);
             dispatch_async(backgroundQueue, ^(void) {
                 NSArray *commands = [str componentsSeparatedByString:@"\n"];
+                NSLog(@"Commands: %@", commands);
                 [self.receiver parse:commands];
             });
             data = nil;
@@ -223,9 +224,7 @@ int count = 0;
     if(self.inputStream == nil && self.outputStream == nil)
         return;
     [self stopConnectionTimeoutTimer];
-//    NSLog(@"stream status i:%u o:%u", self.inputStream.streamStatus, self.outputStream.streamStatus);
     if ([self.inputStream streamStatus] != NSStreamStatusClosed) {
-//        NSLog(@"ci");
         [self.inputStream close];
     } else
         [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];

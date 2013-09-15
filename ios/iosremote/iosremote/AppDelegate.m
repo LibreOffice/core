@@ -69,7 +69,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     kCountDownTimerAutoStart = [[NSUserDefaults standardUserDefaults] boolForKey:@"TIMER_AUTO_START"];
     kCountDownTimerVibration = [[NSUserDefaults standardUserDefaults] boolForKey:@"TIMER_VIBRATION"];
     
-    NSLog(@"Setting kDefaultTimerWidget to %d", kDefaultTimerWidget);
+    NSLog(@"Setting kCountDownTimerDefaultDuration to %d", kCountDownTimerDefaultDuration);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

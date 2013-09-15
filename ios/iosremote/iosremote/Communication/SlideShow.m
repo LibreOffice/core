@@ -147,7 +147,6 @@ NSString *sTitle;
 }
 
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index{
-//    NSLog(@"Put note into %u", index);
     [self.notesDictionary setObject:notes forKey:[NSNumber numberWithUnsignedInt:index]];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"storage_update_ready"
                                                         object:nil
