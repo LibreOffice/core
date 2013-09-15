@@ -42,7 +42,7 @@
 
 //========================================================================
 
-ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit, sal_Bool bSheetProtected)
+ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const OUString& rName, sal_Bool bEdit, sal_Bool bSheetProtected)
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
         aFlName         ( this, ScResId( FL_NAME )),
@@ -65,7 +65,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
         bIsEdit         ( bEdit )
 {
     if (bIsEdit)
-        SetText(String(ScResId(STR_EDIT)));
+        SetText(OUString(ScResId(STR_EDIT)));
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
@@ -90,25 +90,16 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
 
     SvtUserOptions aUserOpt;
 
-    String aComment( ScResId( STR_CREATEDBY ) );
+    OUString aComment(OUString(ScResId(STR_CREATEDBY)) + " " + aUserOpt.GetFirstName() + " " +aUserOpt.GetLastName()
+              + ", " + OUString(ScResId(STR_ON)) + " " + ScGlobal::GetpLocaleData()->getDate(Date(Date::SYSTEM))
+              + ", " + ScGlobal::GetpLocaleData()->getTime(Time(Time::SYSTEM)));
 
-    aComment += ' ';
-    aComment += (String)aUserOpt.GetFirstName();
-    aComment += ' ';
-    aComment += (String)aUserOpt.GetLastName();
-    aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-    aComment += String( ScResId( STR_ON ) );
-    aComment += ' ';
-    aComment += ScGlobal::GetpLocaleData()->getDate( Date( Date::SYSTEM ) );
-    aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-    aComment += ScGlobal::GetpLocaleData()->getTime( Time( Time::SYSTEM ) );
-
-    aEdComment  .SetText( aComment );
-    aEdName     .SetText( rName );
-    aBtnOk      .SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
+    aEdComment.SetText(aComment);
+    aEdName.SetText(rName);
+    aBtnOk.SetClickHdl( LINK( this, ScNewScenarioDlg, OkHdl ) );
     aCbShowFrame.SetClickHdl( LINK( this, ScNewScenarioDlg, EnableHdl ) );
 
-    aLbColor.SetAccessibleName(String(ScResId( STR_COLOR ) ));
+    aLbColor.SetAccessibleName(OUString(ScResId( STR_COLOR ) ));
 
     FreeResource();
 
@@ -201,22 +192,19 @@ void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& r
 
 IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 {
-    String      aName = comphelper::string::strip(aEdName.GetText(), ' ');
-    ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->
-                                GetViewData()->GetDocument();
+    OUString      aName = comphelper::string::strip(aEdName.GetText(), ' ');
+    ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->GetViewData()->GetDocument();
 
     aEdName.SetText( aName );
 
     if ( !pDoc->ValidTabName( aName ) )
     {
-        InfoBox( this, ScGlobal::GetRscString( STR_INVALIDTABNAME ) ).
-            Execute();
+        InfoBox( this, ScGlobal::GetRscString( STR_INVALIDTABNAME ) ).Execute();
         aEdName.GrabFocus();
     }
     else if ( !bIsEdit && !pDoc->ValidNewTabName( aName ) )
     {
-        InfoBox( this, ScGlobal::GetRscString( STR_NEWTABNAMENOTUNIQUE ) ).
-            Execute();
+        InfoBox( this, ScGlobal::GetRscString( STR_NEWTABNAMENOTUNIQUE ) ).Execute();
         aEdName.GrabFocus();
     }
     else

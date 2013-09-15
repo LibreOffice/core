@@ -33,7 +33,7 @@
 class ScNewScenarioDlg : public ModalDialog
 {
 public:
-        ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
+        ScNewScenarioDlg( Window* pParent, const OUString& rName, sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
         ~ScNewScenarioDlg();
 
     void SetScenarioData( const OUString& rName, const OUString& rComment,
@@ -59,8 +59,8 @@ private:
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
-    const String        aDefScenarioName;
-    sal_Bool                bIsEdit;
+    const OUString      aDefScenarioName;
+    sal_Bool            bIsEdit;
 
     DECL_LINK(OkHdl, void *);
     DECL_LINK( EnableHdl, CheckBox * );
