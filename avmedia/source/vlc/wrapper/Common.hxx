@@ -21,6 +21,7 @@ namespace wrapper
     public:
         static bool LoadSymbols();
         static const char* Version();
+        static const char* LastErrorMessage();
     };
 }
 }

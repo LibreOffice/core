@@ -12,6 +12,7 @@
 namespace
 {
     const char* ( *libvlc_get_version ) (void);
+    char *  ( * libvlc_errmsg ) (void);
 }
 
 namespace avmedia
@@ -24,7 +25,8 @@ bool Common::LoadSymbols()
 {
     ApiMap VLC_COMMON_API[] =
     {
-        SYM_MAP( libvlc_get_version )
+        SYM_MAP( libvlc_get_version ),
+        SYM_MAP( libvlc_errmsg )
     };
 
     return InitApiMap( VLC_COMMON_API );
@@ -33,6 +35,11 @@ bool Common::LoadSymbols()
 const char* Common::Version()
 {
     return libvlc_get_version();
+}
+
+const char* Common::LastErrorMessage()
+{
+    return libvlc_errmsg();
 }
 }
 }

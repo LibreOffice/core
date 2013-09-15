@@ -12,6 +12,7 @@
 #include "SymbolLoader.hxx"
 #include "Instance.hxx"
 #include "Types.hxx"
+#include "Common.hxx"
 
 struct libvlc_instance_t;
 
@@ -27,6 +28,8 @@ namespace
     void ( *libvlc_media_release ) ( libvlc_media_t *p_md );
     void ( *libvlc_media_retain ) ( libvlc_media_t *p_md );
     libvlc_time_t ( *libvlc_media_get_duration ) ( libvlc_media_t *p_md );
+    void ( *libvlc_media_parse ) ( libvlc_media_t *p_md );
+    int ( *libvlc_media_is_parsed ) ( libvlc_media_t *p_md );
 
     libvlc_media_t* InitMedia( const rtl::OUString& url, Instance& instance )
     {
@@ -44,7 +47,9 @@ bool Media::LoadSymbols()
         SYM_MAP( libvlc_media_new_path ),
         SYM_MAP( libvlc_media_release ),
         SYM_MAP( libvlc_media_retain ),
-        SYM_MAP( libvlc_media_get_duration )
+        SYM_MAP( libvlc_media_get_duration ),
+        SYM_MAP( libvlc_media_parse ),
+        SYM_MAP( libvlc_media_is_parsed )
     };
 
     return InitApiMap( VLC_MEDIA_API );
@@ -71,9 +76,20 @@ const Media& Media::operator=( const Media& other )
 
 int Media::getDuration() const
 {
+    if ( !libvlc_media_is_parsed( mMedia ) )
+        libvlc_media_parse( mMedia );
+
     const int duration = libvlc_media_get_duration( mMedia );
     if (duration == -1)
+    {
+        SAL_WARN("avmedia", Common::LastErrorMessage());
         return 0;
+    }
+    else if (duration == 0)
+    {
+        // A duration must be greater than 0
+        return 1;
+    }
 
     return duration;
 }
