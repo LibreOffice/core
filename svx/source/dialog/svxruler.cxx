@@ -19,7 +19,6 @@
 
 #include <cstring>
 #include <climits>
-#include <cmath>
 
 #include <tools/shl.hxx>
 #include <vcl/image.hxx>
@@ -366,7 +365,7 @@ long SvxRuler::MakePositionSticky(long aPosition, long aPointOfReference, bool a
     // Convert position to current selected map mode
     long aPositionLogic = pEditWin->PixelToLogic(Size(aTranslatedPosition, 0), GetCurrentMapMode()).Width();
     // Normalize -- snap to nearest tick
-    aPositionLogic = std::round((aPositionLogic + aHalfTick) / aTick) * aTick;
+    aPositionLogic = rtl::math::round((aPositionLogic + aHalfTick) / aTick) * aTick;
     // Convert back to pixels
     aPosition = pEditWin->LogicToPixel(Size(aPositionLogic, 0), GetCurrentMapMode()).Width();
     // Move "coordinate system" back to original position
@@ -2080,7 +2079,7 @@ long SvxRuler::RoundToCurrentMapMode(long lValue) const
     double aRoundingFactor = aUnitData.nTickUnit / aUnitData.nTick1;
 
     long lNewValue = pEditWin->LogicToLogic(Size(lValue, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
-    lNewValue = (std::round(lNewValue / (double) aUnitData.nTickUnit * aRoundingFactor) / aRoundingFactor) * aUnitData.nTickUnit;
+    lNewValue = (rtl::math::round(lNewValue / (double) aUnitData.nTickUnit * aRoundingFactor) / aRoundingFactor) * aUnitData.nTickUnit;
     return pEditWin->LogicToLogic(Size(lNewValue, 0), GetCurrentMapMode(), pEditWin->GetMapMode()).Width();
 }
 
