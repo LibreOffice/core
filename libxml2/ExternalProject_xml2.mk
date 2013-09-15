@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
 			$(if $(debug),--with-run-debug) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
 			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
 			CFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(if $(debug),-g)" \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
