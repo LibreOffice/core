@@ -19,6 +19,7 @@
 
 #include <cstring>
 #include <climits>
+#include <cmath>
 
 #include <tools/shl.hxx>
 #include <vcl/image.hxx>
