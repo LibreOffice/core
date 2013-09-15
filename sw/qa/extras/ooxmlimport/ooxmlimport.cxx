@@ -1372,9 +1372,12 @@ void Test::testN779630()
 
 void Test::testIndentation()
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
-    // This was RL_TB (e.g. right-to-left).
-    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>(xPropertySet, "WritingMode"));
+    uno::Reference<uno::XInterface> xParaLTRTitle(getParagraph( 1, "Title aligned"));
+    uno::Reference<uno::XInterface> xParaLTRNormal(getParagraph( 2, ""));
+
+    // this will test the text direction for paragraphs
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaLTRTitle, "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaLTRNormal, "WritingMode" ));
 }
 
 void Test::testPageBorderShadow()

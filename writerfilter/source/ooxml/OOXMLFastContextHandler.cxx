@@ -1618,19 +1618,7 @@ void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 
     if (mpValue.get() == NULL)
     {
-        // Value should not always be 'true'
-        //OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(true));
-        bool bSet = true;
-
-        // Paragraph properties are not always 'true' by default
-        // For example - RTL layout of paragraph is by default 'false' (look in this link for 'sprmPFBiDi')
-        // http://msdn.microsoft.com/en-us/library/dd923496%28v=office.12%29.aspx
-        if (getId() == NS_sprm::LN_PFBiDi)
-        {
-                bSet = false;
-        }
-
-        OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(bSet));
+        OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(true));
         setValue(pValue);
     }
 }
