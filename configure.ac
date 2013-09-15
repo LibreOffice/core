@@ -1419,10 +1419,21 @@ AC_ARG_WITH(system-libxml,
         [Use libxml/libxslt already on system.]),,
     [with_system_libxml=auto])
 
+AC_ARG_WITH(icupath,
+    AS_HELP_STRING([--with-icupath],
+        [Use an external (but not sytem) icu.]),
+,)
+
 AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
         [Use icu already on system.]),,
-    [with_system_icu="$with_system_libs"])
+    [
+        if test "x$with_system_libs" = xyes; then
+            with_system_icu="$with_system_libs"
+        elif test -n "$with_icupath"; then
+            with_system_icu=yes
+        fi
+    ])
 
 AC_ARG_WITH(system-ucpp,
     AS_HELP_STRING([--with-system-ucpp],
@@ -8788,7 +8799,11 @@ if test "$with_system_icu" = "yes"; then
     AC_LANG_POP([C++])
 
     if test "$cross_compiling" != "yes" -o "$WITH_MINGW" = "yes"; then
-        ICUPATH="$PATH"
+        if test -n "$with_icupath"; then
+            ICUPATH="$with_icupath"
+        else
+            ICUPATH="$PATH"
+        fi
         if test "$WITH_MINGW" = "yes"; then
             ICUPATH=`$CC -print-sysroot`/mingw/bin:"$ICUPATH"
         fi
