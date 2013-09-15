@@ -675,8 +675,6 @@ sal_Bool SvxColumnItem::IsTable() const
     return bTable;
 }
 
-sal_Bool SvxColumnItem::CalcOrtho() const;
-
 void SvxColumnItem::SetOrtho(sal_Bool bVal)
 {
     bOrtho = bVal;
