@@ -755,9 +755,7 @@ namespace sw
             short  nType = NUMBERFORMAT_DEFINED;
             sal_uInt32  nKey = 0;
 
-            OUString sParams(rParams);
-            SwapQuotesInField(sParams);
-            rParams = sParams;
+            SwapQuotesInField(rParams);
 
             // Force to Japanese when finding one of 'geaE'
             bool bForceJapanese = (-1 != rParams.indexOf('g')
@@ -966,9 +964,7 @@ namespace sw
             if (bHijri)
                 rParams = "[~hijri]" + rParams;
 
-            OUString sTemp(rParams);
-            pFormatter->PutEntry(sTemp, nCheckPos, nType, nKey, rLang);
-            rParams = sTemp;
+            pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, rLang);
 
             return nKey;
         }
