@@ -1961,6 +1961,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 rContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB ));
                 rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_RIGHT ));
             }
+            else
+            {
+                rContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::LR_TB ));
+                rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_LEFT ));
+            }
         }
 
         break;  // sprmPFBiDi
