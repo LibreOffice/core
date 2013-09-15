@@ -102,7 +102,7 @@ void SAL_CALL VLCWindow::removeEventListener( const uno::Reference< lang::XEvent
 {
 }
 
-void SAL_CALL VLCWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+void SAL_CALL VLCWindow::setPosSize( sal_Int32 /* X */, sal_Int32 /* Y */, sal_Int32 /* Width */, sal_Int32 /* Height */, sal_Int16 /* Flags */ )
     throw (uno::RuntimeException)
 {
 }
