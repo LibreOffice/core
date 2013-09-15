@@ -34,7 +34,7 @@
 #include <vector>
 #include <string>
 
-#if defined (LINUX) || (FREEBSD)
+#if defined (LINUX) || defined (FREEBSD)
 #include <netinet/in.h>
 #endif
 
