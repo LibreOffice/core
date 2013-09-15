@@ -36,7 +36,7 @@ struct ApiMap
 namespace
 {
 #if defined( UNX )
-    const char LibName[] = "libvlc.so.5";
+    const char LibName[] = "libvlc.so";
 #elif defined( MACOSX )
     const char LibName[] = "/Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib";
 #elif defined( WNT )

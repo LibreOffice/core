@@ -9,6 +9,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+#include <com/sun/star/uno/Exception.hpp>
 #include "vlcmanager.hxx"
 #include "vlcplayer.hxx"
 #include "wrapper/Instance.hxx"
@@ -78,7 +79,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const rtl::OUSt
     throw (uno::RuntimeException)
 {
     if ( !m_is_vlc_found )
-        return uno::Reference< media::XPlayer >();
+        throw uno::Exception();
 
     if ( !rURL.isEmpty() )
     {
@@ -107,15 +108,12 @@ rtl::OUString SAL_CALL Manager::getImplementationName()
 sal_Bool SAL_CALL Manager::supportsService( const rtl::OUString& serviceName )
     throw (uno::RuntimeException)
 {
-    return serviceName == VLC_SERVICENAME && m_is_vlc_found;
+    return serviceName == VLC_SERVICENAME;
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    if ( !m_is_vlc_found )
-        return uno::Sequence< rtl::OUString >();
-
     ::uno::Sequence< OUString > aRet(1);
     aRet[0] = VLC_SERVICENAME;
     return aRet;
