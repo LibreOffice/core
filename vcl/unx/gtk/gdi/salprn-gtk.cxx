@@ -483,6 +483,11 @@ GtkPrintDialog::impl_initCustomTab()
         GtkWidget* pGroup = NULL;
         bool bGtkInternal = false;
 
+        //Fix fdo#69381
+        //Next options if this one is empty
+        if ( aOptProp.getLength() == 0)
+            continue;
+
         for (int n = 0; n != aOptProp.getLength(); n++)
         {
             const beans::PropertyValue& rEntry(aOptProp[ n ]);
