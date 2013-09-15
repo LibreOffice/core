@@ -131,6 +131,8 @@ protected:
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
 
+    virtual void Paint( const Rectangle& rRect );
+
 protected:
 
     sal_uInt16 mnCurRegionId;
