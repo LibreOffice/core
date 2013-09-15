@@ -356,18 +356,18 @@ hack_msitemplates .PHONY:
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSIURETEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
     $(GNUCOPY) -u $(MSICOMMONTEMPLATESOURCE)$/Binary$/*.* $(MSITESTTEMPLATEDIR)$/Binary
-    $(COPY) $(PRJ)$/res$/install_suse_bw.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/install_suse_bw.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/install_suse_bw.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/install_suse_bw.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/install_suse_bw.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/install_suse_bw.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/banner_suse_bw.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
-    $(COPY) $(PRJ)$/res$/banner_suse_bw.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
-    $(COPY) $(PRJ)$/res$/banner_suse_bw.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
-    $(COPY) $(PRJ)$/res$/banner_suse_bw.bmp $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
-    $(COPY) $(PRJ)$/res$/banner_suse_bw.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
-    $(COPY) $(PRJ)$/res$/banner_suse_bw.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/install_cp.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/install_cp.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/install_cp.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/install_cp.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/install_cp.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/install_cp.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Banner.bmp
 
 .IF "$(OS)" == "WNT"
 
