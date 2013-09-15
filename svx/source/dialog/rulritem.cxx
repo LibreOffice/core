@@ -23,15 +23,13 @@
 #include <com/sun/star/frame/status/LeftRightMargin.hpp>
 #include <com/sun/star/frame/status/UpperLowerMargin.hpp>
 
-//------------------------------------------------------------------------
-
 TYPEINIT1_AUTOFACTORY(SvxPagePosSizeItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxLongLRSpaceItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxLongULSpaceItem, SfxPoolItem);
 TYPEINIT1(SvxColumnItem, SfxPoolItem);
 TYPEINIT1(SvxObjectItem, SfxPoolItem);
 
-//------------------------------------------------------------------------
+/* SvxLongLRSpaceItem */
 
 int SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
@@ -39,9 +37,6 @@ int SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
         lLeft==((const SvxLongLRSpaceItem &)rCmp).lLeft &&
         lRight==((const SvxLongLRSpaceItem &)rCmp).lRight;
 }
-
-
-//------------------------------------------------------------------------
 
 OUString SvxLongLRSpaceItem::GetValueText() const
 {
@@ -80,7 +75,6 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-// -----------------------------------------------------------------------
 bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -92,8 +86,8 @@ bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
         ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
         if ( rVal >>= aLeftRightMargin )
         {
-            lLeft    = bConvert ? MM100_TO_TWIP( aLeftRightMargin.Left ) : aLeftRightMargin.Left;
-            lRight   = bConvert ? MM100_TO_TWIP( aLeftRightMargin.Right ) : aLeftRightMargin.Right;
+            lLeft  = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Left) : aLeftRightMargin.Left;
+            lRight = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Right) : aLeftRightMargin.Right;
             return true;
         }
     }
@@ -115,62 +109,68 @@ bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
     return false;
 }
 
-//------------------------------------------------------------------------
-
-SfxItemPresentation SvxLongLRSpaceItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    OUString&           /*rText*/, const IntlWrapper *
-)   const
+SfxItemPresentation SvxLongLRSpaceItem::GetPresentation(
+                        SfxItemPresentation /*ePres*/,
+                        SfxMapUnit          /*eCoreUnit*/,
+                        SfxMapUnit          /*ePresUnit*/,
+                        OUString&           /*rText*/,
+                        const IntlWrapper*  /*pWrapper*/) const
 {
-
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
 {
     return new SvxLongLRSpaceItem(*this);
 }
 
-//------------------------------------------------------------------------
-
-SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lL, long lR, sal_uInt16 nId)
-    : SfxPoolItem(nId),
-    lLeft(lL),
-    lRight(lR)
+SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lL, long lR, sal_uInt16 nId) :
+    SfxPoolItem (nId),
+    lLeft       (lL),
+    lRight      (lR)
 {}
-
-//------------------------------------------------------------------------
 
 SvxLongLRSpaceItem::SvxLongLRSpaceItem() :
-    SfxPoolItem( 0 ),
-    lLeft( 0 ),
-    lRight( 0 )
+    SfxPoolItem (0),
+    lLeft       (0),
+    lRight      (0)
 {}
 
-//------------------------------------------------------------------------
+SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy) :
+    SfxPoolItem (rCpy),
+    lLeft       (rCpy.lLeft),
+    lRight      (rCpy.lRight)
+{}
 
-SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy)
-    : SfxPoolItem(rCpy),
-    lLeft(rCpy.lLeft),
-    lRight(rCpy.lRight)
-        {}
+long SvxLongLRSpaceItem::GetLeft() const
+{
+    return lLeft;
+}
 
-//------------------------------------------------------------------------
+long SvxLongLRSpaceItem::GetRight() const
+{
+    return lRight;
+}
+
+void SvxLongLRSpaceItem::SetLeft(long lArgLeft)
+{
+    lLeft = lArgLeft;
+}
+
+void SvxLongLRSpaceItem::SetRight(long lArgRight)
+{
+    lRight = lArgRight;
+}
+
+/* SvxLongULSpaceItem */
 
 int SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-        lLeft==((const SvxLongULSpaceItem &)rCmp).lLeft &&
-        lRight==((const SvxLongULSpaceItem &)rCmp).lRight;
+        lLeft == ((const SvxLongULSpaceItem&)rCmp).lLeft &&
+        lRight == ((const SvxLongULSpaceItem&)rCmp).lRight;
 }
 
-
-//------------------------------------------------------------------------
 
 OUString SvxLongULSpaceItem::GetValueText() const
 {
@@ -206,7 +206,6 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-// -----------------------------------------------------------------------
 bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -241,51 +240,60 @@ bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
     return false;
 }
 
-//------------------------------------------------------------------------
-
-SfxItemPresentation SvxLongULSpaceItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    OUString&           /*rText*/, const IntlWrapper *
-)   const
+SfxItemPresentation SvxLongULSpaceItem::GetPresentation(
+                        SfxItemPresentation /*ePres*/,
+                        SfxMapUnit          /*eCoreUnit*/,
+                        SfxMapUnit          /*ePresUnit*/,
+                        OUString&           /*rText*/,
+                        const IntlWrapper*  /*pWrapper*/ ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
 {
     return new SvxLongULSpaceItem(*this);
 }
 
-//------------------------------------------------------------------------
-
-SvxLongULSpaceItem::SvxLongULSpaceItem(long lL, long lR, sal_uInt16 nId)
-    : SfxPoolItem(nId),
-    lLeft(lL),
-    lRight(lR)
+SvxLongULSpaceItem::SvxLongULSpaceItem(long lL, long lR, sal_uInt16 nId) :
+    SfxPoolItem (nId),
+    lLeft       (lL),
+    lRight      (lR)
 {}
 
-//------------------------------------------------------------------------
-
-SvxLongULSpaceItem::SvxLongULSpaceItem(const SvxLongULSpaceItem &rCpy)
-    : SfxPoolItem(rCpy),
-    lLeft(rCpy.lLeft),
-    lRight(rCpy.lRight)
-        {}
-
-//------------------------------------------------------------------------
+SvxLongULSpaceItem::SvxLongULSpaceItem(const SvxLongULSpaceItem &rCpy) :
+    SfxPoolItem (rCpy),
+    lLeft       (rCpy.lLeft),
+    lRight      (rCpy.lRight)
+{}
 
 SvxLongULSpaceItem::SvxLongULSpaceItem() :
-    SfxPoolItem( 0 ),
-    lLeft( 0 ),
-    lRight( 0 )
+    SfxPoolItem (0),
+    lLeft       (0),
+    lRight      (0)
 {}
 
-//------------------------------------------------------------------------
+long SvxLongULSpaceItem::GetUpper() const
+{
+    return lLeft;
+}
+
+long SvxLongULSpaceItem::GetLower() const
+{
+    return lRight;
+}
+
+void SvxLongULSpaceItem::SetUpper(long lArgLeft)
+{
+    lLeft = lArgLeft;
+}
+
+void SvxLongULSpaceItem::SetLower(long lArgRight)
+{
+    lRight = lArgRight;
+}
+
+/* SvxPagePosSizeItem */
 
 int SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
 {
@@ -362,61 +370,48 @@ bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
     return false;
 }
 
-//------------------------------------------------------------------------
-
 OUString SvxPagePosSizeItem::GetValueText() const
 {
     return OUString();
 }
 
-//------------------------------------------------------------------------
-
-SfxItemPresentation SvxPagePosSizeItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    OUString&           /*rText*/, const IntlWrapper *
-)   const
+SfxItemPresentation SvxPagePosSizeItem::GetPresentation(
+                        SfxItemPresentation /*ePres*/,
+                        SfxMapUnit          /*eCoreUnit*/,
+                        SfxMapUnit          /*ePresUnit*/,
+                        OUString&           /*rText*/,
+                        const IntlWrapper*  /*pWrapper*/ ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
 {
     return new SvxPagePosSizeItem(*this);
 }
 
-//------------------------------------------------------------------------
-
-SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, long lW, long lH)
-    : SfxPoolItem(SID_RULER_PAGE_POS),
-    aPos(rP),
-    lWidth(lW),
-    lHeight(lH)
+SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, long lW, long lH) :
+    SfxPoolItem (SID_RULER_PAGE_POS),
+    aPos        (rP),
+    lWidth      (lW),
+    lHeight     (lH)
 {}
 
-//------------------------------------------------------------------------
-
-SvxPagePosSizeItem::SvxPagePosSizeItem(const SvxPagePosSizeItem &rCpy)
-    : SfxPoolItem(rCpy),
-    aPos(rCpy.aPos),
-    lWidth(rCpy.lWidth),
-    lHeight(rCpy.lHeight)
-        {}
-
-//------------------------------------------------------------------------
-
-SvxPagePosSizeItem::SvxPagePosSizeItem()
-    : SfxPoolItem( 0 ),
-    aPos( 0, 0 ),
-    lWidth( 0 ),
-    lHeight( 0 )
+SvxPagePosSizeItem::SvxPagePosSizeItem(const SvxPagePosSizeItem &rCpy) :
+    SfxPoolItem (rCpy),
+    aPos        (rCpy.aPos),
+    lWidth      (rCpy.lWidth),
+    lHeight     (rCpy.lHeight)
 {}
 
-//------------------------------------------------------------------------
+SvxPagePosSizeItem::SvxPagePosSizeItem() :
+    SfxPoolItem (0),
+    aPos        (0, 0),
+    lWidth      (0),
+    lHeight     (0)
+{}
+
+/* SvxColumnItem */
 
 int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 {
@@ -429,14 +424,13 @@ int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
         return sal_False;
 
     const sal_uInt16 nCount = ((const SvxColumnItem&)rCmp).Count();
-    for(sal_uInt16 i = 0; i < nCount;++i) {
+    for(sal_uInt16 i = 0; i < nCount;++i)
+    {
         if( (*this)[i] != ((const SvxColumnItem&)rCmp)[i] )
             return sal_False;
     }
     return sal_True;
 }
-
-//------------------------------------------------------------------------
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
     SfxPoolItem (SID_RULER_BORDERS),
@@ -446,8 +440,7 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
     bTable      (sal_False),
     bOrtho      (sal_True)
 
-{
-}
+{}
 
 SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 right ) :
     SfxPoolItem (SID_RULER_BORDERS),
@@ -456,8 +449,7 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 ri
     nActColumn  (nActCol),
     bTable      (sal_True),
     bOrtho      (sal_True)
-{
-}
+{}
 
 SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
     SfxPoolItem (rCopy),
@@ -472,8 +464,7 @@ SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
 }
 
 SvxColumnItem::~SvxColumnItem()
-{
-}
+{}
 
 OUString SvxColumnItem::GetValueText() const
 {
@@ -481,11 +472,11 @@ OUString SvxColumnItem::GetValueText() const
 }
 
 SfxItemPresentation SvxColumnItem::GetPresentation(
-                                        SfxItemPresentation /*ePres*/,
-                                        SfxMapUnit          /*eCoreUnit*/,
-                                        SfxMapUnit          /*ePresUnit*/,
-                                        OUString&           /*rText*/,
-                                        const IntlWrapper*) const
+                        SfxItemPresentation /*ePres*/,
+                        SfxMapUnit          /*eCoreUnit*/,
+                        SfxMapUnit          /*ePresUnit*/,
+                        OUString&           /*rText*/,
+                        const IntlWrapper*  /*pWrapper*/ ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -595,6 +586,8 @@ sal_uInt16 SvxColumnItem::Count() const
     return aColumns.size();
 }
 
+/* SvxColumnDescription */
+
 SvxColumnDescription& SvxColumnItem::At(sal_uInt16 index)
 {
     return aColumns[index];
@@ -690,8 +683,6 @@ sal_Bool SvxColumnItem::IsConsistent() const
     return nActColumn < aColumns.size();
 }
 
-//------------------------------------------------------------------------
-
 int SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==(rCmp) &&
@@ -702,14 +693,10 @@ int SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
        bLimits == ((const SvxObjectItem&)rCmp).bLimits;
 }
 
-//------------------------------------------------------------------------
-
 OUString SvxObjectItem::GetValueText() const
 {
     return OUString();
 }
-
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxObjectItem::GetPresentation
 (
@@ -722,14 +709,10 @@ SfxItemPresentation SvxObjectItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
-
 SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
 {
     return new SvxObjectItem(*this);
 }
-
-//------------------------------------------------------------------------
 
 SvxObjectItem::SvxObjectItem( long nSX, long nEX,
                               long nSY, long nEY, sal_Bool limits ) :
@@ -744,8 +727,6 @@ SvxObjectItem::SvxObjectItem( long nSX, long nEX,
 
 {
 }
-
-//------------------------------------------------------------------------
 
 SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
 

@@ -21,7 +21,7 @@
 
 #include <tools/gen.hxx>
 #include <svl/poolitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <vector>
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
@@ -52,10 +52,10 @@ public:
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
 
-    long    GetLeft() const { return lLeft; }
-    long    GetRight() const { return lRight; }
-    void    SetLeft(long lArgLeft) {lLeft=lArgLeft;}
-    void    SetRight(long lArgRight) {lRight=lArgRight;}
+    long GetLeft() const;
+    long GetRight() const;
+    void SetLeft(long lArgLeft);
+    void SetRight(long lArgRight);
 };
 
 class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
@@ -86,10 +86,10 @@ public:
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
 
-    long    GetUpper() const { return lLeft; }
-    long    GetLower() const { return lRight; }
-    void    SetUpper(long lArgLeft) {lLeft=lArgLeft;}
-    void    SetLower(long lArgRight) {lRight=lArgRight;}
+    long GetUpper() const;
+    long GetLower() const;
+    void SetUpper(long lArgLeft);
+    void SetLower(long lArgRight);
 };
 
 class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
