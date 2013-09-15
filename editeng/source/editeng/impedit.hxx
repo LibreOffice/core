@@ -557,9 +557,9 @@ private:
     EditPaM             ImpFastInsertText( EditPaM aPaM, const OUString& rStr );
     EditPaM             ImpFastInsertParagraph( sal_Int32 nPara );
 
-    sal_Bool            ImpCheckRefMapMode();
+    bool                ImpCheckRefMapMode();
 
-    sal_Bool                ImplHasText() const;
+    bool                ImplHasText() const;
 
     void                ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, std::vector<sal_uInt16>& rArray );
 
