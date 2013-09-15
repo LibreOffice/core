@@ -343,45 +343,20 @@ namespace myImplHelpers
 namespace
 {
 
-sal_Bool lcl_IsPreviousAM(const OUString& rParams, sal_Int32 nPos)
+bool lcl_IsPreviousAM(const OUString& rParams, sal_Int32 nPos)
 {
-    sal_Int32 nPos1 = nPos - 1;
-    sal_Int32 nPos2 = nPos - 2;
-
-    if(nPos1<0 || nPos2<0){
-        return sal_False;
-    }else{
-        return (
-             ( rParams[nPos1] == 'M' || rParams[nPos1] == 'm' ) &&
-             ( rParams[nPos2] == 'A' || rParams[nPos2] == 'a' )
-            );
-    }
+    return nPos>=2 && rParams.matchIgnoreAsciiCase("am", nPos-2);
 }
 
-sal_Bool lcl_IsNextPM(const OUString& rParams, sal_Int32 nPos)
+bool lcl_IsNextPM(const OUString& rParams, sal_Int32 nPos)
 {
-    sal_Int32 nPos1 = nPos + 1;
-    sal_Int32 nPos2 = nPos + 2;
-
-    if(nPos1 >= rParams.getLength() - 1 || nPos2 > rParams.getLength() - 1){
-        return sal_False;
-    }else{
-        return (
-            ( rParams[nPos1] == 'P' || rParams[nPos1] == 'p' ) &&
-            ( rParams[nPos2] == 'M' || rParams[nPos2] == 'm' )
-            );
-    }
+    return nPos+2<rParams.getLength() && rParams.matchIgnoreAsciiCase("pm", nPos+1);
 }
 
 bool lcl_IsNotAM(const OUString& rParams, sal_Int32 nPos)
 {
-    return (
-            (nPos == rParams.getLength() - 1) ||
-            (
-            (rParams[nPos+1] != 'M') &&
-            (rParams[nPos+1] != 'm')
-            )
-        );
+    ++nPos;
+    return nPos>=rParams.getLength() || (rParams[nPos]!='M' && rParams[nPos]!='m');
 }
 
 }
