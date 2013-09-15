@@ -46,7 +46,10 @@ namespace
 #error unknown OS
 #endif
     unsigned ( *libvlc_media_player_has_vout ) ( libvlc_media_player_t *p_mi );
-    void ( *libvlc_video_set_mouse_input ) ( libvlc_media_player_t *p_mi, unsigned on);
+    void ( *libvlc_video_set_mouse_input ) ( libvlc_media_player_t *p_mi, unsigned on );
+    void ( *libvlc_video_set_scale ) ( libvlc_media_player_t *p_mi, float f_factor );
+    int ( *libvlc_video_get_size ) ( libvlc_media_player_t *p_mi, unsigned num,
+                                     unsigned *px, unsigned *py );
 }
 
 namespace avmedia
@@ -82,7 +85,9 @@ namespace wrapper
 #endif
             SYM_MAP( libvlc_media_player_has_vout ),
             SYM_MAP( libvlc_video_set_mouse_input ),
-            SYM_MAP( libvlc_media_player_retain )
+            SYM_MAP( libvlc_media_player_retain ),
+            SYM_MAP( libvlc_video_set_scale ),
+            SYM_MAP( libvlc_video_get_size )
         };
 
         return InitApiMap( VLC_PLAYER_API );
@@ -136,6 +141,25 @@ namespace wrapper
         const int time = libvlc_media_player_get_time( mPlayer );
 
         return ( time == -1 ? 0 : time );
+    }
+
+    void Player::setScale( float factor )
+    {
+        libvlc_video_set_scale( mPlayer, factor );
+    }
+
+    unsigned Player::getWidth() const
+    {
+        unsigned width, height;
+        libvlc_video_get_size( mPlayer, 0, &width, &height );
+        return width;
+    }
+
+    unsigned Player::getHeight() const
+    {
+        unsigned width, height;
+        libvlc_video_get_size( mPlayer, 0, &width, &height );
+        return height;
     }
 
     void Player::setMouseHandling(bool flag)

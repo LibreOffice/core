@@ -57,6 +57,11 @@ namespace wrapper
 
         bool hasVout() const;
 
+        void setScale( float factor );
+
+        unsigned getWidth() const;
+        unsigned getHeight() const;
+
         inline operator libvlc_media_player_t*()
         {
             return mPlayer;

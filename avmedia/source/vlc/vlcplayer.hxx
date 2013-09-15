@@ -57,6 +57,10 @@ public:
                wrapper::Instance& instance,
                wrapper::EventHandler& eh );
 
+    unsigned getWidth() const;
+    unsigned getHeight() const;
+
+    void SAL_CALL setScale( float factor );
     void SAL_CALL setWindowID( const intptr_t windowID );
 
     void SAL_CALL start() throw ( ::com::sun::star::uno::RuntimeException );

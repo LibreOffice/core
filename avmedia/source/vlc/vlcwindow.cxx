@@ -41,6 +41,21 @@ void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException)
             meZoomLevel = eZoomLevel;
         }
 
+        switch ( static_cast<int>( eZoomLevel ) )
+        {
+        case media::ZoomLevel_ORIGINAL:
+            mPlayer.setScale( 1.0 );
+            break;
+        case media::ZoomLevel_FIT_TO_WINDOW:
+            break;
+        case media::ZoomLevel_ZOOM_1_TO_2:
+            mPlayer.setScale( 0.5 );
+            break;
+        case media::ZoomLevel_ZOOM_2_TO_1:
+            mPlayer.setScale( 2.0 );
+            break;
+        }
+
         bRet = true;
     }
 
@@ -87,7 +102,7 @@ void SAL_CALL VLCWindow::removeEventListener( const uno::Reference< lang::XEvent
 {
 }
 
-void SAL_CALL VLCWindow::setPosSize( sal_Int32, sal_Int32, sal_Int32, sal_Int32, sal_Int16 )
+void SAL_CALL VLCWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
     throw (uno::RuntimeException)
 {
 }
@@ -98,8 +113,8 @@ awt::Rectangle SAL_CALL VLCWindow::getPosSize()
     awt::Rectangle aRet;
 
     aRet.X = aRet.Y = 0;
-    aRet.Width = 320;
-    aRet.Height = 240;
+    aRet.Width = mPlayer.getWidth();
+    aRet.Height = mPlayer.getHeight();
 
     return aRet;
 }
