@@ -17,6 +17,10 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
@@ -26,6 +30,9 @@
 
 #include "../doc/doc.hrc"
 #include "templateview.hrc"
+
+using namespace basegfx;
+using namespace drawinglayer::primitive2d;
 
 bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
 {
@@ -319,6 +326,21 @@ void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
     {
         maOpenTemplateHdl.Call(pItem);
     }
+}
+
+void TemplateAbstractView::Paint( const Rectangle& rRect )
+{
+    ThumbnailView::Paint( rRect );
+
+    Rectangle aRect(rRect.TopLeft(),
+        Point(rRect.BottomRight().X(), mnHeaderHeight));
+
+    drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(Polygon(aRect).getB2DPolygon()),
+        BColor(1.0, 1.0, 1.0)));
+
+    mpProcessor->process(aSeq);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

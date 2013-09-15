@@ -325,6 +325,9 @@ protected:
     long mnDisplayHeight;       // Height of the data display box (name, etc)
     long mnVisLines;
     long mnLines;
+
+    int mnFineness;
+
     sal_uInt16 mnHighItemId;
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;

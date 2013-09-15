@@ -136,6 +136,7 @@ void ThumbnailView::ImplInit()
     mnItemPadding       = 0;
     mnVisLines          = 0;
     mnLines             = 0;
+    mnFineness          = 5;
     mnFirstLine         = 0;
     mnHighItemId        = 0;
     mnCols              = 0;
@@ -287,6 +288,14 @@ void ThumbnailView::CalculateItemPositions ()
         }
     }
 
+    // calculate window scroll ratio
+    float nScrollRatio;
+    if( mpScrBar )
+        nScrollRatio = static_cast<float>(mpScrBar->GetThumbPos()) /
+                        static_cast<float>(mpScrBar->GetRangeMax()-2);
+    else
+        nScrollRatio = 0;
+
     // calculate ScrollBar width
     long nScrBarWidth = 0;
     if ( mpScrBar )
@@ -316,13 +325,16 @@ void ThumbnailView::CalculateItemPositions ()
 
     if ( mnLines <= mnVisLines )
         mnFirstLine = 0;
-    else
-    {
-        if ( mnFirstLine > (sal_uInt16)(mnLines-mnVisLines) )
-            mnFirstLine = (sal_uInt16)(mnLines-mnVisLines);
-    }
+    else if ( mnFirstLine > (sal_uInt16)(mnLines-mnVisLines) )
+        mnFirstLine = (sal_uInt16)(mnLines-mnVisLines);
 
     mbHasVisibleItems = true;
+
+    long nItemHeightOffset = mnItemHeight + nVItemSpace;
+    long nHiddenLines = (static_cast<long>(
+        ( mnLines - 1 ) * nItemHeightOffset * nScrollRatio ) -
+        nVItemSpace - mnHeaderHeight) /
+        nItemHeightOffset;
 
     // calculate offsets
     long nStartX = nHItemSpace;
@@ -330,11 +342,12 @@ void ThumbnailView::CalculateItemPositions ()
 
     // calculate and draw items
     long x = nStartX;
-    long y = nStartY;
+    long y = nStartY - ( mnLines - 1 ) * nItemHeightOffset * nScrollRatio +
+        nHiddenLines * nItemHeightOffset;
 
     // draw items
-    size_t nFirstItem = mnFirstLine * mnCols;
-    size_t nLastItem = nFirstItem + (mnVisLines * mnCols);
+    size_t nFirstItem = nHiddenLines * mnCols;
+    size_t nLastItem = nFirstItem + (mnVisLines + 1) * mnCols;
 
     maItemListRect.Left() = x;
     maItemListRect.Top() = y;
@@ -413,9 +426,8 @@ void ThumbnailView::CalculateItemPositions ()
         Size aSize( nScrBarWidth, aWinSize.Height() - mnHeaderHeight );
 
         mpScrBar->SetPosSizePixel( aPos, aSize );
-        mpScrBar->SetRangeMax( (nCurCount+mnCols-1)/mnCols);
+        mpScrBar->SetRangeMax( (nCurCount+mnCols-1)*mnFineness/mnCols);
         mpScrBar->SetVisibleSize( mnVisLines );
-        mpScrBar->SetThumbPos( (long)mnFirstLine );
         long nPageSize = mnVisLines;
         if ( nPageSize < 1 )
             nPageSize = 1;
@@ -503,17 +515,8 @@ bool ThumbnailView::ImplHasAccessibleListeners()
 
 IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
 {
-    sal_uInt16 nNewFirstLine = mnFirstLine;
-
-    if (pScrollBar->GetDelta() > 0)
-        nNewFirstLine += 1;
-    else
-        nNewFirstLine -= 1;
-
-    if ( nNewFirstLine != mnFirstLine )
+    if ( pScrollBar->GetDelta() )
     {
-        mnFirstLine = nNewFirstLine;
-
         CalculateItemPositions();
 
         if ( IsReallyVisible() && IsUpdateMode() )
