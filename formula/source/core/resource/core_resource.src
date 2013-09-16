@@ -20,7 +20,7 @@
 #include "core_resource.hrc"
 #include "formula/compiler.hrc"
 
-// DO NOT CHANGE!
+// DO NOT CHANGE NAMES! Only add functions.
 // These English names are used internally to store/load ODFF as of ODF v1.2
 Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
 {
@@ -362,11 +362,12 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ERROR_NAME    { Text = "#NAME?"  ; };
     String SC_OPCODE_ERROR_NUM     { Text = "#NUM!"   ; };
     String SC_OPCODE_ERROR_NA      { Text = "#N/A"    ; };
+    /* END defined ERROR.TYPE() values. */
     String SC_OPCODE_FILTERXML     { Text = "COM.MICROSOFT.FILTERXML";};
     String SC_OPCODE_WEBSERVICE    { Text = "COM.MICROSOFT.WEBSERVICE"; };
-    /* END defined ERROR.TYPE() values. */
 };
-// DO NOT CHANGE!
+
+// DO NOT CHANGE NAMES! Only add functions.
 // These English names are used internally to store/load ODF v1.0/v1.1 and for
 // API XFunctionAccess.
 Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
@@ -710,7 +711,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ERROR_NUM     { Text = "#NUM!"   ; };
     String SC_OPCODE_ERROR_NA      { Text = "#N/A"    ; };
     /* END defined ERROR.TYPE() values. */
+    String SC_OPCODE_FILTERXML     { Text = "FILTERXML";};
+    String SC_OPCODE_WEBSERVICE    { Text = "WEBSERVICE"; };
 };
+
 Resource RID_STRLIST_FUNCTION_NAMES
 {
     String SC_OPCODE_IF
