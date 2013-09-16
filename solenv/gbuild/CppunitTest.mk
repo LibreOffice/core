@@ -48,8 +48,6 @@ endif
 gb_CppunitTest_CPPTESTDEPS := $(call gb_Executable_get_runtime_dependencies,cppunit/cppunittester)
 gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppunit/cppunittester)
 
-gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
-
 define gb_CppunitTest__make_args
 $(HEADLESS) \
 "-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)" \
@@ -88,7 +86,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		DISABLE_SAL_DBGBOX=t \
 		$(if $(SAL_DIAGNOSE_ABORT),SAL_DIAGNOSE_ABORT=$(SAL_DIAGNOSE_ABORT)) \
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
-		$(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) \
+		$(WORKDIR)/LinkTarget/CppunitTest/$(call gb_CppunitTest_get_libfilename,$*) \
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
@@ -98,10 +96,11 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 				&& false))))
 
 define gb_CppunitTest_CppunitTest
-$(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
+$(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarget,$(1)))
 
 endef
 
+# call gb_CppunitTest__CppunitTest_impl,cppunittest,linktarget
 define gb_CppunitTest__CppunitTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2),CppunitTest_$(1))
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
@@ -195,7 +194,7 @@ $$(call gb_Output_error,\
 endef
 
 define gb_CppunitTest_use_api
-$(call gb_LinkTarget_use_api,$(call gb_CppunitTest__get_linktargetname,$(1)),$(2))
+$(call gb_LinkTarget_use_api,$(call gb_CppunitTest_get_linktarget,$(1)),$(2))
 $(foreach rdb,$(2),$(call gb_CppunitTest__use_api,$(1),$(rdb)))
 
 endef
@@ -333,7 +332,7 @@ $(call gb_CppunitTestFakeExecutable_get_clean_target,$(2)) :
 endef
 
 define gb_CppunitTest__forward_to_Linktarget
-gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest__get_linktargetname,$$(1)),$$(2),$$(3),CppunitTest_$$(1))
+gb_CppunitTest_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_CppunitTest_get_linktarget,$$(1)),$$(2),$$(3),CppunitTest_$$(1))
 
 endef
 

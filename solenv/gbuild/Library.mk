@@ -58,9 +58,9 @@ $(call gb_Library_get_target,$(1)) : SOVERSION :=
 $(if $(gb_Package_PRESTAGEDIR),\
     $(if $(wildcard $(gb_Package_PRESTAGEDIR)/$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))),\
         $(call gb_Library__Library_impl_copy,$(0),$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))),\
-        $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))\
+        $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktarget,$(1)))\
     ),
-    $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))\
+    $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktarget,$(1)))\
 )
 
 endef
@@ -72,6 +72,7 @@ $(call gb_Package_add_file,Library_Copy_$(1),$(2),$(2))
 $(OUTDIR)/lib/$(notdir $(2)) : $(gb_INSTROOT)/$(2)
 endef
 
+# call gb_Library__Library_impl,library,linktarget
 define gb_Library__Library_impl
 $(call gb_LinkTarget_LinkTarget,$(2),Library_$(1))
 $(call gb_LinkTarget_set_targettype,$(2),Library)
@@ -105,9 +106,9 @@ endef
 # The auxtarget is delivered via the rule in Package.mk.
 # gb_Library_add_auxtarget library outdirauxtarget
 define gb_Library_add_auxtarget
-$(call gb_LinkTarget_add_auxtarget,$(call gb_Library_get_linktargetname,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2)))
+$(call gb_LinkTarget_add_auxtarget,$(call gb_Library_get_linktarget,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))))/$(notdir $(2)))
 $(call gb_Library_get_target,$(1)) : $(2)
-$(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2))
+$(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))))/$(notdir $(2))
 $(2) :| $(dir $(2)).dir
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS += $(2)
 
@@ -125,12 +126,12 @@ $(call gb_Library_add_auxtarget,$(1),$(2))
 endef
 
 define gb_Library__set_soversion_script
-$(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktargetname,$(1)),$(2),$(3))
+$(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktarget,$(1)),$(2),$(3))
 $(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
 $(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_target,$(1)).$(2))
 $(call gb_Helper_install,$(call gb_Library__get_final_target,$(1)), \
 	$(call gb_Library_get_install_target,$(1)).$(2), \
-	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).$(2))
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))).$(2))
 
 endef
 
@@ -184,7 +185,7 @@ gb_Library__COMPONENTPREFIXES := \
     OXT:./ \
 
 define gb_Library__forward_to_Linktarget
-gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktargetname,$$(1)),$$(2),$$(3),Library_$$(1))
+gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktarget,$$(1)),$$(2),$$(3),Library_$$(1))
 
 endef
 

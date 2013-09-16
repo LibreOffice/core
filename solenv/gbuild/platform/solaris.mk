@@ -171,7 +171,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(filter-out $(foreach lib,frm scfilt wpftdraw,$(call gb_Library_get_linktargetname,$(lib))),$*),$(gb_LTOFLAGS)) \
+		$(if $(filter-out $(foreach lib,frm scfilt wpftdraw,$(call gb_Library__get_workdir_linktargetname,$(lib))),$(2)),$(gb_LTOFLAGS)) \
 		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT))\
 		$(subst \d,$$,$(RPATH)) \
@@ -215,7 +215,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1)))
+$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 

@@ -136,7 +136,8 @@ gb_LinkTarget_INCLUDE :=\
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 	-I$(BUILDDIR)/config_$(gb_Side) \
 
-gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
+gb_LinkTarget_get_pdbfile = \
+ $(WORKDIR)/LinkTarget/pdb/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).pdb
 
 # avoid fatal error LNK1170 for Library_merged
 define gb_LinkTarget_MergedResponseFile
@@ -164,7 +165,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(PCHOBJS) $(NATIVERES)) && \
-		$(if $(filter $(call gb_Library_get_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
+		$(if $(filter $(call gb_Library__get_workdir_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
 	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
@@ -269,7 +270,7 @@ gb_Library_DLLFILENAMES :=\
 # An assembly is a special kind of library for CLI
 define gb_Library_Assembly
 $(call gb_Library_Library,$(1))
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : NATIVERES :=
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))) : NATIVERES :=
 
 endef
 
@@ -343,7 +344,7 @@ endef
 # in effect this just causes the .export target to be touched
 # cannot be the .lib itself because that causes attempts to get it linked :(
 define gb_Library_get_exports_target
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).exports
+$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
 endef
 
 
