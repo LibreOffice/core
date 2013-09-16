@@ -15,6 +15,7 @@
 #include "formulaopt.hxx"
 #include "miscuno.hxx"
 #include "global.hxx"
+#include "formulagroup.hxx"
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -197,7 +198,8 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_ODF_RECALC           8
 #define SCFORMULAOPT_OPENCL_ENABLED       9
 #define SCFORMULAOPT_OPENCL_AUTOSELECT   10
-#define SCFORMULAOPT_COUNT               11
+#define SCFORMULAOPT_OPENCL_DEVICE       11
+#define SCFORMULAOPT_COUNT               12
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -213,7 +215,8 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
         "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
-        "Calculation/OpenCLAutoSelect"   // SCFORMULAOPT_OPENCL_AUTOSELECT
+        "Calculation/OpenCLAutoSelect",  // SCFORMULAOPT_OPENCL_AUTOSELECT
+        "Calculation/OpenCLDevice"       // SCFORMULAOPT_OPENCL_DEVICE
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -226,7 +229,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 {
     Sequence<OUString> aPropNames = GetPropertyNames();
-    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_STRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT };
+    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_STRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT, SCFORMULAOPT_OPENCL_DEVICE };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
     for ( sal_uInt16 i=0; i<aPropNames.getLength(); ++i )
@@ -418,6 +421,13 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     pValues[nProp] >>= bVal;
                     GetCalcConfig().mbOpenCLAutoSelect = bVal;
                 }
+                break;
+                case SCFORMULAOPT_OPENCL_DEVICE:
+                {
+                    OUString aOpenCLDevice = GetCalcConfig().maOpenCLDevice;
+                    pValues[nProp] >>= aOpenCLDevice;
+                    GetCalcConfig().maOpenCLDevice = aOpenCLDevice;
+                }
                 default:
                     ;
                 }
@@ -530,6 +540,14 @@ void ScFormulaCfg::Commit()
             {
                 sal_Bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
                 pValues[nProp] <<= bVal;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_DEVICE:
+            {
+                OUString aOpenCLDevice = GetCalcConfig().maOpenCLDevice;
+                pValues[nProp] <<= aOpenCLDevice;
+                sc::FormulaGroupInterpreter::switchOpenCLDevice(
+                        aOpenCLDevice, GetCalcConfig().mbOpenCLAutoSelect);
             }
             break;
             default:

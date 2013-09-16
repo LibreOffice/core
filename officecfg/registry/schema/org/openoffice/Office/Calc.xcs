@@ -1344,6 +1344,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="OpenCLAutoDevice" oor:type="xs:string" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>The Device ID of the OpenCL device selected if OpenCLAutoSelect is false</desc>
+          </info>
+          <value></value>
+        </prop>
       </group>
       <group oor:name="Syntax">
         <info>

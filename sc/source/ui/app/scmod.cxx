@@ -179,9 +179,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     ScGlobal::InitTextHeight( pMessagePool );
 
     StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
-
-    // initialize formula grouping
-    sc::FormulaGroupInterpreter::getStatic();
 }
 
 ScModule::~ScModule()

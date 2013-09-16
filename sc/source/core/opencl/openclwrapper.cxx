@@ -2773,6 +2773,20 @@ namespace {
 
 cl_device_id findDeviceIdByDeviceString(const OUString& rString, const std::vector<OpenclPlatformInfo>& rPlatforms)
 {
+    std::vector<OpenclPlatformInfo>::const_iterator it = rPlatforms.begin(), itEnd = rPlatforms.end();
+    for(; it != itEnd; ++it)
+    {
+        std::vector<OpenclDeviceInfo>::const_iterator itr = it->maDevices.begin(), itrEnd = it->maDevices.end();
+        for(; itr != itrEnd; ++itr)
+        {
+            OUString aDeviceId = it->maVendor + " " + itr->maName;
+            if(rString == aDeviceId)
+            {
+                return static_cast<cl_device_id>(itr->device);
+            }
+        }
+    }
+
     return NULL;
 }
 
@@ -2851,6 +2865,10 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
     env.mpOclDevsID = pDeviceId;
     env.mpOclCmdQueue = command_queue;
     OpenclDevice::initOpenclAttr(&env);
+
+    // why do we need this at all?
+    OpenclDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( 1 );
+    OpenclDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
     return !OpenclDevice::initOpenclRunEnv(0);
 }
 

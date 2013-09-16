@@ -13,6 +13,8 @@
 #include "scdllapi.h"
 #include "formula/grammar.hxx"
 
+#include "rtl/ustring.hxx"
+
 // have to match the registry values
 enum ScRecalcOptions
 {
@@ -30,6 +32,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool mbEmptyStringAsZero:1;
     bool mbOpenCLEnabled:1;
     bool mbOpenCLAutoSelect:1;
+    OUString maOpenCLDevice;
 
     ScCalcConfig();
 

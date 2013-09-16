@@ -371,6 +371,7 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
     mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));
     mpFtComputeUnits->SetText(OUString::number(pInfo->mnComputeUnits));
     mpFtMemory->SetText(OUString::number(pInfo->mnMemory/1024/1024));
+    maConfig.maOpenCLDevice = dynamic_cast<SvLBoxString*>(pEntry->GetItem(1))->GetText();
 #endif
 }
 

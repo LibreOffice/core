@@ -27,7 +27,8 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
            mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
            mbOpenCLEnabled == r.mbOpenCLEnabled &&
-           mbOpenCLAutoSelect == r.mbOpenCLAutoSelect;
+           mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
+           maOpenCLDevice == r.maOpenCLDevice;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

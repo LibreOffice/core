@@ -427,7 +427,7 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     if (!pModule)
         return;
 
-    oslGenericFunction fn = pModule->getFunctionSymbol("switchOpenclDevice");
+    oslGenericFunction fn = pModule->getFunctionSymbol("switchOpenClDevice");
     if (!fn)
         return;
 
