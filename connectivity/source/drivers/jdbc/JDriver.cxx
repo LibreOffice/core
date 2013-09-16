@@ -117,7 +117,20 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLEx
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
     sal_Bool bEnabled = sal_False;
-    OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
+    javaFrameworkError e = jfw_getEnabled(&bEnabled);
+    switch (e) {
+    case JFW_E_NONE:
+        break;
+    case JFW_E_DIRECT_MODE:
+        SAL_INFO(
+            "connectivity.jdbc",
+            "jfw_getEnabled: JFW_E_DIRECT_MODE, assuming true");
+        bEnabled = true;
+        break;
+    default:
+        SAL_WARN("connectivity.jdbc", "jfw_getEnabled: error code " << +e);
+        break;
+    }
     return bEnabled && url.startsWith("jdbc:");
 }
 // -------------------------------------------------------------------------

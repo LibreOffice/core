@@ -400,7 +400,21 @@ namespace connectivity
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url ) throw (SQLException, RuntimeException)
     {
         sal_Bool bEnabled = sal_False;
-        OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
+        javaFrameworkError e = jfw_getEnabled(&bEnabled);
+        switch (e) {
+        case JFW_E_NONE:
+            break;
+        case JFW_E_DIRECT_MODE:
+            SAL_INFO(
+                "connectivity.hsqldb",
+                "jfw_getEnabled: JFW_E_DIRECT_MODE, assuming true");
+            bEnabled = true;
+            break;
+        default:
+            SAL_WARN(
+                "connectivity.hsqldb", "jfw_getEnabled: error code " << +e);
+            break;
+        }
         return bEnabled  && url.equals("sdbc:embedded:hsqldb");
     }
 

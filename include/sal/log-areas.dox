@@ -58,6 +58,8 @@ certain functionality.
 @li @c connectivity.commontools
 @li @c connectivity.drivers
 @li @c connectivity.firebird
+@li @c connectivity.hsqldb
+@li @c connectivity.jdbc
 @li @c connectivity.mork
 @li @c connectivity.flat
 @li @c connectivity.parse
