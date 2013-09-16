@@ -16,7 +16,9 @@ $(eval $(call gb_Module_add_targets,jvmfwk,\
 	Library_jvmfwk \
 	Library_sunjavaplugin \
 	Package_jreproperties \
+	Package_jreproperties_solver \
 	Package_rcfiles \
+	Package_rcfiles_solver \
 ))
 
 ifneq (,$(filter-out MACOSX WNT,$(OS)))
