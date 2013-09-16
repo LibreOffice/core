@@ -1179,7 +1179,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     rDoc.Replace( nInsPos, sChg );
 }
 
-String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
+OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
                                 sal_Unicode cInsChar, sal_Bool bSttQuote )
 {
     LanguageType eLang = rDoc.GetLanguage( nInsPos, sal_False );
@@ -1673,7 +1673,7 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
 
 // the search for the words in the substitution table
 const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
-                const String& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos,
+                const OUString& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos,
                 SvxAutoCorrDoc&, LanguageType& rLang )
 {
     LanguageType eLang = rLang;

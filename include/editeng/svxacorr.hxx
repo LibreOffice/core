@@ -306,7 +306,7 @@ public:
     // nEnd - to check position - as of this item forward
     // rLang - Input: in which language is searched
     //         Output: in which "language list" was it found
-    const SvxAutocorrWord* SearchWordsInList( const String& rTxt,
+    const SvxAutocorrWord* SearchWordsInList( const OUString& rTxt,
                                     xub_StrLen& rStt, xub_StrLen nEndPos,
                                     SvxAutoCorrDoc& rDoc,
                                     LanguageType& rLang );
@@ -322,7 +322,7 @@ public:
     void SetStartDoubleQuote( const sal_Unicode cStart )    { cStartDQuote = cStart; }
     void SetEndDoubleQuote( const sal_Unicode cEnd )        { cEndDQuote = cEnd; }
 
-    String GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
+    OUString GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
                     sal_Unicode cInsChar, sal_Bool bSttQuote );
     void InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
                     sal_Unicode cInsChar, sal_Bool bSttQuote, sal_Bool bIns );
