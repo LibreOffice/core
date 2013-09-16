@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -118,6 +119,7 @@ public:
     void testFdo68787();
     void testCharacterBorder();
     void testStyleInheritance();
+    void testSmartart();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -229,6 +231,7 @@ void Test::run()
         {"fdo68787.docx", &Test::testFdo68787},
         {"charborder.odt", &Test::testCharacterBorder},
         {"style-inheritance.docx", &Test::testStyleInheritance},
+        {"smartart.docx", &Test::testSmartart},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1376,6 +1379,94 @@ void Test::testStyleInheritance()
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(properties, "FollowStyle"));
     properties = uno::Reference< beans::XPropertySet >(paragraphStyles->getByName("Heading 11"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getProperty<OUString>(properties, "FollowStyle"));
+}
+
+void Test::testSmartart()
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGrabBag(0);
+    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+
+    sal_Bool bTheme = sal_False;
+    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    {
+      if (aGrabBag[i].Name == OUString("OOXTheme"))
+      {
+        bTheme = sal_True;
+        uno::Reference<xml::dom::XDocument> aThemeDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aThemeDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aThemeDom.get()); // Reference not empty
+      }
+    }
+    CPPUNIT_ASSERT(bTheme); // Grab Bag has all the expected elements
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
+
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
+
+    uno::Reference<beans::XPropertySet> xGroupPropertySet(getShape(1), uno::UNO_QUERY);
+    xGroupPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+
+    sal_Bool bData = sal_False, bLayout = sal_False, bQStyle = sal_False, bColor = sal_False, bDrawing = sal_False;
+    for(int i = 0; i < aGrabBag.getLength(); ++i)
+    {
+      if (aGrabBag[i].Name == OUString("OOXData"))
+      {
+        bData = sal_True;
+        uno::Reference<xml::dom::XDocument> aDataDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDataDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aDataDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString("OOXLayout"))
+      {
+        bLayout = sal_True;
+        uno::Reference<xml::dom::XDocument> aLayoutDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aLayoutDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aLayoutDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString("OOXStyle"))
+      {
+        bQStyle = sal_True;
+        uno::Reference<xml::dom::XDocument> aStyleDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aStyleDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aStyleDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString("OOXColor"))
+      {
+        bColor = sal_True;
+        uno::Reference<xml::dom::XDocument> aColorDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aColorDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aColorDom.get()); // Reference not empty
+      }
+      else if (aGrabBag[i].Name == OUString("OOXDrawing"))
+      {
+        bDrawing = sal_True;
+        uno::Reference<xml::dom::XDocument> aDrawingDom;
+        CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDrawingDom); // PropertyValue of proper type
+        CPPUNIT_ASSERT(aDrawingDom.get()); // Reference not empty
+      }
+    }
+    CPPUNIT_ASSERT(bData && bLayout && bQStyle && bColor && bDrawing); // Grab Bag has all the expected elements
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nValue(0);
+    xPropertySet->getPropertyValue("FillColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), nValue); // If fill color is right, theme import is OK
+
+    uno::Reference<text::XTextRange> xTextRange(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sample"), xTextRange->getString()); // Shape has text
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextRange->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("ParaAdjust") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
