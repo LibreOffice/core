@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-typedef ::std::vector< String* > StringList;
+typedef ::std::vector< OUString > StringList;
 typedef ::std::vector< OString* > ByteStringList;
 
 class SvCommand
@@ -35,8 +35,8 @@ public:
     OUString    aListFile;
     OUString    aSlotMapFile;
     OUString    aSfxItemFile;
-    String      aPath;
-    String      aTargetFile;
+    OUString    aPath;
+    OUString    aTargetFile;
     OUString    aHelpIdFile;
     OUString    aCSVFile;
     OUString    aExportFile;

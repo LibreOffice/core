@@ -27,7 +27,7 @@
 #include <osl/file.hxx>
 
 #define BR 0x8000
-sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool bImmerVerschieben )
+sal_Bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, sal_Bool bImmerVerschieben )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
     sal_uLong nC1 = 0;
@@ -245,8 +245,8 @@ int cdecl main ( int argc, char ** argv)
     if( nExit == 0 )
     {
         sal_Bool bErr = sal_False;
-        sal_Bool bDoMove = aCommand.aTargetFile.Len() == 0;
-        String aErrFile, aErrFile2;
+        sal_Bool bDoMove = aCommand.aTargetFile.isEmpty();
+        OUString aErrFile, aErrFile2;
         if( !bErr && !aCommand.aListFile.isEmpty() )
         {
             bErr |= !FileMove_Impl( aCommand.aListFile, aTmpListFile, bDoMove );
@@ -325,7 +325,7 @@ int cdecl main ( int argc, char ** argv)
         }
         else
         {
-            if( aCommand.aTargetFile.Len() )
+            if( !aCommand.aTargetFile.isEmpty() )
             {
 #ifdef ICC
                 DirEntry aT(aCommand.aTargetFile);

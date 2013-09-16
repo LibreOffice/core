@@ -134,7 +134,7 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 {
     for( size_t n = 0; n < rCommand.aInFileList.size(); ++n )
     {
-        String aFileName ( *rCommand.aInFileList[ n ] );
+        OUString aFileName ( rCommand.aInFileList[ n ] );
         pDataBase->AddDepFile(aFileName);
         SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
         if( aStm.GetError() == SVSTREAM_OK )
@@ -178,7 +178,7 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
 {
     // program name
-    pList->push_back( new String(OUString::createFromAscii(*argv) ) );
+    pList->push_back( OUString::createFromAscii(*argv) );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
@@ -200,12 +200,12 @@ static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
                     while( aStr[n] && !isspace( aStr[n] ) )
                         n++;
                     if( n != nPos )
-                        pList->push_back( new String( OStringToOUString(aStr.copy(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) ) );
+                        pList->push_back( OStringToOUString(aStr.copy(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) );
                 }
             }
         }
         else if( argv[ i ] )
-            pList->push_back( new String( OUString::createFromAscii( argv[ i ] ) ) );
+            pList->push_back( OUString::createFromAscii( argv[ i ] ) );
     }
     return sal_True;
 }
@@ -219,17 +219,17 @@ SvCommand::SvCommand( int argc, char ** argv )
     {
         for( size_t i = 1; i < aList.size(); i++ )
         {
-            String aParam( *aList[ i ] );
-            sal_Unicode aFirstChar( aParam.GetChar(0) );
+            OUString aParam( aList[ i ] );
+            sal_Unicode aFirstChar( aParam[0] );
             if( '-' == aFirstChar )
             {
-                aParam.Erase( 0, 1 );
-                aFirstChar = aParam.GetChar(0);
+                aParam = aParam.copy( 1 );
+                aFirstChar = aParam[0];
                 if( aFirstChar == 'F' || aFirstChar == 'f' )
                 {
-                    aParam.Erase( 0, 1 );
-                    aFirstChar = aParam.GetChar(0);
-                    String aName( aParam.Copy( 1 ) );
+                    aParam = aParam.copy( 1 );
+                    aFirstChar = aParam[0];
+                    OUString aName( aParam.copy( 1 ) );
                     if( 's' == aFirstChar )
                     { // name of slot output
                         aSlotMapFile = aName;
@@ -298,35 +298,35 @@ SvCommand::SvCommand( int argc, char ** argv )
                         exit( -1 );
                     }
                 }
-                else if( aParam.EqualsIgnoreCaseAscii( "help" ) || aParam.EqualsIgnoreCaseAscii( "?" ) )
+                else if( aParam.equalsIgnoreAsciiCase( "help" ) || aParam.equalsIgnoreAsciiCase( "?" ) )
                 { // help
                     printf( "%s", CommandLineSyntax );
                 }
-                else if( aParam.EqualsIgnoreCaseAscii( "quiet" ) )
+                else if( aParam.equalsIgnoreAsciiCase( "quiet" ) )
                 {
                     nVerbosity = 0;
                 }
-                else if( aParam.EqualsIgnoreCaseAscii( "verbose" ) )
+                else if( aParam.equalsIgnoreAsciiCase( "verbose" ) )
                 {
                     nVerbosity = 2;
                 }
-                else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
+                else if( aParam.equalsIgnoreAsciiCase( "syntax" ) )
                 { // help
                     int j = 0;
                     while(SyntaxStrings[j])
                         printf("%s\n",SyntaxStrings[j++]);
                 }
-                else if( aParam.EqualsIgnoreCaseAscii( "i", 0, 1 ) )
+                else if( aParam.startsWithIgnoreAsciiCase( "i" ) )
                 { // define include paths
-                    String aName( aParam.Copy( 1 ) );
-                    if( aPath.Len() )
+                    OUString aName( aParam.copy( 1 ) );
+                    if( !aPath.isEmpty() )
                         aPath += OUString( SAL_PATHSEPARATOR );
                     aPath += aName;
                 }
-                else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
+                else if( aParam.startsWithIgnoreAsciiCase( "rsc" ) )
                 { // first line in *.srs file
                     OSL_ENSURE(false, "does anything use this option, doesn't look like it belong here");
-                    if( aList[ i + 1 ] )
+                    if( !aList[ i + 1 ].isEmpty() )
                     {
                         i++;
                     }
@@ -343,7 +343,7 @@ SvCommand::SvCommand( int argc, char ** argv )
             }
             else
             {
-                aInFileList.push_back( new String( aParam ) );
+                aInFileList.push_back( aParam );
             }
         }
     }
@@ -352,15 +352,13 @@ SvCommand::SvCommand( int argc, char ** argv )
         printf( "%s", CommandLineSyntax );
     }
 
-    for ( size_t i = 0, n = aList.size(); i < n; ++i )
-        delete aList[ i ];
     aList.clear();
 
     OString aInc(getenv("INCLUDE"));
     // append include environment variable
     if( aInc.getLength() )
     {
-        if( aPath.Len() )
+        if( !aPath.isEmpty() )
             aPath += OUString( SAL_PATHSEPARATOR );
         aPath += OStringToOUString(aInc, RTL_TEXTENCODING_ASCII_US);
     }
@@ -369,8 +367,6 @@ SvCommand::SvCommand( int argc, char ** argv )
 SvCommand::~SvCommand()
 {
     // release String list
-    for ( size_t i = 0, n = aInFileList.size(); i < n; ++i )
-        delete aInFileList[ i ];
     aInFileList.clear();
 }
 

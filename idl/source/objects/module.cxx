@@ -35,7 +35,7 @@ SvMetaModule::SvMetaModule()
 {
 }
 
-SvMetaModule::SvMetaModule( const String & rIdlFileName, sal_Bool bImp )
+SvMetaModule::SvMetaModule( const OUString & rIdlFileName, sal_Bool bImp )
     : aIdlFileName( rIdlFileName )
     , bImported( bImp ), bIsModified( sal_False )
 {

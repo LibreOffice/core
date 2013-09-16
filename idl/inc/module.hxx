@@ -38,7 +38,7 @@ class SvMetaModule : public SvMetaExtern
     SvMetaTypeMemberList        aTypeList;
     SvMetaAttributeMemberList   aAttrList;
 // browser
-    String                  aIdlFileName;
+    OUString                aIdlFileName;
     SvString                aHelpFileName;
     SvString                aSlotIdFile;
     SvString                aTypeLibFile;
@@ -58,7 +58,7 @@ public:
                         SV_DECL_META_FACTORY1( SvMetaModule, SvMetaExtern, 13 )
                         SvMetaModule();
 
-    const String &      GetIdlFileName() const { return aIdlFileName; }
+    const OUString &    GetIdlFileName() const { return aIdlFileName; }
     const OString& GetModulePrefix() const { return aModulePrefix.getString(); }
 
     virtual sal_Bool    SetName( const OString& rName, SvIdlDataBase * = NULL  );
@@ -70,7 +70,7 @@ public:
     const SvMetaTypeMemberList & GetTypeList() const { return aTypeList; }
     const SvMetaClassMemberList & GetClassList() const { return aClassList; }
 
-                        SvMetaModule( const String & rIdlFileName,
+                        SvMetaModule( const OUString & rIdlFileName,
                                       sal_Bool bImported );
 
     sal_Bool                FillNextName( SvGlobalName * );

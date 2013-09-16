@@ -38,8 +38,6 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
 
 SvIdlDataBase::~SvIdlDataBase()
 {
-    for ( size_t i = 0, n = aIdFileList.size(); i < n; ++i )
-        delete aIdFileList[ i ];
     aIdFileList.clear();
 
     delete pIdTable;
@@ -203,17 +201,17 @@ sal_Bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
     return sal_False;
 }
 
-sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
+sal_Bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
 {
     OUString aFullName;
     osl::File::searchFileURL( rFileName, GetPath(), aFullName);
     osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
 
     for ( size_t i = 0, n = aIdFileList.size(); i < n; ++i )
-        if ( *aIdFileList[ i ] == rFileName )
+        if ( aIdFileList[ i ] == rFileName )
             return sal_True;
 
-    aIdFileList.push_back( new String( rFileName ) );
+    aIdFileList.push_back( rFileName );
     this->AddDepFile( aFullName );
     SvTokenStream aTokStm( aFullName );
     if( aTokStm.GetStream().GetError() == SVSTREAM_OK )
@@ -554,7 +552,7 @@ void SvIdlDataBase::WriteError( const OString& rErrWrn,
 void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 {
     // error treatment
-    String aFileName( rInStm.GetFileName() );
+    OUString aFileName( rInStm.GetFileName() );
     OStringBuffer aErrorText;
     sal_uLong   nRow = 0, nColumn = 0;
 
@@ -620,7 +618,7 @@ SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 {
 }
 
-sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported, const String & rPath )
+sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported, const OUString & rPath )
 {
     aPath = rPath; // only valid for this iteration
     SvToken * pTok;
@@ -783,9 +781,9 @@ sal_Bool SvIdlWorkingBase::WriteSfxItem( SvStream & )
     return sal_False;
 }
 
-void SvIdlDataBase::StartNewFile( const String& rName )
+void SvIdlDataBase::StartNewFile( const OUString& rName )
 {
-    bExport = ( aExportFile.EqualsIgnoreCaseAscii( rName ) );
+    bExport = ( aExportFile.equalsIgnoreAsciiCase( rName ) );
 }
 
 void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
@@ -827,7 +825,7 @@ sal_Bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
     return sal_True;
 }
 
-void SvIdlDataBase::AddDepFile(String const& rFileName)
+void SvIdlDataBase::AddDepFile(OUString const& rFileName)
 {
     m_DepFiles.insert(rFileName);
 }

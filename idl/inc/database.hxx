@@ -56,10 +56,10 @@ public:
 class SvIdlDataBase
 {
     sal_Bool                        bExport;
-    String                      aExportFile;
+    OUString                    aExportFile;
     sal_uInt32                  nUniqueId;
     sal_uInt32                  nVerbosity;
-    String                      aDataBaseFile;
+    OUString                    aDataBaseFile;
     SvPersistStream             aPersStream;
     StringList                  aIdFileList;
     SvStringHashTable *         pIdTable;
@@ -73,7 +73,7 @@ class SvIdlDataBase
 protected:
     ::std::set< OUString > m_DepFiles;
     SvMetaObjectMemberStack     aContextStack;
-    String                      aPath;
+    OUString                    aPath;
     SvIdlError                  aError;
     void WriteReset()
     {
@@ -100,15 +100,15 @@ public:
     OString            aIFaceName;
     SvNumberIdentifier      aStructSlotId;
 
-    void                    StartNewFile( const String& rName );
-    void                    SetExportFile( const String& rName )
+    void                    StartNewFile( const OUString& rName );
+    void                    SetExportFile( const OUString& rName )
                             { aExportFile = rName; }
     void                    AppendAttr( SvMetaAttribute *pSlot );
     const SvIdlError &      GetError() const { return aError; }
     void                    SetError( const SvIdlError & r )
                             { aError = r; }
 
-    const String &            GetPath() const { return aPath; }
+    const OUString &        GetPath() const { return aPath; }
     SvMetaObjectMemberStack & GetStack()      { return aContextStack; }
 
     void                    Write(const OString& rText);
@@ -131,7 +131,7 @@ public:
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
     sal_Bool                FindId( const OString& rIdName, sal_uLong * pVal );
     sal_Bool                InsertId( const OString& rIdName, sal_uLong nVal );
-    sal_Bool                    ReadIdFile( const String & rFileName );
+    sal_Bool                ReadIdFile( const OUString & rFileName );
 
     SvMetaType *            FindType( const OString& rName );
     static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
@@ -141,7 +141,7 @@ public:
                                             SvMetaType * pType = NULL );
     SvMetaAttribute *       SearchKnownAttr( const SvNumberIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
-    void AddDepFile(String const& rFileName);
+    void AddDepFile(OUString const& rFileName);
     bool WriteDepFile(SvFileStream & rStream, OUString const& rTarget);
 };
 
@@ -150,7 +150,7 @@ class SvIdlWorkingBase : public SvIdlDataBase
 public:
                 explicit SvIdlWorkingBase( const SvCommand& rCmd );
 
-    sal_Bool        ReadSvIdl( SvTokenStream &, sal_Bool bImported, const String & rPath );
+    sal_Bool        ReadSvIdl( SvTokenStream &, sal_Bool bImported, const OUString & rPath );
     sal_Bool        WriteSvIdl( SvStream & );
 
     sal_Bool        WriteSfx( SvStream & );

@@ -130,7 +130,7 @@ class SvTokenStream
 
     SvFileStream *  pInStream;
     SvStream &      rInStream;
-    String          aFileName;
+    OUString        aFileName;
     boost::ptr_vector<SvToken> aTokList;
     boost::ptr_vector<SvToken>::iterator pCurToken;
 
@@ -165,12 +165,12 @@ class SvTokenStream
                         }
                     }
 public:
-                    SvTokenStream( const String & rFileName );
-                    SvTokenStream( SvStream & rInStream, const String & rFileName );
+                    SvTokenStream( const OUString & rFileName );
+                    SvTokenStream( SvStream & rInStream, const OUString & rFileName );
                     ~SvTokenStream();
 
-    const String &  GetFileName() const { return aFileName; }
-    SvStream &      GetStream() { return rInStream; }
+    const OUString &  GetFileName() const { return aFileName; }
+    SvStream &        GetStream() { return rInStream; }
 
     void            SetTabSize( sal_uInt16 nTabSizeP )
                     { nTabSize = nTabSizeP; }
