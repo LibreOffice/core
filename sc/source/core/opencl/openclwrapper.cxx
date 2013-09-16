@@ -436,17 +436,6 @@ int OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
     return 1;
 }
 
-int OpenclDevice::runKernelWrapper( cl_kernel_function function, const char * kernelName, void **usrdata )
-{
-    printf("oclwrapper:runKernel_wrapper...\n");
-    if ( registerKernelWrapper( kernelName, function ) != 1 )
-    {
-        fprintf(stderr, "Error:runKernel_wrapper:registerKernelWrapper fail!\n");
-        return -1;
-    }
-    return ( runKernel( kernelName, usrdata ) );
-}
-
 int OpenclDevice::cachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName )
 {
     int i;
@@ -623,43 +612,6 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
     gpuInfo->mnFileCount += 1;
 
     return 1;
-}
-
-int OpenclDevice::getKernelEnvAndFunc( const char *kernelName, KernelEnv *env, cl_kernel_function *function)
-{
-    for (size_t i = 0, n = gpuEnv.maKernelNames.size(); i < n; ++i)
-    {
-        const char* pName = gpuEnv.maKernelNames[i];
-        if (!strcasecmp(kernelName, pName))
-        {
-            env->mpkContext = gpuEnv.mpContext;
-            env->mpkCmdQueue = gpuEnv.mpCmdQueue;
-            env->mpkProgram = gpuEnv.mpArryPrograms[0];
-            env->mpkKernel = gpuEnv.mpArryKernels[i];
-            *function = gpuEnv.mpArryKnelFuncs[i];
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
-int OpenclDevice::runKernel( const char *kernelName, void **userdata)
-{
-    KernelEnv kEnv;
-    cl_kernel_function function;
-    int status;
-
-    memset( &kEnv, 0, sizeof( KernelEnv ) );
-    status = getKernelEnvAndFunc( kernelName, &kEnv, &function );
-    strcpy( kEnv.mckKernelName, kernelName );
-    if ( status == 1 )
-    {
-        if ( &kEnv == (KernelEnv *) NULL || &function == (cl_kernel_function *) NULL)
-            return 0;
-        return ( function( userdata, &kEnv ) );
-    }
-    return 0;
 }
 
 int OpenclDevice::initOpenclRunEnv( int argc )
@@ -889,18 +841,6 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
     gpuInfo->mnKhrFp64Flag = bKhrFp64;
     gpuInfo->mnAmdFp64Flag = bAmdFp64;
 
-    return 0;
-}
-int OpenclDevice::registerKernelWrapper( const char *kernelName, cl_kernel_function function )
-{
-    for (size_t i = 0, n = gpuEnv.maKernelNames.size(); i < n; ++i)
-    {
-        if (!strcasecmp(kernelName, gpuEnv.maKernelNames[i]))
-        {
-            gpuEnv.mpArryKnelFuncs[i] = function;
-            return 1;
-        }
-    }
     return 0;
 }
 

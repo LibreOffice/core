@@ -114,7 +114,6 @@ struct GPUEnv
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file
     char mArryKnelSrcFile[MAX_CLFILE_NUM][256]; //the max len of kernel file name is 256
     std::vector<const char*> maKernelNames;
-    cl_kernel_function mpArryKnelFuncs[MAX_CLKERNEL_NUM];
     int mnFileCount; // only one kernel file
     int mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
     int mnKhrFp64Flag;
@@ -190,12 +189,8 @@ public:
 
     static int initOpenclAttr( OpenCLEnv * env );
     int setKernelEnv( KernelEnv *envInfo );
-    int runKernel( const char *kernelName, void **userdata );
     int convertToString( const char *filename, char **source );
     int checkKernelName( KernelEnv *envInfo, const char *kernelName );
-    int registerKernelWrapper( const char *kernelName, cl_kernel_function function );
-    int runKernelWrapper( cl_kernel_function function, const char * kernelName, void **usrdata );
-    int getKernelEnvAndFunc( const char *kernelName, KernelEnv *env, cl_kernel_function *function );
 
     int getOpenclState();
     void setOpenclState( int state );
