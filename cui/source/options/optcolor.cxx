@@ -346,7 +346,6 @@ ColorConfigWindow_Impl::Entry::Entry( Window *pGrid, unsigned nYPos,
     , m_aDefaultColor(rColorEntry.getDefaultColor())
 {
     m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
-    m_pText->set_grid_width(3);
     m_pText->set_grid_left_attach(0);
     m_pText->set_grid_top_attach(nYPos);
     m_pText->set_margin_left(6 + nCheckBoxLabelOffset);
@@ -755,6 +754,7 @@ void ColorConfigWindow_Impl::ColorHdl (
 
     // extended entries
     unsigned const nExtCount = pExtConfig->GetComponentCount();
+    i = ColorConfigEntryCount;
     for (unsigned j = 0; j != nExtCount; ++j)
     {
         OUString sComponentName = pExtConfig->GetComponentName(j);
