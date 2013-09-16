@@ -142,30 +142,6 @@ struct DoubleVectorFormula
     int mnInputEndOffset;
 };
 
-class OpenclCalcBase
-{
-public:
-    OpenclCalcBase(){};
-    virtual ~OpenclCalcBase(){};
-    virtual int oclHostArithmeticOperator64Bits( const char* aKernelName, double *&rResult, int nRowSize )=0;
-    virtual int oclMoreColHostArithmeticOperator64Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize )=0;
-    virtual int oclHostFormulaStatistics64Bits( const char* aKernelName,double *&output, int outputSize )=0;
-    virtual int oclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize)=0;
-    virtual int oclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize )=0;
-    virtual int oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst,std::vector<double>&dpResult, uint nDim)=0;
-    virtual int oclMoreColHostArithmeticOperator32Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize )=0;
-
-    virtual int oclHostArithmeticOperator32Bits( const char* aKernelName, double *rResult, int nRowSize )=0;
-    virtual int oclHostFormulaStatistics32Bits( const char* aKernelName,double *output, int outputSize )=0;
-    virtual int oclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize)=0;
-    virtual int oclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize )=0;
-    virtual int oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim )=0;
-
-    virtual int oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArray, const double *pSubtractSingle, size_t nSrcDataSize,size_t nElements, double delta,uint *nStartPos,uint *nEndPos ,double *deResult)=0;
-    virtual double *oclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double delta )=0;
-};
-
-
 class OpenclDevice
 {
 public:
@@ -193,7 +169,7 @@ public:
     static void setOpenclState( int state );
 };
 
-class OclCalc: public OpenclDevice,OpenclCalcBase
+class OclCalc: public OpenclDevice
 {
 
 public:
