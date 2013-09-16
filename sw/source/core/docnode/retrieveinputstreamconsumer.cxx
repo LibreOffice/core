@@ -39,7 +39,7 @@ SwAsyncRetrieveInputStreamThreadConsumer::~SwAsyncRetrieveInputStreamThreadConsu
     SwThreadManager::GetThreadManager().RemoveThread( mnThreadID );
 }
 
-void SwAsyncRetrieveInputStreamThreadConsumer::CreateThread( const String& rURL )
+void SwAsyncRetrieveInputStreamThreadConsumer::CreateThread( const OUString& rURL )
 {
     // Get new data container for input stream data
     SwRetrievedInputStreamDataManager::tDataKey nDataKey =

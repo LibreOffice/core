@@ -25,7 +25,6 @@
 #include <retrievedinputstreamdata.hxx>
 
 class SwGrfNode;
-class String;
 
 /** class to provide creation of a thread to retrieve an input stream given by
     an URL and to consume the retrieved input stream.
@@ -41,7 +40,7 @@ class SwAsyncRetrieveInputStreamThreadConsumer
 
         /** method to create thread
         */
-        void CreateThread( const String& rURL );
+        void CreateThread( const OUString& rURL );
 
         /** method called to provide the retrieved input stream to the thread Consumer
         */
