@@ -30,7 +30,6 @@ public:
         oox::drawingml::ShapePtr pShapePtr ) throw();
     virtual ~ExtDrawingFragmentHandler() throw();
 
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
