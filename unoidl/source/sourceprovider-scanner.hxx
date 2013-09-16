@@ -189,19 +189,22 @@ private:
 };
 
 struct SourceProviderEntity {
-    enum Kind { KIND_EXTERNAL, KIND_LOCAL, KIND_INTERFACE_DECL };
+    enum Kind { KIND_EXTERNAL, KIND_LOCAL, KIND_INTERFACE_DECL, KIND_MODULE };
 
     explicit SourceProviderEntity(
         Kind theKind, rtl::Reference<unoidl::Entity> const & externalEntity):
         kind(theKind), entity(externalEntity)
-    { assert(theKind != KIND_INTERFACE_DECL); assert(externalEntity.is()); }
+    { assert(theKind <= KIND_LOCAL); assert(externalEntity.is()); }
 
     explicit SourceProviderEntity(
         rtl::Reference<SourceProviderEntityPad> const & localPad):
         kind(KIND_LOCAL), pad(localPad)
     { assert(localPad.is()); }
 
-    SourceProviderEntity(): kind(KIND_INTERFACE_DECL) {}
+    explicit SourceProviderEntity(Kind theKind): kind(theKind)
+    { assert(theKind >= KIND_INTERFACE_DECL); }
+
+    SourceProviderEntity() {} // needed for std::map::operator []
 
     Kind kind;
     rtl::Reference<unoidl::Entity> entity;

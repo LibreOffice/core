@@ -460,6 +460,8 @@ Found findEntity(
                                         case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
                                             argT = unoidl::detail::SourceProviderType::TYPE_INTERFACE;
                                             break;
+                                        case unoidl::detail::SourceProviderEntity::KIND_MODULE:
+                                            assert(false); // this cannot happen
                                         }
                                         argType
                                             = unoidl::detail::SourceProviderType(
@@ -546,6 +548,11 @@ Found findEntity(
                     e->entity = ent;
                 }
                 break;
+            case unoidl::detail::SourceProviderEntity::KIND_MODULE:
+                error(
+                    location, yyscanner,
+                    *name + " is based on module entity " + n);
+                return FOUND_ERROR;
             }
         }
         if (!typeNucleus.isEmpty() || rank != 0 || !args.empty()) {
@@ -696,6 +703,8 @@ Found findEntity(
                             unoidl::detail::SourceProviderType::TYPE_INTERFACE,
                             n, e);
                         break;
+                    case unoidl::detail::SourceProviderEntity::KIND_MODULE:
+                        assert(false); // this cannot happen
                     }
                 }
             } else {
@@ -757,6 +766,8 @@ Found findEntity(
                          + n
                          + " that is not a polymorphic struct type template"));
                     return FOUND_ERROR;
+                case unoidl::detail::SourceProviderEntity::KIND_MODULE:
+                    assert(false); // this cannot happen
                 }
             }
             if (typedefedType != 0) {
@@ -904,7 +915,21 @@ moduleDecl:
   TOK_MODULE identifier
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
-      data->modules.push_back(convertToFullName(data, $2));
+      OUString name(convertToFullName(data, $2));
+      data->modules.push_back(name);
+      std::pair<std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator, bool> p(
+          data->entities.insert(
+              std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
+                  name,
+                  unoidl::detail::SourceProviderEntity(
+                      unoidl::detail::SourceProviderEntity::KIND_MODULE))));
+      if (!p.second
+          && (p.first->second.kind
+              != unoidl::detail::SourceProviderEntity::KIND_MODULE))
+      {
+          error(@2, yyscanner, "multiple entities named " + name);
+          YYERROR;
+      }
   }
   '{' definitions '}' ';' { yyget_extra(yyscanner)->modules.pop_back(); }
 ;
@@ -2671,7 +2696,9 @@ interfaceDecl:
       std::pair<std::map<OUString, unoidl::detail::SourceProviderEntity>::iterator, bool> p(
           data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
-                  name, unoidl::detail::SourceProviderEntity())));
+                  name,
+                  unoidl::detail::SourceProviderEntity(
+                      unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL))));
       if (!p.second
           && (p.first->second.kind
               != unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL))
@@ -3468,6 +3495,8 @@ type:
                       ent);
                   ok = true;
                   break;
+              case unoidl::detail::SourceProviderEntity::KIND_MODULE:
+                  assert(false); // this cannot happen
               }
               if (!ok) {
                   error(@1, yyscanner, "non-type entity " + name);
@@ -3533,6 +3562,8 @@ type:
           break;
       case unoidl::detail::SourceProviderEntity::KIND_INTERFACE_DECL:
           break;
+      case unoidl::detail::SourceProviderEntity::KIND_MODULE:
+          assert(false); // this cannot happen
       }
       if (!ok) {
           error(@1, yyscanner, "non-type entity " + name);
