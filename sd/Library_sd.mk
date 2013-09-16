@@ -182,7 +182,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/animations/CustomAnimationDialog \
 	sd/source/ui/animations/CustomAnimationList \
 	sd/source/ui/animations/CustomAnimationPane \
-	sd/source/ui/animations/DialogListBox \
 	sd/source/ui/animations/STLPropertySet \
 	sd/source/ui/animations/SlideTransitionPane \
 	sd/source/ui/animations/motionpathtag \

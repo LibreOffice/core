@@ -2473,6 +2473,7 @@ CmisPropertiesControl::CmisPropertiesControl(SfxTabPage* pParent)
     , m_rScrolledWindow( *pParent->get<VclScrolledWindow>("CmisScroll"))
     , m_rVertScroll( m_rScrolledWindow.getVertScrollBar())
 {
+    m_rScrolledWindow.setUserManagedScrolling(true);
     m_rVertScroll.EnableDrag();
     m_rVertScroll.Show( m_rScrolledWindow.GetStyle() & WB_VSCROLL);
     m_rVertScroll.SetRangeMin(0);

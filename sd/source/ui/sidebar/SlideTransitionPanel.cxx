@@ -23,7 +23,6 @@
 
 namespace sd {
     extern ::Window* createSlideTransitionPanel (::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame);
-    extern sal_Int32 getSlideTransitionPanelMinimumHeight (::Window* pParent);
 }
 
 
@@ -67,7 +66,8 @@ SlideTransitionPanel::~SlideTransitionPanel (void)
 
 css::ui::LayoutSize SlideTransitionPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
-    const sal_Int32 nMinimumHeight(getSlideTransitionPanelMinimumHeight(mpWrappedControl.get()));
+    Window *pControl = mpWrappedControl.get();
+    sal_Int32 nMinimumHeight = pControl ? pControl->get_preferred_size().Height() : 0;
     return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);
 }
 

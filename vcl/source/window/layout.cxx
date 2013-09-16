@@ -1573,9 +1573,46 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
     return 0;
 }
 
+VclScrolledWindow::VclScrolledWindow(Window *pParent, WinBits nStyle)
+    : VclBin(pParent, nStyle)
+    , m_bUserManagedScrolling(false)
+    , m_aVScroll(this, WB_HIDE | WB_VERT)
+    , m_aHScroll(this, WB_HIDE | WB_HORZ)
+    , m_aScrollBarBox(this, WB_HIDE)
+{
+    SetType(WINDOW_SCROLLWINDOW);
+
+    Link aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
+    m_aVScroll.SetScrollHdl(aLink);
+    m_aHScroll.SetScrollHdl(aLink);
+}
+
+IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
+{
+    Window *pChild = get_child();
+    if (!pChild)
+        return 1;
+
+    Point aWinPos;
+
+    if (m_aHScroll.IsVisible())
+    {
+        aWinPos.X() = -m_aHScroll.GetThumbPos();
+    }
+
+    if (m_aVScroll.IsVisible())
+    {
+        aWinPos.Y() = -m_aVScroll.GetThumbPos();
+    }
+
+    pChild->SetPosPixel(aWinPos);
+
+    return 1;
+}
+
 const Window *VclScrolledWindow::get_child() const
 {
-    assert(GetChildCount() == 3);
+    assert(GetChildCount() == 4);
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
     return pWindowImpl->mpLastChild;
 }
@@ -1593,13 +1630,36 @@ Size VclScrolledWindow::calculateRequisition() const
     if (pChild && pChild->IsVisible())
         aRet = getLayoutRequisition(*pChild);
 
-    if (m_aVScroll.IsVisible())
+    if (GetStyle() & WB_VSCROLL)
         aRet.Width() += getLayoutRequisition(m_aVScroll).Width();
 
-    if (m_aHScroll.IsVisible())
+    if (GetStyle() & WB_HSCROLL)
         aRet.Height() += getLayoutRequisition(m_aHScroll).Height();
 
     return aRet;
+}
+
+void VclScrolledWindow::InitScrollBars(const Size &rRequest)
+{
+    const Window *pChild = get_child();
+    if (!pChild || !pChild->IsVisible())
+        return;
+
+    Size aOutSize(getVisibleChildSize());
+
+    if (m_aVScroll.IsVisible())
+    {
+        m_aVScroll.SetRangeMax(rRequest.Height());
+        m_aVScroll.SetVisibleSize(aOutSize.Height());
+        m_aVScroll.SetPageSize(16);
+    }
+
+    if (m_aHScroll.IsVisible())
+    {
+        m_aHScroll.SetRangeMax(rRequest.Width());
+        m_aHScroll.SetVisibleSize(aOutSize.Width());
+        m_aHScroll.SetPageSize(16);
+    }
 }
 
 void VclScrolledWindow::setAllocation(const Size &rAllocation)
@@ -1611,24 +1671,59 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     if (pChild && pChild->IsVisible())
         aChildReq = getLayoutRequisition(*pChild);
 
+    long nAvailHeight = rAllocation.Width();
+    long nAvailWidth = rAllocation.Width();
+    // vert. ScrollBar
+    if (GetStyle() & WB_AUTOVSCROLL)
+        m_aVScroll.Show(nAvailHeight < aChildReq.Height());
+
+    if (m_aVScroll.IsVisible())
+        nAvailWidth -= getLayoutRequisition(m_aVScroll).Width();
+
+    // horz. ScrollBar
+    if (GetStyle() & WB_AUTOHSCROLL)
+    {
+        m_aHScroll.Show(nAvailWidth < aChildReq.Width());
+        nAvailHeight -= getLayoutRequisition(m_aHScroll).Height();
+
+        if (GetStyle() & WB_AUTOVSCROLL)
+            m_aVScroll.Show(nAvailHeight < aChildReq.Height());
+    }
+
+    Size aInnerSize(aChildAllocation);
+    long nScrollBarWidth, nScrollBarHeight;
+
     if (m_aVScroll.IsVisible())
     {
-        long nScrollBarWidth = getLayoutRequisition(m_aVScroll).Width();
+        nScrollBarWidth = getLayoutRequisition(m_aVScroll).Width();
         Point aScrollPos(rAllocation.Width() - nScrollBarWidth, 0);
         Size aScrollSize(nScrollBarWidth, rAllocation.Height());
         setLayoutAllocation(m_aVScroll, aScrollPos, aScrollSize);
         aChildAllocation.Width() -= nScrollBarWidth;
+        aInnerSize.Width() -= nScrollBarWidth;
         aChildAllocation.Height() = aChildReq.Height();
     }
 
     if (m_aHScroll.IsVisible())
     {
-        long nScrollBarHeight = getLayoutRequisition(m_aHScroll).Height();
+        nScrollBarHeight = getLayoutRequisition(m_aHScroll).Height();
         Point aScrollPos(0, rAllocation.Height() - nScrollBarHeight);
         Size aScrollSize(rAllocation.Width(), nScrollBarHeight);
         setLayoutAllocation(m_aHScroll, aScrollPos, aScrollSize);
         aChildAllocation.Height() -= nScrollBarHeight;
+        aInnerSize.Height() -= nScrollBarHeight;
         aChildAllocation.Width() = aChildReq.Width();
+    }
+
+    if (m_aVScroll.IsVisible() && m_aHScroll.IsVisible())
+    {
+        Point aBoxPos(aInnerSize.Width(), aInnerSize.Height());
+        m_aScrollBarBox.SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
+        m_aScrollBarBox.Show();
+    }
+    else
+    {
+        m_aScrollBarBox.Hide();
     }
 
     if (pChild && pChild->IsVisible())
@@ -1640,6 +1735,9 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
             aChildPos.Y() = 0;
         setLayoutAllocation(*pChild, aChildPos, aChildAllocation);
     }
+
+    if (!m_bUserManagedScrolling)
+        InitScrollBars(aChildReq);
 }
 
 Size VclScrolledWindow::getVisibleChildSize() const
@@ -1658,6 +1756,25 @@ bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
     m_aVScroll.Show((GetStyle() & WB_VSCROLL) != 0);
     m_aHScroll.Show((GetStyle() & WB_HSCROLL) != 0);
     return bRet;
+}
+
+long VclScrolledWindow::Notify(NotifyEvent& rNEvt)
+{
+    long nDone = 0;
+    if ( rNEvt.GetType() == EVENT_COMMAND )
+    {
+        const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
+        if ( rCEvt.GetCommand() == COMMAND_WHEEL )
+        {
+            const CommandWheelData* pData = rCEvt.GetWheelData();
+            if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
+            {
+                nDone = HandleScrollCommand(rCEvt, &m_aHScroll, &m_aVScroll);
+            }
+        }
+    }
+
+    return nDone ? nDone : VclBin::Notify( rNEvt );
 }
 
 const Window *VclEventBox::get_child() const
@@ -1919,7 +2036,7 @@ short MessageDialog::Execute()
         m_pImage->set_valign(VCL_ALIGN_START);
         m_pImage->Show();
 
-        WinBits nWinStyle = WB_LEFT | WB_VCENTER | WB_WORDBREAK | WB_NOLABEL | WB_NOTABSTOP;
+        WinBits nWinStyle = WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_WORDBREAK | WB_NOLABEL | WB_NOTABSTOP;
 
         bool bHasSecondaryText = !m_sSecondaryString.isEmpty();
 

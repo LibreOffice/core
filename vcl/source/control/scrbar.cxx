@@ -145,8 +145,7 @@ ScrollBar::ScrollBar( Window* pParent, const ResId& rResId ) :
 
 ScrollBar::~ScrollBar()
 {
-    if( mpData )
-        delete mpData;
+    delete mpData;
 }
 
 

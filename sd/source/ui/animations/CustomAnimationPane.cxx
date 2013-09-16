@@ -71,7 +71,6 @@
 #include "framework/FrameworkHelper.hxx"
 
 #include "EventMultiplexer.hxx"
-#include "DialogListBox.hxx"
 
 #include "glob.hrc"
 #include "sdpage.hxx"
@@ -2298,33 +2297,18 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 
 ::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
 {
-    DialogListBox* pWindow = 0;
+    ::Window* pWindow = 0;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )
     {
-        pWindow = new DialogListBox( pParent, WB_CLIPCHILDREN|WB_TABSTOP|WB_AUTOHSCROLL );
-        const Size aMinSize( pWindow->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
-        pWindow->SetSizePixel(aMinSize);
-        pWindow->SetBackground(Wallpaper(Color(COL_BLUE)));
-
-        ::Window* pPaneWindow = new CustomAnimationPane( pWindow, rBase, rxFrame, aMinSize );
-        pWindow->SetChildWindow( pPaneWindow, aMinSize );
-        pWindow->SetText( pPaneWindow->GetText() );
+        const Size aMinSize( pParent->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
+        pWindow = new CustomAnimationPane( pParent, rBase, rxFrame, aMinSize );
     }
 
     return pWindow;
 }
 
-
-
-sal_Int32 getCustomAnimationPanelMinimumHeight (::Window* pDialog)
-{
-    if (pDialog != NULL)
-        return pDialog->LogicToPixel(Size( 80, 256 ), MAP_APPFONT).Height();
-    else
-        return 0;
-}
 
 }
 

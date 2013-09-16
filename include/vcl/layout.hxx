@@ -23,7 +23,7 @@
 class VCL_DLLPUBLIC VclContainer : public Window
 {
 public:
-    VclContainer(Window *pParent, WinBits nStyle = WB_HIDE);
+    VclContainer(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN);
 
     //These take into account the external margins of the rWindow widget
     //while GetOptimalSize/get_preferred_size and SetPosSizePixel are
@@ -439,7 +439,7 @@ VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTo
 class VCL_DLLPUBLIC VclBin : public VclContainer
 {
 public:
-    VclBin(Window *pParent, WinBits nStyle = WB_HIDE)
+    VclBin(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
         : VclContainer(pParent, nStyle)
     {
     }
@@ -547,31 +547,30 @@ private:
     DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
 };
 
-//This is a work in progress, so if you want to put something inside a
-//scrolled window that doesn't handle its own scrolling, then you may need to
-//implement this fully
 class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
 public:
-    VclScrolledWindow(Window *pParent, WinBits nStyle = WB_HIDE | WB_AUTOHSCROLL | WB_AUTOVSCROLL)
-        : VclBin(pParent, nStyle)
-        , m_aVScroll(this, WB_HIDE | WB_VERT)
-        , m_aHScroll(this, WB_HIDE | WB_HORZ)
-    {
-        SetType(WINDOW_SCROLLWINDOW);
-    }
+    VclScrolledWindow(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
     virtual Window *get_child();
     virtual const Window *get_child() const;
     virtual bool set_property(const OString &rKey, const OString &rValue);
     ScrollBar& getVertScrollBar() { return m_aVScroll; }
     ScrollBar& getHorzScrollBar() { return m_aHScroll; }
     Size getVisibleChildSize() const;
+    //set to true to disable the built-in scrolling callbacks to allow the user
+    //to override it
+    void setUserManagedScrolling(bool bUserManagedScrolling) { m_bUserManagedScrolling = bUserManagedScrolling;}
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
+    DECL_LINK(ScrollBarHdl, void *);
+    void InitScrollBars(const Size &rRequest);
+    virtual long Notify(NotifyEvent& rNEvt);
 private:
+    bool m_bUserManagedScrolling;
     ScrollBar m_aVScroll;
     ScrollBar m_aHScroll;
+    ScrollBarBox m_aScrollBarBox;
 };
 
 //Enforces that its children are always the same size as itself.
@@ -709,8 +708,8 @@ public:
         const OUString &rMessage,
         VclMessageType eMessageType = VCL_MESSAGE_ERROR,
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
-        WinBits nStyle = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE);
-    MessageDialog(Window* pParent, WinBits nStyle);
+        WinBits nStyle = WB_CLIPCHILDREN | WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
+    MessageDialog(Window* pParent, WinBits nStyle = WB_CLIPCHILDREN);
     MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue);
     virtual short Execute();

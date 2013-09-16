@@ -47,7 +47,6 @@
 #include "sddll.hxx"
 #include "framework/FrameworkHelper.hxx"
 
-#include "DialogListBox.hxx"
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <algorithm>
@@ -459,7 +458,7 @@ SlideTransitionPane::SlideTransitionPane(
     get(mpCB_AUTO_PREVIEW, "auto_preview");
 
     mpLB_SLIDE_TRANSITIONS->set_width_request(mpLB_SLIDE_TRANSITIONS->approximate_char_width() * 16);
-    mpLB_SLIDE_TRANSITIONS->set_height_request(mpLB_SLIDE_TRANSITIONS->GetTextHeight() * 16);
+    mpLB_SLIDE_TRANSITIONS->SetDropDownLineCount(4);
 
     if( pDoc )
         mxModel.set( pDoc->getUnoModel(), uno::UNO_QUERY );
@@ -1098,33 +1097,17 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
 
 ::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
 {
-    DialogListBox* pWindow = 0;
+    ::Window* pWindow = 0;
 
     DrawDocShell* pDocSh = rBase.GetDocShell();
     if( pDocSh )
     {
-        pWindow = new DialogListBox( pParent, WB_CLIPCHILDREN|WB_TABSTOP|WB_AUTOHSCROLL );
-
-        Size aMinSize( pWindow->LogicToPixel( Size( 72, 216 ), MAP_APPFONT ) );
-        ::Window* pPaneWindow = new SlideTransitionPane( pWindow, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
-        pWindow->SetChildWindow( pPaneWindow, aMinSize );
-        pWindow->SetText( pPaneWindow->GetText() );
+        Size aMinSize( pParent->LogicToPixel( Size( 72, 216 ), MAP_APPFONT ) );
+        pWindow = new SlideTransitionPane( pParent, rBase, aMinSize, pDocSh->GetDoc(), rxFrame );
     }
 
     return pWindow;
 }
-
-
-
-
-sal_Int32 getSlideTransitionPanelMinimumHeight (::Window* pDialog)
-{
-    if (pDialog != NULL)
-        return pDialog->LogicToPixel(Size( 72, 216 ), MAP_APPFONT).Height();
-    else
-        return 0;
-}
-
 
 } //  namespace sd
 

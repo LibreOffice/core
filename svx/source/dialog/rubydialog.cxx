@@ -213,6 +213,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
     get(m_pPreviewWin, "preview");
     m_pPreviewWin->setRubyDialog(this);
     get(m_pScrolledWindow, "scrolledwindow");
+    m_pScrolledWindow->setUserManagedScrolling(true);
     m_pScrollSB = &m_pScrolledWindow->getVertScrollBar();
     get(m_pLeft1ED, "Left1ED");
     get(m_pRight1ED, "Right1ED");

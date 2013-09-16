@@ -27,14 +27,31 @@ Size PanelLayout::GetOptimalSize() const
 
 void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
+    bool bCanHandleSmallerWidth = false;
+    bool bCanHandleSmallerHeight = false;
+
+    bool bIsLayoutEnabled = isLayoutEnabled(this);
+    Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+
+    if (bIsLayoutEnabled && pChild->GetType() == WINDOW_SCROLLWINDOW)
+    {
+        WinBits nStyle = pChild->GetStyle();
+        if (nStyle && (WB_AUTOHSCROLL | WB_HSCROLL))
+            bCanHandleSmallerWidth = true;
+        if (nStyle && (WB_AUTOVSCROLL | WB_VSCROLL))
+            bCanHandleSmallerHeight = true;
+    }
+
     Size aSize(GetOptimalSize());
-    nWidth = std::max(nWidth,aSize.Width());
-    nHeight = std::max(nHeight,aSize.Height());
+    if (!bCanHandleSmallerWidth)
+        nWidth = std::max(nWidth,aSize.Width());
+    if (!bCanHandleSmallerHeight)
+        nHeight = std::max(nHeight,aSize.Height());
 
     Control::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 
-    if (isLayoutEnabled(this) && (nFlags & WINDOW_POSSIZE_SIZE))
-        VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), Size(nWidth, nHeight));
+    if (bIsLayoutEnabled && (nFlags & WINDOW_POSSIZE_SIZE))
+        VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

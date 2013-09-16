@@ -23,7 +23,6 @@
 
 namespace sd {
     extern ::Window * createCustomAnimationPanel (::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame);
-    extern sal_Int32 getCustomAnimationPanelMinimumHeight (::Window* pParent);
 }
 
 namespace sd { namespace sidebar {
@@ -66,7 +65,8 @@ CustomAnimationPanel::~CustomAnimationPanel (void)
 
 css::ui::LayoutSize CustomAnimationPanel::GetHeightForWidth (const sal_Int32 /*nWidth*/)
 {
-    const sal_Int32 nMinimumHeight(getCustomAnimationPanelMinimumHeight(mpWrappedControl.get()));
+    Window *pControl = mpWrappedControl.get();
+    sal_Int32 nMinimumHeight = pControl ? pControl->get_preferred_size().Height() : 0;
     return css::ui::LayoutSize(nMinimumHeight,-1, nMinimumHeight);
 }
 

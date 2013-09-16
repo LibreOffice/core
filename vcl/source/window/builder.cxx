@@ -731,7 +731,7 @@ namespace
 
     Button* extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
-        WinBits nBits = WB_CENTER|WB_VCENTER;
+        WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER;
 
         nBits |= extractRelief(rMap);
 
@@ -764,7 +764,7 @@ namespace
 
     Button * extractStockAndBuildMenuButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
-        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         nBits |= extractRelief(rMap);
 
@@ -1105,7 +1105,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         }
     }
 
-    if (bIsPlaceHolder || name == "GtkTreeSelection")
+    if (bIsPlaceHolder || name == "GtkTreeSelection" || name == "GtkViewport")
         return NULL;
 
     extractButtonImage(id, rMap, name == "GtkRadioButton");
@@ -1113,14 +1113,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     Window *pWindow = NULL;
     if (name == "GtkDialog")
     {
-        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
+        WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         pWindow = new Dialog(pParent, nBits);
     }
     else if (name == "GtkMessageDialog")
     {
-        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
+        WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         pWindow = new MessageDialog(pParent, nBits);
@@ -1178,7 +1178,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkRadioButton")
     {
         extractGroup(id, rMap);
-        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
         OString sWrap = extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
@@ -1188,7 +1188,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkCheckButton")
     {
-        WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
         OString sWrap = extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
@@ -1208,7 +1208,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sPattern = extractCustomProperty(rMap);
         OString sUnit = extractUnit(sPattern);
 
-        WinBits nBits = WB_LEFT|WB_BORDER|WB_3DLOOK;
+        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_BORDER|WB_3DLOOK;
         if (!id.endsWith("-nospin"))
             nBits |= WB_SPIN | WB_REPEAT;
 
@@ -1254,7 +1254,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sPattern = extractCustomProperty(rMap);
         extractModel(id, rMap);
 
-        WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
         bool bDropdown = VclBuilder::extractDropdown(rMap);
 
@@ -1312,7 +1312,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sAdjustment = extractAdjustment(rMap);
         extractModel(id, rMap);
 
-        WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
+        WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
         bool bDropdown = VclBuilder::extractDropdown(rMap);
 
@@ -1352,7 +1352,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         //   everything over to SvTreeViewBox
         //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
-        WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
         OString sBorder = extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
@@ -1433,7 +1433,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         extractBuffer(id, rMap);
 
-        WinBits nWinStyle = WB_LEFT;
+        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
         OString sBorder = extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;

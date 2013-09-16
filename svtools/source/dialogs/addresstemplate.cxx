@@ -575,7 +575,9 @@ void AssignmentPersistentData::Commit()
         get(m_pDatasource, "datasource");
         get(m_pAdministrateDatasources, "admin");
         get(m_pTable, "datatable");
-        m_pFieldScroller = &get<VclScrolledWindow>("scrollwindow")->getVertScrollBar();
+        VclScrolledWindow *pScrollWindow = get<VclScrolledWindow>("scrollwindow");
+        pScrollWindow->setUserManagedScrolling(true);
+        m_pFieldScroller = &pScrollWindow->getVertScrollBar();
 
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {
