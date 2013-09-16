@@ -464,6 +464,18 @@
                 <property name="height">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="software">
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Software</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">11</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

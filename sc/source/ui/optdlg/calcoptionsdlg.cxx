@@ -137,6 +137,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maDescEmptyStringAsZero = get<Window>("empty_str_as_zero_desc")->GetText();
     maCaptionOpenCLEnabled = get<Window>("opencl_enabled")->GetText();
     maDescOpenCLEnabled = get<Window>("opencl_enabled_desc")->GetText();
+    maSoftware = get<Window>("software")->GetText();
 
     mpLbSettings->set_height_request(8 * mpLbSettings->GetTextHeight());
     mpLbSettings->SetStyle(mpLbSettings->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -199,6 +200,10 @@ void ScCalcOptionsDialog::fillOpenclList()
 {
     mpOpenclInfoList->SetUpdateMode(false);
     mpOpenclInfoList->Clear();
+    mpOpenclInfoList->InsertEntry(maSoftware);
+
+    OUString aStoredDevice = maConfig.maOpenCLDevice;
+
     sc::FormulaGroupInterpreter::fillOpenCLInfo(maPlatformInfo);
     for(std::vector<sc::OpenclPlatformInfo>::iterator it = maPlatformInfo.begin(),
             itEnd = maPlatformInfo.end(); it != itEnd; ++it)
@@ -367,11 +372,25 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
 #if HAVE_FEATURE_OPENCL
     SvTreeListEntry* pEntry = mpOpenclInfoList->GetModel()->GetView(0)->FirstSelected();
     sc::OpenclDeviceInfo* pInfo = reinterpret_cast<sc::OpenclDeviceInfo*>(pEntry->GetUserData());
-    assert(pInfo);
-    mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));
-    mpFtComputeUnits->SetText(OUString::number(pInfo->mnComputeUnits));
-    mpFtMemory->SetText(OUString::number(pInfo->mnMemory/1024/1024));
-    maConfig.maOpenCLDevice = dynamic_cast<SvLBoxString*>(pEntry->GetItem(1))->GetText();
+    if(pInfo)
+    {
+        mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));
+        mpFtComputeUnits->SetText(OUString::number(pInfo->mnComputeUnits));
+        mpFtMemory->SetText(OUString::number(pInfo->mnMemory/1024/1024));
+    }
+    else
+    {
+        mpFtFrequency->SetText(OUString());
+        mpFtComputeUnits->SetText(OUString());
+        mpFtMemory->SetText(OUString());
+    }
+
+    OUString aDevice = dynamic_cast<SvLBoxString*>(pEntry->GetItem(1))->GetText();
+    // use english string for configuration
+    if(aDevice == maSoftware)
+        aDevice = "Software";
+
+    maConfig.maOpenCLDevice = aDevice;
 #endif
 }
 

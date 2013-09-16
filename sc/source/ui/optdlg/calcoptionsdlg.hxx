@@ -86,6 +86,8 @@ private:
     OUString maCaptionOpenCLEnabled;
     OUString maDescOpenCLEnabled;
 
+    OUString maSoftware;
+
     ScCalcConfig maConfig;
 #if HAVE_FEATURE_OPENCL
     std::vector<sc::OpenclPlatformInfo> maPlatformInfo;
