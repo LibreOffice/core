@@ -55,7 +55,7 @@ class SvStream;
 class SwWrtShell;
 class SfxRequest;
 class SwView;
-class SwTableAutoFormat;
+class SwTableFormat;
 class SwTOXMgr;
 class SwForm;
 struct CurTOXType;
@@ -125,8 +125,8 @@ class AbstractInsTableDlg : public VclAbstractDialog
 {
 public:
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
-                                SwTableAutoFormat *& prTAFormat ) = 0;
+                                SwInsertTableOptions& rInsTableFlags, OUString& rStyleName,
+                                SwTableFormat *& prStyle ) = 0;
 };
 
 class AbstractJavaEditDialog : public VclAbstractDialog
@@ -225,7 +225,7 @@ class AbstractSwConvertTableDlg :  public VclAbstractDialog
 public:
     virtual void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTableFlags,
-                    SwTableAutoFormat const*& prTAFormat ) = 0;
+                    SwTableFormat const*& prStyle ) = 0;
 };
 
 class AbstractSwInsertDBColAutoPilot :  public VclAbstractDialog
@@ -263,7 +263,7 @@ public:
 class AbstractSwAutoFormatDlg : public VclAbstractDialog
 {
 public:
-    virtual void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const = 0;
+    virtual void FillAutoFormatOfIndex( SwTableFormat*& rToFill ) const = 0;
 };
 
 class AbstractSwFieldDlg : public SfxAbstractTabDialog
@@ -371,7 +371,7 @@ public:
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                                                             bool bSetAutoFormat = true,
-                                                            const SwTableAutoFormat* pSelFormat = 0 ) = 0;
+                                                            const SwTableFormat* pSelFormat = 0 ) = 0;
     virtual SfxAbstractDialog * CreateSwBorderDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) = 0;
     virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) = 0;
 

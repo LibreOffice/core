@@ -84,7 +84,6 @@ class SwFormatFootnote;
 class SwSection;
 class SwSectionData;
 class SwSectionFormat;
-class SwTableAutoFormat;
 class SwPageDesc;
 class SwTextINetFormat;
 class SwSeqFieldList;
@@ -681,7 +680,7 @@ public:
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,
                                 sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
-                                const SwTableAutoFormat* pTAFormat = 0 );
+                                const SwTableFormat* pTableStyle = 0 );
 
     void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HEADLINE_NO_BORDER
                          SwDDEFieldType* pDDEType,
@@ -695,7 +694,7 @@ public:
     bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                       sal_Unicode cCh,
                       sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
-                      const SwTableAutoFormat* pTAFormat = 0 );
+                      const SwTableFormat* pTableStyle = 0 );
     bool TableToText( sal_Unicode cCh );
     bool IsTextToTableAvailable() const;
 

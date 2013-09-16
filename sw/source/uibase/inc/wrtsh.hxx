@@ -102,6 +102,7 @@ private:
 public:
 
     using SwEditShell::Insert;
+    using SwFEShell::GetTableStyle;
 
     long SetCursor    (const Point* pPt, bool bProp) { return (this->*m_fnSetCrsr)(pPt, bProp); }
     long Drag         (const Point* pPt, bool bProp) { return (this->*m_fnDrag)(pPt, bProp); }

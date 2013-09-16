@@ -307,7 +307,7 @@ SwDoc::SwDoc()
     mpFrameFormatTable->push_back(mpDfltFrameFormat);
     mpCharFormatTable->push_back(mpDfltCharFormat);
 
-    mpTableStyleTable = new SwTableAutoFormatTable( this );
+    mpTableStyleTable = new SwTableFormatTable( this );
     mpTableStyleTable->Load();
 
     /* FormatColls */

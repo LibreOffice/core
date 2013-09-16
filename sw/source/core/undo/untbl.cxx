@@ -222,19 +222,22 @@ sal_uInt16 aSave_BoxContentSet[] = {
 
 SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 nRw,
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTableOpts,
-                            const SwTableAutoFormat* pTAFormat,
+                            const SwTableFormat* pTableStyle,
                             const std::vector<sal_uInt16> *pColArr,
                             const OUString & rName)
     : SwUndo( UNDO_INSTABLE ),
-    aInsTableOpts( rInsTableOpts ), pDDEFieldType( 0 ), pColWidth( 0 ), pRedlData( 0 ), pAutoFormat( 0 ),
+    aInsTableOpts( rInsTableOpts ), pDDEFieldType( 0 ), pColWidth( 0 ), pRedlData( 0 ),
     nSttNode( rPos.nNode.GetIndex() ), nRows( nRw ), nCols( nCl ), nAdjust( nAdj )
 {
+    if( pTableStyle )
+        sStyleName = pTableStyle->GetName();
+    else
+        sStyleName = OUString();
+
     if( pColArr )
     {
         pColWidth = new std::vector<sal_uInt16>(*pColArr);
     }
-    if( pTAFormat )
-        pAutoFormat = new SwTableAutoFormat( *pTAFormat );
 
     // consider redline
     SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
@@ -252,7 +255,6 @@ SwUndoInsTable::~SwUndoInsTable()
     delete pDDEFieldType;
     delete pColWidth;
     delete pRedlData;
-    delete pAutoFormat;
 }
 
 void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -303,11 +305,11 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     SwPosition const aPos(SwNodeIndex(rDoc.GetNodes(), nSttNode));
+    SwTableFormat* pStyle = rDoc.GetTableStyles()->FindStyle( sStyleName );
     const SwTable* pTable = rDoc.InsertTable( aInsTableOpts, aPos, nRows, nCols,
-                                            nAdjust,
-                                            pAutoFormat, pColWidth );
-    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
-    SwTableNode* pTableNode = rDoc.GetNodes()[nSttNode]->GetTableNode();
+                                            nAdjust,pStyle, pColWidth );
+    ((SwFrameFormat*)pTable->GetFrameFormat())->SetName( sTableNm );
+    SwTableNode* pTableNode = (SwTableNode*)rDoc.GetNodes()[nSttNode]->GetTableNode();
 
     if( pDDEFieldType )
     {
@@ -342,9 +344,10 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoInsTable::RepeatImpl(::sw::RepeatContext & rContext)
 {
+    SwTableFormat* pStyle = rContext.GetDoc().GetTableStyles()->FindStyle( sStyleName );
     rContext.GetDoc().InsertTable(
             aInsTableOpts, *rContext.GetRepeatPaM().GetPoint(),
-            nRows, nCols, nAdjust, pAutoFormat, pColWidth );
+            nRows, nCols, nAdjust, pStyle, pColWidth );
 }
 
 SwRewriter SwUndoInsTable::GetRewriter() const
@@ -686,13 +689,14 @@ void SwUndoTableToText::AddBoxPos( SwDoc& rDoc, sal_uLong nNdIdx, sal_uLong nEnd
 SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
                                 const SwInsertTableOptions& rInsTableOpts,
                                 sal_Unicode cCh, sal_uInt16 nAdj,
-                                const SwTableAutoFormat* pAFormat )
+                                const SwTableFormat* pStyle )
     : SwUndo( UNDO_TEXTTOTABLE ), SwUndRng( rRg ), aInsTableOpts( rInsTableOpts ),
-      pDelBoxes( 0 ), pAutoFormat( 0 ),
-      pHistory( 0 ), cTrenner( cCh ), nAdjust( nAdj )
+      pDelBoxes( 0 ), pHistory( 0 ), cTrenner( cCh ), nAdjust( nAdj )
 {
-    if( pAFormat )
-        pAutoFormat = new SwTableAutoFormat( *pAFormat );
+    if( pStyle )
+        sStyleName = pStyle->GetName();
+    else
+        sStyleName = OUString();
 
     const SwPosition* pEnd = rRg.End();
     SwNodes& rNds = rRg.GetDoc()->GetNodes();
@@ -704,7 +708,6 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
 SwUndoTextToTable::~SwUndoTextToTable()
 {
     delete pDelBoxes;
-    delete pAutoFormat;
 }
 
 void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -792,9 +795,10 @@ void SwUndoTextToTable::RedoImpl(::sw::UndoRedoContext & rContext)
     RemoveIdxFromRange(rPam, false);
     SetPaM(rPam);
 
+    SwTableFormat* pStyle = rContext.GetDoc().GetTableStyles()->FindStyle( sStyleName );
     SwTable const*const pTable = rContext.GetDoc().TextToTable(
-                aInsTableOpts, rPam, cTrenner, nAdjust, pAutoFormat );
-    static_cast<SwFrameFormat*>(pTable->GetFrameFormat())->SetName( sTableNm );
+                aInsTableOpts, rPam, cTrenner, nAdjust, pStyle );
+    ((SwFrameFormat*)pTable->GetFrameFormat())->SetName( sTableNm );
 }
 
 void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)
@@ -802,9 +806,9 @@ void SwUndoTextToTable::RepeatImpl(::sw::RepeatContext & rContext)
     // no Table In Table
     if (!rContext.GetRepeatPaM().GetNode().FindTableNode())
     {
+        SwTableFormat* pStyle = rContext.GetDoc().GetTableStyles()->FindStyle( sStyleName );
         rContext.GetDoc().TextToTable( aInsTableOpts, rContext.GetRepeatPaM(),
-                                        cTrenner, nAdjust,
-                                        pAutoFormat );
+                                        cTrenner, nAdjust, pStyle );
     }
 }
 
@@ -977,7 +981,7 @@ void _SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
         SwTableFormat::RestoreTableProperties( NULL, rTable );
     else
     {
-        SwTableFormat* pStyle = pDoc->FindTableFormatByName( m_aSaveFormatName, true );
+        SwTableFormat* pStyle = pDoc->GetTableStyles()->FindStyle( m_aSaveFormatName );
         SwTableFormat::RestoreTableProperties( pStyle, rTable );
     }
 
@@ -1451,7 +1455,7 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
         SwTableFormat::RestoreTableProperties( NULL, table );
     else
     {
-        pStyle = rDoc.FindTableFormatByName( m_aSaveFormatName, sal_True );
+        pStyle = rDoc.GetTableStyles()->FindStyle( m_aSaveFormatName );
         SwTableFormat::RestoreTableProperties( pStyle, table );
     }
 

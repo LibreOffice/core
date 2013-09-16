@@ -107,61 +107,28 @@ The properties saved are divided into three categories:
 Character and box properties are stored per cell (and are lossy for tables larger than 4x4). Table
 properties are stored per-table, and are lossless.
 */
-class SW_DLLPUBLIC SwTableAutoFormat
+
+class SW_DLLPUBLIC SwTableFormatTable
 {
-    SwTableFormat* m_pTableStyle;
-    sal_uInt16 nStrResId;
-
-public:
-    SwTableAutoFormat( const OUString& rName, SwTableFormat* pTableStyle );
-    SwTableAutoFormat( const SwTableAutoFormat& rNew );
-
-    SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
-
-    SwTableFormat* GetTableStyle() const   { return m_pTableStyle; }
-    SwTableFormat* GetTableStyle()         { return m_pTableStyle; }
-
-    void SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos );
-    SwTableBoxFormat* GetBoxFormat( sal_uInt8 nPos ) const;
-
-    void SetName( const OUString& rNew ) { m_pTableStyle->SetName( rNew ); nStrResId = USHRT_MAX; }
-    OUString GetName() const { return m_pTableStyle->GetName(); }
-
-    void RestoreTableProperties(SwTable &table) const;
-    void StoreTableProperties(const SwTable &table);
-
-    bool IsFont() const         { return m_pTableStyle->IsFont(); }
-    bool IsJustify() const      { return m_pTableStyle->IsJustify(); }
-    bool IsFrame() const        { return m_pTableStyle->IsFrame(); }
-    bool IsBackground() const   { return m_pTableStyle->IsBackground(); }
-    bool IsValueFormat() const  { return m_pTableStyle->IsValueFormat(); }
-
-    static SwTableAutoFormat* Load( SvStream& rStream, const SwAfVersions&, SwDoc* pDoc );
-    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-};
-
-class SW_DLLPUBLIC SwTableAutoFormatTable
-{
-    struct Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    std::vector<SwTableFormat*> m_TableStyles;
     SwDoc* m_pDoc;
 
     SAL_DLLPRIVATE bool Load( SvStream& rStream );
-    SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;
 
 public:
-    explicit SwTableAutoFormatTable(SwDoc* pDoc);
-    ~SwTableAutoFormatTable();
+    explicit SwTableFormatTable(SwDoc* pDoc);
+    ~SwTableFormatTable();
 
     size_t size() const;
-    SwTableAutoFormat const& operator[](size_t i) const;
-    SwTableAutoFormat      & operator[](size_t i);
-    void InsertAutoFormat(size_t i, std::unique_ptr<SwTableAutoFormat> pFormat);
-    void EraseAutoFormat(size_t i);
-    std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(size_t i);
+    SwTableFormat const* operator[](size_t i) const;
+    SwTableFormat      * operator[](size_t i);
+    SwTableFormat* MakeStyle( OUString sName );
+    SwTableFormat* FindStyle( OUString sName );
+    void InsertStyle(size_t i, SwTableFormat * pFormat);
+    void EraseStyle(size_t i);
+    void MoveStyle(size_t target, size_t source);
 
     bool Load();
-    bool Save() const;
 };
 
 #endif

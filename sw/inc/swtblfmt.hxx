@@ -59,6 +59,8 @@ class SwTableBoxFormat;
 class SW_DLLPUBLIC SwTableFormat : public SwFrameFormat
 {
     friend class SwDoc;
+    friend class SwTableFormatTable;
+    sal_uInt16 nStrResId;
 
 protected:
     SwTableFormat(SwAttrPool& rPool, const sal_Char* pFormatNm, SwFrameFormat *pDrvdFrm);
@@ -136,7 +138,7 @@ public:
     static void AssignLineParents_Complex( SwTableLineFormat* pSrcLineFormat, SwTableBoxFormat* pSrcBoxFormat, SwTableBox& rBox );
     static void AssignBoxParents_Complex( SwTableLineFormat* pSrcLineFormat, SwTableBoxFormat* pSrcBoxFormat, SwTableLine& rLine );
 
-    bool Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal );
+    static SwTableFormat* Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc );
 
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
@@ -243,8 +245,6 @@ public:
     bool IsValueFormat() const;
 
     bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 

@@ -28,7 +28,6 @@
 #include <actctrl.hxx>
 
 class SwWrtShell;
-class SwTableAutoFormat;
 class SwView;
 struct SwInsertTableOptions;
 
@@ -52,7 +51,7 @@ class SwInsTableDlg : public SfxModalDialog
     VclPtr<PushButton>     m_pAutoFormatBtn;
 
     SwWrtShell*     pShell;
-    SwTableAutoFormat* pTAutoFormat;
+    SwTableFormat*     pTableStyle;
     sal_Int64       nEnteredValRepeatHeaderNF;
 
     DECL_LINK( ModifyName, Edit* );
@@ -69,8 +68,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                    SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
-                    SwTableAutoFormat *& prTAFormat );
+                    SwInsertTableOptions& rInsTableOpts, OUString& rStyleName,
+                    SwTableFormat *& prStyle );
 };
 
 #endif

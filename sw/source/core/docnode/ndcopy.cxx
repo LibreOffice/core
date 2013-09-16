@@ -24,6 +24,7 @@
 #include <ndtxt.hxx>
 #include <swtblfmt.hxx>
 #include <cellatr.hxx>
+#include <tblafmt.hxx>
 #include <docary.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
@@ -258,7 +259,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
     SwTableFormat* pStyle = (SwTableFormat*)GetTable().GetFrameFormat()->GetRegisteredIn();
-    SwTableFormat* pActualStyle = pStyle ? pDoc->FindTableFormatByName( pStyle->GetName() , sal_True ) : 0;
+    SwTableFormat* pActualStyle = pStyle ? pDoc->GetTableStyles()->FindStyle( pStyle->GetName() ) : 0;
     if( !pActualStyle )
         pActualStyle = pStyle;
 

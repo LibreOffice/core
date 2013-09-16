@@ -1175,7 +1175,7 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
 }
 
     // AutoFormat for the table/table selection
-bool SwFEShell::SetTableAutoFormat( const SwTableAutoFormat& rNew )
+bool SwFEShell::SetTableStyle( const SwTableFormat* pStyle )
 {
     SwTableNode *pTableNd = const_cast<SwTableNode*>(IsCrsrInTable());
     if( !pTableNd || pTableNd->GetTable().IsTableComplex() )
@@ -1204,7 +1204,7 @@ bool SwFEShell::SetTableAutoFormat( const SwTableAutoFormat& rNew )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        bRet = GetDoc()->SetTableAutoFormat( aBoxes, rNew );
+        bRet = GetDoc()->SetTableStyle( aBoxes, pStyle );
         DELETEZ( pLastCols );
         DELETEZ( pLastRows );
         EndAllActionAndCall();
@@ -1214,7 +1214,7 @@ bool SwFEShell::SetTableAutoFormat( const SwTableAutoFormat& rNew )
     return bRet;
 }
 
-bool SwFEShell::GetTableAutoFormat( SwTableAutoFormat& rGet )
+bool SwFEShell::GetTableStyle( SwTableFormat* pStyle )
 {
     const SwTableNode *pTableNd = IsCrsrInTable();
     if( !pTableNd || pTableNd->GetTable().IsTableComplex() )
@@ -1238,7 +1238,7 @@ bool SwFEShell::GetTableAutoFormat( SwTableAutoFormat& rGet )
         }
     }
 
-    return GetDoc()->GetTableAutoFormat( aBoxes, rGet );
+    return GetDoc()->GetTableStyle( aBoxes, pStyle );
 }
 
 bool SwFEShell::DeleteTableSel()

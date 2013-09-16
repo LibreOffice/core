@@ -779,9 +779,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 ( nSlot == FN_CONVERT_TEXT_TABLE && 0 == rSh.GetTableFormat() ))
                 bToTable = true;
             SwInsertTableOptions aInsTableOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-            SwTableAutoFormat const* pTAFormat = 0;
-            std::unique_ptr<SwTableAutoFormatTable> pAutoFormatTable;
-            bool bDeleteFormat = true;
+            SwTableFormat const* pTableStyle = 0;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState( FN_PARAM_1, true, &pItem))
             {
                 aInsTableOpts.mnInsMode = 0;
@@ -794,19 +792,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     OUString sAutoFormat = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
-                    pAutoFormatTable.reset(new SwTableAutoFormatTable(GetShell().GetDoc()));
-                    pAutoFormatTable->Load();
-
-                    for( sal_uInt16 i = 0, nCount = pAutoFormatTable->size(); i < nCount; i++ )
-                    {
-                        SwTableAutoFormat const*const pFormat = &(*pAutoFormatTable)[ i ];
-                        if( pFormat->GetName() == sAutoFormat )
-                        {
-                            pTAFormat = pFormat;
-                            bDeleteFormat = false;
-                            break;
-                        }
-                    }
+                    pTableStyle = GetShell().GetDoc()->GetTableStyles()->FindStyle( sAutoFormat );
                 }
                 //WithHeader
                 if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_3, true, &pItem) &&
@@ -834,8 +820,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
-                    pDlg->GetValues( cDelim, aInsTableOpts, pTAFormat );
-
+                    pDlg->GetValues( cDelim, aInsTableOpts, pTableStyle );
                 }
             }
 
@@ -852,8 +837,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));
                     if(bToTable)
                     {
-                        if(pTAFormat)
-                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFormat->GetName()));
+                        if(pTableStyle)
+                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTableStyle->GetName()));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, 0 != (aInsTableOpts.mnInsMode & tabopts::HEADLINE)));
                         aReq.AppendItem( SfxInt16Item( FN_PARAM_4, (short)aInsTableOpts.mnRowsToRepeat ));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, 0 != (aInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER) ));
@@ -866,15 +851,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.TableToText( cDelim );
                 else
                 {
-                    bInserted = rSh.TextToTable( aInsTableOpts, cDelim, text::HoriOrientation::FULL, pTAFormat );
+                    bInserted = rSh.TextToTable( aInsTableOpts, cDelim, text::HoriOrientation::FULL, pTableStyle );
                 }
                 rSh.EnterStdMode();
 
                 if( bInserted )
                     rSaveView.AutoCaption( TABLE_CAP );
             }
-            if(bDeleteFormat)
-                delete pTAFormat;
         }
         break;
         case SID_STYLE_WATERCAN:
@@ -2570,9 +2553,8 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             sal_uInt16 nCols = 0;
             sal_uInt16 nRows = 0;
             SwInsertTableOptions aInsTableOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-            OUString aTableName;
-            OUString aAutoName;
-            SwTableAutoFormat* pTAFormat = 0;
+            OUString aTableName, aAutoName;
+            SwTableFormat* pTableStyle = 0;
 
             if( pArgs && pArgs->Count() >= 2 )
             {
@@ -2593,16 +2575,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     aAutoName = pAuto->GetValue();
                     if ( !aAutoName.isEmpty() )
                     {
-                        SwTableAutoFormatTable aTableTable(GetShell().GetDoc());
-                        aTableTable.Load();
-                        for ( size_t n=0; n<aTableTable.size(); n++ )
-                        {
-                            if ( aTableTable[n].GetName() == aAutoName )
-                            {
-                                pTAFormat = new SwTableAutoFormat( aTableTable[n] );
-                                break;
-                            }
-                        }
+                        pTableStyle = GetShell().GetDoc()->GetTableStyles()->FindStyle( aAutoName );
                     }
                 }
 
@@ -2623,7 +2596,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
-                    pDlg->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+                    pDlg->GetValues( aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTableStyle );
                 }
                 else
                     _rRequest.Ignore();
@@ -2647,7 +2620,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if( rSh.HasSelection() )
                     rSh.DelRight();
 
-                rSh.InsertTable( aInsTableOpts, nRows, nCols, text::HoriOrientation::FULL, pTAFormat );
+                rSh.InsertTable( aInsTableOpts, nRows, nCols, text::HoriOrientation::FULL, pTableStyle );
                 rSh.MoveTable( fnTablePrev, fnTableStart );
 
                 if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )
@@ -2656,7 +2629,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 rSh.EndAllAction();
                 rTempView.AutoCaption(TABLE_CAP);
             }
-            delete pTAFormat;
         }
 
         if( bCallEndUndo )

@@ -38,8 +38,8 @@
 #define ROW_COL_PROD 16384
 
 void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTableOpts, OUString& rAutoName,
-                                SwTableAutoFormat *& prTAFormat )
+                                SwInsertTableOptions& rInsTableOpts, OUString& rStyleName,
+                                SwTableFormat *& prStyle )
 {
     sal_uInt16 nInsMode = 0;
     rName = m_pNameEdit->GetText();
@@ -56,10 +56,11 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
         rInsTableOpts.mnRowsToRepeat = 0;
     if (!m_pDontSplitCB->IsChecked())
         nInsMode |= tabopts::SPLIT_LAYOUT;
-    if( pTAutoFormat )
+
+    prStyle = pTableStyle;
+    if( pTableStyle )
     {
-        prTAFormat = new SwTableAutoFormat( *pTAutoFormat );
-        rAutoName = prTAFormat->GetName();
+        rStyleName = pTableStyle->GetName();
     }
 
     rInsTableOpts.mnInsMode = nInsMode;
@@ -69,7 +70,7 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
     , m_aTextFilter(" .<>")
     , pShell(&rView.GetWrtShell())
-    , pTAutoFormat(0)
+    , pTableStyle(0)
     , nEnteredValRepeatHeaderNF(-1)
 {
     get(m_pNameEdit, "nameedit");
@@ -141,7 +142,6 @@ SwInsTableDlg::~SwInsTableDlg()
 
 void SwInsTableDlg::dispose()
 {
-    delete pTAutoFormat;
     m_pNameEdit.clear();
     m_pColNF.clear();
     m_pRowNF.clear();
@@ -204,10 +204,10 @@ IMPL_LINK_TYPED( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton,pShell, false, pTAutoFormat));
+    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton,pShell, false, pTableStyle));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFormatOfIndex( pTAutoFormat );
+        pDlg->FillAutoFormatOfIndex( pTableStyle );
 }
 
 IMPL_LINK_NOARG_TYPED(SwInsTableDlg, CheckBoxHdl, Button*, void)

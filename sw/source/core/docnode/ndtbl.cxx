@@ -309,7 +309,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
 const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                                    const SwPosition& rPos, sal_uInt16 nRows,
                                    sal_uInt16 nCols, sal_Int16 eAdjust,
-                                   const SwTableAutoFormat* pTAFormat,
+                                   const SwTableFormat* pTableStyle,
                                    const std::vector<sal_uInt16> *pColArr,
                                    bool bCalledFromShell,
                                    bool bNewModel )
@@ -335,7 +335,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     {
         GetIDocumentUndoRedo().AppendUndo(
             new SwUndoInsTable( rPos, nCols, nRows, static_cast<sal_uInt16>(eAdjust),
-                                      rInsTableOpts, pTAFormat, pColArr,
+                                      rInsTableOpts, pTableStyle, pColArr,
                                       aTableName));
     }
 
@@ -371,8 +371,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
 
     // Create the Box/Line/Table construct
     SwTableLineFormat* pLineFormat = MakeTableLineFormat();
-    SwTableFormat* pTableStyle = pTAFormat ? pTAFormat->GetTableStyle() : NULL;
-    SwTableFormat* pTableFormat = MakeTableFrameFormat( aTableName, pTableStyle );
+    SwTableFormat* pTableFormat = MakeTableFrameFormat( aTableName, const_cast<SwTableFormat*>( pTableStyle ) );
 
     /* If the node to insert the table at is a context node and has a
        non-default FRAMEDIR propagate it to the table. */
@@ -467,7 +466,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             if( bDfltBorders )
             {
                 sal_uInt8 nBoxId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
-                pBoxF = ::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId, pTAFormat == 0);
+                pBoxF = ::lcl_CreateDfltBoxFormat( *this, aBoxFormatArr, nCols, nBoxId, pTableStyle == 0);
             }
             else
                 pBoxF = pBoxFormat;
@@ -495,7 +494,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         }
     }
 
-    SwTableFormat::AssignFormatParents( pTableStyle, rNdTable );
+    SwTableFormat::AssignFormatParents( const_cast<SwTableFormat*>( pTableStyle ), rNdTable );
 
     // Insert Frms
     GetNodes().GoNext( &aNdIdx ); // Go to the next ContentNode
@@ -583,7 +582,7 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
 const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                                    const SwPaM& rRange, sal_Unicode cCh,
                                    sal_Int16 eAdjust,
-                                   const SwTableAutoFormat* pTAFormat )
+                                   const SwTableFormat* pTableStyle )
 {
     // See if the selection contains a Table
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
@@ -606,7 +605,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     {
         GetIDocumentUndoRedo().StartUndo( UNDO_TEXTTOTABLE, NULL );
         pUndo = new SwUndoTextToTable( aOriginal, rInsTableOpts, cCh,
-                    static_cast<sal_uInt16>(eAdjust), pTAFormat );
+                    static_cast<sal_uInt16>(eAdjust), pTableStyle );
         GetIDocumentUndoRedo().AppendUndo( pUndo );
 
         // Do not add splitting the TextNode to the Undo history
@@ -654,8 +653,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     // Create the Box/Line/Table construct
     SwTableBoxFormat* pBoxFormat = MakeTableBoxFormat();
     SwTableLineFormat* pLineFormat = MakeTableLineFormat();
-    SwTableFormat* pTableStyle = pTAFormat ? pTAFormat->GetTableStyle() : NULL;
-    SwTableFormat* pTableFormat = MakeTableFrameFormat( GetUniqueTableName(), pTableStyle );
+    SwTableFormat* pTableFormat = MakeTableFrameFormat( GetUniqueTableName(), const_cast<SwTableFormat*>( pTableStyle ) );
 
     // All Lines have a left-to-right Fill Order
     pLineFormat->SetFormatAttr( SwFormatFillOrder( ATT_LEFT_TO_RIGHT ));
@@ -707,7 +705,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     rNdTable.RegisterToFormat( *pTableFormat );
 
-    if( pTAFormat || rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER )
+    if( pTableStyle || rInsTableOpts.mnInsMode & tabopts::DEFAULT_BORDER )
     {
         sal_uInt8 nBoxArrLen = 4;
         boost::scoped_ptr< DfltBoxAttrList_t > aBoxFormatArr1;
@@ -734,10 +732,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
                 sal_uInt8 nId = (i < nCols - 1 ? 0 : 1) + (n ? 2 : 0 );
                 if( bUseBoxFormat )
-                    ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId, pTAFormat == 0 );
+                    ::lcl_SetDfltBoxAttr( *pBox, *aBoxFormatArr1, nId, pTableStyle == 0 );
                 else
                 {
-                    pBoxF = ::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId, pTAFormat == 0 );
+                    pBoxF = ::lcl_CreateDfltBoxFormat( *this, *aBoxFormatArr2, USHRT_MAX, nId, pTableStyle == 0 );
                     pBoxF->SetFormatAttr( pBox->GetFrameFormat()->GetFrmSize() );
                     pBox->ChgFrameFormat( pBoxF );
                 }
@@ -745,7 +743,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
         }
     }
 
-    SwTableFormat::AssignFormatParents( pTableStyle, rNdTable );
+    SwTableFormat::AssignFormatParents( const_cast<SwTableFormat*>( pTableStyle ), rNdTable );
 
     // Check the Boxes' for Numbers
     if( IsInsTableFormatNum() )
@@ -3561,7 +3559,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
 /**
  * AutoFormat for the Table/TableSelection
  */
-bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew )
+bool SwDoc::SetTableStyle( const SwSelBoxes& rBoxes, const SwTableFormat* pStyle )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -3590,7 +3588,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
-    rNew.RestoreTableProperties(table);
+    SwTableFormat::RestoreTableProperties( const_cast<SwTableFormat*>( pStyle ), table );
 
     if( pUndo )
     {
@@ -3606,7 +3604,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
 /**
  * Find out who has the Attributes
  */
-bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet )
+bool SwDoc::GetTableStyle( const SwSelBoxes& rBoxes, SwTableFormat*& prStyle )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -3624,7 +3622,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 
     // Store table properties
     SwTable &table = pTableNd->GetTable();
-    rGet.GetTableStyle()->StoreTableProperties(table);
+    prStyle = SwTableFormat::StoreTableProperties( table );
 
     return true;
 }

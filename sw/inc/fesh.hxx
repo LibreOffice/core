@@ -43,7 +43,6 @@ class SwFlyFrm;
 class SwTabCols;
 class SvxBrushItem;
 class SvxFrameDirectionItem;
-class SwTableAutoFormat;
 class SwFrm;
 class SwFormatFrmSize;
 class SwFormatRowSplit;
@@ -721,9 +720,9 @@ public:
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
 
     /// AutoFormat for table/ table selection.
-    bool SetTableAutoFormat( const SwTableAutoFormat& rNew );
+    bool SetTableStyle( const SwTableFormat* pStyle );
 
-    bool GetTableAutoFormat( SwTableAutoFormat& rGet );
+    bool GetTableStyle( SwTableFormat* pStyle );
 
     bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff = 283 );
 

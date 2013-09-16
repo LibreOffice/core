@@ -30,9 +30,9 @@
 
 #include <vcl/virdev.hxx>
 
-class SwTableAutoFormat;
+class SwTableFormat;
 class AutoFormatPreview;
-class SwTableAutoFormatTable;
+class SwTableFormatTable;
 class SwWrtShell;
 
 enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
@@ -61,14 +61,14 @@ class SwAutoFormatDlg : public SfxModalDialog
     VclPtr<AutoFormatPreview> m_pWndPreview;
 
     SwWrtShell*             pShell;
-    SwTableAutoFormatTable*      pTableTable;
+    SwTableFormatTable*     pTableTable;
     sal_uInt8                   nIndex;
     sal_uInt8                   nDfltStylePos;
     bool                    bCoreDataChanged : 1;
     bool                    bSetAutoFormat : 1;
 
-    void Init( const SwTableAutoFormat* pSelFormat );
-    void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
+    void Init( const SwTableFormat* pSelFormat );
+    void UpdateChecks( const SwTableFormat*, bool bEnableBtn );
 
     DECL_LINK_TYPED( CheckHdl, Button*, void );
     DECL_LINK_TYPED(OkHdl, Button*, void);
@@ -79,12 +79,12 @@ class SwAutoFormatDlg : public SfxModalDialog
 
 public:
     SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
-                        bool bSetAutoFormat = true,
-                        const SwTableAutoFormat* pSelFormat = 0 );
+                        bool bAutoFormat = true,
+                        const SwTableFormat* pSelFormat = 0 );
     virtual ~SwAutoFormatDlg();
     virtual void dispose() SAL_OVERRIDE;
 
-    void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const;
+    void FillAutoFormatOfIndex( SwTableFormat*& rToFill ) const;
 };
 
 #endif // SW_AUTOFMT_HXX

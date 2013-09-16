@@ -2082,14 +2082,11 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     }
 
     SwTableFormat* pStyle = (SwTableFormat*)GetFrameFormat()->GetRegisteredIn();
-    SwTableAutoFormat* pAutoFormat = 0;
-    if( pStyle )
-        pAutoFormat = new SwTableAutoFormat( pStyle->GetName(), pStyle );
 
     SwTable* pNewTable = (SwTable*)pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
             rPos, 1, 1, GetFrameFormat()->GetHoriOrient().GetHoriOrient(),
-            pAutoFormat, 0, sal_False, IsNewModel() );
+            pStyle, 0, sal_False, IsNewModel() );
     if( !pNewTable )
         return false;
 

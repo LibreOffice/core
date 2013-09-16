@@ -224,9 +224,9 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
 }
 
 void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
-                                                SwTableAutoFormat const*& prTAFormat)
+                                                SwTableFormat const*& prStyle)
 {
-    pDlg->GetValues(rDelim,rInsTableFlags, prTAFormat);
+    pDlg->GetValues(rDelim,rInsTableFlags, prStyle);
 }
 
 void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::Any >& rSelection,
@@ -307,7 +307,7 @@ void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_Int32 nIdx)
     pDlg->SelectEntryPos( nIdx );
 }
 
-void AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
+void AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex( SwTableFormat*& rToFill ) const
 {
     pDlg->FillAutoFormatOfIndex(rToFill);
 }
@@ -445,10 +445,10 @@ void AbstractInsFootNoteDlg_Impl::SetText( const OUString& rStr )
 }
 
 void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
-                                SwTableAutoFormat *& prTAFormat )
+                                SwInsertTableOptions& rInsTableFlags, OUString& rStyleName,
+                                SwTableFormat *& prStyle )
 {
-    pDlg->GetValues( rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
+    pDlg->GetValues( rName, rRow, rCol, rInsTableFlags, rStyleName, prStyle);
 }
 
 OUString AbstractJavaEditDialog_Impl::GetScriptText() const
@@ -830,7 +830,7 @@ AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(
 }
 
 AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(vcl::Window* pParent,
-    SwWrtShell* pShell, bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat)
+    SwWrtShell* pShell, bool bSetAutoFormat, const SwTableFormat* pSelFormat)
 {
     VclPtr<SwAutoFormatDlg> pDlg = VclPtr<SwAutoFormatDlg>::Create(pParent, pShell, bSetAutoFormat, pSelFormat);
     return new AbstractSwAutoFormatDlg_Impl(pDlg);

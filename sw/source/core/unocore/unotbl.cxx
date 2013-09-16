@@ -2420,18 +2420,18 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
     }
 }
 
-void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
+void SwXTextTable::autoFormat(const OUString& aName)
     throw (lang::IllegalArgumentException, uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFormat), static_cast<cppu::OWeakObject*>(this));
-    SwTableAutoFormatTable aAutoFormatTable(pFormat->GetDoc());
+    SwTableFormatTable aAutoFormatTable(pFormat->GetDoc());
     aAutoFormatTable.Load();
     for (size_t i = aAutoFormatTable.size(); i;)
-        if( sAutoFormatName == aAutoFormatTable[ --i ].GetName() )
         {
+            SwTableFormat* pStyle = pFormat->GetDoc()->GetTableStyles()->FindStyle( aName );
             SwSelBoxes aBoxes;
             const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
             for (size_t n = 0; n < rTBoxes.size(); ++n)
@@ -2440,8 +2440,7 @@ void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
                 aBoxes.insert( pBox );
             }
             UnoActionContext aContext( pFormat->GetDoc() );
-            pFormat->GetDoc()->SetTableAutoFormat( aBoxes, aAutoFormatTable[i] );
-            break;
+            pFormat->GetDoc()->SetTableStyle( aBoxes, pStyle );
         }
 }
 

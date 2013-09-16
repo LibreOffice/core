@@ -24,7 +24,7 @@
 #include <vcl/edit.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class SwTableAutoFormat;
+class SwTableFormat;
 class SwView;
 class SwWrtShell;
 class NumericField;
@@ -51,8 +51,8 @@ class SwConvertTableDlg: public SfxModalDialog
     VclPtr<CheckBox>       mpBorderCB;
     VclPtr<PushButton>     mpAutoFormatBtn;
 
-    OUString        sConvertTextTable;
-    SwTableAutoFormat* pTAutoFormat;
+    OUString               sConvertTextTable;
+    SwTableFormat*         pTableStyle;
     SwWrtShell*     pShell;
 
     DECL_LINK_TYPED( AutoFormatHdl, Button*, void );
@@ -67,7 +67,7 @@ public:
 
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTableOpts,
-                    SwTableAutoFormat const*& prTAFormat );
+                    SwTableFormat const*& prStyle );
 };
 
 #endif

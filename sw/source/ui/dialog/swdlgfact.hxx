@@ -145,7 +145,7 @@ class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg
 {
     DECL_ABSTDLG_BASE( AbstractSwConvertTableDlg_Impl,SwConvertTableDlg)
     virtual void GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
-                    SwTableAutoFormat const*& prTAFormat) SAL_OVERRIDE;
+                    SwTableFormat const*& prStyle) SAL_OVERRIDE;
 };
 
 class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPilot
@@ -190,7 +190,7 @@ class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl,SwAutoFormatDlg )
-    virtual void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const SAL_OVERRIDE;
+    virtual void FillAutoFormatOfIndex( SwTableFormat*& rToFill ) const SAL_OVERRIDE;
 };
 
 class AbstractSwFieldDlg_Impl : public AbstractSwFieldDlg
@@ -262,8 +262,8 @@ class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
     DECL_ABSTDLG_BASE(AbstractInsTableDlg_Impl,SwInsTableDlg)
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
-                                SwTableAutoFormat *& prTAFormat ) SAL_OVERRIDE;
+                                SwInsertTableOptions& rInsTableFlags, OUString& rStyleName,
+                                SwTableFormat *& prStyle ) SAL_OVERRIDE;
 };
 
 class SwJavaEditDialog;
@@ -417,7 +417,7 @@ public:
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
                                                             bool bSetAutoFormat = true,
-                                                            const SwTableAutoFormat* pSelFormat = 0 ) SAL_OVERRIDE;
+                                                            const SwTableFormat* pSelFormat = 0 ) SAL_OVERRIDE;
     virtual SfxAbstractDialog * CreateSwBorderDlg (vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId ) SAL_OVERRIDE;
 
     virtual SfxAbstractDialog * CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode, int nResId ) SAL_OVERRIDE;

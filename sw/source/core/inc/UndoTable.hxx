@@ -43,7 +43,6 @@ class SwTableBox;
 class SwStartNode;
 class SwTableNode;
 class SwTableFormat;
-class SwTableAutoFormat;
 class SwTableSortBoxes;
 
 class SwUndoInsTable : public SwUndo
@@ -53,7 +52,7 @@ class SwUndoInsTable : public SwUndo
     SwDDEFieldType* pDDEFieldType;
     std::vector<sal_uInt16> *pColWidth;
     SwRedlineData*  pRedlData;
-    SwTableAutoFormat* pAutoFormat;
+    OUString sStyleName;
     sal_uLong nSttNode;
     sal_uInt16 nRows, nCols;
     sal_uInt16 nAdjust;
@@ -61,8 +60,8 @@ class SwUndoInsTable : public SwUndo
 public:
     SwUndoInsTable( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
                     sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTableOpts,
-                    const SwTableAutoFormat* pTAFormat, const std::vector<sal_uInt16> *pColArr,
-                  const OUString & rName);
+                    const SwTableFormat* pStyle, const std::vector<sal_uInt16> *pColArr,
+                    const OUString & rName);
 
     virtual ~SwUndoInsTable();
 
@@ -78,7 +77,7 @@ class SwUndoTextToTable : public SwUndo, public SwUndRng
     OUString sTableNm;
     SwInsertTableOptions aInsTableOpts;
     std::vector<sal_uLong>* pDelBoxes;
-    SwTableAutoFormat* pAutoFormat;
+    OUString sStyleName;
     SwHistory* pHistory;
     sal_Unicode cTrenner;
     sal_uInt16 nAdjust;
@@ -87,7 +86,7 @@ class SwUndoTextToTable : public SwUndo, public SwUndRng
 public:
     SwUndoTextToTable( const SwPaM&, const SwInsertTableOptions&, sal_Unicode,
                     sal_uInt16,
-                    const SwTableAutoFormat* pAFormat );
+                    const SwTableFormat* pStyle );
 
     virtual ~SwUndoTextToTable();
 

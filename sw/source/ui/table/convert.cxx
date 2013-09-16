@@ -44,7 +44,7 @@ static sal_Unicode uOther = ',';
 
 void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
                                     SwInsertTableOptions& rInsTableOpts,
-                                    SwTableAutoFormat const*& prTAFormat )
+                                    SwTableFormat const*& prStyle )
 {
     if( mpTabBtn->IsChecked() )
     {
@@ -87,8 +87,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     if (!mpDontSplitCB->IsChecked())
         nInsMode |= tabopts::SPLIT_LAYOUT;
 
-    if( pTAutoFormat )
-        prTAFormat = new SwTableAutoFormat( *pTAutoFormat );
+    prStyle = pTableStyle;
 
     rInsTableOpts.mnInsMode = nInsMode;
 }
@@ -96,7 +95,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     : SfxModalDialog(&rView.GetViewFrame()->GetWindow(), "ConvertTextTableDialog", "modules/swriter/ui/converttexttable.ui" )
     , sConvertTextTable(SW_RES(STR_CONVERT_TEXT_TABLE))
-    , pTAutoFormat(0)
+    , pTableStyle(0)
     , pShell(&rView.GetWrtShell())
 {
     get(mpTabBtn, "tabs");
@@ -179,7 +178,6 @@ SwConvertTableDlg:: ~SwConvertTableDlg()
 
 void SwConvertTableDlg::dispose()
 {
-    delete pTAutoFormat;
     mpTabBtn.clear();
     mpSemiBtn.clear();
     mpParaBtn.clear();
@@ -202,10 +200,10 @@ IMPL_LINK_TYPED( SwConvertTableDlg, AutoFormatHdl, Button*, pButton, void )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pShell, false, pTAutoFormat));
+    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pShell, false, pTableStyle));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFormatOfIndex( pTAutoFormat );
+        pDlg->FillAutoFormatOfIndex( pTableStyle );
 }
 
 IMPL_LINK_TYPED( SwConvertTableDlg, BtnHdl, Button*, pButton, void )

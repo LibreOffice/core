@@ -131,8 +131,7 @@ class SwTOXBaseSection;
 class SwTOXTypes;
 class SwTabCols;
 class SwTable;
-class SwTableAutoFormat;
-class SwTableAutoFormatTable;
+class SwTableFormatTable;
 class SwTableBox;
 class SwTableBoxFormat;
 class SwTableFormat;
@@ -300,7 +299,7 @@ class SW_DLLPUBLIC SwDoc :
     SwFrameFormats       *mpSpzFrameFormatTable;
     SwSectionFormats   *mpSectionFormatTable;
     SwFrameFormats       *mpTableFrameFormatTable;     //< For tables
-    SwTableAutoFormatTable *mpTableStyleTable;    ///< Table styles
+    SwTableFormatTable   *mpTableStyleTable;      ///< Table styles
     SwTextFormatColls   *mpTextFormatCollTable;    //< FormatCollections
     SwGrfFormatColls   *mpGrfFormatCollTable;
 
@@ -860,7 +859,7 @@ public:
     SwTableFormat* MakeTableFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
     void        DelTableFrameFormat( SwTableFormat* pFormat );
     SwTableFormat* FindTableFormatByName( const OUString& rName, bool bAll = false ) const;
-    SwTableAutoFormatTable* GetTableStyles() { return mpTableStyleTable; };
+    SwTableFormatTable* GetTableStyles() { return mpTableStyleTable; };
 
     /** Access to frames.
     Iterate over Flys - for Basic-Collections. */
@@ -1192,7 +1191,7 @@ public:
     const SwTable* InsertTable( const SwInsertTableOptions& rInsTableOpts,  // HEADLINE_NO_BORDER
                                 const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, short eAdjust,
-                                const SwTableAutoFormat* pTAFormat = 0,
+                                const SwTableFormat* pTableStyle = 0,
                                 const std::vector<sal_uInt16> *pColArr = 0,
                                 bool bCalledFromShell = false,
                                 bool bNewModel = true );
@@ -1205,7 +1204,7 @@ public:
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTableOpts, // HEADLINE_NO_BORDER,
                                 const SwPaM& rRange, sal_Unicode cCh,
                                 short eAdjust,
-                                const SwTableAutoFormat* = 0 );
+                                const SwTableFormat* = 0 );
 
     // text to table conversion - API support
     const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
@@ -1254,11 +1253,11 @@ public:
 
     void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
-    // AutoFormat for table/table selection.
-    bool SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew );
+    /// AutoFormat for table/table selection.
+    bool SetTableStyle( const SwSelBoxes& rBoxes, const SwTableFormat* pStyle );
 
-    // Query attributes.
-    bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );
+    /// Query attributes.
+    bool GetTableStyle( const SwSelBoxes& rBoxes, SwTableFormat*& prStyle );
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 

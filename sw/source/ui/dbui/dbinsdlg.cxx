@@ -195,7 +195,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     , aDBData(rData)
     , sNoTmpl(SW_RESSTR(SW_STR_NONE))
     , pView(&rView)
-    , pTAutoFormat(0)
+    , pTableStyle(0)
     , pTableSet(0)
     , pRep(0)
 {
@@ -421,7 +421,6 @@ void SwInsertDBColAutoPilot::dispose()
     delete pTableSet;
     delete pRep;
 
-    delete pTAutoFormat;
     m_pRbAsTable.clear();
     m_pRbAsField.clear();
     m_pRbAsText.clear();
@@ -776,10 +775,10 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTAutoFormat));
+    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTableStyle));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFormatOfIndex( pTAutoFormat );
+        pDlg->FillAutoFormatOfIndex( pTableStyle );
 }
 
 IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
@@ -1034,7 +1033,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         bool bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
-            nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTAutoFormat : 0) );
+            nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTableStyle : 0) );
         rSh.MoveTable( GetfnTablePrev(), GetfnTableStart() );
 
         if( pSelection && pTableSet )
@@ -1173,13 +1172,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         }
 
         rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
-        if( !pSelection && ( pTableSet || pTAutoFormat ))
+        if( !pSelection && ( pTableSet || pTableStyle ))
         {
             if( pTableSet )
                 SetTabSet();
 
-            if( pTAutoFormat )
-                rSh.SetTableAutoFormat( *pTAutoFormat );
+            if( pTableStyle )
+                rSh.SetTableStyle( pTableStyle );
         }
         rSh.SetAutoUpdateCells( bIsAutoUpdateCells );
     }
@@ -1429,15 +1428,15 @@ void SwInsertDBColAutoPilot::SetTabSet()
     SwWrtShell& rSh = pView->GetWrtShell();
     const SfxPoolItem* pItem;
 
-    if( pTAutoFormat )
+    if( pTableStyle )
     {
-        if( pTAutoFormat->IsFrame() )
+        if( pTableStyle->IsFrame() )
         {
             // border is from AutoFormat
             pTableSet->ClearItem( RES_BOX );
             pTableSet->ClearItem( SID_ATTR_BORDER_INNER );
         }
-        if( pTAutoFormat->IsBackground() )
+        if( pTableStyle->IsBackground() )
         {
             pTableSet->ClearItem( RES_BACKGROUND );
             pTableSet->ClearItem( SID_ATTR_BRUSH_ROW );
@@ -1575,8 +1574,8 @@ void SwInsertDBColAutoPilot::ImplCommit()
     if( sNoTmpl != (sTmp = m_pLbDbParaColl->GetSelectEntry()) )
         pValues[5].Value <<= sTmp;
 
-    if( pTAutoFormat )
-        pValues[6].Value <<= pTAutoFormat->GetName();
+    if( pTableStyle )
+        pValues[6].Value <<= pTableStyle->GetName();
 
     pValues[7].Value <<= m_pRbAsTable->IsChecked();
     pValues[8].Value <<= m_pRbAsField->IsChecked();
@@ -1756,20 +1755,11 @@ void SwInsertDBColAutoPilot::Load()
             else
                 m_pLbDbParaColl->SelectEntryPos( 0 );
 
-            delete pTAutoFormat, pTAutoFormat = 0;
+            pTableStyle = 0;
             sTmp = pNewData->sTAutoFormatNm;
-            if( !sTmp.isEmpty() )
+            if( sTmp.getLength() )
             {
-                // then load the AutoFormat file and look for Autoformat first
-                SwDoc* pDoc = pView->GetWrtShell().GetDoc();
-                SwTableAutoFormatTable aAutoFormatTable(pDoc);
-                aAutoFormatTable.Load();
-                for( size_t nAutoFormat = aAutoFormatTable.size(); nAutoFormat; )
-                    if( sTmp == aAutoFormatTable[ --nAutoFormat ].GetName() )
-                    {
-                        pTAutoFormat = new SwTableAutoFormat( aAutoFormatTable[ nAutoFormat ] );
-                        break;
-                    }
+                pTableStyle = pView->GetWrtShell().GetDoc()->GetTableStyles()->FindStyle( sTmp );
             }
 
             m_pRbAsTable->Check( pNewData->bIsTable );

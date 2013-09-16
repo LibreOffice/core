@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <docsh.hxx>
+#include <IDocumentState.hxx>
 #include <tools/resid.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -433,224 +435,14 @@ bool SwTableBoxFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     return 0 == rStream.GetError();
 }
 
-bool SwTableBoxFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
+SwTableFormat* SwTableFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )
 {
-    SvxFontItem aFont = GetFont();
-    aFont.Store( rStream, aFont.GetVersion(fileVersion) );
-
-    SvxFontHeightItem aHeight = GetHeight();
-    aHeight.Store( rStream, aHeight.GetVersion(fileVersion) );
-
-    SvxWeightItem aWeight = GetWeight();
-    aWeight.Store( rStream, aWeight.GetVersion(fileVersion) );
-
-    SvxPostureItem aPosture = GetPosture();
-    aPosture.Store( rStream, aPosture.GetVersion(fileVersion) );
-
-    SvxFontItem aCJKFont = GetCJKFont();
-    aCJKFont.Store( rStream, aCJKFont.GetVersion(fileVersion) );
-
-    SvxFontHeightItem aCJKHeight = GetCJKHeight();
-    aCJKHeight.Store( rStream, aCJKHeight.GetVersion(fileVersion) );
-
-    SvxWeightItem aCJKWeight = GetCJKWeight();
-    aCJKWeight.Store( rStream, aCJKWeight.GetVersion(fileVersion) );
-
-    SvxPostureItem aCJKPosture = GetCJKPosture();
-    aCJKPosture.Store( rStream, aCJKPosture.GetVersion(fileVersion) );
-
-    SvxFontItem aCTLFont = GetCTLFont();
-    aCTLFont.Store( rStream, aCTLFont.GetVersion(fileVersion) );
-
-    SvxFontHeightItem aCTLHeight = GetCTLHeight();
-    aCTLHeight.Store( rStream, aCTLHeight.GetVersion(fileVersion) );
-
-    SvxWeightItem aCTLWeight = GetCTLWeight();
-    aCTLWeight.Store( rStream, aCTLWeight.GetVersion(fileVersion) );
-
-    SvxPostureItem aCTLPosture = GetCTLPosture();
-    aCTLPosture.Store( rStream, aCTLPosture.GetVersion(fileVersion) );
-
-    SvxUnderlineItem aUnderline = GetUnderline();
-    aUnderline.Store( rStream, aUnderline.GetVersion(fileVersion) );
-
-    SvxOverlineItem aOverline = GetOverline();
-    aOverline.Store( rStream, aOverline.GetVersion(fileVersion) );
-
-    SvxCrossedOutItem aCrossedOut = GetCrossedOut();
-    aCrossedOut.Store( rStream, aCrossedOut.GetVersion(fileVersion) );
-
-    SvxContourItem aContour = GetContour();
-    aContour.Store( rStream, aContour.GetVersion(fileVersion) );
-
-    SvxShadowedItem aShadowed = GetShadowed();
-    aShadowed.Store( rStream, aShadowed.GetVersion(fileVersion) );
-
-    SvxColorItem aColor = GetColor();
-    aColor.Store( rStream, aColor.GetVersion(fileVersion) );
-
-    SvxBoxItem aBox = GetBox();
-    aBox.Store( rStream, aBox.GetVersion(fileVersion) );
-
-    SvxBrushItem aBackground = makeBackgroundBrushItem();
-    aBackground.Store( rStream, aBackground.GetVersion(fileVersion) );
-
-    SvxAdjustItem aAdjust = GetAdjust();
-    aAdjust.Store( rStream, aAdjust.GetVersion(fileVersion) );
-
-    if (fileVersion >= SOFFICE_FILEFORMAT_50)
-    {
-        WriterSpecificAutoFormatBlock block(rStream);
-
-        SvxFrameDirectionItem aTextOrientation = GetTextOrientation();
-        aTextOrientation.Store(rStream, aTextOrientation.GetVersion(fileVersion));
-
-        SwFormatVertOrient aVerticalAlignment = GetVerticalAlignment();
-        aVerticalAlignment.Store(rStream, aVerticalAlignment.GetVersion(fileVersion));
-    }
-
-    // --- from 680/dr25 on: store strings as UTF-8
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, sNumFormatString,
-        RTL_TEXTENCODING_UTF8);
-    rStream.WriteUInt16( eSysLanguage ).WriteUInt16( eNumFormatLanguage );
-
-    return 0 == rStream.GetError();
-}
-
-bool SwTableBoxFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
-{
-    rStream.WriteUInt16(GetFont().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetHeight().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetWeight().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetPosture().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetUnderline().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetOverline().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetCrossedOut().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetContour().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetShadowed().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetColor().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetBox().GetVersion(fileVersion));
-    rStream.WriteUInt16(makeBackgroundBrushItem().GetVersion(fileVersion));
-    rStream.WriteUInt16(GetAdjust().GetVersion(fileVersion));
-
-    if (fileVersion >= SOFFICE_FILEFORMAT_50)
-    {
-        WriterSpecificAutoFormatBlock block(rStream);
-
-        rStream.WriteUInt16(GetTextOrientation().GetVersion(fileVersion));
-        rStream.WriteUInt16(GetVerticalAlignment().GetVersion(fileVersion));
-    }
-
-    rStream.WriteUInt16(0);       // NumberFormat
-
-    return 0 == rStream.GetError();
-}
-
-SwTableAutoFormat::SwTableAutoFormat( const OUString& rName, SwTableFormat* pTableStyle )
-    : m_pTableStyle( pTableStyle )
-    , nStrResId( USHRT_MAX )
-{
-    m_pTableStyle->SetName( rName );
-}
-
-SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
-{
-    *this = rNew;
-}
-
-SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
-{
-    if (&rNew == this)
-        return *this;
-
-    m_pTableStyle = rNew.m_pTableStyle;
-    nStrResId = rNew.nStrResId;
-
-    return *this;
-}
-
-void SwTableAutoFormat::SetBoxFormat( const SwTableBoxFormat& rNew, sal_uInt8 nPos )
-{
-    m_pTableStyle->SetBoxFormat( rNew, nPos );
-}
-
-
-SwTableBoxFormat* SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos ) const
-{
-    return m_pTableStyle->GetBoxFormat( nPos );
-}
-
-void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
-{
-    SwTableFormat::RestoreTableProperties( m_pTableStyle, table );
-}
-
-void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
-{
-    m_pTableStyle = SwTableFormat::StoreTableProperties( table );
-}
-
-bool SwTableFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal )
-{
+    SwTableFormat* pRet = NULL;
     sal_Bool bRet = 0 == rStream.GetError();
-
-    if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
-    {
-        SfxPoolItem* pNew = 0;
-
-        SvxFormatBreakItem aBreak = SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK );
-        READ( aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION );
-        SetBreak( aBreak );
-
-        SwFormatPageDesc aPageDesc;
-        READ( aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION );
-        SetPageDesc( aPageDesc );
-
-        SvxFormatKeepItem aKeepWithNextPara = SvxFormatKeepItem( sal_False, RES_KEEP );
-        READ( aKeepWithNextPara, SvxFormatKeepItem, AUTOFORMAT_FILE_VERSION );
-        SetKeepWithNextPara( aKeepWithNextPara );
-
-        sal_uInt16 aRepeatHeading;
-        bool bLayoutSplit;
-        bool bRowSplit;
-        bool bCollapsingBorders;
-        rStream.ReadUInt16(aRepeatHeading).ReadCharAsBool(bLayoutSplit).ReadCharAsBool(bRowSplit).ReadCharAsBool(bCollapsingBorders);
-        SetRepeatHeading( aRepeatHeading );
-        SetRowSplit( bRowSplit );
-        SetLayoutSplit( bLayoutSplit );
-        SetCollapsingBorders( bCollapsingBorders );
-
-        SvxShadowItem aShadow = SvxShadowItem( RES_SHADOW );
-        READ( aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION );
-        SetShadow( aShadow );
-    }
-
-    bRet = 0 == rStream.GetError();
-
-    for( sal_uInt8 i = 0; bRet && i < 16; ++i )
-    {
-        SwTableBoxFormat* pFormat = pDoc->MakeTableBoxFormat();
-
-        bRet = pFormat->Load( rStream, rVersions, nVal );
-        if( bRet )
-            SetBoxFormat( *pFormat, i );
-        else
-        {
-            delete pFormat;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
-SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )
-{
-    SwTableAutoFormat* pRet = NULL;
 
     sal_uInt16  nVal = 0;
     rStream.ReadUInt16( nVal );
-    bool bRet = 0 == rStream.GetError();
+    bRet = 0 == rStream.GetError();
 
     if( bRet && (nVal == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
@@ -673,13 +465,7 @@ SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersion
                 nStrResId = USHRT_MAX;
         }
 
-        // FIXME Yuk! we are creating the table styles ATM, but in the targetted
-        // ideal, the table styles are created with the document
-        SwTableFormat* pStyle = pDoc->FindTableFormatByName(aName);
-        if ( !pStyle )
-            pStyle = pDoc->MakeTableFrameFormat( aName, pDoc->GetDfltFrameFormat() );
-        pRet = new SwTableAutoFormat( aName, pStyle );
-
+        pRet = pDoc->GetTableStyles()->MakeStyle( aName );
         pRet->nStrResId = nStrResId;
 
         // No longer needed, but still read to not misread other data
@@ -690,114 +476,132 @@ SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersion
         rStream.ReadCharAsBool( b );
         rStream.ReadCharAsBool( b );
 
-        bRet = pStyle->Load( rStream, rVersions, pDoc, nVal );
+        if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
+        {
+            SfxPoolItem* pNew = 0;
+
+            SvxFormatBreakItem aBreak = SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK );
+            READ( aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION );
+            pRet->SetBreak( aBreak );
+
+            SwFormatPageDesc aPageDesc;
+            READ( aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION );
+            pRet->SetPageDesc( aPageDesc );
+
+            SvxFormatKeepItem aKeepWithNextPara = SvxFormatKeepItem( sal_False, RES_KEEP );
+            READ( aKeepWithNextPara, SvxFormatKeepItem, AUTOFORMAT_FILE_VERSION );
+            pRet->SetKeepWithNextPara( aKeepWithNextPara );
+
+            sal_uInt16 aRepeatHeading;
+            bool bLayoutSplit;
+            bool bRowSplit;
+            bool bCollapsingBorders;
+            rStream.ReadUInt16(aRepeatHeading).ReadCharAsBool(bLayoutSplit).ReadCharAsBool(bRowSplit).ReadCharAsBool(bCollapsingBorders);
+            pRet->SetRepeatHeading( aRepeatHeading );
+            pRet->SetRowSplit( bRowSplit );
+            pRet->SetLayoutSplit( bLayoutSplit );
+            pRet->SetCollapsingBorders( bCollapsingBorders );
+
+            SvxShadowItem aShadow = SvxShadowItem( RES_SHADOW );
+            READ( aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION );
+            pRet->SetShadow( aShadow );
+        }
+
+        bRet = 0 == rStream.GetError();
+
+        for( sal_uInt8 i = 0; bRet && i < 16; ++i )
+        {
+            SwTableBoxFormat* pFormat = pDoc->MakeTableBoxFormat();
+
+            bRet = pFormat->Load( rStream, rVersions, nVal );
+            if( bRet )
+                pRet->SetBoxFormat( *pFormat, i );
+            else
+            {
+                delete pFormat;
+                break;
+            }
+        }
     }
     if ( !bRet )
     {
         delete pRet;
         pRet = NULL;
     }
+
     return pRet;
 }
 
-bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
+size_t SwTableFormatTable::size() const
 {
-    sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    rStream.WriteUInt16( nVal );
-    // --- from 680/dr25 on: store strings as UTF-8
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, GetName(),
-        RTL_TEXTENCODING_UTF8 );
-    rStream.WriteUInt16( nStrResId );
-    rStream.WriteBool( false );
-    rStream.WriteBool( false );
-    rStream.WriteBool( false );
-    rStream.WriteBool( false );
-    rStream.WriteBool( false );
-    rStream.WriteBool( false );
+    return m_TableStyles.size();
+}
 
+SwTableFormat const* SwTableFormatTable::operator[](size_t const i) const
+{
+    return m_TableStyles[i];
+}
+
+SwTableFormat      * SwTableFormatTable::operator[](size_t const i)
+{
+    return m_TableStyles[i];
+}
+
+SwTableFormat* SwTableFormatTable::MakeStyle( OUString sName )
+{
+    SwTableFormat* pStyle = new SwTableFormat( m_pDoc->GetAttrPool(), sName, m_pDoc->GetDfltFrameFormat() );
+    m_TableStyles.push_back( pStyle );
+    m_pDoc->getIDocumentState().SetModified();
+
+    return pStyle;
+}
+
+SwTableFormat* SwTableFormatTable::FindStyle( OUString sName )
+{
+    SwTableFormat* pFnd = 0;
+    for( sal_uInt16 n = 0; n < m_TableStyles.size(); n++ )
     {
-        WriterSpecificAutoFormatBlock block(rStream);
-
-        SvxFormatBreakItem m_aBreak = m_pTableStyle->GetBreak();
-        m_aBreak.Store(rStream, m_aBreak.GetVersion(fileVersion));
-
-        SwFormatPageDesc m_aPageDesc = m_pTableStyle->GetPageDesc();
-        m_aPageDesc.Store(rStream, m_aPageDesc.GetVersion(fileVersion));
-
-        SvxFormatKeepItem m_aKeepWithNextPara = m_pTableStyle->GetKeepWithNextPara();
-        m_aKeepWithNextPara.Store(rStream, m_aKeepWithNextPara.GetVersion(fileVersion));
-
-        rStream.WriteUInt16(m_pTableStyle->GetRepeatHeading());
-        rStream.WriteBool(m_pTableStyle->GetLayoutSplit());
-        rStream.WriteBool(m_pTableStyle->GetRowSplit());
-        rStream.WriteBool(m_pTableStyle->GetCollapsingBorders());
-
-        SvxShadowItem m_aShadow = m_pTableStyle->GetShadow();
-        m_aShadow.Store(rStream, m_aShadow.GetVersion(fileVersion));
+        if( m_TableStyles[ n ]->GetName() == sName )
+        {
+            pFnd = m_TableStyles[ n ];
+            break;
+        }
     }
 
-    bool bRet = 0 == rStream.GetError();
+    return pFnd;
+}
 
-    for( int i = 0; bRet && i < 16; ++i )
+void SwTableFormatTable::InsertStyle(size_t const i, SwTableFormat * pFormat)
+{
+    m_TableStyles.insert(m_TableStyles.begin() + i, pFormat);
+}
+
+void SwTableFormatTable::EraseStyle(size_t const i)
+{
+    m_TableStyles.erase(m_TableStyles.begin() + i);
+}
+
+void SwTableFormatTable::MoveStyle(size_t const target, size_t source)
+{
+    m_TableStyles.insert( m_TableStyles.begin() + target, m_TableStyles[ source ] );
+    m_TableStyles.erase( m_TableStyles.begin() + source );
+}
+
+SwTableFormatTable::~SwTableFormatTable()
+{
+    for( sal_uInt16 n = 0; n < m_TableStyles.size(); n++ )
     {
-        SwTableBoxFormat* pFormat = GetBoxFormat( i );
-
-        bRet = pFormat->Save( rStream, fileVersion );
+        delete m_TableStyles[ n ];
+        m_TableStyles.erase( m_TableStyles.begin() + n );
     }
-    return bRet;
 }
 
-struct SwTableAutoFormatTable::Impl
-{
-    std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;
-};
-
-size_t SwTableAutoFormatTable::size() const
-{
-    return m_pImpl->m_AutoFormats.size();
-}
-
-SwTableAutoFormat const& SwTableAutoFormatTable::operator[](size_t const i) const
-{
-    return *m_pImpl->m_AutoFormats[i];
-}
-SwTableAutoFormat      & SwTableAutoFormatTable::operator[](size_t const i)
-{
-    return *m_pImpl->m_AutoFormats[i];
-}
-
-void
-SwTableAutoFormatTable::InsertAutoFormat(size_t const i, std::unique_ptr<SwTableAutoFormat> pFormat)
-{
-    m_pImpl->m_AutoFormats.insert(m_pImpl->m_AutoFormats.begin() + i, std::move(pFormat));
-}
-
-void SwTableAutoFormatTable::EraseAutoFormat(size_t const i)
-{
-    m_pImpl->m_AutoFormats.erase(m_pImpl->m_AutoFormats.begin() + i);
-}
-
-std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(size_t const i)
-{
-    auto const iter(m_pImpl->m_AutoFormats.begin() + i);
-    std::unique_ptr<SwTableAutoFormat> pRet(std::move(*iter));
-    m_pImpl->m_AutoFormats.erase(iter);
-    return pRet;
-}
-
-SwTableAutoFormatTable::~SwTableAutoFormatTable()
-{
-}
-
-SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
-    : m_pImpl(new Impl)
-    , m_pDoc(pDoc)
+SwTableFormatTable::SwTableFormatTable(SwDoc* pDoc)
+    : m_pDoc( pDoc)
 {
     OUString sNm;
     sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
-    SwTableFormat* pStyle = pDoc->MakeTableFrameFormat( sNm, pDoc->GetDfltFrameFormat() );
-
-    std::unique_ptr<SwTableAutoFormat> pNewTableAutoFormat(new SwTableAutoFormat(sNm, pStyle));
+    SwTableFormat* pNewTableStyle = MakeStyle( sNm );
 
     SwTableBoxFormat* pNewBoxFormat = pDoc->MakeTableBoxFormat();
 
@@ -809,13 +613,13 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
     pNewBoxFormat->SetColor( SvxColorItem(Color( COL_WHITE ), RES_CHRATR_COLOR) );
 
     for( i = 0; i < 4; ++i )
-        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
+        pNewTableStyle->SetBoxFormat( *pNewBoxFormat, i );
 
     // 70% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0x4d, 0x4d, 0x4d ) );
     pNewBoxFormat->SetBackground( aBrushItem );
     for( i = 4; i <= 12; i += 4 )
-        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
+        pNewTableStyle->SetBoxFormat( *pNewBoxFormat, i );
 
     // 20% gray
     aBrushItem.SetColor( RGB_COLORDATA( 0xcc, 0xcc, 0xcc ) );
@@ -823,16 +627,16 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
     aColor.SetColor( COL_BLACK );
     pNewBoxFormat->SetColor( SvxColorItem( aColor, RES_CHRATR_COLOR) );
     for( i = 7; i <= 15; i += 4 )
-        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
+        pNewTableStyle->SetBoxFormat( *pNewBoxFormat, i );
     for( i = 13; i <= 14; ++i )
-        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
+        pNewTableStyle->SetBoxFormat( *pNewBoxFormat, i );
 
     aBrushItem.SetColor( Color( COL_WHITE ) );
     pNewBoxFormat->SetBackground( aBrushItem );
     for( i = 5; i <= 6; ++i )
-        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
+        pNewTableStyle->SetBoxFormat( *pNewBoxFormat, i );
     for( i = 9; i <= 10; ++i )
-        pNewTableAutoFormat->SetBoxFormat( *pNewBoxFormat, i );
+        pNewTableStyle->SetBoxFormat( *pNewBoxFormat, i );
 
 
     SvxBoxItem aBox( RES_BOX );
@@ -845,13 +649,11 @@ SwTableAutoFormatTable::SwTableAutoFormatTable(SwDoc* pDoc)
     {
         aBox.SetLine( i <= 3 ? &aLn : 0, SvxBoxItemLine::TOP );
         aBox.SetLine( (3 == ( i & 3 )) ? &aLn : 0, SvxBoxItemLine::RIGHT );
-        pNewTableAutoFormat->GetBoxFormat( i )->SetBox( aBox );
+        pNewTableStyle->GetBoxFormat( i )->SetBox( aBox );
     }
-
-    m_pImpl->m_AutoFormats.push_back(std::move(pNewTableAutoFormat));
 }
 
-bool SwTableAutoFormatTable::Load()
+bool SwTableFormatTable::Load()
 {
     bool bRet = false;
     OUString sNm(AUTOTABLE_FORMAT_NAME);
@@ -866,17 +668,9 @@ bool SwTableAutoFormatTable::Load()
     return bRet;
 }
 
-bool SwTableAutoFormatTable::Save() const
+bool SwTableFormatTable::Load( SvStream& rStream )
 {
-    SvtPathOptions aPathOpt;
-    const OUString sNm( aPathOpt.GetUserConfigPath() + "/" AUTOTABLE_FORMAT_NAME );
-    SfxMedium aStream(sNm, STREAM_STD_WRITE );
-    return Save( *aStream.GetOutStream() ) && aStream.Commit();
-}
-
-bool SwTableAutoFormatTable::Load( SvStream& rStream )
-{
-    bool bRet = 0 == rStream.GetError();
+    sal_Bool bRet = 0 == rStream.GetError();
     if (bRet)
     {
         // Attention: We need to read a general Header here
@@ -913,32 +707,19 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
             {
                 aVersions.Load( rStream, nVal );        // Item versions
 
+                SwTableFormat* pNew;
                 sal_uInt16 nCount = 0;
                 rStream.ReadUInt16( nCount );
 
                 bRet = 0 == rStream.GetError();
-                if (bRet)
+
+                for( sal_uInt16 i = 0; i < nCount; ++i )
                 {
-                    const size_t nMinRecordSize = sizeof(sal_uInt16);
-                    const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
-                    if (nCount > nMaxRecords)
+                    pNew = SwTableFormat::Load( rStream, aVersions, m_pDoc );
+                    if( !pNew )
                     {
-                        SAL_WARN("sw.core", "Parsing error: " << nMaxRecords <<
-                                 " max possible entries, but " << nCount << " claimed, truncating");
-                        nCount = nMaxRecords;
-                    }
-                    for (sal_uInt16 i = 0; i < nCount; ++i)
-                    {
-                        std::unique_ptr<SwTableAutoFormat> pNew(SwTableAutoFormat::Load(rStream, aVersions, m_pDoc));
-                        if (pNew)
-                        {
-                            m_pImpl->m_AutoFormats.push_back(std::move(pNew));
-                        }
-                        else
-                        {
-                            bRet = false;
-                            break;
-                        }
+                        bRet = false;
+                        break;
                     }
                 }
             }
@@ -948,40 +729,6 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
             }
         }
     }
-    return bRet;
-}
-
-bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
-{
-    bool bRet = 0 == rStream.GetError();
-    if (bRet)
-    {
-        rStream.SetVersion(AUTOFORMAT_FILE_VERSION);
-
-        // Attention: We need to save a general Header here
-        sal_uInt16 nVal = AUTOFORMAT_ID;
-        rStream.WriteUInt16( nVal )
-               .WriteUChar( 2 ) // Character count of the Header including this value
-               .WriteUChar( GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
-
-        bRet = 0 == rStream.GetError();
-        if (!bRet)
-            return false;
-
-        // Write this version number for all attributes
-        m_pImpl->m_AutoFormats[0]->GetBoxFormat(0)->SaveVersionNo(
-               rStream, AUTOFORMAT_FILE_VERSION);
-
-        rStream.WriteUInt16( m_pImpl->m_AutoFormats.size() - 1 );
-        bRet = 0 == rStream.GetError();
-
-        for (sal_uInt16 i = 1; bRet && i < m_pImpl->m_AutoFormats.size(); ++i)
-        {
-            SwTableAutoFormat const& rFormat = *m_pImpl->m_AutoFormats[i];
-            bRet = rFormat.Save(rStream, AUTOFORMAT_FILE_VERSION);
-        }
-    }
-    rStream.Flush();
     return bRet;
 }
 
