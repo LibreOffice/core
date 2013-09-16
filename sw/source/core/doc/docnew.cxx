@@ -355,7 +355,7 @@ SwDoc::SwDoc()
     mpFrmFmtTbl->push_back(mpDfltFrmFmt);
     mpCharFmtTbl->push_back(mpDfltCharFmt);
 
-    mpTblStyleTbl = new SwTableAutoFmtTbl( this );
+    mpTblStyleTbl = new SwTableFmtTbl( this );
     mpTblStyleTbl->Load();
 
     /* FmtColls */

@@ -63,6 +63,8 @@ class SwTableBoxFmt;
 class SW_DLLPUBLIC SwTableFmt : public SwFrmFmt
 {
     friend class SwDoc;
+    friend class SwTableFmtTbl;
+    sal_uInt16 nStrResId;
 
 protected:
     SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
@@ -138,7 +140,7 @@ public:
     static void AssignLineParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableBoxFmt* pSrcBoxFmt, SwTableBox& rBox );
     static void AssignBoxParents_Complex( SwTableLineFmt* pSrcLineFmt, SwTableBoxFmt* pSrcBoxFmt, SwTableLine& rLine );
 
-    sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc, sal_uInt16 nVal );
+    static SwTableFmt* Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc );
 
     TYPEINFO();     // Already in base class Content.
 
@@ -244,8 +246,6 @@ public:
     sal_Bool IsValueFormat() const;
 
     sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
-    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-    sal_Bool SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const;
 
     TYPEINFO();     // Already in base class Content.
 

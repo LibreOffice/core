@@ -82,7 +82,6 @@ class SwSectionFmt;
 class SwTOXMarks;
 class SwTOXBase;
 class SwTOXType;
-class SwTableAutoFmt;
 class SwPageDesc;
 class SwTxtINetFmt;
 class SwSeqFldList;
@@ -687,7 +686,7 @@ public:
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTblOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,
                                 sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
-                                const SwTableAutoFmt* pTAFmt = 0 );
+                                const SwTableFmt* pTableStyle = 0 );
 
     void InsertDDETable( const SwInsertTableOptions& rInsTblOpts,  ///< HEADLINE_NO_BORDER
                          SwDDEFieldType* pDDEType,
@@ -701,7 +700,7 @@ public:
     sal_Bool TextToTable( const SwInsertTableOptions& rInsTblOpts,  ///< ALL_TBL_INS_ATTR
                       sal_Unicode cCh,
                       sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
-                      const SwTableAutoFmt* pTAFmt = 0 );
+                      const SwTableFmt* pTableStyle = 0 );
     sal_Bool TableToText( sal_Unicode cCh );
     sal_Bool IsTextToTableAvailable() const;
 

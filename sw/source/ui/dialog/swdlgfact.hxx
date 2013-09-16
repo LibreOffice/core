@@ -161,7 +161,7 @@ class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg // add 
 {
     DECL_ABSTDLG_BASE( AbstractSwConvertTableDlg_Impl,SwConvertTableDlg)
     virtual void GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTblFlags,
-                    SwTableAutoFmt const*& prTAFmt);
+                    SwTableFmt const*& prStyle);
 };
 //add for SwConvertTableDlg end
 
@@ -216,7 +216,7 @@ class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 {
     DECL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl,SwAutoFormatDlg )
-    virtual void FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const;
+    virtual void FillAutoFmtOfIndex( SwTableFmt*& rToFill ) const;
 };
 //add for SwAutoFormatDlg end
 
@@ -301,8 +301,8 @@ class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
     DECL_ABSTDLG_BASE(AbstractInsTableDlg_Impl,SwInsTableDlg)
     virtual void            GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
-                                SwTableAutoFmt *& prTAFmt );
+                                SwInsertTableOptions& rInsTblFlags, String& rStyleName,
+                                SwTableFmt *& prStyle );
 };
 //for SwInsTableDlg end
 
@@ -477,7 +477,7 @@ public:
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
                                                             sal_Bool bSetAutoFmt = sal_True,
-                                                            const SwTableAutoFmt* pSelFmt = 0 );
+                                                            const SwTableFmt* pSelFmt = 0 );
     virtual SfxAbstractDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType,int nResId );//add for SwBorderDlg
 
     virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId ); //add for SwWrapDlg

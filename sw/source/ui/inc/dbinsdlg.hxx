@@ -47,7 +47,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-class SwTableAutoFmt;
+class SwTableFmt;
 class SwView;
 class SfxItemSet;
 class SwTableRep;
@@ -136,7 +136,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     String          sNoTmpl;
 
     SwView*         pView;
-    SwTableAutoFmt* pTAutoFmt;
+    SwTableFmt*     pTableStyle;
 
     SfxItemSet*     pTblSet;
     SwTableRep*     pRep;

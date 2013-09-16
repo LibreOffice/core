@@ -107,61 +107,28 @@ The properties saved are divided into three categories:
 Character and box properties are stored per cell (and are lossy for tables larger than 4x4). Table
 properties are stored per-table, and are lossless.
 */
-class SW_DLLPUBLIC SwTableAutoFmt
+
+class SW_DLLPUBLIC SwTableFmtTbl
 {
-    SwTableFmt* m_pTableStyle;
-    sal_uInt16 nStrResId;
-
-public:
-    SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle );
-    SwTableAutoFmt( const SwTableAutoFmt& rNew );
-
-    SwTableAutoFmt& operator=( const SwTableAutoFmt& rNew );
-
-    SwTableFmt* GetTableStyle() const   { return m_pTableStyle; }
-    SwTableFmt* GetTableStyle()         { return m_pTableStyle; }
-
-    void SetBoxFmt( const SwTableBoxFmt& rNew, sal_uInt8 nPos );
-    SwTableBoxFmt* GetBoxFmt( sal_uInt8 nPos ) const;
-
-    void SetName( const String& rNew ) { m_pTableStyle->SetName( rNew ); nStrResId = USHRT_MAX; }
-    const String& GetName() const { return m_pTableStyle->GetName(); }
-
-    void RestoreTableProperties(SwTable &table) const;
-    void StoreTableProperties(const SwTable &table);
-
-    sal_Bool IsFont() const         { return m_pTableStyle->IsFont(); }
-    sal_Bool IsJustify() const      { return m_pTableStyle->IsJustify(); }
-    sal_Bool IsFrame() const        { return m_pTableStyle->IsFrame(); }
-    sal_Bool IsBackground() const   { return m_pTableStyle->IsBackground(); }
-    sal_Bool IsValueFormat() const  { return m_pTableStyle->IsValueFormat(); }
-
-    static SwTableAutoFmt* Load( SvStream& rStream, const SwAfVersions&, SwDoc* pDoc );
-    sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
-};
-
-class SW_DLLPUBLIC SwTableAutoFmtTbl
-{
-    struct Impl;
-    ::boost::scoped_ptr<Impl> m_pImpl;
+    std::vector<SwTableFmt*> m_TableStyles;
     SwDoc* m_pDoc;
 
     SW_DLLPRIVATE sal_Bool Load( SvStream& rStream );
-    SW_DLLPRIVATE sal_Bool Save( SvStream& rStream ) const;
 
 public:
-    explicit SwTableAutoFmtTbl(SwDoc* pDoc);
-    ~SwTableAutoFmtTbl();
+    explicit SwTableFmtTbl(SwDoc* pDoc);
+    ~SwTableFmtTbl();
 
     size_t size() const;
-    SwTableAutoFmt const& operator[](size_t i) const;
-    SwTableAutoFmt      & operator[](size_t i);
-    void InsertAutoFmt(size_t i, SwTableAutoFmt * pFmt);
-    void EraseAutoFmt(size_t i);
-    void MoveAutoFmt(size_t target, size_t source);
+    SwTableFmt const* operator[](size_t i) const;
+    SwTableFmt      * operator[](size_t i);
+    SwTableFmt* MakeStyle( OUString sName );
+    SwTableFmt* FindStyle( OUString sName );
+    void InsertStyle(size_t i, SwTableFmt * pFmt);
+    void EraseStyle(size_t i);
+    void MoveStyle(size_t target, size_t source);
 
     sal_Bool Load();
-    sal_Bool Save() const;
 };
 
 #endif

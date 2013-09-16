@@ -24,7 +24,7 @@
 #include <vcl/edit.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class SwTableAutoFmt;
+class SwTableFmt;
 class SwView;
 class SwWrtShell;
 class NumericField;
@@ -52,7 +52,7 @@ class SwConvertTableDlg: public SfxModalDialog
     PushButton*     mpAutoFmtBtn;
 
     String          sConvertTextTable;
-    SwTableAutoFmt* pTAutoFmt;
+    SwTableFmt*     pTableStyle;
     SwWrtShell*     pShell;
 
     DECL_LINK( AutoFmtHdl, PushButton* );
@@ -66,7 +66,7 @@ public:
 
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTblOpts,
-                    SwTableAutoFmt const*& prTAFmt );
+                    SwTableFmt const*& prStyle );
 };
 
 

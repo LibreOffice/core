@@ -27,7 +27,6 @@
 #include <actctrl.hxx>
 
 class SwWrtShell;
-class SwTableAutoFmt;
 class SwView;
 struct SwInsertTableOptions;
 
@@ -51,7 +50,7 @@ class SwInsTableDlg : public SfxModalDialog
     PushButton*     m_pAutoFmtBtn;
 
     SwWrtShell*     pShell;
-    SwTableAutoFmt* pTAutoFmt;
+    SwTableFmt*     pTableStyle;
     sal_Int64       nEnteredValRepeatHeaderNF;
 
     DECL_LINK( ModifyName, Edit * );
@@ -67,8 +66,8 @@ public:
     ~SwInsTableDlg();
 
     void GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                    SwInsertTableOptions& rInsTblOpts, String& rTableAutoFmtName,
-                    SwTableAutoFmt *& prTAFmt );
+                    SwInsertTableOptions& rInsTblOpts, String& rStyleName,
+                    SwTableFmt *& prStyle );
 };
 
 #endif

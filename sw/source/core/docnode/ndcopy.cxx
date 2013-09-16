@@ -37,6 +37,7 @@
 #include <mvsave.hxx>
 #include <cellatr.hxx>
 #include <swtblfmt.hxx>
+#include <tblafmt.hxx>
 #include <swddetbl.hxx>
 #include <docary.hxx>
 #include <fmtcnct.hxx>
@@ -429,7 +430,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
     SwTableFmt* pStyle = (SwTableFmt*)GetTable().GetTableFmt()->GetRegisteredIn();
-    SwTableFmt* pActualStyle = pStyle ? pDoc->FindTblFmtByName( pStyle->GetName() , sal_True ) : 0;
+    SwTableFmt* pActualStyle = pStyle ? pDoc->GetTableStyles()->FindStyle( pStyle->GetName() ) : 0;
     if( !pActualStyle )
         pActualStyle = pStyle;
 

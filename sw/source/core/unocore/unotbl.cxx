@@ -2992,23 +2992,16 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
         if(!pTable->IsTblComplex())
         {
 
-            String sAutoFmtName(aName);
-            SwTableAutoFmtTbl aAutoFmtTbl( pFmt->GetDoc() );
-            aAutoFmtTbl.Load();
-            for (sal_uInt16 i = aAutoFmtTbl.size(); i;)
-                if( sAutoFmtName == aAutoFmtTbl[ --i ].GetName() )
-                {
-                    SwSelBoxes aBoxes;
-                    const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
-                    for (size_t n = 0; n < rTBoxes.size(); ++n)
-                    {
-                        SwTableBox* pBox = rTBoxes[ n ];
-                        aBoxes.insert( pBox );
-                    }
-                    UnoActionContext aContext( pFmt->GetDoc() );
-                    pFmt->GetDoc()->SetTableAutoFmt( aBoxes, aAutoFmtTbl[i] );
-                    break;
-                }
+            SwTableFmt* pStyle = pFmt->GetDoc()->GetTableStyles()->FindStyle( aName );
+            SwSelBoxes aBoxes;
+            const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
+            for (size_t n = 0; n < rTBoxes.size(); ++n)
+            {
+                SwTableBox* pBox = rTBoxes[ n ];
+                aBoxes.insert( pBox );
+            }
+            UnoActionContext aContext( pFmt->GetDoc() );
+            pFmt->GetDoc()->SetTableStyle( aBoxes, pStyle );
         }
     }
     else

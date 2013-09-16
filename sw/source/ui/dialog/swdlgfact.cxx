@@ -226,9 +226,9 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetPageNumber()
 }
 
 void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTblFlags,
-                                                SwTableAutoFmt const*& prTAFmt)
+                                                SwTableFmt const*& prStyle)
 {
-    pDlg->GetValues(rDelim,rInsTblFlags, prTAFmt);
+    pDlg->GetValues(rDelim,rInsTblFlags, prStyle);
 }
 
 void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::Any >& rSelection,
@@ -309,7 +309,7 @@ void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_uInt16 nIdx)
     pDlg->SelectEntryPos( nIdx );
 }
 
-void AbstractSwAutoFormatDlg_Impl::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
+void AbstractSwAutoFormatDlg_Impl::FillAutoFmtOfIndex( SwTableFmt*& rToFill ) const
 {
     pDlg->FillAutoFmtOfIndex(rToFill);
 }
@@ -439,10 +439,10 @@ void AbstractInsFootNoteDlg_Impl::SetText( const OUString& rStr )
 }
 
 void AbstractInsTableDlg_Impl::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
-                                SwTableAutoFmt *& prTAFmt )
+                                SwInsertTableOptions& rInsTblFlags, String& rStyleName,
+                                SwTableFmt *& prStyle )
 {
-    pDlg->GetValues( rName, rRow, rCol, rInsTblFlags, rTableAutoFmtName, prTAFmt);
+    pDlg->GetValues( rName, rRow, rCol, rInsTblFlags, rStyleName, prStyle);
 }
 
 OUString AbstractJavaEditDialog_Impl::GetText()
@@ -892,7 +892,7 @@ AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg 
 }
 
 AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(Window* pParent,
-    SwWrtShell* pShell, sal_Bool bSetAutoFmt, const SwTableAutoFmt* pSelFmt)
+    SwWrtShell* pShell, sal_Bool bSetAutoFmt, const SwTableFmt* pSelFmt)
 {
     SwAutoFormatDlg* pDlg = new SwAutoFormatDlg(pParent, pShell, bSetAutoFmt, pSelFmt);
     return new AbstractSwAutoFormatDlg_Impl(pDlg);

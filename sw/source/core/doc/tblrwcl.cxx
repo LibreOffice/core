@@ -2154,14 +2154,11 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     }
 
     SwTableFmt* pStyle = (SwTableFmt*)GetTableFmt()->GetRegisteredIn();
-    SwTableAutoFmt* pAutoFmt = 0;
-    if( pStyle )
-        pAutoFmt = new SwTableAutoFmt( pStyle->GetName(), pStyle );
 
     SwTable* pNewTbl = (SwTable*)pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
             rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient(),
-            pAutoFmt, 0, sal_False, IsNewModel() );
+            pStyle, 0, sal_False, IsNewModel() );
     if( !pNewTbl )
         return false;
 

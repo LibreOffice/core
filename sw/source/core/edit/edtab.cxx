@@ -91,7 +91,7 @@ sal_Bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh
 const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                          sal_uInt16 nRows, sal_uInt16 nCols,
                                          sal_Int16 eAdj,
-                                         const SwTableAutoFmt* pTAFmt )
+                                         const SwTableFmt* pTableStyle )
 {
     StartAllAction();
     SwPosition* pPos = GetCrsr()->GetPoint();
@@ -107,7 +107,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     // from pPos to the new content nodes in the table.
     const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
                                                    nRows, nCols,
-                                                   eAdj, pTAFmt,
+                                                   eAdj, pTableStyle,
                                                    0, sal_True );
     if( bEndUndo )
         EndUndo( UNDO_END );
@@ -119,7 +119,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
 sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                                sal_Unicode cCh,
                                sal_Int16 eAdj,
-                               const SwTableAutoFmt* pTAFmt )
+                               const SwTableFmt* pTableStyle )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
     sal_Bool bRet = sal_False;
@@ -127,7 +127,7 @@ sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     FOREACHPAM_START(this)
         if( PCURCRSR->HasMark() )
             bRet |= 0 != GetDoc()->TextToTable( rInsTblOpts, *PCURCRSR, cCh,
-                                                eAdj, pTAFmt );
+                                                eAdj, pTableStyle );
     FOREACHPAM_END()
     EndAllAction();
     return bRet;

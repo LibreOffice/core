@@ -162,8 +162,7 @@ class SwTOXType;
 class SwTOXTypes;
 class SwTabCols;
 class SwTable;
-class SwTableAutoFmt;
-class SwTableAutoFmtTbl;
+class SwTableFmtTbl;
 class SwTableBox;
 class SwTableBoxFmt;
 class SwTableFmt;
@@ -311,7 +310,7 @@ class SW_DLLPUBLIC SwDoc :
     SwFrmFmts       *mpSpzFrmFmtTbl;
     SwSectionFmts   *mpSectionFmtTbl;
     SwFrmFmts       *mpTblFrmFmtTbl;     ///< For tables
-    SwTableAutoFmtTbl *mpTblStyleTbl;    ///< Table styles
+    SwTableFmtTbl   *mpTblStyleTbl;      ///< Table styles
     SwTxtFmtColls   *mpTxtFmtCollTbl;    ///< FormatCollections
     SwGrfFmtColls   *mpGrfFmtCollTbl;
 
@@ -1285,7 +1284,7 @@ public:
     SwTableFmt* MakeTblFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
     void        DelTblFrmFmt( SwTableFmt* pFmt );
     SwTableFmt* FindTblFmtByName( const String& rName, sal_Bool bAll = sal_False ) const;
-    SwTableAutoFmtTbl* GetTableStyles() { return mpTblStyleTbl; };
+    SwTableFmtTbl* GetTableStyles() { return mpTblStyleTbl; };
 
     /** Access to frames.
     Iterate over Flys - forr Basic-Collections. */
@@ -1606,7 +1605,7 @@ public:
     const SwTable* InsertTable( const SwInsertTableOptions& rInsTblOpts,  // HEADLINE_NO_BORDER
                                 const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, short eAdjust,
-                                const SwTableAutoFmt* pTAFmt = 0,
+                                const SwTableFmt* pTableStyle = 0,
                                 const std::vector<sal_uInt16> *pColArr = 0,
                                 sal_Bool bCalledFromShell = sal_False,
                                 sal_Bool bNewModel = sal_True );
@@ -1619,7 +1618,7 @@ public:
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTblOpts, // HEADLINE_NO_BORDER,
                                 const SwPaM& rRange, sal_Unicode cCh,
                                 short eAdjust,
-                                const SwTableAutoFmt* = 0 );
+                                const SwTableFmt* = 0 );
 
     /// text to table conversion - API support
     const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
@@ -1669,10 +1668,10 @@ public:
     void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
     /// AutoFormat for table/table selection.
-    sal_Bool SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew );
+    sal_Bool SetTableStyle( const SwSelBoxes& rBoxes, const SwTableFmt* pStyle );
 
     /// Query attributes.
-    sal_Bool GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet );
+    sal_Bool GetTableStyle( const SwSelBoxes& rBoxes, SwTableFmt*& prStyle );
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable );
 

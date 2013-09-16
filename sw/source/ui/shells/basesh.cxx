@@ -766,9 +766,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 ( nSlot == FN_CONVERT_TEXT_TABLE && 0 == rSh.GetTableFmt() ))
                 bToTable = true;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-            SwTableAutoFmt const* pTAFmt = 0;
-            SwTableAutoFmtTbl* pAutoFmtTbl = 0;
-            bool bDeleteFormat = true;
+            SwTableFmt const* pTableStyle = 0;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem))
             {
                 aInsTblOpts.mnInsMode = 0;
@@ -781,19 +779,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     String sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
-                    pAutoFmtTbl = new SwTableAutoFmtTbl(GetShell().GetDoc());
-                    pAutoFmtTbl->Load();
-
-                    for( sal_uInt16 i = 0, nCount = pAutoFmtTbl->size(); i < nCount; i++ )
-                    {
-                        SwTableAutoFmt const*const pFmt = &(*pAutoFmtTbl)[ i ];
-                        if( pFmt->GetName() == sAutoFmt )
-                        {
-                            pTAFmt = pFmt;
-                            bDeleteFormat = false;
-                            break;
-                        }
-                    }
+                    pTableStyle = GetShell().GetDoc()->GetTableStyles()->FindStyle( sAutoFmt );
                 }
                 //WithHeader
                 if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_3, sal_True, &pItem) &&
@@ -821,7 +807,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
-                    pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
+                    pDlg->GetValues( cDelim, aInsTblOpts, pTableStyle );
 
                 }
                 delete pDlg;
@@ -840,8 +826,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));
                     if(bToTable)
                     {
-                        if(pTAFmt)
-                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFmt->GetName()));
+                        if(pTableStyle)
+                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTableStyle->GetName()));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, 0 != (aInsTblOpts.mnInsMode & tabopts::HEADLINE)));
                         aReq.AppendItem( SfxInt16Item( FN_PARAM_4, (short)aInsTblOpts.mnRowsToRepeat ));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, 0 != (aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) ));
@@ -854,16 +840,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.TableToText( cDelim );
                 else
                 {
-                    bInserted = rSh.TextToTable( aInsTblOpts, cDelim, text::HoriOrientation::FULL, pTAFmt );
+                    bInserted = rSh.TextToTable( aInsTblOpts, cDelim, text::HoriOrientation::FULL, pTableStyle );
                 }
                 rSh.EnterStdMode();
 
                 if( bInserted )
                     rSaveView.AutoCaption( TABLE_CAP );
             }
-            if(bDeleteFormat)
-                delete pTAFmt;
-            delete pAutoFmtTbl;
         }
         break;
         case SID_STYLE_WATERCAN:
@@ -2537,7 +2520,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             sal_uInt16 nRows = 0;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             String aTableName, aAutoName;
-            SwTableAutoFmt* pTAFmt = 0;
+            SwTableFmt* pTableStyle = 0;
 
             if( pArgs && pArgs->Count() >= 2 )
             {
@@ -2558,16 +2541,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     aAutoName = pAuto->GetValue();
                     if ( aAutoName.Len() )
                     {
-                        SwTableAutoFmtTbl aTableTbl(GetShell().GetDoc());
-                        aTableTbl.Load();
-                        for ( sal_uInt16 n=0; n<aTableTbl.size(); n++ )
-                        {
-                            if ( aTableTbl[n].GetName() == aAutoName )
-                            {
-                                pTAFmt = new SwTableAutoFmt( aTableTbl[n] );
-                                break;
-                            }
-                        }
+                        pTableStyle = GetShell().GetDoc()->GetTableStyles()->FindStyle( aAutoName );
                     }
                 }
 
@@ -2588,7 +2562,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
-                    pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
+                    pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTableStyle );
                 }
                 else
                     _rRequest.Ignore();
@@ -2613,7 +2587,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if( rSh.HasSelection() )
                     rSh.DelRight();
 
-                rSh.InsertTable( aInsTblOpts, nRows, nCols, text::HoriOrientation::FULL, pTAFmt );
+                rSh.InsertTable( aInsTblOpts, nRows, nCols, text::HoriOrientation::FULL, pTableStyle );
                 rSh.MoveTable( fnTablePrev, fnTableStart );
 
                 if( aTableName.Len() && !rSh.GetTblStyle( aTableName ) )
@@ -2622,7 +2596,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 rSh.EndAllAction();
                 rTempView.AutoCaption(TABLE_CAP);
             }
-            delete pTAFmt;
         }
 
         if( bCallEndUndo )

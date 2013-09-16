@@ -55,7 +55,7 @@ class SvStream;
 class SwWrtShell;
 class SfxRequest;
 class SwView;
-class SwTableAutoFmt;
+class SwTableFmt;
 class SwTOXMgr;
 class SwForm;
 struct CurTOXType;
@@ -123,8 +123,8 @@ class AbstractInsTableDlg : public VclAbstractDialog  //add for SwInsTableDlg
 {
 public:
     virtual void            GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
-                                SwTableAutoFmt *& prTAFmt ) = 0;
+                                SwInsertTableOptions& rInsTblFlags, String& rStyleName,
+                                SwTableFmt *& prStyle ) = 0;
 };
 
 class AbstractJavaEditDialog : public VclAbstractDialog  //add for SwJavaEditDialog
@@ -224,7 +224,7 @@ class AbstractSwConvertTableDlg :  public VclAbstractDialog // add for SwConvert
 public:
     virtual void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTblFlags,
-                    SwTableAutoFmt const*& prTAFmt ) = 0;
+                    SwTableFmt const*& prStyle ) = 0;
 };
 
 class AbstractSwInsertDBColAutoPilot :  public VclAbstractDialog // add for SwInsertDBColAutoPilot
@@ -262,7 +262,7 @@ public:
 class AbstractSwAutoFormatDlg : public VclAbstractDialog //add for SwAutoFormatDlg
 {
 public:
-    virtual void FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const = 0;
+    virtual void FillAutoFmtOfIndex( SwTableFmt*& rToFill ) const = 0;
 };
 
 class AbstractSwFldDlg : public SfxAbstractTabDialog //add for SwFldDlg
@@ -377,7 +377,7 @@ public:
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
                                                             sal_Bool bSetAutoFmt = sal_True,
-                                                            const SwTableAutoFmt* pSelFmt = 0 ) = 0;
+                                                            const SwTableFmt* pSelFmt = 0 ) = 0;
     virtual SfxAbstractDialog * CreateSwBorderDlg ( Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId ) = 0;//add for SwBorderDlg
     virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId ) = 0; //add for SwWrapDlg
 

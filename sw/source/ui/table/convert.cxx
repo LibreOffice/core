@@ -47,7 +47,7 @@ static sal_Unicode uOther = ',';
 
 void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
                                     SwInsertTableOptions& rInsTblOpts,
-                                    SwTableAutoFmt const*& prTAFmt )
+                                    SwTableFmt const*& prStyle )
 {
     if( mpTabBtn->IsChecked() )
     {
@@ -91,8 +91,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
     if (!mpDontSplitCB->IsChecked())
         nInsMode |= tabopts::SPLIT_LAYOUT;
 
-    if( pTAutoFmt )
-        prTAFmt = new SwTableAutoFmt( *pTAutoFmt );
+    prStyle = pTableStyle;
 
     rInsTblOpts.mnInsMode = nInsMode;
 }
@@ -101,7 +100,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     : SfxModalDialog(&rView.GetViewFrame()->GetWindow(), "ConvertTextTableDialog", "modules/swriter/ui/converttexttable.ui" )
     , sConvertTextTable(SW_RES(STR_CONVERT_TEXT_TABLE))
-    , pTAutoFmt(0)
+    , pTableStyle(0)
     , pShell(&rView.GetWrtShell())
 {
     get(mpTabBtn, "tabs");
@@ -179,7 +178,6 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
 SwConvertTableDlg:: ~SwConvertTableDlg()
 {
-    delete pTAutoFmt;
 }
 
 IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
@@ -187,10 +185,10 @@ IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, sal_False, pTAutoFmt);
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, sal_False, pTableStyle);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFmtOfIndex( pTAutoFmt );
+        pDlg->FillAutoFmtOfIndex( pTableStyle );
     delete pDlg;
     return 0;
 }

@@ -40,7 +40,6 @@ class SwFlyFrm;
 class SwTabCols;
 class SvxBrushItem;
 class SvxFrameDirectionItem;
-class SwTableAutoFmt;
 class SwFrm;
 class SwFmtFrmSize;
 class SwFmtRowSplit;
@@ -678,9 +677,9 @@ public:
     sal_Bool BalanceCellWidth( sal_Bool bTstOnly );
 
     /// AutoFormat for table/ table selection.
-    sal_Bool SetTableAutoFmt( const SwTableAutoFmt& rNew );
+    sal_Bool SetTableStyle( const SwTableFmt* pStyle );
 
-    sal_Bool GetTableAutoFmt( SwTableAutoFmt& rGet );
+    sal_Bool GetTableStyle( SwTableFmt* pStyle );
 
     sal_Bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff = 283 );
 

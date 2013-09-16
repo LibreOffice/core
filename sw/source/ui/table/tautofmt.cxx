@@ -51,7 +51,7 @@ public:
     AutoFmtPreview(Window* pParent);
     ~AutoFmtPreview();
 
-    void NotifyChange( const SwTableAutoFmt& rNewData );
+    void NotifyChange( const SwTableFmt* pNewData );
 
     void DetectRTL(SwWrtShell* pWrtShell);
 
@@ -60,7 +60,7 @@ protected:
     virtual void Paint( const Rectangle& rRect );
 
 private:
-    SwTableAutoFmt*         pCurData;
+    SwTableFmt*             pCurData;
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
@@ -139,7 +139,7 @@ SwStringInputDlg::~SwStringInputDlg()
 // AutoFormat-Dialogue:
 
 SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
-                    sal_Bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
+                    sal_Bool bSetAutoFormat, const SwTableFmt* pSelFmt )
     : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
     , aStrTitle(SW_RES(STR_ADD_AUTOFORMAT_TITLE))
     , aStrLabel(SW_RES(STR_ADD_AUTOFORMAT_LABEL))
@@ -179,7 +179,7 @@ SwAutoFormatDlg::~SwAutoFormatDlg()
 {
 }
 
-void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
+void SwAutoFormatDlg::Init( const SwTableFmt* pSelFmt )
 {
     Link aLk( LINK( this, SwAutoFormatDlg, CheckHdl ) );
     m_pBtnBorder->SetClickHdl( aLk );
@@ -208,9 +208,9 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(pTableTbl->size());
             i < nCount; i++)
     {
-        SwTableAutoFmt const& rFmt = (*pTableTbl)[ i ];
-        m_pLbFormat->InsertEntry(rFmt.GetName());
-        if (pSelFmt && rFmt.GetName() == pSelFmt->GetName())
+        SwTableFmt const* pFmt = (*pTableTbl)[ i ];
+        m_pLbFormat->InsertEntry(pFmt->GetName());
+        if (pSelFmt && pFmt->GetName() == pSelFmt->GetName())
             nIndex = i;
     }
 
@@ -218,35 +218,30 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     SelFmtHdl( 0 );
 }
 
-void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFmt& rFmt, sal_Bool bEnable )
+void SwAutoFormatDlg::UpdateChecks( const SwTableFmt* pFmt, sal_Bool bEnable )
 {
     m_pBtnNumFormat->Enable( bEnable );
-    m_pBtnNumFormat->Check( rFmt.IsValueFormat() );
+    m_pBtnNumFormat->Check( pFmt && pFmt->IsValueFormat() );
 
     m_pBtnBorder->Enable( bEnable );
-    m_pBtnBorder->Check( rFmt.IsFrame() );
+    m_pBtnBorder->Check( pFmt && pFmt->IsFrame() );
 
     m_pBtnFont->Enable( bEnable );
-    m_pBtnFont->Check( rFmt.IsFont() );
+    m_pBtnFont->Check( pFmt && pFmt->IsFont() );
 
     m_pBtnPattern->Enable( bEnable );
-    m_pBtnPattern->Check( rFmt.IsBackground() );
+    m_pBtnPattern->Check( pFmt && pFmt->IsBackground() );
 
     m_pBtnAlignment->Enable( bEnable );
-    m_pBtnAlignment->Check( rFmt.IsJustify() );
+    m_pBtnAlignment->Check( pFmt && pFmt->IsJustify() );
 }
 
-void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
+void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableFmt*& prToFill ) const
 {
     if( 255 != nIndex )
-    {
-        if( rToFill )
-            *rToFill = (*pTableTbl)[ nIndex ];
-        else
-            rToFill = new SwTableAutoFmt( (*pTableTbl)[ nIndex ] );
-    }
+        prToFill = (*pTableTbl)[ nIndex ];
     else
-        delete rToFill, rToFill = 0;
+        prToFill = 0;
 }
 
 
@@ -254,7 +249,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
-    SwTableAutoFmt* pData  = &(*pTableTbl)[nIndex];
+    SwTableFmt* pData  = (*pTableTbl)[nIndex];
     sal_Bool bDataChgd = sal_True;
 
     if( pBtn == m_pBtnNumFormat )
@@ -278,7 +273,7 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
             bCoreDataChanged = sal_True;
         }
 
-        m_pWndPreview->NotifyChange( *pData );
+        m_pWndPreview->NotifyChange( pData );
     }
     return 0;
 }
@@ -301,26 +296,21 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
             {
                 sal_uInt16 n;
                 for( n = 0; n < pTableTbl->size(); ++n )
-                    if( (*pTableTbl)[n].GetName() == aFormatName )
+                    if( (*pTableTbl)[n]->GetName() == aFormatName )
                         break;
 
                 if( n >= pTableTbl->size() )
                 {
                     // Format with the name does not already exist, so take up.
-                    SwDoc* pDoc = pShell->GetDoc();
-                    SwTableFmt* pStyle = pDoc->FindTblFmtByName( aFormatName );
-                    if ( !pStyle )
-                        pStyle = pDoc->MakeTblFrmFmt( aFormatName, NULL);
-                    SwTableAutoFmt* pNewData = new
-                                        SwTableAutoFmt( aFormatName, pStyle );
-                    pShell->GetTableAutoFmt( *pNewData );
+                    SwTableFmt* pStyle = pTableTbl->MakeStyle( aFormatName );
+                    pShell->GetTableStyle( pStyle );
 
                     // Insert sorted!!
                     for( n = 1; n < pTableTbl->size(); ++n )
-                        if( (*pTableTbl)[ n ].GetName() > aFormatName )
+                        if( (*pTableTbl)[ n ]->GetName() > aFormatName )
                             break;
 
-                    pTableTbl->InsertAutoFmt(n, pNewData);
+                    pTableTbl->InsertStyle(n, pStyle);
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
                     bFmtInserted = true;
@@ -366,7 +356,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
         m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
         m_pLbFormat->SelectEntryPos( nDfltStylePos + nIndex-1 );
 
-        pTableTbl->EraseAutoFmt(nIndex);
+        pTableTbl->EraseStyle(nIndex);
         nIndex--;
 
         if( !nIndex )
@@ -406,26 +396,26 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
             {
                 sal_uInt16 n;
                 for( n = 0; n < pTableTbl->size(); ++n )
-                    if ((*pTableTbl)[n].GetName() == aFormatName)
+                    if ((*pTableTbl)[n]->GetName() == aFormatName)
                         break;
 
                 if( n >= pTableTbl->size() )
                 {
                     // no format with this name exists, so rename it
                     m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
-                    SwTableAutoFmt* p = &(*pTableTbl)[ nIndex ];
+                    SwTableFmt* p = (*pTableTbl)[ nIndex ];
 
                     p->SetName( aFormatName );
 
                     // keep all arrays sorted!
                     for( n = 1; n < pTableTbl->size(); ++n )
                         if ((n != nIndex) &&
-                            ((*pTableTbl)[n].GetName() > aFormatName))
+                            ((*pTableTbl)[n]->GetName() > aFormatName))
                         {
                             break;
                         }
 
-                    pTableTbl->MoveAutoFmt(n, nIndex);
+                    pTableTbl->MoveStyle(n, nIndex);
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
 
@@ -476,13 +466,10 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
         // ideal, the table styles are created with the document
         sNm = SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
         SwTableFmt* pStyle = pShell->GetDoc()->FindTblFmtByName(sNm);
-        if ( !pStyle )
-            pStyle = pShell->GetDoc()->MakeTblFrmFmt(sNm, NULL);
-        SwTableAutoFmt aTmp( sNm, pStyle );
 
         if( nOldIdx != nIndex )
-            m_pWndPreview->NotifyChange( *(SwTableAutoFmt*)0 );
-        UpdateChecks( aTmp, sal_False );
+            m_pWndPreview->NotifyChange( NULL );
+        UpdateChecks( pStyle, sal_False );
     }
 
     m_pBtnRemove->Enable( bBtnEnable );
@@ -494,7 +481,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
 IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
 {
     if( bSetAutoFmt )
-        pShell->SetTableAutoFmt( (*pTableTbl)[ nIndex ] );
+        pShell->SetTableStyle( (*pTableTbl)[ nIndex ] );
     EndDialog( RET_OK );
     return sal_True;
 }
@@ -536,7 +523,7 @@ void AutoFmtPreview::Resize()
     nDataColWidth1 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3;
     nDataColWidth2 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4;
     nRowHeight = (aPrvSize.Height() - 4) / 5;
-    NotifyChange(*pCurData);
+    NotifyChange(pCurData);
 }
 
 void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
@@ -864,9 +851,9 @@ void AutoFmtPreview::CalcLineMap()
     }
 }
 
-void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
+void AutoFmtPreview::NotifyChange( const SwTableFmt* pNewData )
 {
-    pCurData  = const_cast< SwTableAutoFmt* >( &rNewData );
+    pCurData  = const_cast< SwTableFmt* >( pNewData );
     bFitWidth = pCurData && pCurData->IsJustify();//sal_True;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();

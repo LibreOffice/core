@@ -43,8 +43,8 @@ namespace swui
 #define ROW_COL_PROD 16384
 
 void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblOpts, String& rAutoName,
-                                SwTableAutoFmt *& prTAFmt )
+                                SwInsertTableOptions& rInsTblOpts, String& rStyleName,
+                                SwTableFmt *& prStyle )
 {
     sal_uInt16 nInsMode = 0;
     rName = m_pNameEdit->GetText();
@@ -61,10 +61,11 @@ void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol
         rInsTblOpts.mnRowsToRepeat = 0;
     if (!m_pDontSplitCB->IsChecked())
         nInsMode |= tabopts::SPLIT_LAYOUT;
-    if( pTAutoFmt )
+
+    prStyle = pTableStyle;
+    if( pTableStyle )
     {
-        prTAFmt = new SwTableAutoFmt( *pTAutoFmt );
-        rAutoName = prTAFmt->GetName();
+        rStyleName = pTableStyle->GetName();
     }
 
     rInsTblOpts.mnInsMode = nInsMode;
@@ -73,7 +74,7 @@ void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
     , pShell(&rView.GetWrtShell())
-    , pTAutoFmt(0)
+    , pTableStyle(0)
     , nEnteredValRepeatHeaderNF(-1)
 {
     get(m_pNameEdit, "nameedit");
@@ -140,7 +141,6 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl)
 
 SwInsTableDlg::~SwInsTableDlg()
 {
-    delete pTAutoFmt;
 }
 
 IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
@@ -192,10 +192,10 @@ IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, sal_False, pTAutoFmt);
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, sal_False, pTableStyle);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFmtOfIndex( pTAutoFmt );
+        pDlg->FillAutoFmtOfIndex( pTableStyle );
     delete pDlg;
     return 0;
 }

@@ -30,9 +30,8 @@
 
 #include <vcl/virdev.hxx>
 
-class SwTableAutoFmt;
 class AutoFmtPreview;
-class SwTableAutoFmtTbl;
+class SwTableFmtTbl;
 class SwWrtShell;
 
 //------------------------------------------------------------------------
@@ -66,15 +65,15 @@ class SwAutoFormatDlg : public SfxModalDialog
 
     //------------------------
     SwWrtShell*             pShell;
-    SwTableAutoFmtTbl*      pTableTbl;
+    SwTableFmtTbl*          pTableTbl;
     sal_uInt8                   nIndex;
     sal_uInt8                   nDfltStylePos;
     sal_Bool                    bCoreDataChanged : 1;
     sal_Bool                    bSetAutoFmt : 1;
 
 
-    void Init( const SwTableAutoFmt* pSelFmt );
-    void UpdateChecks( const SwTableAutoFmt&, sal_Bool bEnableBtn );
+    void Init( const SwTableFmt* pSelFmt );
+    void UpdateChecks( const SwTableFmt*, sal_Bool bEnableBtn );
     //------------------------
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK(OkHdl, void *);
@@ -86,10 +85,10 @@ class SwAutoFormatDlg : public SfxModalDialog
 public:
     SwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
                         sal_Bool bSetAutoFmt = sal_True,
-                        const SwTableAutoFmt* pSelFmt = 0 );
+                        const SwTableFmt* pSelFmt = 0 );
     virtual ~SwAutoFormatDlg();
 
-    void FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const;
+    void FillAutoFmtOfIndex( SwTableFmt*& rToFill ) const;
 };
 
 

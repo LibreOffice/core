@@ -1251,7 +1251,7 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
 }
 
     // AutoFormat for the table/table selection
-sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
+sal_Bool SwFEShell::SetTableStyle( const SwTableFmt* pStyle )
 {
     SwTableNode *pTblNd = (SwTableNode*)IsCrsrInTbl();
     if( !pTblNd || pTblNd->GetTable().IsTblComplex() )
@@ -1280,7 +1280,7 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        bRet = GetDoc()->SetTableAutoFmt( aBoxes, rNew );
+        bRet = GetDoc()->SetTableStyle( aBoxes, pStyle );
         DELETEZ( pLastCols );
         DELETEZ( pLastRows );
         EndAllActionAndCall();
@@ -1290,7 +1290,7 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
     return bRet;
 }
 
-sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
+sal_Bool SwFEShell::GetTableStyle( SwTableFmt* pStyle )
 {
     const SwTableNode *pTblNd = IsCrsrInTbl();
     if( !pTblNd || pTblNd->GetTable().IsTblComplex() )
@@ -1314,7 +1314,7 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
         }
     }
 
-    return GetDoc()->GetTableAutoFmt( aBoxes, rGet );
+    return GetDoc()->GetTableStyle( aBoxes, pStyle );
 }
 
 /***********************************************************************
