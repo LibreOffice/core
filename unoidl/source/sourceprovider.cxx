@@ -20,14 +20,14 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
-#include "unoidl/sourceprovider.hxx"
 #include "unoidl/unoidl.hxx"
 
 #include "sourceprovider-parser-requires.hxx"
 #include "sourceprovider-parser.hxx"
 #include "sourceprovider-scanner.hxx"
+#include "sourceprovider.hxx"
 
-namespace unoidl {
+namespace unoidl { namespace detail {
 
 namespace {
 
@@ -35,7 +35,7 @@ rtl::Reference<Entity> parse(
     rtl::Reference<Manager> const & manager, OUString const & name,
     OUString const & uri, void const * address, sal_uInt64 size)
 {
-    detail::SourceProviderScannerData data(manager, address, size);
+    SourceProviderScannerData data(manager, address, size);
     yyscan_t yyscanner;
     if (yylex_init_extra(&data, &yyscanner) != 0) {
         // Checking errno for the specific EINVAL, ENOMEM documented for
@@ -50,7 +50,7 @@ rtl::Reference<Entity> parse(
     switch (e) {
     case 0:
         {
-            std::map<OUString, detail::SourceProviderEntity>::const_iterator i(
+            std::map<OUString, SourceProviderEntity>::const_iterator i(
                 data.entities.find(name));
             return i == data.entities.end()
                 ? rtl::Reference<Entity>() : i->second.entity;
@@ -230,6 +230,6 @@ rtl::Reference<Entity> SourceProvider::findEntity(OUString const & name) const {
 
 SourceProvider::~SourceProvider() throw () {}
 
-}
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

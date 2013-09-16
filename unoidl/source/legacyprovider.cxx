@@ -19,10 +19,11 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "unoidl/legacyprovider.hxx"
 #include "unoidl/unoidl.hxx"
 
-namespace unoidl {
+#include "legacyprovider.hxx"
+
+namespace unoidl { namespace detail {
 
 namespace {
 
@@ -823,6 +824,6 @@ rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & name)
 
 LegacyProvider::~LegacyProvider() throw () {}
 
-}
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

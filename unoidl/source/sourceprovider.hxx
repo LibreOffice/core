@@ -15,13 +15,11 @@
 #include <map>
 
 #include "rtl/ref.hxx"
-#include "sal/types.h"
-#include "unoidl/detail/dllapi.hxx"
 #include "unoidl/unoidl.hxx"
 
-namespace unoidl {
+namespace unoidl { namespace detail {
 
-class LO_DLLPUBLIC_UNOIDL SourceProvider: public Provider {
+class SourceProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
     SourceProvider(
@@ -34,14 +32,14 @@ public:
     virtual rtl::Reference<Entity> findEntity(OUString const & name) const;
 
 private:
-    virtual SAL_DLLPRIVATE ~SourceProvider() throw ();
+    virtual ~SourceProvider() throw ();
 
     rtl::Reference<Manager> manager_;
     OUString uri_;
     mutable std::map< OUString, rtl::Reference<Entity> > cache_; //TODO: at manager
 };
 
-}
+} }
 
 #endif
 

@@ -14,14 +14,11 @@
 
 #include "registry/registry.hxx"
 #include "rtl/ref.hxx"
-#include "sal/types.h"
-#include "unoidl/detail/dllapi.hxx"
 #include "unoidl/unoidl.hxx"
 
+namespace unoidl { namespace detail {
 
-namespace unoidl {
-
-class LO_DLLPUBLIC_UNOIDL LegacyProvider: public Provider {
+class LegacyProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
     LegacyProvider(
@@ -35,13 +32,13 @@ public:
         const;
 
 private:
-    virtual SAL_DLLPRIVATE ~LegacyProvider() throw ();
+    virtual ~LegacyProvider() throw ();
 
     rtl::Reference< Manager > manager_;
     mutable RegistryKey ucr_;
 };
 
-}
+} }
 
 #endif
 

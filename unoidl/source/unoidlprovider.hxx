@@ -14,17 +14,14 @@
 
 #include "rtl/ref.hxx"
 #include "sal/types.h"
-#include "unoidl/detail/dllapi.hxx"
 #include "unoidl/unoidl.hxx"
 
 namespace unoidl { namespace detail {
-    class MappedFile;
-    struct MapEntry;
-} }
 
-namespace unoidl {
+class MappedFile;
+struct MapEntry;
 
-class LO_DLLPUBLIC_UNOIDL UnoidlProvider: public Provider {
+class UnoidlProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
     explicit UnoidlProvider(OUString const & uri);
@@ -36,24 +33,15 @@ public:
     virtual rtl::Reference< Entity > findEntity(OUString const & name)
         const;
 
-    // throws FileFormatException:
-    sal_uInt32 find(OUString const & name, bool * constant = 0) const;
-
-    // throws FileFormatException:
-    rtl::Reference< Entity > getEntity(sal_uInt32 offset) const;
-
-    // throws FileFormatException:
-    ConstantValue getConstant(sal_uInt32 offset) const;
-
 private:
-    virtual SAL_DLLPRIVATE ~UnoidlProvider() throw ();
+    virtual ~UnoidlProvider() throw ();
 
     rtl::Reference< detail::MappedFile > file_;
     detail::MapEntry const * mapBegin_;
     sal_uInt32 mapSize_;
 };
 
-}
+} }
 
 #endif
 

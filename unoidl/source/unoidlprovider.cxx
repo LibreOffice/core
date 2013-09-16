@@ -24,7 +24,10 @@
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
 #include "unoidl/unoidl.hxx"
-#include "unoidl/unoidlprovider.hxx"
+
+#include "unoidlprovider.hxx"
+
+namespace unoidl { namespace detail {
 
 namespace {
 
@@ -113,10 +116,6 @@ struct Memory64 {
 };
 
 }
-
-namespace unoidl {
-
-namespace detail {
 
 class MappedFile: public salhelper::SimpleReferenceObject {
 public:
@@ -365,15 +364,13 @@ struct MapEntry {
     Memory32 data;
 };
 
-}
-
 namespace {
 
 enum Compare { COMPARE_LESS, COMPARE_GREATER, COMPARE_EQUAL };
 
 Compare compare(
-    rtl::Reference< detail::MappedFile > const & file, OUString const & name,
-    sal_Int32 nameOffset, sal_Int32 nameLength, detail::MapEntry const * entry)
+    rtl::Reference< MappedFile > const & file, OUString const & name,
+    sal_Int32 nameOffset, sal_Int32 nameLength, MapEntry const * entry)
 {
     assert(file.is());
     assert(entry != 0);
@@ -411,15 +408,15 @@ Compare compare(
 }
 
 sal_uInt32 findInMap(
-    rtl::Reference< detail::MappedFile > const & file,
-    detail::MapEntry const * mapBegin, sal_uInt32 mapSize,
-    OUString const & name, sal_Int32 nameOffset, sal_Int32 nameLength)
+    rtl::Reference< MappedFile > const & file, MapEntry const * mapBegin,
+    sal_uInt32 mapSize, OUString const & name, sal_Int32 nameOffset,
+    sal_Int32 nameLength)
 {
     if (mapSize == 0) {
         return 0;
     }
     sal_uInt32 n = mapSize / 2;
-    detail::MapEntry const * p = mapBegin + n;
+    MapEntry const * p = mapBegin + n;
     switch (compare(file, name, nameOffset, nameLength, p)) {
     case COMPARE_LESS:
         return findInMap(file, mapBegin, n, name, nameOffset, nameLength);
@@ -438,7 +435,7 @@ sal_uInt32 findInMap(
 }
 
 std::vector< OUString > readAnnotations(
-    bool annotated, rtl::Reference< detail::MappedFile > const & file,
+    bool annotated, rtl::Reference< MappedFile > const & file,
     sal_uInt32 offset, sal_uInt32 * newOffset = 0)
 {
     std::vector< OUString > ans;
@@ -456,7 +453,7 @@ std::vector< OUString > readAnnotations(
 }
 
 ConstantValue readConstant(
-    rtl::Reference< detail::MappedFile > const & file, sal_uInt32 offset,
+    rtl::Reference< MappedFile > const & file, sal_uInt32 offset,
     sal_uInt32 * newOffset = 0, bool * annotated = 0)
 {
     assert(file.is());
@@ -546,13 +543,13 @@ ConstantValue readConstant(
 }
 
 rtl::Reference< Entity > readEntity(
-    rtl::Reference< detail::MappedFile > const & file, sal_uInt32 offset);
+    rtl::Reference< MappedFile > const & file, sal_uInt32 offset);
 
 class UnoidlCursor: public MapCursor {
 public:
     UnoidlCursor(
-        rtl::Reference< detail::MappedFile > file,
-        detail::MapEntry const * mapBegin, sal_uInt32 mapSize):
+        rtl::Reference< MappedFile > file, MapEntry const * mapBegin,
+        sal_uInt32 mapSize):
         file_(file), mapIndex_(mapBegin), mapEnd_(mapBegin + mapSize)
     {}
 
@@ -561,9 +558,9 @@ private:
 
     virtual rtl::Reference< Entity > getNext(OUString * name);
 
-    rtl::Reference< detail::MappedFile > file_;
-    detail::MapEntry const * mapIndex_;
-    detail::MapEntry const * mapEnd_;
+    rtl::Reference< MappedFile > file_;
+    MapEntry const * mapIndex_;
+    MapEntry const * mapEnd_;
 };
 
 rtl::Reference< Entity > UnoidlCursor::getNext(OUString * name) {
@@ -580,11 +577,11 @@ rtl::Reference< Entity > UnoidlCursor::getNext(OUString * name) {
 class UnoidlModuleEntity: public ModuleEntity {
 public:
     UnoidlModuleEntity(
-        rtl::Reference< detail::MappedFile > const & file, sal_uInt32 mapOffset,
+        rtl::Reference< MappedFile > const & file, sal_uInt32 mapOffset,
         sal_uInt32 mapSize):
         file_(file),
         mapBegin_(
-            reinterpret_cast< detail::MapEntry const * >(
+            reinterpret_cast< MapEntry const * >(
                 static_cast< char const * >(file_->address) + mapOffset)),
         mapSize_(mapSize)
     { assert(file.is()); }
@@ -597,8 +594,8 @@ private:
     virtual rtl::Reference< MapCursor > createCursor() const
     { return new UnoidlCursor(file_, mapBegin_, mapSize_); }
 
-    rtl::Reference< detail::MappedFile > file_;
-    detail::MapEntry const * mapBegin_;
+    rtl::Reference< MappedFile > file_;
+    MapEntry const * mapBegin_;
     sal_uInt32 mapSize_;
 };
 
@@ -611,7 +608,7 @@ std::vector< OUString > UnoidlModuleEntity::getMemberNames() const {
 }
 
 rtl::Reference< Entity > readEntity(
-    rtl::Reference< detail::MappedFile > const & file, sal_uInt32 offset)
+    rtl::Reference< MappedFile > const & file, sal_uInt32 offset)
 {
     assert(file.is());
     int v = file->read8(offset);
@@ -959,9 +956,8 @@ rtl::Reference< Entity > readEntity(
                     ("UNOIDL format: constant group map offset + size too"
                      " large"));
             }
-            detail::MapEntry const * p
-                = reinterpret_cast< detail::MapEntry const * >(
-                    static_cast< char const * >(file->address) + offset + 5);
+            MapEntry const * p = reinterpret_cast< MapEntry const * >(
+                static_cast< char const * >(file->address) + offset + 5);
             std::vector< ConstantGroupEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 sal_uInt32 off = p[i].data.getUnsigned32();
@@ -1179,8 +1175,7 @@ rtl::Reference< Entity > readEntity(
 
 }
 
-UnoidlProvider::UnoidlProvider(OUString const & uri):
-    file_(new detail::MappedFile(uri))
+UnoidlProvider::UnoidlProvider(OUString const & uri): file_(new MappedFile(uri))
 {
     if (file_->size < 8 || std::memcmp(file_->address, "UNOIDL\xFF\0", 8) != 0)
     {
@@ -1195,7 +1190,7 @@ UnoidlProvider::UnoidlProvider(OUString const & uri):
         throw FileFormatException(
             file_->uri, "UNOIDL format: root map offset + size too large");
     }
-    mapBegin_ = reinterpret_cast< detail::MapEntry const * >(
+    mapBegin_ = reinterpret_cast< MapEntry const * >(
         static_cast< char const * >(file_->address) + off);
 }
 
@@ -1205,13 +1200,7 @@ rtl::Reference< MapCursor > UnoidlProvider::createRootCursor() const {
 
 rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
 {
-    bool cnst;
-    sal_uInt32 off = find(name, &cnst);
-    return off == 0 || cnst ? rtl::Reference< Entity >() : getEntity(off);
-}
-
-sal_uInt32 UnoidlProvider::find(OUString const & name, bool * constant) const {
-    detail::MapEntry const * mapBegin = mapBegin_;
+    MapEntry const * mapBegin = mapBegin_;
     sal_uInt32 mapSize = mapSize_;
     bool cgroup = false;
     for (sal_Int32 i = 0;;) {
@@ -1221,16 +1210,13 @@ sal_uInt32 UnoidlProvider::find(OUString const & name, bool * constant) const {
         }
         sal_Int32 off = findInMap(file_, mapBegin, mapSize, name, i, j - i);
         if (off == 0) {
-            return 0;
+            return rtl::Reference< Entity >();
         }
         if (j == name.getLength()) {
-            if (constant != 0) {
-                *constant = cgroup;
-            }
-            return off;
+            return cgroup ? rtl::Reference< Entity >() : readEntity(file_, off);
         }
         if (cgroup) {
-            return 0;
+            return rtl::Reference< Entity >();
                 //TODO: throw an exception instead here, where the segments of a
                 // constant's name are a prefix of the requested name's
                 // segments?
@@ -1240,7 +1226,7 @@ sal_uInt32 UnoidlProvider::find(OUString const & name, bool * constant) const {
             if ((v & 0x3F) == 7) { // constant group
                 cgroup = true;
             } else {
-                return 0;
+                return rtl::Reference< Entity >();
                     //TODO: throw an exception instead here, where the segments
                     // of a non-module, non-constant-group entity's name are a
                     // prefix of the requested name's segments?
@@ -1251,22 +1237,14 @@ sal_uInt32 UnoidlProvider::find(OUString const & name, bool * constant) const {
             throw FileFormatException(
                 file_->uri, "UNOIDL format: map offset + size too large");
         }
-        mapBegin = reinterpret_cast< detail::MapEntry const * >(
+        mapBegin = reinterpret_cast< MapEntry const * >(
             static_cast< char const * >(file_->address) + off + 5);
         i = j + 1;
     }
 }
 
-rtl::Reference< Entity > UnoidlProvider::getEntity(sal_uInt32 offset) const {
-    return readEntity(file_, offset);
-}
-
-ConstantValue UnoidlProvider::getConstant(sal_uInt32 offset) const {
-    return readConstant(file_, offset);
-}
-
 UnoidlProvider::~UnoidlProvider() throw () {}
 
-}
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

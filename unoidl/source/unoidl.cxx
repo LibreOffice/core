@@ -17,10 +17,11 @@
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "unoidl/legacyprovider.hxx"
-#include "unoidl/sourceprovider.hxx"
 #include "unoidl/unoidl.hxx"
-#include "unoidl/unoidlprovider.hxx"
+
+#include "legacyprovider.hxx"
+#include "sourceprovider.hxx"
+#include "unoidlprovider.hxx"
 
 namespace unoidl {
 
@@ -113,17 +114,17 @@ rtl::Reference< Provider > loadProvider(
         if (item.getFileStatus(status) == osl::FileBase::E_None
             && status.getFileType() == osl::FileStatus::Directory)
         {
-            return new SourceProvider(manager, uri);
+            return new detail::SourceProvider(manager, uri);
         }
     }
     try {
-        return new UnoidlProvider(uri);
+        return new detail::UnoidlProvider(uri);
     } catch (FileFormatException & e) {
         SAL_INFO(
             "unoidl",
             "FileFormatException \"" << e.getDetail() << "\", retrying <" << uri
                 << "> as legacy format");
-        return new LegacyProvider(manager, uri);
+        return new detail::LegacyProvider(manager, uri);
     }
 }
 
