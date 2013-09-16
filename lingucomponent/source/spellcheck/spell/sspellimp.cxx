@@ -483,7 +483,7 @@ Reference< XSpellAlternatives >
         }
 
         // now return an empty alternative for no suggestions or the list of alternatives if some found
-        String aTmp(rWord);
+        OUString aTmp(rWord);
         xRes = SpellAlternatives::CreateSpellAlternatives( aTmp, nLang, SpellFailure::SPELLING_ERROR, aStr );
         return xRes;
     }

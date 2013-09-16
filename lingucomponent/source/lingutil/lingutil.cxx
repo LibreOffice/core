@@ -83,7 +83,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         return aRes;
 
     OUString aFormatName;
-    String aDicExtension;
+    OUString aDicExtension;
 #ifdef SYSTEM_DICTS
     OUString aSystemDir;
     OUString aSystemPrefix;
@@ -120,7 +120,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     }
 
 
-    if (aFormatName.isEmpty() || aDicExtension.Len() == 0)
+    if (aFormatName.isEmpty() || aDicExtension.isEmpty())
         return aRes;
 
 #ifdef SYSTEM_DICTS
