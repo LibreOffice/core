@@ -373,7 +373,7 @@ void Font::SetFamily( FontFamily eFamily )
     }
 }
 
-void Font::SetCharSet( CharSet eCharSet )
+void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
     DBG_CHKTHIS( Font, NULL );
 

@@ -793,7 +793,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> bItalic >> bOutline >> bShadow >> bTransparent;
 
                     aFont.SetSize( Size( nWidth, nHeight ) );
-                    aFont.SetCharSet( (CharSet) nCharSet );
+                    aFont.SetCharSet( (rtl_TextEncoding) nCharSet );
                     aFont.SetFamily( (FontFamily) nFamily );
                     aFont.SetPitch( (FontPitch) nPitch );
                     aFont.SetAlign( (FontAlign) nAlign );

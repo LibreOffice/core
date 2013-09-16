@@ -298,17 +298,17 @@ sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div);
 
 class SgfFontOne {
 public:
-    SgfFontOne* Next;        // Zeiger f"ur Listenverkettung
-    sal_uInt32      IFID;
-    sal_Bool        Bold;
-    sal_Bool        Ital;
-    sal_Bool        Sans;
-    sal_Bool        Serf;
-    sal_Bool        Fixd;
-    FontFamily      SVFamil;
-    CharSet         SVChSet;
-    OUString        SVFName;    // z.B. "Times New Roman" = 15 Chars
-    sal_uInt16      SVWidth;    // Durchschnittliche Zeichenbreite in %
+    SgfFontOne*      Next;        // Zeiger f"ur Listenverkettung
+    sal_uInt32       IFID;
+    sal_Bool         Bold;
+    sal_Bool         Ital;
+    sal_Bool         Sans;
+    sal_Bool         Serf;
+    sal_Bool         Fixd;
+    FontFamily       SVFamil;
+    rtl_TextEncoding SVChSet;
+    OUString         SVFName;    // z.B. "Times New Roman" = 15 Chars
+    sal_uInt16       SVWidth;    // Durchschnittliche Zeichenbreite in %
          SgfFontOne();
     void ReadOne(const OString& rID, OString& rDsc);
 };

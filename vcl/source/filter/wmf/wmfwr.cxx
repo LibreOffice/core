@@ -310,8 +310,8 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     if (rFont.GetUnderline()==UNDERLINE_NONE) *pWMF << (sal_uInt8)0; else  *pWMF << (sal_uInt8)1;
     if (rFont.GetStrikeout()==STRIKEOUT_NONE) *pWMF << (sal_uInt8)0; else  *pWMF << (sal_uInt8)1;
 
-    CharSet     eFontNameEncoding = rFont.GetCharSet();
-    sal_uInt8   nCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontNameEncoding );
+    rtl_TextEncoding  eFontNameEncoding = rFont.GetCharSet();
+    sal_uInt8         nCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontNameEncoding );
     if ( eFontNameEncoding == RTL_TEXTENCODING_SYMBOL )
         eFontNameEncoding = RTL_TEXTENCODING_MS_1252;
     if ( nCharSet == 1 )

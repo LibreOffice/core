@@ -701,7 +701,7 @@ public:
     void                CreateObject( sal_Int32 nIndex, GDIObjectType, void* pStyle = NULL );
     void                DeleteObject( sal_Int32 nIndex );
     void                SelectObject( sal_Int32 nIndex );
-    CharSet             GetCharSet(){ return maFont.GetCharSet(); };
+    rtl_TextEncoding    GetCharSet(){ return maFont.GetCharSet(); };
     WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
     const Font&         GetFont() const;
     void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );

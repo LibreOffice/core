@@ -140,7 +140,7 @@ void WinMtfPathObj::ClosePath()
 
 WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
-    CharSet eCharSet;
+    rtl_TextEncoding eCharSet;
     if ( ( rFont.lfCharSet == OEM_CHARSET ) || ( rFont.lfCharSet == DEFAULT_CHARSET ) )
         eCharSet = RTL_TEXTENCODING_MS_1252;
     else

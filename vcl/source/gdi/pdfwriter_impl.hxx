@@ -83,7 +83,7 @@ public:
         int                         m_nAscent;
         int                         m_nDescent;
         FontFamily                  m_eFamily;                   // Family
-        CharSet                     m_eCharSet;                  // CharSet
+        rtl_TextEncoding            m_eCharSet;                  // CharSet
         FontPitch                   m_ePitch;                    // Pitch
         FontWidth                   m_eWidthType;                // WidthType
         FontWeight                  m_eWeight;                   // Weight
