@@ -27,7 +27,7 @@ public:
     XMLErrorBarStylePropertyHdl(  const SvXMLEnumMapEntry* pEnumMap, const ::com::sun::star::uno::Type & rType );
     virtual ~XMLErrorBarStylePropertyHdl();
 
-    virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
 #endif  // _XMLERRORBARSTYLEPROPERTYHDL_HXX_

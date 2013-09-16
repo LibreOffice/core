@@ -37,9 +37,9 @@ XMLKerningPropHdl::~XMLKerningPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     sal_Int32 nKerning = 0;
 
     if( ! IsXMLToken( rStrImpValue, XML_KERNING_NORMAL ) )
@@ -52,9 +52,9 @@ sal_Bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue
     return bRet;
 }
 
-sal_Bool XMLKerningPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLKerningPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int16 nValue = sal_Int16();
 
     if( rValue >>= nValue )
@@ -70,7 +70,7 @@ sal_Bool XMLKerningPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 
         rStrExpValue = aOut.makeStringAndClear();
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

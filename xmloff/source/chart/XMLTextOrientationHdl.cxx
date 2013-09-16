@@ -28,34 +28,34 @@ XMLTextOrientationHdl::~XMLTextOrientationHdl()
 {
 }
 
-sal_Bool XMLTextOrientationHdl::importXML(
+bool XMLTextOrientationHdl::importXML(
     const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bRetval( sal_False );
+    bool bRetval( false );
 
     if( IsXMLToken( rStrImpValue, XML_LTR ))
     {
         rValue <<= static_cast< sal_Bool >( sal_False );
-        bRetval = sal_True;
+        bRetval = true;
     }
     else if( IsXMLToken( rStrImpValue, XML_TTB ))
     {
         rValue <<= static_cast< sal_Bool >( sal_True );
-        bRetval = sal_True;
+        bRetval = true;
     }
 
     return bRetval;
 }
 
-sal_Bool XMLTextOrientationHdl::exportXML(
+bool XMLTextOrientationHdl::exportXML(
     OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     sal_Bool bVal (sal_False );
-    sal_Bool bRetval( sal_False );
+    bool bRetval( false );
 
     if( rValue >>= bVal )
     {
@@ -63,7 +63,7 @@ sal_Bool XMLTextOrientationHdl::exportXML(
             rStrExpValue = GetXMLToken( XML_TTB );
         else
             rStrExpValue = GetXMLToken( XML_LTR );
-        bRetval = sal_True;
+        bRetval = true;
     }
 
     return bRetval;

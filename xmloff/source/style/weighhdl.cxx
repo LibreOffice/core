@@ -64,20 +64,20 @@ XMLFontWeightPropHdl::~XMLFontWeightPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nWeight = 0;
 
     if( IsXMLToken( rStrImpValue, XML_WEIGHT_NORMAL ) )
     {
         nWeight = 400;
-        bRet = sal_True;
+        bRet = true;
     }
     else if( IsXMLToken( rStrImpValue, XML_WEIGHT_BOLD ) )
     {
         nWeight = 700;
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
@@ -89,7 +89,7 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
 
     if( bRet )
     {
-        bRet = sal_False;
+        bRet = false;
         static int nCount = sizeof(aFontWeightMap)/sizeof(FontWeightMapper);
         for (int i = 0; i < (nCount-1); ++i)
         {
@@ -103,7 +103,7 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
                 else
                     rValue <<= aFontWeightMap[i+1].fWeight;
 
-                bRet = sal_True;
+                bRet = true;
                 break;
             }
         }
@@ -112,9 +112,9 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     return bRet;
 }
 
-sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     float fValue = float();
     if( !( rValue >>= fValue ) )
@@ -123,11 +123,11 @@ sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
         if( rValue >>= nValue )
         {
             fValue = (float)nValue;
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else
-        bRet = sal_True;
+        bRet = true;
 
     if( bRet )
     {

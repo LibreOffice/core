@@ -47,7 +47,7 @@ XMLCharLanguageHdl::~XMLCharLanguageHdl()
 
 bool XMLCharLanguageHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     lang::Locale aLocale1, aLocale2;
 
     if( ( r1 >>= aLocale1 ) && ( r2 >>= aLocale2 ) )
@@ -74,7 +74,7 @@ bool XMLCharLanguageHdl::equals( const ::com::sun::star::uno::Any& r1, const ::c
     return bRet;
 }
 
-sal_Bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -101,14 +101,14 @@ sal_Bool XMLCharLanguageHdl::importXML( const OUString& rStrImpValue, uno::Any& 
     }
 
     rValue <<= aLocale;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
-        return sal_False;
+        return false;
 
     if (aLocale.Variant.isEmpty())
         rStrExpValue = aLocale.Language;
@@ -121,13 +121,13 @@ sal_Bool XMLCharLanguageHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
         // *:rfc-language-tag that is written if Variant is not empty. If there
         // is no match do not write this attribute at all.
         if (rStrExpValue.isEmpty())
-            return sal_False;
+            return false;
     }
 
     if( rStrExpValue.isEmpty() )
         rStrExpValue = GetXMLToken( XML_NONE );
 
-    return sal_True;
+    return true;
 }
 
 XMLCharScriptHdl::~XMLCharScriptHdl()
@@ -137,7 +137,7 @@ XMLCharScriptHdl::~XMLCharScriptHdl()
 
 bool XMLCharScriptHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     lang::Locale aLocale1, aLocale2;
 
     if( ( r1 >>= aLocale1 ) && ( r2 >>= aLocale2 ) )
@@ -145,7 +145,7 @@ bool XMLCharScriptHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com
         bool bEmptyVariant1 = aLocale1.Variant.isEmpty();
         bool bEmptyVariant2 = aLocale2.Variant.isEmpty();
         if (bEmptyVariant1 && bEmptyVariant2)
-            bRet = sal_True;
+            bRet = true;
         else if ((bEmptyVariant1 && !bEmptyVariant2) || (!bEmptyVariant1 && bEmptyVariant2))
             ;   // stays false
         else
@@ -166,7 +166,7 @@ bool XMLCharScriptHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com
     return bRet;
 }
 
-sal_Bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -215,26 +215,26 @@ sal_Bool XMLCharScriptHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     }
 
     rValue <<= aLocale;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
-        return sal_False;
+        return false;
 
     // Do not write script='none' for default script.
 
     if (aLocale.Variant.isEmpty())
-        return sal_False;
+        return false;
 
     LanguageTag aLanguageTag( aLocale);
     if (!aLanguageTag.hasScript())
-        return sal_False;
+        return false;
 
     if (SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
-        return sal_False;
+        return false;
 
     OUString aLanguage, aCountry;
     aLanguageTag.getIsoLanguageScriptCountry( aLanguage, rStrExpValue, aCountry);
@@ -242,9 +242,9 @@ sal_Bool XMLCharScriptHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     // *:language is not written either, does it? It's all in
     // *:rfc-language-tag
     if (aLanguage.isEmpty() || rStrExpValue.isEmpty())
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 XMLCharCountryHdl::~XMLCharCountryHdl()
@@ -254,7 +254,7 @@ XMLCharCountryHdl::~XMLCharCountryHdl()
 
 bool XMLCharCountryHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     lang::Locale aLocale1, aLocale2;
 
     if( ( r1 >>= aLocale1 ) && ( r2 >>= aLocale2 ) )
@@ -263,7 +263,7 @@ bool XMLCharCountryHdl::equals( const ::com::sun::star::uno::Any& r1, const ::co
     return bRet;
 }
 
-sal_Bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -289,14 +289,14 @@ sal_Bool XMLCharCountryHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     }
 
     rValue <<= aLocale;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
-        return sal_False;
+        return false;
 
     if (aLocale.Variant.isEmpty())
         rStrExpValue = aLocale.Country;
@@ -309,13 +309,13 @@ sal_Bool XMLCharCountryHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
         // *:rfc-language-tag that is written if Variant is not empty. If there
         // is no match do not write this attribute at all.
         if (rStrExpValue.isEmpty())
-            return sal_False;
+            return false;
     }
 
     if( rStrExpValue.isEmpty() )
         rStrExpValue = GetXMLToken( XML_NONE );
 
-    return sal_True;
+    return true;
 }
 
 XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl()
@@ -325,7 +325,7 @@ XMLCharRfcLanguageTagHdl::~XMLCharRfcLanguageTagHdl()
 
 bool XMLCharRfcLanguageTagHdl::equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     lang::Locale aLocale1, aLocale2;
 
     if( ( r1 >>= aLocale1 ) && ( r2 >>= aLocale2 ) )
@@ -334,7 +334,7 @@ bool XMLCharRfcLanguageTagHdl::equals( const ::com::sun::star::uno::Any& r1, con
     return bRet;
 }
 
-sal_Bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     rValue >>= aLocale;
@@ -346,25 +346,25 @@ sal_Bool XMLCharRfcLanguageTagHdl::importXML( const OUString& rStrImpValue, uno:
     }
 
     rValue <<= aLocale;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLCharRfcLanguageTagHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharRfcLanguageTagHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     lang::Locale aLocale;
     if(!(rValue >>= aLocale))
-        return sal_False;
+        return false;
 
     // Do not write rfc-language-tag='none' if BCP 47 is not needed.
     if (aLocale.Variant.isEmpty())
-        return sal_False;
+        return false;
 
     if (SvtSaveOptions().GetODFDefaultVersion() < SvtSaveOptions::ODFVER_012)
-        return sal_False;
+        return false;
 
     rStrExpValue = aLocale.Variant;
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

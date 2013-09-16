@@ -29,22 +29,22 @@ XMLIsPercentagePropertyHandler::~XMLIsPercentagePropertyHandler()
 {
 }
 
-sal_Bool XMLIsPercentagePropertyHandler::importXML(
+bool XMLIsPercentagePropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     rValue <<= (sal_Bool)(rStrImpValue.indexOf( sal_Unicode('%') ) != -1);
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLIsPercentagePropertyHandler::exportXML(
+bool XMLIsPercentagePropertyHandler::exportXML(
     OUString&,
     const Any&,
     const SvXMLUnitConverter& ) const
 {
     OSL_FAIL( "XMLIsPercentagePropertyHandler is not for export!" );
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,15 +29,15 @@ class XMLAnchorTypePropHdl : public XMLPropertyHandler
 public:
     virtual ~XMLAnchorTypePropHdl ();
 
-    virtual sal_Bool importXML(
+    virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML(
+    virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
-    static sal_Bool convert( const OUString& rStrImpValue,
+    static bool convert( const OUString& rStrImpValue,
                  ::com::sun::star::text::TextContentAnchorType& rType );
 };
 

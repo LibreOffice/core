@@ -45,17 +45,17 @@ XMLPosturePropHdl::~XMLPosturePropHdl()
     // nothing to do
 }
 
-sal_Bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLPosturePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 ePosture;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum( ePosture, rStrImpValue, aPostureGenericMapping );
+    bool bRet = SvXMLUnitConverter::convertEnum( ePosture, rStrImpValue, aPostureGenericMapping );
     if( bRet )
         rValue <<= (awt::FontSlant)ePosture;
 
     return bRet;
 }
 
-sal_Bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     awt::FontSlant eSlant;
 
@@ -64,13 +64,13 @@ sal_Bool XMLPosturePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
         sal_Int32 nValue = 0;
 
         if( !( rValue >>= nValue ) )
-            return sal_False;
+            return false;
 
         eSlant = (awt::FontSlant)nValue;
     }
 
     OUStringBuffer aOut;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum( aOut, (sal_Int32)eSlant, aPostureGenericMapping );
+    bool bRet = SvXMLUnitConverter::convertEnum( aOut, (sal_Int32)eSlant, aPostureGenericMapping );
     if( bRet )
         rStrExpValue = aOut.makeStringAndClear();
 

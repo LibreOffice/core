@@ -132,17 +132,17 @@ namespace xmloff
     {
     }
 
-    sal_Bool OControlTextEmphasisHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OControlTextEmphasisHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         OUStringBuffer aReturn;
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
         sal_Int16 nFontEmphasis = sal_Int16();
         if (_rValue >>= nFontEmphasis)
         {
             // the type
             sal_Int16 nType = nFontEmphasis & ~(awt::FontEmphasisMark::ABOVE | awt::FontEmphasisMark::BELOW);
             // the position of the mark
-            sal_Bool bBelow = 0 != (nFontEmphasis & awt::FontEmphasisMark::BELOW);
+            bool bBelow = 0 != (nFontEmphasis & awt::FontEmphasisMark::BELOW);
 
             // convert
             bSuccess = SvXMLUnitConverter::convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE);
@@ -158,13 +158,13 @@ namespace xmloff
         return bSuccess;
     }
 
-    sal_Bool OControlTextEmphasisHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OControlTextEmphasisHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        sal_Bool bSuccess = sal_True;
+        bool bSuccess = true;
         sal_uInt16 nEmphasis = awt::FontEmphasisMark::NONE;
 
-        sal_Bool bBelow = sal_False;
-        sal_Bool bHasPos = sal_False, bHasType = sal_False;
+        bool bBelow = false;
+        bool bHasPos = false, bHasType = false;
 
         OUString sToken;
         SvXMLTokenEnumerator aTokenEnum(_rStrImpValue);
@@ -174,24 +174,24 @@ namespace xmloff
             {
                 if (IsXMLToken(sToken, XML_ABOVE))
                 {
-                    bBelow = sal_False;
-                    bHasPos = sal_True;
+                    bBelow = false;
+                    bHasPos = true;
                 }
                 else if (IsXMLToken(sToken, XML_BELOW))
                 {
-                    bBelow = sal_True;
-                    bHasPos = sal_True;
+                    bBelow = true;
+                    bHasPos = true;
                 }
             }
             if (!bHasType)
             {
                 if (SvXMLUnitConverter::convertEnum(nEmphasis, sToken, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis)))
                 {
-                    bHasType = sal_True;
+                    bHasType = true;
                 }
                 else
                 {
-                    bSuccess = sal_False;
+                    bSuccess = false;
                     break;
                 }
             }
@@ -212,7 +212,7 @@ namespace xmloff
     {
     }
 
-    sal_Bool OControlBorderHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OControlBorderHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         OUString sToken;
         SvXMLTokenEnumerator aTokens(_rStrImpValue);
@@ -230,7 +230,7 @@ namespace xmloff
                 if ( SvXMLUnitConverter::convertEnum( nStyle, sToken, OEnumMapper::getEnumMap( OEnumMapper::epBorderWidth ) ) )
                 {
                     _rValue <<= nStyle;
-                    return sal_True;
+                    return true;
                 }
             }
 
@@ -241,17 +241,17 @@ namespace xmloff
                 if (::sax::Converter::convertColor( nColor, sToken ))
                 {
                     _rValue <<= nColor;
-                    return sal_True;
+                    return true;
                 }
             }
         }
 
-        return sal_False;
+        return false;
     }
 
-    sal_Bool OControlBorderHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OControlBorderHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        sal_Bool bSuccess = sal_False;
+        bool bSuccess = false;
 
         OUStringBuffer aOut;
         switch ( m_eFacet )
@@ -269,20 +269,20 @@ namespace xmloff
             if ( _rValue >>= nBorderColor )
             {
                 ::sax::Converter::convertColor(aOut, nBorderColor);
-                bSuccess = sal_True;
+                bSuccess = true;
             }
         }
         break;
         }   // switch ( m_eFacet )
 
         if ( !bSuccess )
-            return sal_False;
+            return false;
 
         if ( !_rStrExpValue.isEmpty() )
             _rStrExpValue += " ";
         _rStrExpValue += aOut.makeStringAndClear();
 
-        return sal_True;
+        return true;
     }
 
     //= OFontWidthHandler
@@ -290,7 +290,7 @@ namespace xmloff
     {
     }
 
-    sal_Bool OFontWidthHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OFontWidthHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int32 nWidth = 0;
         bool const bSuccess = ::sax::Converter::convertMeasure(
@@ -301,7 +301,7 @@ namespace xmloff
         return bSuccess;
     }
 
-    sal_Bool OFontWidthHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    bool OFontWidthHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int16 nWidth = 0;
         OUStringBuffer aResult;
@@ -320,7 +320,7 @@ namespace xmloff
     {
     }
 
-    sal_Bool ORotationAngleHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    bool ORotationAngleHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         double fValue;
         bool const bSucces =
@@ -334,10 +334,10 @@ namespace xmloff
         return bSucces;
     }
 
-    sal_Bool ORotationAngleHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    bool ORotationAngleHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         float fAngle = 0;
-        sal_Bool bSuccess = (_rValue >>= fAngle);
+        bool bSuccess = (_rValue >>= fAngle);
 
         if (bSuccess)
         {

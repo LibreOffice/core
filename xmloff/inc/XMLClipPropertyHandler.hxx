@@ -27,14 +27,14 @@
 */
 class XMLClipPropertyHandler : public XMLPropertyHandler
 {
-    sal_Bool m_bODF11;
+    bool m_bODF11;
 public:
-    XMLClipPropertyHandler( sal_Bool bODF11 );
+    XMLClipPropertyHandler( bool bODF11 );
     virtual ~XMLClipPropertyHandler();
 
     virtual bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
-    virtual sal_Bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
 #endif      // _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX

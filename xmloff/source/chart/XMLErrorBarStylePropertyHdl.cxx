@@ -34,7 +34,7 @@ XMLErrorBarStylePropertyHdl::~XMLErrorBarStylePropertyHdl()
 {
 }
 
-sal_Bool XMLErrorBarStylePropertyHdl::exportXML( OUString& rStrExpValue,
+bool XMLErrorBarStylePropertyHdl::exportXML( OUString& rStrExpValue,
                                               const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     uno::Any aValue(rValue);

@@ -35,21 +35,21 @@ XMLBitmapLogicalSizePropertyHandler::~XMLBitmapLogicalSizePropertyHandler()
 {
 }
 
-sal_Bool XMLBitmapLogicalSizePropertyHandler::importXML(
+bool XMLBitmapLogicalSizePropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     rValue = ::cppu::bool2any( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLBitmapLogicalSizePropertyHandler::exportXML(
+bool XMLBitmapLogicalSizePropertyHandler::exportXML(
     OUString&,
     const Any&,
     const SvXMLUnitConverter& ) const
 {
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

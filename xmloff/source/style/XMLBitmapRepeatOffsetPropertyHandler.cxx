@@ -33,7 +33,7 @@ using ::xmloff::token::XML_VERTICAL;
 using ::xmloff::token::XML_HORIZONTAL;
 
 
-XMLBitmapRepeatOffsetPropertyHandler::XMLBitmapRepeatOffsetPropertyHandler( sal_Bool bX )
+XMLBitmapRepeatOffsetPropertyHandler::XMLBitmapRepeatOffsetPropertyHandler( bool bX )
 :   mbX( bX ),
     msVertical( GetXMLToken(XML_VERTICAL) ),
     msHorizontal( GetXMLToken(XML_HORIZONTAL) )
@@ -44,7 +44,7 @@ XMLBitmapRepeatOffsetPropertyHandler::~XMLBitmapRepeatOffsetPropertyHandler()
 {
 }
 
-sal_Bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
+bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
@@ -61,17 +61,17 @@ sal_Bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
                 if( ( mbX && ( aToken == msHorizontal ) ) || ( !mbX && ( aToken == msVertical ) ) )
                 {
                     rValue <<= nValue;
-                    return sal_True;
+                    return true;
                 }
             }
         }
     }
 
-    return sal_False;
+    return false;
 
 }
 
-sal_Bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
+bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
     OUString& rStrExpValue,
     const Any& rValue,
     const SvXMLUnitConverter& ) const
@@ -86,10 +86,10 @@ sal_Bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
         aOut.append( mbX ? msHorizontal : msVertical );
         rStrExpValue = aOut.makeStringAndClear();
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

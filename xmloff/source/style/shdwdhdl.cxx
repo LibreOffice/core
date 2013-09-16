@@ -36,17 +36,17 @@ XMLShadowedPropHdl::~XMLShadowedPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bValue = ! IsXMLToken( rStrImpValue, XML_NONE );
     rValue <<= sal_Bool(bValue);
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Bool bValue = sal_Bool();
 
     if (rValue >>= bValue)
@@ -60,7 +60,7 @@ sal_Bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValu
             rStrExpValue = GetXMLToken( XML_NONE );
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

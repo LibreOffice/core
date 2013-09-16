@@ -40,14 +40,14 @@ XMLShadowPropHdl::~XMLShadowPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     table::ShadowFormat aShadow;
     aShadow.Location = table::ShadowLocation_BOTTOM_RIGHT;
 
-    sal_Bool bColorFound = sal_False;
-    sal_Bool bOffsetFound = sal_False;
+    bool bColorFound = false;
+    bool bOffsetFound = false;
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
     Color aColor( 128,128, 128 );
     OUString aToken;
@@ -57,7 +57,7 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         if( IsXMLToken( aToken, XML_NONE ) )
         {
             aShadow.Location = table::ShadowLocation_NONE;
-            bRet = sal_True;
+            bRet = true;
             break;
         }
         else if( !bColorFound && aToken.startsWith("#") )
@@ -65,10 +65,10 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
             sal_Int32 nColor(0);
             bRet = ::sax::Converter::convertColor( nColor, aToken );
             if( !bRet )
-                return sal_False;
+                return false;
 
             aColor.SetColor(nColor);
-            bColorFound = sal_True;
+            bColorFound = true;
         }
         else if( !bOffsetFound )
         {
@@ -108,7 +108,7 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     {
         aShadow.IsTransparent = aColor.GetTransparency() > 0;
         aShadow.Color = aColor.GetColor();
-        bRet = sal_True;
+        bRet = true;
     }
 
     rValue <<= aShadow;
@@ -116,9 +116,9 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     return bRet;
 }
 
-sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
       OUStringBuffer aOut;
     table::ShadowFormat aShadow;
 
@@ -143,7 +143,7 @@ sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
             case table::ShadowLocation_NONE:
             default:
                 rStrExpValue = GetXMLToken(XML_NONE);
-                return sal_True;
+                return true;
         }
 
         nX *= aShadow.ShadowWidth;
@@ -158,7 +158,7 @@ sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 
         rStrExpValue = aOut.makeStringAndClear();
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

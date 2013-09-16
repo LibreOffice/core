@@ -28,16 +28,16 @@
 class XMLPercentOrMeasurePropertyHandler : public XMLPropertyHandler
 {
 private:
-    sal_Bool mbPercent;
+    bool mbPercent;
 public:
-    XMLPercentOrMeasurePropertyHandler( sal_Bool bPercent );
+    XMLPercentOrMeasurePropertyHandler( bool bPercent );
     virtual ~XMLPercentOrMeasurePropertyHandler ();
 
-    virtual sal_Bool importXML(
+    virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML(
+    virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;

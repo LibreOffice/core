@@ -24,15 +24,15 @@
 class XMLErrorIndicatorPropertyHdl : public XMLPropertyHandler
 {
 private:
-    sal_Bool mbUpperIndicator;
+    bool mbUpperIndicator;
 
 public:
-    XMLErrorIndicatorPropertyHdl( sal_Bool bUpper ) : mbUpperIndicator( bUpper )
+    XMLErrorIndicatorPropertyHdl( bool bUpper ) : mbUpperIndicator( bUpper )
         {}
     virtual ~XMLErrorIndicatorPropertyHdl();
 
-    virtual sal_Bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
 #endif  // _XMLERRORINDICATORPROPERTYHDL_HXX_

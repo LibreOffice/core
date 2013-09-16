@@ -730,39 +730,39 @@ SvXMLEnumMapEntry const pXML_Caption_Type_Enum[] =
 class XMLCaptionEscapeRelative : public XMLPropertyHandler
 {
 public:
-    virtual sal_Bool importXML(
+    virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML(
+    virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-sal_Bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue;
 
     if (!::sax::Converter::convertPercent( nValue, rStrImpValue ))
-        return sal_False;
+        return false;
 
     nValue *= 100;
     rValue <<= nValue;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     if( !(rValue >>= nValue ) )
-        return sal_False;
+        return false;
 
     nValue /= 100;
     OUStringBuffer aOut;
     ::sax::Converter::convertPercent( aOut, nValue );
     rStrExpValue = aOut.makeStringAndClear();
-    return sal_True;
+    return true;
 }
 
 class XMLMoveSizeProtectHdl : public XMLPropertyHandler
@@ -770,11 +770,11 @@ class XMLMoveSizeProtectHdl : public XMLPropertyHandler
 public:
     XMLMoveSizeProtectHdl( sal_Int32 nType ) : mnType( nType ) {}
 
-    virtual sal_Bool importXML(
+    virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML(
+    virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
@@ -782,18 +782,18 @@ private:
     const sal_Int32 mnType;
 };
 
-sal_Bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLMoveSizeProtectHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     const sal_Bool bValue = rStrImpValue.indexOf( GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE ) ) != -1;
     rValue <<= bValue;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bValue = sal_Bool();
     if( !(rValue >>= bValue ) )
-        return sal_False;
+        return false;
 
     if( bValue )
     {
@@ -803,7 +803,7 @@ sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rV
         rStrExpValue += GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE );
     }
 
-    return sal_True;
+    return true;
 }
 
 class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
@@ -811,15 +811,15 @@ class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 public:
     virtual ~XMLSdHeaderFooterVisibilityTypeHdl();
 
-    virtual sal_Bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
 XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
 {
 }
 
-sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
+bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
         const OUString& rStrImpValue,
         ::com::sun::star::uno::Any& rValue,
         const SvXMLUnitConverter& ) const
@@ -832,12 +832,12 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
     return bBool || IsXMLToken(rStrImpValue, XML_FALSE) || IsXMLToken(rStrImpValue, XML_HIDDEN);
 }
 
-sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
+bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
       OUStringBuffer aOut;
     sal_Bool bValue = sal_Bool();
 
@@ -846,7 +846,7 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
         ::sax::Converter::convertBool( aOut, bValue );
         rStrExpValue = aOut.makeStringAndClear();
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

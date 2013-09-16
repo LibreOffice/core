@@ -39,7 +39,7 @@ XMLLineHeightHdl::~XMLLineHeightHdl()
     // nothing to do
 }
 
-sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
     sal_Int32 nTemp = 0;
@@ -48,7 +48,7 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     {
         aLSp.Mode = style::LineSpacingMode::PROP;
         if (!::sax::Converter::convertPercent( nTemp, rStrImpValue ))
-            return sal_False;
+            return false;
         aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
     }
     else if( IsXMLToken( rStrImpValue, XML_CASEMAP_NORMAL) )
@@ -61,24 +61,24 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         aLSp.Mode = style::LineSpacingMode::FIX;
         if (!rUnitConverter.convertMeasureToCore(
                     nTemp, rStrImpValue, 0x0000, 0xffff))
-            return sal_False;
+            return false;
         aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
     }
 
     rValue <<= aLSp;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 
     style::LineSpacing aLSp;
     if(!(rValue >>= aLSp))
-        return sal_False;
+        return false;
 
     if( style::LineSpacingMode::PROP != aLSp.Mode && style::LineSpacingMode::FIX  != aLSp.Mode )
-        return sal_False;
+        return false;
 
     if( style::LineSpacingMode::PROP == aLSp.Mode )
     {
@@ -102,30 +102,30 @@ XMLLineHeightAtLeastHdl::~XMLLineHeightAtLeastHdl()
     // nothing to do
 }
 
-sal_Bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
 
     sal_Int32 nTemp;
     aLSp.Mode = style::LineSpacingMode::MINIMUM;
     if (!rUnitConverter.convertMeasureToCore( nTemp, rStrImpValue, 0, 0xffff))
-        return sal_False;
+        return false;
     aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
 
     rValue <<= aLSp;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 
     style::LineSpacing aLSp;
     if(!(rValue >>= aLSp))
-        return sal_False;
+        return false;
 
     if( style::LineSpacingMode::MINIMUM != aLSp.Mode )
-        return sal_False;
+        return false;
 
     rUnitConverter.convertMeasureToXML( aOut, aLSp.Height );
 
@@ -142,30 +142,30 @@ XMLLineSpacingHdl::~XMLLineSpacingHdl()
     // nothing to do
 }
 
-sal_Bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     style::LineSpacing aLSp;
     sal_Int32 nTemp;
 
     aLSp.Mode = style::LineSpacingMode::LEADING;
     if (!rUnitConverter.convertMeasureToCore( nTemp, rStrImpValue, 0, 0xffff))
-        return sal_False;
+        return false;
     aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
 
     rValue <<= aLSp;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLLineSpacingHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLLineSpacingHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 
     style::LineSpacing aLSp;
     if(!(rValue >>= aLSp))
-        return sal_False;
+        return false;
 
     if( style::LineSpacingMode::LEADING != aLSp.Mode )
-        return sal_False;
+        return false;
 
     rUnitConverter.convertMeasureToXML( aOut, aLSp.Height );
 

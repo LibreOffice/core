@@ -40,13 +40,13 @@ public:
     virtual ~XMLRectangleMembersHdl();
 
     /// Imports the given value in cas of the given XML-data-type
-    virtual sal_Bool importXML(
+    virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 
     /// Exports the given value in cas of the given XML-data-type
-    virtual sal_Bool exportXML(
+    virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;

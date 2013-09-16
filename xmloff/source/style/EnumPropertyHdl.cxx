@@ -35,7 +35,7 @@ XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
     // Nothing to do
 }
 
-sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nValue = 0;
 
@@ -57,28 +57,28 @@ sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValu
             break;
         default:
             OSL_FAIL( "Wrong type for enum property handler!" );
-            return sal_False;
+            return false;
         }
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLEnumPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEnumPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     if(!(rValue >>= nValue ))
         if(!::cppu::enum2int(nValue, rValue) )
-            return sal_False;
+            return false;
 
     OUStringBuffer aOut;
 
     if(!SvXMLUnitConverter::convertEnum( aOut, nValue, mpEnumMap ))
-        return sal_False;
+        return false;
 
     rStrExpValue = aOut.makeStringAndClear();
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

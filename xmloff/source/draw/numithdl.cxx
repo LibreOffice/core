@@ -40,14 +40,14 @@ bool XMLNumRulePropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
     return mxNumRuleCompare.is() && mxNumRuleCompare->compare( r1, r2 ) == 0;
 }
 
-sal_Bool XMLNumRulePropHdl::importXML( const OUString& /*rStrImpValue*/, ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLNumRulePropHdl::importXML( const OUString& /*rStrImpValue*/, ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLNumRulePropHdl::exportXML( OUString& /*rStrExpValue*/, const ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLNumRulePropHdl::exportXML( OUString& /*rStrExpValue*/, const ::com::sun::star::uno::Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

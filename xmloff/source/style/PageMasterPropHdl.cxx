@@ -48,15 +48,15 @@ XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout()
 bool XMLPMPropHdl_PageStyleLayout::equals( const Any& rAny1, const Any& rAny2 ) const
 {
     style::PageStyleLayout eLayout1, eLayout2;
-    return ((rAny1 >>= eLayout1) && (rAny2 >>= eLayout2)) ? (eLayout1 == eLayout2) : sal_False;
+    return ((rAny1 >>= eLayout1) && (rAny2 >>= eLayout2)) ? (eLayout1 == eLayout2) : false;
 }
 
-sal_Bool XMLPMPropHdl_PageStyleLayout::importXML(
+bool XMLPMPropHdl_PageStyleLayout::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if( IsXMLToken( rStrImpValue, XML_ALL ) )
         rValue <<= PageStyleLayout_ALL;
@@ -67,22 +67,22 @@ sal_Bool XMLPMPropHdl_PageStyleLayout::importXML(
     else if( IsXMLToken( rStrImpValue, XML_MIRRORED ) )
         rValue <<= PageStyleLayout_MIRRORED;
     else
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }
 
-sal_Bool XMLPMPropHdl_PageStyleLayout::exportXML(
+bool XMLPMPropHdl_PageStyleLayout::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool        bRet = sal_False;
+    bool bRet = false;
     PageStyleLayout eLayout;
 
     if( rValue >>= eLayout )
     {
-        bRet = sal_True;
+        bRet = true;
         switch( eLayout )
         {
             case PageStyleLayout_ALL:
@@ -98,7 +98,7 @@ sal_Bool XMLPMPropHdl_PageStyleLayout::exportXML(
                 rStrExpValue = GetXMLToken( XML_MIRRORED );
             break;
             default:
-                bRet = sal_False;
+                bRet = false;
         }
     }
 
@@ -111,15 +111,14 @@ XMLPMPropHdl_NumFormat::~XMLPMPropHdl_NumFormat()
 {
 }
 
-sal_Bool XMLPMPropHdl_NumFormat::importXML(
+bool XMLPMPropHdl_NumFormat::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int16 nSync = sal_Int16();
     sal_Int16 nNumType = NumberingType::NUMBER_NONE;
-    rUnitConverter.convertNumFormat( nNumType, rStrImpValue, OUString(),
-                                     sal_True );
+    rUnitConverter.convertNumFormat( nNumType, rStrImpValue, OUString(), true );
 
     if( !(rValue >>= nSync) )
         nSync = NumberingType::NUMBER_NONE;
@@ -141,15 +140,15 @@ sal_Bool XMLPMPropHdl_NumFormat::importXML(
     }
     rValue <<= nNumType;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLPMPropHdl_NumFormat::exportXML(
+bool XMLPMPropHdl_NumFormat::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool    bRet = sal_False;
+    bool bRet = false;
     sal_Int16   nNumType = sal_Int16();
 
     if( rValue >>= nNumType )
@@ -157,7 +156,7 @@ sal_Bool XMLPMPropHdl_NumFormat::exportXML(
         OUStringBuffer aBuffer( 10 );
         rUnitConverter.convertNumFormat( aBuffer, nNumType );
         rStrExpValue = aBuffer.makeStringAndClear();
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -168,7 +167,7 @@ XMLPMPropHdl_NumLetterSync::~XMLPMPropHdl_NumLetterSync()
 {
 }
 
-sal_Bool XMLPMPropHdl_NumLetterSync::importXML(
+bool XMLPMPropHdl_NumLetterSync::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
@@ -176,7 +175,7 @@ sal_Bool XMLPMPropHdl_NumLetterSync::importXML(
     sal_Int16 nNumType;
     sal_Int16 nSync = NumberingType::NUMBER_NONE;
     rUnitConverter.convertNumFormat( nSync, rStrImpValue,
-                                     GetXMLToken( XML_A ), sal_True );
+                                     GetXMLToken( XML_A ), true );
 
     if( !(rValue >>= nNumType) )
         nNumType = NumberingType::NUMBER_NONE;
@@ -195,15 +194,15 @@ sal_Bool XMLPMPropHdl_NumLetterSync::importXML(
     }
     rValue <<= nNumType;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLPMPropHdl_NumLetterSync::exportXML(
+bool XMLPMPropHdl_NumLetterSync::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
     sal_Int16   nNumType = sal_Int16();
 
     if( rValue >>= nNumType )
@@ -222,17 +221,17 @@ XMLPMPropHdl_PaperTrayNumber::~XMLPMPropHdl_PaperTrayNumber()
 {
 }
 
-sal_Bool XMLPMPropHdl_PaperTrayNumber::importXML(
+bool XMLPMPropHdl_PaperTrayNumber::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( IsXMLToken( rStrImpValue, XML_DEFAULT ) )
     {
         rValue <<= DEFAULT_PAPERTRAY;
-        bRet = sal_True;
+        bRet = true;
     }
     else
     {
@@ -240,19 +239,19 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::importXML(
         if (::sax::Converter::convertNumber( nPaperTray, rStrImpValue, 0 ))
         {
             rValue <<= nPaperTray;
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     return bRet;
 }
 
-sal_Bool XMLPMPropHdl_PaperTrayNumber::exportXML(
+bool XMLPMPropHdl_PaperTrayNumber::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
     sal_Int32   nPaperTray = 0;
 
     if( rValue >>= nPaperTray )
@@ -265,7 +264,7 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::exportXML(
             ::sax::Converter::convertNumber( aBuffer, nPaperTray );
             rStrExpValue = aBuffer.makeStringAndClear();
         }
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -281,14 +280,14 @@ XMLPMPropHdl_Print::~XMLPMPropHdl_Print()
 {
 }
 
-sal_Bool XMLPMPropHdl_Print::importXML(
+bool XMLPMPropHdl_Print::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
     sal_Unicode cToken  = ' ';
     sal_Int32   nTokenIndex = 0;
-    sal_Bool    bFound  = sal_False;
+    bool        bFound  = false;
 
     do
     {
@@ -297,10 +296,10 @@ sal_Bool XMLPMPropHdl_Print::importXML(
     while ( (nTokenIndex >= 0) && !bFound );
 
     setBOOL( rValue, bFound );
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLPMPropHdl_Print::exportXML(
+bool XMLPMPropHdl_Print::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& ) const
@@ -312,7 +311,7 @@ sal_Bool XMLPMPropHdl_Print::exportXML(
         rStrExpValue += sAttrValue;
     }
 
-    return sal_True;
+    return true;
 }
 
 // property handler for style:table-centering
@@ -321,34 +320,34 @@ XMLPMPropHdl_CenterHorizontal::~XMLPMPropHdl_CenterHorizontal()
 {
 }
 
-sal_Bool XMLPMPropHdl_CenterHorizontal::importXML(
+bool XMLPMPropHdl_CenterHorizontal::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if (!rStrImpValue.isEmpty())
         if (IsXMLToken( rStrImpValue, XML_BOTH) ||
             IsXMLToken( rStrImpValue, XML_HORIZONTAL))
         {
             rValue = ::cppu::bool2any(sal_True);
-            bRet = sal_True;
+            bRet = true;
         }
 
     return bRet;
 }
 
-sal_Bool XMLPMPropHdl_CenterHorizontal::exportXML(
+bool XMLPMPropHdl_CenterHorizontal::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool    bRet = sal_False;
+    bool bRet = false;
 
     if ( ::cppu::any2bool( rValue ) )
     {
-        bRet = sal_True;
+        bRet = true;
         if (!rStrExpValue.isEmpty())
             rStrExpValue = GetXMLToken(XML_BOTH);
         else
@@ -362,34 +361,34 @@ XMLPMPropHdl_CenterVertical::~XMLPMPropHdl_CenterVertical()
 {
 }
 
-sal_Bool XMLPMPropHdl_CenterVertical::importXML(
+bool XMLPMPropHdl_CenterVertical::importXML(
         const OUString& rStrImpValue,
         Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if (!rStrImpValue.isEmpty())
         if (IsXMLToken(rStrImpValue, XML_BOTH) ||
             IsXMLToken(rStrImpValue, XML_VERTICAL) )
         {
             rValue = ::cppu::bool2any(sal_True);
-            bRet = sal_True;
+            bRet = true;
         }
 
     return bRet;
 }
 
-sal_Bool XMLPMPropHdl_CenterVertical::exportXML(
+bool XMLPMPropHdl_CenterVertical::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool    bRet = sal_False;
+    bool bRet = false;
 
     if ( ::cppu::any2bool( rValue ) )
     {
-        bRet = sal_True;
+        bRet = true;
         if (!rStrExpValue.isEmpty())
             rStrExpValue = GetXMLToken(XML_BOTH);
         else

@@ -34,7 +34,7 @@ XMLTabStopPropHdl::~XMLTabStopPropHdl()
 
 bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
 {
-    sal_Bool bEqual = sal_False;
+    bool bEqual = false;
 
     uno::Sequence< style::TabStop> aSeq1;
     if( r1 >>= aSeq1 )
@@ -44,7 +44,7 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
         {
             if( aSeq1.getLength() == aSeq2.getLength() )
             {
-                bEqual = sal_True;
+                bEqual = true;
                 if( aSeq1.getLength() > 0 )
                 {
                     const style::TabStop* pTabs1 = aSeq1.getConstArray();
@@ -69,14 +69,14 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
     return bEqual;
 }
 
-sal_Bool XMLTabStopPropHdl::importXML( const OUString&, ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
+bool XMLTabStopPropHdl::importXML( const OUString&, ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLTabStopPropHdl::exportXML( OUString&, const ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
+bool XMLTabStopPropHdl::exportXML( OUString&, const ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
 {
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

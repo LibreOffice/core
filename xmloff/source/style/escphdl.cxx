@@ -42,7 +42,7 @@ XMLEscapementPropHdl::~XMLEscapementPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int16 nVal;
 
@@ -50,7 +50,7 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
 
     OUString aToken;
     if( ! aTokens.getNextToken( aToken ) )
-        return sal_False;
+        return false;
 
     if( IsXMLToken( aToken, XML_ESCAPEMENT_SUB ) )
     {
@@ -64,16 +64,16 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     {
         sal_Int32 nNewEsc;
         if (!::sax::Converter::convertPercent( nNewEsc, aToken ))
-            return sal_False;
+            return false;
 
         nVal = (sal_Int16) nNewEsc;
     }
 
     rValue <<= nVal;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
     OUStringBuffer aOut;
@@ -95,7 +95,7 @@ sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return sal_True;
+    return true;
 }
 
 //
@@ -107,23 +107,23 @@ XMLEscapementHeightPropHdl::~XMLEscapementHeightPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( IsXMLToken( rStrImpValue, XML_CASEMAP_SMALL_CAPS ) )
-        return sal_False;
+        return false;
 
     SvXMLTokenEnumerator aTokens( rStrImpValue );
 
     OUString aToken;
     if( ! aTokens.getNextToken( aToken ) )
-        return sal_False;
+        return false;
 
     sal_Int8 nProp;
     if( aTokens.getNextToken( aToken ) )
     {
         sal_Int32 nNewProp;
         if (!::sax::Converter::convertPercent( nNewProp, aToken ))
-            return sal_False;
+            return false;
         nProp = (sal_Int8)nNewProp;
     }
     else
@@ -139,10 +139,10 @@ sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, un
     }
 
     rValue <<= nProp;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut( rStrExpValue );
 

@@ -38,13 +38,13 @@ XMLConstantsPropertyHandler::~XMLConstantsPropertyHandler()
 {
 }
 
-sal_Bool XMLConstantsPropertyHandler::importXML(
+bool XMLConstantsPropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+    bool bRet = SvXMLUnitConverter::convertEnum(
         nEnum, rStrImpValue, pMap );
 
     if( bRet )
@@ -53,14 +53,14 @@ sal_Bool XMLConstantsPropertyHandler::importXML(
     return bRet;
 }
 
-sal_Bool XMLConstantsPropertyHandler::exportXML(
+bool XMLConstantsPropertyHandler::exportXML(
     OUString& rStrExpValue,
     const Any& rValue,
     const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 
-    sal_Bool bRet = false;
+    bool bRet = false;
 
     sal_Int32 nEnum = 0;
 

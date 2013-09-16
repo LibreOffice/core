@@ -37,13 +37,13 @@ XMLFillBitmapSizePropertyHandler::~XMLFillBitmapSizePropertyHandler()
 {
 }
 
-sal_Bool XMLFillBitmapSizePropertyHandler::importXML(
+bool XMLFillBitmapSizePropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Int32 nValue;
-    sal_Bool bRet;
+    bool bRet;
 
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
@@ -61,7 +61,7 @@ sal_Bool XMLFillBitmapSizePropertyHandler::importXML(
     return bRet;
 }
 
-sal_Bool XMLFillBitmapSizePropertyHandler::exportXML(
+bool XMLFillBitmapSizePropertyHandler::exportXML(
     OUString& rStrExpValue,
     const Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
@@ -81,10 +81,10 @@ sal_Bool XMLFillBitmapSizePropertyHandler::exportXML(
         }
 
         rStrExpValue = aOut.makeStringAndClear();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

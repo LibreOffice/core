@@ -78,10 +78,10 @@ XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewStrikeout;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+    bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutType_Enum );
     if( bRet )
     {
@@ -129,9 +129,9 @@ sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno:
     return bRet;
 }
 
-sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
@@ -153,10 +153,10 @@ XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewStrikeout;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+    bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutStyle_Enum );
     if( bRet )
     {
@@ -177,9 +177,9 @@ sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno
     return bRet;
 }
 
-sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
@@ -201,10 +201,10 @@ XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewStrikeout;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum(
+    bool bRet = SvXMLUnitConverter::convertEnum(
         eNewStrikeout, rStrImpValue, pXML_CrossedoutWidth_Enum );
     if( bRet )
     {
@@ -246,9 +246,9 @@ sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno
     return bRet;
 }
 
-sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int16 nValue = sal_Int16();
     OUStringBuffer aOut;
 
@@ -270,9 +270,9 @@ XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( !rStrImpValue.isEmpty() )
     {
@@ -280,15 +280,15 @@ sal_Bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno:
                                         ? awt::FontStrikeout::SLASH
                                         : awt::FontStrikeout::X);
         rValue <<= (sal_Int16)eStrikeout;
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int16 nValue = sal_Int16();
 
     if( (rValue >>= nValue) &&
@@ -297,7 +297,7 @@ sal_Bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno:
         rStrExpValue = OUString(
             static_cast< sal_Unicode>( awt::FontStrikeout::SLASH == nValue ? '/'
                                                                       : 'X' ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

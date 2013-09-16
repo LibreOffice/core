@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-XMLPercentOrMeasurePropertyHandler::XMLPercentOrMeasurePropertyHandler( sal_Bool bPercent )
+XMLPercentOrMeasurePropertyHandler::XMLPercentOrMeasurePropertyHandler( bool bPercent )
 : mbPercent( bPercent )
 {
 }
@@ -41,32 +41,32 @@ XMLPercentOrMeasurePropertyHandler::~XMLPercentOrMeasurePropertyHandler()
 {
 }
 
-sal_Bool XMLPercentOrMeasurePropertyHandler::importXML(
+bool XMLPercentOrMeasurePropertyHandler::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
     if( (rStrImpValue.indexOf( sal_Unicode('%') ) != -1) != mbPercent )
-        return sal_False;
+        return false;
 
     sal_Int32 nValue;
 
     if( mbPercent )
     {
         if (!::sax::Converter::convertPercent( nValue, rStrImpValue ))
-            return sal_False;
+            return false;
     }
     else
     {
         if (!rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
-            return sal_False;
+            return false;
     }
 
     rValue <<= nValue;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLPercentOrMeasurePropertyHandler::exportXML(
+bool XMLPercentOrMeasurePropertyHandler::exportXML(
     OUString& rStrExpValue,
     const Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
@@ -75,7 +75,7 @@ sal_Bool XMLPercentOrMeasurePropertyHandler::exportXML(
 
     sal_Int32 nValue = 0;
     if( !(rValue >>= nValue ) )
-        return sal_False;
+        return false;
 
     if( mbPercent )
     {
@@ -87,7 +87,7 @@ sal_Bool XMLPercentOrMeasurePropertyHandler::exportXML(
     }
 
     rStrExpValue = aOut.makeStringAndClear();
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

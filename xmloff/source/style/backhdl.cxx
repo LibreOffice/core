@@ -51,20 +51,20 @@ XMLBackGraphicPositionPropHdl::~XMLBackGraphicPositionPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     style::GraphicLocation ePos = style::GraphicLocation_NONE, eTmp;
     sal_uInt16 nTmp;
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
     OUString aToken;
-    sal_Bool bHori = sal_False, bVert = sal_False;
+    bool bHori = false, bVert = false;
 
     while( bRet && aTokenEnum.getNextToken( aToken ) )
     {
         if( bHori && bVert )
         {
-            bRet = sal_False;
+            bRet = false;
         }
         else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
         {
@@ -76,7 +76,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
                     ePos = nPrc < 25 ? style::GraphicLocation_LEFT_TOP :
                                        (nPrc < 75 ? style::GraphicLocation_MIDDLE_MIDDLE :
                                                     style::GraphicLocation_RIGHT_BOTTOM);
-                    bHori = sal_True;
+                    bHori = true;
                 }
                 else
                 {
@@ -84,13 +84,13 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
                                        (nPrc < 75 ? style::GraphicLocation_LEFT_MIDDLE :
                                                     style::GraphicLocation_LEFT_BOTTOM);
                     MergeXMLVertPos( ePos, eTmp );
-                    bVert = sal_True;
+                    bVert = true;
                 }
             }
             else
             {
                 // wrong percentage
-                bRet = sal_False;
+                bRet = false;
             }
         }
         else if( IsXMLToken( aToken, XML_CENTER ) )
@@ -109,9 +109,9 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
             else if( !bHori )
                 ePos = (style::GraphicLocation)nTmp;
             else
-                bRet = sal_False;
+                bRet = false;
 
-            bHori = sal_True;
+            bHori = true;
         }
         else if( SvXMLUnitConverter::convertEnum( nTmp, aToken, pXML_BrushVerticalPos ) )
         {
@@ -120,12 +120,12 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
             else if( !bVert )
                 ePos = (style::GraphicLocation)nTmp;
             else
-                bRet = sal_False;
-            bVert = sal_True;
+                bRet = false;
+            bVert = true;
         }
         else
         {
-            bRet = sal_False;
+            bRet = false;
         }
     }
 
@@ -136,9 +136,9 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
     return bRet;
 }
 
-sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     OUStringBuffer aOut;
 
     style::GraphicLocation eLocation;
@@ -148,12 +148,12 @@ sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const
         if( rValue >>= nValue )
             eLocation = (style::GraphicLocation)nValue;
         else
-            bRet = sal_False;
+            bRet = false;
     }
 
     if( bRet )
     {
-        bRet = sal_False;
+        bRet = false;
 
         switch( eLocation )
         {
@@ -161,19 +161,19 @@ sal_Bool XMLBackGraphicPositionPropHdl::exportXML( OUString& rStrExpValue, const
         case style::GraphicLocation_MIDDLE_TOP:
         case style::GraphicLocation_RIGHT_TOP:
             aOut.append( GetXMLToken(XML_TOP) );
-            bRet = sal_True;
+            bRet = true;
             break;
         case style::GraphicLocation_LEFT_MIDDLE:
         case style::GraphicLocation_MIDDLE_MIDDLE:
         case style::GraphicLocation_RIGHT_MIDDLE:
             aOut.append( GetXMLToken(XML_CENTER) );
-            bRet = sal_True;
+            bRet = true;
             break;
         case style::GraphicLocation_LEFT_BOTTOM:
         case style::GraphicLocation_MIDDLE_BOTTOM:
         case style::GraphicLocation_RIGHT_BOTTOM:
             aOut.append( GetXMLToken(XML_BOTTOM) );
-            bRet = sal_True;
+            bRet = true;
             break;
         default:
             break;

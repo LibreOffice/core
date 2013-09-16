@@ -38,7 +38,7 @@ XMLCharHeightHdl::~XMLCharHeightHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 )
     {
@@ -50,14 +50,14 @@ sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         {
             fSize = ::std::max<double>(fSize, 1.0); // fdo#49876: 0pt is invalid
             rValue <<= (float)fSize;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 
@@ -84,7 +84,7 @@ XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
@@ -92,14 +92,14 @@ sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any
         if (::sax::Converter::convertPercent( nPrc, rStrImpValue ))
         {
             rValue <<= (sal_Int16)nPrc;
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut( rStrExpValue );
 
@@ -122,7 +122,7 @@ XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()
     // nothing to do
 }
 
-sal_Bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nRel = 0;
 
@@ -130,13 +130,13 @@ sal_Bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any
                 util::MeasureUnit::POINT ))
     {
         rValue <<= (float)nRel;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     OUStringBuffer aOut;
 

@@ -60,7 +60,7 @@ SvXMLSignedEnumMapEntry aXMLChartSymbolNameMap[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-sal_Bool lcl_convertEnum(
+bool lcl_convertEnum(
     OUStringBuffer & rBuffer,
     sal_Int32 nValue,
     const SvXMLSignedEnumMapEntry *pMap )
@@ -83,7 +83,7 @@ sal_Bool lcl_convertEnum(
     return (eTok != XML_TOKEN_INVALID);
 }
 
-sal_Bool lcl_convertEnum(
+bool lcl_convertEnum(
     sal_Int32 & rEnum,
     const OUString & rValue,
     const SvXMLSignedEnumMapEntry *pMap )
@@ -111,10 +111,10 @@ XMLSymbolTypePropertyHdl::XMLSymbolTypePropertyHdl( bool bIsNamedSymbol )
 XMLSymbolTypePropertyHdl::~XMLSymbolTypePropertyHdl()
 {}
 
-sal_Bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
+bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if( m_bIsNamedSymbol )
     {
@@ -132,10 +132,10 @@ sal_Bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
     return bResult;
 }
 
-sal_Bool XMLSymbolTypePropertyHdl::exportXML( OUString& rStrExpValue,
+bool XMLSymbolTypePropertyHdl::exportXML( OUString& rStrExpValue,
                                               const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     sal_Int32 nType = -3; // NONE
     rValue >>= nType;

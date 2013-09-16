@@ -61,7 +61,7 @@ bool XMLAttributeContainerHandler::equals(
             for( sal_Int32 i=0; i < nCount; i++, pAttribName++ )
             {
                 if( !xContainer2->hasByName( *pAttribName ) )
-                    return sal_False;
+                    return false;
 
                 xContainer1->getByName( *pAttribName ) >>= aData1;
                 xContainer2->getByName( *pAttribName ) >>= aData2;
@@ -69,24 +69,24 @@ bool XMLAttributeContainerHandler::equals(
                 if( ( aData1.Namespace != aData2.Namespace ) ||
                     ( aData1.Type      != aData2.Type      ) ||
                     ( aData1.Value     != aData2.Value     ) )
-                    return sal_False;
+                    return false;
             }
 
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLAttributeContainerHandler::importXML( const OUString& /*rStrImpValue*/, Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLAttributeContainerHandler::importXML( const OUString& /*rStrImpValue*/, Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLAttributeContainerHandler::exportXML( OUString& /*rStrExpValue*/, const Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
+bool XMLAttributeContainerHandler::exportXML( OUString& /*rStrExpValue*/, const Any& /*rValue*/, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,8 +46,8 @@ namespace xmloff
     public:
         ORotationAngleHandler();
 
-        virtual sal_Bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
-        virtual sal_Bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
     };
 
     //=====================================================================
@@ -58,8 +58,8 @@ namespace xmloff
     public:
         OFontWidthHandler();
 
-        virtual sal_Bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
-        virtual sal_Bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
     };
 
     //=====================================================================
@@ -76,8 +76,8 @@ namespace xmloff
 
         OControlBorderHandler( const BorderFacet _eFacet );
 
-        virtual sal_Bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
-        virtual sal_Bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
 
     private:
         BorderFacet m_eFacet;
@@ -91,8 +91,8 @@ namespace xmloff
     public:
         OControlTextEmphasisHandler();
 
-        virtual sal_Bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
-        virtual sal_Bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool importXML( const OUString& _rStrImpValue, ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
+        virtual bool exportXML( OUString& _rStrExpValue, const ::com::sun::star::uno::Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const;
     };
 
     //=====================================================================

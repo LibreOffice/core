@@ -42,7 +42,7 @@ XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
 {
 }
 
-sal_Bool XMLDurationPropertyHdl::importXML(
+bool XMLDurationPropertyHdl::importXML(
     const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
@@ -54,10 +54,10 @@ sal_Bool XMLDurationPropertyHdl::importXML(
                              + aDuration.Minutes) * 60 + aDuration.Seconds + aDuration.NanoSeconds / static_cast<double>(::Time::nanoSecPerSec);
     rValue <<= fSeconds;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLDurationPropertyHdl::exportXML(
+bool XMLDurationPropertyHdl::exportXML(
     OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
@@ -73,10 +73,10 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
         OUStringBuffer aOut;
         ::sax::Converter::convertDuration(aOut, aDuration);
         rStrExpValue = aOut.makeStringAndClear();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // implementation of an opacity property handler
@@ -90,23 +90,23 @@ XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
 {
 }
 
-sal_Bool XMLOpacityPropertyHdl::importXML(
+bool XMLOpacityPropertyHdl::importXML(
     const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nValue = 0;
 
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
         if (::sax::Converter::convertPercent( nValue, rStrImpValue ))
-            bRet = sal_True;
+            bRet = true;
     }
     else
     {
         nValue = sal_Int32( rStrImpValue.toDouble() * 100.0 );
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( bRet )
@@ -138,12 +138,12 @@ sal_Bool XMLOpacityPropertyHdl::importXML(
     return bRet;
 }
 
-sal_Bool XMLOpacityPropertyHdl::exportXML(
+bool XMLOpacityPropertyHdl::exportXML(
     OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nVal = sal_uInt16();
 
     if( rValue >>= nVal )
@@ -153,7 +153,7 @@ sal_Bool XMLOpacityPropertyHdl::exportXML(
         nVal = 100 - nVal;
         ::sax::Converter::convertPercent( aOut, nVal );
         rStrExpValue = aOut.makeStringAndClear();
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -165,12 +165,12 @@ XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
 {
 }
 
-sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
+bool XMLTextAnimationStepPropertyHdl::importXML(
     const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nValue = 0;
 
     const OUString aPX( "px" );
@@ -180,7 +180,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
         if (::sax::Converter::convertNumber(nValue, rStrImpValue.copy(0, nPos)))
         {
             rValue <<= sal_Int16( -nValue );
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else
@@ -188,19 +188,19 @@ sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
         if (rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
         {
             rValue <<= sal_Int16( nValue );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     return bRet;
 }
 
-sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
+bool XMLTextAnimationStepPropertyHdl::exportXML(
     OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int16 nVal = sal_Int16();
 
     if( rValue >>= nVal )
@@ -219,7 +219,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
         }
 
         rStrExpValue = aOut.makeStringAndClear();
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -236,23 +236,23 @@ XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl()
 {
 }
 
-sal_Bool XMLDateTimeFormatHdl::importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLDateTimeFormatHdl::importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     rValue <<= rStrImpValue;
     return true;
 }
 
-sal_Bool XMLDateTimeFormatHdl::exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLDateTimeFormatHdl::exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nNumberFormat = 0;
     if( mpExport && (rValue >>= nNumberFormat) )
     {
         mpExport->addDataStyle( nNumberFormat );
         rStrExpValue = mpExport->getDataStyleName( nNumberFormat );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

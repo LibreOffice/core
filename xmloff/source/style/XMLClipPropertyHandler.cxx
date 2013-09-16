@@ -33,7 +33,7 @@ using namespace ::xmloff::token;
 // class XMLMeasurePropHdl
 //
 
-XMLClipPropertyHandler::XMLClipPropertyHandler( sal_Bool bODF11 ) :
+XMLClipPropertyHandler::XMLClipPropertyHandler( bool bODF11 ) :
     m_bODF11( bODF11 )
 {
 }
@@ -57,9 +57,9 @@ bool XMLClipPropertyHandler::equals(
            aCrop1.Right == aCrop2.Right;
 }
 
-sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nLen = rStrImpValue.getLength();
     if( nLen > 6 &&
         rStrImpValue.startsWith( GetXMLToken(XML_RECT)) &&
@@ -69,7 +69,7 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
         GraphicCrop aCrop;
         OUString sTmp( rStrImpValue.copy( 5, nLen-6 ) );
 
-        sal_Bool bHasComma = sTmp.indexOf( ',' ) != -1;
+        bool bHasComma = sTmp.indexOf( ',' ) != -1;
         SvXMLTokenEnumerator aTokenEnum( sTmp, bHasComma ? ',' : ' ' );
 
         sal_uInt16 nPos = 0;
@@ -99,9 +99,9 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
     return bRet;
 }
 
-sal_Bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
       OUStringBuffer aOut(30);
     GraphicCrop aCrop;
 
@@ -125,7 +125,7 @@ sal_Bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::A
         aOut.append( (sal_Unicode)')' );
         rStrExpValue = aOut.makeStringAndClear();
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

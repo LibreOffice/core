@@ -29,24 +29,24 @@ struct SvXMLEnumMapEntry;
 */
 class XMLBitmapRepeatOffsetPropertyHandler: public XMLPropertyHandler
 {
-    sal_Bool mbX;
+    bool mbX;
     OUString msVertical;
     OUString msHorizontal;
 public:
 
-    XMLBitmapRepeatOffsetPropertyHandler( sal_Bool bX );
+    XMLBitmapRepeatOffsetPropertyHandler( bool bX );
 
     // Just needed for virtual destruction
     virtual ~XMLBitmapRepeatOffsetPropertyHandler();
 
     /// Imports the given value in cas of the given XML-data-type
-    virtual sal_Bool importXML(
+    virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 
     /// Exports the given value in cas of the given XML-data-type
-    virtual sal_Bool exportXML(
+    virtual bool exportXML(
             OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;

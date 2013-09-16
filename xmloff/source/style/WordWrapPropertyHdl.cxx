@@ -42,18 +42,19 @@ XMLWordWrapPropertyHdl::~XMLWordWrapPropertyHdl()
     // Nothing to do
 }
 
-sal_Bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue = sal_False, bRetValue = sal_False;
+    bool bRetValue = false;
+    sal_Bool bValue = sal_False;
     if( rStrImpValue == GetXMLToken( xmloff::token::XML_WRAP ) )
     {
         bValue = sal_True;
-        bRetValue = sal_True;
+        bRetValue = true;
     }
     if( rStrImpValue == GetXMLToken( xmloff::token::XML_NO_WRAP ) )
     {
         bValue = sal_False;
-        bRetValue = sal_True;
+        bRetValue = true;
     }
     if ( bRetValue && mpImport )
     {
@@ -73,7 +74,7 @@ sal_Bool XMLWordWrapPropertyHdl::importXML( const OUString& rStrImpValue, Any& r
     return bRetValue;
 }
 
-sal_Bool XMLWordWrapPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLWordWrapPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( ::cppu::any2bool( rValue ) )
     {
@@ -83,7 +84,7 @@ sal_Bool XMLWordWrapPropertyHdl::exportXML( OUString& rStrExpValue, const Any& r
     {
         rStrExpValue = GetXMLToken( xmloff::token::XML_NO_WRAP );
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

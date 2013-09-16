@@ -46,10 +46,10 @@ XMLFmtBreakBeforePropHdl::~XMLFmtBreakBeforePropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
+    bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
     if( bRet )
     {
         style::BreakType eBreak;
@@ -71,7 +71,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::importXML( const OUString& rStrImpValue, uno:
     return bRet;
 }
 
-sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::BreakType eBreak;
 
@@ -79,7 +79,7 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
     {
         sal_Int32 nValue = 0;
         if( !( rValue >>= nValue ) )
-            return sal_False;
+            return false;
 
         eBreak = (style::BreakType) nValue;
     }
@@ -97,14 +97,14 @@ sal_Bool XMLFmtBreakBeforePropHdl::exportXML( OUString& rStrExpValue, const uno:
             nEnum = 0;
             break;
         default:
-            return sal_False;
+            return false;
     }
 
     OUStringBuffer aOut;
-    /* sal_Bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
+    /* bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
-    return sal_True;
+    return true;
 }
 
 //
@@ -116,10 +116,10 @@ XMLFmtBreakAfterPropHdl::~XMLFmtBreakAfterPropHdl()
     // Nothing to do
 }
 
-sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 nEnum;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
+    bool bRet = SvXMLUnitConverter::convertEnum( nEnum, rStrImpValue, pXML_BreakTypes );
     if( bRet )
     {
         style::BreakType eBreak;
@@ -141,7 +141,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::importXML( const OUString& rStrImpValue, uno::
     return bRet;
 }
 
-sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     style::BreakType eBreak;
 
@@ -149,7 +149,7 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
     {
         sal_Int32 nValue = 0;
         if( !( rValue >>= nValue ) )
-            return sal_False;
+            return false;
 
         eBreak = (style::BreakType) nValue;
     }
@@ -167,14 +167,14 @@ sal_Bool XMLFmtBreakAfterPropHdl::exportXML( OUString& rStrExpValue, const uno::
             nEnum = 0;
             break;
         default:
-            return sal_False;
+            return false;
     }
 
     OUStringBuffer aOut;
-    /* sal_Bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
+    /* bool bOk = */ SvXMLUnitConverter::convertEnum( aOut, nEnum, pXML_BreakTypes );
     rStrExpValue = aOut.makeStringAndClear();
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

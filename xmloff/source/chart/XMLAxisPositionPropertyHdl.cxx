@@ -41,10 +41,10 @@ XMLAxisPositionPropertyHdl::XMLAxisPositionPropertyHdl( bool bCrossingValue )
 XMLAxisPositionPropertyHdl::~XMLAxisPositionPropertyHdl()
 {}
 
-sal_Bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
+bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bResult = false;
+    bool bResult = false;
 
     if( rStrImpValue.equals( GetXMLToken(XML_START) ) )
     {
@@ -80,10 +80,10 @@ sal_Bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
     return bResult;
 }
 
-sal_Bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
+bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
                                               const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = sal_False;
 
     OUStringBuffer sValueBuffer;
     if( m_bCrossingValue )

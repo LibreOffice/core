@@ -35,24 +35,24 @@ XMLNamedBoolPropertyHdl::~XMLNamedBoolPropertyHdl()
     // Nothing to do
 }
 
-sal_Bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNamedBoolPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( rStrImpValue == maTrueStr )
     {
         rValue = ::cppu::bool2any( sal_True );
-        return sal_True;
+        return true;
     }
 
     if( rStrImpValue == maFalseStr )
     {
         rValue = ::cppu::bool2any( sal_False );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLNamedBoolPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLNamedBoolPropertyHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     if( ::cppu::any2bool( rValue ) )
     {
@@ -63,7 +63,7 @@ sal_Bool XMLNamedBoolPropertyHdl::exportXML( OUString& rStrExpValue, const Any& 
         rStrExpValue = maFalseStr;
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

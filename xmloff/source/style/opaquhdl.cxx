@@ -34,20 +34,19 @@ XMLOpaquePropHdl::~XMLOpaquePropHdl()
     // nothing to do
 }
 
-sal_Bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLOpaquePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     sal_Bool bValue = IsXMLToken( rStrImpValue, XML_OPAQUE_FOREGROUND );
     rValue <<= sal_Bool(bValue);
-    bRet = sal_True;
 
     return bRet;
 }
 
-sal_Bool XMLOpaquePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+bool XMLOpaquePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Bool bValue = sal_Bool();
 
     if (rValue >>= bValue)
@@ -57,7 +56,7 @@ sal_Bool XMLOpaquePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
         else
             rStrExpValue = GetXMLToken( XML_OPAQUE_BACKGROUND );
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

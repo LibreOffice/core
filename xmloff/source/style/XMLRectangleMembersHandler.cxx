@@ -38,7 +38,7 @@ XMLRectangleMembersHdl::~XMLRectangleMembersHdl()
 {
 }
 
-sal_Bool XMLRectangleMembersHdl::importXML(
+bool XMLRectangleMembersHdl::importXML(
     const OUString& rStrImpValue,
     Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
@@ -68,13 +68,13 @@ sal_Bool XMLRectangleMembersHdl::importXML(
         }
 
         rValue <<= aRect;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-sal_Bool XMLRectangleMembersHdl::exportXML(
+bool XMLRectangleMembersHdl::exportXML(
     OUString& rStrExpValue,
     const Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
@@ -106,7 +106,7 @@ sal_Bool XMLRectangleMembersHdl::exportXML(
     OUStringBuffer sBuffer;
     rUnitConverter.convertMeasureToXML( sBuffer, nValue );
     rStrExpValue = sBuffer.makeStringAndClear();
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-sal_Bool XMLDurationMS16PropHdl_Impl::importXML(
+bool XMLDurationMS16PropHdl_Impl::importXML(
         const OUString& rStrImpValue,
            Any& rValue,
         const SvXMLUnitConverter& ) const
@@ -42,10 +42,10 @@ sal_Bool XMLDurationMS16PropHdl_Impl::importXML(
                            + aDuration.Seconds) * 100 + (aDuration.NanoSeconds / (10*1000*1000));
     rValue <<= nMS;
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLDurationMS16PropHdl_Impl::exportXML(
+bool XMLDurationMS16PropHdl_Impl::exportXML(
         OUString& rStrExpValue,
         const Any& rValue,
         const SvXMLUnitConverter& ) const
@@ -58,10 +58,10 @@ sal_Bool XMLDurationMS16PropHdl_Impl::exportXML(
         Duration aDuration(false, 0, 0, 0, 0, 0, 0, nMS * 10);
         ::sax::Converter::convertDuration(aOut, aDuration);
         rStrExpValue = aOut.makeStringAndClear();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 XMLDurationMS16PropHdl_Impl::~XMLDurationMS16PropHdl_Impl()

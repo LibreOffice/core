@@ -103,7 +103,7 @@ XMLBorderWidthHdl::~XMLBorderWidthHdl()
     // nothing to do
 }
 
-sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     SvXMLTokenEnumerator aTokenEnum( rStrImpValue );
 
@@ -111,22 +111,22 @@ sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& r
 
     OUString aToken;
     if( !aTokenEnum.getNextToken( aToken ) )
-        return sal_False;
+        return false;
 
     if (!rUnitConverter.convertMeasureToCore( nInWidth, aToken, 0, 500 ))
-        return sal_False;
+        return false;
 
     if( !aTokenEnum.getNextToken( aToken ) )
-        return sal_False;
+        return false;
 
     if (!rUnitConverter.convertMeasureToCore( nDistance, aToken, 0, 500 ))
-        return sal_False;
+        return false;
 
     if( !aTokenEnum.getNextToken( aToken ) )
-        return sal_False;
+        return false;
 
     if (!rUnitConverter.convertMeasureToCore( nOutWidth, aToken, 0, 500 ))
-        return sal_False;
+        return false;
 
     table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
@@ -137,16 +137,16 @@ sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     aBorderLine.LineDistance   = sal::static_int_cast< sal_Int16 >(nDistance);
 
     rValue <<= aBorderLine;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUStringBuffer aOut;
 
     table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
-        return sal_False;
+        return false;
 
     bool bDouble = false;
     switch ( aBorderLine.LineStyle )
@@ -165,7 +165,7 @@ sal_Bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     }
 
     if( ( aBorderLine.LineDistance == 0 && aBorderLine.InnerLineWidth == 0 ) || !bDouble )
-        return sal_False;
+        return false;
 
     rUnitConverter.convertMeasureToXML( aOut, aBorderLine.InnerLineWidth );
     aOut.append( sal_Unicode( ' ' ) );
@@ -174,7 +174,7 @@ sal_Bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     rUnitConverter.convertMeasureToXML( aOut, aBorderLine.OuterLineWidth );
 
     rStrExpValue = aOut.makeStringAndClear();
-    return sal_True;
+    return true;
 }
 
 //
@@ -186,14 +186,14 @@ XMLBorderHdl::~XMLBorderHdl()
     // nothing to do
 }
 
-sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     OUString aToken;
     SvXMLTokenEnumerator aTokens( rStrImpValue );
 
-    sal_Bool bHasStyle = sal_False;
-    sal_Bool bHasWidth = sal_False;
-    sal_Bool bHasColor = sal_False;
+    bool bHasStyle = false;
+    bool bHasWidth = false;
+    bool bHasColor = false;
 
     sal_uInt16 nStyle = USHRT_MAX;
     sal_uInt16 nWidth = 0;
@@ -207,36 +207,36 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
             rUnitConverter.convertEnum( nNamedWidth, aToken,
                                         pXML_NamedBorderWidths ) )
         {
-            bHasWidth = sal_True;
+            bHasWidth = true;
         }
         else if( !bHasStyle &&
                  rUnitConverter.convertEnum( nStyle, aToken,
                                               pXML_BorderStyles ) )
         {
-            bHasStyle = sal_True;
+            bHasStyle = true;
         }
         else if (!bHasColor && ::sax::Converter::convertColor(nColor, aToken))
         {
-            bHasColor = sal_True;
+            bHasColor = true;
         }
         else if( !bHasWidth &&
                  rUnitConverter.convertMeasureToCore( nTemp, aToken, 0,
                                                  USHRT_MAX ) )
         {
             nWidth = (sal_uInt16)nTemp;
-            bHasWidth = sal_True;
+            bHasWidth = true;
         }
         else
         {
             // missformed
-            return sal_False;
+            return false;
         }
     }
 
     // if there is no style or a different style than none but no width,
        // then the declaration is not valid.
     if( !bHasStyle || (API_LINE_NONE != nStyle && !bHasWidth) )
-        return sal_False;
+        return false;
 
     table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
@@ -282,16 +282,16 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     }
 
     rValue <<= aBorderLine;
-    return sal_True;
+    return true;
 }
 
-sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& /* rUnitConverter */ ) const
+bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
     OUStringBuffer aOut;
 
     table::BorderLine2 aBorderLine;
     if(!(rValue >>= aBorderLine))
-        return sal_False;
+        return false;
 
     sal_Int32 nWidth = aBorderLine.LineWidth;
 
@@ -352,7 +352,7 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 
     rStrExpValue = aOut.makeStringAndClear();
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
