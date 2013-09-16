@@ -27,8 +27,8 @@ class DBTestBase
     : public ::test::BootstrapFixture
     , public ::unotest::MacrosTest
 {
-private:
-    static OUString our_sFilePath;
+protected:
+    static const OUString our_sFilePath;
 public:
     virtual void setUp();
     virtual void tearDown();
@@ -41,7 +41,7 @@ public:
             uno::Reference< XOfficeDatabaseDocument >& xDocument);
 };
 
-OUString DBTestBase::our_sFilePath("/dbaccess/qa/unit/data/");
+const OUString DBTestBase::our_sFilePath("/dbaccess/qa/unit/data/");
 
 uno::Reference< XOfficeDatabaseDocument >
     DBTestBase::getDocumentForFileName(OUString sFileName)
