@@ -28,7 +28,6 @@
 class SwTxtNode;
 class Point;
 class MultiSelection;
-class String;
 typedef std::list< xub_StrLen > PositionList;
 typedef std::deque< xub_StrLen > SvXub_StrLens;
 
