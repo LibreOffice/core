@@ -197,8 +197,8 @@ sal_Bool VCLXFont::hasGlyphs( const OUString& aText )
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
     if ( pOutDev )
     {
-        String aStr( aText );
-        if ( pOutDev->HasGlyphs( maFont, aStr, 0, aStr.Len() ) == STRING_LEN )
+        OUString aStr( aText );
+        if ( pOutDev->HasGlyphs( maFont, aStr, 0, aStr.getLength() ) == STRING_LEN )
         {
             return sal_True;
         }

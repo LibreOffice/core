@@ -340,8 +340,8 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDes
         aFont.SetSize( Size( rDescr.Width, rDescr.Height ) );
     if ( (FontFamily)rDescr.Family != FAMILY_DONTKNOW )
         aFont.SetFamily( (FontFamily)rDescr.Family );
-    if ( (CharSet)rDescr.CharSet != RTL_TEXTENCODING_DONTKNOW )
-        aFont.SetCharSet( (CharSet)rDescr.CharSet );
+    if ( (rtl_TextEncoding)rDescr.CharSet != RTL_TEXTENCODING_DONTKNOW )
+        aFont.SetCharSet( (rtl_TextEncoding)rDescr.CharSet );
     if ( (FontPitch)rDescr.Pitch != PITCH_DONTKNOW )
         aFont.SetPitch( (FontPitch)rDescr.Pitch );
     if ( rDescr.CharacterWidth )

@@ -335,7 +335,7 @@ static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecon
 }
 }
 
-sal_uInt16 ImplGetComponentType( const String& rServiceName )
+sal_uInt16 ImplGetComponentType( const OUString& rServiceName )
 {
     static bool bSorted = false;
     if( !bSorted )
@@ -628,7 +628,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     if ( aServiceName == "tabcontrolnotabs" )
     {
         nWinBits |= WB_NOBORDER;
-        nType = ImplGetComponentType( String( "tabcontrol" ) );
+        nType = ImplGetComponentType( OUString( "tabcontrol" ) );
     }
     if ( !pParent )
     {
@@ -705,7 +705,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXEdit;
             break;
             case WINDOW_ERRORBOX:
-                pNewWindow = new ErrorBox( pParent, nWinBits, String() );
+                pNewWindow = new ErrorBox( pParent, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WINDOW_FIXEDBITMAP:
@@ -754,7 +754,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXButton;
             break;
             case WINDOW_INFOBOX:
-                pNewWindow = new InfoBox( pParent, String() );
+                pNewWindow = new InfoBox( pParent, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WINDOW_LISTBOX:
@@ -775,7 +775,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXButton;
             break;
             case WINDOW_MESSBOX:
-                pNewWindow = new MessBox( pParent, nWinBits, String(), String() );
+                pNewWindow = new MessBox( pParent, nWinBits, OUString(), OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WINDOW_METRICBOX:
@@ -838,7 +838,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 *ppNewComp = new VCLXButton;
             break;
             case WINDOW_QUERYBOX:
-                pNewWindow = new QueryBox( pParent, nWinBits, String() );
+                pNewWindow = new QueryBox( pParent, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WINDOW_RADIOBUTTON:
@@ -914,7 +914,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new TriStateBox( pParent, nWinBits );
             break;
             case WINDOW_WARNINGBOX:
-                pNewWindow = new WarningBox( pParent, nWinBits, String() );
+                pNewWindow = new WarningBox( pParent, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
             case WINDOW_WORKWINDOW:

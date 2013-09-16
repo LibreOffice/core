@@ -1595,7 +1595,7 @@ OUString VCLXListBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    String aItem;
+    OUString aItem;
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
         aItem = pBox->GetEntry( nPos );
@@ -1649,7 +1649,7 @@ OUString VCLXListBox::getSelectedItem() throw(::com::sun::star::uno::RuntimeExce
 {
     SolarMutexGuard aGuard;
 
-    String aItem;
+    OUString aItem;
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
         aItem = pBox->GetSelectEntry();
@@ -1729,7 +1729,7 @@ void VCLXListBox::selectItem( const OUString& rItemText, sal_Bool bSelect ) thro
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
     {
-        String aItemText( rItemText );
+        OUString aItemText( rItemText );
         selectItemPos( pBox->GetEntryPos( aItemText ), bSelect );
     }
 }
@@ -2215,7 +2215,7 @@ OUString VCLXMessageBox::getCaptionText() throw(::com::sun::star::uno::RuntimeEx
 {
     SolarMutexGuard aGuard;
 
-    String aText;
+    OUString aText;
     Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
