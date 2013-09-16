@@ -20,6 +20,7 @@
 #include "unoidl/unoidl.hxx"
 
 #include "legacyprovider.hxx"
+#include "sourcefileprovider.hxx"
 #include "sourcetreeprovider.hxx"
 #include "unoidlprovider.hxx"
 
@@ -116,6 +117,9 @@ rtl::Reference< Provider > loadProvider(
         {
             return new detail::SourceTreeProvider(manager, uri);
         }
+    }
+    if (uri.endsWith(".idl")) {
+        return new detail::SourceFileProvider(manager, uri);
     }
     try {
         return new detail::UnoidlProvider(uri);
