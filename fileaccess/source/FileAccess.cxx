@@ -228,10 +228,10 @@ void OFileAccess::transferImpl( const OUString& rSource,
     // SfxContentHelper::Transfer_Impl
     INetURLObject aSourceObj( rSource, INET_PROT_FILE );
     INetURLObject aDestObj( rDest, INET_PROT_FILE );
-    String aName = aDestObj.getName(
+    OUString aName = aDestObj.getName(
         INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    String aDestURL;
-    String aSourceURL = aSourceObj.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aDestURL;
+    OUString aSourceURL = aSourceObj.GetMainURL( INetURLObject::NO_DECODE );
     if ( aDestObj.removeSegment() )
     {
         // hierarchical URL.
@@ -367,13 +367,13 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 
     // SfxContentHelper::MakeFolder
     INetURLObject aURL( NewFolderURL, INET_PROT_FILE );
-    String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    if ( aTitle.Len() )
+    OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    if ( !aTitle.isEmpty() )
     {
         aURL.removeSegment();
 
         // Does the base folder exist? Otherwise create it first
-        String aBaseFolderURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aBaseFolderURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
         if( !isFolder( aBaseFolderURLStr ) )
         {
             createFolder( aBaseFolderURLStr );
@@ -731,14 +731,14 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
             INetURLObject aParentURLObj( aURL );
             if ( aParentURLObj.removeSegment() )
             {
-                String aParentURL
+                OUString aParentURL
                     = aParentURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 // ensure all parent folders exist.
                 createFolder( aParentURL );
 
                 // create the new file...
-                String aTitle
+                OUString aTitle
                     = aURL.getName( INetURLObject::LAST_SEGMENT,
                                     true,
                                     INetURLObject::DECODE_WITH_CHARSET );
