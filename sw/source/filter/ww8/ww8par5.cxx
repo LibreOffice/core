@@ -1359,7 +1359,7 @@ returns an identifier of the bookmark attribute to close after inserting
 the appropriate set/ask field.
 */
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
-    String &rOrigName, const String &rData)
+    OUString &rOrigName, const OUString &rData)
 {
     OSL_ENSURE(pPlcxMan,"No pPlcxMan");
     long nNo;
@@ -1369,18 +1369,17 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     */
     sal_uInt16 nIndex;
     pPlcxMan->GetBook()->MapName(rOrigName);
-    String sName = pPlcxMan->GetBook()->GetBookmark(
+    OUString sName = pPlcxMan->GetBook()->GetBookmark(
         pF->nSCode, pF->nSCode + pF->nLen, nIndex);
-    if (sName.Len())
+    if (!sName.isEmpty())
     {
         pPlcxMan->GetBook()->SetStatus(nIndex, BOOK_IGNORE);
         nNo = nIndex;
     }
     else
     {
-        sName = OUString("WWSetBkmk");
         nNo = pReffingStck->aFieldVarNames.size()+1;
-        sName += OUString::number(nNo);
+        sName = "WWSetBkmk" + OUString::number(nNo);
         nNo += pPlcxMan->GetBook()->GetIMax();
     }
     pReffedStck->NewAttr(*pPaM->GetPoint(),
@@ -1406,14 +1405,14 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
     if (pFld && RES_GETREFFLD == pFld->Which())
     {
         //Get the name of the ref field, and see if actually a variable
-        const String &rName = pFld->GetPar1();
-        ::std::map<String,String,SwWW8FltRefStack::ltstr>::const_iterator
-            aResult = aFieldVarNames.find(rName);
+        const OUString sName = pFld->GetPar1();
+        ::std::map<OUString, OUString, SwWW8FltRefStack::ltstr>::const_iterator
+            aResult = aFieldVarNames.find(sName);
 
         if (aResult != aFieldVarNames.end())
         {
             SwGetExpField aFld( (SwGetExpFieldType*)
-                pDoc->GetSysFldType(RES_GETEXPFLD), rName, nsSwGetSetExpType::GSE_STRING, 0);
+                pDoc->GetSysFldType(RES_GETEXPFLD), sName, nsSwGetSetExpType::GSE_STRING, 0);
             delete rEntry.pAttr;
             SwFmtFld aTmp(aFld);
             rEntry.pAttr = aTmp.Clone();
@@ -1425,25 +1424,23 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
 
 String SwWW8ImplReader::GetMappedBookmark(const String &rOrigName)
 {
-    String sName(BookmarkToWriter(rOrigName));
+    OUString sName(BookmarkToWriter(rOrigName));
     OSL_ENSURE(pPlcxMan,"no pPlcxMan");
     pPlcxMan->GetBook()->MapName(sName);
 
     //See if there has been a variable set with this name, if so get
     //the pseudo bookmark name that was set with it.
-    ::std::map<String,String,SwWW8FltRefStack::ltstr>::const_iterator aResult =
+    ::std::map<OUString, OUString, SwWW8FltRefStack::ltstr>::const_iterator aResult =
             pReffingStck->aFieldVarNames.find(sName);
 
-    const String &rBkmName = (aResult == pReffingStck->aFieldVarNames.end())
+    return (aResult == pReffingStck->aFieldVarNames.end())
         ? sName : (*aResult).second;
-
-    return rBkmName;
 }
 
 // "ASK"
 eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
 {
-    String sOrigName;
+    OUString sOrigName;
     String aQ;
     String aDef;
     WW8ReadFieldParams aReadParam( rStr );
@@ -1455,7 +1452,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
         switch( nRet )
         {
         case -2:
-            if (!sOrigName.Len())
+            if (sOrigName.isEmpty())
                 sOrigName = aReadParam.GetResult();
             else if( !aQ.Len() )
                 aQ = aReadParam.GetResult();
@@ -1468,10 +1465,10 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
         }
     }
 
-    if( !sOrigName.Len() )
+    if (sOrigName.isEmpty())
         return FLD_TAGIGN;  // macht ohne Textmarke keinen Sinn
 
-    String aResult(GetFieldResult(pF));
+    const OUString aResult(GetFieldResult(pF));
 
     //#i24377#, munge Default Text into title as we have only one slot
     //available for aResult and aDef otherwise
@@ -1482,7 +1479,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
         aQ.Append(aDef);
     }
 
-    long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
+    const long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
 
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
         SwSetExpFieldType(&rDoc, sOrigName, nsSwGetSetExpType::GSE_STRING));
@@ -2058,8 +2055,8 @@ eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, OUString& rStr )
 // "SET"
 eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
 {
-    String sOrigName;
-    String sVal;
+    OUString sOrigName;
+    OUString sVal;
     WW8ReadFieldParams aReadParam( rStr );
     for (;;)
     {
@@ -2069,15 +2066,15 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
         switch( nRet )
         {
         case -2:
-            if( !sOrigName.Len() )
+            if (sOrigName.isEmpty())
                 sOrigName = aReadParam.GetResult();
-            else if( !sVal.Len() )
+            else if (sVal.isEmpty())
                 sVal = aReadParam.GetResult();
             break;
         }
     }
 
-    long nNo = MapBookmarkVariables(pF,sOrigName,sVal);
+    const long nNo = MapBookmarkVariables(pF, sOrigName, sVal);
 
     SwFieldType* pFT = rDoc.InsertFldType( SwSetExpFieldType( &rDoc, sOrigName,
         nsSwGetSetExpType::GSE_STRING ) );

@@ -742,7 +742,7 @@ public:
     bool GetIsEnd() const { return nIsEnd ? true : false; }
     long GetHandle() const;
     void SetStatus( sal_uInt16 nIndex, eBookStatus eStat );
-    bool MapName(String& rName);
+    bool MapName(OUString& rName);
     String GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex);
     eBookStatus GetStatus() const;
     OUString GetUniqueBookmarkName(const OUString &rSuggestedName);

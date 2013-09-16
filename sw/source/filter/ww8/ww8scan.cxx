@@ -4136,7 +4136,7 @@ OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
     return aRet;
 }
 
-bool WW8PLCFx_Book::MapName(String& rName)
+bool WW8PLCFx_Book::MapName(OUString& rName)
 {
     if( !pBook[0] || !pBook[1] )
         return false;
@@ -4145,7 +4145,7 @@ bool WW8PLCFx_Book::MapName(String& rName)
     sal_uInt16 i = 0;
     do
     {
-        if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(aBookNames[i]))
+        if (rName.equalsIgnoreAsciiCase(aBookNames[i]))
         {
             rName = aBookNames[i];
             bFound = true;
