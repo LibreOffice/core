@@ -162,6 +162,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mpDoc( &rDocument ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
+    mbSelectAll(false),
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()
 {
@@ -236,6 +237,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mpDoc( rShell.GetDoc() ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
+    mbSelectAll(false),
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()
 {

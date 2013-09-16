@@ -159,6 +159,10 @@ long SwWrtShell::SelAll()
         }
         SttSelect();
         GoEnd(sal_True, &bMoveTable);
+
+        if (StartsWithTable())
+            ExtendedSelectAll();
+
         if( pStartPos )
         {
             pTmpCrsr = getShellCrsr( false );

@@ -327,6 +327,10 @@ public:
     // if ExtendedSelect() is called afterwards, the whole nodes array is selected
     // only for usage in special cases allowed!
     void ExtendedSelectAll();
+    /// If ExtendedSelectAll() was called and selection didn't change since then.
+    bool ExtendedSelectedAll();
+    /// If document body starts with a table.
+    bool StartsWithTable();
 
     SwPaM* GetCrsr( sal_Bool bMakeTblCrsr = sal_True ) const;
     inline SwCursor* GetSwCrsr( sal_Bool bMakeTblCrsr = sal_True ) const;
