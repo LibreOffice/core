@@ -177,7 +177,7 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
         Graphic aGraphic;
 
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( aGraphic, String(), *pStream, GRFILTER_FORMAT_DONTKNOW );
+        rGF.ImportGraphic( aGraphic, OUString(), *pStream, GRFILTER_FORMAT_DONTKNOW );
 
         BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 

@@ -207,7 +207,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         }
 
         // We have to map commands which uses special characters like '/',':','?','\','<'.'>','|'
-        String aExt = OUString(".png");
+        OUString aExt = OUString(".png");
         m_aImageCommandNameVector.resize(aCmdImageSeq.getLength() );
         m_aImageNameVector.resize( aCmdImageSeq.getLength() );
 
@@ -218,7 +218,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         // Create a image name vector that must be provided to the vcl imagelist. We also need
         // a command to image name map to speed up access time for image retrieval.
         OUString aUNOString( ".uno:" );
-        String   aEmptyString;
+        OUString aEmptyString;
         const sal_uInt32 nCount = m_aImageCommandNameVector.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {

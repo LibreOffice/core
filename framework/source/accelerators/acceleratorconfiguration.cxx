@@ -849,13 +849,13 @@ AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const Accelerator
     {
         const css::awt::KeyEvent& rAWTKey = *pIt;
         const KeyCode             aVCLKey = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey);
-        const String              sName   = aVCLKey.GetName();
+        const OUString            sName   = aVCLKey.GetName();
 
-        if (sName.Len () > 0)
+        if (!sName.isEmpty())
             return pIt;
     }
 
-    return lKeys.end ();
+    return lKeys.end();
 }
 
 //-----------------------------------------------

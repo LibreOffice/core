@@ -737,7 +737,7 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
         sal_uInt16 nNewItemId( 0 );
         sal_uInt16 nInsertPos( MENU_APPEND );
         sal_uInt16 nBeforePos( MENU_APPEND );
-        String aCommandBefore( OUString(".uno:About"));
+        OUString aCommandBefore( ".uno:About" );
         for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( n );
@@ -847,8 +847,8 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
             if (( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR ) &&
                 ( pMenu->GetItemText( nItemId ).isEmpty() ))
             {
-                String aCommand = pMenu->GetItemCommand( nItemId );
-                if ( aCommand.Len() > 0 ) {
+                OUString aCommand = pMenu->GetItemCommand( nItemId );
+                if ( !aCommand.isEmpty() ) {
                     pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aCommand ));
                 }
             }
@@ -1235,7 +1235,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, (MenuBar *)pMenu );
     }
 
-    String      aEmpty;
+    OUString    aEmpty;
     sal_Bool    bAccessibilityEnabled( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() );
     sal_uInt16 nItemCount = pMenu->GetItemCount();
     OUString aItemCommand;

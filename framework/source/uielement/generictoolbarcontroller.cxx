@@ -68,10 +68,10 @@ static OUString getEnumCommand( const OUString& rCommand )
     INetURLObject aURL( rCommand );
 
     OUString   aEnumCommand;
-    String          aURLPath = aURL.GetURLPath();
-    xub_StrLen      nIndex   = aURLPath.Search( '.' );
-    if (( nIndex > 0 ) && ( nIndex < aURLPath.Len() ))
-        aEnumCommand = aURLPath.Copy( nIndex+1 );
+    OUString   aURLPath = aURL.GetURLPath();
+    sal_Int32  nIndex   = aURLPath.indexOf( '.' );
+    if (( nIndex > 0 ) && ( nIndex < aURLPath.getLength() ))
+        aEnumCommand = aURLPath.copy( nIndex+1 );
 
     return aEnumCommand;
 }

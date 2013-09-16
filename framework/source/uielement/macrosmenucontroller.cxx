@@ -87,7 +87,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 
     // insert basic
     OUString aCommand(".uno:MacroDialog");
-    String aDisplayName = RetrieveLabelFromCommand( aCommand );
+    OUString aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
 
@@ -189,15 +189,15 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
                 if ( serviceNames[ index ].indexOf( providerKey ) == 0 )
                 {
                     OUString serviceName = serviceNames[ index ];
-                    String aCommand =  aCmdBase;
-                    String aDisplayName = String( serviceName.copy( providerKey.getLength() ) );
-                    if( aDisplayName.Equals( OUString("Java") ) || aDisplayName.Equals( OUString("Basic") ) )
+                    OUString aCommand = aCmdBase;
+                    OUString aDisplayName = serviceName.copy( providerKey.getLength() );
+                    if( aDisplayName == "Java" || aDisplayName == "Basic" )
                     {
                         // no entries for Java & Basic added elsewhere
                         break;
                     }
-                    aCommand.Append( aDisplayName );
-                    aDisplayName.Append( ellipsis );
+                    aCommand += aDisplayName;
+                    aDisplayName += ellipsis;
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
                     itemId++;

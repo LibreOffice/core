@@ -698,7 +698,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
 
     // Remove uno and cmd protocol part as we want to support both of them. We store only the command part
     // in our hash map. All other protocols are stored with the protocol part.
-    String aCommand( aURL.Main );
+    OUString aCommand( aURL.Main );
     if ( aURL.Protocol.equalsIgnoreAsciiCaseAsciiL( UNO_PROTOCOL, sizeof( UNO_PROTOCOL )-1 ))
         aCommand = aURL.Path;
 

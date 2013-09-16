@@ -182,8 +182,8 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 sal_uLong nCount = aFontSizeNames.Count();
                 for( sal_uLong i = 0; i < nCount; i++ )
                 {
-                    String  aSizeName = aFontSizeNames.GetIndexName( i );
-                    long    nSize = aFontSizeNames.GetIndexSize( i );
+                    OUString  aSizeName = aFontSizeNames.GetIndexName( i );
+                    long      nSize = aFontSizeNames.GetIndexSize( i );
                     m_pHeightArray[nPos] = nSize;
                     nPos++; // Id is nPos+1
                     pVCLPopupMenu->InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
@@ -200,8 +200,8 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 pTempAry = pAry;
                 while ( *pTempAry )
                 {
-                    String aSizeName = aFontSizeNames.Size2Name( *pTempAry );
-                    if ( aSizeName.Len() )
+                    OUString aSizeName = aFontSizeNames.Size2Name( *pTempAry );
+                    if ( !aSizeName.isEmpty() )
                     {
                         m_pHeightArray[nPos] = *pTempAry;
                         nPos++; // Id is nPos+1

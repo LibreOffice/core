@@ -102,8 +102,8 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
                 if ( !bImageSet )
                 {
-                    String aCmd( pPopupMenu->GetItemCommand( nItemId ) );
-                    if ( aCmd.Len() )
+                    OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
+                    if ( !aCmd.isEmpty() )
                         aImage = GetImageFromURL( xFrame, aCmd, false );
 
                     if ( !!aImage )

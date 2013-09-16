@@ -74,10 +74,10 @@ class LicenseDialog : public ModalDialog
     PushButton      aPBDecline;
     PushButton      aPBAccept;
     FixedImage      aArrow;
-    String          aStrAccept;
-    String          aStrNotAccept;
-    String          aOldCancelText;
-    sal_Bool            bEndReached;
+    OUString        aStrAccept;
+    OUString        aStrNotAccept;
+    OUString        aOldCancelText;
+    sal_Bool        bEndReached;
 
     void                EnableControls();
 

@@ -584,7 +584,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 {
                     // Do handle file URL differently => convert it to a system
                     // path and abbreviate it with a special function:
-                    String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+                    OUString aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
                     OUString aSystemPath( aFileSystemPath );
                     OUString aCompactedSystemPath;
@@ -592,14 +592,14 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     aTipHelpText = aSystemPath;
                     oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
                     if ( !nError )
-                        aMenuTitle = String( aCompactedSystemPath );
+                        aMenuTitle = aCompactedSystemPath;
                     else
                         aMenuTitle = aSystemPath;
                 }
                 else
                 {
                     // Use INetURLObject to abbreviate all other URLs
-                    String  aShortURL;
+                    OUString  aShortURL;
                     aShortURL = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
                     aMenuTitle += aShortURL;
                     aTipHelpText = aURLString;

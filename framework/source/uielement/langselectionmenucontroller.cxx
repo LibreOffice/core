@@ -248,7 +248,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
         {
             pPopupMenu->InsertItem( nItemId, rStr );
             aCmd = aCmd_Language;
-            aCmd += String( rStr );
+            aCmd += rStr;
             pPopupMenu->SetItemCommand( nItemId, aCmd );
             if (rStr == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
@@ -261,19 +261,19 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     // entry for LANGUAGE_NONE
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )) );
+    pPopupMenu->InsertItem( nItemId, OUString(FwlResId( STR_LANGSTATUS_NONE )) );
     aCmd = aCmd_Language + "LANGUAGE_NONE";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for 'Reset to default language'
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_RESET_TO_DEFAULT_LANGUAGE )) );
+    pPopupMenu->InsertItem( nItemId, OUString(FwlResId( STR_RESET_TO_DEFAULT_LANGUAGE )) );
     aCmd = aCmd_Language + "RESET_LANGUAGES";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for opening the Format/Character dialog
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_MORE )));
+    pPopupMenu->InsertItem( nItemId, OUString(FwlResId( STR_LANGSTATUS_MORE )));
     pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
 }
 

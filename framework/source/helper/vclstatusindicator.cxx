@@ -98,7 +98,7 @@ void SAL_CALL VCLStatusIndicator::reset()
     if (m_pStatusBar)
     {
         m_pStatusBar->SetProgressValue(0);
-        m_pStatusBar->SetText(String());
+        m_pStatusBar->SetText(OUString());
     }
     // <- SOLAR SAFE ----------------------------
 }

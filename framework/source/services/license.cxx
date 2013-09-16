@@ -352,8 +352,8 @@ LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
     aStyle |= WB_REPEAT;
     aPBPageDown.SetStyle( aStyle );
 
-    String aText = aInfo2FT.GetText();
-    aText.SearchAndReplaceAll( OUString("%PAGEDOWN"), aPBPageDown.GetText() );
+    OUString aText = aInfo2FT.GetText();
+    aText = aText.replaceAll( "%PAGEDOWN", aPBPageDown.GetText() );
     aInfo2FT.SetText( aText );
 
     aPBDecline.SetText( aStrNotAccept );

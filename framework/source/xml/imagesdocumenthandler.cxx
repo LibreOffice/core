@@ -283,7 +283,7 @@ throw(  SAXException, RuntimeException )
                     }
                 } // for
 
-                if ( m_pImages->aURL.Len() == 0 )
+                if ( m_pImages->aURL.isEmpty() )
                 {
                     delete m_pImages;
                     m_pImages = NULL;
@@ -356,7 +356,7 @@ throw(  SAXException, RuntimeException )
                 }
 
                 // Check required attribute "command"
-                if ( pItem->aCommandURL.Len() == 0 )
+                if ( pItem->aCommandURL.isEmpty() )
                 {
                     delete pItem;
                     delete m_pImages;
@@ -459,7 +459,7 @@ throw(  SAXException, RuntimeException )
                 }
 
                 // Check required attribute "command"
-                if ( pItem->aCommandURL.Len() == 0 )
+                if ( pItem->aCommandURL.isEmpty() )
                 {
                     delete pItem;
                     delete m_pImages;
@@ -473,7 +473,7 @@ throw(  SAXException, RuntimeException )
                 }
 
                 // Check required attribute "href"
-                if ( pItem->aURL.Len() == 0 )
+                if ( pItem->aURL.isEmpty() )
                 {
                     delete pItem;
                     delete m_pImages;
@@ -704,7 +704,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
                              m_aAttributeType,
                              pImageList->aMaskURL );
 
-        if ( pImageList->aHighContrastMaskURL.Len() > 0 )
+        if ( !pImageList->aHighContrastMaskURL.isEmpty() )
         {
             pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_HIGHCONTRASTMASKURL ),
                                  m_aAttributeType,
@@ -728,7 +728,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
                              OUString( ATTRIBUTE_MASKMODE_COLOR ) );
     }
 
-    if ( pImageList->aHighContrastURL.Len() > 0 )
+    if ( !pImageList->aHighContrastURL.isEmpty() )
     {
         pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_HIGHCONTRASTURL ),
                              m_aAttributeType,
@@ -798,14 +798,14 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
                          m_aAttributeType,
                          m_aAttributeValueSimple );
 
-    if ( pExternalImage->aURL.Len() > 0 )
+    if ( !pExternalImage->aURL.isEmpty() )
     {
         pList->AddAttribute( m_aXMLXlinkNS + OUString( ATTRIBUTE_HREF ),
                              m_aAttributeType,
                              pExternalImage->aURL );
     }
 
-    if ( pExternalImage->aCommandURL.Len() > 0 )
+    if ( !pExternalImage->aCommandURL.isEmpty() )
     {
         pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_COMMAND ),
                              m_aAttributeType,

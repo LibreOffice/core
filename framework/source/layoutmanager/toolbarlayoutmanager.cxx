@@ -970,11 +970,11 @@ void ToolbarLayoutManager::setDockingAreaOffsets( const ::Rectangle aOffsets )
 
 OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const
 {
-    String aAddonGenericTitle(FWK_RESSTR(STR_TOOLBAR_TITLE_ADDON));
+    OUString aAddonGenericTitle(FWK_RESSTR(STR_TOOLBAR_TITLE_ADDON));
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    String aNumStr = rI18nHelper.GetNum( nNumber, 0, sal_False, sal_False );
-    aAddonGenericTitle.SearchAndReplaceAscii( "%num%", aNumStr );
+    OUString aNumStr = rI18nHelper.GetNum( nNumber, 0, sal_False, sal_False );
+    aAddonGenericTitle = aAddonGenericTitle.replaceFirst( "%num%", aNumStr );
 
     return OUString( aAddonGenericTitle );
 }
@@ -1446,8 +1446,8 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             pWindow = VCLUnoHelper::GetWindow( xWindow );
             if ( pWindow )
             {
-                String aText = pWindow->GetText();
-                if ( aText.Len() == 0 )
+                OUString aText = pWindow->GetText();
+                if ( aText.isEmpty() )
                     pWindow->SetText( rElement.m_aUIName );
                 if ( rElement.m_bNoClose )
                     pWindow->SetStyle( pWindow->GetStyle() & ~WB_CLOSEABLE );
@@ -1469,8 +1469,8 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             if ( pWindow )
             {
                 SolarMutexGuard aGuard;
-                String aText = pWindow->GetText();
-                if ( aText.Len() == 0 )
+                OUString aText = pWindow->GetText();
+                if ( aText.isEmpty() )
                     pWindow->SetText( rElement.m_aUIName );
             }
 
