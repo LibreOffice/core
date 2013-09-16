@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Executable_Executable,reg2unoidl))
+$(eval $(call gb_Executable_Executable,unoidl-write))
 
-$(eval $(call gb_Executable_add_exception_objects,reg2unoidl, \
-    unoidl/source/reg2unoidl \
+$(eval $(call gb_Executable_add_exception_objects,unoidl-write, \
+    unoidl/source/unoidl-write \
 ))
 
-$(eval $(call gb_Executable_use_libraries,reg2unoidl, \
+$(eval $(call gb_Executable_use_libraries,unoidl-write, \
     sal \
     salhelper \
     unoidl \

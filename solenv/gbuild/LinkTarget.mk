@@ -850,11 +850,11 @@ gb_BUILD_HELPER_LIBS := basegfx \
 
 gb_BUILD_HELPER_TOOLS := cppumaker \
 	idlc \
-	reg2unoidl \
 	regcompare \
 	regmerge \
 	rsc \
-	svidl
+	svidl \
+	unoidl-write \
 
 define gb_LinkTarget__is_build_lib
 $(if $(filter $(1),$(foreach lib,$(gb_BUILD_HELPER_LIBS),$(call gb_Library_get_linktargetname,$(lib)))),$(true),$(false))

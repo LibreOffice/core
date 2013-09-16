@@ -80,7 +80,7 @@ endif
 
 gb_UnoApiTarget_REGCOMPAREDEPS := $(call gb_Executable_get_runtime_dependencies,regcompare)
 gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regcompare)
-gb_UnoApiTarget_REGMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,regmerge) $(call gb_Executable_get_runtime_dependencies,reg2unoidl)
+gb_UnoApiTarget_REGMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,regmerge) $(call gb_Executable_get_runtime_dependencies,unoidl-write)
 gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regmerge)
 
 gb_UnoApiTarget_TYPESRDB := $(call gb_UnoApiTarget_get_target,types)
@@ -90,7 +90,7 @@ RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(1).oldformat $(2) $(3))
 $(gb_UnoApiTarget_REGMERGECOMMAND) @$${RESPONSEFILE} && \
 rm -f $${RESPONSEFILE} && \
 SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin \
-	$(call gb_Executable_get_command,reg2unoidl) \
+	$(call gb_Executable_get_command,unoidl-write) \
 	$(foreach rdb,$(4),$(call gb_UnoApiTarget_get_target,$(rdb))) \
 	$(1).oldformat $(1)
 endef

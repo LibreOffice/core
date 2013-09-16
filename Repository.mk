@@ -48,7 +48,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	pdfunzip \
 	pocheck \
 	propex \
-	reg2unoidl \
 	regsvrex \
 	rsc \
 	saxparser \
@@ -60,6 +59,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	treex \
 	uiex \
 	ulfex \
+	unoidl-write \
 	xrmex \
 ))
 

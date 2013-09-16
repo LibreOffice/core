@@ -34,9 +34,38 @@
 
 namespace {
 
-OUString getArgumentUri(sal_uInt32 argument) {
+void badUsage() {
+    std::cerr
+        << "Usage:" << std::endl << std::endl
+        << "  unoidl-write [<registries>] [@<entities file>] <unoidl file>"
+        << std::endl << std::endl
+        << ("where each <registry> is either a new- or legacy-format .rdb"
+            " file or a")
+        << std::endl
+        << ("root directory of an .idl file tree, and the UTF-8 encoded"
+            " <entities file>")
+        << std::endl
+        << ("contains zero or more space-separated names of (non-module)"
+            " entities to include")
+        << std::endl
+        << ("in the output, and, if omitted, defaults to the complete content"
+            " of the final")
+        << std::endl << "<registry>, if any." << std::endl;
+    std::exit(EXIT_FAILURE);
+}
+
+OUString getArgumentUri(sal_uInt32 argument, bool * entities) {
     OUString arg;
     rtl_getAppCommandArg(argument, &arg.pData);
+    if (arg.startsWith("@")) {
+        if (entities == 0) {
+            badUsage();
+        }
+        *entities = true;
+        arg = arg.copy(1);
+    } else if (entities != 0) {
+        *entities = false;
+    }
     OUString url;
     osl::FileBase::RC e1 = osl::FileBase::getFileURLFromSystemPath(arg, url);
     if (e1 != osl::FileBase::E_None) {
@@ -62,22 +91,6 @@ OUString getArgumentUri(sal_uInt32 argument) {
         std::exit(EXIT_FAILURE);
     }
     return abs;
-}
-
-rtl::Reference< unoidl::Provider > load(
-    rtl::Reference< unoidl::Manager > const & manager, OUString const & uri)
-{
-    try {
-        return unoidl::loadProvider(manager, uri);
-    } catch (unoidl::NoSuchFileException &) {
-        std::cerr << "Input <" << uri << "> does not exist" << std::endl;
-        std::exit(EXIT_FAILURE);
-    } catch (unoidl::FileFormatException & e) {
-        std::cerr
-            << "Cannot read input <" << uri << ">: " << e.getDetail()
-            << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
 }
 
 sal_uInt64 getOffset(osl::File & file) {
@@ -292,6 +305,7 @@ struct Item {
     {}
 
     rtl::Reference< unoidl::Entity > entity;
+    std::map< OUString, Item > module;
     sal_uInt64 nameOffset;
     sal_uInt64 dataOffset;
 };
@@ -310,35 +324,139 @@ struct ConstItem {
     sal_uInt64 dataOffset;
 };
 
-sal_uInt64 writeMap(
-    osl::File & file, rtl::Reference< unoidl::MapCursor > const & cursor,
-    std::size_t * rootSize)
+void mapEntities(
+    rtl::Reference< unoidl::Manager > const & manager, OUString const & uri,
+    std::map< OUString, Item > & map)
 {
-    assert(cursor.is());
-    std::map< OUString, Item > map;
+    assert(manager.is());
+    osl::File f(uri);
+    osl::FileBase::RC e = f.open(osl_File_OpenFlag_Read);
+    if (e != osl::FileBase::E_None) {
+        std::cerr
+            << "Cannot open <" << f.getURL() << "> for reading, error code "
+            << +e << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
     for (;;) {
-        OUString name;
-        rtl::Reference< unoidl::Entity > ent(cursor->getNext(&name));
-        if (!ent.is()) {
-            break;
-        }
-        if (!map.insert(std::make_pair(name, Item(ent))).second) {
-            std::cout << "Duplicate name \"" << name << '"' << std::endl;
+        sal_Bool eof;
+        e = f.isEndOfFile(&eof);
+        if (e != osl::FileBase::E_None) {
+            std::cerr
+                << "Cannot check <" << f.getURL() << "> for EOF, error code "
+                << +e << std::endl;
             std::exit(EXIT_FAILURE);
         }
+        if (eof) {
+            break;
+        }
+        rtl::ByteSequence s1;
+        e = f.readLine(s1);
+        if (e != osl::FileBase::E_None) {
+            std::cerr
+                << "Cannot read from <" << f.getURL() << ">, error code "
+                << +e << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        OUString s2;
+        if (!rtl_convertStringToUString(
+                &s2.pData, reinterpret_cast< char const * >(s1.getConstArray()),
+                s1.getLength(), RTL_TEXTENCODING_UTF8,
+                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+                 | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+        {
+            std::cerr
+                << "Cannot interpret line read from <" << f.getURL()
+                << "> as UTF-8" << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        for (sal_Int32 i = 0; i != -1;) {
+            OUString t(s2.getToken(0, ' ', i));
+            if (!t.isEmpty()) {
+                rtl::Reference< unoidl::Entity > ent(manager->findEntity(t));
+                if (!ent.is()) {
+                    std::cerr
+                        << "Unknown entity \"" << t << "\" read from <"
+                        << f.getURL() << ">" << std::endl;
+                    std::exit(EXIT_FAILURE);
+                }
+                if (ent->getSort() == unoidl::Entity::SORT_MODULE) {
+                    std::cerr
+                        << "Module entity \"" << t << "\" read from <"
+                        << f.getURL() << ">" << std::endl;
+                    std::exit(EXIT_FAILURE);
+                }
+                std::map< OUString, Item > * map2 = &map;
+                for (sal_Int32 j = 0;;) {
+                    OUString id(t.getToken(0, '.', j));
+                    if (j == -1) {
+                        map2->insert(std::make_pair(id, Item(ent)));
+                        break;
+                    }
+                    std::map< OUString, Item >::iterator k(map2->find(id));
+                    if (k == map2->end()) {
+                        rtl::Reference< unoidl::Entity > ent2(
+                            manager->findEntity(t.copy(0, j - 1)));
+                        assert(ent2.is());
+                        k = map2->insert(std::make_pair(id, Item(ent2))).first;
+                    }
+                    assert(
+                        k->second.entity->getSort()
+                        == unoidl::Entity::SORT_MODULE);
+                    map2 = &k->second.module;
+                }
+            }
+        }
     }
+    e = f.close();
+    if (e != osl::FileBase::E_None) {
+        std::cerr
+            << "Cannot close <" << f.getURL() << "> after reading, error code "
+            << +e << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+}
+
+void mapCursor(
+    rtl::Reference< unoidl::MapCursor > const & cursor,
+    std::map< OUString, Item > & map)
+{
+    if (cursor.is()) {
+        for (;;) {
+            OUString name;
+            rtl::Reference< unoidl::Entity > ent(cursor->getNext(&name));
+            if (!ent.is()) {
+                break;
+            }
+            std::pair< std::map< OUString, Item >::iterator, bool > i(
+                map.insert(std::make_pair(name, Item(ent))));
+            if (!i.second) {
+                std::cout << "Duplicate name \"" << name << '"' << std::endl;
+                std::exit(EXIT_FAILURE);
+            }
+            if (i.first->second.entity->getSort()
+                == unoidl::Entity::SORT_MODULE)
+            {
+                mapCursor(
+                    rtl::Reference< unoidl::ModuleEntity >(
+                        static_cast< unoidl::ModuleEntity * >(
+                            i.first->second.entity.get()))->createCursor(),
+                    i.first->second.module);
+            }
+        }
+    }
+}
+
+sal_uInt64 writeMap(
+    osl::File & file, std::map< OUString, Item > & map, std::size_t * rootSize)
+{
     for (std::map< OUString, Item >::iterator i(map.begin()); i != map.end();
          ++i)
     {
         switch (i->second.entity->getSort()) {
         case unoidl::Entity::SORT_MODULE:
-            {
-                rtl::Reference< unoidl::ModuleEntity > ent2(
-                    static_cast< unoidl::ModuleEntity * >(
-                        i->second.entity.get()));
-                i->second.dataOffset = writeMap(file, ent2->createCursor(), 0);
-                break;
-            }
+            i->second.dataOffset = writeMap(file, i->second.module, 0);
+            break;
         case unoidl::Entity::SORT_ENUM_TYPE:
             {
                 rtl::Reference< unoidl::EnumTypeEntity > ent2(
@@ -905,73 +1023,90 @@ sal_uInt64 writeMap(
 }
 
 SAL_IMPLEMENT_MAIN() {
-    sal_uInt32 args = rtl_getAppCommandArgCount();
-    if (args < 2) {
-        std::cerr
-            << "Usage: reg2unoidl <extra .rdb files> <.rdb file> <unoidl file>"
-            << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    rtl::Reference< unoidl::Manager > mgr(new unoidl::Manager);
-    for (sal_uInt32 i = 0; i != args - 2; ++i) {
-        mgr->addProvider(load(mgr, getArgumentUri(i)));
-    }
-    rtl::Reference< unoidl::Provider > prov(
-        load(mgr, getArgumentUri(args - 2)));
-    osl::File f(getArgumentUri(args - 1));
-    osl::FileBase::RC e = f.open(osl_File_OpenFlag_Write);
-    if (e == osl::FileBase::E_NOENT) {
-        e = f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
-    }
-    if (e != osl::FileBase::E_None) {
-        std::cerr
-            << "Cannot open <" << f.getURL() << "> for writing, error code "
-            << +e << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    write(f, "UNOIDL\xFF\0", 8);
-    write32(f, 0); // root map offset
-    write32(f, 0); // root map size
-    write(
-        f,
-        RTL_CONSTASCII_STRINGPARAM(
-            "\0** Created by LibreOffice " LIBO_VERSION_DOTTED
-            " reg2unoidl **\0"));
-    sal_uInt64 off;
-    std::size_t size;
     try {
-        off = writeMap(f, prov->createRootCursor(), &size);
+        sal_uInt32 args = rtl_getAppCommandArgCount();
+        if (args == 0) {
+            badUsage();
+        }
+        rtl::Reference< unoidl::Manager > mgr(new unoidl::Manager);
+        bool entities = false;
+        rtl::Reference< unoidl::Provider > prov;
+        std::map< OUString, Item > map;
+        for (sal_uInt32 i = 0; i != args - 1; ++i) {
+            assert(args > 1);
+            OUString uri(getArgumentUri(i, i == args - 2 ? &entities : 0));
+            if (entities) {
+                mapEntities(mgr, uri, map);
+            } else {
+                try {
+                    prov = unoidl::loadProvider(mgr, uri);
+                } catch (unoidl::NoSuchFileException &) {
+                    std::cerr
+                        << "Input <" << uri << "> does not exist" << std::endl;
+                    std::exit(EXIT_FAILURE);
+                }
+                mgr->addProvider(prov);
+            }
+        }
+        if (!entities) {
+            mapCursor(
+                (prov.is()
+                 ? prov->createRootCursor()
+                 : rtl::Reference< unoidl::MapCursor >()),
+                map);
+        }
+        osl::File f(getArgumentUri(args - 1, 0));
+        osl::FileBase::RC e = f.open(osl_File_OpenFlag_Write);
+        if (e == osl::FileBase::E_NOENT) {
+            e = f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
+        }
+        if (e != osl::FileBase::E_None) {
+            std::cerr
+                << "Cannot open <" << f.getURL() << "> for writing, error code "
+                << +e << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        write(f, "UNOIDL\xFF\0", 8);
+        write32(f, 0); // root map offset
+        write32(f, 0); // root map size
+        write(
+            f,
+            RTL_CONSTASCII_STRINGPARAM(
+                "\0** Created by LibreOffice " LIBO_VERSION_DOTTED
+                " unoidl-write **\0"));
+        std::size_t size;
+        sal_uInt64 off = writeMap(f, map, &size);
+        e = f.setSize(getOffset(f)); // truncate in case it already existed
+        if (e != osl::FileBase::E_None) {
+            std::cerr
+                << "Cannot set size of <" << f.getURL() << ">, error code "
+                << +e << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        e = f.setPos(osl_Pos_Absolut, 8);
+        if (e != osl::FileBase::E_None) {
+            std::cerr
+                << "Cannot rewind current position in <" << f.getURL()
+                << ">, error code " << +e << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        write32(f, off);
+        write32(f, size);
+            // overflow from std::map::size_type -> sal_uInt64 is unrealistic
+        e = f.close();
+        if (e != osl::FileBase::E_None) {
+            std::cerr
+                << "Cannot close <" << f.getURL()
+                << "> after writing, error code " << +e << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        return EXIT_SUCCESS;
     } catch (unoidl::FileFormatException & e1) {
         std::cerr
             << "Bad input <" << e1.getUri() << ">: " << e1.getDetail()
             << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    e = f.setSize(getOffset(f)); // truncate in case it already existed
-    if (e != osl::FileBase::E_None) {
-        std::cerr
-            << "Cannot set size of <" << f.getURL() << ">, error code " << +e
-            << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    e = f.setPos(osl_Pos_Absolut, 8);
-    if (e != osl::FileBase::E_None) {
-        std::cerr
-            << "Cannot rewind current position in <" << f.getURL()
-            << ">, error code " << +e << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    write32(f, off);
-    write32(f, size);
-        // overflow from std::map::size_type -> sal_uInt64 is unrealistic
-    e = f.close();
-    if (e != osl::FileBase::E_None) {
-        std::cerr
-            << "Cannot close <" << f.getURL() << "> after writing, error code "
-            << +e << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    return EXIT_SUCCESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

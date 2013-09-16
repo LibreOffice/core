@@ -14,6 +14,7 @@
 #include <new>
 
 #include "osl/file.h"
+#include "osl/file.hxx"
 #include "osl/thread.h"
 #include "rtl/character.hxx"
 #include "rtl/ref.hxx"
@@ -86,6 +87,20 @@ private:
     { return rtl::Reference<Entity>(); } //TODO
 };
 
+class SourceModuleEntity: public ModuleEntity {
+public:
+    SourceModuleEntity() {}
+
+private:
+    virtual ~SourceModuleEntity() throw () {}
+
+    virtual std::vector<OUString> getMemberNames() const
+    { return std::vector<OUString>(); } //TODO
+
+    virtual rtl::Reference< MapCursor > createCursor() const
+    { return new Cursor; }
+};
+
 }
 
 SourceProvider::SourceProvider(
@@ -147,53 +162,67 @@ rtl::Reference<Entity> SourceProvider::findEntity(OUString const & name) const {
         throw FileFormatException( //TODO
             "", "Illegal UNOIDL identifier \"" + name + "\"");
     }
-    OUString uri(uri_ + buf.makeStringAndClear() + ".idl");
-    oslFileHandle handle;
-    oslFileError e = osl_openFile(uri.pData, &handle, osl_File_OpenFlag_Read);
-    switch (e) {
-    case osl_File_E_None:
-        break;
-    case osl_File_E_NOENT:
-        cache_.insert(
-            std::map< OUString, rtl::Reference<Entity> >::value_type(
-                name, rtl::Reference<Entity>()));
-        return rtl::Reference<Entity>();
-    default:
-        throw FileFormatException(uri, "cannot open: " + OUString::number(e));
-    }
-    sal_uInt64 size;
-    e = osl_getFileSize(handle, &size);
-    if (e != osl_File_E_None) {
-        oslFileError e2 = osl_closeFile(handle);
-        SAL_WARN_IF(
-            e2 != osl_File_E_None, "unoidl",
-            "cannot close " << uri << ": " << +e2);
-        throw FileFormatException(
-            uri, "cannot get size: " + OUString::number(e));
-    }
-    void * address;
-    e = osl_mapFile(handle, &address, size, 0, osl_File_MapFlag_RandomAccess);
-    if (e != osl_File_E_None) {
-        oslFileError e2 = osl_closeFile(handle);
-        SAL_WARN_IF(
-            e2 != osl_File_E_None, "unoidl",
-            "cannot close " << uri << ": " << +e2);
-        throw FileFormatException(uri, "cannot mmap: " + OUString::number(e));
-    }
+    OUString uri(uri_ + buf.makeStringAndClear());
     rtl::Reference<Entity> ent;
-    try {
-        ent = parse(manager_, name, uri, address, size);
-    } catch (...) {
+    osl::DirectoryItem item;
+    osl::FileStatus status(osl_FileStatus_Mask_Type);
+    if (osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None
+        && item.getFileStatus(status) == osl::FileBase::E_None
+        && status.getFileType() == osl::FileStatus::Directory)
+    {
+        ent = new SourceModuleEntity;
+    } else {
+        uri += ".idl";
+        oslFileHandle handle;
+        oslFileError e = osl_openFile(
+            uri.pData, &handle, osl_File_OpenFlag_Read);
+        switch (e) {
+        case osl_File_E_None:
+            break;
+        case osl_File_E_NOENT:
+            cache_.insert(
+                std::map< OUString, rtl::Reference<Entity> >::value_type(
+                    name, rtl::Reference<Entity>()));
+            return rtl::Reference<Entity>();
+        default:
+            throw FileFormatException(
+                uri, "cannot open: " + OUString::number(e));
+        }
+        sal_uInt64 size;
+        e = osl_getFileSize(handle, &size);
+        if (e != osl_File_E_None) {
+            oslFileError e2 = osl_closeFile(handle);
+            SAL_WARN_IF(
+                e2 != osl_File_E_None, "unoidl",
+                "cannot close " << uri << ": " << +e2);
+            throw FileFormatException(
+                uri, "cannot get size: " + OUString::number(e));
+        }
+        void * address;
+        e = osl_mapFile(
+            handle, &address, size, 0, osl_File_MapFlag_RandomAccess);
+        if (e != osl_File_E_None) {
+            oslFileError e2 = osl_closeFile(handle);
+            SAL_WARN_IF(
+                e2 != osl_File_E_None, "unoidl",
+                "cannot close " << uri << ": " << +e2);
+            throw FileFormatException(
+                uri, "cannot mmap: " + OUString::number(e));
+        }
+        try {
+            ent = parse(manager_, name, uri, address, size);
+        } catch (...) {
+            e = osl_unmapMappedFile(handle, address, size);
+            SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot unmap: " << +e);
+            e = osl_closeFile(handle);
+            SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot close: " << +e);
+            throw;
+        }
         e = osl_unmapMappedFile(handle, address, size);
         SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot unmap: " << +e);
         e = osl_closeFile(handle);
         SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot close: " << +e);
-        throw;
     }
-    e = osl_unmapMappedFile(handle, address, size);
-    SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot unmap: " << +e);
-    e = osl_closeFile(handle);
-    SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot close: " << +e);
     cache_.insert(
         std::map< OUString, rtl::Reference<Entity> >::value_type(name, ent));
     return ent;
