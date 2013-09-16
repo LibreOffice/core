@@ -34,6 +34,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
                                                              ofType:@"plist"];
     NSDictionary *appDefaults = [NSDictionary dictionaryWithContentsOfFile:defaultsPath];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    
+    NSString *defaultSettingsPath = [[NSBundle mainBundle] pathForResource:@"Root"
+                                                             ofType:@"plist"];
+    NSDictionary *appDefaultSettings = [NSDictionary dictionaryWithContentsOfFile:defaultSettingsPath];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaultSettings];
 
     [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil]
      setBackgroundImage:[UIImage imageNamed:@"navBarButtonNormal"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];

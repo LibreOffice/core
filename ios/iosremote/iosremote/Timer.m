@@ -113,7 +113,6 @@ int vibrationCount;
             // On ipad this just get ignored
             if (kCountDownTimerVibration && vibrationCount < 3){
                 vibrationCount++;
-                NSLog(@"Vibrating...");
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             }
         }

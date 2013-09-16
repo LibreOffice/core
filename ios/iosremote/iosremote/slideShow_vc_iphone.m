@@ -265,6 +265,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowFinishedObserver];
     [[NSNotificationCenter defaultCenter] removeObserver:self.slideShowImageNoteReadyObserver];
+    [[(slideShowSwipeInList *)self.revealViewController.rearViewController timer] clear];
     [super viewDidDisappear:animated];
 }
 

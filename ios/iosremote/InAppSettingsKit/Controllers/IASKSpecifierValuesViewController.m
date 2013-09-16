@@ -58,6 +58,8 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(handleBack)];
     [backButton setBackgroundImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     self.navigationItem.leftBarButtonItem = backButton;
+    
+    self.view.backgroundColor = [UIColor colorWithRed:.968627451 green:.968627451 blue:.968627451 alpha:1.0];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
