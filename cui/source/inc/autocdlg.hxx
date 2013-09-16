@@ -280,7 +280,7 @@ public:
 
     void    SetLanguage(LanguageType eSet);
     void    DeleteEntry(String sShort, String sLong);
-    void    NewEntry(String sShort, String sLong);
+    void    NewEntry(String sShort, String sLong, bool bKeepSourceFormatting);
 };
 
 // class OfaAutocorrExceptPage ---------------------------------------------
