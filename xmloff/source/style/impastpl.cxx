@@ -18,7 +18,11 @@
  */
 
 #include <tools/debug.hxx>
+#include <rtl/ustrbuf.hxx>
+
 #include "impastpl.hxx"
+
+using namespace std;
 
 // Class XMLAutoStyleFamily
 // ctor/dtor class XMLAutoStyleFamily
@@ -41,6 +45,31 @@ XMLAutoStyleFamily::~XMLAutoStyleFamily() {}
 void XMLAutoStyleFamily::ClearEntries()
 {
     maParents.clear();
+}
+
+// Class SvXMLAutoStylePoolProperties_Impl
+// ctor class SvXMLAutoStylePoolProperties_Impl
+
+XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties )
+: maProperties( rProperties ),
+  mnPos       ( rFamilyData.mnCount )
+{
+    // create a name that hasn't been used before. The created name has not
+    // to be added to the array, because it will never tried again
+    OUStringBuffer sBuffer( 7 );
+    do
+    {
+        rFamilyData.mnName++;
+        sBuffer.append( rFamilyData.maStrPrefix );
+        sBuffer.append( OUString::number( rFamilyData.mnName ) );
+        msName = sBuffer.makeStringAndClear();
+    }
+    while (rFamilyData.maNameList.find(msName) != rFamilyData.maNameList.end());
+}
+
+bool operator<( const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2)
+{
+    return r1.mnFamily < r2.mnFamily;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
