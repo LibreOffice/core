@@ -729,6 +729,42 @@ int OpenclDevice::initOpenclRunEnv( int argc )
     return 0;
 }
 
+namespace {
+
+void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bAmdFp64)
+{
+    bKhrFp64 = false;
+    bAmdFp64 = false;
+
+    // Check device extensions for double type
+    size_t aDevExtInfoSize = 0;
+
+    cl_uint clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize );
+    if( clStatus != CL_SUCCESS )
+        return;
+
+    boost::scoped_array<char> pExtInfo(new char[aDevExtInfoSize]);
+
+    clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS,
+                   sizeof(char) * aDevExtInfoSize, pExtInfo.get(), NULL);
+
+    if( clStatus != CL_SUCCESS )
+        return;
+
+    if ( strstr( pExtInfo.get(), "cl_khr_fp64" ) )
+    {
+        bKhrFp64 = true;
+    }
+    else
+    {
+        // Check if cl_amd_fp64 extension is supported
+        if ( strstr( pExtInfo.get(), "cl_amd_fp64" ) )
+            bAmdFp64 = true;
+    }
+}
+
+}
+
 int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
 {
     size_t length;
@@ -859,32 +895,14 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
     }
 
     clStatus = clGetCommandQueueInfo( gpuInfo->mpCmdQueue, CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL );
-    // Check device extensions for double type
-    size_t aDevExtInfoSize = 0;
 
-    clStatus = clGetDeviceInfo( gpuInfo->mpArryDevsID[0], CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize );
-    CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
+    bool bKhrFp64 = false;
+    bool bAmdFp64 = false;
 
-    char *aExtInfo = new char[aDevExtInfoSize];
+    checkDeviceForDoubleSupport(gpuInfo->mpArryDevsID[0], bKhrFp64, bAmdFp64);
 
-    clStatus = clGetDeviceInfo( gpuInfo->mpArryDevsID[0], CL_DEVICE_EXTENSIONS,
-                   sizeof(char) * aDevExtInfoSize, aExtInfo, NULL);
-    CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
-
-    gpuInfo->mnKhrFp64Flag = 0;
-    gpuInfo->mnAmdFp64Flag = 0;
-
-    if ( strstr( aExtInfo, "cl_khr_fp64" ) )
-    {
-        gpuInfo->mnKhrFp64Flag = 1;
-    }
-    else
-    {
-        // Check if cl_amd_fp64 extension is supported
-        if ( strstr( aExtInfo, "cl_amd_fp64" ) )
-            gpuInfo->mnAmdFp64Flag = 1;
-    }
-    delete []aExtInfo;
+    gpuInfo->mnKhrFp64Flag = bKhrFp64;
+    gpuInfo->mnAmdFp64Flag = bAmdFp64;
 
     return 0;
 }
@@ -2673,6 +2691,14 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
     cl_uint nComputeUnits;
     nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(nComputeUnits), &nComputeUnits, NULL);
     if(nState != CL_SUCCESS)
+        return;
+
+    bool bKhrFp64 = false;
+    bool bAmdFp64 = false;
+    checkDeviceForDoubleSupport(aDeviceId, bKhrFp64, bAmdFp64);
+
+    // only list devices that support double
+    if(!bKhrFp64 && !bAmdFp64)
         return;
 
     aDeviceInfo.mnComputeUnits = nComputeUnits;
