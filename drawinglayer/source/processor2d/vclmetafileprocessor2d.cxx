@@ -1008,8 +1008,8 @@ namespace drawinglayer
                         case drawinglayer::primitive2d::FIELD_TYPE_URL :
                         {
                             const OUString& rURL = rFieldPrimitive.getString();
-                            const String aOldString(rURL);
-                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
+                            const OUString aOldString(rURL);
+                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(aOldString.getStr()), 2 * aOldString.getLength()));
                             break;
                         }
                     }
