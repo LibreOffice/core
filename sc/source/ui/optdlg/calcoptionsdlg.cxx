@@ -211,12 +211,18 @@ void ScCalcOptionsDialog::fillOpenclList()
         for(std::vector<sc::OpenclDeviceInfo>::iterator
                 itr = it->maDevices.begin(), itrEnd = it->maDevices.end(); itr != itrEnd; ++itr)
         {
-            SvTreeListEntry* pEntry = mpOpenclInfoList->InsertEntry(it->maVendor + " " + itr->maName);
+            OUString aDeviceId = it->maVendor + " " + itr->maName;
+            SvTreeListEntry* pEntry = mpOpenclInfoList->InsertEntry(aDeviceId);
+            if(aDeviceId == aStoredDevice)
+            {
+                mpOpenclInfoList->GetModel()->GetView(0)->Select(pEntry);
+            }
             pEntry->SetUserData(&(*itr));
         }
     }
 
     mpOpenclInfoList->SetUpdateMode(true);
+    SelectedDeviceChanged();
 }
 
 #endif
@@ -371,6 +377,9 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
 {
 #if HAVE_FEATURE_OPENCL
     SvTreeListEntry* pEntry = mpOpenclInfoList->GetModel()->GetView(0)->FirstSelected();
+    if(!pEntry)
+        return;
+
     sc::OpenclDeviceInfo* pInfo = reinterpret_cast<sc::OpenclDeviceInfo*>(pEntry->GetUserData());
     if(pInfo)
     {
