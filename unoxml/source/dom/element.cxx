@@ -55,7 +55,7 @@ namespace DOM
         OUString type = "";
         // add namespace definitions to attributes
         for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != 0; pNs = pNs->next) {
-            const xmlChar *pPrefix = pNs->prefix;
+            const xmlChar *pPrefix = pNs->prefix ? pNs->prefix : (const xmlChar*)"";
             OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
