@@ -796,8 +796,7 @@ namespace sw
             }
 
             sal_Int32 nLen = rParams.getLength();
-            sal_Int32 nI = 0;
-            while (nI < nLen)
+            for (sal_Int32 nI = 0; nI < nLen; ++nI)
             {
                 if (rParams[nI] == '\\')
                     nI++;
@@ -949,7 +948,6 @@ namespace sw
                         }
                     }
                 }
-                ++nI;
             }
 
             if (bForceNatNum)
