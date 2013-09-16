@@ -239,7 +239,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 {
     friend class SvxAutoCorrectLanguageLists;
 
-    String sShareAutoCorrFile, sUserAutoCorrFile;
+    OUString sShareAutoCorrFile, sUserAutoCorrFile;
 
     SvxSwAutoFmtFlags aSwFlags;     // StarWriter AutoFormat Flags
 
@@ -282,8 +282,8 @@ public:
 
     TYPEINFO();
 
-    SvxAutoCorrect( const String& rShareAutocorrFile,
-                    const String& rUserAutocorrFile );
+    SvxAutoCorrect( const OUString& rShareAutocorrFile,
+                    const OUString& rUserAutocorrFile );
     SvxAutoCorrect( const SvxAutoCorrect& );
     virtual ~SvxAutoCorrect();
 

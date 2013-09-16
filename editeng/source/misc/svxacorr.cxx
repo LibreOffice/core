@@ -278,8 +278,8 @@ long SvxAutoCorrect::GetDefaultFlags()
 }
 
 
-SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
-                                const String& rUserAutocorrFile )
+SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
+                                const OUString& rUserAutocorrFile )
     : sShareAutoCorrFile( rShareAutocorrFile ),
     sUserAutoCorrFile( rUserAutocorrFile ),
     pLangTable( new boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists> ),
