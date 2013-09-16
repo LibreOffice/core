@@ -59,7 +59,7 @@ if( status != CL_SUCCESS )    \
 }
 
 #define MAX_KERNEL_STRING_LEN 64
-#define MAX_CLFILE_NUM 50
+#define MAX_CLFILE_NUM 100
 #define MAX_CLKERNEL_NUM 200
 #define MAX_KERNEL_NAME_LEN 64
 
@@ -112,11 +112,11 @@ struct GPUEnv
     cl_command_queue mpCmdQueue;
     cl_kernel mpArryKernels[MAX_CLFILE_NUM];
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file
-    char mArryKnelSrcFile[MAX_CLFILE_NUM][256], //the max len of kernel file name is 256
-         mArrykernelNames[MAX_CLKERNEL_NUM][MAX_KERNEL_STRING_LEN + 1];
-         cl_kernel_function mpArryKnelFuncs[MAX_CLKERNEL_NUM];
-    int mnKernelCount, mnFileCount, // only one kernel file
-        mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
+    char mArryKnelSrcFile[MAX_CLFILE_NUM][256]; //the max len of kernel file name is 256
+    std::vector<const char*> maKernelNames;
+    cl_kernel_function mpArryKnelFuncs[MAX_CLKERNEL_NUM];
+    int mnFileCount; // only one kernel file
+    int mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
     int mnKhrFp64Flag;
     int mnAmdFp64Flag;
 };
@@ -199,7 +199,6 @@ public:
 
     int getOpenclState();
     void setOpenclState( int state );
-    static int addKernelConfig( int kCount, const char *kName );
 };
 
 class OclCalc: public OpenclDevice,OpenclCalcBase

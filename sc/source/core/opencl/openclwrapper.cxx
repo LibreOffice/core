@@ -64,15 +64,51 @@ int OpenclDevice::releaseOpenclRunEnv()
 
     return 1;
 }
-///////////////////////////////////////////////////////
-///////////////////////////////////////////////////////
-int OpenclDevice::addKernelConfig( int kCount, const char *kName )
-{
-    if ( kCount < 1 )
-        fprintf(stderr,"Error: ( KCount < 1 )" SAL_DETAIL_WHERE "addKernelConfig\n" );
-    strcpy( gpuEnv.mArrykernelNames[kCount-1], kName );
-    gpuEnv.mnKernelCount++;
-    return 0;
+
+namespace {
+
+const char* pKernelNames[] = {
+
+    "oclFormulaMin",
+    "oclFormulaMax",
+    "oclFormulaSum",
+    "oclFormulaCount",
+    "oclFormulaAverage",
+    "oclFormulaSumproduct",
+    "oclFormulaMtxInv",
+
+    "oclSignedAdd",
+    "oclSignedSub",
+    "oclSignedMul",
+    "oclSignedDiv",
+    "oclAverageDelta",
+    "oclMaxDelta",
+    "oclMinDelta",
+    "oclSubDelta",
+    "oclLUDecomposition",
+    "oclAverageDeltaRPN",
+    "oclMaxDeltaRPN",
+    "oclMinDeltaRPN",
+    "oclMoreColArithmeticOperator",
+    "oclColumnH",
+    "oclColumnL",
+    "oclColumnN",
+    "oclColumnJ",
+    "oclMaxSub",
+    "oclAverageSub",
+    "oclMinSub",
+    "oclMaxAdd",
+    "oclAverageAdd",
+    "oclMinAdd",
+    "oclMaxMul",
+    "oclAverageMul"
+    "oclMinMul",
+    "oclMaxDiv",
+    "oclAverageDiv"
+    "oclMinDiv",
+    "oclSub"
+};
+
 }
 
 int OpenclDevice::registOpenclKernel()
@@ -81,46 +117,10 @@ int OpenclDevice::registOpenclKernel()
         memset( &gpuEnv, 0, sizeof(gpuEnv) );
 
     gpuEnv.mnFileCount = 0; //argc;
-    gpuEnv.mnKernelCount = 0UL;
 
-    addKernelConfig( 1, (const char*) "oclFormulaMin" );
-    addKernelConfig( 2, (const char*) "oclFormulaMax" );
-    addKernelConfig( 3, (const char*) "oclFormulaSum" );
-    addKernelConfig( 4, (const char*) "oclFormulaCount" );
-    addKernelConfig( 5, (const char*) "oclFormulaAverage" );
-    addKernelConfig( 6, (const char*) "oclFormulaSumproduct" );
-    addKernelConfig( 7, (const char*) "oclFormulaMtxInv" );
+    for (size_t i = 0, n = SAL_N_ELEMENTS(pKernelNames); i < n; ++i)
+        gpuEnv.maKernelNames.push_back(pKernelNames[i]);
 
-    addKernelConfig( 8, (const char*) "oclSignedAdd" );
-    addKernelConfig( 9, (const char*) "oclSignedSub" );
-    addKernelConfig( 10, (const char*) "oclSignedMul" );
-    addKernelConfig( 11, (const char*) "oclSignedDiv" );
-    addKernelConfig( 12, (const char*) "oclAverageDelta" );
-    addKernelConfig( 13, (const char*) "oclMaxDelta" );
-    addKernelConfig( 14, (const char*) "oclMinDelta" );
-    addKernelConfig( 15, (const char*) "oclSubDelta" );
-    addKernelConfig( 16, (const char*) "oclLUDecomposition" );
-    addKernelConfig( 17, (const char*) "oclAverageDeltaRPN" );
-    addKernelConfig( 18, (const char*) "oclMaxDeltaRPN" );
-    addKernelConfig( 19, (const char*) "oclMinDeltaRPN" );
-    addKernelConfig( 20, (const char*) "oclMoreColArithmeticOperator" );
-    addKernelConfig( 21, (const char*) "oclColumnH" );
-    addKernelConfig( 22, (const char*) "oclColumnL" );
-    addKernelConfig( 23, (const char*) "oclColumnN" );
-    addKernelConfig( 24, (const char*) "oclColumnJ" );
-    addKernelConfig( 25, (const char*) "oclMaxSub" );
-    addKernelConfig( 26, (const char*) "oclAverageSub" );
-    addKernelConfig( 27, (const char*) "oclMinSub" );
-    addKernelConfig( 28, (const char*) "oclMaxAdd" );
-    addKernelConfig( 29, (const char*) "oclAverageAdd" );
-    addKernelConfig( 30, (const char*) "oclMinAdd" );
-    addKernelConfig( 31, (const char*) "oclMaxMul" );
-    addKernelConfig( 32, (const char*) "oclAverageMul" );
-    addKernelConfig( 33, (const char*) "oclMinMul" );
-    addKernelConfig( 34, (const char*) "oclMaxDiv" );
-    addKernelConfig( 35, (const char*) "oclAverageDiv" );
-    addKernelConfig( 36, (const char*) "oclMinDiv" );
-    addKernelConfig( 37, (const char*) "oclSub" );// for svDouble type
     return 0;
 }
 
@@ -145,23 +145,24 @@ int OpenclDevice::setKernelEnv( KernelEnv *envInfo )
 
 int OpenclDevice::checkKernelName( KernelEnv *envInfo, const char *kernelName )
 {
-    //printf("checkKernelName,total count of kernels...%d\n", gpuEnv.kernelCount);
-    int kCount;
     int nFlag = 0;
-    for ( kCount=0; kCount < gpuEnv.mnKernelCount; kCount++ )
+    size_t i = 0;
+    for (size_t n = gpuEnv.maKernelNames.size(); i < n; ++i)
     {
-        if ( strcasecmp( kernelName, gpuEnv.mArrykernelNames[kCount]) == 0 )
+        const char* pName = gpuEnv.maKernelNames[i];
+        if (!strcasecmp(kernelName, pName))
         {
             nFlag = 1;
             printf("match %s kernel right\n",kernelName);
             break;
         }
     }
+
     if ( !nFlag )
     {
         printf("can't find kernel: %s\n",kernelName);
     }
-    envInfo->mpkKernel = gpuEnv.mpArryKernels[kCount];
+    envInfo->mpkKernel = gpuEnv.mpArryKernels[i];
     strcpy( envInfo->mckKernelName, kernelName );
     if ( envInfo == (KernelEnv *) NULL )
     {
@@ -626,11 +627,10 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
 int OpenclDevice::getKernelEnvAndFunc( const char *kernelName, KernelEnv *env, cl_kernel_function *function)
 {
-    int i;
-    //printf("----------------OpenclDevice::getKernelEnvAndFunc\n");
-    for ( i = 0; i < gpuEnv.mnKernelCount; i++ )
+    for (size_t i = 0, n = gpuEnv.maKernelNames.size(); i < n; ++i)
     {
-        if ( strcasecmp( kernelName, gpuEnv.mArrykernelNames[i]) == 0 )
+        const char* pName = gpuEnv.maKernelNames[i];
+        if (!strcasecmp(kernelName, pName))
         {
             env->mpkContext = gpuEnv.mpContext;
             env->mpkCmdQueue = gpuEnv.mpCmdQueue;
@@ -640,6 +640,7 @@ int OpenclDevice::getKernelEnvAndFunc( const char *kernelName, KernelEnv *env, c
             return 1;
         }
     }
+
     return 0;
 }
 
@@ -702,7 +703,7 @@ int OpenclDevice::initOpenclRunEnv( int argc )
             printf("----use float type in kernel----\n");
             status = compileKernelFile( &gpuEnv, "-Dfp_t=float -Dfp_t4=float4 -Dfp_t16=float16" );
         }
-        if ( status == 0 || gpuEnv.mnKernelCount == 0 )
+        if (status == 0 || gpuEnv.maKernelNames.empty())
         {
             printf("compileKernelFile failed.\n");
             return 1;
@@ -892,11 +893,9 @@ int OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
 }
 int OpenclDevice::registerKernelWrapper( const char *kernelName, cl_kernel_function function )
 {
-    int i;
-    //printf("oclwrapper:registerKernelWrapper...%d\n", gpuEnv.mnKernelCount);
-    for ( i = 0; i < gpuEnv.mnKernelCount; i++ )
+    for (size_t i = 0, n = gpuEnv.maKernelNames.size(); i < n; ++i)
     {
-        if ( strcasecmp( kernelName, gpuEnv.mArrykernelNames[i]) == 0 )
+        if (!strcasecmp(kernelName, gpuEnv.maKernelNames[i]))
         {
             gpuEnv.mpArryKnelFuncs[i] = function;
             return 1;
