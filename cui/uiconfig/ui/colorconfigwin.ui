@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="ColorConfigWindow">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -13,9 +14,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -28,9 +29,9 @@
       <object class="GtkLabel" id="doccolor">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Document background</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -53,11 +54,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="doccolor_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
-        <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -68,10 +68,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="docboundaries_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -123,10 +123,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="appback_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -139,9 +139,9 @@
       <object class="GtkLabel" id="appback">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Application background</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -156,9 +156,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -181,10 +181,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="objboundaries_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -199,9 +199,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -224,10 +224,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="tblboundaries_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -240,9 +240,9 @@
       <object class="GtkLabel" id="font">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Font color</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -265,10 +265,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="font_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -283,9 +283,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -308,10 +308,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="unvisitedlinks_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -326,9 +326,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -351,10 +351,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="visitedlinks_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -367,9 +367,9 @@
       <object class="GtkLabel" id="autospellcheck">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">AutoSpellcheck</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -382,70 +382,27 @@
       <object class="GtkLabel" id="smarttags">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Smart Tags</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">10</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="shadows">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="label" translatable="yes">Shadows</property>
-        <property name="margin_left">6</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">11</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkDrawingArea" id="autospellcheck_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
         <property name="top_attach">9</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="smarttags_wn:border">
-        <property name="hexpand">True</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">11</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="shadows_wn:border">
-        <property name="hexpand">True</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">10</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -519,9 +476,9 @@
       <object class="GtkLabel" id="writergrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Grid</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -532,10 +489,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="writergrid_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -558,10 +515,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="field_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -584,10 +541,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="index_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -612,9 +569,9 @@
       <object class="GtkLabel" id="script">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Script Indicator</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -625,10 +582,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="script_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -643,9 +600,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -660,9 +617,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -677,9 +634,9 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -702,10 +659,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="section_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -730,9 +687,9 @@
       <object class="GtkLabel" id="hdft">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Headers and Footer delimiter</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -743,10 +700,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="hdft_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -771,9 +728,9 @@
       <object class="GtkLabel" id="pagebreak">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Page and column breaks</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -784,10 +741,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="pagebreak_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -812,9 +769,9 @@
       <object class="GtkLabel" id="direct">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Direct Cursor</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -825,10 +782,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="direct_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -870,9 +827,9 @@
       <object class="GtkLabel" id="sgml">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">SGML syntax highlighting</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -883,10 +840,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sgml_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -911,9 +868,9 @@
       <object class="GtkLabel" id="htmlcomment">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Comment highlighting</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -924,10 +881,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="htmlcomment_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -952,9 +909,9 @@
       <object class="GtkLabel" id="htmlkeyword">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Keyword highlighting</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -965,10 +922,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="htmlkeyword_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -993,9 +950,9 @@
       <object class="GtkLabel" id="unknown">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Text</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1006,10 +963,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="unknown_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1051,9 +1008,9 @@
       <object class="GtkLabel" id="calcgrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Grid lines</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1064,10 +1021,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="calcgrid_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1092,9 +1049,9 @@
       <object class="GtkLabel" id="brk">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Page breaks</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1105,10 +1062,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="brk_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1133,9 +1090,9 @@
       <object class="GtkLabel" id="brkmanual">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Manual page breaks</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1146,10 +1103,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="brkmanual_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1174,9 +1131,9 @@
       <object class="GtkLabel" id="brkauto">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Automatic page breaks</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1187,10 +1144,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="brkauto_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1215,9 +1172,9 @@
       <object class="GtkLabel" id="det">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Detective</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1228,10 +1185,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="det_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1256,9 +1213,9 @@
       <object class="GtkLabel" id="deterror">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Detective error</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1269,10 +1226,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="deterror_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1297,9 +1254,9 @@
       <object class="GtkLabel" id="ref">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">References</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1310,10 +1267,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="ref_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1338,9 +1295,9 @@
       <object class="GtkLabel" id="notes">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Notes background</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1351,10 +1308,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="notes_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1396,9 +1353,9 @@
       <object class="GtkLabel" id="drawgrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Grid</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1409,10 +1366,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="drawgrid_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1454,9 +1411,9 @@
       <object class="GtkLabel" id="basicid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Identifier</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1467,10 +1424,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="basicid_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1495,9 +1452,9 @@
       <object class="GtkLabel" id="basiccomment">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Comment</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1508,10 +1465,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="basiccomment_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1536,9 +1493,9 @@
       <object class="GtkLabel" id="basicnumber">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Number</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1549,10 +1506,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="basicnumber_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1577,9 +1534,9 @@
       <object class="GtkLabel" id="basicstring">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">String</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1590,10 +1547,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="basicstring_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1618,9 +1575,9 @@
       <object class="GtkLabel" id="basicop">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Operator</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1631,10 +1588,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="basicop_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1659,9 +1616,9 @@
       <object class="GtkLabel" id="basickeyword">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Reserved expression</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1672,10 +1629,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="basickeyword_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1700,9 +1657,9 @@
       <object class="GtkLabel" id="error">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Error</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1713,10 +1670,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="error_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1758,9 +1715,9 @@
       <object class="GtkLabel" id="sqlid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Identifier</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1771,10 +1728,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sqlid_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1799,9 +1756,9 @@
       <object class="GtkLabel" id="sqlnumber">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Number</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1812,10 +1769,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sqlnumber_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1840,9 +1797,9 @@
       <object class="GtkLabel" id="sqlstring">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">String</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1853,10 +1810,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sqlstring_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1881,9 +1838,9 @@
       <object class="GtkLabel" id="sqlop">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Operator</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1894,10 +1851,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sqlop_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1922,9 +1879,9 @@
       <object class="GtkLabel" id="sqlkeyword">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Keyword</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1935,10 +1892,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sqlkeyword_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -1963,9 +1920,9 @@
       <object class="GtkLabel" id="sqlparam">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Parameter</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1976,10 +1933,10 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sqlparam_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -2004,9 +1961,9 @@
       <object class="GtkLabel" id="sqlcomment">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Comment</property>
-        <property name="margin_left">6</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -2017,14 +1974,59 @@
     </child>
     <child>
       <object class="GtkDrawingArea" id="sqlcomment_wn:border">
-        <property name="hexpand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
         <property name="top_attach">52</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkDrawingArea" id="smarttags_wn:border">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">10</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkDrawingArea" id="shadows_wn:border">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_right">6</property>
+        <property name="hexpand">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">11</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="shadows">
+        <property name="label" translatable="yes">Shadows</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="margin_left">6</property>
+        <property name="xalign">0</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">11</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
