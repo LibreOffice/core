@@ -20,7 +20,7 @@
 #include "unoidl/unoidl.hxx"
 
 #include "legacyprovider.hxx"
-#include "sourceprovider.hxx"
+#include "sourcetreeprovider.hxx"
 #include "unoidlprovider.hxx"
 
 namespace unoidl {
@@ -114,7 +114,7 @@ rtl::Reference< Provider > loadProvider(
         if (item.getFileStatus(status) == osl::FileBase::E_None
             && status.getFileType() == osl::FileStatus::Directory)
         {
-            return new detail::SourceProvider(manager, uri);
+            return new detail::SourceTreeProvider(manager, uri);
         }
     }
     try {

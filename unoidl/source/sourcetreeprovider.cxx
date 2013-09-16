@@ -23,7 +23,7 @@
 #include "sourceprovider-parser-requires.hxx"
 #include "sourceprovider-parser.hxx"
 #include "sourceprovider-scanner.hxx"
-#include "sourceprovider.hxx"
+#include "sourcetreeprovider.hxx"
 
 namespace unoidl { namespace detail {
 
@@ -56,16 +56,18 @@ private:
 
 }
 
-SourceProvider::SourceProvider(
+SourceTreeProvider::SourceTreeProvider(
     rtl::Reference<Manager> const & manager, OUString const & uri):
     manager_(manager), uri_(uri.endsWith("/") ? uri : uri + "/")
 {}
 
-rtl::Reference<MapCursor> SourceProvider::createRootCursor() const {
+rtl::Reference<MapCursor> SourceTreeProvider::createRootCursor() const {
     return new Cursor;
 }
 
-rtl::Reference<Entity> SourceProvider::findEntity(OUString const & name) const {
+rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
+    const
+{
     std::map< OUString, rtl::Reference<Entity> >::iterator ci(
         cache_.find(name));
     if (ci != cache_.end()) {
@@ -143,7 +145,7 @@ rtl::Reference<Entity> SourceProvider::findEntity(OUString const & name) const {
     return ent;
 }
 
-SourceProvider::~SourceProvider() throw () {}
+SourceTreeProvider::~SourceTreeProvider() throw () {}
 
 } }
 

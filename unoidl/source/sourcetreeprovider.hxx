@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOIDL_SOURCEPROVIDER_HXX
-#define INCLUDED_UNOIDL_SOURCEPROVIDER_HXX
+#ifndef INCLUDED_UNOIDL_SOURCETREEPROVIDER_HXX
+#define INCLUDED_UNOIDL_SOURCETREEPROVIDER_HXX
 
 #include "sal/config.h"
 
@@ -19,10 +19,10 @@
 
 namespace unoidl { namespace detail {
 
-class SourceProvider: public Provider {
+class SourceTreeProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
-    SourceProvider(
+    SourceTreeProvider(
         rtl::Reference<Manager> const & manager, OUString const & uri);
 
     // throws FileFormatException:
@@ -32,7 +32,7 @@ public:
     virtual rtl::Reference<Entity> findEntity(OUString const & name) const;
 
 private:
-    virtual ~SourceProvider() throw ();
+    virtual ~SourceTreeProvider() throw ();
 
     rtl::Reference<Manager> manager_;
     OUString uri_;
