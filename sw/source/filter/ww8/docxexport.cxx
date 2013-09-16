@@ -25,6 +25,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
@@ -46,6 +49,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 
+#include <editeng/unoprnms.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/brushitem.hxx>
@@ -344,6 +348,8 @@ void DocxExport::ExportDocument_Impl()
     WriteFonts();
 
     WriteSettings();
+
+    WriteTheme();
 
     delete pStyles, pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
@@ -736,6 +742,44 @@ void DocxExport::WriteSettings()
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
 
     pFS->endElementNS( XML_w, XML_settings );
+}
+
+void DocxExport::WriteTheme()
+{
+    uno::Reference< beans::XPropertySet > xPropSet( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( !xPropSetInfo->hasPropertyByName( pName ) )
+        return;
+
+    uno::Reference<xml::dom::XDocument> themeDom;
+    uno::Sequence< beans::PropertyValue > propList;
+    xPropSet->getPropertyValue( pName ) >>= propList;
+    for ( sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp )
+    {
+        OUString propName = propList[nProp].Name;
+        if ( propName == "OOXTheme" )
+        {
+             propList[nProp].Value >>= themeDom;
+             break;
+        }
+    }
+
+    // no theme dom to write
+    if ( !themeDom.is() )
+        return;
+
+    m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+            "theme/theme1.xml" );
+
+    uno::Reference< xml::sax::XSAXSerializable > serializer( themeDom, uno::UNO_QUERY );
+    uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
+    writer->setOutputStream( GetFilter().openFragmentStream( "word/theme/theme1.xml",
+        "application/vnd.openxmlformats-officedocument.theme+xml" ) );
+    serializer->serialize( uno::Reference< xml::sax::XDocumentHandler >( writer, uno::UNO_QUERY_THROW ),
+        uno::Sequence< beans::StringPair >() );
 }
 
 VMLExport& DocxExport::VMLExporter()
