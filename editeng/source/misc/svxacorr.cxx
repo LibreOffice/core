@@ -1738,7 +1738,7 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
 }
 
 sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
-                                             const String& sWord )
+                                             const OUString& sWord )
 {
     // First search for eLang, then US-English -> English
     // and last in LANGUAGE_UNDETERMINED
@@ -1817,7 +1817,7 @@ static sal_Bool lcl_FindAbbreviation(const SvStringsISortDtor* pList, const OUSt
 }
 
 sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
-                                const String& sWord, sal_Bool bAbbreviation)
+                                const OUString& sWord, sal_Bool bAbbreviation)
 {
     // First search for eLang, then US-English -> English
     // and last in LANGUAGE_UNDETERMINED

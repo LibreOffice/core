@@ -389,8 +389,8 @@ public:
     sal_Bool AddWrtSttException( const String& rNew, LanguageType eLang = LANGUAGE_SYSTEM);
 
     // Search through the Languages for the entry
-    sal_Bool FindInWrdSttExceptList( LanguageType eLang, const String& sWord );
-    sal_Bool FindInCplSttExceptList( LanguageType eLang, const String& sWord,
+    sal_Bool FindInWrdSttExceptList( LanguageType eLang, const OUString& sWord );
+    sal_Bool FindInCplSttExceptList( LanguageType eLang, const OUString& sWord,
                                     sal_Bool bAbbreviation = sal_False);
 
     // Methods for the auto-correction
