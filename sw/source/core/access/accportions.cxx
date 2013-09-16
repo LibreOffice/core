@@ -126,7 +126,7 @@ void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int
 }
 
 void SwAccessiblePortionData::Special(
-    sal_uInt16 nLength, const String& rText, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
+    sal_uInt16 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
 {
     OSL_ENSURE( nModelPosition >= 0, "illegal position" );
     OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().getLength(),

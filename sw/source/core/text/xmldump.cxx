@@ -147,7 +147,7 @@ class XmlPortionDumper:public SwPortionHandler
                 font size of the painted text
       */
     virtual void Special( sal_uInt16 nLength,
-                          const String & rText,
+                          const OUString & rText,
                           sal_uInt16 nType,
                           sal_Int32 nHeight,
                           sal_Int32 nWidth )

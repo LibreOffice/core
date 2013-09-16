@@ -23,8 +23,6 @@
 #include <tools/solar.h>
 #include <txttypes.hxx>
 
-class String;
-
 /** The SwPortionHandler interface implements a visitor for the layout
  * engine's text portions. This can be used to gather information of
  * the on-screen representation of a single paragraph.
@@ -68,7 +66,7 @@ public:
      */
     virtual void Special(
         sal_uInt16 nLength,      /// length of this portion in the model string
-        const String& rText, /// text which is painted on-screen
+        const OUString& rText, /// text which is painted on-screen
         sal_uInt16 nType,         /// type of this portion
         sal_Int32 nHeight = 0,     /// font height of the painted text
         sal_Int32 nWidth = 0     /// width of this portion
