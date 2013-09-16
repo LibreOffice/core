@@ -55,7 +55,6 @@ int vibrationCount;
     self.timeLabel = timeLabel;
     
     [self setupActions];
-    [self clear];
     return self;
 }
 
@@ -67,7 +66,7 @@ int vibrationCount;
     self.timeLabel = (UILabel *)[[cell viewWithTag:9] viewWithTag:1];
 
     [self setupActions];
-    [self clear];
+//    [self clear];
 }
 
 - (void) setupActions

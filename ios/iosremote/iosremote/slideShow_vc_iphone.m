@@ -34,7 +34,6 @@
 @property (nonatomic, strong) id slideShowFinishedObserver;
 @property (nonatomic, strong) SlideShow* slideshow;
 
-@property BOOL pointerCalibrationOn;
 @property CGPoint refLeftUpperGravity;
 @property CGPoint refRightUpperGravity;
 @property CGPoint refRightLowerGravity;
@@ -53,20 +52,6 @@
 
 #pragma mark - Pointer
 
-- (CMMotionManager *)motionManager
-{
-    CMMotionManager *motionManager = nil;
-
-    id appDelegate = [UIApplication sharedApplication].delegate;
-
-    if ([appDelegate respondsToSelector:@selector(motionManager)]) {
-        motionManager = [appDelegate motionManager];
-    }
-
-    return motionManager;
-}
-
-// Not localized for now since this is subject to fundemental changes
 - (IBAction)pointerAction:(id)sender {
     if ([self.touchPointerImage isHidden]){
         [self.slideshow getContentAtIndex:self.slideshow.currentSlide forView:self.touchPointerImage];
@@ -198,7 +183,6 @@
                                                             action:@selector( revealToggle: )];
     self.revealViewController.navigationItem.leftBarButtonItem = self.revealButtonItem;
 
-    self.pointerCalibrationOn = NO;
     self.movingPointer.layer.cornerRadius = 3;
 
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
@@ -254,9 +238,6 @@
                                                      }];
     [self.slideView setShadow];
     [self.secondarySlideView setShadow];
-
-    // We calibrate once when presentation starts. needs a users alert to inform users to point at the center of the screen at the beginning
-    self.pointerCalibrationOn = YES;
 
     [super viewDidAppear:animated];
 }

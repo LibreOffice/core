@@ -79,8 +79,6 @@ dispatch_queue_t backgroundQueue;
     [self.stopWatch updateStartButtonIcon];
     [self.timer updateStartButtonIcon];
     if ([self.comManager.interpreter.slideShow size] > 0) {
-        [self.stopWatch updateStartButtonIcon];
-        [self.timer updateStartButtonIcon];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.slideshow.currentSlide
                                                     inSection:1];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
