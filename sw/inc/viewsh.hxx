@@ -193,6 +193,7 @@ protected:
 
     sal_uInt16 nStartAction; // != 0 if at least one ::com::sun::star::chaos::Action is active.
     sal_uInt16 nLockPaint;   // != 0 if Paint is locked.
+    bool      mbSelectAll; ///< Special select all mode: whole document selected, even if doc starts with table.
 
 public:
     TYPEINFO();
@@ -564,6 +565,7 @@ public:
     bool IsHeaderFooterEdit() const { return bHeaderFooterEdit; }
     bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? bShowHeaderSeparator: bShowFooterSeparator; }
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) bShowHeaderSeparator = bShow; else bShowFooterSeparator = bShow; }
+    bool IsSelectAll() { return mbSelectAll; }
 };
 
 //---- class CurrShell manages global ShellPointer -------------------

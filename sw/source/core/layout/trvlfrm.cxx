@@ -2581,6 +2581,9 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             bool const bBody = pStartFrm->IsInDocBody();
             const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
                                          ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
+            if (pSh->IsSelectAll())
+                pCellBox = 0;
+
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
             SwRect aPrvRect;
 
@@ -2602,6 +2605,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 // same cell frame (or its follow cell)
                 const SwTableBox* pTmpCellBox = pCntnt->GetUpper()->IsCellFrm() ?
                                                 ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
+                if (pSh->IsSelectAll())
+                    pTmpCellBox = 0;
                 if ( bBody == pCntnt->IsInDocBody() &&
                     ( !pCellBox || pCellBox == pTmpCellBox ) )
                 {
