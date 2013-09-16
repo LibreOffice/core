@@ -211,7 +211,7 @@ bool SfxErrorHandler::CreateString(
 
 //-------------------------------------------------------------------------
 
-class ResString: public String
+class ResString: public OUString
 
 /*  [Beschreibung]
 
@@ -224,14 +224,14 @@ class ResString: public String
     sal_uInt16 nFlags;
   public:
     sal_uInt16 GetFlags() const {return nFlags;}
-    const String & GetString() const {return *this;}
+    const OUString & GetString() const {return *this;}
     ResString( ResId &rId);
 };
 
 //-------------------------------------------------------------------------
 
 ResString::ResString(ResId & rId):
-    String(rId.SetAutoRelease(sal_False).toString()),
+    OUString(rId.SetAutoRelease(sal_False).toString()),
     nFlags(0)
 {
     ResMgr * pResMgr = rId.GetResMgr();

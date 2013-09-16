@@ -178,7 +178,7 @@ namespace svt
             m_pNextPage = new PushButton(this, WB_TABSTOP);
             m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-            m_pNextPage->SetText(String(SVT_RESSTR(STR_WIZDLG_NEXT)));
+            m_pNextPage->SetText(OUString(SVT_RESSTR(STR_WIZDLG_NEXT)));
             m_pNextPage->Show();
 
             AddButton( m_pNextPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );

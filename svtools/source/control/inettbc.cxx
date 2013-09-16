@@ -85,7 +85,7 @@ public:
 
     inline SvtURLBox_Impl( )
     {
-        FilterMatch::createWildCardFilterList(String(),m_aFilters);
+        FilterMatch::createWildCardFilterList(OUString(),m_aFilters);
     }
 };
 

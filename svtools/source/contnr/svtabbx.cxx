@@ -1066,8 +1066,8 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBr
 
     if( _eType == ::svt::BBTYPE_TABLECELL && _nPos != -1 )
     {
-        const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
-        const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
+        const OUString sVar1( "%1" );
+        const OUString sVar2( "%2" );
 
         sal_uInt16 nColumnCount = GetColumnCount();
         if (nColumnCount > 0)
@@ -1075,12 +1075,12 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBr
             sal_Int32 nRow = _nPos / nColumnCount;
             sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
-            String aText( SVT_RESSTR(STR_SVT_ACC_DESC_TABLISTBOX) );
-            aText.SearchAndReplace( sVar1, OUString::number( nRow ) );
-            String sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
-            if ( sColHeader.Len() == 0 )
+            OUString aText( SVT_RESSTR(STR_SVT_ACC_DESC_TABLISTBOX) );
+            aText = aText.replaceFirst( sVar1, OUString::number( nRow ) );
+            OUString sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
+            if ( sColHeader.isEmpty() )
                 sColHeader = OUString::number( nColumn );
-            aText.SearchAndReplace( sVar2, sColHeader );
+            aText = aText.replaceFirst( sVar2, sColHeader );
             aRetText = aText;
         }
     }

@@ -2005,8 +2005,10 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
             if( GetSequence( rFlavor, aSeq ) && ( 2048 == aSeq.getLength() ) )
             {
-                rBmk = INetBookmark( String( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ), osl_getThreadTextEncoding() ),
-                                     String( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024, osl_getThreadTextEncoding() ) );
+                const sal_Char* p1 = reinterpret_cast< const sal_Char* >( aSeq.getConstArray() );
+                const sal_Char* p2 =  reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024;
+                rBmk = INetBookmark( OUString( p1, strlen(p1), osl_getThreadTextEncoding() ),
+                                     OUString( p2, strlen(p2), osl_getThreadTextEncoding() ) );
                 bRet = sal_True;
             }
         }

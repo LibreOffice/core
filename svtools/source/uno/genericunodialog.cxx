@@ -121,7 +121,7 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         m_bTitleAmbiguous = sal_False;
 
         if (m_pDialog)
-            m_pDialog->SetText(String(m_sTitle));
+            m_pDialog->SetText(OUString(m_sTitle));
     }
 }
 
