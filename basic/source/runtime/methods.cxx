@@ -3617,7 +3617,7 @@ RTLFUNC(Shell)
 
         // #55735 if there are parameters, they have to be separated
         // #72471 also separate the single parameters
-        std::list<String> aTokenList;
+        std::list<OUString> aTokenList;
         OUString aToken;
         sal_Int32 i = 0;
         sal_Unicode c;
@@ -3699,7 +3699,7 @@ RTLFUNC(Shell)
         }
 
         // #72471 work parameter(s) up
-        std::list<String>::const_iterator iter = aTokenList.begin();
+        std::list<OUString>::const_iterator iter = aTokenList.begin();
         const OUString& rStr = *iter;
         OUString aOUStrProg( rStr.getStr(), rStr.getLength() );
         OUString aOUStrProgURL = getFullPath( aOUStrProg );
@@ -3824,7 +3824,7 @@ OUString getBasicTypeName( SbxDataType eType )
     return OUString::createFromAscii(pTypeNames[nPos]);
 }
 
-String getObjectTypeName( SbxVariable* pVar )
+OUString getObjectTypeName( SbxVariable* pVar )
 {
     OUString sRet( "Object" );
     if ( pVar )

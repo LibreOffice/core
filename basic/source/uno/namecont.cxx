@@ -1687,7 +1687,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     if( bStorage )
     {
         aLibInfoPath = maInfoFileName;
-        aLibInfoPath += String( "-lb.xml" );
+        aLibInfoPath += "-lb.xml";
 
         try
         {

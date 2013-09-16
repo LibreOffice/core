@@ -38,18 +38,18 @@ class SvRTLInputBox : public ModalDialog
     void PositionDialog( long nXTwips, long nYTwips, const Size& rDlgSize );
     void InitButtons( const Size& rDlgSize );
     void PositionEdit( const Size& rDlgSize );
-    void PositionPrompt( const String& rPrompt, const Size& rDlgSize );
+    void PositionPrompt( const OUString& rPrompt, const Size& rDlgSize );
     DECL_LINK( OkHdl, Button * );
     DECL_LINK( CancelHdl, Button * );
 
 public:
-    SvRTLInputBox( Window* pParent, const String& rPrompt, const String& rTitle,
-        const String& rDefault, long nXTwips = -1, long nYTwips = -1 );
+    SvRTLInputBox( Window* pParent, const OUString& rPrompt, const OUString& rTitle,
+        const OUString& rDefault, long nXTwips = -1, long nYTwips = -1 );
     OUString GetText() const { return aText; }
 };
 
-SvRTLInputBox::SvRTLInputBox( Window* pParent, const String& rPrompt,
-        const String& rTitle, const String& rDefault,
+SvRTLInputBox::SvRTLInputBox( Window* pParent, const OUString& rPrompt,
+        const OUString& rTitle, const OUString& rDefault,
         long nXTwips, long nYTwips ) :
     ModalDialog( pParent,WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
     aEdit( this,  WB_LEFT | WB_BORDER ),
@@ -103,9 +103,9 @@ void SvRTLInputBox::PositionEdit( const Size& rDlgSize )
 }
 
 
-void SvRTLInputBox::PositionPrompt(const String& rPrompt,const Size& rDlgSize)
+void SvRTLInputBox::PositionPrompt(const OUString& rPrompt,const Size& rDlgSize)
 {
-    if ( rPrompt.Len() == 0 )
+    if ( rPrompt.isEmpty() )
         return;
     OUString aText_(convertLineEnd(rPrompt, LINEEND_CR));
     aPromptText.SetPosPixel( LogicToPixel(Point(5,5)));
@@ -153,10 +153,10 @@ RTLFUNC(InputBox)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        String aTitle;
-        String aDefault;
+        OUString aTitle;
+        OUString aDefault;
         sal_Int32 nX = -1, nY = -1;  // center
-        const String& rPrompt = rPar.Get(1)->GetOUString();
+        const OUString& rPrompt = rPar.Get(1)->GetOUString();
         if ( nArgCount > 2 && !rPar.Get(2)->IsErr() )
             aTitle = rPar.Get(2)->GetOUString();
         if ( nArgCount > 3 && !rPar.Get(3)->IsErr() )

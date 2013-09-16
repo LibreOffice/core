@@ -680,16 +680,16 @@ enum VbaFormatType
 struct VbaFormatInfo
 {
     VbaFormatType meType;
-    const char* mpVbaFormat; // Format string in vba
+    OUString mpVbaFormat; // Format string in vba
     NfIndexTableOffset meOffset; // SvNumberFormatter format index, if meType = VBA_FORMAT_TYPE_OFFSET
     const char* mpOOoFormat; // if meType = VBA_FORMAT_TYPE_USERDEFINED
 };
 
 #define VBA_FORMAT_OFFSET( pcUtf8, eOffset ) \
-    { VBA_FORMAT_TYPE_OFFSET, pcUtf8, eOffset, 0 }
+    { VBA_FORMAT_TYPE_OFFSET, OUString(pcUtf8), eOffset, 0 }
 
 #define VBA_FORMAT_USERDEFINED( pcUtf8, pcDefinedUtf8 ) \
-    { VBA_FORMAT_TYPE_USERDEFINED, pcUtf8, NF_NUMBER_STANDARD, pcDefinedUtf8 }
+    { VBA_FORMAT_TYPE_USERDEFINED, OUString(pcUtf8), NF_NUMBER_STANDARD, pcDefinedUtf8 }
 
 static VbaFormatInfo pFormatInfoTable[] =
 {
@@ -703,16 +703,16 @@ static VbaFormatInfo pFormatInfoTable[] =
     VBA_FORMAT_OFFSET( "dddddd", NF_DATE_SYSTEM_LONG ),
     VBA_FORMAT_USERDEFINED( "ttttt", "H:MM:SS AM/PM" ),
     VBA_FORMAT_OFFSET( "ww", NF_DATE_WW ),
-    { VBA_FORMAT_TYPE_NULL, 0, NF_INDEX_TABLE_ENTRIES, 0 }
+    { VBA_FORMAT_TYPE_NULL, OUString(""), NF_INDEX_TABLE_ENTRIES, 0 }
 };
 
-VbaFormatInfo* getFormatInfo( const String& rFmt )
+VbaFormatInfo* getFormatInfo( const OUString& rFmt )
 {
     VbaFormatInfo* pInfo = NULL;
     sal_Int16 i = 0;
-    while( (pInfo = pFormatInfoTable + i )->mpVbaFormat != NULL )
+    while( (pInfo = pFormatInfoTable + i )->meType != VBA_FORMAT_TYPE_NULL )
     {
-        if( rFmt.EqualsIgnoreCaseAscii( pInfo->mpVbaFormat ) )
+        if( rFmt.equalsIgnoreAsciiCase( pInfo->mpVbaFormat ) )
             break;
         i++;
     }
