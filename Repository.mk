@@ -448,12 +448,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
-	affine_uno \
+	affine_uno_uno \
 	$(if $(ENABLE_JAVA),java_uno) \
 	$(if $(ENABLE_JAVA),juh) \
 	$(if $(ENABLE_JAVA),juhx) \
-	log_uno \
-	unsafe_uno \
+	log_uno_uno \
+	unsafe_uno_uno \
 	$(if $(URELIBS),urelibs) \
 	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
 	$(if $(filter $(OS),WNT), \

@@ -13,11 +13,11 @@ $(eval $(call gb_Module_Module,cppu))
 $(eval $(call gb_Module_add_targets,cppu,\
 	InternalUnoApi_cppu_qa_cppumaker_types \
 	InternalUnoApi_cppu_qa_types \
-	Library_affine_uno \
+	Library_affine_uno_uno \
 	Library_cppu \
-	Library_log_uno \
+	Library_log_uno_uno \
 	Library_purpenvhelper \
-	Library_unsafe_uno \
+	Library_unsafe_uno_uno \
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppu,\

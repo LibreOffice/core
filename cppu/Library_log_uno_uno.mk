@@ -8,18 +8,21 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,unsafe_uno))
+$(eval $(call gb_Library_Library,log_uno_uno))
 
-$(eval $(call gb_Library_use_udk_api,unsafe_uno))
+$(eval $(call gb_Library_use_external,log_uno_uno,boost_headers))
 
-$(eval $(call gb_Library_use_libraries,unsafe_uno,\
+$(eval $(call gb_Library_use_udk_api,log_uno_uno))
+
+$(eval $(call gb_Library_use_libraries,log_uno_uno,\
+	cppu \
 	purpenvhelper \
 	sal \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,unsafe_uno,\
-	cppu/source/UnsafeBridge/UnsafeBridge \
+$(eval $(call gb_Library_add_exception_objects,log_uno_uno,\
+	cppu/source/LogBridge/LogBridge \
 ))
 
 # vim: set noet sw=4 ts=4:
