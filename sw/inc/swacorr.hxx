@@ -32,12 +32,12 @@ protected:
     // Return replacement text (only for SWG-format, all others can be obtained from wordlist!).
     // rShort is stream-name - encrypted!
     virtual sal_Bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                  const String& rFileName, const String& rShort, OUString& rLong );
+                                  const OUString& rFileName, const OUString& rShort, OUString& rLong );
 
     // Text with attributes (only SWG-format!).
     // rShort is stream-name - encrypted!
     virtual sal_Bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                              const String& rFileName, const String& rShort, SfxObjectShell&, OUString& );
+                              const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& );
 
 public:
     TYPEINFO();

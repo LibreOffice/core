@@ -1582,7 +1582,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
     return pLists != 0;
 }
 
-sal_Bool SvxAutoCorrect::PutText( const String& rShort, const String& rLong,
+sal_Bool SvxAutoCorrect::PutText( const OUString& rShort, const OUString& rLong,
                                 LanguageType eLang )
 {
     boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
@@ -1614,14 +1614,14 @@ sal_Bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNew
     //  - return the replacement text (only for SWG-Format, all other
     //      can be taken from the word list!)
 sal_Bool SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                      const String&, const String&, OUString& )
+                                      const OUString&, const OUString&, OUString& )
 {
     return sal_False;
 }
 
     // Text with attribution (only the SWG - SWG format!)
 sal_Bool SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                  const String&, const String&, SfxObjectShell&, OUString& )
+                                  const OUString&, const OUString&, SfxObjectShell&, OUString& )
 {
     return sal_False;
 }

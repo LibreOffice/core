@@ -266,7 +266,7 @@ protected:
     //  - Text with attribution (only the SWG - SWG format!)
     //      rShort is the stream name - encrypted!
     virtual sal_Bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg,
-                              const String& rFileName, const String& rShort, SfxObjectShell&, OUString& );
+                              const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& );
 
     // required language in the table add if possible only when the file exists
     sal_Bool    CreateLanguageFile(LanguageType eLang, sal_Bool bNewFile = sal_True);
@@ -278,7 +278,7 @@ public:
     sal_Unicode GetQuote( sal_Unicode cInsChar, sal_Bool bSttQuote,
                             LanguageType eLang ) const;
     virtual sal_Bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg,
-                                  const String& rFileName, const String& rShort, OUString& rLong );
+                                  const OUString& rFileName, const OUString& rShort, OUString& rLong );
 
     TYPEINFO();
 
@@ -352,9 +352,9 @@ public:
     //      Save these directly in the storage. The word list is updated
     //      accordingly!
     //  - pure Text
-    sal_Bool PutText( const String& rShort, const String& rLong, LanguageType eLang = LANGUAGE_SYSTEM );
+    sal_Bool PutText( const OUString& rShort, const OUString& rLong, LanguageType eLang = LANGUAGE_SYSTEM );
     //  - Text with attribution (only in the SWG - SWG format!)
-    sal_Bool PutText( const String& rShort, SfxObjectShell& rShell,
+    sal_Bool PutText( const OUString& rShort, SfxObjectShell& rShell,
                  LanguageType eLang = LANGUAGE_SYSTEM )
         { return _GetLanguageList( eLang ).PutText(rShort, rShell ); }
 
