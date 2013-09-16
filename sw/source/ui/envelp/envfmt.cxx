@@ -178,14 +178,16 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
     {
         if (i != PAPER_USER)
         {
-            String aPaperName = SvxPaperInfo::GetName((Paper) i),
-                   aEntryName;
+            OUString aPaperName = SvxPaperInfo::GetName((Paper) i);
+
+            if (aPaperName.isEmpty())
+                continue;
 
             sal_uInt16 nPos   = 0;
             bool bFound = false;
             while (nPos < m_pSizeFormatBox->GetEntryCount() && !bFound)
             {
-                aEntryName = m_pSizeFormatBox->GetEntry(i);
+                OUString aEntryName = m_pSizeFormatBox->GetEntry(i);
                 if (aEntryName < aPaperName)
                     nPos++;
                 else
