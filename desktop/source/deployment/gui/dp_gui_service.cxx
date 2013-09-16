@@ -88,17 +88,17 @@ void MyApp::DeInit()
 namespace
 {
     struct ProductName
-        : public rtl::Static< String, ProductName > {};
+        : public rtl::Static< OUString, ProductName > {};
     struct Version
-        : public rtl::Static< String, Version > {};
+        : public rtl::Static< OUString, Version > {};
     struct AboutBoxVersion
-        : public rtl::Static< String, AboutBoxVersion > {};
+        : public rtl::Static< OUString, AboutBoxVersion > {};
     struct AboutBoxVersionSuffix
-        : public rtl::Static< String, AboutBoxVersionSuffix > {};
+        : public rtl::Static< OUString, AboutBoxVersionSuffix > {};
     struct OOOVendor
-        : public rtl::Static< String, OOOVendor > {};
+        : public rtl::Static< OUString, OOOVendor > {};
     struct Extension
-        : public rtl::Static< String, Extension > {};
+        : public rtl::Static< OUString, Extension > {};
 }
 
 OUString ReplaceProductNameHookProc( const OUString& rStr )

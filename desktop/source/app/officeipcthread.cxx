@@ -249,7 +249,7 @@ rtl::Reference< OfficeIPCThread > OfficeIPCThread::pGlobalOfficeIPCThread;
 
 // Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
-String CreateMD5FromString( const OUString& aMsg )
+OUString CreateMD5FromString( const OUString& aMsg )
 {
 #if (OSL_DEBUG_LEVEL > 2)
     fprintf( stderr, "create md5 from '%s'\n",
@@ -278,7 +278,7 @@ String CreateMD5FromString( const OUString& aMsg )
         return aBuffer.makeStringAndClear();
     }
 
-    return String();
+    return OUString();
 }
 
 class ProcessEventsClass_Impl

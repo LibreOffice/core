@@ -30,7 +30,7 @@ namespace desktop {
 bool Lockfile_execWarning( Lockfile * that )
 {
     // read information from lock
-    String aLockname = that->m_aLockname;
+    OUString aLockname = that->m_aLockname;
     Config aConfig(aLockname);
     aConfig.SetGroup( LOCKFILE_GROUP );
     OString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
@@ -40,15 +40,15 @@ bool Lockfile_execWarning( Lockfile * that )
     // display warning and return response
     QueryBox aBox( NULL, DesktopResId( QBX_USERDATALOCKED ) );
     // set box title
-    String aTitle = String( DesktopResId( STR_TITLE_USERDATALOCKED ));
+    OUString aTitle = OUString( DesktopResId( STR_TITLE_USERDATALOCKED ));
     aBox.SetText( aTitle );
     // insert values...
-    String aMsgText = aBox.GetMessText( );
-    aMsgText.SearchAndReplaceAscii(
+    OUString aMsgText = aBox.GetMessText( );
+    aMsgText = aMsgText.replaceFirst(
         "$u", OStringToOUString( aUser, RTL_TEXTENCODING_ASCII_US) );
-    aMsgText.SearchAndReplaceAscii(
+    aMsgText = aMsgText.replaceFirst(
         "$h", OStringToOUString( aHost, RTL_TEXTENCODING_ASCII_US) );
-    aMsgText.SearchAndReplaceAscii(
+    aMsgText = aMsgText.replaceFirst(
         "$t", OStringToOUString( aTime, RTL_TEXTENCODING_ASCII_US) );
     aBox.SetMessText(aMsgText);
     // do it

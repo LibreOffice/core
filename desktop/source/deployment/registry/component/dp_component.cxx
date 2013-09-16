@@ -671,7 +671,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
                 INetContentTypeParameter const * param = params.find(OString("platform"));
                 bool bPlatformFits(param == 0);
-                String aPlatform;
+                OUString aPlatform;
                 if (!bPlatformFits) // platform is specified, we have to check
                 {
                     aPlatform = param->m_sValue;
@@ -683,8 +683,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     param = params.find(OString("type"));
                     if (param != 0)
                     {
-                        String const & value = param->m_sValue;
-                        if (value.EqualsIgnoreCaseAscii("native")) {
+                        OUString const & value = param->m_sValue;
+                        if (value.equalsIgnoreAsciiCase("native")) {
                             if (bPlatformFits)
                                 return new BackendImpl::ComponentPackageImpl(
                                     this, url, name, m_xDynComponentTypeInfo,
@@ -695,13 +695,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                                     this, url, name, m_xDynComponentTypeInfo,
                                     bRemoved, identifier, aPlatform);
                         }
-                        if (value.EqualsIgnoreCaseAscii("Java")) {
+                        if (value.equalsIgnoreAsciiCase("Java")) {
                             return new BackendImpl::ComponentPackageImpl(
                                 this, url, name, m_xJavaComponentTypeInfo,
                                 "com.sun.star.loader.Java2",
                                 bRemoved, identifier);
                         }
-                        if (value.EqualsIgnoreCaseAscii("Python")) {
+                        if (value.equalsIgnoreAsciiCase("Python")) {
                             return new BackendImpl::ComponentPackageImpl(
                                 this, url, name, m_xPythonComponentTypeInfo,
                                 "com.sun.star.loader.Python",
@@ -723,14 +723,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             {
                 INetContentTypeParameter const * param = params.find(OString("type"));
                 if (param != 0) {
-                    String const & value = param->m_sValue;
-                    if (value.EqualsIgnoreCaseAscii("RDB"))
+                    OUString const & value = param->m_sValue;
+                    if (value.equalsIgnoreAsciiCase("RDB"))
                     {
                         return new BackendImpl::TypelibraryPackageImpl(
                             this, url, name, m_xRDBTypelibTypeInfo,
                             false /* rdb */, bRemoved, identifier);
                     }
-                    if (value.EqualsIgnoreCaseAscii("Java")) {
+                    if (value.equalsIgnoreAsciiCase("Java")) {
                         return new BackendImpl::TypelibraryPackageImpl(
                             this, url, name, m_xJavaTypelibTypeInfo,
                             true /* jar */, bRemoved, identifier);

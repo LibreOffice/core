@@ -161,7 +161,7 @@ private:
                          OUString const & sReleaseNotes);
     bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
-    bool showDescription( const String& rDescription, bool bWithPublisher );
+    bool showDescription( const OUString& rDescription, bool bWithPublisher );
     bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
     DECL_LINK(selectionHandler, void *);

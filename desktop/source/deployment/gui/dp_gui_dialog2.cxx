@@ -96,7 +96,7 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
         const SolarMutexGuard guard;
         ::std::auto_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
         OSL_ASSERT( resmgr.get() != 0 );
-        String ret( ResId( STR_FILTERNAME_ALL, *resmgr.get() ) );
+        OUString ret( ResId( STR_FILTERNAME_ALL, *resmgr.get() ) );
         return ret;
     }
 };
@@ -383,7 +383,7 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
         aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
     }
 
-    if ( GetEntryData( nPos )->m_sLicenseText.Len() )
+    if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
         aPopup.InsertItem( CMD_SHOW_LICENSE, DialogHelper::getResourceString( RID_STR_SHOW_LICENSE_CMD ) );
 
     return (MENU_COMMAND) aPopup.Execute( this, rPos );
@@ -898,7 +898,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
     xFilePicker->setTitle( m_sAddPackages );
 
-    if ( m_sLastFolderURL.Len() )
+    if ( !m_sLastFolderURL.isEmpty() )
         xFilePicker->setDisplayDirectory( m_sLastFolderURL );
 
     // collect and set filter list:
@@ -1231,7 +1231,7 @@ UpdateRequiredDialog::UpdateRequiredDialog( Window *pParent, TheExtensionManager
 
     // resize update button
     Size aBtnSize = m_aUpdateBtn.GetSizePixel();
-    String sTitle = m_aUpdateBtn.GetText();
+    OUString sTitle = m_aUpdateBtn.GetText();
     long nWidth = m_aUpdateBtn.GetCtrlTextWidth( sTitle );
     nWidth += 2 * m_aUpdateBtn.GetTextHeight();
     if ( nWidth > aBtnSize.Width() )

@@ -57,7 +57,7 @@ void DescriptionEdit::Init()
 
 void DescriptionEdit::Clear()
 {
-    SetText( String() );
+    SetText( OUString() );
 
     m_bIsVerticalScrollBarHidden = true;
     ScrollBar*  pVScrBar = GetVScrollBar();

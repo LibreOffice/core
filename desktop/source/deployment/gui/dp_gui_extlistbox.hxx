@@ -67,13 +67,13 @@ struct Entry_Impl
     bool            m_bHasButtons   :1;
     bool            m_bMissingLic   :1;
     PackageState    m_eState;
-    String          m_sTitle;
-    String          m_sVersion;
-    String          m_sDescription;
-    String          m_sPublisher;
-    String          m_sPublisherURL;
-    String          m_sErrorText;
-    String          m_sLicenseText;
+    OUString        m_sTitle;
+    OUString        m_sVersion;
+    OUString        m_sDescription;
+    OUString        m_sPublisher;
+    OUString        m_sPublisherURL;
+    OUString        m_sErrorText;
+    OUString        m_sLicenseText;
     Image           m_aIcon;
     Image           m_aIconHC;
     FixedHyperlink* m_pPublisher;
@@ -84,7 +84,7 @@ struct Entry_Impl
                 const PackageState eState, const bool bReadOnly );
    ~Entry_Impl();
 
-    StringCompare CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const;
+    sal_Int32     CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const;
     void          checkDependencies();
 };
 

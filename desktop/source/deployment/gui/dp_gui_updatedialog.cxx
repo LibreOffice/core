@@ -951,7 +951,7 @@ void UpdateDialog::initDescription()
 
 void UpdateDialog::clearDescription()
 {
-    String sEmpty;
+    OUString sEmpty;
     m_PublisherLabel.Hide();
     m_PublisherLink.Hide();
     m_PublisherLink.SetText( sEmpty );
@@ -1022,9 +1022,9 @@ bool UpdateDialog::showDescription(std::pair< OUString, OUString > const & pairP
     return true;
 }
 
-bool UpdateDialog::showDescription( const String& rDescription, bool bWithPublisher )
+bool UpdateDialog::showDescription( const OUString& rDescription, bool bWithPublisher )
 {
-    if ( rDescription.Len() == 0 )
+    if ( rDescription.isEmpty() )
         // nothing to show
         return false;
 

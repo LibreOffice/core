@@ -109,9 +109,9 @@ class ExtMgrDialog : public ModelessDialog,
     FixedText           *m_pProgressText;
     ProgressBar         *m_pProgressBar;
     CancelButton        *m_pCancelBtn;
-    const String         m_sAddPackages;
-    String               m_sProgressText;
-    String               m_sLastFolderURL;
+    const OUString       m_sAddPackages;
+    OUString             m_sProgressText;
+    OUString             m_sLastFolderURL;
     ::osl::Mutex         m_aMutex;
     bool                 m_bHasProgress;
     bool                 m_bProgressChanged;
@@ -181,9 +181,9 @@ class UpdateRequiredDialog : public ModalDialog,
     FixedLine            m_aDivider;
     FixedText            m_aProgressText;
     ProgressBar          m_aProgressBar;
-    const String         m_sAddPackages;
-    const String         m_sCloseText;
-    String               m_sProgressText;
+    const OUString       m_sAddPackages;
+    const OUString       m_sCloseText;
+    OUString             m_sProgressText;
     ::osl::Mutex         m_aMutex;
     bool                 m_bHasProgress;
     bool                 m_bProgressChanged;

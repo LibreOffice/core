@@ -217,14 +217,14 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_bError(false),
         m_bNoEntry(true),
         m_bActivated(false),
-        m_sInstalling(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_INSTALLING))),
-        m_sFinished(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_FINISHED))),
-        m_sNoErrors(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS))),
-        m_sErrorDownload(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD))),
-        m_sErrorInstallation(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION))),
-        m_sErrorLicenseDeclined(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))),
-        m_sNoInstall(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))),
-        m_sThisErrorOccurred(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))),
+        m_sInstalling(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_INSTALLING))),
+        m_sFinished(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_FINISHED))),
+        m_sNoErrors(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS))),
+        m_sErrorDownload(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD))),
+        m_sErrorInstallation(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION))),
+        m_sErrorLicenseDeclined(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))),
+        m_sNoInstall(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))),
+        m_sThisErrorOccurred(OUString(DpGuiResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))),
         m_ft_action(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_DOWNLOADING)),
         m_statusbar(this,DpGuiResId(RID_DLG_UPDATE_INSTALL_STATUSBAR)),
         m_ft_extension_name(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NAME)),
@@ -274,7 +274,7 @@ void UpdateInstallDialog::updateDone()
 void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtension,
     OUString const & exceptionMessage)
 {
-    String sError;
+    OUString sError;
     m_bError = true;
 
     switch (err)
@@ -293,7 +293,7 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
         OSL_ASSERT(0);
     }
 
-    sError.SearchAndReplace(String("%NAME"), String(sExtension), 0);
+    sError = sError.replaceFirst("%NAME", sExtension);
     //We want to have an empty line between the error messages. However,
     //there shall be no empty line after the last entry.
     if (m_bNoEntry)

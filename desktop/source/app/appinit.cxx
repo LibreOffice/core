@@ -157,7 +157,7 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
 namespace
 {
     struct acceptorMap : public rtl::Static< AcceptorMap, acceptorMap > {};
-    struct CurrentTempURL : public rtl::Static< String, CurrentTempURL > {};
+    struct CurrentTempURL : public rtl::Static< OUString, CurrentTempURL > {};
 }
 
 static sal_Bool bAccept = sal_False;
@@ -272,7 +272,7 @@ void Desktop::CreateTemporaryDirectory()
         DesktopResId aResId( STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE );
         aResId.SetRT( RSC_STRING );
         if ( aResId.GetResMgr()->IsAvailable( aResId ))
-            aMsg = String( aResId );
+            aMsg = OUString( aResId );
         else
             aMsg = OUString( "The path manager is not available.\n" );
         e.Message = aMsg + e.Message;
@@ -314,8 +314,8 @@ void Desktop::RemoveTemporaryDirectory()
     SAL_INFO( "desktop.app", "desktop (cd100003) ::removeTemporaryDirectory" );
 
     // remove current temporary directory
-    String &rCurrentTempURL = CurrentTempURL::get();
-    if ( rCurrentTempURL.Len() > 0 )
+    OUString &rCurrentTempURL = CurrentTempURL::get();
+    if ( !rCurrentTempURL.isEmpty() )
     {
         ::utl::UCBContentHelper::Kill( rCurrentTempURL );
     }

@@ -112,19 +112,19 @@ Entry_Impl::~Entry_Impl()
 {}
 
 //------------------------------------------------------------------------------
-StringCompare Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const
+sal_Int32 Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const
 {
-    StringCompare eCompare = (StringCompare) pCollator->compareString( m_sTitle, pEntry->m_sTitle );
-    if ( eCompare == COMPARE_EQUAL )
+    sal_Int32 eCompare = pCollator->compareString( m_sTitle, pEntry->m_sTitle );
+    if ( eCompare == 0 )
     {
-        eCompare = m_sVersion.CompareTo( pEntry->m_sVersion );
-        if ( eCompare == COMPARE_EQUAL )
+        eCompare = m_sVersion.compareTo( pEntry->m_sVersion );
+        if ( eCompare == 0 )
         {
             sal_Int32 nCompare = m_xPackage->getRepositoryName().compareTo( pEntry->m_xPackage->getRepositoryName() );
             if ( nCompare < 0 )
-                eCompare = COMPARE_LESS;
+                eCompare = -1;
             else if ( nCompare > 0 )
-                eCompare = COMPARE_GREATER;
+                eCompare = 1;
         }
     }
     return eCompare;
@@ -573,7 +573,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     long aTextHeight = GetTextHeight();
 
     // Init publisher link here
-    if ( !pEntry->m_pPublisher && pEntry->m_sPublisher.Len() )
+    if ( !pEntry->m_pPublisher && !pEntry->m_sPublisher.isEmpty() )
     {
         pEntry->m_pPublisher = new FixedHyperlink( this );
         pEntry->m_pPublisher->SetBackground();
@@ -603,7 +603,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     if ( aTitleWidth > nMaxTitleWidth - aVersionWidth )
     {
         aTitleWidth = nMaxTitleWidth - aVersionWidth - (aTextHeight / 3);
-        String aShortTitle = GetEllipsisString( pEntry->m_sTitle, aTitleWidth );
+        OUString aShortTitle = GetEllipsisString( pEntry->m_sTitle, aTitleWidth );
         DrawText( aPos, aShortTitle );
         aTitleWidth += (aTextHeight / 3);
     }
@@ -622,7 +622,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
 
     // draw description
     OUString sDescription;
-    if ( pEntry->m_sErrorText.Len() )
+    if ( !pEntry->m_sErrorText.isEmpty() )
     {
         if ( pEntry->m_bActive )
             sDescription = pEntry->m_sErrorText + OUString("\n") + pEntry->m_sDescription;
@@ -943,14 +943,14 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
     if ( nStart > nEnd )
         return false;
 
-    StringCompare eCompare;
+    sal_Int32 eCompare;
 
     if ( nStart == nEnd )
     {
         eCompare = pEntry->CompareTo( m_pCollator, m_vEntries[ nStart ] );
-        if ( eCompare == COMPARE_LESS )
+        if ( eCompare < 0 )
             return false;
-        else if ( eCompare == COMPARE_EQUAL )
+        else if ( eCompare == 0 )
         {
             //Workaround. See i86963.
             if (pEntry->m_xPackage != m_vEntries[nStart]->m_xPackage)
@@ -970,9 +970,9 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
     const long nMid = nStart + ( ( nEnd - nStart ) / 2 );
     eCompare = pEntry->CompareTo( m_pCollator, m_vEntries[ nMid ] );
 
-    if ( eCompare == COMPARE_LESS )
+    if ( eCompare < 0 )
         return FindEntryPos( pEntry, nStart, nMid-1, nPos );
-    else if ( eCompare == COMPARE_GREATER )
+    else if ( eCompare > 0 )
         return FindEntryPos( pEntry, nMid+1, nEnd, nPos );
     else
     {
@@ -1027,7 +1027,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     TEntry_Impl pEntry( new Entry_Impl( xPackage, eState, bLocked ) );
 
     // Don't add empty entries
-    if ( ! pEntry->m_sTitle.Len() )
+    if ( pEntry->m_sTitle.isEmpty() )
         return 0;
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
@@ -1093,7 +1093,7 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
             if ( eState == AMBIGUOUS )
                 (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
             else if ( ! (*iIndex)->m_bMissingLic )
-                (*iIndex)->m_sErrorText = String();
+                (*iIndex)->m_sErrorText = "";
 
             if ( IsReallyVisible() )
                 Invalidate();

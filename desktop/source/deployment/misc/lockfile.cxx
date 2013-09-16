@@ -149,7 +149,7 @@ namespace desktop {
         // this checks whether the lockfile was created on the same
         // host by the same user. Should this be the case it is safe
         // to assume that it is a stale lockfile which can be overwritten
-        String aLockname = m_aLockname;
+        OUString aLockname = m_aLockname;
         Config aConfig(aLockname);
         aConfig.SetGroup(LOCKFILE_GROUP);
         OString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
@@ -175,7 +175,7 @@ namespace desktop {
 
     void Lockfile::syncToFile( void ) const
     {
-        String aLockname = m_aLockname;
+        OUString aLockname = m_aLockname;
         Config aConfig(aLockname);
         aConfig.SetGroup(LOCKFILE_GROUP);
 

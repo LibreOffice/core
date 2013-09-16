@@ -363,7 +363,7 @@ OUString GetMsgString(
     {
         ResMgr* resMgr = Desktop::GetDesktopResManager();
         if ( resMgr )
-            return OUString( String( ResId( nId, *resMgr )));
+            return OUString( ResId( nId, *resMgr ) );
     }
     return aFallbackMsg;
 }
@@ -391,7 +391,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
-        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr ))) );
+        aDiagnosticMessage.append( OUString( ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr ) ) );
     else
         aDiagnosticMessage.appendAscii( "The program cannot be started." );
 
@@ -399,7 +399,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     {
         aDiagnosticMessage.appendAscii( "\n\n" );
         if ( pResMgr )
-            aDiagnosticMessage.append( OUString(String(ResId(STR_INTERNAL_ERRMSG, *pResMgr ))) );
+            aDiagnosticMessage.append( OUString( ResId(STR_INTERNAL_ERRMSG, *pResMgr ) ) );
         else
             aDiagnosticMessage.appendAscii( "The following internal error has occurred:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
@@ -457,23 +457,23 @@ CommandLineArgs& Desktop::GetCommandLineArgs()
 namespace
 {
     struct BrandName
-        : public rtl::Static< String, BrandName > {};
+        : public rtl::Static< OUString, BrandName > {};
     struct Version
-        : public rtl::Static< String, Version > {};
+        : public rtl::Static< OUString, Version > {};
     struct AboutBoxVersion
-        : public rtl::Static< String, AboutBoxVersion > {};
+        : public rtl::Static< OUString, AboutBoxVersion > {};
     struct AboutBoxVersionSuffix
-        : public rtl::Static< String, AboutBoxVersionSuffix > {};
+        : public rtl::Static< OUString, AboutBoxVersionSuffix > {};
     struct OOOVendor
-        : public rtl::Static< String, OOOVendor > {};
+        : public rtl::Static< OUString, OOOVendor > {};
     struct Extension
-        : public rtl::Static< String, Extension > {};
+        : public rtl::Static< OUString, Extension > {};
     struct XMLFileFormatName
-        : public rtl::Static< String, XMLFileFormatName > {};
+        : public rtl::Static< OUString, XMLFileFormatName > {};
     struct XMLFileFormatVersion
-        : public rtl::Static< String, XMLFileFormatVersion > {};
+        : public rtl::Static< OUString, XMLFileFormatVersion > {};
     struct WriterCompatibilityVersionOOo11
-        : public rtl::Static< String, WriterCompatibilityVersionOOo11 > {};
+        : public rtl::Static< OUString, WriterCompatibilityVersionOOo11 > {};
 }
 
 OUString ReplaceStringHookProc( const OUString& rStr )
@@ -840,11 +840,11 @@ OUString    Desktop::CreateErrorMsgString(
 
     if ( bFileInfo )
     {
-        String aMsgString( aMsg );
+        OUString aMsgString( aMsg );
 
         osl::File::getSystemPathFromFileURL( aFileURL, aFilePath );
 
-        aMsgString.SearchAndReplaceAscii( "$1", aFilePath );
+        aMsgString = aMsgString.replaceFirst( "$1", aFilePath );
         aMsg = aMsgString;
     }
 
@@ -1169,7 +1169,7 @@ void restartOnMac(bool passArguments) {
 #if HAVE_FEATURE_MACOSX_SANDBOX
     (void) passArguments; // avoid warnings
     ResMgr *resMgr = Desktop::GetDesktopResManager();
-    OUString aMessage = OUString( String( ResId( STR_LO_MUST_BE_RESTARTED, *resMgr )));
+    OUString aMessage = OUString( ResId( STR_LO_MUST_BE_RESTARTED, *resMgr ) );
 
     ErrorBox aRestartBox( NULL, WB_OK, aMessage );
     aRestartBox.Execute();
@@ -1255,7 +1255,7 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 
     if ( bInException )
     {
-        String aDoubleExceptionString;
+        OUString aDoubleExceptionString;
         Application::Abort( aDoubleExceptionString );
     }
 
@@ -1279,14 +1279,14 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
     {
         case EXC_RSCNOTLOADED:
         {
-            String aResExceptionString;
+            OUString aResExceptionString;
             Application::Abort( aResExceptionString );
             break;
         }
 
         case EXC_SYSOBJNOTCREATED:
         {
-            String aSysResExceptionString;
+            OUString aSysResExceptionString;
             Application::Abort( aSysResExceptionString );
             break;
         }
@@ -1309,7 +1309,7 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
             }
             else
             {
-                Application::Abort( String() );
+                Application::Abort( OUString() );
             }
 
             break;
@@ -1494,16 +1494,16 @@ int Desktop::Main()
         // create title string
         LanguageTag aLocale( LANGUAGE_SYSTEM);
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "ofa", aLocale );
-        String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
+        OUString aTitle = pLabelResMgr ? OUString( ResId( RID_APPTITLE, *pLabelResMgr ) ) : OUString();
         delete pLabelResMgr;
 
 #ifdef DBG_UTIL
         //include buildid in non product builds
         OUString aDefault("development");
         aTitle += OUString(" [");
-        String aVerId( utl::Bootstrap::getBuildIdData(aDefault));
+        OUString aVerId( utl::Bootstrap::getBuildIdData(aDefault));
         aTitle += aVerId;
-        aTitle += ']';
+        aTitle += "]";
 #endif
 
         SetDisplayName( aTitle );
@@ -2034,7 +2034,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
         if (getenv ("OOO_EXIT_POST_STARTUP"))
             new ExitTimer();
     } catch (const ::com::sun::star::uno::Exception &e) {
-        String a( "UNO exception during client open:\n"  );
+        OUString a( "UNO exception during client open:\n"  );
         Application::Abort( a + e.Message );
     }
     return 0;
@@ -2586,24 +2586,24 @@ void Desktop::OpenDefault()
 }
 
 
-String GetURL_Impl(
-    const String& rName, boost::optional< OUString > const & cwdUrl )
+OUString GetURL_Impl(
+    const OUString& rName, boost::optional< OUString > const & cwdUrl )
 {
     // if rName is a vnd.sun.star.script URL do not attempt to parse it
     // as INetURLObj does not handle handle there URLs
-    if (rName.CompareToAscii("vnd.sun.star.script" , 19) == COMPARE_EQUAL)
+    if (rName.startsWith("vnd.sun.star.script"))
     {
         return rName;
     }
 
     // dont touch file urls, those should already be in internal form
     // they won't get better here (#112849#)
-    if (rName.CompareToAscii("file:" , 5) == COMPARE_EQUAL)
+    if (rName.startsWith("file:"))
     {
         return rName;
     }
 
-    if ( rName.CompareToAscii("service:" , 8) == COMPARE_EQUAL )
+    if ( rName.startsWith("service:"))
     {
         return rName;
     }
@@ -2624,7 +2624,7 @@ String GetURL_Impl(
     bool bWasAbsolute;
     INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute, false, INetURLObject::WAS_ENCODED,
                                                 RTL_TEXTENCODING_UTF8, true );
-    String        aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    OUString      aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     ::osl::FileStatus aStatus( osl_FileStatus_Mask_FileURL );
     ::osl::DirectoryItem aItem;

@@ -68,8 +68,8 @@ using namespace ::com::sun::star::task;
 namespace desktop
 {
 
-String GetURL_Impl(
-    const String& rName, boost::optional< OUString > const & cwdUrl );
+OUString GetURL_Impl(
+    const OUString& rName, boost::optional< OUString > const & cwdUrl );
 
 struct DispatchHolder
 {
@@ -81,10 +81,10 @@ struct DispatchHolder
     Reference< XDispatch > xDispatch;
 };
 
-static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
-                                        String aAppl )
+static OUString impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
+                                        OUString aAppl )
 {
-    String aFilter;
+    OUString aFilter;
     SfxMedium* pMedium = new SfxMedium( aUrl,
                                         STREAM_STD_READ );
 
@@ -112,7 +112,7 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
 static OUString impl_GuessFilter( OUString aUrlIn, OUString aUrlOut )
 {
     /* aAppl can also be set to Factory like scalc, swriter... */
-    String aAppl;
+    OUString aAppl;
     aAppl = impl_GetFilterFromExt( aUrlIn, SFX_FILTER_IMPORT, aAppl );
     return  impl_GetFilterFromExt( aUrlOut, SFX_FILTER_EXPORT, aAppl );
 }
@@ -236,7 +236,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             aArgs[nCount-1].Value <<= aDispatchRequest.aPreselectedFactory;
         }
 
-        String aName( GetURL_Impl( aDispatchRequest.aURL, aDispatchRequest.aCwdUrl ) );
+        OUString aName( GetURL_Impl( aDispatchRequest.aURL, aDispatchRequest.aCwdUrl ) );
         OUString aTarget("_default");
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
@@ -264,10 +264,10 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         // Otherwise try to dispatch it ...
         Reference < XPrintable > xDoc;
         if(
-            ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
-            ( aName.CompareToAscii( "slot:" , 5 ) == COMPARE_EQUAL )  ||
-            ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )  ||
-            ( aName.CompareToAscii("vnd.sun.star.script", 19) == COMPARE_EQUAL)
+            ( aName.startsWith( ".uno" ) )  ||
+            ( aName.startsWith( "slot:" ) )  ||
+            ( aName.startsWith( "macro:" ) )  ||
+            ( aName.startsWith("vnd.sun.star.script") )
           )
         {
             // Attention: URL must be parsed full. Otherwise some detections on it will fail!
@@ -297,7 +297,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 aDispatches.push_back( DispatchHolder( aURL, xDispatcher ));
             }
         }
-        else if ( ( aName.CompareToAscii( "service:"  , 8 ) == COMPARE_EQUAL ) )
+        else if ( ( aName.startsWith( "service:" ) ) )
         {
             // TODO: the dispatch has to be done for loadComponentFromURL as well. Please ask AS for more details.
             URL             aURL ;

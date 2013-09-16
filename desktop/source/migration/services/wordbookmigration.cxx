@@ -153,7 +153,7 @@ bool IsUserWordbook( const OUString& rFile )
     static const sal_Char*      pVerOOo7    = "OOoUserDict1";
 
     bool bRet = false;
-    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( String(rFile), STREAM_STD_READ );
+    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( OUString(rFile), STREAM_STD_READ );
     if ( pStream && !pStream->GetError() )
     {
         sal_Size nSniffPos = pStream->Tell();

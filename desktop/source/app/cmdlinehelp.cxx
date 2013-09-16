@@ -133,13 +133,13 @@ namespace desktop
     {
         // if you put variables in other chunks don't forget to call the replace routines
         // for those chunks...
-        String aHelpMessage_version(aCmdLineHelp_version, RTL_TEXTENCODING_ASCII_US);
-        String aHelpMessage_head(aCmdLineHelp_head, RTL_TEXTENCODING_ASCII_US);
-        String aHelpMessage_left(aCmdLineHelp_left, RTL_TEXTENCODING_ASCII_US);
-        String aHelpMessage_right(aCmdLineHelp_right, RTL_TEXTENCODING_ASCII_US);
-        String aHelpMessage_bottom(aCmdLineHelp_bottom, RTL_TEXTENCODING_ASCII_US);
+        OUString aHelpMessage_version = OUString::createFromAscii(aCmdLineHelp_version);
+        OUString aHelpMessage_head = OUString::createFromAscii(aCmdLineHelp_head);
+        OUString aHelpMessage_left = OUString::createFromAscii(aCmdLineHelp_left);
+        OUString aHelpMessage_right = OUString::createFromAscii(aCmdLineHelp_right);
+        OUString aHelpMessage_bottom = OUString::createFromAscii(aCmdLineHelp_bottom);
         aHelpMessage_version = ReplaceStringHookProc(aHelpMessage_version);
-        aHelpMessage_head.SearchAndReplaceAscii( "%CMDNAME", String( "soffice", RTL_TEXTENCODING_ASCII_US) );
+        aHelpMessage_head = aHelpMessage_head.replaceFirst( "%CMDNAME", "soffice" );
         if (!unknown.isEmpty())
         {
             aHelpMessage_head = "Unknown option: " + unknown + "\n\n"
