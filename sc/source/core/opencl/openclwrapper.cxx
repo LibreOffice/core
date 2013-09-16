@@ -400,22 +400,6 @@ int OpenclDevice::initOpenclAttr( OpenCLEnv * env )
     return 0;
 }
 
-int OpenclDevice::createKernel( char * kernelname, KernelEnv * env )
-{
-    int clStatus;
-
-    env->mpkKernel = clCreateKernel( gpuEnv.mpArryPrograms[0], kernelname, &clStatus );
-    env->mpkContext = gpuEnv.mpContext;
-    env->mpkCmdQueue = gpuEnv.mpCmdQueue;
-    return clStatus != CL_SUCCESS ? 1 : 0;
-}
-
-int OpenclDevice::releaseKernel( KernelEnv * env )
-{
-    int clStatus = clReleaseKernel( env->mpkKernel );
-    return clStatus != CL_SUCCESS ? 1 : 0;
-}
-
 int OpenclDevice::releaseOpenclEnv( GPUEnv *gpuInfo )
 {
     int i = 0;

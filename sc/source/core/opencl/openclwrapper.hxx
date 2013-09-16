@@ -93,15 +93,15 @@ namespace sc { namespace opencl {
 
 typedef unsigned int uint;
 
-typedef struct _OpenCLEnv
+struct OpenCLEnv
 {
     cl_platform_id mpOclPlatformID;
     cl_context mpOclContext;
     cl_device_id mpOclDevsID;
     cl_command_queue mpOclCmdQueue;
-} OpenCLEnv;
+};
 
-typedef struct _GPUEnv
+struct GPUEnv
 {
     //share vb in all modules in hb library
     cl_platform_id mpPlatformID;
@@ -119,15 +119,9 @@ typedef struct _GPUEnv
         mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
     int mnKhrFp64Flag;
     int mnAmdFp64Flag;
+};
 
-} GPUEnv;
-
-typedef struct
-{
-    char kernelName[MAX_KERNEL_NAME_LEN + 1];
-    char *kernelStr;
-} kernel_node;
-typedef struct _SingleVectorFormula
+struct SingleVectorFormula
 {
     const double *mdpInputLeftData;
     const double *mdpInputRightData;
@@ -137,9 +131,9 @@ typedef struct _SingleVectorFormula
     uint mnInputRightStartPosition;
     int mnInputLeftOffset;
     int mnInputRightOffset;
-} SingleVectorFormula;
+};
 
-typedef struct _DoubleVectorFormula
+struct DoubleVectorFormula
 {
     const double *mdpInputData;
     size_t mnInputDataSize;
@@ -147,7 +141,8 @@ typedef struct _DoubleVectorFormula
     uint mnInputEndPosition;
     int mnInputStartOffset;
     int mnInputEndOffset;
-} DoubleVectorFormula;
+};
+
 class OpenclCalcBase
 {
 public:
@@ -169,8 +164,6 @@ public:
 
     virtual int oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArray, const double *pSubtractSingle, size_t nSrcDataSize,size_t nElements, double delta,uint *nStartPos,uint *nEndPos ,double *deResult)=0;
     virtual double *oclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double delta )=0;
-
-
 };
 
 
@@ -196,9 +189,7 @@ public:
     static int compileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
 
     static int initOpenclAttr( OpenCLEnv * env );
-    int releaseKernel( KernelEnv * env );
     int setKernelEnv( KernelEnv *envInfo );
-    int createKernel( char * kernelname, KernelEnv * env );
     int runKernel( const char *kernelName, void **userdata );
     int convertToString( const char *filename, char **source );
     int checkKernelName( KernelEnv *envInfo, const char *kernelName );
