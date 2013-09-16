@@ -1158,6 +1158,7 @@ sal_Bool SwCrsrShell::GoPrevCrsr()
 
 void SwCrsrShell::Paint( const Rectangle &rRect)
 {
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     SET_CURR_SHELL( this );
 
     // always switch off all cursors when painting
