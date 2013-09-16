@@ -213,17 +213,19 @@ struct SourceProviderEntity {
 
 struct SourceProviderScannerData {
     SourceProviderScannerData(
-        rtl::Reference<unoidl::Manager> const & theManager,
-        void const * sourceAddress, sal_uInt64 sourceSize):
-        manager(theManager),
-        sourcePosition(static_cast<char const *>(sourceAddress)),
-        sourceEnd(sourcePosition + sourceSize), errorLine(0)
+        rtl::Reference<unoidl::Manager> const & theManager):
+        manager(theManager), errorLine(0)
     { assert(manager.is()); }
+
+    void setSource(void const * address, sal_uInt64 size) {
+        sourcePosition = static_cast<char const *>(address);
+        sourceEnd = sourcePosition + size;
+    }
 
     rtl::Reference<unoidl::Manager> manager;
 
     char const * sourcePosition;
-    char const * const sourceEnd;
+    char const * sourceEnd;
     YYLTYPE errorLine;
     OString parserError;
     OUString errorMessage;
@@ -232,6 +234,8 @@ struct SourceProviderScannerData {
     std::vector<OUString> modules;
     OUString currentName;
 };
+
+bool parse(OUString const & uri, SourceProviderScannerData * data);
 
 } }
 

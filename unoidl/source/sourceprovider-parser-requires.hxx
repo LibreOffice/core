@@ -23,8 +23,6 @@
 
 typedef void * yyscan_t;
 
-int yyparse(yyscan_t yyscanner);
-
 namespace unoidl { namespace detail {
 
 struct SourceProviderEntity;

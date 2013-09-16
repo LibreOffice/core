@@ -19,10 +19,13 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cerrno>
 #include <cstddef>
 #include <cstdlib>
 #include <limits>
+#include <new>
 #include <utility>
+#include <vector>
 
 #include <sourceprovider-parser-requires.hxx>
 
@@ -49,6 +52,9 @@
 %parse-param {yyscan_t yyscanner}
 
 %{
+
+#include "osl/file.h"
+#include "osl/thread.h"
 
 #include "sourceprovider-scanner.hxx"
 
@@ -3655,6 +3661,87 @@ OUString SourceProviderType::getName() const {
     default:
         assert(false); for (;;) { std::abort(); } // this cannot happen
     }
+}
+
+bool parse(OUString const & uri, SourceProviderScannerData * data) {
+    assert(data != 0);
+    oslFileHandle handle;
+    oslFileError e = osl_openFile(uri.pData, &handle, osl_File_OpenFlag_Read);
+    switch (e) {
+    case osl_File_E_None:
+        break;
+    case osl_File_E_NOENT:
+        return false;
+    default:
+        throw FileFormatException(uri, "cannot open: " + OUString::number(e));
+    }
+    sal_uInt64 size;
+    e = osl_getFileSize(handle, &size);
+    if (e != osl_File_E_None) {
+        oslFileError e2 = osl_closeFile(handle);
+        SAL_WARN_IF(
+            e2 != osl_File_E_None, "unoidl",
+            "cannot close " << uri << ": " << +e2);
+        throw FileFormatException(
+            uri, "cannot get size: " + OUString::number(e));
+    }
+    void * address;
+    e = osl_mapFile(handle, &address, size, 0, osl_File_MapFlag_RandomAccess);
+    if (e != osl_File_E_None) {
+        oslFileError e2 = osl_closeFile(handle);
+        SAL_WARN_IF(
+            e2 != osl_File_E_None, "unoidl",
+            "cannot close " << uri << ": " << +e2);
+        throw FileFormatException(uri, "cannot mmap: " + OUString::number(e));
+    }
+    try {
+        data->setSource(address, size);
+        yyscan_t yyscanner;
+        if (yylex_init_extra(data, &yyscanner) != 0) {
+            // Checking errno for the specific EINVAL, ENOMEM documented for
+            // yylex_init_extra would not work as those values are not defined
+            // by the C++ Standard:
+            int e = errno;
+            throw FileFormatException(
+                uri,
+                "yylex_init_extra failed with errno " + OUString::number(e));
+        }
+        int e2 = yyparse(yyscanner);
+        yylex_destroy(yyscanner);
+        switch (e2) {
+        case 0:
+            break;
+        default:
+            assert(false);
+            // fall through
+        case 1:
+            throw FileFormatException(
+                uri,
+                ("cannot parse"
+                 + (data->errorLine == 0
+                    ? OUString() : " line " + OUString::number(data->errorLine))
+                 + (data->parserError.isEmpty()
+                    ? OUString()
+                    : (", "
+                       + OStringToOUString(
+                           data->parserError, osl_getThreadTextEncoding())))
+                 + (data->errorMessage.isEmpty()
+                    ? OUString() : ": \"" + data->errorMessage + "\"")));
+        case 2:
+            throw std::bad_alloc();
+        }
+    } catch (...) {
+        e = osl_unmapMappedFile(handle, address, size);
+        SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot unmap: " << +e);
+        e = osl_closeFile(handle);
+        SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot close: " << +e);
+        throw;
+    }
+    e = osl_unmapMappedFile(handle, address, size);
+    SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot unmap: " << +e);
+    e = osl_closeFile(handle);
+    SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot close: " << +e);
+    return true;
 }
 
 } }
