@@ -279,7 +279,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="ctlsupport">
-                    <property name="label" translatable="yes">C_TL</property>
+                    <property name="label" translatable="yes">Complex _text layout (CTL)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
