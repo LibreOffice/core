@@ -38,7 +38,6 @@
 
 class SwDoc;
 class SwPaM;
-class String;
 class SwTableNode;
 class SwNodeIndex;
 class SwNoTxtNode;

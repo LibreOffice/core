@@ -134,8 +134,6 @@ void SetCurrGlosGroup(OUString sStr)
     SetCachedString(CurrGlosGroup, sStr);
 }
 
-std::vector<String>* pDBNameList = 0;
-
 namespace
 {
 
@@ -159,7 +157,6 @@ void _FinitUI()
     delete SwFieldType::pFldNames;
 
     ClearStringCache();
-    delete pDBNameList;
     delete pGlossaryList;
     delete pAuthFieldNameList;
     delete pAuthFieldTypeList;
@@ -172,7 +169,6 @@ void _InitUI()
 {
     // ShellResource gives the CORE the possibility to work with resources.
     ViewShell::SetShellRes( new ShellResource );
-    pDBNameList = new std::vector<String>;
     SwEditWin::_InitStaticData();
 }
 

@@ -28,7 +28,6 @@
 /*
  * Forward Declarations
  */
-class String;
 class SwThesaurus;
 
 /*
@@ -47,8 +46,6 @@ SW_DLLPUBLIC void SetOldDrwCat(OUString sStr);
 
 SW_DLLPUBLIC OUString GetCurrGlosGroup();
 SW_DLLPUBLIC void SetCurrGlosGroup(OUString sStr);
-
-extern std::vector<String>*   pDBNameList;
 
 // provides textblock management
 class SwGlossaries;

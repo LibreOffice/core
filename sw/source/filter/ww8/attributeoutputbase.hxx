@@ -120,7 +120,6 @@ class wwFont;
 
 namespace editeng { class SvxBorderLine; }
 
-class String;
 namespace rtl { class OUString; }
 
 class MSWordExportBase;
