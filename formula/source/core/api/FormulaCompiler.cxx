@@ -497,14 +497,12 @@ void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eO
     DBG_ASSERT( 0 < eOp && sal_uInt16(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
     {
-        DBG_ASSERT( (mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) ||
-            (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
-            (eOp == ocArrayRowSep),
-            OStringBuffer(
-                RTL_CONSTASCII_STRINGPARAM("OpCodeMap::putOpCode: reusing OpCode ")).
-            append( sal_Int32( eOp)).append( RTL_CONSTASCII_STRINGPARAM(" (")).
-            append( OUStringToOString( rStr, RTL_TEXTENCODING_ASCII_US)).
-            append(')').getStr());
+        SAL_WARN_IF( !((mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) ||
+                    (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
+                    (eOp == ocArrayRowSep)), "formula.core",
+                "OpCodeMap::putOpCode: reusing OpCode " << eOp
+                << ", replacing '" << mpTable[eOp] << "' with '" << rStr << "' in "
+                << (mbEnglish ? "" : "non-") << "English map 0x" << ::std::hex << meGrammar);
         mpTable[eOp] = rStr;
         mpHashMap->insert( OpCodeHashMap::value_type( rStr, eOp));
     }
