@@ -36,9 +36,9 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, s
     if (bIsLayoutEnabled && pChild->GetType() == WINDOW_SCROLLWINDOW)
     {
         WinBits nStyle = pChild->GetStyle();
-        if (nStyle && (WB_AUTOHSCROLL | WB_HSCROLL))
+        if (nStyle & (WB_AUTOHSCROLL | WB_HSCROLL))
             bCanHandleSmallerWidth = true;
-        if (nStyle && (WB_AUTOVSCROLL | WB_VSCROLL))
+        if (nStyle & (WB_AUTOVSCROLL | WB_VSCROLL))
             bCanHandleSmallerHeight = true;
     }
 
