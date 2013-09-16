@@ -923,6 +923,17 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
         for (sal_uInt32 i = 0; i < rStringChangeList.aNewEntries.size(); i++)
         {
             DoubleString& newEntry = rStringChangeList.aNewEntries[i];
+
+            //fdo#67697 if the user data is set then we want to retain the
+            //source formatting of the entry, so don't use the optimized
+            //text-only MakeCombinedChanges for this entry
+            bool bKeepSourceFormatting = newEntry.pUserData == &bHasSelectionText;
+            if (bKeepSourceFormatting)
+            {
+                pAutoCorrect->PutText(newEntry.sShort, *SfxObjectShell::Current(), eCurrentLang);
+                continue;
+            }
+
             SvxAutocorrWord aNewWord( newEntry.sShort, newEntry.sLong );
             aNewWords.push_back( aNewWord );
         }
@@ -1100,7 +1111,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     return 0;
 };
 
-void OfaAutocorrReplacePage::NewEntry(String sShort, String sLong)
+void OfaAutocorrReplacePage::NewEntry(String sShort, String sLong, bool bKeepSourceFormatting)
 {
     DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
     for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
@@ -1126,6 +1137,8 @@ void OfaAutocorrReplacePage::NewEntry(String sShort, String sLong)
     aNewString.sShort = sShort;
     aNewString.sLong = sLong;
     rNewArray.push_back(aNewString);
+    if (bKeepSourceFormatting)
+        rNewArray.back().pUserData = &bHasSelectionText;
 }
 
 void OfaAutocorrReplacePage::DeleteEntry(String sShort, String sLong)
@@ -1177,7 +1190,9 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
         if(sEntry.Len() && ( !m_pReplaceED->GetText().isEmpty() ||
                 ( bHasSelectionText && bSWriter ) ))
         {
-            NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText());
+            bool bKeepSourceFormatting = !bReplaceEditChanged && !m_pTextOnlyCB->IsChecked();
+
+            NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText(), bKeepSourceFormatting);
             m_pReplaceTLB->SetUpdateMode(sal_False);
             sal_uInt32 nPos = UINT_MAX;
             sEntry += '\t';
@@ -1201,7 +1216,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
             SvTreeListEntry* pInsEntry = m_pReplaceTLB->InsertEntry(
                                         sEntry, static_cast< SvTreeListEntry * >(NULL), false,
                                         nPos == UINT_MAX ? LIST_APPEND : nPos);
-            if( !bReplaceEditChanged && !m_pTextOnlyCB->IsChecked())
+            if (bKeepSourceFormatting)
             {
                 pInsEntry->SetUserData(&bHasSelectionText); // new formatted text
             }
