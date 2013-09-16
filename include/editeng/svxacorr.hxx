@@ -394,28 +394,28 @@ public:
                                     sal_Bool bAbbreviation = sal_False);
 
     // Methods for the auto-correction
-    sal_Bool FnCptlSttWrd( SvxAutoCorrDoc&, const String&,
+    sal_Bool FnCptlSttWrd( SvxAutoCorrDoc&, const OUString&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const String&,
+    sal_Bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const OUString&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnChgToEnEmDash( SvxAutoCorrDoc&, const String&,
+    sal_Bool FnChgToEnEmDash( SvxAutoCorrDoc&, const OUString&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const String&,
+    sal_Bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const OUString&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnSetINetAttr( SvxAutoCorrDoc&, const String&,
+    sal_Bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnChgWeightUnderl( SvxAutoCorrDoc&, const String&,
+    sal_Bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
-    sal_Bool FnCptlSttSntnc( SvxAutoCorrDoc&, const String&, sal_Bool bNormalPos,
+    sal_Bool FnCptlSttSntnc( SvxAutoCorrDoc&, const OUString&, sal_Bool bNormalPos,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang  = LANGUAGE_SYSTEM);
-    bool FnCorrectCapsLock( SvxAutoCorrDoc&, const String&,
+    bool FnCorrectCapsLock( SvxAutoCorrDoc&, const OUString&,
                             xub_StrLen nSttPos, xub_StrLen nEndPos,
                             LanguageType eLang  = LANGUAGE_SYSTEM );
 

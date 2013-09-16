@@ -342,7 +342,7 @@ void SvxAutoCorrect::SetAutoCorrFlag( long nFlag, sal_Bool bOn )
 
 
     // Two capital letters at the beginning of word?
-sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
+sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
                                     LanguageType eLang )
 {
@@ -371,7 +371,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
     // Find all compound word delimiters
     for (n = nSttPos; n < nEndPos; n++)
     {
-        if (IsAutoCorrectChar(rTxt.GetChar( n )))
+        if (IsAutoCorrectChar(rTxt[ n ]))
         {
             aDelimiters.push_back( n + 1 ); // Get position of char after delimiter
         }
@@ -383,7 +383,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
     // char will not be included in rTxt.
     // If the last AutoCorrect char was not a newline, then the AutoCorrect
     // character will be the last character in rTxt.
-    if (!IsAutoCorrectChar(rTxt.GetChar(nEndPos-1)))
+    if (!IsAutoCorrectChar(rTxt[nEndPos-1]))
         aDelimiters.push_back(nEndPos);
 
     // Iterate through the word and all words that compose it.
@@ -401,10 +401,10 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
             // Is the third character a lower case
             IsLowerLetter( rCC.getCharacterType( rTxt, nSttPos +1 )) &&
             // Do not replace special attributes
-            0x1 != rTxt.GetChar( nSttPos ) && 0x2 != rTxt.GetChar( nSttPos ))
+            0x1 != rTxt[ nSttPos ] && 0x2 != rTxt[ nSttPos ])
         {
             // test if the word is in an exception list
-            String sWord( rTxt.Copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
+            String sWord( rTxt.copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
             if( !FindInWrdSttExceptList(eLang, sWord) )
             {
                 // Check that word isn't correctly spelled before correcting:
@@ -419,7 +419,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
                         return false;
                     }
                 }
-                sal_Unicode cSave = rTxt.GetChar( nSttPos );
+                sal_Unicode cSave = rTxt[ nSttPos ];
                 OUString sChar( cSave );
                 sChar = rCC.lowercase( sChar );
                 if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
@@ -436,7 +436,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
 
 sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
-                                SvxAutoCorrDoc& rDoc, const String& rTxt,
+                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang )
 {
@@ -447,10 +447,10 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
     sal_Bool bChg = sal_False;
 
     for( ; nSttPos < nEndPos; ++nSttPos )
-        if( !lcl_IsInAsciiArr( sImplSttSkipChars, rTxt.GetChar( nSttPos ) ))
+        if( !lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nSttPos ] ))
             break;
     for( ; nSttPos < nEndPos; --nEndPos )
-        if( !lcl_IsInAsciiArr( sImplEndSkipChars, rTxt.GetChar( nEndPos - 1 ) ))
+        if( !lcl_IsInAsciiArr( sImplEndSkipChars, rTxt[ nEndPos - 1 ] ))
             break;
 
 
@@ -475,7 +475,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
     }
 
     if ( foundEnd && validNumber ) {
-        sal_Int32 nNum = rTxt.Copy( nSttPos, nNumEnd - nSttPos + 1 ).ToInt32( );
+        sal_Int32 nNum = rTxt.copy( nSttPos, nNumEnd - nSttPos + 1 ).toInt32( );
 
         // Check if the characters after that number correspond to the ordinal suffix
         uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
@@ -485,7 +485,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
         {
             String sSuffix( aSuffixes[ nSuff ] );
-            String sEnd = rTxt.Copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
+            String sEnd = rTxt.copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
 
             if ( sSuffix == sEnd )
             {
@@ -507,7 +507,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
 
 
 sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
-                                SvxAutoCorrDoc& rDoc, const String& rTxt,
+                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang )
 {
@@ -520,15 +520,15 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
     // replace " - " or " --" with "enDash"
     if( cEnDash && 1 < nSttPos && 1 <= nEndPos - nSttPos )
     {
-        sal_Unicode cCh = rTxt.GetChar( nSttPos );
+        sal_Unicode cCh = rTxt[ nSttPos ];
         if( '-' == cCh )
         {
-            if( ' ' == rTxt.GetChar( nSttPos-1 ) &&
-                '-' == rTxt.GetChar( nSttPos+1 ))
+            if( ' ' == rTxt[ nSttPos-1 ] &&
+                '-' == rTxt[ nSttPos+1 ])
             {
                 xub_StrLen n;
                 for( n = nSttPos+2; n < nEndPos && lcl_IsInAsciiArr(
-                            sImplSttSkipChars,(cCh = rTxt.GetChar( n )));
+                            sImplSttSkipChars,(cCh = rTxt[ n ]));
                         ++n )
                     ;
 
@@ -536,7 +536,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                 if( rCC.isLetterNumeric( OUString(cCh) ) )
                 {
                     for( n = nSttPos-1; n && lcl_IsInAsciiArr(
-                            sImplEndSkipChars,(cCh = rTxt.GetChar( --n ))); )
+                            sImplEndSkipChars,(cCh = rTxt[ --n ])); )
                         ;
 
                     // found: "[A-z0-9][<AnyEndChars>] --[<AnySttChars>][A-z0-9]
@@ -550,20 +550,20 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
             }
         }
         else if( 3 < nSttPos &&
-                 ' ' == rTxt.GetChar( nSttPos-1 ) &&
-                 '-' == rTxt.GetChar( nSttPos-2 ))
+                 ' ' == rTxt[ nSttPos-1 ] &&
+                 '-' == rTxt[ nSttPos-2 ])
         {
             xub_StrLen n, nLen = 1, nTmpPos = nSttPos - 2;
-            if( '-' == ( cCh = rTxt.GetChar( nTmpPos-1 )) )
+            if( '-' == ( cCh = rTxt[ nTmpPos-1 ]) )
             {
                 --nTmpPos;
                 ++nLen;
-                cCh = rTxt.GetChar( nTmpPos-1 );
+                cCh = rTxt[ nTmpPos-1 ];
             }
             if( ' ' == cCh )
             {
                 for( n = nSttPos; n < nEndPos && lcl_IsInAsciiArr(
-                            sImplSttSkipChars,(cCh = rTxt.GetChar( n )));
+                            sImplSttSkipChars,(cCh = rTxt[ n ]));
                         ++n )
                     ;
 
@@ -572,7 +572,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                 {
                     cCh = ' ';
                     for( n = nTmpPos-1; n && lcl_IsInAsciiArr(
-                            sImplEndSkipChars,(cCh = rTxt.GetChar( --n ))); )
+                            sImplEndSkipChars,(cCh = rTxt[ --n ])); )
                             ;
                     // found: "[A-z0-9][<AnyEndChars>] - [<AnySttChars>][A-z0-9]
                     if( rCC.isLetterNumeric( OUString(cCh) ))
@@ -591,14 +591,14 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
     bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
     if( ((cEmDash && !bEnDash) || (cEnDash && bEnDash)) && 4 <= nEndPos - nSttPos )
     {
-        String sTmp( rTxt.Copy( nSttPos, nEndPos - nSttPos ) );
+        String sTmp( rTxt.copy( nSttPos, nEndPos - nSttPos ) );
         xub_StrLen nFndPos = sTmp.SearchAscii( "--" );
         if( STRING_NOTFOUND != nFndPos && nFndPos &&
             nFndPos + 2 < sTmp.Len() &&
             ( rCC.isLetterNumeric( sTmp, nFndPos - 1 ) ||
-              lcl_IsInAsciiArr( sImplEndSkipChars, rTxt.GetChar( nFndPos - 1 ) )) &&
+              lcl_IsInAsciiArr( sImplEndSkipChars, rTxt[ nFndPos - 1 ] )) &&
             ( rCC.isLetterNumeric( sTmp, nFndPos + 2 ) ||
-            lcl_IsInAsciiArr( sImplSttSkipChars, rTxt.GetChar( nFndPos + 2 ) )))
+            lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nFndPos + 2 ] )))
         {
             nSttPos = nSttPos + nFndPos;
             rDoc.Delete( nSttPos, nSttPos + 2 );
@@ -615,7 +615,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
 #endif
 
 sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
-                                SvxAutoCorrDoc& rDoc, const String& rTxt,
+                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 xub_StrLen, xub_StrLen nEndPos,
                                 LanguageType eLang )
 {
@@ -631,7 +631,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
         if ( bFrCA )
             chars = OUString( ":" );
 
-        sal_Unicode cChar = rTxt.GetChar( nEndPos );
+        sal_Unicode cChar = rTxt[ nEndPos ];
         bool bHasSpace = chars.indexOf( cChar ) != -1;
         bool bIsSpecial = allChars.indexOf( cChar ) != -1;
         if ( bIsSpecial )
@@ -639,20 +639,20 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
             // Get the last word delimiter position
             xub_StrLen nSttWdPos = nEndPos;
             bool bWasWordDelim = false;
-            while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt.GetChar( --nSttWdPos ))))
+            while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
                 ;
 
-            if(INetURLObject::CompareProtocolScheme(rTxt.Copy(nSttWdPos + (bWasWordDelim ? 1 : 0), nEndPos - nSttWdPos + 1)) != INET_PROT_NOT_VALID) {
+            if(INetURLObject::CompareProtocolScheme(rTxt.copy(nSttWdPos + (bWasWordDelim ? 1 : 0), nEndPos - nSttWdPos + 1)) != INET_PROT_NOT_VALID) {
                 return sal_False;
             }
 
 
             // Check the presence of "://" in the word
-            xub_StrLen nStrPos = rTxt.Search( OUString( "://" ), nSttWdPos + 1 );
+            xub_StrLen nStrPos = rTxt.indexOf( "://", nSttWdPos + 1 );
             if ( STRING_NOTFOUND == nStrPos && nEndPos > 0 )
             {
                 // Check the previous char
-                sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
+                sal_Unicode cPrevChar = rTxt[ nEndPos - 1 ];
                 if ( ( chars.indexOf( cPrevChar ) == -1 ) && cPrevChar != '\t' )
                 {
                     // Remove any previous normal space
@@ -661,7 +661,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                     {
                         if ( nPos == 0 ) break;
                         nPos--;
-                        cPrevChar = rTxt.GetChar( nPos );
+                        cPrevChar = rTxt[ nPos ];
                     }
 
                     nPos++;
@@ -678,11 +678,11 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                     bRunNext = true;
             }
         }
-        else if ( cChar == '/' && nEndPos > 1 && rTxt.Len() > (nEndPos - 1) )
+        else if ( cChar == '/' && nEndPos > 1 && rTxt.getLength() > (nEndPos - 1) )
         {
             // Remove the hardspace right before to avoid formatting URLs
-            sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
-            sal_Unicode cMaybeSpaceChar = rTxt.GetChar( nEndPos - 2 );
+            sal_Unicode cPrevChar = rTxt[ nEndPos - 1 ];
+            sal_Unicode cMaybeSpaceChar = rTxt[ nEndPos - 2 ];
             if ( cPrevChar == ':' && cMaybeSpaceChar == CHAR_HARDBLANK )
             {
                 rDoc.Delete( nEndPos - 2, nEndPos - 1 );
@@ -698,7 +698,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 #pragma warning(pop)
 #endif
 
-sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt,
+sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
                                     LanguageType eLang )
 {
@@ -716,7 +716,7 @@ sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt
 }
 
 
-sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const String& rTxt,
+sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                         xub_StrLen, xub_StrLen nEndPos,
                                         LanguageType eLang )
 {
@@ -724,9 +724,9 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const String& 
     //  at the beginning:   _ or * after Space with the folloeing !Space
     //  at the end:         _ or * before Space (word delimiter?)
 
-    sal_Unicode c, cInsChar = rTxt.GetChar( nEndPos );  // underline or bold
-    if( ++nEndPos != rTxt.Len() &&
-        !IsWordDelim( rTxt.GetChar( nEndPos ) ) )
+    sal_Unicode c, cInsChar = rTxt[ nEndPos ];  // underline or bold
+    if( ++nEndPos != rTxt.getLength() &&
+        !IsWordDelim( rTxt[ nEndPos ] ) )
         return sal_False;
 
     --nEndPos;
@@ -737,15 +737,15 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const String& 
 
     while( nPos )
     {
-        switch( c = rTxt.GetChar( --nPos ) )
+        switch( c = rTxt[ --nPos ] )
         {
         case '_':
         case '*':
             if( c == cInsChar )
             {
                 if( bAlphaNum && nPos+1 < nEndPos && ( !nPos ||
-                    IsWordDelim( rTxt.GetChar( nPos-1 ))) &&
-                    !IsWordDelim( rTxt.GetChar( nPos+1 )))
+                    IsWordDelim( rTxt[ nPos-1 ])) &&
+                    !IsWordDelim( rTxt[ nPos+1 ]))
                         nFndPos = nPos;
                 else
                     // Condition is not satisfied, so cancel
@@ -789,12 +789,12 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const String& 
 
 
 sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
-                                    const String& rTxt, sal_Bool bNormalPos,
+                                    const OUString& rTxt, sal_Bool bNormalPos,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
                                     LanguageType eLang )
 {
 
-    if( !rTxt.Len() || nEndPos <= nSttPos )
+    if( rTxt.isEmpty() || nEndPos <= nSttPos )
         return sal_False;
 
     CharClass& rCC = GetCharClass( eLang );
@@ -839,7 +839,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             rCC.getCharacterType(
                 aText,
                 sal::static_int_cast< xub_StrLen >( pWordStt - pStart ) ) ) ||
-        INetURLObject::CompareProtocolScheme(rTxt.Copy(pWordStt - pStart, pDelim - pWordStt + 1)) != INET_PROT_NOT_VALID ||
+        INetURLObject::CompareProtocolScheme(rTxt.copy(pWordStt - pStart, pDelim - pWordStt + 1)) != INET_PROT_NOT_VALID ||
         0x1 == *pWordStt || 0x2 == *pWordStt )
         return sal_False;       // no character to be replaced, or already ok
 
@@ -1052,7 +1052,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
     // Ok, then replace
     sal_Unicode cSave = *pWordStt;
-    nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
+    nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.getStr() );
     OUString sChar( cSave );
     sChar = rCC.titlecase(sChar); //see fdo#56740
     sal_Bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
@@ -1064,7 +1064,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     return bRet;
 }
 
-bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt,
+bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                         xub_StrLen nSttPos, xub_StrLen nEndPos,
                                         LanguageType eLang )
 {
@@ -1082,8 +1082,8 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
         return false;
 
     String aConverted;
-    aConverted.Append( rCC.uppercase(OUString(rTxt.GetChar(nSttPos))) );
-    aConverted.Append( rCC.lowercase(OUString(rTxt.GetChar(nSttPos+1))) );
+    aConverted.Append( rCC.uppercase(OUString(rTxt[nSttPos])) );
+    aConverted.Append( rCC.lowercase(OUString(rTxt[nSttPos+1])) );
 
     for (xub_StrLen i = nSttPos+2; i < nEndPos; ++i)
     {
@@ -1093,10 +1093,10 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
 
         if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
             // Another uppercase letter.  Convert it.
-            aConverted.Append(rCC.lowercase(OUString(rTxt.GetChar(i))));
+            aConverted.Append(rCC.lowercase(OUString(rTxt[i])));
         else
             // This is not an alphabetic letter.  Leave it as-is.
-            aConverted.Append(rTxt.GetChar(i));
+            aConverted.Append(rTxt[i]);
     }
 
     // Replace the word.
