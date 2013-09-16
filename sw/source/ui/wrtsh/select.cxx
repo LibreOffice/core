@@ -159,6 +159,11 @@ long SwWrtShell::SelAll()
         }
         SttSelect();
         GoEnd(sal_True, &bMoveTable);
+
+        bool bStartsWithTable = StartsWithTable();
+        if (bStartsWithTable)
+            ExtendedSelectAll();
+
         if( pStartPos )
         {
             pTmpCrsr = getShellCrsr( false );
@@ -169,9 +174,9 @@ long SwWrtShell::SelAll()
                 // if the last selection was behind the first section or
                 // if the last selection was already the first section
                 // In this both cases we select to the end of document
-                if( *pTmpCrsr->GetPoint() < *pEndPos ||
+                if( ( *pTmpCrsr->GetPoint() < *pEndPos ||
                     ( *pStartPos == *pTmpCrsr->GetMark() &&
-                      *pEndPos == *pTmpCrsr->GetPoint() ) )
+                      *pEndPos == *pTmpCrsr->GetPoint() ) ) && !bStartsWithTable)
                     SwCrsrShell::SttEndDoc(sal_False);
             }
             delete pStartPos;

@@ -58,6 +58,7 @@
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
 
+#include <comphelper/flagguard.hxx>
 #include <globals.hrc>
 
 #include <comcore.hrc>
@@ -237,6 +238,7 @@ void SwCrsrShell::StartAction()
 
 void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 {
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     sal_Bool bVis = m_bSVCrsrVis;
 
     // Idle-formatting?
@@ -543,6 +545,32 @@ void SwCrsrShell::ExtendedSelectAll()
     pPos->nNode = rNodes.GetEndOfContent();
     SwCntntNode* pCNd = rNodes.GoPrevious( &pPos->nNode );
     pPos->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
+}
+
+bool SwCrsrShell::ExtendedSelectedAll()
+{
+    SwNodes& rNodes = GetDoc()->GetNodes();
+    SwNodeIndex nNode = rNodes.GetEndOfPostIts();
+    SwCntntNode* pStart = rNodes.GoNext(&nNode);
+
+    nNode = rNodes.GetEndOfContent();
+    SwCntntNode* pEnd = rNodes.GoPrevious(&nNode);
+
+    if (!pStart || !pEnd)
+        return false;
+
+    SwPosition aStart(*pStart, 0);
+    SwPosition aEnd(*pEnd, pEnd->Len());
+    SwShellCrsr* pShellCrsr = getShellCrsr(false);
+    return aStart == *pShellCrsr->Start() && aEnd == *pShellCrsr->End();
+}
+
+bool SwCrsrShell::StartsWithTable()
+{
+    SwNodes& rNodes = GetDoc()->GetNodes();
+    SwNodeIndex nNode(rNodes.GetEndOfExtras());
+    SwCntntNode* pCntntNode = rNodes.GoNext(&nNode);
+    return pCntntNode->FindTableNode();
 }
 
 sal_Bool SwCrsrShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
@@ -1160,6 +1188,7 @@ sal_Bool SwCrsrShell::GoPrevCrsr()
 
 void SwCrsrShell::Paint( const Rectangle &rRect)
 {
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     SET_CURR_SHELL( this );
 
     // always switch off all cursors when painting
@@ -1338,7 +1367,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         mpDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
           ( m_pTblCrsr ||
             pTstCrsr->GetNode( sal_True )->StartOfSectionNode() !=
-            pTstCrsr->GetNode( sal_False )->StartOfSectionNode() ) )
+            pTstCrsr->GetNode( sal_False )->StartOfSectionNode() ) && !mbSelectAll)
     {
         SwShellCrsr* pITmpCrsr = getShellCrsr( true );
         Point aTmpPt( pITmpCrsr->GetPtPos() );
