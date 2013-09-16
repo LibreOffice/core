@@ -665,13 +665,6 @@ TextBodyPtr Shape::getTextBody()
     return mpTextBody;
 }
 
-void Shape::moveAllToPosition( const awt::Point &rPoint )
-{
-    setPosition( awt::Point( rPoint.X + maPosition.X, rPoint.Y + maPosition.Y ) );
-    for( ::std::vector<ShapePtr>::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end();aIt != aEnd; ++aIt )
-        (*aIt)->moveAllToPosition( rPoint );
-}
-
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
     SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "set master text list style to shape id: " << msId);

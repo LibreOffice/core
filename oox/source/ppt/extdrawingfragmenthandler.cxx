@@ -48,7 +48,7 @@ ExtDrawingFragmentHandler::onCreateContext( ::sal_Int32 aElement,
     case DSP_TOKEN( spTree ):
         mpShapePtr = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) );
         return new PPTShapeGroupContext(
-                *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
+                *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr,
                 mpShapePtr );
     default:
         break;
@@ -60,7 +60,7 @@ void SAL_CALL ExtDrawingFragmentHandler::endDocument() throw (::com::sun::star::
 {
     if( mpShapePtr )
     {
-        mpShapePtr->moveAllToPosition( mpOrgShapePtr->getPosition() );
+        mpShapePtr->setPosition( mpOrgShapePtr->getPosition() );
         mpShapePtr->setName( mpOrgShapePtr->getName() );
     }
 }

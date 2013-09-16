@@ -101,7 +101,6 @@ public:
 
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
-    void                              moveAllToPosition( const com::sun::star::awt::Point &rPoint );
 
     void                              setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
     const com::sun::star::awt::Point& getPosition() const { return maPosition; }
