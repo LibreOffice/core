@@ -168,12 +168,9 @@ public:
 
 class OpenclDevice
 {
-
 public:
     static GPUEnv gpuEnv;
     static int isInited;
-    OpenclDevice();
-    ~OpenclDevice();
     static int initEnv();
     static int registOpenclKernel();
     static int releaseOpenclRunEnv();
@@ -188,12 +185,12 @@ public:
     static int compileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
 
     static int initOpenclAttr( OpenCLEnv * env );
-    int setKernelEnv( KernelEnv *envInfo );
-    int convertToString( const char *filename, char **source );
-    int checkKernelName( KernelEnv *envInfo, const char *kernelName );
+    static int setKernelEnv( KernelEnv *envInfo );
+    static int convertToString( const char *filename, char **source );
+    static int checkKernelName( KernelEnv *envInfo, const char *kernelName );
 
-    int getOpenclState();
-    void setOpenclState( int state );
+    static int getOpenclState();
+    static void setOpenclState( int state );
 };
 
 class OclCalc: public OpenclDevice,OpenclCalcBase

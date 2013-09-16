@@ -124,16 +124,6 @@ int OpenclDevice::registOpenclKernel()
     return 0;
 }
 
-OpenclDevice::OpenclDevice()
-{
-    //initEnv();
-}
-
-OpenclDevice::~OpenclDevice()
-{
-    //releaseOpenclRunEnv();
-}
-
 int OpenclDevice::setKernelEnv( KernelEnv *envInfo )
 {
     envInfo->mpkContext = gpuEnv.mpContext;
