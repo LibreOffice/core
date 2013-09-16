@@ -38,7 +38,7 @@ namespace accessibility
     public:
         virtual ~IComboListBoxHelper() = 0;
 
-        virtual String          GetEntry( sal_uInt16 nPos ) const = 0;
+        virtual OUString        GetEntry( sal_uInt16 nPos ) const = 0;
         virtual Rectangle       GetDropDownPosSizePixel( ) const = 0;
         virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const = 0;
         virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow ) = 0;

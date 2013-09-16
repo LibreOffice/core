@@ -144,7 +144,7 @@ namespace accessibility
         m_pPanelDeck->AddListener( *this );
         m_aChildren.resize( m_pPanelDeck->GetPanelCount() );
 
-        const String sAccessibleDescription( TK_RES_STRING( RID_STR_ACC_DESC_PANELDECL_TABBAR ) );
+        const OUString sAccessibleDescription( TK_RES_STRING( RID_STR_ACC_DESC_PANELDECL_TABBAR ) );
         i_rTabBar.SetAccessibleName( sAccessibleDescription );
         i_rTabBar.SetAccessibleDescription( sAccessibleDescription );
 

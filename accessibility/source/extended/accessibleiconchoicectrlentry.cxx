@@ -494,13 +494,13 @@ throw(RuntimeException)
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        String sText = getText();
-        if  ( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
-            || ( 0 > nEndIndex ) || ( sText.Len() <= nEndIndex ) )
+        OUString sText = getText();
+        if  ( ( 0 > nStartIndex ) || ( sText.getLength() <= nStartIndex )
+            || ( 0 > nEndIndex ) || ( sText.getLength() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
 
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.Copy( (sal_uInt16)nStartIndex, (sal_uInt16)nLen ), m_pIconCtrl );
+        ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), m_pIconCtrl );
 
         return sal_True;
     }

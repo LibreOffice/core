@@ -580,13 +580,13 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
         EnsureIsAlive();
 
-        String sText = getText();
-        if  ( ( 0 > nStartIndex ) || ( sText.Len() <= nStartIndex )
-            || ( 0 > nEndIndex ) || ( sText.Len() <= nEndIndex ) )
+        OUString sText = getText();
+        if  ( ( 0 > nStartIndex ) || ( sText.getLength() <= nStartIndex )
+            || ( 0 > nEndIndex ) || ( sText.getLength() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
 
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.Copy( (sal_uInt16)nStartIndex, (sal_uInt16)nLen ), getListBox() );
+        ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), getListBox() );
 
         return sal_True;
     }

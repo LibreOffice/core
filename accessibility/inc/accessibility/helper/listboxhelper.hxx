@@ -46,7 +46,7 @@ public:
         m_aComboListBox( _pListBox ){}
 
     // -----------------------------------------------------------------------------
-    virtual String          GetEntry( sal_uInt16 nPos ) const
+    virtual OUString        GetEntry( sal_uInt16 nPos ) const
     {
         return m_aComboListBox.GetEntry( nPos );
     }
