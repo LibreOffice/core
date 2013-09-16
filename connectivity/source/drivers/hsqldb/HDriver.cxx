@@ -235,11 +235,10 @@ namespace connectivity
                     OUString(
 #ifdef SYSTEM_HSQLDB
                         HSQLDB_JAR
-                        " vnd.sun.star.expand:$BRAND_BASE_DIR/" LIBO_SHARE_JAVA_FOLDER "/sdbc_hsqldb.jar"
 #else
-                        "vnd.sun.star.expand:$BRAND_BASE_DIR/" LIBO_SHARE_JAVA_FOLDER "/hsqldb.jar"
-                        " vnd.sun.star.expand:$BRAND_BASE_DIR/" LIBO_SHARE_JAVA_FOLDER "/sdbc_hsqldb.jar"
+                        "vnd.sun.star.expand:$LO_JAVA_DIR/hsqldb.jar"
 #endif
+                        " vnd.sun.star.expand:$LO_JAVA_DIR/sdbc_hsqldb.jar"
                         ) );
 
                 // auto increment handling
