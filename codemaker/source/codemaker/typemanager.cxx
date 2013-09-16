@@ -54,6 +54,9 @@ bool TypeManager::foundAtPrimaryProvider(OUString const & name) const {
             return true;
         }
     }
+    if (!manager_->findEntity(name).is()) {
+        throw CannotDumpException("Unknown entity '" + name + "'");
+    }
     return false;
 }
 
