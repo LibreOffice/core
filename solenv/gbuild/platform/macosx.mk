@@ -253,8 +253,8 @@ gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 # set the TARGETTYPE to Bundle, and clear install_name(RPATH)
 define gb_Library_Bundle
 $(call gb_Library_Library,$(1))
-$(call gb_LinkTarget_set_targettype,$(call gb_Library_get_linktargetname,$(1)),Bundle)
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
+$(call gb_LinkTarget_set_targettype,$(call gb_Library_get_linktarget,$(1)),Bundle)
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))) : \
 	RPATH :=
 endef
 

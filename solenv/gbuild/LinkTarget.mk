@@ -201,7 +201,7 @@ endif
 
 # GenCxxObject class
 
-gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(2))
+gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(2)))
 # defined by platform
 #  gb_CxxObject__command
 
@@ -360,8 +360,8 @@ endef
 #  gb_LinkTarget_LDFLAGS
 #  gb_LinkTarget_INCLUDE
 
-.PHONY : $(call gb_LinkTarget_get_clean_target,%)
-$(call gb_LinkTarget_get_clean_target,%) :
+.PHONY : $(WORKDIR)/Clean/LinkTarget/%
+$(WORKDIR)/Clean/LinkTarget/% :
 	$(call gb_Output_announce,$*,$(false),LNK,4)
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -409,7 +409,7 @@ $(call gb_Helper_abbreviate_dirs,\
 
 endef
 
-# call gb_LinkTarget__command_objectlist,ignored,linktargetname
+# call gb_LinkTarget__command_objectlist,linktarget
 define gb_LinkTarget__command_objectlist
 TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 	$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -421,7 +421,7 @@ TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 	$(PCHOBJS)) && \
 $(if $(EXTRAOBJECTLISTS),cat $(EXTRAOBJECTLISTS) >> $${TEMPFILE} && ) \
-mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2))
+mv $${TEMPFILE} $(1)
 
 endef
 
@@ -430,24 +430,28 @@ endef
 # written in gb_LinkTarget__command_dynamiclink.
 # Put this pattern rule here so it overrides the one below.
 # (this is rather ugly: because of % the functions cannot be used)
-$(call gb_LinkTarget_get_target,Library/%.exports) : $(gb_Library_OUTDIRLOCATION)/%
+$(WORKDIR)/LinkTarget/Library/%.exports : $(gb_Library_OUTDIRLOCATION)/%
 	$(if $(wildcard $@),,mkdir -p $(dir $@) && touch $@)
 
 # This recipe actually also builds the dep-target as a side-effect, which
 # is an optimization to reduce incremental build time.
 # (with exception for concat-dep executable itself which does not exist yet...)
-$(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-ifeq ($(gb_FULLDEPS),$(true))
-	$(if $(findstring concat-deps,$*),,\
-		$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*))
-endif
-	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),\
-		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$*)),\
-			$(call gb_LinkTarget__command,$@,$*),\
-			mkdir -p $(dir $@) && echo invalid > $@ \
-			$(if $(SOVERSION),&& echo invalid > $@.$(SOVERSION))),\
-		$(call gb_LinkTarget__command,$@,$*))
-	$(call gb_LinkTarget__command_objectlist,$@,$*)
+$(WORKDIR)/LinkTarget/% : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
+	$(call gb_LinkTarget__command_impl,$@,$*)
+
+# call gb_LinkTarget__command_impl,linktargettarget,linktargetname
+define gb_LinkTarget__command_impl
+	$(if $(gb_FULLDEPS),\
+		$(if $(findstring concat-deps,$(2)),,\
+			$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$(2)),$(2))))
+	$(if $(filter $(2),$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),\
+		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),\
+			$(call gb_LinkTarget__command,$(1),$(2)),\
+			mkdir -p $(dir $(1)) && echo invalid > $(1) \
+			$(if $(SOVERSION),&& echo invalid > $(1).$(SOVERSION))),\
+		$(call gb_LinkTarget__command,$(1),$(2)))
+	$(call gb_LinkTarget__command_objectlist,$(WORKDIR)/LinkTarget/$(2).objectlist)
+endef
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
@@ -468,7 +472,7 @@ define gb_LinkTarget__get_headers_check
 ifneq ($$(SELF),$$*)
 $$(eval $$(call gb_Output_info,LinkTarget $$* not defined: Assuming headers to be there!,ALL))
 endif
-$$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touch $$@ && mkdir -p $(call gb_LinkTarget_get_target,)pdb/$$(dir $$*))
+$$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touch $$@ && mkdir -p $(WORKDIR)/LinkTarget/pdb/$$(dir $$*))
 
 endef
 
@@ -514,7 +518,7 @@ $(call gb_LinkTarget_get_headers_target,%) :
 # call gb_LinkTarget_LinkTarget,linktarget,linktargetmakefilename
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
-$(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(1)
+$(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
@@ -607,7 +611,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSION :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSIONSCRIPT :=
 endif
 
-gb_LinkTarget_CXX_SUFFIX_$(1) := cxx
+gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := cxx
 
 endef
 
@@ -850,7 +854,7 @@ define gb_LinkTarget__use_libraries
 # used by bin/module-deps.pl
 ifneq ($(ENABLE_PRINT_DEPS),)
 # exclude libraries in Library_merged Librery_urelibs
-ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))),)
+ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktarget,$(lib)))),)
 $$(eval $$(call gb_PrintDeps_info,$(4),$(3)))
 endif
 endif
@@ -886,12 +890,12 @@ gb_BUILD_HELPER_TOOLS := cppumaker \
 
 # call gb_LinkTarget__is_build_lib,linktargetname
 define gb_LinkTarget__is_build_lib
-$(if $(filter $(1),$(foreach lib,$(gb_BUILD_HELPER_LIBS),$(call gb_Library_get_linktargetname,$(lib)))),$(true),$(false))
+$(if $(filter $(1),$(foreach lib,$(gb_BUILD_HELPER_LIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),$(true),$(false))
 endef
 
 # call gb_LinkTarget__is_build_tool,linktargetname
 define gb_LinkTarget__is_build_tool
-$(if $(filter $(1),$(addprefix Executable/,$(gb_BUILD_HELPER_TOOLS))),$(true),$(false))
+$(if $(filter $(1),$(foreach exe,$(gb_BUILD_HELPER_TOOLS),$(call gb_Executable__get_workdir_linktargetname,$(exe)))),$(true),$(false))
 endef
 
 # call gb_LinkTarget_use_libraries,linktarget,libs
@@ -903,19 +907,18 @@ endif
 
 ifeq ($(call gb_LinkTarget__is_build_tool,$(1)),$(true))
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(2),$(4))
-
 else
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
 	$(if $(filter $(gb_MERGEDLIBS),$(2)), \
-		$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))), \
+		$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktarget,$(lib)))), \
 			$(filter $(gb_MERGEDLIBS),$(2)), merged)) \
 	$(if $(filter $(gb_URELIBS),$(2)), \
-		$(if $(filter $(1),$(foreach lib,$(gb_URELIBS),$(call gb_Library_get_linktargetname,$(lib)))), \
+		$(if $(filter $(1),$(foreach lib,$(gb_URELIBS),$(call gb_Library_get_linktarget,$(lib)))), \
 		$(filter $(gb_URELIBS),$(2)), urelibs)) \
 	$(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(2)) \
 	),$(4))
-
 endif
+
 endef
 
 define gb_LinkTarget_add_linked_static_libs
@@ -966,7 +969,7 @@ $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_CxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 ifeq ($(gb_ENABLE_PCH),$(true))
-$(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(call gb_LinkTarget__get_workdir_linktargetname,$(1)))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -1077,7 +1080,7 @@ $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : GEN_CXX_SOURCE := $(call gb_GenCxxObject_get_source,$(2),$(1))
 ifeq ($(gb_ENABLE_PCH),$(true))
-$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
+$(call gb_GenCxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(call gb_LinkTarget__get_workdir_linktargetname,$(1)))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -1151,7 +1154,7 @@ ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
-$(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktargetname,$(lib))))
+$(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktarget,$(lib))))
 $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
@@ -1335,7 +1338,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb
 
 $(call gb_PrecompiledHeader_get_target,$(3)) : VISIBILITY :=
 
-$(call gb_PrecompiledHeader_get_timestamp,$(1)) : $(call gb_PrecompiledHeader_get_target,$(3))
+$(call gb_PrecompiledHeader_get_timestamp,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))) : $(call gb_PrecompiledHeader_get_target,$(3))
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_PrecompiledHeader_get_dep_target,$(3)) 
@@ -1437,7 +1440,7 @@ endef
 #
 # call gb_LinkTarget_set_generated_cxx_suffix,linktarget,used-suffix
 define gb_LinkTarget_set_generated_cxx_suffix
-gb_LinkTarget_CXX_SUFFIX_$(1) := $(2)
+gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := $(2)
 
 endef
 

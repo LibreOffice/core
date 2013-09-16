@@ -36,6 +36,6 @@ $(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
 # rebuilt if any library has been rebuilt. Avoids need for "make
 # ios.clean".
 
-$(call gb_LinkTarget_get_target,Executable/LibreOffice) : $(wildcard $(OUTDIR)/lib/lib*.a)
+$(WORKDIR)/LinkTarget/Executable/LibreOffice : $(wildcard $(OUTDIR)/lib/lib*.a)
 
 # vim: set ts=4 sw=4 et:

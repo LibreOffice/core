@@ -137,9 +137,16 @@ gb_JunitTest_get_classsetname = JunitTest/$(1)
 gb_JunitTest_get_target = $(WORKDIR)/JunitTest/$(1)/done
 gb_JunitTest_get_userdir = $(WORKDIR)/JunitTest/$(1)/user
 gb_PythonTest_get_target = $(WORKDIR)/PythonTest/$(1)/done
-gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
-gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
-gb_LinkTarget_get_objects_list = $(WORKDIR)/LinkTarget/$(1).objectlist
+gb_LinkTarget__get_workdir_linktargetname = $(firstword $(subst <>,  ,$(1)))
+gb_LinkTarget_get_headers_target = \
+ $(WORKDIR)/Headers/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
+gb_LinkTarget_get_objects_list = \
+ $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).objectlist
+gb_LinkTarget_get_dep_target = \
+ $(WORKDIR)/Dep/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).d
+gb_LinkTarget_get_clean_target = \
+ $(WORKDIR)/Clean/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
+gb_LinkTarget_get_target = $(lastword $(subst <>,  ,$(1)))
 gb_Module_get_almost_target = $(WORKDIR)/Module/almost/$(1)
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_slowcheck_target = $(WORKDIR)/Module/slowcheck/$(1)
@@ -265,7 +272,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	JavaClassSet \
 	Jar \
 	JunitTest \
-	LinkTarget \
 	Module \
 	PackagePart \
 	Package \
@@ -329,7 +335,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	AsmObject \
 	GenCObject \
 	GenCxxObject \
-	LinkTarget \
 	SdiTarget \
 	SrsPartTarget \
 	SrsTarget \
@@ -372,9 +377,48 @@ define gb_Executable_get_command
 $(gb_Helper_set_ld_path) $(2) $(call gb_Executable_get_target_for_build,$(1))
 endef
 
-gb_Executable_get_linktargetname = Executable/$(call gb_Executable_get_filename,$(1))
-gb_Library_get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
-gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
+define gb_Executable__get_workdir_linktargetname
+Executable/$(call gb_Executable_get_filename,$(1))
+endef
+define gb_Executable__get_linktarget_target
+$(WORKDIR)/LinkTarget/$(call gb_Executable__get_workdir_linktargetname,$(1))
+endef
+define gb_Executable_get_linktarget
+$(call gb_Executable__get_workdir_linktargetname,$(1))<>$(call gb_Executable__get_linktarget_target,$(1))
+endef
+
+define gb_Library__get_workdir_linktargetname
+Library/$(call gb_Library_get_filename,$(1))
+endef
+define gb_Library__get_linktarget_target
+$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1))
+endef
+# this returns a tuple of both the linktargetname, and the target file
+define gb_Library_get_linktarget
+$(call gb_Library__get_workdir_linktargetname,$(1))<>$(call gb_Library__get_linktarget_target,$(1))
+endef
+
+define gb_StaticLibrary__get_workdir_linktargetname
+StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
+endef
+define gb_StaticLibrary__get_linktarget_target
+$(WORKDIR)/LinkTarget/$(call gb_StaticLibrary__get_workdir_linktargetname,$(1))
+endef
+# this returns a tuple of both the linktargetname, and the target file
+define gb_StaticLibrary_get_linktarget
+$(call gb_StaticLibrary__get_workdir_linktargetname,$(1))<>$(call gb_StaticLibrary__get_linktarget_target,$(1))
+endef
+
+define gb_CppunitTest__get_workdir_linktargetname
+CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
+endef
+define gb_CppunitTest__get_linktarget_target
+$(WORKDIR)/LinkTarget/$(call gb_CppunitTest__get_workdir_linktargetname,$(1))
+endef
+# this returns a tuple of both the linktargetname, and the target file
+define gb_CppunitTest_get_linktarget
+$(call gb_CppunitTest__get_workdir_linktargetname,$(1))<>$(call gb_CppunitTest__get_linktarget_target,$(1))
+endef
 
 # static members declared here because they are used globally
 

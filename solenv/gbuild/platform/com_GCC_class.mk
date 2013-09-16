@@ -200,7 +200,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 define gb_Library_get_exports_target
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).exports
+$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
 endef
 
 # YaccTarget class
