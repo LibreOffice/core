@@ -72,7 +72,7 @@ extern "C" {
 
 //----------------------------------------------------------------------------
 
-SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
+SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 {
     SfxDispatcher* pDispatcher = GetDispatcher();
     if( pDispatcher )

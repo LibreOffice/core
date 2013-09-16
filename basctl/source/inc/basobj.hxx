@@ -27,7 +27,6 @@ class SbMethod;
 class SbModule;
 class SbxVariable;
 class StarBASIC;
-class String;
 class SfxUInt16Item;
 class SfxBindings;
 class SfxDispatcher;
@@ -39,7 +38,7 @@ namespace basctl
 
 
     // help methods for the general use:
-    SbMethod*       CreateMacro( SbModule* pModule, const String& rMacroName );
+    SbMethod*       CreateMacro( SbModule* pModule, const OUString& rMacroName );
     void            RunMethod( SbMethod* pMethod );
 
     StarBASIC*      FindBasic( const SbxVariable* pVar );
@@ -48,7 +47,7 @@ namespace basctl
     void            BasicStopped( bool* pbAppWindowDisabled = 0, bool* pbDispatcherLocked = 0, sal_uInt16* pnWaitCount = 0,
                             SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
 
-    bool            IsValidSbxName( const String& rName );
+    bool            IsValidSbxName( const OUString& rName );
 
     BasicManager*   FindBasicManager( StarBASIC* pLib );
 

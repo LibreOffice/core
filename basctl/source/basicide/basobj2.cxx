@@ -88,11 +88,11 @@ void Organize( sal_Int16 tabId )
 
 //----------------------------------------------------------------------------
 
-bool IsValidSbxName( const String& rName )
+bool IsValidSbxName( const OUString& rName )
 {
-    for ( sal_uInt16 nChar = 0; nChar < rName.Len(); nChar++ )
+    for ( sal_uInt16 nChar = 0; nChar < rName.getLength(); nChar++ )
     {
-        sal_Unicode c = rName.GetChar(nChar);
+        sal_Unicode c = rName[nChar];
         bool bValid = (
             ( c >= 'A' && c <= 'Z' ) ||
             ( c >= 'a' && c <= 'z' ) ||
