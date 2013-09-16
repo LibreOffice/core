@@ -417,15 +417,15 @@ public:
 
     struct ltstr
     {
-        bool operator()(const String &r1, const String &r2) const
+        bool operator()(const OUString &r1, const OUString &r2) const
         {
-            return r1.CompareIgnoreCaseToAscii(r2) == COMPARE_LESS;
+            return r1.compareToIgnoreAsciiCase(r2)<0;
         }
     };
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
-    std::map<String, String, ltstr> aFieldVarNames;
+    std::map<OUString, OUString, ltstr> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry& rEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
@@ -1730,8 +1730,8 @@ public:     // eigentlich private, geht aber leider nur public
     static sal_uInt32 ExtractColour(const sal_uInt8* &rpData, bool bVer67);
 
     void Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen);
-    long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,
-        const String &rData);
+    long MapBookmarkVariables(const WW8FieldDesc* pF, OUString &rOrigName,
+        const OUString &rData);
     String GetMappedBookmark(const String &rOrigName);
 
     // Felder
