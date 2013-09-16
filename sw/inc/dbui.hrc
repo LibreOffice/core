@@ -42,7 +42,7 @@
 #define DLG_MM_ASSIGNFIELDS           (RC_DBUI_BEGIN + 20)
 
 #define DLG_MM_LAYOUT_PAGE            (RC_DBUI_BEGIN + 22)
-#define DLG_MM_COPYTO                 (RC_DBUI_BEGIN + 23)
+
 #define DLG_MM_MAILBODY               (RC_DBUI_BEGIN + 24)
 #define DLG_MM_SENDMAILS              (RC_DBUI_BEGIN + 25)
 #define DLG_MAILMERGECHILD            (RC_DBUI_BEGIN + 26)

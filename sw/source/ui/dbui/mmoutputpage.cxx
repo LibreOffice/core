@@ -213,55 +213,24 @@ IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit*, pEdit)
 
 class SwCopyToDialog : public SfxModalDialog
 {
-    FixedInfo       m_aDescriptionFI;
-    FixedText       m_aCCFT;
-    Edit            m_aCCED;
-    FixedText       m_aBCCFT;
-    Edit            m_aBCCED;
-
-    FixedInfo       m_aNoteFI;
-    FixedLine       m_aSeparatorFL;
-
-    OKButton        m_aOK;
-    CancelButton    m_aCancel;
-    HelpButton      m_aHelp;
+    Edit* m_pCCED;
+    Edit* m_pBCCED;
 
 public:
-    SwCopyToDialog(Window* pParent);
-    ~SwCopyToDialog();
+    SwCopyToDialog(Window* pParent)
+        : SfxModalDialog(pParent, "CCDialog",
+            "modules/swriter/ui/ccdialog.ui")
+    {
+        get(m_pCCED, "cc");
+        get(m_pBCCED, "bcc");
+    }
 
-    String          GetCC() {return m_aCCED.GetText();}
-    void            SetCC(const String& rSet) {m_aCCED.SetText(rSet);}
+    OUString GetCC() {return m_pCCED->GetText();}
+    void SetCC(const OUString& rSet) {m_pCCED->SetText(rSet);}
 
-    String          GetBCC() {return m_aBCCED.GetText();}
-    void            SetBCC(const String& rSet) {m_aBCCED.SetText(rSet);}
+    OUString GetBCC() {return m_pBCCED->GetText();}
+    void SetBCC(const OUString& rSet) {m_pBCCED->SetText(rSet);}
 };
-
-SwCopyToDialog::SwCopyToDialog(Window* pParent) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_COPYTO)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aDescriptionFI( this, SW_RES(       FI_DESCRIPTION )),
-    m_aCCFT( this, SW_RES(                FT_CC          )),
-    m_aCCED( this, SW_RES(                ED_CC          )),
-    m_aBCCFT( this, SW_RES(               FT_BCC         )),
-    m_aBCCED( this, SW_RES(               ED_BCC         )),
-    m_aNoteFI( this, SW_RES(              FI_NOTE        )),
-    m_aSeparatorFL( this, SW_RES(         FL_SEPARATOR   )),
-    m_aOK( this, SW_RES(                  PB_OK          )),
-    m_aCancel( this, SW_RES(              PB_CANCEL      )),
-    m_aHelp( this, SW_RES(                PB_HELP        ))
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-{
-    FreeResource();
-}
-
-SwCopyToDialog::~SwCopyToDialog()
-{
-}
 
 SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUT_PAGE)),
