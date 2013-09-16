@@ -247,7 +247,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/escphdl \
     xmloff/source/style/fonthdl \
     xmloff/source/style/impastpl \
-    xmloff/source/style/impastp3 \
     xmloff/source/style/impastp4 \
     xmloff/source/style/kernihdl \
     xmloff/source/style/lspachdl \
