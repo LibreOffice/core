@@ -26,7 +26,6 @@
 
 class SwDoc;
 class SwTxtFmtColl;
-class String;
 class SwRewriter;
 class SfxItemSet;
 
