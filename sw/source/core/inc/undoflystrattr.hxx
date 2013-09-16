@@ -23,15 +23,14 @@
 #include <swundo.hxx>
 
 class SwFlyFrmFmt;
-class String;
 
 class SwUndoFlyStrAttr : public SwUndo
 {
     public:
         SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
                           const SwUndoId eUndoId,
-                          const String& sOldStr,
-                          const String& sNewStr );
+                          const OUString& sOldStr,
+                          const OUString& sNewStr );
         virtual ~SwUndoFlyStrAttr();
 
         virtual void UndoImpl( ::sw::UndoRedoContext & );
@@ -41,8 +40,8 @@ class SwUndoFlyStrAttr : public SwUndo
 
     private:
         SwFlyFrmFmt& mrFlyFrmFmt;
-        const String msOldStr;
-        const String msNewStr;
+        const OUString msOldStr;
+        const OUString msNewStr;
 };
 
 #endif // SW_UNDO_FLY_STR_ATTR_HXX

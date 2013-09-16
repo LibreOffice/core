@@ -23,8 +23,8 @@
 
 SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
                                     const SwUndoId eUndoId,
-                                    const String& sOldStr,
-                                    const String& sNewStr )
+                                    const OUString& sOldStr,
+                                    const OUString& sNewStr )
     : SwUndo( eUndoId ),
       mrFlyFrmFmt( rFlyFrmFmt ),
       msOldStr( sOldStr ),
