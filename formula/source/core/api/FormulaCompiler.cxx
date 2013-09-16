@@ -33,18 +33,15 @@
 #include <rtl/strbuf.hxx>
 #include <stdio.h>
 
-// =============================================================================
 namespace formula
 {
-// =============================================================================
     using namespace ::com::sun::star;
 
     static const sal_Char* pInternal[ 1 ] = { "TTT" };
 
-// =============================================================================
 namespace
 {
-// =============================================================================
+
 class FormulaCompilerRecursionGuard
 {
 private:
@@ -120,7 +117,8 @@ short lcl_GetRetFormat( OpCode eOpCode )
     }
 }
 
-inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec, const String* pTable, sal_uInt16 nOpCode )
+inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
+        const String* pTable, sal_uInt16 nOpCode )
 {
     sheet::FormulaOpCodeMapEntry aEntry;
     aEntry.Token.OpCode = nOpCode;
@@ -128,13 +126,15 @@ inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >
     rVec.push_back( aEntry);
 }
 
-void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec, const String* pTable, sal_uInt16 nOpCodeBeg, sal_uInt16 nOpCodeEnd )
+void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
+        const String* pTable, sal_uInt16 nOpCodeBeg, sal_uInt16 nOpCodeEnd )
 {
     for (sal_uInt16 nOpCode = nOpCodeBeg; nOpCode < nOpCodeEnd; ++nOpCode)
         lclPushOpCodeMapEntry( rVec, pTable, nOpCode );
 }
 
-void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec, const String* pTable, const sal_uInt16* pnOpCodes, size_t nCount )
+void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
+        const String* pTable, const sal_uInt16* pnOpCodes, size_t nCount )
 {
     for (const sal_uInt16* pnEnd = pnOpCodes + nCount; pnOpCodes < pnEnd; ++pnOpCodes)
         lclPushOpCodeMapEntry( rVec, pTable, *pnOpCodes );
@@ -160,16 +160,16 @@ private:
 };
 
 OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr xMap ) :
-    Resource( ResId(nRID,*ResourceManager::getResManager()) )
-    ,meSepType(SEMICOLON_BASE)
+    Resource( ResId( nRID, *ResourceManager::getResManager()))
+    , meSepType( SEMICOLON_BASE)
 {
-     for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+    for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
         String aOpStr;
-        if ( getOpCodeString(aOpStr, i) )
-            xMap->putOpCode(aOpStr, OpCode(i));
+        if ( getOpCodeString( aOpStr, i) )
+            xMap->putOpCode( aOpStr, OpCode(i));
         else
-            putDefaultOpCode(xMap, i);
+            putDefaultOpCode( xMap, i);
     }
 
     FreeResource();
@@ -228,14 +228,14 @@ bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
 
 void OpCodeList::putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp )
 {
-    ResId aRes(nOp,*ResourceManager::getResManager());
-    aRes.SetRT(RSC_STRING);
-    if (IsAvailableRes(aRes))
-        xMap->putOpCode(aRes.toString(), OpCode(nOp));
+    ResId aRes( nOp, *ResourceManager::getResManager());
+    aRes.SetRT( RSC_STRING);
+    if (IsAvailableRes( aRes))
+        xMap->putOpCode( aRes.toString(), OpCode( nOp));
 }
-// -----------------------------------------------------------------------------
+
 // static
-const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,sal_Unicode c )
+const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr, sal_Unicode c )
 {
     if ( !pStr )
         return NULL;
@@ -247,9 +247,9 @@ const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,sal_Unicode c )
     }
     return NULL;
 }
-// =============================================================================
-} // empty
-// =============================================================================
+
+} // namespace
+
 
 void FormulaCompiler::OpCodeMap::putExternal( const String & rSymbol, const String & rAddIn )
 {
@@ -274,7 +274,9 @@ void FormulaCompiler::OpCodeMap::putExternalSoftly( const String & rSymbol, cons
     if (bOk)
         mpExternalHashMap->insert( ExternalHashMap::value_type( rSymbol, rAddIn));
 }
-uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(const FormulaCompiler& _rCompiler,const uno::Sequence< OUString >& rNames ) const
+
+uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(
+        const FormulaCompiler& rCompiler, const uno::Sequence< OUString >& rNames ) const
 {
     const sal_Int32 nLen = rNames.getLength();
     uno::Sequence< sheet::FormulaToken > aTokens( nLen);
@@ -298,7 +300,7 @@ uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceO
                 // interest.
             }
             if (aIntName.isEmpty())
-                aIntName = _rCompiler.FindAddInFunction(*pName, !isEnglish());    // bLocalFirst=false for english
+                aIntName = rCompiler.FindAddInFunction(*pName, !isEnglish());    // bLocalFirst=false for english
             if (aIntName.isEmpty())
                 pToken->OpCode = getOpCodeUnknown();
             else
@@ -310,7 +312,9 @@ uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceO
     }
     return aTokens;
 }
-uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::createSequenceOfAvailableMappings(const FormulaCompiler& _rCompiler,const sal_Int32 nGroups ) const
+
+uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::createSequenceOfAvailableMappings(
+        const FormulaCompiler& rCompiler, const sal_Int32 nGroups ) const
 {
     using namespace sheet;
 
@@ -437,8 +441,10 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
         {
             // Function names are not consecutive, skip the gaps between
             // functions with no parameter, functions with 1 parameter
-            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_NO_PAR, ::std::min< sal_uInt16 >( SC_OPCODE_STOP_NO_PAR, mnSymbols ) );
-            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_1_PAR, ::std::min< sal_uInt16 >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
+            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_NO_PAR,
+                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_NO_PAR, mnSymbols ) );
+            lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_1_PAR,
+                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
             // Additional functions not within range of functions.
             static const sal_uInt16 aOpCodes[] = {
                 SC_OPCODE_IF,
@@ -477,14 +483,14 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             }
             else
             {
-                _rCompiler.fillAddInToken(aVec,isEnglish());
+                rCompiler.fillAddInToken( aVec, isEnglish());
             }
         }
     }
     const FormulaOpCodeMapEntry* pRet = aVec.empty() ? 0 : &aVec[0];
-    return uno::Sequence< FormulaOpCodeMapEntry >(pRet, aVec.size());
+    return uno::Sequence< FormulaOpCodeMapEntry >( pRet, aVec.size());
 }
-//-----------------------------------------------------------------------------
+
 
 void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eOp )
 {
@@ -496,20 +502,20 @@ void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eO
             (eOp == ocArrayRowSep),
             OStringBuffer(
                 RTL_CONSTASCII_STRINGPARAM("OpCodeMap::putOpCode: reusing OpCode ")).
-            append(sal_Int32(eOp)).append(RTL_CONSTASCII_STRINGPARAM(" (")).
-            append(OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US)).
+            append( sal_Int32( eOp)).append( RTL_CONSTASCII_STRINGPARAM(" (")).
+            append( OUStringToOString( rStr, RTL_TEXTENCODING_ASCII_US)).
             append(')').getStr());
         mpTable[eOp] = rStr;
         mpHashMap->insert( OpCodeHashMap::value_type( rStr, eOp));
     }
 }
-// -----------------------------------------------------------------------------
+
 // class FormulaCompiler
-// -----------------------------------------------------------------------------
+
 DBG_NAME(FormulaCompiler)
-FormulaCompiler::FormulaCompiler(FormulaTokenArray& _rArr)
+FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         :
-        pArr( &_rArr ),
+        pArr( &rArr ),
         pExternalRef(NULL),
         pStack( NULL ),
         nRecursion(0),
@@ -521,8 +527,9 @@ FormulaCompiler::FormulaCompiler(FormulaTokenArray& _rArr)
         bIgnoreErrors( false )
 
 {
-    DBG_CTOR(FormulaCompiler,NULL);
+    DBG_CTOR(FormulaCompiler, NULL);
 }
+
 FormulaCompiler::FormulaCompiler()
         :
         pArr( NULL ),
@@ -537,11 +544,12 @@ FormulaCompiler::FormulaCompiler()
         bIgnoreErrors( false )
 
 {
-    DBG_CTOR(FormulaCompiler,NULL);
+    DBG_CTOR(FormulaCompiler, NULL);
 }
+
 FormulaCompiler::~FormulaCompiler()
 {
-    DBG_DTOR(FormulaCompiler,NULL);
+    DBG_DTOR(FormulaCompiler, NULL);
 }
 
 FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLanguage ) const
@@ -580,13 +588,12 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::GetOpCodeMap( const sal_Int32 nLa
     }
     return xMap;
 }
-// -----------------------------------------------------------------------------
 
 String FormulaCompiler::FindAddInFunction( const String& /*rUpperName*/, bool /*bLocalFirst*/ ) const
 {
     return String();
 }
-// -----------------------------------------------------------------------------
+
 FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
         const uno::Sequence<
         const sheet::FormulaOpCodeMapEntry > & rMapping,
@@ -594,7 +601,9 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
 {
     using sheet::FormulaOpCodeMapEntry;
     // Filter / API maps are never Core
-    NonConstOpCodeMapPtr xMap( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1,false, FormulaGrammar::mergeToGrammar( FormulaGrammar::setEnglishBit(FormulaGrammar::GRAM_EXTERNAL, bEnglish),FormulaGrammar::CONV_UNSPECIFIED)));
+    NonConstOpCodeMapPtr xMap( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, false,
+                FormulaGrammar::mergeToGrammar( FormulaGrammar::setEnglishBit(
+                        FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED)));
     FormulaOpCodeMapEntry const * pArr2 = rMapping.getConstArray();
     FormulaOpCodeMapEntry const * const pStop = pArr2 + rMapping.getLength();
     for ( ; pArr2 < pStop; ++pArr2)
@@ -616,110 +625,111 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
     return xMap;
 }
 
-// -----------------------------------------------------------------------------
-void lcl_fillNativeSymbols(FormulaCompiler::NonConstOpCodeMapPtr& _xMap,bool _destroy = false)
+void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bDestroy = false )
 {
     static FormulaCompiler::NonConstOpCodeMapPtr s_SymbolMap;
-    if ( _destroy )
+    if ( bDestroy )
     {
         s_SymbolMap.reset();
-    } // if ( _destroy )
+    }
     else if ( !s_SymbolMap.get() )
     {
         // Core
-        s_SymbolMap.reset( new FormulaCompiler::OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI));
+        s_SymbolMap.reset( new FormulaCompiler::OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, true,
+                    FormulaGrammar::GRAM_NATIVE_UI));
         OModuleClient aModuleClient;
         OpCodeList aOpCodeListNative( RID_STRLIST_FUNCTION_NAMES, s_SymbolMap );
         // No AddInMap for native core mapping.
-    } // if ( !s_SymbolMap.get() )
-    _xMap = s_SymbolMap;
+    }
+    xMap = s_SymbolMap;
 }
-// -----------------------------------------------------------------------------
+
 const String& FormulaCompiler::GetNativeSymbol( OpCode eOp )
 {
     NonConstOpCodeMapPtr xSymbolsNative;
-    lcl_fillNativeSymbols(xSymbolsNative);
+    lcl_fillNativeSymbols( xSymbolsNative);
     return xSymbolsNative->getSymbol( eOp );
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::InitSymbolsNative() const
 {
-    lcl_fillNativeSymbols(mxSymbolsNative);
+    lcl_fillNativeSymbols( mxSymbolsNative);
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::InitSymbolsEnglish() const
 {
     static NonConstOpCodeMapPtr s_sSymbol;
     if ( !s_sSymbol.get() )
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH,FormulaGrammar::GRAM_ENGLISH,s_sSymbol);
+        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, s_sSymbol);
     mxSymbolsEnglish = s_sSymbol;
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::InitSymbolsPODF() const
 {
     static NonConstOpCodeMapPtr s_sSymbol;
     if ( !s_sSymbol.get() )
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH,FormulaGrammar::GRAM_PODF,s_sSymbol);
+        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_PODF, s_sSymbol);
     mxSymbolsPODF = s_sSymbol;
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::InitSymbolsODFF() const
 {
     static NonConstOpCodeMapPtr s_sSymbol;
     if ( !s_sSymbol.get() )
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF,FormulaGrammar::GRAM_ODFF,s_sSymbol);
+        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, s_sSymbol);
     mxSymbolsODFF = s_sSymbol;
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::InitSymbolsEnglishXL() const
 {
     static NonConstOpCodeMapPtr s_sSymbol;
     if ( !s_sSymbol.get() )
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH,FormulaGrammar::GRAM_ENGLISH,s_sSymbol);
+        loadSymbols( RID_STRLIST_FUNCTION_NAMES_ENGLISH, FormulaGrammar::GRAM_ENGLISH, s_sSymbol);
     mxSymbolsEnglishXL = s_sSymbol;
 
     // TODO: For now, just replace the separators to the Excel English
     // variants. Later, if we want to properly map Excel functions with Calc
     // functions, we'll need to do a little more work here.
-    mxSymbolsEnglishXL->putOpCode(OUString(','), ocSep);
-    mxSymbolsEnglishXL->putOpCode(OUString(','), ocArrayColSep);
-    mxSymbolsEnglishXL->putOpCode(OUString(';'), ocArrayRowSep);
+    mxSymbolsEnglishXL->putOpCode( OUString(','), ocSep);
+    mxSymbolsEnglishXL->putOpCode( OUString(','), ocArrayColSep);
+    mxSymbolsEnglishXL->putOpCode( OUString(';'), ocArrayRowSep);
 }
 
-// -----------------------------------------------------------------------------
-void FormulaCompiler::loadSymbols(sal_uInt16 _nSymbols,FormulaGrammar::Grammar _eGrammar,NonConstOpCodeMapPtr& _xMap) const
+
+void FormulaCompiler::loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar eGrammar,
+        NonConstOpCodeMapPtr& rxMap) const
 {
-    if ( !_xMap.get() )
+    if ( !rxMap.get() )
     {
         // not Core
-        _xMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, _eGrammar != FormulaGrammar::GRAM_ODFF, _eGrammar ));
+        rxMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar ));
         OModuleClient aModuleClient;
-        OpCodeList aOpCodeList( _nSymbols, _xMap );
+        OpCodeList aOpCodeList( nSymbols, rxMap );
 
-        fillFromAddInMap( _xMap, _eGrammar);
+        fillFromAddInMap( rxMap, eGrammar);
         // Fill from collection for AddIns not already present.
-        if ( FormulaGrammar::GRAM_ENGLISH != _eGrammar )
-            fillFromAddInCollectionUpperName( _xMap);
+        if ( FormulaGrammar::GRAM_ENGLISH != eGrammar )
+            fillFromAddInCollectionUpperName( rxMap);
         else
-            fillFromAddInCollectionEnglishName( _xMap);
+            fillFromAddInCollectionEnglishName( rxMap);
     }
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr /*xMap */) const
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr /*xMap */) const
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::fillFromAddInMap( NonConstOpCodeMapPtr /*xMap*/, FormulaGrammar::Grammar /*_eGrammar */) const
 {
 }
-// -----------------------------------------------------------------------------
+
 OpCode FormulaCompiler::GetEnglishOpCode( const String& rName ) const
 {
-    FormulaCompiler::OpCodeMapPtr xMap = GetOpCodeMap(sheet::FormulaLanguage::ENGLISH);
+    FormulaCompiler::OpCodeMapPtr xMap = GetOpCodeMap( sheet::FormulaLanguage::ENGLISH);
 
     formula::OpCodeHashMap::const_iterator iLook( xMap->getHashMap()->find( rName ) );
     bool bFound = (iLook != xMap->getHashMap()->end());
@@ -773,14 +783,16 @@ bool FormulaCompiler::DeQuote( String& rStr )
     }
     return false;
 }
-// -----------------------------------------------------------------------------
-void FormulaCompiler::fillAddInToken(::std::vector< sheet::FormulaOpCodeMapEntry >& /*_rVec*/,bool /*_bIsEnglish*/) const
+
+void FormulaCompiler::fillAddInToken(
+        ::std::vector< sheet::FormulaOpCodeMapEntry >& /*_rVec*/,
+        bool /*_bIsEnglish*/) const
 {
 }
-// -----------------------------------------------------------------------------
-bool FormulaCompiler::IsMatrixFunction(OpCode _eOpCode)
+
+bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
 {
-    switch ( _eOpCode )
+    switch (eOpCode)
     {
         case ocDde :
         case ocGrowth :
@@ -801,7 +813,7 @@ bool FormulaCompiler::IsMatrixFunction(OpCode _eOpCode)
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 FormulaCompiler::OpCodeMap::~OpCodeMap()
 {
     delete mpReverseExternalHashMap;
@@ -809,23 +821,23 @@ FormulaCompiler::OpCodeMap::~OpCodeMap()
     delete [] mpTable;
     delete mpHashMap;
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
 {
     delete mpHashMap;
-    mpHashMap = new OpCodeHashMap(mnSymbols);
+    mpHashMap = new OpCodeHashMap( mnSymbols);
 
     sal_uInt16 n = r.getSymbolCount();
     for (sal_uInt16 i = 0; i < n; ++i)
     {
         OpCode eOp = OpCode(i);
-        const String& rSymbol = r.getSymbol(eOp);
-        putOpCode(rSymbol, eOp);
+        const String& rSymbol = r.getSymbol( eOp);
+        putOpCode( rSymbol, eOp);
     }
 
     // TODO: maybe copy the external maps too?
 }
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName ) const
 {
@@ -897,13 +909,13 @@ void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 n
     rBuffer.append( mxSymbols->getSymbol( eOp));
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 FormulaCompiler::OpCodeMap::getOpCodeUnknown()
 {
     static const sal_Int32 kOpCodeUnknown = -1;
     return kOpCodeUnknown;
 }
-// -----------------------------------------------------------------------------
+
 bool FormulaCompiler::GetToken()
 {
     static const short nRecursionMax = 42;
@@ -993,10 +1005,9 @@ bool FormulaCompiler::GetToken()
     }
     return true;
 }
-//---------------------------------------------------------------------------
-// RPN creation by recursion
-//---------------------------------------------------------------------------
 
+
+// RPN creation by recursion
 void FormulaCompiler::Factor()
 {
     if ( pArr->GetCodeError() && !bIgnoreErrors )
@@ -1022,12 +1033,12 @@ void FormulaCompiler::Factor()
                ? errNoName : errOperatorExpected );
             if ( bAutoCorrect && !pStack )
             {   // assume multiplication
-                aCorrectedFormula += mxSymbols->getSymbol(ocMul);
+                aCorrectedFormula += mxSymbols->getSymbol( ocMul);
                 bCorrected = true;
                 NextToken();
                 eOp = Expression();
                 if( eOp != ocClose )
-                    SetError(errPairExpected);
+                    SetError( errPairExpected);
                 else
                     eOp = NextToken();
             }
@@ -1046,12 +1057,12 @@ void FormulaCompiler::Factor()
             // errors like =(1;) would also result in display of =(1~)
             if (!pArr->GetCodeError())
             {
-                pFacToken->NewOpCode( ocUnion,FormulaToken::PrivateAccess());
+                pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
                 PutCode( pFacToken);
             }
         }
         if (eOp != ocClose)
-            SetError(errPairExpected);
+            SetError( errPairExpected);
         else
             eOp = NextToken();
     }
@@ -1060,7 +1071,7 @@ void FormulaCompiler::Factor()
         if( nNumFmt == NUMBERFORMAT_UNDEFINED )
             nNumFmt = lcl_GetRetFormat( eOp );
 
-        if ( IsOpCodeVolatile(eOp) )
+        if ( IsOpCodeVolatile( eOp) )
             pArr->SetExclusiveRecalcModeAlways();
         else
         {
@@ -1091,7 +1102,7 @@ void FormulaCompiler::Factor()
                     // cell with hyperlink needs to be calculated on load to
                     // get its matrix result generated.
                     pArr->AddRecalcMode( RECALCMODE_ONLOAD );
-                    pArr->SetHyperLink(true);
+                    pArr->SetHyperLink( true);
                 break;
                 default:
                     ;   // nothing
@@ -1103,15 +1114,15 @@ void FormulaCompiler::Factor()
             eOp = NextToken();
             if (eOp != ocOpen)
             {
-                SetError(errPairExpected);
+                SetError( errPairExpected);
                 PutCode( pFacToken );
             }
             else
             {
                 eOp = NextToken();
                 if (eOp != ocClose)
-                    SetError(errPairExpected);
-                PutCode(pFacToken);
+                    SetError( errPairExpected);
+                PutCode( pFacToken);
                 eOp = NextToken();
             }
         }
@@ -1129,9 +1140,9 @@ void FormulaCompiler::Factor()
                 eOp = Expression();
             }
             else
-                SetError(errPairExpected);
+                SetError( errPairExpected);
             if (eOp != ocClose)
-                SetError(errPairExpected);
+                SetError( errPairExpected);
             else if ( !pArr->GetCodeError() )
                 pFacToken->SetByte( 1 );
             PutCode( pFacToken );
@@ -1169,7 +1180,7 @@ void FormulaCompiler::Factor()
                 bNoParam = true;
             }
             else
-                SetError(errPairExpected);
+                SetError( errPairExpected);
             sal_uInt8 nSepCount = 0;
             if( !bNoParam )
             {
@@ -1184,7 +1195,7 @@ void FormulaCompiler::Factor()
             if (bBadName)
                 ;   // nothing, keep current token for return
             else if (eOp != ocClose)
-                SetError(errPairExpected);
+                SetError( errPairExpected);
             else
                 eOp = NextToken();
             // Jumps are just normal functions for the FunctionAutoPilot tree view
@@ -1220,7 +1231,7 @@ void FormulaCompiler::Factor()
                 eOp = Expression();
             }
             else
-                SetError(errPairExpected);
+                SetError( errPairExpected);
             PutCode( pFacToken );
             // During AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
@@ -1256,7 +1267,7 @@ void FormulaCompiler::Factor()
                 PutCode( mpToken );
             }
             if (eOp != ocClose)
-                SetError(errPairExpected);
+                SetError( errPairExpected);
             else
             {
                 eOp = NextToken();
@@ -1284,7 +1295,7 @@ void FormulaCompiler::Factor()
                 if (bLimitOk)
                     pFacToken->GetJump()[ 0 ] = nJumpCount;
                 else
-                    SetError(errIllegalParameter);
+                    SetError( errIllegalParameter);
             }
         }
         else if ( eOp == ocMissing )
@@ -1307,7 +1318,7 @@ void FormulaCompiler::Factor()
         }
         else if ( mpToken->IsExternalRef() )
         {
-            PutCode(mpToken);
+            PutCode( mpToken);
             eOp = NextToken();
         }
         else
@@ -1328,8 +1339,6 @@ void FormulaCompiler::Factor()
     }
 }
 
-//---------------------------------------------------------------------------
-
 void FormulaCompiler::RangeLine()
 {
     Factor();
@@ -1345,8 +1354,6 @@ void FormulaCompiler::RangeLine()
     }
 }
 
-//---------------------------------------------------------------------------
-
 void FormulaCompiler::IntersectionLine()
 {
     RangeLine();
@@ -1359,8 +1366,6 @@ void FormulaCompiler::IntersectionLine()
     }
 }
 
-//---------------------------------------------------------------------------
-
 void FormulaCompiler::UnionLine()
 {
     IntersectionLine();
@@ -1372,8 +1377,6 @@ void FormulaCompiler::UnionLine()
         PutCode(p);
     }
 }
-
-//---------------------------------------------------------------------------
 
 void FormulaCompiler::UnaryLine()
 {
@@ -1391,8 +1394,6 @@ void FormulaCompiler::UnaryLine()
         UnionLine();
 }
 
-//---------------------------------------------------------------------------
-
 void FormulaCompiler::PostOpLine()
 {
     UnaryLine();
@@ -1402,8 +1403,6 @@ void FormulaCompiler::PostOpLine()
         NextToken();
     }
 }
-
-//---------------------------------------------------------------------------
 
 void FormulaCompiler::PowLine()
 {
@@ -1417,8 +1416,6 @@ void FormulaCompiler::PowLine()
     }
 }
 
-//---------------------------------------------------------------------------
-
 void FormulaCompiler::MulDivLine()
 {
     PowLine();
@@ -1430,8 +1427,6 @@ void FormulaCompiler::MulDivLine()
         PutCode(p);
     }
 }
-
-//---------------------------------------------------------------------------
 
 void FormulaCompiler::AddSubLine()
 {
@@ -1445,8 +1440,6 @@ void FormulaCompiler::AddSubLine()
     }
 }
 
-//---------------------------------------------------------------------------
-
 void FormulaCompiler::ConcatLine()
 {
     AddSubLine();
@@ -1458,8 +1451,6 @@ void FormulaCompiler::ConcatLine()
         PutCode(p);
     }
 }
-
-//---------------------------------------------------------------------------
 
 void FormulaCompiler::CompareLine()
 {
@@ -1473,8 +1464,6 @@ void FormulaCompiler::CompareLine()
     }
 }
 
-//---------------------------------------------------------------------------
-
 void FormulaCompiler::NotLine()
 {
     CompareLine();
@@ -1486,8 +1475,6 @@ void FormulaCompiler::NotLine()
         PutCode(p);
     }
 }
-
-//---------------------------------------------------------------------------
 
 OpCode FormulaCompiler::Expression()
 {
@@ -1509,17 +1496,19 @@ OpCode FormulaCompiler::Expression()
     }
     return mpToken->GetOpCode();
 }
-// -----------------------------------------------------------------------------
-void FormulaCompiler::SetError(sal_uInt16 /*nError*/)
+
+
+void FormulaCompiler::SetError( sal_uInt16 /*nError*/ )
 {
 }
-// -----------------------------------------------------------------------------
-FormulaTokenRef FormulaCompiler::ExtendRangeReference( FormulaToken & /*rTok1*/, FormulaToken & /*rTok2*/, bool /*bReuseDoubleRef*/ )
+
+FormulaTokenRef FormulaCompiler::ExtendRangeReference( FormulaToken & /*rTok1*/, FormulaToken & /*rTok2*/,
+        bool /*bReuseDoubleRef*/ )
 {
     return FormulaTokenRef();
 }
-// -----------------------------------------------------------------------------
-bool FormulaCompiler::MergeRangeReference(FormulaToken * * const pCode1, FormulaToken * const * const pCode2 )
+
+bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 )
 {
     FormulaToken *p1, *p2;
     if (pc < 2 || !pCode1 || !pCode2 ||
@@ -1540,7 +1529,7 @@ bool FormulaCompiler::MergeRangeReference(FormulaToken * * const pCode1, Formula
 
     return true;
 }
-// -----------------------------------------------------------------------------
+
 bool FormulaCompiler::CompileTokenArray()
 {
     glSubTotal = false;
@@ -1591,7 +1580,7 @@ bool FormulaCompiler::CompileTokenArray()
         if( pArr->GetCodeError() && !bIgnoreErrors )
         {
             pArr->DelRPN();
-            pArr->SetHyperLink(false);
+            pArr->SetHyperLink( false);
         }
 
         if ( bWasForced )
@@ -1601,7 +1590,7 @@ bool FormulaCompiler::CompileTokenArray()
         nNumFmt = NUMBERFORMAT_NUMBER;
     return glSubTotal;
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::PopTokenArray()
 {
     if( pStack )
@@ -1621,7 +1610,7 @@ void FormulaCompiler::PopTokenArray()
         delete p;
     }
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::CreateStringFromTokenArray( String& rFormula )
 {
     OUStringBuffer aBuffer( pArr->GetLen() * 5 );
@@ -1650,7 +1639,7 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     rBuffer.ensureCapacity( pArr->GetLen() * 5 );
 
     if ( pArr->IsRecalcModeForced() )
-        rBuffer.append(sal_Unicode('='));
+        rBuffer.append( sal_Unicode('='));
     FormulaToken* t = pArr->First();
     while( t )
         t = CreateStringFromToken( rBuffer, t, true );
@@ -1661,8 +1650,8 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         pArr = pSaveArr;
     }
 }
-// -----------------------------------------------------------------------------
-FormulaToken* FormulaCompiler::CreateStringFromToken( String& rFormula, FormulaToken* pTokenP,bool bAllowArrAdvance )
+
+FormulaToken* FormulaCompiler::CreateStringFromToken( String& rFormula, FormulaToken* pTokenP, bool bAllowArrAdvance )
 {
     OUStringBuffer aBuffer;
     FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
@@ -1670,7 +1659,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( String& rFormula, FormulaT
     return p;
 }
 
-FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pTokenP,bool bAllowArrAdvance )
+FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pTokenP, bool bAllowArrAdvance )
 {
     bool bNext = true;
     bool bSpaces = false;
@@ -1687,7 +1676,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
         bSpaces = ( !t || t->GetOpCode() != ocOpen );
     }
     if( bSpaces )
-        rBuffer.append(sal_Unicode(' '));
+        rBuffer.append( sal_Unicode(' '));
 
     if( eOp == ocSpaces )
     {
@@ -1710,24 +1699,24 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
             sal_uInt8 n = t->GetByte();
             for ( sal_uInt8 j=0; j<n; ++j )
             {
-                rBuffer.append(sal_Unicode(' '));
+                rBuffer.append( sal_Unicode(' '));
             }
         }
     }
     else if( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
         rBuffer.appendAscii( pInternal[ eOp - ocInternalBegin ] );
     else if( (sal_uInt16) eOp < mxSymbols->getSymbolCount())        // Keyword:
-        rBuffer.append(mxSymbols->getSymbol(eOp));
+        rBuffer.append( mxSymbols->getSymbol( eOp));
     else
     {
         SAL_WARN( "formula.core","unknown OpCode");
-        rBuffer.append(GetNativeSymbol( ocErrName ));
+        rBuffer.append( GetNativeSymbol( ocErrName ));
     }
     if( bNext )
     {
         if (t->IsExternalRef())
         {
-            CreateStringFromExternal(rBuffer, pTokenP);
+            CreateStringFromExternal( rBuffer, pTokenP);
         }
         else
         {
@@ -1739,15 +1728,15 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
 
             case svString:
                 if( eOp == ocBad || eOp == ocStringXML )
-                    rBuffer.append(t->GetString());
+                    rBuffer.append( t->GetString());
                 else
                     AppendString( rBuffer, t->GetString() );
                 break;
             case svSingleRef:
-                CreateStringFromSingleRef(rBuffer,t);
+                CreateStringFromSingleRef( rBuffer, t);
                 break;
             case svDoubleRef:
-                CreateStringFromDoubleRef(rBuffer,t);
+                CreateStringFromDoubleRef( rBuffer, t);
                 break;
             case svMatrix:
                 CreateStringFromMatrix( rBuffer, t );
@@ -1772,7 +1761,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
                 }
                 if (!bMapped && !mxSymbols->isEnglish())
                         LocalizeString( aAddIn );
-                    rBuffer.append(aAddIn);
+                    rBuffer.append( aAddIn);
                 }
             break;
             case svError:
@@ -1790,7 +1779,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
         }
     }
     if( bSpaces )
-        rBuffer.append(sal_Unicode(' '));
+        rBuffer.append( sal_Unicode(' '));
     if ( bAllowArrAdvance )
     {
         if( bNext )
@@ -1799,7 +1788,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
     }
     return pTokenP;
 }
-// -----------------------------------------------------------------------------
+
 
 void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal )
 {
@@ -1819,51 +1808,51 @@ void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal )
                 true );
     }
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal )
 {
-    rBuffer.append( mxSymbols->getSymbol(static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
+    rBuffer.append( mxSymbols->getSymbol( static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const String & rStr )
 {
-    rBuffer.append(sal_Unicode('"'));
+    rBuffer.append( sal_Unicode('"'));
     if ( lcl_UnicodeStrChr( rStr.GetBuffer(), '"' ) == NULL )
         rBuffer.append( rStr );
     else
     {
         String aStr( rStr );
         aStr.SearchAndReplaceAll( OUString('"'), OUString("\"\"") );
-        rBuffer.append(aStr);
+        rBuffer.append( aStr);
     }
-    rBuffer.append(sal_Unicode('"'));
+    rBuffer.append( sal_Unicode('"'));
 }
 
 void FormulaCompiler::UpdateSeparatorsNative(
     const OUString& rSep, const OUString& rArrayColSep, const OUString& rArrayRowSep )
 {
     NonConstOpCodeMapPtr xSymbolsNative;
-    lcl_fillNativeSymbols(xSymbolsNative);
-    xSymbolsNative->putOpCode(rSep, ocSep);
-    xSymbolsNative->putOpCode(rArrayColSep, ocArrayColSep);
-    xSymbolsNative->putOpCode(rArrayRowSep, ocArrayRowSep);
+    lcl_fillNativeSymbols( xSymbolsNative);
+    xSymbolsNative->putOpCode( rSep, ocSep);
+    xSymbolsNative->putOpCode( rArrayColSep, ocArrayColSep);
+    xSymbolsNative->putOpCode( rArrayRowSep, ocArrayRowSep);
 }
 
 void FormulaCompiler::ResetNativeSymbols()
 {
     NonConstOpCodeMapPtr xSymbolsNative;
-    lcl_fillNativeSymbols(xSymbolsNative, true);
-    lcl_fillNativeSymbols(xSymbolsNative);
+    lcl_fillNativeSymbols( xSymbolsNative, true);
+    lcl_fillNativeSymbols( xSymbolsNative);
 }
 
 void FormulaCompiler::SetNativeSymbols( const OpCodeMapPtr& xMap )
 {
     NonConstOpCodeMapPtr xSymbolsNative;
-    lcl_fillNativeSymbols(xSymbolsNative);
+    lcl_fillNativeSymbols( xSymbolsNative);
     xSymbolsNative->copyFrom(*xMap);
 }
 
-// -----------------------------------------------------------------------------
+
 OpCode FormulaCompiler::NextToken()
 {
     if( !GetToken() )
@@ -1873,7 +1862,7 @@ OpCode FormulaCompiler::NextToken()
     if ( (eOp == ocPush || eOp == ocColRowNameAuto) &&
             !( (eLastOp == ocOpen) || (eLastOp == ocSep) ||
                 (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)) )
-        SetError(errOperatorExpected);
+        SetError( errOperatorExpected);
     // Operator and Plus => operator
     if (eOp == ocAdd && (eLastOp == ocOpen || eLastOp == ocSep ||
                 (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
@@ -1887,7 +1876,7 @@ OpCode FormulaCompiler::NextToken()
                 && (eLastOp == ocOpen || eLastOp == ocSep ||
                     (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
         {
-            SetError(errVariableExpected);
+            SetError( errVariableExpected);
             if ( bAutoCorrect && !pStack )
             {
                 if ( eOp == eLastOp || eLastOp == ocOpen )
@@ -1905,44 +1894,44 @@ OpCode FormulaCompiler::NextToken()
                         switch ( eOp )
                         {   // swap operators
                             case ocGreater:
-                                if ( c == mxSymbols->getSymbol(ocEqual).GetChar(0) )
+                                if ( c == mxSymbols->getSymbol( ocEqual).GetChar(0) )
                                 {   // >= instead of =>
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol(ocGreater).GetChar(0) );
+                                        mxSymbols->getSymbol( ocGreater).GetChar(0) );
                                     aCorrectedSymbol = c;
                                     bCorrected = true;
                                 }
                             break;
                             case ocLess:
-                                if ( c == mxSymbols->getSymbol(ocEqual).GetChar(0) )
+                                if ( c == mxSymbols->getSymbol( ocEqual).GetChar(0) )
                                 {   // <= instead of =<
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol(ocLess).GetChar(0) );
+                                        mxSymbols->getSymbol( ocLess).GetChar(0) );
                                     aCorrectedSymbol = c;
                                     bCorrected = true;
                                 }
-                                else if ( c == mxSymbols->getSymbol(ocGreater).GetChar(0) )
+                                else if ( c == mxSymbols->getSymbol( ocGreater).GetChar(0) )
                                 {   // <> instead of ><
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol(ocLess).GetChar(0) );
+                                        mxSymbols->getSymbol( ocLess).GetChar(0) );
                                     aCorrectedSymbol = c;
                                     bCorrected = true;
                                 }
                             break;
                             case ocMul:
-                                if ( c == mxSymbols->getSymbol(ocSub).GetChar(0) )
+                                if ( c == mxSymbols->getSymbol( ocSub).GetChar(0) )
                                 {   // *- instead of -*
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol(ocMul).GetChar(0) );
+                                        mxSymbols->getSymbol( ocMul).GetChar(0) );
                                     aCorrectedSymbol = c;
                                     bCorrected = true;
                                 }
                             break;
                             case ocDiv:
-                                if ( c == mxSymbols->getSymbol(ocSub).GetChar(0) )
+                                if ( c == mxSymbols->getSymbol( ocSub).GetChar(0) )
                                 {   // /- instead of -/
                                     aCorrectedFormula.SetChar( nPos,
-                                        mxSymbols->getSymbol(ocDiv).GetChar(0) );
+                                        mxSymbols->getSymbol( ocDiv).GetChar(0) );
                                     aCorrectedSymbol = c;
                                     bCorrected = true;
                                 }
@@ -1969,7 +1958,7 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
             *pCode++ = p.get();
             ++pc;
         }
-        SetError(errCodeOverflow);
+        SetError( errCodeOverflow);
         return;
     }
     if( pArr->GetCodeError() && !bCompileForFAP )
@@ -1980,47 +1969,47 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
     pc++;
 }
 
-// -----------------------------------------------------------------------------
-bool FormulaCompiler::HandleExternalReference(const FormulaToken& /*_aToken*/)
+
+bool FormulaCompiler::HandleExternalReference( const FormulaToken& /*_aToken*/)
 {
     return true;
 }
-// -----------------------------------------------------------------------------
+
 bool FormulaCompiler::HandleRange()
 {
     return true;
 }
-// -----------------------------------------------------------------------------
+
 bool FormulaCompiler::HandleSingleRef()
 {
     return true;
 }
-// -----------------------------------------------------------------------------
+
 bool FormulaCompiler::HandleDbData()
 {
     return true;
 }
-// -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromSingleRef(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+
+void FormulaCompiler::CreateStringFromSingleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
 {
 }
-// -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromDoubleRef(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+
+void FormulaCompiler::CreateStringFromDoubleRef( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
 {
 }
-// -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromIndex(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+
+void FormulaCompiler::CreateStringFromIndex( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
 {
 }
-// -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromMatrix(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+
+void FormulaCompiler::CreateStringFromMatrix( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
 {
 }
-// -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromExternal(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+
+void FormulaCompiler::CreateStringFromExternal( OUStringBuffer& /*rBuffer*/, FormulaToken* /*pTokenP*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaCompiler::LocalizeString( String& /*rName*/ )
 {
 }
@@ -2039,8 +2028,6 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     pArr          = pa;
 }
 
-// =============================================================================
-} // formula
-// =============================================================================
+} // namespace formula
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
