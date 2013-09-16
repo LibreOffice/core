@@ -820,17 +820,68 @@ FormulaCompiler::OpCodeMap::~OpCodeMap()
     delete mpHashMap;
 }
 
-void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
+void FormulaCompiler::OpCodeMap::putCopyOpCode( const String& rSymbol, OpCode eOp )
+{
+    SAL_WARN_IF( mpTable[eOp].Len() && !rSymbol.Len(), "formula.core",
+            "OpCodeMap::putCopyOpCode: NOT replacing OpCode " << eOp << " '" << mpTable[eOp] << "' with empty name!");
+    if (mpTable[eOp].Len() && !rSymbol.Len())
+        mpHashMap->insert( OpCodeHashMap::value_type( mpTable[eOp], eOp));
+    else
+    {
+        mpTable[eOp] = rSymbol;
+        mpHashMap->insert( OpCodeHashMap::value_type( rSymbol, eOp));
+    }
+}
+
+void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKnownBad )
 {
     delete mpHashMap;
     mpHashMap = new OpCodeHashMap( mnSymbols);
 
     sal_uInt16 n = r.getSymbolCount();
-    for (sal_uInt16 i = 0; i < n; ++i)
+    SAL_WARN_IF( n != mnSymbols, "formula.core",
+            "OpCodeMap::copyFrom: unequal size, this: " << mnSymbols << "  that: " << n);
+    if (n > mnSymbols)
+        n = mnSymbols;
+
+    // OpCode 0 (ocPush) should never be in a map.
+    SAL_WARN_IF( mpTable[0].Len() || r.mpTable[0].Len(), "formula.core",
+            "OpCodeMap::copyFrom: OpCode 0 assigned, this: '"
+            << mpTable[0] << "'  that: '" << r.mpTable[0] << "'");
+
+    // For bOverrideKnownBad when copying from the English core map (ODF 1.1
+    // and API) to the native map (UI "use English function names") replace the
+    // known bad legacy function names with correct ones.
+    if (bOverrideKnownBad && r.mbCore &&
+            FormulaGrammar::extractFormulaLanguage( meGrammar) == sheet::FormulaLanguage::NATIVE &&
+            FormulaGrammar::extractFormulaLanguage( r.meGrammar) == sheet::FormulaLanguage::ENGLISH)
     {
-        OpCode eOp = OpCode(i);
-        const String& rSymbol = r.getSymbol( eOp);
-        putOpCode( rSymbol, eOp);
+        for (sal_uInt16 i = 1; i < n; ++i)
+        {
+            String aSymbol;
+            OpCode eOp = OpCode(i);
+            switch (eOp)
+            {
+                case ocZGZ:
+                    aSymbol = OUString("RRI");
+                    break;
+                case ocTableOp:
+                    aSymbol = OUString("MULTIPLE.OPERATIONS");
+                    break;
+                default:
+                    aSymbol = r.mpTable[i];
+            }
+            putCopyOpCode( aSymbol, eOp);
+        }
+    }
+    else
+    {
+        for (sal_uInt16 i = 1; i < n; ++i)
+        {
+            OpCode eOp = OpCode(i);
+            const String& rSymbol = r.mpTable[i];
+            putCopyOpCode( rSymbol, eOp);
+        }
     }
 
     // TODO: maybe copy the external maps too?
@@ -1847,7 +1898,7 @@ void FormulaCompiler::SetNativeSymbols( const OpCodeMapPtr& xMap )
 {
     NonConstOpCodeMapPtr xSymbolsNative;
     lcl_fillNativeSymbols( xSymbolsNative);
-    xSymbolsNative->copyFrom(*xMap);
+    xSymbolsNative->copyFrom( *xMap, true);
 }
 
 

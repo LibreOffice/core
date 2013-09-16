@@ -114,7 +114,14 @@ public:
         }
         virtual ~OpCodeMap();
 
-        void copyFrom( const OpCodeMap& r );
+        /** Copy mappings from r into this map, effectively replacing this map.
+
+            @param  bOverrideKnownBad
+                    If TRUE, override known legacy bad function names with
+                    correct ones if the conditions can be derived from the
+                    current maps.
+         */
+        void copyFrom( const OpCodeMap& r, bool bOverrideKnownBad );
 
         /// Get the symbol String -> OpCode hash map for finds.
         inline const OpCodeHashMap* getHashMap() const { return mpHashMap; }
@@ -180,6 +187,14 @@ public:
         /** The value used in createSequenceOfAvailableMappings() and thus in
             XFormulaOpCodeMapper::getMappings() for an unknown symbol. */
         static sal_Int32 getOpCodeUnknown();
+
+    private:
+
+        /** Conditionally put a mapping in copyFrom() context.
+
+            Does NOT check eOp range!
+         */
+        void putCopyOpCode( const String& rSymbol, OpCode eOp );
     };
 
 public:
