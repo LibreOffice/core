@@ -59,7 +59,7 @@ if( status != CL_SUCCESS )    \
 }
 
 #define MAX_KERNEL_STRING_LEN 64
-#define MAX_CLFILE_NUM 100
+#define MAX_CLFILE_NUM 50
 #define MAX_CLKERNEL_NUM 200
 #define MAX_KERNEL_NAME_LEN 64
 
