@@ -54,7 +54,7 @@ namespace nsTransferBufferType
 
 #define DATA_FLAVOR     ::com::sun::star::datatransfer::DataFlavor
 
-class SwTransferable : public TransferableHelper
+class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellLock             aDocShellRef;
