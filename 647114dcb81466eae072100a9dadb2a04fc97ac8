@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn////Y\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-16T16:31:16Z",
+      "side": 1,
+      "message": "The OModuleClient instance ensures that the the resource manager lives as long as the resource is accessed while constructing the OpCodeList. This is necessary here because the entire FormulaCompiler may be accessed via UNO API.",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn////U\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-16T16:31:16Z",
+      "side": 1,
+      "message": "It fills the functionname \u003c-\u003e opcode mapping from a list of text resources in RID_STRLIST_FUNCTION_NAMES in formula/source/core/resource/core_resource.src",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn////Q\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-16T16:31:16Z",
+      "side": 1,
+      "message": "Same as above, creates a mapping of the resource list passed.",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn////M\u003d",
+        "filename": "sc/source/core/data/documen7.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-16T16:31:16Z",
+      "side": 1,
+      "message": "nFormulaCodeInTree keeps track of the sum of RPN tokens of all formula cells added to the recalculation list. If that goes \u003c current RPN when removing a formula cell then something forgot to remove a formula from the list before changing / recompiling it and re-adding it to the list after.",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn////I\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-16T16:31:16Z",
+      "side": 1,
+      "message": "This seems to be ok.",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn////E\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-16T16:31:16Z",
+      "side": 1,
+      "message": "Yes :-)",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
