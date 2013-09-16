@@ -755,6 +755,7 @@ void ColorConfigWindow_Impl::ColorHdl (
 
     // extended entries
     unsigned const nExtCount = pExtConfig->GetComponentCount();
+    i = ColorConfigEntryCount;
     for (unsigned j = 0; j != nExtCount; ++j)
     {
         OUString sComponentName = pExtConfig->GetComponentName(j);
