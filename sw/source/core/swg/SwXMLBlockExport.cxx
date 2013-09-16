@@ -97,7 +97,7 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
                             XML_NAMESPACE_TEXT );
 }
 
-sal_uInt32 SwXMLTextBlockExport::exportDoc(const String &rText)
+sal_uInt32 SwXMLTextBlockExport::exportDoc(const OUString &rText)
 {
     GetDocHandler()->startDocument();
 
@@ -123,8 +123,8 @@ sal_uInt32 SwXMLTextBlockExport::exportDoc(const String &rText)
                 sal_Int32 nPos = 0;
                 do
                 {
-                    String sTemp ( rText.GetToken( 0, '\015', nPos ) );
-                     SvXMLElementExport aPara (*this, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
+                    OUString sTemp ( rText.getToken( 0, '\015', nPos ) );
+                    SvXMLElementExport aPara (*this, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
                     GetDocHandler()->characters(sTemp);
                 } while (-1 != nPos );
             }

@@ -22,7 +22,6 @@
 
 #include <xmloff/xmlexp.hxx>
 
-class String;
 class SwXMLTextBlocks;
 
 class SwXMLBlockListExport : public SvXMLExport
@@ -58,7 +57,7 @@ public:
 
     virtual ~SwXMLTextBlockExport ( void ) {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) {return 0;}
-    sal_uInt32 exportDoc(const String & rText);
+    sal_uInt32 exportDoc(const OUString & rText);
     void _ExportAutoStyles() {}
     void _ExportMasterStyles () {}
     void _ExportContent() {}
