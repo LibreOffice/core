@@ -39,6 +39,7 @@
 
 void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
 {
+    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
     // nur bei Selektion
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
         return;
@@ -49,9 +50,10 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     //  1. Point und Mark stehen in einer Box, Selection normal loeschen
     //  2. Point und Mark stehen in unterschiedlichen Boxen, alle
     // selektierten Boxen suchen in den Inhalt loeschen
+    // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
     if( rPam.GetNode()->FindTableNode() &&
         rPam.GetNode()->StartOfSectionNode() !=
-        rPam.GetNode(sal_False)->StartOfSectionNode() )
+        rPam.GetNode(sal_False)->StartOfSectionNode() && !bSelectAll )
     {
         // in Tabellen das Undo gruppieren
         if( pUndo && !*pUndo )
