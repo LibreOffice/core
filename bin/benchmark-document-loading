@@ -484,8 +484,8 @@ def usage():
  --userdir=URL     specify user installation directory for 'path' method
  --valgrind        pass --valgrind to soffice for 'path' method
 
- 'location' is a pathname, not a URL. 'userdir' is a URL. the 'directory' parameters should be
-  full absolute pathnames, not URLs."""
+ 'location' is a pathname, not a URL. 'outdir' and 'userdir' are URLs.
+ The 'directory' parameters should be full absolute pathnames, not URLs."""
     print(message.format(program = os.path.basename(sys.argv[0])))
 
 
