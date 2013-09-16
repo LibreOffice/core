@@ -849,14 +849,14 @@ namespace cppcanvas
 
         // create text effects such as shadow/relief/embossed
         void ImplRenderer::createTextAction( const ::Point&                 rStartPoint,
-                                             const String                   rString,
+                                             const OUString                 rString,
                                              int                            nIndex,
                                              int                            nLength,
                                              const sal_Int32*               pCharWidths,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
-            ENSURE_OR_THROW( nIndex >= 0 && nLength <= rString.Len() + nIndex,
+            ENSURE_OR_THROW( nIndex >= 0 && nLength <= rString.getLength() + nIndex,
                               "ImplRenderer::createTextWithEffectsAction(): Invalid text index" );
 
             if( !nLength )
@@ -975,11 +975,11 @@ namespace cppcanvas
                 nMaxWidth += nWidth + 1;
 
                 long nFullStrikeoutWidth = 0;
-                String aStrikeoutText;
+                OUString aStrikeoutText;
                 while( (nFullStrikeoutWidth+=nStrikeoutWidth ) < nMaxWidth+1 )
-                    aStrikeoutText += pChars[0];
+                    aStrikeoutText += OUString(pChars[0]);
 
-                xub_StrLen nLen = aStrikeoutText.Len();
+                sal_Int32 nLen = aStrikeoutText.getLength();
 
                 if( nLen )
                 {
@@ -1008,7 +1008,7 @@ namespace cppcanvas
                             aShadowColor,
                             aStrikeoutText,
                             nStartPos,
-                            aStrikeoutText.Len(),
+                            aStrikeoutText.getLength(),
                             pStrikeoutCharWidths,
                             rParms.mrVDev,
                             rParms.mrCanvas,

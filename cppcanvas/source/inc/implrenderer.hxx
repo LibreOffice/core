@@ -263,7 +263,7 @@ static float GetSwapFloat( SvStream& rSt )
                                        bool                           bSubsettableActions );
 
             void createTextAction( const ::Point&                 rStartPoint,
-                                   const String                   rString,
+                                   const OUString                 rString,
                                    int                            nIndex,
                                    int                            nLength,
                                    const sal_Int32*               pCharWidths,

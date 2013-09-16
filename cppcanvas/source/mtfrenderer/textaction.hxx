@@ -31,7 +31,6 @@ class VirtualDevice;
 class Point;
 class Size;
 class Color;
-class String;
 
 
 /* Definition of internal::TextActionFactory class */
@@ -71,7 +70,7 @@ namespace cppcanvas
                                                      const ::Color&                 rReliefColor,
                                                      const ::Size&                  rShadowOffset,
                                                      const ::Color&                 rShadowColor,
-                                                     const ::String&                rText,
+                                                     const OUString&                rText,
                                                      sal_Int32                      nStartPos,
                                                      sal_Int32                      nLen,
                                                      const sal_Int32*               pDXArray,

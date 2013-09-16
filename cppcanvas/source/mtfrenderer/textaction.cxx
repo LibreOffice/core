@@ -189,7 +189,7 @@ namespace cppcanvas
                 return aCharWidthSeq;
             }
 
-            uno::Sequence< double > setupDXArray( const ::String&    rText,
+            uno::Sequence< double > setupDXArray( const OUString&    rText,
                                                   sal_Int32          nStartPos,
                                                   sal_Int32          nLen,
                                                   VirtualDevice&     rVDev,
@@ -1935,7 +1935,7 @@ namespace cppcanvas
                                            const ::Color&                   rReliefColor,
                                            const ::basegfx::B2DSize&        rShadowOffset,
                                            const ::Color&                   rShadowColor,
-                                           const String&                    rText,
+                                           const OUString&                  rText,
                                            sal_Int32                        nStartPos,
                                            sal_Int32                        nLen,
                                            const sal_Int32*                 pDXArray,
@@ -2085,7 +2085,7 @@ namespace cppcanvas
                                                              const ::Color&                 rReliefColor,
                                                              const ::Size&                  rShadowOffset,
                                                              const ::Color&                 rShadowColor,
-                                                             const String&                  rText,
+                                                             const OUString&                rText,
                                                              sal_Int32                      nStartPos,
                                                              sal_Int32                      nLen,
                                                              const sal_Int32*               pDXArray,

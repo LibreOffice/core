@@ -750,7 +750,7 @@ namespace cppcanvas
                     if (width == 0) { // non native formats
                         GraphicFilter filter;
 
-                        filter.ImportGraphic (graphic, String (), s);
+                        filter.ImportGraphic (graphic, OUString(), s);
                         SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: "  << graphic.GetBitmap().GetSizePixel().Width() << " height: " << graphic.GetBitmap().GetSizePixel().Height());
                     }
 
@@ -764,7 +764,7 @@ namespace cppcanvas
                     // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
                     SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : dataSize - 16, STREAM_READ);
 
-                    filter.ImportGraphic (graphic, String (), mfStream);
+                    filter.ImportGraphic (graphic, OUString(), mfStream);
 
                     // debug code - write the stream to debug file /tmp/emf-stream.emf
 #if OSL_DEBUG_LEVEL > 1
