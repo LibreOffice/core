@@ -1750,7 +1750,6 @@ const WrongList* ContentNode::GetWrongList() const
 
 void ContentNode::SetWrongList( WrongList* p )
 {
-    DBG_ASSERT(!mpWrongList, "WrongList already exist!");
     mpWrongList.reset(p);
 }
 
