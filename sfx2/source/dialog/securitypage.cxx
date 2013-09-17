@@ -20,7 +20,7 @@
 
 #include "sfx2/securitypage.hxx"
 
-#include "sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>
