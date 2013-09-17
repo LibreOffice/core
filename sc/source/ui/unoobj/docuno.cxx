@@ -100,6 +100,14 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
+#ifndef SEQTYPE
+ #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
+  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
+ #else
+  #define SEQTYPE(x) &(x)
+ #endif
+#endif
+
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
 //! umbenennen, sind nicht mehr nur Options
@@ -147,6 +155,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_REFERENCEDEVICE),   0, &getCppuType((uno::Reference<awt::XDevice>*)0),           beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN("BuildId"),                0, &::getCppuType(static_cast< const OUString * >(0)), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_CODENAME),        0, &getCppuType(static_cast< const OUString * >(0)),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_INTEROPGRABBAG),          0, SEQTYPE(::getCppuType((uno::Sequence< beans::PropertyValue >*)0)), 0, 0},
 
         {0,0,0,0,0,0}
     };
@@ -1704,6 +1713,10 @@ void SAL_CALL ScModelObj::setPropertyValue(
             if ( !aObjName.isEmpty() )
                 pDoc->RestoreChartListener( aObjName );
         }
+        else if ( aString.EqualsAscii( SC_UNO_INTEROPGRABBAG ) )
+        {
+            setGrabBagItem(aValue);
+        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -1882,6 +1895,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         else if ( aString.EqualsAscii( "InternalDocument" ) )
         {
             ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL) );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_INTEROPGRABBAG ) )
+        {
+            getGrabBagItem(aRet);
         }
     }
 

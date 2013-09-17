@@ -76,6 +76,7 @@
 "ScModelObj";"com::sun::star::document::OfficeDocument";"AutomaticControlFocus#optional"
 "ScModelObj";"com::sun::star::document::OfficeDocument";"ApplyFormDesignMode#optional"
 "ScModelObj";"com::sun::star::document::OfficeDocument";"RuntimeUID#optional"
+"ScModelObj";"com::sun::star::document::OfficeDocument";"InteropGrabBag#optional"
 "ScModelObj";"com::sun::star::frame::XModel";"attachResource()"
 "ScModelObj";"com::sun::star::frame::XModel";"getURL()"
 "ScModelObj";"com::sun::star::frame::XModel";"getArgs()"

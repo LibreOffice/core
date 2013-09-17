@@ -127,6 +127,7 @@ const char sUNO_Prop_UserDefinedAttributes[] = "UserDefinedAttributes";
 const char sUNO_Prop_BookmarkURL[] = "BookmarkURL";
 const char sUNO_Prop_RuntimeUID[] = "RuntimeUID";
 const char sUNO_Prop_HasValidSignatures[] = "HasValidSignatures";
+const char sUNO_Prop_InteropGrabBag[] = "InteropGrabBag";
 
 // view settings
 const char sUNO_View_ViewId[] = "ViewId";

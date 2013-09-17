@@ -1411,6 +1411,11 @@ protected:
     /* returns true if the document signatures are valid, otherwise false */
     sal_Bool hasValidSignatures() const;
 
+    /* GrabBagItem for interim interop purposes */
+    void getGrabBagItem(com::sun::star::uno::Any& rVal) const;
+
+    void setGrabBagItem(const com::sun::star::uno::Any& rVal);
+
 //________________________________________________________________________________________________________
 //  private methods
 //________________________________________________________________________________________________________
