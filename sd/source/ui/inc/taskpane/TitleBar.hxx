@@ -27,7 +27,6 @@
 #include <memory>
 
 class Rectangle;
-class String;
 class VirtualDevice;
 
 namespace sd { namespace toolpanel {
