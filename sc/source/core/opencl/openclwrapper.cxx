@@ -419,10 +419,9 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
     cl_int clStatus = 0;
     size_t length;
     char *binary;
-    const char *source;
     int b_error, binary_status, binaryExisted, idx;
     cl_uint numDevices;
-    FILE *fd, *fd1;
+    FILE *fd;
     const char* filename = "kernel.cl";
     fprintf(stderr, "compileKernelFile ... \n");
     if ( cachedOfKernerPrg(gpuInfo, filename) == 1 )
@@ -431,8 +430,6 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
     }
 
     idx = gpuInfo->mnFileCount;
-
-    source = kernel_src;
 
     binaryExisted = 0;
     if ( ( binaryExisted = binaryGenerated( filename, &fd ) ) == 1 )
@@ -483,8 +480,9 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         // create a CL program using the kernel source
         fprintf(stderr, "Create kernel from source\n");
         size_t source_size[1];
-        source_size[0] = strlen( source );
-        gpuEnv.mpArryPrograms[idx] = clCreateProgramWithSource( gpuEnv.mpContext, 1, &source,
+
+        source_size[0] = strlen( kernel_src );
+        gpuEnv.mpArryPrograms[idx] = clCreateProgramWithSource( gpuEnv.mpContext, 1, &kernel_src,
                                          source_size, &clStatus);
         CHECK_OPENCL( clStatus, "clCreateProgramWithSource" );
     }
@@ -544,12 +542,16 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
             return 0;
         }
 
-        fd1 = fopen( "kernel-build.log", "w+" );
-        if ( fd1 != NULL )
-        {
-            fwrite( buildLog.get(), sizeof(char), length, fd1 );
-            fclose( fd1 );
-        }
+        OString aBuildLogFileURL = maCacheFolder + "kernel-build.log";
+        osl::File aBuildLogFile(rtl::OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
+        osl::FileBase::RC status = aBuildLogFile.open(
+                osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
+
+        if(status != osl::FileBase::E_None)
+            return 0;
+
+        sal_uInt64 nBytesWritten = 0;
+        aBuildLogFile.write( buildLog.get(), length, nBytesWritten );
 
         return 0;
     }
