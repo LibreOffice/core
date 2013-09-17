@@ -425,6 +425,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     sal_Bool    bSyncHeight : 1;
     sal_Bool    bCreateFailed : 1;
     sal_Bool    bOwnBase64Stream : 1;
+    bool        mbSetNameForFrame : 1; // #123261# remember if to set the NameForFrame
 
     void Create( sal_Bool bHRefOrBase64 );
 
@@ -436,14 +437,14 @@ public:
     const OUString& GetHRef() const { return sHRef; }
 
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & rAttrList,
-            ::com::sun::star::text::TextContentAnchorType eAnchorType,
-            sal_uInt16 nType,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::xml::sax::XAttributeList > & rFrameAttrList );
+        sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::sax::XAttributeList > & rAttrList,
+        ::com::sun::star::text::TextContentAnchorType eAnchorType,
+        sal_uInt16 nType,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & rFrameAttrList,
+        bool bSetNameForFrame); // #123261# control if to set the NameForFrame
     virtual ~XMLTextFrameContext_Impl();
 
     virtual void EndElement();
@@ -468,9 +469,39 @@ public:
 
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
+
+    // #123261# helper to set the NameForFrame
+    void SetNameForFrameFromPropSet();
 };
 
 TYPEINIT1( XMLTextFrameContext_Impl, SvXMLImportContext );
+
+void XMLTextFrameContext_Impl::SetNameForFrameFromPropSet()
+{
+    // set name
+    UniReference < XMLTextImportHelper > xTextImportHelper = GetImport().GetTextImport();
+    Reference < XNamed > xNamed( xPropSet, UNO_QUERY );
+
+    if( xNamed.is() && xTextImportHelper.is() )
+    {
+        OUString sOrigName( xNamed->getName() );
+        if( !sOrigName.getLength() ||
+            (sName.getLength() && sOrigName != sName) )
+        {
+            OUString sOldName( sName );
+            sal_Int32 i = 0;
+            while( xTextImportHelper->HasFrameByName( sName ) )
+            {
+                sName = sOldName;
+                sName += OUString::valueOf( ++i );
+            }
+            xNamed->setName( sName );
+            if( sName != sOldName )
+                xTextImportHelper->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
+                                             sOldName, sName );
+        }
+    }
+}
 
 void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
 {
@@ -581,26 +612,12 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
 
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
-    // set name
-    Reference < XNamed > xNamed( xPropSet, UNO_QUERY );
-    if( xNamed.is() )
+    // #123261# set name, but only if wanted, e.g. for MultiImageSupport, it will be set after
+    // it is decided which image will be used. This is done e.g. to avoid double stuff and effects
+    // for the target to avoid double names
+    if(mbSetNameForFrame)
     {
-        OUString sOrigName( xNamed->getName() );
-        if( !sOrigName.getLength() ||
-            (sName.getLength() && sOrigName != sName) )
-        {
-            OUString sOldName( sName );
-            sal_Int32 i = 0;
-            while( xTextImportHelper->HasFrameByName( sName ) )
-            {
-                sName = sOldName;
-                sName += OUString::valueOf( ++i );
-            }
-            xNamed->setName( sName );
-            if( sName != sOldName )
-                xTextImportHelper->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
-                                             sOldName, sName );
-        }
+        SetNameForFrameFromPropSet();
     }
 
     // frame style
@@ -805,12 +822,13 @@ sal_Bool XMLTextFrameContext_Impl::CreateIfNotThere()
 }
 
 XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< XAttributeList > & rAttrList,
-        TextContentAnchorType eATyp,
-        sal_uInt16 nNewType,
-        const Reference< XAttributeList > & rFrameAttrList )
+    SvXMLImport& rImport,
+    sal_uInt16 nPrfx, const OUString& rLName,
+    const Reference< XAttributeList > & rAttrList,
+    TextContentAnchorType eATyp,
+    sal_uInt16 nNewType,
+    const Reference< XAttributeList > & rFrameAttrList,
+    bool bSetNameForFrame)
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mbListContextPushed( false )
 ,   sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
@@ -841,6 +859,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
 ,   sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
 ,   nType( nNewType )
 ,   eAnchorType( eATyp )
+,   mbSetNameForFrame(bSetNameForFrame)
 {
     nX = 0;
     nY = 0;
@@ -1441,10 +1460,22 @@ void XMLTextFrameContext::EndElement()
 {
     /// solve if multiple image child contexts were imported
     /// the winner is returned, if something has yet to be done with it
-    /*const SvXMLImportContext* pWinner =*/ solveMultipleImages();
+    const SvXMLImportContext* pWinner = solveMultipleImages();
+
+    // #123261# see if the winner is a XMLTextFrameContext_Impl
+    const XMLTextFrameContext_Impl* pImplWinner = dynamic_cast< const XMLTextFrameContext_Impl* >(pWinner);
+
+    if(pImplWinner)
+    {
+        // #123261# if yes, set name now, after the winner is identified (setting at each
+        // candidate may run into problems due to colliding with efforts in the target to
+        // avoid double names, so only set one name at one image and not at each)
+        const_cast< XMLTextFrameContext_Impl* >(pImplWinner)->SetNameForFrameFromPropSet();
+    }
 
     SvXMLImportContext *pContext = &m_xImplContext;
-    XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
+    XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl* >(pContext);
+
     if( pImpl )
     {
         pImpl->CreateIfNotThere();
@@ -1554,12 +1585,15 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
                 if( !pContext )
                 {
-
-                    pContext = new XMLTextFrameContext_Impl( GetImport(), p_nPrefix,
-                                                        rLocalName, xAttrList,
-                                                        m_eDefaultAnchorType,
-                                                        nFrameType,
-                                                        m_xAttrList );
+                    pContext = new XMLTextFrameContext_Impl(
+                        GetImport(),
+                        p_nPrefix,
+                        rLocalName,
+                        xAttrList,
+                        m_eDefaultAnchorType,
+                        nFrameType,
+                        m_xAttrList,
+                        !getSupportsMultipleContents());
                 }
 
                 m_xImplContext = pContext;
@@ -1575,8 +1609,14 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     {
         // read another image
         pContext = new XMLTextFrameContext_Impl(
-            GetImport(), p_nPrefix, rLocalName, xAttrList,
-            m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList);
+            GetImport(),
+            p_nPrefix,
+            rLocalName,
+            xAttrList,
+            m_eDefaultAnchorType,
+            XML_TEXT_FRAME_GRAPHIC,
+            m_xAttrList,
+            false);
 
         m_xImplContext = pContext;
         addContent(*m_xImplContext);

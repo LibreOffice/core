@@ -40,7 +40,7 @@ protected:
 
 public:
     multiImageImportHelper();
-    ~multiImageImportHelper();
+    virtual ~multiImageImportHelper();
 
     /// solve multiple imported images. The most valuable one is choosen,
     /// see imlementation for evtl. changing weights and/or adding filetypes.
