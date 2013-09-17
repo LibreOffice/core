@@ -609,19 +609,18 @@ class ItemsTable(object):
         and remove them from the list of all <*> items, so the next
         search will be faster.
         '''
-        i = 0
-        while i < len(self.agenda.allItems):
-            workwith = self.agenda.allItems[i]
-            t = workwith.TextTable
+        aux = []
+        for item in self.agenda.allItems:
+            t = item.TextTable
             if t == ItemsTable.table:
-                iText = workwith.String.lower().lstrip()
+                iText = item.String.lower().lstrip()
                 ai = self.agenda.itemsCache[iText]
                 if ai is not None:
                     self.items.append(ai)
-                    del self.agenda.allItems[i]
                     self.agenda.itemsMap[iText] = self
-                    i -= 1
-            i += 1
+            else:
+                aux.append(item)
+        self.agenda.allItems = aux
 
     '''
     link the section to the template. this will restore the original table
