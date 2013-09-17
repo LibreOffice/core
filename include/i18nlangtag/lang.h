@@ -54,14 +54,18 @@
    And of course 2 lists aren't enough, so Windows Vista needs an extra one.
    Which at least seems to include values of other versions of Windows.
    Language Identifier Constants and Strings
-   http://msdn2.microsoft.com/en-us/library/ms776294.aspx
+   http://msdn.microsoft.com/en-us/library/ms776294.aspx
 
-   Hey, yet another list, maybe this one will not move around? It seems to be
-   quite complete..
-   Language Identifier Constants and Strings (Windows)
-   http://msdn.microsoft.com/en-us/library/dd318693(VS.85).aspx
+ ! Hey, yet another list, maybe this one will not move around? It seems to be
+ ! quite complete..
+ ! Language Identifier Constants and Strings (Windows)
+ ! http://msdn.microsoft.com/en-us/library/dd318693.aspx
+ !
+ ! Use THAT ^^^ as of 2013-09-17 it includes also Windows 8
 
+   For completeness, you can never have enough lists:
    List of supported locale identifiers in Word
+   Applies to Microsoft Word 2000 and 2002
    http://support.microsoft.com/default.aspx?scid=KB;en-us;q221435
  */
 
@@ -380,7 +384,10 @@ typedef unsigned short LanguageType;
  *! LANGUAGE_SYSTEM and then to effective system language */
 #define LANGUAGE_PROCESS_OR_USER_DEFAULT    0x0400
 
-/* And now the extensions we define, valid from
+
+/* And now the extensions we define,
+ * with primary language IDs from 0x200 to 0x3FF valid in blocks from
+ *
  * 0x0610 to 0x07FF with sublanguage ID 0x01 (default)
  * 0x0A00 to 0x0BFF with sublanguage ID 0x02
  * ...
@@ -389,6 +396,23 @@ typedef unsigned short LanguageType;
  * ...
  * 0xFA00 to 0xFBFF with sublanguage ID 0x3E
  * 0xFE00 to 0xFFFF with sublanguage ID 0x3F
+ *
+ * Of which we define reserved blocks:
+ * All primary language IDs 0x3E0 to 0x3FF with any sublanguage ID, not to be
+ * assigned as user-defined IDs:
+ *
+ * 0x07E0 to 0x07FF with sublanguage ID 0x01, first on-the-fly block
+ * 0x0BE0 to 0x0BFF with sublanguage ID 0x02, second on-the-fly block
+ * ...
+ * 0x83E0 to 0x83FF with sublanguage ID 0x20
+ * 0x87E0 to 0x87FF with sublanguage ID 0x21
+ * ...
+ * 0xFBE0 to 0xFBFF with sublanguage ID 0x3E, last on-the-fly block
+ * 0xFFE0 to 0xFFFF with sublanguage ID 0x3F, 32 privateuse and specials
+ *
+ * This leaves room for 480 user-defined primary language IDs (instead of 512)
+ * with primary bitmask comparability, and 1984 on-the-fly IDs (instead of 0)
+ * with arbitrary assignment.
  *
  * Obsolete OOo user defines now have other values assigned by MS, and
  * different name. Mapping an obsolete value to ISO code should work provided
@@ -560,6 +584,15 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_NGAEBERE              0x0689
 #define LANGUAGE_USER_ENGLISH_UK_OED        0x8C09  /* makeLangID( 0x23, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 
+
+/* Primary language ID range for on-the-fly assignment. */
+#define LANGUAGE_ON_THE_FLY_START           0x03E0
+#define LANGUAGE_ON_THE_FLY_END             0x03FF
+/* Sublanguage ID range for on-the-fly assignment. */
+#define LANGUAGE_ON_THE_FLY_SUB_START       0x01
+#define LANGUAGE_ON_THE_FLY_SUB_END         0x3E
+
+/* 0xFFE0 to 0xFFFF reserved for privateuse and specials. */
 #define LANGUAGE_USER_PRIV_JOKER            0xFFEB  /* privateuse "*" (sic! bad! nasty!), primary 0x3eb, sub 0x3f */
 #define LANGUAGE_USER_PRIV_COMMENT          0xFFEC  /* privateuse "x-comment", primary 0x3ec, sub 0x3f */
 #define LANGUAGE_USER_PRIV_DEFAULT          0xFFED  /* privateuse "x-default", primary 0x3ed, sub 0x3f */
