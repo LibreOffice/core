@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "bindablecontrolhelper.hxx"
+#include <svtools/bindablecontrolhelper.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
