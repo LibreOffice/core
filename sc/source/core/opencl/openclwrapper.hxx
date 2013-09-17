@@ -178,7 +178,6 @@ public:
 
     static int initOpenclAttr( OpenCLEnv * env );
     static int setKernelEnv( KernelEnv *envInfo );
-    static int convertToString( const char *filename, char **source );
     static Kernel* checkKernelName( const char *kernelName );
 
     static int getOpenclState();

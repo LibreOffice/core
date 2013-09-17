@@ -180,43 +180,6 @@ Kernel* OpenclDevice::checkKernelName( const char *kernelName )
     return NULL;
 }
 
-int OpenclDevice::convertToString( const char *filename, char **source )
-{
-    int file_size;
-    size_t result;
-    FILE *file = NULL;
-    file_size = 0;
-    result = 0;
-    file = fopen( filename, "rb+" );
-    printf("open kernel file %s.\n",filename);
-
-    if ( file != NULL )
-    {
-        printf("Open ok!\n");
-        fseek( file, 0, SEEK_END );
-
-        file_size = ftell( file );
-        rewind( file );
-        *source = (char*) malloc( sizeof(char) * file_size + 1 );
-        if ( *source == (char*) NULL )
-        {
-            return 0;
-        }
-        result = fread(*source, 1, file_size, file);
-        if ( result != (size_t) file_size )
-        {
-            free( *source );
-            return 0;
-        }
-        (*source)[file_size] = '\0';
-        fclose( file );
-
-        return 1;
-    }
-    printf("open kernel file failed.\n");
-    return 0;
-}
-
 namespace {
 
 OString createFileName(cl_device_id deviceId, const char* clFileName)
