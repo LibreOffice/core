@@ -176,4 +176,9 @@ String SV_BUTTONTEXT_FIND
     Text [ en-US ] = "~Find" ;
 };
 
+String SV_BUTTONTEXT_STOP
+{
+    Text [ en-US ] = "~Stop" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
