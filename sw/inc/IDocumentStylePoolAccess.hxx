@@ -26,7 +26,6 @@
  class SwCharFmt;
  class SwFmt;
  class SwFrmFmt;
- class String;
  class SwNumRule;
  class SwPageDesc;
 
