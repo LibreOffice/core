@@ -19,6 +19,7 @@
 #ifndef _INSTABLE_HXX
 #define _INSTABLE_HXX
 
+#include <rtl/ustring.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>

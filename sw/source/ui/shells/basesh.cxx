@@ -2474,7 +2474,8 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             sal_uInt16 nCols = 0;
             sal_uInt16 nRows = 0;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-            OUString aTableName, aAutoName;
+            OUString aTableName;
+            OUString aAutoName;
             SwTableAutoFmt* pTAFmt = 0;
 
             if( pArgs && pArgs->Count() >= 2 )

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "wrtsh.hxx"
@@ -145,10 +144,10 @@ SwInsTableDlg::~SwInsTableDlg()
 
 IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
 {
-    String sTblName = pEdit->GetText();
-    if(sTblName.Search(' ') != STRING_NOTFOUND)
+    OUString sTblName = pEdit->GetText();
+    if (sTblName.indexOf(' ') != -1)
     {
-        sTblName = comphelper::string::remove(sTblName, ' ');
+        sTblName = sTblName.replaceAll(" ", "");
         pEdit->SetText(sTblName);
     }
 

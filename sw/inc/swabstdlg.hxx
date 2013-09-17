@@ -19,6 +19,7 @@
 #ifndef _SW_ABSTDLG_HXX
 #define _SW_ABSTDLG_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>
