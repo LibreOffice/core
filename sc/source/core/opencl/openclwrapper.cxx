@@ -255,50 +255,34 @@ int OpenclDevice::writeBinaryToFile( const char* fileName, const char* birary, s
 
 int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
 {
-    unsigned int i = 0;
-    cl_int clStatus;
-    size_t *binarySizes;
     cl_uint numDevices;
-    cl_device_id *mpArryDevsID;
-    char **binaries, *str = NULL;
+    char *str = NULL;
 
-    clStatus = clGetProgramInfo( program, CL_PROGRAM_NUM_DEVICES,
+    cl_int clStatus = clGetProgramInfo( program, CL_PROGRAM_NUM_DEVICES,
                    sizeof(numDevices), &numDevices, NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
-    mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) * numDevices );
-    if ( mpArryDevsID == NULL )
-    {
-        return 0;
-    }
+    std::vector<cl_device_id> mpArryDevsID(numDevices);
     /* grab the handles to all of the devices in the program. */
     clStatus = clGetProgramInfo( program, CL_PROGRAM_DEVICES,
-                   sizeof(cl_device_id) * numDevices, mpArryDevsID, NULL );
+                   sizeof(cl_device_id) * numDevices, &mpArryDevsID[0], NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
     /* figure out the sizes of each of the binaries. */
-    binarySizes = (size_t*) malloc( sizeof(size_t) * numDevices );
+    std::vector<size_t> binarySizes(numDevices);
 
     clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARY_SIZES,
-                   sizeof(size_t) * numDevices, binarySizes, NULL );
+                   sizeof(size_t) * numDevices, &binarySizes[0], NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
     /* copy over all of the generated binaries. */
-    binaries = (char**) malloc( sizeof(char *) * numDevices );
-    if ( binaries == NULL )
-    {
-        return 0;
-    }
+    boost::scoped_array<char*> binaries(new char*[numDevices]);
 
-    for ( i = 0; i < numDevices; i++ )
+    for ( size_t i = 0; i < numDevices; i++ )
     {
         if ( binarySizes[i] != 0 )
         {
-            binaries[i] = (char*) malloc( sizeof(char) * binarySizes[i] );
-            if ( binaries[i] == NULL )
-            {
-                return 0;
-            }
+            binaries[i] = new char[binarySizes[i]];
         }
         else
         {
@@ -307,11 +291,11 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
     }
 
     clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARIES,
-                   sizeof(char *) * numDevices, binaries, NULL );
+                   sizeof(char *) * numDevices, binaries.get(), NULL );
     CHECK_OPENCL(clStatus,"clGetProgramInfo");
 
     /* dump out each binary into its own separate file. */
-    for ( i = 0; i < numDevices; i++ )
+    for ( size_t i = 0; i < numDevices; i++ )
     {
         char fileName[256] = { 0 }, cl_name[128] = { 0 };
 
@@ -337,32 +321,11 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
     }
 
     // Release all resouces and memory
-    for ( i = 0; i < numDevices; i++ )
+    for ( size_t i = 0; i < numDevices; i++ )
     {
-        if ( binaries[i] != NULL )
-        {
-            free( binaries[i] );
-            binaries[i] = NULL;
-        }
+        delete[] binaries[i];
     }
 
-    if ( binaries != NULL )
-    {
-        free( binaries );
-        binaries = NULL;
-    }
-
-    if ( binarySizes != NULL )
-    {
-        free( binarySizes );
-        binarySizes = NULL;
-    }
-
-    if ( mpArryDevsID != NULL )
-    {
-        free( mpArryDevsID );
-        mpArryDevsID = NULL;
-    }
     return 1;
 }
 
