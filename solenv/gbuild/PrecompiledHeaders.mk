@@ -38,7 +38,7 @@ $(call gb_PrecompiledHeader_get_target,%) :
 	rm -f $@
 	$(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE))
 
-.PHONY : $(call gb_PrecompiledHeader_get_clean_target,%) $(call gb_NoExPrecompiledHeader_get_clean_target,%)
+.PHONY : $(call gb_PrecompiledHeader_get_clean_target,%)
 $(call gb_PrecompiledHeader_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PCH,1)
 	-$(call gb_Helper_abbreviate_dirs,\
