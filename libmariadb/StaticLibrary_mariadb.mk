@@ -13,8 +13,6 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,mariadblib))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,mariadblib,mariadb))
 
-$(eval $(call gb_StaticLibrary_set_generated_c_suffix,mariadblib,c))
-
 $(eval $(call gb_StaticLibrary_set_include,mariadblib,\
 	$$(INCLUDE) \
 	-I$(call gb_UnpackedTarball_get_dir,mariadb)/include \
