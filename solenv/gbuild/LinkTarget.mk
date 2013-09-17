@@ -448,7 +448,7 @@ define gb_LinkTarget__command_impl
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),\
 			$(call gb_LinkTarget__command,$(1),$(2)),\
 			mkdir -p $(dir $(1)) && echo invalid > $(1) \
-			$(if $(SOVERSION),&& echo invalid > $(1).$(SOVERSION))),\
+			$(if $(SOVERSION),&& echo invalid > $(basename $(1)))),\
 		$(call gb_LinkTarget__command,$(1),$(2)))
 	$(call gb_LinkTarget__command_objectlist,$(WORKDIR)/LinkTarget/$(2).objectlist)
 endef
@@ -615,12 +615,11 @@ gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) 
 
 endef
 
-# call gb_LinkTarget_set_soversion_script,linktarget,soversion,soversionscript
+# call gb_LinkTarget_set_soversion_script,linktarget,soversionscript
 define gb_LinkTarget_set_soversion_script
-$(call gb_LinkTarget_get_target,$(1)) : $(3)
-$(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(2)
-$(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
-$(call gb_LinkTarget_get_target,$(1)).$(2) : $(call gb_LinkTarget_get_target,$(1))
+$(call gb_LinkTarget_get_target,$(1)) : $(2)
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(gb_Library_UDK_MAJORVER)
+$(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(2)
 
 endef
 

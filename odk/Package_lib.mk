@@ -27,7 +27,7 @@ $(eval $(call gb_Package_add_files,odk_lib,$(gb_Package_SDKDIRNAME)/lib,\
 
 ifneq (,$(filter-out MACOSX WNT,$(OS)))
 define odk_add_sybolic_link
-$(call gb_Package_add_symbolic_link,odk_lib,$(gb_Package_SDKDIRNAME)/lib/$(1),../../ure-link/lib/$(1).3)
+$(call gb_Package_add_symbolic_link,odk_lib,$(gb_Package_SDKDIRNAME)/lib/$(basename $(1)),../../ure-link/lib/$(1))
 
 endef
 

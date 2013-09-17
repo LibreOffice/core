@@ -172,7 +172,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter-out $(foreach lib,frm scfilt wpftdraw,$(call gb_Library__get_workdir_linktargetname,$(lib))),$(2)),$(gb_LTOFLAGS)) \
-		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \
+		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1))) \
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT))\
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
@@ -185,10 +185,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
 		-Wl$(COMMA)--no-as-needed \
 		$(LIBS) \
-		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
-		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)))
-	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1))
-	$(if $(filter Library,$(TARGETTYPE)),\
+		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
+		-o $(1) \
+	$(if $(SOVERSION),&& ln -sf $(notdir $(1)) $(ILIBTARGET)) \
+	$(if $(filter Library,$(TARGETTYPE)),&& \
 		readelf -d $(1) | grep SONAME > $(1).exports.tmp ; \
 		$(NM) --dynamic --extern-only --defined-only --format=posix $(1) \
 			| cut -d' ' -f1-2 \
@@ -196,7 +196,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		if cmp -s $(1).exports.tmp $(1).exports; \
 			then rm $(1).exports.tmp; \
 			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
-		fi)
+		fi))
 endef
 
 define gb_LinkTarget__command_staticlink
@@ -224,6 +224,7 @@ endef
 
 gb_Library_DEFS :=
 gb_Library_TARGETTYPEFLAGS := -shared
+gb_Library_UDK_MAJORVER := 3
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .so
@@ -244,8 +245,8 @@ gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PRIVATELIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
-	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
-	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT).$(gb_Library_UDK_MAJORVER)) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT).$(gb_Library_UDK_MAJORVER)) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
 

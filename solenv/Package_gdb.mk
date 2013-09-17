@@ -16,14 +16,14 @@ $(eval $(call gb_Package_add_files,solenv_gdb,lib,\
 		$(if $(filter ALL,$(MERGELIBS)), \
 			$(call gb_Library_get_runtime_filename,urelibs)-gdb.py \
 		, \
-			$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
-			$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
+			$(call gb_Library_get_runtime_filename,cppu)-gdb.py \
+			$(call gb_Library_get_runtime_filename,sal)-gdb.py \
 			$(call gb_Library_get_runtime_filename,sw)-gdb.py \
 		) \
 	, \
 		$(call gb_Library_get_runtime_filename,basegfx)-gdb.py \
-		$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
-		$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
+		$(call gb_Library_get_runtime_filename,cppu)-gdb.py \
+		$(call gb_Library_get_runtime_filename,sal)-gdb.py \
 		$(call gb_Library_get_runtime_filename,svl)-gdb.py \
 		$(call gb_Library_get_runtime_filename,sw)-gdb.py \
 		$(call gb_Library_get_runtime_filename,tl)-gdb.py \

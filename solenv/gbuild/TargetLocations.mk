@@ -232,6 +232,10 @@ define gb_Library_get_exports_target
 $(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
 endef
 
+define gb_Library_get_workdir_target_versionlink
+$(WORKDIR)/LinkTarget/$(basename $(call gb_Library__get_workdir_linktargetname,$(1)))
+endef
+
 gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
 
 define gb_Library_get_headers_target

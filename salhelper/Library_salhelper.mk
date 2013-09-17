@@ -34,6 +34,6 @@ $(eval $(call gb_Library_add_exception_objects,salhelper,\
 # Solaris would need something like this, too.  Its backwards compatibility is
 # broken for now:
 
-$(eval $(call gb_Library_set_soversion_script,salhelper,3,$(SRCDIR)/salhelper/source/gcc3.map))
+$(eval $(call gb_Library_set_soversion_script,salhelper,$(SRCDIR)/salhelper/source/gcc3.map))
 
 # vim: set noet sw=4 ts=4:
