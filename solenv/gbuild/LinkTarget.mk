@@ -448,7 +448,7 @@ define gb_LinkTarget__command_impl
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),\
 			$(call gb_LinkTarget__command,$(1),$(2)),\
 			mkdir -p $(dir $(1)) && echo invalid > $(1) \
-			$(if $(SOVERSION),&& echo invalid > $(basename $(1)))),\
+			$(if $(SOVERSIONSCRIPT),&& echo invalid > $(basename $(1)))),\
 		$(call gb_LinkTarget__command,$(1),$(2)))
 	$(call gb_LinkTarget__command_objectlist,$(WORKDIR)/LinkTarget/$(2).objectlist)
 endef
@@ -580,7 +580,6 @@ $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
-$(call gb_LinkTarget_get_target,$(1)) : SOVERSION :=
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -607,7 +606,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : WARNINGS_NOT_ERRORS :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSION :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSIONSCRIPT :=
 endif
 
@@ -618,7 +616,6 @@ endef
 # call gb_LinkTarget_set_soversion_script,linktarget,soversionscript
 define gb_LinkTarget_set_soversion_script
 $(call gb_LinkTarget_get_target,$(1)) : $(2)
-$(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(gb_Library_UDK_MAJORVER)
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(2)
 
 endef
