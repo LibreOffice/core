@@ -25,7 +25,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <vector>
 
-class String;
 class SwTxtNode;
 struct SwSpecialPos;
 class SwViewOption;
