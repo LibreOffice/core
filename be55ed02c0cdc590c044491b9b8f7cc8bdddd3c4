@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///7w\u003d",
+        "filename": "sw/source/ui/uno/unotxdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-09-17T14:00:28Z",
+      "side": 0,
+      "message": "Is it necessary to remove this part? In writerfilter you make sure that no OLE2 shape reach sw core anyway.",
+      "revId": "be55ed02c0cdc590c044491b9b8f7cc8bdddd3c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
