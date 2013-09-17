@@ -258,7 +258,6 @@ int OpenclDevice::writeBinaryToFile( const char* fileName, const char* birary, s
 int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
 {
     cl_uint numDevices;
-    char *str = NULL;
 
     cl_int clStatus = clGetProgramInfo( program, CL_PROGRAM_NUM_DEVICES,
                    sizeof(numDevices), &numDevices, NULL );
@@ -308,7 +307,7 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
                            sizeof(deviceName), deviceName, NULL);
             CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
 
-            str = (char*) strstr( clFileName, (char*) ".cl" );
+            char* str = (char*) strstr( clFileName, (char*) ".cl" );
             memcpy( cl_name, clFileName, str - clFileName );
             cl_name[str - clFileName] = '\0';
             sprintf( fileName, "./%s-%s.bin", cl_name, deviceName );
@@ -316,9 +315,9 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
             if ( !writeBinaryToFile( fileName, binaries[i], binarySizes[i] ) )
             {
                 printf("opencl-wrapper: write binary[%s] failds\n", fileName);
-                return 0;
-            } //else
-            printf("opencl-wrapper: write binary[%s] succesfully\n", fileName);
+            }
+            else
+                printf("opencl-wrapper: write binary[%s] succesfully\n", fileName);
         }
     }
 
