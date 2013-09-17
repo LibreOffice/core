@@ -577,6 +577,7 @@ UI_FILELIST(desktop, "UIConfig/desktop.filelist")
 UI_FILELIST(filter, "UIConfig/filter.filelist")
 #ifdef DBCONNECTIVITY
 UI_FILELIST(sbibliography, "UIConfig/modules/sbibliography.filelist")
+UI_FILELIST(spropctrlr, "UIConfig/modules/spropctrlr.filelist")
 #endif
 UI_FILELIST(scalc, "UIConfig/modules/scalc.filelist")
 UI_FILELIST(schart, "UIConfig/modules/schart.filelist")
