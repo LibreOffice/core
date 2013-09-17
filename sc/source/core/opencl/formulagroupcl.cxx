@@ -455,66 +455,54 @@ double * agency::calculate( int nOclOp,int rowSize,OclCalc &ocl_calc,uint *npOcl
         {
             case ocAdd:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                rResult = (double *)malloc( sizeof(double) * rowSize );
                 memset(rResult,0,rowSize);
                 ocl_calc.oclHostArithmeticStash64Bits( "oclSignedAdd",dpLeftData,dpRightData,rResult,temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                formulaInterprt->srdDataPush( new SourceData( rResult,rowSize ) );
                 break;
             }
             case ocSub:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = ( double * )malloc( sizeof(double) * nDataSize );
+                rResult = ( double * )malloc( sizeof(double) * rowSize );
                 memset( rResult,0,rowSize );
                 ocl_calc.oclHostArithmeticStash64Bits( "oclSignedSub",dpLeftData,dpRightData,rResult,temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData(rResult,nDataSize) );
+                formulaInterprt->srdDataPush( new SourceData(rResult,rowSize) );
                 break;
             }
             case ocMul:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                rResult = (double *)malloc( sizeof(double) * rowSize );
                 memset( rResult,0,rowSize );
                 ocl_calc.oclHostArithmeticStash64Bits( "oclSignedMul",dpLeftData,dpRightData,rResult,temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                formulaInterprt->srdDataPush( new SourceData( rResult,rowSize ) );
                 break;
             }
             case ocDiv:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = ( double * )malloc( sizeof(double) * nDataSize );
+                rResult = ( double * )malloc( sizeof(double) * rowSize );
                 memset( rResult,0,rowSize );
                 ocl_calc.oclHostArithmeticStash64Bits( "oclSignedDiv",dpLeftData,dpRightData,rResult,temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                formulaInterprt->srdDataPush( new SourceData( rResult,rowSize ) );
                 break;
             }
             case ocMax:
@@ -567,66 +555,54 @@ double * agency::calculate( int nOclOp,int rowSize,OclCalc &ocl_calc,uint *npOcl
         {
             case ocAdd:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                rResult = (double *)malloc( sizeof(double) * rowSize );
                 memset(rResult,0,rowSize);
                 ocl_calc.oclHostArithmeticStash32Bits( "oclSignedAdd", dpLeftData, dpRightData, rResult, temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData(rResult, nDataSize) );
+                formulaInterprt->srdDataPush( new SourceData(rResult, rowSize) );
                 break;
             }
             case ocSub:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                rResult = (double *)malloc( sizeof(double) * rowSize );
                 memset( rResult, 0, rowSize );
                 ocl_calc.oclHostArithmeticStash32Bits( "oclSignedSub", dpLeftData, dpRightData, rResult, temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData( rResult,nDataSize ) );
+                formulaInterprt->srdDataPush( new SourceData( rResult, rowSize ) );
                 break;
             }
             case ocMul:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc(sizeof(double) * nDataSize );
+                rResult = (double *)malloc(sizeof(double) * rowSize );
                 memset( rResult, 0, rowSize );
                 ocl_calc.oclHostArithmeticStash32Bits( "oclSignedMul", dpLeftData, dpRightData, rResult, temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData( rResult, nDataSize ) );
+                formulaInterprt->srdDataPush( new SourceData( rResult, rowSize ) );
                 break;
             }
             case ocDiv:
             {
-                unsigned int nDataSize = 0;
                 SourceData *temp = formulaInterprt->srdDataPop();
                 SourceData *temp2 = formulaInterprt->srdDataPop();
-                nDataSize = temp2->getDataSize();
                 dpLeftData = temp2->getDouleData();
                 dpRightData = temp->getDouleData();
-                nDataSize = temp2->getDataSize();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                rResult = (double *)malloc( sizeof(double) * rowSize );
                 memset( rResult, 0, rowSize );
                 ocl_calc.oclHostArithmeticStash32Bits( "oclSignedDiv", dpLeftData, dpRightData, rResult, temp->getDataSize() );
-                formulaInterprt->srdDataPush( new SourceData(rResult, nDataSize) );
+                formulaInterprt->srdDataPush( new SourceData(rResult, rowSize) );
                 break;
             }
             case ocMax:
@@ -636,7 +612,7 @@ double * agency::calculate( int nOclOp,int rowSize,OclCalc &ocl_calc,uint *npOcl
                 nDataSize = temp->getDataSize();
                 dpOclSrcData = temp->getDouleData();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc(sizeof(double) * nDataSize );
+                rResult = (double *)malloc(sizeof(double) * rowSize );
                 memset(rResult,0,rowSize);
                 ocl_calc.oclHostFormulaStash32Bits( "oclFormulaMax", dpOclSrcData, npOclStartPos, npOclEndPos, rResult,nDataSize, rowSize );
                 formulaInterprt->srdDataPush( new SourceData( rResult, rowSize ) );
@@ -649,7 +625,7 @@ double * agency::calculate( int nOclOp,int rowSize,OclCalc &ocl_calc,uint *npOcl
                 nDataSize = temp->getDataSize();
                 dpOclSrcData = temp->getDouleData();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                rResult = (double *)malloc( sizeof(double) * rowSize );
                 memset( rResult, 0, rowSize );
                 ocl_calc.oclHostFormulaStash32Bits( "oclFormulaMin", dpOclSrcData, npOclStartPos, npOclEndPos, rResult, nDataSize, rowSize );
                 formulaInterprt->srdDataPush( new SourceData( rResult, rowSize) );
@@ -662,7 +638,7 @@ double * agency::calculate( int nOclOp,int rowSize,OclCalc &ocl_calc,uint *npOcl
                 nDataSize = temp->getDataSize();
                 dpOclSrcData = temp->getDouleData();
                 double *rResult = NULL; // Point to the output data from GPU
-                rResult = (double *)malloc( sizeof(double) * nDataSize );
+                rResult = (double *)malloc( sizeof(double) * rowSize );
                 memset( rResult, 0, rowSize);
                 ocl_calc.oclHostFormulaStash32Bits( "oclFormulaAverage", dpOclSrcData, npOclStartPos, npOclEndPos, rResult, nDataSize, rowSize );
                 formulaInterprt->srdDataPush( new SourceData( rResult, rowSize) );
