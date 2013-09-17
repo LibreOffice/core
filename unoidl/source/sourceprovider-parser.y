@@ -59,7 +59,7 @@
 #include "sourceprovider-scanner.hxx"
 
 #define YYLLOC_DEFAULT(Current, Rhs, N) \
-    do { (Current) = YYRHSLOC((Rhs), YYID((N)) ? 1 : 0); } while (YYID(0))
+    do { (Current) = YYRHSLOC((Rhs), (N) ? 1 : 0); } while (0)
 
 void yyerror(YYLTYPE * locp, yyscan_t yyscanner, char const * msg) {
     assert(locp != 0);
