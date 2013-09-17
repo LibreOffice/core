@@ -86,6 +86,36 @@ static const KnownTagSet & getKnowns()
 }
 
 
+/* TODO: this is how on-the-fly LangID assignment will work, now implement
+ * usage and registration. */
+#if 0
+static LanguageType getNextOnTheFlyLanguage()
+{
+    static LanguageType nOnTheFlyLanguage = 0;
+    osl::MutexGuard aGuard( theMutex::get());
+    if (!nOnTheFlyLanguage)
+        nOnTheFlyLanguage = MsLangId::makeLangID( LANGUAGE_ON_THE_FLY_SUB_START, LANGUAGE_ON_THE_FLY_START);
+    else
+    {
+        if (MsLangId::getPrimaryLanguage( nOnTheFlyLanguage) != LANGUAGE_ON_THE_FLY_END)
+            ++nOnTheFlyLanguage;
+        else
+        {
+            LanguageType nSub = MsLangId::getSubLanguage( nOnTheFlyLanguage);
+            if (nSub != LANGUAGE_ON_THE_FLY_SUB_END)
+                nOnTheFlyLanguage = MsLangId::makeLangID( ++nSub, LANGUAGE_ON_THE_FLY_START);
+            else
+                SAL_WARN( "i18nlangtag", "getNextOnTheFlyLanguage: none left! ("
+                        << ((LANGUAGE_ON_THE_FLY_END - LANGUAGE_ON_THE_FLY_START + 1)
+                            * (LANGUAGE_ON_THE_FLY_SUB_END - LANGUAGE_ON_THE_FLY_SUB_START + 1))
+                        << " consumed?!?)");
+        }
+    }
+    return nOnTheFlyLanguage;
+}
+#endif
+
+
 /** A reference holder for liblangtag data de/initialization, one static
     instance. Currently implemented such that the first "ref" inits and dtor
     (our library deinitialized) tears down.
