@@ -98,7 +98,7 @@ endef
 #
 # gb_ExternalProject_mark_generated_files package file(s)
 define gb_ExternalPackage_mark_generated_files
-$(foreach file,$(2),$(call gb_ExternalProject_mark_generated_file,$(1),$(file)))
+$(foreach file,$(2),$(call gb_ExternalPackage_mark_generated_file,$(1),$(file)))
 
 endef
 

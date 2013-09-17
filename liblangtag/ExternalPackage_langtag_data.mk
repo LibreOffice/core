@@ -9,8 +9,8 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,langtag_data,langtag))
 
-$(eval $(call gb_ExternalPackage_add_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag,data/language-subtag-registry.xml))
-$(eval $(call gb_ExternalPackage_add_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag/common/bcp47,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag,data/language-subtag-registry.xml))
+$(eval $(call gb_ExternalPackage_add_unpacked_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag/common/bcp47,\
 	data/common/bcp47/calendar.xml \
 	data/common/bcp47/collation.xml \
 	data/common/bcp47/currency.xml \
@@ -23,6 +23,6 @@ $(eval $(call gb_ExternalPackage_add_files,langtag_data,unittest/install/$(LIBO_
 	data/common/bcp47/transform_private_use.xml \
 	data/common/bcp47/variant.xml \
 ))
-$(eval $(call gb_ExternalPackage_add_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag/common/supplemental,data/common/supplemental/likelySubtags.xml))
+$(eval $(call gb_ExternalPackage_add_unpacked_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag/common/supplemental,data/common/supplemental/likelySubtags.xml))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
