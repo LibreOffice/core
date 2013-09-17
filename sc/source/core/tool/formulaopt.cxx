@@ -216,7 +216,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
         "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
         "Calculation/OpenCLAutoSelect",  // SCFORMULAOPT_OPENCL_AUTOSELECT
-        "Calculation/OpenCLDevice"       // SCFORMULAOPT_OPENCL_DEVICE
+        "Calculation/OpenCLAutoDevice"   // SCFORMULAOPT_OPENCL_DEVICE
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
