@@ -193,11 +193,6 @@ http://www.winehq.org/docs/wineusr-guide/environment-variables, and add
 Z:\tmp\LibO-Dev_4.1.0.0.alpha0_Win_x86_archive/LOdev\ 4.1\URE\bin
 to "Path" in My Computer->HKEY_CURRENT_USER->Environment.
 
-Then run linkoo, so that when you rebuild something, you can directly see the
-changes the next time you run it:
-
-solenv/bin/linkoo '/tmp/LibO-Dev_4.1.0.0.alpha0_Win_x86_archive/LOdev\ 4.1' <your_clone_dir>
-
 And start debugging:
 
 $ winedbg soffice.bin
@@ -422,7 +417,6 @@ CC=<path-to-arm-linux-gnueabihf-gcc> --sysroot=<path-to-raspbian_rootfs>
 CXX=<path-to-arm-linux-gnueabihf-g++> --sysroot=<path-to-raspbian_rootfs>
 --build=x86_64-unknown-linux-gnu
 --host=arm-unknown-linux-gnueabihf
---disable-linkoo
 --without-doxygen
 --disable-gnome-vfs
 --enable-python=system

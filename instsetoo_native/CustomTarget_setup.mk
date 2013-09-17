@@ -12,7 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/setup))
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(call gb_Helper_get_rcfile,bootstrap) \
 	$(call gb_Helper_get_rcfile,fundamental) \
-	ooenv \
+	$(if $(ENABLE_OOENV),ooenv) \
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,$(call gb_Helper_get_rcfile,pythonloader.uno)) \
 	$(call gb_Helper_get_rcfile,uno) \
 	$(call gb_Helper_get_rcfile,version) \
@@ -69,11 +69,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
-		echo 'java_path=`$(gb_INSTROOT)/ure/bin/javaldx 2>/dev/null`' && \
-		echo 'export LD_LIBRARY_PATH="$(gb_INSTROOT)/program:$$java_path$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH}"' && \
 		echo 'ulimit -c unlimited' && \
-		echo 'export PATH="$(gb_INSTROOT)/program:$(gb_INSTROOT)/ure/bin:$$PATH"' && \
-		echo 'export GNOME_DISABLE_CRASH_DIALOG=1' && \
 		echo '# debugging assistance' && \
 		echo 'export SAL_DISABLE_FLOATGRAB=1' && \
 		echo 'export G_SLICE=always-malloc' && \

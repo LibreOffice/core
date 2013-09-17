@@ -15,11 +15,6 @@ bin/
 		the scp2/ module to create an installer, and/or to
 		do a local install for the smoketest.
 
-	linkoo
-		creates a forest of symlinks inside an install such
-		that a developer can re-compile in the source tree,
-		and re-run without re-installing (on Unix at least)
-
 gbuild/
 	the (shiny new) gnumake build makefile fragments we are
 	migrating the codebase to use.

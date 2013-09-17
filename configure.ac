@@ -848,9 +848,9 @@ AC_ARG_ENABLE(compiler-plugins,
         [Enable compiler plugins that will perform additional checks during
          building. Enabled automatically by --enable-dbgutil.]))
 
-AC_ARG_ENABLE(linkoo,
-    AS_HELP_STRING([--disable-linkoo],
-        [Disable linkoo for the smoketest installation.]))
+AC_ARG_ENABLE(ooenv,
+    AS_HELP_STRING([--disable-ooenv],
+        [Disable ooenv for the instdir installation.]))
 
 AC_ARG_ENABLE(lto,
     AS_HELP_STRING([--enable-lto],
@@ -4601,21 +4601,18 @@ else
 fi
 AC_SUBST(ASSERT_ALWAYS_ABORT)
 
-dnl Determine whether to use linkoo for the smoketest installation
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use linkoo for the smoketest installation])
-if test $_os = Darwin; then
-    enable_linkoo=no
+# Determine whether to use ooenv for the instdir installation
+# ===================================================================
+if test $_os != "WINNT" -a $_os != "Darwin"; then
+    AC_MSG_CHECKING([whether to use ooenv for the instdir installation])
+    if test "$enable_ooenv" = "no"; then
+        AC_MSG_RESULT([no])
+    else
+        ENABLE_OOENV="TRUE"
+        AC_MSG_RESULT([yes])
+    fi
 fi
-
-if test "$enable_linkoo" = "no"; then
-    DISABLE_LINKOO="TRUE"
-    AC_MSG_RESULT([no])
-else
-    DISABLE_LINKOO=
-    AC_MSG_RESULT([yes])
-fi
-AC_SUBST(DISABLE_LINKOO)
+AC_SUBST(ENABLE_OOENV)
 
 if test "$enable_headless" = "yes"; then
     # be sure to do not mess with uneeded stuff
