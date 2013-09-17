@@ -20,8 +20,8 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include "PlaceEditDialog.hxx"
-#include "ServerDetailsControls.hxx"
+#include <svtools/PlaceEditDialog.hxx>
+#include <svtools/ServerDetailsControls.hxx>
 
 using namespace std;
 using namespace com::sun::star::lang;

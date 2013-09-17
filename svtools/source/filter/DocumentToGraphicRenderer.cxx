@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DocumentToGraphicRenderer.hxx"
+#include <svtools/DocumentToGraphicRenderer.hxx>
 
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>

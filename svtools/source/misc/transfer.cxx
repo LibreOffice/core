@@ -49,7 +49,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include "svl/urlbmk.hxx"
-#include "inetimg.hxx"
+#include <svtools/inetimg.hxx>
 #include <vcl/wmf.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
