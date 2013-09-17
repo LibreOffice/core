@@ -37,13 +37,27 @@ void setValues(uno::Sequence< uno::Sequence < Any > >& rColRow, double nOffset)
 
 void XCellRangeData::testSetDataArray()
 {
-    uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XCellRangeData > xCellRangeData(getXCellRangeData(), UNO_QUERY_THROW);
 
     uno::Sequence< uno::Sequence < Any > > aColRow;
     aColRow.realloc(4);
     setValues(aColRow, 1);
     xCellRangeData->setDataArray(aColRow);
-    // need to check here for correct values
+
+    // check values
+    uno::Sequence< uno::Sequence < Any > > oColRow = xCellRangeData(getXCellRangeData(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(oColRow.getLength() == 4);
+    for (sal_Int32 i = 0; i < oColRow.getLength(); ++i)
+    {
+        CPPUNIT_ASSERT(oColRow[j].getLength() == 4);
+        for (sal_Int32 j = 0; j < oColRow[i].getLength(); ++j)
+        {
+            Any& oAny = oColRow[i][j];
+            double nValue = 0.0;
+            CPPUNIT_ASSERT(oAny >>= nValue);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+j+1), nValue, 0.000001);
+        }
+    }
 
     // set old values
     setValues(aColRow, 0);
@@ -52,15 +66,15 @@ void XCellRangeData::testSetDataArray()
 
 void XCellRangeData::testGetDataArray()
 {
-    uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XCellRangeData > xCellRangeData(getXCellRangeData(), UNO_QUERY_THROW);
     uno::Sequence< uno::Sequence < Any > > aColRow = xCellRangeData->getDataArray();
-    for ( sal_Int32 i = 0; i < aColRow.getLength(); ++i)
+    for (sal_Int32 i = 0; i < aColRow.getLength(); ++i)
     {
-        for ( sal_Int32 j = 0; j < aColRow[i].getLength(); ++j)
+        for (sal_Int32 j = 0; j < aColRow[i].getLength(); ++j)
         {
             Any& aAny = aColRow[i][j];
             double nValue = 0.0;
-            CPPUNIT_ASSERT( aAny >>= nValue);
+            CPPUNIT_ASSERT(aAny >>= nValue);
             CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<double>(i+j), nValue, 0.000001);
         }
     }
