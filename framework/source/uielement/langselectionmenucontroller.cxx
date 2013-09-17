@@ -261,19 +261,19 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     // entry for LANGUAGE_NONE
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, OUString(FwlResId( STR_LANGSTATUS_NONE )) );
+    pPopupMenu->InsertItem( nItemId, FwlResId(STR_LANGSTATUS_NONE).toString() );
     aCmd = aCmd_Language + "LANGUAGE_NONE";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for 'Reset to default language'
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, OUString(FwlResId( STR_RESET_TO_DEFAULT_LANGUAGE )) );
+    pPopupMenu->InsertItem( nItemId, FwlResId(STR_RESET_TO_DEFAULT_LANGUAGE).toString() );
     aCmd = aCmd_Language + "RESET_LANGUAGES";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for opening the Format/Character dialog
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, OUString(FwlResId( STR_LANGSTATUS_MORE )));
+    pPopupMenu->InsertItem( nItemId, FwlResId(STR_LANGSTATUS_MORE).toString());
     pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
 }
 

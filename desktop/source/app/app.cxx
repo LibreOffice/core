@@ -363,7 +363,7 @@ OUString GetMsgString(
     {
         ResMgr* resMgr = Desktop::GetDesktopResManager();
         if ( resMgr )
-            return OUString( ResId( nId, *resMgr ) );
+            return ResId(nId, *resMgr).toString();
     }
     return aFallbackMsg;
 }
@@ -391,7 +391,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
-        aDiagnosticMessage.append( OUString( ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr ) ) );
+        aDiagnosticMessage.append( ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr).toString() );
     else
         aDiagnosticMessage.appendAscii( "The program cannot be started." );
 
@@ -399,7 +399,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     {
         aDiagnosticMessage.appendAscii( "\n\n" );
         if ( pResMgr )
-            aDiagnosticMessage.append( OUString( ResId(STR_INTERNAL_ERRMSG, *pResMgr ) ) );
+            aDiagnosticMessage.append( ResId(STR_INTERNAL_ERRMSG, *pResMgr).toString() );
         else
             aDiagnosticMessage.appendAscii( "The following internal error has occurred:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
@@ -1169,7 +1169,7 @@ void restartOnMac(bool passArguments) {
 #if HAVE_FEATURE_MACOSX_SANDBOX
     (void) passArguments; // avoid warnings
     ResMgr *resMgr = Desktop::GetDesktopResManager();
-    OUString aMessage = OUString( ResId( STR_LO_MUST_BE_RESTARTED, *resMgr ) );
+    OUString aMessage = ResId(STR_LO_MUST_BE_RESTARTED, *resMgr).toString();
 
     ErrorBox aRestartBox( NULL, WB_OK, aMessage );
     aRestartBox.Execute();
@@ -1494,7 +1494,7 @@ int Desktop::Main()
         // create title string
         LanguageTag aLocale( LANGUAGE_SYSTEM);
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "ofa", aLocale );
-        OUString aTitle = pLabelResMgr ? OUString( ResId( RID_APPTITLE, *pLabelResMgr ) ) : OUString();
+        OUString aTitle = pLabelResMgr ? ResId(RID_APPTITLE, *pLabelResMgr).toString() : OUString();
         delete pLabelResMgr;
 
 #ifdef DBG_UTIL

@@ -162,7 +162,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 if ( bAllOneState && ( nCount > 1 ))
                 {
                     // Insert special item for all command
-                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, OUString( FwlResId( STR_MENU_HEADFOOTALL )), 0, OString(), 0 );
+                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwlResId(STR_MENU_HEADFOOTALL).toString(), 0, OString(), 0 );
 
                     OUStringBuffer aStrBuf( aCmd );
                     aStrBuf.appendAscii( "?On:bool=" );
