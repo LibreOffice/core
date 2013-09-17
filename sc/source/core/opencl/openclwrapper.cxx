@@ -152,15 +152,25 @@ int OpenclDevice::setKernelEnv( KernelEnv *envInfo )
     return 1;
 }
 
-Kernel* OpenclDevice::checkKernelName( const char *kernelName )
+Kernel* OpenclDevice::fetchKernel( const char *kernelName )
 {
+    cl_int nStatus;
     for (size_t i = 0, n = gpuEnv.maKernels.size(); i < n; ++i)
     {
         Kernel* pKernel = &gpuEnv.maKernels[i];
         if (!strcasecmp(kernelName, pKernel->mpName))
         {
             printf("found the kernel named %s.\n", kernelName);
-            return pKernel;
+            if (!pKernel->mpKernel && gpuEnv.mpArryPrograms[0])
+            {
+                pKernel->mpKernel = clCreateKernel(gpuEnv.mpArryPrograms[0], kernelName, &nStatus);
+                if (nStatus != CL_SUCCESS)
+                    pKernel->mpKernel = NULL;
+
+                printf("Kernel named '%s' has been compiled\n", kernelName);
+            }
+
+            return pKernel->mpKernel ?  pKernel : NULL;
         }
     }
 
@@ -1000,15 +1010,10 @@ bool OclCalc::oclHostArithmeticOperator64Bits( const char* aKernelName, double *
 {
     cl_int clStatus = 0;
     size_t global_work_size[1];
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
 
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
     clFinish( kEnv.mpkCmdQueue );
     cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE,
                           nRowSize * sizeof(double), NULL, &clStatus);
@@ -1048,15 +1053,9 @@ bool OclCalc::oclMoreColHostArithmeticOperator64Bits( int nDataSize,int neOpSize
     cl_int clStatus = 0;
     size_t global_work_size[1];
     const char *aKernelName = "oclMoreColArithmeticOperator";
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nRowSize * sizeof(double), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
@@ -1095,15 +1094,10 @@ bool OclCalc::oclHostArithmeticStash64Bits( const char* aKernelName, const doubl
     cl_int clStatus = 0;
     size_t global_work_size[1];
     setKernelEnv( &kEnv );
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
 
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
     clFinish( kEnv.mpkCmdQueue );
 
     cl_mem clLeftData = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
@@ -1149,15 +1143,9 @@ bool OclCalc::oclHostFormulaStash64Bits( const char* aKernelName, const double* 
     cl_int clStatus = 0;
     size_t global_work_size[1];
     setKernelEnv( &kEnv );
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     cl_mem clSrcData   = clCreateBuffer( kEnv.mpkContext, (cl_mem_flags) (CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR),
         nBufferSize * sizeof(double), (void *)dpSrcData, &clStatus );
@@ -1205,15 +1193,9 @@ bool OclCalc::oclHostFormulaStatistics64Bits( const char* aKernelName, double *&
 {
     cl_int clStatus = 0;
     size_t global_work_size[1];
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     cl_mem outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, size * sizeof(double), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
@@ -1252,17 +1234,11 @@ bool OclCalc::oclHostFormulaStatistics64Bits( const char* aKernelName, double *&
 bool OclCalc::oclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize )
 {
     const char *cpKernelName = "oclFormulaCount";
-    Kernel* pKernel = checkKernelName(cpKernelName);
+    Kernel* pKernel = fetchKernel(cpKernelName);
     if (!pKernel)
         return false;
 
     cl_int clStatus;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, cpKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     size_t global_work_size[1];
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemStartPos, npStartPos, 0, NULL, NULL );
@@ -1310,15 +1286,10 @@ bool OclCalc::oclHostFormulaSumProduct64Bits( double *dpSumProMergeLfData, doubl
     memset(dpOutput,0,nSize);
     const char *cpFirstKernelName = "oclSignedMul";
     const char *cpSecondKernelName = "oclFormulaSumproduct";
-    Kernel* pKernel1 = checkKernelName(cpFirstKernelName);
+    Kernel* pKernel1 = fetchKernel(cpFirstKernelName);
     if (!pKernel1)
         return false;
 
-    if (!pKernel1->mpKernel)
-    {
-        pKernel1->mpKernel = clCreateKernel(kEnv.mpkProgram, cpFirstKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemMergeLfData, dpSumProMergeLfData, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
     clFinish(kEnv.mpkCmdQueue);
@@ -1348,15 +1319,10 @@ bool OclCalc::oclHostFormulaSumProduct64Bits( double *dpSumProMergeLfData, doubl
     clStatus = clReleaseMemObject( mpClmemMergeRtData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
 
-    Kernel* pKernel2 = checkKernelName(cpSecondKernelName);
+    Kernel* pKernel2 = fetchKernel(cpSecondKernelName);
     if (!pKernel2)
         return false;
 
-    if (!pKernel2->mpKernel)
-    {
-        pKernel2->mpKernel = clCreateKernel(kEnv.mpkProgram, cpSecondKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
     cl_mem clpOutput = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nSize* sizeof(double), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     cl_uint nMatixSize = nFormulaColSize * nFormulaRowSize;
@@ -1576,15 +1542,9 @@ bool OclCalc::oclHostArithmeticOperator32Bits( const char* aKernelName,double *r
     cl_int clStatus = 0;
     size_t global_work_size[1];
 
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nRowSize * sizeof(float), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
@@ -1620,15 +1580,9 @@ bool OclCalc::oclMoreColHostArithmeticOperator32Bits( int nDataSize,int neOpSize
     cl_int clStatus = 0;
     size_t global_work_size[1];
     const char *aKernelName = "oclMoreColArithmeticOperator";
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel( kEnv.mpkProgram, aKernelName, &clStatus );
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     cl_mem clResult = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nRowSize * sizeof(float), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
@@ -1665,18 +1619,11 @@ bool OclCalc::oclMoreColHostArithmeticOperator32Bits( int nDataSize,int neOpSize
 
 bool OclCalc::oclHostFormulaStatistics32Bits(const char* aKernelName,double *output,int size)
 {
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
 
     cl_int clStatus = 0;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
-
     size_t global_work_size[1];
 
     cl_mem outputCl = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, size * sizeof(float), NULL, &clStatus );
@@ -1713,15 +1660,9 @@ bool OclCalc::oclHostArithmeticStash32Bits( const char* aKernelName, const doubl
     cl_int clStatus = 0;
     size_t global_work_size[1];
     setKernelEnv( &kEnv );
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     float *fpLeftData = (float *)malloc( sizeof(float) * nRowSize );
     float *fpRightData = (float *)malloc( sizeof(float) * nRowSize );
@@ -1782,15 +1723,9 @@ bool OclCalc::oclHostFormulaStash32Bits( const char* aKernelName, const double* 
     cl_int clStatus = 0;
     size_t global_work_size[1];
     setKernelEnv( &kEnv );
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     float *fpSrcData = (float *)malloc( sizeof(float) * nBufferSize );
     float *fpResult = (float *)malloc( sizeof(float) * size );
@@ -1848,18 +1783,13 @@ bool OclCalc::oclHostFormulaStash32Bits( const char* aKernelName, const double* 
 bool OclCalc::oclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize )
 {
     const char *cpKernelName = "oclFormulaCount";
-    Kernel* pKernel = checkKernelName(cpKernelName);
+    Kernel* pKernel = fetchKernel(cpKernelName);
     if (!pKernel)
         return false;
 
     cl_int clStatus;
     size_t global_work_size[1];
 
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, cpKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemStartPos, npStartPos, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
     clFinish( kEnv.mpkCmdQueue );
@@ -1909,15 +1839,9 @@ bool OclCalc::oclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float 
     memset(dpOutput,0,nSize);
     const char *cpFirstKernelName = "oclSignedMul";
     const char *cpSecondKernelName = "oclFormulaSumproduct";
-    Kernel* pKernel1 = checkKernelName(cpFirstKernelName);
+    Kernel* pKernel1 = fetchKernel(cpFirstKernelName);
     if (!pKernel1)
         return false;
-
-    if (!pKernel1->mpKernel)
-    {
-        pKernel1->mpKernel = clCreateKernel(kEnv.mpkProgram, cpFirstKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemMergeLfData, fpSumProMergeLfData, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
@@ -1947,15 +1871,10 @@ bool OclCalc::oclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float 
     clStatus = clReleaseMemObject( mpClmemMergeRtData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
 
-    Kernel* pKernel2 = checkKernelName(cpSecondKernelName);
+    Kernel* pKernel2 = fetchKernel(cpSecondKernelName);
     if (!pKernel2)
         return false;
 
-    if (!pKernel2->mpKernel)
-    {
-        pKernel2->mpKernel = clCreateKernel(kEnv.mpkProgram, cpSecondKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
     cl_mem clpOutput = clCreateBuffer( kEnv.mpkContext, CL_MEM_READ_WRITE, nSize* sizeof(float), NULL, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer" );
     cl_uint nMatixSize = nFormulaColSize * nFormulaRowSize;
@@ -2065,18 +1984,11 @@ bool OclCalc::oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArra
             break;
         }
     }
-    Kernel* pKernel = checkKernelName(kernelName);
+    Kernel* pKernel = fetchKernel(kernelName);
     if (!pKernel)
         return false;
 
     cl_int clStatus;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, kernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
-
     size_t global_work_size[1];
     if ( ( eOpNum == 1 ) && ( eOp[0] == ocSub ) )
         subFlag = true;
@@ -2239,26 +2151,12 @@ double *OclCalc::oclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, co
         assert( false );
     }
 
-    Kernel* pKernel = checkKernelName(kernelName);
+    Kernel* pKernel = fetchKernel(kernelName);
     if (!pKernel)
         return NULL;
 
     cl_int clStatus;
     size_t global_work_size[1];
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, kernelName, &clStatus);
-        CHECK_OPENCL_PTR( clStatus, "clCreateKernel" );
-    }
-
-    if (!pKernel->mpKernel)
-    {
-        fprintf( stderr, "\n\n*** Error: Could not clCreateKernel '%s' ***\n\n", kernelName );
-        fprintf( stderr, "\tprobably your binary cache is out of date\n"
-                "\tplease delete kernel-*.bin in your cwd\n\n\n" );
-        return NULL;
-    }
 
     // Ugh - horrible redundant copying ...
 
@@ -2411,15 +2309,9 @@ bool OclCalc::oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOcl
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpNData, npDim, 0, NULL, NULL );
 
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
-
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
 
     clStatus = clSetKernelArg(pKernel->mpKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
@@ -2527,15 +2419,10 @@ bool OclCalc::oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclM
     for ( uint i = 0; i < nDim; i++ )
         npDim[i] = nDim;
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, clpNData, npDim, 0, NULL, NULL );
-    Kernel* pKernel = checkKernelName(aKernelName);
+    Kernel* pKernel = fetchKernel(aKernelName);
     if (!pKernel)
         return false;
 
-    if (!pKernel->mpKernel)
-    {
-        pKernel->mpKernel = clCreateKernel(kEnv.mpkProgram, aKernelName, &clStatus);
-        CHECK_OPENCL( clStatus, "clCreateKernel" );
-    }
     clStatus = clSetKernelArg(pKernel->mpKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
     clStatus = clSetKernelArg(pKernel->mpKernel, 1, sizeof(cl_mem), (void *)&clpPData);
