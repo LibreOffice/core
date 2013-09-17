@@ -845,8 +845,15 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                 sal::static_int_cast< xub_StrLen >( pWordStt - pStart ) ) ) )
         return sal_False; // already ok
 
-    if (INetURLObject::CompareProtocolScheme(rTxt.copy(pWordStt - pStart, pDelim - pWordStt + 1)) != INET_PROT_NOT_VALID)
-        return sal_False; // already ok
+    //See if the text is the start of a protocol string, e.g. have text of
+    //"http" see if it is the start of "http:" and if so leave it alone
+    sal_Int32 nIndex = pWordStt - pStart;
+    sal_Int32 nProtocolLen = pDelim - pWordStt + 1;
+    if (nIndex + nProtocolLen <= rTxt.getLength())
+    {
+        if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INET_PROT_NOT_VALID)
+            return sal_False; // already ok
+    }
 
     if (0x1 == *pWordStt || 0x2 == *pWordStt)
         return sal_False; // already ok
