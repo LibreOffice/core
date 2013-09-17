@@ -384,15 +384,15 @@ static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
 //  alles static
 
 
-sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
+sal_uInt16 ScServiceProvider::GetProviderType(const OUString& rServiceName)
 {
-    if (rServiceName.Len())
+    if (!rServiceName.isEmpty())
     {
         const sal_uInt16 nEntries =
             sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
         for (sal_uInt16 i = 0; i < nEntries; i++)
         {
-            if (rServiceName.EqualsAscii( aProvNamesId[i].pName ))
+            if (rServiceName.equalsAscii( aProvNamesId[i].pName ))
             {
                 return aProvNamesId[i].nType;
             }
@@ -402,7 +402,7 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
         for (i=0; i<SC_SERVICE_COUNT; i++)
         {
             OSL_ENSURE( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
-            if (rServiceName.EqualsAscii( aOldNames[i] ))
+            if (rServiceName.equalsAscii( aOldNames[i] ))
             {
                 OSL_FAIL("old service name used");
                 return i;

@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-class String;
 class ScDocShell;
 
 
@@ -102,7 +101,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                             MakeInstance( sal_uInt16 nType, ScDocShell* pDocShell );
     static ::com::sun::star::uno::Sequence<OUString> GetAllServiceNames();
-    static sal_uInt16       GetProviderType(const String& rServiceName);
+    static sal_uInt16       GetProviderType(const OUString& rServiceName);
 };
 
 
