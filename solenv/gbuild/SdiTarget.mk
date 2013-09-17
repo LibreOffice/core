@@ -47,10 +47,10 @@ $(call gb_SdiTarget_get_target,%.hxx) : $(call gb_SdiTarget_get_target,%)
 	@true
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(dir $(call gb_SdiObject_get_dep_target,%)).dir :
+$(dir $(call gb_SdiTarget_get_dep_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(dir $(call gb_SdiObject_get_dep_target,%))%/.dir :
+$(dir $(call gb_SdiTarget_get_dep_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_SdiTarget_get_dep_target,%) :
