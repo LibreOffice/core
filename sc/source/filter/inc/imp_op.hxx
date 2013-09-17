@@ -30,6 +30,9 @@
 #include "otlnbuff.hxx"
 #include "colrowst.hxx"
 #include "excdefs.hxx"
+#include "rtl/ref.hxx"
+#include "clkernelthread.hxx"
+
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -79,6 +82,8 @@ private:
 class ImportExcel : public ImportTyp, protected XclImpRoot
 {
 protected:
+    rtl::Reference<sc::CLBuildKernelThread> mxCLKernelThread;
+
     static const double     fExcToTwips;        // Umrechnung 1/256 Zeichen -> Twips
 
     RootData*               pExcRoot;

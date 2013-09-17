@@ -136,6 +136,11 @@ void ImportExcel::Formula(
         }
     }
 
+    if (!mxCLKernelThread.is())
+    {
+        mxCLKernelThread.set(new sc::CLBuildKernelThread);
+        mxCLKernelThread->launch();
+    }
     ConvErr eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true, FT_CellFormula);
 
     ScFormulaCell* pCell = NULL;

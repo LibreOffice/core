@@ -2851,6 +2851,10 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
     return !OpenclDevice::initOpenclRunEnv(0);
 }
 
+void compileKernels()
+{
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
