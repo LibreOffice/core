@@ -378,12 +378,12 @@ void XMLDocumentSettingsContext::EndElement()
     {
         GetImport().SetViewSettings(aSeqViewProps);
         sal_Int32 i(aSeqViewProps.getLength() - 1);
-        sal_Bool bFound(sal_False);
+        bool bFound(false);
         while((i >= 0) && !bFound)
         {
             if (aSeqViewProps[i].Name.compareToAscii("Views") == 0)
             {
-                bFound = sal_True;
+                bFound = true;
                 uno::Reference<container::XIndexAccess> xIndexAccess;
                 if (aSeqViewProps[i].Value >>= xIndexAccess)
                 {
@@ -772,35 +772,35 @@ void XMLConfigItemMapIndexedContext::EndElement()
                         const OUString sVariant   ( "Variant" );
                         const OUString sBeginLine ( "BeginLine" );
                         const OUString sEndLine   ( "EndLine" );
-                        sal_Bool bHaveLanguage = sal_False, bHaveCountry = sal_False, bHaveVariant = sal_False,
-                                 bHaveBegin = sal_False, bHaveEnd = sal_False;
+                        bool bHaveLanguage = false, bHaveCountry = false, bHaveVariant = false,
+                             bHaveBegin = false, bHaveEnd = false;
 
                         for ( sal_Int32 j = 0 ; j < XML_FORBIDDEN_CHARACTER_MAX ; j++ )
                         {
                             if (pForChar->Name.equals (sLanguage ) )
                             {
                                 pForChar->Value >>= aLocale.Language;
-                                bHaveLanguage = sal_True;
+                                bHaveLanguage = true;
                             }
                             else if (pForChar->Name.equals (sCountry ) )
                             {
                                 pForChar->Value >>= aLocale.Country;
-                                bHaveCountry = sal_True;
+                                bHaveCountry = true;
                             }
                             else if (pForChar->Name.equals (sVariant ) )
                             {
                                 pForChar->Value >>= aLocale.Variant;
-                                bHaveVariant = sal_True;
+                                bHaveVariant = true;
                             }
                             else if (pForChar->Name.equals (sBeginLine ) )
                             {
                                 pForChar->Value >>= aForbid.beginLine;
-                                bHaveBegin = sal_True;
+                                bHaveBegin = true;
                             }
                             else if (pForChar->Name.equals (sEndLine ) )
                             {
                                 pForChar->Value >>= aForbid.endLine;
-                                bHaveEnd = sal_True;
+                                bHaveEnd = true;
                             }
                             pForChar++;
                         }
@@ -851,10 +851,10 @@ void XMLConfigItemMapIndexedContext::EndElement()
             {
                 if ((xIndex->getByIndex( i ) >>= aProps) && (aProps.getLength() == XML_SYMBOL_DESCRIPTOR_MAX ) )
                 {
-                    sal_Bool bHaveName = sal_False, bHaveExportName = sal_False, bHaveCharSet = sal_False,
-                              bHaveFontName = sal_False, bHaveFamily = sal_False, bHavePitch = sal_False,
-                              bHaveWeight = sal_False, bHaveItalic = sal_False, bHaveSymbolSet = sal_False,
-                             bHaveCharacter = sal_False;
+                    bool bHaveName = false, bHaveExportName = false, bHaveCharSet = false,
+                         bHaveFontName = false, bHaveFamily = false, bHavePitch = false,
+                         bHaveWeight = false, bHaveItalic = false, bHaveSymbolSet = false,
+                         bHaveCharacter = false;
                     beans::PropertyValue *pSymbol = aProps.getArray();
 
                     for ( sal_Int32 j = 0 ; j < XML_SYMBOL_DESCRIPTOR_MAX ; j++ )
@@ -862,52 +862,52 @@ void XMLConfigItemMapIndexedContext::EndElement()
                         if (pSymbol->Name.equals ( sName ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sName;
-                            bHaveName = sal_True;
+                            bHaveName = true;
                         }
                         else if (pSymbol->Name.equals (sExportName ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sExportName;
-                            bHaveExportName = sal_True;
+                            bHaveExportName = true;
                         }
                         else if (pSymbol->Name.equals (sFontName ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sFontName;
-                            bHaveFontName = sal_True;
+                            bHaveFontName = true;
                         }
                         else if (pSymbol->Name.equals (sCharSet ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharSet;
-                            bHaveCharSet = sal_True;
+                            bHaveCharSet = true;
                         }
                         else if (pSymbol->Name.equals (sFamily ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nFamily;
-                            bHaveFamily = sal_True;
+                            bHaveFamily = true;
                         }
                         else if (pSymbol->Name.equals (sPitch ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nPitch;
-                            bHavePitch = sal_True;
+                            bHavePitch = true;
                         }
                         else if (pSymbol->Name.equals (sWeight ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nWeight;
-                            bHaveWeight = sal_True;
+                            bHaveWeight = true;
                         }
                         else if (pSymbol->Name.equals (sItalic ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nItalic;
-                            bHaveItalic = sal_True;
+                            bHaveItalic = true;
                         }
                         else if (pSymbol->Name.equals (sSymbolSet ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sSymbolSet;
-                            bHaveSymbolSet = sal_True;
+                            bHaveSymbolSet = true;
                         }
                         else if (pSymbol->Name.equals (sCharacter ) )
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharacter;
-                            bHaveCharacter = sal_True;
+                            bHaveCharacter = true;
                         }
                         pSymbol++;
                     }

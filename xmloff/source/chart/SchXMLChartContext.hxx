@@ -126,7 +126,7 @@ private:
             rows or from columns.
     */
     void    InitChart   (const OUString & rChartTypeServiceName,
-                        sal_Bool bSetSwitchData);
+                        bool bSetSwitchData);
 
     void MergeSeriesForStockChart();
 };

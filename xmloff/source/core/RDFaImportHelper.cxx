@@ -315,10 +315,10 @@ RDFaInserter::MakeResource( OUString const & i_rResource)
 /** i wrote this because c++ implementations cannot agree on which variant
     of boost::bind and std::mem_fun_ref applied to Reference::is compiles */
 class ref_is_null :
-    public ::std::unary_function<sal_Bool, const uno::Reference<rdf::XURI> & >
+    public ::std::unary_function<bool, const uno::Reference<rdf::XURI> & >
 {
 public:
-    sal_Bool operator() (const uno::Reference<rdf::XURI> & i_rRef)
+    bool operator() (const uno::Reference<rdf::XURI> & i_rRef)
     {
         return !i_rRef.is();
     }

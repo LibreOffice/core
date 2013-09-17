@@ -333,14 +333,14 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     else
         fCount = 0.0;
     sal_Int16 nCount = sal_Int16(fCount);
-    sal_Bool bHasTime(sal_False);
+    bool bHasTime(false);
     double fHoursValue = 0;
     double fMinsValue = 0;
     double fSecsValue = 0;
     double f100SecsValue = 0;
     if (fValue > 0.0)
     {
-        bHasTime = sal_True;
+        bHasTime = true;
         fValue *= 24;
         fHoursValue = ::rtl::math::approxFloor (fValue);
         fValue -= fHoursValue;
@@ -586,7 +586,7 @@ sal_Bool SvXMLUnitConverter::convertNumFormat(
         sal_Bool bNumberNone ) const
 {
     sal_Bool bRet = sal_True;
-    sal_Bool bExt = sal_False;
+    bool bExt = false;
 
     sal_Int32 nLen = rNumFmt.getLength();
     if( 0 == nLen )
@@ -605,7 +605,7 @@ sal_Bool SvXMLUnitConverter::convertNumFormat(
         case sal_Unicode('A'):  rType = NumberingType::CHARS_UPPER_LETTER;  break;
         case sal_Unicode('i'):  rType = NumberingType::ROMAN_LOWER; break;
         case sal_Unicode('I'):  rType = NumberingType::ROMAN_UPPER; break;
-        default:                bExt = sal_True; break;
+        default:                bExt = true; break;
         }
         if( !bExt && IsXMLToken( rNumLetterSync, XML_TRUE ) )
         {
@@ -622,7 +622,7 @@ sal_Bool SvXMLUnitConverter::convertNumFormat(
     }
     else
     {
-        bExt = sal_True;
+        bExt = true;
     }
     if( bExt )
     {
@@ -758,7 +758,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
     for( sal_Int32 i = 0; i < nLen; i++ )
     {
         sal_Unicode c = rName[i];
-        sal_Bool bValidChar = sal_False;
+        bool bValidChar = false;
         if( c < 0x00ffU )
         {
             bValidChar =
@@ -775,12 +775,12 @@ OUString SvXMLUnitConverter::encodeStyleName(
             if( (c >= 0xf900U && c <= 0xfffeU) ||
                  (c >= 0x20ddU && c <= 0x20e0U))
             {
-                bValidChar = sal_False;
+                bValidChar = false;
             }
             else if( (c >= 0x02bbU && c <= 0x02c1U) || c == 0x0559 ||
                      c == 0x06e5 || c == 0x06e6 )
             {
-                bValidChar = sal_True;
+                bValidChar = true;
             }
             else if( c == 0x0387 )
             {
@@ -801,7 +801,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
                 case UnicodeType::TITLECASE_LETTER:     // Lt
                 case UnicodeType::OTHER_LETTER:         // Lo
                 case UnicodeType::LETTER_NUMBER:        // Nl
-                    bValidChar = sal_True;
+                    bValidChar = true;
                     break;
                 case UnicodeType::NON_SPACING_MARK:     // Ms
                 case UnicodeType::ENCLOSING_MARK:       // Me

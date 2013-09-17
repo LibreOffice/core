@@ -1844,7 +1844,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
         uno::Reference<container::XIndexAccess> xIndexAccess;
         xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
         xIndexAccess = xViewDataSupplier->getViewData();
-        sal_Bool bAdd = sal_False;
+        bool bAdd = false;
         uno::Any aAny;
         if(xIndexAccess.is() && xIndexAccess->hasElements() )
         {
@@ -1857,7 +1857,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
                 {
                     if( aProps.getLength() > 0 )
                     {
-                        bAdd = sal_True;
+                        bAdd = true;
                         break;
                     }
                 }

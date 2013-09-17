@@ -47,13 +47,13 @@ public:
         nToken( rEntry.nToken )
     {}
 
-    sal_Bool operator==( const SvXMLTokenMapEntry_Impl& r ) const
+    bool operator==( const SvXMLTokenMapEntry_Impl& r ) const
     {
         return nPrefixKey == r.nPrefixKey &&
                sLocalName == r.sLocalName;
     }
 
-    sal_Bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
+    bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
     {
         return nPrefixKey < r.nPrefixKey ||
                ( nPrefixKey == r.nPrefixKey &&

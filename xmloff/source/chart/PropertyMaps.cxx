@@ -195,7 +195,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
     OUString aAutoPropName;
-    sal_Bool bCheckAuto = sal_False;
+    bool bCheckAuto = false;
 
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
@@ -208,24 +208,24 @@ void XMLChartExportPropertyMapper::ContextFilter(
         {
             // if Auto... is set the corresponding properties mustn't be exported
             case XML_SCH_CONTEXT_MIN:
-                bCheckAuto = sal_True;
+                bCheckAuto = true;
                 aAutoPropName = "AutoMin";
                 break;
             case XML_SCH_CONTEXT_MAX:
-                bCheckAuto = sal_True;
+                bCheckAuto = true;
                 aAutoPropName = "AutoMax";
                 break;
             case XML_SCH_CONTEXT_STEP_MAIN:
-                bCheckAuto = sal_True;
+                bCheckAuto = true;
                 aAutoPropName = "AutoStepMain";
                 break;
             case XML_SCH_CONTEXT_STEP_HELP_COUNT:
-                bCheckAuto = sal_True;
+                bCheckAuto = true;
                 aAutoPropName = "AutoStepHelp";
                 break;
 
             case XML_SCH_CONTEXT_ORIGIN:
-                bCheckAuto = sal_True;
+                bCheckAuto = true;
                 aAutoPropName = "AutoOrigin";
                 break;
 
@@ -262,7 +262,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 {
                 }
             }
-            bCheckAuto = sal_False;
+            bCheckAuto = false;
         }
     }
 
@@ -359,13 +359,13 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx ) const
 {
-    sal_Bool bHandled = sal_False;
+    bool bHandled = false;
 
     sal_Int32 nContextId = getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex );
 
     if( nContextId )
     {
-        bHandled = sal_True;
+        bHandled = true;
 
         OUString sAttrName = getPropertySetMapper()->GetEntryXMLName( rProperty.mnIndex );
         sal_uInt16 nNameSpace = getPropertySetMapper()->GetEntryNameSpace( rProperty.mnIndex );
@@ -373,7 +373,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
         OUString sValue;
 
         sal_Int32 nValue = 0;
-        sal_Bool bValue = sal_False;
+        bool bValue = false;
 
         switch( nContextId )
         {
@@ -475,7 +475,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 break;
 
             default:
-                bHandled = sal_False;
+                bHandled = false;
                 break;
         }
 
@@ -532,7 +532,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
     const SvXMLNamespaceMap& rNamespaceMap ) const
 {
     sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
-    sal_Bool bRet = (nContextId != 0);
+    bool bRet = (nContextId != 0);
 
     if( nContextId )
     {
@@ -648,7 +648,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
             break;
 
             default:
-                bRet = sal_False;
+                bRet = false;
                 break;
         }
     }
