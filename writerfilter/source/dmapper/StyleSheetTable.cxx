@@ -724,6 +724,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
                     uno::Reference< style::XStyle > xStyle;
                     OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
+
                     // When pasting, don't update existing styles.
                     if(xStyles->hasByName( sConvertedStyleName ) && m_pImpl->m_bIsNewDoc)
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
@@ -761,18 +762,21 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         if( !m_pImpl->m_rDMapper.IsOOXMLImport() && nFontCount > 2 )
                         {
                             uno::Any aTwoHundredFortyTwip = uno::makeAny(12.);
-    //                      font size to 240 twip (12 pts) for all if not set
+
+                            // font size to 240 twip (12 pts) for all if not set
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT, aTwoHundredFortyTwip, false);
-    //                      western font not already set -> apply first font
+
+                            // western font not already set -> apply first font
                             const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
                             OUString sWesternFontName = pWesternFontEntry->sFontName;
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sWesternFontName ), false);
 
-    //                      CJK  ... apply second font
+                            // CJK  ... apply second font
                             const FontEntry::Pointer_t pCJKFontEntry(rFontTable->getFontEntry( 2 ));
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( pCJKFontEntry->sFontName ), false);
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, aTwoHundredFortyTwip, false);
-    //                      CTL  ... apply third font, if available
+
+                            // CTL  ... apply third font, if available
                             if( nFontCount > 3 )
                             {
                                 const FontEntry::Pointer_t pCTLFontEntry(rFontTable->getFontEntry( 3 ));
@@ -780,13 +784,14 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                 pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredFortyTwip, false);
                             }
                         }
-    //                  Widow/Orphan -> set both to two if not already set
+
+                        // Widow/Orphan -> set both to two if not already set
                         uno::Any aTwo = uno::makeAny(sal_Int8(2));
                         pEntry->pProperties->Insert(PROP_PARA_WIDOWS, aTwo, false);
                         pEntry->pProperties->Insert(PROP_PARA_ORPHANS, aTwo, false);
-    //                  Left-to-right direction if not already set
+
+                        // Left-to-right direction if not already set
                         pEntry->pProperties->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
-                        // Don't set font color to Auto if not already set: this could hide the default font color setting
                     }
 
                     uno::Sequence< beans::PropertyValue > aPropValues = pEntry->pProperties->GetPropertyValues();
@@ -795,7 +800,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     {
                             bAddFollowStyle = true;
                     }
-                    //remove Left/RightMargin values from TOX heading styles
+
+                    // remove Left/RightMargin values from TOX heading styles
                     if( bParaStyle )
                     {
                         // Set the outline levels
@@ -874,7 +880,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         PropValVector aSortedPropVals;
                         for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
                         {
-                                // Don't add the style name properties
+                            // Don't add the style name properties
                             bool bIsParaStyleName = aPropValues[nProp].Name == "ParaStyleName";
                             bool bIsCharStyleName = aPropValues[nProp].Name == "CharStyleName";
                             if ( !bIsParaStyleName && !bIsCharStyleName )
