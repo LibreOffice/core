@@ -161,8 +161,8 @@ public:
     {
         return m_pShortNameEdit->GetText();
     }
-    static String   GetCurrGroup();
-    static void     SetActGroup(const String& rNewGroup);
+    static OUString GetCurrGroup();
+    static void     SetActGroup(const OUString& rNewGroup);
     static String   GetExtension();
 };
 

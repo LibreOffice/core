@@ -42,8 +42,8 @@ namespace swui
 
 #define ROW_COL_PROD 16384
 
-void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblOpts, String& rAutoName,
+void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
+                                SwInsertTableOptions& rInsTblOpts, OUString& rAutoName,
                                 SwTableAutoFmt *& prTAFmt )
 {
     sal_uInt16 nInsMode = 0;

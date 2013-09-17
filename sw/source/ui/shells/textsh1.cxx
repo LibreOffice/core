@@ -459,9 +459,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 sal_uInt16 nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;
                 SfxRequest aReq( GetView().GetViewFrame(), nId );
-                if ( pDlg->GetStr().Len() )
+                if ( !pDlg->GetStr().isEmpty() )
                     aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
-                if ( pDlg->GetFontName().Len() )
+                if ( !pDlg->GetFontName().isEmpty() )
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
                 ExecuteSlot( aReq );
             }

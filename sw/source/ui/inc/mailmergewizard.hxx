@@ -36,7 +36,7 @@ class SwMailMergeConfigItem;
 class SwMailMergeWizard : public ::svt::RoadmapWizard
 {
     SwView*                 m_pSwView;
-    String                  sDocumentURL;
+    OUString                sDocumentURL;
     bool                    m_bDocumentLoad;
 
     SwMailMergeConfigItem&  m_rConfigItem;
@@ -72,7 +72,7 @@ public:
     SwMailMergeConfigItem&      GetConfigItem() { return m_rConfigItem;}
 
     void                    SetReloadDocument(const String& rURL){sDocumentURL = rURL;}
-    const String&           GetReloadDocument() const {return sDocumentURL;}
+    const OUString&         GetReloadDocument() const {return sDocumentURL;}
 
     //next step requires loading of document
     void                    SetDocumentLoad(bool bSet) {m_bDocumentLoad = bSet;}

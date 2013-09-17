@@ -208,7 +208,7 @@ sal_uInt16 AbstractSplitTableDialog_Impl::GetSplitMode()
     return pDlg->GetSplitMode();
 }
 
-String AbstractSwBreakDlg_Impl::GetTemplateName()
+OUString AbstractSwBreakDlg_Impl::GetTemplateName()
 {
     return pDlg->GetTemplateName();
 }
@@ -292,7 +292,7 @@ Printer * AbstractSwLabDlg_Impl::GetPrt()
     return pDlg->GetPrt();
 }
 
-void AbstractSwSelGlossaryDlg_Impl::InsertGlos(const String &rRegion, const String &rGlosName)
+void AbstractSwSelGlossaryDlg_Impl::InsertGlos(const OUString &rRegion, const OUString &rGlosName)
 {
     pDlg->InsertGlos( rRegion, rGlosName );
 }
@@ -377,7 +377,7 @@ void AbstractSwFldDlg_Impl::ShowReferencePage()
     pDlg->ShowReferencePage();
 }
 
-void AbstractSwRenameXNamedDlg_Impl::SetForbiddenChars( const String& rSet )
+void AbstractSwRenameXNamedDlg_Impl::SetForbiddenChars( const OUString& rSet )
 {
     pDlg->SetForbiddenChars( rSet );
 }
@@ -394,12 +394,12 @@ void    AbstractSwModalRedlineAcceptDlg_Impl::AcceptAll( sal_Bool bAccept )
     pDlg->AcceptAll( bAccept);
 }
 
-String AbstractGlossaryDlg_Impl::GetCurrGrpName() const
+OUString AbstractGlossaryDlg_Impl::GetCurrGrpName() const
 {
     return pDlg->GetCurrGrpName();
 }
 
-String AbstractGlossaryDlg_Impl::GetCurrShortName() const
+OUString AbstractGlossaryDlg_Impl::GetCurrShortName() const
 {
     return pDlg->GetCurrShortName();
 }
@@ -414,7 +414,7 @@ OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
     return pDlg->GetWindowState( nMask );
 }
 
-String AbstractInsFootNoteDlg_Impl::GetFontName()
+OUString AbstractInsFootNoteDlg_Impl::GetFontName()
 {
     return pDlg->GetFontName();
 }
@@ -424,7 +424,7 @@ sal_Bool AbstractInsFootNoteDlg_Impl::IsEndNote()
     return pDlg->IsEndNote();
 }
 
-String AbstractInsFootNoteDlg_Impl::GetStr()
+OUString AbstractInsFootNoteDlg_Impl::GetStr()
 {
     return pDlg->GetStr();
 }
@@ -439,8 +439,8 @@ void AbstractInsFootNoteDlg_Impl::SetText( const OUString& rStr )
     pDlg->SetText( rStr );
 }
 
-void AbstractInsTableDlg_Impl::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
+void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
+                                SwInsertTableOptions& rInsTblFlags, OUString& rTableAutoFmtName,
                                 SwTableAutoFmt *& prTAFmt )
 {
     pDlg->GetValues( rName, rRow, rCol, rInsTblFlags, rTableAutoFmtName, prTAFmt);
@@ -451,7 +451,7 @@ OUString AbstractJavaEditDialog_Impl::GetText()
     return pDlg->GetText();
 }
 
-String AbstractJavaEditDialog_Impl::GetType()
+OUString AbstractJavaEditDialog_Impl::GetType()
 {
     return pDlg->GetType();
 }
@@ -501,12 +501,12 @@ bool AbstractMailMergeDlg_Impl::IsGenerateFromDataBase() const
     return pDlg->IsGenerateFromDataBase();
 }
 
-String AbstractMailMergeDlg_Impl::GetColumnName() const
+OUString AbstractMailMergeDlg_Impl::GetColumnName() const
 {
     return pDlg->GetColumnName();
 }
 
-String AbstractMailMergeDlg_Impl::GetPath() const
+OUString AbstractMailMergeDlg_Impl::GetPath() const
 {
     return pDlg->GetPath();
 }
@@ -541,7 +541,7 @@ const SfxItemSet* AbstractMultiTOXTabDialog_Impl::GetOutputItemSet() const
     return pDlg->GetOutputItemSet();
 }
 
-void AbstractEditRegionDlg_Impl::SelectSection(const String& rSectionName)
+void AbstractEditRegionDlg_Impl::SelectSection(const OUString& rSectionName)
 {
     pDlg->SelectSection(rSectionName);
 }
@@ -615,12 +615,12 @@ IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDial
     return 0L;
 }
 
-void AbstractMailMergeWizard_Impl::SetReloadDocument(const String& rURL)
+void AbstractMailMergeWizard_Impl::SetReloadDocument(const OUString& rURL)
 {
     pDlg->SetReloadDocument(rURL);
 }
 
-const String&       AbstractMailMergeWizard_Impl::GetReloadDocument() const
+const OUString&     AbstractMailMergeWizard_Impl::GetReloadDocument() const
 {
     return pDlg->GetReloadDocument();
 }
@@ -830,7 +830,7 @@ AbstractSplitTableDialog * SwAbstractDialogFactory_Impl::CreateSplitTblDialog ( 
     return new AbstractSplitTableDialog_Impl( new SwSplitTblDlg( pParent, rSh) );
 }
 
-AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(Window * pParent, const String &rShortName)
+AbstractSwSelGlossaryDlg * SwAbstractDialogFactory_Impl::CreateSwSelGlossaryDlg(Window * pParent, const OUString &rShortName)
 {
     SwSelGlossaryDlg* pDlg = new SwSelGlossaryDlg(pParent, rShortName);
     return new AbstractSwSelGlossaryDlg_Impl(pDlg);
@@ -991,8 +991,8 @@ AbstractJavaEditDialog * SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
 
 AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nResId,
                                                 Window* pParent, SwWrtShell& rSh,
-                                                 const String& rSourceName,
-                                                const String& rTblName,
+                                                const OUString& rSourceName,
+                                                const OUString& rTblName,
                                                 sal_Int32 nCommandType,
                                                 const uno::Reference< sdbc::XConnection>& xConnection,
                                                 uno::Sequence< uno::Any >* pSelection )

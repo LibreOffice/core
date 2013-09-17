@@ -157,14 +157,14 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 /*------------------------------------------------------------------------
  Description:   query / set currently set group
 ------------------------------------------------------------------------*/
-String SwGlossaryDlg::GetCurrGroup()
+OUString SwGlossaryDlg::GetCurrGroup()
 {
     if( !::GetCurrGlosGroup().isEmpty() )
         return ::GetCurrGlosGroup();
     return SwGlossaries::GetDefName();
 }
 
-void SwGlossaryDlg::SetActGroup(const String &rGrp)
+void SwGlossaryDlg::SetActGroup(const OUString &rGrp)
 {
     ::SetCurrGlosGroup(rGrp);
 }

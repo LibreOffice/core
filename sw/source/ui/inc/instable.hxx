@@ -66,8 +66,8 @@ public:
     SwInsTableDlg( SwView& rView );
     ~SwInsTableDlg();
 
-    void GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                    SwInsertTableOptions& rInsTblOpts, String& rTableAutoFmtName,
+    void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
+                    SwInsertTableOptions& rInsTblOpts, OUString& rTableAutoFmtName,
                     SwTableAutoFmt *& prTAFmt );
 };
 

@@ -40,7 +40,6 @@ class SfxBindings;
 class SfxItemSet;
 class ResId;
 class Window;
-class String;
 class SfxItemPool;
 class SfxStyleSheetBase;
 class SwGlossaryHdl;
@@ -89,14 +88,14 @@ namespace com{namespace sun{namespace star{
 
 typedef   void (*SwLabDlgMethod) (::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,   const SwLabItem& rItem);
 
-typedef String      (*GlossaryGetCurrGroup)();
-typedef void        (*GlossarySetActGroup)(const String& rNewGroup);
+typedef OUString    (*GlossaryGetCurrGroup)();
+typedef void        (*GlossarySetActGroup)(const OUString& rNewGroup);
 
 class AbstractGlossaryDlg : public VclAbstractDialog
 {
 public:
-    virtual String          GetCurrGrpName() const = 0;
-    virtual String          GetCurrShortName() const = 0;
+    virtual OUString        GetCurrGrpName() const = 0;
+    virtual OUString        GetCurrShortName() const = 0;
 };
 
 class AbstractFldInputDlg : public VclAbstractDialog
@@ -110,9 +109,9 @@ public:
 class AbstractInsFootNoteDlg : public VclAbstractDialog
 {
 public:
-    virtual String          GetFontName() = 0;
-    virtual sal_Bool            IsEndNote() = 0;
-    virtual String          GetStr() = 0;
+    virtual OUString        GetFontName() = 0;
+    virtual sal_Bool        IsEndNote() = 0;
+    virtual OUString        GetStr() = 0;
     //from class Window
     virtual void    SetHelpId( const OString& sHelpId ) = 0;
     virtual void    SetText( const OUString& rStr ) = 0;
@@ -121,18 +120,18 @@ public:
 class AbstractInsTableDlg : public VclAbstractDialog
 {
 public:
-    virtual void            GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
-                                SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
+    virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
+                                SwInsertTableOptions& rInsTblFlags, OUString& rTableAutoFmtName,
                                 SwTableAutoFmt *& prTAFmt ) = 0;
 };
 
 class AbstractJavaEditDialog : public VclAbstractDialog
 {
 public:
-    virtual OUString                GetText() = 0;
-    virtual String              GetType() = 0;
-    virtual sal_Bool                IsUrl() = 0;
-    virtual sal_Bool                IsNew() = 0;
+    virtual OUString            GetText() = 0;
+    virtual OUString            GetType() = 0;
+    virtual sal_Bool            IsUrl() = 0;
+    virtual sal_Bool            IsNew() = 0;
     virtual bool                IsUpdate() = 0;
 };
 
@@ -145,8 +144,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const = 0;
     virtual bool IsSaveIndividualDocs() const = 0;
     virtual bool IsGenerateFromDataBase() const = 0;
-    virtual String GetColumnName() const = 0;
-    virtual String GetPath() const = 0;
+    virtual OUString GetColumnName() const = 0;
+    virtual OUString GetPath() const = 0;
 
 };
 class AbstractMailMergeCreateFromDlg : public VclAbstractDialog
@@ -173,7 +172,7 @@ public:
 class AbstractEditRegionDlg : public VclAbstractDialog
 {
 public:
-    virtual void    SelectSection(const String& rSectionName) = 0;
+    virtual void    SelectSection(const OUString& rSectionName) = 0;
 };
 class AbstractInsertSectionTabDialog : public VclAbstractDialog
 {
@@ -206,7 +205,7 @@ public:
 class AbstractSwBreakDlg : public VclAbstractDialog
 {
 public:
-    virtual String  GetTemplateName() = 0;
+    virtual OUString    GetTemplateName() = 0;
     virtual sal_uInt16  GetKind() = 0;
     virtual sal_uInt16  GetPageNumber() = 0;
 
@@ -253,7 +252,7 @@ public:
 class AbstractSwSelGlossaryDlg : public VclAbstractDialog
 {
 public:
-    virtual void InsertGlos(const String &rRegion, const String &rGlosName) = 0;    // inline
+    virtual void InsertGlos(const OUString &rRegion, const OUString &rGlosName) = 0;    // inline
     virtual sal_uInt16 GetSelectedIdx() const = 0;  // inline
     virtual void SelectEntryPos(sal_uInt16 nIdx) = 0;   // inline
 };
@@ -278,7 +277,7 @@ public:
 class AbstractSwRenameXNamedDlg : public VclAbstractDialog
 {
 public:
-    virtual void    SetForbiddenChars( const String& rSet ) = 0;
+    virtual void    SetForbiddenChars( const OUString& rSet ) = 0;
     virtual void SetAlternativeAccess(
              ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xSecond,
              ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xThird ) = 0;
@@ -310,9 +309,9 @@ class SwMailMergeConfigItem;
 class AbstractMailMergeWizard : public VclAbstractDialog2
 {
 public:
-    virtual void                SetReloadDocument(const String& rURL) = 0;
-    virtual const String&       GetReloadDocument() const = 0;
-    virtual sal_Bool                ShowPage( sal_uInt16 nLevel ) = 0;
+    virtual void                SetReloadDocument(const OUString& rURL) = 0;
+    virtual const OUString&     GetReloadDocument() const = 0;
+    virtual sal_Bool            ShowPage( sal_uInt16 nLevel ) = 0;
     virtual sal_uInt16          GetRestartPage() const = 0;
 };
 
@@ -364,7 +363,7 @@ public:
                                                     sal_Bool bDraw = sal_False,
                                                     OString sDefPage = OString() ) = 0;
 
-    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const String &rShortName) = 0;
+    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const OUString &rShortName) = 0;
 
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) = 0;
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ) = 0;
@@ -417,8 +416,8 @@ public:
         SwWrtShell* pWrtSh) = 0;
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,
                                                 Window* pParent, SwWrtShell& rSh,
-                                                 const String& rSourceName,
-                                                const String& rTblName,
+                                                 const OUString& rSourceName,
+                                                const OUString& rTblName,
                                                 sal_Int32 nCommandType,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0 ) = 0;

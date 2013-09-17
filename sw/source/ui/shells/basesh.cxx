@@ -2474,7 +2474,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             sal_uInt16 nCols = 0;
             sal_uInt16 nRows = 0;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
-            String aTableName, aAutoName;
+            OUString aTableName, aAutoName;
             SwTableAutoFmt* pTAFmt = 0;
 
             if( pArgs && pArgs->Count() >= 2 )
@@ -2494,7 +2494,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if ( pAuto )
                 {
                     aAutoName = pAuto->GetValue();
-                    if ( aAutoName.Len() )
+                    if ( !aAutoName.isEmpty() )
                     {
                         SwTableAutoFmtTbl aTableTbl;
                         aTableTbl.Load();
@@ -2537,7 +2537,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             {
                 // record before shell change
                 _rRequest.AppendItem( SfxStringItem( FN_INSERT_TABLE, aTableName ) );
-                if ( aAutoName.Len() )
+                if ( !aAutoName.isEmpty() )
                     _rRequest.AppendItem( SfxStringItem( FN_PARAM_2, aAutoName ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nCols ) );
                 _rRequest.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRows ) );
@@ -2554,7 +2554,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 rSh.InsertTable( aInsTblOpts, nRows, nCols, text::HoriOrientation::FULL, pTAFmt );
                 rSh.MoveTable( fnTablePrev, fnTableStart );
 
-                if( aTableName.Len() && !rSh.GetTblStyle( aTableName ) )
+                if( !aTableName.isEmpty() && !rSh.GetTblStyle( aTableName ) )
                     rSh.GetTableFmt()->SetName( aTableName );
 
                 rSh.EndAllAction();
