@@ -39,6 +39,8 @@
 #define OPENCL_DLL_NAME "libOpenCL.so"
 #endif
 
+#define DEVICE_NAME_LENGTH 1024
+
 using namespace std;
 
 namespace sc { namespace opencl {
@@ -218,7 +220,7 @@ int OpenclDevice::binaryGenerated( const char * clFileName, FILE ** fhandle )
         char fileName[256] = { 0 }, cl_name[128] = { 0 };
         if ( gpuEnv.mpArryDevsID[i] != 0 )
         {
-            char deviceName[1024];
+            char deviceName[DEVICE_NAME_LENGTH];
             clStatus = clGetDeviceInfo( gpuEnv.mpArryDevsID[i], CL_DEVICE_NAME, sizeof(deviceName), deviceName, NULL );
             CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
             str = (char*) strstr( clFileName, (char*) ".cl" );
@@ -301,7 +303,7 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
 
         if ( binarySizes[i] != 0 )
         {
-            char deviceName[1024];
+            char deviceName[DEVICE_NAME_LENGTH];
             clStatus = clGetDeviceInfo(mpArryDevsID[i], CL_DEVICE_NAME,
                            sizeof(deviceName), deviceName, NULL);
             CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
@@ -2633,15 +2635,15 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
     OpenclDeviceInfo aDeviceInfo;
     aDeviceInfo.device = aDeviceId;
 
-    char pName[64];
-    cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_NAME, 64, pName, NULL);
+    char pName[DEVICE_NAME_LENGTH];
+    cl_int nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_NAME, DEVICE_NAME_LENGTH, pName, NULL);
     if(nState != CL_SUCCESS)
         return;
 
     aDeviceInfo.maName = OUString::createFromAscii(pName);
 
-    char pVendor[64];
-    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_VENDOR, 64, pName, NULL);
+    char pVendor[DEVICE_NAME_LENGTH];
+    nState = clGetDeviceInfo(aDeviceId, CL_DEVICE_VENDOR, DEVICE_NAME_LENGTH, pName, NULL);
     if(nState != CL_SUCCESS)
         return;
 
