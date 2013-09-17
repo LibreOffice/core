@@ -125,7 +125,9 @@ const char* pKernelNames[] = {
     "oclMaxDiv",
     "oclAverageDiv"
     "oclMinDiv",
-    "oclSub"
+    "oclSub",
+
+    "oclMatrixSolve"
 };
 
 }
@@ -2341,20 +2343,22 @@ bool OclCalc::oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOcl
     }
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, dpOclMatrixSrc, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
-    cl_kernel kernel_solve = clCreateKernel( kEnv.mpkProgram, "oclMatrixSolve", &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateKernel" );
-    clStatus = clSetKernelArg( kernel_solve, 0, sizeof(cl_mem), (void *)&mpClmemLeftData );
+    Kernel* pKernelMatrix = fetchKernel("oclMatrixSolve");
+    if (!pKernelMatrix)
+        return false;
+
+    clStatus = clSetKernelArg(pKernel->mpKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 1, sizeof(cl_mem), (void *)&mpClmemRightData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 1, sizeof(cl_mem), (void *)&mpClmemRightData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 2, sizeof(cl_mem), (void *)&clpPData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 2, sizeof(cl_mem), (void *)&clpPData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 3, sizeof(cl_mem), (void *)&clpYData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 3, sizeof(cl_mem), (void *)&clpYData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 4, sizeof(cl_mem), (void *)&clpNData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 4, sizeof(cl_mem), (void *)&clpNData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
 
-    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kernel_solve, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
+    clStatus = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, pKernel->mpKernel, 1, NULL, global_work_size, NULL, 0, NULL, NULL);
     CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
     for ( uint i = 0; i < nDim; i++ )
@@ -2370,8 +2374,6 @@ bool OclCalc::oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOcl
     clStatus = clReleaseMemObject( mpClmemRightData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     mpClmemRightData = NULL;
-    clStatus = clReleaseKernel( kernel_solve );
-    CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpPData );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpYData );
@@ -2453,20 +2455,23 @@ bool OclCalc::oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclM
     clStatus = clEnqueueUnmapMemObject( kEnv.mpkCmdQueue, mpClmemLeftData, fpOclMatrixSrc, 0, NULL, NULL );
     CHECK_OPENCL( clStatus, "clEnqueueUnmapMemObject" );
 
-    cl_kernel kernel_solve = clCreateKernel( kEnv.mpkProgram, "oclMatrixSolve", &clStatus );
-    CHECK_OPENCL( clStatus, "clCreateKernel" );
-    clStatus = clSetKernelArg( kernel_solve, 0, sizeof(cl_mem), (void *)&mpClmemLeftData );
+    Kernel* pKernelMatrix = fetchKernel("oclMatrixSolve");
+    if (!pKernelMatrix)
+        return false;
+
+    clStatus = clSetKernelArg(pKernel->mpKernel, 0, sizeof(cl_mem), (void *)&mpClmemLeftData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 1, sizeof(cl_mem), (void *)&mpClmemRightData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 1, sizeof(cl_mem), (void *)&mpClmemRightData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 2, sizeof(cl_mem), (void *)&clpPData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 2, sizeof(cl_mem), (void *)&clpPData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 3, sizeof(cl_mem), (void *)&clpYData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 3, sizeof(cl_mem), (void *)&clpYData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
-    clStatus = clSetKernelArg( kernel_solve, 4, sizeof(cl_mem), (void *)&clpNData );
+    clStatus = clSetKernelArg(pKernel->mpKernel, 4, sizeof(cl_mem), (void *)&clpNData);
     CHECK_OPENCL( clStatus, "clSetKernelArg" );
 
-    clStatus = clEnqueueNDRangeKernel( kEnv.mpkCmdQueue, kernel_solve, 1, NULL, global_work_size, NULL, 0, NULL, NULL );
+    clStatus = clEnqueueNDRangeKernel(
+        kEnv.mpkCmdQueue, pKernel->mpKernel, 1, NULL, global_work_size, NULL, 0, NULL, NULL);
     CHECK_OPENCL( clStatus, "clEnqueueNDRangeKernel" );
     clFinish( kEnv.mpkCmdQueue );
     for ( uint i = 0; i < nDim; i++ )
@@ -2482,8 +2487,6 @@ bool OclCalc::oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclM
     clStatus = clReleaseMemObject( mpClmemRightData );
     CHECK_OPENCL( clStatus, "clReleaseMemObject" );
     mpClmemRightData = NULL;
-    clStatus = clReleaseKernel( kernel_solve );
-    CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpPData );
     CHECK_OPENCL( clStatus, "clReleaseKernel" );
     clStatus = clReleaseMemObject( clpYData );
