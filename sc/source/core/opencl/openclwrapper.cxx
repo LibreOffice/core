@@ -420,10 +420,8 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
     size_t length;
     char *buildLog = NULL, *binary;
     const char *source;
-    size_t source_size[1];
     int b_error, binary_status, binaryExisted, idx;
     cl_uint numDevices;
-    cl_device_id *mpArryDevsID;
     FILE *fd, *fd1;
     const char* filename = "kernel.cl";
     fprintf(stderr, "compileKernelFile ... \n");
@@ -436,7 +434,6 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
     source = kernel_src;
 
-    source_size[0] = strlen( source );
     binaryExisted = 0;
     if ( ( binaryExisted = binaryGenerated( filename, &fd ) ) == 1 )
     {
@@ -444,11 +441,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
                        sizeof(numDevices), &numDevices, NULL );
         CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
-        mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) * numDevices );
-        if ( mpArryDevsID == NULL )
-        {
-            return 0;
-        }
+        boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
 
         b_error = 0;
         length = 0;
@@ -474,23 +467,23 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         fd = NULL;
         // grab the handles to all of the devices in the context.
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
-                       sizeof( cl_device_id ) * numDevices, mpArryDevsID, NULL );
+                       sizeof( cl_device_id ) * numDevices, mpArryDevsID.get(), NULL );
         CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
         fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
-                                           mpArryDevsID, &length, (const unsigned char**) &binary,
+                                           mpArryDevsID.get(), &length, (const unsigned char**) &binary,
                                            &binary_status, &clStatus );
         CHECK_OPENCL( clStatus, "clCreateProgramWithBinary" );
 
         free( binary );
-        free( mpArryDevsID );
-        mpArryDevsID = NULL;
     }
     else
     {
         // create a CL program using the kernel source
         fprintf(stderr, "Create kernel from source\n");
+        size_t source_size[1];
+        source_size[0] = strlen( source );
         gpuEnv.mpArryPrograms[idx] = clCreateProgramWithSource( gpuEnv.mpContext, 1, &source,
                                          source_size, &clStatus);
         CHECK_OPENCL( clStatus, "clCreateProgramWithSource" );
