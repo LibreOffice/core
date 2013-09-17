@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAXn//7yo\u003d",
+        "filename": "formula/source/core/api/FormulaCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-09-17T11:24:31Z",
+      "side": 1,
+      "message": "indentation put right, I got confused every time I saw these lines. (not functionally relevant for fdo#50118)",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAYn////M\u003d",
         "filename": "sc/source/core/data/documen7.cxx",
         "patchSetId": 1
@@ -64,6 +81,23 @@
       "writtenOn": "2013-09-16T16:31:16Z",
       "side": 1,
       "message": "nFormulaCodeInTree keeps track of the sum of RPN tokens of all formula cells added to the recalculation list. If that goes \u003c current RPN when removing a formula cell then something forgot to remove a formula from the list before changing / recompiling it and re-adding it to the list after.",
+      "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXn//7ys\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-09-17T11:24:31Z",
+      "side": 1,
+      "message": "(left over from removal of trace instructions, please disregard.)",
       "revId": "647114dcb81466eae072100a9dadb2a04fc97ac8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
