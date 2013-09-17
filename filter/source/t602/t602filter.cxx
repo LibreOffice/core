@@ -1103,10 +1103,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
 
 void T602ImportFilterDialog::initLocale()
 {
-    OString aModName( "t602filter" );
-    aModName += OString::number( SUPD );
-
-    mpResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( meLocale) );
+    mpResMgr = ResMgr::CreateResMgr( "t602filter", LanguageTag( meLocale) );
 }
 
 ResMgr* T602ImportFilterDialog::getResMgr()
