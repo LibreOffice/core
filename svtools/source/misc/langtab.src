@@ -195,6 +195,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Urdu (India)" ; LANGUAGE_URDU_INDIA ; > ;
         < "Ukrainian" ; LANGUAGE_UKRAINIAN ; > ;
         < "Uzbek Latin" ; LANGUAGE_UZBEK_LATIN ; > ;
+        < "Uzbek Cyrillic" ; LANGUAGE_UZBEK_CYRILLIC ; > ;
         < "Welsh" ; LANGUAGE_WELSH ; > ;
         < "Latin" ; LANGUAGE_LATIN ; > ;
         < "Esperanto" ; LANGUAGE_USER_ESPERANTO ; > ;
