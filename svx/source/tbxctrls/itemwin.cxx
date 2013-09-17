@@ -301,7 +301,7 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
     {
       // fdo#64455
         ::Color aColor = pItem->GetColorValue();
-        String aString( pItem->GetName() );
+        OUString aString( pItem->GetName() );
         SelectEntry(aString);
         if( GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND ||
             GetSelectEntryColor() != aColor )
@@ -313,20 +313,18 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
             GetSelectEntryColor() != aColor )
         {
             sal_uInt16 nCount = GetEntryCount();
-            String aTmpStr;
+            OUString aTmpStr;
             if( nCount > 0 )
             {
                 // Last entry gets tested against temporary color
                 aTmpStr = GetEntry( nCount - 1 );
-                if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                     aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                if(  aTmpStr[0] == TMP_STR_BEGIN &&
+                     aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
                 {
                     RemoveEntry( nCount - 1 );
                 }
             }
-            aTmpStr = TMP_STR_BEGIN;
-            aTmpStr += aString;
-            aTmpStr += TMP_STR_END;
+            aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
 
             sal_uInt16 nPos = InsertEntry( aColor, aTmpStr );
             SelectEntryPos( nPos );
