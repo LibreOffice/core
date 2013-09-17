@@ -866,7 +866,7 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
     pDoc->mbInitFromSource = true;
 }
 
-String ScExternalRefCache::getTableName(sal_uInt16 nFileId, size_t nCacheId) const
+OUString ScExternalRefCache::getTableName(sal_uInt16 nFileId, size_t nCacheId) const
 {
     if( DocItem* pDoc = getDocItem( nFileId ) )
         if( nCacheId < pDoc->maTableNames.size() )
@@ -1201,7 +1201,7 @@ ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) 
 
 // ============================================================================
 
-ScExternalRefLink::ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const String& rFilter) :
+ScExternalRefLink::ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const OUString& rFilter) :
     ::sfx2::SvBaseLink(::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
     mnFileId(nFileId),
     maFilterName(rFilter),
@@ -2323,7 +2323,7 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
     maLinkedDocs.insert(LinkedDocMap::value_type(nFileId, true));
 }
 
-void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const String& rOwnDocName)
+void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& rOwnDocName)
 {
     if (maRelativeName.isEmpty())
         // No relative path given.  Nothing to do.

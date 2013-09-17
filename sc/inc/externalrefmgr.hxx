@@ -43,7 +43,6 @@
 
 class ScDocument;
 class ScTokenArray;
-class String;
 class SfxObjectShellRef;
 class Window;
 class ScFormulaCell;
@@ -53,7 +52,7 @@ class ScExternalRefCache;
 class ScExternalRefLink : public ::sfx2::SvBaseLink
 {
 public:
-    ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const String& rFilter);
+    ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const OUString& rFilter);
     virtual ~ScExternalRefLink();
 
     virtual void Closed();
@@ -70,7 +69,7 @@ private:
     DECL_LINK( ExternalRefEndEditHdl, void* );
 
     sal_uInt16  mnFileId;
-    String      maFilterName;
+    OUString    maFilterName;
     ScDocument* mpDoc;
     bool        mbDoRefresh;
 };
@@ -242,7 +241,7 @@ public:
 
     bool isDocInitialized(sal_uInt16 nFileId);
     void initializeDoc(sal_uInt16 nFileId, const ::std::vector<OUString>& rTabNames);
-    String getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
+    OUString getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
     void getAllTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
     SCsTAB getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const;
     void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
@@ -413,7 +412,7 @@ public:
         OUString maFilterOptions;
         bool bUnsaved;
 
-        void maybeCreateRealFileName(const String& rOwnDocName);
+        void maybeCreateRealFileName(const OUString& rOwnDocName);
     };
 
 public:
@@ -573,7 +572,7 @@ public:
      *                       If false, it returns an URI adjusted for
      *                       relocated document.
      *
-     * @return const String* external document URI.
+     * @return const OUString* external document URI.
      */
     const OUString* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
     bool hasExternalFile(sal_uInt16 nFileId) const;
