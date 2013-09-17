@@ -18,6 +18,7 @@
 #include <boost/scoped_array.hpp>
 
 #include "sal/config.h"
+#include <osl/file.hxx>
 #include "oclkernels.hxx"
 
 #include <stdio.h>
