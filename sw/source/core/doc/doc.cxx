@@ -916,7 +916,7 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
     return sal_True;
 }
 
-bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
+bool SwDoc::InsertString( const SwPaM &rRg, const OUString &rStr,
         const enum InsertFlags nInsertMode )
 {
     // fetching DoesUndo is surprisingly expensive
@@ -928,9 +928,9 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
 
     if( mpACEWord )                  // add to auto correction
     {
-        if( 1 == rStr.Len() && mpACEWord->IsDeleted() )
+        if( 1 == rStr.getLength() && mpACEWord->IsDeleted() )
         {
-            mpACEWord->CheckChar( rPos, rStr.GetChar( 0 ) );
+            mpACEWord->CheckChar( rPos, rStr[ 0 ] );
         }
         delete mpACEWord, mpACEWord = 0;
     }
@@ -1028,8 +1028,8 @@ SwFlyFrmFmt* SwDoc::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,
 }
 
 SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
-                            const String& rGrfName,
-                            const String& rFltName,
+                            const OUString& rGrfName,
+                            const OUString& rFltName,
                             const Graphic* pGraphic,
                             const SfxItemSet* pFlyAttrSet,
                             const SfxItemSet* pGrfAttrSet,
@@ -1085,7 +1085,7 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
                             pFrmFmt );
 }
 
-SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
+SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const OUString& rObjName,
                         sal_Int64 nAspect,
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet,
@@ -1940,8 +1940,8 @@ void SwDoc::ResetModified()
     }
 }
 
-void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
-                    const String& rFltName, const Graphic* pGraphic,
+void SwDoc::ReRead( SwPaM& rPam, const OUString& rGrfName,
+                    const OUString& rFltName, const Graphic* pGraphic,
                     const GraphicObject* pGrafObj )
 {
     SwGrfNode *pGrfNd;

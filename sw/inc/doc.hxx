@@ -861,12 +861,12 @@ public:
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags);
     virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags);
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags);
-    virtual bool Overwrite(const SwPaM &rRg, const String& rStr);
-    virtual bool InsertString(const SwPaM &rRg, const String&,
+    virtual bool Overwrite(const SwPaM &rRg, const OUString& rStr);
+    virtual bool InsertString(const SwPaM &rRg, const OUString&,
               const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
     virtual bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
     virtual bool UpdateRsid( const SwPaM &rRg, xub_StrLen nLen );
-    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
+    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
@@ -878,14 +878,14 @@ public:
                                 const SetAttrMode nFlags,bool bExpandCharToPara=false);
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
                                 const SetAttrMode nFlags);
-    virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);
+    virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj);
     virtual void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&);
-    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
+    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
                            const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual bool SplitNode(const SwPosition &rPos, bool bChkTableStart);
     virtual bool AppendTxtNode(SwPosition& rPos);
         virtual void SetModified(SwPaM &rPaM);
-    virtual bool ReplaceRange(SwPaM& rPam, const String& rNewStr,
+    virtual bool ReplaceRange(SwPaM& rPam, const OUString& rNewStr,
                               const bool bRegExReplace);
     virtual void RemoveLeadingWhiteSpace(const SwPosition & rPos );
 

@@ -26,7 +26,6 @@
  struct SwPosition;
  class SwNode;
  class SwNodeRange;
- class String;
  class Graphic;
  class SfxItemSet;
  class SfxPoolItem;
@@ -99,11 +98,11 @@
 
     /** Overwrite string in an existing text node.
     */
-    virtual bool Overwrite(const SwPaM &rRg, const String& rStr) = 0;
+    virtual bool Overwrite(const SwPaM &rRg, const OUString& rStr) = 0;
 
     /** Insert string into existing text node at position rRg.Point().
      */
-    virtual bool InsertString(const SwPaM &rRg, const String&,
+    virtual bool InsertString(const SwPaM &rRg, const OUString&,
               const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) = 0;
 
     /** change text to Upper/Lower/Hiragana/Katagana/...
@@ -112,7 +111,7 @@
 
     /** Insert graphic or formula. The XXXX are copied.
      */
-    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
+    virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
@@ -120,7 +119,7 @@
 
     /** Transpose graphic (with undo)
      */
-    virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) = 0;
+    virtual void ReRead(SwPaM&, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) = 0;
 
     /** Insert a DrawObject. The object must be already registered
         in DrawModel.
@@ -132,7 +131,7 @@
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
-    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const String& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
+    virtual SwFlyFrmFmt* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
                            const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /** Split a node at rPos (implemented only for TxtNode).
@@ -147,7 +146,7 @@
         ( not \& ). E.g.: Find: "zzz", Replace: "xx\t\\t..&..\&"
         --> "xx\t<Tab>..zzz..&"
     */
-    virtual bool ReplaceRange(SwPaM& rPam, const String& rNewStr,
+    virtual bool ReplaceRange(SwPaM& rPam, const OUString& rNewStr,
                               const bool bRegExReplace) = 0;
 
     /** Insert an attribute. If rRg spans several nodes the

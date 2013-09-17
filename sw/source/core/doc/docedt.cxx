@@ -702,18 +702,18 @@ void SwDoc::SetModified(SwPaM &rPaM)
     SetModified();
 }
 
-bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
+bool SwDoc::Overwrite( const SwPaM &rRg, const OUString &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
     if( mpACEWord )                  // Add to AutoCorrect
     {
-        if( 1 == rStr.Len() )
-            mpACEWord->CheckChar( rPt, rStr.GetChar( 0 ) );
+        if( 1 == rStr.getLength() )
+            mpACEWord->CheckChar( rPt, rStr[ 0 ] );
         delete mpACEWord, mpACEWord = 0;
     }
 
     SwTxtNode *pNode = rPt.nNode.GetNode().GetTxtNode();
-    if (!pNode || ( static_cast<size_t>(rStr.Len()) // worst case: no erase
+    if (!pNode || ( static_cast<size_t>(rStr.getLength()) // worst case: no erase
                   + static_cast<size_t>(pNode->GetTxt().getLength()) > TXTNODE_MAX))
     {
         return false;
@@ -733,7 +733,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     bool bOldExpFlg = pNode->IsIgnoreDontExpand();
     pNode->SetIgnoreDontExpand( true );
 
-    for( xub_StrLen nCnt = 0; nCnt < rStr.Len(); ++nCnt )
+    for( sal_Int32 nCnt = 0; nCnt < rStr.getLength(); ++nCnt )
     {
         // start behind the characters (to fix the attributes!)
         nStart = rIdx.GetIndex();
@@ -741,7 +741,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
         {
             lcl_SkipAttr( pNode, rIdx, nStart );
         }
-        sal_Unicode c = rStr.GetChar( nCnt );
+        sal_Unicode c = rStr[ nCnt ];
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             bool bMerged(false);
@@ -2155,7 +2155,7 @@ static bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, bool bRegExpRpl
     return bRet;
 }
 
-bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
+bool SwDoc::ReplaceRange( SwPaM& rPam, const OUString& rStr,
         const bool bRegExReplace )
 {
     // unfortunately replace works slightly differently from delete,
