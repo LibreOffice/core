@@ -47,8 +47,8 @@ using namespace ::std;
 
 struct CompatibilityItem
 {
-    String      m_sName;
-    String      m_sModule;
+    OUString    m_sName;
+    OUString    m_sModule;
     bool        m_bUsePrtMetrics;
     bool        m_bAddSpacing;
     bool        m_bAddSpacingAtPages;
@@ -63,7 +63,7 @@ struct CompatibilityItem
     bool        m_bIsDefault;
     bool        m_bIsUser;
 
-    CompatibilityItem( const String& _rName, const String& _rModule,
+    CompatibilityItem( const OUString& _rName, const OUString& _rModule,
                        bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
                        bool _bUseOurTabStops, bool _bNoExtLeading, bool _bUseLineSpacing,
                        bool _bAddTableSpacing, bool _bUseObjPos, bool _bUseOurTextWrapping,
@@ -112,7 +112,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet
 
     for (sal_uInt16 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
     {
-        String sEntry = m_pFormattingLB->GetEntry(nId);
+        OUString sEntry = m_pFormattingLB->GetEntry(nId);
         if ( COPT_USE_OUR_TABSTOPS == nId ||
              COPT_USE_LINESPACING == nId ||
              COPT_USE_OBJECTPOSITIONING == nId ||
@@ -143,20 +143,18 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
     delete m_pImpl;
 }
 
-void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
+void SwCompatibilityOptPage::ReplaceFormatName( OUString& rEntry )
 {
     OUString sFormatName(utl::ConfigManager::getProductName());
-    OUString sFormatVersion;
-    bool bOpenOffice = ( sFormatName == "OpenOffice.org" );
-    if ( bOpenOffice )
-        sFormatVersion = OUString("1.1");
-    else
-        sFormatVersion = OUString("6.0/7");
+    const bool bOpenOffice = ( sFormatName == "OpenOffice.org" );
+    const OUString sFormatVersion = bOpenOffice
+        ? OUString("1.1")
+        : OUString("6.0/7");
     if ( !bOpenOffice && ( sFormatName != "StarSuite" ) )
-        sFormatName = OUString("StarOffice");
+        sFormatName = "StarOffice";
 
-    rEntry.SearchAndReplace( OUString("%FORMATNAME"), sFormatName );
-    rEntry.SearchAndReplace( OUString("%FORMATVERSION"), sFormatVersion );
+    rEntry = rEntry.replaceFirst( "%FORMATNAME", sFormatName )
+                   .replaceFirst( "%FORMATVERSION", sFormatVersion );
 }
 
 sal_uLong convertBools2Ulong_Impl
@@ -216,7 +214,7 @@ sal_uLong convertBools2Ulong_Impl
 void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 {
     // init objectshell and detect document name
-    String sDocTitle;
+    OUString sDocTitle;
     const SfxPoolItem* pItem = NULL;
     SfxObjectShell* pObjShell = NULL;
     if ( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_WRTSHELL, sal_False, &pItem ) )
@@ -252,7 +250,6 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     int i, j, nCount = aList.getLength();
     for ( i = 0; i < nCount; ++i )
     {
-        String sNewEntry;
         const Sequence< PropertyValue >& rEntry = aList[i];
         for ( j = 0; j < rEntry.getLength(); j++ )
         {
@@ -297,6 +294,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         if ( aItem.m_bIsDefault )
             continue;
 
+        OUString sNewEntry;
         if ( sName.equals( USER_ENTRY ) )
             sNewEntry = m_sUserEntry;
         else if ( pObjShell && !sName.isEmpty() )
@@ -307,7 +305,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
                 sNewEntry = pFilter->GetUIName();
         }
 
-        if ( sNewEntry.Len() == 0 )
+        if ( sNewEntry.isEmpty() )
             sNewEntry = sName;
 
         sal_uInt16 nPos = m_pFormattingLB->InsertEntry( sNewEntry );

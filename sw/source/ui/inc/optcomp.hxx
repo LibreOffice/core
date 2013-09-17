@@ -25,6 +25,7 @@
 #include <vcl/lstbox.hxx>
 #include <unotools/compatibility.hxx>
 #include <svx/checklbx.hxx>
+#include "rtl/ustring.hxx"
 
 // class SwCompatibilityOptPage ------------------------------------------
 class SwWrtShell;
@@ -41,7 +42,7 @@ private:
     // config item
     SvtCompatibilityOptions m_aConfigItem;
     // text of the user entry
-    String                  m_sUserEntry;
+    OUString                m_sUserEntry;
     // shell of the current document
     SwWrtShell*             m_pWrtShell;
     // impl object
@@ -55,7 +56,7 @@ private:
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );
-    void                    ReplaceFormatName( String& rEntry );
+    void                    ReplaceFormatName( OUString& rEntry );
     void                    SetCurrentOptions( sal_uLong nOptions );
     sal_uLong                   GetDocumentOptions() const;
     void                    WriteOptions();
