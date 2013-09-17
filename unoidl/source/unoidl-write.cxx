@@ -39,18 +39,18 @@ void badUsage() {
         << "Usage:" << std::endl << std::endl
         << "  unoidl-write [<registries>] [@<entities file>] <unoidl file>"
         << std::endl << std::endl
-        << ("where each <registry> is either a new- or legacy-format .rdb"
-            " file or a")
+        << ("where each <registry> is either a new- or legacy-format .rdb file,"
+            " a single .idl")
         << std::endl
-        << ("root directory of an .idl file tree, and the UTF-8 encoded"
-            " <entities file>")
+        << ("file, or a root directory of an .idl file tree; and the UTF-8"
+            " encoded <entities")
         << std::endl
-        << ("contains zero or more space-separated names of (non-module)"
-            " entities to include")
+        << ("file> contains zero or more space-separated names of (non-module)"
+            " entities to")
         << std::endl
-        << ("in the output, and, if omitted, defaults to the complete content"
-            " of the final")
-        << std::endl << "<registry>, if any." << std::endl;
+        << ("include in the output, and, if omitted, defaults to the complete"
+            " content of the")
+        << std::endl << "last <registry>, if any." << std::endl;
     std::exit(EXIT_FAILURE);
 }
 
