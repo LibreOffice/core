@@ -44,15 +44,15 @@ class SvXMLExport;
 
 struct XMLAutoStyleFamily : boost::noncopyable
 {
-    typedef boost::ptr_set<XMLAutoStylePoolParent> ParentsType;
+    typedef boost::ptr_set<XMLAutoStylePoolParent> ParentSetType;
     typedef std::set<OUString> NameSetType;
 
     sal_uInt32                   mnFamily;
     OUString                     maStrFamilyName;
     UniReference < SvXMLExportPropertyMapper >  mxMapper;
 
-    ParentsType maParents;
-    NameSetType maNameList;
+    ParentSetType maParentSet;
+    NameSetType maNameSet;
     sal_uInt32                          mnCount;
     sal_uInt32                          mnName;
     OUString                     maStrPrefix;
@@ -133,10 +133,10 @@ public:
 class SvXMLAutoStylePoolP_Impl
 {
     // A set that finds and sorts based only on mnFamily
-    typedef boost::ptr_set<XMLAutoStyleFamily> FamilyListType;
+    typedef boost::ptr_set<XMLAutoStyleFamily> FamilySetType;
 
     SvXMLExport& rExport;
-    FamilyListType maFamilyList;
+    FamilySetType maFamilySet;
 
 public:
 
