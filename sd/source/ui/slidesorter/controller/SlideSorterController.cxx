@@ -50,7 +50,6 @@
 
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"
-#include "TextLogger.hxx"
 #include "ViewShellBase.hxx"
 #include "Window.hxx"
 #include "FrameView.hxx"
