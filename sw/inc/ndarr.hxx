@@ -34,7 +34,6 @@
 
 class Graphic;
 class GraphicObject;
-class String;
 class SwAttrSet;
 class SfxItemSet;
 class SwCntntNode;
@@ -223,8 +222,8 @@ public:
                             SwAttrSet* pAutoAttr = 0 );
 
     SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
-                            const String& rGrfName,
-                            const String& rFltName,
+                            const OUString& rGrfName,
+                            const OUString& rFltName,
                             const Graphic* pGraphic,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0,
@@ -240,7 +239,7 @@ public:
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); ///< in ndole.cxx
     SwOLENode *MakeOLENode( const SwNodeIndex & rWhere,
-                            const String &rName,
+                            const OUString &rName,
                             sal_Int64 nAspect,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr ); ///< in ndole.cxx

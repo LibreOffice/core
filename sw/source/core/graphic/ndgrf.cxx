@@ -411,8 +411,8 @@ SwCntntNode *SwGrfNode::SplitCntntNode( const SwPosition & )
 }
 
 SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
-                                const String& rGrfName,
-                                const String& rFltName,
+                                const OUString& rGrfName,
+                                const OUString& rFltName,
                                 const Graphic* pGraphic,
                                 SwGrfFmtColl* pGrfColl,
                                 SwAttrSet* pAutoAttr,

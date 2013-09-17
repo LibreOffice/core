@@ -410,7 +410,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
-    const String &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
+    const OUString &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
 {
     OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
 
