@@ -35,6 +35,7 @@
 
 void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
 {
+    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
     // only for selections
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
         return;
@@ -42,10 +43,11 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     // Is the selection in a table? Then delete only the content of the selected boxes.
     // Here, there are two cases:
     // 1. Point and Mark are in one box, delete selection as usual
-    // 2. Point and Mare are in different boxes, search all selected boxes and delete content
+    // 2. Point and Mark are in different boxes, search all selected boxes and delete content
+    // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
     if( rPam.GetNode()->FindTableNode() &&
         rPam.GetNode()->StartOfSectionNode() !=
-        rPam.GetNode(sal_False)->StartOfSectionNode() )
+        rPam.GetNode(sal_False)->StartOfSectionNode() && !bSelectAll )
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
