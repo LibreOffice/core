@@ -597,11 +597,11 @@ void SwSidebarWin::DoResize()
     }
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
-    mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     if (!mpVScrollbar->IsVisible())
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     }
+    mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
 
     if (!Application::GetSettings().GetLayoutRTL())
     {
