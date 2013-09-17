@@ -229,10 +229,10 @@ void ScChangeTrackingExportHelper::WriteEmptyCell()
     SvXMLElementExport aElemEmptyCell(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
 }
 
-void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, const String& sValue)
+void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, const OUString& sValue)
 {
     bool bSetAttributes(false);
-    if (sValue.Len())
+    if (!sValue.isEmpty())
     {
         sal_uInt32 nIndex = 0;
         double fTempValue = 0.0;

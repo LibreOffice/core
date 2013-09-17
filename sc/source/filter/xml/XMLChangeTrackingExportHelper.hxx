@@ -34,7 +34,6 @@ struct ScCellValue;
 class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
-class String;
 
 typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;
@@ -60,7 +59,7 @@ class ScChangeTrackingExportHelper
     void WriteDependings(ScChangeAction* pAction);
 
     void WriteEmptyCell();
-    void SetValueAttributes(const double& fValue, const String& sValue);
+    void SetValueAttributes(const double& fValue, const OUString& sValue);
     void WriteValueCell(const ScCellValue& rCell, const OUString& sValue);
     void WriteStringCell(const ScCellValue& rCell);
     void WriteEditCell(const ScCellValue& rCell);
