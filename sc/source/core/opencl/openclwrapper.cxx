@@ -56,11 +56,14 @@ namespace {
 
 OString generateHashForSource()
 {
-    size_t nLength = strlen(kernel_src);
     sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_MD5];
+
+#ifndef NDEBUG
+    size_t nLength = strlen(kernel_src);
     rtlDigestError aError = rtl_digest_MD5(kernel_src, nLength,
             pBuffer, RTL_DIGEST_LENGTH_MD5);
     assert(aError == rtl_Digest_E_None);
+#endif
 
     OStringBuffer aBuffer;
     const char* pString = "0123456789ABCDEF";
