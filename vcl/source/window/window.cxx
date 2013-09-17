@@ -4198,12 +4198,8 @@ void Window::ImplNewInputContext()
             else
                 aSize.Height() = (12*pFocusWin->mnDPIY)/72;
         }
-        // TODO: No display device uses ImplDirectFontSubstitution thingy, right? => remove it
-        ImplDirectFontSubstitution* pFontSubst = NULL;
-        //if( pFocusWin->mpOutDevData )
-        //    pFontSubst = &pFocusWin->mpOutDevData->maDevFontSubst;
         pFontEntry = pFocusWin->mpFontCache->GetFontEntry( pFocusWin->mpFontList,
-                         rFont, aSize, static_cast<float>(aSize.Height()), pFontSubst );
+                         rFont, aSize, static_cast<float>(aSize.Height()), NULL );
         if ( pFontEntry )
             aNewContext.mpFont = &pFontEntry->maFontSelData;
     }
