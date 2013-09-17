@@ -238,6 +238,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     DragDropMode    nOldDragMode;
     SelectionMode   eSelMode;
     sal_Int8        nDragOptions;
+    sal_Int32       nMinWidthInChars;
 
     SvTreeListEntry*        pEdEntry;
     SvLBoxItem*         pEdItem;
@@ -500,6 +501,10 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void EnableCellFocus();
+
+    void set_min_width_in_chars(sal_Int32 nChars);
+
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 
 protected:
     using SvListView::Expand;
