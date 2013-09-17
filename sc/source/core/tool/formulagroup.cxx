@@ -338,7 +338,7 @@ typedef FormulaGroupInterpreter* (*__createFormulaGroupOpenCLInterpreter)(void);
 typedef size_t (*__getOpenCLPlatformCount)(void);
 typedef void (*__fillOpenCLInfo)(OpenclPlatformInfo*, size_t);
 typedef bool (*__switchOpenClDevice)(const OUString*, bool);
-typedef void (*__compileKernels)(void);
+typedef void (*__compileKernels)(const OUString*);
 
 #endif
 
@@ -460,7 +460,8 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
 
 void FormulaGroupInterpreter::compileKernels()
 {
-    if (!ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+    const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
+    if (!rConfig.mbOpenCLEnabled)
         // OpenCL is not enabled.
         return;
 
@@ -472,7 +473,7 @@ void FormulaGroupInterpreter::compileKernels()
     if (!fn)
         return;
 
-    reinterpret_cast<__compileKernels>(fn)();
+    reinterpret_cast<__compileKernels>(fn)(&rConfig.maOpenCLDevice);
 }
 
 void FormulaGroupInterpreter::generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode)

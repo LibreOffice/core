@@ -266,7 +266,7 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo();
  */
 bool switchOpenclDevice(const OUString* pDeviceId, bool bAutoSelect);
 
-void compileKernels();
+void compileKernels(const OUString* pDeviceId);
 
 }}
 

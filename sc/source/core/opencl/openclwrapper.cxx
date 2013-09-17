@@ -2851,8 +2851,33 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
     return !OpenclDevice::initOpenclRunEnv(0);
 }
 
-void compileKernels()
+void compileKernels(const OUString* pDeviceId)
 {
+    if (!pDeviceId)
+        return;
+
+    if (pDeviceId->isEmpty())
+        return;
+
+    if (!switchOpenclDevice(pDeviceId, false))
+        return;
+
+    cl_program pProgram = OpenclDevice::gpuEnv.mpArryPrograms[0];
+    if (!pProgram)
+        return;
+
+    cl_int nStatus;
+    for (size_t i = 0, n = OpenclDevice::gpuEnv.maKernels.size(); i < n; ++i)
+    {
+        Kernel& r = OpenclDevice::gpuEnv.maKernels[i];
+        if (r.mpKernel)
+            continue;
+
+        r.mpKernel = clCreateKernel(pProgram, r.mpName, &nStatus);
+        if (nStatus != CL_SUCCESS)
+            r.mpKernel = NULL;
+    }
+
 }
 
 }}
