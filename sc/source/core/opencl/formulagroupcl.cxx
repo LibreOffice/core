@@ -308,7 +308,14 @@ bool FormulaGroupInterpreterOpenCL::chooseFunction( OclCalc &ocl_calc, double *&
             pGroundWaterDataArray=NULL;
             delta = mdpSvdouble[0];
         }
-        ocl_calc.oclGroundWaterGroup( mnOperatorGroup,mnOperatorCount,pGroundWaterDataArray,pArrayToSubtractOneElementFrom,nSrcData,mnRowSize,delta,mnpOclStartPos,mnpOclEndPos,dpResult);
+
+        bool bSuccess = ocl_calc.oclGroundWaterGroup(
+            mnOperatorGroup, mnOperatorCount, pGroundWaterDataArray,
+            pArrayToSubtractOneElementFrom, nSrcData, mnRowSize, delta,
+            mnpOclStartPos, mnpOclEndPos, dpResult);
+
+        if (!bSuccess)
+            return false;
     }
     else if( isStockHistory() )
     {
@@ -332,14 +339,19 @@ bool FormulaGroupInterpreterOpenCL::chooseFunction( OclCalc &ocl_calc, double *&
             {
                 if (!ocl_calc.createFormulaBuf64Bits(nSrcDataSize, mnRowSize))
                     return false;
-                ocl_calc.mapAndCopy64Bits( dpOclSrcData,mnpOclStartPos,mnpOclEndPos,nSrcDataSize,mnRowSize );
-                ocl_calc.oclHostFormulaStatistics64Bits( mcHostName, dpResult, mnRowSize );
+                if (!ocl_calc.mapAndCopy64Bits(dpOclSrcData, mnpOclStartPos, mnpOclEndPos, nSrcDataSize, mnRowSize))
+                    return false;
+                if (!ocl_calc.oclHostFormulaStatistics64Bits(mcHostName, dpResult, mnRowSize))
+                    return false;
             }
             else
             {
-                ocl_calc.createFormulaBuf32Bits( nSrcDataSize, mnPositonLen );
-                ocl_calc.mapAndCopy32Bits( dpOclSrcData, mnpOclStartPos, mnpOclEndPos, nSrcDataSize, mnRowSize);
-                ocl_calc.oclHostFormulaStatistics32Bits( mcHostName, dpResult, mnRowSize );
+                if (!ocl_calc.createFormulaBuf32Bits(nSrcDataSize, mnPositonLen))
+                    return false;
+                if (!ocl_calc.mapAndCopy32Bits(dpOclSrcData, mnpOclStartPos, mnpOclEndPos, nSrcDataSize, mnRowSize))
+                    return false;
+                if (!ocl_calc.oclHostFormulaStatistics32Bits(mcHostName, dpResult, mnRowSize))
+                    return false;
             }
         }
     }
@@ -359,16 +371,21 @@ bool FormulaGroupInterpreterOpenCL::chooseFunction( OclCalc &ocl_calc, double *&
         {
             if ( ocl_calc.gpuEnv.mnKhrFp64Flag == 1 || ocl_calc.gpuEnv.mnAmdFp64Flag == 1 )
             {
-                ocl_calc.createArithmeticOptBuf64Bits( mnRowSize );
-                ocl_calc.mapAndCopy64Bits(dpLeftData,dpRightData,mnRowSize);
+                if (!ocl_calc.createArithmeticOptBuf64Bits(mnRowSize))
+                    return false;
+                if (!ocl_calc.mapAndCopy64Bits(dpLeftData, dpRightData, mnRowSize))
+                    return false;
                 if (!ocl_calc.oclHostArithmeticOperator64Bits(mcHostName, dpResult, mnRowSize))
                     return false;
             }
             else
             {
-                ocl_calc.createArithmeticOptBuf32Bits( mnRowSize );
-                ocl_calc.mapAndCopy32Bits(dpLeftData,dpRightData,mnRowSize);
-                ocl_calc.oclHostArithmeticOperator32Bits( mcHostName,dpResult,mnRowSize );
+                if (!ocl_calc.createArithmeticOptBuf32Bits(mnRowSize))
+                    return false;
+                if (!ocl_calc.mapAndCopy32Bits(dpLeftData, dpRightData, mnRowSize))
+                    return false;
+                if (!ocl_calc.oclHostArithmeticOperator32Bits(mcHostName, dpResult, mnRowSize))
+                    return false;
             }
         }
     }
@@ -396,15 +413,21 @@ bool FormulaGroupInterpreterOpenCL::chooseFunction( OclCalc &ocl_calc, double *&
         {
             if ( ocl_calc.gpuEnv.mnKhrFp64Flag == 1 || ocl_calc.gpuEnv.mnAmdFp64Flag == 1 )
             {
-                ocl_calc.createMoreColArithmeticBuf64Bits( j * mnRowSize, mnOperatorCount );
-                ocl_calc.mapAndCopyMoreColArithmetic64Bits( dpMoreColArithmetic, mnRowSize * j, mnOperatorGroup, mnOperatorCount );
-                ocl_calc.oclMoreColHostArithmeticOperator64Bits( mnRowSize, mnOperatorCount, dpResult,mnRowSize );
+                if (!ocl_calc.createMoreColArithmeticBuf64Bits(j * mnRowSize, mnOperatorCount))
+                    return false;
+                if (!ocl_calc.mapAndCopyMoreColArithmetic64Bits(dpMoreColArithmetic, mnRowSize * j, mnOperatorGroup, mnOperatorCount))
+                    return false;
+                if (!ocl_calc.oclMoreColHostArithmeticOperator64Bits(mnRowSize, mnOperatorCount, dpResult, mnRowSize))
+                    return false;
             }
             else
             {
-                ocl_calc.createMoreColArithmeticBuf32Bits( j* mnRowSize, mnOperatorCount );
-                ocl_calc.mapAndCopyMoreColArithmetic32Bits(dpMoreColArithmetic, mnRowSize * j, mnOperatorGroup, mnOperatorCount);
-                ocl_calc.oclMoreColHostArithmeticOperator32Bits( mnRowSize, mnOperatorCount, dpResult, mnRowSize );
+                if (!ocl_calc.createMoreColArithmeticBuf32Bits(j* mnRowSize, mnOperatorCount))
+                    return false;
+                if (!ocl_calc.mapAndCopyMoreColArithmetic32Bits(dpMoreColArithmetic, mnRowSize * j, mnOperatorGroup, mnOperatorCount))
+                    return false;
+                if (!ocl_calc.oclMoreColHostArithmeticOperator32Bits(mnRowSize, mnOperatorCount, dpResult, mnRowSize))
+                    return false;
             }
         }
     }
