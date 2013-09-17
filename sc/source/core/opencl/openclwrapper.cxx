@@ -418,7 +418,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 {
     cl_int clStatus = 0;
     size_t length;
-    char *buildLog = NULL, *binary;
+    char *binary;
     const char *source;
     int b_error, binary_status, binaryExisted, idx;
     cl_uint numDevices;
@@ -526,20 +526,17 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
             printf("opencl create build log fail\n");
             return 0;
         }
-        buildLog = (char*) malloc( length );
-        if ( buildLog == (char*) NULL )
-        {
-            return 0;
-        }
+
+        boost::scoped_array<char> buildLog(new char[length]);
         if ( !gpuInfo->mnIsUserCreated )
         {
             clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpArryDevsID[0],
-                           CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
+                           CL_PROGRAM_BUILD_LOG, length, buildLog.get(), &length );
         }
         else
         {
             clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
-                           CL_PROGRAM_BUILD_LOG, length, buildLog, &length );
+                           CL_PROGRAM_BUILD_LOG, length, buildLog.get(), &length );
         }
         if ( clStatus != CL_SUCCESS )
         {
@@ -550,11 +547,10 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         fd1 = fopen( "kernel-build.log", "w+" );
         if ( fd1 != NULL )
         {
-            fwrite( buildLog, sizeof(char), length, fd1 );
+            fwrite( buildLog.get(), sizeof(char), length, fd1 );
             fclose( fd1 );
         }
 
-        free( buildLog );
         return 0;
     }
 
