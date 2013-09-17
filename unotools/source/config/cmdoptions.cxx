@@ -46,15 +46,6 @@ using namespace ::com::sun::star::beans ;
 
 #define PROPERTYNAME_CMD                                OUString("Command")
 
-// Method to retrieve a hash code from a string. May be we have to change it to decrease collisions in the hash map
-struct OUStringHashCode
-{
-    size_t operator()( const OUString& sString ) const
-    {
-        return sString.hashCode();
-    }
-};
-
 /*-****************************************************************************************************************
     @descr  support simple command option structures and operations on it
 ****************************************************************************************************************-*/
@@ -106,9 +97,9 @@ class SvtCmdOptions
         }
 
     private:
-        class CommandHashMap : public ::boost::unordered_map< OUString       ,
+        class CommandHashMap : public ::boost::unordered_map< OUString      ,
                                                         sal_Int32           ,
-                                                        OUStringHashCode    ,
+                                                        OUStringHash        ,
                                                         ::std::equal_to< OUString >  >
         {
             public:

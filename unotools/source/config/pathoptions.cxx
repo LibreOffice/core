@@ -67,21 +67,13 @@ using namespace com::sun::star::lang;
 
 #define STRPOS_NOTFOUND       -1
 
-struct OUStringHashCode
-{
-    size_t operator()( const OUString& sString ) const
-    {
-        return sString.hashCode();
-    }
-};
-
 enum VarNameProperty
 {
     VAR_NEEDS_SYSTEM_PATH,
     VAR_NEEDS_FILEURL
 };
 
-class NameToHandleMap : public ::boost::unordered_map<  OUString, sal_Int32, OUStringHashCode, ::std::equal_to< OUString > >
+class NameToHandleMap : public ::boost::unordered_map<  OUString, sal_Int32, OUStringHash, ::std::equal_to< OUString > >
 {
     public:
         inline void free() { NameToHandleMap().swap( *this ); }
@@ -93,7 +85,7 @@ class EnumToHandleMap : public ::boost::unordered_map< sal_Int32, sal_Int32, boo
         inline void free() { EnumToHandleMap().swap( *this ); }
 };
 
-class VarNameToEnumMap : public ::boost::unordered_map< OUString, VarNameProperty, OUStringHashCode, ::std::equal_to< OUString > >
+class VarNameToEnumMap : public ::boost::unordered_map< OUString, VarNameProperty, OUStringHash, ::std::equal_to< OUString > >
 {
     public:
         inline void free() { VarNameToEnumMap().swap( *this ); }

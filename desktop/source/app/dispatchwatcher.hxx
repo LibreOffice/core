@@ -39,15 +39,7 @@ namespace desktop
     running office without UI.
 */
 
-struct OUStringHashCode
-{
-    size_t operator()( const OUString& sString ) const
-    {
-        return sString.hashCode();
-    }
-};
-
-class DispatchWatcherHashMap : public ::boost::unordered_map< OUString, sal_Int32, OUStringHashCode, ::std::equal_to< OUString >  >
+class DispatchWatcherHashMap : public ::boost::unordered_map< OUString, sal_Int32, OUStringHash, ::std::equal_to< OUString >  >
 {
     public:
         inline void free()

@@ -47,17 +47,9 @@ using namespace ::com::sun::star::uno   ;
 
 #define PROPERTYCOUNT                   1
 
-struct OUStringHashCode
-{
-    size_t operator()( const OUString& sString ) const
-    {
-        return sString.hashCode();
-    }
-};
-
 class ExtensionHashMap : public ::boost::unordered_map< OUString,
                                                  sal_Int32,
-                                                 OUStringHashCode,
+                                                 OUStringHash,
                                                  ::std::equal_to< OUString > >
 {
     public:

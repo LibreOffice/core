@@ -46,15 +46,7 @@ static sal_Int32                    nRefCount = 0;
 class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
 {
 private:
-    struct OUStringHashCode
-    {
-        size_t operator()( const OUString& sString ) const
-        {
-            return sString.hashCode();
-        }
-    };
-
-    typedef boost::unordered_map< OUString, sal_Bool, OUStringHashCode, ::std::equal_to< OUString > > OptionNodeList;
+    typedef boost::unordered_map< OUString, sal_Bool, OUStringHash, ::std::equal_to< OUString > > OptionNodeList;
 
     OUString        m_sPathDelimiter;
     OptionNodeList  m_aOptionNodeList;

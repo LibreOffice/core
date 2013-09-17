@@ -60,16 +60,8 @@ struct FormulaArrayStack
 };
 
 
-struct FORMULA_DLLPUBLIC OUStringHashCode
-{
-    size_t operator()( const OUString& rStr ) const
-    {
-        return rtl_ustr_hashCode_WithLength( rStr.getStr(), rStr.getLength() );
-    }
-};
-
-typedef ::boost::unordered_map< OUString, OpCode, OUStringHashCode, ::std::equal_to< OUString > > OpCodeHashMap;
-typedef ::boost::unordered_map< OUString, OUString, OUStringHashCode, ::std::equal_to< OUString > > ExternalHashMap;
+typedef ::boost::unordered_map< OUString, OpCode, OUStringHash, ::std::equal_to< OUString > > OpCodeHashMap;
+typedef ::boost::unordered_map< OUString, OUString, OUStringHash, ::std::equal_to< OUString > > ExternalHashMap;
 
 class FORMULA_DLLPUBLIC FormulaCompiler
 {
