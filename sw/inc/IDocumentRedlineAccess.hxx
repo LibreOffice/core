@@ -33,7 +33,6 @@
  struct SwPosition;
  class SwStartNode;
  class SwNode;
- class String;
 
 typedef sal_uInt16 RedlineMode_t;
 namespace nsRedlineMode_t
@@ -188,12 +187,12 @@ public:
     virtual sal_uInt16 GetRedlineAuthor() = 0;
 
     // For Readers etc.: register new Author in table.
-    virtual sal_uInt16 InsertRedlineAuthor(const String& rAuthor) = 0;
+    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor) = 0;
 
     // Place a comment at Redline at given position.
     virtual bool SetRedlineComment(
         /*[in]*/const SwPaM& rPam,
-        /*[in]*/const String& rComment) = 0;
+        /*[in]*/const OUString& rComment) = 0;
 
     virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const = 0;
 

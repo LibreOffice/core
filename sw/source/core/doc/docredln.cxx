@@ -2483,7 +2483,7 @@ const SwRedline* SwDoc::SelPrevRedline( SwPaM& rPam ) const
 }
 
 // Set comment at the Redline
-bool SwDoc::SetRedlineComment( const SwPaM& rPaM, const String& rS )
+bool SwDoc::SetRedlineComment( const SwPaM& rPaM, const OUString& rS )
 {
     bool bRet = false;
     const SwPosition* pStt = rPaM.Start(),
@@ -2517,7 +2517,7 @@ sal_uInt16 SwDoc::GetRedlineAuthor()
 }
 
 /// Insert new author into the Table for the Readers etc.
-sal_uInt16 SwDoc::InsertRedlineAuthor( const String& rNew )
+sal_uInt16 SwDoc::InsertRedlineAuthor( const OUString& rNew )
 {
     return SW_MOD()->InsertRedlineAuthor(rNew);
 }

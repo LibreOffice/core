@@ -781,8 +781,8 @@ public:
     virtual const SwRedline* SelPrevRedline(/*[in]*/SwPaM& rPam) const;
     virtual void UpdateRedlineAttr();
     virtual sal_uInt16 GetRedlineAuthor();
-    virtual sal_uInt16 InsertRedlineAuthor(const String& rAuthor);
-    virtual bool SetRedlineComment(/*[in]*/const SwPaM& rPam, /*[in]*/const String& rComment);
+    virtual sal_uInt16 InsertRedlineAuthor(const OUString& rAuthor);
+    virtual bool SetRedlineComment(/*[in]*/const SwPaM& rPam, /*[in]*/const OUString& rComment);
     virtual const ::com::sun::star::uno::Sequence <sal_Int8>& GetRedlinePassword() const;
     virtual void SetRedlinePassword(/*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword);
 
