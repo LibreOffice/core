@@ -278,17 +278,17 @@ void SwGlossaryList::Update()
         for( size_t nPath = 0; nPath < rPathArr.size(); nPath++ )
         {
             std::vector<String> aFoundGroupNames;
-            std::vector<OUString*> aFiles;
+            std::vector<OUString> aFiles;
             std::vector<DateTime*> aDateTimeArr;
 
             SWUnoHelper::UCB_GetFileListOfFolder( rPathArr[nPath], aFiles,
                                                     &sExt, &aDateTimeArr );
             for( size_t nFiles = 0; nFiles < aFiles.size(); ++nFiles )
             {
-                const OUString* pTitle = aFiles[ nFiles ];
+                const OUString aTitle = aFiles[ nFiles ];
                 ::DateTime* pDT = (::DateTime*) aDateTimeArr[ static_cast<sal_uInt16>(nFiles) ];
 
-                OUString sName( pTitle->copy( 0, pTitle->getLength() - sExt.getLength() ));
+                OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() ));
 
                 aFoundGroupNames.push_back(sName);
                 sName += OUString(GLOS_DELIM) + OUString::number( static_cast<sal_uInt16>(nPath) );
@@ -309,7 +309,6 @@ void SwGlossaryList::Update()
                 }
 
                 // don't need any more these pointers
-                delete pTitle;
                 delete pDT;
             }
 

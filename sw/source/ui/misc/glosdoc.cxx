@@ -342,19 +342,16 @@ std::vector<OUString> & SwGlossaries::GetNameList()
         const OUString sExt( SwGlossaries::GetExtension() );
         for (size_t i = 0; i < m_PathArr.size(); ++i)
         {
-            std::vector<OUString*> aFiles;
+            std::vector<OUString> aFiles;
 
             SWUnoHelper::UCB_GetFileListOfFolder(m_PathArr[i], aFiles, &sExt);
-            for( std::vector<OUString*>::const_iterator filesIt(aFiles.begin());
+            for( std::vector<OUString>::const_iterator filesIt(aFiles.begin());
                  filesIt != aFiles.end(); ++filesIt)
             {
-                const OUString *pTitle = *filesIt;
-                const OUString sName( pTitle->copy( 0, pTitle->getLength() - sExt.getLength() )
+                const OUString aTitle = *filesIt;
+                const OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() )
                     + OUString(GLOS_DELIM) + OUString::number( static_cast<sal_Int16>(i) ));
                 m_GlosArr.push_back(sName);
-
-                // don't need any more these pointers
-                delete pTitle;
             }
         }
         if (m_GlosArr.empty())

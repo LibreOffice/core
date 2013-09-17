@@ -56,7 +56,7 @@ sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rVal )
 
 
 // methods for UCB actions
-sal_Bool UCB_DeleteFile( const String& rURL )
+sal_Bool UCB_DeleteFile( const OUString& rURL )
 {
     sal_Bool bRemoved;
     try
@@ -76,7 +76,7 @@ sal_Bool UCB_DeleteFile( const String& rURL )
     return bRemoved;
 }
 
-sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopyIsMove )
+sal_Bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, sal_Bool bCopyIsMove )
 {
     sal_Bool bCopyCompleted = sal_True;
     try
@@ -108,7 +108,7 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
     return bCopyCompleted;
 }
 
-sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
+sal_Bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
 {
     sal_Bool bCaseSensitive;
     try
@@ -136,7 +136,7 @@ sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
     return bCaseSensitive;
 }
 
-sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
+sal_Bool UCB_IsReadOnlyFileName( const OUString& rURL )
 {
     sal_Bool bIsReadOnly = sal_False;
     try
@@ -154,7 +154,7 @@ sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
     return bIsReadOnly;
 }
 
-sal_Bool UCB_IsFile( const String& rURL )
+sal_Bool UCB_IsFile( const OUString& rURL )
 {
     sal_Bool bExists = sal_False;
     try
@@ -168,7 +168,7 @@ sal_Bool UCB_IsFile( const String& rURL )
     return bExists;
 }
 
-sal_Bool UCB_IsDirectory( const String& rURL )
+sal_Bool UCB_IsDirectory( const OUString& rURL )
 {
     sal_Bool bExists = sal_False;
     try
@@ -188,7 +188,7 @@ sal_Bool UCB_IsDirectory( const String& rURL )
     //                       the files in a std::vector<String*> -->
     //                       !! objects must be deleted from the caller!!
 bool UCB_GetFileListOfFolder( const OUString& rURL,
-                                std::vector<OUString*>& rList,
+                                std::vector<OUString>& rList,
                                 const OUString* pExtension,
                                 std::vector< ::DateTime* >* pDateTimeList )
 {
@@ -228,7 +228,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
                             ( sTitle.getLength() > nExtLen &&
                               sTitle.endsWith( *pExtension )) )
                         {
-                            rList.push_back( new OUString(sTitle) );
+                            rList.push_back( sTitle );
 
                             if( pDateTimeList )
                             {
