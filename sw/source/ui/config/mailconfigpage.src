@@ -28,7 +28,6 @@ ModalDialog DLG_MM_TESTACCOUNTSETTINGS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = HID_MM_TESTACCOUNTSETTINGS;
     Size = MAP_APPFONT ( 250 , 176 ) ;
     Moveable = TRUE ;
 
