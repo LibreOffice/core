@@ -10,7 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,modules/sbibliography))
 
 $(eval $(call gb_UIConfig_add_menubarfiles,modules/sbibliography,\
-	extensions/source/bibliography/uiconfig/sbibliography/menubar/menubar \
+	extensions/uiconfig/sbibliography/menubar/menubar \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -10,7 +10,7 @@
 $(eval $(call gb_UIConfig_UIConfig,modules/spropctrlr))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/spropctrlr,\
-	extensions/source/propctrlr/uiconfig/spropctrlr/ui/taborder \
+	extensions/uiconfig/spropctrlr/ui/taborder \
 ))
 
 # vim: set noet sw=4 ts=4:
