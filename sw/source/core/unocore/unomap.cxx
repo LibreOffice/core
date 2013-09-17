@@ -145,108 +145,108 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 // UNO_NAME_BREAK_TYPE and UNO_NAME_PAGE_DESC_NAME which can not be used
 // by the SwXTextTableCursor
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \
-        { SW_PROP_NMID(UNO_NAME_PARRSID), RES_PARATR_RSID, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, 0 }, \
-        { SW_PROP_NMID(UNO_NAME_PARA_IS_HYPHENATION), RES_PARATR_HYPHENZONE,        CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN         },                                        \
-        { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS), RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },                              \
-        { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS), RES_PARATR_HYPHENZONE,        CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },                              \
-        { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS), RES_PARATR_HYPHENZONE,       CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},                              \
-        { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_KERNING), RES_CHRATR_AUTOKERN  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_CHAR_BACK_COLOR), RES_CHRATR_BACKGROUND,    CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID ,MID_BACK_COLOR         },                                           \
-        { SW_PROP_NMID(UNO_NAME_PARA_BACK_COLOR), RES_BACKGROUND,       CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID ,MID_BACK_COLOR         },                                           \
-        { SW_PROP_NMID(UNO_NAME_CHAR_CASE_MAP), RES_CHRATR_CASEMAP,     CPPU_E2T(CPPUTYPE_INT16),           PropertyAttribute::MAYBEVOID, 0},                                                            \
-        { SW_PROP_NMID(UNO_NAME_CHAR_COLOR), RES_CHRATR_COLOR,      CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, 0},                                                           \
-        { SW_PROP_NMID(UNO_NAME_CHAR_STRIKEOUT), RES_CHRATR_CROSSEDOUT,  CPPU_E2T(CPPUTYPE_INT16),                  PropertyAttribute::MAYBEVOID, MID_CROSS_OUT},                                              \
-        { SW_PROP_NMID(UNO_NAME_CHAR_CROSSED_OUT), RES_CHRATR_CROSSEDOUT,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,        PropertyAttribute::MAYBEVOID, MID_CROSSED_OUT},                                                       \
-        { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  CPPU_E2T(CPPUTYPE_INT16),             PropertyAttribute::MAYBEVOID, MID_ESC           },                                                   \
-        { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     CPPU_E2T(CPPUTYPE_INT8)  ,          PropertyAttribute::MAYBEVOID, MID_ESC_HEIGHT},                                               \
-        { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,            PropertyAttribute::MAYBEVOID, MID_AUTO_ESC  },                                                \
-        { SW_PROP_NMID(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},\
-        { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT16),              PropertyAttribute::MAYBEVOID, MID_TL_STYLE},                                                \
-        { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT32),            PropertyAttribute::MAYBEVOID, MID_TL_COLOR},                                                \
-        { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_BOOLEAN),              PropertyAttribute::MAYBEVOID, MID_TL_HASCOLOR},                                                \
-        { SW_PROP_NMID(UNO_NAME_CHAR_OVERLINE), RES_CHRATR_OVERLINE ,  CPPU_E2T(CPPUTYPE_INT16),              PropertyAttribute::MAYBEVOID, MID_TL_STYLE},                                                \
-        { SW_PROP_NMID(UNO_NAME_CHAR_OVERLINE_COLOR), RES_CHRATR_OVERLINE ,  CPPU_E2T(CPPUTYPE_INT32),            PropertyAttribute::MAYBEVOID, MID_TL_COLOR},                                                \
-        { SW_PROP_NMID(UNO_NAME_CHAR_OVERLINE_HAS_COLOR), RES_CHRATR_OVERLINE ,  CPPU_E2T(CPPUTYPE_BOOLEAN),              PropertyAttribute::MAYBEVOID, MID_TL_HASCOLOR},                                                \
-        { SW_PROP_NMID(UNO_NAME_PARA_GRAPHIC_URL), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_OUSTRING),        PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_URL    },                                          \
-        { SW_PROP_NMID(UNO_NAME_PARA_GRAPHIC_FILTER), RES_BACKGROUND,       CPPU_E2T(CPPUTYPE_OUSTRING),        PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_FILTER    },                                       \
-        { SW_PROP_NMID(UNO_NAME_PARA_GRAPHIC_LOCATION), RES_BACKGROUND,         CPPU_E2T(CPPUTYPE_GRAPHICLOC), PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_POSITION},                                \
-        { SW_PROP_NMID(UNO_NAME_PARA_LEFT_MARGIN), RES_LR_SPACE,            CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},                                   \
-        { SW_PROP_NMID(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},                                  \
-        { SW_PROP_NMID(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_BOOLEAN),      PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO},                                      \
-        { SW_PROP_NMID(UNO_NAME_PARA_FIRST_LINE_INDENT), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32),      PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},                         \
+        { SW_PROP_NMID(UNO_NAME_PARRSID),                             RES_PARATR_RSID,               CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_IS_HYPHENATION),                 RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN                          }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS),  RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD                    }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS), RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL                   }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS),        RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS                 }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_KERNING),                   RES_CHRATR_AUTOKERN,           CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_BACK_COLOR),                     RES_CHRATR_BACKGROUND,         CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_BACK_COLOR                         }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_BACK_COLOR),                     RES_BACKGROUND,                CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_BACK_COLOR                         }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_CASE_MAP),                       RES_CHRATR_CASEMAP,            CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_COLOR),                          RES_CHRATR_COLOR,              CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_STRIKEOUT),                      RES_CHRATR_CROSSEDOUT,         CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_CROSS_OUT                          }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_CROSSED_OUT),                    RES_CHRATR_CROSSEDOUT,         CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_CROSSED_OUT                        }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT),                     RES_CHRATR_ESCAPEMENT,         CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_ESC                                }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT),              RES_CHRATR_ESCAPEMENT,         CPPU_E2T(CPPUTYPE_INT8),          PropertyAttribute::MAYBEVOID, MID_ESC_HEIGHT                         }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_ESCAPEMENT),                RES_CHRATR_ESCAPEMENT,         CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_AUTO_ESC                           }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_FLASH),                          RES_CHRATR_BLINK,              CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_HIDDEN),                         RES_CHRATR_HIDDEN,             CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE),                      RES_CHRATR_UNDERLINE,          CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_TL_STYLE                           }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_COLOR),                RES_CHRATR_UNDERLINE,          CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_TL_COLOR                           }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR),            RES_CHRATR_UNDERLINE,          CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_TL_HASCOLOR                        }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_OVERLINE),                       RES_CHRATR_OVERLINE,           CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_TL_STYLE                           }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_OVERLINE_COLOR),                 RES_CHRATR_OVERLINE,           CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_TL_COLOR                           }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_OVERLINE_HAS_COLOR),             RES_CHRATR_OVERLINE,           CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_TL_HASCOLOR                        }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_GRAPHIC_URL),                    RES_BACKGROUND,                CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC_URL                        }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_GRAPHIC_FILTER),                 RES_BACKGROUND,                CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC_FILTER                     }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_GRAPHIC_LOCATION),               RES_BACKGROUND,                CPPU_E2T(CPPUTYPE_GRAPHICLOC),    PropertyAttribute::MAYBEVOID, MID_GRAPHIC_POSITION                   }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_LEFT_MARGIN),                    RES_LR_SPACE,                  CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN        | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_RIGHT_MARGIN),                   RES_LR_SPACE,                  CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_R_MARGIN           | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT),      RES_LR_SPACE,                  CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO                         }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_FIRST_LINE_INDENT),              RES_LR_SPACE,                  CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT  | CONVERT_TWIPS }, \
         _STANDARD_FONT_PROPERTIES \
         _CJK_FONT_PROPERTIES \
         _CTL_FONT_PROPERTIES \
-        { SW_PROP_NMID(UNO_NAME_CHAR_KERNING), RES_CHRATR_KERNING    ,  CPPU_E2T(CPPUTYPE_INT16)  ,         PropertyAttribute::MAYBEVOID,   CONVERT_TWIPS},                                                           \
-        { SW_PROP_NMID(UNO_NAME_CHAR_NO_HYPHENATION), RES_CHRATR_NOHYPHEN   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_CHAR_SHADOWED), RES_CHRATR_SHADOWED  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID, 0},                                                                     \
-        { SW_PROP_NMID(UNO_NAME_CHAR_CONTOURED), RES_CHRATR_CONTOUR,    CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID, 0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_DROP_CAP_FORMAT), RES_PARATR_DROP,        CPPU_E2T(CPPUTYPE_DROPCAPFMT)  , PropertyAttribute::MAYBEVOID, MID_DROPCAP_FORMAT|CONVERT_TWIPS},                        \
-        { SW_PROP_NMID(UNO_NAME_DROP_CAP_WHOLE_WORD), RES_PARATR_DROP,        CPPU_E2T(CPPUTYPE_BOOLEAN)  ,         PropertyAttribute::MAYBEVOID, MID_DROPCAP_WHOLE_WORD },                                               \
-        { SW_PROP_NMID(UNO_NAME_DROP_CAP_CHAR_STYLE_NAME), RES_PARATR_DROP,        CPPU_E2T(CPPUTYPE_OUSTRING)  ,       PropertyAttribute::MAYBEVOID, MID_DROPCAP_CHAR_STYLE_NAME },                                  \
-        { SW_PROP_NMID(UNO_NAME_PARA_KEEP_TOGETHER), RES_KEEP,              CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_PARA_SPLIT), RES_PARATR_SPLIT,      CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_PARA_WIDOWS), RES_PARATR_WIDOWS,        CPPU_E2T(CPPUTYPE_INT8),PropertyAttribute::MAYBEVOID,     0},                                                                  \
-        { SW_PROP_NMID(UNO_NAME_PARA_ORPHANS), RES_PARATR_ORPHANS,      CPPU_E2T(CPPUTYPE_INT8),PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_PAGE_NUMBER_OFFSET), RES_PAGEDESC,              CPPU_E2T(CPPUTYPE_INT16),       PropertyAttribute::MAYBEVOID, MID_PAGEDESC_PAGENUMOFFSET},                                   \
-        { SW_PROP_NMID(UNO_NAME_PARA_ADJUST), RES_PARATR_ADJUST,      CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_PARA_ADJUST},                                              \
-        { SW_PROP_NMID(UNO_NAME_PARA_EXPAND_SINGLE_WORD), RES_PARATR_ADJUST,        CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID, MID_EXPAND_SINGLE   },                                                  \
-        { SW_PROP_NMID(UNO_NAME_PARA_LAST_LINE_ADJUST), RES_PARATR_ADJUST, CPPU_E2T(CPPUTYPE_INT16),                PropertyAttribute::MAYBEVOID, MID_LAST_LINE_ADJUST},                                         \
-        { SW_PROP_NMID(UNO_NAME_PARA_LINE_NUMBER_COUNT), RES_LINENUMBER,    CPPU_E2T(CPPUTYPE_BOOLEAN),             PropertyAttribute::MAYBEVOID ,MID_LINENUMBER_COUNT      },                                                \
-        { SW_PROP_NMID(UNO_NAME_PARA_LINE_NUMBER_START_VALUE), RES_LINENUMBER, CPPU_E2T(CPPUTYPE_INT32),                    PropertyAttribute::MAYBEVOID ,MID_LINENUMBER_STARTVALUE},                                    \
-        { SW_PROP_NMID(UNO_NAME_PARA_LINE_SPACING), RES_PARATR_LINESPACING, CPPU_E2T(CPPUTYPE_LINESPACE),       PropertyAttribute::MAYBEVOID,     CONVERT_TWIPS},                                      \
-        { SW_PROP_NMID(UNO_NAME_PARA_REGISTER_MODE_ACTIVE), RES_PARATR_REGISTER,CPPU_E2T(CPPUTYPE_BOOLEAN)  ,           PropertyAttribute::MAYBEVOID, 0},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_PARA_TOP_MARGIN), RES_UL_SPACE,             CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_UP_MARGIN|CONVERT_TWIPS},                                  \
-        { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_LO_MARGIN|CONVERT_TWIPS},                                 \
-        { SW_PROP_NMID(UNO_NAME_PARA_CONTEXT_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_BOOLEAN),           PropertyAttribute::MAYBEVOID, MID_CTX_MARGIN},                                 \
-        { SW_PROP_NMID(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND, CPPU_E2T(CPPUTYPE_BOOLEAN),              PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT        },                                                \
-        { SW_PROP_NMID(UNO_NAME_PARA_BACK_TRANSPARENT), RES_BACKGROUND, CPPU_E2T(CPPUTYPE_BOOLEAN),                 PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT        },                                                \
-        { SW_PROP_NMID(UNO_NAME_NUMBERING_STYLE_NAME), RES_PARATR_NUMRULE,  CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,   0},                                                           \
-        { SW_PROP_NMID(UNO_NAME_CHAR_WORD_MODE), RES_CHRATR_WORDLINEMODE,CPPU_E2T(CPPUTYPE_BOOLEAN)  ,          PropertyAttribute::MAYBEVOID,     0},                                                             \
-        { SW_PROP_NMID(UNO_NAME_CHAR_LEFT_BORDER), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_BORDERLINE), PropertyAttribute::MAYBEVOID, LEFT_BORDER  |CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_RIGHT_BORDER), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_BORDERLINE), PropertyAttribute::MAYBEVOID, RIGHT_BORDER |CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_TOP_BORDER), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_BORDERLINE), PropertyAttribute::MAYBEVOID, TOP_BORDER   |CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_BOTTOM_BORDER), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_BORDERLINE), PropertyAttribute::MAYBEVOID, BOTTOM_BORDER|CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_BORDER_DISTANCE), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_LEFT_BORDER_DISTANCE), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_RIGHT_BORDER_DISTANCE), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_TOP_BORDER_DISTANCE), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE), RES_CHRATR_BOX, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },\
-        { SW_PROP_NMID(UNO_NAME_CHAR_SHADOW_FORMAT), RES_CHRATR_SHADOW, CPPU_E2T(CPPUTYPE_SHADOWFMT), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},\
-        { SW_PROP_NMID(UNO_NAME_LEFT_BORDER), RES_BOX,              CPPU_E2T(CPPUTYPE_BORDERLINE),      PropertyAttribute::MAYBEVOID, LEFT_BORDER  |CONVERT_TWIPS },                            \
-        { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER), RES_BOX,             CPPU_E2T(CPPUTYPE_BORDERLINE),      PropertyAttribute::MAYBEVOID, RIGHT_BORDER |CONVERT_TWIPS },                                \
-        { SW_PROP_NMID(UNO_NAME_TOP_BORDER), RES_BOX,               CPPU_E2T(CPPUTYPE_BORDERLINE),      PropertyAttribute::MAYBEVOID, TOP_BORDER   |CONVERT_TWIPS },                            \
-        { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER), RES_BOX,                CPPU_E2T(CPPUTYPE_BORDERLINE),      PropertyAttribute::MAYBEVOID, BOTTOM_BORDER|CONVERT_TWIPS },                                \
-        { SW_PROP_NMID(UNO_NAME_BORDER_DISTANCE), RES_BOX,              CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },                               \
-        { SW_PROP_NMID(UNO_NAME_LEFT_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),        PropertyAttribute::MAYBEVOID, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },                                                            \
-        { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),        PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },                                                            \
-        { SW_PROP_NMID(UNO_NAME_TOP_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },                                                        \
-        { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },                                                        \
-        { SW_PROP_NMID(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },                                   \
-        { SW_PROP_NMID(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES), RES_TXTATR_UNKNOWN_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },                               \
-        { SW_PROP_NMID(UNO_NAME_PARA_SHADOW_FORMAT), RES_SHADOW,            CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS}, \
-        { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_IS_ON), RES_CHRATR_TWO_LINES,          CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, MID_TWOLINES}, \
-        { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_PREFIX), RES_CHRATR_TWO_LINES,             CPPU_E2T(CPPUTYPE_OUSTRING),    PropertyAttribute::MAYBEVOID, MID_START_BRACKET}, \
-        { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_SUFFIX), RES_CHRATR_TWO_LINES,             CPPU_E2T(CPPUTYPE_OUSTRING),    PropertyAttribute::MAYBEVOID, MID_END_BRACKET}, \
-        { SW_PROP_NMID(UNO_NAME_CHAR_EMPHASIS), RES_CHRATR_EMPHASIS_MARK,           CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_EMPHASIS},\
-        { SW_PROP_NMID(UNO_NAME_PARA_IS_HANGING_PUNCTUATION), RES_PARATR_HANGINGPUNCTUATION,  CPPU_E2T(CPPUTYPE_BOOLEAN),    PropertyAttribute::MAYBEVOID ,0  },    \
-        { SW_PROP_NMID(UNO_NAME_PARA_IS_CHARACTER_DISTANCE), RES_PARATR_SCRIPTSPACE,         CPPU_E2T(CPPUTYPE_BOOLEAN),    PropertyAttribute::MAYBEVOID ,0  },    \
-        { SW_PROP_NMID(UNO_NAME_PARA_IS_FORBIDDEN_RULES), RES_PARATR_FORBIDDEN_RULES,     CPPU_E2T(CPPUTYPE_BOOLEAN),    PropertyAttribute::MAYBEVOID ,0  }, \
-        { SW_PROP_NMID(UNO_NAME_PARA_VERT_ALIGNMENT), RES_PARATR_VERTALIGN,CPPU_E2T(CPPUTYPE_INT16),    PropertyAttribute::MAYBEVOID,     0      },  \
-        { SW_PROP_NMID(UNO_NAME_CHAR_ROTATION), RES_CHRATR_ROTATE,      CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID,     MID_ROTATE      },  \
-        { SW_PROP_NMID(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE), RES_CHRATR_ROTATE,       CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID,         MID_FITTOLINE  },  \
-        { SW_PROP_NMID(UNO_NAME_CHAR_SCALE_WIDTH), RES_CHRATR_SCALEW,       CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID,          0 },  \
-        { SW_PROP_NMID(UNO_NAME_RUBY_TEXT), RES_TXTATR_CJK_RUBY,    CPPU_E2T(CPPUTYPE_OUSTRING),    PropertyAttribute::MAYBEVOID,          MID_RUBY_TEXT },  \
-        { SW_PROP_NMID(UNO_NAME_RUBY_ADJUST), RES_TXTATR_CJK_RUBY,  CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },  \
-        { SW_PROP_NMID(UNO_NAME_RUBY_CHAR_STYLE_NAME), RES_TXTATR_CJK_RUBY, CPPU_E2T(CPPUTYPE_OUSTRING),    PropertyAttribute::MAYBEVOID,          MID_RUBY_CHARSTYLE },  \
-        { SW_PROP_NMID(UNO_NAME_RUBY_IS_ABOVE), RES_TXTATR_CJK_RUBY,    CPPU_E2T(CPPUTYPE_BOOLEAN),  PropertyAttribute::MAYBEVOID,         MID_RUBY_ABOVE },  \
-        { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PropertyAttribute::MAYBEVOID,      MID_RELIEF }, \
-        { SW_PROP_NMID(UNO_NAME_SNAP_TO_GRID), RES_PARATR_SNAPTOGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID, 0 }, \
-        { SW_PROP_NMID(UNO_NAME_PARA_IS_CONNECT_BORDER), RES_PARATR_CONNECT_BORDER, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID, 0}, \
-        { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 }, \
-        { SW_PROP_NMID(UNO_NAME_CHAR_SHADING_VALUE), RES_CHRATR_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT32),    PROPERTY_NONE,      MID_SHADING_VALUE }, \
-        { SW_PROP_NMID(UNO_NAME_PARA_INTEROP_GRAB_BAG), RES_PARATR_GRABBAG, CPPU_E2T(CPPUTYPE_PROPERTYVALUE), PROPERTY_NONE, 0 }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_KERNING),                        RES_CHRATR_KERNING,            CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_NO_HYPHENATION),                 RES_CHRATR_NOHYPHEN,           CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_SHADOWED),                       RES_CHRATR_SHADOWED,           CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_CONTOURED),                      RES_CHRATR_CONTOUR,            CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_DROP_CAP_FORMAT),                     RES_PARATR_DROP,               CPPU_E2T(CPPUTYPE_DROPCAPFMT),    PropertyAttribute::MAYBEVOID, MID_DROPCAP_FORMAT     | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_DROP_CAP_WHOLE_WORD),                 RES_PARATR_DROP,               CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_DROPCAP_WHOLE_WORD                 }, \
+        { SW_PROP_NMID(UNO_NAME_DROP_CAP_CHAR_STYLE_NAME),            RES_PARATR_DROP,               CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, MID_DROPCAP_CHAR_STYLE_NAME            }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_KEEP_TOGETHER),                  RES_KEEP,                      CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_SPLIT),                          RES_PARATR_SPLIT,              CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_WIDOWS),                         RES_PARATR_WIDOWS,             CPPU_E2T(CPPUTYPE_INT8),          PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_ORPHANS),                        RES_PARATR_ORPHANS,            CPPU_E2T(CPPUTYPE_INT8),          PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PAGE_NUMBER_OFFSET),                  RES_PAGEDESC,                  CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_PAGEDESC_PAGENUMOFFSET             }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_ADJUST),                         RES_PARATR_ADJUST,             CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_PARA_ADJUST                        }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_EXPAND_SINGLE_WORD),             RES_PARATR_ADJUST,             CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_EXPAND_SINGLE                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_LAST_LINE_ADJUST),               RES_PARATR_ADJUST,             CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_LAST_LINE_ADJUST                   }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_LINE_NUMBER_COUNT),              RES_LINENUMBER,                CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_LINENUMBER_COUNT                   }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_LINE_NUMBER_START_VALUE),        RES_LINENUMBER,                CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_LINENUMBER_STARTVALUE              }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_LINE_SPACING),                   RES_PARATR_LINESPACING,        CPPU_E2T(CPPUTYPE_LINESPACE),     PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_REGISTER_MODE_ACTIVE),           RES_PARATR_REGISTER,           CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_TOP_MARGIN),                     RES_UL_SPACE,                  CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_UP_MARGIN          | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN),                  RES_UL_SPACE,                  CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, MID_LO_MARGIN          | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_CONTEXT_MARGIN),                 RES_UL_SPACE,                  CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_CTX_MARGIN                         }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_BACK_TRANSPARENT),               RES_CHRATR_BACKGROUND,         CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_GRAPHIC_TRANSPARENT                }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_BACK_TRANSPARENT),               RES_BACKGROUND,                CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_GRAPHIC_TRANSPARENT                }, \
+        { SW_PROP_NMID(UNO_NAME_NUMBERING_STYLE_NAME),                RES_PARATR_NUMRULE,            CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_WORD_MODE),                      RES_CHRATR_WORDLINEMODE,       CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_LEFT_BORDER),                    RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, LEFT_BORDER            | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_RIGHT_BORDER),                   RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, RIGHT_BORDER           | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_TOP_BORDER),                     RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, TOP_BORDER             | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_BOTTOM_BORDER),                  RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, BOTTOM_BORDER          | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_BORDER_DISTANCE),                RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, BORDER_DISTANCE        | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_LEFT_BORDER_DISTANCE),           RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, LEFT_BORDER_DISTANCE   | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_RIGHT_BORDER_DISTANCE),          RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE  | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_TOP_BORDER_DISTANCE),            RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, TOP_BORDER_DISTANCE    | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_BOTTOM_BORDER_DISTANCE),         RES_CHRATR_BOX,                CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, BOTTOM_BORDER_DISTANCE | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_SHADOW_FORMAT),                  RES_CHRATR_SHADOW,             CPPU_E2T(CPPUTYPE_SHADOWFMT),     PropertyAttribute::MAYBEVOID, CONVERT_TWIPS                          }, \
+        { SW_PROP_NMID(UNO_NAME_LEFT_BORDER),                         RES_BOX,                       CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, LEFT_BORDER            | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER),                        RES_BOX,                       CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, RIGHT_BORDER           | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_TOP_BORDER),                          RES_BOX,                       CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, TOP_BORDER             | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER),                       RES_BOX,                       CPPU_E2T(CPPUTYPE_BORDERLINE),    PropertyAttribute::MAYBEVOID, BOTTOM_BORDER          | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_BORDER_DISTANCE),                     RES_BOX,                       CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, BORDER_DISTANCE        | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_LEFT_BORDER_DISTANCE),                RES_BOX,                       CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, LEFT_BORDER_DISTANCE   | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER_DISTANCE),               RES_BOX,                       CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE  | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_TOP_BORDER_DISTANCE),                 RES_BOX,                       CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, TOP_BORDER_DISTANCE    | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER_DISTANCE),              RES_BOX,                       CPPU_E2T(CPPUTYPE_INT32),         PropertyAttribute::MAYBEVOID, BOTTOM_BORDER_DISTANCE | CONVERT_TWIPS }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES),        RES_UNKNOWNATR_CONTAINER,      CPPU_E2T(CPPUTYPE_REFNAMECNT),    PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES),        RES_TXTATR_UNKNOWN_CONTAINER,  CPPU_E2T(CPPUTYPE_REFNAMECNT),    PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_SHADOW_FORMAT),                  RES_SHADOW,                    CPPU_E2T(CPPUTYPE_SHADOWFMT),     PROPERTY_NONE,                CONVERT_TWIPS                          }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_IS_ON),                  RES_CHRATR_TWO_LINES,          CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_TWOLINES                           }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_PREFIX),                 RES_CHRATR_TWO_LINES,          CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, MID_START_BRACKET                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_COMBINE_SUFFIX),                 RES_CHRATR_TWO_LINES,          CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, MID_END_BRACKET                        }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_EMPHASIS),                       RES_CHRATR_EMPHASIS_MARK,      CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_EMPHASIS                           }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),         RES_PARATR_HANGINGPUNCTUATION, CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),          RES_PARATR_SCRIPTSPACE,        CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_IS_FORBIDDEN_RULES),             RES_PARATR_FORBIDDEN_RULES,    CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_VERT_ALIGNMENT),                 RES_PARATR_VERTALIGN,          CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_ROTATION),                       RES_CHRATR_ROTATE,             CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_ROTATE                             }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),        RES_CHRATR_ROTATE,             CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_FITTOLINE                          }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_SCALE_WIDTH),                    RES_CHRATR_SCALEW,             CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_RUBY_TEXT),                           RES_TXTATR_CJK_RUBY,           CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, MID_RUBY_TEXT                          }, \
+        { SW_PROP_NMID(UNO_NAME_RUBY_ADJUST),                         RES_TXTATR_CJK_RUBY,           CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_RUBY_ADJUST                        }, \
+        { SW_PROP_NMID(UNO_NAME_RUBY_CHAR_STYLE_NAME),                RES_TXTATR_CJK_RUBY,           CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID, MID_RUBY_CHARSTYLE                     }, \
+        { SW_PROP_NMID(UNO_NAME_RUBY_IS_ABOVE),                       RES_TXTATR_CJK_RUBY,           CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, MID_RUBY_ABOVE                         }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF),                         RES_CHRATR_RELIEF,             CPPU_E2T(CPPUTYPE_INT16),         PropertyAttribute::MAYBEVOID, MID_RELIEF                             }, \
+        { SW_PROP_NMID(UNO_NAME_SNAP_TO_GRID),                        RES_PARATR_SNAPTOGRID,         CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_IS_CONNECT_BORDER),              RES_PARATR_CONNECT_BORDER,     CPPU_E2T(CPPUTYPE_BOOLEAN),       PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_WRITING_MODE),                        RES_FRAMEDIR,                  CPPU_E2T(CPPUTYPE_INT16),         PROPERTY_NONE,                0                                      }, \
+        { SW_PROP_NMID(UNO_NAME_CHAR_SHADING_VALUE),                  RES_CHRATR_BACKGROUND,         CPPU_E2T(CPPUTYPE_INT32),         PROPERTY_NONE,                MID_SHADING_VALUE                      }, \
+        { SW_PROP_NMID(UNO_NAME_PARA_INTEROP_GRAB_BAG),               RES_PARATR_GRABBAG,            CPPU_E2T(CPPUTYPE_PROPERTYVALUE), PROPERTY_NONE,                0                                      }, \
 
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
         COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \
