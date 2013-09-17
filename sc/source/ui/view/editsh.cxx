@@ -338,7 +338,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 const SvxFontItem& rItem = (const SvxFontItem&)
                             pTableView->GetAttribs().Get(nFontWhich);
 
-                String aString;
+                OUString aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
 
                 const SfxItemSet *pArgs = rReq.GetArgs();
@@ -372,7 +372,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         return;
                 }
 
-                if ( aString.Len() )
+                if ( !aString.isEmpty() )
                 {
                     //  if string contains WEAK characters, set all fonts
                     sal_uInt8 nSetScript;

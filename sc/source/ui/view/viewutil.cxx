@@ -342,7 +342,7 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
 sal_Bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                                  SfxViewFrame& rFrame,
                                  SvxFontItem&       rNewFont,
-                                 String&            rString )
+                                 OUString&          rString )
 {
     sal_Bool bRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

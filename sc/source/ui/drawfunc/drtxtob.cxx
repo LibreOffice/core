@@ -214,7 +214,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SvxFontItem& rItem = (const SvxFontItem&)
                             pOutView->GetAttribs().Get(EE_CHAR_FONTINFO);
 
-                String aString;
+                OUString aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
 
                 const SfxItemSet *pArgs = rReq.GetArgs();
@@ -242,7 +242,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 else
                     ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame(), aNewItem, aString );
 
-                if ( aString.Len() )
+                if ( !aString.isEmpty() )
                 {
                     SfxItemSet aSet( pOutliner->GetEmptyItemSet() );
                     aSet.Put( aNewItem );

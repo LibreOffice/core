@@ -23,7 +23,6 @@
 #include <tools/solar.h>
 #include <sal/types.h>
 
-class String;
 class SfxItemSet;
 class SfxBindings;
 class SvxFontItem;
@@ -47,7 +46,7 @@ public:
     static sal_Bool ExecuteCharMap( const SvxFontItem&  rOldFont,
                                 SfxViewFrame&       rFrame,
                                 SvxFontItem&        rNewFont,
-                                String&             rString );
+                                OUString&           rString );
 
     static sal_Bool IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
