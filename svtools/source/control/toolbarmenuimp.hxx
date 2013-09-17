@@ -37,7 +37,7 @@
 
 #include <vector>
 
-#include "framestatuslistener.hxx"
+#include <svtools/framestatuslistener.hxx>
 
 namespace svtools {
 

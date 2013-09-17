@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "PlaceEditDialog.hxx"
-#include "ServerDetailsControls.hxx"
+#include <svtools/PlaceEditDialog.hxx>
+#include <svtools/ServerDetailsControls.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>

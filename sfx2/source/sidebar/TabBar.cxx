@@ -19,7 +19,7 @@
 
 #include "TabBar.hxx"
 #include "TabItem.hxx"
-#include "sidebar/ControlFactory.hxx"
+#include <sfx2/sidebar/ControlFactory.hxx>
 #include "DeckDescriptor.hxx"
 #include "Paint.hxx"
 #include "sfx2/sidebar/Theme.hxx"

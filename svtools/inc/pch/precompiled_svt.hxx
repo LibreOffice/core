@@ -14,11 +14,11 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "DocumentToGraphicRenderer.hxx"
-#include "GraphicExportOptionsDialog.hxx"
-#include "PlaceEditDialog.hxx"
-#include "ServerDetailsControls.hxx"
-#include "bindablecontrolhelper.hxx"
+#include <svtools/DocumentToGraphicRenderer.hxx>
+#include <svtools/GraphicExportOptionsDialog.hxx>
+#include <svtools/PlaceEditDialog.hxx>
+#include <svtools/ServerDetailsControls.hxx>
+#include <svtools/bindablecontrolhelper.hxx>
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/document/XDocumentProperties.hpp"
 #include "com/sun/star/script/Converter.hpp"
