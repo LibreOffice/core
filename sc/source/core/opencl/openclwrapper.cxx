@@ -239,10 +239,10 @@ int OpenclDevice::binaryGenerated( const char * clFileName, FILE ** fhandle )
 
 }
 
-int OpenclDevice::writeBinaryToFile( const char* fileName, const char* birary, size_t numBytes )
+int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* birary, size_t numBytes )
 {
     FILE *output = NULL;
-    output = fopen( fileName, "wb" );
+    output = fopen( rFileName.getStr(), "wb" );
     if ( output == NULL )
     {
         return 0;
@@ -298,26 +298,25 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
     /* dump out each binary into its own separate file. */
     for ( size_t i = 0; i < numDevices; i++ )
     {
-        char fileName[256] = { 0 }, cl_name[128] = { 0 };
 
         if ( binarySizes[i] != 0 )
         {
+            OString fileName(clFileName);
+            sal_Int32 nIndex = fileName.lastIndexOf(".cl");
+            if(nIndex > 0)
+                fileName = fileName.copy(0, nIndex - 1);
+
             char deviceName[DEVICE_NAME_LENGTH];
             clStatus = clGetDeviceInfo(mpArryDevsID[i], CL_DEVICE_NAME,
                            sizeof(deviceName), deviceName, NULL);
             CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
 
-            char* str = (char*) strstr( clFileName, (char*) ".cl" );
-            memcpy( cl_name, clFileName, str - clFileName );
-            cl_name[str - clFileName] = '\0';
-            sprintf( fileName, "./%s-%s.bin", cl_name, deviceName );
-
-            if ( !writeBinaryToFile( fileName, binaries[i], binarySizes[i] ) )
+            if ( !writeBinaryToFile( fileName + "-" + deviceName, binaries[i], binarySizes[i] ) )
             {
-                printf("opencl-wrapper: write binary[%s] failds\n", fileName);
+                printf("opencl-wrapper: write binary[%s] failds\n", fileName.getStr());
             }
             else
-                printf("opencl-wrapper: write binary[%s] succesfully\n", fileName);
+                printf("opencl-wrapper: write binary[%s] succesfully\n", fileName.getStr());
         }
     }
 
