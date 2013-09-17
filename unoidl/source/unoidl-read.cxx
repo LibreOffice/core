@@ -17,19 +17,14 @@
 #include <utility>
 #include <vector>
 
-#include "config_version.h"
-#include "osl/endian.h"
 #include "osl/file.h"
 #include "osl/file.hxx"
 #include "osl/process.h"
 #include "rtl/process.h"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "rtl/textenc.h"
-#include "rtl/textcvt.h"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
-#include "sal/macros.h"
 #include "sal/main.h"
+#include "sal/types.h"
 #include "unoidl/unoidl.hxx"
 
 namespace {
