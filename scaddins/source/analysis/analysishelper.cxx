@@ -437,6 +437,7 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 
 
 //fdo40100 toDo: make function fully compliant with ODFF1.2
+// LEM: I fixed case nMode==1; anything else to fix?
 /**
  * Function GetYearFrac implements YEARFRAC as defined in:
  *   Open Document Format for Office Applications version 1.2 Part 2, par. 6.10.24
@@ -522,7 +523,8 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
             break;
         case 1:         // 1=exact/exact
             {
-                bool isYearDifferent = ( nYear1 != nYear2 );
+                const bool isYearDifferent = ( nYear1 != nYear2 );
+                // ODFv1.2 part 2 section 4.11.7.7.7
                 if ( isYearDifferent &&
                      ( ( nYear2 != nYear1 + 1 ) ||
                        ( nMonth1 < nMonth2 ) ||
@@ -535,32 +537,62 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
 
                     nDaysInYear = ( double ) nDayCount / ( double ) ( nYear2 - nYear1 + 1 );
                 }
+                // we take advantage of the fact that (ODFv1.2 part 2) 4.11.7.7.9
+                // 4.11.7.7.10 can be permuted without changing the end result
+                // ODFv1.2 part 2 section 4.11.7.7.8 and 4.11.7.7.10
+                else if ( ( isYearDifferent && IsLeapYear( nYear1 ) ) ||
+                          ( nMonth2 == 2 && nDay2 == 29) )
+                {
+                    nDaysInYear = 366;
+                }
                 else
                 {
-                    if ( isYearDifferent && IsLeapYear( nYear1 ) )
+                    // ODFv1.2 part 2 section 4.11.7.7.9:
+                    // we need to determine whether there is a 29 February
+                    // between nDate1 and nDate2
+                    // LEM FIXME: I have a doubt concerning nDate1 == "29 February YYYY"
+                    //            In this case, is the "29 February YYYY" between nDate1 and nDate2
+                    //            in the meaning of ODFv1.2 part 2, section 4.11.7.7.9?
+                    //            I assume "no", since if "between" is to be understood as "inclusive"
+                    //            then 4.11.7.7.10 has no point.
+                    //            OTOH, it could theoretically be possible that "between"
+                    //            is to be understood as "inclusive the lower bound, exclusive in upper bound".
+
+                    assert(nYear1 == nYear2 || nYear1 + 1 == nYear2);
+                    // as a consequence, nYearDifferent iff nYear2 == nYear + 1, and
+                    // there are only two possible 29 Februaries to consider:
+                    // "29 February nYear1" and "29 February nYear2"
+
+                    // nDate2=="29 February YYYY" is handled above and the following conditions
+                    // rely on that for simplification.
+                    assert( ! (nMonth2 == 2 && nDay2 == 29));
+
+                    if( IsLeapYear( nYear1 ) )
+                       assert(nYear1 == nYear2);
+
+                    // is 29/2/nYear1 between nDate1 and nDate2?
+                    // that is only possible if IsLeapYear( nYear1 ),
+                    // which implies nYear1 == nYear2
+                    if( IsLeapYear( nYear1 ) &&
+                        ( nMonth1 == 1 || ( nMonth1 == 2 && nDay1 <= 28 )) &&
+                        nMonth2 > 2 )
+                    {
+                        nDaysInYear = 366;
+                    }
+                    // is 29/2/nYear2 between nDate1 and nDate2?
+                    // if nYear1==nYear2, then that is adequately tested by the previous test,
+                    // so no need to retest it here.
+                    else if(isYearDifferent && nMonth2 > 2 && IsLeapYear( nYear2 ))
                     {
                         nDaysInYear = 366;
                     }
                     else
                     {
-                        //if Feb 29 is between nDate1 and ndate2, inclusive
-                        if ( ( IsLeapYear( nYear1 ) && nMonth1 <= 2 && nDay1 <= 29 ) ||
-                             ( IsLeapYear( nYear2 ) && ( nMonth2 > 3 || ( nMonth2 == 2 && nDay1 == 29 ) ) ) )
-                        {
-                            nDaysInYear = 366;
-                        }
-                        else
-                        {
-                            nDaysInYear = 365;
-                            for ( sal_Int16 i = nYear1; i <= nYear2; i++ )
-                            {
-                                if ( IsLeapYear( i ) )
-                                {
-                                    nDaysInYear = 366;
-                                    break;
-                                }
-                            }
-                        }
+                        assert( !( IsLeapYear( nYear2 ) &&
+                                   nYear1 == nYear2 &&
+                                   (nMonth1 == 1 || (nMonth1==2 && nDay1 <= 28)) &&
+                                   nMonth2 > 2));
+                        nDaysInYear = 365;
                     }
                 }
             }
