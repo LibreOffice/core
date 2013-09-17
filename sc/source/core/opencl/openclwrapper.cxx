@@ -7,14 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_folders.h>
+
 #include "openclwrapper.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/digest.h>
+#include <rtl/bootstrap.hxx>
 #include <boost/scoped_array.hpp>
 
 #include "sal/config.h"
+#include <osl/file.hxx>
 #include "oclkernels.hxx"
 
 #include <stdio.h>
@@ -76,9 +80,20 @@ OString generateHashForSource()
     return aBuffer.makeStringAndClear();
 }
 
+OString getCacheFolder()
+{
+    OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+    rtl::Bootstrap::expandMacros(url);
+
+    osl::Directory::create(url);
+
+    return rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
+}
+
 }
 
 OString OpenclDevice::maSourceHash = generateHashForSource();
+OString OpenclDevice::maCacheFolder = getCacheFolder();
 
 int OpenclDevice::releaseOpenclRunEnv()
 {
@@ -195,7 +210,8 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
     char deviceName[DEVICE_NAME_LENGTH] = {0};
     clGetDeviceInfo(deviceId, CL_DEVICE_NAME,
             sizeof(deviceName), deviceName, NULL);
-    return fileName + "-" + deviceName + "-" + OpenclDevice::maSourceHash + ".bin";
+    return OpenclDevice::maCacheFolder + fileName + "-" +
+        deviceName + "-" + OpenclDevice::maSourceHash + ".bin";
 }
 
 }
@@ -242,17 +258,19 @@ int OpenclDevice::binaryGenerated( const char * clFileName, FILE ** fhandle )
 
 }
 
-int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* birary, size_t numBytes )
+int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
-    FILE *output = NULL;
-    output = fopen( rFileName.getStr(), "wb" );
-    if ( output == NULL )
-    {
-        return 0;
-    }
+    osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
+    osl::FileBase::RC status = file.open(
+            osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
-    fwrite( birary, sizeof(char), numBytes, output );
-    fclose( output );
+    if(status != osl::FileBase::E_None)
+        return 0;
+
+    sal_uInt64 nBytesWritten = 0;
+    file.write( binary, numBytes, nBytesWritten );
+
+    assert(numBytes == nBytesWritten);
 
     return 1;
 

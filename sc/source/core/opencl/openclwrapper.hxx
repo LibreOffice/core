@@ -163,6 +163,8 @@ public:
     static GPUEnv gpuEnv;
     static int isInited;
     static OString maSourceHash;
+    static OString maCacheFolder;
+
     static int registOpenclKernel();
     static int releaseOpenclRunEnv();
     static int initOpenclRunEnv( GPUEnv *gpu );
