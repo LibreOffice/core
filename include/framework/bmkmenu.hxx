@@ -27,7 +27,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>
 
-class String;
 class ImageList;
 
 #define BMKMENU_ITEMID_START    20000

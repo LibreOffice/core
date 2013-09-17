@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 class SvTreeListEntry;
-class String;
 class Point;
 class PopupMenu;
 class Control;

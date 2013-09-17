@@ -26,7 +26,6 @@
 
 class SwPaM;
 class KeyCode;
-class String;
 struct SwPosition;
 class SwTxtNode;
 

@@ -22,7 +22,6 @@
 
 #include <tools/solar.h>
 
-class String;
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
 namespace sfx2 { class SvLinkSource;  class LinkManager; }
 

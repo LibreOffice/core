@@ -29,7 +29,6 @@
 
 class _SfxMacroTabPage;
 class SvTabListBox;
-class String;
 
 class _SfxMacroTabPage_Impl;
 

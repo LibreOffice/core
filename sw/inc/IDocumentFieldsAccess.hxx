@@ -35,7 +35,6 @@ class SwMsgPoolItem;
 class DateTime;
 class _SetGetExpFld;
 struct SwHash;
-class String;
 class SwNode;
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }

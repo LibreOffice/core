@@ -36,7 +36,6 @@
 
 #include <boost/unordered_map.hpp>
 
-class String;
 class SfxObjectShell;
 class ScUnoAddInFuncData;
 class ScFuncDesc;
