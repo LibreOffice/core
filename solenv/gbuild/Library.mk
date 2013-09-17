@@ -86,7 +86,7 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 
-$(if $(call gb_Library_get_instdir,$(1)),\
+$(if $(and $(call gb_Library_get_instdir,$(1)),$(filter-out $(gb_MERGEDLIBS),$(1))),\
 $(call gb_Library__install,$(call gb_Library__get_final_target,$(1)), \
 	$(call gb_Library_get_install_target,$(1)), \
 	$(gb_Library_DLLDIR)/$(call gb_Library_get_runtime_filename,$(1)), \
