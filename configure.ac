@@ -3065,7 +3065,6 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([whether to use ActiveX])
     if test "$enable_activex" = "yes" -o "$enable_activex" = ""; then
         DISABLE_ACTIVEX=""
-        SCPDEFS="$SCPDEFS -DWITH_ACTIVEX_COMPONENT"
         AC_MSG_RESULT([yes])
     else
         DISABLE_ACTIVEX="TRUE"

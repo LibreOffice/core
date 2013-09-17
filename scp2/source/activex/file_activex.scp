@@ -18,8 +18,6 @@
 
 #include "macros.inc"
 
-#ifdef WITH_ACTIVEX_COMPONENT
-
 File gid_File_Lib_Soactivex
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -36,5 +34,3 @@ End
 		ComponentCondition = "VersionNT64";
 	End
 #endif
-
-#endif // WITH_ACTIVEX_COMPONENT

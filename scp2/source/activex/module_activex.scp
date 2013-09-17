@@ -19,8 +19,6 @@
 #include "macros.inc"
 #include "AutoInstall/activexbinarytable"
 
-#ifdef WITH_ACTIVEX_COMPONENT
-
 Module gid_Module_Optional_Activexcontrol
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_OPTIONAL_ACTIVEXCONTROL );
@@ -33,5 +31,3 @@ Module gid_Module_Optional_Activexcontrol
         gid_File_Lib_Soactivex64,
         gid_File_Lib_Regpatchactivex_Msi);
 End
-
-#endif // WITH_ACTIVEX_COMPONENT
