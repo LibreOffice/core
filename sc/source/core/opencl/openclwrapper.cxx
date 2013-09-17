@@ -18,7 +18,6 @@
 #include <boost/scoped_array.hpp>
 
 #include "sal/config.h"
-#include <osl/file.hxx>
 #include "oclkernels.hxx"
 
 #include <stdio.h>
@@ -216,45 +215,42 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
 
 }
 
-int OpenclDevice::binaryGenerated( const char * clFileName, FILE ** fhandle )
+std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const char * clFileName, cl_context context )
 {
-    unsigned int i = 0;
-    cl_int clStatus;
-    int status = 0;
-    FILE *fd = NULL;
     cl_uint numDevices=0;
-    if ( getenv("SC_OPENCLCPU") )
-    {
-        clStatus = clGetDeviceIDs(gpuEnv.mpPlatformID, // platform
-                                  CL_DEVICE_TYPE_CPU,  // device_type for CPU device
-                                  0,                   // num_entries
-                                  NULL,                // devices ID
-                                  &numDevices);
-    }
-    else
-    {
-        clStatus = clGetDeviceIDs(gpuEnv.mpPlatformID, // platform
-                                  CL_DEVICE_TYPE_GPU,  // device_type for GPU device
-                                  0,                   // num_entries
-                                  NULL,                // devices ID
-                                  &numDevices);
-    }
-    CHECK_OPENCL( clStatus, "clGetDeviceIDs" );
 
-    for ( i = 0; i < numDevices; i++ )
+    std::vector<boost::shared_ptr<osl::File> > aGeneratedFiles;
+    cl_int clStatus = clGetContextInfo( context, CL_CONTEXT_NUM_DEVICES,
+            sizeof(numDevices), &numDevices, NULL );
+
+    if(clStatus != CL_SUCCESS)
+        return aGeneratedFiles;
+
+
+    // grab the handles to all of the devices in the context.
+    boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
+    clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
+            sizeof( cl_device_id ) * numDevices, mpArryDevsID.get(), NULL );
+
+    if(clStatus != CL_SUCCESS)
+        return aGeneratedFiles;
+
+    for ( size_t i = 0; i < numDevices; i++ )
     {
-        if ( gpuEnv.mpArryDevsID[i] != 0 )
+        if ( mpArryDevsID[i] != 0 )
         {
             OString fileName = createFileName(gpuEnv.mpArryDevsID[i], clFileName);
-            fd = fopen( fileName.getStr(), "rb" );
-            status = ( fd != NULL ) ? 1 : 0;
+            osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
+            if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
+                aGeneratedFiles.push_back(boost::shared_ptr<osl::File>(pNewFile));
+            else
+            {
+                delete pNewFile;
+                break;
+            }
         }
     }
-    if ( fd != NULL )
-    {
-        *fhandle = fd;
-    }
-    return status;
+    return aGeneratedFiles;
 
 }
 
@@ -418,10 +414,8 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 {
     cl_int clStatus = 0;
     size_t length;
-    char *binary;
-    int b_error, binary_status, binaryExisted, idx;
+    int binary_status, idx;
     cl_uint numDevices;
-    FILE *fd;
     const char* filename = "kernel.cl";
     fprintf(stderr, "compileKernelFile ... \n");
     if ( cachedOfKernerPrg(gpuInfo, filename) == 1 )
@@ -431,49 +425,57 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
     idx = gpuInfo->mnFileCount;
 
-    binaryExisted = 0;
-    if ( ( binaryExisted = binaryGenerated( filename, &fd ) ) == 1 )
+    clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_NUM_DEVICES,
+            sizeof(numDevices), &numDevices, NULL );
+    CHECK_OPENCL( clStatus, "clGetContextInfo" );
+
+    std::vector<boost::shared_ptr<osl::File> > aGeneratedFiles = binaryGenerated(
+            filename, gpuInfo->mpContext );
+
+    bool bBinaryExisted = false;
+    if (aGeneratedFiles.size() == numDevices)
     {
-        clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_NUM_DEVICES,
-                       sizeof(numDevices), &numDevices, NULL );
-        CHECK_OPENCL( clStatus, "clGetContextInfo" );
-
-        boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
-
-        b_error = 0;
-        length = 0;
-        b_error |= fseek( fd, 0, SEEK_END ) < 0;
-        b_error |= ( length = ftell(fd) ) <= 0;
-        b_error |= fseek( fd, 0, SEEK_SET ) < 0;
-        if ( b_error )
+        bBinaryExisted = true;
+        boost::scoped_array<char*> pBinary(new char*[numDevices]);
+        for(size_t i = 0; i < numDevices; ++i)
         {
-            return 0;
+            sal_uInt64 nSize;
+            aGeneratedFiles[i]->getSize(nSize);
+            char* binary = new char[nSize];
+            sal_uInt64 nBytesRead;
+            aGeneratedFiles[i]->read(binary, nSize, nBytesRead);
+            if(nSize != nBytesRead)
+                assert(false);
+
+            pBinary[i] = binary;
         }
 
-        binary = (char*) malloc( length + 2 );
-        if ( !binary )
-        {
-            return 0;
-        }
-
-        memset( binary, 0, length + 2 );
-        b_error |= fread( binary, 1, length, fd ) != length;
-
-
-        fclose( fd );
-        fd = NULL;
         // grab the handles to all of the devices in the context.
+        boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
                        sizeof( cl_device_id ) * numDevices, mpArryDevsID.get(), NULL );
+
+        if(clStatus != CL_SUCCESS)
+        {
+            for(size_t i = 0; i < numDevices; ++i)
+            {
+                delete[] pBinary[i];
+            }
+        }
         CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
         fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
-                                           mpArryDevsID.get(), &length, (const unsigned char**) &binary,
+                                           mpArryDevsID.get(), &length, (const unsigned char**) &pBinary,
                                            &binary_status, &clStatus );
+        if(clStatus != CL_SUCCESS)
+        {
+            for(size_t i = 0; i < numDevices; ++i)
+            {
+                delete[] pBinary[i];
+            }
+        }
         CHECK_OPENCL( clStatus, "clCreateProgramWithBinary" );
-
-        free( binary );
     }
     else
     {
@@ -558,7 +560,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
     strcpy( gpuEnv.mArryKnelSrcFile[idx], filename );
 
-    if ( binaryExisted == 0 )
+    if ( !bBinaryExisted )
         generatBinFromKernelSource( gpuEnv.mpArryPrograms[idx], filename );
 
     gpuInfo->mnFileCount += 1;

@@ -13,6 +13,9 @@
 #include <config_features.h>
 #include <formula/opcode.hxx>
 #include <sal/detail/log.h>
+#include <osl/file.hxx>
+#include <vector>
+#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include "platforminfo.hxx"
 
@@ -174,7 +177,7 @@ public:
     static int cachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName );
     static int generatBinFromKernelSource( cl_program program, const char * clFileName );
     static int writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
-    static int binaryGenerated( const char * clFileName, FILE ** fhandle );
+    static std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context);
     static int compileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
 
     static int initOpenclAttr( OpenCLEnv * env );
