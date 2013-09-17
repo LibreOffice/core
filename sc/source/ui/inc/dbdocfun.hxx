@@ -24,8 +24,6 @@
 #include <tools/solar.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-class String;
-
 struct ScImportParam;
 struct ScQueryParam;
 struct ScSortParam;
@@ -59,7 +57,7 @@ public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                     ~ScDBDocFunc() {}
 
-    void            UpdateImport( const String& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
+    void            UpdateImport( const OUString& rTarget, const svx::ODataAccessDescriptor& rDescriptor );
 
     bool DoImport( SCTAB nTab, const ScImportParam& rParam,
                    const svx::ODataAccessDescriptor* pDescriptor,      // used for selection an existing ResultSet
@@ -84,7 +82,7 @@ public:
 
     bool AddDBRange( const OUString& rName, const ScRange& rRange, sal_Bool bApi );
     bool DeleteDBRange( const OUString& rName );
-    bool RenameDBRange( const String& rOld, const String& rNew );
+    bool RenameDBRange( const OUString& rOld, const OUString& rNew );
     bool ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
 
     bool RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);

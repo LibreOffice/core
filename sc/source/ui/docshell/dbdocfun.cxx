@@ -146,7 +146,7 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
     return bDone;
 }
 
-bool ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew )
+bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 {
     bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -1672,7 +1672,7 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
 //
 //      database import
 
-void ScDBDocFunc::UpdateImport( const String& rTarget, const svx::ODataAccessDescriptor& rDescriptor )
+void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessDescriptor& rDescriptor )
 {
     // rTarget is the name of a database range
 
