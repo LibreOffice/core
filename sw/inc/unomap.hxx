@@ -236,6 +236,7 @@
 #define WID_DOC_RUNTIME_UID                     1015
 #define WID_DOC_LOCK_UPDATES                    1016
 #define WID_DOC_HAS_VALID_SIGNATURES            1017
+#define WID_DOC_INTEROP_GRAB_BAG                1018
 #define WID_DOC_BUILDID                         1024
 #define WID_DOC_ISTEMPLATEID                    1025
 #define WID_DOC_DEFAULT_PAGE_MODE               1069

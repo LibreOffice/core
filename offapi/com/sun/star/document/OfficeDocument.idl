@@ -155,6 +155,17 @@ published service OfficeDocument
         may get a different id every time it gets loaded.</p>
     */
     [property, optional, readonly] string RuntimeUID;
+
+    /** Grab bag of document properties, used as a string-any map for
+        interim interop purposes.
+
+        @since LibreOffice 4.2
+
+        <p>This property is intentionally not handled by the ODF
+        filter. Any member that should be handled there should be
+        first moved out from this grab bag to a separate property.</p>
+    */
+    [optional, property] sequence<com::sun::star::beans::PropertyValue> InteropGrabBag;
 };
 
 

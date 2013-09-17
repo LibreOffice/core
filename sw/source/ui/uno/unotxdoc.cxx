@@ -1998,6 +1998,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetDefaultPageMode( bDefaultPageMode );
         }
         break;
+        case WID_DOC_INTEROP_GRAB_BAG:
+             setGrabBagItem(aValue);
+        break;
 
         default:
         {
@@ -2151,6 +2154,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_HAS_VALID_SIGNATURES:
             aAny <<= hasValidSignatures();
+        break;
+        case WID_DOC_INTEROP_GRAB_BAG:
+             getGrabBagItem(aAny);
         break;
 
         default:

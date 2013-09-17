@@ -67,6 +67,7 @@
 "SwXTextDocument";"com::sun::star::document::OfficeDocument";"AutomaticControlFocus#optional"
 "SwXTextDocument";"com::sun::star::document::OfficeDocument";"ApplyFormDesignMode#optional"
 "SwXTextDocument";"com::sun::star::document::OfficeDocument";"RuntimeUID#optional"
+"SwXTextDocument";"com::sun::star::document::OfficeDocument";"InteropGrabBag#optional"
 "SwXTextDocument";"com::sun::star::frame::XModel";"attachResource()"
 "SwXTextDocument";"com::sun::star::frame::XModel";"getURL()"
 "SwXTextDocument";"com::sun::star::frame::XModel";"getArgs()"

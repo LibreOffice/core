@@ -43,6 +43,7 @@
 "SdXImpressDocument";"com::sun::star::document::OfficeDocument";"AutomaticControlFocus#optional"
 "SdXImpressDocument";"com::sun::star::document::OfficeDocument";"ApplyFormDesignMode#optional"
 "SdXImpressDocument";"com::sun::star::document::OfficeDocument";"RuntimeUID#optional"
+"SdXImpressDocument";"com::sun::star::document::OfficeDocument";"InteropGrabBag#optional"
 "SdXImpressDocument";"com::sun::star::frame::XModel";"attachResource()"
 "SdXImpressDocument";"com::sun::star::frame::XModel";"getURL()"
 "SdXImpressDocument";"com::sun::star::frame::XModel";"getArgs()"

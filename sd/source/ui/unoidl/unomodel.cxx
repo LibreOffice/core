@@ -173,6 +173,7 @@ const sal_Int32 WID_MODEL_BUILDID = 10;
 const sal_Int32 WID_MODEL_HASVALIDSIGNATURES = 11;
 const sal_Int32 WID_MODEL_DIALOGLIBS = 12;
 const sal_Int32 WID_MODEL_FONTS = 13;
+const sal_Int32 WID_MODEL_INTEROPGRABBAG     = 14;
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
@@ -200,6 +201,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { MAP_CHAR_LEN(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,   &::getCppuType(static_cast< const OUString * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN("Fonts"),                        WID_MODEL_FONTS,   SEQTYPE(::getCppuType((uno::Sequence<uno::Any>*)0)), beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_InteropGrabBag),       WID_MODEL_INTEROPGRABBAG,     SEQTYPE(::getCppuType((uno::Sequence< beans::PropertyValue >*)0)),       0, 0},
         { 0,0,0,0,0,0 }
     };
     static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -1264,6 +1266,9 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         case WID_MODEL_DIALOGLIBS:
         case WID_MODEL_FONTS:
             throw beans::PropertyVetoException();
+        case WID_MODEL_INTEROPGRABBAG:
+            setGrabBagItem(aValue);
+            break;
         default:
             throw beans::UnknownPropertyException();
     }
@@ -1386,6 +1391,9 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 aAny <<= aSeq;
             break;
             }
+        case WID_MODEL_INTEROPGRABBAG:
+            getGrabBagItem(aAny);
+            break;
         default:
             throw beans::UnknownPropertyException();
     }

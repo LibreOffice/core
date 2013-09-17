@@ -838,6 +838,8 @@ enum SwPropNameIds
 /* 0772 */  UNO_NAME_CHAR_SHADOW_FORMAT,
 /* 0773 */  UNO_NAME_SHADOW_TRANSPARENCE,
 
+/* 0774 */  UNO_NAME_DOC_INTEROP_GRAB_BAG,
+
             SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
