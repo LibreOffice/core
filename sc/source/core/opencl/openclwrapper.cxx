@@ -10,6 +10,8 @@
 #include "openclwrapper.hxx"
 
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/digest.h>
 #include <boost/scoped_array.hpp>
 
 #include "sal/config.h"
@@ -49,6 +51,31 @@ Kernel::Kernel( const char* pName ) : mpName(pName), mpKernel(NULL) {}
 
 GPUEnv OpenclDevice::gpuEnv;
 int OpenclDevice::isInited =0;
+
+namespace {
+
+OString generateHashForSource()
+{
+    size_t nLength = strlen(kernel_src);
+    sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_MD5];
+    rtlDigestError aError = rtl_digest_MD5(kernel_src, nLength,
+            pBuffer, RTL_DIGEST_LENGTH_MD5);
+    assert(aError == rtl_Digest_E_None);
+
+    OStringBuffer aBuffer;
+    const char* pString = "0123456789ABCDEF";
+    for(size_t i = 0; i < RTL_DIGEST_LENGTH_MD5; ++i)
+    {
+        sal_uInt8 val = pBuffer[i];
+        aBuffer.append(pString[val/16]);
+        aBuffer.append(pString[val%16]);
+    }
+    return aBuffer.makeStringAndClear();
+}
+
+}
+
+OString OpenclDevice::maSourceHash = generateHashForSource();
 
 int OpenclDevice::initEnv()
 {
@@ -190,12 +217,28 @@ int OpenclDevice::convertToString( const char *filename, char **source )
     return 0;
 }
 
+namespace {
+
+OString createFileName(cl_device_id deviceId, const char* clFileName)
+{
+    OString fileName(clFileName);
+    sal_Int32 nIndex = fileName.lastIndexOf(".cl");
+    if(nIndex > 0)
+        fileName = fileName.copy(0, nIndex);
+
+    char deviceName[DEVICE_NAME_LENGTH] = {0};
+    clGetDeviceInfo(deviceId, CL_DEVICE_NAME,
+            sizeof(deviceName), deviceName, NULL);
+    return fileName + "-" + deviceName + "-" + OpenclDevice::maSourceHash + ".bin";
+}
+
+}
+
 int OpenclDevice::binaryGenerated( const char * clFileName, FILE ** fhandle )
 {
     unsigned int i = 0;
     cl_int clStatus;
     int status = 0;
-    char *str = NULL;
     FILE *fd = NULL;
     cl_uint numDevices=0;
     if ( getenv("SC_OPENCLCPU") )
@@ -215,19 +258,13 @@ int OpenclDevice::binaryGenerated( const char * clFileName, FILE ** fhandle )
                                   &numDevices);
     }
     CHECK_OPENCL( clStatus, "clGetDeviceIDs" );
+
     for ( i = 0; i < numDevices; i++ )
     {
-        char fileName[256] = { 0 }, cl_name[128] = { 0 };
         if ( gpuEnv.mpArryDevsID[i] != 0 )
         {
-            char deviceName[DEVICE_NAME_LENGTH];
-            clStatus = clGetDeviceInfo( gpuEnv.mpArryDevsID[i], CL_DEVICE_NAME, sizeof(deviceName), deviceName, NULL );
-            CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
-            str = (char*) strstr( clFileName, (char*) ".cl" );
-            memcpy( cl_name, clFileName, str - clFileName );
-            cl_name[str - clFileName] = '\0';
-            sprintf( fileName, "./%s-%s.bin", cl_name, deviceName );
-            fd = fopen( fileName, "rb" );
+            OString fileName = createFileName(gpuEnv.mpArryDevsID[i], clFileName);
+            fd = fopen( fileName.getStr(), "rb" );
             status = ( fd != NULL ) ? 1 : 0;
         }
     }
@@ -301,17 +338,9 @@ int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * c
 
         if ( binarySizes[i] != 0 )
         {
-            OString fileName(clFileName);
-            sal_Int32 nIndex = fileName.lastIndexOf(".cl");
-            if(nIndex > 0)
-                fileName = fileName.copy(0, nIndex - 1);
-
-            char deviceName[DEVICE_NAME_LENGTH];
-            clStatus = clGetDeviceInfo(mpArryDevsID[i], CL_DEVICE_NAME,
-                           sizeof(deviceName), deviceName, NULL);
-            CHECK_OPENCL( clStatus, "clGetDeviceInfo" );
-
-            if ( !writeBinaryToFile( fileName + "-" + deviceName, binaries[i], binarySizes[i] ) )
+            OString fileName = createFileName(mpArryDevsID[i], clFileName);
+            if ( !writeBinaryToFile( fileName,
+                        binaries[i], binarySizes[i] ) )
             {
                 printf("opencl-wrapper: write binary[%s] failds\n", fileName.getStr());
             }

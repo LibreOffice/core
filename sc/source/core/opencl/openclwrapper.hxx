@@ -16,6 +16,8 @@
 #include <cassert>
 #include "platforminfo.hxx"
 
+#include <rtl/string.hxx>
+
 #include "clcc/clew.h"
 
 // CL_MAP_WRITE_INVALIDATE_REGION is new in OpenCL 1.2.
@@ -161,6 +163,7 @@ public:
     static GPUEnv gpuEnv;
     static int isInited;
     static int initEnv();
+    static OString maSourceHash;
     static int registOpenclKernel();
     static int releaseOpenclRunEnv();
     static int initOpenclRunEnv( GPUEnv *gpu );
@@ -169,7 +172,7 @@ public:
     static int initOpenclRunEnv( int argc );
     static int cachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * clFileName );
     static int generatBinFromKernelSource( cl_program program, const char * clFileName );
-    static int writeBinaryToFile( const char* fileName, const char* birary, size_t numBytes );
+    static int writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
     static int binaryGenerated( const char * clFileName, FILE ** fhandle );
     static int compileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
 
