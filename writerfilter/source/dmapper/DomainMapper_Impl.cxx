@@ -1723,6 +1723,25 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             uno::Reference<text::XTextContent> xTxtContent(xShape, uno::UNO_QUERY);
             m_aAnchoredStack.push(xTxtContent);
         }
+        else if (xSInfo->supportsService("com.sun.star.drawing.OLE2Shape"))
+        {
+            // OLE2Shape from oox should be converted to a TextEmbeddedObject for sw.
+            m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
+            uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
+            m_aAnchoredStack.push(xTextContent);
+            uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+
+            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
+            m_xEmbedded.set(m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
+            uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
+            xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_EMBEDDED_OBJECT)));
+            xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_ANCHOR_TYPE), uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+            // So that the original bitmap-only shape will be replaced by the embedded object.
+            m_aAnchoredStack.top().bToRemove = true;
+            m_aTextAppendStack.pop();
+               appendTextContent(m_xEmbedded, uno::Sequence<beans::PropertyValue>());
+        }
         else
         {
             uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
@@ -1783,7 +1802,17 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         SAL_WARN("writerfilter", "Exception when adding shape: " << e.Message);
     }
 }
-
+/*
+ * Updating chart height and width after reading the actual values from wp:extent
+*/
+void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::XShape > xShape)
+{
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+        uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
+        awt::Size aSize = xShape->getSize( );
+        xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_WIDTH), uno::makeAny(sal_Int32(aSize.Width)));
+        xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_HEIGHT), uno::makeAny(sal_Int32(aSize.Height)));
+}
 
 
 void DomainMapper_Impl::PopShapeContext()
@@ -3668,6 +3697,10 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     uno::Reference<text::XTextContent> xTextContent
         (m_pGraphicImport->GetGraphicObject());
 
+    // Update the shape properties if it is embedded object.
+    if(m_xEmbedded.is()){
+        UpdateEmbeddedShapeProps(m_pGraphicImport->GetXShapeObject());
+    }
     //insert it into the document at the current cursor position
     OSL_ENSURE( xTextContent.is(), "DomainMapper_Impl::ImportGraphic");
     if( xTextContent.is())

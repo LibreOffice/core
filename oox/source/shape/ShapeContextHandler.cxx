@@ -90,6 +90,31 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getLockedCanv
     return mxLockedCanvasContext;
 }
 
+/*
+ * This method creates new ChartGraphicDataContext Object.
+ */
+uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getChartShapeContext(sal_Int32 nElement)
+{
+    if (!mxChartShapeContext.is())
+    {
+        ContextHandler2Helper *rFragmentHandler
+                    (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        ShapePtr pMasterShape;
+
+        switch (nElement & 0xffff)
+        {
+            case XML_chart:
+                mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
+                mxChartShapeContext.set(new ChartGraphicDataContext(*rFragmentHandler, mpShape, true));
+                break;
+            default:
+                break;
+        }
+    }
+
+    return mxChartShapeContext;
+}
+
 uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
@@ -164,6 +189,9 @@ ShapeContextHandler::getContextHandler()
         case NMSP_dmlLockedCanvas:
             xResult.set(getLockedCanvasContext(mnStartToken));
             break;
+        case NMSP_dmlChart:
+            xResult.set(getChartShapeContext(mnStartToken));
+            break;
         default:
             xResult.set(getGraphicShapeContext(mnStartToken));
             break;
@@ -188,18 +216,21 @@ void SAL_CALL ShapeContextHandler::startFastElement
 
     mpThemePtr.reset(new Theme());
 
-    if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas))
+    if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) )
     {
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!msRelationFragmentPath.isEmpty())
         {
             FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
             OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
-            uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
-            mxFilterBase->importFragment(new ThemeFragmentHandler(*mxFilterBase, aThemeFragmentPath, *mpThemePtr ), xDoc);
-            ShapeFilterBase* pShapeFilterBase(dynamic_cast<ShapeFilterBase*>(mxFilterBase.get()));
-            if (pShapeFilterBase)
-                pShapeFilterBase->setCurrentTheme(mpThemePtr);
+            if(!aThemeFragmentPath.isEmpty())
+            {
+                uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
+                mxFilterBase->importFragment(new ThemeFragmentHandler(*mxFilterBase, aThemeFragmentPath, *mpThemePtr ), xDoc);
+                ShapeFilterBase* pShapeFilterBase(dynamic_cast<ShapeFilterBase*>(mxFilterBase.get()));
+                if (pShapeFilterBase)
+                    pShapeFilterBase->setCurrentTheme(mpThemePtr);
+            }
         }
 
         createFastChildContext(Element, Attribs);
@@ -352,6 +383,17 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                 xResult = pShape->getXShape();
                 mxLockedCanvasContext.clear();
             }
+        }
+        else if (mxChartShapeContext.is())
+        {
+            basegfx::B2DHomMatrix aMatrix;
+            ChartGraphicDataContext* pChartGraphicDataContext = dynamic_cast<ChartGraphicDataContext*>(mxChartShapeContext.get());
+            oox::drawingml::ShapePtr pShapePtr( pChartGraphicDataContext->getShape());
+            // See SwXTextDocument::createInstance(), ODF import uses the same hack.
+            pShapePtr->setServiceName("com.sun.star.drawing.temporaryForXMLImportOLE2Shape");
+            pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
+            xResult = pShapePtr->getXShape();
+            mxChartShapeContext.clear();
         }
         else if (mpShape.get() != NULL)
         {

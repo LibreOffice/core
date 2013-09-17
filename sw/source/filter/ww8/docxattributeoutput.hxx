@@ -603,6 +603,7 @@ private:
     void WritePostponedGraphic();
     void WritePostponedMath();
     void WritePostponedDiagram();
+    void WritePostponedChart();
     void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
@@ -626,7 +627,7 @@ private:
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
     int m_footnoteEndnoteRefTag;
-
+    int m_docPrID;
     boost::scoped_ptr< const WW8_SepInfo > m_pSectionInfo;
 
     /// Redline data to remember in the text run.
@@ -703,6 +704,8 @@ private:
     };
     std::list< PostponedDiagram >* m_postponedDiagram;
     const SwOLENode* m_postponedMath;
+    const SdrObject* m_postponedChart;
+    Size m_postponedChartSize;
     const SwField* pendingPlaceholder;
     std::vector< const SwPostItField* > m_postitFields;
     unsigned int m_postitFieldsMaxId;

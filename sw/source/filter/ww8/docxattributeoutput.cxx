@@ -1114,6 +1114,8 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     WritePostponedGraphic();
 
     WritePostponedDiagram();
+    //We need to write w:drawing tag after the w:rPr.
+    WritePostponedChart();
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
@@ -2784,6 +2786,31 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
 
     if( xChartDoc.is() )
     {
+        m_postponedChart = pSdrObj;
+        m_postponedChartSize = rSize;
+        return true;
+    }
+    return false;
+}
+
+/*
+ * Write chart hierarchy in w:drawing after end element of w:rPr tag.
+ */
+void DocxAttributeOutput::WritePostponedChart()
+{
+       if(m_postponedChart == NULL)
+                return;
+       uno::Reference< chart2::XChartDocument > xChartDoc;
+       uno::Reference< drawing::XShape > xShape( ((SdrObject*)m_postponedChart)->getUnoShape(), uno::UNO_QUERY );
+       if( xShape.is() )
+       {
+            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+            if( xPropSet.is() )
+                xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+       }
+
+       if( xChartDoc.is() )
+       {
         OSL_TRACE("DocxAttributeOutput::WriteOLE2Obj: export chart ");
         m_pSerializer->startElementNS( XML_w, XML_drawing,
             FSEND );
@@ -2791,8 +2818,8 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
             XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
             FSEND );
 
-        OString aWidth( OString::number( TwipsToEMU( rSize.Width() ) ) );
-        OString aHeight( OString::number( TwipsToEMU( rSize.Height() ) ) );
+        OString aWidth( OString::number( TwipsToEMU( m_postponedChartSize.Width() ) ) );
+        OString aHeight( OString::number( TwipsToEMU( m_postponedChartSize.Height() ) ) );
         m_pSerializer->singleElementNS( XML_wp, XML_extent,
             XML_cx, aWidth.getStr(),
             XML_cy, aHeight.getStr(),
@@ -2802,15 +2829,13 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
             XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
             FSEND );
 
-        // should get the unique id
-        sal_Int32 nID = 1;
         OUString sName("Object 1");
         uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
         if( xNamed.is() )
             sName = xNamed->getName();
 
         m_pSerializer->singleElementNS( XML_wp, XML_docPr,
-            XML_id, I32S( nID ),
+            XML_id, I32S( ++m_docPrID ),
             XML_name, USS( sName ),
             FSEND );
 
@@ -2842,9 +2867,9 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
         m_pSerializer->endElementNS( XML_wp, XML_inline );
         m_pSerializer->endElementNS( XML_w, XML_drawing );
 
-        return true;
     }
-    return false;
+        m_postponedChart = NULL;
+    return;
 }
 
 bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLENode, const Size& )
@@ -5639,6 +5664,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
       m_footnoteEndnoteRefTag( 0 ),
+      m_docPrID(0),
       m_pSectionInfo( NULL ),
       m_pRedlineData( NULL ),
       m_nRedlineId( 0 ),
@@ -5660,6 +5686,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postponedGraphic( NULL ),
       m_postponedDiagram( NULL ),
       m_postponedMath( NULL ),
+      m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 0 ),
