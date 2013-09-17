@@ -32,4 +32,7 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
+# empty to avoid --warn-undefined-functions
+gb_Library__set_soversion_script_platform =
+
 # vim:set noexpandtab:
