@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <cstdlib>
 #include <iostream>
 #include <map>
 #include <set>
