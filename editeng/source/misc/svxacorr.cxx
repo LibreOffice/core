@@ -832,16 +832,24 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         }
     } while( 0 == ( bAtStart = (pStart == pStr)) );
 
-    if( !pWordStt ||
-        rCC.isDigit(
-            aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) ||
-        IsUpperLetter(
+    if (!pWordStt)
+        return sal_False;    // no character to be replaced
+
+
+    if (rCC.isDigit( aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ))
+        return sal_False; // already ok
+
+    if (IsUpperLetter(
             rCC.getCharacterType(
                 aText,
-                sal::static_int_cast< xub_StrLen >( pWordStt - pStart ) ) ) ||
-        INetURLObject::CompareProtocolScheme(rTxt.copy(pWordStt - pStart, pDelim - pWordStt + 1)) != INET_PROT_NOT_VALID ||
-        0x1 == *pWordStt || 0x2 == *pWordStt )
-        return sal_False;       // no character to be replaced, or already ok
+                sal::static_int_cast< xub_StrLen >( pWordStt - pStart ) ) ) )
+        return sal_False; // already ok
+
+    if (INetURLObject::CompareProtocolScheme(rTxt.copy(pWordStt - pStart, pDelim - pWordStt + 1)) != INET_PROT_NOT_VALID)
+        return sal_False; // already ok
+
+    if (0x1 == *pWordStt || 0x2 == *pWordStt)
+        return sal_False; // already ok
 
     if( *pDelim && 2 >= pDelim - pWordStt &&
         lcl_IsInAsciiArr( ".-)>", *pDelim ) )
