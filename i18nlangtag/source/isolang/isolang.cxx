@@ -344,8 +344,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_KIRGHIZ,                     "ky", "KG", false },
     { LANGUAGE_LAO,                         "lo", "LA", false },
     { LANGUAGE_MALTESE,                     "mt", "MT", false },
-    { LANGUAGE_MONGOLIAN,                   "mn", "MN", false },   // Cyrillic script
-    { LANGUAGE_MONGOLIAN_MONGOLIAN,         "mn", "MN", false },
+    { LANGUAGE_MONGOLIAN,                   "mn", "MN", true  },   // Cyrillic script
     { LANGUAGE_RUSSIAN_MOLDOVA,             "mo", "MD", false },
     { LANGUAGE_SWAHILI,                     "sw", "KE", false },
     { LANGUAGE_USER_SWAHILI_TANZANIA,       "sw", "TZ", false },
@@ -581,6 +580,8 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA" },
     { LANGUAGE_AZERI_CYRILLIC,                  "az-Cyrl", "AZ" },  // macrolanguage code
     { LANGUAGE_UZBEK_CYRILLIC,                  "uz-Cyrl", "UZ" },  // macrolanguage code
+    { LANGUAGE_MONGOLIAN,                       "mn-Cyrl", "MN" },  // macrolanguage code
+    { LANGUAGE_MONGOLIAN_MONGOLIAN,             "mn-Mong", "MN" },  // macrolanguage code
     { LANGUAGE_USER_PALI_LATIN,                 "pi-Latn", ""   },
     { LANGUAGE_DONTKNOW,                        "",        ""   }   // marks end of table
 };
