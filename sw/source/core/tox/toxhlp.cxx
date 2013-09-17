@@ -44,11 +44,11 @@ IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
 {
 }
 
-String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
-                                               const String& rTxtReading,
-                                               const ::com::sun::star::lang::Locale& rLocale ) const
+OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rTxt,
+                                                 const OUString& rTxtReading,
+                                                 const ::com::sun::star::lang::Locale& rLocale ) const
 {
-    String sRet;
+    OUString sRet;
     try {
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
@@ -59,9 +59,9 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
     return sRet;
 }
 
-String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
+OUString IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
 {
-    String sRet;
+    OUString sRet;
     try {
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
@@ -89,7 +89,7 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Local
 
 sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
         const ::com::sun::star::lang::Locale& rLcl,
-        const String& sSortAlgorithm, long nOptions ) const
+        const OUString& sSortAlgorithm, long nOptions ) const
 {
     sal_Bool bRet = sal_False;
     try {
@@ -103,9 +103,9 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
 }
 
 sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
-            const String& rTxt1, const String& rTxtReading1,
+            const OUString& rTxt1, const OUString& rTxtReading1,
             const ::com::sun::star::lang::Locale& rLocale1,
-            const String& rTxt2, const String& rTxtReading2,
+            const OUString& rTxt2, const OUString& rTxtReading2,
             const ::com::sun::star::lang::Locale& rLocale2 ) const
 {
     sal_Int16 nRet = 0;

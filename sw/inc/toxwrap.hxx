@@ -35,8 +35,6 @@ namespace lang {
 }}}
 
 
-class String;
-
 class SW_DLLPUBLIC IndexEntrySupplierWrapper
 {
     ::com::sun::star::lang::Locale aLcl;
@@ -48,20 +46,20 @@ public:
 
     void SetLocale( const ::com::sun::star::lang::Locale& rLocale ) { aLcl = rLocale; }
 
-    String GetIndexKey( const String& rTxt, const String& rTxtReading,
+    OUString GetIndexKey( const OUString& rTxt, const OUString& rTxtReading,
                         const ::com::sun::star::lang::Locale& rLocale ) const;
 
-    String GetFollowingText( sal_Bool bMorePages ) const;
+    OUString GetFollowingText( sal_Bool bMorePages ) const;
 
     ::com::sun::star::uno::Sequence< OUString >
     GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const;
 
     sal_Bool LoadAlgorithm( const ::com::sun::star::lang::Locale& rLcl,
-                            const String& sSortAlgorithm, long nOptions ) const;
+                            const OUString& sSortAlgorithm, long nOptions ) const;
 
-    sal_Int16 CompareIndexEntry( const String& rTxt1, const String& rTxtReading1,
+    sal_Int16 CompareIndexEntry( const OUString& rTxt1, const OUString& rTxtReading1,
                                  const ::com::sun::star::lang::Locale& rLcl1,
-                                 const String& rTxt2, const String& rTxtReading2,
+                                 const OUString& rTxt2, const OUString& rTxtReading2,
                                  const ::com::sun::star::lang::Locale& rLcl2 ) const;
 };
 
