@@ -21,12 +21,12 @@
 #define SD_SIDEBAR_PANELS_DCUMENT_HELPER_HXX
 
 #include <tools/solar.h>
+#include <rtl/ustring.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
 class SdDrawDocument;
 class SdPage;
-class String;
 
 namespace sd { namespace sidebar {
 
@@ -98,7 +98,7 @@ private:
     */
     static void AssignMasterPageToPage (
         SdPage* pMasterPage,
-        const String& rsBaseLayoutName,
+        const OUString& rsBaseLayoutName,
         SdPage* pPage);
 };
 
