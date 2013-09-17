@@ -34,8 +34,8 @@ TYPEINIT1(SvxObjectItem, SfxPoolItem);
 int SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-        lLeft==((const SvxLongLRSpaceItem &)rCmp).lLeft &&
-        lRight==((const SvxLongLRSpaceItem &)rCmp).lRight;
+        mlLeft  == ((const SvxLongLRSpaceItem &)rCmp).mlLeft &&
+        mlRight == ((const SvxLongLRSpaceItem &)rCmp).mlRight;
 }
 
 OUString SvxLongLRSpaceItem::GetValueText() const
@@ -57,15 +57,21 @@ bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
         case 0:
         {
             ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
-            aLeftRightMargin.Left = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
-            aLeftRightMargin.Right = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
+            aLeftRightMargin.Left = bConvert ? TWIP_TO_MM100( mlLeft ) : mlLeft;
+            aLeftRightMargin.Right = bConvert ? TWIP_TO_MM100( mlRight ) : mlRight;
             rVal <<= aLeftRightMargin;
             return sal_True;
         }
 
-        case MID_LEFT: nVal = lLeft; break;
-        case MID_RIGHT: nVal = lRight; break;
-        default: OSL_FAIL("Wrong MemberId!"); return false;
+        case MID_LEFT:
+            nVal = mlLeft;
+            break;
+        case MID_RIGHT:
+            nVal = mlRight;
+            break;
+        default:
+            OSL_FAIL("Wrong MemberId!");
+            return false;
     }
 
     if ( bConvert )
@@ -86,8 +92,8 @@ bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
         ::com::sun::star::frame::status::LeftRightMargin aLeftRightMargin;
         if ( rVal >>= aLeftRightMargin )
         {
-            lLeft  = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Left) : aLeftRightMargin.Left;
-            lRight = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Right) : aLeftRightMargin.Right;
+            mlLeft  = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Left) : aLeftRightMargin.Left;
+            mlRight = bConvert ? MM100_TO_TWIP(aLeftRightMargin.Right) : aLeftRightMargin.Right;
             return true;
         }
     }
@@ -98,9 +104,15 @@ bool SvxLongLRSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
 
         switch( nMemberId )
         {
-            case MID_LEFT: lLeft = nVal; break;
-            case MID_RIGHT: lRight = nVal; break;
-            default: OSL_FAIL("Wrong MemberId!"); return false;
+            case MID_LEFT:
+                mlLeft = nVal;
+                break;
+            case MID_RIGHT:
+                mlRight = nVal;
+                break;
+            default:
+                OSL_FAIL("Wrong MemberId!");
+                return false;
         }
 
         return true;
@@ -124,42 +136,42 @@ SfxPoolItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
     return new SvxLongLRSpaceItem(*this);
 }
 
-SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lL, long lR, sal_uInt16 nId) :
+SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId) :
     SfxPoolItem (nId),
-    lLeft       (lL),
-    lRight      (lR)
+    mlLeft      (lLeft),
+    mlRight     (lRight)
 {}
 
 SvxLongLRSpaceItem::SvxLongLRSpaceItem() :
     SfxPoolItem (0),
-    lLeft       (0),
-    lRight      (0)
+    mlLeft      (0),
+    mlRight     (0)
 {}
 
 SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy) :
     SfxPoolItem (rCpy),
-    lLeft       (rCpy.lLeft),
-    lRight      (rCpy.lRight)
+    mlLeft      (rCpy.mlLeft),
+    mlRight     (rCpy.mlRight)
 {}
 
 long SvxLongLRSpaceItem::GetLeft() const
 {
-    return lLeft;
+    return mlLeft;
 }
 
 long SvxLongLRSpaceItem::GetRight() const
 {
-    return lRight;
+    return mlRight;
 }
 
 void SvxLongLRSpaceItem::SetLeft(long lArgLeft)
 {
-    lLeft = lArgLeft;
+    mlLeft = lArgLeft;
 }
 
 void SvxLongLRSpaceItem::SetRight(long lArgRight)
 {
-    lRight = lArgRight;
+    mlRight = lArgRight;
 }
 
 /* SvxLongULSpaceItem */
@@ -167,8 +179,8 @@ void SvxLongLRSpaceItem::SetRight(long lArgRight)
 int SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-        lLeft == ((const SvxLongULSpaceItem&)rCmp).lLeft &&
-        lRight == ((const SvxLongULSpaceItem&)rCmp).lRight;
+        mlLeft == ((const SvxLongULSpaceItem&)rCmp).mlLeft &&
+        mlRight == ((const SvxLongULSpaceItem&)rCmp).mlRight;
 }
 
 
@@ -188,14 +200,18 @@ bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8
         case 0:
         {
             ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
-            aUpperLowerMargin.Upper = bConvert ? TWIP_TO_MM100( lLeft ) : lLeft;
-            aUpperLowerMargin.Lower = bConvert ? TWIP_TO_MM100( lRight ) : lRight;
+            aUpperLowerMargin.Upper = bConvert ? TWIP_TO_MM100( mlLeft )  : mlLeft;
+            aUpperLowerMargin.Lower = bConvert ? TWIP_TO_MM100( mlRight ) : mlRight;
             rVal <<= aUpperLowerMargin;
             return true;
         }
 
-        case MID_UPPER: nVal = lLeft; break;
-        case MID_LOWER: nVal = lRight; break;
+        case MID_UPPER:
+            nVal = mlLeft;
+            break;
+        case MID_LOWER:
+            nVal = mlRight;
+            break;
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
@@ -217,8 +233,8 @@ bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
         ::com::sun::star::frame::status::UpperLowerMargin aUpperLowerMargin;
         if ( rVal >>= aUpperLowerMargin )
         {
-            lLeft    = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
-            lRight   = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Lower ) : aUpperLowerMargin.Lower;
+            mlLeft    = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
+            mlRight   = bConvert ? MM100_TO_TWIP( aUpperLowerMargin.Lower ) : aUpperLowerMargin.Lower;
             return true;
         }
     }
@@ -229,9 +245,15 @@ bool SvxLongULSpaceItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
 
         switch( nMemberId )
         {
-            case MID_UPPER: lLeft = nVal; break;
-            case MID_LOWER: lRight = nVal; break;
-            default: OSL_FAIL("Wrong MemberId!"); return false;
+            case MID_UPPER:
+                mlLeft = nVal;
+                break;
+            case MID_LOWER:
+                mlRight = nVal;
+                break;
+            default:
+                OSL_FAIL("Wrong MemberId!");
+                return false;
         }
 
         return true;
@@ -255,42 +277,42 @@ SfxPoolItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
     return new SvxLongULSpaceItem(*this);
 }
 
-SvxLongULSpaceItem::SvxLongULSpaceItem(long lL, long lR, sal_uInt16 nId) :
+SvxLongULSpaceItem::SvxLongULSpaceItem(long lLeft, long lRight, sal_uInt16 nId) :
     SfxPoolItem (nId),
-    lLeft       (lL),
-    lRight      (lR)
+    mlLeft       (lLeft),
+    mlRight      (lRight)
 {}
 
 SvxLongULSpaceItem::SvxLongULSpaceItem(const SvxLongULSpaceItem &rCpy) :
     SfxPoolItem (rCpy),
-    lLeft       (rCpy.lLeft),
-    lRight      (rCpy.lRight)
+    mlLeft      (rCpy.mlLeft),
+    mlRight     (rCpy.mlRight)
 {}
 
 SvxLongULSpaceItem::SvxLongULSpaceItem() :
     SfxPoolItem (0),
-    lLeft       (0),
-    lRight      (0)
+    mlLeft      (0),
+    mlRight     (0)
 {}
 
 long SvxLongULSpaceItem::GetUpper() const
 {
-    return lLeft;
+    return mlLeft;
 }
 
 long SvxLongULSpaceItem::GetLower() const
 {
-    return lRight;
+    return mlRight;
 }
 
 void SvxLongULSpaceItem::SetUpper(long lArgLeft)
 {
-    lLeft = lArgLeft;
+    mlLeft = lArgLeft;
 }
 
 void SvxLongULSpaceItem::SetLower(long lArgRight)
 {
-    lRight = lArgRight;
+    mlRight = lArgRight;
 }
 
 /* SvxPagePosSizeItem */
@@ -586,8 +608,6 @@ sal_uInt16 SvxColumnItem::Count() const
     return aColumns.size();
 }
 
-/* SvxColumnDescription */
-
 SvxColumnDescription& SvxColumnItem::At(sal_uInt16 index)
 {
     return aColumns[index];
@@ -668,6 +688,60 @@ sal_Bool SvxColumnItem::IsTable() const
     return bTable;
 }
 
+/* SvxColumnDescription */
+
+SvxColumnDescription::SvxColumnDescription() :
+    nStart   (0),
+    nEnd     (0),
+    bVisible (sal_True),
+    nEndMin  (0),
+    nEndMax  (0)
+{}
+
+SvxColumnDescription::SvxColumnDescription(const SvxColumnDescription &rCopy) :
+    nStart   (rCopy.nStart),
+    nEnd     (rCopy.nEnd),
+    bVisible (rCopy.bVisible),
+    nEndMin  (rCopy.nEndMin),
+    nEndMax  (rCopy.nEndMax)
+{}
+
+SvxColumnDescription::SvxColumnDescription(long start, long end, sal_Bool bVis) :
+    nStart   (start),
+    nEnd     (end),
+    bVisible (bVis),
+    nEndMin  (0),
+    nEndMax  (0)
+{}
+
+SvxColumnDescription::SvxColumnDescription(long start, long end, long endMin, long endMax, sal_Bool bVis) :
+    nStart   (start),
+    nEnd     (end),
+    bVisible (bVis),
+    nEndMin  (endMin),
+    nEndMax  (endMax)
+{}
+
+int SvxColumnDescription::operator==(const SvxColumnDescription& rCmp) const
+{
+    return nStart   == rCmp.nStart
+        && bVisible == rCmp.bVisible
+        && nEnd     == rCmp.nEnd
+        && nEndMin  == rCmp.nEndMin
+        && nEndMax  == rCmp.nEndMax;
+}
+
+int SvxColumnDescription::operator!=(const SvxColumnDescription& rCmp) const
+{
+    return !operator==(rCmp);
+}
+
+long SvxColumnDescription::GetWidth() const
+{
+    return nEnd - nStart;
+}
+
+/* SvxColumnItem */
 void SvxColumnItem::SetOrtho(sal_Bool bVal)
 {
     bOrtho = bVal;
@@ -698,13 +772,12 @@ OUString SvxObjectItem::GetValueText() const
     return OUString();
 }
 
-SfxItemPresentation SvxObjectItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    OUString&           /*rText*/, const IntlWrapper *
-)   const
+SfxItemPresentation SvxObjectItem::GetPresentation(
+                        SfxItemPresentation /*ePres*/,
+                        SfxMapUnit          /*eCoreUnit*/,
+                        SfxMapUnit          /*ePresUnit*/,
+                        OUString&           /*rText*/,
+                        const IntlWrapper*  /*pWrapper*/ ) const
 {
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -716,44 +789,46 @@ SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
 
 SvxObjectItem::SvxObjectItem( long nSX, long nEX,
                               long nSY, long nEY, sal_Bool limits ) :
-
-    SfxPoolItem( SID_RULER_OBJECT ),
-
-    nStartX ( nSX ),
-    nEndX   ( nEX ),
-    nStartY ( nSY ),
-    nEndY   ( nEY ),
-    bLimits ( limits )
-
-{
-}
+    SfxPoolItem (SID_RULER_OBJECT),
+    nStartX     (nSX),
+    nEndX       (nEX),
+    nStartY     (nSY),
+    nEndY       (nEY),
+    bLimits     (limits)
+{}
 
 SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
-
-    SfxPoolItem( rCopy ),
-
-    nStartX ( rCopy.nStartX ),
-    nEndX   ( rCopy.nEndX ),
-    nStartY ( rCopy.nStartY ),
-    nEndY   ( rCopy.nEndY ),
-    bLimits ( rCopy.bLimits )
-
-{
-}
+    SfxPoolItem (rCopy),
+    nStartX     (rCopy.nStartX),
+    nEndX       (rCopy.nEndX),
+    nStartY     (rCopy.nStartY),
+    nEndY       (rCopy.nEndY),
+    bLimits     (rCopy.bLimits)
+{}
 
 bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
-    switch ( nMemberId )
+    switch (nMemberId)
     {
-        case MID_START_X : rVal <<= nStartX; break;
-        case MID_START_Y : rVal <<= nStartY; break;
-        case MID_END_X : rVal <<= nEndX; break;
-        case MID_END_Y : rVal <<= nEndY; break;
-        case MID_LIMIT : rVal <<= bLimits; break;
+        case MID_START_X:
+            rVal <<= nStartX;
+            break;
+        case MID_START_Y:
+            rVal <<= nStartY;
+            break;
+        case MID_END_X:
+            rVal <<= nEndX;
+            break;
+        case MID_END_Y:
+            rVal <<= nEndY;
+            break;
+        case MID_LIMIT:
+            rVal <<= bLimits;
+            break;
         default:
             OSL_FAIL( "Wrong MemberId" );
-            return sal_False;
+            return false;
     }
 
     return true;
@@ -763,17 +838,72 @@ bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;
-    switch ( nMemberId )
+    switch (nMemberId)
     {
-        case MID_START_X : bRet = (rVal >>= nStartX); break;
-        case MID_START_Y : bRet = (rVal >>= nStartY); break;
-        case MID_END_X : bRet = (rVal >>= nEndX); break;
-        case MID_END_Y : bRet = (rVal >>= nEndY); break;
-        case MID_LIMIT : bRet = (rVal >>= bLimits); break;
+        case MID_START_X:
+            bRet = (rVal >>= nStartX);
+            break;
+        case MID_START_Y:
+            bRet = (rVal >>= nStartY);
+            break;
+        case MID_END_X:
+            bRet = (rVal >>= nEndX);
+            break;
+        case MID_END_Y:
+            bRet = (rVal >>= nEndY);
+            break;
+        case MID_LIMIT:
+            bRet = (rVal >>= bLimits);
+            break;
         default: OSL_FAIL( "Wrong MemberId" );
     }
 
     return bRet;
+}
+
+sal_Bool SvxObjectItem::HasLimits() const
+{
+    return bLimits;
+}
+
+long SvxObjectItem::GetStartX() const
+{
+    return nStartX;
+}
+
+long SvxObjectItem::GetEndX() const
+{
+    return nEndX;
+}
+
+long SvxObjectItem::GetStartY() const
+{
+    return nStartY;
+}
+
+long SvxObjectItem::GetEndY() const
+{
+    return nEndY;
+}
+
+void SvxObjectItem::SetStartX(long lValue)
+{
+    nStartX = lValue;
+}
+
+void SvxObjectItem::SetEndX(long lValue)
+{
+    nEndX = lValue;
+}
+
+void SvxObjectItem::SetStartY(long lValue)
+{
+    nStartY = lValue;
+}
+
+void SvxObjectItem::SetEndY(long lValue)
+{
+    nEndY = lValue;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

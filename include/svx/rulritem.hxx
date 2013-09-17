@@ -26,8 +26,8 @@
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 {
-    long    lLeft;         // nLeft or the negativ first-line indentation
-    long    lRight;        // the unproblematic right edge
+    long    mlLeft;         // nLeft or the negativ first-line indentation
+    long    mlRight;        // the unproblematic right edge
 
   protected:
 
@@ -60,8 +60,8 @@ public:
 
 class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 {
-    long    lLeft;         // nLeft or the negative first-line indentation
-    long    lRight;        // the unproblematic right edge
+    long    mlLeft;         // nLeft or the negative first-line indentation
+    long    mlRight;        // the unproblematic right edge
 
   protected:
 
@@ -123,47 +123,27 @@ public:
     long    GetHeight() const { return lHeight; }
 };
 
-struct SvxColumnDescription
+struct SVX_DLLPUBLIC SvxColumnDescription
 {
-    long nStart;                    /* Start of the column */
-    long nEnd;                      /* End of the column */
-    sal_Bool bVisible;              /* Visibility */
+    long     nStart;    /* Start of the column */
+    long     nEnd;      /* End of the column */
+    sal_Bool bVisible;  /* Visibility */
 
-    long nEndMin;         //min. possible position of end
-    long nEndMax;         //max. possible position of end
+    long nEndMin; //min. possible position of end
+    long nEndMax; //max. possible position of end
 
-    SvxColumnDescription():
-        nStart(0), nEnd(0), bVisible(sal_True), nEndMin(0), nEndMax(0) {}
+    SvxColumnDescription();
 
-    SvxColumnDescription(const SvxColumnDescription &rCopy) :
-        nStart(rCopy.nStart), nEnd(rCopy.nEnd),
-        bVisible(rCopy.bVisible),
-        nEndMin(rCopy.nEndMin), nEndMax(rCopy.nEndMax)
-         {}
+    SvxColumnDescription(const SvxColumnDescription &rCopy);
 
-    SvxColumnDescription(long start, long end, sal_Bool bVis = sal_True):
-        nStart(start), nEnd(end),
-        bVisible(bVis),
-        nEndMin(0), nEndMax(0) {}
+    SvxColumnDescription(long start, long end, sal_Bool bVis = sal_True);
 
     SvxColumnDescription(long start, long end,
-                        long endMin, long endMax, sal_Bool bVis = sal_True):
-        nStart(start), nEnd(end),
-        bVisible(bVis),
-        nEndMin(endMin), nEndMax(endMax)
-         {}
+                         long endMin, long endMax, sal_Bool bVis = sal_True);
 
-    int operator==(const SvxColumnDescription &rCmp) const {
-        return nStart == rCmp.nStart &&
-            bVisible == rCmp.bVisible &&
-            nEnd == rCmp.nEnd &&
-            nEndMin == rCmp.nEndMin &&
-                nEndMax == rCmp.nEndMax;
-    }
-    int operator!=(const SvxColumnDescription &rCmp) const {
-        return !operator==(rCmp);
-    }
-    long GetWidth() const { return nEnd - nStart; }
+    int operator==(const SvxColumnDescription &rCmp) const;
+    int operator!=(const SvxColumnDescription &rCmp) const;
+    long GetWidth() const;
 };
 
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
@@ -233,11 +213,12 @@ public:
 class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
 {
 private:
-    long   nStartX;                    /* Start in x direction */
-    long   nEndX;                      /* End in x direction */
-    long   nStartY;                    /* Start in y direction */
-    long   nEndY;                      /* Ende in y direction */
-    sal_Bool bLimits;                  /* boundary limit control by the application */
+    long nStartX;   /* Start in x direction */
+    long nEndX;     /* End in x direction */
+    long nStartY;   /* Start in y direction */
+    long nEndY;     /* Ende in y direction */
+    sal_Bool bLimits; /* boundary limit control by the application */
+
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
 
@@ -250,26 +231,28 @@ protected:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+
 private:
     SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
+
 public:
     TYPEINFO();
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY,
                   sal_Bool bLimits = sal_False);
-    SvxObjectItem(const SvxObjectItem &);
+    SvxObjectItem(const SvxObjectItem& rCopy);
 
-    sal_Bool   HasLimits() const { return bLimits; }
+    sal_Bool HasLimits() const;
 
-    long   GetStartX() const { return nStartX; }
-    long   GetEndX() const { return nEndX; }
-    long   GetStartY() const { return nStartY; }
-    long   GetEndY() const { return nEndY; }
+    long GetStartX() const;
+    long GetEndX() const;
+    long GetStartY() const;
+    long GetEndY() const;
 
-    void   SetStartX(long l) { nStartX = l; }
-    void   SetEndX(long l) { nEndX = l; }
-    void   SetStartY(long l) { nStartY = l; }
-    void   SetEndY(long l) { nEndY = l; }
+    void SetStartX(long lValue);
+    void SetEndX(long lValue);
+    void SetStartY(long lValue);
+    void SetEndY(long lValue);
 };
 
 
