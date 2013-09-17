@@ -77,18 +77,6 @@ OString generateHashForSource()
 
 OString OpenclDevice::maSourceHash = generateHashForSource();
 
-int OpenclDevice::initEnv()
-{
-    // TODO: This part needs more platform specific handling.  On Windows,
-    // the GPU Driver itself  installs OpenCL.dll in the system folder.
-    int status = clewInit(OPENCL_DLL_NAME);
-    if (status < 0)
-        return 1;
-
-    initOpenclRunEnv( 0 );
-    return 1;
-}
-
 int OpenclDevice::releaseOpenclRunEnv()
 {
     releaseOpenclEnv( &gpuEnv );

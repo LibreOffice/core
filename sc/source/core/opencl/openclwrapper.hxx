@@ -162,7 +162,6 @@ class OpenclDevice
 public:
     static GPUEnv gpuEnv;
     static int isInited;
-    static int initEnv();
     static OString maSourceHash;
     static int registOpenclKernel();
     static int releaseOpenclRunEnv();
