@@ -19,7 +19,7 @@
 
 #include "documentfontsdialog.hxx"
 
-#include <objsh.hxx>
+#include <sfx2/objsh.hxx>
 
 using namespace ::com::sun::star;
 

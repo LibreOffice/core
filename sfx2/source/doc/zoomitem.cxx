@@ -23,7 +23,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 // -----------------------------------------------------------------------
 
 TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);

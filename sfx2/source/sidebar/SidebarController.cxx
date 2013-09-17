@@ -30,7 +30,7 @@
 #include "SidebarDockingWindow.hxx"
 #include "Context.hxx"
 
-#include "sfxresid.hxx"
+#include <sfx2/sfxresid.hxx>
 #include "sfx2/sfxsids.hrc"
 #include "sfx2/titledockwin.hxx"
 #include "sfxlocal.hrc"
