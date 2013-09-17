@@ -299,6 +299,7 @@ private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >     m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xPageStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               m_xBodyText;
+    ::com::sun::star::uno::Reference<text::XTextContent>                            m_xEmbedded;
 
     TextAppendStack                                                                 m_aTextAppendStack;
 
@@ -523,6 +524,7 @@ public:
 
     void PushShapeContext( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     void PopShapeContext();
+    void UpdateEmbeddedShapeProps( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     /// Add a pending shape: it's currently inserted into the document, but it should be removed before the import finishes.
     void PushPendingShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     /// Get the first pending shape, if there are any.

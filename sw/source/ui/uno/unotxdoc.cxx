@@ -1697,14 +1697,6 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
 
             if(!xRet.is())
             {
-                //! we don't want to insert OLE2 Shapes (e.g. "com.sun.star.drawing.OLE2Shape", ...)
-                //! like this (by creating them with the documents factory and
-                //! adding the shapes to the draw page).
-                //! For inserting OLE objects the proper way is to use
-                //! "com.sun.star.text.TextEmbeddedObject"!
-                if (rServiceName.lastIndexOf( ".OLE2Shape" ) == rServiceName.getLength() - 10)
-                    throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
-
                 //
                 // the XML import is allowed to create instances of com.sun.star.drawing.OLE2Shape.
                 // Thus, a temporary service name is introduced to make this possible.

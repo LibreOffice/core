@@ -27,6 +27,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/chart" alias="chart" id="dmlChart"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
@@ -5169,6 +5170,7 @@
           <ref name="pic"/>
           <ref name="relIds"/>
           <ref name="lockedCanvas"/>
+          <ref name="chart"/>
           <element>
             <anyName/>
             <ref name="BUILT_IN_ANY_TYPE"/>
@@ -5196,6 +5198,7 @@
       <element name="pic" tokenid="ooxml:CT_GraphicalObjectData_pic"/>
       <element name="relIds" tokenid="ooxml:CT_GraphicalObjectData_relIds"/>
       <element name="lockedCanvas" tokenid="ooxml:CT_GraphicalObjectData_lockedCanvas"/>
+      <element name="chart" tokenid="ooxml:CT_GraphicalObjectData_chart"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
     <resource name="CT_GraphicalObject" resource="Properties" tag="shape">
@@ -8472,6 +8475,16 @@
           <ref name="CT_GvmlGroupShape"/>
         </element>
       </define>
+      <define xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Chart">
+        <attribute name="r:id">
+          <text/>
+        </attribute>
+        </define>
+      <define name="chart">
+        <element xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" name="c:chart">
+            <ref name="CT_Chart"/>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_PictureNonVisual" resource="Properties" tag="shape">
       <element name="cNvPr" tokenid="ooxml:CT_PictureNonVisual_cNvPr"/>
@@ -8501,6 +8514,13 @@
     <resource name="lockedCanvas" resource="Shape" tag="shape">
       <element xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" name="lc:lockedCanvas" tokenid="ooxml:lc_lockedCanvas"/>
     </resource>
+    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Chart" resource="Shape" tag="shape">
+      <attribute name="r:id" tokenid="ooxml:CT_RelId_chart"/>
+    </resource>
+    <resource name="chart" resource="Shape" tag="shape">
+        <element xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" name="c:chart" tokenid="ooxml:c_chart"/>
+    </resource>
+
   </namespace>
   <namespace name="vml-main" file="vml-main.rng" todo="ignore">
     <start name="shape"/>
