@@ -364,8 +364,6 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
-    long nWidth;
-
     DECL_LINK( ClickmaPbSetPwdHdl, void* );
 
     void enablePermissionControls();
