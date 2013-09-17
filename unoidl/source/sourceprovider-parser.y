@@ -2502,31 +2502,31 @@ serviceProperty:
           YYERROR;
       }
       int att = 0;
-      if (($2 && unoidl::detail::FLAG_BOUND) != 0) {
+      if (($2 & unoidl::detail::FLAG_BOUND) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_BOUND;
       }
-      if (($2 && unoidl::detail::FLAG_CONSTRAINED) != 0) {
+      if (($2 & unoidl::detail::FLAG_CONSTRAINED) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_CONSTRAINED;
       }
-      if (($2 && unoidl::detail::FLAG_MAYBEAMBIGUOUS) != 0) {
+      if (($2 & unoidl::detail::FLAG_MAYBEAMBIGUOUS) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_AMBIGUOUS;
       }
-      if (($2 && unoidl::detail::FLAG_MAYBEDEFAULT) != 0) {
+      if (($2 & unoidl::detail::FLAG_MAYBEDEFAULT) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_DEFAULT;
       }
-      if (($2 && unoidl::detail::FLAG_MAYBEVOID) != 0) {
+      if (($2 & unoidl::detail::FLAG_MAYBEVOID) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_MAYBE_VOID;
       }
-      if (($2 && unoidl::detail::FLAG_OPTIONAL) != 0) {
+      if (($2 & unoidl::detail::FLAG_OPTIONAL) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_OPTIONAL;
       }
-      if (($2 && unoidl::detail::FLAG_READONLY) != 0) {
+      if (($2 & unoidl::detail::FLAG_READONLY) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_READ_ONLY;
       }
-      if (($2 && unoidl::detail::FLAG_REMOVABLE) != 0) {
+      if (($2 & unoidl::detail::FLAG_REMOVABLE) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_REMOVABLE;
       }
-      if (($2 && unoidl::detail::FLAG_TRANSIENT) != 0) {
+      if (($2 & unoidl::detail::FLAG_TRANSIENT) != 0) {
           att |= unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_TRANSIENT;
       }
       switch (t.type) {
