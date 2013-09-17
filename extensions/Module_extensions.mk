@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_dbp \
 	Library_pcr \
 	UIConfig_sbibliography \
+	UIConfig_spropctrlr \
 ))
 endif
 

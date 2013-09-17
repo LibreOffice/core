@@ -45,7 +45,7 @@ namespace pcr
     class TabOrderListBox : public SvTreeListBox
     {
     public:
-        TabOrderListBox( Window* pParent, const ResId& rResId  );
+        TabOrderListBox( Window* pParent, WinBits nBits  );
         virtual ~TabOrderListBox();
 
         void            MoveSelection( long nRelPos );
@@ -72,16 +72,13 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                     m_xORB;
 
-        FixedText                   aFT_Controls;
-        TabOrderListBox         aLB_Controls;
+        TabOrderListBox* m_pLB_Controls;
 
-        OKButton                    aPB_OK;
-        CancelButton                aPB_CANCEL;
-        HelpButton                  aPB_HELP;
+        OKButton* m_pPB_OK;
 
-        PushButton                  aPB_MoveUp;
-        PushButton                  aPB_MoveDown;
-        PushButton                  aPB_AutoOrder;
+        PushButton* m_pPB_MoveUp;
+        PushButton* m_pPB_MoveDown;
+        PushButton* m_pPB_AutoOrder;
 
         ImageList*                  pImageList;
 

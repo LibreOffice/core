@@ -415,6 +415,9 @@
     <glade-widget-class title="Tooltip Tree List" name="swuilo-SwFldRefTreeListBox"
                         generic-name="Tooltip Tree List" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Tab Order ListBox" name="pcrlo-TabOrderListBox"
+                        generic-name="TabOrderListBox" parent="svtlo-SvTreeListBox"
+                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Checked Tree List" name="svxlo-SvxCheckListBox"
                         generic-name="Checked Tree List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>

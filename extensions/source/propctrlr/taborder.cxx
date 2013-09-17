@@ -18,7 +18,6 @@
  */
 
 #include "taborder.hxx"
-#include "taborder.hrc"
 
 #include "modulepcr.hxx"
 #include "formresid.hrc"
@@ -29,7 +28,8 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/runtime/FormController.hpp>
 #include <vcl/scrbar.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <vcl/builder.hxx>
 
 //............................................................................
 namespace pcr
@@ -74,27 +74,25 @@ namespace pcr
     //------------------------------------------------------------------------
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB )
-        :ModalDialog( _pParent, PcrRes( RID_DLG_TABORDER ) )
+        :ModalDialog( _pParent, "TabOrderDialog", "modules/spropctrlr/ui/taborder.ui")
         ,m_xModel( _rxTabModel )
         ,m_xControlContainer( _rxControlCont )
         ,m_xORB( _rxORB )
-        ,aFT_Controls( this, PcrRes( FT_CONTROLS ) )
-        ,aLB_Controls( this, PcrRes( CTRL_TREE ) )
-        ,aPB_OK( this, PcrRes( PB_OK ) )
-        ,aPB_CANCEL( this, PcrRes( PB_CANCEL ) )
-        ,aPB_HELP( this, PcrRes( PB_HELP ) )
-        ,aPB_MoveUp( this, PcrRes( PB_MOVE_UP ) )
-        ,aPB_MoveDown( this, PcrRes( PB_MOVE_DOWN ) )
-        ,aPB_AutoOrder( this, PcrRes( PB_AUTO_ORDER ) )
         ,pImageList( NULL )
     {
+        get(m_pLB_Controls, "CTRLtree");
+        get(m_pPB_OK, "ok");
+        get(m_pPB_MoveUp, "upB");
+        get(m_pPB_MoveDown, "downB");
+        get(m_pPB_AutoOrder, "autoB");
+
         DBG_CTOR(TabOrderDialog,NULL);
 
-        aPB_MoveUp.SetClickHdl( LINK( this, TabOrderDialog, MoveUpClickHdl ) );
-        aPB_MoveDown.SetClickHdl( LINK( this, TabOrderDialog, MoveDownClickHdl ) );
-        aPB_AutoOrder.SetClickHdl( LINK( this, TabOrderDialog, AutoOrderClickHdl ) );
-        aPB_OK.SetClickHdl( LINK( this, TabOrderDialog, OKClickHdl ) );
-        aPB_OK.Disable();
+        m_pPB_MoveUp->SetClickHdl( LINK( this, TabOrderDialog, MoveUpClickHdl ) );
+        m_pPB_MoveDown->SetClickHdl( LINK( this, TabOrderDialog, MoveDownClickHdl ) );
+        m_pPB_AutoOrder->SetClickHdl( LINK( this, TabOrderDialog, AutoOrderClickHdl ) );
+        m_pPB_OK->SetClickHdl( LINK( this, TabOrderDialog, OKClickHdl ) );
+        m_pPB_OK->Disable();
 
         pImageList = new ImageList( PcrRes( RID_IL_FORMEXPLORER ) );
 
@@ -104,26 +102,25 @@ namespace pcr
         if ( m_xTempModel.is() && m_xControlContainer.is() )
             FillList();
 
-        if ( aLB_Controls.GetEntryCount() < 2 )
+        if ( m_pLB_Controls->GetEntryCount() < 2 )
         {
-            aPB_MoveUp.Disable();
-            aPB_MoveDown.Disable();
-            aPB_AutoOrder.Disable();
+            m_pPB_MoveUp->Disable();
+            m_pPB_MoveDown->Disable();
+            m_pPB_AutoOrder->Disable();
         }
 
-        FreeResource();
     }
 
     //------------------------------------------------------------------------
     void TabOrderDialog::SetModified()
     {
-        aPB_OK.Enable();
+        m_pPB_OK->Enable();
     }
 
     //------------------------------------------------------------------------
     TabOrderDialog::~TabOrderDialog()
     {
-        aLB_Controls.Hide();
+        m_pLB_Controls->Hide();
         //  delete pLB_Controls;
         delete pImageList;
 
@@ -175,7 +172,7 @@ namespace pcr
         if ( !m_xTempModel.is() || !m_xControlContainer.is() )
             return;
 
-        aLB_Controls.Clear();
+        m_pLB_Controls->Clear();
 
         try
         {
@@ -199,14 +196,14 @@ namespace pcr
                         aName = ::comphelper::getString( xControl->getPropertyValue( PROPERTY_NAME ) );
                             // TODO: do Basic controls have a name?
                         aImage = GetImage( xControl );
-                        aLB_Controls.InsertEntry( aName, aImage, aImage, 0, sal_False, LIST_APPEND, xControl.get() );
+                        m_pLB_Controls->InsertEntry( aName, aImage, aImage, 0, sal_False, LIST_APPEND, xControl.get() );
                     }
                 }
                 else
                 {
                     // no property set -> no tab order
                     OSL_FAIL( "TabOrderDialog::FillList: invalid control encountered!" );
-                    aLB_Controls.Clear();
+                    m_pLB_Controls->Clear();
                     break;
                 }
             }
@@ -217,22 +214,22 @@ namespace pcr
         }
 
         // select first entry
-        SvTreeListEntry* pFirstEntry = aLB_Controls.GetEntry( 0 );
+        SvTreeListEntry* pFirstEntry = m_pLB_Controls->GetEntry( 0 );
         if ( pFirstEntry )
-            aLB_Controls.Select( pFirstEntry );
+            m_pLB_Controls->Select( pFirstEntry );
     }
 
     //------------------------------------------------------------------------
     IMPL_LINK( TabOrderDialog, MoveUpClickHdl, Button*, /*pButton*/ )
     {
-        aLB_Controls.MoveSelection( -1 );
+        m_pLB_Controls->MoveSelection( -1 );
         return 0;
     }
 
     //------------------------------------------------------------------------
     IMPL_LINK( TabOrderDialog, MoveDownClickHdl, Button*, /*pButton*/ )
     {
-        aLB_Controls.MoveSelection( 1 );
+        m_pLB_Controls->MoveSelection( 1 );
         return 0;
     }
 
@@ -263,7 +260,7 @@ namespace pcr
     //------------------------------------------------------------------------
     IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, /*pButton*/ )
     {
-        sal_uLong nEntryCount = aLB_Controls.GetEntryCount();
+        sal_uLong nEntryCount = m_pLB_Controls->GetEntryCount();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
         Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
         Reference< XControlModel > * pSortedControlModels = aSortedControlModelSeq.getArray();
@@ -271,7 +268,7 @@ namespace pcr
 
         for (sal_uLong i=0; i < nEntryCount; i++)
         {
-            SvTreeListEntry* pEntry = aLB_Controls.GetEntry(i);
+            SvTreeListEntry* pEntry = m_pLB_Controls->GetEntry(i);
 
             for( sal_Int32 j=0; j<aControlModels.getLength(); j++ )
             {
@@ -296,14 +293,24 @@ namespace pcr
     //========================================================================
     DBG_NAME(TabOrderListBox);
     //------------------------------------------------------------------------
-    TabOrderListBox::TabOrderListBox( Window* pParent, const ResId& rResId  )
-        :SvTreeListBox( pParent, rResId  )
+    TabOrderListBox::TabOrderListBox( Window* pParent, WinBits nBits  )
+        :SvTreeListBox( pParent, nBits  )
     {
         DBG_CTOR(TabOrderListBox,NULL);
         SetDragDropMode(0xFFFF/*SV_DRAGDROP_CTRL_MOVE*/);
             // Hmm. The flag alone is not enough, so to be on the safe side ...
 
         SetSelectionMode( MULTIPLE_SELECTION );
+    }
+
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTabOrderListBox(Window *pParent,
+         VclBuilder::stringmap &rMap)
+    {
+         WinBits nWinStyle = WB_TABSTOP;
+         OString sBorder = VclBuilder::extractCustomProperty(rMap);
+         if (!sBorder.isEmpty())
+             nWinStyle |= WB_BORDER;
+         return new TabOrderListBox(pParent, nWinStyle);
     }
 
     //------------------------------------------------------------------------

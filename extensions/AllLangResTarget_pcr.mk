@@ -28,7 +28,6 @@ $(eval $(call gb_SrsTarget_add_files,pcr/res,\
 	extensions/source/propctrlr/propres.src \
 	extensions/source/propctrlr/formres.src \
 	extensions/source/propctrlr/pcrmiscres.src \
-	extensions/source/propctrlr/taborder.src \
 	extensions/source/propctrlr/fontdialog.src \
 	extensions/source/propctrlr/selectlabeldialog.src \
 	extensions/source/propctrlr/formlinkdialog.src \
