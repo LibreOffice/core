@@ -27,6 +27,7 @@
 #include "DrawDocShell.hxx"
 #include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
+#include <svx/svxdlg.hxx>
 #include <editeng/svxenum.hxx>
 
 /**
@@ -52,8 +53,11 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
 
     FreeResource();
 
-    AddTabPage( RID_SVXPAGE_PAGE);
-    AddTabPage( RID_SVXPAGE_AREA);
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
+
+    AddTabPage( RID_SVXPAGE_PAGE, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );
+    AddTabPage( RID_SVXPAGE_AREA, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), 0 );
 
     if(!bAreaPage)  // I have to add the page before I remove it !
         RemoveTabPage( RID_SVXPAGE_AREA );
