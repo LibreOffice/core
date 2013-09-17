@@ -204,7 +204,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Dhivehi" ; LANGUAGE_DHIVEHI ; > ;
         < "Northern Sotho" ; LANGUAGE_SEPEDI ; > ;
         < "Gaelic (Scotland)" ; LANGUAGE_GAELIC_SCOTLAND ; > ;
-        < "Mongolian" ; LANGUAGE_MONGOLIAN ; > ;
+        < "Mongolian Cyrillic" ; LANGUAGE_MONGOLIAN ; > ;
+        < "Mongolian Mongolian" ; LANGUAGE_MONGOLIAN_MONGOLIAN ; > ;
         < "Interlingua" ; LANGUAGE_USER_INTERLINGUA ; > ;
         < "Bosnian" ; LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA ; > ;
         < "Bengali (Bangladesh)" ; LANGUAGE_BENGALI_BANGLADESH ; > ;
