@@ -28,6 +28,9 @@
 
 #include <svx/dialogs.hrc>
 
+#define TMP_STR_BEGIN   '['
+#define TMP_STR_END     ']'
+
 #define DELAY_TIMEOUT           100
 
 #include <svx/xlnclit.hxx>
@@ -295,7 +298,40 @@ SvxColorBox::~SvxColorBox()
 void SvxColorBox::Update( const XLineColorItem* pItem )
 {
     if ( pItem )
-        SelectEntry( pItem->GetColorValue() );
+    {
+      // fdo#64455
+        ::Color aColor = pItem->GetColorValue();
+        String aString( pItem->GetName() );
+        SelectEntry(aString);
+        if( GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND ||
+            GetSelectEntryColor() != aColor )
+        {
+            SelectEntry( aColor );
+        }
+        // Check if the entry is not in the list
+        if( GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND ||
+            GetSelectEntryColor() != aColor )
+        {
+            sal_uInt16 nCount = GetEntryCount();
+            String aTmpStr;
+            if( nCount > 0 )
+            {
+                // Last entry gets tested against temporary color
+                aTmpStr = GetEntry( nCount - 1 );
+                if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
+                     aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                {
+                    RemoveEntry( nCount - 1 );
+                }
+            }
+            aTmpStr = TMP_STR_BEGIN;
+            aTmpStr += aString;
+            aTmpStr += TMP_STR_END;
+
+            sal_uInt16 nPos = InsertEntry( aColor, aTmpStr );
+            SelectEntryPos( nPos );
+        }
+    }
     else
         SetNoSelection();
 }
