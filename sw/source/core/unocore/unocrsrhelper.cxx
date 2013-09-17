@@ -389,11 +389,11 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_PAGE_STYLE :
         {
-            String sVal;
+            OUString sVal;
             GetCurPageStyle(rPam, sVal);
             if( pAny )
-                *pAny <<= OUString(sVal);
-            if(!sVal.Len())
+                *pAny <<= sVal;
+            if(sVal.isEmpty())
                 eNewState = PropertyState_AMBIGUOUS_VALUE;
         }
         break;
@@ -898,7 +898,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
         eState = PropertyState_DEFAULT_VALUE;
 }
 
-void GetCurPageStyle(SwPaM& rPaM, String &rString)
+void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 {
     if (!rPaM.GetCntntNode())
         return; // TODO: is there an easy way to get it for tables/sections?
@@ -959,7 +959,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
 }
 
 void InsertFile(SwUnoCrsr* pUnoCrsr,
-    const String& rURL,
+    const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions
     ) throw( lang::IllegalArgumentException, io::IOException, uno::RuntimeException )
 {
@@ -1108,7 +1108,8 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
 // paragraph breaks at those positions by calling SplitNode
 bool DocInsertStringSplitCR(
         SwDoc &rDoc,
-        const SwPaM &rNewCursor, const String &rText,
+        const SwPaM &rNewCursor,
+        const OUString &rText,
         const bool bForceExpandHints )
 {
     bool bOK = true;
@@ -1134,16 +1135,16 @@ bool DocInsertStringSplitCR(
     const xub_StrLen nMaxLength = ( pTxtNd )
         ? STRING_LEN - pTxtNd->GetTxt().getLength()
         : STRING_LEN;
-    xub_StrLen nIdx = rText.Search( '\r', nStartIdx );
-    if( ( nIdx == STRING_NOTFOUND && nMaxLength < rText.Len() ) ||
-        ( nIdx != STRING_NOTFOUND && nMaxLength < nIdx ) )
+    sal_Int32 nIdx = rText.indexOf( '\r', nStartIdx );
+    if( ( nIdx == -1 && nMaxLength < rText.getLength() ) ||
+        ( nIdx != -1 && nMaxLength < nIdx ) )
     {
         nIdx = nMaxLength;
     }
-    while (nIdx != STRING_NOTFOUND )
+    while (nIdx != -1 )
     {
         OSL_ENSURE( nIdx - nStartIdx >= 0, "index negative!" );
-        aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
+        aTxt = rText.copy( nStartIdx, nIdx - nStartIdx );
         if (!aTxt.isEmpty() &&
             !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
@@ -1156,9 +1157,9 @@ bool DocInsertStringSplitCR(
             bOK = false;
         }
         nStartIdx = nIdx + 1;
-        nIdx = rText.Search( '\r', nStartIdx );
+        nIdx = rText.indexOf( '\r', nStartIdx );
     }
-    aTxt = rText.Copy( nStartIdx );
+    aTxt = rText.copy( nStartIdx );
     if (!aTxt.isEmpty() &&
         !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
