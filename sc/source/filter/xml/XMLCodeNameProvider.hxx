@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 class ScDocument;
-class String;
 
 class XMLCodeNameProvider : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameAccess >
 {
@@ -33,7 +32,7 @@ class XMLCodeNameProvider : public ::cppu::WeakImplHelper1< ::com::sun::star::co
     OUString msCodeNameProp;
 
     static sal_Bool _getCodeName( const ::com::sun::star::uno::Any& aAny,
-                           String& rCodeName );
+                           OUString& rCodeName );
 
 public:
     XMLCodeNameProvider( ScDocument* pDoc );

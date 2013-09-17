@@ -23,7 +23,7 @@
 using namespace com::sun::star;
 
 
-sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeName )
+sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeName )
 {
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aAny >>= aProps) )
@@ -165,7 +165,7 @@ void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xN
 {
     uno::Any aAny;
     OUString sDocName("*doc*");
-    String sCodeName;
+    OUString sCodeName;
     if( xNameAccess->hasByName( sDocName ) )
     {
         aAny = xNameAccess->getByName( sDocName );
