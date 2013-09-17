@@ -41,7 +41,14 @@
 if( status != CL_SUCCESS )    \
 {    \
     printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE " when %s .\n", status, name);    \
-    return 0;    \
+    return false;    \
+}
+
+#define CHECK_OPENCL_PTR(status,name)    \
+if( status != CL_SUCCESS )    \
+{    \
+    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE " when %s .\n", status, name);    \
+    return NULL;    \
 }
 
 #define CHECK_OPENCL_VOID(status,name)    \
@@ -77,8 +84,6 @@ typedef struct _KernelEnv
     cl_context mpkContext;
     cl_command_queue mpkCmdQueue;
     cl_program mpkProgram;
-    cl_kernel mpkKernel;
-    char mckKernelName[150];
 } KernelEnv;
 
 extern "C" {
@@ -101,6 +106,14 @@ struct OpenCLEnv
     cl_command_queue mpOclCmdQueue;
 };
 
+struct Kernel
+{
+    const char* mpName;
+    cl_kernel mpKernel;
+
+    Kernel( const char* pName );
+};
+
 struct GPUEnv
 {
     //share vb in all modules in hb library
@@ -113,7 +126,7 @@ struct GPUEnv
     cl_kernel mpArryKernels[MAX_CLFILE_NUM];
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file
     char mArryKnelSrcFile[MAX_CLFILE_NUM][256]; //the max len of kernel file name is 256
-    std::vector<const char*> maKernelNames;
+    std::vector<Kernel> maKernels;
     int mnFileCount; // only one kernel file
     int mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
     int mnKhrFp64Flag;
@@ -163,7 +176,7 @@ public:
     static int initOpenclAttr( OpenCLEnv * env );
     static int setKernelEnv( KernelEnv *envInfo );
     static int convertToString( const char *filename, char **source );
-    static int checkKernelName( KernelEnv *envInfo, const char *kernelName );
+    static Kernel* checkKernelName( const char *kernelName );
 
     static int getOpenclState();
     static void setOpenclState( int state );
@@ -193,48 +206,49 @@ public:
     ~OclCalc();
 
 // for 64bits double
-    int oclHostArithmeticOperator64Bits( const char* aKernelName,  double *&rResult, int nRowSize );
-    int oclMoreColHostArithmeticOperator64Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize );
-    int oclHostFormulaStatistics64Bits( const char* aKernelName, double *&output, int outputSize);
-    int oclHostFormulaStash64Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size);
-    int oclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize );
-    int oclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize);
-    int oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst, std::vector<double>&dpResult, uint nDim );
+    bool oclHostArithmeticOperator64Bits( const char* aKernelName,  double *&rResult, int nRowSize );
+    bool oclMoreColHostArithmeticOperator64Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize );
+    bool oclHostFormulaStatistics64Bits( const char* aKernelName, double *&output, int outputSize);
+    bool oclHostFormulaStash64Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size);
+    bool oclHostFormulaCount64Bits( uint *npStartPos, uint *npEndPos, double *&dpOutput, int nSize );
+    bool oclHostFormulaSumProduct64Bits( double *fpSumProMergeLfData, double *fpSumProMergeRrData, uint *npSumSize, double *&dpOutput, int nSize);
+    bool oclHostMatrixInverse64Bits( const char* aKernelName, double *dpOclMatrixSrc, double *dpOclMatrixDst, std::vector<double>&dpResult, uint nDim );
 // for 32bits float
-    int oclHostArithmeticOperator32Bits( const char* aKernelName, double *rResult, int nRowSize );
-    int oclMoreColHostArithmeticOperator32Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize );
-    int oclHostFormulaStatistics32Bits( const char* aKernelName, double *output, int outputSize);
-    int oclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize );
-    int oclHostArithmeticStash64Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize );
-    int oclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize );
-    int oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim );
+    bool oclHostArithmeticOperator32Bits( const char* aKernelName, double *rResult, int nRowSize );
+    bool oclMoreColHostArithmeticOperator32Bits( int nDataSize,int neOpSize,double *rResult, int nRowSize );
+    bool oclHostFormulaStatistics32Bits( const char* aKernelName, double *output, int outputSize);
+    bool oclHostFormulaCount32Bits( uint *npStartPos, uint *npEndPos, double *dpOutput, int nSize );
+    bool oclHostArithmeticStash64Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize );
+    bool oclHostFormulaSumProduct32Bits( float *fpSumProMergeLfData, float *fpSumProMergeRrData, uint *npSumSize, double *dpOutput, int nSize );
+    bool oclHostMatrixInverse32Bits( const char* aKernelName, float *fpOclMatrixSrc, float *fpOclMatrixDst, std::vector<double>& dpResult, uint nDim );
 // for groundwater
-    int oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArray, const double *pSubtractSingle,size_t nSrcDataSize, size_t nElements, double delta ,uint *nStartPos,uint *nEndPos,double *deResult);
+    bool oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArray, const double *pSubtractSingle,size_t nSrcDataSize, size_t nElements, double delta ,uint *nStartPos,uint *nEndPos,double *deResult);
     double *oclSimpleDeltaOperation( OpCode eOp, const double *pOpArray, const double *pSubtractSingle, size_t nElements, double delta );
 
     ///////////////////////////////////////////////////////////////
-    int createBuffer64Bits( double *&dpLeftData, double *&dpRightData, int nBufferSize );
-    int mapAndCopy64Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize );
-    int mapAndCopy64Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize);
-    int mapAndCopyArithmetic64Bits( const double *dpMoreArithmetic,int nBufferSize );
-    int mapAndCopyMoreColArithmetic64Bits( const double *dpMoreColArithmetic,int nBufferSize ,uint *npeOp,uint neOpSize );
-    int createMoreColArithmeticBuf64Bits( int nBufferSize, int neOpSize );
+    bool createBuffer64Bits( double *&dpLeftData, double *&dpRightData, int nBufferSize );
+    bool mapAndCopy64Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize );
+    bool mapAndCopy64Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize);
+    bool mapAndCopyArithmetic64Bits( const double *dpMoreArithmetic,int nBufferSize );
+    bool mapAndCopyMoreColArithmetic64Bits( const double *dpMoreColArithmetic,int nBufferSize ,uint *npeOp,uint neOpSize );
+    bool createMoreColArithmeticBuf64Bits( int nBufferSize, int neOpSize );
 
-    int createFormulaBuf64Bits( int nBufferSize, int rowSize );
-    int createArithmeticOptBuf64Bits( int nBufferSize );
+    bool createFormulaBuf64Bits( int nBufferSize, int rowSize );
+    bool createArithmeticOptBuf64Bits( int nBufferSize );
 
-    int createBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nBufferSize );
-    int mapAndCopy32Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize );
-    int mapAndCopy32Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize);
-    int mapAndCopyArithmetic32Bits( const double *dpMoreColArithmetic, int nBufferSize );
-    int mapAndCopyMoreColArithmetic32Bits( const double *dpMoreColArithmetic,int nBufferSize ,uint *npeOp,uint neOpSize );
-    int createMoreColArithmeticBuf32Bits( int nBufferSize, int neOpSize );
-    int createFormulaBuf32Bits( int nBufferSize, int rowSize  );
-    int createArithmeticOptBuf32Bits( int nBufferSize );
-    int oclHostFormulaStash32Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size );
-    int oclHostArithmeticStash32Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize );
+    bool createBuffer32Bits( float *&fpLeftData, float *&fpRightData, int nBufferSize );
+    bool mapAndCopy32Bits(const double *dpTempLeftData,const double *dpTempRightData,int nBufferSize );
+    bool mapAndCopy32Bits(const double *dpTempSrcData,unsigned int *unStartPos,unsigned int *unEndPos,int nBufferSize ,int nRowsize);
+    bool mapAndCopyArithmetic32Bits( const double *dpMoreColArithmetic, int nBufferSize );
+    bool mapAndCopyMoreColArithmetic32Bits( const double *dpMoreColArithmetic,int nBufferSize ,uint *npeOp,uint neOpSize );
+    bool createMoreColArithmeticBuf32Bits( int nBufferSize, int neOpSize );
+    bool createFormulaBuf32Bits( int nBufferSize, int rowSize );
+    bool createArithmeticOptBuf32Bits( int nBufferSize );
+    bool oclHostFormulaStash32Bits( const char* aKernelName, const double* dpSrcData, uint *nStartPos, uint *nEndPos, double *output, int nBufferSize, int size );
+    bool oclHostArithmeticStash32Bits( const char* aKernelName, const double *dpLeftData, const double *dpRightData, double *rResult,int nRowSize );
 
-    int releaseOclBuffer(void);
+    void releaseOclBuffer();
+
     friend class agency;
 };
 

@@ -330,7 +330,8 @@ bool FormulaGroupInterpreterOpenCL::chooseFunction( OclCalc &ocl_calc, double *&
         {
             if ( ocl_calc.gpuEnv.mnKhrFp64Flag==1 || ocl_calc.gpuEnv.mnAmdFp64Flag == 1 )
             {
-                ocl_calc.createFormulaBuf64Bits( nSrcDataSize, mnRowSize );
+                if (!ocl_calc.createFormulaBuf64Bits(nSrcDataSize, mnRowSize))
+                    return false;
                 ocl_calc.mapAndCopy64Bits( dpOclSrcData,mnpOclStartPos,mnpOclEndPos,nSrcDataSize,mnRowSize );
                 ocl_calc.oclHostFormulaStatistics64Bits( mcHostName, dpResult, mnRowSize );
             }
@@ -360,7 +361,8 @@ bool FormulaGroupInterpreterOpenCL::chooseFunction( OclCalc &ocl_calc, double *&
             {
                 ocl_calc.createArithmeticOptBuf64Bits( mnRowSize );
                 ocl_calc.mapAndCopy64Bits(dpLeftData,dpRightData,mnRowSize);
-                ocl_calc.oclHostArithmeticOperator64Bits( mcHostName,dpResult,mnRowSize );
+                if (!ocl_calc.oclHostArithmeticOperator64Bits(mcHostName, dpResult, mnRowSize))
+                    return false;
             }
             else
             {
