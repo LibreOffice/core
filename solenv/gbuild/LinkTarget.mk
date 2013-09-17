@@ -383,7 +383,7 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(call gb_LinkTarget_get_headers_target,$*) \
 		$(call gb_LinkTarget_get_objects_list,$*) \
 		$(call gb_LinkTarget_get_target,$*).exports \
-		$(DLLTARGET) \
+		$(ILIBTARGET) \
 		$(AUXTARGETS)) && \
 		cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -fr && \
 		rm -f $${RESPONSEFILE}
@@ -519,7 +519,7 @@ $(call gb_LinkTarget_get_headers_target,%) :
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(call gb_LinkTarget__get_workdir_linktargetname,$(1))
-$(call gb_LinkTarget_get_target,$(1)) : DLLTARGET :=
+$(call gb_LinkTarget_get_target,$(1)) : ILIBTARGET :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
@@ -1249,10 +1249,10 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 := $(2)
 
 endef
 
-# call gb_LinkTarget_set_dlltarget,linktarget,dllfilename
-define gb_LinkTarget_set_dlltarget
+# call gb_LinkTarget_set_ilibtarget,linktarget,ilibfilename
+define gb_LinkTarget_set_ilibtarget
 $(call gb_LinkTarget_get_clean_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : ILIBTARGET := $(2)
 
 endef
 

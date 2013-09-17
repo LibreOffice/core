@@ -427,7 +427,8 @@ endef
 # static members declared here because they are used globally
 
 gb_Executable_BINDIR = $(WORKDIR)/LinkTarget/Executable
-gb_Library_OUTDIRLOCATION = $(OUTDIR)/lib
+# FIXME move platform
+gb_Library_OUTDIRLOCATION = $(if $(filter WNT,$(OS)),$(OUTDIR)/bin,$(OUTDIR)/lib)
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib

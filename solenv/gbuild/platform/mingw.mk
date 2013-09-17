@@ -109,7 +109,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(NATIVERES) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
-		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))))) \
 		$(LIBS) \
 		-Wl$(COMMA)-Map$(COMMA)$(basename $(1)).map \
 		-o $(1)))
@@ -129,11 +129,11 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(NATIVERES) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
-		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
+		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))))) \
 		$(LIBS) \
-		-Wl$(COMMA)-Map$(COMMA)$(dir $(1))$(notdir $(basename $(DLLTARGET)).map) \
-		-Wl$(COMMA)--out-implib$(COMMA)$(1) \
-		-o $(dir $(1))/$(notdir $(DLLTARGET))) \
+		-Wl$(COMMA)-Map$(COMMA)$(dir $(1))$(notdir $(basename $(1)).map) \
+		-Wl$(COMMA)--out-implib$(COMMA)$(ILIBTARGET) \
+		-o $(1) \
 		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 endef
 
@@ -197,7 +197,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
-gb_Library_FILENAMES :=\
+gb_Library_ILIBFILENAMES :=\
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
@@ -208,7 +208,7 @@ gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
 
-gb_Library_DLLFILENAMES :=\
+gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOODLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
@@ -224,13 +224,13 @@ gb_Library_IARCEXT := .a
 gb_Library_ILIBEXT := .lib
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+$(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_Library_get_target,$(1)) :| $(OUTDIR)/bin/.dir
 
 $(call gb_Library_add_auxtargets,$(1), \
 	$(OUTDIR)/bin/$(notdir $(3)) \
-	$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.map,$(3))) \
+	$(OUTDIR)/bin/$(patsubst %.dll,%.map,$(call gb_Library_get_filename,$(1))) \
 )
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
@@ -264,8 +264,8 @@ $(call gb_LinkTarget_get_target,$(1)) : NATIVERES := $(call gb_WinResTarget_get_
 
 endef
 
-define gb_Library_get_dllname
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
+define gb_Library_get_ilibfilename
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_ILIBFILENAMES)))
 endef
 
 # Executable class
@@ -281,17 +281,15 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
-gb_CppunitTest_SYSPRE := itest_
-gb_CppunitTest_EXT := .lib
-gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = test_$(1).dll
+gb_CppunitTest_get_filename = test_$(1).dll
+gb_CppunitTest_get_ilibfilename = itest_$(1).lib
 
 define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+$(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(3) \
-	$(patsubst %.dll,%.map,$(3)) \
+	$(patsubst %.dll,%.map,$(call gb_LinkTarget_get_target,$(2))) \
 )
 
 endef

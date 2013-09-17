@@ -138,6 +138,12 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_get_pdbfile = \
  $(WORKDIR)/LinkTarget/pdb/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).pdb
+gb_LinkTarget_get_pdbfile2 = \
+ $(WORKDIR)/LinkTarget/$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
+gb_LinkTarget_get_ilkfile = \
+ $(WORKDIR)/LinkTarget/$(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
+gb_LinkTarget_get_manifestfile = \
+ $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).manifest
 
 # avoid fatal error LNK1170 for Library_merged
 define gb_LinkTarget_MergedResponseFile
@@ -180,19 +186,19 @@ $(call gb_Helper_abbreviate_dirs,\
 		    $(if $(filter 80,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/win8/um/x64)) \
 		$(T_LDFLAGS) \
 		@$${RESPONSEFILE} \
-		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
+		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(LIBS) \
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),user32.lib) \
-		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
-	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) \
-	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(DLLTARGET).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(DLLTARGET).manifest -outputresource:$(DLLTARGET)\;2 && touch -r $(1) $(DLLTARGET).manifest $(DLLTARGET); fi) \
+		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
+	$(if $(ILIBTARGET),; if [ ! -f $(ILIBTARGET) ]; then rm -f $(1) && false; fi) \
+	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(1).manifest -outputresource:$(1)\;2 && touch -r $(1) $(1).manifest $(ILIBTARGET); fi) \
 	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(1).manifest -outputresource:$(1)\;1 && touch -r $(1) $(1).manifest; fi) \
 	$(if $(filter YES,$(TARGETGUI)),&& if [ -f $(SRCDIR)/solenv/inc/DeclareDPIAware.manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(SRCDIR)/solenv/inc/DeclareDPIAware.manifest -updateresource:$(1)\;1 ; fi) \
 	$(if $(filter Library,$(TARGETTYPE)),&& \
-		echo $(notdir $(DLLTARGET)) > $(1).exports.tmp && \
+		echo $(notdir $(1)) > $(1).exports.tmp && \
 		$(if $(filter YES,$(LIBRARY_X64)),$(LINK_X64_BINARY),$(gb_LINK)) \
-			-dump -exports $(1) >> $(1).exports.tmp && \
+			-dump -exports $(ILIBTARGET) >> $(1).exports.tmp && \
 		if cmp -s $(1).exports.tmp $(1).exports; \
 			then rm $(1).exports.tmp; \
 			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
@@ -246,7 +252,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
-gb_Library_FILENAMES :=\
+gb_Library_ILIBFILENAMES :=\
 	$(foreach lib,$(gb_Library_KNOWNLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 gb_Library_DLLEXT := .dll
@@ -257,7 +263,7 @@ gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
 gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
 
-gb_Library_DLLFILENAMES :=\
+gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOOEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
@@ -275,33 +281,32 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))) : NATIVE
 endef
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+$(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
-	$(3).manifest \
+	$(patsubst %.lib,%.exp,$(3)) \
+	$(call gb_LinkTarget_get_manifestfile,$(2)) \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
 )
 
-$(if $(filter $(gb_MERGEDLIBS),$(1)),,\
-$(call gb_Library_add_auxtarget,$(1),$(OUTDIR)/bin/$(notdir $(3))))
+$(call gb_Library_add_auxtarget,$(1),$(OUTDIR)/lib/$(notdir $(3)))
 
 # substitute .pyd here because pyuno has to follow python's crazy conventions
 ifneq ($(ENABLE_CRASHDUMP),)
 $(call gb_Library_add_auxtargets,$(1),\
-	$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(3)))) \
-	$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(3)))) \
+	$(OUTDIR)/bin/$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(call gb_Library_get_filename,$(1)))) \
+	$(OUTDIR)/bin/$(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(call gb_Library_get_filename,$(1)))) \
 )
 else
 $(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(3))) \
-	$(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(3))) \
+	$(call gb_LinkTarget_get_pdbfile2,$(2)) \
+	$(call gb_LinkTarget_get_ilkfile,$(2)) \
 )
 endif
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
-$(if $(filter $(gb_MERGEDLIBS),$(1)),,$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1)))
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(notdir $(3)),$(3),$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
@@ -314,8 +319,8 @@ $(call gb_WinResTarget_set_rcfile,$(2),include/default)
 $(call gb_WinResTarget_add_defs,$(2),\
 		-DVERVARIANT="$(LIBO_VERSION_PATCH)" \
 		-DRES_APP_VENDOR="$(OOO_VENDOR)" \
-		-DORG_NAME="$(call gb_Library_get_dllname,$(1))"\
-		-DINTERNAL_NAME="$(subst $(gb_Library_DLLEXT),,$(call gb_Library_get_dllname,$(1)))" \
+		-DORG_NAME="$(call gb_Library_get_filename,$(1))"\
+		-DINTERNAL_NAME="$(subst $(gb_Library_DLLEXT),,$(call gb_Library_get_filename,$(1)))" \
 		-DADDITIONAL_VERINFO1="" \
 		-DADDITIONAL_VERINFO2="" \
 		-DADDITIONAL_VERINFO3="" \
@@ -337,8 +342,8 @@ $(call gb_LinkTarget_get_target,$(1)) : NATIVERES := $(call gb_WinResTarget_get_
 
 endef
 
-define gb_Library_get_dllname
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
+define gb_Library_get_ilibfilename
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_ILIBFILENAMES)))
 endef
 
 
@@ -387,22 +392,20 @@ gb_CppunitTest_DEFS := -D_DLL
 # thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
 
-gb_CppunitTest_SYSPRE := itest_
-gb_CppunitTest_EXT := .lib
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
-gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = test_$(1).dll
+gb_CppunitTest_get_filename = test_$(1).dll
+gb_CppunitTest_get_ilibfilename = itest_$(1).lib
 
 define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+$(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
+	$(patsubst %.lib,%.exp,$(3)) \
 	$(3) \
-	$(3).manifest \
-	$(patsubst %.dll,%.pdb,$(3)) \
+	$(call gb_LinkTarget_get_manifestfile,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile2,$(2)) \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
-	$(patsubst %.dll,%.ilk,$(3)) \
+	$(call gb_LinkTarget_get_ilkfile,$(2)) \
 )
 
 $(call gb_LinkTarget_get_target,$(2)) \
