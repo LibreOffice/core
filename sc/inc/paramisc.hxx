@@ -23,23 +23,21 @@
 #include "address.hxx"
 #include <tools/solar.h>
 
-class String;
-
 struct ScSolveParam
 {
     ScAddress   aRefFormulaCell;
     ScAddress   aRefVariableCell;
-    String*     pStrTargetVal;
+    OUString*   pStrTargetVal;
 
     ScSolveParam();
     ScSolveParam( const ScSolveParam& r );
     ScSolveParam( const ScAddress&  rFormulaCell,
                   const ScAddress&  rVariableCell,
-                  const String& rTargetValStr );
+                  const OUString& rTargetValStr );
     ~ScSolveParam();
 
     ScSolveParam&   operator=   ( const ScSolveParam& r );
-    sal_Bool            operator==  ( const ScSolveParam& r ) const;
+    sal_Bool        operator==  ( const ScSolveParam& r ) const;
 };
 
 struct ScTabOpParam
@@ -60,7 +58,7 @@ struct ScTabOpParam
     ~ScTabOpParam() {};
 
     ScTabOpParam&   operator=       ( const ScTabOpParam& r );
-    sal_Bool            operator==      ( const ScTabOpParam& r ) const;
+    sal_Bool        operator==      ( const ScTabOpParam& r ) const;
 };
 
 #endif // SC_PARAMISC_HXX

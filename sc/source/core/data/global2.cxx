@@ -234,7 +234,7 @@ ScSolveParam::ScSolveParam( const ScSolveParam& r )
     :   aRefFormulaCell ( r.aRefFormulaCell ),
         aRefVariableCell( r.aRefVariableCell ),
         pStrTargetVal   ( r.pStrTargetVal
-                            ? new String(*r.pStrTargetVal)
+                            ? new OUString(*r.pStrTargetVal)
                             : NULL )
 {
 }
@@ -243,10 +243,10 @@ ScSolveParam::ScSolveParam( const ScSolveParam& r )
 
 ScSolveParam::ScSolveParam( const ScAddress& rFormulaCell,
                             const ScAddress& rVariableCell,
-                            const String&   rTargetValStr )
+                            const OUString&   rTargetValStr )
     :   aRefFormulaCell ( rFormulaCell ),
         aRefVariableCell( rVariableCell ),
-        pStrTargetVal   ( new String(rTargetValStr) )
+        pStrTargetVal   ( new OUString(rTargetValStr) )
 {
 }
 
@@ -266,7 +266,7 @@ ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
     aRefFormulaCell  = r.aRefFormulaCell;
     aRefVariableCell = r.aRefVariableCell;
     pStrTargetVal    = r.pStrTargetVal
-                            ? new String(*r.pStrTargetVal)
+                            ? new OUString(*r.pStrTargetVal)
                             : NULL;
     return *this;
 }
