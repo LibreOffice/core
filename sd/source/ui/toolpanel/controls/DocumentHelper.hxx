@@ -20,13 +20,13 @@
 #ifndef SD_TOOLPANEL_CONTROLS_DCUMENT_HELPER_HXX
 #define SD_TOOLPANEL_CONTROLS_DCUMENT_HELPER_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
 class SdDrawDocument;
 class SdPage;
-class String;
 
 namespace sd { namespace toolpanel { namespace controls {
 
@@ -98,7 +98,7 @@ private:
     */
     static void AssignMasterPageToPage (
         SdPage* pMasterPage,
-        const String& rsBaseLayoutName,
+        const OUString& rsBaseLayoutName,
         SdPage* pPage);
 };
 

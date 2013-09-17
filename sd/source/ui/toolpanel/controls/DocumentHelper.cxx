@@ -415,7 +415,7 @@ SdPage* DocumentHelper::AddMasterPage (
 */
 void DocumentHelper::AssignMasterPageToPage (
     SdPage* pMasterPage,
-    const String& rsBaseLayoutName,
+    const OUString& rsBaseLayoutName,
     SdPage* pPage)
 {
     // Leave early when the parameters are invalid.
