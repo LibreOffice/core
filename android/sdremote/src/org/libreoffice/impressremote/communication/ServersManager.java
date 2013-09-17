@@ -22,6 +22,13 @@ import android.content.Context;
 import org.libreoffice.impressremote.util.Preferences;
 
 class ServersManager implements Comparator<Server> {
+    private static final class CompareResult {
+        private CompareResult() {
+        }
+
+        public static final int EQUAL = 0;
+    }
+
     private final ServersFinder mBluetoothServersFinder;
     private final ServersFinder mTcpServersFinder;
 
@@ -94,6 +101,25 @@ class ServersManager implements Comparator<Server> {
 
     @Override
     public int compare(Server aFirstServer, Server aSecondServer) {
+        int aServersTypesComparison = compareServersTypes(aFirstServer, aSecondServer);
+        int aServersNamesComparison = compareServersNames(aFirstServer, aSecondServer);
+
+        if (aServersTypesComparison != CompareResult.EQUAL) {
+            return aServersTypesComparison;
+        }
+        else {
+            return aServersNamesComparison;
+        }
+    }
+
+    private int compareServersTypes(Server aFirstServer, Server aSecondServer) {
+        Server.Type aFirstServerType = aFirstServer.getType();
+        Server.Type aSecondServerType = aSecondServer.getType();
+
+        return aFirstServerType.compareTo(aSecondServerType);
+    }
+
+    private int compareServersNames(Server aFirstServer, Server aSecondServer) {
         String aFirstServerName = aFirstServer.getName();
         String aSecondServerName = aSecondServer.getName();
 

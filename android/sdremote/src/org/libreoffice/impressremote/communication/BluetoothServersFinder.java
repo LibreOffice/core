@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -116,10 +117,26 @@ class BluetoothServersFinder extends BroadcastReceiver implements ServersFinder,
     }
 
     private Server buildServer(BluetoothDevice aBluetoothDevice) {
+        Server.Type aServerType = buildServerType(aBluetoothDevice);
         String aServerAddress = aBluetoothDevice.getAddress();
         String aServerName = aBluetoothDevice.getName();
 
-        return Server.newBluetoothInstance(aServerAddress, aServerName);
+        return Server.newBluetoothInstance(aServerType, aServerAddress, aServerName);
+    }
+
+    private Server.Type buildServerType(BluetoothDevice aBluetoothDevice) {
+        int aBluetoothClass = aBluetoothDevice.getBluetoothClass().getMajorDeviceClass();
+
+        switch (aBluetoothClass) {
+            case BluetoothClass.Device.Major.COMPUTER:
+                return Server.Type.COMPUTER;
+
+            case BluetoothClass.Device.Major.PHONE:
+                return Server.Type.PHONE;
+
+            default:
+                return Server.Type.UNDEFINED;
+        }
     }
 
     private void callUpdatingServersList() {

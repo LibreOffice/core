@@ -19,26 +19,36 @@ public class Server implements Parcelable {
         TCP, BLUETOOTH
     }
 
+    public static enum Type {
+        COMPUTER, PHONE, UNDEFINED
+    }
+
     private final Protocol mProtocol;
+    private final Type mType;
     private final String mAddress;
     private final String mName;
 
-    private Server(Protocol aProtocol, String aAddress, String aName) {
-        this.mProtocol = aProtocol;
-        this.mAddress = aAddress;
-        this.mName = aName;
+    private Server(Protocol aProtocol, Type aType, String aAddress, String aName) {
+        mProtocol = aProtocol;
+        mType = aType;
+        mAddress = aAddress;
+        mName = aName;
     }
 
     public static Server newTcpInstance(String aAddress, String aName) {
-        return new Server(Protocol.TCP, aAddress, aName);
+        return new Server(Protocol.TCP, Type.UNDEFINED, aAddress, aName);
     }
 
-    public static Server newBluetoothInstance(String aAddress, String aName) {
-        return new Server(Protocol.BLUETOOTH, aAddress, aName);
+    public static Server newBluetoothInstance(Type aClass, String aAddress, String aName) {
+        return new Server(Protocol.BLUETOOTH, aClass, aAddress, aName);
     }
 
     public Protocol getProtocol() {
         return mProtocol;
+    }
+
+    public Type getType() {
+        return mType;
     }
 
     public String getAddress() {
@@ -64,9 +74,10 @@ public class Server implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel aParcel, int aFlags) {
+        aParcel.writeString(mProtocol.name());
+        aParcel.writeString(mType.name());
         aParcel.writeString(mAddress);
         aParcel.writeString(mName);
-        aParcel.writeString(mProtocol.name());
     }
 
     public static final Parcelable.Creator<Server> CREATOR = new Parcelable.Creator<Server>() {
@@ -80,9 +91,10 @@ public class Server implements Parcelable {
     };
 
     private Server(Parcel aParcel) {
+        this.mProtocol = Protocol.valueOf(aParcel.readString());
+        this.mType = Type.valueOf(aParcel.readString());
         this.mAddress = aParcel.readString();
         this.mName = aParcel.readString();
-        this.mProtocol = Protocol.valueOf(aParcel.readString());
     }
 }
 
