@@ -35,7 +35,6 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     aFmtName( OUString::createFromAscii(pFmtNm) ),
     aSet( rPool, pWhichRanges ),
     nWhichId( nFmtWhich ),
-    nFmtId( 0 ),
     nPoolFmtId( USHRT_MAX ),
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
@@ -55,7 +54,6 @@ SwFmt::SwFmt( SwAttrPool& rPool, const OUString& rFmtNm,
     aFmtName( rFmtNm ),
     aSet( rPool, pWhichRanges ),
     nWhichId( nFmtWhich ),
-    nFmtId( 0 ),
     nPoolFmtId( USHRT_MAX ),
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
@@ -73,7 +71,6 @@ SwFmt::SwFmt( const SwFmt& rFmt )
     aFmtName( rFmt.aFmtName ),
     aSet( rFmt.aSet ),
     nWhichId( rFmt.nWhichId ),
-    nFmtId( 0 ),
     nPoolFmtId( rFmt.GetPoolFmtId() ),
     nPoolHelpId( rFmt.GetPoolHelpId() ),
     nPoolHlpFileId( rFmt.GetPoolHlpFileId() )

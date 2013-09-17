@@ -40,7 +40,6 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     SwAttrSet aSet;
 
     sal_uInt16 nWhichId;
-    sal_uInt16 nFmtId;            ///< Format-ID for reading / writing.
     sal_uInt16 nPoolFmtId;        /**< Id for "automatically" created formats.
                                        (is not hard attribution!!!) */
     sal_uInt16 nPoolHelpId;       ///< HelpId for this Pool-style.
