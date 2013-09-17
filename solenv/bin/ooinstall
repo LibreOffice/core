@@ -20,7 +20,6 @@ use Cwd;
 
 $path = '';
 $strip = '';
-$do_link = 0;
 $is_windows = 0;
 my $tmp_dir;
 
@@ -45,9 +44,7 @@ if ($ENV{'SYSTEM_MOZILLA'} eq 'YES') {
 $ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python/lib-dynload";
 
 for $arg (@ARGV) {
-    if ($arg eq '-l' || $arg eq '--link') {
-        $do_link = 1;
-    } elsif ($arg eq '-s' || $arg eq '--strip') {
+    if ($arg eq '-s' || $arg eq '--strip') {
         $strip = "-strip";
     } elsif ($arg eq '-h' || $arg eq '--help') {
         $help = 1;
@@ -61,8 +58,7 @@ for $arg (@ARGV) {
 $help = 1 if $path eq '';
 
 if ($help) {
-    print "ooinstall [-l] [-s] <prefix to install to>\n";
-    print "  -l/--link  - performs a linkoo on the installed source\n";
+    print "ooinstall [-s] <prefix to install to>\n";
     print "  -s/--strip - strip the installed binaries\n";
     exit 1;
 }
@@ -120,11 +116,6 @@ if ($ENV{BUILD_TYPE} =~ m/ODK/) {
             "-simple $path") && die "Failed to install: $!";
 }
 print "Installer finished\n";
-
-if ($do_link && !$is_windows) {
-    system("$ENV{SOLARENV}/bin/linkoo $path $ENV{BUILDDIR}") &&
-      die "linkoo failed: $!";
-}
 
 # Local Variables:
 # cperl-indent-level: 4

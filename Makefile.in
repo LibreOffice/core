@@ -271,16 +271,12 @@ dev-install: build
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
-ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 	@macosx-codesign-app-bundle $(DEVINSTALLDIR)/opt/LibreOffice.app
 endif
 ifneq ($(OS),MACOSX)
 	@install-gdb-printers -L
-endif
-else
-	@ooinstall -l $(DEVINSTALLDIR)/opt
 endif
 endif
 	@rm -f $(BUILDDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(BUILDDIR)/install
@@ -304,14 +300,6 @@ endif
 
 dev-install-nocheck: build-nocheck
 	$(MAKE) dev-install -o build
-
-# FIXME: shouldn't linkoo be BUILDDIR vs SRCDIR aware ?
-dev-update:
-ifeq ($(DISABLE_LINKOO),TRUE)
-	@linkoo --copy $(DEVINSTALLDIR)/opt $(SRCDIR)
-else
-	@linkoo $(DEVINSTALLDIR)/opt $(SRCDIR)
-endif
 
 install-tb:
 	@rm -rf $(DEVINSTALLDIR)
