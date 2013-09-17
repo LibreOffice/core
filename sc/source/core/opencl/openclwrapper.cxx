@@ -43,49 +43,6 @@
 
 #define DEVICE_NAME_LENGTH 1024
 
-
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class stack_printer
-{
-public:
-    explicit stack_printer(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~stack_printer()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime - mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime - mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 using namespace std;
 
 namespace sc { namespace opencl {
@@ -2795,8 +2752,6 @@ void compileKernels(const OUString* pDeviceId)
     if (pDeviceId->isEmpty())
         return;
 
-    stack_printer __stack_printer__("sc/opencl::compileKernels");
-    fprintf(stdout, "opencl::compileKernels:   device = '%s'\n", rtl::OUStringToOString(*pDeviceId, RTL_TEXTENCODING_UTF8).getStr());
     if (!switchOpenclDevice(pDeviceId, false))
         return;
 
