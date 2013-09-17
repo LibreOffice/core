@@ -20,7 +20,7 @@
 #ifndef _VERSDLG_HXX
 #define _VERSDLG_HXX
 
-#include <sfx2/basedlgs.hxx>
+#include <basedlgs.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svtabbx.hxx>

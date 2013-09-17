@@ -28,10 +28,10 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/macitem.hxx>
-#include <sfx2/appuno.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxbasemodel.hxx>
-#include <sfx2/evntconf.hxx>
+#include <appuno.hxx>
+#include <objsh.hxx>
+#include <sfxbasemodel.hxx>
+#include <evntconf.hxx>
 #include <unotools/eventcfg.hxx>
 
 #include <unotools/securityoptions.hxx>
@@ -39,14 +39,14 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include "eventsupplier.hxx"
 
-#include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <app.hxx>
+#include "sfxresid.hxx"
 
-#include <sfx2/sfxsids.hrc>
+#include <sfxsids.hrc>
 #include "sfxlocal.hrc"
-#include <sfx2/docfile.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/frame.hxx>
+#include <docfile.hxx>
+#include <viewfrm.hxx>
+#include <frame.hxx>
 
 //--------------------------------------------------------------------------------------------------------
 

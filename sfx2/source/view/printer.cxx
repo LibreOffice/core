@@ -24,13 +24,13 @@
 #include <svtools/printoptions.hxx>
 #include <vector>
 
-#include <sfx2/printer.hxx>
-#include <sfx2/printopt.hxx>
+#include <printer.hxx>
+#include <printopt.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/prnmon.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/tabdlg.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <prnmon.hxx>
+#include <viewsh.hxx>
+#include <tabdlg.hxx>
+#include "sfxresid.hxx"
 #include "view.hrc"
 
 // struct SfxPrinter_Impl ------------------------------------------------

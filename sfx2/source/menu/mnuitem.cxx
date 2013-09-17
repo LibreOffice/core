@@ -40,24 +40,24 @@
 #include <svtools/menuoptions.hxx>
 #include <framework/menuconfiguration.hxx>
 
-#include <sfx2/app.hxx>
+#include <app.hxx>
 #include <sfx2/sfx.hrc>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/msg.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
+#include <msgpool.hxx>
+#include <msg.hxx>
+#include <bindings.hxx>
+#include <dispatch.hxx>
 #include "idpool.hxx"
 #include "sfxtypes.hxx"
 #include "virtmenu.hxx"
-#include <sfx2/mnuitem.hxx>
-#include <sfx2/tbxctrl.hxx>
+#include <mnuitem.hxx>
+#include <tbxctrl.hxx>
 #include "arrdecl.hxx"
-#include <sfx2/module.hxx>
-#include <sfx2/unoctitm.hxx>
-#include <sfx2/viewfrm.hxx>
-#include "sfx2/imgmgr.hxx"
-#include "sfx2/imagemgr.hxx"
-#include "sfx2/sfxresid.hxx"
+#include <module.hxx>
+#include <unoctitm.hxx>
+#include <viewfrm.hxx>
+#include "imgmgr.hxx"
+#include "imagemgr.hxx"
+#include "sfxresid.hxx"
 #include "../doc/doc.hrc"
 
 using namespace ::com::sun::star::uno;

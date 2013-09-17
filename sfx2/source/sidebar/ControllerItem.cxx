@@ -18,12 +18,12 @@
  */
 #include "sidebar/ControllerItem.hxx"
 
-#include <sfx2/msgpool.hxx>
-#include <sfx2/viewsh.hxx>
-#include "sfx2/imagemgr.hxx"
-#include "sfx2/bindings.hxx"
+#include <msgpool.hxx>
+#include <viewsh.hxx>
+#include "imagemgr.hxx"
+#include "bindings.hxx"
 #include <unotools/cmdoptions.hxx>
-#include "sfx2/sidebar/CommandInfoProvider.hxx"
+#include "sidebar/CommandInfoProvider.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/help.hxx>

@@ -29,25 +29,25 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "virtmenu.hxx"
-#include <sfx2/msgpool.hxx>
+#include <msgpool.hxx>
 #include "statcach.hxx"
-#include <sfx2/msg.hxx>
+#include <msg.hxx>
 #include "idpool.hxx"
-#include <sfx2/mnuitem.hxx>
-#include <sfx2/mnumgr.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/app.hxx>
+#include <mnuitem.hxx>
+#include <mnumgr.hxx>
+#include <bindings.hxx>
+#include <dispatch.hxx>
+#include <app.hxx>
 #include "sfxtypes.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/sfx.hrc>
-#include <sfx2/viewsh.hxx>
+#include <viewsh.hxx>
 #include "sfxpicklist.hxx"
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "menu.hrc"
-#include "sfx2/imagemgr.hxx"
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
+#include "imagemgr.hxx"
+#include <viewfrm.hxx>
+#include <objsh.hxx>
 #include <framework/addonsoptions.hxx>
 
 #include <framework/addonmenu.hxx>

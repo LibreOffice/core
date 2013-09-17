@@ -78,16 +78,16 @@ using namespace ::rtl;
 using namespace ::ucbhelper;
 
 
-#include <sfx2/doctempl.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/objsh.hxx>
+#include <doctempl.hxx>
+#include <docfac.hxx>
+#include <docfile.hxx>
+#include <objsh.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/templatelocnames.hrc>
+#include <app.hxx>
+#include "sfxresid.hxx"
+#include <templatelocnames.hrc>
 #include "doc.hrc"
-#include <sfx2/fcontnr.hxx>
+#include <fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
 
 #include <comphelper/storagehelper.hxx>

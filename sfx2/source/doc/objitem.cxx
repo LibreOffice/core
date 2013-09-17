@@ -18,8 +18,8 @@
  */
 
 
-#include <sfx2/objsh.hxx>
-#include <sfx2/objitem.hxx>
+#include <objsh.hxx>
+#include <objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 //====================================================================

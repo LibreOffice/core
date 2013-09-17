@@ -20,8 +20,8 @@
 #define _SFXPREVIEW_HXX
 
 
-#include <sfx2/doctempl.hxx>
-#include <sfx2/basedlgs.hxx>
+#include <doctempl.hxx>
+#include <basedlgs.hxx>
 
 class SfxObjectShell;
 class GDIMetaFile;

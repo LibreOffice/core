@@ -20,7 +20,7 @@
 #ifndef DOCUMENT_UNDO_MANAGER_HXX
 #define DOCUMENT_UNDO_MANAGER_HXX
 
-#include "sfx2/sfxbasemodel.hxx"
+#include "sfxbasemodel.hxx"
 
 #include <com/sun/star/document/XUndoManager.hpp>
 

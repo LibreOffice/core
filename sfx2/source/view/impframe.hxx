@@ -20,8 +20,8 @@
 #ifndef _SFX_IMPFRAME_HXX
 #define _SFX_IMPFRAME_HXX
 
-#include <sfx2/frame.hxx>
-#include <sfx2/viewfrm.hxx>                  // SvBorder
+#include <frame.hxx>
+#include <viewfrm.hxx>                  // SvBorder
 
 class SfxViewFrame;
 #include <com/sun/star/frame/XController.hpp>
@@ -30,8 +30,8 @@ class SfxViewFrame;
 #include <com/sun/star/awt/PosSize.hpp>
 #include <cppuhelper/weak.hxx>
 
-#include <sfx2/viewsh.hxx>
-#include <sfx2/sfxuno.hxx>
+#include <viewsh.hxx>
+#include <sfxuno.hxx>
 
 class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase
 {

@@ -69,30 +69,30 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 
-#include <sfx2/tbxctrl.hxx>
-#include <sfx2/mnumgr.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/msg.hxx>
-#include <sfx2/msgpool.hxx>
+#include <tbxctrl.hxx>
+#include <mnumgr.hxx>
+#include <dispatch.hxx>
+#include <msg.hxx>
+#include <msgpool.hxx>
 #include "statcach.hxx"
-#include <sfx2/viewfrm.hxx>
+#include <viewfrm.hxx>
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/genlink.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <genlink.hxx>
+#include "sfxresid.hxx"
 #include <sfx2/sfx.hrc>
-#include <sfx2/module.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfac.hxx>
+#include <module.hxx>
+#include <docfile.hxx>
+#include <docfac.hxx>
 #include "referers.hxx"
-#include <sfx2/frmhtmlw.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/unoctitm.hxx>
+#include <frmhtmlw.hxx>
+#include <app.hxx>
+#include <unoctitm.hxx>
 #include "helpid.hrc"
 #include "workwin.hxx"
-#include "sfx2/imgmgr.hxx"
+#include "imgmgr.hxx"
 #include "virtmenu.hxx"
-#include "sfx2/imagemgr.hxx"
+#include "imagemgr.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

@@ -28,11 +28,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <sfx2/docfac.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/objsh.hxx>
+#include <docfac.hxx>
+#include <docfilt.hxx>
+#include <fcontnr.hxx>
+#include <sfxuno.hxx>
+#include <objsh.hxx>
 
 using namespace ::com::sun::star;
 

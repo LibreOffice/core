@@ -32,9 +32,9 @@
 
 #include <vector>
 
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewsh.hxx>
+#include <bindings.hxx>
+#include <dispatch.hxx>
+#include <viewsh.hxx>
 #include "thessubmenu.hxx"
 
 using namespace ::com::sun::star;

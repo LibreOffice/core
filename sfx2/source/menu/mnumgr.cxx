@@ -31,7 +31,7 @@
 #include <vcl/pointr.hxx>
 
 #include <unotools/streamwrap.hxx>
-#include <sfx2/objsh.hxx>
+#include <objsh.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
 #include <comphelper/processfactory.hxx>
@@ -45,23 +45,23 @@
 #include <vcl/graphicfilter.hxx>
 #include <svl/lngmisc.hxx>
 
-#include <sfx2/mnumgr.hxx>
+#include <mnumgr.hxx>
 
 #include <svtools/menuoptions.hxx>
 
 #include "virtmenu.hxx"
-#include <sfx2/msg.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/app.hxx>
+#include <msg.hxx>
+#include <dispatch.hxx>
+#include <app.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/bindings.hxx>
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/msgpool.hxx>
+#include <bindings.hxx>
+#include "sfxresid.hxx"
+#include <msgpool.hxx>
 #include <sfx2/sfx.hrc>
 #include "menu.hrc"
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/objface.hxx>
+#include <viewfrm.hxx>
+#include <viewsh.hxx>
+#include <objface.hxx>
 #include "thessubmenu.hxx"
 
 // static member initialization

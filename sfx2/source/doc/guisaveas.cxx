@@ -66,19 +66,19 @@
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
-#include <sfx2/sfxsids.hrc>
+#include <sfxsids.hrc>
 #include <doc.hrc>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/dinfdlg.hxx>
-#include <sfx2/request.hxx>
+#include <sfxresid.hxx>
+#include <docfilt.hxx>
+#include <filedlghelper.hxx>
+#include <app.hxx>
+#include <objsh.hxx>
+#include <dinfdlg.hxx>
+#include <request.hxx>
 #include <sfxtypes.hxx>
 #include "alienwarn.hxx"
 
-#include <sfx2/docmacromode.hxx>
+#include <docmacromode.hxx>
 #include <comphelper/interaction.hxx>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <rtl/ref.hxx>

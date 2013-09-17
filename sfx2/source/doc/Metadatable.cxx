@@ -18,8 +18,8 @@
  */
 
 
-#include <sfx2/Metadatable.hxx>
-#include <sfx2/XmlIdRegistry.hxx>
+#include <Metadatable.hxx>
+#include <XmlIdRegistry.hxx>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx> // solarmutex

@@ -32,16 +32,16 @@
 
 #include "versdlg.hxx"
 #include "dialog.hrc"
-#include <sfx2/dialoghelper.hxx>
-#include <sfx2/viewfrm.hxx>
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/docfile.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
+#include <dialoghelper.hxx>
+#include <viewfrm.hxx>
+#include "sfxresid.hxx"
+#include <docfile.hxx>
+#include <objsh.hxx>
+#include <sfxsids.hrc>
+#include <dispatch.hxx>
+#include <request.hxx>
 
-#include <sfx2/sfxuno.hxx>
+#include <sfxuno.hxx>
 #include <vector>
 
 using namespace com::sun::star;

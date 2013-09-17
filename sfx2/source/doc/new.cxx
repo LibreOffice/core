@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <sfx2/new.hxx>
+#include <new.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/morebtn.hxx>
 #include <svtools/svmedit.hxx>
@@ -31,12 +31,12 @@
 
 #include "new.hrc"
 #include "doc.hrc"
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/docfile.hxx>
+#include <app.hxx>
+#include <objsh.hxx>
+#include "sfxresid.hxx"
+#include <docfile.hxx>
 #include "preview.hxx"
-#include <sfx2/printer.hxx>
+#include <printer.hxx>
 #include <vcl/waitobj.hxx>
 
 //========================================================================

@@ -45,14 +45,14 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/event.hxx>
+#include <viewfrm.hxx>
+#include <viewsh.hxx>
+#include <dispatch.hxx>
+#include <request.hxx>
+#include <printer.hxx>
+#include <app.hxx>
+#include <objsh.hxx>
+#include <event.hxx>
 
 #define SFX_PRINTABLESTATE_CANCELJOB    -2
 

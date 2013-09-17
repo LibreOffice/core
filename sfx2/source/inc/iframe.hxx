@@ -36,8 +36,8 @@
 #include <svl/ownlist.hxx>
 #include <svl/itemprop.hxx>
 
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/frmdescr.hxx>
+#include <sfxuno.hxx>
+#include <frmdescr.hxx>
 
 namespace sfx2
 {

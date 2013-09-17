@@ -39,7 +39,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
-#include <sfx2/sfxuno.hxx>
+#include <sfxuno.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svl/lstner.hxx>

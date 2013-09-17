@@ -25,7 +25,7 @@
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 
 #include <vcl/menu.hxx>
-#include <sfx2/mnuitem.hxx>
+#include <mnuitem.hxx>
 
 class SfxThesSubMenuHelper
 {

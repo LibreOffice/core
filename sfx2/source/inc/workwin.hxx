@@ -32,11 +32,11 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 
-#include <sfx2/sfx.hrc>
-#include <sfx2/childwin.hxx>
-#include <sfx2/shell.hxx>
-#include <sfx2/ctrlitem.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <sfx.hrc>
+#include <childwin.hxx>
+#include <shell.hxx>
+#include <ctrlitem.hxx>
+#include <viewfrm.hxx>
 
 class SfxSplitWindow;
 class SfxWorkWindow;

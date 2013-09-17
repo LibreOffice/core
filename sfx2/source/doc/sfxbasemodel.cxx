@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <sfx2/sfxbasemodel.hxx>
+#include <sfxbasemodel.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
@@ -82,36 +82,36 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 
-#include <sfx2/sfxbasecontroller.hxx>
-#include "sfx2/viewfac.hxx"
+#include <sfxbasecontroller.hxx>
+#include "viewfac.hxx"
 #include "workwin.hxx"
-#include <sfx2/signaturestate.hxx>
-#include <sfx2/sfxuno.hxx>
+#include <signaturestate.hxx>
+#include <sfxuno.hxx>
 #include <objshimp.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/printer.hxx>
+#include <viewfrm.hxx>
+#include <viewsh.hxx>
+#include <docfile.hxx>
+#include <dispatch.hxx>
+#include <request.hxx>
+#include <printer.hxx>
 #include <basic/basmgr.hxx>
 #include <svtools/svtools.hrc>
-#include <sfx2/event.hxx>
+#include <event.hxx>
 #include <eventsupplier.hxx>
-#include <sfx2/evntconf.hxx>
-#include <sfx2/sfx.hrc>
-#include <sfx2/app.hxx>
+#include <evntconf.hxx>
+#include <sfx.hrc>
+#include <app.hxx>
 #include "appdata.hxx"
-#include <sfx2/docfac.hxx>
-#include <sfx2/fcontnr.hxx>
-#include "sfx2/docstoragemodifylistener.hxx"
-#include "sfx2/brokenpackageint.hxx"
+#include <docfac.hxx>
+#include <fcontnr.hxx>
+#include "docstoragemodifylistener.hxx"
+#include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
 #include "docundomanager.hxx"
-#include <sfx2/msgpool.hxx>
-#include <sfx2/DocumentMetadataAccess.hxx>
+#include <msgpool.hxx>
+#include <DocumentMetadataAccess.hxx>
 
-#include <sfx2/sfxresid.hxx>
+#include <sfxresid.hxx>
 
 //________________________________________________________________________________________________________
 //  namespaces

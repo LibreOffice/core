@@ -18,13 +18,13 @@
  */
 
 #include "TabBar.hxx"
-#include "sfx2/sidebar/SidebarChildWindow.hxx"
+#include "sidebar/SidebarChildWindow.hxx"
 #include "SidebarDockingWindow.hxx"
-#include "sfx2/sfxsids.hrc"
+#include "sfxsids.hrc"
 #include "helpid.hrc"
-#include "sfx2/dockwin.hxx"
-#include "sfx2/viewfrm.hxx"
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
+#include "dockwin.hxx"
+#include "viewfrm.hxx"
+#include <sidebar/ResourceDefinitions.hrc>
 
 
 namespace sfx2 { namespace sidebar {

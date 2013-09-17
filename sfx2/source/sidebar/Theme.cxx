@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "sfx2/sidebar/Theme.hxx"
+#include "sidebar/Theme.hxx"
 #include "Paint.hxx"
 #include "SidebarResource.hxx"
-#include "sfx2/sidebar/Tools.hxx"
+#include "sidebar/Tools.hxx"
 
 #include <tools/svborder.hxx>
 #include <tools/rc.hxx>
@@ -334,7 +334,7 @@ void Theme::UpdateTheme (void)
             Any(sal_Int32(aBorderColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Grip],
-            Any(A2S("private:graphicrepository/sfx2/res/grip.png")));
+            Any(A2S("private:graphicrepository/res/grip.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Expand],
             Any(A2S("private:graphicrepository/res/plus.png")));
@@ -343,20 +343,20 @@ void Theme::UpdateTheme (void)
             Any(A2S("private:graphicrepository/res/minus.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_TabBarMenu],
-            Any(A2S("private:graphicrepository/sfx2/res/symphony/open_more.png")));
+            Any(A2S("private:graphicrepository/res/symphony/open_more.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_PanelMenu],
-            Any(A2S("private:graphicrepository/sfx2/res/symphony/morebutton.png")));
+            Any(A2S("private:graphicrepository/res/symphony/morebutton.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_Closer],
-            Any(A2S("private:graphicrepository/sfx2/res/closedoc.png")));
+            Any(A2S("private:graphicrepository/res/closedoc.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(A2S("private:graphicrepository/cmd/lc_decrementlevel.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_ToolBoxItemSeparator],
             Any(
-                A2S("private:graphicrepository/sfx2/res/separator.png")));
+                A2S("private:graphicrepository/res/separator.png")));
 
         // ToolBox
 

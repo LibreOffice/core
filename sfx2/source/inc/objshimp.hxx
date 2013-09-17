@@ -27,8 +27,8 @@
 #include <tools/datetime.hxx>
 
 #include <unotools/securityoptions.hxx>
-#include <sfx2/objsh.hxx>
-#include "sfx2/docmacromode.hxx"
+#include <objsh.hxx>
+#include "docmacromode.hxx"
 #include "bitset.hxx"
 
 namespace svtools { class AsynchronLink; }

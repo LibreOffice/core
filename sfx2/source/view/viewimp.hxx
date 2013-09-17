@@ -21,8 +21,8 @@
 #define SFX_VIEWIMP_HXX
 
 #include <basic/sbxobj.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>                  // SvBorder
+#include <viewsh.hxx>
+#include <viewfrm.hxx>                  // SvBorder
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

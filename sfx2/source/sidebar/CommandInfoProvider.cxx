@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/sidebar/CommandInfoProvider.hxx"
+#include "sidebar/CommandInfoProvider.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -339,6 +339,6 @@ OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)
 }
 
 
-} } // end of namespace sfx2/framework
+} } // end of namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

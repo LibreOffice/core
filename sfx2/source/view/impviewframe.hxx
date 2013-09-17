@@ -20,7 +20,7 @@
 #ifndef SFX2_IMPVIEWFRAME_HXX
 #define SFX2_IMPVIEWFRAME_HXX
 
-#include "sfx2/viewfrm.hxx"
+#include "viewfrm.hxx"
 
 #include <svtools/asynclink.hxx>
 #include <vcl/window.hxx>

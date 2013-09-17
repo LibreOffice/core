@@ -59,11 +59,11 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
 
-#include "sfx2/sfxresid.hxx"
+#include "sfxresid.hxx"
 #include "sfxurlrelocator.hxx"
 #include "doctemplateslocal.hxx"
-#include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
+#include <docfac.hxx>
+#include <docfile.hxx>
 #include "doc.hrc"
 
 #include <vector>

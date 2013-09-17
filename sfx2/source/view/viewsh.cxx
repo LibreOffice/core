@@ -52,29 +52,29 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 
-#include <sfx2/app.hxx>
+#include <app.hxx>
 #include "view.hrc"
-#include <sfx2/viewsh.hxx>
+#include <viewsh.hxx>
 #include "viewimp.hxx"
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/request.hxx>
-#include <sfx2/templdlg.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/dispatch.hxx>
+#include "sfxresid.hxx"
+#include <request.hxx>
+#include <templdlg.hxx>
+#include <printer.hxx>
+#include <docfile.hxx>
+#include <dispatch.hxx>
 #include "arrdecl.hxx"
-#include <sfx2/docfac.hxx>
+#include <docfac.hxx>
 #include "sfxlocal.hrc"
-#include <sfx2/sfxbasecontroller.hxx>
-#include "sfx2/mailmodelapi.hxx"
+#include <sfxbasecontroller.hxx>
+#include "mailmodelapi.hxx"
 #include "bluthsndapi.hxx"
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/ipclient.hxx>
+#include <viewfrm.hxx>
+#include <event.hxx>
+#include <fcontnr.hxx>
+#include <ipclient.hxx>
 #include "workwin.hxx"
-#include <sfx2/objface.hxx>
-#include <sfx2/docfilt.hxx>
+#include <objface.hxx>
+#include <docfilt.hxx>
 #include "openuriexternally.hxx"
 
 using namespace ::com::sun::star;

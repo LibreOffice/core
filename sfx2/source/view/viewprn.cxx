@@ -27,23 +27,23 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
+#include <app.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/printwarningoptions.hxx>
 #include <tools/datetime.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/objface.hxx>
-#include <sfx2/viewsh.hxx>
+#include <bindings.hxx>
+#include <objface.hxx>
+#include <viewsh.hxx>
 #include "viewimp.hxx"
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/prnmon.hxx>
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/request.hxx>
-#include <sfx2/objsh.hxx>
+#include <viewfrm.hxx>
+#include <prnmon.hxx>
+#include "sfxresid.hxx"
+#include <request.hxx>
+#include <objsh.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/event.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
+#include <event.hxx>
+#include <docfile.hxx>
+#include <docfilt.hxx>
 
 #include "toolkit/awt/vclxdevice.hxx"
 

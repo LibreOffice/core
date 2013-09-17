@@ -21,8 +21,8 @@
 
 #include <stdio.h>
 
-#include <sfx2/infobar.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <infobar.hxx>
+#include <viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchRecorder.hpp>
@@ -109,39 +109,39 @@ using ::com::sun::star::container::XIndexContainer;
 
 // Due to ViewFrame::Current
 #include "appdata.hxx"
-#include <sfx2/taskpane.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objface.hxx>
+#include <taskpane.hxx>
+#include <app.hxx>
+#include <objface.hxx>
 #include "openflag.hxx"
 #include "objshimp.hxx"
-#include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
+#include <viewsh.hxx>
+#include <objsh.hxx>
+#include <bindings.hxx>
+#include <dispatch.hxx>
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/request.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/ipclient.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <request.hxx>
+#include <docfac.hxx>
+#include <ipclient.hxx>
+#include "sfxresid.hxx"
 #include "appbas.hxx"
-#include <sfx2/objitem.hxx>
-#include "sfx2/viewfac.hxx"
-#include <sfx2/event.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/msgpool.hxx>
+#include <objitem.hxx>
+#include "viewfac.hxx"
+#include <event.hxx>
+#include <fcontnr.hxx>
+#include <docfile.hxx>
+#include <module.hxx>
+#include <msgpool.hxx>
 #include "viewimp.hxx"
-#include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/sfx.hrc>
+#include <sfxbasecontroller.hxx>
+#include <sfx.hrc>
 #include "view.hrc"
-#include <sfx2/frmdescr.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/progress.hxx>
+#include <frmdescr.hxx>
+#include <sfxuno.hxx>
+#include <progress.hxx>
 #include "workwin.hxx"
 #include "helper.hxx"
-#include "sfx2/minfitem.hxx"
+#include "minfitem.hxx"
 #include "../appl/app.hrc"
 #include "impviewframe.hxx"
 

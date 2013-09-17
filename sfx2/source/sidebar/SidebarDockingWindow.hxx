@@ -19,8 +19,8 @@
 #ifndef SFX_SIDEBAR_DOCKING_WINDOW_HXX
 #define SFX_SIDEBAR_DOCKING_WINDOW_HXX
 
-#include "sfx2/dockwin.hxx"
-#include "sfx2/dockwin.hxx"
+#include "dockwin.hxx"
+#include "dockwin.hxx"
 #include "Sidebar.hxx"
 
 #include <rtl/ref.hxx>

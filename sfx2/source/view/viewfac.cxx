@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include "sfx2/viewfac.hxx"
+#include <app.hxx>
+#include "viewfac.hxx"
 #include <rtl/ustrbuf.hxx>
 
 // STATIC DATA -----------------------------------------------------------

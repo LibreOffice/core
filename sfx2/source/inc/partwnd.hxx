@@ -35,8 +35,8 @@ namespace com
     }
 }
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/dockwin.hxx>
+#include <childwin.hxx>
+#include <dockwin.hxx>
 
 // forward ---------------------------------------------------------------
 

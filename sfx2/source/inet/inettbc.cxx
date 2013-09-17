@@ -42,10 +42,10 @@
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <sfx2/sfx.hrc>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
+#include <sfx.hrc>
+#include <dispatch.hxx>
+#include <viewfrm.hxx>
+#include <objsh.hxx>
 #include "referers.hxx"
 #include "sfxtypes.hxx"
 #include "helper.hxx"

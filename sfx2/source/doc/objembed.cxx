@@ -24,11 +24,11 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#include <sfx2/objsh.hxx>
-#include <sfx2/app.hxx>
+#include <objsh.hxx>
+#include <app.hxx>
 #include "objshimp.hxx"
-#include <sfx2/sfx.hrc>
-#include <sfx2/event.hxx>
+#include <sfx.hrc>
+#include <event.hxx>
 
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>

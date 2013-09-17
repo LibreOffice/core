@@ -31,8 +31,8 @@ class SfxTemplateControllerItem;
 #include <rsc/rscsfx.hxx>
 #include <tools/rtti.hxx>
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/templdlg.hxx>
+#include <childwin.hxx>
+#include <templdlg.hxx>
 
 class SfxStyleFamilies;
 class SfxStyleFamilyItem;

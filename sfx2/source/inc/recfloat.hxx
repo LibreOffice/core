@@ -20,8 +20,8 @@
 #ifndef _RECFLOAT_HXX
 #define _RECFLOAT_HXX
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/basedlgs.hxx>
+#include <childwin.hxx>
+#include <basedlgs.hxx>
 
 class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
 {

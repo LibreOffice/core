@@ -18,7 +18,7 @@
  */
 
 
-#include <sfx2/DocumentMetadataAccess.hxx>
+#include <DocumentMetadataAccess.hxx>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -44,8 +44,8 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include <sfx2/docfile.hxx>
-#include <sfx2/XmlIdRegistry.hxx>
+#include <docfile.hxx>
+#include <XmlIdRegistry.hxx>
 
 #include <libxml/tree.h>    // for xmlValidateNCName
 

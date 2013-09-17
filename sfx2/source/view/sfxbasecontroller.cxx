@@ -18,7 +18,7 @@
  */
 
 #include <time.h>
-#include <sfx2/sfxbasecontroller.hxx>
+#include <sfxbasecontroller.hxx>
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -46,24 +46,24 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <basic/sbstar.hxx>
 #include <uno/mapping.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/userinputinterception.hxx>
+#include <viewsh.hxx>
+#include <docfac.hxx>
+#include <viewfrm.hxx>
+#include <objsh.hxx>
+#include <app.hxx>
+#include <msgpool.hxx>
+#include <dispatch.hxx>
+#include <userinputinterception.hxx>
 
 #include <viewimp.hxx>
-#include <sfx2/unoctitm.hxx>
-#include <sfx2/childwin.hxx>
-#include <sfx2/sfxsids.hrc>
+#include <unoctitm.hxx>
+#include <childwin.hxx>
+#include <sfxsids.hrc>
 #include <sfx2/sfx.hrc>
-#include <sfx2/sfxresid.hxx>
+#include <sfxresid.hxx>
 #include <workwin.hxx>
-#include <sfx2/objface.hxx>
-#include <sfx2/infobar.hxx>
+#include <objface.hxx>
+#include <infobar.hxx>
 
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
@@ -76,8 +76,8 @@
 
 #include <boost/unordered_map.hpp>
 
-#include <sfx2/event.hxx>
-#include "sfx2/viewfac.hxx"
+#include <event.hxx>
+#include "viewfac.hxx"
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 

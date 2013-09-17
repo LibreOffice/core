@@ -40,11 +40,11 @@
 #include <svtools/embedhlp.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sfx2/ipclient.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/dispatch.hxx>
+#include <ipclient.hxx>
+#include <viewsh.hxx>
+#include <viewfrm.hxx>
+#include <objsh.hxx>
+#include <dispatch.hxx>
 #include "workwin.hxx"
 #include "guisaveas.hxx"
 #include <cppuhelper/implbase5.hxx>

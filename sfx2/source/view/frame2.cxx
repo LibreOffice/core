@@ -20,17 +20,17 @@
 
 #include "impframe.hxx"
 #include "objshimp.hxx"
-#include "sfx2/sfxhelp.hxx"
+#include "sfxhelp.hxx"
 #include "workwin.hxx"
 
-#include "sfx2/app.hxx"
-#include "sfx2/bindings.hxx"
-#include "sfx2/dispatch.hxx"
-#include "sfx2/docfac.hxx"
-#include "sfx2/docfile.hxx"
-#include "sfx2/event.hxx"
-#include "sfx2/objface.hxx"
-#include "sfx2/request.hxx"
+#include "app.hxx"
+#include "bindings.hxx"
+#include "dispatch.hxx"
+#include "docfac.hxx"
+#include "docfile.hxx"
+#include "event.hxx"
+#include "objface.hxx"
+#include "request.hxx"
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

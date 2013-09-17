@@ -21,7 +21,7 @@
 
 
 #include "Sidebar.hrc"
-#include <sfx2/sfxresid.hxx>
+#include <sfxresid.hxx>
 #include <tools/rc.hxx>
 
 

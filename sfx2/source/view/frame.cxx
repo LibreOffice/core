@@ -39,31 +39,31 @@
 
 // due to pTopFrames
 #include "appdata.hxx"
-#include <sfx2/app.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/unoctitm.hxx>
-#include <sfx2/frame.hxx>
+#include <app.hxx>
+#include <event.hxx>
+#include <unoctitm.hxx>
+#include <frame.hxx>
 #include "arrdecl.hxx"
-#include <sfx2/objsh.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/frmdescr.hxx>
+#include <objsh.hxx>
+#include <dispatch.hxx>
+#include <docfile.hxx>
+#include <docfilt.hxx>
+#include <frmdescr.hxx>
 #include "openflag.hxx"
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/fcontnr.hxx>
+#include <viewsh.hxx>
+#include <viewfrm.hxx>
+#include <request.hxx>
+#include <fcontnr.hxx>
 #include "impframe.hxx"
-#include <sfx2/appuno.hxx>
+#include <appuno.hxx>
 #include "workwin.hxx"
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/msgpool.hxx>
+#include <sfxuno.hxx>
+#include <msgpool.hxx>
 #include "objshimp.hxx"
-#include <sfx2/ipclient.hxx>
+#include <ipclient.hxx>
 
 #ifdef DBG_UTIL
-#include <sfx2/frmhtmlw.hxx>
+#include <frmhtmlw.hxx>
 #endif
 
 using namespace com::sun::star;

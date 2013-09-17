@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/app.hxx>
-#include "sfx2/docinsert.hxx"
-#include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/filedlghelper.hxx>
+#include <app.hxx>
+#include "docinsert.hxx"
+#include <docfile.hxx>
+#include <fcontnr.hxx>
+#include <filedlghelper.hxx>
 #include "openflag.hxx"
-#include <sfx2/passwd.hxx>
+#include <passwd.hxx>
 
-#include <sfx2/sfxsids.hrc>
+#include <sfxsids.hrc>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// implemented in 'sfx2/source/appl/appopen.cxx'
+// implemented in 'source/appl/appopen.cxx'
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell* pDoc, SfxItemPool &rPool, SfxMedium* pFile );
 
 namespace sfx2 {

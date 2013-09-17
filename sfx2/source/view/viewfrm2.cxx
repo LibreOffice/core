@@ -20,20 +20,20 @@
 
 #include "impviewframe.hxx"
 #include "statcach.hxx"
-#include "sfx2/viewfac.hxx"
+#include "viewfac.hxx"
 #include "workwin.hxx"
 
-#include "sfx2/app.hxx"
-#include "sfx2/bindings.hxx"
-#include "sfx2/ctrlitem.hxx"
-#include "sfx2/dispatch.hxx"
-#include "sfx2/docfac.hxx"
-#include "sfx2/docfile.hxx"
-#include "sfx2/objitem.hxx"
-#include "sfx2/objsh.hxx"
-#include "sfx2/request.hxx"
-#include "sfx2/viewfrm.hxx"
-#include "sfx2/viewsh.hxx"
+#include "app.hxx"
+#include "bindings.hxx"
+#include "ctrlitem.hxx"
+#include "dispatch.hxx"
+#include "docfac.hxx"
+#include "docfile.hxx"
+#include "objitem.hxx"
+#include "objsh.hxx"
+#include "request.hxx"
+#include "viewfrm.hxx"
+#include "viewsh.hxx"
 
 #include <com/sun/star/util/XCloseable.hpp>
 

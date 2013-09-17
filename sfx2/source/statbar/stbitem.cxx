@@ -29,17 +29,17 @@
 
 #include <vcl/status.hxx>
 
-#include <sfx2/app.hxx>
-#include "sfx2/stbitem.hxx"
+#include <app.hxx>
+#include "stbitem.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/msg.hxx>
+#include <msg.hxx>
 #include "arrdecl.hxx"
-#include <sfx2/bindings.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/unoctitm.hxx>
-#include <sfx2/objsh.hxx>
+#include <bindings.hxx>
+#include <msgpool.hxx>
+#include <module.hxx>
+#include <dispatch.hxx>
+#include <unoctitm.hxx>
+#include <objsh.hxx>
 #include <sfx2/sfx.hrc>
 
 #include <comphelper/processfactory.hxx>

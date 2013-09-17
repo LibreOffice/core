@@ -19,7 +19,7 @@
 #ifndef SFX_SIDEBAR_HXX
 #define SFX_SIDEBAR_HXX
 
-#include "sfx2/dllapi.h"
+#include "dllapi.h"
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 

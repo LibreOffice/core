@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include <sfx2/bindings.hxx>
+#include <bindings.hxx>
 
 #include "slotserv.hxx"
 

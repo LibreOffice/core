@@ -19,8 +19,8 @@
 
 #include <config_features.h>
 
-#include <sfx2/docfile.hxx>
-#include "sfx2/signaturestate.hxx"
+#include <docfile.hxx>
+#include "signaturestate.hxx"
 
 #include <uno/mapping.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -107,17 +107,17 @@
 #include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
 
 #include "helper.hxx"
-#include <sfx2/request.hxx>      // SFX_ITEMSET_SET
-#include <sfx2/app.hxx>          // GetFilterMatcher
-#include <sfx2/frame.hxx>        // LoadTargetFrame
-#include <sfx2/fcontnr.hxx>      // SfxFilterMatcher
-#include <sfx2/docfilt.hxx>      // SfxFilter
-#include <sfx2/objsh.hxx>        // CheckOpenMode
-#include <sfx2/docfac.hxx>       // GetFilterContainer
+#include <request.hxx>      // SFX_ITEMSET_SET
+#include <app.hxx>          // GetFilterMatcher
+#include <frame.hxx>        // LoadTargetFrame
+#include <fcontnr.hxx>      // SfxFilterMatcher
+#include <docfilt.hxx>      // SfxFilter
+#include <objsh.hxx>        // CheckOpenMode
+#include <docfac.hxx>       // GetFilterContainer
 #include "doc.hrc"
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/appuno.hxx>
+#include "sfxresid.hxx"
+#include <appuno.hxx>
 #include "sfxacldetect.hxx"
 #include "officecfg/Office/Common.hxx"
 

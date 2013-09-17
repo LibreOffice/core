@@ -20,7 +20,7 @@
 #define _SFXSPLITWIN_HXX
 
 #include <vcl/splitwin.hxx>
-#include <sfx2/childwin.hxx>
+#include <childwin.hxx>
 
 class SfxWorkWindow;
 class SfxDockingWindow;

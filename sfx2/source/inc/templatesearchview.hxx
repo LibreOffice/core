@@ -10,7 +10,7 @@
 #ifndef __SFX2_TEMPLATESEARCHVIEW_HXX__
 #define __SFX2_TEMPLATESEARCHVIEW_HXX__
 
-#include <sfx2/thumbnailview.hxx>
+#include <thumbnailview.hxx>
 
 class TemplateSearchView : public ThumbnailView
 {

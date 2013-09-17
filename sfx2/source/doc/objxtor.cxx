@@ -40,15 +40,15 @@
 #include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
 #include <svl/lstner.hxx>
-#include <sfx2/sfxhelp.hxx>
+#include <sfxhelp.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/eventcfg.hxx>
 
-#include <sfx2/objsh.hxx>
-#include <sfx2/signaturestate.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
+#include <objsh.hxx>
+#include <signaturestate.hxx>
+#include <sfxmodelfactory.hxx>
 
 #include <basic/sbuno.hxx>
 #include <svtools/sfxecode.hxx>
@@ -72,31 +72,31 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/classids.hxx>
 
-#include <sfx2/app.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
-#include "sfx2/sfxresid.hxx"
+#include <app.hxx>
+#include <docfac.hxx>
+#include <docfile.hxx>
+#include <event.hxx>
+#include <dispatch.hxx>
+#include <viewsh.hxx>
+#include <viewfrm.hxx>
+#include "sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appbas.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/evntconf.hxx>
-#include <sfx2/request.hxx>
+#include <evntconf.hxx>
+#include <request.hxx>
 #include "doc.hrc"
 #include "sfxlocal.hrc"
 #include "appdata.hxx"
-#include <sfx2/appuno.hxx>
-#include <sfx2/sfxsids.hrc>
+#include <appuno.hxx>
+#include <sfxsids.hrc>
 #include <basic/basmgr.hxx>
 #include <svtools/svtools.hrc>
-#include "sfx2/QuerySaveDocument.hxx"
+#include "QuerySaveDocument.hxx"
 #include "helpid.hrc"
-#include <sfx2/msg.hxx>
+#include <msg.hxx>
 #include "appbaslib.hxx"
-#include <sfx2/sfxbasemodel.hxx>
+#include <sfxbasemodel.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 

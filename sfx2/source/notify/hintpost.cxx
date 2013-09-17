@@ -19,8 +19,8 @@
 
 
 #include "arrdecl.hxx"
-#include <sfx2/hintpost.hxx>
-#include <sfx2/app.hxx>
+#include <hintpost.hxx>
+#include <app.hxx>
 #include "sfxtypes.hxx"
 
 //--------------------------------------------------------------------

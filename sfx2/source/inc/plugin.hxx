@@ -37,7 +37,7 @@
 #include <svl/ownlist.hxx>
 #include <svl/itemprop.hxx>
 
-#include <sfx2/sfxuno.hxx>
+#include <sfxuno.hxx>
 
 namespace sfx2
 {

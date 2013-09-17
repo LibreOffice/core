@@ -22,13 +22,13 @@
 #include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "sfx2/imgmgr.hxx"
+#include "imgmgr.hxx"
 #include <sfx2/sfx.hrc>
-#include <sfx2/app.hxx>
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/bindings.hxx>
+#include <app.hxx>
+#include "sfxresid.hxx"
+#include <bindings.hxx>
 #include "statcach.hxx"
-#include <sfx2/module.hxx>
+#include <module.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/toolbox.hxx>
 

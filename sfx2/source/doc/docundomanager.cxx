@@ -19,11 +19,11 @@
 
 
 #include "docundomanager.hxx"
-#include "sfx2/sfxbasemodel.hxx"
-#include "sfx2/objsh.hxx"
-#include "sfx2/viewfrm.hxx"
-#include "sfx2/viewsh.hxx"
-#include "sfx2/bindings.hxx"
+#include "sfxbasemodel.hxx"
+#include "objsh.hxx"
+#include "viewfrm.hxx"
+#include "viewsh.hxx"
+#include "bindings.hxx"
 
 #include <com/sun/star/lang/XComponent.hpp>
 
