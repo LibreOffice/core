@@ -53,7 +53,6 @@ ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
 endif
-$(call gb_Library_get_target,$(1)) : SOVERSION :=
 
 $(if $(gb_Package_PRESTAGEDIR),\
     $(if $(wildcard $(gb_Package_PRESTAGEDIR)/$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))),\
@@ -130,7 +129,6 @@ endef
 
 define gb_Library__set_soversion_script
 $(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktarget,$(1)),$(2))
-$(call gb_Library_get_target,$(1)) : SOVERSION := $(gb_Library_UDK_MAJORVER)
 $(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_workdir_target_versionlink,$(1)))
 
 endef

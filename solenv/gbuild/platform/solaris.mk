@@ -172,8 +172,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter-out $(foreach lib,frm scfilt wpftdraw,$(call gb_Library__get_workdir_linktargetname,$(lib))),$(2)),$(gb_LTOFLAGS)) \
-		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1))) \
-		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT))\
+		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--soname=$(notdir $(1)) \
+			-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -187,7 +187,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(LIBS) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
 		-o $(1) \
-	$(if $(SOVERSION),&& ln -sf $(notdir $(1)) $(ILIBTARGET)) \
+	$(if $(SOVERSIONSCRIPT),&& ln -sf $(notdir $(1)) $(ILIBTARGET)) \
 	$(if $(filter Library,$(TARGETTYPE)),&& \
 		readelf -d $(1) | grep SONAME > $(1).exports.tmp ; \
 		$(NM) --dynamic --extern-only --defined-only --format=posix $(1) \

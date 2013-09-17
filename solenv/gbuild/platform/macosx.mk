@@ -153,7 +153,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(LIBS) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		-o $(1) && \
-	$(if $(SOVERSION),ln -sf $(notdir $(1)) $(ILIBTARGET),:) && \
+	$(if $(SOVERSIONSCRIPT),ln -sf $(notdir $(1)) $(ILIBTARGET),:) && \
 	$(if $(filter Executable,$(TARGETTYPE)), \
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
