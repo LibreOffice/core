@@ -119,28 +119,28 @@ $(foreach aux,$(2),$(call gb_Library_add_auxtarget,$(1),$(aux)))
 
 endef
 
-# gb_Library__add_soversion_link library package linkname
+# we actually (ab)use ILIBTARGET here to store the unversioned symlink -
+# it serves a similar purpose to an MSVC import library, as input for linker
+# call gb_Library__add_soversion_link,library,linkname
 define gb_Library__add_soversion_link
-$(call gb_Library_add_auxtarget,$(1),$(2))
+$(call gb_Library_add_auxtarget,$(1),$(OUTDIR)/lib/$(notdir $(2)))
+$(call gb_LinkTarget_set_ilibtarget,$(call gb_Library_get_linktarget,$(1)),$(2))
 
 endef
 
 define gb_Library__set_soversion_script
-$(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktarget,$(1)),$(2),$(3))
-$(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
-$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_target,$(1)).$(2))
-$(call gb_Helper_install,$(call gb_Library__get_final_target,$(1)), \
-	$(call gb_Library_get_install_target,$(1)).$(2), \
-	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))).$(2))
+$(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktarget,$(1)),$(2))
+$(call gb_Library_get_target,$(1)) : SOVERSION := $(gb_Library_UDK_MAJORVER)
+$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_workdir_target_versionlink,$(1)))
 
 endef
 
 # for libraries that maintain stable ABI: set SOVERSION and version script
-# $(call gb_Library_set_soversion_script,soversion,versionscript)
+# $(call gb_Library_set_soversion_script,versionscript)
 define gb_Library_set_soversion_script
-$(if $(2),,$(call gb_Output_error,gb_Library_set_soversion_script: no version))
-$(if $(3),,$(call gb_Output_error,gb_Library_set_soversion_script: no script))
-$(call gb_Library__set_soversion_script_platform,$(1),$(2),$(3))
+$(if $(2),,$(call gb_Output_error,gb_Library_set_soversion_script: no script))
+$(if $(3),$(call gb_Output_error,gb_Library_set_soversion_script: too many arguments))
+$(call gb_Library__set_soversion_script_platform,$(1),$(2))
 endef
 
 # The dependency from workdir component target to outdir library should ensure

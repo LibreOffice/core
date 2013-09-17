@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,cppuhelper))
 
-$(eval $(call gb_Library_set_soversion_script,cppuhelper,3,$(SRCDIR)/cppuhelper/source/gcc3.map))
+$(eval $(call gb_Library_set_soversion_script,cppuhelper,$(SRCDIR)/cppuhelper/source/gcc3.map))
 
 $(eval $(call gb_Library_use_internal_comprehensive_api,cppuhelper,\
 	cppuhelper \

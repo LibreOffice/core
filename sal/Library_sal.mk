@@ -10,7 +10,7 @@
 
 $(eval $(call gb_Library_Library,sal))
 
-$(eval $(call gb_Library_set_soversion_script,sal,3,$(SRCDIR)/sal/util/sal.map))
+$(eval $(call gb_Library_set_soversion_script,sal,$(SRCDIR)/sal/util/sal.map))
 
 $(eval $(call gb_Library_set_precompiled_header,sal,$(SRCDIR)/sal/inc/pch/precompiled_sal))
 

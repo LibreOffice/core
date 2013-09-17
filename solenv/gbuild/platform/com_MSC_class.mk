@@ -256,12 +256,12 @@ gb_Library_ILIBFILENAMES :=\
 	$(foreach lib,$(gb_Library_KNOWNLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 gb_Library_DLLEXT := .dll
-gb_Library_MAJORVER := 3
+gb_Library_UDK_MAJORVER := 3
 gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
 gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
-gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
-gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
+gb_Library_UNOVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_DLLEXT)
+gb_Library_RTVEREXT := $(gb_Library_UDK_MAJORVER)$(gb_Library_RTEXT)
 
 gb_Library_FILENAMES :=\
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(lib)$(gb_Library_OOOEXT)) \
