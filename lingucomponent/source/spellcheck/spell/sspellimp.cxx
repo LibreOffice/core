@@ -243,10 +243,10 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
     if (!aSuppLocales.getLength())
         getLocales();
 
+    const Locale *pLocale = aSuppLocales.getConstArray();
     sal_Int32 nLen = aSuppLocales.getLength();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
-        const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
             bRes = sal_True;
