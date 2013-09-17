@@ -26,7 +26,6 @@
 #include <set>
 
 class SdDrawDocument;
-class String;
 
 namespace sd {
 
@@ -107,12 +106,12 @@ public:
 
     EventType meType;
     SdDrawDocument& mrDocument;
-    const String& mrMasterPageName;
+    const OUString& mrMasterPageName;
 
     MasterPageObserverEvent (
         EventType eType,
         SdDrawDocument& rDocument,
-        const String& rMasterPageName)
+        const OUString& rMasterPageName)
         : meType(eType),
           mrDocument(rDocument),
           mrMasterPageName(rMasterPageName)
