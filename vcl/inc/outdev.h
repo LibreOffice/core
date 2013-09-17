@@ -245,8 +245,6 @@ struct ImplOutDevData
     basegfx::B2DHomMatrix*      mpInverseViewTransform;
 };
 
-void ImplFreeOutDevFontData();
-
 #endif // _SV_OUTDEV_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

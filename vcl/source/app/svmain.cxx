@@ -550,7 +550,6 @@ void DeInitVCL()
     pSVData->maGDIData.mpScreenFontList = NULL;
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = NULL;
-    ImplFreeOutDevFontData();
 
     if ( pSVData->mpResMgr )
     {

@@ -288,10 +288,6 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
     }
 }
 
-// TODO: remove this method when the CWS-gfbfcfg dust has settled
-void ImplFreeOutDevFontData()
-{}
-
 void OutputDevice::BeginFontSubstitution()
 {
     ImplSVData* pSVData = ImplGetSVData();
