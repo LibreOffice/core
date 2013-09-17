@@ -98,11 +98,14 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
             p->nVal = *(double*)pData;
             break;
         case PTR_STRING :
+        {
+            sal_Char* pChar = (sal_Char*)pData;
             if ( p->pStr )
-                *p->pStr = String( (sal_Char*)pData, osl_getThreadTextEncoding() );
+                *p->pStr = OUString( pChar, strlen(pChar),osl_getThreadTextEncoding() );
             else
-                p->pStr = new String( (sal_Char*)pData, osl_getThreadTextEncoding() );
+                p->pStr = new OUString( pChar, strlen(pChar), osl_getThreadTextEncoding() );
             break;
+        }
         default :
             OSL_FAIL( "unknown AsyncType" );
             return;

@@ -32,15 +32,13 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 class ScDocument;
 class ScAddInDocs : public std::set<ScDocument*> {};
 
-class String;
-
 class ScAddInAsync : public SvtBroadcaster
 {
 private:
     union
     {
         double      nVal;               // current value
-        String*     pStr;
+        OUString*   pStr;
     };
     ScAddInDocs*    pDocs;              // List of using documents
     FuncData*       mpFuncData;         // Pointer to data in collection
@@ -61,7 +59,7 @@ public:
     bool            IsValid() const         { return bValid; }
     ParamType       GetType() const         { return meType; }
     double          GetValue() const        { return nVal; }
-    const String&   GetString() const       { return *pStr; }
+    const OUString& GetString() const       { return *pStr; }
     bool            HasDocument( ScDocument* pDoc ) const
                         { return pDocs->find( pDoc ) != pDocs->end(); }
     void            AddDocument( ScDocument* pDoc ) { pDocs->insert( pDoc ); }
