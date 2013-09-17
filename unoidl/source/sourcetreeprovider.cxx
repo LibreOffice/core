@@ -130,10 +130,10 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
         uri += ".idl";
         SourceProviderScannerData data(manager_);
         if (parse(uri, &data)) {
-            std::map<OUString, SourceProviderEntity>::const_iterator i(
+            std::map<OUString, SourceProviderEntity>::const_iterator j(
                 data.entities.find(name));
-            if (i != data.entities.end()) {
-                ent = i->second.entity;
+            if (j != data.entities.end()) {
+                ent = j->second.entity;
             }
             SAL_WARN_IF(
                 !ent.is(), "unoidl",
