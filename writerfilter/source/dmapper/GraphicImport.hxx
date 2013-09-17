@@ -84,6 +84,7 @@ public:
     virtual void data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t ref);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > GetGraphicObject();
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> GetXShapeObject();
     bool    IsGraphic() const;
 
  private:

@@ -316,7 +316,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
     aFileName = "word/charts/chart" + OUString::number(nCount) + ".xml";
     ::sax_fastparser::FSHelperPtr pChartFS =
         m_pFilter->openFragmentStreamWithSerializer( aFileName,
-            "application/vnd.openxmlformats-officedocument.drawingml.chart" );
+            "application/vnd.openxmlformats-officedocument.drawingml.chart+xml" );
 
     oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
     aChartExport.ExportContent();

@@ -1028,6 +1028,9 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
     return xResult;
 }
 
+uno::Reference< ::com::sun::star::drawing::XShape> GraphicImport::GetXShapeObject(){
+    return m_xShape;
+}
 
 
 void GraphicImport::ProcessShapeOptions(Value& val)
@@ -1206,6 +1209,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_pic_pic:
         case NS_ooxml::LN_dgm_relIds:
         case NS_ooxml::LN_lc_lockedCanvas:
+        case NS_ooxml::LN_c_chart:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
