@@ -247,11 +247,12 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     bool bUseOurTextWrapping = false;
     bool bConsiderWrappingStyle = false;
     bool bExpandWordSpace = false;
-    int i, j, nCount = aList.getLength();
-    for ( i = 0; i < nCount; ++i )
+    const sal_Int32 nCount = aList.getLength();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         const Sequence< PropertyValue >& rEntry = aList[i];
-        for ( j = 0; j < rEntry.getLength(); j++ )
+        const sal_Int32 nEntries = rEntry.getLength();
+        for ( sal_Int32 j = 0; j < nEntries; j++ )
         {
             PropertyValue aValue = rEntry[j];
             if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_NAME )
