@@ -420,10 +420,10 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
 /*
  * SwTaggedPDFHelper::BeginTag()
  */
-void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const String& rString )
+void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )
 {
     // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, OUString( rString ) );
+    const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rString );
     ++nEndStructureElement;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2211,7 +2211,7 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                                                        const SwTxtNode& rTNd,
                                                        const SwRect& rLinkRect,
                                                        sal_Int32 nDestId,
-                                                       const String& rURL,
+                                                       const OUString& rURL,
                                                        bool bIntern ) const
 {
     // We assume, that the primary link has just been exported. Therefore

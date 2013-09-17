@@ -43,7 +43,6 @@ class SwTxtNode;
 class SwNumRule;
 class SwTable;
 class SwNumberTreeNode;
-class String;
 class SvxLanguageItem;
 
 
@@ -148,7 +147,7 @@ class SwTaggedPDFHelper
     const Frm_Info* mpFrmInfo;
     const Por_Info* mpPorInfo;
 
-    void BeginTag( vcl::PDFWriter::StructElement aTagRole, const String& rTagName );
+    void BeginTag( vcl::PDFWriter::StructElement aTagRole, const OUString& rTagName );
     void EndTag();
 
     void SetAttributes( vcl::PDFWriter::StructElement eType );
@@ -229,7 +228,7 @@ class SwEnhancedPDFExportHelper
 
     void MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                 const SwTxtNode& rTNd, const SwRect& rLinkRect,
-                                sal_Int32 nDestId, const String& rURL, bool bIntern ) const;
+                                sal_Int32 nDestId, const OUString& rURL, bool bIntern ) const;
 
     public:
 
