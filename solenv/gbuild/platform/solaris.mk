@@ -305,11 +305,9 @@ endef
 
 gb_CppunitTest_CPPTESTPRECOMMAND := \
     $(call gb_Helper_extend_ld_path,$(OUTDIR_FOR_BUILD)/lib/sqlite)
-gb_CppunitTest_SYSPRE := libtest_
-gb_CppunitTest_EXT := .so
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
-gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
+gb_CppunitTest_get_filename = libtest_$(1).so
+gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH :=

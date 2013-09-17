@@ -282,11 +282,9 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
-gb_CppunitTest_SYSPRE := libtest_
-gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
-gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
-gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
+gb_CppunitTest_get_filename = libtest_$(1).dylib
+gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH :=

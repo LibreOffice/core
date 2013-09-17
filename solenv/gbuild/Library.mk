@@ -25,7 +25,7 @@
 #  gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
 # defined by platform
 #  gb_Library_DEFS
-#  gb_Library_DLLFILENAMES
+#  gb_Library_ILIBFILENAMES
 #  gb_Library_FILENAMES
 #  gb_Library_Library_platform
 
@@ -85,7 +85,7 @@ $(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_Library_get_target,$(1))).dir
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
-$(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
+$(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_ilibfilename,$(1)))
 
 $(if $(and $(call gb_Library_get_instdir,$(1)),$(filter-out $(gb_MERGEDLIBS),$(1))),\
 $(call gb_Library__install,$(call gb_Library__get_final_target,$(1)), \
@@ -189,8 +189,7 @@ gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktarget,$
 
 endef
 
-gb_Library_get_runtime_filename = \
- $(or $(call gb_Library_get_dllname,$(1)),$(call gb_Library_get_filename,$(1)))
+gb_Library_get_runtime_filename = $(call gb_Library_get_filename,$(1))
 
 $(eval $(foreach method,\
 	add_cobject \

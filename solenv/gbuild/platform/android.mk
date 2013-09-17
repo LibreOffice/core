@@ -103,7 +103,7 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_EXT := .a
+gb_CppunitTest_get_filename = libtest_$(1).a
 
 # No use for Cppunit targets now for Android (which would be just
 # static archives), they are just a waste of disk space.

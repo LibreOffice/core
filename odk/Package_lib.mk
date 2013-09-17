@@ -19,7 +19,7 @@ $(eval $(call gb_Package_add_files,odk_lib,$(gb_Package_SDKDIRNAME)/lib,\
 			purpenvhelper \
 			sal \
 			salhelper \
-			,$(notdir $(call gb_Library_get_target,$(lib))) \
+			,$(call gb_Library_get_ilibfilename,$(lib)) \
 		) \
 	) \
 	$(if $(filter LINUX,$(OS)),$(notdir $(call gb_StaticLibrary_get_target,salcpprt))) \
