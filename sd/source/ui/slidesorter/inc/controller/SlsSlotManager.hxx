@@ -27,7 +27,6 @@
 class AbstractSvxNameDialog;
 class SfxItemSet;
 class SfxRequest;
-class String;
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
