@@ -275,6 +275,8 @@ public:
     /** Returns the codec helper that stores the encoder/decoder object. */
     BiffCodecHelper&    getCodecHelper() const;
 
+    void compileOpenCLKernels();
+
 private:
     WorkbookGlobals&    mrBookGlob;
 };

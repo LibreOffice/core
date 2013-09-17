@@ -71,6 +71,8 @@
 #include "dbdata.hxx"
 #include "datauno.hxx"
 #include "globalnames.hxx"
+#include "clkernelthread.hxx"
+#include "rtl/ref.hxx"
 
 #include "formulabuffer.hxx"
 #include "vcl/mapmod.hxx"
@@ -223,6 +225,8 @@ public:
     /** Returns the codec helper that stores the encoder/decoder object. */
     inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
+    void compileOpenCLKernels();
+
 private:
     /** Initializes some basic members and sets needed document properties. */
     void                initialize( bool bWorkbookFile );
@@ -252,6 +256,8 @@ private:
     typedef ::std::auto_ptr< oox::drawingml::chart::ChartConverter >      ExcelChartConvPtr;
     typedef ::std::auto_ptr< PageSettingsConverter >    PageSettConvPtr;
     typedef ::std::auto_ptr< BiffCodecHelper >          BiffCodecHelperPtr;
+
+    rtl::Reference<sc::CLBuildKernelThread> mxCLKernelThread;
 
     OUString            maCellStyles;           /// Style family name for cell styles.
     OUString            maPageStyles;           /// Style family name for page styles.
@@ -504,6 +510,15 @@ void WorkbookGlobals::useInternalChartDataTable( bool bInternal )
 
 // private --------------------------------------------------------------------
 
+void WorkbookGlobals::compileOpenCLKernels()
+{
+    if (mxCLKernelThread.is())
+        return;
+
+    mxCLKernelThread.set(new sc::CLBuildKernelThread);
+    mxCLKernelThread->launch();
+}
+
 void WorkbookGlobals::initialize( bool bWorkbookFile )
 {
     maCellStyles = "CellStyles";
@@ -634,6 +649,9 @@ void WorkbookGlobals::finalize()
         //ScDocShell::AfterXMLLoading() for ods
         getScDocument().SetInsertingFromOtherDoc(false);
         getScDocument().RebuildFormulaGroups();
+
+        if (mxCLKernelThread.is())
+            mxCLKernelThread->join();
     }
 }
 
@@ -947,6 +965,11 @@ rtl_TextEncoding WorkbookHelper::getTextEncoding() const
 BiffCodecHelper& WorkbookHelper::getCodecHelper() const
 {
     return mrBookGlob.getCodecHelper();
+}
+
+void WorkbookHelper::compileOpenCLKernels()
+{
+    mrBookGlob.compileOpenCLKernels();
 }
 
 // ============================================================================
