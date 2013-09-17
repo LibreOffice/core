@@ -59,6 +59,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	treex \
 	uiex \
 	ulfex \
+	unoidl-read \
 	unoidl-write \
 	xrmex \
 ))

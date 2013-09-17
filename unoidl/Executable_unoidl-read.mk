@@ -7,15 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,unoidl))
+$(eval $(call gb_Executable_Executable,unoidl-read))
 
-$(eval $(call gb_Module_add_targets,unoidl, \
-    Executable_unoidl-read \
-    Library_unoidl \
+$(eval $(call gb_Executable_add_exception_objects,unoidl-read, \
+    unoidl/source/unoidl-read \
 ))
 
-$(eval $(call gb_Module_add_targets_for_build,unoidl, \
-    Executable_unoidl-write \
+$(eval $(call gb_Executable_use_libraries,unoidl-read, \
+    sal \
+    salhelper \
+    unoidl \
 ))
 
 # vim: set noet sw=4 ts=4:
