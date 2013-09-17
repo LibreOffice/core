@@ -124,7 +124,7 @@ public:
     OUString colorCyan() { return maColorCyan; }
 
     void setColorMagenta(const OUString color) { maColorMagenta = color; }
-    OUString colorMagenta() { return maColorGreen; }
+    OUString colorMagenta() { return maColorMagenta; }
 
     void setColorYellow(const OUString color) { maColorYellow = color; }
     OUString colorYellow() { return maColorYellow; }
