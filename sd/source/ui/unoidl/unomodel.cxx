@@ -160,19 +160,19 @@ void SdUnoForbiddenCharsTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) t
 
 ///////////////////////////////////////////////////////////////////////
 
-const sal_Int32 WID_MODEL_LANGUAGE = 1;
-const sal_Int32 WID_MODEL_TABSTOP  = 2;
-const sal_Int32 WID_MODEL_VISAREA  = 3;
-const sal_Int32 WID_MODEL_MAPUNIT  = 4;
-const sal_Int32 WID_MODEL_FORBCHARS= 5;
-const sal_Int32 WID_MODEL_CONTFOCUS = 6;
-const sal_Int32 WID_MODEL_DSGNMODE  = 7;
-const sal_Int32 WID_MODEL_BASICLIBS = 8;
-const sal_Int32 WID_MODEL_RUNTIMEUID = 9;
-const sal_Int32 WID_MODEL_BUILDID = 10;
+const sal_Int32 WID_MODEL_LANGUAGE           =  1;
+const sal_Int32 WID_MODEL_TABSTOP            =  2;
+const sal_Int32 WID_MODEL_VISAREA            =  3;
+const sal_Int32 WID_MODEL_MAPUNIT            =  4;
+const sal_Int32 WID_MODEL_FORBCHARS          =  5;
+const sal_Int32 WID_MODEL_CONTFOCUS          =  6;
+const sal_Int32 WID_MODEL_DSGNMODE           =  7;
+const sal_Int32 WID_MODEL_BASICLIBS          =  8;
+const sal_Int32 WID_MODEL_RUNTIMEUID         =  9;
+const sal_Int32 WID_MODEL_BUILDID            = 10;
 const sal_Int32 WID_MODEL_HASVALIDSIGNATURES = 11;
-const sal_Int32 WID_MODEL_DIALOGLIBS = 12;
-const sal_Int32 WID_MODEL_FONTS = 13;
+const sal_Int32 WID_MODEL_DIALOGLIBS         = 12;
+const sal_Int32 WID_MODEL_FONTS              = 13;
 const sal_Int32 WID_MODEL_INTEROPGRABBAG     = 14;
 
 #ifndef SEQTYPE
@@ -188,19 +188,19 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
     // Attention: the first parameter HAS TO BE sorted!!!
     const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,  &::getCppuType(static_cast< const OUString * >(0)), 0, 0},
-        { MAP_CHAR_LEN(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE, &::getCppuType((const lang::Locale*)0),     0,  0},
-        { MAP_CHAR_LEN(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,  &::getCppuType((const sal_Int32*)0),        0,  0},
-        { MAP_CHAR_LEN(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,  &::getCppuType((const awt::Rectangle*)0),   0,  0},
-        { MAP_CHAR_LEN(sUNO_Prop_MapUnit),              WID_MODEL_MAPUNIT,  &::getCppuType((const sal_Int16*)0),        beans::PropertyAttribute::READONLY, 0},
-        { MAP_CHAR_LEN(sUNO_Prop_ForbiddenCharacters),  WID_MODEL_FORBCHARS,&::getCppuType((const uno::Reference< i18n::XForbiddenCharacters > *)0), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN(sUNO_Prop_AutomContFocus ),  WID_MODEL_CONTFOCUS,    &::getBooleanCppuType(),                    0,  0},
-        { MAP_CHAR_LEN(sUNO_Prop_ApplyFrmDsgnMode), WID_MODEL_DSGNMODE,     &::getBooleanCppuType(),                    0,  0},
-        { MAP_CHAR_LEN("BasicLibraries"),               WID_MODEL_BASICLIBS,&::getCppuType((const uno::Reference< script::XLibraryContainer > *)0), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN("DialogLibraries"),              WID_MODEL_DIALOGLIBS,   &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,   &::getCppuType(static_cast< const OUString * >(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN("Fonts"),                        WID_MODEL_FONTS,   SEQTYPE(::getCppuType((uno::Sequence<uno::Any>*)0)), beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,            &::getCppuType(static_cast< const OUString * >(0)),                      0, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE,           &::getCppuType((const lang::Locale*)0),                                  0, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,            &::getCppuType((const sal_Int32*)0),                                     0, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,            &::getCppuType((const awt::Rectangle*)0),                                0, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_MapUnit),              WID_MODEL_MAPUNIT,            &::getCppuType((const sal_Int16*)0),                                     beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_ForbiddenCharacters),  WID_MODEL_FORBCHARS,          &::getCppuType((const uno::Reference< i18n::XForbiddenCharacters > *)0), beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_AutomContFocus ),      WID_MODEL_CONTFOCUS,          &::getBooleanCppuType(),                                                 0, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_ApplyFrmDsgnMode),     WID_MODEL_DSGNMODE,           &::getBooleanCppuType(),                                                 0, 0},
+        { MAP_CHAR_LEN("BasicLibraries"),               WID_MODEL_BASICLIBS,          &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),  beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("DialogLibraries"),              WID_MODEL_DIALOGLIBS,         &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),  beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,         &::getCppuType(static_cast< const OUString * >(0)),                      beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)),                      beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("Fonts"),                        WID_MODEL_FONTS,              SEQTYPE(::getCppuType((uno::Sequence<uno::Any>*)0)),                     beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(sUNO_Prop_InteropGrabBag),       WID_MODEL_INTEROPGRABBAG,     SEQTYPE(::getCppuType((uno::Sequence< beans::PropertyValue >*)0)),       0, 0},
         { 0,0,0,0,0,0 }
     };
