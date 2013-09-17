@@ -341,12 +341,6 @@ define gb_Library_get_dllname
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
 endef
 
-# in effect this just causes the .export target to be touched
-# cannot be the .lib itself because that causes attempts to get it linked :(
-define gb_Library_get_exports_target
-$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
-endef
-
 
 # StaticLibrary class
 

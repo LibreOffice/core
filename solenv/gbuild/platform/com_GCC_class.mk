@@ -199,10 +199,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		)
 endef
 
-define gb_Library_get_exports_target
-$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
-endef
-
 # YaccTarget class
 
 define gb_YaccTarget__command

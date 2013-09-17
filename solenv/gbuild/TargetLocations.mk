@@ -228,6 +228,10 @@ gb_XcuMergeTarget_get_target = $(WORKDIR)/XcuMergeTarget/$(1)
 gb_XcuResTarget_get_target = $(WORKDIR)/XcuResTarget/$(1)
 gb_Zip_get_target = $(WORKDIR)/Zip/$(1).zip
 
+define gb_Library_get_exports_target
+$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
+endef
+
 gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
 
 define gb_Library_get_headers_target
