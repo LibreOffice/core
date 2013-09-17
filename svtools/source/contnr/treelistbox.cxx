@@ -401,7 +401,8 @@ SvTreeListBox::SvTreeListBox(Window* pParent, WinBits nWinStyle) :
     DragSourceHelper(this),
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
-    eSelMode(NO_SELECTION)
+    eSelMode(NO_SELECTION),
+    nMinWidthInChars(0)
 {
     DBG_CTOR(SvTreeListBox,0);
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
@@ -430,7 +431,8 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
     DragSourceHelper(this),
     mpImpl(new SvTreeListBoxImpl(*this)),
     mbContextBmpExpanded(false),
-    eSelMode(NO_SELECTION)
+    eSelMode(NO_SELECTION),
+    nMinWidthInChars(0)
 {
     DBG_CTOR(SvTreeListBox,0);
     pTargetEntry = 0;
@@ -3454,6 +3456,8 @@ Size SvTreeListBox::GetOptimalSize() const
         aRet.Width() += rStyleSettings.GetBorderSize() * 2;
         aRet.Height() += rStyleSettings.GetBorderSize() * 2;
     }
+    long nMinWidth = nMinWidthInChars * approximate_char_width();
+    aRet.Width() = std::max(aRet.Width(), nMinWidth);
     return aRet;
 }
 
@@ -3981,6 +3985,23 @@ void SvTreeListBox::CallImplEventListeners(sal_uLong nEvent, void* pData)
 
 void SvTreeListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& /*rStateSet*/ ) const
 {
+}
+
+void SvTreeListBox::set_min_width_in_chars(sal_Int32 nChars)
+{
+    nMinWidthInChars = nChars;
+    queue_resize();
+}
+
+bool SvTreeListBox::set_property(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "min-width-chars")
+    {
+        set_min_width_in_chars(rValue.toInt32());
+    }
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

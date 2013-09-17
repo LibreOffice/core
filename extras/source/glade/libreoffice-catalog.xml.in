@@ -388,7 +388,18 @@
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tree List" name="svtlo-SvTreeListBox"
                         generic-name="Tree List" parent="GtkTreeView"
-                        icon-name="widget-gtk-treeview"/>
+                        icon-name="widget-gtk-treeview">
+      <properties>
+        <property save="True" query="False" id="min-width-chars" default="-1" name="Minimum Width in Characters">
+          <parameter-spec>
+            <type>GParamInt</type>
+            <min>-1</min>
+          </parameter-spec>
+          <tooltip>The desired minimum width of the SvTreeListBox, in characters</tooltip>
+        </property>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="DD ListBox" name="swuilo-DDListBox"
                         generic-name="DD ListBox" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
