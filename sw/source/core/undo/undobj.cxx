@@ -275,7 +275,7 @@ OUString SwUndo::GetComment() const
     {
         if (! pComment)
         {
-            pComment = new String(SW_RES(UNDO_BASE + GetId()));
+            pComment = new OUString(SW_RES(UNDO_BASE + GetId()));
 
             SwRewriter aRewriter = GetRewriter();
 

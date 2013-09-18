@@ -54,7 +54,7 @@ class SwUndo
 
 protected:
     bool bCacheComment;
-    mutable String * pComment;
+    mutable OUString * pComment;
 
     void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = 0 );
     void RemoveIdxFromRange( SwPaM& rPam, sal_Bool bMoveNext );
