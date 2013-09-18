@@ -475,10 +475,10 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
         {
             // something went wrong, fall back to compiling from source
             bBinaryExisted = false;
-            for(size_t i = 0; i < numDevices; ++i)
-            {
-                delete[] pBinary[i];
-            }
+        }
+        for(size_t i = 0; i < numDevices; ++i)
+        {
+            delete[] pBinary[i];
         }
     }
 
