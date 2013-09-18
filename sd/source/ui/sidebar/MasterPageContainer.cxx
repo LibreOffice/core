@@ -372,12 +372,12 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForIndex (int nIndex)
 
 
 MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
-    const String& sURL)
+    const OUString& sURL)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     Token aResult (NIL_TOKEN);
-    if (sURL.Len() > 0)
+    if (!sURL.isEmpty())
     {
         MasterPageContainerType::iterator iEntry (
             ::std::find_if (
@@ -393,12 +393,12 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
 
 
 
-MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const String& sStyleName)
+MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const OUString& sStyleName)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     Token aResult (NIL_TOKEN);
-    if (sStyleName.Len() > 0)
+    if (!sStyleName.isEmpty())
     {
         MasterPageContainerType::iterator iEntry (
             ::std::find_if (
@@ -436,7 +436,7 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
 
 
 
-String MasterPageContainer::GetURLForToken (
+OUString MasterPageContainer::GetURLForToken (
     MasterPageContainer::Token aToken)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -445,13 +445,13 @@ String MasterPageContainer::GetURLForToken (
     if (pDescriptor.get() != NULL)
         return pDescriptor->msURL;
     else
-        return String();
+        return OUString();
 }
 
 
 
 
-String MasterPageContainer::GetPageNameForToken (
+OUString MasterPageContainer::GetPageNameForToken (
     MasterPageContainer::Token aToken)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -460,13 +460,13 @@ String MasterPageContainer::GetPageNameForToken (
     if (pDescriptor.get() != NULL)
         return pDescriptor->msPageName;
     else
-        return String();
+        return OUString();
 }
 
 
 
 
-String MasterPageContainer::GetStyleNameForToken (
+OUString MasterPageContainer::GetStyleNameForToken (
     MasterPageContainer::Token aToken)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -475,7 +475,7 @@ String MasterPageContainer::GetStyleNameForToken (
     if (pDescriptor.get() != NULL)
         return pDescriptor->msStyleName;
     else
-        return String();
+        return OUString();
 }
 
 
