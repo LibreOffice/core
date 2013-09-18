@@ -152,7 +152,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     return nRet;
 }
 
-/// copy all selections and the doc
+/// copy all selections to the doc
 sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 {
     OSL_ENSURE( pInsDoc, "no Ins.Document"  );

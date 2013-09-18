@@ -212,7 +212,7 @@ public:
     /** For copying via ClipBoard:
        If table is copied into table, move all cursors away from it.
        Copy and Paste must be in FEShell because of FlyFrames!
-       Copy all selections and the document. */
+       Copy all selections to the document. */
     sal_Bool _CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pNdInsPos = 0 );
 
     long SplitNode( sal_Bool bAutoFormat = sal_False, sal_Bool bCheckTableStart = sal_True );
