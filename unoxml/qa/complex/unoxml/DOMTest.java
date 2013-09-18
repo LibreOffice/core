@@ -25,8 +25,15 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.StringPair;
 import com.sun.star.io.XInputStream;
+import com.sun.star.io.SequenceInputStream;
 import com.sun.star.xml.dom.*;
+import com.sun.star.xml.sax.XDocumentHandler;
+import com.sun.star.xml.sax.XSAXSerializable;
+import com.sun.star.xml.sax.SAXException;
+import com.sun.star.xml.sax.XAttributeList;
+import com.sun.star.xml.sax.XLocator;
 import static com.sun.star.xml.dom.DOMExceptionType.*;
 import static com.sun.star.xml.dom.NodeType.*;
 import com.sun.star.xml.xpath.*;
@@ -2686,6 +2693,52 @@ public class DOMTest
         }
     }
 
+    @Test public void testXSAXSerialize() throws Exception
+    {
+        String file =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "<office:document-content " +
+            "xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" " +
+            "xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+            "xmlns=\"\" " +
+            "office:version=\"1.0\">" +
+            "<office:scripts/>" +
+            "<xlink:test/>" +
+            "<office:automatic-styles teststyle=\"test\"/>" +
+            "<moretest/>" +
+            "some text \303\266\303\244\303\274" +
+            "</office:document-content>";
+
+        XDocumentBuilder xBuilder =
+            UnoRuntime.queryInterface(XDocumentBuilder.class,
+            m_xMSF.createInstance("com.sun.star.xml.dom.DocumentBuilder"));
+
+        XInputStream xIn =
+            SequenceInputStream.createStreamFromSequence(m_xContext, file.getBytes());
+
+        XDocument xDoc =
+            xBuilder.parse(xIn);
+
+        XDocumentHandler xHandler =
+            UnoRuntime.queryInterface(XDocumentHandler.class, new DummyDocumentHandler());
+
+        XSAXSerializable serializable =
+            UnoRuntime.queryInterface(XSAXSerializable.class, xDoc);
+
+        serializable.serialize(xHandler, new StringPair[0]);
+    }
+
+    class DummyDocumentHandler implements XDocumentHandler
+    {
+        public void startDocument() throws SAXException {}
+        public void endDocument() throws SAXException {}
+        public void startElement(String s, XAttributeList a) throws SAXException {}
+        public void endElement(String s) throws SAXException {}
+        public void characters(String s) throws SAXException {}
+        public void ignorableWhitespace(String s) throws SAXException {}
+        public void processingInstruction(String s1, String s2) throws SAXException {}
+        public void setDocumentLocator(XLocator l) throws SAXException {}
+    }
 
     // just for importNode...
     abstract class MockNode implements XNode
