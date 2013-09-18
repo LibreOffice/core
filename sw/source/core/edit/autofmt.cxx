@@ -1827,7 +1827,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 
     SwTxtFrmInfo aFInfo( 0 );
 
-    xub_StrLen nSttPos, nLastBlank = nPos;
+    sal_Int32 nSttPos, nLastBlank = nPos;
     sal_Bool bFirst = aFlags.bCptlSttSntnc, bFirstSent = bFirst;
     sal_Unicode cChar = 0;
 

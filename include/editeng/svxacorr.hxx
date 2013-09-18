@@ -104,7 +104,7 @@ public:
     //             (Does not to have to be the same paragraph !!!!)
     virtual OUString GetPrevPara( sal_Bool bAtNormalPos ) = 0;
 
-    virtual sal_Bool ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
+    virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
                                   OUString* pPara ) = 0;
     // Is called after the change of the signs by the functions
@@ -151,8 +151,8 @@ class EDITENG_DLLPUBLIC SvxAutocorrWordList
 
     const SvxAutocorrWord* WordMatches(const SvxAutocorrWord *pFnd,
                                        const OUString &rTxt,
-                                       xub_StrLen &rStt,
-                                       xub_StrLen nEndPos) const;
+                                       sal_Int32 &rStt,
+                                       sal_Int32 nEndPos) const;
 public:
                            // free any objects still in the set
                            ~SvxAutocorrWordList();
@@ -165,7 +165,7 @@ public:
     typedef std::vector<SvxAutocorrWord *> Content;
     Content                getSortedContent() const;
 
-    const SvxAutocorrWord* SearchWordsInList(const OUString& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos) const;
+    const SvxAutocorrWord* SearchWordsInList(const OUString& rTxt, sal_Int32& rStt, sal_Int32 nEndPos) const;
 };
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
@@ -292,7 +292,7 @@ public:
     // FIXME: this has the horrible flaw that the rTxt must be a reference
     // to the actual SwTxtNode/EditNode string because it inserts the character
     // in rDoc and expects that to side-effect rTxt
-    sal_uLong DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
+    sal_uLong DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                            xub_StrLen nPos, sal_Unicode cInsChar, sal_Bool bInsert, Window* pFrameWin = NULL );
 
     // Return for the autotext expansion the previous word,
@@ -307,7 +307,7 @@ public:
     // rLang - Input: in which language is searched
     //         Output: in which "language list" was it found
     const SvxAutocorrWord* SearchWordsInList( const OUString& rTxt,
-                                    xub_StrLen& rStt, xub_StrLen nEndPos,
+                                    sal_Int32& rStt, sal_Int32 nEndPos,
                                     SvxAutoCorrDoc& rDoc,
                                     LanguageType& rLang );
 

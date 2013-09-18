@@ -149,7 +149,7 @@ public:
 
     virtual OUString    GetPrevPara( sal_Bool bAtNormalPos );
 
-    virtual sal_Bool    ChgAutoCorrWord( sal_uInt16& rSttPos, sal_uInt16 nEndPos,
+    virtual bool        ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect, OUString* pPara );
 
     virtual LanguageType GetLanguage( sal_uInt16 nPos, sal_Bool bPrevPara = sal_False ) const;

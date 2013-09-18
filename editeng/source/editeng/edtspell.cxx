@@ -727,8 +727,8 @@ OUString EdtAutoCorrDoc::GetPrevPara( sal_Bool )
 
 }
 
-sal_Bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_uInt16& rSttPos,
-            sal_uInt16 nEndPos, SvxAutoCorrect& rACorrect,
+bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
+            sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
             OUString* pPara )
 {
     // Paragraph-start or a blank found, search for the word

@@ -272,8 +272,8 @@ private:
         //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
         return OUString();
     }
-    virtual sal_Bool ChgAutoCorrWord( sal_uInt16& rSttPos,
-                sal_uInt16 nEndPos, SvxAutoCorrect& rACorrect,
+    virtual bool ChgAutoCorrWord( sal_Int32& rSttPos,
+                sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
                 OUString* pPara )
     {
         //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
@@ -333,10 +333,7 @@ void Test::testAutocorrect()
         OUString sExpected("foo");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        String const& rInput2(reinterpret_cast<String const&>(aFoo.getResult()));
-        aAutoCorrect.DoAutoCorrect(aFoo,
-            rInput2,
-            sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
     }

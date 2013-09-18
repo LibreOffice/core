@@ -293,7 +293,7 @@ OUString SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
     return aStr;
 }
 
-sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
+bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                          SvxAutoCorrect& rACorrect,
                                          OUString* pPara )
 {

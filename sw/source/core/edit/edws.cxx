@@ -254,7 +254,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
 
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
     // FIXME: this _must_ be called with reference to the actual node text!
-    String const& rNodeText(reinterpret_cast<String const&>(pTNd->GetTxt()));
+    OUString const& rNodeText(pTNd->GetTxt());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rNodeText, pCrsr->GetPoint()->nContent.GetIndex(),
                     cChar, bInsert, GetWin() );

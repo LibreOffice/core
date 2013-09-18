@@ -74,7 +74,7 @@ public:
     //               (does not need to be the same paragraph)
     virtual OUString GetPrevPara( sal_Bool bAtNormalPos );
 
-    virtual sal_Bool ChgAutoCorrWord( xub_StrLen& rSttPos, xub_StrLen nEndPos,
+    virtual bool ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                   SvxAutoCorrect& rACorrect,
                                   OUString* pPara );
 

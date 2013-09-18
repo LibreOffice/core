@@ -1229,7 +1229,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
 }
 
 sal_uLong
-SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
+SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     xub_StrLen nInsPos, sal_Unicode cChar,
                                     sal_Bool bInsert, Window* pFrameWin )
 {
@@ -1243,7 +1243,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             // Prevent double space
             if( nInsPos && ' ' == cChar &&
                 IsAutoCorrFlag( IgnoreDoubleSpace ) &&
-                ' ' == rTxt.GetChar( nInsPos - 1 ) )
+                ' ' == rTxt[ nInsPos - 1 ])
             {
                 nRet = IgnoreDoubleSpace;
                 break;
@@ -1257,7 +1257,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             {
                 sal_Unicode cPrev;
                 sal_Bool bSttQuote = !nInsPos ||
-                        IsWordDelim( ( cPrev = rTxt.GetChar( nInsPos-1 ))) ||
+                        IsWordDelim( ( cPrev = rTxt[ nInsPos-1 ])) ||
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
                         ( cEmDash && cEmDash == cPrev ) ||
                         ( cEnDash && cEnDash == cPrev );
@@ -1283,15 +1283,15 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 else if ( bIsNextRun && !IsAutoCorrectChar( cChar ) )
                 {
                     // Remove the NBSP if it wasn't an autocorrection
-                    if ( nInsPos != 0 && NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) &&
+                    if ( nInsPos != 0 && NeedsHardspaceAutocorr( rTxt[ nInsPos - 1 ] ) &&
                             cChar != ' ' && cChar != '\t' && cChar != CHAR_HARDBLANK )
                     {
                         // Look for the last HARD_SPACE
-                        xub_StrLen nPos = nInsPos - 1;
+                        sal_Int32 nPos = nInsPos - 1;
                         bool bContinue = true;
                         while ( bContinue )
                         {
-                            const sal_Unicode cTmpChar = rTxt.GetChar( nPos );
+                            const sal_Unicode cTmpChar = rTxt[ nPos ];
                             if ( cTmpChar == CHAR_HARDBLANK )
                             {
                                 rDoc.Delete( nPos, nPos + 1 );
@@ -1310,13 +1310,13 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         if( !nInsPos )
             break;
 
-        xub_StrLen nPos = nInsPos - 1;
+        sal_Int32 nPos = nInsPos - 1;
 
-        if( IsWordDelim( rTxt.GetChar( nPos )))
+        if( IsWordDelim( rTxt[ nPos ]))
             break;
 
         // Set bold or underline automatically?
-        if( '*' == cChar || '_' == cChar )
+        if (('*' == cChar || '_' == cChar) && (nPos+1 < rTxt.getLength()))
         {
             if( IsAutoCorrFlag( ChgWeightUnderl ) &&
                 FnChgWeightUnderl( rDoc, rTxt, 0, nPos+1 ) )
@@ -1324,13 +1324,13 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             break;
         }
 
-        while( nPos && !IsWordDelim( rTxt.GetChar( --nPos )))
+        while( nPos && !IsWordDelim( rTxt[ --nPos ]))
             ;
 
         // Found a Paragraph-start or a Blank, search for the word shortcut in
         // auto.
-        xub_StrLen nCapLttrPos = nPos+1;        // on the 1st Character
-        if( !nPos && !IsWordDelim( rTxt.GetChar( 0 )))
+        sal_Int32 nCapLttrPos = nPos+1;        // on the 1st Character
+        if( !nPos && !IsWordDelim( rTxt[ 0 ]))
             --nCapLttrPos;          // Absatz Anfang und kein Blank !
 
         LanguageType eLang = rDoc.GetLanguage( nCapLttrPos, sal_False );
@@ -1347,17 +1347,17 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             OUString aPara;
             OUString* pPara = IsAutoCorrFlag(CptlSttSntnc) ? &aPara : 0;
 
-            sal_Bool bChgWord = rDoc.ChgAutoCorrWord( nCapLttrPos, nInsPos,
+            bool bChgWord = rDoc.ChgAutoCorrWord( nCapLttrPos, nInsPos,
                                                     *this, pPara );
             if( !bChgWord )
             {
-                xub_StrLen nCapLttrPos1 = nCapLttrPos, nInsPos1 = nInsPos;
+                sal_Int32 nCapLttrPos1 = nCapLttrPos, nInsPos1 = nInsPos;
                 while( nCapLttrPos1 < nInsPos &&
-                        lcl_IsInAsciiArr( sImplSttSkipChars, rTxt.GetChar( nCapLttrPos1 ) )
+                        lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nCapLttrPos1 ] )
                         )
                         ++nCapLttrPos1;
                 while( nCapLttrPos1 < nInsPos1 && nInsPos1 &&
-                        lcl_IsInAsciiArr( sImplEndSkipChars, rTxt.GetChar( nInsPos1-1 ) )
+                        lcl_IsInAsciiArr( sImplEndSkipChars, rTxt[ nInsPos1-1 ] )
                         )
                         --nInsPos1;
 
@@ -1365,7 +1365,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                     nCapLttrPos1 < nInsPos1 &&
                     rDoc.ChgAutoCorrWord( nCapLttrPos1, nInsPos1, *this, pPara ))
                 {
-                    bChgWord = sal_True;
+                    bChgWord = true;
                     nCapLttrPos = nCapLttrPos1;
                 }
             }
@@ -1685,7 +1685,7 @@ static void GeneratePackageName ( const OUString& rShort, OUString& rPackageName
 
 static const SvxAutocorrWord* lcl_SearchWordsInList(
                 SvxAutoCorrectLanguageListsPtr pList, const String& rTxt,
-                xub_StrLen& rStt, xub_StrLen nEndPos)
+                sal_Int32& rStt, sal_Int32 nEndPos)
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
     return pAutoCorrWordList->SearchWordsInList( rTxt, rStt, nEndPos );
@@ -1693,7 +1693,7 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
 
 // the search for the words in the substitution table
 const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
-                const OUString& rTxt, xub_StrLen& rStt, xub_StrLen nEndPos,
+                const OUString& rTxt, sal_Int32& rStt, sal_Int32 nEndPos,
                 SvxAutoCorrDoc&, LanguageType& rLang )
 {
     LanguageType eLang = rLang;
@@ -2734,8 +2734,8 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
 
 const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
                                       const OUString &rTxt,
-                                      xub_StrLen &rStt,
-                                      xub_StrLen nEndPos) const
+                                      sal_Int32 &rStt,
+                                      sal_Int32 nEndPos) const
 {
     const String& rChk = pFnd->GetShort();
     xub_StrLen left_wildcard = ( rChk.GetChar( 0 ) == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
@@ -2794,8 +2794,8 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
     return NULL;
 }
 
-const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rTxt, xub_StrLen& rStt,
-                                                              xub_StrLen nEndPos) const
+const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rTxt, sal_Int32& rStt,
+                                                              sal_Int32 nEndPos) const
 {
     for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
     {
