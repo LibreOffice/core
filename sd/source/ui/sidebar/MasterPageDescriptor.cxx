@@ -31,9 +31,9 @@ namespace sd { namespace sidebar {
 MasterPageDescriptor::MasterPageDescriptor (
     MasterPageContainer::Origin eOrigin,
     const sal_Int32 nTemplateIndex,
-    const String& rsURL,
-    const String& rsPageName,
-    const String& rsStyleName,
+    const OUString& rsURL,
+    const OUString& rsPageName,
+    const OUString& rsStyleName,
     const bool bIsPrecious,
     const ::boost::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
     const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider)
