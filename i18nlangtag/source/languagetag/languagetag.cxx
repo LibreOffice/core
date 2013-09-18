@@ -938,6 +938,8 @@ void LanguageTag::convertBcp47ToLang()
 {
     LanguageTagImpl* pImpl = getImpl();
     pImpl->convertBcp47ToLang();
+    maLocale = pImpl->maLocale;
+    mbInitializedLocale = pImpl->mbInitializedLocale;
     mnLangID = pImpl->mnLangID;
     mbInitializedLangID = pImpl->mbInitializedLangID;
 }
@@ -978,6 +980,8 @@ void LanguageTag::convertLangToBcp47()
 {
     LanguageTagImpl* pImpl = getImpl();
     pImpl->convertLangToBcp47();
+    maLocale = pImpl->maLocale;
+    mbInitializedLocale = pImpl->mbInitializedLocale;
     maBcp47 = pImpl->maBcp47;
     mbInitializedBcp47 = pImpl->mbInitializedBcp47;
 }
