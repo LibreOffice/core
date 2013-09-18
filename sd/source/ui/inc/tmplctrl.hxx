@@ -37,7 +37,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt );
 
 private:
-    String  msTemplate;
+    OUString  msTemplate;
 };
 
 
