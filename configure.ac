@@ -164,11 +164,9 @@ BUILDDIR=`pwd`
 cd $srcdir
 SRC_ROOT=`pwd`
 cd $BUILDDIR
-EXEEXT_FOR_BUILD=
 x_Cygwin=[\#]
 
 if test "$build_os" = "cygwin"; then
-    EXEEXT_FOR_BUILD=.exe
     PathFormat "$SRC_ROOT"
     SRC_ROOT="$formatted_path"
     PathFormat "$BUILDDIR"
@@ -178,7 +176,6 @@ fi
 
 AC_SUBST(SRC_ROOT)
 AC_SUBST(BUILDDIR)
-AC_SUBST(EXEEXT_FOR_BUILD)
 AC_SUBST(x_Cygwin)
 AC_DEFINE_UNQUOTED(SRCDIR,"$SRC_ROOT")
 AC_DEFINE_UNQUOTED(BUILDDIR,"$BUILDDIR")
