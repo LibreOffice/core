@@ -1077,10 +1077,10 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         }
 
         SfxFilter* pFilter = bUpdate ? (SfxFilter*) SfxFilter::GetFilterByName( sFilterName ) : 0;
-        sal_Bool bNew = sal_False;
+        bool bNew = false;
         if (!pFilter)
         {
-            bNew = sal_True;
+            bNew = true;
             pFilter = new SfxFilter( sFilterName             ,
                                      sExtension              ,
                                      nFlags                  ,
