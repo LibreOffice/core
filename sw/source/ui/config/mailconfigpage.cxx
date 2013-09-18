@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <mailconfigpage.hxx>
+#include <sfx2/imgmgr.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
@@ -33,7 +35,6 @@
 #include "com/sun/star/mail/MailServiceProvider.hpp"
 #include <vcl/msgbox.hxx>
 #include <globals.hrc>
-#include <mailconfigpage.hrc>
 #include <config.hrc>
 #include <helpid.h>
 
@@ -44,29 +45,22 @@ using namespace ::com::sun::star::beans;
 
 class SwTestAccountSettingsDialog : public SfxModalDialog
 {
-    FixedInfo           m_aInfoFI;
+    VclMultiLineEdit*   m_pErrorsED;
 
-    HeaderBar           m_aStatusHB;
-    SvTabListBox        m_aStatusLB;
+    PushButton*         m_pStopPB;
 
-    FixedInfo           m_aErrorFI;
-    MultiLineEdit       m_eErrorsED;
+    FixedText*          m_pEstablish;
+    FixedText*          m_pFind;
+    FixedText*          m_pResult1;
+    FixedText*          m_pResult2;
+    FixedImage*         m_pImage1;
+    FixedImage*         m_pImage2;
 
-    FixedLine           m_aSeparatorFL;
-    PushButton          m_aStopPB;
-    CancelButton        m_aCancelPB;
-    HelpButton          m_aHelpPB;
-
-    ImageList           m_aImageList;
-
-    String              m_sTask        ;
-    String              m_sStatus      ;
-    String              m_sEstablish   ;
-    String              m_sFindServer  ;
-    String              m_sCompleted   ;
-    String              m_sFailed      ;
-    String              m_sErrorNetwork;
-    String              m_sErrorServer ;
+    Image               m_aCompletedImg;
+    Image               m_aFailedImg;
+    OUString            m_sCompleted;
+    OUString            m_sFailed;
+    OUString            m_sErrorServer;
 
     SwMailConfigPage*   m_pParent;
 
@@ -77,7 +71,6 @@ class SwTestAccountSettingsDialog : public SfxModalDialog
     DECL_STATIC_LINK(SwTestAccountSettingsDialog, TestHdl, void*);
 public:
     SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
-    ~SwTestAccountSettingsDialog();
 };
 
 class SwAuthenticationSettingsDialog : public SfxModalDialog
@@ -217,72 +210,34 @@ IMPL_LINK_NOARG(SwMailConfigPage, TestHdl)
     return 0;
 }
 
-SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_TESTACCOUNTSETTINGS)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aInfoFI( this, SW_RES(         FI_INFO )),
-    m_aStatusHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aStatusLB( this, SW_RES(       LB_STATUS )),
-    m_aErrorFI( this, SW_RES(        FI_ERROR  )),
-    m_eErrorsED( this, SW_RES(       ED_ERROR  )),
-    m_aSeparatorFL( this, SW_RES(    FL_SEPAPARATOR )),
-    m_aStopPB( this, SW_RES(         PB_STOP   )),
-    m_aCancelPB( this, SW_RES(       PB_CANCEL )),
-    m_aHelpPB( this, SW_RES(         PB_HELP   )),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-    m_aImageList( SW_RES(ILIST) ),
-    m_sTask( SW_RES(        ST_TASK          )),
-    m_sStatus( SW_RES(      ST_STATUS        )),
-    m_sEstablish( SW_RES(   ST_ESTABLISH     )),
-    m_sFindServer( SW_RES(  ST_FINDSERVER    )),
-    m_sCompleted( SW_RES(   ST_COMPLETED     )),
-    m_sFailed( SW_RES(      ST_FAILED        )),
-    m_sErrorServer( SW_RES( ST_ERROR_SERVER )),
-    m_pParent(pParent),
-    m_bStop(false)
+SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
+    : SfxModalDialog(pParent, "TestMailSettings", "modules/swriter/ui/testmailsettings.ui")
+    , m_pParent(pParent)
+    , m_bStop(false)
 {
-    FreeResource();
-    m_aStopPB.SetClickHdl(LINK(this, SwTestAccountSettingsDialog, StopHdl));
+    get(m_pStopPB, "stop");
+    get(m_pErrorsED, "errors");
+    m_pErrorsED->SetMaxTextWidth(80 * m_pErrorsED->approximate_char_width());
+    m_pErrorsED->set_height_request(8 * m_pErrorsED->GetTextHeight());
+    m_sErrorServer = m_pErrorsED->GetText();
+    m_pErrorsED->SetText("");
+    get(m_pEstablish, "establish");
+    get(m_pFind, "find");
+    get(m_pImage1, "image1");
+    get(m_pResult1, "result1");
+    get(m_pImage2, "image2");
+    get(m_pResult2, "result2");
+    m_sCompleted = m_pResult1->GetText();
+    m_sFailed = m_pResult2->GetText();
 
-    Size aLBSize(m_aStatusLB.GetOutputSizePixel());
-    m_aStatusHB.SetSizePixel(aLBSize);
-    Size aHeadSize(m_aStatusHB.CalcWindowSizePixel());
-    aHeadSize.Width() = aLBSize.Width();
-    m_aStatusHB.SetSizePixel(aHeadSize);
-    Point aLBPos(m_aStatusLB.GetPosPixel());
-    m_aStatusHB.SetPosPixel(aLBPos);
-    aLBPos.Y() += aHeadSize.Height();
-    aLBSize.Height() -= aHeadSize.Height();
-    m_aStatusLB.SetPosSizePixel(aLBPos, aLBSize);
 
-    Size aSz(m_aStatusHB.GetOutputSizePixel());
-    m_aStatusHB.InsertItem( 1, m_sTask,
-                            aSz.Width()/2,
-                            HIB_LEFT | HIB_VCENTER );
-    m_aStatusHB.InsertItem( 2, m_sStatus,
-                            aSz.Width()/2,
-                            HIB_LEFT | HIB_VCENTER );
+    SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
+    m_aFailedImg = pManager->GetImage(FN_FORMULA_CANCEL);
+    m_aCompletedImg = pManager->GetImage(FN_FORMULA_APPLY);
 
-    m_aStatusHB.SetHelpId(HID_MM_TESTACCOUNTSETTINGS_HB  );
-    m_aStatusHB.Show();
-
-    m_aStatusLB.SetHelpId(HID_MM_TESTACCOUNTSETTINGS_TLB);
-    static long nTabs[] = {2, 0, aSz.Width()/2 };
-    m_aStatusLB.SetStyle( m_aStatusLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
-    m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );
-    m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
-    short nEntryHeight = m_aStatusLB.GetEntryHeight();
-    m_aStatusLB.SetEntryHeight( nEntryHeight * 15 / 10 );
+    m_pStopPB->SetClickHdl(LINK(this, SwTestAccountSettingsDialog, StopHdl));
 
     Application::PostUserEvent( STATIC_LINK( this, SwTestAccountSettingsDialog, TestHdl ), this );
-}
-
-SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()
-{
 }
 
 IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl)
@@ -383,29 +338,18 @@ void SwTestAccountSettingsDialog::Test()
         sException = e.Message;
     }
 
-    Image aFailedImg =   m_aImageList.GetImage( FN_FORMULA_CANCEL );
-    Image aCompletedImg = m_aImageList.GetImage( FN_FORMULA_APPLY );
+    m_pResult1->SetText(bIsServer ? m_sCompleted : m_sFailed);
+    m_pImage1->SetImage(bIsServer ? m_aCompletedImg : m_aFailedImg);
 
-    String sTmp(m_sEstablish);
-    sTmp += '\t';
-    sTmp += bIsServer ? m_sCompleted : m_sFailed;
-    m_aStatusLB.InsertEntry(sTmp,
-            bIsServer ? aCompletedImg : aFailedImg,
-            bIsServer ? aCompletedImg : aFailedImg);
+    m_pResult2->SetText(bIsLoggedIn ? m_sCompleted : m_sFailed);
+    m_pImage2->SetImage(bIsLoggedIn ? m_aCompletedImg : m_aFailedImg);
 
-    sTmp = m_sFindServer;
-    sTmp += '\t';
-    sTmp += bIsLoggedIn ? m_sCompleted : m_sFailed;
-    m_aStatusLB.InsertEntry(sTmp,
-            bIsLoggedIn ? aCompletedImg : aFailedImg,
-            bIsLoggedIn ? aCompletedImg : aFailedImg);
-
-    if(!bIsServer || !bIsLoggedIn )
+    if (!bIsServer || !bIsLoggedIn)
     {
         OUStringBuffer aErrorMessage(m_sErrorServer);
         if (!sException.isEmpty())
-            aErrorMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n--\n")).append(sException);
-        m_eErrorsED.SetText(aErrorMessage.makeStringAndClear());
+            aErrorMessage.append("\n--\n").append(sException);
+        m_pErrorsED->SetText(aErrorMessage.makeStringAndClear());
     }
 }
 

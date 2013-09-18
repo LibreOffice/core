@@ -21,12 +21,7 @@
 
 #include "rcid.hrc"
 
-// dialogs for configuration
-
 // strings for configuration
-
-
-#define DLG_MM_TESTACCOUNTSETTINGS (RC_CONFIG_BEGIN + 19)
 
 #define STR_ARR_METRIC          (RC_CONFIG_BEGIN + 26)
 #define CONFIG_ACT_END          STR_ARR_METRIC
@@ -34,7 +29,6 @@
 #if CONFIG_ACT_END > RC_CONFIG_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
-
 
 #endif
 

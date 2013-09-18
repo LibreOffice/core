@@ -382,8 +382,6 @@
 #define HID_MM_ASSIGNFIELDS                                     "SW_HID_MM_ASSIGNFIELDS"
 #define HID_MM_LAYOUT_PAGE                                      "SW_HID_MM_LAYOUT_PAGE"
 #define HID_MM_ADDRESSLIST_HB                                   "SW_HID_MM_ADDRESSLIST_HB"
-#define HID_MM_TESTACCOUNTSETTINGS_TLB                          "SW_HID_MM_TESTACCOUNTSETTINGS_TLB"
-#define HID_MM_TESTACCOUNTSETTINGS_HB                           "SW_HID_MM_TESTACCOUNTSETTINGS_HB"
 #define HID_MM_MAILBODY                                         "SW_HID_MM_MAILBODY"
 #define HID_MM_SENDMAILS                                        "SW_HID_MM_SENDMAILS"
 #define HID_MM_SENDMAILS_STATUSLB                               "SW_HID_MM_SENDMAILS_STATUSLB"
