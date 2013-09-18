@@ -111,7 +111,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))))) \
 		$(LIBS) \
-		-Wl$(COMMA)-Map$(COMMA)$(basename $(1)).map \
+		-Wl$(COMMA)-Map$(COMMA)$(WORKDIR)/LinkTarget/$(2).map \
 		-o $(1)))
 endef
 
@@ -131,7 +131,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))))) \
 		$(LIBS) \
-		-Wl$(COMMA)-Map$(COMMA)$(dir $(1))$(notdir $(basename $(1)).map) \
+		-Wl$(COMMA)-Map$(COMMA)$(WORKDIR)/LinkTarget/$(2).map \
 		-Wl$(COMMA)--out-implib$(COMMA)$(ILIBTARGET) \
 		-o $(1) \
 		$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
@@ -161,6 +161,8 @@ define gb_LinkTarget_use_system_win32_libs
 $(call gb_LinkTarget_add_libs,$(1),$(foreach lib,$(2),-l$(patsubst oldnames,moldname,$(lib))))
 endef
 
+gb_LinkTarget_get_mapfile = \
+$(WORKDIR)/LinkTarget/$(patsubst %.dll,%.map,$(call gb_LinkTarget__get_workdir_linktargetname,$(1)))
 
 # Library class
 
@@ -228,9 +230,9 @@ $(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_Library_get_target,$(1)) :| $(OUTDIR)/bin/.dir
 
-$(call gb_Library_add_auxtargets,$(1), \
-	$(OUTDIR)/bin/$(notdir $(3)) \
-	$(OUTDIR)/bin/$(patsubst %.dll,%.map,$(call gb_Library_get_filename,$(1))) \
+$(call gb_LinkTarget_add_auxtargets,$(2), \
+	$(3) \
+	$(call gb_LinkTarget_get_mapfile,$(2)) \
 )
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
@@ -289,7 +291,7 @@ $(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(3) \
-	$(patsubst %.dll,%.map,$(call gb_LinkTarget_get_target,$(2))) \
+	$(call gb_LinkTarget_get_mapfile,$(2)) \
 )
 
 endef

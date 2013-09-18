@@ -59,10 +59,10 @@ $(if $(URE),\
 	    "-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))") \
     $(if $(strip $(UNO_SERVICES)),\
 	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
-    $(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
-	    -env:$(dir)=$(call gb_Helper_make_url,$(gb_CppunitTest_LIBDIR))) \
-    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-    --protector unobootstrapprotector$(gb_Library_DLLEXT) unobootstrapprotector \
+	-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(gb_INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
+	-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)) \
+	--protector $(call gb_Library_get_target,unoexceptionprotector) unoexceptionprotector \
+	--protector $(call gb_Library_get_target,unobootstrapprotector) unobootstrapprotector \
  ) $(ARGS)
 endef
 
@@ -102,7 +102,7 @@ endef
 
 # call gb_CppunitTest__CppunitTest_impl,cppunittest,linktarget
 define gb_CppunitTest__CppunitTest_impl
-$(call gb_LinkTarget_LinkTarget,$(2),CppunitTest_$(1))
+$(call gb_LinkTarget_LinkTarget,$(2),CppunitTest_$(1),NONE)
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\

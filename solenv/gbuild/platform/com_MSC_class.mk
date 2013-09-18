@@ -138,12 +138,19 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_get_pdbfile = \
  $(WORKDIR)/LinkTarget/pdb/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).pdb
+# substitute .pyd here because pyuno has to follow python's crazy conventions
 gb_LinkTarget_get_pdbfile2 = \
  $(WORKDIR)/LinkTarget/$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
 gb_LinkTarget_get_ilkfile = \
  $(WORKDIR)/LinkTarget/$(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
 gb_LinkTarget_get_manifestfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).manifest
+
+gb_LinkTarget_get_linksearchpath_for_layer = \
+	-LIBPATH:$(INSTDIR)/$(gb_Package_SDKDIRNAME)/lib \
+	$(if $(filter OXT,$(1)),\
+		-LIBPATH:$(WORKDIR)/LinkTarget/ExtensionLibrary, \
+		-LIBPATH:$(WORKDIR)/LinkTarget/Library)
 
 # avoid fatal error LNK1170 for Library_merged
 define gb_LinkTarget_MergedResponseFile
@@ -190,18 +197,22 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(LIBS) \
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),user32.lib) \
+		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),-manifestfile:$(WORKDIR)/LinkTarget/$(2).manifest) \
+		-pdb:$(WORKDIR)/LinkTarget/$(2).pdb \
 		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
-	$(if $(ILIBTARGET),; if [ ! -f $(ILIBTARGET) ]; then rm -f $(1) && false; fi) \
-	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(1).manifest -outputresource:$(1)\;2 && touch -r $(1) $(1).manifest $(ILIBTARGET); fi) \
-	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(1).manifest -outputresource:$(1)\;1 && touch -r $(1) $(1).manifest; fi) \
+	$(if $(filter Library,$(TARGETTYPE)),; if [ ! -f $(ILIBTARGET) ]; then rm -f $(1); exit 42; fi) \
+	$(if $(filter Library,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest -outputresource:$(1)\;2 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest $(ILIBTARGET); fi) \
+	$(if $(filter Executable,$(TARGETTYPE)),&& if [ -f $(WORKDIR)/LinkTarget/$(2).manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(WORKDIR)/LinkTarget/$(2).manifest -outputresource:$(1)\;1 && touch -r $(1) $(WORKDIR)/LinkTarget/$(2).manifest; fi) \
 	$(if $(filter YES,$(TARGETGUI)),&& if [ -f $(SRCDIR)/solenv/inc/DeclareDPIAware.manifest ]; then mt.exe $(MTFLAGS) -nologo -manifest $(SRCDIR)/solenv/inc/DeclareDPIAware.manifest -updateresource:$(1)\;1 ; fi) \
 	$(if $(filter Library,$(TARGETTYPE)),&& \
-		echo $(notdir $(1)) > $(1).exports.tmp && \
+		echo $(notdir $(1)) > $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(if $(filter YES,$(LIBRARY_X64)),$(LINK_X64_BINARY),$(gb_LINK)) \
-			-dump -exports $(ILIBTARGET) >> $(1).exports.tmp && \
-		if cmp -s $(1).exports.tmp $(1).exports; \
-			then rm $(1).exports.tmp; \
-			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
+			-dump -exports $(ILIBTARGET) \
+			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
+		if cmp -s $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports; \
+			then rm $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
+			else mv $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports && \
+				touch -r $(1) $(WORKDIR)/LinkTarget/$(2).exports; \
 		fi) \
 	; exit $$RC)
 endef
@@ -287,22 +298,9 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(3)) \
 	$(call gb_LinkTarget_get_manifestfile,$(2)) \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
-)
-
-$(call gb_Library_add_auxtarget,$(1),$(OUTDIR)/lib/$(notdir $(3)))
-
-# substitute .pyd here because pyuno has to follow python's crazy conventions
-ifneq ($(ENABLE_CRASHDUMP),)
-$(call gb_Library_add_auxtargets,$(1),\
-	$(OUTDIR)/bin/$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(call gb_Library_get_filename,$(1)))) \
-	$(OUTDIR)/bin/$(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(call gb_Library_get_filename,$(1)))) \
-)
-else
-$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(call gb_LinkTarget_get_pdbfile2,$(2)) \
 	$(call gb_LinkTarget_get_ilkfile,$(2)) \
 )
-endif
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
@@ -390,7 +388,7 @@ endef
 gb_CppunitTest_DEFS := -D_DLL
 # cppunittester.exe is in the cppunit subdirectory of ${OUTDIR}/bin,
 # thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
-gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(shell cygpath -w $(gb_Library_DLLDIR))"
 
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = test_$(1).dll
@@ -542,7 +540,7 @@ gb_InstallScript_EXT := .inf
 # CliAssemblyTarget class
 
 gb_CliAssemblyTarget_POLICYEXT := $(gb_Library_DLLEXT)
-gb_CliAssemblyTarget_get_dll = $(OUTDIR)/bin/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
+gb_CliAssemblyTarget_get_dll = $(call gb_Library__get_dir_for_layer,URELIB)/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 
 # Extension class
 

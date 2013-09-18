@@ -219,4 +219,12 @@ gb_StaticLibrary_get_filename = lib$(1).a
 gb_StaticLibrary_PLAINEXT := .a
 gb_StaticLibrary_StaticLibrary_platform :=
 
+gb_LinkTarget_get_linksearchpath_for_layer = \
+	-L$(INSTDIR)/$(gb_Package_SDKDIRNAME)/lib \
+	$(foreach layer,\
+		$(subst +, ,$(patsubst $(1):%.,%,\
+			$(filter $(1):%.,$(gb_LinkTarget_LAYER_LINKPATHS)))),\
+		$(patsubst $(layer):%,-L%,\
+			$(filter $(layer):%,$(gb_Library_LAYER_DIRS))))
+
 # vim: set noet sw=4 ts=4:

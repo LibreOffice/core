@@ -303,9 +303,8 @@ gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 # Helper class
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
-gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/bin
 
 # need windows path with backslashes here
-gb_Helper_set_ld_path := PATH="$(shell cygpath -w $(OUTDIR)/bin)"
+gb_Helper_set_ld_path := PATH="$(shell cygpath -w $(OUTDIR)/bin);$(shell cygpath -w $(INSTDIR)/$(LIBO_URE_LIB_FOLDER));$(shell cygpath -w $(INSTDIR)/$(gb_PROGRAMDIRNAME))"
 
 # vim: set noet sw=4:

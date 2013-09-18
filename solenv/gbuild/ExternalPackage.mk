@@ -199,7 +199,7 @@ define gb_ExternalPackage__add_file_for_install
 $(call gb_ExternalPackage_add_file,$(1),$(2),$(4))
 
 $(call gb_Helper_install,$(call gb_ExternalPackage_get_target,$(1)), \
-	$(gb_INSTROOT)/$(3), \
+	$(3), \
 	$(call gb_UnpackedTarball_get_dir,$(gb_ExternalPackage_UNPACKED_$(1)))/$(4))
 
 $(call gb_UnpackedTarball_get_dir,$(gb_ExternalPackage_UNPACKED_$(1)))/$(4) :| \
@@ -218,7 +218,7 @@ endef
 #
 # gb_ExternalPackage_add_library_for_install package dest src library?
 define gb_ExternalPackage_add_library_for_install
-$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(if $(4),$(call gb_Library_get_instdir,$(4)),$(gb_Package_PROGRAMDIRNAME))/$(notdir $(2)),$(3))
+$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(if $(4),$(call gb_Library_get_instdir,$(4)),$(gb_INSTROOT)/$(gb_Package_PROGRAMDIRNAME))/$(notdir $(2)),$(3))
 
 endef
 
@@ -238,7 +238,7 @@ endef
 #
 # gb_ExternalPackage_add_jar_for_install package dest src
 define gb_ExternalPackage_add_jar_for_install
-$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(gb_Package_PROGRAMDIRNAME)/classes/$(notdir $(2)),$(3))
+$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(gb_INSTROOT)/$(gb_Package_PROGRAMDIRNAME)/classes/$(notdir $(2)),$(3))
 
 endef
 

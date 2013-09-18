@@ -154,7 +154,7 @@ gb_LinkTarget__RPATHS := \
 	OOO:\dORIGIN:\dORIGIN/../ure-link/lib \
 	SDKBIN:\dORIGIN/../../ure-link/lib \
 	OXT: \
-	NONE:\dORIGIN/../lib:\dORIGIN \
+	NONE:\dORIGIN/../Library \
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
@@ -187,15 +187,16 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(LIBS) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
 		-o $(1) \
-	$(if $(SOVERSIONSCRIPT),&& ln -sf $(notdir $(1)) $(ILIBTARGET)) \
-	$(if $(filter Library,$(TARGETTYPE)),&& \
-		readelf -d $(1) | grep SONAME > $(1).exports.tmp ; \
+	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../ure-link/lib/$(notdir $(1)) $(ILIBTARGET)))
+	$(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
+		readelf -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
 		$(NM) --dynamic --extern-only --defined-only --format=posix $(1) \
 			| cut -d' ' -f1-2 \
-			>> $(1).exports.tmp && \
-		if cmp -s $(1).exports.tmp $(1).exports; \
-			then rm $(1).exports.tmp; \
-			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
+			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
+		if cmp -s $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports; \
+			then rm $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
+			else mv $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports && \
+				touch -r $(1) $(WORKDIR)/LinkTarget/$(2).exports; \
 		fi))
 endef
 
@@ -311,7 +312,7 @@ gb_CppunitTest_get_filename = libtest_$(1).so
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library__get_rpath,$(call gb_LinkTarget__get_rpath_for_layer,NONE))
 
 endef
 

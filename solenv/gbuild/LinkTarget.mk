@@ -54,6 +54,15 @@ gb_LinkTarget__get_objcxxflags=$(if $(OBJCXXFLAGS),$(OBJCXXFLAGS),$(call gb_Link
 # call gb_LinkTarget__get_ldflags,linktargetmakefilename
 gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_debugldflags,$(1)))
 
+gb_LinkTarget_LAYER_LINKPATHS := \
+	URELIB:URELIB. \
+	UREBIN:URELIB. \
+	SDKBIN:URELIB. \
+	OOO:URELIB+OOO. \
+	OXT:OXT. \
+	NONE:URELIB+OOO+NONE. \
+
+
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
@@ -378,11 +387,10 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
-		$(call gb_LinkTarget_get_target,$*) \
-		$(call gb_LinkTarget_get_dep_target,$*) \
-		$(call gb_LinkTarget_get_headers_target,$*) \
-		$(call gb_LinkTarget_get_objects_list,$*) \
-		$(call gb_LinkTarget_get_target,$*).exports \
+		$(call gb_LinkTarget_get_target,$(LINKTARGET)) \
+		$(call gb_LinkTarget_get_dep_target,$(LINKTARGET)) \
+		$(call gb_LinkTarget_get_headers_target,$(LINKTARGET)) \
+		$(call gb_LinkTarget_get_objects_list,$(LINKTARGET)) \
 		$(ILIBTARGET) \
 		$(AUXTARGETS)) && \
 		cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -fr && \
@@ -425,12 +433,15 @@ mv $${TEMPFILE} $(1)
 
 endef
 
+$(WORKDIR)/LinkTarget/%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 # Target for the .exports of the shared library, to speed up incremental build.
 # This deliberately does nothing if the file exists; the file is actually
 # written in gb_LinkTarget__command_dynamiclink.
 # Put this pattern rule here so it overrides the one below.
 # (this is rather ugly: because of % the functions cannot be used)
-$(WORKDIR)/LinkTarget/Library/%.exports : $(gb_Library_OUTDIRLOCATION)/%
+$(WORKDIR)/LinkTarget/Library/%.exports :
 	$(if $(wildcard $@),,mkdir -p $(dir $@) && touch $@)
 
 # This recipe actually also builds the dep-target as a side-effect, which
@@ -439,6 +450,16 @@ $(WORKDIR)/LinkTarget/Library/%.exports : $(gb_Library_OUTDIRLOCATION)/%
 $(WORKDIR)/LinkTarget/% : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
 	$(call gb_LinkTarget__command_impl,$@,$*)
 
+# call gb_LinkTarget__make_installed_rule,linktarget
+define gb_LinkTarget__make_installed_rule
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_LinkTarget_get_headers_target,$(1))
+	$$(call gb_LinkTarget__command_impl,$(call gb_LinkTarget_get_target,$(1)),$(call gb_LinkTarget__get_workdir_linktargetname,$(1)))
+
+endef
+
+# it's not possible to use a pattern rule for files in INSTDIR because
+# it would inevitably conflict with the pattern rule for Package
+# (especially since external libraries are delivered via Package)
 # call gb_LinkTarget__command_impl,linktargettarget,linktargetname
 define gb_LinkTarget__command_impl
 	$(if $(gb_FULLDEPS),\
@@ -448,7 +469,7 @@ define gb_LinkTarget__command_impl
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),\
 			$(call gb_LinkTarget__command,$(1),$(2)),\
 			mkdir -p $(dir $(1)) && echo invalid > $(1) \
-			$(if $(SOVERSIONSCRIPT),&& echo invalid > $(basename $(1)))),\
+			$(if $(SOVERSIONSCRIPT),&& echo invalid > $(WORKDIR)/LinkTarget/$(2))),\
 		$(call gb_LinkTarget__command,$(1),$(2)))
 	$(call gb_LinkTarget__command_objectlist,$(WORKDIR)/LinkTarget/$(2).objectlist)
 endef
@@ -515,8 +536,9 @@ $(call gb_LinkTarget_get_headers_target,%) :
 # local variable of the same name is considered obscure, the target local
 # variables have a T_ prefix.
 #
-# call gb_LinkTarget_LinkTarget,linktarget,linktargetmakefilename
+# call gb_LinkTarget_LinkTarget,linktarget,linktargetmakefilename,layer
 define gb_LinkTarget_LinkTarget
+$(call gb_LinkTarget_get_clean_target,$(1)) : LINKTARGET := $(1)
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(call gb_LinkTarget__get_workdir_linktargetname,$(1))
 $(call gb_LinkTarget_get_target,$(1)) : ILIBTARGET :=
@@ -563,7 +585,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(call gb_LinkTarget__get_ldflags,$(2))
+$(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(call gb_LinkTarget_get_linksearchpath_for_layer,$(3)) $(call gb_LinkTarget__get_ldflags,$(2))
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LIBS :=
@@ -610,6 +632,9 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : SOVERSIONSCRIPT :=
 endif
 
 gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := cxx
+
+# installed linktargets need a rule to build!
+$(if $(findstring $(INSTDIR),$(1)),$(call gb_LinkTarget__make_installed_rule,$(1)))
 
 endef
 

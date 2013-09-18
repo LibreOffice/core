@@ -346,15 +346,13 @@ static PyObject* initPoniesMode(
             xContext->getServiceManager(),
             com::sun::star::uno::UNO_QUERY_THROW);
         if (!xMSF.is()) { abort(); }
-        char *const outdir = getenv("OUTDIR");
-        if (!outdir) { abort(); }
-        OString const libname = (OString(OString(outdir, strlen(outdir)) +
+        char *const testlib = getenv("TEST_LIB");
+        if (!testlib) { abort(); }
+        OString const libname = OString(testlib, strlen(testlib))
 #ifdef _WIN32
-                "/bin/")).replaceAll(OString('/'), OString('\\'))
-#else
-                "/lib/"))
+            .replaceAll(OString('/'), OString('\\'))
 #endif
-                + SAL_MODULENAME("test");
+            ;
         oslModule const mod( osl_loadModuleAscii(libname.getStr(),
                                 SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL) );
         if (!mod) { abort(); }

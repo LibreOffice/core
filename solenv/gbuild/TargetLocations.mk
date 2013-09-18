@@ -53,9 +53,8 @@ define gb_Executable_get_target_for_build
 $(patsubst $(1):%,$(OUTDIR_FOR_BUILD)/bin/%,$(filter $(1):%,$(gb_Executable_FILENAMES_FOR_BUILD)))
 endef
 
-define gb_Library_get_target
-$(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
-endef
+# FIXME: cleanup?
+gb_Library_get_target = $(gb_Library__get_linktarget_target)
 
 define gb_StaticLibrary_get_target
 $(gb_StaticLibrary_OUTDIRLOCATION)/$(call gb_StaticLibrary_get_filename,$(1))
@@ -232,8 +231,8 @@ define gb_Library_get_exports_target
 $(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).exports
 endef
 
-define gb_Library_get_workdir_target_versionlink
-$(WORKDIR)/LinkTarget/$(basename $(call gb_Library__get_workdir_linktargetname,$(1)))
+define gb_Library_get_versionlink_target
+$(INSTDIR)/$(gb_Package_SDKDIRNAME)/lib/$(basename $(call gb_Library_get_filename,$(1)))
 endef
 
 gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
@@ -280,6 +279,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	JavaClassSet \
 	Jar \
 	JunitTest \
+	Library \
 	Module \
 	PackagePart \
 	Package \
@@ -330,7 +330,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	CliNativeLibrary \
 	CliUnoApi \
 	InstallScript \
-	Library \
 	StaticLibrary \
 	UnoApi \
 ))
@@ -399,7 +398,7 @@ define gb_Library__get_workdir_linktargetname
 Library/$(call gb_Library_get_filename,$(1))
 endef
 define gb_Library__get_linktarget_target
-$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1))
+$(if $(filter-out $(gb_MERGEDLIBS),$(1)),$(call gb_Library_get_install_target,$(1)),$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)))
 endef
 # this returns a tuple of both the linktargetname, and the target file
 define gb_Library_get_linktarget
@@ -430,6 +429,7 @@ endef
 
 # static members declared here because they are used globally
 
+gb_Library_WORKDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Library
 gb_Executable_BINDIR = $(WORKDIR)/LinkTarget/Executable
 # FIXME move platform
 gb_Library_OUTDIRLOCATION = $(if $(filter WNT,$(OS)),$(OUTDIR)/bin,$(OUTDIR)/lib)
