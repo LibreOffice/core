@@ -208,7 +208,7 @@ Tested compiled library with:
 
 ###0.6 - September 2, 2011
 
-* Renamed base64_encode to testflight_base64_encode to remove a conflict with other third party libraries
+* Renamed SlideShowPreviewViewController~ipad.h_encode to testflight_SlideShowPreviewViewController~ipad.h_encode to remove a conflict with other third party libraries
 * Added ability to reinstall crash handlers when they are overwritten using the setOptions API
 * Fixed an issue where crash reports might not get sent under certain circumstances
 * Fixed a deadlock when the application is put in the background and then resumed before all information can be sent

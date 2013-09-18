@@ -15,7 +15,7 @@
 #import "CommandInterpreter.h"
 #import "BasePresentationViewController.h"
 #import "MainSplitViewController.h"
-#import "serverList_vc.h"
+#import "ServerListViewController.h"
 #import <dispatch/dispatch.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <SystemConfiguration/CaptiveNetwork.h>
@@ -74,7 +74,7 @@
         if (self.state != DISCONNECTED) {
             NSLog(@"Connection Failed");
             self.state = DISCONNECTED;
-            if ([self.delegate isKindOfClass:[server_list_vc class]]){
+            if ([self.delegate isKindOfClass:[ServerListViewController class]]){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Failed to reach server", @"Connection failure title")
                                                                       message:NSLocalizedString(@"Failed to reach server Msg", @"Connection failure message")
@@ -84,7 +84,7 @@
                     [message show];
                 });
                 [[self.delegate navigationController] popToRootViewControllerAnimated:YES];
-                [(server_list_vc *)self.delegate startSearching];
+                [(ServerListViewController *)self.delegate startSearching];
             } else {
                 [[self.delegate navigationController] popToRootViewControllerAnimated:YES];
                 BasePresentationViewController *bpvc = [[(MainSplitViewController *)[self.delegate presentingViewController] viewControllers] objectAtIndex:1];

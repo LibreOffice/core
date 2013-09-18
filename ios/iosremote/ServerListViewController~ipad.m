@@ -6,13 +6,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#import "AboutViewController.h"
+#import "ServerListViewController~ipad.h"
 
-@interface AboutViewController ()
+@interface ServerListViewController_ipad ()
 
 @end
 
-@implementation AboutViewController
+@implementation ServerListViewController_ipad
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,13 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(handleBack)];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    self.navigationItem.leftBarButtonItem = backButton;
- 
-    NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"licenses" ofType:@"html" inDirectory:nil]];
-    [self.aboutWebView loadRequest:[NSURLRequest requestWithURL:url]];
+	// Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning
@@ -42,7 +36,11 @@
 }
 
 - (void)viewDidUnload {
-    [self setAboutWebView:nil];
     [super viewDidUnload];
+}
+
+#pragma mark - Actions
+- (IBAction)cancelModalView:(id)sender {
+    [self.presentingViewController dismissModalViewControllerAnimated:YES];
 }
 @end

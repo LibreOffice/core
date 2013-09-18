@@ -8,8 +8,8 @@
 
 
 #import "SlideShow.h"
-#import "Base64.h"
-#import "slideShow_vc_iphone.h"
+#import "NSString+Base64.h"
+#import "SlideShowViewController~iphone.h"
 #import "UIImageView+setImageAnimated.h"
 #import <dispatch/dispatch.h>
 

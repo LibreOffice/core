@@ -6,16 +6,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#import "slideShowPreviewTable_vc.h"
+#import "ServerListViewController.h"
 
-@protocol MainSplitViewControllerProtocol <NSObject>
+@interface ServerListViewController_ipad : ServerListViewController
 
-- (void) didReceivePresentationStarted;
-
-@end
-
-@interface slideShowPreviewTable_vc_ipad : slideShowPreviewTable_vc
-
-@property (strong, nonatomic) id <MainSplitViewControllerProtocol> delegate;
+- (IBAction)cancelModalView:(id)sender;
 
 @end

@@ -14,12 +14,11 @@
 		571BFAD1178AADA200EF1BDB /* more_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 571BFAD0178AADA200EF1BDB /* more_icon.png */; };
 		571D4807178B2F080063D93B /* timer_clear_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4805178B2F080063D93B /* timer_clear_btn.png */; };
 		571D4808178B2F080063D93B /* timer_start_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 571D4806178B2F080063D93B /* timer_start_btn.png */; };
-		5753DD901781EA0300DB71BB /* serverList_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* serverList_vc.m */; };
-		5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD9817834D7100DB71BB /* newServer_vc.m */; };
-		57701739178AC83E00B99793 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57701738178AC83E00B99793 /* SWRevealViewController.m */; };
-		57701742178B0A6900B99793 /* slideShowSwipeInList_iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 57701741178B0A6900B99793 /* slideShowSwipeInList_iphone.m */; };
+		5753DD901781EA0300DB71BB /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD8F1781EA0300DB71BB /* ServerListViewController.m */; };
+		5753DD9917834D7100DB71BB /* NewServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753DD9817834D7100DB71BB /* NewServerViewController.m */; };
+		57701742178B0A6900B99793 /* SlideShowSwipeInList~iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 57701741178B0A6900B99793 /* SlideShowSwipeInList~iphone.m */; };
 		57867A541787172A00EBBE52 /* impress.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 57867A531787172A00EBBE52 /* impress.jpeg */; };
-		57867A571787385800EBBE52 /* slideShow_vc_iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 57867A561787385800EBBE52 /* slideShow_vc_iphone.m */; };
+		57867A571787385800EBBE52 /* SlideShowViewController~iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 57867A561787385800EBBE52 /* SlideShowViewController~iphone.m */; };
 		57867A5A1787510700EBBE52 /* pushed_next_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 57867A581787510700EBBE52 /* pushed_next_button.png */; };
 		57867A5B1787510700EBBE52 /* released_next_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 57867A591787510700EBBE52 /* released_next_button.png */; };
 		57867A5E178752CD00EBBE52 /* pushed_previous_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 57867A5C178752CD00EBBE52 /* pushed_previous_button.png */; };
@@ -27,7 +26,7 @@
 		57AEEDAF17895B67007F4F97 /* pointer.png in Resources */ = {isa = PBXBuildFile; fileRef = 57AEEDAE17895B67007F4F97 /* pointer.png */; };
 		57AEEDB117895BF5007F4F97 /* pointer_pushed.png in Resources */ = {isa = PBXBuildFile; fileRef = 57AEEDB017895BF5007F4F97 /* pointer_pushed.png */; };
 		57AEEDB517899BB4007F4F97 /* slide_finished.png in Resources */ = {isa = PBXBuildFile; fileRef = 57AEEDB417899BB4007F4F97 /* slide_finished.png */; };
-		57B152991764703500EECC67 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B152981764703500EECC67 /* Base64.m */; };
+		57B152991764703500EECC67 /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B152981764703500EECC67 /* NSString+Base64.m */; };
 		57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529E176486C300EECC67 /* CommandTransmitter.m */; };
 		57B7625D17621E42007703F6 /* SlideShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B7625C17621E42007703F6 /* SlideShow.m */; };
 		57C6E3F3175E06E800E8BC5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F2175E06E800E8BC5F /* UIKit.framework */; };
@@ -46,10 +45,10 @@
 		57CC48C6178B42A400075DE4 /* timer_pause_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 57CC48C4178B42A400075DE4 /* timer_pause_btn.png */; };
 		57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */; };
 		57DC7007178D84490050FC58 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57DC7006178D84490050FC58 /* CoreMotion.framework */; };
-		57DC7012178E16A40050FC58 /* UIViewTransitionCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DC7011178E16A40050FC58 /* UIViewTransitionCategory.m */; };
+		57DC7012178E16A40050FC58 /* UIView+FadeInFadeOut.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DC7011178E16A40050FC58 /* UIView+FadeInFadeOut.m */; };
 		57DF0A85178FFFAB008B2D3D /* iPhone_autosize.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57DF0A83178FFFAB008B2D3D /* iPhone_autosize.storyboard */; };
-		57FE71E31785C61400B50125 /* pinValidation_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E21785C61400B50125 /* pinValidation_vc.m */; };
-		57FE71E917861A9000B50125 /* slideShowPreviewTable_vc.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E817861A9000B50125 /* slideShowPreviewTable_vc.m */; };
+		57FE71E31785C61400B50125 /* PinValidationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E21785C61400B50125 /* PinValidationViewController.m */; };
+		57FE71E917861A9000B50125 /* SlideShowPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57FE71E817861A9000B50125 /* SlideShowPreviewViewController.m */; };
 		8C0323AB17A943720037432E /* UIImageView+setImageAnimated.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */; };
 		8C06B31D17B7EC83002F5CF8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C06B31B17B7EC83002F5CF8 /* Localizable.strings */; };
 		8C06B31E17B7ED1E002F5CF8 /* iPad_autosize.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C06B32017B7ED1E002F5CF8 /* iPad_autosize.storyboard */; };
@@ -61,8 +60,7 @@
 		8C0DC84317A4185A0099E5AE /* nextButton_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC83F17A4185A0099E5AE /* nextButton_normal@2x.png */; };
 		8C0DC84417A4185A0099E5AE /* previousButton_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC84017A4185A0099E5AE /* previousButton_normal.png */; };
 		8C0DC84517A4185A0099E5AE /* previousButton_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC84117A4185A0099E5AE /* previousButton_normal@2x.png */; };
-		8C0DC84717A45B160099E5AE /* libO_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC84617A45B160099E5AE /* libO_icon.png */; };
-		8C0DC85117A512250099E5AE /* AppDelegate_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0DC85017A512250099E5AE /* AppDelegate_ipad.m */; };
+		8C0DC85117A512250099E5AE /* AppDelegate~ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0DC85017A512250099E5AE /* AppDelegate~ipad.m */; };
 		8C19F41D17B00899005BDB61 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */; };
 		8C19F41F17B02A8A005BDB61 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C19F41E17B02A8A005BDB61 /* QuartzCore.framework */; };
 		8C19F42417B02C7A005BDB61 /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42117B02AA9005BDB61 /* PopoverView.m */; };
@@ -88,9 +86,15 @@
 		8C23B46D17DB3B8600FB4DE6 /* timer_settime_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */; };
 		8C23B47017DB419300FB4DE6 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C23B46F17DB419300FB4DE6 /* Timer.m */; };
 		8C26E5C617A5539D007DA4B7 /* UserDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C26E5C517A5539D007DA4B7 /* UserDefaults.plist */; };
-		8C26E5C917A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5C817A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m */; };
+		8C26E5C917A5731D007DA4B7 /* AutoDismissKeyboardNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5C817A5731D007DA4B7 /* AutoDismissKeyboardNavigationViewController.m */; };
 		8C26E5D017A58703007DA4B7 /* HorizontalSlideCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */; };
-		8C26E5D717A68154007DA4B7 /* stopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5D617A68154007DA4B7 /* stopWatch.m */; };
+		8C26E5D717A68154007DA4B7 /* StopWatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26E5D617A68154007DA4B7 /* StopWatch.m */; };
+		8C2937B017E8348D00C3B887 /* libreoffice_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937AF17E8348D00C3B887 /* libreoffice_logo.png */; };
+		8C2937B317E8374B00C3B887 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2937B217E8374B00C3B887 /* SWRevealViewController.m */; };
+		8C2937BD17E837BA00C3B887 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937BA17E837BA00C3B887 /* Default-568h@2x.png */; };
+		8C2937BE17E837BA00C3B887 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937BB17E837BA00C3B887 /* Default.png */; };
+		8C2937BF17E837BA00C3B887 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937BC17E837BA00C3B887 /* Default@2x.png */; };
+		8C2937C517E9C40D00C3B887 /* ServerListViewController~ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2937C417E9C40C00C3B887 /* ServerListViewController~ipad.m */; };
 		8C3A648817DCBE9E004A77D9 /* timer_clear_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648117DCBE9E004A77D9 /* timer_clear_btn_dark.png */; };
 		8C3A648A17DCBE9E004A77D9 /* timer_pause_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648317DCBE9E004A77D9 /* timer_pause_btn_dark.png */; };
 		8C3A648B17DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648417DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png */; };
@@ -99,11 +103,10 @@
 		8C3A648E17DCBE9E004A77D9 /* timer_start_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */; };
 		8C94E69617CF7BF000B4848D /* WTPairingScreenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */; };
 		8CAD658517A2E84A00CFB661 /* MainSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */; };
-		8CAD658817A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658717A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m */; };
-		8CAD658C17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658B17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.m */; };
-		8CAD658F17A3250000CFB661 /* server_list_vc_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658E17A3250000CFB661 /* server_list_vc_ipad.m */; };
+		8CAD658817A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658717A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m */; };
+		8CAD658C17A2F02000CFB661 /* SlideShowPreviewViewController~iphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658B17A2F02000CFB661 /* SlideShowPreviewViewController~iphone.m */; };
 		8CAD659517A3C2D400CFB661 /* BasePresentationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD659417A3C2D400CFB661 /* BasePresentationViewController.m */; };
-		8CAD65A017A3F76300CFB661 /* slideShowSwipeInList_ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD659F17A3F76300CFB661 /* slideShowSwipeInList_ipad.m */; };
+		8CAD65A017A3F76300CFB661 /* SlideShowSwipeInList~ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD659F17A3F76300CFB661 /* SlideShowSwipeInList~ipad.m */; };
 		8CAF3DDF17D0DFFD00F931E5 /* WTcontrol~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */; };
 		8CAF3DE017D0DFFD00F931E5 /* WTcontrol~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */; };
 		8CAF3DE317D1D5D700F931E5 /* more_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DE117D1D5D600F931E5 /* more_ipad.png */; };
@@ -134,7 +137,6 @@
 		8CBF9E0517DE022F0044D949 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF9E0417DE022F0044D949 /* AudioToolbox.framework */; };
 		8CBF9E0817DE79EB0044D949 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0717DE79EB0044D949 /* AboutViewController.m */; };
 		8CBF9E0A17E103B50044D949 /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0917E103B40044D949 /* licenses.html */; };
-		8CBF9E0F17E1133B0044D949 /* libreoffice_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0E17E1133A0044D949 /* libreoffice_logo.png */; };
 		8CD6EC6817CBBAF40071827A /* WalkThroughPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */; };
 		8CD6EC6917CBBAF40071827A /* WalkThroughPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */; };
 		8CD6EC7017CC3FA00071827A /* WalkThroughContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */; };
@@ -156,29 +158,27 @@
 		5711026A1794127E007D343B /* release_notes.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = release_notes.md; sourceTree = "<group>"; };
 		5711026B1794127E007D343B /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		5711026F1794128E007D343B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		571BFAD0178AADA200EF1BDB /* more_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = more_icon.png; path = iosremote/more_icon.png; sourceTree = "<group>"; };
-		571D4805178B2F080063D93B /* timer_clear_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_clear_btn.png; path = iosremote/timer_clear_btn.png; sourceTree = "<group>"; };
-		571D4806178B2F080063D93B /* timer_start_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_start_btn.png; path = iosremote/timer_start_btn.png; sourceTree = "<group>"; };
-		5753DD8E1781EA0300DB71BB /* serverList_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = serverList_vc.h; path = iosremote/serverList_vc.h; sourceTree = "<group>"; };
-		5753DD8F1781EA0300DB71BB /* serverList_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = serverList_vc.m; path = iosremote/serverList_vc.m; sourceTree = "<group>"; };
-		5753DD9717834D7100DB71BB /* newServer_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = newServer_vc.h; path = iosremote/newServer_vc.h; sourceTree = "<group>"; };
-		5753DD9817834D7100DB71BB /* newServer_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = newServer_vc.m; path = iosremote/newServer_vc.m; sourceTree = "<group>"; };
-		57701737178AC83E00B99793 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
-		57701738178AC83E00B99793 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
-		57701740178B0A6800B99793 /* slideShowSwipeInList_iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slideShowSwipeInList_iphone.h; path = iosremote/slideShowSwipeInList_iphone.h; sourceTree = "<group>"; };
-		57701741178B0A6900B99793 /* slideShowSwipeInList_iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = slideShowSwipeInList_iphone.m; path = iosremote/slideShowSwipeInList_iphone.m; sourceTree = "<group>"; };
-		57867A531787172A00EBBE52 /* impress.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = impress.jpeg; path = iosremote/impress.jpeg; sourceTree = "<group>"; };
-		57867A551787385800EBBE52 /* slideShow_vc_iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slideShow_vc_iphone.h; path = iosremote/slideShow_vc_iphone.h; sourceTree = "<group>"; };
-		57867A561787385800EBBE52 /* slideShow_vc_iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = slideShow_vc_iphone.m; path = iosremote/slideShow_vc_iphone.m; sourceTree = "<group>"; };
-		57867A581787510700EBBE52 /* pushed_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pushed_next_button.png; path = iosremote/pushed_next_button.png; sourceTree = "<group>"; };
-		57867A591787510700EBBE52 /* released_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = released_next_button.png; path = iosremote/released_next_button.png; sourceTree = "<group>"; };
-		57867A5C178752CD00EBBE52 /* pushed_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pushed_previous_button.png; path = iosremote/pushed_previous_button.png; sourceTree = "<group>"; };
-		57867A5D178752CD00EBBE52 /* released_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = released_previous_button.png; path = iosremote/released_previous_button.png; sourceTree = "<group>"; };
-		57AEEDAE17895B67007F4F97 /* pointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pointer.png; path = iosremote/pointer.png; sourceTree = "<group>"; };
-		57AEEDB017895BF5007F4F97 /* pointer_pushed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pointer_pushed.png; path = iosremote/pointer_pushed.png; sourceTree = "<group>"; };
-		57AEEDB417899BB4007F4F97 /* slide_finished.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = slide_finished.png; path = iosremote/slide_finished.png; sourceTree = "<group>"; };
-		57B152971764703500EECC67 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = iosremote/Base64.h; sourceTree = "<group>"; };
-		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = iosremote/Base64.m; sourceTree = "<group>"; };
+		571BFAD0178AADA200EF1BDB /* more_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_icon.png; sourceTree = "<group>"; };
+		571D4805178B2F080063D93B /* timer_clear_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_clear_btn.png; sourceTree = "<group>"; };
+		571D4806178B2F080063D93B /* timer_start_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_start_btn.png; sourceTree = "<group>"; };
+		5753DD8E1781EA0300DB71BB /* ServerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerListViewController.h; path = iosremote/Classes/ServerListViewController.h; sourceTree = "<group>"; };
+		5753DD8F1781EA0300DB71BB /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ServerListViewController.m; path = iosremote/Classes/ServerListViewController.m; sourceTree = "<group>"; };
+		5753DD9717834D7100DB71BB /* NewServerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewServerViewController.h; path = iosremote/Classes/NewServerViewController.h; sourceTree = "<group>"; };
+		5753DD9817834D7100DB71BB /* NewServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewServerViewController.m; path = iosremote/Classes/NewServerViewController.m; sourceTree = "<group>"; };
+		57701740178B0A6800B99793 /* SlideShowSwipeInList~iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SlideShowSwipeInList~iphone.h"; path = "iosremote/Classes/SlideShowSwipeInList~iphone.h"; sourceTree = "<group>"; };
+		57701741178B0A6900B99793 /* SlideShowSwipeInList~iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowSwipeInList~iphone.m"; path = "iosremote/Classes/SlideShowSwipeInList~iphone.m"; sourceTree = "<group>"; };
+		57867A531787172A00EBBE52 /* impress.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = impress.jpeg; sourceTree = "<group>"; };
+		57867A551787385800EBBE52 /* SlideShowViewController~iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SlideShowViewController~iphone.h"; path = "iosremote/Classes/SlideShowViewController~iphone.h"; sourceTree = "<group>"; };
+		57867A561787385800EBBE52 /* SlideShowViewController~iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowViewController~iphone.m"; path = "iosremote/Classes/SlideShowViewController~iphone.m"; sourceTree = "<group>"; };
+		57867A581787510700EBBE52 /* pushed_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushed_next_button.png; sourceTree = "<group>"; };
+		57867A591787510700EBBE52 /* released_next_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = released_next_button.png; sourceTree = "<group>"; };
+		57867A5C178752CD00EBBE52 /* pushed_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushed_previous_button.png; sourceTree = "<group>"; };
+		57867A5D178752CD00EBBE52 /* released_previous_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = released_previous_button.png; sourceTree = "<group>"; };
+		57AEEDAE17895B67007F4F97 /* pointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pointer.png; sourceTree = "<group>"; };
+		57AEEDB017895BF5007F4F97 /* pointer_pushed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pointer_pushed.png; sourceTree = "<group>"; };
+		57AEEDB417899BB4007F4F97 /* slide_finished.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slide_finished.png; sourceTree = "<group>"; };
+		57B152971764703500EECC67 /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "iosremote/Categories/NSString+Base64.h"; sourceTree = "<group>"; };
+		57B152981764703500EECC67 /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Base64.m"; path = "iosremote/Categories/NSString+Base64.m"; sourceTree = "<group>"; };
 		57B1529D176486C300EECC67 /* CommandTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandTransmitter.h; path = iosremote/Communication/CommandTransmitter.h; sourceTree = "<group>"; };
 		57B1529E176486C300EECC67 /* CommandTransmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandTransmitter.m; path = iosremote/Communication/CommandTransmitter.m; sourceTree = "<group>"; };
 		57B7625B17621E42007703F6 /* SlideShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideShow.h; path = iosremote/Communication/SlideShow.h; sourceTree = "<group>"; };
@@ -191,8 +191,8 @@
 		57C6E3FC175E06E800E8BC5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		57C6E3FE175E06E800E8BC5F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		57C6E400175E06E800E8BC5F /* iosremote-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iosremote-Prefix.pch"; sourceTree = "<group>"; };
-		57C6E401175E06E800E8BC5F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = iosremote/AppDelegate.h; sourceTree = "<group>"; };
-		57C6E402175E06E800E8BC5F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = iosremote/AppDelegate.m; sourceTree = "<group>"; };
+		57C6E401175E06E800E8BC5F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = iosremote/Classes/AppDelegate.h; sourceTree = "<group>"; };
+		57C6E402175E06E800E8BC5F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = iosremote/Classes/AppDelegate.m; sourceTree = "<group>"; };
 		57C6E404175E06E800E8BC5F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		57C6E406175E06E800E8BC5F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		57C6E408175E06E800E8BC5F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -204,19 +204,19 @@
 		57C6E42B175E076900E8BC5F /* CommandInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommandInterpreter.m; path = iosremote/Communication/CommandInterpreter.m; sourceTree = "<group>"; };
 		57C6E42C175E076900E8BC5F /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Server.h; path = iosremote/Communication/Server.h; sourceTree = "<group>"; };
 		57C6E42D175E076900E8BC5F /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Server.m; path = iosremote/Communication/Server.m; sourceTree = "<group>"; };
-		57CC48C4178B42A400075DE4 /* timer_pause_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_pause_btn.png; path = iosremote/timer_pause_btn.png; sourceTree = "<group>"; };
-		57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableTableViewCell.h; path = iosremote/EditableTableViewCell.h; sourceTree = "<group>"; };
-		57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableTableViewCell.m; path = iosremote/EditableTableViewCell.m; sourceTree = "<group>"; };
+		57CC48C4178B42A400075DE4 /* timer_pause_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_pause_btn.png; sourceTree = "<group>"; };
+		57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableTableViewCell.h; path = iosremote/Classes/EditableTableViewCell.h; sourceTree = "<group>"; };
+		57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableTableViewCell.m; path = iosremote/Classes/EditableTableViewCell.m; sourceTree = "<group>"; };
 		57DC7006178D84490050FC58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		57DC7010178E16A40050FC58 /* UIViewTransitionCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewTransitionCategory.h; sourceTree = "<group>"; };
-		57DC7011178E16A40050FC58 /* UIViewTransitionCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewTransitionCategory.m; sourceTree = "<group>"; };
+		57DC7010178E16A40050FC58 /* UIView+FadeInFadeOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+FadeInFadeOut.h"; path = "iosremote/Categories/UIView+FadeInFadeOut.h"; sourceTree = "<group>"; };
+		57DC7011178E16A40050FC58 /* UIView+FadeInFadeOut.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+FadeInFadeOut.m"; path = "iosremote/Categories/UIView+FadeInFadeOut.m"; sourceTree = "<group>"; };
 		57DF0A84178FFFAB008B2D3D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPhone_autoSize.storyboard; sourceTree = "<group>"; };
-		57FE71E11785C61300B50125 /* pinValidation_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pinValidation_vc.h; path = iosremote/Communication/pinValidation_vc.h; sourceTree = "<group>"; };
-		57FE71E21785C61400B50125 /* pinValidation_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = pinValidation_vc.m; path = iosremote/Communication/pinValidation_vc.m; sourceTree = "<group>"; };
-		57FE71E717861A9000B50125 /* slideShowPreviewTable_vc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowPreviewTable_vc.h; sourceTree = "<group>"; };
-		57FE71E817861A9000B50125 /* slideShowPreviewTable_vc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShowPreviewTable_vc.m; sourceTree = "<group>"; };
-		8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+setImageAnimated.h"; path = "iosremote/UIImageView+setImageAnimated.h"; sourceTree = "<group>"; };
-		8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+setImageAnimated.m"; path = "iosremote/UIImageView+setImageAnimated.m"; sourceTree = "<group>"; };
+		57FE71E11785C61300B50125 /* PinValidationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinValidationViewController.h; path = iosremote/Classes/PinValidationViewController.h; sourceTree = "<group>"; };
+		57FE71E21785C61400B50125 /* PinValidationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PinValidationViewController.m; path = iosremote/Classes/PinValidationViewController.m; sourceTree = "<group>"; };
+		57FE71E717861A9000B50125 /* SlideShowPreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideShowPreviewViewController.h; path = iosremote/Classes/SlideShowPreviewViewController.h; sourceTree = "<group>"; };
+		57FE71E817861A9000B50125 /* SlideShowPreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideShowPreviewViewController.m; path = iosremote/Classes/SlideShowPreviewViewController.m; sourceTree = "<group>"; };
+		8C0323A917A943720037432E /* UIImageView+setImageAnimated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+setImageAnimated.h"; path = "iosremote/Categories/UIImageView+setImageAnimated.h"; sourceTree = "<group>"; };
+		8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+setImageAnimated.m"; path = "iosremote/Categories/UIImageView+setImageAnimated.m"; sourceTree = "<group>"; };
 		8C06B31C17B7EC83002F5CF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = iosremote/en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8C06B31F17B7ED1E002F5CF8 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/iPad_autosize.storyboard; sourceTree = "<group>"; };
 		8C06B32117B7ED2A002F5CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = fr.lproj/iPhone_autoSize.storyboard; sourceTree = "<group>"; };
@@ -235,71 +235,76 @@
 		8C0DC83F17A4185A0099E5AE /* nextButton_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nextButton_normal@2x.png"; sourceTree = "<group>"; };
 		8C0DC84017A4185A0099E5AE /* previousButton_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previousButton_normal.png; sourceTree = "<group>"; };
 		8C0DC84117A4185A0099E5AE /* previousButton_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "previousButton_normal@2x.png"; sourceTree = "<group>"; };
-		8C0DC84617A45B160099E5AE /* libO_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = libO_icon.png; sourceTree = "<group>"; };
-		8C0DC84F17A512250099E5AE /* AppDelegate_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate_ipad.h; path = iosremote/AppDelegate_ipad.h; sourceTree = "<group>"; };
-		8C0DC85017A512250099E5AE /* AppDelegate_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate_ipad.m; path = iosremote/AppDelegate_ipad.m; sourceTree = "<group>"; };
+		8C0DC84F17A512250099E5AE /* AppDelegate~ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate~ipad.h"; path = "iosremote/Classes/AppDelegate~ipad.h"; sourceTree = "<group>"; };
+		8C0DC85017A512250099E5AE /* AppDelegate~ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate~ipad.m"; path = "iosremote/Classes/AppDelegate~ipad.m"; sourceTree = "<group>"; };
 		8C19F41C17B00899005BDB61 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8C19F41E17B02A8A005BDB61 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		8C19F42017B02AA9005BDB61 /* PopoverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
-		8C19F42117B02AA9005BDB61 /* PopoverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
-		8C19F42217B02C2E005BDB61 /* PopoverView_Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PopoverView_Configuration.h; sourceTree = "<group>"; };
-		8C19F42317B02C2E005BDB61 /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
+		8C19F42017B02AA9005BDB61 /* PopoverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PopoverView.h; path = PopoverView/PopoverView.h; sourceTree = "<group>"; };
+		8C19F42117B02AA9005BDB61 /* PopoverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PopoverView.m; path = PopoverView/PopoverView.m; sourceTree = "<group>"; };
+		8C19F42217B02C2E005BDB61 /* PopoverView_Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PopoverView_Configuration.h; path = PopoverView/PopoverView_Configuration.h; sourceTree = "<group>"; };
+		8C19F42317B02C2E005BDB61 /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PopoverViewCompatibility.h; path = PopoverView/PopoverViewCompatibility.h; sourceTree = "<group>"; };
 		8C19F42517B04E7C005BDB61 /* navBarBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBarBackground@2x.png"; sourceTree = "<group>"; };
 		8C19F42617B04E7C005BDB61 /* navBarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBarBackground.png; sourceTree = "<group>"; };
-		8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Theme.h"; sourceTree = "<group>"; };
-		8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Theme.m"; sourceTree = "<group>"; };
-		8C19F42D17B05089005BDB61 /* LibONavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LibONavigationController.h; path = iosremote/LibONavigationController.h; sourceTree = "<group>"; };
-		8C19F42E17B05089005BDB61 /* LibONavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LibONavigationController.m; path = iosremote/LibONavigationController.m; sourceTree = "<group>"; };
-		8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "navBarButtonNormal@2x.png"; path = "iosremote/navBarButtonNormal@2x.png"; sourceTree = "<group>"; };
-		8C19F43417B10D48005BDB61 /* UIViewController+LibOStyling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+LibOStyling.h"; path = "iosremote/UIViewController+LibOStyling.h"; sourceTree = "<group>"; };
-		8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+LibOStyling.m"; path = "iosremote/UIViewController+LibOStyling.m"; sourceTree = "<group>"; };
-		8C19F43717B145AD005BDB61 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = iosremote/backButton.png; sourceTree = "<group>"; };
-		8C19F43817B145AD005BDB61 /* backButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "backButton@2x.png"; path = "iosremote/backButton@2x.png"; sourceTree = "<group>"; };
-		8C19F43C17B1D935005BDB61 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add.png; path = iosremote/add.png; sourceTree = "<group>"; };
-		8C19F44817B1FEFD005BDB61 /* gear_transparent_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gear_transparent_bg.png; path = iosremote/gear_transparent_bg.png; sourceTree = "<group>"; };
-		8C19F44917B1FEFE005BDB61 /* gear_transparent_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gear_transparent_bg@2x.png"; path = "iosremote/gear_transparent_bg@2x.png"; sourceTree = "<group>"; };
-		8C19F44C17B20426005BDB61 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "iosremote/add@2x.png"; sourceTree = "<group>"; };
+		8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Theme.h"; path = "iosremote/Categories/UINavigationController+Theme.h"; sourceTree = "<group>"; };
+		8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Theme.m"; path = "iosremote/Categories/UINavigationController+Theme.m"; sourceTree = "<group>"; };
+		8C19F42D17B05089005BDB61 /* LibONavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LibONavigationController.h; path = iosremote/Classes/LibONavigationController.h; sourceTree = "<group>"; };
+		8C19F42E17B05089005BDB61 /* LibONavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LibONavigationController.m; path = iosremote/Classes/LibONavigationController.m; sourceTree = "<group>"; };
+		8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBarButtonNormal@2x.png"; sourceTree = "<group>"; };
+		8C19F43417B10D48005BDB61 /* UIViewController+LibOStyling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+LibOStyling.h"; path = "iosremote/Categories/UIViewController+LibOStyling.h"; sourceTree = "<group>"; };
+		8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+LibOStyling.m"; path = "iosremote/Categories/UIViewController+LibOStyling.m"; sourceTree = "<group>"; };
+		8C19F43717B145AD005BDB61 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton.png; sourceTree = "<group>"; };
+		8C19F43817B145AD005BDB61 /* backButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backButton@2x.png"; sourceTree = "<group>"; };
+		8C19F43C17B1D935005BDB61 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
+		8C19F44817B1FEFD005BDB61 /* gear_transparent_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear_transparent_bg.png; sourceTree = "<group>"; };
+		8C19F44917B1FEFE005BDB61 /* gear_transparent_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear_transparent_bg@2x.png"; sourceTree = "<group>"; };
+		8C19F44C17B20426005BDB61 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
 		8C1A16FA17A2853100B4BB3C /* iosremote_iphone_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosremote_iphone_icon@2x.png"; sourceTree = "<group>"; };
 		8C1A16FC17A2853700B4BB3C /* iosremote_iphone_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_iphone_icon.png; sourceTree = "<group>"; };
 		8C1A16FE17A2853F00B4BB3C /* iosremote_ipad_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iosremote_ipad_icon.png; sourceTree = "<group>"; };
 		8C1A170017A2854300B4BB3C /* iosremote_ipad_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iosremote_ipad_icon@2x.png"; sourceTree = "<group>"; };
-		8C23B46717DA158C00FB4DE6 /* UIView+Shadowing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shadowing.h"; sourceTree = "<group>"; };
-		8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadowing.m"; sourceTree = "<group>"; };
-		8C23B46A17DB3B8600FB4DE6 /* timer_settime_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_settime_btn.png; path = iosremote/timer_settime_btn.png; sourceTree = "<group>"; };
-		8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timer_settime_btn@2x.png"; path = "iosremote/timer_settime_btn@2x.png"; sourceTree = "<group>"; };
-		8C23B46E17DB419300FB4DE6 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = iosremote/Timer.h; sourceTree = "<group>"; };
-		8C23B46F17DB419300FB4DE6 /* Timer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Timer.m; path = iosremote/Timer.m; sourceTree = "<group>"; };
+		8C23B46717DA158C00FB4DE6 /* UIView+Shadowing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Shadowing.h"; path = "iosremote/Categories/UIView+Shadowing.h"; sourceTree = "<group>"; };
+		8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Shadowing.m"; path = "iosremote/Categories/UIView+Shadowing.m"; sourceTree = "<group>"; };
+		8C23B46A17DB3B8600FB4DE6 /* timer_settime_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_settime_btn.png; sourceTree = "<group>"; };
+		8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timer_settime_btn@2x.png"; sourceTree = "<group>"; };
+		8C23B46E17DB419300FB4DE6 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = iosremote/Classes/Timer.h; sourceTree = "<group>"; };
+		8C23B46F17DB419300FB4DE6 /* Timer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Timer.m; path = iosremote/Classes/Timer.m; sourceTree = "<group>"; };
 		8C26E5C517A5539D007DA4B7 /* UserDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = UserDefaults.plist; path = ../UserDefaults.plist; sourceTree = "<group>"; };
-		8C26E5C717A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = autoDismissKeyboardNavigationViewController.h; path = iosremote/autoDismissKeyboardNavigationViewController.h; sourceTree = "<group>"; };
-		8C26E5C817A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = autoDismissKeyboardNavigationViewController.m; path = iosremote/autoDismissKeyboardNavigationViewController.m; sourceTree = "<group>"; };
-		8C26E5CA17A57C20007DA4B7 /* ControlVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ControlVariables.h; path = iosremote/ControlVariables.h; sourceTree = "<group>"; };
-		8C26E5CE17A58703007DA4B7 /* HorizontalSlideCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HorizontalSlideCell.h; path = iosremote/HorizontalSlideCell.h; sourceTree = "<group>"; };
-		8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HorizontalSlideCell.m; path = iosremote/HorizontalSlideCell.m; sourceTree = "<group>"; };
-		8C26E5D517A68154007DA4B7 /* stopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stopWatch.h; path = iosremote/stopWatch.h; sourceTree = "<group>"; };
-		8C26E5D617A68154007DA4B7 /* stopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = stopWatch.m; path = iosremote/stopWatch.m; sourceTree = "<group>"; };
-		8C3A648117DCBE9E004A77D9 /* timer_clear_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_clear_btn_dark.png; path = iosremote/timer_clear_btn_dark.png; sourceTree = "<group>"; };
-		8C3A648317DCBE9E004A77D9 /* timer_pause_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_pause_btn_dark.png; path = iosremote/timer_pause_btn_dark.png; sourceTree = "<group>"; };
-		8C3A648417DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timer_pause_btn_dark@2x.png"; path = "iosremote/timer_pause_btn_dark@2x.png"; sourceTree = "<group>"; };
-		8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_settime_btn_dark.png; path = iosremote/timer_settime_btn_dark.png; sourceTree = "<group>"; };
-		8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timer_settime_btn_dark@2x.png"; path = "iosremote/timer_settime_btn_dark@2x.png"; sourceTree = "<group>"; };
-		8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = timer_start_btn_dark.png; path = iosremote/timer_start_btn_dark.png; sourceTree = "<group>"; };
-		8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTPairingScreenshot.png; path = iosremote/WTPairingScreenshot.png; sourceTree = "<group>"; };
-		8CAD658317A2E84A00CFB661 /* MainSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainSplitViewController.h; path = iosremote/MainSplitViewController.h; sourceTree = "<group>"; };
-		8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainSplitViewController.m; path = iosremote/MainSplitViewController.m; sourceTree = "<group>"; };
-		8CAD658617A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slideShowPreviewTable_vc_ipad.h; path = iosremote/slideShowPreviewTable_vc_ipad.h; sourceTree = "<group>"; };
-		8CAD658717A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = slideShowPreviewTable_vc_ipad.m; path = iosremote/slideShowPreviewTable_vc_ipad.m; sourceTree = "<group>"; };
-		8CAD658A17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slideShowPreviewTable_vc_iphone.h; path = iosremote/slideShowPreviewTable_vc_iphone.h; sourceTree = "<group>"; };
-		8CAD658B17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = slideShowPreviewTable_vc_iphone.m; path = iosremote/slideShowPreviewTable_vc_iphone.m; sourceTree = "<group>"; };
-		8CAD658D17A3250000CFB661 /* server_list_vc_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = server_list_vc_ipad.h; path = iosremote/server_list_vc_ipad.h; sourceTree = "<group>"; };
-		8CAD658E17A3250000CFB661 /* server_list_vc_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = server_list_vc_ipad.m; path = iosremote/server_list_vc_ipad.m; sourceTree = "<group>"; };
-		8CAD659317A3C2D400CFB661 /* BasePresentationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasePresentationViewController.h; path = iosremote/BasePresentationViewController.h; sourceTree = "<group>"; };
-		8CAD659417A3C2D400CFB661 /* BasePresentationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasePresentationViewController.m; path = iosremote/BasePresentationViewController.m; sourceTree = "<group>"; };
-		8CAD659E17A3F76300CFB661 /* slideShowSwipeInList_ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slideShowSwipeInList_ipad.h; path = iosremote/slideShowSwipeInList_ipad.h; sourceTree = "<group>"; };
-		8CAD659F17A3F76300CFB661 /* slideShowSwipeInList_ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = slideShowSwipeInList_ipad.m; path = iosremote/slideShowSwipeInList_ipad.m; sourceTree = "<group>"; };
-		8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WTcontrol~ipad.png"; path = "iosremote/WTcontrol~ipad.png"; sourceTree = "<group>"; };
-		8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WTcontrol~iphone.png"; path = "iosremote/WTcontrol~iphone.png"; sourceTree = "<group>"; };
-		8CAF3DE117D1D5D600F931E5 /* more_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = more_ipad.png; path = iosremote/more_ipad.png; sourceTree = "<group>"; };
-		8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "more_ipad@2x.png"; path = "iosremote/more_ipad@2x.png"; sourceTree = "<group>"; };
+		8C26E5C717A5731D007DA4B7 /* AutoDismissKeyboardNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoDismissKeyboardNavigationViewController.h; path = iosremote/Categories/AutoDismissKeyboardNavigationViewController.h; sourceTree = "<group>"; };
+		8C26E5C817A5731D007DA4B7 /* AutoDismissKeyboardNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AutoDismissKeyboardNavigationViewController.m; path = iosremote/Categories/AutoDismissKeyboardNavigationViewController.m; sourceTree = "<group>"; };
+		8C26E5CA17A57C20007DA4B7 /* ControlVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ControlVariables.h; path = iosremote/Classes/ControlVariables.h; sourceTree = "<group>"; };
+		8C26E5CE17A58703007DA4B7 /* HorizontalSlideCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HorizontalSlideCell.h; path = iosremote/Classes/HorizontalSlideCell.h; sourceTree = "<group>"; };
+		8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HorizontalSlideCell.m; path = iosremote/Classes/HorizontalSlideCell.m; sourceTree = "<group>"; };
+		8C26E5D517A68154007DA4B7 /* StopWatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopWatch.h; path = iosremote/Classes/StopWatch.h; sourceTree = "<group>"; };
+		8C26E5D617A68154007DA4B7 /* StopWatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopWatch.m; path = iosremote/Classes/StopWatch.m; sourceTree = "<group>"; };
+		8C2937AF17E8348D00C3B887 /* libreoffice_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = libreoffice_logo.png; sourceTree = "<group>"; };
+		8C2937B117E8374B00C3B887 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWRevealViewController.h; path = SWRevealViewController/SWRevealViewController.h; sourceTree = SOURCE_ROOT; };
+		8C2937B217E8374B00C3B887 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWRevealViewController.m; path = SWRevealViewController/SWRevealViewController.m; sourceTree = SOURCE_ROOT; };
+		8C2937BA17E837BA00C3B887 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "iosremote/Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
+		8C2937BB17E837BA00C3B887 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = iosremote/Default.png; sourceTree = SOURCE_ROOT; };
+		8C2937BC17E837BA00C3B887 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "iosremote/Default@2x.png"; sourceTree = SOURCE_ROOT; };
+		8C2937C317E9C40C00C3B887 /* ServerListViewController~ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ServerListViewController~ipad.h"; sourceTree = "<group>"; };
+		8C2937C417E9C40C00C3B887 /* ServerListViewController~ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ServerListViewController~ipad.m"; sourceTree = "<group>"; };
+		8C3A648117DCBE9E004A77D9 /* timer_clear_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_clear_btn_dark.png; sourceTree = "<group>"; };
+		8C3A648317DCBE9E004A77D9 /* timer_pause_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_pause_btn_dark.png; sourceTree = "<group>"; };
+		8C3A648417DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timer_pause_btn_dark@2x.png"; sourceTree = "<group>"; };
+		8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_settime_btn_dark.png; sourceTree = "<group>"; };
+		8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timer_settime_btn_dark@2x.png"; sourceTree = "<group>"; };
+		8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_start_btn_dark.png; sourceTree = "<group>"; };
+		8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WTPairingScreenshot.png; sourceTree = "<group>"; };
+		8CAD658317A2E84A00CFB661 /* MainSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainSplitViewController.h; path = iosremote/Classes/MainSplitViewController.h; sourceTree = "<group>"; };
+		8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainSplitViewController.m; path = iosremote/Classes/MainSplitViewController.m; sourceTree = "<group>"; };
+		8CAD658617A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SlideShowPreviewViewController~ipad.h"; path = "iosremote/Classes/SlideShowPreviewViewController~ipad.h"; sourceTree = "<group>"; };
+		8CAD658717A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowPreviewViewController~ipad.m"; path = "iosremote/Classes/SlideShowPreviewViewController~ipad.m"; sourceTree = "<group>"; };
+		8CAD658A17A2F02000CFB661 /* SlideShowPreviewViewController~iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SlideShowPreviewViewController~iphone.h"; path = "iosremote/Classes/SlideShowPreviewViewController~iphone.h"; sourceTree = "<group>"; };
+		8CAD658B17A2F02000CFB661 /* SlideShowPreviewViewController~iphone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowPreviewViewController~iphone.m"; path = "iosremote/Classes/SlideShowPreviewViewController~iphone.m"; sourceTree = "<group>"; };
+		8CAD659317A3C2D400CFB661 /* BasePresentationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BasePresentationViewController.h; path = iosremote/Classes/BasePresentationViewController.h; sourceTree = "<group>"; };
+		8CAD659417A3C2D400CFB661 /* BasePresentationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BasePresentationViewController.m; path = iosremote/Classes/BasePresentationViewController.m; sourceTree = "<group>"; };
+		8CAD659E17A3F76300CFB661 /* SlideShowSwipeInList~ipad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SlideShowSwipeInList~ipad.h"; path = "iosremote/Classes/SlideShowSwipeInList~ipad.h"; sourceTree = "<group>"; };
+		8CAD659F17A3F76300CFB661 /* SlideShowSwipeInList~ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowSwipeInList~ipad.m"; path = "iosremote/Classes/SlideShowSwipeInList~ipad.m"; sourceTree = "<group>"; };
+		8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WTcontrol~ipad.png"; sourceTree = "<group>"; };
+		8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WTcontrol~iphone.png"; sourceTree = "<group>"; };
+		8CAF3DE117D1D5D600F931E5 /* more_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_ipad.png; sourceTree = "<group>"; };
+		8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_ipad@2x.png"; sourceTree = "<group>"; };
 		8CBF9DC317DDBFA70044D949 /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		8CBF9DC417DDBFA70044D949 /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
 		8CBF9DC517DDBFA70044D949 /* IASKAppSettingsWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsWebViewController.h; sourceTree = "<group>"; };
@@ -340,24 +345,23 @@
 		8CBF9E0017DDC1A80044D949 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8CBF9E0217DDD2230044D949 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Settings.bundle; sourceTree = "<group>"; };
 		8CBF9E0417DE022F0044D949 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		8CBF9E0617DE79EB0044D949 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = iosremote/AboutViewController.h; sourceTree = "<group>"; };
-		8CBF9E0717DE79EB0044D949 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = iosremote/AboutViewController.m; sourceTree = "<group>"; };
+		8CBF9E0617DE79EB0044D949 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutViewController.h; path = iosremote/Classes/AboutViewController.h; sourceTree = "<group>"; };
+		8CBF9E0717DE79EB0044D949 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutViewController.m; path = iosremote/Classes/AboutViewController.m; sourceTree = "<group>"; };
 		8CBF9E0917E103B40044D949 /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
-		8CBF9E0E17E1133A0044D949 /* libreoffice_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = libreoffice_logo.png; sourceTree = "<group>"; };
-		8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughPageViewController.h; path = iosremote/WalkThroughPageViewController.h; sourceTree = "<group>"; };
-		8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughPageViewController.m; path = iosremote/WalkThroughPageViewController.m; sourceTree = "<group>"; };
-		8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewController.xib; path = iosremote/WalkThroughPageViewController.xib; sourceTree = "<group>"; };
-		8CD6EC6E17CC3FA00071827A /* WalkThroughContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WalkThroughContainerViewController.h; sourceTree = "<group>"; };
-		8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WalkThroughContainerViewController.m; sourceTree = "<group>"; };
-		8CD6EC7517CE31550071827A /* forwardButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = forwardButton.png; path = iosremote/forwardButton.png; sourceTree = "<group>"; };
-		8CD6EC7617CE31550071827A /* forwardButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "forwardButton@2x.png"; path = "iosremote/forwardButton@2x.png"; sourceTree = "<group>"; };
-		8CD6EC7917CE358B0071827A /* buttonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = buttonBackground.png; path = iosremote/buttonBackground.png; sourceTree = "<group>"; };
-		8CD6EC7A17CE358B0071827A /* buttonBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "buttonBackground@2x.png"; path = "iosremote/buttonBackground@2x.png"; sourceTree = "<group>"; };
-		8CD6EC7D17CF2CE70071827A /* WTconnection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTconnection.png; path = iosremote/WTconnection.png; sourceTree = "<group>"; };
-		8CD6EC7F17CF35A70071827A /* WTConnectionHotspot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTConnectionHotspot.png; path = iosremote/WTConnectionHotspot.png; sourceTree = "<group>"; };
-		8CD6EC8117CF40200071827A /* WTconnecting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTconnecting.png; path = iosremote/WTconnecting.png; sourceTree = "<group>"; };
-		8CD6EC8317CF46930071827A /* WTPairing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WTPairing.png; path = iosremote/WTPairing.png; sourceTree = "<group>"; };
-		8CD6EC8717CF4ABA0071827A /* WalkThroughPageViewMainImageController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewMainImageController.xib; path = iosremote/WalkThroughPageViewMainImageController.xib; sourceTree = "<group>"; };
+		8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughPageViewController.h; path = iosremote/Classes/WalkThroughPageViewController.h; sourceTree = "<group>"; };
+		8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughPageViewController.m; path = iosremote/Classes/WalkThroughPageViewController.m; sourceTree = "<group>"; };
+		8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewController.xib; path = iosremote/Views/WalkThroughPageViewController.xib; sourceTree = "<group>"; };
+		8CD6EC6E17CC3FA00071827A /* WalkThroughContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughContainerViewController.h; path = iosremote/Classes/WalkThroughContainerViewController.h; sourceTree = "<group>"; };
+		8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughContainerViewController.m; path = iosremote/Classes/WalkThroughContainerViewController.m; sourceTree = "<group>"; };
+		8CD6EC7517CE31550071827A /* forwardButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardButton.png; sourceTree = "<group>"; };
+		8CD6EC7617CE31550071827A /* forwardButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forwardButton@2x.png"; sourceTree = "<group>"; };
+		8CD6EC7917CE358B0071827A /* buttonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buttonBackground.png; sourceTree = "<group>"; };
+		8CD6EC7A17CE358B0071827A /* buttonBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonBackground@2x.png"; sourceTree = "<group>"; };
+		8CD6EC7D17CF2CE70071827A /* WTconnection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WTconnection.png; sourceTree = "<group>"; };
+		8CD6EC7F17CF35A70071827A /* WTConnectionHotspot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WTConnectionHotspot.png; sourceTree = "<group>"; };
+		8CD6EC8117CF40200071827A /* WTconnecting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WTconnecting.png; sourceTree = "<group>"; };
+		8CD6EC8317CF46930071827A /* WTPairing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WTPairing.png; sourceTree = "<group>"; };
+		8CD6EC8717CF4ABA0071827A /* WalkThroughPageViewMainImageController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewMainImageController.xib; path = iosremote/Views/WalkThroughPageViewMainImageController.xib; sourceTree = "<group>"; };
 		BE9EBD061765BF0800283FD2 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -395,21 +399,11 @@
 			path = TestFlightSDK1.2.6;
 			sourceTree = "<group>";
 		};
-		571BFAD2178AB7BA00EF1BDB /* slideShow */ = {
-			isa = PBXGroup;
-			children = (
-				57DC7010178E16A40050FC58 /* UIViewTransitionCategory.h */,
-				57DC7011178E16A40050FC58 /* UIViewTransitionCategory.m */,
-			);
-			name = slideShow;
-			path = iosremote;
-			sourceTree = "<group>";
-		};
 		57701736178AC83E00B99793 /* SWRevealViewController */ = {
 			isa = PBXGroup;
 			children = (
-				57701737178AC83E00B99793 /* SWRevealViewController.h */,
-				57701738178AC83E00B99793 /* SWRevealViewController.m */,
+				8C2937B117E8374B00C3B887 /* SWRevealViewController.h */,
+				8C2937B217E8374B00C3B887 /* SWRevealViewController.m */,
 			);
 			name = SWRevealViewController;
 			path = iosremote/SWRevealViewController;
@@ -418,22 +412,11 @@
 		57AEEDAA1788D7B2007F4F97 /* Ressources */ = {
 			isa = PBXGroup;
 			children = (
-				8CBF9E0E17E1133A0044D949 /* libreoffice_logo.png */,
 				8CBF9E0917E103B40044D949 /* licenses.html */,
 				8C06B31A17B7EC6C002F5CF8 /* localizations */,
 				8C06B31917B7EC62002F5CF8 /* assets */,
 			);
 			name = Ressources;
-			sourceTree = "<group>";
-		};
-		57AEEDAB1789443D007F4F97 /* slideShowPreview */ = {
-			isa = PBXGroup;
-			children = (
-				57FE71E717861A9000B50125 /* slideShowPreviewTable_vc.h */,
-				57FE71E817861A9000B50125 /* slideShowPreviewTable_vc.m */,
-			);
-			name = slideShowPreview;
-			path = iosremote;
 			sourceTree = "<group>";
 		};
 		57C6E3E6175E06E800E8BC5F = {
@@ -487,6 +470,10 @@
 		8C06B31917B7EC62002F5CF8 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				8C2937BA17E837BA00C3B887 /* Default-568h@2x.png */,
+				8C2937BB17E837BA00C3B887 /* Default.png */,
+				8C2937BC17E837BA00C3B887 /* Default@2x.png */,
+				8C2937AF17E8348D00C3B887 /* libreoffice_logo.png */,
 				8C3A648117DCBE9E004A77D9 /* timer_clear_btn_dark.png */,
 				8C3A648317DCBE9E004A77D9 /* timer_pause_btn_dark.png */,
 				8C3A648417DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png */,
@@ -517,7 +504,6 @@
 				8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */,
 				8C19F42517B04E7C005BDB61 /* navBarBackground@2x.png */,
 				8C19F42617B04E7C005BDB61 /* navBarBackground.png */,
-				8C0DC84617A45B160099E5AE /* libO_icon.png */,
 				8C0DC83E17A4185A0099E5AE /* nextButton_normal.png */,
 				8C0DC83F17A4185A0099E5AE /* nextButton_normal@2x.png */,
 				8C0DC84017A4185A0099E5AE /* previousButton_normal.png */,
@@ -544,6 +530,7 @@
 				571D4806178B2F080063D93B /* timer_start_btn.png */,
 			);
 			name = assets;
+			path = iosremote/Ressources;
 			sourceTree = "<group>";
 		};
 		8C06B31A17B7EC6C002F5CF8 /* localizations */ = {
@@ -557,8 +544,8 @@
 		8C0DC84E17A511C60099E5AE /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				8C0DC84F17A512250099E5AE /* AppDelegate_ipad.h */,
-				8C0DC85017A512250099E5AE /* AppDelegate_ipad.m */,
+				8C0DC84F17A512250099E5AE /* AppDelegate~ipad.h */,
+				8C0DC85017A512250099E5AE /* AppDelegate~ipad.m */,
 			);
 			name = Application;
 			sourceTree = "<group>";
@@ -590,20 +577,20 @@
 		8C1A170417A28AFD00B4BB3C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				57FE71E717861A9000B50125 /* SlideShowPreviewViewController.h */,
+				57FE71E817861A9000B50125 /* SlideShowPreviewViewController.m */,
 				8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */,
 				8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */,
 				8CD6EC6E17CC3FA00071827A /* WalkThroughContainerViewController.h */,
 				8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */,
-				57FE71E11785C61300B50125 /* pinValidation_vc.h */,
-				57FE71E21785C61400B50125 /* pinValidation_vc.m */,
-				5753DD9717834D7100DB71BB /* newServer_vc.h */,
-				5753DD9817834D7100DB71BB /* newServer_vc.m */,
-				5753DD8E1781EA0300DB71BB /* serverList_vc.h */,
-				5753DD8F1781EA0300DB71BB /* serverList_vc.m */,
+				57FE71E11785C61300B50125 /* PinValidationViewController.h */,
+				57FE71E21785C61400B50125 /* PinValidationViewController.m */,
+				5753DD9717834D7100DB71BB /* NewServerViewController.h */,
+				5753DD9817834D7100DB71BB /* NewServerViewController.m */,
+				5753DD8E1781EA0300DB71BB /* ServerListViewController.h */,
+				5753DD8F1781EA0300DB71BB /* ServerListViewController.m */,
 				8CBF9E0617DE79EB0044D949 /* AboutViewController.h */,
 				8CBF9E0717DE79EB0044D949 /* AboutViewController.m */,
-				571BFAD2178AB7BA00EF1BDB /* slideShow */,
-				57AEEDAB1789443D007F4F97 /* slideShowPreview */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -628,12 +615,12 @@
 		8C1A170617A28DDF00B4BB3C /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				57B152971764703500EECC67 /* Base64.h */,
-				57B152981764703500EECC67 /* Base64.m */,
+				57B152971764703500EECC67 /* NSString+Base64.h */,
+				57B152981764703500EECC67 /* NSString+Base64.m */,
 				57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */,
 				57CFED9817838FDC00E82E05 /* EditableTableViewCell.m */,
-				8C26E5C717A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.h */,
-				8C26E5C817A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m */,
+				8C26E5C717A5731D007DA4B7 /* AutoDismissKeyboardNavigationViewController.h */,
+				8C26E5C817A5731D007DA4B7 /* AutoDismissKeyboardNavigationViewController.m */,
 				8C26E5CA17A57C20007DA4B7 /* ControlVariables.h */,
 				8C26E5CE17A58703007DA4B7 /* HorizontalSlideCell.h */,
 				8C26E5CF17A58703007DA4B7 /* HorizontalSlideCell.m */,
@@ -641,6 +628,8 @@
 				8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */,
 				8C23B46717DA158C00FB4DE6 /* UIView+Shadowing.h */,
 				8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */,
+				57DC7010178E16A40050FC58 /* UIView+FadeInFadeOut.h */,
+				57DC7011178E16A40050FC58 /* UIView+FadeInFadeOut.m */,
 				8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */,
 				8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */,
 				8C19F42D17B05089005BDB61 /* LibONavigationController.h */,
@@ -654,8 +643,8 @@
 		8C1A170717A28DE800B4BB3C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8C26E5D517A68154007DA4B7 /* stopWatch.h */,
-				8C26E5D617A68154007DA4B7 /* stopWatch.m */,
+				8C26E5D517A68154007DA4B7 /* StopWatch.h */,
+				8C26E5D617A68154007DA4B7 /* StopWatch.m */,
 				57C6E426175E076900E8BC5F /* Client.h */,
 				57C6E427175E076900E8BC5F /* Client.m */,
 				57C6E428175E076900E8BC5F /* CommunicationManager.h */,
@@ -696,16 +685,16 @@
 		8CAD658217A2E81F00CFB661 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8C2937C317E9C40C00C3B887 /* ServerListViewController~ipad.h */,
+				8C2937C417E9C40C00C3B887 /* ServerListViewController~ipad.m */,
 				8CAD658317A2E84A00CFB661 /* MainSplitViewController.h */,
 				8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */,
-				8CAD658617A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.h */,
-				8CAD658717A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m */,
-				8CAD658D17A3250000CFB661 /* server_list_vc_ipad.h */,
-				8CAD658E17A3250000CFB661 /* server_list_vc_ipad.m */,
+				8CAD658617A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.h */,
+				8CAD658717A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m */,
 				8CAD659317A3C2D400CFB661 /* BasePresentationViewController.h */,
 				8CAD659417A3C2D400CFB661 /* BasePresentationViewController.m */,
-				8CAD659E17A3F76300CFB661 /* slideShowSwipeInList_ipad.h */,
-				8CAD659F17A3F76300CFB661 /* slideShowSwipeInList_ipad.m */,
+				8CAD659E17A3F76300CFB661 /* SlideShowSwipeInList~ipad.h */,
+				8CAD659F17A3F76300CFB661 /* SlideShowSwipeInList~ipad.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -713,12 +702,12 @@
 		8CAD658917A2F00500CFB661 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				57867A551787385800EBBE52 /* slideShow_vc_iphone.h */,
-				57867A561787385800EBBE52 /* slideShow_vc_iphone.m */,
-				57701740178B0A6800B99793 /* slideShowSwipeInList_iphone.h */,
-				57701741178B0A6900B99793 /* slideShowSwipeInList_iphone.m */,
-				8CAD658A17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.h */,
-				8CAD658B17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.m */,
+				57867A551787385800EBBE52 /* SlideShowViewController~iphone.h */,
+				57867A561787385800EBBE52 /* SlideShowViewController~iphone.m */,
+				57701740178B0A6800B99793 /* SlideShowSwipeInList~iphone.h */,
+				57701741178B0A6900B99793 /* SlideShowSwipeInList~iphone.m */,
+				8CAD658A17A2F02000CFB661 /* SlideShowPreviewViewController~iphone.h */,
+				8CAD658B17A2F02000CFB661 /* SlideShowPreviewViewController~iphone.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -905,7 +894,6 @@
 				8C0DC84317A4185A0099E5AE /* nextButton_normal@2x.png in Resources */,
 				8C0DC84417A4185A0099E5AE /* previousButton_normal.png in Resources */,
 				8C0DC84517A4185A0099E5AE /* previousButton_normal@2x.png in Resources */,
-				8C0DC84717A45B160099E5AE /* libO_icon.png in Resources */,
 				8C26E5C617A5539D007DA4B7 /* UserDefaults.plist in Resources */,
 				8C19F42717B04E7C005BDB61 /* navBarBackground@2x.png in Resources */,
 				8C19F42817B04E7C005BDB61 /* navBarBackground.png in Resources */,
@@ -949,7 +937,10 @@
 				8CBF9DFF17DDBFA70044D949 /* IASKSpecifierValuesView.xib in Resources */,
 				8CBF9E0317DDD2230044D949 /* Settings.bundle in Resources */,
 				8CBF9E0A17E103B50044D949 /* licenses.html in Resources */,
-				8CBF9E0F17E1133B0044D949 /* libreoffice_logo.png in Resources */,
+				8C2937B017E8348D00C3B887 /* libreoffice_logo.png in Resources */,
+				8C2937BD17E837BA00C3B887 /* Default-568h@2x.png in Resources */,
+				8C2937BE17E837BA00C3B887 /* Default.png in Resources */,
+				8C2937BF17E837BA00C3B887 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -986,27 +977,25 @@
 				57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */,
 				57C6E431175E076900E8BC5F /* Server.m in Sources */,
 				57B7625D17621E42007703F6 /* SlideShow.m in Sources */,
-				57B152991764703500EECC67 /* Base64.m in Sources */,
+				57B152991764703500EECC67 /* NSString+Base64.m in Sources */,
 				57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */,
-				5753DD901781EA0300DB71BB /* serverList_vc.m in Sources */,
-				5753DD9917834D7100DB71BB /* newServer_vc.m in Sources */,
+				5753DD901781EA0300DB71BB /* ServerListViewController.m in Sources */,
+				5753DD9917834D7100DB71BB /* NewServerViewController.m in Sources */,
 				57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */,
-				57FE71E31785C61400B50125 /* pinValidation_vc.m in Sources */,
-				57FE71E917861A9000B50125 /* slideShowPreviewTable_vc.m in Sources */,
-				57867A571787385800EBBE52 /* slideShow_vc_iphone.m in Sources */,
-				57701739178AC83E00B99793 /* SWRevealViewController.m in Sources */,
-				57701742178B0A6900B99793 /* slideShowSwipeInList_iphone.m in Sources */,
-				57DC7012178E16A40050FC58 /* UIViewTransitionCategory.m in Sources */,
+				57FE71E31785C61400B50125 /* PinValidationViewController.m in Sources */,
+				57FE71E917861A9000B50125 /* SlideShowPreviewViewController.m in Sources */,
+				57867A571787385800EBBE52 /* SlideShowViewController~iphone.m in Sources */,
+				57701742178B0A6900B99793 /* SlideShowSwipeInList~iphone.m in Sources */,
+				57DC7012178E16A40050FC58 /* UIView+FadeInFadeOut.m in Sources */,
 				8CAD658517A2E84A00CFB661 /* MainSplitViewController.m in Sources */,
-				8CAD658817A2EDB200CFB661 /* slideShowPreviewTable_vc_ipad.m in Sources */,
-				8CAD658C17A2F02000CFB661 /* slideShowPreviewTable_vc_iphone.m in Sources */,
-				8CAD658F17A3250000CFB661 /* server_list_vc_ipad.m in Sources */,
+				8CAD658817A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m in Sources */,
+				8CAD658C17A2F02000CFB661 /* SlideShowPreviewViewController~iphone.m in Sources */,
 				8CAD659517A3C2D400CFB661 /* BasePresentationViewController.m in Sources */,
-				8CAD65A017A3F76300CFB661 /* slideShowSwipeInList_ipad.m in Sources */,
-				8C0DC85117A512250099E5AE /* AppDelegate_ipad.m in Sources */,
-				8C26E5C917A5731D007DA4B7 /* autoDismissKeyboardNavigationViewController.m in Sources */,
+				8CAD65A017A3F76300CFB661 /* SlideShowSwipeInList~ipad.m in Sources */,
+				8C0DC85117A512250099E5AE /* AppDelegate~ipad.m in Sources */,
+				8C26E5C917A5731D007DA4B7 /* AutoDismissKeyboardNavigationViewController.m in Sources */,
 				8C26E5D017A58703007DA4B7 /* HorizontalSlideCell.m in Sources */,
-				8C26E5D717A68154007DA4B7 /* stopWatch.m in Sources */,
+				8C26E5D717A68154007DA4B7 /* StopWatch.m in Sources */,
 				8C0323AB17A943720037432E /* UIImageView+setImageAnimated.m in Sources */,
 				8C19F42F17B05089005BDB61 /* LibONavigationController.m in Sources */,
 				8C19F43617B10D49005BDB61 /* UIViewController+LibOStyling.m in Sources */,
@@ -1030,6 +1019,8 @@
 				8CBF9DF817DDBFA70044D949 /* IASKSwitch.m in Sources */,
 				8CBF9DF917DDBFA70044D949 /* IASKTextField.m in Sources */,
 				8CBF9E0817DE79EB0044D949 /* AboutViewController.m in Sources */,
+				8C2937B317E8374B00C3B887 /* SWRevealViewController.m in Sources */,
+				8C2937C517E9C40D00C3B887 /* ServerListViewController~ipad.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

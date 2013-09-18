@@ -11,7 +11,7 @@
 #import "Server.h"
 #import "CommandInterpreter.h"
 #import "CommunicationManager.h"
-#import "serverList_vc.h"
+#import "ServerListViewController.h"
 
 #define CHARSET @"UTF-8"
 

@@ -9,7 +9,7 @@
 
 #import "CommandInterpreter.h"
 #import "SlideShow.h"
-#import "Base64.h"
+#import "NSString+Base64.h"
 #import "CommunicationManager.h"
 
 @interface CommandInterpreter()
