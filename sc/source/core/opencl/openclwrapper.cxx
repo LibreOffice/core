@@ -251,8 +251,8 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
             }
         }
     }
-    return aGeneratedFiles;
 
+    return aGeneratedFiles;
 }
 
 int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
@@ -270,7 +270,6 @@ int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binar
     assert(numBytes == nBytesWritten);
 
     return 1;
-
 }
 
 int OpenclDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
@@ -414,9 +413,7 @@ int OpenclDevice::cachedOfKernerPrg( const GPUEnv *gpuEnvCached, const char * cl
 int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 {
     cl_int clStatus = 0;
-    size_t length;
     int binary_status, idx;
-    cl_uint numDevices;
     const char* filename = "kernel.cl";
     fprintf(stderr, "compileKernelFile ... \n");
     if ( cachedOfKernerPrg(gpuInfo, filename) == 1 )
@@ -426,6 +423,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
     idx = gpuInfo->mnFileCount;
 
+    cl_uint numDevices;
     clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_NUM_DEVICES,
             sizeof(numDevices), &numDevices, NULL );
     CHECK_OPENCL( clStatus, "clGetContextInfo" );
@@ -437,6 +435,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
     if (aGeneratedFiles.size() == numDevices)
     {
         bBinaryExisted = true;
+        boost::scoped_array<size_t> length(new size_t[numDevices]);
         boost::scoped_array<unsigned char*> pBinary(new unsigned char*[numDevices]);
         for(size_t i = 0; i < numDevices; ++i)
         {
@@ -448,7 +447,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
             if(nSize != nBytesRead)
                 assert(false);
 
-            length = nBytesRead;
+            length[i] = nBytesRead;
 
             pBinary[i] = binary;
         }
@@ -469,7 +468,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
         fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
-                                           mpArryDevsID.get(), &length, (const unsigned char**) pBinary.get(),
+                                           mpArryDevsID.get(), length.get(), (const unsigned char**) pBinary.get(),
                                            &binary_status, &clStatus );
         if(clStatus != CL_SUCCESS)
         {
@@ -515,6 +514,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
     if ( clStatus != CL_SUCCESS )
     {
+        size_t length;
         printf ("BuildProgram error!\n");
         if ( !gpuInfo->mnIsUserCreated )
         {
