@@ -153,7 +153,7 @@ String RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK
 };
 String RID_SVXSTR_NON_BREAK_SPACE
 {
-    Text [ en-US ] = "Add non breaking space before specific punctuation marks in french text" ;
+    Text [ en-US ] = "Add non-breaking space before specific punctuation marks in French text" ;
 };
 String RID_SVXSTR_ORDINAL
 {
