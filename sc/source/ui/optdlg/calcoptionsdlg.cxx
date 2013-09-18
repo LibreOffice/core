@@ -204,6 +204,8 @@ void ScCalcOptionsDialog::fillOpenclList()
 
     OUString aStoredDevice = maConfig.maOpenCLDevice;
 
+    SvTreeListEntry* pSelectedEntry = NULL;
+
     sc::FormulaGroupInterpreter::fillOpenCLInfo(maPlatformInfo);
     for(std::vector<sc::OpenclPlatformInfo>::iterator it = maPlatformInfo.begin(),
             itEnd = maPlatformInfo.end(); it != itEnd; ++it)
@@ -215,13 +217,18 @@ void ScCalcOptionsDialog::fillOpenclList()
             SvTreeListEntry* pEntry = mpOpenclInfoList->InsertEntry(aDeviceId);
             if(aDeviceId == aStoredDevice)
             {
-                mpOpenclInfoList->GetModel()->GetView(0)->Select(pEntry);
+                pSelectedEntry = pEntry;
             }
             pEntry->SetUserData(&(*itr));
         }
     }
 
     mpOpenclInfoList->SetUpdateMode(true);
+    mpOpenclInfoList->GetModel()->GetView(0)->SelectAll(false, false);
+    if(pSelectedEntry)
+    {
+        mpOpenclInfoList->GetModel()->GetView(0)->Select(pSelectedEntry);
+    }
     SelectedDeviceChanged();
 }
 
