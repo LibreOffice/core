@@ -88,7 +88,7 @@ bool HelpParser::CreatePO(
         printf(
             "%s: %s\n",
             sHelpFile.getStr(),
-            aParser.GetError().sMessage.getStr());
+            aParser.GetError().m_sMessage.getStr());
         exit(-1);
     }
     file->Extract();

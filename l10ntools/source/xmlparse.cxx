@@ -47,58 +47,56 @@ using namespace osl;
 // class XMLChildNode
 //
 
-/*****************************************************************************/
 XMLChildNode::XMLChildNode( XMLParentNode *pPar )
-/*****************************************************************************/
-                : pParent( pPar )
+    : m_pParent( pPar )
 {
-    if ( pParent )
-        pParent->AddChild( this );
+    if ( m_pParent )
+        m_pParent->AddChild( this );
 }
 
 
-/*****************************************************************************/
-XMLChildNode::XMLChildNode( const XMLChildNode& obj)
-/*****************************************************************************/
-:   XMLNode(obj),
-    pParent(obj.pParent){}
+XMLChildNode::XMLChildNode( const XMLChildNode& rObj)
+    : XMLNode(rObj),
+      m_pParent(rObj.m_pParent)
+{
+}
 
-/*****************************************************************************/
-XMLChildNode& XMLChildNode::operator=(const XMLChildNode& obj){
-/*****************************************************************************/
-    if(this != &obj){
-        pParent=obj.pParent;
+XMLChildNode& XMLChildNode::operator=(const XMLChildNode& rObj)
+{
+    if(this != &rObj)
+    {
+        m_pParent=rObj.m_pParent;
     }
     return *this;
 }
+
 //
 // class XMLParentNode
 //
 
-
-/*****************************************************************************/
 XMLParentNode::~XMLParentNode()
-/*****************************************************************************/
 {
-    if( pChildList ){
+    if( m_pChildList )
+    {
             RemoveAndDeleteAllChildren();
-            delete pChildList;
-            pChildList = NULL;
+            delete m_pChildList;
     }
-    pChildList = NULL;
+    m_pChildList = NULL;
 }
-/*****************************************************************************/
-XMLParentNode::XMLParentNode( const XMLParentNode& obj)
-/*****************************************************************************/
-: XMLChildNode( obj )
+XMLParentNode::XMLParentNode( const XMLParentNode& rObj)
+: XMLChildNode( rObj )
 {
-    if( obj.pChildList ){
-        pChildList=new XMLChildNodeList();
+    if( rObj.m_pChildList )
+    {
+        m_pChildList=new XMLChildNodeList();
         XMLChildNode* pNode = NULL;
-        for ( size_t i = 0; i < obj.pChildList->size(); i++ ){
-            pNode = (*obj.pChildList)[ i ];
-            if( pNode != NULL){
-                switch(pNode->GetNodeType()){
+        for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
+        {
+            pNode = (*rObj.m_pChildList)[ i ];
+            if( pNode != NULL)
+            {
+                switch(pNode->GetNodeType())
+                {
                     case XML_NODE_TYPE_ELEMENT:
                         AddChild( new XMLElement( *static_cast<XMLElement* >(pNode) ) ); break;
                     case XML_NODE_TYPE_DATA:
@@ -107,47 +105,51 @@ XMLParentNode::XMLParentNode( const XMLParentNode& obj)
                         AddChild( new XMLComment( *static_cast<XMLComment* >(pNode) ) ); break;
                     case XML_NODE_TYPE_DEFAULT:
                         AddChild( new XMLDefault( *static_cast<XMLDefault* >(pNode) ) ); break;
-                    default:    fprintf(stdout,"XMLParentNode::XMLParentNode( const XMLParentNode& obj) strange obj");
+                    default:    fprintf(stdout,"XMLParentNode::XMLParentNode( const XMLParentNode& rObj) strange obj");
                 }
             }
         }
-    }else pChildList = NULL;
+    }
+    else
+        m_pChildList = NULL;
 }
-/*****************************************************************************/
-XMLParentNode& XMLParentNode::operator=(const XMLParentNode& obj){
-/*****************************************************************************/
-    if(this!=&obj){
-        XMLChildNode::operator=(obj);
-        if( pChildList ){
+XMLParentNode& XMLParentNode::operator=(const XMLParentNode& rObj)
+{
+    if(this!=&rObj)
+    {
+        XMLChildNode::operator=(rObj);
+        if( m_pChildList )
+        {
             RemoveAndDeleteAllChildren();
-            delete pChildList;
-            pChildList = NULL;
+            delete m_pChildList;
+            m_pChildList = NULL;
         }
-        if( obj.pChildList ){
-            pChildList=new XMLChildNodeList();
-            for ( size_t i = 0; i < obj.pChildList->size(); i++ )
-                AddChild( (*obj.pChildList)[ i ] );
-        }else pChildList = NULL;
+        if( rObj.m_pChildList )
+        {
+            m_pChildList=new XMLChildNodeList();
+            for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
+                AddChild( (*rObj.m_pChildList)[ i ] );
+        }
+        else
+            m_pChildList = NULL;
 
     }
     return *this;
 }
-/*****************************************************************************/
 void XMLParentNode::AddChild( XMLChildNode *pChild )
-/*****************************************************************************/
 {
-    if ( !pChildList )
-        pChildList = new XMLChildNodeList();
-    pChildList->push_back( pChild );
+    if ( !m_pChildList )
+        m_pChildList = new XMLChildNodeList();
+    m_pChildList->push_back( pChild );
 }
 
-/*****************************************************************************/
-void XMLParentNode::RemoveAndDeleteAllChildren(){
-/*****************************************************************************/
-    if ( pChildList ) {
-        for ( size_t i = 0; i < pChildList->size(); i++ )
-            delete (*pChildList)[ i ];
-        pChildList->clear();
+void XMLParentNode::RemoveAndDeleteAllChildren()
+{
+    if ( m_pChildList )
+    {
+        for ( size_t i = 0; i < m_pChildList->size(); i++ )
+            delete (*m_pChildList)[ i ];
+        m_pChildList->clear();
     }
 }
 
@@ -155,18 +157,12 @@ void XMLParentNode::RemoveAndDeleteAllChildren(){
 // class XMLFile
 //
 
-/*****************************************************************************/
-sal_uInt16 XMLFile::GetNodeType()
-/*****************************************************************************/
-{
-    return XML_NODE_TYPE_FILE;
-}
-
 void XMLFile::Write( OString const &aFilename )
 {
     std::ofstream s(
         aFilename.getStr(), std::ios_base::out | std::ios_base::trunc);
-    if (!s.is_open()) {
+    if (!s.is_open())
+    {
         std::cerr
             << "Error: helpex cannot create file " << aFilename.getStr()
             << '\n';
@@ -181,19 +177,23 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
     if ( !pCur )
         Write( rStream, this );
     else {
-        switch( pCur->GetNodeType()) {
-            case XML_NODE_TYPE_FILE: {
+        switch( pCur->GetNodeType())
+        {
+            case XML_NODE_TYPE_FILE:
+            {
                 if( GetChildList())
                     for ( size_t i = 0; i < GetChildList()->size(); i++ )
                         Write( rStream, (*GetChildList())[ i ] );
             }
             break;
-            case XML_NODE_TYPE_ELEMENT: {
+            case XML_NODE_TYPE_ELEMENT:
+            {
                 XMLElement *pElement = ( XMLElement * ) pCur;
                 rStream  << "<";
                 rStream << pElement->GetName().getStr();
                 if ( pElement->GetAttributeList())
-                    for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ) {
+                    for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
+                    {
                         rStream << " ";
                         OString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
                         rStream << XMLUtil::QuotHTML( sData ).getStr();
@@ -204,31 +204,34 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                     }
                 if ( !pElement->GetChildList())
                     rStream << "/>";
-                else {
+                else
+                {
                     rStream << ">";
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         Write( rStream, (*pElement->GetChildList())[ k ] );
                     rStream << "</";
                     rStream << pElement->GetName().getStr();
                     rStream << ">";
-                   }
+                }
             }
             break;
-            case XML_NODE_TYPE_DATA: {
-                XMLData *pData = ( XMLData * ) pCur;
-                OString sData( pData->GetData());
+            case XML_NODE_TYPE_DATA:
+            {
+                OString sData( static_cast<const XMLData*>(pCur)->GetData());
                 rStream << XMLUtil::QuotHTML( sData ).getStr();
             }
             break;
-            case XML_NODE_TYPE_COMMENT: {
-                XMLComment *pComment = ( XMLComment * ) pCur;
+            case XML_NODE_TYPE_COMMENT:
+            {
+                const XMLComment *pComment = static_cast<const XMLComment*>(pCur);
                 rStream << "<!--";
                 rStream <<  pComment->GetComment().getStr();
                 rStream << "-->";
             }
             break;
-            case XML_NODE_TYPE_DEFAULT: {
-                XMLDefault *pDefault = ( XMLDefault * ) pCur;
+            case XML_NODE_TYPE_DEFAULT:
+            {
+                const XMLDefault *pDefault = static_cast<const XMLDefault*>(pCur);
                 rStream <<  pDefault->GetDefault().getStr();
             }
             break;
@@ -237,20 +240,23 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
     return sal_True;
 }
 
-
 void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
 {
     if ( !pCur )
         Print( this );
-    else {
-        switch( pCur->GetNodeType()) {
-            case XML_NODE_TYPE_FILE: {
+    else
+    {
+        switch( pCur->GetNodeType())
+        {
+            case XML_NODE_TYPE_FILE:
+            {
                 if( GetChildList())
                     for ( size_t i = 0; i < GetChildList()->size(); i++ )
                         Print( (*GetChildList())[ i ] );
             }
             break;
-            case XML_NODE_TYPE_ELEMENT: {
+            case XML_NODE_TYPE_ELEMENT:
+            {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
                 fprintf( stdout, "<%s", pElement->GetName().getStr());
@@ -269,7 +275,8 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
                 }
                 if ( !pElement->GetChildList())
                     fprintf( stdout, "/>" );
-                else {
+                else
+                {
                     fprintf( stdout, ">" );
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         Print( (*pElement->GetChildList())[ k ], nLevel + 1 );
@@ -277,18 +284,21 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
                 }
             }
             break;
-            case XML_NODE_TYPE_DATA: {
-                XMLData *pData = ( XMLData * ) pCur;
+            case XML_NODE_TYPE_DATA:
+            {
+                const XMLData *pData = static_cast<const XMLData*>(pCur);
                 fprintf( stdout, "%s", pData->GetData().getStr());
             }
             break;
-            case XML_NODE_TYPE_COMMENT: {
-                XMLComment *pComment = ( XMLComment * ) pCur;
+            case XML_NODE_TYPE_COMMENT:
+            {
+                const XMLComment *pComment = static_cast<const XMLComment*>(pCur);
                 fprintf( stdout, "<!--%s-->", pComment->GetComment().getStr());
             }
             break;
-            case XML_NODE_TYPE_DEFAULT: {
-                XMLDefault *pDefault = ( XMLDefault * ) pCur;
+            case XML_NODE_TYPE_DEFAULT:
+            {
+                const XMLDefault *pDefault = static_cast<const XMLDefault*>(pCur);
                 fprintf( stdout, "%s", pDefault->GetDefault().getStr());
             }
             break;
@@ -297,222 +307,241 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
 }
 XMLFile::~XMLFile()
 {
-    if( XMLStrings != NULL ){
-        XMLHashMap::iterator pos = XMLStrings->begin();
-        for( ; pos != XMLStrings->end() ; ++pos ){
+    if( m_pXMLStrings != NULL )
+    {
+        XMLHashMap::iterator pos = m_pXMLStrings->begin();
+        for( ; pos != m_pXMLStrings->end() ; ++pos )
+        {
             delete pos->second;             // Check and delete content also ?
         }
-        delete XMLStrings;
-        XMLStrings = NULL;
+        delete m_pXMLStrings;
+        m_pXMLStrings = NULL;
     }
 }
-/*****************************************************************************/
 XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created from memory stream
-/*****************************************************************************/
-                : XMLParentNode( NULL ),
-                  sFileName    ( rFileName ),
-                  XMLStrings   ( NULL )
-
+    : XMLParentNode( NULL )
+    , m_sFileName( rFileName )
+    , m_pXMLStrings( NULL )
 {
-    nodes_localize.insert( TagMap::value_type(OString("bookmark") , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString("variable") , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString("paragraph") , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString("alt") , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString("caption") , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString("title") , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString("link") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("bookmark") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("variable") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("paragraph") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("alt") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("caption") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("title") , sal_True) );
+    m_aNodes_localize.insert( TagMap::value_type(OString("link") , sal_True) );
 }
-/*****************************************************************************/
-void XMLFile::Extract( XMLFile *pCur )
-/*****************************************************************************/
-{
-    if( XMLStrings != NULL ) delete XMLStrings; // Elements ?
 
-    XMLStrings = new XMLHashMap();
-       if ( !pCur )
+void XMLFile::Extract( XMLFile *pCur )
+{
+    if( m_pXMLStrings )
+        delete m_pXMLStrings; // Elements ?
+
+    m_pXMLStrings = new XMLHashMap();
+    if ( !pCur )
         SearchL10NElements( this );
-    else {
-        if( pCur->GetNodeType()==XML_NODE_TYPE_FILE) {
+    else
+    {
+        if( pCur->GetNodeType() == XML_NODE_TYPE_FILE )
+        {
             SearchL10NElements(pCur);
         }
     }
 }
 
-/*****************************************************************************/
-void XMLFile::InsertL10NElement( XMLElement* pElement ){
-/*****************************************************************************/
-    OString id,language("");
-    LangHashMap* elem;
+void XMLFile::InsertL10NElement( XMLElement* pElement )
+{
+    OString sId, sLanguage("");
+    LangHashMap* pElem;
 
-    if( pElement->GetAttributeList() != NULL ){
+    if( pElement->GetAttributeList() != NULL )
+    {
         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
         {
-            const OString tmpStr((*pElement->GetAttributeList())[ j ]->GetName());
-            if (tmpStr == ID) { // Get the "id" Attribute
-                id = (*pElement->GetAttributeList())[ j ]->GetValue();
+            const OString sTempStr((*pElement->GetAttributeList())[ j ]->GetName());
+            // Get the "id" Attribute
+            if (sTempStr == ID)
+            {
+                sId = (*pElement->GetAttributeList())[ j ]->GetValue();
             }
-            if (tmpStr == XML_LANG) { // Get the "xml-lang" Attribute
-                language = (*pElement->GetAttributeList())[j]->GetValue();
+            // Get the "xml-lang" Attribute
+            if (sTempStr == XML_LANG)
+            {
+                sLanguage = (*pElement->GetAttributeList())[j]->GetValue();
             }
 
         }
-    }else{
+    }
+    else
+    {
         fprintf(stdout,"XMLFile::InsertL10NElement: No AttributeList found");
         fprintf(stdout,"++++++++++++++++++++++++++++++++++++++++++++++++++");
         Print( pElement , 0 );
         fprintf(stdout,"++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
-    XMLHashMap::iterator pos = XMLStrings->find( id );
-    if( pos == XMLStrings->end() ){             // No instanze , create new one
-        elem = new LangHashMap();
-        (*elem)[ language ]=pElement;
-        XMLStrings->insert( XMLHashMap::value_type( id , elem ) );
-        order.push_back( id );
-    }else{                                  // Already there
-        elem=pos->second;
-        if ( (*elem)[ language ] )
+    XMLHashMap::iterator pos = m_pXMLStrings->find( sId );
+    if( pos == m_pXMLStrings->end() ) // No instanze , create new one
+    {
+        pElem = new LangHashMap();
+        (*pElem)[ sLanguage ]=pElement;
+        m_pXMLStrings->insert( XMLHashMap::value_type( sId , pElem ) );
+        m_vOrder.push_back( sId );
+    }
+    else        // Already there
+    {
+        pElem=pos->second;
+        if ( (*pElem)[ sLanguage ] )
         {
-            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.getStr(), language.getStr(), sFileName.getStr() );
+            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", sId.getStr(), sLanguage.getStr(), m_sFileName.getStr() );
             exit( -1 );
         }
-        (*elem)[ language ]=pElement;
+        (*pElem)[ sLanguage ]=pElement;
     }
 }
 
-XMLFile::XMLFile( const XMLFile& obj )
-/*****************************************************************************/
-                : XMLParentNode( obj ),
-                  sFileName    ( obj.sFileName ),
-                  XMLStrings   ( NULL )
+XMLFile::XMLFile( const XMLFile& rObj )
+    : XMLParentNode( rObj )
+    , m_sFileName( rObj.m_sFileName )
+    , m_pXMLStrings( 0 )
 {
-    if( this!=&obj )
+    if( this != &rObj )
     {
-        nodes_localize  =obj.nodes_localize;
-        order           =obj.order;
-
+        m_aNodes_localize = rObj.m_aNodes_localize;
+        m_vOrder = rObj.m_vOrder;
     }
 }
-/*****************************************************************************/
-XMLFile& XMLFile::operator=(const XMLFile& obj){
-/*****************************************************************************/
-    if( this!=&obj ){
 
-        XMLParentNode::operator=(obj);
+XMLFile& XMLFile::operator=(const XMLFile& rObj)
+{
+    if( this != &rObj )
+    {
+        XMLParentNode::operator=(rObj);
 
-        nodes_localize  =obj.nodes_localize;
-        order           =obj.order;
+        m_aNodes_localize = rObj.m_aNodes_localize;
+        m_vOrder = rObj.m_vOrder;
 
-        if( XMLStrings )    delete XMLStrings;
+        if( m_pXMLStrings )
+            delete m_pXMLStrings;
 
-        if( obj.XMLStrings )
+        if( rObj.m_pXMLStrings )
         {
-            XMLStrings = new XMLHashMap();
-            for( XMLHashMap::iterator pos = obj.XMLStrings->begin() ; pos != obj.XMLStrings->end() ; ++pos )
+            m_pXMLStrings = new XMLHashMap();
+            for( XMLHashMap::iterator pos = rObj.m_pXMLStrings->begin() ; pos != rObj.m_pXMLStrings->end() ; ++pos )
             {
-                LangHashMap* elem=pos->second;
-                LangHashMap* newelem = new LangHashMap();
-                for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2){
-                    (*newelem)[ pos2->first ] = new XMLElement( *pos2->second );
+                LangHashMap* pElem=pos->second;
+                LangHashMap* pNewelem = new LangHashMap();
+                for(LangHashMap::iterator pos2=pElem->begin(); pos2!=pElem->end();++pos2)
+                {
+                    (*pNewelem)[ pos2->first ] = new XMLElement( *pos2->second );
                 }
-                (*XMLStrings)[ pos->first ] = newelem;
+                (*m_pXMLStrings)[ pos->first ] = pNewelem;
             }
         }
     }
     return *this;
 }
 
-
-/*****************************************************************************/
-void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
-/*****************************************************************************/
+void XMLFile::SearchL10NElements( XMLParentNode *pCur, int nPos )
 {
-    bool bInsert    = true;
+    bool bInsert = true;
     if ( !pCur )
         SearchL10NElements( this  );
-    else {
-        switch( pCur->GetNodeType()) {
-            case XML_NODE_TYPE_FILE: {
+    else
+    {
+        switch( pCur->GetNodeType())
+        {
+            case XML_NODE_TYPE_FILE:
+            {
                 XMLChildNode* pElement;
-                if( GetChildList()){
-                    for ( size_t i = 0; i < GetChildList()->size(); i++ ){
+                if( GetChildList())
+                {
+                    for ( size_t i = 0; i < GetChildList()->size(); i++ )
+                    {
                         pElement = (*GetChildList())[ i ];
-                        if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) SearchL10NElements( (XMLParentNode*) pElement , i);
+                        if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT )
+                            SearchL10NElements( (XMLParentNode*) pElement , i);
                     }
                 }
             }
             break;
-            case XML_NODE_TYPE_ELEMENT: {
+            case XML_NODE_TYPE_ELEMENT:
+            {
                 XMLElement *pElement = ( XMLElement * ) pCur;
                 const OString sName(pElement->GetName().toAsciiLowerCase());
-                OString language,tmpStrVal,oldref;
+                OString sLanguage, sTmpStrVal, sOldref;
                 if ( pElement->GetAttributeList())
                 {
                     for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
                     {
-                        const OString tmpStr = (*pElement->GetAttributeList())[j]->GetName();
-                        if (tmpStr == ID) {
-                            tmpStrVal=(*pElement->GetAttributeList())[ j ]->GetValue();
+                        const OString sTmpStr = (*pElement->GetAttributeList())[j]->GetName();
+                        if (sTmpStr == ID)
+                        {
+                            sTmpStrVal=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
-                        if (tmpStr == "localize") {
+                        if (sTmpStr == "localize")
+                        {
                             bInsert=false;
                         }
-                        if (tmpStr == XML_LANG) { // Get the "xml-lang" Attribute
-                            language=(*pElement->GetAttributeList())[ j ]->GetValue();
+                        if (sTmpStr == XML_LANG) // Get the "xml-lang" Attribute
+                        {
+                            sLanguage=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
-                        if (tmpStr == OLDREF) { // Get the "oldref" Attribute
-                            oldref=(*pElement->GetAttributeList())[ j ]->GetValue();
+                        if (sTmpStr == OLDREF) // Get the "oldref" Attribute
+                        {
+                            sOldref=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
                     }
-                    pElement->SetLanguageId ( language );
-                    pElement->SetId(tmpStrVal);
-                    pElement->SetOldRef     ( oldref  );
-                    pElement->SetPos( pos );
+                    pElement->SetLanguageId( sLanguage );
+                    pElement->SetId( sTmpStrVal );
+                    pElement->SetOldRef( sOldref );
+                    pElement->SetPos( nPos );
                 }
 
-                if ( bInsert && ( nodes_localize.find( sName ) != nodes_localize.end() ) )
+                if ( bInsert && ( m_aNodes_localize.find( sName ) != m_aNodes_localize.end() ) )
                     InsertL10NElement(pElement);
-                else if ( bInsert && pElement->GetChildList() ){
+                else if ( bInsert && pElement->GetChildList() )
+                {
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         SearchL10NElements( (XMLParentNode*)(*pElement->GetChildList())[ k ], k);
                 }
             }
             break;
-            case XML_NODE_TYPE_DATA: {
-            }
+            case XML_NODE_TYPE_DATA:
             break;
-            case XML_NODE_TYPE_COMMENT: {
-            }
+            case XML_NODE_TYPE_COMMENT:
             break;
-            case XML_NODE_TYPE_DEFAULT: {
-            }
+            case XML_NODE_TYPE_DEFAULT:
             break;
         }
     }
 }
 
-/*****************************************************************************/
 bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
-/*****************************************************************************/
 {
     static bool bStatusExport = true;
 
-    bool bInsert    = true;
+    bool bInsert = true;
     if ( !pCur )
         CheckExportStatus( this );
     else {
-        switch( pCur->GetNodeType()) {
-            case XML_NODE_TYPE_FILE: {
+        switch( pCur->GetNodeType())
+        {
+            case XML_NODE_TYPE_FILE:
+            {
                 XMLParentNode* pElement;
-                if( GetChildList()){
-                    for ( size_t i = 0; i < GetChildList()->size(); i++ ){
+                if( GetChildList())
+                {
+                    for ( size_t i = 0; i < GetChildList()->size(); i++ )
+                    {
                         pElement = (XMLParentNode*)(*GetChildList())[ i ];
                         if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) CheckExportStatus( pElement );//, i);
                     }
                 }
             }
             break;
-            case XML_NODE_TYPE_ELEMENT: {
+            case XML_NODE_TYPE_ELEMENT:
+            {
                 XMLElement *pElement = ( XMLElement * ) pCur;
                 if (pElement->GetName().equalsIgnoreAsciiCase("TOPIC"))
                 {
@@ -546,95 +575,101 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
     return bStatusExport;
 }
 
-/*****************************************************************************/
-sal_uInt16 XMLElement::GetNodeType()
-/*****************************************************************************/
+XMLElement::XMLElement(
+    const OString &rName,    // the element name
+    XMLParentNode *pParent   // parent node of this element
+)
+    : XMLParentNode( pParent )
+    , m_sElementName( rName )
+    , m_pAttributes( NULL )
+    , m_sProject(OString())
+    , m_sFilename(OString())
+    , m_sId(OString())
+    , m_sOldRef(OString())
+    , m_sResourceType(OString())
+    , m_sLanguageId(OString())
+    , m_nPos(0)
 {
-    return XML_NODE_TYPE_ELEMENT;
 }
 
-/*****************************************************************************/
-XMLElement::XMLElement(const XMLElement& obj)
-/*****************************************************************************/
-    :
-                XMLParentNode   ( obj ),
-                sElementName    ( obj.sElementName ),
-                pAttributes     ( NULL ),
-                project         ( obj.project ),
-                filename        ( obj.filename ),
-                id              ( obj.id ),
-                sOldRef         ( obj.sOldRef ),
-                resourceType    ( obj.resourceType ),
-                languageId      ( obj.languageId ),
-                nPos            ( obj.nPos )
-
+XMLElement::XMLElement(const XMLElement& rObj)
+    : XMLParentNode( rObj )
+    , m_sElementName( rObj.m_sElementName )
+    , m_pAttributes( 0 )
+    , m_sProject( rObj.m_sProject )
+    , m_sFilename( rObj.m_sFilename )
+    , m_sId( rObj.m_sId )
+    , m_sOldRef( rObj.m_sOldRef )
+    , m_sResourceType( rObj.m_sResourceType )
+    , m_sLanguageId( rObj.m_sLanguageId )
+    , m_nPos( rObj.m_nPos )
 {
-    if ( obj.pAttributes ){
-        pAttributes = new XMLAttributeList();
-        for ( size_t i = 0; i < obj.pAttributes->size(); i++ )
-            AddAttribute( (*obj.pAttributes)[ i ]->GetName(), (*obj.pAttributes)[ i ]->GetValue() );
+    if ( rObj.m_pAttributes )
+    {
+        m_pAttributes = new XMLAttributeList();
+        for ( size_t i = 0; i < rObj.m_pAttributes->size(); i++ )
+            AddAttribute( (*rObj.m_pAttributes)[ i ]->GetName(), (*rObj.m_pAttributes)[ i ]->GetValue() );
     }
 }
 
-/*****************************************************************************/
-XMLElement& XMLElement::operator=(const XMLElement& obj){
-/*****************************************************************************/
-    if( this!=&obj ){
-        XMLParentNode::operator=(obj);
-        sElementName    =obj.sElementName;
-        project         =obj.project;
-        filename        =obj.filename;
-        id              =obj.id;
-        sOldRef         =obj.sOldRef;
-        resourceType    =obj.resourceType;
-        languageId      =obj.languageId;
-        nPos            =obj.nPos;
+XMLElement& XMLElement::operator=(const XMLElement& rObj)
+{
+    if( this !=& rObj )
+    {
+        XMLParentNode::operator=(rObj);
+        m_sElementName = rObj.m_sElementName;
+        m_sProject = rObj.m_sProject;
+        m_sFilename = rObj.m_sFilename;
+        m_sId = rObj.m_sId;
+        m_sOldRef = rObj.m_sOldRef;
+        m_sResourceType = rObj.m_sResourceType;
+        m_sLanguageId = rObj.m_sLanguageId;
+        m_nPos = rObj.m_nPos;
 
-        if ( pAttributes ){
-            for ( size_t i = 0; i < pAttributes->size(); i++ )
-                delete (*pAttributes)[ i ];
-            delete pAttributes;
+        if ( m_pAttributes )
+        {
+            for ( size_t i = 0; i < m_pAttributes->size(); i++ )
+                delete (*m_pAttributes)[ i ];
+            delete m_pAttributes;
         }
-        if ( obj.pAttributes ){
-            pAttributes         =new XMLAttributeList();
-            for ( size_t i = 0; i < obj.pAttributes->size(); i++ )
-                AddAttribute( (*obj.pAttributes)[ i ]->GetName(), (*obj.pAttributes)[ i ]->GetValue() );
+        if ( rObj.m_pAttributes )
+        {
+            m_pAttributes = new XMLAttributeList();
+            for ( size_t i = 0; i < rObj.m_pAttributes->size(); i++ )
+                AddAttribute( (*rObj.m_pAttributes)[ i ]->GetName(), (*rObj.m_pAttributes)[ i ]->GetValue() );
         }
     }
     return *this;
 }
 
-/*****************************************************************************/
 void XMLElement::AddAttribute( const OString &rAttribute, const OString &rValue )
-/*****************************************************************************/
 {
-    if ( !pAttributes )
-        pAttributes = new XMLAttributeList();
-    pAttributes->push_back( new XMLAttribute( rAttribute, rValue ) );
+    if ( !m_pAttributes )
+        m_pAttributes = new XMLAttributeList();
+    m_pAttributes->push_back( new XMLAttribute( rAttribute, rValue ) );
 }
 
-/*****************************************************************************/
 void XMLElement::ChangeLanguageTag( const OString &rValue )
 {
     SetLanguageId(rValue);
-    if ( pAttributes )
+    if ( m_pAttributes )
     {
-        for (size_t i = 0; i < pAttributes->size(); ++i)
+        for (size_t i = 0; i < m_pAttributes->size(); ++i)
         {
-            if ( (*pAttributes)[ i ]->GetName() == "xml-lang" )
-                (*pAttributes)[ i ]->setValue(rValue);
+            if ( (*m_pAttributes)[ i ]->GetName() == "xml-lang" )
+                (*m_pAttributes)[ i ]->setValue(rValue);
         }
     }
     XMLChildNode* pNode  = NULL;
     XMLElement*   pElem  = NULL;
     XMLChildNodeList* pCList = GetChildList();
 
-    if( pCList != NULL )
+    if( pCList )
     {
         for ( size_t i = 0; i < pCList->size(); i++ )
         {
             pNode = (*pCList)[ i ];
-            if( pNode != NULL && pNode->GetNodeType() == XML_NODE_TYPE_ELEMENT )
+            if( pNode && pNode->GetNodeType() == XML_NODE_TYPE_ELEMENT )
             {
                 pElem = static_cast< XMLElement* >(pNode);
                 pElem->ChangeLanguageTag( rValue );
@@ -647,196 +682,113 @@ void XMLElement::ChangeLanguageTag( const OString &rValue )
     }
 }
 
-/*****************************************************************************/
 XMLElement::~XMLElement()
-/*****************************************************************************/
 {
-    if ( pAttributes ) {
-        for ( size_t i = 0; i < pAttributes->size(); i++ )
-            delete (*pAttributes)[ i ];
+    if ( m_pAttributes )
+    {
+        for ( size_t i = 0; i < m_pAttributes->size(); i++ )
+            delete (*m_pAttributes)[ i ];
 
-        delete pAttributes;
-        pAttributes = NULL;
+        delete m_pAttributes;
+        m_pAttributes = NULL;
     }
 }
 
-/*****************************************************************************/
-OString XMLElement::ToOString(){
-/*****************************************************************************/
-    OStringBuffer* buffer = new OStringBuffer();
-    Print(this,*buffer,true);
-    OString result=buffer->makeStringAndClear();
-    OString xy(result.getStr());
-    result=OString(xy);
-    delete buffer;
-    return result;
+OString XMLElement::ToOString()
+{
+    OStringBuffer sBuffer;
+    Print(this,sBuffer,true);
+    return sBuffer.makeStringAndClear();
 }
-/*****************************************************************************/
-void XMLElement::Print(XMLNode *pCur, OStringBuffer& buffer , bool rootelement ){
-/*****************************************************************************/
-    if(pCur!=NULL){
-        if(rootelement){
-            XMLElement *pElement = ( XMLElement * ) pCur;
-            if ( pElement->GetAttributeList()){
-                if ( pElement->GetChildList()){
-                    XMLChildNode* tmp=NULL;
-                    for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ ){
-                        tmp = (*pElement->GetChildList())[ k ];
-                        Print( tmp, buffer , false);
+
+void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement ) const
+{
+    if( pCur )
+    {
+        if( bRootelement )
+        {
+            XMLElement *pElement = static_cast<XMLElement*>(pCur);
+            if ( pElement->GetAttributeList())
+            {
+                if ( pElement->GetChildList())
+                {
+                    XMLChildNode* pTmp = 0;
+                    for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
+                    {
+                        pTmp = (*pElement->GetChildList())[ k ];
+                        Print( pTmp, rBuffer , false);
                     }
                 }
             }
         }
-        else{
+        else
+        {
+            switch( pCur->GetNodeType())
+            {
+                case XML_NODE_TYPE_ELEMENT:
+                {
+                    XMLElement *pElement = static_cast<XMLElement*>(pCur);
 
-        switch( pCur->GetNodeType()) {
-            case XML_NODE_TYPE_ELEMENT: {
-                XMLElement *pElement = ( XMLElement * ) pCur;
-
-                if( !pElement->GetName().equalsIgnoreAsciiCase("comment") ){
-                    buffer.append( "<" );
-                    buffer.append( pElement->GetName() );
-                    if ( pElement->GetAttributeList()){
-                        for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
-
-                            const OString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
-                            if( !aAttrName.equalsIgnoreAsciiCase( "xml-lang" ) ) {
-                                buffer.append( " " );
-                                buffer.append( aAttrName );
-                                buffer.append( "=" );
-                                buffer.append( "\"" );
-                                buffer.append( (*pElement->GetAttributeList())[ j ]->GetValue() );
-                                buffer.append( "\"" );
+                    if( !pElement->GetName().equalsIgnoreAsciiCase("comment") )
+                    {
+                        rBuffer.append( "<" );
+                        rBuffer.append( pElement->GetName() );
+                        if ( pElement->GetAttributeList())
+                        {
+                            for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
+                            {
+                                const OString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
+                                if( !aAttrName.equalsIgnoreAsciiCase( "xml-lang" ) )
+                                {
+                                    rBuffer.append(
+                                        " " + aAttrName + "=\"" +
+                                        (*pElement->GetAttributeList())[ j ]->GetValue() + "\"" );
+                                }
                             }
                         }
-                    }
-                    if ( !pElement->GetChildList())
-                        buffer.append( "/>" );
-                    else {
-                        buffer.append( ">" );
-                        XMLChildNode* tmp=NULL;
-                        for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ ){
-                            tmp = (*pElement->GetChildList())[ k ];
-                            Print( tmp, buffer , false);
+                        if ( !pElement->GetChildList())
+                            rBuffer.append( "/>" );
+                        else
+                        {
+                            rBuffer.append( ">" );
+                            XMLChildNode* pTmp = 0;
+                            for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
+                            {
+                                pTmp = (*pElement->GetChildList())[ k ];
+                                Print( pTmp, rBuffer , false);
+                            }
+                            rBuffer.append( "</" + pElement->GetName() + ">" );
                         }
-                        buffer.append( "</" );
-                        buffer.append( pElement->GetName() );
-                        buffer.append( ">" );
                     }
                 }
+                break;
+                case XML_NODE_TYPE_DATA:
+                {
+                    const XMLData *pData = static_cast<const XMLData*>(pCur);
+                    rBuffer.append( pData->GetData() );
+                }
+                break;
+                case XML_NODE_TYPE_COMMENT:
+                {
+                    const XMLComment *pComment = static_cast<const XMLComment*>(pCur);
+                    rBuffer.append( "<!--" + pComment->GetComment() + "-->" );
+                }
+                break;
+                case XML_NODE_TYPE_DEFAULT:
+                {
+                    const XMLDefault *pDefault = static_cast<const XMLDefault*>(pCur);
+                    rBuffer.append( pDefault->GetDefault() );
+                }
+                break;
             }
-            break;
-            case XML_NODE_TYPE_DATA: {
-                XMLData *pData = ( XMLData * ) pCur;
-                buffer.append( pData->GetData() );
-            }
-            break;
-            case XML_NODE_TYPE_COMMENT: {
-                XMLComment *pComment = ( XMLComment * ) pCur;
-                buffer.append( "<!--" );
-                buffer.append( pComment->GetComment() );
-                buffer.append( "-->" );
-            }
-            break;
-            case XML_NODE_TYPE_DEFAULT: {
-                XMLDefault *pDefault = ( XMLDefault * ) pCur;
-                buffer.append( pDefault->GetDefault() );
-            }
-            break;
         }
-        }
-    }else {
+    }
+    else
+    {
         fprintf(stdout,"\n#+------Error: NULL Pointer in XMLELement::Print------+#\n");
         return;
     }
 }
-
-
-//
-// class XMLData
-//
-/*****************************************************************************/
-XMLData::XMLData(const XMLData& obj)
-/*****************************************************************************/
-    : XMLChildNode( obj ),
-      sData( obj.sData ) ,
-      isNewCreated ( obj.isNewCreated ){}
-
-/*****************************************************************************/
-XMLData& XMLData::operator=(const XMLData& obj){
-/*****************************************************************************/
-    if( this!=&obj ){
-        XMLChildNode::operator=( obj );
-        sData           = obj.sData;
-        isNewCreated    = obj.isNewCreated;
-    }
-    return *this;
-}
-/*****************************************************************************/
-void XMLData::AddData( const OString &rData) {
-/*****************************************************************************/
-    sData += rData;
-}
-
-/*****************************************************************************/
-sal_uInt16 XMLData::GetNodeType()
-/*****************************************************************************/
-{
-    return XML_NODE_TYPE_DATA;
-}
-
-//
-// class XMLComment
-//
-
-/*****************************************************************************/
-sal_uInt16 XMLComment::GetNodeType()
-/*****************************************************************************/
-{
-    return XML_NODE_TYPE_COMMENT;
-}
-/*****************************************************************************/
-XMLComment::XMLComment(const XMLComment& obj)
-/*****************************************************************************/
-    : XMLChildNode( obj ),
-      sComment( obj.sComment ){}
-
-/*****************************************************************************/
-XMLComment& XMLComment::operator=(const XMLComment& obj){
-/*****************************************************************************/
-    if( this!=&obj ){
-        XMLChildNode::operator=( obj );
-        sComment        = obj.sComment;
-    }
-    return *this;
-}
-
-//
-// class XMLDefault
-//
-
-/*****************************************************************************/
-sal_uInt16 XMLDefault::GetNodeType()
-/*****************************************************************************/
-{
-    return XML_NODE_TYPE_DEFAULT;
-}
-/*****************************************************************************/
-XMLDefault::XMLDefault(const XMLDefault& obj)
-/*****************************************************************************/
-    : XMLChildNode( obj ),
-      sDefault( obj.sDefault){}
-
-/*****************************************************************************/
-XMLDefault& XMLDefault::operator=(const XMLDefault& obj){
-/*****************************************************************************/
-    if( this!=&obj ){
-        XMLChildNode::operator=( obj );
-        sDefault        = obj.sDefault;
-    }
-    return *this;
-}
-
 
 //
 // class SimpleXMLParser
@@ -845,7 +797,8 @@ XMLDefault& XMLDefault::operator=(const XMLDefault& obj){
 namespace
 {
 
-static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname) {
+static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
+{
     OUString sPath = OStringToOUString(rPathname, RTL_TEXTENCODING_UTF8 );
     OUString sUrl;
     if (osl::FileBase::getFileURLFromSystemPath(sPath, sUrl)
@@ -855,7 +808,8 @@ static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname) {
         std::exit(EXIT_FAILURE);
     }
     OUString sCwd;
-    if (osl_getProcessWorkingDir(&sCwd.pData) != osl_Process_E_None) {
+    if (osl_getProcessWorkingDir(&sCwd.pData) != osl_Process_E_None)
+    {
         std::cerr << "Error: Cannot determine cwd\n";
         std::exit(EXIT_FAILURE);
     }
@@ -870,133 +824,107 @@ static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname) {
 }
 
 
-/*****************************************************************************/
 SimpleXMLParser::SimpleXMLParser()
-/*****************************************************************************/
-                : pXMLFile( NULL )
+    : m_pXMLFile( NULL )
 {
-    aParser = XML_ParserCreate( NULL );
-    XML_SetUserData( aParser, this );
-    XML_SetElementHandler( aParser, (XML_StartElementHandler) StartElementHandler, (XML_EndElementHandler) EndElementHandler );
-    XML_SetCharacterDataHandler( aParser, (XML_CharacterDataHandler) CharacterDataHandler );
-    XML_SetCommentHandler( aParser, (XML_CommentHandler) CommentHandler );
-    XML_SetDefaultHandler( aParser, (XML_DefaultHandler) DefaultHandler );
+    m_aParser = XML_ParserCreate( NULL );
+    XML_SetUserData( m_aParser, this );
+    XML_SetElementHandler( m_aParser, (XML_StartElementHandler) StartElementHandler, (XML_EndElementHandler) EndElementHandler );
+    XML_SetCharacterDataHandler( m_aParser, (XML_CharacterDataHandler) CharacterDataHandler );
+    XML_SetCommentHandler( m_aParser, (XML_CommentHandler) CommentHandler );
+    XML_SetDefaultHandler( m_aParser, (XML_DefaultHandler) DefaultHandler );
 }
 
-/*****************************************************************************/
 SimpleXMLParser::~SimpleXMLParser()
-/*****************************************************************************/
 {
-    XML_ParserFree( aParser );
+    XML_ParserFree( m_aParser );
 }
 
-/*****************************************************************************/
 void SimpleXMLParser::StartElementHandler(
     void *userData, const XML_Char *name, const XML_Char **atts )
-/*****************************************************************************/
 {
     (( SimpleXMLParser * ) userData )->StartElement( name, atts );
 }
 
-
-/*****************************************************************************/
 void SimpleXMLParser::EndElementHandler(
     void *userData, const XML_Char *name )
-/*****************************************************************************/
 {
     (( SimpleXMLParser * ) userData )->EndElement( name );
 }
 
-/*****************************************************************************/
 void SimpleXMLParser::CharacterDataHandler(
     void *userData, const XML_Char *s, int len )
-/*****************************************************************************/
 {
     (( SimpleXMLParser * ) userData )->CharacterData( s, len );
 }
 
-/*****************************************************************************/
 void SimpleXMLParser::CommentHandler(
     void *userData, const XML_Char *data )
-/*****************************************************************************/
 {
     (( SimpleXMLParser * ) userData )->Comment( data );
 }
 
-/*****************************************************************************/
 void SimpleXMLParser::DefaultHandler(
     void *userData, const XML_Char *s, int len )
-/*****************************************************************************/
 {
     (( SimpleXMLParser * ) userData )->Default( s, len );
 }
 
-/*****************************************************************************/
 void SimpleXMLParser::StartElement(
     const XML_Char *name, const XML_Char **atts )
-/*****************************************************************************/
 {
-    XMLElement *pElement = new XMLElement( OString(name), ( XMLParentNode * ) pCurNode );
-    pCurNode = pElement;
-    pCurData = NULL;
+    XMLElement *pElement = new XMLElement( OString(name), ( XMLParentNode * ) m_pCurNode );
+    m_pCurNode = pElement;
+    m_pCurData = NULL;
 
     int i = 0;
-    while( atts[i] ) {
+    while( atts[i] )
+    {
         pElement->AddAttribute( atts[ i ], atts[ i + 1 ] );
         i += 2;
     }
 }
 
-/*****************************************************************************/
 void SimpleXMLParser::EndElement( const XML_Char * /*name*/ )
-/*****************************************************************************/
 {
-    pCurNode = pCurNode->GetParent();
-    pCurData = NULL;
+    m_pCurNode = m_pCurNode->GetParent();
+    m_pCurData = NULL;
 }
 
-/*****************************************************************************/
-void SimpleXMLParser::CharacterData(
-    const XML_Char *s, int len )
-/*****************************************************************************/
+void SimpleXMLParser::CharacterData( const XML_Char *s, int len )
 {
-    if ( !pCurData ){
+    if ( !m_pCurData )
+    {
         OString x( s, len );
-        pCurData = new XMLData( helper::UnQuotHTML(x) , pCurNode );
-    }else{
+        m_pCurData = new XMLData( helper::UnQuotHTML(x) , m_pCurNode );
+    }
+    else
+    {
         OString x( s, len );
-        pCurData->AddData( helper::UnQuotHTML(x) );
+        m_pCurData->AddData( helper::UnQuotHTML(x) );
 
     }
 }
 
-/*****************************************************************************/
-void SimpleXMLParser::Comment(
-    const XML_Char *data )
-/*****************************************************************************/
+void SimpleXMLParser::Comment( const XML_Char *data )
 {
-    pCurData = NULL;
-    new XMLComment( OString( data ), pCurNode );
+    m_pCurData = NULL;
+    new XMLComment( OString( data ), m_pCurNode );
 }
 
-/*****************************************************************************/
-void SimpleXMLParser::Default(
-    const XML_Char *s, int len )
-/*****************************************************************************/
+void SimpleXMLParser::Default( const XML_Char *s, int len )
 {
-    pCurData = NULL;
-    new XMLDefault(OString( s, len ), pCurNode );
+    m_pCurData = NULL;
+    new XMLDefault(OString( s, len ), m_pCurNode );
 }
 
-/*****************************************************************************/
 XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn )
-/*****************************************************************************/
 {
-    aErrorInformation.eCode = XML_ERROR_NONE;
-    aErrorInformation.nLine = 0;
-    aErrorInformation.nColumn = 0;
-    aErrorInformation.sMessage = "ERROR: Unable to open file ";
-    aErrorInformation.sMessage += rFileName;
+    m_aErrorInformation.m_eCode = XML_ERROR_NONE;
+    m_aErrorInformation.m_nLine = 0;
+    m_aErrorInformation.m_nColumn = 0;
+    m_aErrorInformation.m_sMessage = "ERROR: Unable to open file ";
+    m_aErrorInformation.m_sMessage += rFileName;
 
     OUString aFileURL(lcl_pathnameToAbsoluteUrl(rFileName));
 
@@ -1010,124 +938,129 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
     sal_uInt64 s;
     oslFileError e = osl_getFileSize(h, &s);
     void * p = NULL;
-    if (e == osl_File_E_None) {
+    if (e == osl_File_E_None)
+    {
         e = osl_mapFile(h, &p, s, 0, 0);
     }
-    if (e != osl_File_E_None) {
+    if (e != osl_File_E_None)
+    {
         osl_closeFile(h);
         return 0;
     }
 
-    pXMLFile = pXMLFileIn;
-    pXMLFile->SetName( rFileName );
+    m_pXMLFile = pXMLFileIn;
+    m_pXMLFile->SetName( rFileName );
 
-    pCurNode = pXMLFile;
-    pCurData = NULL;
+    m_pCurNode = m_pXMLFile;
+    m_pCurData = NULL;
 
-    aErrorInformation.eCode = XML_ERROR_NONE;
-    aErrorInformation.nLine = 0;
-    aErrorInformation.nColumn = 0;
-    if ( !pXMLFile->GetName().isEmpty()) {
-        aErrorInformation.sMessage = "File " + pXMLFile->GetName() + " parsed successfully";
+    m_aErrorInformation.m_eCode = XML_ERROR_NONE;
+    m_aErrorInformation.m_nLine = 0;
+    m_aErrorInformation.m_nColumn = 0;
+    if ( !m_pXMLFile->GetName().isEmpty())
+    {
+        m_aErrorInformation.m_sMessage = "File " + m_pXMLFile->GetName() + " parsed successfully";
     }
     else
-        aErrorInformation.sMessage = "XML-File parsed successfully";
+        m_aErrorInformation.m_sMessage = "XML-File parsed successfully";
 
-    if (!XML_Parse(aParser, reinterpret_cast< char * >(p), s, true))
+    if (!XML_Parse(m_aParser, reinterpret_cast< char * >(p), s, true))
     {
-        aErrorInformation.eCode = XML_GetErrorCode( aParser );
-        aErrorInformation.nLine = XML_GetErrorLineNumber( aParser );
-        aErrorInformation.nColumn = XML_GetErrorColumnNumber( aParser );
+        m_aErrorInformation.m_eCode = XML_GetErrorCode( m_aParser );
+        m_aErrorInformation.m_nLine = XML_GetErrorLineNumber( m_aParser );
+        m_aErrorInformation.m_nColumn = XML_GetErrorColumnNumber( m_aParser );
 
-        aErrorInformation.sMessage = "ERROR: ";
-        if ( !pXMLFile->GetName().isEmpty())
-            aErrorInformation.sMessage += pXMLFile->GetName();
+        m_aErrorInformation.m_sMessage = "ERROR: ";
+        if ( !m_pXMLFile->GetName().isEmpty())
+            m_aErrorInformation.m_sMessage += m_pXMLFile->GetName();
         else
-            aErrorInformation.sMessage += OString( "XML-File (");
-        aErrorInformation.sMessage +=
-            OString::number(sal::static_int_cast< sal_Int64 >(aErrorInformation.nLine)) + "," +
-            OString::number(sal::static_int_cast< sal_Int64 >(aErrorInformation.nColumn)) + "): ";
+            m_aErrorInformation.m_sMessage += OString( "XML-File (");
 
-        switch (aErrorInformation.eCode) {
+        m_aErrorInformation.m_sMessage +=
+            OString::number(sal::static_int_cast< sal_Int64 >(m_aErrorInformation.m_nLine)) + "," +
+            OString::number(sal::static_int_cast< sal_Int64 >(m_aErrorInformation.m_nColumn)) + "): ";
+
+        switch (m_aErrorInformation.m_eCode)
+        {
         case XML_ERROR_NO_MEMORY:
-            aErrorInformation.sMessage += "No memory";
+            m_aErrorInformation.m_sMessage += "No memory";
             break;
         case XML_ERROR_SYNTAX:
-            aErrorInformation.sMessage += "Syntax";
+            m_aErrorInformation.m_sMessage += "Syntax";
             break;
         case XML_ERROR_NO_ELEMENTS:
-            aErrorInformation.sMessage += "No elements";
+            m_aErrorInformation.m_sMessage += "No elements";
             break;
         case XML_ERROR_INVALID_TOKEN:
-            aErrorInformation.sMessage += "Invalid token";
+            m_aErrorInformation.m_sMessage += "Invalid token";
             break;
         case XML_ERROR_UNCLOSED_TOKEN:
-            aErrorInformation.sMessage += "Unclosed token";
+            m_aErrorInformation.m_sMessage += "Unclosed token";
             break;
         case XML_ERROR_PARTIAL_CHAR:
-            aErrorInformation.sMessage += "Partial char";
+            m_aErrorInformation.m_sMessage += "Partial char";
             break;
         case XML_ERROR_TAG_MISMATCH:
-            aErrorInformation.sMessage += "Tag mismatch";
+            m_aErrorInformation.m_sMessage += "Tag mismatch";
             break;
         case XML_ERROR_DUPLICATE_ATTRIBUTE:
-            aErrorInformation.sMessage += "Dublicat attribute";
+            m_aErrorInformation.m_sMessage += "Dublicat attribute";
             break;
         case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:
-            aErrorInformation.sMessage += "Junk after doc element";
+            m_aErrorInformation.m_sMessage += "Junk after doc element";
             break;
         case XML_ERROR_PARAM_ENTITY_REF:
-            aErrorInformation.sMessage += "Param entity ref";
+            m_aErrorInformation.m_sMessage += "Param entity ref";
             break;
         case XML_ERROR_UNDEFINED_ENTITY:
-            aErrorInformation.sMessage += "Undefined entity";
+            m_aErrorInformation.m_sMessage += "Undefined entity";
             break;
         case XML_ERROR_RECURSIVE_ENTITY_REF:
-            aErrorInformation.sMessage += "Recursive entity ref";
+            m_aErrorInformation.m_sMessage += "Recursive entity ref";
             break;
         case XML_ERROR_ASYNC_ENTITY:
-            aErrorInformation.sMessage += "Async_entity";
+            m_aErrorInformation.m_sMessage += "Async_entity";
             break;
         case XML_ERROR_BAD_CHAR_REF:
-            aErrorInformation.sMessage += "Bad char ref";
+            m_aErrorInformation.m_sMessage += "Bad char ref";
             break;
         case XML_ERROR_BINARY_ENTITY_REF:
-            aErrorInformation.sMessage += "Binary entity";
+            m_aErrorInformation.m_sMessage += "Binary entity";
             break;
         case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:
-            aErrorInformation.sMessage += "Attribute external entity ref";
+            m_aErrorInformation.m_sMessage += "Attribute external entity ref";
             break;
         case XML_ERROR_MISPLACED_XML_PI:
-            aErrorInformation.sMessage += "Misplaced xml pi";
+            m_aErrorInformation.m_sMessage += "Misplaced xml pi";
             break;
         case XML_ERROR_UNKNOWN_ENCODING:
-            aErrorInformation.sMessage += "Unknown encoding";
+            m_aErrorInformation.m_sMessage += "Unknown encoding";
             break;
         case XML_ERROR_INCORRECT_ENCODING:
-            aErrorInformation.sMessage += "Incorrect encoding";
+            m_aErrorInformation.m_sMessage += "Incorrect encoding";
             break;
         case XML_ERROR_UNCLOSED_CDATA_SECTION:
-            aErrorInformation.sMessage += "Unclosed cdata section";
+            m_aErrorInformation.m_sMessage += "Unclosed cdata section";
             break;
         case XML_ERROR_EXTERNAL_ENTITY_HANDLING:
-            aErrorInformation.sMessage += "External entity handling";
+            m_aErrorInformation.m_sMessage += "External entity handling";
             break;
         case XML_ERROR_NOT_STANDALONE:
-            aErrorInformation.sMessage += "Not standalone";
+            m_aErrorInformation.m_sMessage += "Not standalone";
             break;
         case XML_ERROR_NONE:
             break;
         default:
             break;
         }
-        delete pXMLFile;
-        pXMLFile = NULL;
+        delete m_pXMLFile;
+        m_pXMLFile = NULL;
     }
 
     osl_unmapMappedFile(h, p, s);
     osl_closeFile(h);
 
-    return pXMLFile;
+    return m_pXMLFile;
 }
 
 namespace
