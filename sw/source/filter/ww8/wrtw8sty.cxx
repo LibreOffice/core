@@ -20,9 +20,9 @@
 
 #include <algorithm>
 #include <functional>
-#include <unordered_set>
 
 #include <boost/scoped_array.hpp>
+#include <boost/unordered_set.hpp>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <rtl/tencinfo.h>
@@ -297,7 +297,7 @@ void MSWordStyles::BuildStylesTable()
 
 void MSWordStyles::BuildStyleIds()
 {
-    std::unordered_set<OString, OStringHash> aUsed;
+    boost::unordered_set<OString, OStringHash> aUsed;
 
     m_aStyleIds.push_back("Normal");
     aUsed.insert("normal");
