@@ -18,7 +18,6 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_html \
 	CustomTarget_settings \
 	Executable_unoapploader \
-	Package_bin \
 	Package_config \
 	Package_docs \
 	Package_html \

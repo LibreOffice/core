@@ -11,7 +11,7 @@
 
 define gb_AutoInstall__make_define
 echo "#define auto_$*_ALL \ " >> $@
-$(foreach binary,$(filter-out $(lastword $(1)),$(1)),echo "    $(binary), \ " >> $@;)
+$(foreach binary,$(filter-out $(lastword $(1)),$(1)),echo "    $(subst -,_,$(binary)), \ " >> $@;)
 echo "    $(lastword $(1))" >> $@;
 echo "" >> $@
 endef
@@ -28,7 +28,7 @@ $(call gb_AutoInstall_get_target,%) : $(SRCDIR)/Repository.mk $(GBUILDDIR)/AutoI
 	$(foreach lib,$(gb_Library_MODULE_$*),\
 		echo "$(SCP2LIBTEMPLATE)(auto_$*_lib_$(lib),$(call gb_Library_get_runtime_filename,$(lib)))" >> $@;)
 	$(foreach exe,$(gb_Executable_MODULE_$*),\
-		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(exe),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
+		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(subst -,_,$(exe)),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
 
 
 $(call gb_AutoInstall_get_clean_target,%) :

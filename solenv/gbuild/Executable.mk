@@ -22,10 +22,10 @@
 # defined by platform
 #  gb_Executable_Executable_platform
 
-# NOTE: SDKBIN executables are already packaged in module odk
 gb_Executable_LAYER_DIRS := \
-	OOO:$(gb_PROGRAMDIRNAME) \
-	UREBIN:$(LIBO_URE_BIN_FOLDER) \
+	UREBIN:$(gb_INSTROOT)/$(LIBO_URE_BIN_FOLDER) \
+	OOO:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME) \
+	SDKBIN:$(INSTDIR)/$(gb_Package_SDKDIRNAME)/bin \
 
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
@@ -43,7 +43,7 @@ $(call gb_Executable_get_clean_target,%) :
 			$(call gb_Executable_get_runtime_target,$*) \
 			$(AUXTARGETS))
 
-gb_Executable__get_dir_for_layer = $(patsubst $(1):%,$(gb_INSTROOT)/%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS)))
+gb_Executable__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS)))
 gb_Executable__get_dir_for_exe = $(call gb_Executable__get_dir_for_layer,$(call gb_Executable_get_layer,$(1)))
 gb_Executable_get_install_target = $(call gb_Executable__get_dir_for_exe,$(1))/$(call gb_Executable_get_filename,$(1))
 

@@ -513,6 +513,14 @@ End
         Styles = (PACKED); \
     End
 
+#define SDK_EXECUTABLE(id,name) \
+    File id \
+        BIN_FILE_BODY; \
+        Dir = gid_Dir_Sdkoo_Bin; \
+        Name = name; \
+        Styles = (PACKED); \
+    End
+
 #define GALLERY_NAME(id) \
 
 #define GALLERY_FILELIST(id) \

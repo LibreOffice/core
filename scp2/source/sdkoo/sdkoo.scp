@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/sdk"
+
 Installation gid_Installation_Sdk
     ProductName = "${PRODUCTNAME}";
     ProductVersion = "${PRODUCTVERSION}";
@@ -29,7 +31,7 @@ Installation gid_Installation_Sdk
 #endif
 End
 
-#if defined WNT
+#ifdef WNT
 
 Directory gid_Dir_Sdkoo_Root
     ParentID = PREDEFINED_PROGDIR;
@@ -39,23 +41,35 @@ End
 
 #endif
 
+Directory gid_Dir_Sdkoo_Sdk
+#ifdef WNT
+    ParentID = gid_Dir_Sdkoo_Root;
+#else
+    ParentID = PREDEFINED_PROGDIR;
+#endif
+#ifdef MACOSX
+    DosName = "LibreOffice${PRODUCTVERSION}_SDK";
+#else
+    DosName = "sdk";
+#endif
+End
+
+Directory gid_Dir_Sdkoo_Bin
+    ParentID = gid_Dir_Sdkoo_Sdk;
+    DosName = "bin";
+End
+
 Module gid_Module_Root_SDK
     Name = "sdkoo";
     Description = "sdkoo";
     PackageInfo = "packinfo_sdkoo.txt";
+    Files = (auto_sdk_ALL);
 End
 
 File gid_File_Pakage_odk_share_readme
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
     Name = "odk_share_readme.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
-File gid_File_Package_odk_bin
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "odk_bin.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
