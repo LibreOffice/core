@@ -1639,6 +1639,31 @@ sub run {
                 # Path of new installation set: $finalinstalldir
                 # Path of old installation set: $installer::globals::updatedatabasepath
                 my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref);
+                if ( defined($ENV{'WINDOWS_BUILD_SIGNING'}) && ($ENV{'WINDOWS_BUILD_SIGNING'} eq 'TRUE') )
+                {
+                    my $systemcall = "signtool.exe sign ";
+                    if ( defined($ENV{'PFXFILE'}) ) { $systemcall .= "-f $ENV{'PFXFILE'} "; }
+                    if ( defined($ENV{'PFXPASSWORD'}) ) { $systemcall .= "-p $ENV{'PFXPASSWORD'} "; }
+                    if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.globalsign.com/scripts/timestamp.dll "; }
+                    $systemcall .= $mspdir . "/*.msp";
+                    installer::logger::print_message( "... $systemcall ...\n" );
+
+                    my $returnvalue = system($systemcall);
+
+                    my $infoline = "Systemcall: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    if ($returnvalue)
+                    {
+                        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                }
                 ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
                 installer::worker::clean_output_tree(); # removing directories created in the output tree
             }
@@ -1659,7 +1684,31 @@ sub run {
                 if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $$downloadname = installer::download::set_download_filename($languagestringref, $allvariableshashref); }
                 else { $$downloadname = installer::download::resolve_variables_in_downloadname($allvariableshashref, $$downloadname, $languagestringref); }
                 installer::systemactions::rename_one_file( $finalinstalldir . $installer::globals::separator . $installer::globals::shortmsidatabasename, $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi" );
+                if ( defined($ENV{'WINDOWS_BUILD_SIGNING'}) && ($ENV{'WINDOWS_BUILD_SIGNING'} eq 'TRUE') )
+                {
+                    my $systemcall = "signtool.exe sign ";
+                    if ( defined($ENV{'PFXFILE'}) ) { $systemcall .= "-f $ENV{'PFXFILE'} "; }
+                    if ( defined($ENV{'PFXPASSWORD'}) ) { $systemcall .= "-p $ENV{'PFXPASSWORD'} "; }
+                    if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.globalsign.com/scripts/timestamp.dll "; }
+                    $systemcall .= $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi";
+                    installer::logger::print_message( "... $systemcall ...\n" );
 
+                    my $returnvalue = system($systemcall);
+
+                    my $infoline = "Systemcall: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    if ($returnvalue)
+                    {
+                        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                }
             }
             if (( $is_success ) && ( $create_download ) && ( $ENV{'ENABLE_DOWNLOADSETS'} ))
             {
