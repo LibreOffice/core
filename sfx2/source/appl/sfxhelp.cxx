@@ -589,7 +589,8 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
                             //see if it has a TabControl and ask the active tab of
                             //that for help
                             bTriedTabPage = true;
-                            TabControl *pCtrl = ((Dialog*)pParent)->get<TabControl>("tabcontrol");
+                            Dialog *pDialog = ((Dialog*)pParent);
+                            TabControl *pCtrl = pDialog->hasBuilder() ? pDialog->get<TabControl>("tabcontrol") : NULL;
                             TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : NULL;
                             Window *pTabChild = pTabPage ? pTabPage->GetWindow(WINDOW_FIRSTCHILD) : NULL;
                             if (pTabChild)
