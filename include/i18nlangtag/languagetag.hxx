@@ -16,6 +16,7 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
@@ -35,6 +36,9 @@ typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
 #define I18NLANGTAG_QLT "qlt"
 
 
+class LanguageTagImpl;
+
+
 /** Wrapper for liblangtag BCP 47 language tags, MS-LangIDs, locales and
     conversions in between.
 
@@ -47,6 +51,8 @@ typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
  */
 class I18NLANGTAG_DLLPUBLIC LanguageTag
 {
+    friend class LanguageTagImpl;
+
 public:
 
     /** Init LanguageTag with existing BCP 47 language tag string.
@@ -480,97 +486,39 @@ public:
 
 private:
 
-    enum Decision
-    {
-        DECISION_DONTKNOW,
-        DECISION_NO,
-        DECISION_YES
-    };
+    mutable com::sun::star::lang::Locale            maLocale;
+    mutable OUString                                maBcp47;
+    mutable LanguageType                            mnLangID;
+    mutable boost::shared_ptr< LanguageTagImpl >    mpImpl;
+            bool                                    mbSystemLocale      : 1;
+    mutable bool                                    mbInitializedBcp47  : 1;
+    mutable bool                                    mbInitializedLocale : 1;
+    mutable bool                                    mbInitializedLangID : 1;
+            bool                                    mbIsFallback        : 1;
 
-    mutable com::sun::star::lang::Locale    maLocale;
-    mutable OUString                        maBcp47;
-    mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
-    mutable OUString                        maCachedScript;     ///< cache getScript()
-    mutable OUString                        maCachedCountry;    ///< cache getCountry()
-    mutable OUString                        maCachedVariants;   ///< cache getVariants()
-    mutable void*                           mpImplLangtag;      ///< actually lt_tag_t pointer, encapsulated
-    mutable LanguageType                    mnLangID;
-    mutable Decision                        meIsValid;
-    mutable Decision                        meIsIsoLocale;
-    mutable Decision                        meIsIsoODF;
-    mutable Decision                        meIsLiblangtagNeeded;   ///< whether processing with liblangtag needed
-            bool                            mbSystemLocale      : 1;
-    mutable bool                            mbInitializedBcp47  : 1;
-    mutable bool                            mbInitializedLocale : 1;
-    mutable bool                            mbInitializedLangID : 1;
-    mutable bool                            mbCachedLanguage    : 1;
-    mutable bool                            mbCachedScript      : 1;
-    mutable bool                            mbCachedCountry     : 1;
-    mutable bool                            mbCachedVariants    : 1;
-            bool                            mbIsFallback        : 1;
+    LanguageTagImpl*    getImpl() const;
+    void                syncFromImpl();
 
-    void    convertLocaleToBcp47();
-    void    convertLocaleToLang();
-    void    convertBcp47ToLocale();
-    void    convertBcp47ToLang();
-    void    convertLangToLocale();
-    void    convertLangToBcp47();
+    void                convertLocaleToBcp47();
+    void                convertLocaleToLang();
+    void                convertBcp47ToLocale();
+    void                convertBcp47ToLang();
+    void                convertLangToLocale();
+    void                convertLangToBcp47();
 
-    void    convertFromRtlLocale();
-
-    /** @return whether BCP 47 language tag string was changed. */
-    bool    canonicalize();
+    void                convertFromRtlLocale();
 
     /** Canonicalize if not yet done and synchronize initialized conversions.
 
         @return whether BCP 47 language tag string was changed.
      */
-    bool    synCanonicalize();
+    bool                synCanonicalize();
 
-    OUString    getLanguageFromLangtag();
-    OUString    getScriptFromLangtag();
-    OUString    getRegionFromLangtag();
-    OUString    getVariantsFromLangtag();
+    void                resetVars();
 
-    void            resetVars();
-
-    /** Obtain Language, Script, Country and Variants via simpleExtract() and
-        assign them to the cached variables if successful.
-
-        @return return of simpleExtract()
-     */
-    bool            cacheSimpleLSCV();
-
-    static bool     isIsoLanguage( const OUString& rLanguage );
-    static bool     isIsoScript( const OUString& rScript );
-    static bool     isIsoCountry( const OUString& rRegion );
-
-    enum Extraction
-    {
-        EXTRACTED_NONE,
-        EXTRACTED_LSC,
-        EXTRACTED_LV,
-        EXTRACTED_X,
-        EXTRACTED_X_JOKER
-    };
-
-    /** Of a language tag of the form lll[-Ssss][-CC][-vvvvvvvv] extract the
-        portions.
-
-        Does not check case or content!
-
-        @return EXTRACTED_LSC if simple tag was detected (i.e. one that
-                would fulfill the isIsoODF() condition),
-                EXTRACTED_LV if a tag with variant was detected,
-                EXTRACTED_X if x-... privateuse tag was detected,
-                EXTRACTED_X_JOKER if "*" joker was detected,
-                EXTRACTED_NONE else.
-     */
-    static Extraction   simpleExtract( const OUString& rBcp47,
-                                       OUString& rLanguage,
-                                       OUString& rScript,
-                                       OUString& rCountry,
-                                       OUString& rVariants );
+    static bool         isIsoLanguage( const OUString& rLanguage );
+    static bool         isIsoScript( const OUString& rScript );
+    static bool         isIsoCountry( const OUString& rRegion );
 
 };
 

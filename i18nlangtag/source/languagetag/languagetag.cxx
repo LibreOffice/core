@@ -201,197 +201,204 @@ void LiblantagDataRef::setupDataPath()
         lt_db_set_datadir( maDataPath.getStr());
 }
 
-LanguageTag::LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize )
-    :
-        maBcp47( rBcp47LanguageTag),
-        mpImplLangtag( NULL),
-        mnLangID( LANGUAGE_DONTKNOW),
-        meIsValid( DECISION_DONTKNOW),
-        meIsIsoLocale( DECISION_DONTKNOW),
-        meIsIsoODF( DECISION_DONTKNOW),
-        meIsLiblangtagNeeded( DECISION_DONTKNOW),
-        mbSystemLocale( rBcp47LanguageTag.isEmpty()),
-        mbInitializedBcp47( !mbSystemLocale),
-        mbInitializedLocale( false),
-        mbInitializedLangID( false),
-        mbCachedLanguage( false),
-        mbCachedScript( false),
-        mbCachedCountry( false),
-        mbCachedVariants( false),
-        mbIsFallback( false)
+
+class LanguageTagImpl
 {
-    if (bCanonicalize)
-        canonicalize();
-}
+public:
 
+    explicit LanguageTagImpl( const LanguageTag & rLanguageTag );
+    explicit LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl );
+    ~LanguageTagImpl();
+    LanguageTagImpl& operator=( const LanguageTagImpl & rLanguageTagImpl );
 
-LanguageTag::LanguageTag( const com::sun::star::lang::Locale & rLocale )
-    :
-        maLocale( rLocale),
-        mpImplLangtag( NULL),
-        mnLangID( LANGUAGE_DONTKNOW),
-        meIsValid( DECISION_DONTKNOW),
-        meIsIsoLocale( DECISION_DONTKNOW),
-        meIsIsoODF( DECISION_DONTKNOW),
-        meIsLiblangtagNeeded( DECISION_DONTKNOW),
-        mbSystemLocale( rLocale.Language.isEmpty()),
-        mbInitializedBcp47( false),
-        mbInitializedLocale( !mbSystemLocale),
-        mbInitializedLangID( false),
-        mbCachedLanguage( false),
-        mbCachedScript( false),
-        mbCachedCountry( false),
-        mbCachedVariants( false),
-        mbIsFallback( false)
-{
-}
+private:
 
+    friend class LanguageTag;
 
-LanguageTag::LanguageTag( LanguageType nLanguage )
-    :
-        mpImplLangtag( NULL),
-        mnLangID( nLanguage),
-        meIsValid( DECISION_DONTKNOW),
-        meIsIsoLocale( DECISION_DONTKNOW),
-        meIsIsoODF( DECISION_DONTKNOW),
-        meIsLiblangtagNeeded( DECISION_DONTKNOW),
-        mbSystemLocale( nLanguage == LANGUAGE_SYSTEM),
-        mbInitializedBcp47( false),
-        mbInitializedLocale( false),
-        mbInitializedLangID( !mbSystemLocale),
-        mbCachedLanguage( false),
-        mbCachedScript( false),
-        mbCachedCountry( false),
-        mbCachedVariants( false),
-        mbIsFallback( false)
-{
-}
-
-
-LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
-                          const OUString& rScript, const OUString& rCountry )
-    :
-        maBcp47( rBcp47),
-        mpImplLangtag( NULL),
-        mnLangID( LANGUAGE_DONTKNOW),
-        meIsValid( DECISION_DONTKNOW),
-        meIsIsoLocale( DECISION_DONTKNOW),
-        meIsIsoODF( DECISION_DONTKNOW),
-        meIsLiblangtagNeeded( DECISION_DONTKNOW),
-        mbSystemLocale( rBcp47.isEmpty() && rLanguage.isEmpty()),
-        mbInitializedBcp47( !rBcp47.isEmpty()),
-        mbInitializedLocale( false),
-        mbInitializedLangID( false),
-        mbCachedLanguage( false),
-        mbCachedScript( false),
-        mbCachedCountry( false),
-        mbCachedVariants( false),
-        mbIsFallback( false)
-{
-    if (!mbSystemLocale && !mbInitializedBcp47)
+    enum Decision
     {
-        if (rScript.isEmpty())
-        {
-            maLocale = lang::Locale( rLanguage, rCountry, "");
-            mbInitializedLocale = true;
-        }
-        else
-        {
-            if (rCountry.isEmpty())
-                maBcp47 = rLanguage + "-" + rScript;
-            else
-                maBcp47 = rLanguage + "-" + rScript + "-" + rCountry;
-            mbInitializedBcp47 = true;
-        }
-    }
-}
+        DECISION_DONTKNOW,
+        DECISION_NO,
+        DECISION_YES
+    };
+
+    mutable com::sun::star::lang::Locale    maLocale;
+    mutable OUString                        maBcp47;
+    mutable OUString                        maCachedLanguage;   ///< cache getLanguage()
+    mutable OUString                        maCachedScript;     ///< cache getScript()
+    mutable OUString                        maCachedCountry;    ///< cache getCountry()
+    mutable OUString                        maCachedVariants;   ///< cache getVariants()
+    mutable void*                           mpImplLangtag;      ///< actually lt_tag_t pointer, encapsulated
+    mutable LanguageType                    mnLangID;
+    mutable Decision                        meIsValid;
+    mutable Decision                        meIsIsoLocale;
+    mutable Decision                        meIsIsoODF;
+    mutable Decision                        meIsLiblangtagNeeded;   ///< whether processing with liblangtag needed
+            bool                            mbSystemLocale      : 1;
+    mutable bool                            mbInitializedBcp47  : 1;
+    mutable bool                            mbInitializedLocale : 1;
+    mutable bool                            mbInitializedLangID : 1;
+    mutable bool                            mbCachedLanguage    : 1;
+    mutable bool                            mbCachedScript      : 1;
+    mutable bool                            mbCachedCountry     : 1;
+    mutable bool                            mbCachedVariants    : 1;
+
+    const OUString &    getBcp47( bool bResolveSystem = true ) const;
+    OUString            getLanguage() const;
+    OUString            getScript() const;
+    OUString            getCountry() const;
+    OUString            getRegion() const;
+    OUString            getVariants() const;
+    bool                hasScript() const;
+
+    bool                isIsoLocale() const;
+    bool                isIsoODF() const;
+    bool                isValidBcp47() const;
+
+    void                convertLocaleToBcp47();
+    void                convertLocaleToLang();
+    void                convertBcp47ToLocale();
+    void                convertBcp47ToLang();
+    void                convertLangToLocale();
+    void                convertLangToBcp47();
+
+    void                convertFromRtlLocale();
+
+    /** @return whether BCP 47 language tag string was changed. */
+    bool                canonicalize();
+
+    /** Canonicalize if not yet done and synchronize initialized conversions.
+
+        @return whether BCP 47 language tag string was changed.
+     */
+    bool                synCanonicalize();
+
+    OUString            getLanguageFromLangtag();
+    OUString            getScriptFromLangtag();
+    OUString            getRegionFromLangtag();
+    OUString            getVariantsFromLangtag();
+
+    void                resetVars();
+
+    /** Obtain Language, Script, Country and Variants via simpleExtract() and
+        assign them to the cached variables if successful.
+
+        @return return of simpleExtract()
+     */
+    bool                cacheSimpleLSCV();
+
+    enum Extraction
+    {
+        EXTRACTED_NONE,
+        EXTRACTED_LSC,
+        EXTRACTED_LV,
+        EXTRACTED_X,
+        EXTRACTED_X_JOKER
+    };
+
+    /** Of a language tag of the form lll[-Ssss][-CC][-vvvvvvvv] extract the
+        portions.
+
+        Does not check case or content!
+
+        @return EXTRACTED_LSC if simple tag was detected (i.e. one that
+                would fulfill the isIsoODF() condition),
+                EXTRACTED_LV if a tag with variant was detected,
+                EXTRACTED_X if x-... privateuse tag was detected,
+                EXTRACTED_X_JOKER if "*" joker was detected,
+                EXTRACTED_NONE else.
+     */
+    static Extraction   simpleExtract( const OUString& rBcp47,
+                                       OUString& rLanguage,
+                                       OUString& rScript,
+                                       OUString& rCountry,
+                                       OUString& rVariants );
+
+};
 
 
-LanguageTag::LanguageTag( const rtl_Locale & rLocale )
-    :
-        maLocale( rLocale.Language, rLocale.Country, rLocale.Variant),
-        mpImplLangtag( NULL),
-        mnLangID( LANGUAGE_DONTKNOW),
-        meIsValid( DECISION_DONTKNOW),
-        meIsIsoLocale( DECISION_DONTKNOW),
-        meIsIsoODF( DECISION_DONTKNOW),
-        meIsLiblangtagNeeded( DECISION_DONTKNOW),
-        mbSystemLocale( maLocale.Language.isEmpty()),
-        mbInitializedBcp47( false),
-        mbInitializedLocale( !mbSystemLocale),
-        mbInitializedLangID( false),
-        mbCachedLanguage( false),
-        mbCachedScript( false),
-        mbCachedCountry( false),
-        mbCachedVariants( false),
-        mbIsFallback( false)
-{
-    convertFromRtlLocale();
-}
-
-
-LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
+LanguageTagImpl::LanguageTagImpl( const LanguageTag & rLanguageTag )
     :
         maLocale( rLanguageTag.maLocale),
         maBcp47( rLanguageTag.maBcp47),
-        maCachedLanguage( rLanguageTag.maCachedLanguage),
-        maCachedScript( rLanguageTag.maCachedScript),
-        maCachedCountry( rLanguageTag.maCachedCountry),
-        maCachedVariants( rLanguageTag.maCachedVariants),
-        mpImplLangtag( rLanguageTag.mpImplLangtag ?
-                lt_tag_copy( LANGTAGCAST( rLanguageTag.mpImplLangtag)) : NULL),
+        mpImplLangtag( NULL),
         mnLangID( rLanguageTag.mnLangID),
-        meIsValid( rLanguageTag.meIsValid),
-        meIsIsoLocale( rLanguageTag.meIsIsoLocale),
-        meIsIsoODF( rLanguageTag.meIsIsoODF),
-        meIsLiblangtagNeeded( rLanguageTag.meIsLiblangtagNeeded),
+        meIsValid( DECISION_DONTKNOW),
+        meIsIsoLocale( DECISION_DONTKNOW),
+        meIsIsoODF( DECISION_DONTKNOW),
+        meIsLiblangtagNeeded( DECISION_DONTKNOW),
         mbSystemLocale( rLanguageTag.mbSystemLocale),
         mbInitializedBcp47( rLanguageTag.mbInitializedBcp47),
         mbInitializedLocale( rLanguageTag.mbInitializedLocale),
         mbInitializedLangID( rLanguageTag.mbInitializedLangID),
-        mbCachedLanguage( rLanguageTag.mbCachedLanguage),
-        mbCachedScript( rLanguageTag.mbCachedScript),
-        mbCachedCountry( rLanguageTag.mbCachedCountry),
-        mbCachedVariants( rLanguageTag.mbCachedVariants),
-        mbIsFallback( rLanguageTag.mbIsFallback)
+        mbCachedLanguage( false),
+        mbCachedScript( false),
+        mbCachedCountry( false),
+        mbCachedVariants( false)
+{
+}
+
+
+LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
+    :
+        maLocale( rLanguageTagImpl.maLocale),
+        maBcp47( rLanguageTagImpl.maBcp47),
+        maCachedLanguage( rLanguageTagImpl.maCachedLanguage),
+        maCachedScript( rLanguageTagImpl.maCachedScript),
+        maCachedCountry( rLanguageTagImpl.maCachedCountry),
+        maCachedVariants( rLanguageTagImpl.maCachedVariants),
+        mpImplLangtag( rLanguageTagImpl.mpImplLangtag ?
+                lt_tag_copy( LANGTAGCAST( rLanguageTagImpl.mpImplLangtag)) : NULL),
+        mnLangID( rLanguageTagImpl.mnLangID),
+        meIsValid( rLanguageTagImpl.meIsValid),
+        meIsIsoLocale( rLanguageTagImpl.meIsIsoLocale),
+        meIsIsoODF( rLanguageTagImpl.meIsIsoODF),
+        meIsLiblangtagNeeded( rLanguageTagImpl.meIsLiblangtagNeeded),
+        mbSystemLocale( rLanguageTagImpl.mbSystemLocale),
+        mbInitializedBcp47( rLanguageTagImpl.mbInitializedBcp47),
+        mbInitializedLocale( rLanguageTagImpl.mbInitializedLocale),
+        mbInitializedLangID( rLanguageTagImpl.mbInitializedLangID),
+        mbCachedLanguage( rLanguageTagImpl.mbCachedLanguage),
+        mbCachedScript( rLanguageTagImpl.mbCachedScript),
+        mbCachedCountry( rLanguageTagImpl.mbCachedCountry),
+        mbCachedVariants( rLanguageTagImpl.mbCachedVariants)
 {
     if (mpImplLangtag)
         theDataRef::get().incRef();
 }
 
 
-LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
+LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTagImpl )
 {
-    maLocale            = rLanguageTag.maLocale;
-    maBcp47             = rLanguageTag.maBcp47;
-    maCachedLanguage    = rLanguageTag.maCachedLanguage;
-    maCachedScript      = rLanguageTag.maCachedScript;
-    maCachedCountry     = rLanguageTag.maCachedCountry;
-    maCachedVariants    = rLanguageTag.maCachedVariants;
-    mpImplLangtag       = rLanguageTag.mpImplLangtag;
-    mpImplLangtag       = rLanguageTag.mpImplLangtag ?
-                            lt_tag_copy( LANGTAGCAST( rLanguageTag.mpImplLangtag)) : NULL;
-    mnLangID            = rLanguageTag.mnLangID;
-    meIsValid           = rLanguageTag.meIsValid;
-    meIsIsoLocale       = rLanguageTag.meIsIsoLocale;
-    meIsIsoODF          = rLanguageTag.meIsIsoODF;
-    meIsLiblangtagNeeded= rLanguageTag.meIsLiblangtagNeeded;
-    mbSystemLocale      = rLanguageTag.mbSystemLocale;
-    mbInitializedBcp47  = rLanguageTag.mbInitializedBcp47;
-    mbInitializedLocale = rLanguageTag.mbInitializedLocale;
-    mbInitializedLangID = rLanguageTag.mbInitializedLangID;
-    mbCachedLanguage    = rLanguageTag.mbCachedLanguage;
-    mbCachedScript      = rLanguageTag.mbCachedScript;
-    mbCachedCountry     = rLanguageTag.mbCachedCountry;
-    mbCachedVariants    = rLanguageTag.mbCachedVariants;
-    mbIsFallback        = rLanguageTag.mbIsFallback;
+    maLocale            = rLanguageTagImpl.maLocale;
+    maBcp47             = rLanguageTagImpl.maBcp47;
+    maCachedLanguage    = rLanguageTagImpl.maCachedLanguage;
+    maCachedScript      = rLanguageTagImpl.maCachedScript;
+    maCachedCountry     = rLanguageTagImpl.maCachedCountry;
+    maCachedVariants    = rLanguageTagImpl.maCachedVariants;
+    mpImplLangtag       = rLanguageTagImpl.mpImplLangtag;
+    mpImplLangtag       = rLanguageTagImpl.mpImplLangtag ?
+                            lt_tag_copy( LANGTAGCAST( rLanguageTagImpl.mpImplLangtag)) : NULL;
+    mnLangID            = rLanguageTagImpl.mnLangID;
+    meIsValid           = rLanguageTagImpl.meIsValid;
+    meIsIsoLocale       = rLanguageTagImpl.meIsIsoLocale;
+    meIsIsoODF          = rLanguageTagImpl.meIsIsoODF;
+    meIsLiblangtagNeeded= rLanguageTagImpl.meIsLiblangtagNeeded;
+    mbSystemLocale      = rLanguageTagImpl.mbSystemLocale;
+    mbInitializedBcp47  = rLanguageTagImpl.mbInitializedBcp47;
+    mbInitializedLocale = rLanguageTagImpl.mbInitializedLocale;
+    mbInitializedLangID = rLanguageTagImpl.mbInitializedLangID;
+    mbCachedLanguage    = rLanguageTagImpl.mbCachedLanguage;
+    mbCachedScript      = rLanguageTagImpl.mbCachedScript;
+    mbCachedCountry     = rLanguageTagImpl.mbCachedCountry;
+    mbCachedVariants    = rLanguageTagImpl.mbCachedVariants;
     if (mpImplLangtag)
         theDataRef::get().incRef();
     return *this;
 }
 
 
-LanguageTag::~LanguageTag()
+LanguageTagImpl::~LanguageTagImpl()
 {
     if (mpImplLangtag)
     {
@@ -401,7 +408,7 @@ LanguageTag::~LanguageTag()
 }
 
 
-void LanguageTag::resetVars()
+void LanguageTagImpl::resetVars()
 {
     if (mpImplLangtag)
     {
@@ -434,6 +441,155 @@ void LanguageTag::resetVars()
     mbCachedScript      = false;
     mbCachedCountry     = false;
     mbCachedVariants    = false;
+}
+
+
+LanguageTag::LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize )
+    :
+        maBcp47( rBcp47LanguageTag),
+        mnLangID( LANGUAGE_DONTKNOW),
+        mbSystemLocale( rBcp47LanguageTag.isEmpty()),
+        mbInitializedBcp47( !mbSystemLocale),
+        mbInitializedLocale( false),
+        mbInitializedLangID( false),
+        mbIsFallback( false)
+{
+    if (bCanonicalize)
+    {
+        if (getImpl()->canonicalize())
+            syncFromImpl();
+    }
+
+}
+
+
+LanguageTag::LanguageTag( const com::sun::star::lang::Locale & rLocale )
+    :
+        maLocale( rLocale),
+        mnLangID( LANGUAGE_DONTKNOW),
+        mbSystemLocale( rLocale.Language.isEmpty()),
+        mbInitializedBcp47( false),
+        mbInitializedLocale( !mbSystemLocale),
+        mbInitializedLangID( false),
+        mbIsFallback( false)
+{
+}
+
+
+LanguageTag::LanguageTag( LanguageType nLanguage )
+    :
+        mnLangID( nLanguage),
+        mbSystemLocale( nLanguage == LANGUAGE_SYSTEM),
+        mbInitializedBcp47( false),
+        mbInitializedLocale( false),
+        mbInitializedLangID( !mbSystemLocale),
+        mbIsFallback( false)
+{
+}
+
+
+LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
+                          const OUString& rScript, const OUString& rCountry )
+    :
+        maBcp47( rBcp47),
+        mnLangID( LANGUAGE_DONTKNOW),
+        mbSystemLocale( rBcp47.isEmpty() && rLanguage.isEmpty()),
+        mbInitializedBcp47( !rBcp47.isEmpty()),
+        mbInitializedLocale( false),
+        mbInitializedLangID( false),
+        mbIsFallback( false)
+{
+    if (!mbSystemLocale && !mbInitializedBcp47)
+    {
+        if (rScript.isEmpty())
+        {
+            maBcp47 = rLanguage + "-" + rCountry;
+            mbInitializedBcp47 = true;
+            maLocale.Language = rLanguage;
+            maLocale.Country  = rCountry;
+            mbInitializedLocale = true;
+        }
+        else
+        {
+            if (rCountry.isEmpty())
+                maBcp47 = rLanguage + "-" + rScript;
+            else
+                maBcp47 = rLanguage + "-" + rScript + "-" + rCountry;
+            mbInitializedBcp47 = true;
+            maLocale.Language = I18NLANGTAG_QLT;
+            maLocale.Country  = rCountry;
+            maLocale.Variant  = maBcp47;
+            mbInitializedLocale = true;
+        }
+    }
+}
+
+
+LanguageTag::LanguageTag( const rtl_Locale & rLocale )
+    :
+        maLocale( rLocale.Language, rLocale.Country, rLocale.Variant),
+        mnLangID( LANGUAGE_DONTKNOW),
+        mbSystemLocale( maLocale.Language.isEmpty()),
+        mbInitializedBcp47( false),
+        mbInitializedLocale( !mbSystemLocale),
+        mbInitializedLangID( false),
+        mbIsFallback( false)
+{
+    convertFromRtlLocale();
+}
+
+
+LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
+    :
+        maLocale( rLanguageTag.maLocale),
+        maBcp47( rLanguageTag.maBcp47),
+        mnLangID( rLanguageTag.mnLangID),
+        mpImpl( rLanguageTag.mpImpl),
+        mbSystemLocale( rLanguageTag.mbSystemLocale),
+        mbInitializedBcp47( rLanguageTag.mbInitializedBcp47),
+        mbInitializedLocale( rLanguageTag.mbInitializedLocale),
+        mbInitializedLangID( rLanguageTag.mbInitializedLangID)
+{
+}
+
+
+LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
+{
+    maLocale            = rLanguageTag.maLocale;
+    maBcp47             = rLanguageTag.maBcp47;
+    mnLangID            = rLanguageTag.mnLangID;
+    mpImpl              = rLanguageTag.mpImpl;
+    mbSystemLocale      = rLanguageTag.mbSystemLocale;
+    mbInitializedBcp47  = rLanguageTag.mbInitializedBcp47;
+    mbInitializedLocale = rLanguageTag.mbInitializedLocale;
+    mbInitializedLangID = rLanguageTag.mbInitializedLangID;
+    return *this;
+}
+
+
+LanguageTag::~LanguageTag()
+{
+}
+
+
+LanguageTagImpl* LanguageTag::getImpl() const
+{
+    if (!mpImpl)
+        mpImpl.reset( new LanguageTagImpl( *this));
+    return mpImpl.get();
+}
+
+
+void LanguageTag::resetVars()
+{
+    mpImpl.reset();
+    maLocale            = lang::Locale();
+    maBcp47             = OUString();
+    mnLangID            = LANGUAGE_SYSTEM;
+    mbSystemLocale      = true;
+    mbInitializedBcp47  = false;
+    mbInitializedLocale = false;
+    mbInitializedLangID = false;
     mbIsFallback        = false;
 }
 
@@ -446,7 +602,7 @@ void LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize 
     mbInitializedBcp47  = !mbSystemLocale;
 
     if (bCanonicalize)
-        canonicalize();
+        getImpl()->canonicalize();
 }
 
 
@@ -475,7 +631,7 @@ void LanguageTag::reset( const rtl_Locale & rLocale )
 }
 
 
-bool LanguageTag::canonicalize()
+bool LanguageTagImpl::canonicalize()
 {
 #ifdef erDEBUG
     // dump once
@@ -603,7 +759,7 @@ bool LanguageTag::canonicalize()
         return bChanged;            // that's it
     }
     meIsLiblangtagNeeded = DECISION_YES;
-    SAL_INFO( "i18nlangtag", "LanguageTag::canonicalize: using liblangtag for " << maBcp47);
+    SAL_INFO( "i18nlangtag", "LanguageTagImpl::canonicalize: using liblangtag for " << maBcp47);
 
     if (!mpImplLangtag)
     {
@@ -616,7 +772,7 @@ bool LanguageTag::canonicalize()
     if (lt_tag_parse( MPLANGTAG, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
         char* pTag = lt_tag_canonicalize( MPLANGTAG, &aError.p);
-        SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTag::canonicalize: could not canonicalize " << maBcp47);
+        SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize " << maBcp47);
         if (pTag)
         {
             OUString aOld( maBcp47);
@@ -630,7 +786,7 @@ bool LanguageTag::canonicalize()
                 meIsIsoODF = DECISION_DONTKNOW;
                 if (!lt_tag_parse( MPLANGTAG, pTag, &aError.p))
                 {
-                    SAL_WARN( "i18nlangtag", "LanguageTag::canonicalize: could not reparse " << maBcp47);
+                    SAL_WARN( "i18nlangtag", "LanguageTagImpl::canonicalize: could not reparse " << maBcp47);
                     free( pTag);
                     meIsValid = DECISION_NO;
                     return bChanged;
@@ -643,14 +799,14 @@ bool LanguageTag::canonicalize()
     }
     else
     {
-        SAL_INFO( "i18nlangtag", "LanguageTag::canonicalize: could not parse " << maBcp47);
+        SAL_INFO( "i18nlangtag", "LanguageTagImpl::canonicalize: could not parse " << maBcp47);
     }
     meIsValid = DECISION_NO;
     return bChanged;
 }
 
 
-bool LanguageTag::synCanonicalize()
+bool LanguageTagImpl::synCanonicalize()
 {
     bool bChanged = false;
     if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
@@ -668,7 +824,28 @@ bool LanguageTag::synCanonicalize()
 }
 
 
-void LanguageTag::convertLocaleToBcp47()
+void LanguageTag::syncFromImpl()
+{
+    LanguageTagImpl* pImpl = getImpl();
+    mbInitializedBcp47  = pImpl->mbInitializedBcp47;
+    maBcp47             = pImpl->maBcp47;
+    mbInitializedLocale = pImpl->mbInitializedLocale;
+    maLocale            = pImpl->maLocale;
+    mbInitializedLangID = pImpl->mbInitializedLangID;
+    mnLangID            = pImpl->mnLangID;
+}
+
+
+bool LanguageTag::synCanonicalize()
+{
+    bool bChanged = getImpl()->synCanonicalize();
+    if (bChanged)
+        syncFromImpl();
+    return bChanged;
+}
+
+
+void LanguageTagImpl::convertLocaleToBcp47()
 {
     if (mbSystemLocale && !mbInitializedLocale)
         convertLangToLocale();
@@ -680,13 +857,22 @@ void LanguageTag::convertLocaleToBcp47()
     }
     else
     {
-        maBcp47 = convertToBcp47( maLocale, true);
+        maBcp47 = LanguageTag::convertToBcp47( maLocale, true);
     }
     mbInitializedBcp47 = true;
 }
 
 
-void LanguageTag::convertLocaleToLang()
+void LanguageTag::convertLocaleToBcp47()
+{
+    LanguageTagImpl* pImpl = getImpl();
+    pImpl->convertLocaleToBcp47();
+    maBcp47 = pImpl->maBcp47;
+    mbInitializedBcp47 = pImpl->mbInitializedBcp47;
+}
+
+
+void LanguageTagImpl::convertLocaleToLang()
 {
     if (mbSystemLocale)
     {
@@ -694,13 +880,22 @@ void LanguageTag::convertLocaleToLang()
     }
     else
     {
-        mnLangID = convertToLanguageType( maLocale, true);
+        mnLangID = LanguageTag::convertToLanguageType( maLocale, true);
     }
     mbInitializedLangID = true;
 }
 
 
-void LanguageTag::convertBcp47ToLocale()
+void LanguageTag::convertLocaleToLang()
+{
+    LanguageTagImpl* pImpl = getImpl();
+    pImpl->convertLocaleToLang();
+    mnLangID = pImpl->mnLangID;
+    mbInitializedLangID = pImpl->mbInitializedLangID;
+}
+
+
+void LanguageTagImpl::convertBcp47ToLocale()
 {
     bool bIso = isIsoLocale();
     if (bIso)
@@ -719,7 +914,16 @@ void LanguageTag::convertBcp47ToLocale()
 }
 
 
-void LanguageTag::convertBcp47ToLang()
+void LanguageTag::convertBcp47ToLocale()
+{
+    LanguageTagImpl* pImpl = getImpl();
+    pImpl->convertBcp47ToLocale();
+    maLocale = pImpl->maLocale;
+    mbInitializedLocale = pImpl->mbInitializedLocale;
+}
+
+
+void LanguageTagImpl::convertBcp47ToLang()
 {
     if (mbSystemLocale)
     {
@@ -735,7 +939,16 @@ void LanguageTag::convertBcp47ToLang()
 }
 
 
-void LanguageTag::convertLangToLocale()
+void LanguageTag::convertBcp47ToLang()
+{
+    LanguageTagImpl* pImpl = getImpl();
+    pImpl->convertBcp47ToLang();
+    mnLangID = pImpl->mnLangID;
+    mbInitializedLangID = pImpl->mbInitializedLangID;
+}
+
+
+void LanguageTagImpl::convertLangToLocale()
 {
     if (mbSystemLocale && !mbInitializedLangID)
     {
@@ -743,17 +956,35 @@ void LanguageTag::convertLangToLocale()
         mbInitializedLangID = true;
     }
     // Resolve system here! The original is remembered as mbSystemLocale.
-    maLocale = convertToLocale( mnLangID, true);
+    maLocale = LanguageTag::convertToLocale( mnLangID, true);
     mbInitializedLocale = true;
 }
 
 
-void LanguageTag::convertLangToBcp47()
+void LanguageTag::convertLangToLocale()
+{
+    LanguageTagImpl* pImpl = getImpl();
+    pImpl->convertLangToLocale();
+    maLocale = pImpl->maLocale;
+    mbInitializedLocale = pImpl->mbInitializedLocale;
+}
+
+
+void LanguageTagImpl::convertLangToBcp47()
 {
     if (!mbInitializedLocale)
         convertLangToLocale();
     convertLocaleToBcp47();
     mbInitializedBcp47 = true;
+}
+
+
+void LanguageTag::convertLangToBcp47()
+{
+    LanguageTagImpl* pImpl = getImpl();
+    pImpl->convertLangToBcp47();
+    maBcp47 = pImpl->maBcp47;
+    mbInitializedBcp47 = pImpl->mbInitializedBcp47;
 }
 
 
@@ -797,22 +1028,37 @@ void LanguageTag::convertFromRtlLocale()
 }
 
 
-const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
+const OUString & LanguageTagImpl::getBcp47( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
         return theEmptyBcp47::get();
     if (!mbInitializedBcp47)
     {
         if (mbInitializedLocale)
-            const_cast<LanguageTag*>(this)->convertLocaleToBcp47();
+            const_cast<LanguageTagImpl*>(this)->convertLocaleToBcp47();
         else
-            const_cast<LanguageTag*>(this)->convertLangToBcp47();
+            const_cast<LanguageTagImpl*>(this)->convertLangToBcp47();
     }
     return maBcp47;
 }
 
 
-OUString LanguageTag::getLanguageFromLangtag()
+const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
+{
+    if (!bResolveSystem && mbSystemLocale)
+        return theEmptyBcp47::get();
+    if (!mbInitializedBcp47)
+        const_cast<LanguageTag*>(this)->syncFromImpl();
+    if (!mbInitializedBcp47)
+    {
+        getImpl()->getBcp47( bResolveSystem);
+        const_cast<LanguageTag*>(this)->syncFromImpl();
+    }
+    return maBcp47;
+}
+
+
+OUString LanguageTagImpl::getLanguageFromLangtag()
 {
     OUString aLanguage;
     synCanonicalize();
@@ -838,7 +1084,7 @@ OUString LanguageTag::getLanguageFromLangtag()
 }
 
 
-OUString LanguageTag::getScriptFromLangtag()
+OUString LanguageTagImpl::getScriptFromLangtag()
 {
     OUString aScript;
     synCanonicalize();
@@ -864,7 +1110,7 @@ OUString LanguageTag::getScriptFromLangtag()
 }
 
 
-OUString LanguageTag::getRegionFromLangtag()
+OUString LanguageTagImpl::getRegionFromLangtag()
 {
     OUString aRegion;
     synCanonicalize();
@@ -897,7 +1143,7 @@ OUString LanguageTag::getRegionFromLangtag()
 }
 
 
-OUString LanguageTag::getVariantsFromLangtag()
+OUString LanguageTagImpl::getVariantsFromLangtag()
 {
     OUString aVariants;
     synCanonicalize();
@@ -936,6 +1182,8 @@ const com::sun::star::lang::Locale & LanguageTag::getLocale( bool bResolveSystem
     if (!bResolveSystem && mbSystemLocale)
         return theEmptyLocale::get();
     if (!mbInitializedLocale)
+        const_cast<LanguageTag*>(this)->syncFromImpl();
+    if (!mbInitializedLocale)
     {
         if (mbInitializedBcp47)
             const_cast<LanguageTag*>(this)->convertBcp47ToLocale();
@@ -950,6 +1198,8 @@ LanguageType LanguageTag::getLanguageType( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
         return LANGUAGE_SYSTEM;
+    if (!mbInitializedLangID)
+        const_cast<LanguageTag*>(this)->syncFromImpl();
     if (!mbInitializedLangID)
     {
         if (mbInitializedBcp47)
@@ -982,9 +1232,9 @@ void LanguageTag::getIsoLanguageScriptCountry( OUString& rLanguage, OUString& rS
     }
     else
     {
-        rLanguage = (isIsoLanguage( getLanguage()) ? getLanguage() : OUString());
-        rScript   = (isIsoScript(   getScript())   ? getScript()   : OUString());
-        rCountry  = (isIsoCountry(  getCountry())  ? getCountry()  : OUString());
+        rLanguage = (LanguageTag::isIsoLanguage( getLanguage()) ? getLanguage() : OUString());
+        rScript   = (LanguageTag::isIsoScript(   getScript())   ? getScript()   : OUString());
+        rCountry  = (LanguageTag::isIsoCountry(  getCountry())  ? getCountry()  : OUString());
     }
 }
 
@@ -1052,25 +1302,37 @@ bool LanguageTag::isIsoScript( const OUString& rScript )
 }
 
 
-OUString LanguageTag::getLanguage() const
+OUString LanguageTagImpl::getLanguage() const
 {
     if (!mbCachedLanguage)
     {
-        maCachedLanguage = const_cast<LanguageTag*>(this)->getLanguageFromLangtag();
+        maCachedLanguage = const_cast<LanguageTagImpl*>(this)->getLanguageFromLangtag();
         mbCachedLanguage = true;
     }
     return maCachedLanguage;
 }
 
 
-OUString LanguageTag::getScript() const
+OUString LanguageTag::getLanguage() const
+{
+    return getImpl()->getLanguage();
+}
+
+
+OUString LanguageTagImpl::getScript() const
 {
     if (!mbCachedScript)
     {
-        maCachedScript = const_cast<LanguageTag*>(this)->getScriptFromLangtag();
+        maCachedScript = const_cast<LanguageTagImpl*>(this)->getScriptFromLangtag();
         mbCachedScript = true;
     }
     return maCachedScript;
+}
+
+
+OUString LanguageTag::getScript() const
+{
+    return getImpl()->getScript();
 }
 
 
@@ -1086,12 +1348,12 @@ OUString LanguageTag::getLanguageAndScript() const
 }
 
 
-OUString LanguageTag::getCountry() const
+OUString LanguageTagImpl::getCountry() const
 {
     if (!mbCachedCountry)
     {
-        maCachedCountry = const_cast<LanguageTag*>(this)->getRegionFromLangtag();
-        if (!isIsoCountry( maCachedCountry))
+        maCachedCountry = const_cast<LanguageTagImpl*>(this)->getRegionFromLangtag();
+        if (!LanguageTag::isIsoCountry( maCachedCountry))
             maCachedCountry = OUString();
         mbCachedCountry = true;
     }
@@ -1099,20 +1361,38 @@ OUString LanguageTag::getCountry() const
 }
 
 
+OUString LanguageTag::getCountry() const
+{
+    return getImpl()->getCountry();
+}
+
+
+OUString LanguageTagImpl::getRegion() const
+{
+    return const_cast<LanguageTagImpl*>(this)->getRegionFromLangtag();
+}
+
+
 OUString LanguageTag::getRegion() const
 {
-    return const_cast<LanguageTag*>(this)->getRegionFromLangtag();
+    return getImpl()->getRegion();
+}
+
+
+OUString LanguageTagImpl::getVariants() const
+{
+    if (!mbCachedVariants)
+    {
+        maCachedVariants = const_cast<LanguageTagImpl*>(this)->getVariantsFromLangtag();
+        mbCachedVariants = true;
+    }
+    return maCachedVariants;
 }
 
 
 OUString LanguageTag::getVariants() const
 {
-    if (!mbCachedVariants)
-    {
-        maCachedVariants = const_cast<LanguageTag*>(this)->getVariantsFromLangtag();
-        mbCachedVariants = true;
-    }
-    return maCachedVariants;
+    return getImpl()->getVariants();
 }
 
 
@@ -1139,7 +1419,7 @@ OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
 }
 
 
-bool LanguageTag::hasScript() const
+bool LanguageTagImpl::hasScript() const
 {
     if (!mbCachedScript)
         getScript();
@@ -1147,7 +1427,13 @@ bool LanguageTag::hasScript() const
 }
 
 
-bool LanguageTag::cacheSimpleLSCV()
+bool LanguageTag::hasScript() const
+{
+    return getImpl()->hasScript();
+}
+
+
+bool LanguageTagImpl::cacheSimpleLSCV()
 {
     OUString aLanguage, aScript, aCountry, aVariants;
     Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry, aVariants);
@@ -1164,27 +1450,33 @@ bool LanguageTag::cacheSimpleLSCV()
 }
 
 
-bool LanguageTag::isIsoLocale() const
+bool LanguageTagImpl::isIsoLocale() const
 {
     if (meIsIsoLocale == DECISION_DONTKNOW)
     {
-        const_cast<LanguageTag*>(this)->synCanonicalize();
+        const_cast<LanguageTagImpl*>(this)->synCanonicalize();
         // It must be at most ll-CC or lll-CC
         // Do not use getCountry() here, use getRegion() instead.
         meIsIsoLocale = ((maBcp47.isEmpty() ||
-                    (maBcp47.getLength() <= 6 && isIsoLanguage( getLanguage()) && isIsoCountry( getRegion()))) ?
-                DECISION_YES : DECISION_NO);
+                    (maBcp47.getLength() <= 6 && LanguageTag::isIsoLanguage( getLanguage()) &&
+                     LanguageTag::isIsoCountry( getRegion()))) ? DECISION_YES : DECISION_NO);
     }
     return meIsIsoLocale == DECISION_YES;
 }
 
 
-bool LanguageTag::isIsoODF() const
+bool LanguageTag::isIsoLocale() const
+{
+    return getImpl()->isIsoLocale();
+}
+
+
+bool LanguageTagImpl::isIsoODF() const
 {
     if (meIsIsoODF == DECISION_DONTKNOW)
     {
-        const_cast<LanguageTag*>(this)->synCanonicalize();
-        if (!isIsoScript( getScript()))
+        const_cast<LanguageTagImpl*>(this)->synCanonicalize();
+        if (!LanguageTag::isIsoScript( getScript()))
             return ((meIsIsoODF = DECISION_NO) == DECISION_YES);
         // The usual case is lll-CC so simply check that first.
         if (isIsoLocale())
@@ -1192,23 +1484,35 @@ bool LanguageTag::isIsoODF() const
         // If this is not ISO locale for which script must not exist it can
         // still be ISO locale plus ISO script lll-Ssss-CC, but not ll-vvvv ...
         // ll-vvvvvvvv
-        meIsIsoODF = ((maBcp47.getLength() <= 11 &&
-                    isIsoLanguage( getLanguage()) && isIsoCountry( getRegion()) && isIsoScript( getScript()) &&
+        meIsIsoODF = ((maBcp47.getLength() <= 11 && LanguageTag::isIsoLanguage( getLanguage()) &&
+                    LanguageTag::isIsoCountry( getRegion()) && LanguageTag::isIsoScript( getScript()) &&
                     getVariants().isEmpty()) ? DECISION_YES : DECISION_NO);
     }
     return meIsIsoODF == DECISION_YES;
 }
 
 
-bool LanguageTag::isValidBcp47() const
+bool LanguageTag::isIsoODF() const
+{
+    return getImpl()->isIsoODF();
+}
+
+
+bool LanguageTagImpl::isValidBcp47() const
 {
     if (meIsValid == DECISION_DONTKNOW)
     {
-        const_cast<LanguageTag*>(this)->synCanonicalize();
+        const_cast<LanguageTagImpl*>(this)->synCanonicalize();
         SAL_WARN_IF( meIsValid == DECISION_DONTKNOW, "i18nlangtag",
                 "LanguageTag::isValidBcp47: canonicalize() didn't set meIsValid");
     }
     return meIsValid == DECISION_YES;
+}
+
+
+bool LanguageTag::isValidBcp47() const
+{
+    return getImpl()->isValidBcp47();
 }
 
 
@@ -1446,7 +1750,7 @@ bool LanguageTag::operator!=( const LanguageTag & rLanguageTag ) const
 
 
 // static
-LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
+LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp47,
         OUString& rLanguage, OUString& rScript, OUString& rCountry, OUString& rVariants )
 {
     Extraction eRet = EXTRACTED_NONE;
