@@ -282,10 +282,10 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         {
             sal_Bool bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
             if( !bFound &&
-                ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
-                aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
-                aFilterName.SearchAscii( "RTF" )  != STRING_NOTFOUND ||
-                aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
+                ( aFilterName.indexOf( "Text" ) != -1 ||
+                aFilterName.indexOf( "Rich" ) != -1 ||
+                aFilterName.indexOf( "RTF" )  != -1 ||
+                aFilterName.indexOf( "HTML" ) != -1 ) )
             {
                 bFound = sal_True;
             }
@@ -428,9 +428,9 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // selected file format: text, RTF or HTML (default is text)
         sal_uInt16 nFormat = EE_FORMAT_TEXT;
 
-        if( aFilterName.SearchAscii( "Rich") != STRING_NOTFOUND )
+        if( aFilterName.indexOf( "Rich") != -1 )
             nFormat = EE_FORMAT_RTF;
-        else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
+        else if( aFilterName.indexOf( "HTML" ) != -1 )
             nFormat = EE_FORMAT_HTML;
 
         /* create our own outline since:
@@ -446,7 +446,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
         SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
         aLayoutName = pPage->GetLayoutName();
-        aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
+        aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
 
         pOutliner->SetPaperSize(pPage->GetSize());
 
@@ -553,9 +553,9 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     // selected file format: text, RTF or HTML (default is text)
     sal_uInt16 nFormat = EE_FORMAT_TEXT;
 
-    if( aFilterName.SearchAscii( "Rich") != STRING_NOTFOUND )
+    if( aFilterName.indexOf( "Rich") != -1 )
         nFormat = EE_FORMAT_RTF;
-    else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
+    else if( aFilterName.indexOf( "HTML" ) != -1 )
         nFormat = EE_FORMAT_HTML;
 
     ::Outliner*    pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
@@ -583,7 +583,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     }
     SdPage* pPage = mpDoc->GetSdPage(nPage, PK_STANDARD);
     aLayoutName = pPage->GetLayoutName();
-    aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
+    aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
 
     /* create our own outline since:
        - it is possible that the document outliner is actually used in the
