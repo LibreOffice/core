@@ -30,22 +30,26 @@
 #  gb_Library_Library_platform
 
 gb_Library_LAYER_DIRS := \
-    OOO:$(gb_PROGRAMDIRNAME) \
-    URELIB:$(LIBO_URE_LIB_FOLDER)
+	URELIB:$(gb_INSTROOT)/$(LIBO_URE_LIB_FOLDER) \
+	OOO:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME) \
+	OXT:$(WORKDIR)/LinkTarget/ExtensionLibrary \
+	NONE:$(gb_Library_DLLDIR) \
 
 # doesn't do anything, just used for hooking up component target
 .PHONY: $(call gb_Library__get_final_target,%)
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
-.PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT)
-$(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
+.PHONY : $(WORKDIR)/Clean/Library/%
+$(WORKDIR)/Clean/Library/% :
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(OUTDIR)/lib/$*$(gb_Library_PLAINEXT) \
+		rm -f $(call gb_Library_get_exports_target,$*) \
 			$(AUXTARGETS))
 
 gb_Library__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER_DIRS)))
 gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
-gb_Library_get_install_target = $(gb_INSTROOT)/$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))
+gb_Library_get_install_target = $(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))
+
+gb_Library_get_ilib_target = $(if $(filter $(1),$(gb_Library_RTVERLIBS) $(gb_Library_UNOVERLIBS)),$(INSTDIR)/$(gb_Package_SDKDIRNAME)/lib/$(call gb_Library_get_ilibfilename,$(1)),$(gb_Library_DLLDIR)/$(call gb_Library_get_ilibfilename,$(1)))
 
 define gb_Library_Library
 $(call gb_Postprocess_register_target,AllLibraries,Library,$(1))
@@ -73,63 +77,47 @@ endef
 
 # call gb_Library__Library_impl,library,linktarget
 define gb_Library__Library_impl
-$(call gb_LinkTarget_LinkTarget,$(2),Library_$(1))
+$(call gb_LinkTarget_LinkTarget,$(2),Library_$(1),$(call gb_Library_get_layer,$(1)))
 $(call gb_LinkTarget_set_targettype,$(2),Library)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
 $(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
-$(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
-	| $(dir $(call gb_Library_get_target,$(1))).dir
+$(call gb_Library_get_exports_target,$(1)) : $(call gb_Library_get_target,$(1))
+$(call gb_Library_get_target,$(1)) : \
+	| $(dir $(call gb_Library_get_target,$(1))).dir \
+	  $(dir $(call gb_Library_get_ilib_target,$(1))).dir \
+	  $(gb_Library_DLLDIR)/.dir
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
-$(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_ilibfilename,$(1)))
-
-$(if $(and $(call gb_Library_get_instdir,$(1)),$(filter-out $(gb_MERGEDLIBS),$(1))),\
-$(call gb_Library__install,$(call gb_Library__get_final_target,$(1)), \
-	$(call gb_Library_get_install_target,$(1)), \
-	$(gb_Library_DLLDIR)/$(call gb_Library_get_runtime_filename,$(1)), \
-	$(call gb_LinkTarget_get_target,$(2))) \
-)
+$(call gb_Library_Library_platform,$(1),$(2),$(call gb_Library_get_ilib_target,$(1)))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 
 $(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library__get_final_target,$(1)))
-$(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
-# Custom definition that does not simply forward to LinkTarget,
-# because there are cases where the auxtargets are not delivered to solver...
-# The auxtarget is delivered via the rule in Package.mk.
-# gb_Library_add_auxtarget library outdirauxtarget
 define gb_Library_add_auxtarget
-$(call gb_LinkTarget_add_auxtarget,$(call gb_Library_get_linktarget,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))))/$(notdir $(2)))
-$(call gb_Library_get_target,$(1)) : $(2)
-$(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,$(1))))/$(notdir $(2))
-$(2) :| $(dir $(2)).dir
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS += $(2)
-
+$(call gb_Output_error,gb_Library_add_auxtarget should no longer be necessary)
 endef
 
 define gb_Library_add_auxtargets
-$(foreach aux,$(2),$(call gb_Library_add_auxtarget,$(1),$(aux)))
-
+$(call gb_Output_error,gb_Library_add_auxtargets should no longer be necessary)
 endef
 
 # we actually (ab)use ILIBTARGET here to store the unversioned symlink -
 # it serves a similar purpose to an MSVC import library, as input for linker
 # call gb_Library__add_soversion_link,library,linkname
 define gb_Library__add_soversion_link
-$(call gb_Library_add_auxtarget,$(1),$(OUTDIR)/lib/$(notdir $(2)))
 $(call gb_LinkTarget_set_ilibtarget,$(call gb_Library_get_linktarget,$(1)),$(2))
 
 endef
 
 define gb_Library__set_soversion_script
 $(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktarget,$(1)),$(2))
-$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_workdir_target_versionlink,$(1)))
+$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_versionlink_target,$(1)))
 
 endef
 

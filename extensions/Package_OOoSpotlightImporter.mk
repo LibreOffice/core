@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extensions_OOoSpotlightImporter,$(OUTDIR)/lib))
+$(eval $(call gb_Package_Package,extensions_OOoSpotlightImporter,$(gb_Library_DLLDIR)))
 
 $(eval $(call gb_Package_set_outdir,extensions_OOoSpotlightImporter,$(gb_INSTROOT)))
 

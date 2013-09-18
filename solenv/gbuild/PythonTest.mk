@@ -41,6 +41,7 @@ $(call gb_PythonTest_get_target,%) :
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(DEFS) \
+		TEST_LIB=$(call gb_Library_get_target,test) \
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(call gb_Helper_get_rcfile,$(gb_DEVINSTALLROOT)/$(LIBO_ETC_FOLDER)/fundamental) \
 		PYTHONPATH="$(PYPATH)" \
 		UserInstallation=$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*))user) \

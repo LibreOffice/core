@@ -32,7 +32,7 @@ $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_
 		"-s com.sun.star.test.bridge.CppTestObject" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
 		"--singleaccept" \
-		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR))" \
+		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_WORKDIR_FOR_BUILD))" \
 		"-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services))" \
 		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		> $@)
@@ -62,7 +62,7 @@ $(testtools_BRIDGEDIR)/bridgetest_inprocess_java$(testtools_BATCHSUFFIX) :| $(te
 		"$(gb_Helper_LIBRARY_PATH_VAR)=\$${$(gb_Helper_LIBRARY_PATH_VAR):+\$$$(gb_Helper_LIBRARY_PATH_VAR):}$(OUTDIR)/lib" \
 		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest" \
-		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR))" \
+		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_WORKDIR_FOR_BUILD))" \
 		"-env:URE_INTERNAL_JAVA_DIR=file://$(OUTDIR)/bin" \
 		"-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services))" \
 		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
@@ -77,7 +77,7 @@ $(testtools_BRIDGEDIR)/bridgetest_client$(testtools_BATCHSUFFIX) :| $(testtools_
 		"$(call gb_Executable_get_target_for_build,uno)" \
 		"-s com.sun.star.test.bridge.BridgeTest --" \
 		"-u 'uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test'" \
-		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR))" \
+		"-env:LO_BUILD_LIB_DIR=$(call gb_Helper_make_url,$(gb_Library_WORKDIR_FOR_BUILD))" \
 		"-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services))" \
 		"-env:URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		> $@)

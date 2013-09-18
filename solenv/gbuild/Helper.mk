@@ -215,17 +215,6 @@ $(1) : $(2) | $(dir $(1)).dir
 $(call gb_Deliver_add_deliverable,$(1),$(2),$(1))
 endef
 
-# 4th parameter overrides 3rd for the dependency, necessary for Library
-# which needs to copy DLL but that must not be a real target...
-define gb_Library__install
-$(1) :| $(2)
-$(2) : $(4) | $(dir $(2)).dir
-	cp $(3) $$@
-
-$(call gb_Deliver_add_deliverable,$(2),$(3),$(2))
-endef
-
-
 # gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
 # for libraries from the OUTDIR
 

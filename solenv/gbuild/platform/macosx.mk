@@ -153,7 +153,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(LIBS) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		-o $(1) && \
-	$(if $(SOVERSIONSCRIPT),ln -sf $(notdir $(1)) $(ILIBTARGET),:) && \
+	$(if $(SOVERSIONSCRIPT),ln -sf $(1) $(ILIBTARGET),:) && \
 	$(if $(filter Executable,$(TARGETTYPE)), \
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
@@ -162,12 +162,14 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Executable,$(TARGETTYPE)), \
 			(codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) || true) &&)) \
 	$(if $(filter Library,$(TARGETTYPE)),\
-		otool -l $(1) | grep -A 5 LC_ID_DYLIB > $(1).exports.tmp && \
+		otool -l $(1) | grep -A 5 LC_ID_DYLIB \
+			> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
 		$(NM) -g -P $(1) | cut -d' ' -f1-2 | grep -v U$$ \
-			>> $(1).exports.tmp && \
-		if cmp -s $(1).exports.tmp $(1).exports; \
-			then rm $(1).exports.tmp; \
-			else mv $(1).exports.tmp $(1).exports; touch -r $(1) $(1).exports; \
+			>> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
+		if cmp -s $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports; \
+			then rm $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
+			else mv $(WORKDIR)/LinkTarget/$(2).exports.tmp $(WORKDIR)/LinkTarget/$(2).exports && \
+				touch -r $(1) $(WORKDIR)/LinkTarget/$(2).exports; \
 		fi &&) \
 	:)
 endef
@@ -281,7 +283,7 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(gb_Library_DLLDIR)"
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = libtest_$(1).dylib
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
