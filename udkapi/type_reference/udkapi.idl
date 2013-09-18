@@ -1,0 +1,1928 @@
+module com {
+ module sun {
+  module star {
+   module beans {
+    published enum PropertyState {
+     DIRECT_VALUE = 0,
+     DEFAULT_VALUE = 1,
+     AMBIGUOUS_VALUE = 2
+    };
+    published struct GetPropertyTolerantResult {
+     short Result;
+     ::com::sun::star::beans::PropertyState State;
+     any Value;
+    };
+    published struct GetDirectPropertyTolerantResult: ::com::sun::star::beans::GetPropertyTolerantResult {
+     string Name;
+    };
+   };
+   module uno {
+    published interface XInterface;
+    published exception Exception {
+     string Message;
+     ::com::sun::star::uno::XInterface Context;
+    };
+   };
+   module beans {
+    published exception IllegalTypeException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module uno {
+    published interface XInterface {
+     any queryInterface([in] type aType);
+     void acquire();
+     void release();
+    };
+   };
+   module beans {
+    published interface XIntrospectionAccess;
+    published interface XIntrospection {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::XIntrospectionAccess inspect([in] any aObject);
+    };
+    published service Introspection: ::com::sun::star::beans::XIntrospection;
+    /** @deprecated */ published exception IntrospectionException: ::com::sun::star::uno::Exception {
+    };
+    published constants MethodConcept {
+     const long ALL = -1;
+     const long DANGEROUS = 1;
+     const long PROPERTY = 2;
+     const long LISTENER = 4;
+     const long ENUMERATION = 8;
+     const long NAMECONTAINER = 16;
+     const long INDEXCONTAINER = 32;
+    };
+    published struct NamedValue {
+     string Name;
+     any Value;
+    };
+    published exception NotRemoveableException: ::com::sun::star::uno::Exception {
+    };
+    published struct Property {
+     string Name;
+     long Handle;
+     type Type;
+     short Attributes;
+    };
+    published constants PropertyAttribute {
+     const short MAYBEVOID = 1;
+     const short BOUND = 2;
+     const short CONSTRAINED = 4;
+     const short TRANSIENT = 8;
+     const short READONLY = 16;
+     const short MAYBEAMBIGUOUS = 32;
+     const short MAYBEDEFAULT = 64;
+     const short REMOVABLE = 128;
+     /** @deprecated */ const short REMOVEABLE = 128;
+     const short OPTIONAL = 256;
+    };
+    published struct PropertyValue {
+     string Name;
+     long Handle;
+     any Value;
+     ::com::sun::star::beans::PropertyState State;
+    };
+    published exception PropertyVetoException: ::com::sun::star::uno::Exception {
+    };
+    published exception UnknownPropertyException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module uno {
+    published exception RuntimeException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module lang {
+    published exception IllegalArgumentException: ::com::sun::star::uno::RuntimeException {
+     short ArgumentPosition;
+    };
+    published exception WrappedTargetException: ::com::sun::star::uno::Exception {
+     any TargetException;
+    };
+   };
+   module beans {
+    published interface XPropertyAccess {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< ::com::sun::star::beans::PropertyValue > getPropertyValues();
+     void setPropertyValues([in] sequence< ::com::sun::star::beans::PropertyValue > aProps) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published exception PropertyExistException: ::com::sun::star::uno::Exception {
+    };
+    published interface XPropertyContainer {
+     interface ::com::sun::star::uno::XInterface;
+     void addProperty([in] string Name, [in] short Attributes, [in] any DefaultValue) raises (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException);
+     void removeProperty([in] string Name) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException);
+    };
+    published interface XPropertyChangeListener;
+    published interface XPropertySetInfo;
+    published interface XVetoableChangeListener;
+    published interface XPropertySet {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+     void setPropertyValue([in] string aPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+     any getPropertyValue([in] string PropertyName) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+     void addPropertyChangeListener([in] string aPropertyName, [in] ::com::sun::star::beans::XPropertyChangeListener xListener) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+     void removePropertyChangeListener([in] string aPropertyName, [in] ::com::sun::star::beans::XPropertyChangeListener aListener) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+     void addVetoableChangeListener([in] string PropertyName, [in] ::com::sun::star::beans::XVetoableChangeListener aListener) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+     void removeVetoableChangeListener([in] string PropertyName, [in] ::com::sun::star::beans::XVetoableChangeListener aListener) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XPropertyBag {
+     interface ::com::sun::star::beans::XPropertySet;
+     interface ::com::sun::star::beans::XPropertyContainer;
+     interface ::com::sun::star::beans::XPropertyAccess;
+    };
+    published service PropertyBag: ::com::sun::star::beans::XPropertyBag {
+     createDefault();
+     createWithTypes([in] sequence< type > AllowedTypes, [in] boolean AllowEmptyPropertyName, [in] boolean AutomaticAddition);
+    };
+   };
+   module lang {
+    published struct EventObject {
+     ::com::sun::star::uno::XInterface Source;
+    };
+   };
+   module beans {
+    published struct PropertyChangeEvent: ::com::sun::star::lang::EventObject {
+     string PropertyName;
+     boolean Further;
+     long PropertyHandle;
+     any OldValue;
+     any NewValue;
+    };
+    published constants PropertyConcept {
+     const long ALL = -1;
+     const long DANGEROUS = 1;
+     const long PROPERTYSET = 2;
+     const long ATTRIBUTES = 4;
+     const long METHODS = 8;
+    };
+    published interface XFastPropertySet {
+     interface ::com::sun::star::uno::XInterface;
+     void setFastPropertyValue([in] long nHandle, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+     any getFastPropertyValue([in] long nHandle) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XPropertiesChangeListener;
+    published interface XPropertySetInfo;
+    published interface XMultiPropertySet {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
+     void setPropertyValues([in] sequence< string > aPropertyNames, [in] sequence< any > aValues) raises (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+     sequence< any > getPropertyValues([in] sequence< string > aPropertyNames);
+     void addPropertiesChangeListener([in] sequence< string > aPropertyNames, [in] ::com::sun::star::beans::XPropertiesChangeListener xListener);
+     void removePropertiesChangeListener([in] ::com::sun::star::beans::XPropertiesChangeListener xListener);
+     void firePropertiesChangeEvent([in] sequence< string > aPropertyNames, [in] ::com::sun::star::beans::XPropertiesChangeListener xListener);
+    };
+    published interface XPropertyState {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::PropertyState getPropertyState([in] string PropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
+     sequence< ::com::sun::star::beans::PropertyState > getPropertyStates([in] sequence< string > aPropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
+     void setPropertyToDefault([in] string PropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
+     any getPropertyDefault([in] string aPropertyName) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published service PropertySet {
+     interface ::com::sun::star::beans::XPropertySet;
+     [optional] interface ::com::sun::star::beans::XFastPropertySet;
+     [optional] interface ::com::sun::star::beans::XMultiPropertySet;
+     [optional] interface ::com::sun::star::beans::XPropertyAccess;
+     [optional] interface ::com::sun::star::beans::XPropertyState;
+    };
+    published constants PropertySetInfoChange {
+     const long PROPERTY_INSERTED = 0;
+     const long PROPERTY_REMOVED = 1;
+    };
+    published struct PropertySetInfoChangeEvent: ::com::sun::star::lang::EventObject {
+     string Name;
+     long Handle;
+     long Reason;
+    };
+    published struct PropertyStateChangeEvent: ::com::sun::star::lang::EventObject {
+     string PropertyName;
+     long PropertyHandle;
+     ::com::sun::star::beans::PropertyState OldValue;
+     ::com::sun::star::beans::PropertyState NewValue;
+    };
+    published typedef sequence< ::com::sun::star::beans::PropertyValue > PropertyValues;
+    published struct SetPropertyTolerantFailed {
+     string Name;
+     short Result;
+    };
+    published struct StringPair {
+     string First;
+     string Second;
+    };
+    published interface XExactName {
+     interface ::com::sun::star::uno::XInterface;
+     string getExactName([in] string aApproximateName);
+    };
+    published interface XHierarchicalPropertySetInfo;
+    published interface XHierarchicalPropertySet {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::XHierarchicalPropertySetInfo getHierarchicalPropertySetInfo();
+     void setHierarchicalPropertyValue([in] string aHierarchicalPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+     any getHierarchicalPropertyValue([in] string aHierarchicalPropertyName) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XHierarchicalPropertySetInfo {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::Property getPropertyByHierarchicalName([in] string aHierarchicalName) raises (::com::sun::star::beans::UnknownPropertyException);
+     boolean hasPropertyByHierarchicalName([in] string aHierarchicalName);
+    };
+   };
+   module container {
+    published exception NoSuchElementException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module lang {
+    published exception NoSuchMethodException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module reflection {
+    published interface XIdlMethod;
+   };
+   module beans {
+    published interface XIntrospectionAccess {
+     interface ::com::sun::star::uno::XInterface;
+     long getSuppliedMethodConcepts();
+     long getSuppliedPropertyConcepts();
+     ::com::sun::star::beans::Property getProperty([in] string aName, [in] long nPropertyConcepts) raises (::com::sun::star::container::NoSuchElementException);
+     boolean hasProperty([in] string aName, [in] long nPropertyConcepts);
+     sequence< ::com::sun::star::beans::Property > getProperties([in] long nPropertyConcepts);
+     ::com::sun::star::reflection::XIdlMethod getMethod([in] string aName, [in] long nMethodConcepts) raises (::com::sun::star::lang::NoSuchMethodException);
+     boolean hasMethod([in] string aName, [in] long nMethodConcepts);
+     sequence< ::com::sun::star::reflection::XIdlMethod > getMethods([in] long nMethodConcepts);
+     sequence< type > getSupportedListeners();
+     ::com::sun::star::uno::XInterface queryAdapter([in] type aInterfaceType) raises (::com::sun::star::beans::IllegalTypeException);
+    };
+    published interface XMaterialHolder {
+     interface ::com::sun::star::uno::XInterface;
+     any getMaterial();
+    };
+    published interface XMultiHierarchicalPropertySet {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::XHierarchicalPropertySetInfo getHierarchicalPropertySetInfo();
+     void setHierarchicalPropertyValues([in] sequence< string > aHierarchicalPropertyNames, [in] sequence< any > Values) raises (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+     sequence< any > getHierarchicalPropertyValues([in] sequence< string > aPropertyNames) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XMultiPropertyStates {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< ::com::sun::star::beans::PropertyState > getPropertyStates([in] sequence< string > aPropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
+     void setAllPropertiesToDefault();
+     void setPropertiesToDefault([in] sequence< string > aPropertyNames) raises (::com::sun::star::beans::UnknownPropertyException);
+     sequence< any > getPropertyDefaults([in] sequence< string > aPropertyNames) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException);
+    };
+   };
+   module lang {
+    published interface XEventListener {
+     interface ::com::sun::star::uno::XInterface;
+     void disposing([in] ::com::sun::star::lang::EventObject Source);
+    };
+   };
+   module beans {
+    published interface XPropertiesChangeListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void propertiesChange([in] sequence< ::com::sun::star::beans::PropertyChangeEvent > aEvent);
+    };
+    published interface XPropertiesChangeNotifier {
+     interface ::com::sun::star::uno::XInterface;
+     void addPropertiesChangeListener([in] sequence< string > PropertyNames, [in] ::com::sun::star::beans::XPropertiesChangeListener Listener);
+     void removePropertiesChangeListener([in] sequence< string > PropertyNames, [in] ::com::sun::star::beans::XPropertiesChangeListener Listener);
+    };
+    published interface XProperty {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::Property getAsProperty();
+    };
+    published interface XPropertyChangeListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void propertyChange([in] ::com::sun::star::beans::PropertyChangeEvent evt);
+    };
+    published interface XPropertySetInfo {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< ::com::sun::star::beans::Property > getProperties();
+     ::com::sun::star::beans::Property getPropertyByName([in] string aName) raises (::com::sun::star::beans::UnknownPropertyException);
+     boolean hasPropertyByName([in] string Name);
+    };
+    published interface XPropertySetInfoChangeListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void propertySetInfoChange([in] ::com::sun::star::beans::PropertySetInfoChangeEvent evt);
+    };
+    published interface XPropertySetInfoChangeNotifier {
+     interface ::com::sun::star::uno::XInterface;
+     void addPropertySetInfoChangeListener([in] ::com::sun::star::beans::XPropertySetInfoChangeListener Listener);
+     void removePropertySetInfoChangeListener([in] ::com::sun::star::beans::XPropertySetInfoChangeListener Listener);
+    };
+    published interface XPropertyStateChangeListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void propertyStateChange([in] ::com::sun::star::beans::PropertyStateChangeEvent aEvent);
+    };
+    published interface XPropertyWithState {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::PropertyState getStateAsProperty();
+     void setToDefaultAsProperty() raises (::com::sun::star::lang::WrappedTargetException);
+     ::com::sun::star::uno::XInterface getDefaultAsProperty() raises (::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XTolerantMultiPropertySet {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< ::com::sun::star::beans::SetPropertyTolerantFailed > setPropertyValuesTolerant([in] sequence< string > aPropertyNames, [in] sequence< any > aValues) raises (::com::sun::star::lang::IllegalArgumentException);
+     sequence< ::com::sun::star::beans::GetPropertyTolerantResult > getPropertyValuesTolerant([in] sequence< string > aPropertyNames);
+     sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > getDirectPropertyValuesTolerant([in] sequence< string > aPropertyNames);
+    };
+    published interface XVetoableChangeListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void vetoableChange([in] ::com::sun::star::beans::PropertyChangeEvent aEvent) raises (::com::sun::star::beans::PropertyVetoException);
+    };
+   };
+   module bridge {
+    published interface XBridge {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface getInstance([in] string sInstanceName);
+     string getName();
+     string getDescription();
+    };
+   };
+   module lang {
+    published interface XComponent {
+     interface ::com::sun::star::uno::XInterface;
+     void dispose();
+     void addEventListener([in] ::com::sun::star::lang::XEventListener xListener);
+     void removeEventListener([in] ::com::sun::star::lang::XEventListener aListener);
+    };
+    published interface XInitialization {
+     interface ::com::sun::star::uno::XInterface;
+     void initialize([in] sequence< any > aArguments) raises (::com::sun::star::uno::Exception);
+    };
+   };
+   module bridge {
+    published service Bridge {
+     interface ::com::sun::star::lang::XInitialization;
+     interface ::com::sun::star::bridge::XBridge;
+     interface ::com::sun::star::lang::XComponent;
+    };
+    published exception BridgeExistsException: ::com::sun::star::uno::Exception {
+    };
+    published interface XInstanceProvider;
+   };
+   module connection {
+    published interface XConnection;
+   };
+   module bridge {
+    published interface XBridgeFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::bridge::XBridge createBridge([in] string sName, [in] string sProtocol, [in] ::com::sun::star::connection::XConnection aConnection, [in] ::com::sun::star::bridge::XInstanceProvider anInstanceProvider) raises (::com::sun::star::bridge::BridgeExistsException, ::com::sun::star::lang::IllegalArgumentException);
+     ::com::sun::star::bridge::XBridge getBridge([in] string sName);
+     sequence< ::com::sun::star::bridge::XBridge > getExistingBridges();
+    };
+    published interface XBridgeFactory2 {
+     interface ::com::sun::star::bridge::XBridgeFactory;
+     interface ::com::sun::star::lang::XComponent;
+    };
+    published service BridgeFactory: ::com::sun::star::bridge::XBridgeFactory2;
+    published service IiopBridge {
+     interface ::com::sun::star::lang::XInitialization;
+     interface ::com::sun::star::bridge::XBridge;
+     interface ::com::sun::star::lang::XComponent;
+    };
+    published struct ProtocolProperty {
+     string Name;
+     any Value;
+    };
+    published exception InvalidProtocolChangeException: ::com::sun::star::uno::Exception {
+     ::com::sun::star::bridge::ProtocolProperty invalidProperty;
+     long reason;
+    };
+    published constants ModelDependent {
+     const short UNO = 1;
+     const short OLE = 2;
+     const short JAVA = 3;
+     const short CORBA = 4;
+    };
+    /** @deprecated */ published service OleApplicationRegistration {
+     interface ::com::sun::star::uno::XInterface;
+    };
+   };
+   module uno {
+    /** @deprecated */ published struct Uik {
+     unsigned long Data1;
+     unsigned short Data2;
+     unsigned short Data3;
+     unsigned long Data4;
+     unsigned long Data5;
+    };
+   };
+   module bridge {
+    /** @deprecated */ published interface XBridgeSupplier {
+     interface ::com::sun::star::uno::XInterface;
+     any createBridge([in] any modelDepObject, [in] ::com::sun::star::uno::Uik MachineId, [in] long ProcessId, [in] short sourceModelType, [in] short destModelType) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    /** @deprecated */ published service OleBridgeSupplier {
+     interface ::com::sun::star::bridge::XBridgeSupplier;
+    };
+    published interface XBridgeSupplier2 {
+     interface ::com::sun::star::uno::XInterface;
+     any createBridge([in] any aModelDepObject, [in] sequence< byte > aProcessId, [in] short nSourceModelType, [in] short nDestModelType) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    /** @deprecated */ published service OleBridgeSupplier2 {
+     interface ::com::sun::star::bridge::XBridgeSupplier2;
+    };
+    /** @deprecated */ published service OleBridgeSupplierVar1 {
+     service ::com::sun::star::bridge::OleBridgeSupplier2;
+    };
+   };
+   module lang {
+    published interface XMultiServiceFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createInstance([in] string aServiceSpecifier) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] string ServiceSpecifier, [in] sequence< any > Arguments) raises (::com::sun::star::uno::Exception);
+     sequence< string > getAvailableServiceNames();
+    };
+   };
+   module bridge {
+    /** @deprecated */ published service OleObjectFactory {
+     interface ::com::sun::star::lang::XMultiServiceFactory;
+    };
+   };
+   module connection {
+    published exception ConnectionSetupException: ::com::sun::star::uno::Exception {
+    };
+    published exception NoConnectException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module bridge {
+    published interface XUnoUrlResolver {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface resolve([in] string sUnoUrl) raises (::com::sun::star::connection::NoConnectException, ::com::sun::star::connection::ConnectionSetupException, ::com::sun::star::lang::IllegalArgumentException);
+    };
+    published service UnoUrlResolver: ::com::sun::star::bridge::XUnoUrlResolver;
+    published service UrpBridge {
+     interface ::com::sun::star::lang::XInitialization;
+     interface ::com::sun::star::bridge::XBridge;
+     interface ::com::sun::star::lang::XComponent;
+    };
+    published interface XInstanceProvider {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface getInstance([in] string sInstanceName) raises (::com::sun::star::container::NoSuchElementException);
+    };
+    published interface XProtocolProperties {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< ::com::sun::star::bridge::ProtocolProperty > getProperties();
+     long requestChange([in] long nRandomNumber);
+     void commitChange([in] sequence< ::com::sun::star::bridge::ProtocolProperty > newValues) raises (::com::sun::star::bridge::InvalidProtocolChangeException);
+    };
+   };
+   module connection {
+    published exception AlreadyAcceptingException: ::com::sun::star::uno::Exception {
+    };
+    published interface XConnection;
+    published interface XAcceptor {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::connection::XConnection accept([in] string sConnectionDescription) raises (::com::sun::star::connection::AlreadyAcceptingException, ::com::sun::star::connection::ConnectionSetupException, ::com::sun::star::lang::IllegalArgumentException);
+     void stopAccepting();
+    };
+    published service Acceptor: ::com::sun::star::connection::XAcceptor;
+    published interface XConnection;
+    published interface XConnector {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::connection::XConnection connect([in] string sConnectionDescription) raises (::com::sun::star::connection::NoConnectException, ::com::sun::star::connection::ConnectionSetupException);
+    };
+    published service Connector: ::com::sun::star::connection::XConnector;
+    published struct SocketPermission {
+     string Host;
+     string Actions;
+    };
+   };
+   module io {
+    published exception IOException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module connection {
+    published interface XConnection {
+     interface ::com::sun::star::uno::XInterface;
+     long read([out] sequence< byte > aReadBytes, [in] long nBytesToRead) raises (::com::sun::star::io::IOException);
+     void write([in] sequence< byte > aData) raises (::com::sun::star::io::IOException);
+     void flush() raises (::com::sun::star::io::IOException);
+     void close() raises (::com::sun::star::io::IOException);
+     string getDescription();
+    };
+    published interface XConnection2 {
+     interface ::com::sun::star::connection::XConnection;
+     long available() raises (::com::sun::star::io::IOException);
+     long readSomeBytes([out] sequence< byte > aData, [in] long nMaxBytesToRead) raises (::com::sun::star::io::IOException);
+    };
+   };
+   module io {
+    published interface XStreamListener;
+   };
+   module connection {
+    published interface XConnectionBroadcaster {
+     interface ::com::sun::star::uno::XInterface;
+     void addStreamListener([in] ::com::sun::star::io::XStreamListener aListener);
+     void removeStreamListener([in] ::com::sun::star::io::XStreamListener aListener);
+    };
+   };
+   module container {
+    published struct ContainerEvent: ::com::sun::star::lang::EventObject {
+     any Accessor;
+     any Element;
+     any ReplacedElement;
+    };
+    published exception ElementExistException: ::com::sun::star::uno::Exception {
+    };
+    published interface XElementAccess {
+     interface ::com::sun::star::uno::XInterface;
+     type getElementType();
+     boolean hasElements();
+    };
+   };
+   module lang {
+    published exception NoSupportException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module container {
+    published interface XChild {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface getParent();
+     void setParent([in] ::com::sun::star::uno::XInterface Parent) raises (::com::sun::star::lang::NoSupportException);
+    };
+    published interface XEnumeration {
+     interface ::com::sun::star::uno::XInterface;
+     boolean hasMoreElements();
+     any nextElement() raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XComponentEnumeration {
+     interface ::com::sun::star::container::XEnumeration;
+     ::com::sun::star::lang::XComponent nextComponent() raises (::com::sun::star::container::NoSuchElementException);
+    };
+    published interface XEnumerationAccess {
+     interface ::com::sun::star::container::XElementAccess;
+     ::com::sun::star::container::XEnumeration createEnumeration();
+    };
+    published interface XComponentEnumerationAccess {
+     interface ::com::sun::star::container::XEnumerationAccess;
+     ::com::sun::star::container::XComponentEnumeration createComponentEnumeration();
+    };
+    published interface XContainerListener;
+    published interface XContainer {
+     interface ::com::sun::star::uno::XInterface;
+     void addContainerListener([in] ::com::sun::star::container::XContainerListener xListener);
+     void removeContainerListener([in] ::com::sun::star::container::XContainerListener xListener);
+    };
+    published interface XContainerListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void elementInserted([in] ::com::sun::star::container::ContainerEvent Event);
+     void elementRemoved([in] ::com::sun::star::container::ContainerEvent Event);
+     void elementReplaced([in] ::com::sun::star::container::ContainerEvent Event);
+    };
+    published interface XContainerQuery {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::container::XEnumeration createSubSetEnumerationByQuery([in] string Query);
+     ::com::sun::star::container::XEnumeration createSubSetEnumerationByProperties([in] sequence< ::com::sun::star::beans::NamedValue > Properties);
+    };
+    published interface XContentEnumerationAccess {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::container::XEnumeration createContentEnumeration([in] string aServiceName);
+     sequence< string > getAvailableServiceNames();
+    };
+    published interface XHierarchicalName {
+     interface ::com::sun::star::uno::XInterface;
+     string getHierarchicalName();
+     string composeHierarchicalName([in] string aRelativeName) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException);
+    };
+    published interface XHierarchicalNameAccess {
+     interface ::com::sun::star::uno::XInterface;
+     any getByHierarchicalName([in] string aName) raises (::com::sun::star::container::NoSuchElementException);
+     boolean hasByHierarchicalName([in] string aName);
+    };
+    published interface XHierarchicalNameReplace {
+     interface ::com::sun::star::container::XHierarchicalNameAccess;
+     void replaceByHierarchicalName([in] string aName, [in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XHierarchicalNameContainer {
+     interface ::com::sun::star::container::XHierarchicalNameReplace;
+     void insertByHierarchicalName([in] string aName, [in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException);
+     void removeByHierarchicalName([in] string Name) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XIdentifierAccess {
+     interface ::com::sun::star::container::XElementAccess;
+     any getByIdentifier([in] long Identifierr) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+     sequence< long > getIdentifiers();
+    };
+    published interface XIdentifierReplace {
+     interface ::com::sun::star::container::XIdentifierAccess;
+     void replaceByIdentifer([in] long Identifier, [in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XIdentifierContainer {
+     interface ::com::sun::star::container::XIdentifierReplace;
+     long insert([in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
+     void removeByIdentifier([in] long Identifier) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XImplicitIDAccess {
+     interface ::com::sun::star::container::XElementAccess;
+     any getByImplicitID([in] string ID) raises (::com::sun::star::container::NoSuchElementException);
+     sequence< string > getImplicitIDs();
+    };
+    published interface XImplicitIDReplace {
+     interface ::com::sun::star::uno::XInterface;
+     void replaceByUniqueID([in] string ID, [in] any aNewElement) raises (::com::sun::star::container::NoSuchElementException);
+    };
+    published interface XImplicitIDContainer {
+     interface ::com::sun::star::container::XImplicitIDReplace;
+     string addWithImplicitID([in] any aElement);
+     void removeByImplicitID([in] string ID) raises (::com::sun::star::container::NoSuchElementException);
+    };
+   };
+   module lang {
+    published exception IndexOutOfBoundsException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module container {
+    published interface XIndexAccess {
+     interface ::com::sun::star::container::XElementAccess;
+     long getCount();
+     any getByIndex([in] long Index) raises (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XIndexReplace {
+     interface ::com::sun::star::container::XIndexAccess;
+     void replaceByIndex([in] long Index, [in] any Element) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XIndexContainer {
+     interface ::com::sun::star::container::XIndexReplace;
+     void insertByIndex([in] long Index, [in] any Element) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException);
+     void removeByIndex([in] long Index) raises (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XNameAccess {
+     interface ::com::sun::star::container::XElementAccess;
+     any getByName([in] string aName) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+     sequence< string > getElementNames();
+     boolean hasByName([in] string aName);
+    };
+    published interface XNameReplace {
+     interface ::com::sun::star::container::XNameAccess;
+     void replaceByName([in] string aName, [in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XNameContainer {
+     interface ::com::sun::star::container::XNameReplace;
+     void insertByName([in] string aName, [in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException);
+     void removeByName([in] string Name) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+    };
+    published interface XNamed {
+     interface ::com::sun::star::uno::XInterface;
+     string getName();
+     void setName([in] string aName);
+    };
+    published interface XSet {
+     interface ::com::sun::star::container::XEnumerationAccess;
+     boolean has([in] any aElement);
+     void insert([in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException);
+     void remove([in] any aElement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException);
+    };
+    published interface XUniqueIDAccess {
+     interface ::com::sun::star::uno::XInterface;
+     any getByUniqueID([in] string ID) raises (::com::sun::star::container::NoSuchElementException);
+     void removeByUniqueID([in] string ID) raises (::com::sun::star::container::NoSuchElementException);
+    };
+   };
+   module io {
+    published exception BufferSizeExceededException: ::com::sun::star::io::IOException {
+    };
+    published interface XInputStream;
+    published interface XActiveDataSink {
+     interface ::com::sun::star::uno::XInterface;
+     void setInputStream([in] ::com::sun::star::io::XInputStream aStream);
+     ::com::sun::star::io::XInputStream getInputStream();
+    };
+    published interface XConnectable {
+     interface ::com::sun::star::uno::XInterface;
+     void setPredecessor([in] ::com::sun::star::io::XConnectable aPredecessor);
+     ::com::sun::star::io::XConnectable getPredecessor();
+     void setSuccessor([in] ::com::sun::star::io::XConnectable aSuccessor);
+     ::com::sun::star::io::XConnectable getSuccessor();
+    };
+    published exception NotConnectedException: ::com::sun::star::io::IOException {
+    };
+    published interface XInputStream {
+     interface ::com::sun::star::uno::XInterface;
+     long readBytes([out] sequence< byte > aData, [in] long nBytesToRead) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
+     long readSomeBytes([out] sequence< byte > aData, [in] long nMaxBytesToRead) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
+     void skipBytes([in] long nBytesToSkip) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
+     long available() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException);
+     void closeInput() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException);
+    };
+    published interface XDataInputStream {
+     interface ::com::sun::star::io::XInputStream;
+     byte readBoolean() raises (::com::sun::star::io::IOException);
+     byte readByte() raises (::com::sun::star::io::IOException);
+     char readChar() raises (::com::sun::star::io::IOException);
+     short readShort() raises (::com::sun::star::io::IOException);
+     long readLong() raises (::com::sun::star::io::IOException);
+     hyper readHyper() raises (::com::sun::star::io::IOException);
+     float readFloat() raises (::com::sun::star::io::IOException);
+     double readDouble() raises (::com::sun::star::io::IOException);
+     string readUTF() raises (::com::sun::star::io::IOException);
+    };
+    published service DataInputStream {
+     interface ::com::sun::star::io::XDataInputStream;
+     interface ::com::sun::star::io::XActiveDataSink;
+     interface ::com::sun::star::io::XConnectable;
+    };
+    published interface XOutputStream;
+    published interface XActiveDataSource {
+     interface ::com::sun::star::uno::XInterface;
+     void setOutputStream([in] ::com::sun::star::io::XOutputStream aStream);
+     ::com::sun::star::io::XOutputStream getOutputStream();
+    };
+    published interface XOutputStream {
+     interface ::com::sun::star::uno::XInterface;
+     void writeBytes([in] sequence< byte > aData) raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
+     void flush() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
+     void closeOutput() raises (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException);
+    };
+    published interface XDataOutputStream {
+     interface ::com::sun::star::io::XOutputStream;
+     void writeBoolean([in] boolean Value) raises (::com::sun::star::io::IOException);
+     void writeByte([in] byte Value) raises (::com::sun::star::io::IOException);
+     void writeChar([in] char Value) raises (::com::sun::star::io::IOException);
+     void writeShort([in] short Value) raises (::com::sun::star::io::IOException);
+     void writeLong([in] long Value) raises (::com::sun::star::io::IOException);
+     void writeHyper([in] hyper Value) raises (::com::sun::star::io::IOException);
+     void writeFloat([in] float Value) raises (::com::sun::star::io::IOException);
+     void writeDouble([in] double Value) raises (::com::sun::star::io::IOException);
+     void writeUTF([in] string Value) raises (::com::sun::star::io::IOException);
+    };
+    published service DataOutputStream {
+     interface ::com::sun::star::io::XDataOutputStream;
+     interface ::com::sun::star::io::XActiveDataSource;
+    };
+    published struct DataTransferEvent: ::com::sun::star::lang::EventObject {
+     any aException;
+    };
+    published struct FilePermission {
+     string URL;
+     string Actions;
+    };
+    published interface XMarkableStream {
+     interface ::com::sun::star::uno::XInterface;
+     long createMark() raises (::com::sun::star::io::IOException);
+     void deleteMark([in] long Mark) raises (::com::sun::star::io::IOException, ::com::sun::star::lang::IllegalArgumentException);
+     void jumpToMark([in] long nMark) raises (::com::sun::star::io::IOException, ::com::sun::star::lang::IllegalArgumentException);
+     void jumpToFurthest() raises (::com::sun::star::io::IOException);
+     long offsetToMark([in] long nMark) raises (::com::sun::star::io::IOException, ::com::sun::star::lang::IllegalArgumentException);
+    };
+    published service MarkableInputStream {
+     interface ::com::sun::star::io::XInputStream;
+     interface ::com::sun::star::io::XMarkableStream;
+     interface ::com::sun::star::io::XActiveDataSink;
+     interface ::com::sun::star::io::XConnectable;
+    };
+    published service MarkableOutputStream {
+     interface ::com::sun::star::io::XOutputStream;
+     interface ::com::sun::star::io::XMarkableStream;
+     interface ::com::sun::star::io::XActiveDataSource;
+     interface ::com::sun::star::io::XConnectable;
+    };
+    published interface XPersistObject;
+    published interface XObjectInputStream {
+     interface ::com::sun::star::io::XDataInputStream;
+     ::com::sun::star::io::XPersistObject readObject() raises (::com::sun::star::io::IOException);
+    };
+    published service ObjectInputStream {
+     interface ::com::sun::star::io::XObjectInputStream;
+     interface ::com::sun::star::io::XActiveDataSink;
+     interface ::com::sun::star::io::XConnectable;
+     interface ::com::sun::star::io::XMarkableStream;
+    };
+    published interface XPersistObject;
+    published interface XObjectOutputStream {
+     interface ::com::sun::star::io::XDataOutputStream;
+     void writeObject([in] ::com::sun::star::io::XPersistObject Object) raises (::com::sun::star::io::IOException);
+    };
+    published service ObjectOutputStream {
+     interface ::com::sun::star::io::XObjectOutputStream;
+     interface ::com::sun::star::io::XActiveDataSource;
+     interface ::com::sun::star::io::XConnectable;
+    };
+    published interface XPipe {
+     interface ::com::sun::star::io::XOutputStream;
+     interface ::com::sun::star::io::XInputStream;
+    };
+    published service Pipe: ::com::sun::star::io::XPipe;
+    published interface XStreamListener;
+    published interface XActiveDataControl {
+     interface ::com::sun::star::uno::XInterface;
+     void addListener([in] ::com::sun::star::io::XStreamListener aListener);
+     void removeListener([in] ::com::sun::star::io::XStreamListener aListener);
+     void start();
+     void terminate();
+    };
+    published service Pump {
+     interface ::com::sun::star::io::XActiveDataSource;
+     interface ::com::sun::star::io::XActiveDataSink;
+     interface ::com::sun::star::io::XActiveDataControl;
+    };
+    published interface XSeekable {
+     interface ::com::sun::star::uno::XInterface;
+     void seek([in] hyper location) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException);
+     hyper getPosition() raises (::com::sun::star::io::IOException);
+     hyper getLength() raises (::com::sun::star::io::IOException);
+    };
+    published interface XSeekableInputStream {
+     interface ::com::sun::star::io::XInputStream;
+     interface ::com::sun::star::io::XSeekable;
+    };
+    published service SequenceInputStream: ::com::sun::star::io::XSeekableInputStream {
+     createStreamFromSequence([in] sequence< byte > aData);
+    };
+    published interface XStream {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::io::XInputStream getInputStream();
+     ::com::sun::star::io::XOutputStream getOutputStream();
+    };
+    published interface XTextInputStream {
+     interface ::com::sun::star::io::XInputStream;
+     string readLine() raises (::com::sun::star::io::IOException);
+     string readString([in] sequence< char > Delimiters, [in] boolean bRemoveDelimiter) raises (::com::sun::star::io::IOException);
+     boolean isEOF() raises (::com::sun::star::io::IOException);
+     void setEncoding([in] string Encoding);
+    };
+    published interface XTextInputStream2 {
+     interface ::com::sun::star::io::XTextInputStream;
+     interface ::com::sun::star::io::XActiveDataSink;
+    };
+    published service TextInputStream: ::com::sun::star::io::XTextInputStream2;
+    published interface XTextOutputStream {
+     interface ::com::sun::star::io::XOutputStream;
+     void writeString([in] string aString) raises (::com::sun::star::io::IOException);
+     void setEncoding([in] string Encoding);
+    };
+    published interface XTextOutputStream2 {
+     interface ::com::sun::star::io::XTextOutputStream;
+     interface ::com::sun::star::io::XActiveDataSource;
+    };
+    published service TextOutputStream: ::com::sun::star::io::XTextOutputStream2;
+    published exception UnexpectedEOFException: ::com::sun::star::io::IOException {
+    };
+    published exception WrongFormatException: ::com::sun::star::io::IOException {
+    };
+    published interface XActiveDataStreamer {
+     interface ::com::sun::star::uno::XInterface;
+     void setStream([in] ::com::sun::star::io::XStream aStream);
+     ::com::sun::star::io::XStream getStream();
+    };
+    published interface XDataTransferEventListener;
+    published interface XDataExporter {
+     interface ::com::sun::star::uno::XInterface;
+     void exportData([in] ::com::sun::star::io::XOutputStream aOutputStream, [in] ::com::sun::star::lang::XComponent Component, [in] ::com::sun::star::io::XDataTransferEventListener aListener);
+     void cancel();
+    };
+    published interface XDataTransferEventListener;
+    published interface XDataImporter {
+     interface ::com::sun::star::uno::XInterface;
+     void importData([in] ::com::sun::star::io::XActiveDataSource aActiveSource, [in] ::com::sun::star::lang::XComponent Component, [in] ::com::sun::star::io::XDataTransferEventListener aListener);
+     void cancel();
+    };
+    published interface XDataTransferEventListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void finished([in] ::com::sun::star::io::DataTransferEvent aEvent);
+     void cancelled([in] ::com::sun::star::io::DataTransferEvent aEvent);
+    };
+    published interface XInputStreamProvider {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::io::XInputStream createInputStream();
+    };
+    published interface XPersist {
+     interface ::com::sun::star::uno::XInterface;
+     void write([in] string URL) raises (::com::sun::star::io::IOException);
+     void read([in] string URL) raises (::com::sun::star::io::IOException);
+    };
+    published interface XPersistObject {
+     interface ::com::sun::star::uno::XInterface;
+     string getServiceName();
+     void write([in] ::com::sun::star::io::XObjectOutputStream OutStream) raises (::com::sun::star::io::IOException);
+     void read([in] ::com::sun::star::io::XObjectInputStream InStream) raises (::com::sun::star::io::IOException);
+    };
+    published interface XStreamListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void started();
+     void closed();
+     void terminated();
+     void error([in] any aException);
+    };
+    published interface XTruncate {
+     interface ::com::sun::star::uno::XInterface;
+     void truncate() raises (::com::sun::star::io::IOException);
+    };
+    published interface XXMLExtractor {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::io::XInputStream extract([in] ::com::sun::star::io::XInputStream aStream);
+    };
+   };
+   module uno {
+    published exception DeploymentException: ::com::sun::star::uno::RuntimeException {
+    };
+   };
+   module java {
+    published exception JavaInitializationException: ::com::sun::star::uno::DeploymentException {
+    };
+    published exception JavaDisabledException: ::com::sun::star::java::JavaInitializationException {
+    };
+    published exception JavaNotConfiguredException: ::com::sun::star::java::JavaInitializationException {
+    };
+    published exception JavaVMCreationFailureException: ::com::sun::star::java::JavaInitializationException {
+     long ErrorCode;
+    };
+    /** @deprecated */ published interface XJavaVM {
+     interface ::com::sun::star::uno::XInterface;
+     any getJavaVM([in] sequence< byte > processID);
+     boolean isVMStarted();
+     boolean isVMEnabled();
+    };
+    /** @deprecated */ published service JavaVirtualMachine: ::com::sun::star::java::XJavaVM;
+    published exception MissingJavaRuntimeException: ::com::sun::star::java::JavaInitializationException {
+     string URLRuntimeLib;
+    };
+    published exception WrongJavaVersionException: ::com::sun::star::uno::Exception {
+     string LowestSupportedVersion;
+     string HighestSupportedVersion;
+     string DetectedVersion;
+    };
+    /** @deprecated */ published interface XJavaThreadRegister_11 {
+     interface ::com::sun::star::uno::XInterface;
+     boolean isThreadAttached();
+     void registerThread();
+     void revokeThread();
+    };
+   };
+   module lang {
+    published exception ArrayIndexOutOfBoundsException: ::com::sun::star::lang::IndexOutOfBoundsException {
+    };
+    published exception ClassNotFoundException: ::com::sun::star::uno::Exception {
+    };
+    published exception DisposedException: ::com::sun::star::uno::RuntimeException {
+    };
+    published exception IllegalAccessException: ::com::sun::star::uno::Exception {
+    };
+    published exception InvalidListenerException: ::com::sun::star::uno::Exception {
+    };
+    published exception ListenerExistException: ::com::sun::star::uno::Exception {
+    };
+    published struct Locale {
+     string Language;
+     string Country;
+     string Variant;
+    };
+   };
+   module uno {
+    published interface XComponentContext;
+   };
+   module lang {
+    published interface XMultiComponentFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createInstanceWithContext([in] string aServiceSpecifier, [in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] string ServiceSpecifier, [in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
+     sequence< string > getAvailableServiceNames();
+    };
+    published service MultiServiceFactory {
+     interface ::com::sun::star::lang::XMultiServiceFactory;
+     interface ::com::sun::star::lang::XMultiComponentFactory;
+    };
+    published exception NoSuchFieldException: ::com::sun::star::uno::Exception {
+    };
+    published exception NotInitializedException: ::com::sun::star::uno::RuntimeException {
+    };
+    published exception NullPointerException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module uno {
+    published interface XComponentContext;
+   };
+   module lang {
+    published service ServiceManager {
+     service ::com::sun::star::lang::MultiServiceFactory;
+     interface ::com::sun::star::lang::XComponent;
+     interface ::com::sun::star::container::XSet;
+     interface ::com::sun::star::container::XContentEnumerationAccess;
+     [optional] interface ::com::sun::star::beans::XPropertySet;
+     [property, optional] ::com::sun::star::uno::XComponentContext DefaultContext;
+    };
+   };
+   module registry {
+    published interface XSimpleRegistry;
+   };
+   module lang {
+    published service RegistryServiceManager {
+     service ::com::sun::star::lang::ServiceManager;
+     interface ::com::sun::star::lang::XInitialization;
+     interface ::com::sun::star::beans::XPropertySet;
+     [property, readonly] ::com::sun::star::registry::XSimpleRegistry Registry;
+    };
+    published exception ServiceNotRegisteredException: ::com::sun::star::uno::Exception {
+    };
+    /** @deprecated */ published constants SystemDependent {
+     const short SYSTEM_WIN32 = 1;
+     const short SYSTEM_WIN16 = 2;
+     const short SYSTEM_JAVA = 3;
+     const short SYSTEM_OS2 = 4;
+     const short SYSTEM_MAC = 5;
+     const short SYSTEM_XWINDOW = 6;
+     const short SYSTEM_IOS = 7;
+     const short SYSTEM_ANDROID = 8;
+    };
+    published exception WrappedTargetRuntimeException: ::com::sun::star::uno::RuntimeException {
+     any TargetException;
+    };
+    published interface XConnectionPointContainer;
+    published interface XConnectionPoint {
+     interface ::com::sun::star::uno::XInterface;
+     type getConnectionType();
+     ::com::sun::star::lang::XConnectionPointContainer getConnectionPointContainer();
+     void advise([in] ::com::sun::star::uno::XInterface xListener) raises (::com::sun::star::lang::ListenerExistException, ::com::sun::star::lang::InvalidListenerException);
+     void unadvise([in] ::com::sun::star::uno::XInterface xListener);
+     sequence< ::com::sun::star::uno::XInterface > getConnections();
+    };
+    published interface XConnectionPointContainer {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< type > getConnectionPointTypes();
+     ::com::sun::star::lang::XConnectionPoint queryConnectionPoint([in] type aType);
+     void advise([in] type aType, [in] ::com::sun::star::uno::XInterface xListener);
+     void unadvise([in] type aType, [in] ::com::sun::star::uno::XInterface xListener);
+    };
+    published interface XLocalizable {
+     interface ::com::sun::star::uno::XInterface;
+     void setLocale([in] ::com::sun::star::lang::Locale eLocale);
+     ::com::sun::star::lang::Locale getLocale();
+    };
+    published interface XMain {
+     interface ::com::sun::star::uno::XInterface;
+     long run([in] sequence< string > aArguments);
+    };
+    published interface XServiceDisplayName {
+     interface ::com::sun::star::uno::XInterface;
+     string getServiceDisplayName([in] ::com::sun::star::lang::Locale aLocale);
+    };
+    published interface XServiceInfo {
+     interface ::com::sun::star::uno::XInterface;
+     string getImplementationName();
+     boolean supportsService([in] string ServiceName);
+     sequence< string > getSupportedServiceNames();
+    };
+    published interface XServiceName {
+     interface ::com::sun::star::uno::XInterface;
+     string getServiceName();
+    };
+   };
+   module uno {
+    published interface XComponentContext;
+   };
+   module lang {
+    published interface XSingleComponentFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createInstanceWithContext([in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
+    };
+    /** @deprecated */ published interface XSingleServiceFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createInstance() raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::uno::XInterface createInstanceWithArguments([in] sequence< any > aArguments) raises (::com::sun::star::uno::Exception);
+    };
+    published interface XTypeProvider {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< type > getTypes();
+     sequence< byte > getImplementationId();
+    };
+    published interface XUnoTunnel {
+     interface ::com::sun::star::uno::XInterface;
+     hyper getSomething([in] sequence< byte > aIdentifier);
+    };
+   };
+   module loader {
+    published exception CannotActivateFactoryException: ::com::sun::star::uno::Exception {
+    };
+   };
+   module registry {
+    published exception CannotRegisterImplementationException: ::com::sun::star::uno::Exception {
+    };
+    published interface XRegistryKey;
+   };
+   module loader {
+    published interface XImplementationLoader {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface activate([in] string implementationName, [in] string implementationLoaderUrl, [in] string locationUrl, [in] ::com::sun::star::registry::XRegistryKey xKey) raises (::com::sun::star::loader::CannotActivateFactoryException);
+     boolean writeRegistryInfo([in] ::com::sun::star::registry::XRegistryKey xKey, [in] string implementationLoaderUrl, [in] string locationUrl) raises (::com::sun::star::registry::CannotRegisterImplementationException);
+    };
+    published service Dynamic: ::com::sun::star::loader::XImplementationLoader;
+    published service Java: ::com::sun::star::loader::XImplementationLoader;
+    /** @deprecated */ published service Java2 {
+     interface ::com::sun::star::loader::XImplementationLoader;
+    };
+    published service SharedLibrary: ::com::sun::star::loader::XImplementationLoader;
+   };
+   module reflection {
+    published interface XIdlClass;
+    published interface XIdlReflection {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::reflection::XIdlClass forName([in] string aTypeName);
+     ::com::sun::star::reflection::XIdlClass getType([in] any aObj);
+    };
+    /** @deprecated */ published service CoreReflection {
+     interface ::com::sun::star::reflection::XIdlReflection;
+     [optional] interface ::com::sun::star::lang::XComponent;
+    };
+    published enum FieldAccessMode {
+     READWRITE = 0,
+     READONLY = 1,
+     WRITEONLY = 2,
+     /** @deprecated */ CONST = 3
+    };
+    published exception InvalidTypeNameException: ::com::sun::star::uno::Exception {
+    };
+    published exception InvocationTargetException: ::com::sun::star::lang::WrappedTargetException {
+    };
+    published enum MethodMode {
+     ONEWAY = 0,
+     TWOWAY = 1
+    };
+    published exception NoSuchTypeNameException: ::com::sun::star::uno::Exception {
+    };
+    published enum ParamMode {
+     IN = 0,
+     OUT = 1,
+     INOUT = 2
+    };
+    published interface XIdlClass;
+    published struct ParamInfo {
+     string aName;
+     ::com::sun::star::reflection::ParamMode aMode;
+     ::com::sun::star::reflection::XIdlClass aType;
+    };
+   };
+   module uno {
+    published interface XAggregation;
+   };
+   module reflection {
+    /** @deprecated */ published interface XProxyFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XAggregation createProxy([in] ::com::sun::star::uno::XInterface xTarget);
+    };
+    /** @deprecated */ published service ProxyFactory: ::com::sun::star::reflection::XProxyFactory;
+    published enum TypeDescriptionSearchDepth {
+     INFINITE = -1,
+     ONE = 1
+    };
+   };
+   module uno {
+    published enum TypeClass {
+     VOID = 0,
+     CHAR = 1,
+     BOOLEAN = 2,
+     BYTE = 3,
+     SHORT = 4,
+     UNSIGNED_SHORT = 5,
+     LONG = 6,
+     UNSIGNED_LONG = 7,
+     HYPER = 8,
+     UNSIGNED_HYPER = 9,
+     FLOAT = 10,
+     DOUBLE = 11,
+     STRING = 12,
+     TYPE = 13,
+     ANY = 14,
+     ENUM = 15,
+     TYPEDEF = 16,
+     STRUCT = 17,
+     UNION = 18,
+     EXCEPTION = 19,
+     SEQUENCE = 20,
+     ARRAY = 21,
+     INTERFACE = 22,
+     SERVICE = 23,
+     MODULE = 24,
+     INTERFACE_METHOD = 25,
+     INTERFACE_ATTRIBUTE = 26,
+     UNKNOWN = 27,
+     PROPERTY = 28,
+     CONSTANT = 29,
+     CONSTANTS = 30,
+     SINGLETON = 31
+    };
+   };
+   module reflection {
+    published interface XTypeDescriptionEnumeration;
+    published interface XTypeDescriptionEnumerationAccess {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::reflection::XTypeDescriptionEnumeration createTypeDescriptionEnumeration([in] string moduleName, [in] sequence< ::com::sun::star::uno::TypeClass > types, [in] ::com::sun::star::reflection::TypeDescriptionSearchDepth depth) raises (::com::sun::star::reflection::NoSuchTypeNameException, ::com::sun::star::reflection::InvalidTypeNameException);
+    };
+    published service TypeDescriptionManager {
+     interface ::com::sun::star::container::XHierarchicalNameAccess;
+     interface ::com::sun::star::container::XSet;
+     [optional] interface ::com::sun::star::lang::XComponent;
+     [optional] interface ::com::sun::star::reflection::XTypeDescriptionEnumerationAccess;
+    };
+    published service TypeDescriptionProvider {
+     interface ::com::sun::star::container::XHierarchicalNameAccess;
+     interface ::com::sun::star::lang::XComponent;
+     [optional] interface ::com::sun::star::reflection::XTypeDescriptionEnumerationAccess;
+    };
+    published interface XTypeDescription {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::TypeClass getTypeClass();
+     string getName();
+    };
+    /** @deprecated */ published interface XArrayTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     ::com::sun::star::reflection::XTypeDescription getType();
+     long getNumberOfDimensions();
+     sequence< long > getDimensions();
+    };
+    published interface XCompoundTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     ::com::sun::star::reflection::XTypeDescription getBaseType();
+     sequence< ::com::sun::star::reflection::XTypeDescription > getMemberTypes();
+     sequence< string > getMemberNames();
+    };
+    published interface XConstantTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     any getConstantValue();
+    };
+    published interface XConstantsTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     sequence< ::com::sun::star::reflection::XConstantTypeDescription > getConstants();
+    };
+    published interface XEnumTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     long getDefaultEnumValue();
+     sequence< string > getEnumNames();
+     sequence< long > getEnumValues();
+    };
+    published interface XIdlArray {
+     interface ::com::sun::star::uno::XInterface;
+     void realloc([inout] any array, [in] long length) raises (::com::sun::star::lang::IllegalArgumentException);
+     long getLen([in] any array) raises (::com::sun::star::lang::IllegalArgumentException);
+     any get([in] any aArray, [in] long nIndex) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException);
+     void set([inout] any aArray, [in] long nIndex, [in] any aNewValue) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ArrayIndexOutOfBoundsException);
+    };
+    published interface XIdlField;
+    published interface XIdlMethod;
+    published interface XIdlClass {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< ::com::sun::star::reflection::XIdlClass > getClasses();
+     /** @deprecated */ ::com::sun::star::reflection::XIdlClass getClass([in] string aName);
+     boolean equals([in] ::com::sun::star::reflection::XIdlClass Type);
+     boolean isAssignableFrom([in] ::com::sun::star::reflection::XIdlClass xType);
+     ::com::sun::star::uno::TypeClass getTypeClass();
+     string getName();
+     /** @deprecated */ ::com::sun::star::uno::Uik getUik();
+     sequence< ::com::sun::star::reflection::XIdlClass > getSuperclasses();
+     sequence< ::com::sun::star::reflection::XIdlClass > getInterfaces();
+     ::com::sun::star::reflection::XIdlClass getComponentType();
+     ::com::sun::star::reflection::XIdlField getField([in] string aName);
+     sequence< ::com::sun::star::reflection::XIdlField > getFields();
+     ::com::sun::star::reflection::XIdlMethod getMethod([in] string aName);
+     sequence< ::com::sun::star::reflection::XIdlMethod > getMethods();
+     ::com::sun::star::reflection::XIdlArray getArray();
+     void createObject([out] any obj);
+    };
+    /** @deprecated */ published interface XIdlClassProvider {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< ::com::sun::star::reflection::XIdlClass > getIdlClasses();
+    };
+    published interface XIdlMember {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::reflection::XIdlClass getDeclaringClass();
+     string getName();
+    };
+    /** @deprecated */ published interface XIdlField {
+     interface ::com::sun::star::reflection::XIdlMember;
+     ::com::sun::star::reflection::XIdlClass getType();
+     ::com::sun::star::reflection::FieldAccessMode getAccessMode();
+     any get([in] any obj) raises (::com::sun::star::lang::IllegalArgumentException);
+     void set([in] any obj, [in] any value) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException);
+    };
+    published interface XIdlField2 {
+     interface ::com::sun::star::reflection::XIdlMember;
+     ::com::sun::star::reflection::XIdlClass getType();
+     ::com::sun::star::reflection::FieldAccessMode getAccessMode();
+     any get([in] any obj) raises (::com::sun::star::lang::IllegalArgumentException);
+     void set([inout] any obj, [in] any value) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException);
+    };
+    published interface XIdlMethod {
+     interface ::com::sun::star::reflection::XIdlMember;
+     ::com::sun::star::reflection::XIdlClass getReturnType();
+     sequence< ::com::sun::star::reflection::XIdlClass > getParameterTypes();
+     sequence< ::com::sun::star::reflection::ParamInfo > getParameterInfos();
+     sequence< ::com::sun::star::reflection::XIdlClass > getExceptionTypes();
+     ::com::sun::star::reflection::MethodMode getMode();
+     any invoke([in] any obj, [inout] sequence< any > args) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::reflection::InvocationTargetException);
+    };
+    published interface XIndirectTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     ::com::sun::star::reflection::XTypeDescription getReferencedType();
+    };
+    published interface XInterfaceMemberTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     string getMemberName();
+     long getPosition();
+    };
+    published interface XInterfaceAttributeTypeDescription {
+     interface ::com::sun::star::reflection::XInterfaceMemberTypeDescription;
+     boolean isReadOnly();
+     ::com::sun::star::reflection::XTypeDescription getType();
+    };
+    published interface XMethodParameter;
+    published interface XInterfaceMethodTypeDescription {
+     interface ::com::sun::star::reflection::XInterfaceMemberTypeDescription;
+     ::com::sun::star::reflection::XTypeDescription getReturnType();
+     boolean isOneway();
+     sequence< ::com::sun::star::reflection::XMethodParameter > getParameters();
+     sequence< ::com::sun::star::reflection::XTypeDescription > getExceptions();
+    };
+    published interface XInterfaceTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     /** @deprecated */ ::com::sun::star::reflection::XTypeDescription getBaseType();
+     /** @deprecated */ ::com::sun::star::uno::Uik getUik();
+     sequence< ::com::sun::star::reflection::XInterfaceMemberTypeDescription > getMembers();
+    };
+    published interface XMethodParameter {
+     interface ::com::sun::star::uno::XInterface;
+     string getName();
+     ::com::sun::star::reflection::XTypeDescription getType();
+     boolean isIn();
+     boolean isOut();
+     long getPosition();
+    };
+    published interface XModuleTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     sequence< ::com::sun::star::reflection::XTypeDescription > getMembers();
+    };
+    published interface XPropertyTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     short getPropertyFlags();
+     ::com::sun::star::reflection::XTypeDescription getPropertyTypeDescription();
+    };
+    published interface XServiceTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     sequence< ::com::sun::star::reflection::XServiceTypeDescription > getMandatoryServices();
+     sequence< ::com::sun::star::reflection::XServiceTypeDescription > getOptionalServices();
+     sequence< ::com::sun::star::reflection::XInterfaceTypeDescription > getMandatoryInterfaces();
+     sequence< ::com::sun::star::reflection::XInterfaceTypeDescription > getOptionalInterfaces();
+     sequence< ::com::sun::star::reflection::XPropertyTypeDescription > getProperties();
+    };
+    published interface XSingletonTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     ::com::sun::star::reflection::XServiceTypeDescription getService();
+    };
+    published interface XTypeDescriptionEnumeration {
+     interface ::com::sun::star::container::XEnumeration;
+     ::com::sun::star::reflection::XTypeDescription nextTypeDescription() raises (::com::sun::star::container::NoSuchElementException);
+    };
+    /** @deprecated */ published interface XUnionTypeDescription {
+     interface ::com::sun::star::reflection::XTypeDescription;
+     ::com::sun::star::reflection::XTypeDescription getDiscriminantType();
+     any getDefaultDiscriminant();
+     ::com::sun::star::reflection::XTypeDescription getDefaultMemberType();
+     sequence< any > getDiscriminants();
+     sequence< ::com::sun::star::reflection::XTypeDescription > getMemberTypes();
+     sequence< string > getMemberNames();
+    };
+   };
+   module registry {
+    published exception InvalidRegistryException: ::com::sun::star::uno::Exception {
+    };
+    published exception MergeConflictException: ::com::sun::star::uno::Exception {
+    };
+    published interface XRegistryKey;
+    published interface XSimpleRegistry {
+     interface ::com::sun::star::uno::XInterface;
+     string getURL();
+     void open([in] string rURL, [in] boolean bReadOnly, [in] boolean bCreate) raises (::com::sun::star::registry::InvalidRegistryException);
+     boolean isValid();
+     void close() raises (::com::sun::star::registry::InvalidRegistryException);
+     void destroy() raises (::com::sun::star::registry::InvalidRegistryException);
+     ::com::sun::star::registry::XRegistryKey getRootKey() raises (::com::sun::star::registry::InvalidRegistryException);
+     boolean isReadOnly() raises (::com::sun::star::registry::InvalidRegistryException);
+     void mergeKey([in] string aKeyName, [in] string aUrl) raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::MergeConflictException);
+    };
+    published service DefaultRegistry {
+     interface ::com::sun::star::registry::XSimpleRegistry;
+    };
+    published interface XImplementationRegistration {
+     interface ::com::sun::star::uno::XInterface;
+     void registerImplementation([in] string aImplementationLoader, [in] string aLocation, [in] ::com::sun::star::registry::XSimpleRegistry xReg) raises (::com::sun::star::registry::CannotRegisterImplementationException);
+     boolean revokeImplementation([in] string aLocation, [in] ::com::sun::star::registry::XSimpleRegistry xReg);
+     sequence< string > getImplementations([in] string aImplementationLoader, [in] string aLocation);
+     sequence< string > checkInstantiation([in] string implementationName);
+    };
+    published service ImplementationRegistration: ::com::sun::star::registry::XImplementationRegistration;
+    published exception InvalidValueException: ::com::sun::star::uno::Exception {
+    };
+    published service NestedRegistry {
+     interface ::com::sun::star::registry::XSimpleRegistry;
+     interface ::com::sun::star::lang::XInitialization;
+    };
+    published enum RegistryKeyType {
+     KEY = 0,
+     LINK = 1
+    };
+    published enum RegistryValueType {
+     NOT_DEFINED = 0,
+     LONG = 1,
+     ASCII = 2,
+     STRING = 3,
+     BINARY = 4,
+     LONGLIST = 5,
+     ASCIILIST = 6,
+     STRINGLIST = 7
+    };
+    published service SimpleRegistry: ::com::sun::star::registry::XSimpleRegistry;
+    published interface XRegistryKey {
+     interface ::com::sun::star::uno::XInterface;
+     [attribute, readonly] string KeyName;
+     boolean isReadOnly() raises (::com::sun::star::registry::InvalidRegistryException);
+     boolean isValid();
+     ::com::sun::star::registry::RegistryKeyType getKeyType([in] string rKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
+     ::com::sun::star::registry::RegistryValueType getValueType() raises (::com::sun::star::registry::InvalidRegistryException);
+     long getLongValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
+     void setLongValue([in] long value) raises (::com::sun::star::registry::InvalidRegistryException);
+     sequence< long > getLongListValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
+     void setLongListValue([in] sequence< long > seqValue) raises (::com::sun::star::registry::InvalidRegistryException);
+     string getAsciiValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
+     void setAsciiValue([in] string value) raises (::com::sun::star::registry::InvalidRegistryException);
+     sequence< string > getAsciiListValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
+     void setAsciiListValue([in] sequence< string > seqValue) raises (::com::sun::star::registry::InvalidRegistryException);
+     string getStringValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
+     void setStringValue([in] string value) raises (::com::sun::star::registry::InvalidRegistryException);
+     sequence< string > getStringListValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
+     void setStringListValue([in] sequence< string > seqValue) raises (::com::sun::star::registry::InvalidRegistryException);
+     sequence< byte > getBinaryValue() raises (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::registry::InvalidValueException);
+     void setBinaryValue([in] sequence< byte > value) raises (::com::sun::star::registry::InvalidRegistryException);
+     ::com::sun::star::registry::XRegistryKey openKey([in] string aKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
+     ::com::sun::star::registry::XRegistryKey createKey([in] string aKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
+     void closeKey() raises (::com::sun::star::registry::InvalidRegistryException);
+     void deleteKey([in] string rKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
+     sequence< ::com::sun::star::registry::XRegistryKey > openKeys() raises (::com::sun::star::registry::InvalidRegistryException);
+     sequence< string > getKeyNames() raises (::com::sun::star::registry::InvalidRegistryException);
+     boolean createLink([in] string aLinkName, [in] string aLinkTarget) raises (::com::sun::star::registry::InvalidRegistryException);
+     void deleteLink([in] string rLinkName) raises (::com::sun::star::registry::InvalidRegistryException);
+     string getLinkTarget([in] string rLinkName) raises (::com::sun::star::registry::InvalidRegistryException);
+     string getResolvedName([in] string aKeyName) raises (::com::sun::star::registry::InvalidRegistryException);
+    };
+   };
+   module script {
+    published struct AllEventObject: ::com::sun::star::lang::EventObject {
+     any Helper;
+     type ListenerType;
+     string MethodName;
+     sequence< any > Arguments;
+    };
+    published interface XAllListener;
+    published interface XAllListenerAdapterService {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createAllListerAdapter([in] type xListenerType, [in] ::com::sun::star::script::XAllListener xListener, [in] any aHelper);
+    };
+    published service AllListenerAdapter: ::com::sun::star::script::XAllListenerAdapterService;
+    published exception BasicErrorException: ::com::sun::star::uno::Exception {
+     long ErrorCode;
+     string ErrorMessageArgument;
+    };
+    published exception CannotConvertException: ::com::sun::star::uno::Exception {
+     ::com::sun::star::uno::TypeClass DestinationTypeClass;
+     long Reason;
+     long ArgumentIndex;
+    };
+    published exception CannotCreateAdapterException: ::com::sun::star::uno::Exception {
+    };
+    /** @deprecated */ published struct ContextInformation {
+     string Name;
+     string SourceCode;
+     long StartLine;
+     long StartColumn;
+     long EndLine;
+     long EndColumn;
+     sequence< string > LocalVariableNames;
+    };
+    published interface XTypeConverter {
+     interface ::com::sun::star::uno::XInterface;
+     any convertTo([in] any aFrom, [in] type xDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
+     any convertToSimpleType([in] any aFrom, [in] ::com::sun::star::uno::TypeClass aDestinationType) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException);
+    };
+    published service Converter: ::com::sun::star::script::XTypeConverter;
+    published interface XEngineListener;
+    published interface XLibraryAccess;
+    /** @deprecated */ published interface XEngine {
+     interface ::com::sun::star::uno::XInterface;
+     void setRoot([in] ::com::sun::star::uno::XInterface xRoot);
+     ::com::sun::star::uno::XInterface getRoot();
+     void setLibraryAccess([in] ::com::sun::star::script::XLibraryAccess Library);
+     boolean compile([in] string ModuleName, [in] string Script, [in] boolean CreateDebugInfo);
+     any run([in] string aScript, [in] ::com::sun::star::uno::XInterface xThis, [in] sequence< any > aArgs);
+     void runAsync([in] string acript, [in] ::com::sun::star::uno::XInterface xThis, [in] sequence< any > args, [in] ::com::sun::star::script::XEngineListener xCallback);
+     void cancel();
+     void addEngineListener([in] ::com::sun::star::script::XEngineListener Listener);
+     void removeEngineListener([in] ::com::sun::star::script::XEngineListener Listener);
+    };
+    /** @deprecated */ published service Engine {
+     interface ::com::sun::star::script::XEngine;
+    };
+    published constants FailReason {
+     const long OUT_OF_RANGE = 1;
+     const long IS_NOT_NUMBER = 2;
+     const long IS_NOT_ENUM = 3;
+     const long IS_NOT_BOOL = 4;
+     const long NO_SUCH_INTERFACE = 5;
+     const long SOURCE_IS_NO_DERIVED_TYPE = 6;
+     const long TYPE_NOT_SUPPORTED = 7;
+     const long INVALID = 8;
+     /** @deprecated */ const long NO_DEFAULT_AVAILABLE = 9;
+     /** @deprecated */ const long UNKNOWN = 10;
+    };
+    /** @deprecated */ published enum FinishReason {
+     OK = 0,
+     Cancel = 1,
+     Error = 2
+    };
+    /** @deprecated */ published struct FinishEngineEvent: ::com::sun::star::lang::EventObject {
+     ::com::sun::star::script::FinishReason Finish;
+     string ErrorMessage;
+     any Return;
+    };
+    /** @deprecated */ published enum InterruptReason {
+     Cancel = 0,
+     RuntimeError = 1,
+     CompileError = 2,
+     BreakPoint = 3,
+     Step = 4,
+     StepOver = 5,
+     StepOut = 6,
+     StepStatement = 7
+    };
+    /** @deprecated */ published struct InterruptEngineEvent: ::com::sun::star::lang::EventObject {
+     string Name;
+     string SourceCode;
+     long StartLine;
+     long StartColumn;
+     long EndLine;
+     long EndColumn;
+     string ErrorMessage;
+     ::com::sun::star::script::InterruptReason Reason;
+    };
+    published service Invocation: ::com::sun::star::lang::XSingleServiceFactory;
+    published interface XInvocation;
+    published interface XInvocationAdapterFactory2 {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] sequence< type > aTypes);
+    };
+    published service InvocationAdapterFactory: ::com::sun::star::script::XInvocationAdapterFactory2;
+    published enum MemberType {
+     METHOD = 0,
+     PROPERTY = 1,
+     UNKNOWN = 2
+    };
+    published struct InvocationInfo {
+     string aName;
+     ::com::sun::star::script::MemberType eMemberType;
+     short PropertyAttribute;
+     type aType;
+     sequence< type > aParamTypes;
+     sequence< ::com::sun::star::reflection::ParamMode > aParamModes;
+    };
+    /** @deprecated */ published service JavaScript {
+     service ::com::sun::star::script::Engine;
+    };
+    published struct ScriptEvent: ::com::sun::star::script::AllEventObject {
+     string ScriptType;
+     string ScriptCode;
+    };
+    published struct ScriptEventDescriptor {
+     string ListenerType;
+     string EventMethod;
+     string AddListenerParam;
+     string ScriptType;
+     string ScriptCode;
+    };
+    published interface XAllListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void firing([in] ::com::sun::star::script::AllEventObject iaEvent);
+     any approveFiring([in] ::com::sun::star::script::AllEventObject aEvent) raises (::com::sun::star::reflection::InvocationTargetException);
+    };
+    published interface XInvocation {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::beans::XIntrospectionAccess getIntrospection();
+     any invoke([in] string aFunctionName, [in] sequence< any > aParams, [out] sequence< short > aOutParamIndex, [out] sequence< any > aOutParam) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
+     void setValue([in] string aPropertyName, [in] any aValue) raises (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
+     any getValue([in] string aPropertyName) raises (::com::sun::star::beans::UnknownPropertyException);
+     boolean hasMethod([in] string aName);
+     boolean hasProperty([in] string aName);
+    };
+    /** @deprecated */ published interface XDebugging {
+     interface ::com::sun::star::uno::XInterface;
+     long setBreakPoint([in] string aModuleName, [in] long nSourceCodeLine, [in] boolean bOn);
+     void clearAllBreakPoints([in] string aModuleName);
+     string eval([in] string aSourceCode, [in] short nCallStackPos);
+     sequence< string > getStackTrace();
+     ::com::sun::star::script::ContextInformation getContextInformation([in] short nCallStackPos);
+     string dumpVariable([in] string aVariableName, [in] short nCallStackPos);
+     void setVariable([in] string aVariableName, [in] string aValue, [in] short nCallStackPos);
+     boolean isVariable([in] string aVariableName, [in] short nCallStackPos);
+     void stop();
+     void stepOver();
+     void stepIn();
+     void stepOut();
+     void doContinue();
+    };
+    published interface XDirectInvocation {
+     interface ::com::sun::star::uno::XInterface;
+     any directInvoke([in] string aName, [in] sequence< any > aParams) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException);
+     boolean hasMember([in] string aName);
+    };
+    /** @deprecated */ published interface XEngineListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void interrupt([in] ::com::sun::star::script::InterruptEngineEvent Evt);
+     void running([in] ::com::sun::star::lang::EventObject Evt);
+     void finished([in] ::com::sun::star::script::FinishEngineEvent Evt);
+    };
+    published interface XEventAttacher {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::lang::XEventListener attachListener([in] ::com::sun::star::uno::XInterface xTarget, [in] ::com::sun::star::script::XAllListener xAllListener, [in] any aHelper, [in] string aListenerType, [in] string aAddListenerParam) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
+     ::com::sun::star::lang::XEventListener attachSingleEventListener([in] ::com::sun::star::uno::XInterface xTarget, [in] ::com::sun::star::script::XAllListener xAllListener, [in] any aHelper, [in] string aListenerType, [in] string aAddListenerParam, [in] string aEventMethod) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
+     void removeListener([in] ::com::sun::star::uno::XInterface xTarget, [in] string aListenerType, [in] string aRemoveListenerParam, [in] ::com::sun::star::lang::XEventListener xToRemoveListener) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException);
+    };
+    published interface XScriptListener;
+    published interface XEventAttacherManager {
+     interface ::com::sun::star::uno::XInterface;
+     void registerScriptEvent([in] long nIndex, [in] ::com::sun::star::script::ScriptEventDescriptor aScriptEvent) raises (::com::sun::star::lang::IllegalArgumentException);
+     void registerScriptEvents([in] long nIndex, [in] sequence< ::com::sun::star::script::ScriptEventDescriptor > aScriptEvents) raises (::com::sun::star::lang::IllegalArgumentException);
+     void revokeScriptEvent([in] long nIndex, [in] string aListenerType, [in] string aEventMethod, [in] string aRemoveListenerParam) raises (::com::sun::star::lang::IllegalArgumentException);
+     void revokeScriptEvents([in] long nIndex) raises (::com::sun::star::lang::IllegalArgumentException);
+     void insertEntry([in] long nIndex) raises (::com::sun::star::lang::IllegalArgumentException);
+     void removeEntry([in] long nIndex) raises (::com::sun::star::lang::IllegalArgumentException);
+     sequence< ::com::sun::star::script::ScriptEventDescriptor > getScriptEvents([in] long Index) raises (::com::sun::star::lang::IllegalArgumentException);
+     void attach([in] long nIndex, [in] ::com::sun::star::uno::XInterface xObject, [in] any aHelper) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ServiceNotRegisteredException);
+     void detach([in] long nIndex, [in] ::com::sun::star::uno::XInterface xObject) raises (::com::sun::star::lang::IllegalArgumentException);
+     void addScriptListener([in] ::com::sun::star::script::XScriptListener xListener) raises (::com::sun::star::lang::IllegalArgumentException);
+     void removeScriptListener([in] ::com::sun::star::script::XScriptListener Listener) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    published interface XInvocation2 {
+     interface ::com::sun::star::script::XInvocation;
+     sequence< string > getMemberNames();
+     sequence< ::com::sun::star::script::InvocationInfo > getInfo();
+     ::com::sun::star::script::InvocationInfo getInfoForName([in] string aName, [in] boolean bExact) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    /** @deprecated */ published interface XInvocationAdapterFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface createAdapter([in] ::com::sun::star::script::XInvocation Invocation, [in] type aType);
+    };
+    /** @deprecated */ published interface XLibraryAccess {
+     interface ::com::sun::star::uno::XInterface;
+     boolean isFunction([in] string aFunctionName);
+     boolean isValidPath([in] string aPathName);
+     sequence< string > getModuleNames();
+     string getModuleSource([in] string aModulName);
+     sequence< byte > getModuleCode([in] string aModuleName);
+     string getFunctionSource([in] string aFunctionName);
+     sequence< byte > getFunctionCode([in] string FunctionName);
+    };
+    published interface XScriptListener;
+    published interface XScriptEventsAttacher {
+     interface ::com::sun::star::uno::XInterface;
+     void attachEvents([in] sequence< ::com::sun::star::uno::XInterface > Objects, [in] ::com::sun::star::script::XScriptListener xListener, [in] any Helper) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::IntrospectionException, ::com::sun::star::script::CannotCreateAdapterException, ::com::sun::star::lang::ServiceNotRegisteredException);
+    };
+    published interface XScriptEventsSupplier {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::container::XNameContainer getEvents();
+    };
+    published interface XScriptListener {
+     interface ::com::sun::star::lang::XEventListener;
+     void firing([in] ::com::sun::star::script::ScriptEvent aEvent);
+     any approveFiring([in] ::com::sun::star::script::ScriptEvent aEvent) raises (::com::sun::star::reflection::InvocationTargetException);
+    };
+    /** @deprecated */ published interface XStarBasicAccess {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::container::XNameContainer getLibraryContainer();
+     void createLibrary([in] string LibName, [in] string Password, [in] string ExternalSourceURL, [in] string LinkTargetURL) raises (::com::sun::star::container::ElementExistException);
+     void addModule([in] string LibraryName, [in] string ModuleName, [in] string Language, [in] string Source) raises (::com::sun::star::container::NoSuchElementException);
+     void addDialog([in] string LibraryName, [in] string DialogName, [in] sequence< byte > Data) raises (::com::sun::star::container::NoSuchElementException);
+    };
+    /** @deprecated */ published interface XStarBasicDialogInfo {
+     interface ::com::sun::star::uno::XInterface;
+     string getName();
+     sequence< byte > getData();
+    };
+    /** @deprecated */ published interface XStarBasicLibraryInfo {
+     interface ::com::sun::star::uno::XInterface;
+     string getName();
+     ::com::sun::star::container::XNameContainer getModuleContainer();
+     ::com::sun::star::container::XNameContainer getDialogContainer();
+     string getPassword();
+     string getExternalSourceURL();
+     string getLinkTargetURL();
+    };
+    /** @deprecated */ published interface XStarBasicModuleInfo {
+     interface ::com::sun::star::uno::XInterface;
+     string getName();
+     string getLanguage();
+     string getSource();
+    };
+   };
+   module uno {
+    published exception SecurityException: ::com::sun::star::uno::RuntimeException {
+    };
+   };
+   module security {
+    published exception AccessControlException: ::com::sun::star::uno::SecurityException {
+     any LackingPermission;
+    };
+    published interface XAccessControlContext;
+    published interface XAction;
+    published interface XAccessController {
+     interface ::com::sun::star::uno::XInterface;
+     void checkPermission([in] any perm) raises (::com::sun::star::security::AccessControlException);
+     any doRestricted([in] ::com::sun::star::security::XAction action, [in] ::com::sun::star::security::XAccessControlContext restriction) raises (::com::sun::star::uno::Exception);
+     any doPrivileged([in] ::com::sun::star::security::XAction action, [in] ::com::sun::star::security::XAccessControlContext restriction) raises (::com::sun::star::uno::Exception);
+     ::com::sun::star::security::XAccessControlContext getContext();
+    };
+    published service AccessController: ::com::sun::star::security::XAccessController;
+    published struct AllPermission {
+     byte dummy;
+    };
+    published interface XPolicy {
+     interface ::com::sun::star::uno::XInterface;
+     sequence< any > getPermissions([in] string userId);
+     sequence< any > getDefaultPermissions();
+     void refresh();
+    };
+    published service Policy: ::com::sun::star::security::XPolicy;
+    published struct RuntimePermission {
+     string Name;
+    };
+    published interface XAccessControlContext {
+     interface ::com::sun::star::uno::XInterface;
+     void checkPermission([in] any perm) raises (::com::sun::star::security::AccessControlException);
+    };
+    published interface XAction {
+     interface ::com::sun::star::uno::XInterface;
+     any run() raises (::com::sun::star::uno::Exception);
+    };
+   };
+   module task {
+    published interface XInteractionContinuation {
+     interface ::com::sun::star::uno::XInterface;
+     void select();
+    };
+    published interface XInteractionAbort {
+     interface ::com::sun::star::task::XInteractionContinuation;
+    };
+    published interface XInteractionRequest;
+    published interface XInteractionHandler {
+     interface ::com::sun::star::uno::XInterface;
+     void handle([in] ::com::sun::star::task::XInteractionRequest Request);
+    };
+    published interface XInteractionRequest;
+    published interface XInteractionHandler2 {
+     interface ::com::sun::star::task::XInteractionHandler;
+     boolean handleInteractionRequest([in] ::com::sun::star::task::XInteractionRequest Request);
+    };
+    published interface XInteractionRequest {
+     interface ::com::sun::star::uno::XInterface;
+     any getRequest();
+     sequence< ::com::sun::star::task::XInteractionContinuation > getContinuations();
+    };
+    published interface XInteractionRetry {
+     interface ::com::sun::star::task::XInteractionContinuation;
+    };
+   };
+   module uno {
+    published interface XNamingService {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface getRegisteredObject([in] string Name) raises (::com::sun::star::uno::Exception);
+     void registerObject([in] string Name, [in] ::com::sun::star::uno::XInterface Object) raises (::com::sun::star::uno::Exception);
+     void revokeObject([in] string Name) raises (::com::sun::star::uno::Exception);
+    };
+    published service NamingService: ::com::sun::star::uno::XNamingService;
+    published interface XReference;
+    published interface XAdapter {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XInterface queryAdapted();
+     void addReference([in] ::com::sun::star::uno::XReference xRef);
+     void removeReference([in] ::com::sun::star::uno::XReference xRef);
+    };
+    /** @deprecated */ published interface XAggregation {
+     interface ::com::sun::star::uno::XInterface;
+     void setDelegator([in] ::com::sun::star::uno::XInterface pDelegator);
+     any queryAggregation([in] type aType);
+    };
+    published interface XComponentContext {
+     interface ::com::sun::star::uno::XInterface;
+     any getValueByName([in] string Name);
+     ::com::sun::star::lang::XMultiComponentFactory getServiceManager();
+    };
+    published interface XCurrentContext {
+     interface ::com::sun::star::uno::XInterface;
+     any getValueByName([in] string Name);
+    };
+    published interface XReference {
+     interface ::com::sun::star::uno::XInterface;
+     void dispose();
+    };
+    /** @deprecated */ published interface XUnloadingPreference {
+     interface ::com::sun::star::uno::XInterface;
+     boolean releaseOnNotification();
+    };
+    published interface XWeak {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uno::XAdapter queryAdapter();
+    };
+   };
+   module uri {
+    published interface XExternalUriReferenceTranslator {
+     interface ::com::sun::star::uno::XInterface;
+     string translateToInternal([in] string externalUriReference);
+     string translateToExternal([in] string internalUriReference);
+    };
+    published service ExternalUriReferenceTranslator: ::com::sun::star::uri::XExternalUriReferenceTranslator;
+    published enum RelativeUriExcessParentSegments {
+     ERROR = 0,
+     RETAIN = 1,
+     REMOVE = 2
+    };
+    published interface XUriReference;
+    published interface XUriReferenceFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uri::XUriReference parse([in] string uriReference);
+     ::com::sun::star::uri::XUriReference makeAbsolute([in] ::com::sun::star::uri::XUriReference baseUriReference, [in] ::com::sun::star::uri::XUriReference uriReference, [in] boolean processSpecialBaseSegments, [in] ::com::sun::star::uri::RelativeUriExcessParentSegments excessParentSegments);
+     ::com::sun::star::uri::XUriReference makeRelative([in] ::com::sun::star::uri::XUriReference baseUriReference, [in] ::com::sun::star::uri::XUriReference uriReference, [in] boolean preferAuthorityOverRelativePath, [in] boolean preferAbsoluteOverRelativePath, [in] boolean encodeRetainedSpecialSegments);
+    };
+    published service UriReferenceFactory: ::com::sun::star::uri::XUriReferenceFactory;
+    published interface XUriReference;
+    published interface XUriSchemeParser {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uri::XUriReference parse([in] string scheme, [in] string schemeSpecificPart);
+    };
+    published service UriSchemeParser_vndDOTsunDOTstarDOTexpand: ::com::sun::star::uri::XUriSchemeParser {
+    };
+    published service UriSchemeParser_vndDOTsunDOTstarDOTscript: ::com::sun::star::uri::XUriSchemeParser {
+    };
+    published interface XUriReference;
+    published interface XVndSunStarPkgUrlReferenceFactory {
+     interface ::com::sun::star::uno::XInterface;
+     ::com::sun::star::uri::XUriReference createVndSunStarPkgUrlReference([in] ::com::sun::star::uri::XUriReference authority);
+    };
+    published service VndSunStarPkgUrlReferenceFactory: ::com::sun::star::uri::XVndSunStarPkgUrlReferenceFactory;
+    published interface XUriReference {
+     interface ::com::sun::star::uno::XInterface;
+     string getUriReference();
+     boolean isAbsolute();
+     string getScheme();
+     string getSchemeSpecificPart();
+     boolean isHierarchical();
+     boolean hasAuthority();
+     string getAuthority();
+     string getPath();
+     boolean hasRelativePath();
+     long getPathSegmentCount();
+     string getPathSegment([in] long index);
+     boolean hasQuery();
+     string getQuery();
+     boolean hasFragment();
+     string getFragment();
+     void setFragment([in] string fragment);
+     void clearFragment();
+    };
+   };
+   module util {
+    published interface XMacroExpander;
+   };
+   module uri {
+    published interface XVndSunStarExpandUrl {
+     interface ::com::sun::star::uno::XInterface;
+     string expand([in] ::com::sun::star::util::XMacroExpander expander) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    published interface XVndSunStarExpandUrlReference {
+     interface ::com::sun::star::uri::XUriReference;
+     interface ::com::sun::star::uri::XVndSunStarExpandUrl;
+    };
+    published interface XVndSunStarScriptUrl {
+     interface ::com::sun::star::uno::XInterface;
+     string getName();
+     void setName([in] string name) raises (::com::sun::star::lang::IllegalArgumentException);
+     boolean hasParameter([in] string key);
+     string getParameter([in] string key);
+     void setParameter([in] string key, [in] string value) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    published interface XVndSunStarScriptUrlReference {
+     interface ::com::sun::star::uri::XUriReference;
+     interface ::com::sun::star::uri::XVndSunStarScriptUrl;
+    };
+   };
+   module util {
+    published interface XMacroExpander {
+     interface ::com::sun::star::uno::XInterface;
+     string expandMacros([in] string exp) raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+    /** @deprecated */ published service MacroExpander {
+     interface ::com::sun::star::util::XMacroExpander;
+     [optional] interface ::com::sun::star::lang::XComponent;
+    };
+    published service BootstrapMacroExpander {
+     service ::com::sun::star::util::MacroExpander;
+     [optional] interface ::com::sun::star::lang::XInitialization;
+    };
+    published singleton theMacroExpander: ::com::sun::star::util::XMacroExpander;
+   };
+  };
+ };
+};

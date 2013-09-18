@@ -216,13 +216,9 @@ $(call gb_UnoApiTarget__add_idlfile,$(1),$(2),$(3))
 
 endef
 
-define gb_UnoApiTarget_add_reference_rdbfile
-$$(call gb_Output_error,gb_UnoApiTarget_add_reference_rdbfile: use gb_UnoApiTarget_set_reference_rdbfile instead.)
-endef
-
 define gb_UnoApiTarget_set_reference_rdbfile
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(foreach rdb,$(2),$(SRCDIR)/$(rdb).rdb)
-$(call gb_UnoApiTarget_get_target,$(1)) : $(foreach rdb,$(2),$(SRCDIR)/$(rdb).rdb)
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(2)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(2)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_UNOIDLCHECKDEPS)
 
 endef

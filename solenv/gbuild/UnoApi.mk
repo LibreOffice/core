@@ -148,11 +148,6 @@ $(foreach rdb,$(2),$(call gb_UnoApi__use_api,$(1),$(rdb)))
 
 endef
 
-define gb_UnoApi_add_reference_rdbfile
-$$(call gb_Output_error,gb_UnoApi_add_reference_rdbfile: use gb_UnoApi_set_reference_rdbfile instead.)
-
-endef
-
 define gb_UnoApi_set_reference_rdbfile
 $(call gb_UnoApiTarget_set_reference_rdbfile,$(1),$(2))
 
