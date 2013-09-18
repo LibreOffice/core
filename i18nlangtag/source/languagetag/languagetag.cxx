@@ -33,11 +33,6 @@
 
 using namespace com::sun::star;
 
-// The actual pointer type of mpImplLangtag that is declared void* to not
-// pollute the entire code base with liblangtag.
-#define LANGTAGCAST(p) (reinterpret_cast<lt_tag_t*>(p))
-#define MPLANGTAG LANGTAGCAST(mpImplLangtag)
-
 
 // Helper to ensure lt_error_t is free'd
 struct myLtError
@@ -228,7 +223,7 @@ private:
     mutable OUString                        maCachedScript;     ///< cache getScript()
     mutable OUString                        maCachedCountry;    ///< cache getCountry()
     mutable OUString                        maCachedVariants;   ///< cache getVariants()
-    mutable void*                           mpImplLangtag;      ///< actually lt_tag_t pointer, encapsulated
+    mutable lt_tag_t*                       mpImplLangtag;      ///< liblangtag pointer
     mutable LanguageType                    mnLangID;
     mutable Decision                        meIsValid;
     mutable Decision                        meIsIsoLocale;
@@ -348,7 +343,7 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
         maCachedCountry( rLanguageTagImpl.maCachedCountry),
         maCachedVariants( rLanguageTagImpl.maCachedVariants),
         mpImplLangtag( rLanguageTagImpl.mpImplLangtag ?
-                lt_tag_copy( LANGTAGCAST( rLanguageTagImpl.mpImplLangtag)) : NULL),
+                lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : NULL),
         mnLangID( rLanguageTagImpl.mnLangID),
         meIsValid( rLanguageTagImpl.meIsValid),
         meIsIsoLocale( rLanguageTagImpl.meIsIsoLocale),
@@ -378,7 +373,7 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     maCachedVariants    = rLanguageTagImpl.maCachedVariants;
     mpImplLangtag       = rLanguageTagImpl.mpImplLangtag;
     mpImplLangtag       = rLanguageTagImpl.mpImplLangtag ?
-                            lt_tag_copy( LANGTAGCAST( rLanguageTagImpl.mpImplLangtag)) : NULL;
+                            lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : NULL;
     mnLangID            = rLanguageTagImpl.mnLangID;
     meIsValid           = rLanguageTagImpl.meIsValid;
     meIsIsoLocale       = rLanguageTagImpl.meIsIsoLocale;
@@ -402,7 +397,7 @@ LanguageTagImpl::~LanguageTagImpl()
 {
     if (mpImplLangtag)
     {
-        lt_tag_unref( MPLANGTAG);
+        lt_tag_unref( mpImplLangtag);
         theDataRef::get().decRef();
     }
 }
@@ -412,7 +407,7 @@ void LanguageTagImpl::resetVars()
 {
     if (mpImplLangtag)
     {
-        lt_tag_unref( MPLANGTAG);
+        lt_tag_unref( mpImplLangtag);
         mpImplLangtag = NULL;
         theDataRef::get().decRef();
     }
@@ -637,9 +632,9 @@ bool LanguageTagImpl::canonicalize()
     // dump once
     struct dumper
     {
-        void** mpp;
-        dumper( void** pp ) : mpp( *pp ? NULL : pp) {}
-        ~dumper() { if (mpp && *mpp) lt_tag_dump( LANGTAGCAST( *mpp)); }
+        lt_tag_t** mpp;
+        dumper( lt_tag_t** pp ) : mpp( *pp ? NULL : pp) {}
+        ~dumper() { if (mpp && *mpp) lt_tag_dump( *mpp); }
     };
     dumper aDumper( &mpImplLangtag);
 #endif
@@ -769,9 +764,9 @@ bool LanguageTagImpl::canonicalize()
 
     myLtError aError;
 
-    if (lt_tag_parse( MPLANGTAG, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
+    if (lt_tag_parse( mpImplLangtag, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
-        char* pTag = lt_tag_canonicalize( MPLANGTAG, &aError.p);
+        char* pTag = lt_tag_canonicalize( mpImplLangtag, &aError.p);
         SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize " << maBcp47);
         if (pTag)
         {
@@ -784,7 +779,7 @@ bool LanguageTagImpl::canonicalize()
                 bChanged = true;
                 meIsIsoLocale = DECISION_DONTKNOW;
                 meIsIsoODF = DECISION_DONTKNOW;
-                if (!lt_tag_parse( MPLANGTAG, pTag, &aError.p))
+                if (!lt_tag_parse( mpImplLangtag, pTag, &aError.p))
                 {
                     SAL_WARN( "i18nlangtag", "LanguageTagImpl::canonicalize: could not reparse " << maBcp47);
                     free( pTag);
@@ -1011,7 +1006,7 @@ void LanguageTag::convertFromRtlLocale()
         myLtError aError;
         theDataRef::get().incRef();
         mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
-        maBcp47 = OStringToOUString( lt_tag_get_string( MPLANGTAG), RTL_TEXTENCODING_UTF8);
+        maBcp47 = OStringToOUString( lt_tag_get_string( mpImplLangtag), RTL_TEXTENCODING_UTF8);
         mbInitializedBcp47 = true;
 #else
         mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);
@@ -1066,7 +1061,7 @@ OUString LanguageTagImpl::getLanguageFromLangtag()
         return aLanguage;
     if (mpImplLangtag)
     {
-        const lt_lang_t* pLangT = lt_tag_get_language( MPLANGTAG);
+        const lt_lang_t* pLangT = lt_tag_get_language( mpImplLangtag);
         SAL_WARN_IF( !pLangT, "i18nlangtag", "LanguageTag::getLanguageFromLangtag: pLangT==NULL");
         if (!pLangT)
             return aLanguage;
@@ -1092,7 +1087,7 @@ OUString LanguageTagImpl::getScriptFromLangtag()
         return aScript;
     if (mpImplLangtag)
     {
-        const lt_script_t* pScriptT = lt_tag_get_script( MPLANGTAG);
+        const lt_script_t* pScriptT = lt_tag_get_script( mpImplLangtag);
         // pScriptT==NULL is valid for default scripts
         if (!pScriptT)
             return aScript;
@@ -1118,7 +1113,7 @@ OUString LanguageTagImpl::getRegionFromLangtag()
         return aRegion;
     if (mpImplLangtag)
     {
-        const lt_region_t* pRegionT = lt_tag_get_region( MPLANGTAG);
+        const lt_region_t* pRegionT = lt_tag_get_region( mpImplLangtag);
         // pRegionT==NULL is valid for language only tags, rough check here
         // that does not take sophisticated tags into account that actually
         // should have a region, check for ll, lll, ll-Ssss and lll-Ssss so
@@ -1151,7 +1146,7 @@ OUString LanguageTagImpl::getVariantsFromLangtag()
         return aVariants;
     if (mpImplLangtag)
     {
-        const lt_list_t* pVariantsT = lt_tag_get_variants( MPLANGTAG);
+        const lt_list_t* pVariantsT = lt_tag_get_variants( mpImplLangtag);
         for (const lt_list_t* pE = pVariantsT; pE; pE = lt_list_next( pE))
         {
             const lt_variant_t* pVariantT = static_cast<const lt_variant_t*>(lt_list_value( pE));
