@@ -32,7 +32,7 @@ protected:
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
     {}
-    SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
+    SwTableFmt( SwAttrPool& rPool, const OUString &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
     {}
@@ -53,7 +53,7 @@ protected:
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
     {}
-    SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
+    SwTableLineFmt( SwAttrPool& rPool, const OUString &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
     {}
@@ -73,7 +73,7 @@ protected:
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
     {}
-    SwTableBoxFmt( SwAttrPool& rPool, const String &rFmtNm,
+    SwTableBoxFmt( SwAttrPool& rPool, const OUString &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
     {}
