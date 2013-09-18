@@ -20,10 +20,10 @@
 # UnoApiTarget
 
 gb_UnoApiTarget_UNOIDLWRITEDEPS := $(call gb_Executable_get_runtime_dependencies,unoidl-write)
-gb_UnoApiTarget_UNOIDLWRITECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,unoidl-write)
+gb_UnoApiTarget_UNOIDLWRITECOMMAND := SOLARBINDIR=$(gb_Executable_BINDIR_FOR_BUILD) $(call gb_Executable_get_command,unoidl-write)
 
 gb_UnoApiTarget_UNOIDLCHECKDEPS := $(call gb_Executable_get_runtime_dependencies,unoidl-check)
-gb_UnoApiTarget_UNOIDLCHECKCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,unoidl-check)
+gb_UnoApiTarget_UNOIDLCHECKCOMMAND := SOLARBINDIR=$(gb_Executable_BINDIR_FOR_BUILD) $(call gb_Executable_get_command,unoidl-check)
 
 define gb_UnoApiTarget__command
 $(call gb_Output_announce,$(2),$(true),UNO,4)
@@ -126,7 +126,7 @@ $(eval $(call gb_Output_error,gb_UnoApiHeadersTarget_select_variant must be defi
 endif
 
 gb_UnoApiHeadersTarget_CPPUMAKERDEPS := $(call gb_Executable_get_runtime_dependencies,cppumaker)
-gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,cppumaker)
+gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := SOLARBINDIR=$(gb_Executable_BINDIR_FOR_BUILD) $(call gb_Executable_get_command,cppumaker)
 
 define gb_UnoApiHeadersTarget__command
 	$(gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND) \

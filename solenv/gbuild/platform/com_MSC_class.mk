@@ -370,14 +370,16 @@ gb_Executable_TARGETTYPEFLAGS := $(gb_Windows_PE_TARGETTYPEFLAGS)
 
 gb_Executable_get_rpath :=
 
+# surprisingly some executables have exports so link.exe creates import lib
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
-	$(call gb_LinkTarget_get_pdbfile,$(2)) \
-)
+$(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
-$(call gb_Executable_add_auxtarget,$(1),$(call gb_Executable_get_target,$(1)).manifest)
-$(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest,$(1))
+$(call gb_LinkTarget_add_auxtargets,$(2),\
+	$(patsubst %.lib,%.exp,$(3)) \
+	$(call gb_LinkTarget_get_pdbfile2,$(2)).pdb \
+	$(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(call gb_LinkTarget_get_manifestfile,$(2)) \
+)
 
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE := $(call gb_LinkTarget_get_pdbfile,$(2))
@@ -444,10 +446,11 @@ gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY
 # SrsPartTarget class
 
 ifeq ($(gb_FULLDEPS),$(true))
-gb_SrsPartTarget__command_target = $(OUTDIR)/bin/makedepend$(gb_Executable_EXT)
+# FIXME this is used before TargetLocations is read?
+gb_SrsPartTarget__command_target = $(WORKDIR)/LinkTarget/Executable/makedepend.exe
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+	$(call gb_Executable_get_target,makedepend) \
 		$(INCLUDE) \
 		$(DEFS) \
 		$(2) \
@@ -485,12 +488,13 @@ $(eval $(call gb_Helper_make_dep_targets,\
 ))
 
 ifeq ($(gb_FULLDEPS),$(true))
-gb_WinResTarget__command_target = $(OUTDIR)/bin/makedepend$(gb_Executable_EXT)
+# FIXME this is used before TargetLocations is read?
+gb_WinResTarget__command_target = $(WORKDIR)/LinkTarget/Executable/makedepend.exe
 define gb_WinResTarget__command_dep
 $(call gb_Output_announce,RC:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
+	$(call gb_Executable_get_target,makedepend) \
 		$(INCLUDE) \
 		$(DEFS) \
 		$(RCFILE) \

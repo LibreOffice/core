@@ -45,13 +45,10 @@ gb_XcuDataTarget_get_outdir_target = $(gb_Configuration_registry)/data/$(1)
 gb_XcuLangpackTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 
-define gb_Executable_get_target
-$(patsubst $(1):%,$(OUTDIR)/bin/%,$(filter $(1):%,$(gb_Executable_FILENAMES)))
-endef
+gb_Executable_get_target = $(gb_Executable__get_linktarget_target)
 
-define gb_Executable_get_target_for_build
-$(patsubst $(1):%,$(OUTDIR_FOR_BUILD)/bin/%,$(filter $(1):%,$(gb_Executable_FILENAMES_FOR_BUILD)))
-endef
+# FIXME broken
+gb_Executable_get_target_for_build = $(gb_Executable__get_linktarget_target)
 
 # FIXME: cleanup?
 gb_Library_get_target = $(gb_Library__get_linktarget_target)
@@ -388,7 +385,7 @@ define gb_Executable__get_workdir_linktargetname
 Executable/$(call gb_Executable_get_filename,$(1))
 endef
 define gb_Executable__get_linktarget_target
-$(WORKDIR)/LinkTarget/$(call gb_Executable__get_workdir_linktargetname,$(1))
+$(call gb_Executable_get_install_target,$(1))
 endef
 define gb_Executable_get_linktarget
 $(call gb_Executable__get_workdir_linktargetname,$(1))<>$(call gb_Executable__get_linktarget_target,$(1))
@@ -431,6 +428,7 @@ endef
 
 gb_Library_WORKDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Library
 gb_Executable_BINDIR = $(WORKDIR)/LinkTarget/Executable
+gb_Executable_BINDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Executable
 # FIXME move platform
 gb_Library_OUTDIRLOCATION = $(if $(filter WNT,$(OS)),$(OUTDIR)/bin,$(OUTDIR)/lib)
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library

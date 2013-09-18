@@ -26,6 +26,7 @@ gb_Executable_LAYER_DIRS := \
 	UREBIN:$(gb_INSTROOT)/$(LIBO_URE_BIN_FOLDER) \
 	OOO:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME) \
 	SDKBIN:$(INSTDIR)/$(gb_Package_SDKDIRNAME)/bin \
+	NONE:$(gb_Executable_BINDIR) \
 
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
@@ -62,22 +63,17 @@ define gb_Executable__Executable_impl
 $(call gb_LinkTarget_LinkTarget,$(2),Executable_$(1),$(call gb_Executable_get_layer,$(1)))
 $(call gb_LinkTarget_set_targettype,$(2),Executable)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
-$(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
-	| $(dir $(call gb_Executable_get_target,$(1))).dir
+$(call gb_Executable_get_target,$(1)) : \
+	| $(dir $(call gb_Executable_get_target,$(1))).dir \
+	  $(gb_Executable_BINDIR)/.dir
 $(call gb_Executable_get_runtime_target,$(1)) :| $(dir $(call gb_Executable_get_runtime_target,$(1))).dir
 $(call gb_Executable_get_runtime_target,$(1)) : $(call gb_Executable_get_target_for_build,$(1))
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
-$(call gb_Executable_Executable_platform,$(1),$(2))
+$(call gb_Executable_Executable_platform,$(1),$(2),$(gb_Executable_BINDIR)/$(1).lib)
 
-$(if $(call gb_Executable__get_dir_for_exe,$(1)), \
-$(call gb_Helper_install,$(call gb_Executable_get_target,$(1)), \
-	$(call gb_Executable_get_install_target,$(1)), \
-	$(call gb_LinkTarget_get_target,$(2))) \
-)
 $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Executable)
-$(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
@@ -85,14 +81,8 @@ define gb_Executable_set_targettype_gui
 $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))) : TARGETGUI := $(2)
 endef
 
-# The auxtarget is delivered via the rule in Package.mk.
-# gb_Executable_add_auxtarget executable outdirauxtarget
 define gb_Executable_add_auxtarget
-$(call gb_LinkTarget_add_auxtarget,$(call gb_Executable_get_linktarget,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))))/$(notdir $(2)))
-$(call gb_Executable_get_target,$(1)) : $(2)
-$(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))))/$(notdir $(2))
-$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS += $(2)
-
+$(call gb_Output_error,gb_Executable_add_auxtarget should no longer be necessary)
 endef
 
 define gb_Executable_forward_to_Linktarget
