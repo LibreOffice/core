@@ -729,6 +729,11 @@ AC_ARG_ENABLE(graphite,
         [Enables the compilation of Graphite smart font rendering.])
 )
 
+AC_ARG_ENABLE(orcus,
+    AS_HELP_STRING([--enable-orcus],
+        [Enables orcus for extra file import filters for Calc.])
+)
+
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
         [Disables fetching external tarballs from web sources.])
@@ -8941,6 +8946,52 @@ fi
 AC_SUBST(ENABLE_GRAPHITE)
 
 dnl ===================================================================
+dnl Orcus
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to enable orcus])
+if test $_os != Darwin -a $_os != Android -a $_os != iOS -a \( -z "$enable_orcus" -o "$enable_orcus" != no \); then
+    AC_MSG_RESULT([yes])
+    ENABLE_ORCUS="TRUE"
+    AC_DEFINE(ENABLE_ORCUS)
+
+    libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.6 >= 0.5.0])
+    if test "$with_system_orcus" != "yes"; then
+        if test "$SYSTEM_BOOST" = "YES"; then
+            # ===========================================================
+            # Determine if we are going to need to link with Boost.System
+            # ===========================================================
+            dnl This seems to be necessary since boost 1.50 (1.48 does not need it,
+            dnl 1.49 is untested). The macro BOOST_THREAD_DONT_USE_SYSTEM mentioned
+            dnl in documentation has no effect.
+            AC_MSG_CHECKING([if we need to link with Boost.System])
+            AC_LANG_PUSH([C++])
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+                    @%:@include <boost/version.hpp>
+                ]],[[
+                    #if BOOST_VERSION >= 105000
+                    #   error yes, we need to link with Boost.System
+                    #endif
+                ]])],[
+                    AC_MSG_RESULT([no])
+                ],[
+                    AC_MSG_RESULT([yes])
+                    AX_BOOST_SYSTEM
+            ])
+            AC_LANG_POP([C++])
+        fi
+    fi
+    dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
+    SYSTEM_LIBORCUS=$SYSTEM_ORCUS
+    AC_SUBST([BOOST_SYSTEM_LIB])
+    AC_SUBST(SYSTEM_LIBORCUS)
+
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_ORCUS)
+
+dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable HarfBuzz support])
@@ -9208,40 +9259,6 @@ fi
 AC_SUBST(RAPTOR_MAJOR)
 AC_SUBST(RASQAL_MAJOR)
 AC_SUBST(REDLAND_MAJOR)
-
-dnl ===================================================================
-dnl Check for system orcus
-dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.6 >= 0.5.0])
-if test "$with_system_orcus" != "yes"; then
-    if test "$SYSTEM_BOOST" = "YES"; then
-        # ===========================================================
-        # Determine if we are going to need to link with Boost.System
-        # ===========================================================
-        dnl This seems to be necessary since boost 1.50 (1.48 does not need it,
-        dnl 1.49 is untested). The macro BOOST_THREAD_DONT_USE_SYSTEM mentioned
-        dnl in documentation has no effect.
-        AC_MSG_CHECKING([if we need to link with Boost.System])
-        AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-                @%:@include <boost/version.hpp>
-            ]],[[
-                #if BOOST_VERSION >= 105000
-                #   error yes, we need to link with Boost.System
-                #endif
-            ]])],[
-                AC_MSG_RESULT([no])
-            ],[
-                AC_MSG_RESULT([yes])
-                AX_BOOST_SYSTEM
-        ])
-        AC_LANG_POP([C++])
-    fi
-fi
-dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
-SYSTEM_LIBORCUS=$SYSTEM_ORCUS
-AC_SUBST([BOOST_SYSTEM_LIB])
-AC_SUBST(SYSTEM_LIBORCUS)
 
 dnl ===================================================================
 dnl Check for system hunspell
@@ -12571,6 +12588,7 @@ AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
+AC_CONFIG_HEADERS([config_host/config_orcus.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])

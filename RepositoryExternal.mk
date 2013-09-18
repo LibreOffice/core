@@ -2475,6 +2475,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 endif # SYSTEM_PYTHON
 
 # ORCUS
+ifeq ($(ENABLE_ORCUS),TRUE)
+
 ifeq ($(SYSTEM_LIBORCUS),YES)
 
 define gb_LinkTarget__use_orcus
@@ -2515,6 +2517,12 @@ endef
 
 endif # SYSTEM_LIBORCUS
 
+else # ENABLE_ORCUS != TRUE
+
+gb_LinkTarget__use_orcus :=
+gb_LinkTarget__use_orcus-parser :=
+
+endif
 
 ### X11 stuff ###
 

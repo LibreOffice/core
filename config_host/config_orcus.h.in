@@ -1,0 +1,6 @@
+#ifndef CONFIG_ORCUS_H
+#define CONFIG_ORCUS_H
+
+#define ENABLE_ORCUS 0
+
+#endif

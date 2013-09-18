@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,liborcus))
 
-ifeq ($(SYSTEM_LIBORCUS),NO)
+ifeq ($(ENABLE_ORCUS)-$(SYSTEM_LIBORCUS),TRUE-NO)
 
 $(eval $(call gb_Module_add_targets,liborcus,\
 	ExternalProject_liborcus \
