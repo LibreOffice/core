@@ -82,8 +82,8 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     // now check for duplicate masterpage and layout names
     // ===================================================
 
-    String aFullNameLayout( pBMMPage->GetLayoutName() );
-    aFullNameLayout.Erase( aFullNameLayout.SearchAscii( SD_LT_SEPARATOR ));
+    OUString aFullNameLayout( pBMMPage->GetLayoutName() );
+    aFullNameLayout = aFullNameLayout.copy(0, aFullNameLayout.indexOf( SD_LT_SEPARATOR ));
 
     OUString aLayout(aFullNameLayout);
 
@@ -97,8 +97,8 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     {
         // Do the layouts already exist within the document?
         SdPage* pTestPage = (SdPage*) rDoc.GetMasterPage(nMPage);
-        String aFullTest(pTestPage->GetLayoutName());
-        aFullTest.Erase( aFullTest.SearchAscii( SD_LT_SEPARATOR ));
+        OUString aFullTest(pTestPage->GetLayoutName());
+        aFullTest = aFullTest.copy(0, aFullTest.indexOf( SD_LT_SEPARATOR ));
 
         OUString aTest(aFullTest);
 
@@ -815,8 +815,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                 ++pExchangeIter;
             }
 
-            String aLayout(pRefPage->GetLayoutName());
-            aLayout.Erase(aLayout.SearchAscii( SD_LT_SEPARATOR ));
+            OUString aLayout(pRefPage->GetLayoutName());
+            aLayout = aLayout.copy(0, aLayout.indexOf( SD_LT_SEPARATOR ));
 
             // update layout and referred master page
             pRefPage->SetPresentationLayout(aLayout);
@@ -1311,7 +1311,7 @@ bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, const OUString& rC
 // #i121863# factored out functinality
 OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 {
-    const String aBaseName(SdResId(STR_LAYOUT_DEFAULT_NAME));
+    const OUString aBaseName(SdResId(STR_LAYOUT_DEFAULT_NAME));
     OUString aRetval;
     sal_uInt16 nCount(0);
 
@@ -1350,7 +1350,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
     if( bUndo )
     {
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), String());
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString());
     }
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);
@@ -1360,9 +1360,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     SdPage* pMaster         = NULL;
     SdPage* pNotesMaster    = NULL;
     SdPage* pPage           = NULL;
-    String aOldPageLayoutName(pSelectedPage->GetLayoutName());
-    String aOldLayoutName(aOldPageLayoutName);
-    aOldLayoutName.Erase(aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ));
+    OUString aOldPageLayoutName(pSelectedPage->GetLayoutName());
+    OUString aOldLayoutName(aOldPageLayoutName);
+    aOldLayoutName = aOldLayoutName.copy(0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ));
 
     if (pSourceDoc)
     {
@@ -1421,8 +1421,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             return;
         }
 
-        const String aOriginalNewLayoutName( pMaster->GetName() );
-        String aTargetNewLayoutName(aOriginalNewLayoutName);
+        const OUString aOriginalNewLayoutName( pMaster->GetName() );
+        OUString aTargetNewLayoutName(aOriginalNewLayoutName);
 
         if (pSourceDoc != this)
         {
@@ -1443,15 +1443,15 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
             // layout name needs to be unique
             aTargetNewLayoutName = pMaster->GetLayoutName();
-            aTargetNewLayoutName.Erase(aTargetNewLayoutName.SearchAscii(SD_LT_SEPARATOR));
+            aTargetNewLayoutName = aTargetNewLayoutName.copy(0, aTargetNewLayoutName.indexOf(SD_LT_SEPARATOR));
 
             if(!isMasterPageLayoutNameUnique(*this, aTargetNewLayoutName))
             {
                 aTargetNewLayoutName = createNewMasterPageLayoutName(*this);
 
-                String aTemp(aTargetNewLayoutName);
-                aTemp.AppendAscii(RTL_CONSTASCII_STRINGPARAM(SD_LT_SEPARATOR));
-                aTemp.Append(SD_RESSTR(STR_LAYOUT_OUTLINE));
+                OUString aTemp(aTargetNewLayoutName);
+                aTemp += SD_LT_SEPARATOR;
+                aTemp += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
                 pMaster->SetName(aTargetNewLayoutName);
                 pMaster->SetLayoutName(aTemp);
@@ -1476,7 +1476,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
             // Correct or create presentation templates --
             // only worry about presentation templates
-            String aName;
+            OUString aName;
             SdStyleSheetPool* pSourceStyleSheetPool = (SdStyleSheetPool*) pSourceDoc->GetStyleSheetPool();
             pSourceStyleSheetPool->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
             static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
@@ -1490,14 +1490,13 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                 // #i121863# search in source styles with original style name from source of
                 // evtl. cloned master (not-cloned, renamed for uniqueness)
-                if( aName.Search( aOriginalNewLayoutName ) == 0 )
+                if( aName.indexOf( aOriginalNewLayoutName ) == 0 )
                 {
                     // #i121863# build name of evtl. cloned master style to search for
                     if(aOriginalNewLayoutName != aTargetNewLayoutName)
                     {
-                        const sal_uInt16 nPos(aName.SearchAscii(SD_LT_SEPARATOR));
-                        aName.Erase(0, nPos);
-                        aName.Insert(aTargetNewLayoutName, 0);
+                        const sal_Int32 nPos(aName.indexOf(SD_LT_SEPARATOR));
+                        aName = aTargetNewLayoutName + aName.copy(nPos);
                     }
 
                     SfxStyleSheet* pMySheet = static_cast<SfxStyleSheet*>( mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
@@ -1537,10 +1536,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                     // #i121863# re-create original name of styte used at page where to replace with
                     // this new style
-                    String aTemp(pMySheet->GetName());
-                    const sal_uInt16 nPos(aTemp.SearchAscii(SD_LT_SEPARATOR));
-                    aTemp.Erase(0, nPos);
-                    aTemp.Insert(aOldLayoutName, 0);
+                    OUString aTemp(pMySheet->GetName());
+                    const sal_Int32 nPos(aTemp.indexOf(SD_LT_SEPARATOR));
+                    aTemp = aOldLayoutName + aTemp.copy(nPos);
                     aReplData.aName = aTemp;
                     aReplList.push_back(aReplData);
                 }
@@ -1560,17 +1558,17 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                     if (pSOld && pSNew)
                     {
-                        const String& rParentOfOld = pSOld->GetParent();
-                        const String& rParentOfNew = pSNew->GetParent();
+                        const OUString& rParentOfOld = pSOld->GetParent();
+                        const OUString& rParentOfNew = pSNew->GetParent();
 
-                        if (rParentOfOld.Len() > 0 && rParentOfNew.Len() == 0)
+                        if (!rParentOfOld.isEmpty() && rParentOfNew.isEmpty())
                         {
                             std::vector<StyleReplaceData>::iterator pRDIter;
                             for ( pRDIter = aReplList.begin(); pRDIter != aReplList.end(); ++pRDIter )
                             {
                                 if ((pRDIter->aName == rParentOfOld) && (pRDIter->aName != pRDIter->aNewName))
                                 {
-                                    String aParentOfNew(pRDIter->aNewName);
+                                    OUString aParentOfNew(pRDIter->aNewName);
                                     pSNew->SetParent(aParentOfNew);
                                     break;
                                 }
@@ -1595,9 +1593,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         // Create layout name based upon the name of the page layout of the
         // master page
-        String aPageLayoutName(pMaster->GetLayoutName());
-        String aLayoutName = aPageLayoutName;
-        aLayoutName.Erase( aLayoutName.SearchAscii( SD_LT_SEPARATOR ));
+        OUString aPageLayoutName(pMaster->GetLayoutName());
+        OUString aLayoutName = aPageLayoutName;
+        aLayoutName = aLayoutName.copy( 0, aLayoutName.indexOf( SD_LT_SEPARATOR ));
 
         // #i121863# Do *not* remove from original document any longer, it is potentially used there
         // and would lead to crashes. Rely on the automatic process of removing unused masterpages
@@ -1653,7 +1651,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             for (sal_uInt16 nPage = 1; nPage < GetPageCount(); nPage++)
             {
                 pPage = (SdPage*) GetPage(nPage);
-                String aTest = pPage->GetLayoutName();
+                OUString aTest = pPage->GetLayoutName();
                 if (aTest == aOldPageLayoutName)
                 {
                     aPageList.push_back(pPage);

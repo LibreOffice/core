@@ -208,9 +208,9 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException)
         if( pPage == 0 )
             throw DisposedException();
 
-        String aLayoutName( pPage->GetLayoutName() );
-        const String aSep( SD_LT_SEPARATOR );
-        aLayoutName.Erase(aLayoutName.Search(aSep));
+        OUString aLayoutName( pPage->GetLayoutName() );
+        const OUString aSep( SD_LT_SEPARATOR );
+        aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(aSep));
 
         return OUString( aLayoutName );
     }

@@ -154,20 +154,18 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
         {
             if (!bListsFilled || !bReplaceStyleSheets)
             {
-                String aFullName;
-                String aOldFullName;
+                OUString aFullName;
+                OUString aOldFullName;
                 SfxStyleSheetBase* pSheet = NULL;
                 SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
 
                 for (sal_Int16 i = -1; i < 9; i++)
                 {
-                    aFullName = maLayoutName;
                     aOldFullName = aOldLayoutName;
-                    aFullName += sal_Unicode( ' ' );
-                    aFullName += OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1);
-                    aOldFullName += sal_Unicode( ' ' );
-                    aOldFullName += OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1 );
-
+                    aFullName = maLayoutName + " " +
+                                OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1) +
+                                " " +
+                                OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1 );
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "Old outline style sheet not found");
                     aOldOutlineStyles.push_back(pSheet);
@@ -268,8 +266,8 @@ void SdPage::EndListenOutlineText()
     {
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*)pModel->GetStyleSheetPool();
         DBG_ASSERT(pSPool, "StyleSheetPool missing");
-        String aTrueLayoutName(maLayoutName);
-        aTrueLayoutName.Erase( aTrueLayoutName.SearchAscii( SD_LT_SEPARATOR ));
+        OUString aTrueLayoutName(maLayoutName);
+        aTrueLayoutName = aTrueLayoutName.copy(0, aTrueLayoutName.indexOf( SD_LT_SEPARATOR ));
 
         SfxStyleSheet *pSheet = NULL;
         std::vector<SfxStyleSheetBase*> aOutlineStyles;
@@ -403,7 +401,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     maSoundFile          = rSrcPage.maSoundFile;
     mbLoopSound          = rSrcPage.mbLoopSound;
     mbStopSound          = rSrcPage.mbStopSound;
-    maCreatedPageName    = String();
+    maCreatedPageName    = "";
     maFileName           = rSrcPage.maFileName;
     maBookmarkName       = rSrcPage.maBookmarkName;
     mbScaleObjects       = rSrcPage.mbScaleObjects;

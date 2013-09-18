@@ -568,14 +568,14 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
 SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
 {
-    String aName(GetLayoutName());
-    String aSep( SD_LT_SEPARATOR );
-    sal_uInt16 nPos = aName.Search(aSep);
+    OUString aName(GetLayoutName());
+    OUString aSep( SD_LT_SEPARATOR );
+    sal_Int32 nPos = aName.indexOf(aSep);
 
-    if (nPos != STRING_NOTFOUND)
+    if (nPos != -1)
     {
-        nPos = nPos + aSep.Len();
-        aName.Erase(nPos);
+        nPos = nPos + aSep.getLength();
+        aName = aName.copy(0, nPos);
     }
 
     aName += SD_RESSTR(STR_LAYOUT_BACKGROUND);
@@ -587,13 +587,13 @@ SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
 
 SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 {
-    String aName(GetLayoutName());
-    String aSep( SD_LT_SEPARATOR );
-    sal_uInt16 nPos = aName.Search(aSep);
-    if (nPos != STRING_NOTFOUND)
+    OUString aName(GetLayoutName());
+    OUString aSep( SD_LT_SEPARATOR );
+    sal_Int32 nPos = aName.indexOf(aSep);
+    if (nPos != -1)
     {
-        nPos = nPos + aSep.Len();
-        aName.Erase(nPos);
+        nPos = nPos + aSep.getLength();
+        aName = aName.copy(0, nPos);
     }
 
     switch (eObjKind)
@@ -636,9 +636,9 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
     slides masterpage */
 SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 {
-    String aStyleName( pPage->GetLayoutName() );
-    const String aSep( SD_LT_SEPARATOR );
-    aStyleName.Erase(aStyleName.Search(aSep) + aSep.Len());
+    OUString aStyleName( pPage->GetLayoutName() );
+    const OUString aSep( SD_LT_SEPARATOR );
+    aStyleName = aStyleName.copy(0, aStyleName.indexOf(aSep) + aSep.getLength());
 
     sal_uInt16 nNameId;
     switch( nHelpId )
@@ -662,11 +662,11 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
         OSL_FAIL( "SdPage::getPresentationStyle(), illegal argument!" );
         return 0;
     }
-    aStyleName.Append( SD_RESSTR( nNameId ) );
+    aStyleName += SD_RESSTR( nNameId );
     if( nNameId == STR_LAYOUT_OUTLINE )
     {
-        aStyleName.Append( sal_Unicode( ' ' ));
-        aStyleName.Append( OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE )));
+        aStyleName += " ";
+        aStyleName += OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ));
     }
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();

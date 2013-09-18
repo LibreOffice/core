@@ -201,7 +201,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
         Transmitter::PRIORITY_LOW );
 }
 
-sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl );
+sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUrl );
 
 // Code copied from sdremote/source/presenter/PresenterNotesView.cxx
 OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
@@ -283,7 +283,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
         aRet.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
-sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl )
+sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, OUString aUrl )
 {
     OUString aFilterName( "XHTML Draw File" );
     uno::Reference< document::XExporter > xExporter;
