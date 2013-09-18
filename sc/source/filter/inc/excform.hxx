@@ -63,7 +63,9 @@ public:
 
     void                GetDummy( const ScTokenArray*& );
     const ScTokenArray* GetBoolErr( XclBoolError );
-    ScFormulaCellGroupRef GetSharedFormula( XclImpStream& rStrm, SCCOL nCol, sal_Size nFormulaLen );
+
+    bool ReadSharedFormulaPosition( XclImpStream& rStrm, SCCOL& rCol, SCROW& rRow );
+    ScFormulaCellGroupRef GetSharedFormula( const ScAddress& rRefPos );
 
     static void         SetError( ScFormulaCell& rCell, const ConvErr eErr );
 

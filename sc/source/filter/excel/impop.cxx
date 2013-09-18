@@ -114,8 +114,10 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     maStrm( rStrm, GetRoot() ),
     aIn( maStrm ),
     maScOleSize( ScAddress::INITIALIZE_INVALID ),
+    mpLastFormula(NULL),
     mnLastRefIdx( 0 ),
     mnIxfeIndex( 0 ),
+    mnLastRecId(0),
     mbBiff2HasXfs(false),
     mbBiff2HasXfsValid(false),
     mbRunCLKernelThread(true)
@@ -165,6 +167,31 @@ ImportExcel::~ImportExcel( void )
     delete pFormConv;
 }
 
+void ImportExcel::SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt16 nXF, ScFormulaCell* pCell )
+{
+    LastFormulaMapType::iterator it = maLastFormulaCells.find(nCol);
+    if (it == maLastFormulaCells.end())
+    {
+        std::pair<LastFormulaMapType::iterator, bool> r =
+            maLastFormulaCells.insert(
+                LastFormulaMapType::value_type(nCol, LastFormula()));
+        it = r.first;
+    }
+
+    it->second.mnCol = nCol;
+    it->second.mnRow = nRow;
+    it->second.mpCell = pCell;
+    it->second.mfValue = fVal;
+    it->second.mnXF = nXF;
+
+    mpLastFormula = &it->second;
+}
+
+ImportExcel::LastFormula* ImportExcel::GetLastFormula( SCCOL nCol )
+{
+    LastFormulaMapType::iterator it = maLastFormulaCells.find(nCol);
+    return it == maLastFormulaCells.end() ? NULL : &it->second;
+}
 
 void ImportExcel::ReadFileSharing()
 {
@@ -815,6 +842,21 @@ void ImportExcel::Standardwidth( void )
 
 void ImportExcel::Shrfmla( void )
 {
+    switch (mnLastRecId)
+    {
+        case EXC_ID2_FORMULA:
+        case EXC_ID3_FORMULA:
+        case EXC_ID4_FORMULA:
+            // This record MUST immediately follow a FORMULA record.
+        break;
+        default:
+            return;
+    }
+
+    if (!mpLastFormula)
+        // The last FORMULA record should have left this data.
+        return;
+
     sal_uInt16              nFirstRow, nLastRow, nLenExpr;
     sal_uInt8               nFirstCol, nLastCol;
 
@@ -829,13 +871,37 @@ void ImportExcel::Shrfmla( void )
     pFormConv->Reset();
     pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
 
-
     OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray is NULL!" );
 
-    pExcRoot->pShrfmlaBuff->Store( ScRange( static_cast<SCCOL>(nFirstCol),
-                static_cast<SCROW>(nFirstRow), GetCurrScTab(),
-                static_cast<SCCOL>(nLastCol), static_cast<SCROW>(nLastRow),
-                GetCurrScTab()), *pErgebnis );
+    // The range in this record can be erroneous especially the row range.
+    // Use the row from the last FORMULA record as the start row.  The end row
+    // will be adjusted by the formula cells that follow.
+    SCCOL nCol1 = nFirstCol;
+    SCCOL nCol2 = nLastCol;
+    SCROW nRow1 = mpLastFormula->mnRow;
+
+    pExcRoot->pShrfmlaBuff->Store(
+        ScRange(nCol1, nRow1, GetCurrScTab(), nCol2, nRow1, GetCurrScTab()), *pErgebnis);
+
+    // Create formula cell for the last formula record.
+
+    ScAddress aPos(nCol1, nRow1, GetCurrScTab());
+    ScFormulaCellGroupRef xGroup = pExcRoot->pShrfmlaBuff->Find(aPos);
+    if (xGroup)
+    {
+        ScDocumentImport& rDoc = GetDocImport();
+        xGroup->compileCode(rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_DEFAULT);
+
+        ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, xGroup);
+        rDoc.getDoc().EnsureTable(aPos.Tab());
+        rDoc.setFormulaCell(aPos, pCell);
+        pCell->SetNeedNumberFormat(false);
+        if (!rtl::math::isNan(mpLastFormula->mfValue))
+            pCell->SetResultDouble(mpLastFormula->mfValue);
+
+        GetXFRangeBuffer().SetXF(aPos, mpLastFormula->mnXF);
+        mpLastFormula->mpCell = pCell;
+    }
 }
 
 
@@ -1181,6 +1247,8 @@ void ImportExcel::NeueTabelle( void )
     }
 
     pExcRoot->pShrfmlaBuff->Clear();
+    maLastFormulaCells.clear();
+    mpLastFormula = NULL;
 
     InitializeTable( nTab );
 
