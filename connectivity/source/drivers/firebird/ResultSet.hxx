@@ -91,12 +91,13 @@ namespace connectivity
             const sal_Int32                             m_fieldCount;
             ISC_STATUS_ARRAY                            m_statusVector;
 
-            bool isNull(sal_Int32 columnIndex);
-            template <typename T> T     retrieveValue(sal_Int32 columnIndex);
+            bool isNull(const sal_Int32 nColumnIndex);
+            template <typename T> T     retrieveValue(const sal_Int32 nColumnIndex,
+                                                      const ISC_SHORT nType);
 
-            template <typename T> T safelyRetrieveValue(sal_Int32 columnIndex)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException);
+            template <typename T> T safelyRetrieveValue(
+                    const sal_Int32 nColumnIndex,
+                    const ISC_SHORT nType);
 
             // OIdPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
@@ -194,9 +195,13 @@ namespace connectivity
 
         // Specialisations have to be in the namespace and can't be within the class.
         template <> ::rtl::OUString
-            OResultSet::retrieveValue(sal_Int32 columnIndex);
+            OResultSet::retrieveValue(
+                const sal_Int32 nColumnIndex,
+                const ISC_SHORT nType);
         template <> ISC_QUAD*
-             OResultSet::retrieveValue(sal_Int32 columnIndex);
+             OResultSet::retrieveValue(
+                 const sal_Int32 nColumnIndex,
+                 const ISC_SHORT nType);
     }
 }
 #endif // CONNECTIVITY_FIREBIRD_RESULTSET_HXX

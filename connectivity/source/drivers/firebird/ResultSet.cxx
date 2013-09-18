@@ -355,79 +355,86 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int3
 }
 
 // ---- Internal Utilities ---------------------------------------------------
-bool OResultSet::isNull(sal_Int32 columnIndex)
+bool OResultSet::isNull(const sal_Int32 nColumnIndex)
 {
-    assert(columnIndex <= m_fieldCount);
+    assert(nColumnIndex <= m_fieldCount);
     XSQLVAR* pVar = m_pSqlda->sqlvar;
 
-    if (pVar[columnIndex-1].sqltype & 1) // Indicates column may contain null
+    if (pVar[nColumnIndex-1].sqltype & 1) // Indicates column may contain null
     {
-        if (*pVar[columnIndex-1].sqlind == -1)
+        if (*pVar[nColumnIndex-1].sqlind == -1)
             return true;
     }
     return false;
 }
 
 template <typename T>
-T OResultSet::retrieveValue(sal_Int32 columnIndex)
+T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
     // TODO: check we have the right type.
-    if ((m_bWasNull = isNull(columnIndex)))
+    if ((m_bWasNull = isNull(nColumnIndex)))
         return T();
 
-    return *((T*) m_pSqlda->sqlvar[columnIndex-1].sqldata);
+    if (m_pSqlda->sqlvar[nColumnIndex-1].sqltype == nType)
+        return *((T*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+    else
+        return T();
+    // TODO: fix
 }
 
 template <>
-OUString OResultSet::retrieveValue(sal_Int32 columnIndex)
+OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
-    if ((m_bWasNull = isNull(columnIndex)))
+    if ((m_bWasNull = isNull(nColumnIndex)))
         return OUString();
 
     // &~1 to remove the "can contain NULL" indicator
-    int aSqlType = m_pSqlda->sqlvar[columnIndex-1].sqltype & ~1;
+    int aSqlType = m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1;
     if (aSqlType == SQL_TEXT )
     {
-        return OUString(m_pSqlda->sqlvar[columnIndex-1].sqldata,
-                        m_pSqlda->sqlvar[columnIndex-1].sqllen,
+        return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata,
+                        m_pSqlda->sqlvar[nColumnIndex-1].sqllen,
                         RTL_TEXTENCODING_UTF8);
     }
     else if (aSqlType == SQL_VARYING)
     {
         // First 2 bytes are a short containing the length of the string
         // No idea if sqllen is still valid here?
-        short aLength = *((short*) m_pSqlda->sqlvar[columnIndex-1].sqldata);
-        return OUString(m_pSqlda->sqlvar[columnIndex-1].sqldata + 2,
+        short aLength = *((short*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+        return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
                         aLength,
                         RTL_TEXTENCODING_UTF8);
     }
     else
     {
+        (void) nType;
         return OUString();
         // TODO: Possibly do some sort of type conversion?
     }
 }
 
 template <>
-ISC_QUAD* OResultSet::retrieveValue(sal_Int32 columnIndex)
+ISC_QUAD* OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
     // TODO: this is probably wrong
-    if ((m_bWasNull = isNull(columnIndex)))
+    if ((m_bWasNull = isNull(nColumnIndex)))
         return 0;
-    return (ISC_QUAD*) m_pSqlda->sqlvar[columnIndex-1].sqldata;
+    if (m_pSqlda->sqlvar[nColumnIndex-1].sqltype == nType)
+        return (ISC_QUAD*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata;
+    else
+        throw SQLException(); // TODO: better exception (can't convert Blob)
 }
 
 template <typename T>
-T OResultSet::safelyRetrieveValue(sal_Int32 columnIndex)
-    throw (SQLException, RuntimeException)
+T OResultSet::safelyRetrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    checkColumnIndex(columnIndex);
+    checkColumnIndex(nColumnIndex);
     checkRowIndex();
 
-    return retrieveValue< T >(columnIndex);
+    return retrieveValue< T >(nColumnIndex, nType);
 }
 
 // ---- XRow -----------------------------------------------------------------
@@ -443,14 +450,19 @@ sal_Bool SAL_CALL OResultSet::wasNull() throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    // TODO: maybe retrieve as string and test for "true", "t", "1" etc. instead?
-    return safelyRetrieveValue< bool >(columnIndex);
+//     // TODO: maybe retrieve as string and test for "true", "t", "1" etc. instead?
+//     return safelyRetrieveValue< bool >(columnIndex);
+    (void) columnIndex;
+    return sal_False;
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex )
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue< sal_Int8 >(columnIndex);
+    // TODO: this doesn't exist in firebird, we have to always convert.
+//     return safelyRetrieveValue< sal_Int8 >(columnIndex);
+    (void) columnIndex;
+    return 0;
 }
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
@@ -464,44 +476,45 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
 sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue< sal_Int16 >(columnIndex);
+    return safelyRetrieveValue< sal_Int16 >(columnIndex, SQL_SHORT);
 }
 
 sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue< sal_Int32 >(columnIndex);
+    return safelyRetrieveValue< sal_Int32 >(columnIndex, SQL_LONG);
 }
 
 sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue< sal_Int64 >(columnIndex);
+    return safelyRetrieveValue< sal_Int64 >(columnIndex, SQL_INT64);
 }
 
 float SAL_CALL OResultSet::getFloat(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue< float >(columnIndex);
+    return safelyRetrieveValue< float >(columnIndex, SQL_FLOAT);
 }
 
 double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue< double >(columnIndex);
+    return safelyRetrieveValue< double >(columnIndex, SQL_DOUBLE);
 }
 
 // ---- XRow: More complex types ----------------------------------------------
 OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
     throw(SQLException, RuntimeException)
 {
-    return safelyRetrieveValue< OUString >(columnIndex);
+    // TODO: special handling for char type?
+    return safelyRetrieveValue< OUString >(columnIndex, 0);
 }
 
 Date SAL_CALL OResultSet::getDate(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
-    ISC_DATE aISCDate = safelyRetrieveValue< ISC_DATE >(nIndex);
+    ISC_DATE aISCDate = safelyRetrieveValue< ISC_DATE >(nIndex, SQL_TYPE_DATE);
 
     struct tm aCTime;
     isc_decode_sql_date(&aISCDate, &aCTime);
@@ -512,7 +525,7 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 nIndex)
 Time SAL_CALL OResultSet::getTime(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
-    ISC_TIME aISCTime = safelyRetrieveValue< ISC_TIME >(nIndex);
+    ISC_TIME aISCTime = safelyRetrieveValue< ISC_TIME >(nIndex, SQL_TYPE_TIME);
 
     struct tm aCTime;
     isc_decode_sql_time(&aISCTime, &aCTime);
@@ -525,7 +538,7 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 nIndex)
 DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
-    ISC_TIMESTAMP aISCTimestamp = safelyRetrieveValue< ISC_TIMESTAMP >(nIndex);
+    ISC_TIMESTAMP aISCTimestamp = safelyRetrieveValue< ISC_TIMESTAMP >(nIndex, SQL_TIMESTAMP);
 
     struct tm aCTime;
     isc_decode_timestamp(&aISCTimestamp, &aCTime);
@@ -573,7 +586,9 @@ uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    ISC_QUAD* pBlobID = safelyRetrieveValue< ISC_QUAD* >(columnIndex);
+    // TODO: CLOB etc. should be valid here too, but we probably want some more
+    // cleverness around this.
+    ISC_QUAD* pBlobID = safelyRetrieveValue< ISC_QUAD* >(columnIndex, SQL_BLOB);
     if (!pBlobID)
         return 0;
     return m_pConnection->createBlob(pBlobID);
