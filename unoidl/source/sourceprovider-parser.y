@@ -3701,10 +3701,10 @@ bool parse(OUString const & uri, SourceProviderScannerData * data) {
             // Checking errno for the specific EINVAL, ENOMEM documented for
             // yylex_init_extra would not work as those values are not defined
             // by the C++ Standard:
-            int e = errno;
+            int e2 = errno;
             throw FileFormatException(
                 uri,
-                "yylex_init_extra failed with errno " + OUString::number(e));
+                "yylex_init_extra failed with errno " + OUString::number(e2));
         }
         int e2 = yyparse(yyscanner);
         yylex_destroy(yyscanner);
