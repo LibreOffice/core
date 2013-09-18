@@ -3265,9 +3265,12 @@ void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
                 FSEND );
     }
 
-    m_pSerializer->singleElementNS( XML_w, XML_next,
-            FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),
-            FSEND );
+    if ( nNext != nId )
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_next,
+                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),
+                FSEND );
+    }
 
     if ( bAutoUpdate )
         m_pSerializer->singleElementNS( XML_w, XML_autoRedefine, FSEND );
