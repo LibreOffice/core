@@ -117,6 +117,7 @@ public:
     void testA4AndBorders();
     void testFdo68787();
     void testCharacterBorder();
+    void testStyleInheritance();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -132,7 +133,7 @@ private:
      * xml stream, and asserting an XPath expression. This method returns the
      * xml stream, so that you can do the asserting.
      */
-    xmlDocPtr parseExport();
+    xmlDocPtr parseExport(const OUString& rStreamName = OUString("word/document.xml"));
     void assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute = OString(), OUString aExpectedValue = OUString());
 };
 
@@ -210,6 +211,7 @@ void Test::run()
         {"a4andborders.docx", &Test::testA4AndBorders},
         {"fdo68787.docx", &Test::testFdo68787},
         {"charborder.odt", &Test::testCharacterBorder},
+        {"style-inheritance.docx", &Test::testStyleInheritance},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -231,7 +233,7 @@ void Test::run()
     }
 }
 
-xmlDocPtr Test::parseExport()
+xmlDocPtr Test::parseExport(const OUString& rStreamName)
 {
     // Create the zip file.
     utl::TempFile aTempFile;
@@ -239,7 +241,7 @@ xmlDocPtr Test::parseExport()
 
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
-    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
     pStream->Seek(STREAM_SEEK_TO_END);
     sal_Size nSize = pStream->Tell();
@@ -1321,6 +1323,19 @@ void Test::testCharacterBorder()
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }
+}
+
+void Test::testStyleInheritance()
+{
+    // This document has several issues to fix, more checks will be here to
+    // test its various aspects
+
+    // Check that now styleId's are more like what MSO produces
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    // the 1st style always must be Normal
+    assertXPath(pXmlStyles, "/w:styles/w:style[1]", "styleId", "Normal");
+    // some random style later
+    assertXPath(pXmlStyles, "/w:styles/w:style[4]", "styleId", "Heading3");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
