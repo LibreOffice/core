@@ -246,6 +246,7 @@ void SwCommentRuler::UpdateCommentHelpText()
 // TODO Make Ruler return its central rectangle instead of margins.
 Rectangle SwCommentRuler::GetCommentControlRegion()
 {
+    long nLeft = 0;
     SwPostItMgr *pPostItMgr = mpViewShell->GetPostItMgr();
 
     //rhbz#1006850 When the SwPostItMgr ctor is called from SwView::SwView it
@@ -255,7 +256,10 @@ Rectangle SwCommentRuler::GetCommentControlRegion()
         return Rectangle();
 
     //FIXME When the page width is larger then screen, the ruler is misplaced by one pixel
-    long nLeft   = GetWinOffset() + GetPageOffset() + mpSwWin->LogicToPixel(Size(GetPageWidth(), 0)).Width();
+    if (GetTextRTL())
+       nLeft = GetPageOffset() - pPostItMgr->GetSidebarWidth(true) + GetBorderOffset();
+    else
+       nLeft = GetWinOffset() + GetPageOffset() + mpSwWin->LogicToPixel(Size(GetPageWidth(), 0)).Width();
     long nTop    = 0 + 4; // Ruler::ImplDraw uses RULER_OFF (value: 3px) as offset, and Ruler::ImplFormat adds one extra pixel
     // Somehow pPostItMgr->GetSidebarBorderWidth() returns border width already doubled
     long nRight  = nLeft+ pPostItMgr->GetSidebarWidth(true) + pPostItMgr->GetSidebarBorderWidth(true);

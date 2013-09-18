@@ -808,7 +808,7 @@ public:
     const Link&     GetExtraDownHdl() const { return maExtraDownHdl; }
 
     void            SetTextRTL(sal_Bool bRTL);
-
+    bool            GetTextRTL();
     void            SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
     void            SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
 

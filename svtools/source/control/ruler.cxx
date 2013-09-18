@@ -2728,7 +2728,6 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Color &rFillColor, const Point
     ImplDrawRulerTab( pDevice, aPos, nTabStyle, nStyle  );
     pDevice->Pop();
 }
-
 void Ruler::SetTextRTL(sal_Bool bRTL)
 {
     if(mpData->bTextRTL != (bool) bRTL)
@@ -2768,6 +2767,11 @@ long Ruler::GetMargin2() const
 long Ruler::GetRulerVirHeight() const
 {
     return mnVirHeight;
+}
+
+bool Ruler::GetTextRTL()
+{
+    return mpData->bTextRTL;
 }
 
 RulerUnitData Ruler::GetCurrentRulerUnit() const
