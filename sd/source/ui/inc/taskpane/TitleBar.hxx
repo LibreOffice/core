@@ -54,7 +54,7 @@ public:
     */
     TitleBar (
         ::Window* pParent,
-        const String& rsTitle,
+        const OUString& rsTitle,
         TitleBarType eType,
         bool bIsExpandable);
     virtual ~TitleBar (void);
@@ -83,7 +83,7 @@ public:
 
     virtual void DataChanged (const DataChangedEvent& rEvent);
 
-    String GetTitle (void) const;
+    OUString GetTitle() const { return msTitle; }
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > CreateAccessibleObject (
@@ -92,7 +92,7 @@ public:
 
 private:
     TitleBarType meType;
-    String msTitle;
+    OUString msTitle;
     bool mbExpanded;
     bool mbFocused;
     // Size of the bounding box that encloses the title string.

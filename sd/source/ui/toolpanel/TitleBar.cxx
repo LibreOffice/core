@@ -49,7 +49,7 @@ namespace sd { namespace toolpanel {
 
 const int TitleBar::snIndentationWidth = 16;
 
-TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eType, bool bIsExpandable)
+TitleBar::TitleBar ( ::Window* pParent, const OUString& rsTitle, TitleBarType eType, bool bIsExpandable)
 : ::Window (pParent, WB_TABSTOP)
 , TreeNode(this)
 , meType(eType)
@@ -536,14 +536,6 @@ void TitleBar::DataChanged (const DataChangedEvent& rEvent)
         }
         break;
     }
-}
-
-
-
-
-String TitleBar::GetTitle (void) const
-{
-    return msTitle;
 }
 
 
