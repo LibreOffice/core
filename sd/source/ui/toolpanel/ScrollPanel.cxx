@@ -106,7 +106,7 @@ ScrollPanel::~ScrollPanel (void)
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 TitledControl* ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
-    const String& rTitle,
+    const OUString& rTitle,
     const OString& rHelpId)
 {
     // We are interested only in the title.  The control itself is
