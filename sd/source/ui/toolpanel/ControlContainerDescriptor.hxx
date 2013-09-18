@@ -62,7 +62,7 @@ public:
         ControlContainer& rContainer,
         ::Window* pParent,
         ::std::auto_ptr<ILayoutableWindow> pControl,
-        const String& rTitle,
+        const OUString& rTitle,
         TitleBar::TitleBarType eType);
 
     virtual ~ControlContainerDescriptor (void);
@@ -85,7 +85,7 @@ public:
     //    const Rectangle& GetTitleBarBox (void) const;
 
     Window* GetControl (void) const;
-    const String& GetTitle (void) const;
+    const OUString& GetTitle (void) const;
 
     void Expand (bool bExpanded = true);
     void Collapse (void);
@@ -109,7 +109,7 @@ private:
     ControlContainer& mrContainer;
     ::std::auto_ptr<TitleBar> mpTitleBar;
     ::std::auto_ptr<ILayoutableWindow> mpControl;
-    String msTitle;
+    OUString msTitle;
     bool mbExpanded;
     bool mbVisible;
     void* mpUserData;
