@@ -811,7 +811,21 @@ struct WW8PLCFxDesc
     //With nStartPos set to WW8_CP_MAX then in the case of a pap or chp
     //GetSprms will not search for the sprms, but instead take the
     //existing ones.
-    WW8PLCFxDesc() : pIdStk(0), nStartPos(WW8_CP_MAX) {}
+    WW8PLCFxDesc()
+        : pIdStk(0)
+        , pMemPos(0)
+        , nOrigSprmsLen(0)
+        , nStartPos(WW8_CP_MAX)
+        , nEndPos(WW8_CP_MAX)
+        , nOrigStartPos(WW8_CP_MAX)
+        , nOrigEndPos(WW8_CP_MAX)
+        , nCp2OrIdx(WW8_CP_MAX)
+        , nSprmsLen(0)
+        , nCpOfs(0)
+        , bFirstSprm(false)
+        , bRealLineEnd(false)
+    {
+    }
     void ReduceByOffset();
 };
 
