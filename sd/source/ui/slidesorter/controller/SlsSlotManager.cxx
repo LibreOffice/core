@@ -990,7 +990,7 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
             && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) ));
 }
 
-bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const String & rName  )
+bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString & rName  )
 {
     sal_Bool   bOutDummy;
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
@@ -1049,7 +1049,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const String
         }
     }
 
-    bool bSuccess = pPageToRename!=NULL && ( sal_False != rName.Equals( pPageToRename->GetName()));
+    bool bSuccess = pPageToRename!=NULL && ( rName == pPageToRename->GetName() );
 
     if( bSuccess )
     {

@@ -92,7 +92,7 @@ private:
     */
     void RenameSlide (void);
     DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog*);
-    bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const String& rName);
+    bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString& rName);
 
     /** Handle SID_INSERTPAGE slot calls.
     */
