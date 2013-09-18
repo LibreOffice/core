@@ -120,7 +120,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
             continue;
 
         // Use the name of the master page to avoid duplicate entries.
-        String sName (pMasterPage->GetName());
+        OUString sName (pMasterPage->GetName());
         if (aMasterPageNames.find(sName)!=aMasterPageNames.end())
             continue;
         aMasterPageNames.insert (sName);
@@ -133,9 +133,9 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
             SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
                 MasterPageContainer::MASTERPAGE,
                 nIndex,
-                String(),
+                OUString(),
                 pMasterPage->GetName(),
-                String(),
+                OUString(),
                 pMasterPage->IsPrecious(),
                 ::boost::shared_ptr<PageObjectProvider>(new ExistingPageProvider(pMasterPage)),
                 ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
@@ -195,7 +195,7 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
     sal_uInt16 nItemCount (mpPageSet->GetItemCount());
     for (nIndex=1; nIndex<=nItemCount && bLoop; nIndex++)
     {
-        String sName (mpPageSet->GetItemText (nIndex));
+        OUString sName (mpPageSet->GetItemText (nIndex));
         if (aNames.find(sName) != aNames.end())
         {
             mpPageSet->SelectItem (nIndex);

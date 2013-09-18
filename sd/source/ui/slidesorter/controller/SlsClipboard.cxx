@@ -544,7 +544,7 @@ void Clipboard::CreateSlideTransferable (
         const sal_Int32 nIndex (sURL.indexOf((sal_Unicode)'#'));
         if (nIndex == -1)
             break;
-        String sBookmark (sURL.copy(nIndex+1));
+        OUString sBookmark (sURL.copy(nIndex+1));
 
         // Make sure that the bookmark points to a page.
         SdDrawDocument* pTransferableDocument = rSlideSorter.GetModel().GetDocument();

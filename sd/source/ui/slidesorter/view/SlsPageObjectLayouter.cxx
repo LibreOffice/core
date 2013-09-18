@@ -250,18 +250,18 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
     if (mpPageNumberFont)
         mpWindow->SetFont(*mpPageNumberFont);
 
-    String sPageNumberTemplate;
+    OUString sPageNumberTemplate;
     if (nPageCount < 10)
-        sPageNumberTemplate = OUString("9");
+        sPageNumberTemplate = "9";
     else if (nPageCount < 100)
-        sPageNumberTemplate = OUString("99");
+        sPageNumberTemplate = "99";
     else if (nPageCount < 200)
         // Just for the case that 1 is narrower than 9.
-        sPageNumberTemplate = OUString("199");
+        sPageNumberTemplate = "199";
     else if (nPageCount < 1000)
-        sPageNumberTemplate = OUString("999");
+        sPageNumberTemplate = "999";
     else
-        sPageNumberTemplate = OUString("9999");
+        sPageNumberTemplate = "9999";
     // More then 9999 pages are not handled.
 
     const Size aSize (

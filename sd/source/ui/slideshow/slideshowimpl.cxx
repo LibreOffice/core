@@ -914,7 +914,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         // ---
 
-        String  aPresSlide( maPresSettings.maPresPage );
+        OUString  aPresSlide( maPresSettings.maPresPage );
         SdPage* pStartPage = mpViewShell ? mpViewShell->GetActualPage() : 0;
         bool    bStartWithActualSlide =  pStartPage &&
                                         ( (meAnimationMode != ANIMATIONMODE_SHOW) ||
@@ -945,7 +945,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         if( bStartWithActualSlide )
         {
-            if ( !aPresSlide.Len())
+            if ( aPresSlide.isEmpty())
             {
                 // no preset slide yet, so pick current on one
                 aPresSlide = pStartPage->GetName();
@@ -1609,7 +1609,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
 
     case presentation::ClickAction_MACRO:
     {
-        const String aMacro( pEvent->maStrBookmark );
+        const OUString aMacro( pEvent->maStrBookmark );
 
         if ( SfxApplication::IsXScriptURL( aMacro ) )
         {
@@ -1624,14 +1624,12 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
             // aMacro has the following syntax:
             // "Macroname.Modulname.Libname.Documentname" or
             // "Macroname.Modulname.Libname.Applicationname"
-            String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
-            String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
+            OUString aMacroName = aMacro.getToken(0, '.');
+            OUString aModulName = aMacro.getToken(1, '.');
 
             // todo: is the limitation still given that only
             // Modulname+Macroname can be used here?
-            String aExecMacro(aModulName);
-            aExecMacro.Append( sal_Unicode('.') );
-            aExecMacro.Append( aMacroName );
+            OUString aExecMacro = aModulName + "." + aMacroName;
             mpDocSh->GetBasic()->Call(aExecMacro);
         }
     }
@@ -2814,7 +2812,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
 
         case SID_NAVIGATOR_OBJECT:
         {
-            const String aTarget( ((SfxStringItem&) pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
+            const OUString aTarget( ((SfxStringItem&) pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
 
             // is the bookmark a Slide?
             sal_Bool        bIsMasterPage;

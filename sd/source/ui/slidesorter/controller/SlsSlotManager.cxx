@@ -841,7 +841,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     sal_Int32 nActivePageCount;
     sal_uInt16 nSelectedPages = mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
     OUStringBuffer aPageStr;
-    String aLayoutStr;
+    OUString aLayoutStr;
 
     //Set number of slides
     if (nSelectedPages > 0)
@@ -872,7 +872,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     {
         pFirstPage = pPage;
         aLayoutStr = pFirstPage->GetLayoutName();
-        aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
+        aLayoutStr = aLayoutStr.copy(0, aLayoutStr.indexOf( SD_LT_SEPARATOR ) );
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
@@ -933,9 +933,9 @@ void SlotManager::RenameSlide (void)
             pSelectedPage = aSelectedPages.GetNextElement()->GetPage();
         if (pSelectedPage != NULL)
         {
-            String aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
-            String aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
-            String aPageName = pSelectedPage->GetName();
+            OUString aTitle( SdResId( STR_TITLE_RENAMESLIDE ) );
+            OUString aDescr( SdResId( STR_DESC_RENAMESLIDE ) );
+            OUString aPageName = pSelectedPage->GetName();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -1043,7 +1043,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         pPageToRename = pDocument->GetMasterSdPage( nPageId, ePageKind );
         if (pPageToRename != NULL)
         {
-            const String aOldLayoutName( pPageToRename->GetLayoutName() );
+            const OUString aOldLayoutName( pPageToRename->GetLayoutName() );
             pManager->AddUndoAction( new RenameLayoutTemplateUndoAction( pDocument, aOldLayoutName, rName ) );
             pDocument->RenameLayoutTemplate( aOldLayoutName, rName );
         }

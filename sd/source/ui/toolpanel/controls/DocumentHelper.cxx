@@ -263,8 +263,8 @@ void DocumentHelper::ProvideStyles (
     SdPage* pPage)
 {
     // Get the layout name of the given page.
-    String sLayoutName (pPage->GetLayoutName());
-    sLayoutName.Erase (sLayoutName.SearchAscii (SD_LT_SEPARATOR));
+    OUString sLayoutName (pPage->GetLayoutName());
+    sLayoutName = sLayoutName.copy(0, sLayoutName.indexOf(SD_LT_SEPARATOR));
 
     // Copy the style sheet from source to target document.
     SdStyleSheetPool* pSourceStyleSheetPool =
@@ -307,8 +307,8 @@ void DocumentHelper::AssignMasterPageToPageList (
     // Make the layout name by stripping ouf the layout postfix from the
     // layout name of the given master page.
     OUString sFullLayoutName(pMasterPage->GetLayoutName());
-    String sBaseLayoutName (sFullLayoutName);
-    sBaseLayoutName.Erase (sBaseLayoutName.SearchAscii (SD_LT_SEPARATOR));
+    OUString sBaseLayoutName (sFullLayoutName);
+    sBaseLayoutName = sBaseLayoutName.copy(0, sBaseLayoutName.indexOf(SD_LT_SEPARATOR));
 
     if (rpPageList->empty())
         return;
@@ -330,7 +330,7 @@ void DocumentHelper::AssignMasterPageToPageList (
 
     ::svl::IUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
     if( pUndoMgr )
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), String());
+        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString());
 
     SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rpPageList);
     if (pMasterPageInDocument == NULL)

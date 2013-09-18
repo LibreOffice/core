@@ -373,7 +373,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         {
             bIllegalArgument = false;
 
-            const String aShowName( aShow );
+            const OUString aShowName( aShow );
 
             SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(sal_False);
             if(pCustomShowList)

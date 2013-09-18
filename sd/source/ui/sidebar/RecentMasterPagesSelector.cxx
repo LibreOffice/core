@@ -129,8 +129,8 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
         MasterPageContainer::Token aToken (rInstance.GetTokenForIndex(nIndex));
         if (aToken != MasterPageContainer::NIL_TOKEN)
         {
-            String sStyleName (mpContainer->GetStyleNameForToken(aToken));
-            if (sStyleName.Len()==0
+            OUString sStyleName (mpContainer->GetStyleNameForToken(aToken));
+            if (sStyleName.isEmpty()
                 || aCurrentNames.find(sStyleName) == aCurrentNames.end())
             {
                 rItemList.push_back(aToken);

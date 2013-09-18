@@ -733,7 +733,7 @@ SfxRequest LayoutMenu::CreateRequest (
         SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
 
         aRequest.AppendItem(
-            SfxStringItem (ID_VAL_PAGENAME, String()));//pPage->GetName()));
+            SfxStringItem (ID_VAL_PAGENAME, OUString()));//pPage->GetName()));
         aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
         aRequest.AppendItem(
             SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
@@ -804,7 +804,7 @@ void LayoutMenu::Fill (void)
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BMP_MIRROR_HORZ);
 
-            InsertItem (i, aBmp, String (SdResId (pInfo->mnStrResId)));
+            InsertItem (i, aBmp, SdResId (pInfo->mnStrResId));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
             n++;
         }

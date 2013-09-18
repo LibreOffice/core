@@ -71,7 +71,7 @@ Bitmap BitmapFactory::CreateBitmap (
     Bitmap aPreview (maRenderer.RenderPage (
         &rPage,
         aSize,
-        String(),
+        OUString(),
         true,
         false).GetBitmapEx().GetBitmap());
     if (bDoSuperSampling)

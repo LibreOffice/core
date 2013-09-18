@@ -506,7 +506,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     const Size      aOutSize( GetOutputSize() );
     const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, rMap ) );
     const Size      aOffset( LogicToLogic( Size( 1000, 1000 ), MAP_100TH_MM, rMap ) );
-    String          aText( SdResId( STR_PRES_PAUSE ) );
+    OUString        aText( SdResId( STR_PRES_PAUSE ) );
     bool            bDrawn = false;
 
     Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
@@ -555,9 +555,9 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
             SvtSysLocale                aSysLocale;
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
-            aText.AppendAscii( " ( " );
+            aText += " ( ";
             aText += aLocaleData.getDuration( Time( 0, 0, mnPauseTimeout ) );
-            aText.AppendAscii( " )" );
+            aText += " )";
             aVDev.DrawText( Point( aOffset.Width(), 0 ), aText );
             DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, aVDev );
             bDrawn = true;
@@ -581,7 +581,7 @@ void ShowWindow::DrawEndScene()
 
     const Point     aOutOrg( PixelToLogic( Point() ) );
     const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );
-    const String    aText( SdResId( STR_PRES_SOFTEND ) );
+    const OUString  aText( SdResId( STR_PRES_SOFTEND ) );
 
     aFont.SetSize( aTextSize );
     aFont.SetColor( COL_WHITE );

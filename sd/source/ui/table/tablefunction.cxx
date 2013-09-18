@@ -220,11 +220,11 @@ void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
     }
     else
     {
-        String aActiveLayer = mpDrawView->GetActiveLayer();
+        OUString aActiveLayer = mpDrawView->GetActiveLayer();
         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
         if( bIsUIActive ||
-            ( aActiveLayer.Len() != 0 && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
+            ( !aActiveLayer.isEmpty() && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
             !pPV->IsLayerVisible(aActiveLayer) ) ) ||
             SD_MOD()->GetWaterCan() )
         {
