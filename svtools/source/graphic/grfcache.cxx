@@ -955,30 +955,27 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
     {
         bRemoved = (*it)->ReleaseGraphicObjectReference( rObj );
 
-        if( bRemoved )
+        if( bRemoved && (0 == (*it)->GetGraphicObjectReferenceCount()) )
         {
-            if( 0 == (*it)->GetGraphicObjectReferenceCount() )
+            // if graphic cache entry has no more references,
+            // the corresponding display cache object can be removed
+            GraphicDisplayCacheEntryList::iterator it2 = maDisplayCache.begin();
+            while( it2 != maDisplayCache.end() )
             {
-                // if graphic cache entry has no more references,
-                // the corresponding display cache object can be removed
-                GraphicDisplayCacheEntryList::iterator it2 = maDisplayCache.begin();
-                while( it2 != maDisplayCache.end() )
+                GraphicDisplayCacheEntry* pDisplayEntry = *it2;
+                if( pDisplayEntry->GetReferencedCacheEntry() == *it )
                 {
-                    GraphicDisplayCacheEntry* pDisplayEntry = *it2;
-                    if( pDisplayEntry->GetReferencedCacheEntry() == *it )
-                    {
-                        mnUsedDisplaySize -= pDisplayEntry->GetCacheSize();
-                        it2 = maDisplayCache.erase( it2 );
-                        delete pDisplayEntry;
-                    }
-                    else
-                        ++it2;
+                    mnUsedDisplaySize -= pDisplayEntry->GetCacheSize();
+                    it2 = maDisplayCache.erase( it2 );
+                    delete pDisplayEntry;
                 }
-
-                // delete graphic cache entry
-                delete *it;
-                it = maGraphicCache.erase( it );
+                else
+                    ++it2;
             }
+
+            // delete graphic cache entry
+            delete *it;
+            it = maGraphicCache.erase( it );
         }
         else
             ++it;
