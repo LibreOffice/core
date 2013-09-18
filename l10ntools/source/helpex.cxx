@@ -124,7 +124,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         hasNoError =
             aParser.CreatePO(
                 aArgs.m_sOutputFile, aArgs.m_sInputFile,
-                new XMLFile( OUString('0') ), "help" );
+                new XMLFile( OString('0') ), "help" );
     }
 
     if( hasNoError )

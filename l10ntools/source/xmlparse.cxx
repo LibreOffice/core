@@ -39,6 +39,10 @@ using namespace U_ICU_NAMESPACE;
 using namespace std;
 using namespace osl;
 
+#define XML_LANG    "xml-lang"
+#define ID          "id"
+#define OLDREF      "oldref"
+
 //
 // class XMLChildNode
 //
@@ -172,12 +176,6 @@ void XMLFile::Write( OString const &aFilename )
     s.close();
 }
 
-void XMLFile::WriteString( ofstream &rStream, const OUString &sString )
-{
-    OString sText(OUStringToOString(sString, RTL_TEXTENCODING_UTF8));
-    rStream << sText.getStr();
-}
-
 sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
 {
     if ( !pCur )
@@ -193,15 +191,15 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
                 rStream  << "<";
-                WriteString( rStream, pElement->GetName());
+                rStream << pElement->GetName().getStr();
                 if ( pElement->GetAttributeList())
                     for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ) {
                         rStream << " ";
-                        OUString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
-                        WriteString( rStream , XMLUtil::QuotHTML( sData ) );
+                        OString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
+                        rStream << XMLUtil::QuotHTML( sData ).getStr();
                         rStream << "=\"";
                         sData = (*pElement->GetAttributeList())[ j ]->GetValue();
-                        WriteString( rStream , XMLUtil::QuotHTML( sData )  );
+                        rStream << XMLUtil::QuotHTML( sData ).getStr();
                         rStream << "\"";
                     }
                 if ( !pElement->GetChildList())
@@ -211,27 +209,27 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         Write( rStream, (*pElement->GetChildList())[ k ] );
                     rStream << "</";
-                    WriteString( rStream, pElement->GetName());
+                    rStream << pElement->GetName().getStr();
                     rStream << ">";
                    }
             }
             break;
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
-                OUString sData( pData->GetData());
-                WriteString( rStream, XMLUtil::QuotHTML( sData ) );
+                OString sData( pData->GetData());
+                rStream << XMLUtil::QuotHTML( sData ).getStr();
             }
             break;
             case XML_NODE_TYPE_COMMENT: {
                 XMLComment *pComment = ( XMLComment * ) pCur;
                 rStream << "<!--";
-                WriteString( rStream, pComment->GetComment());
+                rStream <<  pComment->GetComment().getStr();
                 rStream << "-->";
             }
             break;
             case XML_NODE_TYPE_DEFAULT: {
                 XMLDefault *pDefault = ( XMLDefault * ) pCur;
-                WriteString( rStream, pDefault->GetDefault());
+                rStream <<  pDefault->GetDefault().getStr();
             }
             break;
         }
@@ -242,7 +240,6 @@ sal_Bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
 
 void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
 {
-
     if ( !pCur )
         Print( this );
     else {
@@ -256,19 +253,17 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
-                fprintf( stdout, "<%s", OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "<%s", pElement->GetName().getStr());
                 if ( pElement->GetAttributeList())
                 {
                     for (size_t j = 0; j < pElement->GetAttributeList()->size(); ++j)
                     {
-                        OString aAttrName(OUStringToOString((*pElement->GetAttributeList())[j]->GetName(),
-                            RTL_TEXTENCODING_UTF8));
+                        const OString aAttrName((*pElement->GetAttributeList())[j]->GetName());
                         if (!aAttrName.equalsIgnoreAsciiCase(XML_LANG))
                         {
                             fprintf( stdout, " %s=\"%s\"",
                                 aAttrName.getStr(),
-                                OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),
-                                    RTL_TEXTENCODING_UTF8).getStr());
+                                (*pElement->GetAttributeList())[ j ]->GetValue().getStr());
                         }
                     }
                 }
@@ -278,24 +273,23 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
                     fprintf( stdout, ">" );
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         Print( (*pElement->GetChildList())[ k ], nLevel + 1 );
-                    fprintf( stdout, "</%s>", OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                    fprintf( stdout, "</%s>", pElement->GetName().getStr());
                 }
             }
             break;
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
-                OUString sData = pData->GetData();
-                fprintf( stdout, "%s", OUStringToOString(sData, RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "%s", pData->GetData().getStr());
             }
             break;
             case XML_NODE_TYPE_COMMENT: {
                 XMLComment *pComment = ( XMLComment * ) pCur;
-                fprintf( stdout, "<!--%s-->", OUStringToOString(pComment->GetComment(), RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "<!--%s-->", pComment->GetComment().getStr());
             }
             break;
             case XML_NODE_TYPE_DEFAULT: {
                 XMLDefault *pDefault = ( XMLDefault * ) pCur;
-                fprintf( stdout, "%s", OUStringToOString(pDefault->GetDefault(), RTL_TEXTENCODING_UTF8).getStr());
+                fprintf( stdout, "%s", pDefault->GetDefault().getStr());
             }
             break;
         }
@@ -313,23 +307,20 @@ XMLFile::~XMLFile()
     }
 }
 /*****************************************************************************/
-XMLFile::XMLFile( const OUString &rFileName ) // the file name, empty if created from memory stream
+XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created from memory stream
 /*****************************************************************************/
                 : XMLParentNode( NULL ),
                   sFileName    ( rFileName ),
-                  ID           ( "id" ),
-                  OLDREF       ( "oldref" ),
-                  XML_LANG     ( "xml-lang" ),
                   XMLStrings   ( NULL )
 
 {
-    nodes_localize.insert( TagMap::value_type(OString(RTL_CONSTASCII_STRINGPARAM("bookmark")) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString(RTL_CONSTASCII_STRINGPARAM("variable")) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString(RTL_CONSTASCII_STRINGPARAM("paragraph")) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString(RTL_CONSTASCII_STRINGPARAM("alt")) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString(RTL_CONSTASCII_STRINGPARAM("caption")) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString(RTL_CONSTASCII_STRINGPARAM("title")) , sal_True) );
-    nodes_localize.insert( TagMap::value_type(OString(RTL_CONSTASCII_STRINGPARAM("link")) , sal_True) );
+    nodes_localize.insert( TagMap::value_type(OString("bookmark") , sal_True) );
+    nodes_localize.insert( TagMap::value_type(OString("variable") , sal_True) );
+    nodes_localize.insert( TagMap::value_type(OString("paragraph") , sal_True) );
+    nodes_localize.insert( TagMap::value_type(OString("alt") , sal_True) );
+    nodes_localize.insert( TagMap::value_type(OString("caption") , sal_True) );
+    nodes_localize.insert( TagMap::value_type(OString("title") , sal_True) );
+    nodes_localize.insert( TagMap::value_type(OString("link") , sal_True) );
 }
 /*****************************************************************************/
 void XMLFile::Extract( XMLFile *pCur )
@@ -350,18 +341,18 @@ void XMLFile::Extract( XMLFile *pCur )
 /*****************************************************************************/
 void XMLFile::InsertL10NElement( XMLElement* pElement ){
 /*****************************************************************************/
-    OString tmpStr,id,language("");
+    OString id,language("");
     LangHashMap* elem;
 
     if( pElement->GetAttributeList() != NULL ){
         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
         {
-            tmpStr=OUStringToOString((*pElement->GetAttributeList())[ j ]->GetName(), RTL_TEXTENCODING_UTF8);
+            const OString tmpStr((*pElement->GetAttributeList())[ j ]->GetName());
             if (tmpStr == ID) { // Get the "id" Attribute
-                id = OUStringToOString((*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8);
+                id = (*pElement->GetAttributeList())[ j ]->GetValue();
             }
             if (tmpStr == XML_LANG) { // Get the "xml-lang" Attribute
-                language = OUStringToOString((*pElement->GetAttributeList())[j]->GetValue(),RTL_TEXTENCODING_UTF8);
+                language = (*pElement->GetAttributeList())[j]->GetValue();
             }
 
         }
@@ -382,7 +373,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
         elem=pos->second;
         if ( (*elem)[ language ] )
         {
-            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.getStr(), language.getStr(), OUStringToOString(sFileName, RTL_TEXTENCODING_ASCII_US).getStr() );
+            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.getStr(), language.getStr(), sFileName.getStr() );
             exit( -1 );
         }
         (*elem)[ language ]=pElement;
@@ -393,9 +384,6 @@ XMLFile::XMLFile( const XMLFile& obj )
 /*****************************************************************************/
                 : XMLParentNode( obj ),
                   sFileName    ( obj.sFileName ),
-                  ID           ( "id" ),
-                  OLDREF       ( "oldref" ),
-                  XML_LANG     ( "xml-lang" ),
                   XMLStrings   ( NULL )
 {
     if( this!=&obj )
@@ -456,24 +444,24 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
             break;
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                OString sName(OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase());
+                const OString sName(pElement->GetName().toAsciiLowerCase());
                 OString language,tmpStrVal,oldref;
                 if ( pElement->GetAttributeList())
                 {
                     for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
                     {
-                        const OString tmpStr = OUStringToOString((*pElement->GetAttributeList())[j]->GetName(), RTL_TEXTENCODING_UTF8);
-                        if (tmpStr == "id") {
-                            tmpStrVal=OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                        const OString tmpStr = (*pElement->GetAttributeList())[j]->GetName();
+                        if (tmpStr == ID) {
+                            tmpStrVal=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
                         if (tmpStr == "localize") {
                             bInsert=false;
                         }
                         if (tmpStr == XML_LANG) { // Get the "xml-lang" Attribute
-                            language=OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                            language=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
                         if (tmpStr == OLDREF) { // Get the "oldref" Attribute
-                            oldref=OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
+                            oldref=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
                     }
                     pElement->SetLanguageId ( language );
@@ -526,19 +514,16 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
             break;
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                OString sName(OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_ASCII_US));
-                if (sName.equalsIgnoreAsciiCase("TOPIC"))
+                if (pElement->GetName().equalsIgnoreAsciiCase("TOPIC"))
                 {
                     if ( pElement->GetAttributeList())
                     {
                         for (size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j)
                         {
-                            const OString tmpStr(OUStringToOString((*pElement->GetAttributeList())[j]->GetName(),
-                                RTL_TEXTENCODING_UTF8));
+                            const OString tmpStr((*pElement->GetAttributeList())[j]->GetName());
                             if (tmpStr.equalsIgnoreAsciiCase("STATUS"))
                             {
-                                OString tmpStrVal(OUStringToOString( (*pElement->GetAttributeList())[j]->GetValue(),
-                                    RTL_TEXTENCODING_UTF8));
+                                const OString tmpStrVal((*pElement->GetAttributeList())[j]->GetValue());
                                 if (!tmpStrVal.equalsIgnoreAsciiCase("PUBLISH") &&
                                     !tmpStrVal.equalsIgnoreAsciiCase("DEPRECATED"))
                                 {
@@ -620,7 +605,7 @@ XMLElement& XMLElement::operator=(const XMLElement& obj){
 }
 
 /*****************************************************************************/
-void XMLElement::AddAttribute( const OUString &rAttribute, const OUString &rValue )
+void XMLElement::AddAttribute( const OString &rAttribute, const OString &rValue )
 /*****************************************************************************/
 {
     if ( !pAttributes )
@@ -629,9 +614,9 @@ void XMLElement::AddAttribute( const OUString &rAttribute, const OUString &rValu
 }
 
 /*****************************************************************************/
-void XMLElement::ChangeLanguageTag( const OUString &rValue )
+void XMLElement::ChangeLanguageTag( const OString &rValue )
 {
-    SetLanguageId(OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
+    SetLanguageId(rValue);
     if ( pAttributes )
     {
         for (size_t i = 0; i < pAttributes->size(); ++i)
@@ -653,7 +638,7 @@ void XMLElement::ChangeLanguageTag( const OUString &rValue )
             {
                 pElem = static_cast< XMLElement* >(pNode);
                 pElem->ChangeLanguageTag( rValue );
-                pElem->SetLanguageId(OUStringToOString(rValue, RTL_TEXTENCODING_UTF8));
+                pElem->SetLanguageId(rValue);
                 pElem  = NULL;
                 pNode  = NULL;
             }
@@ -676,18 +661,18 @@ XMLElement::~XMLElement()
 }
 
 /*****************************************************************************/
-OUString XMLElement::ToOUString(){
+OString XMLElement::ToOString(){
 /*****************************************************************************/
-    OUStringBuffer* buffer = new OUStringBuffer();
+    OStringBuffer* buffer = new OStringBuffer();
     Print(this,*buffer,true);
-    OUString result=buffer->makeStringAndClear();
-    OUString xy(result.getStr());
-    result=OUString(xy);
+    OString result=buffer->makeStringAndClear();
+    OString xy(result.getStr());
+    result=OString(xy);
     delete buffer;
     return result;
 }
 /*****************************************************************************/
-void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
+void XMLElement::Print(XMLNode *pCur, OStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
     if(pCur!=NULL){
         if(rootelement){
@@ -709,49 +694,48 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
                 if( !pElement->GetName().equalsIgnoreAsciiCase("comment") ){
-                    buffer.append( OUString("<") );
+                    buffer.append( "<" );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
                         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
 
-                            OUString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
+                            const OString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
                             if( !aAttrName.equalsIgnoreAsciiCase( "xml-lang" ) ) {
-                                buffer.append( OUString(" ") );
+                                buffer.append( " " );
                                 buffer.append( aAttrName );
-                                buffer.append( OUString("=") );
-                                buffer.append( OUString("\"") );
+                                buffer.append( "=" );
+                                buffer.append( "\"" );
                                 buffer.append( (*pElement->GetAttributeList())[ j ]->GetValue() );
-                                buffer.append( OUString("\"") );
+                                buffer.append( "\"" );
                             }
                         }
                     }
                     if ( !pElement->GetChildList())
-                        buffer.append( OUString("/>") );
+                        buffer.append( "/>" );
                     else {
-                        buffer.append( OUString(">") );
+                        buffer.append( ">" );
                         XMLChildNode* tmp=NULL;
                         for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ ){
                             tmp = (*pElement->GetChildList())[ k ];
                             Print( tmp, buffer , false);
                         }
-                        buffer.append( OUString("</") );
+                        buffer.append( "</" );
                         buffer.append( pElement->GetName() );
-                        buffer.append( OUString(">") );
+                        buffer.append( ">" );
                     }
                 }
             }
             break;
             case XML_NODE_TYPE_DATA: {
                 XMLData *pData = ( XMLData * ) pCur;
-                OUString sData = pData->GetData();
-                buffer.append( sData );
+                buffer.append( pData->GetData() );
             }
             break;
             case XML_NODE_TYPE_COMMENT: {
                 XMLComment *pComment = ( XMLComment * ) pCur;
-                buffer.append( OUString("<!--") );
+                buffer.append( "<!--" );
                 buffer.append( pComment->GetComment() );
-                buffer.append( OUString("-->") );
+                buffer.append( "-->" );
             }
             break;
             case XML_NODE_TYPE_DEFAULT: {
@@ -789,7 +773,7 @@ XMLData& XMLData::operator=(const XMLData& obj){
     return *this;
 }
 /*****************************************************************************/
-void XMLData::AddData( const OUString &rData) {
+void XMLData::AddData( const OString &rData) {
 /*****************************************************************************/
     sData += rData;
 }
@@ -858,15 +842,13 @@ XMLDefault& XMLDefault::operator=(const XMLDefault& obj){
 // class SimpleXMLParser
 //
 
-#define XML_CHAR_TO_OUSTRING(x) OStringToOUString(OString(x), RTL_TEXTENCODING_UTF8)
-#define XML_CHAR_N_TO_OUSTRING(x,n) OStringToOUString(OString(x,n), RTL_TEXTENCODING_UTF8 )
-
 namespace
 {
 
-static OUString lcl_pathnameToAbsoluteUrl(const OUString& rPathname) {
+static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname) {
+    OUString sPath = OStringToOUString(rPathname, RTL_TEXTENCODING_UTF8 );
     OUString sUrl;
-    if (osl::FileBase::getFileURLFromSystemPath(rPathname, sUrl)
+    if (osl::FileBase::getFileURLFromSystemPath(sPath, sUrl)
         != osl::FileBase::E_None)
     {
         std::cerr << "Error: Cannot convert input pathname to URL\n";
@@ -954,29 +936,21 @@ void SimpleXMLParser::StartElement(
     const XML_Char *name, const XML_Char **atts )
 /*****************************************************************************/
 {
-    OUString sElementName = OUString( XML_CHAR_TO_OUSTRING( name ));
-    XMLElement *pElement = new XMLElement( sElementName, ( XMLParentNode * ) pCurNode );
+    XMLElement *pElement = new XMLElement( OString(name), ( XMLParentNode * ) pCurNode );
     pCurNode = pElement;
     pCurData = NULL;
 
     int i = 0;
     while( atts[i] ) {
-        pElement->AddAttribute(
-            OUString( XML_CHAR_TO_OUSTRING( atts[ i ] )),
-            OUString( XML_CHAR_TO_OUSTRING( atts[ i + 1 ] )));
+        pElement->AddAttribute( atts[ i ], atts[ i + 1 ] );
         i += 2;
     }
 }
 
 /*****************************************************************************/
-void SimpleXMLParser::EndElement( const XML_Char *name )
+void SimpleXMLParser::EndElement( const XML_Char * /*name*/ )
 /*****************************************************************************/
 {
-    // This variable is not used at all, but the sax C interface can't be changed
-    // To prevent warnings this dummy assignment is used
-    // +++
-    (void) name;
-
     pCurNode = pCurNode->GetParent();
     pCurData = NULL;
 }
@@ -987,13 +961,11 @@ void SimpleXMLParser::CharacterData(
 /*****************************************************************************/
 {
     if ( !pCurData ){
-        OUString x = XML_CHAR_N_TO_OUSTRING( s, len );
-        XMLUtil::UnQuotHTML(x);
-        pCurData = new XMLData( x , pCurNode );
+        OString x( s, len );
+        pCurData = new XMLData( helper::UnQuotHTML(x) , pCurNode );
     }else{
-        OUString x = XML_CHAR_N_TO_OUSTRING( s, len );
-        XMLUtil::UnQuotHTML(x);
-        pCurData->AddData( x );
+        OString x( s, len );
+        pCurData->AddData( helper::UnQuotHTML(x) );
 
     }
 }
@@ -1004,7 +976,7 @@ void SimpleXMLParser::Comment(
 /*****************************************************************************/
 {
     pCurData = NULL;
-    new XMLComment( OUString( XML_CHAR_TO_OUSTRING( data )), pCurNode );
+    new XMLComment( OString( data ), pCurNode );
 }
 
 /*****************************************************************************/
@@ -1013,18 +985,17 @@ void SimpleXMLParser::Default(
 /*****************************************************************************/
 {
     pCurData = NULL;
-    new XMLDefault(
-        OUString( XML_CHAR_N_TO_OUSTRING( s, len )), pCurNode );
+    new XMLDefault(OString( s, len ), pCurNode );
 }
 
 /*****************************************************************************/
-XMLFile *SimpleXMLParser::Execute( const OUString &rFileName, XMLFile* pXMLFileIn )
+XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn )
 /*****************************************************************************/
 {
     aErrorInformation.eCode = XML_ERROR_NONE;
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
-    aErrorInformation.sMessage = OUString( "ERROR: Unable to open file ");
+    aErrorInformation.sMessage = "ERROR: Unable to open file ";
     aErrorInformation.sMessage += rFileName;
 
     OUString aFileURL(lcl_pathnameToAbsoluteUrl(rFileName));
@@ -1057,12 +1028,10 @@ XMLFile *SimpleXMLParser::Execute( const OUString &rFileName, XMLFile* pXMLFileI
     aErrorInformation.nLine = 0;
     aErrorInformation.nColumn = 0;
     if ( !pXMLFile->GetName().isEmpty()) {
-        aErrorInformation.sMessage = OUString( "File ");
-        aErrorInformation.sMessage += pXMLFile->GetName();
-        aErrorInformation.sMessage += OUString( " parsed successfully");
+        aErrorInformation.sMessage = "File " + pXMLFile->GetName() + " parsed successfully";
     }
     else
-        aErrorInformation.sMessage = OUString( "XML-File parsed successfully");
+        aErrorInformation.sMessage = "XML-File parsed successfully";
 
     if (!XML_Parse(aParser, reinterpret_cast< char * >(p), s, true))
     {
@@ -1070,84 +1039,81 @@ XMLFile *SimpleXMLParser::Execute( const OUString &rFileName, XMLFile* pXMLFileI
         aErrorInformation.nLine = XML_GetErrorLineNumber( aParser );
         aErrorInformation.nColumn = XML_GetErrorColumnNumber( aParser );
 
-        aErrorInformation.sMessage = OUString( "ERROR: ");
+        aErrorInformation.sMessage = "ERROR: ";
         if ( !pXMLFile->GetName().isEmpty())
             aErrorInformation.sMessage += pXMLFile->GetName();
         else
-            aErrorInformation.sMessage += OUString( "XML-File (");
-        aErrorInformation.sMessage += OUString::number(
-            sal::static_int_cast< sal_Int64 >(aErrorInformation.nLine));
-        aErrorInformation.sMessage += OUString( ",");
-        aErrorInformation.sMessage += OUString::number(
-            sal::static_int_cast< sal_Int64 >(aErrorInformation.nColumn));
-        aErrorInformation.sMessage += OUString( "): ");
+            aErrorInformation.sMessage += OString( "XML-File (");
+        aErrorInformation.sMessage +=
+            OString::number(sal::static_int_cast< sal_Int64 >(aErrorInformation.nLine)) + "," +
+            OString::number(sal::static_int_cast< sal_Int64 >(aErrorInformation.nColumn)) + "): ";
 
         switch (aErrorInformation.eCode) {
         case XML_ERROR_NO_MEMORY:
-            aErrorInformation.sMessage += OUString( "No memory");
+            aErrorInformation.sMessage += "No memory";
             break;
         case XML_ERROR_SYNTAX:
-            aErrorInformation.sMessage += OUString( "Syntax");
+            aErrorInformation.sMessage += "Syntax";
             break;
         case XML_ERROR_NO_ELEMENTS:
-            aErrorInformation.sMessage += OUString( "No elements");
+            aErrorInformation.sMessage += "No elements";
             break;
         case XML_ERROR_INVALID_TOKEN:
-            aErrorInformation.sMessage += OUString( "Invalid token");
+            aErrorInformation.sMessage += "Invalid token";
             break;
         case XML_ERROR_UNCLOSED_TOKEN:
-            aErrorInformation.sMessage += OUString( "Unclosed token");
+            aErrorInformation.sMessage += "Unclosed token";
             break;
         case XML_ERROR_PARTIAL_CHAR:
-            aErrorInformation.sMessage += OUString( "Partial char");
+            aErrorInformation.sMessage += "Partial char";
             break;
         case XML_ERROR_TAG_MISMATCH:
-            aErrorInformation.sMessage += OUString( "Tag mismatch");
+            aErrorInformation.sMessage += "Tag mismatch";
             break;
         case XML_ERROR_DUPLICATE_ATTRIBUTE:
-            aErrorInformation.sMessage += OUString( "Dublicat attribute");
+            aErrorInformation.sMessage += "Dublicat attribute";
             break;
         case XML_ERROR_JUNK_AFTER_DOC_ELEMENT:
-            aErrorInformation.sMessage += OUString( "Junk after doc element");
+            aErrorInformation.sMessage += "Junk after doc element";
             break;
         case XML_ERROR_PARAM_ENTITY_REF:
-            aErrorInformation.sMessage += OUString( "Param entity ref");
+            aErrorInformation.sMessage += "Param entity ref";
             break;
         case XML_ERROR_UNDEFINED_ENTITY:
-            aErrorInformation.sMessage += OUString( "Undefined entity");
+            aErrorInformation.sMessage += "Undefined entity";
             break;
         case XML_ERROR_RECURSIVE_ENTITY_REF:
-            aErrorInformation.sMessage += OUString( "Recursive entity ref");
+            aErrorInformation.sMessage += "Recursive entity ref";
             break;
         case XML_ERROR_ASYNC_ENTITY:
-            aErrorInformation.sMessage += OUString( "Async_entity");
+            aErrorInformation.sMessage += "Async_entity";
             break;
         case XML_ERROR_BAD_CHAR_REF:
-            aErrorInformation.sMessage += OUString( "Bad char ref");
+            aErrorInformation.sMessage += "Bad char ref";
             break;
         case XML_ERROR_BINARY_ENTITY_REF:
-            aErrorInformation.sMessage += OUString( "Binary entity");
+            aErrorInformation.sMessage += "Binary entity";
             break;
         case XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF:
-            aErrorInformation.sMessage += OUString( "Attribute external entity ref");
+            aErrorInformation.sMessage += "Attribute external entity ref";
             break;
         case XML_ERROR_MISPLACED_XML_PI:
-            aErrorInformation.sMessage += OUString( "Misplaced xml pi");
+            aErrorInformation.sMessage += "Misplaced xml pi";
             break;
         case XML_ERROR_UNKNOWN_ENCODING:
-            aErrorInformation.sMessage += OUString( "Unknown encoding");
+            aErrorInformation.sMessage += "Unknown encoding";
             break;
         case XML_ERROR_INCORRECT_ENCODING:
-            aErrorInformation.sMessage += OUString( "Incorrect encoding");
+            aErrorInformation.sMessage += "Incorrect encoding";
             break;
         case XML_ERROR_UNCLOSED_CDATA_SECTION:
-            aErrorInformation.sMessage += OUString( "Unclosed cdata section");
+            aErrorInformation.sMessage += "Unclosed cdata section";
             break;
         case XML_ERROR_EXTERNAL_ENTITY_HANDLING:
-            aErrorInformation.sMessage += OUString( "External entity handling");
+            aErrorInformation.sMessage += "External entity handling";
             break;
         case XML_ERROR_NOT_STANDALONE:
-            aErrorInformation.sMessage += OUString( "Not standalone");
+            aErrorInformation.sMessage += "Not standalone";
             break;
         case XML_ERROR_NONE:
             break;
@@ -1207,7 +1173,7 @@ static icu::UnicodeString lcl_QuotRange(
 
 static bool lcl_isTag( const icu::UnicodeString& rString )
 {
-    const int nSize = 12;
+    static const int nSize = 12;
     static const icu::UnicodeString vTags[nSize] = {
         "ahelp", "link", "item", "emph", "defaultinline",
         "switchinline", "caseinline", "variable",
@@ -1225,7 +1191,7 @@ static bool lcl_isTag( const icu::UnicodeString& rString )
 
 } /// anonymous namespace
 
-OUString XMLUtil::QuotHTML( const OUString &rString )
+OString XMLUtil::QuotHTML( const OString &rString )
 {
     if( rString.trim().isEmpty() )
         return rString;
@@ -1238,9 +1204,10 @@ OUString XMLUtil::QuotHTML( const OUString &rString )
         reinterpret_cast<const UChar*>(sPattern.getStr()),
         sPattern.getLength() );
 
+    const OUString sOUSource = OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
     icu::UnicodeString sSource(
         reinterpret_cast<const UChar*>(
-            rString.getStr()), rString.getLength() );
+            sOUSource.getStr()), sOUSource.getLength() );
 
     RegexMatcher aRegexMatcher( sSearchPat, nSearchFlags, nIcuErr );
     aRegexMatcher.reset( sSource );
@@ -1268,13 +1235,10 @@ OUString XMLUtil::QuotHTML( const OUString &rString )
     if( nEndPos < sSource.length() )
         sReturn.append(lcl_QuotRange(sSource, nEndPos, sSource.length()));
     sReturn.append('\0');
-    return OUString(reinterpret_cast<const sal_Unicode*>(sReturn.getBuffer()));
-}
-
-OUString  XMLUtil::UnQuotHTML( const OUString& rString )
-{
-    const OString sString(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
-    return OStringToOUString(helper::UnQuotHTML(sString), RTL_TEXTENCODING_UTF8);
+    return
+        OUStringToOString(
+            OUString(reinterpret_cast<const sal_Unicode*>(sReturn.getBuffer())),
+            RTL_TEXTENCODING_UTF8);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

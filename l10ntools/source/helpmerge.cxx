@@ -79,20 +79,16 @@ bool HelpParser::CreatePO(
     const OString &rPOFile_in, const OString &sHelpFile,
     XMLFile *pXmlFile, const OString &rGsi1){
     SimpleXMLParser aParser;
-    OUString sXmlFile(
-        OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile, pXmlFile ) );
+    std::auto_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
 
     if(file.get() == NULL)
     {
         printf(
             "%s: %s\n",
             sHelpFile.getStr(),
-            (OUStringToOString(
-                aParser.GetError().sMessage, RTL_TEXTENCODING_ASCII_US).
-             getStr()));
+            aParser.GetError().sMessage.getStr());
         exit(-1);
     }
     file->Extract();
@@ -125,7 +121,7 @@ bool HelpParser::CreatePO(
         if( pXMLElement != NULL )
         {
             OString data(
-                OUStringToOString( pXMLElement->ToOUString(), RTL_TEXTENCODING_UTF8 ).
+                pXMLElement->ToOString().
                     replaceAll("\n",OString()).
                     replaceAll("\t",OString()).trim());
 
@@ -153,11 +149,9 @@ bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
 
     SimpleXMLParser aParser;
 
-    OUString sXmlFile(
-        OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    XMLFile* xmlfile = ( aParser.Execute( sXmlFile, new XMLFile( OUString('0') ) ) );
+    XMLFile* xmlfile = ( aParser.Execute( sHelpFile, new XMLFile( OString('0') ) ) );
     bool hasNoError = MergeSingleFile( xmlfile , pMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     return hasNoError;
@@ -207,7 +201,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
 
     pEntrys = NULL;
 
-    if( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) ){
+    if( !sCur.equalsIgnoreAsciiCase("en-US") ){
         pXMLElement = (*aLangHM)[ "en-US" ];
         if( pXMLElement == NULL )
         {
@@ -219,15 +213,15 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             pResData->sId     =  sLId;
 
             OString sNewText;
-            OUString sNewdata;
-            OUString sSourceText(
-            pXMLElement->ToOUString().
+            OString sNewdata;
+            OString sSourceText(
+            pXMLElement->ToOString().
                 replaceAll(
-                    OUString("\n"),
-                    OUString()).
+                    OString("\n"),
+                    OString()).
                 replaceAll(
-                    OUString("\t"),
-                    OUString()));
+                    OString("\t"),
+                    OString()));
             // re-add spaces to the beginning of translated string,
             // important for indentation of Basic code examples
             sal_Int32 nPreSpaces = 0;
@@ -236,20 +230,18 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                 nPreSpaces++;
             if( sCur == "qtz" )
             {
-                const OString sOriginText = OUStringToOString(sSourceText, RTL_TEXTENCODING_UTF8);
-                sNewText = MergeEntrys::GetQTZText(*pResData, sOriginText);
-                sNewdata = OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
+                sNewText = MergeEntrys::GetQTZText(*pResData, sSourceText);
+                sNewdata = sNewText;
             }
             else if( pMergeDataFile )
             {
                 pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
                 if( pEntrys != NULL)
                 {
-                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur , true );
-                    OUString sTemp = OStringToOUString(sNewText, RTL_TEXTENCODING_UTF8);
-                    if (helper::isWellFormedXML(OUStringToOString(XMLUtil::QuotHTML(sTemp),RTL_TEXTENCODING_UTF8)))
+                    pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, true );
+                    if (helper::isWellFormedXML(XMLUtil::QuotHTML(sNewText)))
                     {
-                        sNewdata = sSourceText.copy(0,nPreSpaces) + sTemp;
+                        sNewdata = sSourceText.copy(0,nPreSpaces) + sNewText;
                     }
                 }
             }
@@ -270,8 +262,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
                     "Can't find GID=" << pResData->sGId.getStr() << " LID="
                         << pResData->sId.getStr() << " TYP=" << pResData->sResTyp.getStr() << "\n");
             }
-            pXMLElement->ChangeLanguageTag(
-                OStringToOUString(sCur, RTL_TEXTENCODING_ASCII_US));
+            pXMLElement->ChangeLanguageTag(sCur);
         }
 
     }
