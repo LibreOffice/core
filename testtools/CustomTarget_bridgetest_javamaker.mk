@@ -15,12 +15,13 @@ $(call gb_CustomTarget_get_target,testtools/bridgetest_javamaker) : $(testtools_
 
 $(testtools_JAVADIR)/done : \
 		$(call gb_UnoApiTarget_get_target,bridgetest) \
+		$(call gb_UnoApiTarget_get_target,performance) \
 		$(call gb_UnoApiTarget_get_target,udkapi) \
 		$(call gb_Executable_get_runtime_dependencies,javamaker) \
 		| $(testtools_JAVADIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	rm -r $(testtools_JAVADIR) && \
-	$(call gb_Helper_execute,javamaker -nD -O$(testtools_JAVADIR) -X$(call gb_UnoApiTarget_get_target,udkapi) $<) && touch $@)
+	$(call gb_Helper_execute,javamaker -nD -O$(testtools_JAVADIR) -X$(call gb_UnoApiTarget_get_target,udkapi) $(call gb_UnoApiTarget_get_target,bridgetest) $(call gb_UnoApiTarget_get_target,performance)) && touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

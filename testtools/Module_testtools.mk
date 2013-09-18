@@ -14,6 +14,7 @@ ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest \
 	InternalUnoApi_bridgetest \
+	InternalUnoApi_performance \
 	StaticLibrary_bridgetest \
 	Library_cppobj \
 	Library_bridgetest \
