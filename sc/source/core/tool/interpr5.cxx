@@ -1590,7 +1590,14 @@ void ScInterpreter::ScPow()
             PushIllegalArgument();
     }
     else
-        PushDouble(pow(fVal1,fVal2));
+    {
+        if (fVal1 > 0)
+            PushDouble(pow(fVal1,fVal2));
+        else
+        {
+            PushDouble(pow(pow(fVal1, 2), (fVal2/2)));
+        }
+    }
 }
 
 namespace {
