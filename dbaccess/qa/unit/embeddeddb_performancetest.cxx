@@ -85,6 +85,17 @@ private:
 
     void doPerformanceTestOnODB(const OUString& rFileName, const OUString& rDBName);
 
+    void setupTestTable(uno::Reference< XConnection >& xConnection);
+
+    // Individual Tests
+    void performPreparedStatementInsertTest(
+        uno::Reference< XConnection >& xConnection,
+        const OUString& rDBName);
+    void performReadTest(
+        uno::Reference< XConnection >& xConnection,
+        const OUString& rDBName);
+
+    // Perform all tests on a given DB.
     void testFirebird();
     void testHSQLDB();
 
@@ -164,107 +175,107 @@ void EmbeddedDBPerformanceTest::doPerformanceTestOnODB(
     uno::Reference< XConnection > xConnection =
         getConnectionForDocument(xDocument);
 
-    // Create Table
-    {
-        uno::Reference< XStatement > xStatement = xConnection->createStatement();
-        CPPUNIT_ASSERT(xStatement.is());
+    setupTestTable(xConnection);
 
-        // Although not strictly necessary we use quoted identifiers to reflect
-        // the fact that Base always uses quoted identifiers.
-        xStatement->execute(
-            "CREATE TABLE \"PFTESTTABLE\" ( \"ID\" INTEGER NOT NULL PRIMARY KEY "
-            ", \"STRINGCOLUMNA\" VARCHAR (50) "
-//             ", \"STRINGCOLUMNB\" VARCHAR (50) "
-//             ", \"STRINGCOLUMNC\" VARCHAR (50) "
-//             ", \"STRINGCOLUMND\" VARCHAR (50) "
-        ")");
-        xConnection->commit();
+    performPreparedStatementInsertTest(xConnection, rDBName);
+    performReadTest(xConnection, rDBName);
+
+//     xConnection.dispose();
+
+}
+
+void EmbeddedDBPerformanceTest::setupTestTable(
+    uno::Reference< XConnection >& xConnection)
+{
+    uno::Reference< XStatement > xStatement = xConnection->createStatement();
+
+    // Although not strictly necessary we use quoted identifiers to reflect
+    // the fact that Base always uses quoted identifiers.
+    xStatement->execute(
+        "CREATE TABLE \"PFTESTTABLE\" ( \"ID\" INTEGER NOT NULL PRIMARY KEY "
+        ", \"STRINGCOLUMNA\" VARCHAR (50) "
+    ")");
+
+    xConnection->commit();
+}
+
+void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
+    uno::Reference< XConnection >& xConnection,
+    const OUString& rDBName)
+{
+    uno::Reference< XPreparedStatement > xPreparedStatement =
+        xConnection->prepareStatement(
+            "INSERT INTO \"PFTESTTABLE\" ( \"ID\", "
+            "\"STRINGCOLUMNA\" "
+            ") VALUES ( ?, ? )"
+        );
+
+    uno::Reference< XParameters > xParameters(xPreparedStatement, UNO_QUERY_THROW);
+
+    ::boost::scoped_ptr< SvFileStream > pFile(new SvFileStream(
+            getSrcRootURL() + our_sFilePath + "wordlist",
+            STREAM_READ));
+
+    if (!pFile)
+    {
+        fprintf(stderr, "Please ensure the wordlist is present\n");
+        CPPUNIT_ASSERT(false);
     }
 
-    // Writing test
+    OUString aWord;
+    sal_Int32 aID = 0;
+
+    TimeValue aStart, aMiddle, aEnd;
+    osl_getSystemTime(&aStart);
+
+    while (pFile->ReadByteStringLine(aWord, RTL_TEXTENCODING_UTF8))
     {
-        uno::Reference< XPreparedStatement > xPreparedStatement =
-            xConnection->prepareStatement(
-                "INSERT INTO \"PFTESTTABLE\" ( \"ID\", "
-                "\"STRINGCOLUMNA\" "
-//                 ", \"STRINGCOLUMNB\" "
-//                 ", \"STRINGCOLUMNC\" "
-//                 ", \"STRINGCOLUMND\" "
-                ") VALUES ( ?, ?"
-//                 ", ?, ?, ? "
-                ")");
-
-        uno::Reference< XParameters > xParameters(xPreparedStatement, UNO_QUERY_THROW);
-
-        ::boost::scoped_ptr< SvFileStream > pFile(new SvFileStream(
-                getSrcRootURL() + our_sFilePath + "wordlist",
-                STREAM_READ));
-
-        if (!pFile)
-        {
-            fprintf(stderr, "Please ensure the wordlist is present\n");
-            CPPUNIT_ASSERT(false);
-        }
-
-        OUString aWord;
-        sal_Int32 aID = 0;
-
-        TimeValue aStart, aMiddle, aEnd;
-        osl_getSystemTime(&aStart);
-
-        while (pFile->ReadByteStringLine(aWord, RTL_TEXTENCODING_UTF8))
-        {
-            xParameters->setInt(1, aID++);
-            xParameters->setString(2, aWord);
-//             xParameters->setString(3, aWord);
-//             xParameters->setString(4, aWord);
-//             xParameters->setString(5, aWord);
-            xPreparedStatement->execute();
-        }
-        osl_getSystemTime(&aMiddle);
-        xConnection->commit();
-        osl_getSystemTime(&aEnd);
-
-
-        TimeValue aTimeInsert, aTimeCommit, aTimeTotal;
-        getTimeDifference(&aStart, &aMiddle, &aTimeInsert);
-        getTimeDifference(&aMiddle, &aEnd, &aTimeCommit);
-        getTimeDifference(&aStart, &aEnd, &aTimeTotal);
-        m_aOutputBuffer.append("Write to: " + rDBName + "\n");
-        printTimes(&aTimeInsert, &aTimeCommit, &aTimeTotal);
-
-        pFile->Close();
+        xParameters->setInt(1, aID++);
+        xParameters->setString(2, aWord);
+        xPreparedStatement->execute();
     }
+    osl_getSystemTime(&aMiddle);
+    xConnection->commit();
+    osl_getSystemTime(&aEnd);
 
-    // Read test
+
+    TimeValue aTimeInsert, aTimeCommit, aTimeTotal;
+    getTimeDifference(&aStart, &aMiddle, &aTimeInsert);
+    getTimeDifference(&aMiddle, &aEnd, &aTimeCommit);
+    getTimeDifference(&aStart, &aEnd, &aTimeTotal);
+    m_aOutputBuffer.append("PreparedStatement Insert: " + rDBName + "\n");
+    printTimes(&aTimeInsert, &aTimeCommit, &aTimeTotal);
+
+    pFile->Close();
+}
+
+void EmbeddedDBPerformanceTest::performReadTest(
+    uno::Reference< XConnection >& xConnection,
+    const OUString& rDBName)
+{
+    uno::Reference< XStatement > xStatement = xConnection->createStatement();
+
+    TimeValue aStart, aMiddle, aEnd;
+    osl_getSystemTime(&aStart);
+
+    uno::Reference< XResultSet > xResults = xStatement->executeQuery("SELECT * FROM PFTESTTABLE");
+
+    osl_getSystemTime(&aMiddle);
+
+    uno::Reference< XRow > xRow(xResults, UNO_QUERY_THROW);
+
+    while (xResults->next())
     {
-        uno::Reference< XStatement > xStatement = xConnection->createStatement();
-
-        TimeValue aStart, aMiddle, aEnd;
-        osl_getSystemTime(&aStart);
-
-        uno::Reference< XResultSet > xResults = xStatement->executeQuery("SELECT * FROM PFTESTTABLE");
-
-        osl_getSystemTime(&aMiddle);
-
-        uno::Reference< XRow > xRow(xResults, UNO_QUERY_THROW);
-
-        while (xResults->next())
-        {
-            xRow->getString(2);
-//             xRow->getString(3);
-//             xRow->getString(4);
-//             xRow->getString(5);
-        }
-        osl_getSystemTime(&aEnd);
-
-        TimeValue aTimeSelect, aTimeIterate, aTimeTotal;
-        getTimeDifference(&aStart, &aMiddle, &aTimeSelect);
-        getTimeDifference(&aMiddle, &aEnd, &aTimeIterate);
-        getTimeDifference(&aStart, &aEnd, &aTimeTotal);
-        m_aOutputBuffer.append("Read from: " + rDBName + "\n");
-        printTimes(&aTimeSelect, &aTimeIterate, &aTimeTotal);
+        xRow->getString(2);
     }
+    osl_getSystemTime(&aEnd);
+
+    TimeValue aTimeSelect, aTimeIterate, aTimeTotal;
+    getTimeDifference(&aStart, &aMiddle, &aTimeSelect);
+    getTimeDifference(&aMiddle, &aEnd, &aTimeIterate);
+    getTimeDifference(&aStart, &aEnd, &aTimeTotal);
+    m_aOutputBuffer.append("Read from: " + rDBName + "\n");
+    printTimes(&aTimeSelect, &aTimeIterate, &aTimeTotal);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EmbeddedDBPerformanceTest);
