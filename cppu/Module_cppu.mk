@@ -11,7 +11,8 @@
 $(eval $(call gb_Module_Module,cppu))
 
 $(eval $(call gb_Module_add_targets,cppu,\
-	InternalUnoApi_cppu \
+	InternalUnoApi_cppu_qa_cppumaker_types \
+	InternalUnoApi_cppu_qa_types \
 	Library_affine_uno \
 	Library_cppu \
 	Library_log_uno \

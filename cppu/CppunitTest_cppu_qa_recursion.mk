@@ -21,7 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,cppu_qa_recursion, \
 ))
 
 $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_qa_recursion, \
-	cppu \
+	cppu_qa_types \
 	udkapi \
 ))
 

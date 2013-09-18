@@ -23,7 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,cppu_test_cppumaker, \
 ))
 
 $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_test_cppumaker, \
-	cppu \
+	cppu_qa_cppumaker_types \
 	udkapi \
 ))
 
