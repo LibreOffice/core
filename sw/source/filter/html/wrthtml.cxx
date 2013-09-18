@@ -1214,11 +1214,11 @@ void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
     {
     case FRMDIR_HORI_LEFT_TOP:
     case FRMDIR_VERT_TOP_LEFT:
-        pValue = "LTR";
+        pValue = "ltr";
         break;
     case FRMDIR_HORI_RIGHT_TOP:
     case FRMDIR_VERT_TOP_RIGHT:
-        pValue = "RTL";
+        pValue = "rtl";
         break;
     }
     if( pValue != 0 )
