@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <unordered_set>
 
 #include <boost/scoped_array.hpp>
 
@@ -158,6 +159,7 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport )
     memset( pFmtA, 0, nAlloc * sizeof( SwFmt* ) );
 
     BuildStylesTable();
+    BuildStyleIds();
 }
 
 MSWordStyles::~MSWordStyles()
@@ -291,6 +293,62 @@ void MSWordStyles::BuildStylesTable()
         SwTxtFmtColl* pFmt = rArr2[n];
         pFmtA[ BuildGetSlot( *pFmt ) ] = pFmt;
     }
+}
+
+void MSWordStyles::BuildStyleIds()
+{
+    std::unordered_set<OString, OStringHash> aUsed;
+
+    m_aStyleIds.push_back("Normal");
+    aUsed.insert("normal");
+
+    for (sal_uInt16 n = 1; n < nUsedSlots; ++n)
+    {
+        const OUString aName(pFmtA[n]? pFmtA[n]->GetName(): OUString());
+
+        OStringBuffer aStyleIdBuf(aName.getLength());
+        for (int i = 0; i < aName.getLength(); ++i)
+        {
+            sal_Unicode nChar = aName[i];
+            if (('0' <= nChar && nChar <= '9') ||
+                ('a' <= nChar && nChar <= 'z') ||
+                ('A' <= nChar && nChar <= 'Z'))
+            {
+                // first letter should be uppercase
+                if (aStyleIdBuf.isEmpty() && ('a' < nChar && nChar <= 'z'))
+                    aStyleIdBuf.append(char(nChar - ('a' - 'A')));
+                else
+                    aStyleIdBuf.append(char(nChar));
+            }
+        }
+
+        OString aStyleId(aStyleIdBuf.makeStringAndClear());
+        if (aStyleId.isEmpty())
+            aStyleId = "Style";
+
+        OString aLower(aStyleId.toAsciiLowerCase());
+
+        // check for uniqueness & construct something unique if we have to
+        if (aUsed.find(aLower) == aUsed.end())
+        {
+            aUsed.insert(aLower);
+            m_aStyleIds.push_back(aStyleId);
+        }
+        else
+        {
+            int nFree = 1;
+            while (aUsed.find(aLower + OString::number(nFree)) != aUsed.end())
+                ++nFree;
+
+            aUsed.insert(aLower + OString::number(nFree));
+            m_aStyleIds.push_back(aStyleId + OString::number(nFree));
+        }
+    }
+}
+
+OString MSWordStyles::GetStyleId(sal_uInt16 nId) const
+{
+    return m_aStyleIds[nId];
 }
 
 /// For WW8 only - extend pO so that the size of pTableStrm is even.

@@ -1280,11 +1280,12 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
     StartRunProperties( );
     SwWW8AttrIter aAttrIt( m_rExport, rNode );
     aAttrIt.OutAttr( nPos, true );
+
     sal_uInt16 nStyle = m_rExport.GetId( *rRuby.GetTxtRuby()->GetCharFmt() );
-    OString aStyleId( "style" );
-    aStyleId += OString::number( nStyle );
+    OString aStyleId(m_rExport.pStyles->GetStyleId(nStyle));
     m_pSerializer->singleElementNS( XML_w, XML_rStyle,
             FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
+
     EndRunProperties( NULL );
     RunText( rRuby.GetText( ) );
     EndRun( );
@@ -1531,8 +1532,7 @@ void DocxAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDro
 
 void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
-    OString aStyleId( "style" );
-    aStyleId += OString::number( nStyle );
+    OString aStyleId(m_rExport.pStyles->GetStyleId(nStyle));
 
     m_pSerializer->singleElementNS( XML_w, XML_pStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
@@ -3249,11 +3249,9 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {
-    OString aStyle( "style" );
-
     m_pSerializer->startElementNS( XML_w, XML_style,
             FSNS( XML_w, XML_type ), bPapFmt? "paragraph": "character", // FIXME is this correct?
-            FSNS( XML_w, XML_styleId ), OString( aStyle + OString::number( nId ) ).getStr(),
+            FSNS( XML_w, XML_styleId ), m_rExport.pStyles->GetStyleId(nId).getStr(),
             FSEND );
 
     m_pSerializer->singleElementNS( XML_w, XML_name,
@@ -3263,12 +3261,12 @@ void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
     if ( nBase != 0x0FFF )
     {
         m_pSerializer->singleElementNS( XML_w, XML_basedOn,
-                FSNS( XML_w, XML_val ), OString( aStyle + OString::number( nBase ) ).getStr(),
+                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nBase).getStr(),
                 FSEND );
     }
 
     m_pSerializer->singleElementNS( XML_w, XML_next,
-            FSNS( XML_w, XML_val ), OString( aStyle + OString::number( nNext ) ).getStr(),
+            FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),
             FSEND );
 
     if ( bAutoUpdate )
@@ -4336,16 +4334,14 @@ void DocxAttributeOutput::TextINetFormat( const SwFmtINetFmt& rLink )
     const SwTxtINetFmt* pINetFmt = rLink.GetTxtINetFmt();
     const SwCharFmt* pCharFmt = pINetFmt->GetCharFmt();
 
-    OString aStyleId( "style" );
-    aStyleId += OString::number( m_rExport.GetId( *pCharFmt ) );
+    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(*pCharFmt)));
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
 void DocxAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
 {
-    OString aStyleId( "style" );
-    aStyleId += OString::number( m_rExport.GetId( *rCharFmt.GetCharFmt() ) );
+    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(*rCharFmt.GetCharFmt())));
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
@@ -4534,8 +4530,7 @@ void DocxAttributeOutput::TextFootnote_Impl( const SwFmtFtn& rFootnote )
     // footnote/endnote run properties
     const SwCharFmt* pCharFmt = rInfo.GetAnchorCharFmt( *m_rExport.pDoc );
 
-    OString aStyleId( "style" );
-    aStyleId += OString::number( m_rExport.GetId( *pCharFmt ) );
+    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(*pCharFmt)));
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 

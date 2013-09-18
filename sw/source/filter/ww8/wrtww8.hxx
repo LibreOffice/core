@@ -1509,8 +1509,14 @@ class MSWordStyles
     SwFmt** pFmtA;
     sal_uInt16 nUsedSlots;
 
+    /// We need to build style id's for DOCX export; ideally we should roundtrip that, but this is good enough.
+    std::vector<OString> m_aStyleIds;
+
     /// Create the style table, called from the constructor.
     void BuildStylesTable();
+
+    /// Based on pFmtA, fill in m_aStyleIds with unique, MS-like names.
+    void BuildStyleIds();
 
     /// Get slot number during building the style table.
     sal_uInt16 BuildGetSlot( const SwFmt& rFmt );
@@ -1541,6 +1547,9 @@ public:
 
     /// Get id of the style (rFmt).
     sal_uInt16 GetSlot( const SwFmt& rFmt ) const;
+
+    /// Get styleId of the nId-th style (nId is its position in pFmtA).
+    OString GetStyleId(sal_uInt16 nId) const;
 
     const SwFmt* GetSwFmt() const { return (*pFmtA); }
 };
