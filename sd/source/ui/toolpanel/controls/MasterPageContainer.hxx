@@ -128,13 +128,13 @@ public:
     */
     Token GetTokenForIndex (int nIndex);
 
-    Token GetTokenForURL (const String& sURL);
-    Token GetTokenForStyleName (const String& sStyleName);
+    Token GetTokenForURL (const OUString& sURL);
+    Token GetTokenForStyleName (const OUString& sStyleName);
     Token GetTokenForPageObject (const SdPage* pPage);
 
-    String GetURLForToken (Token aToken);
-    String GetPageNameForToken (Token aToken);
-    String GetStyleNameForToken (Token aToken);
+    OUString GetURLForToken (Token aToken);
+    OUString GetPageNameForToken (Token aToken);
+    OUString GetStyleNameForToken (Token aToken);
     SdPage* GetPageObjectForToken (Token aToken, bool bLoad=true);
     Origin GetOriginForToken (Token aToken);
     sal_Int32 GetTemplateIndexForToken (Token aToken);

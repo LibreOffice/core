@@ -414,7 +414,7 @@ void RecentlyUsedMasterPages::AddMasterPage (
     // has to have a valid URL.  This excludes master pages that do not come
     // from template files.
     if (aToken != MasterPageContainer::NIL_TOKEN
-        && mpContainer->GetURLForToken(aToken).Len()>0)
+        && !mpContainer->GetURLForToken(aToken).isEmpty())
     {
 
         MasterPageList::iterator aIterator (
