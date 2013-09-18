@@ -432,11 +432,14 @@ void indent(std::vector<OUString> const & modules, unsigned int extra = 0) {
     }
 }
 
-void closeModule(std::vector<OUString> & modules) {
-    assert(!modules.empty());
-    modules.pop_back();
-    indent(modules);
-    std::cout << "};\n";
+void closeModules(
+    std::vector<OUString> & modules, std::vector<OUString>::size_type n) {
+    for (std::vector<OUString>::size_type i = 0; i != n; ++i) {
+        assert(!modules.empty());
+        modules.pop_back();
+        indent(modules);
+        std::cout << "};\n";
+    }
 }
 
 OUString openModulesFor(std::vector<OUString> & modules, OUString const & name)
@@ -445,6 +448,10 @@ OUString openModulesFor(std::vector<OUString> & modules, OUString const & name)
     for (sal_Int32 j = 0;;) {
         OUString id(name.getToken(0, '.', j));
         if (j == -1) {
+            closeModules(
+                modules,
+                static_cast< std::vector<OUString>::size_type >(
+                    modules.end() - i));
             indent(modules);
             return id;
         }
@@ -453,11 +460,10 @@ OUString openModulesFor(std::vector<OUString> & modules, OUString const & name)
                 ++i;
                 continue;
             }
-            std::vector<OUString>::difference_type n = modules.end() - i;
-            assert(n > 0);
-            for (std::vector<OUString>::difference_type k = 0; k != n; ++k) {
-                closeModule(modules);
-            }
+            closeModules(
+                modules,
+                static_cast< std::vector<OUString>::size_type >(
+                    modules.end() - i));
             i = modules.end();
         }
         indent(modules);
@@ -785,7 +791,7 @@ void writeEntity(
                 writeAnnotationsPublished(ent);
                 std::cout << "typedef ";
                 writeType(ent2->getType());
-                std::cout << id << ";\n";
+                std::cout << ' ' << id << ";\n";
                 break;
             }
         case unoidl::Entity::SORT_CONSTANT_GROUP:
@@ -839,7 +845,7 @@ void writeEntity(
                         std::cout << (j->value.booleanValue ? "TRUE" : "FALSE");
                         break;
                     case unoidl::ConstantValue::TYPE_BYTE:
-                        std::cout << j->value.byteValue;
+                        std::cout << int(j->value.byteValue);
                         break;
                     case unoidl::ConstantValue::TYPE_SHORT:
                         std::cout << j->value.shortValue;
@@ -1093,9 +1099,7 @@ SAL_IMPLEMENT_MAIN() {
         {
             writeEntity(ents, mods, *i);
         }
-        while (!mods.empty()) {
-            closeModule(mods);
-        }
+        closeModules(mods, mods.size());
         return EXIT_SUCCESS;
     } catch (unoidl::FileFormatException & e1) {
         std::cerr
