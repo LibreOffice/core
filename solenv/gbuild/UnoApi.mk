@@ -97,7 +97,8 @@ $(call gb_UnoApi__add_headerfile,$(1),$(2).hdl)
 
 endef
 
-# for interfaces, exceptions, structs, enums, constant groups
+# For enum types, plain struct types, polymorphic struct type templates,
+# exception types, interface types, typedefs, and constant groups:
 define gb_UnoApi_add_idlfile
 $(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
 $(call gb_UnoApi__add_idlfile_full,$(1),$(2)/$(3))
@@ -110,7 +111,7 @@ $(foreach idl,$(3),$(call gb_UnoApi__add_idlfile_full,$(1),$(2)/$(idl)))
 
 endef
 
-# for new-style services
+# For single-interface--based services and interface-based singletons:
 define gb_UnoApi_add_idlfile_nohdl
 $(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
 $(call gb_UnoApi__add_idlfile_nohdl,$(1),$(2)/$(3))
@@ -123,7 +124,7 @@ $(foreach idl,$(3),$(call gb_UnoApi__add_idlfile_nohdl,$(1),$(2)/$(idl)))
 
 endef
 
-# for old-style services and modules
+# For accumulation-based services and service-based singletons:
 define gb_UnoApi_add_idlfile_noheader
 $(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
 $(call gb_UnoApi__add_idlfile_noheader,$(1),$(2)/$(3))
