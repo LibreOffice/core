@@ -2436,7 +2436,7 @@ void SwWW8ImplReader::StopApo()
         if (nNewWidth)
             pSFlyPara->BoxUpWidth(nNewWidth);
 
-        Color aBg(0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
+        Color aBg(0xFF, 0xFF, 0xFF, 0xFF);  //#69407 'no fill' by default
 
         if (SwTxtNode* pNd = aPref.GetNode().GetTxtNode())
         {
