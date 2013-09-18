@@ -107,7 +107,7 @@ class SwBoxAutoFmt
     SvxRotateModeItem   aRotateMode;
 
     // number format
-    String              sNumFmtString;
+    OUString            sNumFmtString;
     LanguageType        eSysLanguage, eNumFmtLanguage;
 
 public:
@@ -176,7 +176,7 @@ public:
     void SetVerticalAlignment(const SwFmtVertOrient& rNew) { m_aVerticalAlignment = rNew; }
     void SetBox( const SvxBoxItem& rNew )               { aBox = rNew; }
     void SetBackground( const SvxBrushItem& rNew )      { aBackground = rNew; }
-    void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
+    void SetValueFormat( const OUString& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
 
     sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
