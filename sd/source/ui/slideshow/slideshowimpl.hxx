@@ -267,7 +267,7 @@ private:
 
     double update();
 
-    void createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide );
+    void createSlideList( bool bAll, bool bStartWithActualSlide, const OUString& rPresSlide );
 
     void displayCurrentSlide (const bool bSkipAllMainSequenceEffects = false);
 
@@ -278,7 +278,7 @@ private:
     sal_Int32 getLastSlideNumber();
     inline bool isInputFreezed() const { return mbInputFreeze; }
 
-    void jumpToBookmark( const String& sBookmark );
+    void jumpToBookmark( const OUString& sBookmark );
 
     void hideChildWindows();
     void showChildWindows();
@@ -357,7 +357,7 @@ private:
     Size            maSlideSize;
     Size            maPresSize;
     AnimationMode   meAnimationMode;
-    String          maCharBuffer;
+    OUString        maCharBuffer;
     Pointer         maOldPointer;
     Pointer         maPencil;
     std::vector< ::sd::Window* > maDrawModeWindows;

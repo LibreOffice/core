@@ -1724,7 +1724,7 @@ void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::jumpToBookmark( const String& sBookmark )
+void SlideshowImpl::jumpToBookmark( const OUString& sBookmark )
 {
     sal_Int32 nSlideNumber = getSlideNumberForBookmark( sBookmark );
     if( nSlideNumber != -1 )
@@ -1977,14 +1977,14 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
 
             case KEY_RETURN:
             {
-                if( maCharBuffer.Len() )
+                if( !maCharBuffer.isEmpty() )
                 {
                     if( mpSlideController.get() )
                     {
-                        if( mpSlideController->jumpToSlideNumber( maCharBuffer.ToInt32() - 1 ) )
+                        if( mpSlideController->jumpToSlideNumber( maCharBuffer.toInt32() - 1 ) )
                             displayCurrentSlide();
                     }
-                    maCharBuffer.Erase();
+                    maCharBuffer = "";
                 }
                 else
                 {
@@ -2004,7 +2004,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             case KEY_7:
             case KEY_8:
             case KEY_9:
-                maCharBuffer.Append( rKEvt.GetCharCode() );
+                maCharBuffer += OUString( rKEvt.GetCharCode() );
                 break;
 
             case KEY_PAGEUP:
@@ -2462,7 +2462,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide )
+void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const OUString& rPresSlide )
 {
     const long nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
 
@@ -2490,7 +2490,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
 
 
             // normal presentation
-            if( rPresSlide.Len() )
+            if( !rPresSlide.isEmpty() )
             {
                 sal_Int32 nSlide;
                 sal_Bool bTakeNextAvailable = sal_False;
@@ -2526,7 +2526,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
         }
         else
         {
-            if( meAnimationMode != ANIMATIONMODE_SHOW && rPresSlide.Len() )
+            if( meAnimationMode != ANIMATIONMODE_SHOW && !rPresSlide.isEmpty() )
             {
                 sal_Int32 nSlide;
                 for( nSlide = 0; nSlide < nSlideCount; nSlide++ )
