@@ -104,9 +104,9 @@ void ResizableMultiLineEdit::Modify()
     mpItem->updateTitleEditSize();
 }
 
-ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView)
+ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
     : mrParent(rView)
-    , mnId(0)
+    , mnId(nId)
     , mbVisible(true)
     , mbSelected(false)
     , mbHover(false)

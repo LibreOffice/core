@@ -13,8 +13,9 @@
 #include <sfx2/recentdocsview.hxx>
 #include <tools/urlobj.hxx>
 
-RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL, const OUString &rTitle)
-    : ThumbnailViewItem(rView)
+RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
+    const OUString &rTitle, sal_uInt16 nId)
+    : ThumbnailViewItem(rView, nId)
 {
     RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
     long nThumbnailSize = rRecentView.GetThumbnailSize();

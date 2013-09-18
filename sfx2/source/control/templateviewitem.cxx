@@ -28,8 +28,8 @@ using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-TemplateViewItem::TemplateViewItem (ThumbnailView &rView)
-    : ThumbnailViewItem(rView),
+TemplateViewItem::TemplateViewItem (ThumbnailView &rView, sal_uInt16 nId)
+    : ThumbnailViewItem(rView, nId),
       mnRegionId(USHRT_MAX),
       mnDocId(USHRT_MAX)
 {

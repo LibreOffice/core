@@ -162,8 +162,7 @@ void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
 {
     const TemplateItemProperties *pCur = &rTemplate;
 
-    TemplateViewItem *pChild = new TemplateViewItem(*this);
-    pChild->mnId = pCur->nId;
+    TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);
     pChild->mnDocId = pCur->nDocId;
     pChild->mnRegionId = pCur->nRegionId;
     pChild->maTitle = pCur->aName;
@@ -190,10 +189,9 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
         //TODO: CHECK IF THE ITEM IS A FOLDER OR NOT
-        TemplateViewItem *pChild = new TemplateViewItem(*this);
         const TemplateItemProperties *pCur = &rTemplates[i];
 
-        pChild->mnId = pCur->nId;
+        TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);
         pChild->mnDocId = pCur->nDocId;
         pChild->mnRegionId = pCur->nRegionId;
         pChild->maTitle = pCur->aName;

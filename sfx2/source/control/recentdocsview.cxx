@@ -136,9 +136,9 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     return aImg;
 }
 
-void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle)
+void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, sal_uInt16 nId)
 {
-    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rURL, rTitle);
+    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rURL, rTitle, nId);
 
     AppendItem(pChild);
 }
@@ -167,7 +167,7 @@ void RecentDocsView::loadRecentDocs()
 
         if( isAcceptedFile(aURL) )
         {
-            insertItem(aURL, aTitle);
+            insertItem(aURL, aTitle, i+1);
         }
     }
 

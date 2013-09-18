@@ -73,7 +73,7 @@ public:
     OUString maTitle;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
-    ThumbnailViewItem (ThumbnailView &rView);
+    ThumbnailViewItem (ThumbnailView &rView, sal_uInt16 nId);
 
     virtual ~ThumbnailViewItem ();
 

@@ -44,7 +44,7 @@ public:
     RecentDocsView( Window* pParent );
     virtual ~RecentDocsView();
 
-    void insertItem(const OUString &rURL, const OUString &rTitle);
+    void insertItem(const OUString &rURL, const OUString &rTitle, sal_uInt16 nId);
     void loadRecentDocs();
 
     void SetThumbnailSize(long thumbnailSize);

@@ -15,7 +15,8 @@
 class RecentDocsViewItem : public ThumbnailViewItem
 {
 public:
-    RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL, const OUString &rTitle);
+    RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
+        const OUString &rTitle, sal_uInt16 nId);
     virtual void setEditTitle (bool edit, bool bChangeFocus = true);
 
     OUString maURL;

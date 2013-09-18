@@ -23,7 +23,7 @@ public:
     BitmapEx maPreview4;
     std::vector<TemplateItemProperties> maTemplates;
 
-    TemplateContainerItem (ThumbnailView &rView);
+    TemplateContainerItem (ThumbnailView &rView, sal_uInt16 nId);
 
     virtual ~TemplateContainerItem ();
 

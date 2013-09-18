@@ -71,8 +71,7 @@ void TemplateLocalView::Populate ()
     {
         OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
-        TemplateContainerItem* pItem = new TemplateContainerItem( *this );
-        pItem->mnId = i+1;
+        TemplateContainerItem* pItem = new TemplateContainerItem( *this, i+1 );
         pItem->mnRegionId = i;
         pItem->maTitle = aRegionName;
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
@@ -139,8 +138,7 @@ void TemplateLocalView::showRootRegion()
     for (int i = 0, n = maRegions.size(); i < n; ++i)
     {
         TemplateContainerItem *pCur = maRegions[i];
-        TemplateContainerItem *pItem = new TemplateContainerItem(*this);
-        pItem->mnId = pCur->mnId;
+        TemplateContainerItem *pItem = new TemplateContainerItem(*this, pCur->mnId);
         pItem->mnRegionId = pCur->mnRegionId;
         pItem->maTitle = pCur->maTitle;
         pItem->maTemplates = pCur->maTemplates;
@@ -272,16 +270,14 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
     OUString aRegionName = rName;
 
     // Insert to the region cache list and to the thumbnail item list
-    TemplateContainerItem* pItem = new TemplateContainerItem( *this );
-    pItem->mnId = nItemId;
+    TemplateContainerItem* pItem = new TemplateContainerItem( *this, nItemId );
     pItem->mnRegionId = nRegionId;
     pItem->maTitle = aRegionName;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
     maRegions.push_back(pItem);
 
-    pItem = new TemplateContainerItem(*this);
-    pItem->mnId = nItemId;
+    pItem = new TemplateContainerItem(*this, nItemId);
     pItem->mnRegionId = nRegionId;
     pItem->maTitle = aRegionName;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
