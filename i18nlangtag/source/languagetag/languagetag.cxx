@@ -238,7 +238,7 @@ private:
     mutable bool                            mbCachedCountry     : 1;
     mutable bool                            mbCachedVariants    : 1;
 
-    const OUString &    getBcp47( bool bResolveSystem = true ) const;
+    const OUString &    getBcp47() const;
     OUString            getLanguage() const;
     OUString            getScript() const;
     OUString            getCountry() const;
@@ -645,7 +645,7 @@ bool LanguageTagImpl::canonicalize()
     // Some methods calling canonicalize() (or not calling it due to
     // meIsLiblangtagNeeded==DECISION_NO) rely on this! Hence do not set
     // meIsLiblangtagNeeded anywhere else than hereafter.
-    getBcp47( true );
+    getBcp47();
 
     // The simple cases and known locales don't need liblangtag processing,
     // which also avoids loading liblangtag data on startup.
@@ -1023,10 +1023,8 @@ void LanguageTag::convertFromRtlLocale()
 }
 
 
-const OUString & LanguageTagImpl::getBcp47( bool bResolveSystem ) const
+const OUString & LanguageTagImpl::getBcp47() const
 {
-    if (!bResolveSystem && mbSystemLocale)
-        return theEmptyBcp47::get();
     if (!mbInitializedBcp47)
     {
         if (mbInitializedLocale)
@@ -1046,7 +1044,7 @@ const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
         const_cast<LanguageTag*>(this)->syncFromImpl();
     if (!mbInitializedBcp47)
     {
-        getImpl()->getBcp47( bResolveSystem);
+        getImpl()->getBcp47();
         const_cast<LanguageTag*>(this)->syncFromImpl();
     }
     return maBcp47;
