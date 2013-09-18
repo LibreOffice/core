@@ -2770,7 +2770,6 @@ void compileKernels(const OUString* pDeviceId)
         if (nStatus != CL_SUCCESS)
             r.mpKernel = NULL;
     }
-
 }
 
 }}

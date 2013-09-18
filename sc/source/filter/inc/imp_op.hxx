@@ -106,14 +106,16 @@ protected:
 
     sal_Int16               mnLastRefIdx;
     sal_uInt16              mnIxfeIndex;        /// Current XF identifier from IXFE record.
-    bool                    mbBiff2HasXfs;      /// Select XF formatting or direct formatting in BIFF2.
-    bool                    mbBiff2HasXfsValid; /// False = mbBiff2HasXfs is undetermined yet.
 
     SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
     ScFormulaCell*          pLastFormCell;      // fuer String-Records
 
     sal_Bool                    bTabTruncated;      // wenn Bereichsueberschreitung zum
                                                 //  Abschneiden von Zellen fuehrt
+
+    bool mbBiff2HasXfs:1;      /// Select XF formatting or direct formatting in BIFF2.
+    bool mbBiff2HasXfsValid:1; /// False = mbBiff2HasXfs is undetermined yet.
+    bool mbRunCLKernelThread:1;
 
     // Record-Funktionen
     void                    ReadFileSharing();

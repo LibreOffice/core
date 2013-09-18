@@ -116,8 +116,9 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     maScOleSize( ScAddress::INITIALIZE_INVALID ),
     mnLastRefIdx( 0 ),
     mnIxfeIndex( 0 ),
-    mbBiff2HasXfs( false ),
-    mbBiff2HasXfsValid( false )
+    mbBiff2HasXfs(false),
+    mbBiff2HasXfsValid(false),
+    mbRunCLKernelThread(true)
 {
     nBdshtTab = 0;
 

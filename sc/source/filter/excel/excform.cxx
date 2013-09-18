@@ -136,11 +136,19 @@ void ImportExcel::Formula(
         }
     }
 
-    if (!mxCLKernelThread.is())
+    if (mbRunCLKernelThread && !mxCLKernelThread.is())
     {
-        mxCLKernelThread.set(new sc::CLBuildKernelThread);
-        mxCLKernelThread->launch();
+        double fRemainSize = maStrm.GetSvStreamSize() - maStrm.GetSvStreamPos();
+        fRemainSize /= 1048576; // Switch to MB.
+        if (fRemainSize > 3.0)
+        {
+            // We still have more than 3MB of stream to parse. Start a thread to pre-compile OpenCL kernels.
+            mxCLKernelThread.set(new sc::CLBuildKernelThread);
+            mxCLKernelThread->launch();
+        }
+        mbRunCLKernelThread = false;
     }
+
     ConvErr eErr = pFormConv->Convert( pResult, maStrm, nFormLen, true, FT_CellFormula);
 
     ScFormulaCell* pCell = NULL;
