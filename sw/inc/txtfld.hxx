@@ -28,7 +28,7 @@ class SwTxtNode;
 
 class SwTxtFld : public SwTxtAttr
 {
-    mutable   String m_aExpand;
+    mutable   OUString m_aExpand;
     SwTxtNode * m_pTxtNode;
 
 public:
@@ -62,7 +62,7 @@ inline SwTxtNode& SwTxtFld::GetTxtNode() const
 
 inline void SwTxtFld::ExpandAlways()
 {
-    m_aExpand += ' ';
+    m_aExpand += " ";
     Expand();
 }
 
