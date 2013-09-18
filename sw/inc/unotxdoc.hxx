@@ -437,13 +437,13 @@ class SwXLinkTargetSupplier : public cppu::WeakImplHelper2
 >
 {
     SwXTextDocument* pxDoc;
-    String sTables;
-    String sFrames;
-    String sGraphics;
-    String sOLEs;
-    String sSections;
-    String sOutlines;
-    String sBookmarks;
+    OUString sTables;
+    OUString sFrames;
+    OUString sGraphics;
+    OUString sOLEs;
+    OUString sSections;
+    OUString sOutlines;
+    OUString sBookmarks;
 
 public:
     SwXLinkTargetSupplier(SwXTextDocument& rxDoc);
@@ -477,17 +477,17 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
 {
     css::uno::Reference< css::container::XNameAccess >    xRealAccess;
     const SfxItemPropertySet*                                                       pPropSet;
-    const String                                                                    sLinkSuffix;
-    const String                                                                    sLinkDisplayName;
+    const OUString                                                                    sLinkSuffix;
+    const OUString                                                                    sLinkDisplayName;
     css::uno::Reference< css::text::XTextDocument >         xDoc;
     SwXTextDocument*                                                                pxDoc;
 
 
 public:
     SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  xAccess,
-            const String& rLinkDisplayName, String sSuffix);
+            const OUString& rLinkDisplayName, OUString sSuffix);
     SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const String& rLinkDisplayName, String sSuffix);
+            const OUString& rLinkDisplayName, OUString sSuffix);
     ~SwXLinkNameAccessWrapper();
 
     //XNameAccess
@@ -525,10 +525,10 @@ class SwXOutlineTarget : public cppu::WeakImplHelper2
 >
 {
     const SfxItemPropertySet*   pPropSet;
-    String                      sOutlineText;
+    OUString                      sOutlineText;
 
 public:
-    SwXOutlineTarget(const String& rOutlineText);
+    SwXOutlineTarget(const OUString& rOutlineText);
     ~SwXOutlineTarget();
 
     //XPropertySet

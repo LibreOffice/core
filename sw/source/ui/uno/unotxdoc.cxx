@@ -3488,7 +3488,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
-            Reference< XNameAccess >  xAccess, const String& rLinkDisplayName, String sSuffix ) :
+            Reference< XNameAccess >  xAccess, const OUString& rLinkDisplayName, OUString sSuffix ) :
     xRealAccess(xAccess),
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
@@ -3498,7 +3498,7 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const String& rLinkDisplayName, String sSuffix) :
+            const OUString& rLinkDisplayName, OUString sSuffix) :
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
     sLinkDisplayName(rLinkDisplayName),
@@ -3606,13 +3606,13 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
 {
     sal_Bool bRet = sal_False;
     String sParam(rName);
-    if(sParam.Len() > sLinkSuffix.Len() )
+    if(sParam.Len() > sLinkSuffix.getLength() )
     {
-        String sCmp = sParam.Copy(sParam.Len() - sLinkSuffix.Len(),
-                                                    sLinkSuffix.Len());
+        String sCmp = sParam.Copy(sParam.Len() - sLinkSuffix.getLength(),
+                                                    sLinkSuffix.getLength());
         if(sCmp == sLinkSuffix)
         {
-                sParam = sParam.Copy(0, sParam.Len() - sLinkSuffix.Len());
+            sParam = sParam.Copy(0, sParam.Len() - sLinkSuffix.getLength());
             if(pxDoc)
             {
                 if(!pxDoc->GetDocShell())
@@ -3774,7 +3774,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
     return aRet;
 }
 
-SwXOutlineTarget::SwXOutlineTarget(const String& rOutlineText) :
+SwXOutlineTarget::SwXOutlineTarget(const OUString& rOutlineText) :
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sOutlineText(rOutlineText)
 {
