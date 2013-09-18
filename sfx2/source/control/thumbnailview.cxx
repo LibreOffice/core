@@ -566,7 +566,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     {
         case KEY_RIGHT:
             {
-                if ( bFoundLast && nLastPos < mFilteredItemList.size( ) - 1 )
+                if ( bFoundLast && nLastPos + 1 < mFilteredItemList.size() )
                 {
                     bValidRange = true;
                     nNextPos = nLastPos + 1;
@@ -593,7 +593,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                     //If we are in the second last row just go the one in
                     //the row below, if theres not row below just go to the
                     //last item but for the last row dont do anything.
-                    if ( nLastPos < mFilteredItemList.size( ) - mnCols )
+                    if ( nLastPos + mnCols < mFilteredItemList.size( ) )
                     {
                         bValidRange = true;
                         nNextPos = nLastPos + mnCols;
