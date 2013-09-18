@@ -65,7 +65,7 @@ public:
     TitledControl (
         TreeNode* pParent,
         ::std::auto_ptr<TreeNode> pControl,
-        const String& rTitle,
+        const OUString& rTitle,
         const ClickHandler& rClickHandler,
         TitleBar::TitleBarType eType);
 
@@ -92,7 +92,7 @@ public:
     TreeNode* GetControl (void);
     const TreeNode* GetConstControl () const;
 
-    const String& GetTitle (void) const;
+    const OUString& GetTitle (void) const;
 
     /** Expand the control without informing its container.  This
         method ususally is called by the container as a result of a
@@ -127,7 +127,7 @@ public:
     using Window::Show;
 
 private:
-    String msTitle;
+    OUString msTitle;
     bool mbVisible;
     void* mpUserData;
     ::std::auto_ptr<ClickHandler> mpClickHandler;

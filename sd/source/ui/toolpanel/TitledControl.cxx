@@ -34,7 +34,7 @@ namespace sd { namespace toolpanel {
 TitledControl::TitledControl (
     TreeNode* pParent,
     ::std::auto_ptr<TreeNode> pControl,
-    const String& rTitle,
+    const OUString& rTitle,
     const ClickHandler& rClickHandler,
     TitleBar::TitleBarType eType)
     : ::Window (pParent->GetWindow(), WB_TABSTOP),
@@ -219,7 +219,7 @@ void TitledControl::KeyInput (const KeyEvent& rEvent)
 
 
 
-const String& TitledControl::GetTitle (void) const
+const OUString& TitledControl::GetTitle (void) const
 {
     return msTitle;
 }
