@@ -142,8 +142,8 @@ void XclExpXmlDBDataTables::SaveXml( XclExpXmlStream& rStrm )
                 OUString( "xl/tables/table" )+ OUString::number( i ) + OUString(".xml" ),
                 OUString( "table" ) + OUString::number( i ) + OUString( ".xml" ),
                 rStrm.GetCurrentStream()->getOutputStream(),
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" );// Last two parameters are a mystery
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml",
+                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" );// imp for xlsx import
             rStrm.PushStream( aDBDataTable );
             //Now the table#.xml file is created, need to pass the stream to that table
             itr->SaveXml( rStrm );
