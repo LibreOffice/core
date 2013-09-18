@@ -437,16 +437,18 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
     if (aGeneratedFiles.size() == numDevices)
     {
         bBinaryExisted = true;
-        boost::scoped_array<char*> pBinary(new char*[numDevices]);
+        boost::scoped_array<unsigned char*> pBinary(new unsigned char*[numDevices]);
         for(size_t i = 0; i < numDevices; ++i)
         {
             sal_uInt64 nSize;
             aGeneratedFiles[i]->getSize(nSize);
-            char* binary = new char[nSize];
+            unsigned char* binary = new unsigned char[nSize];
             sal_uInt64 nBytesRead;
             aGeneratedFiles[i]->read(binary, nSize, nBytesRead);
             if(nSize != nBytesRead)
                 assert(false);
+
+            length = nBytesRead;
 
             pBinary[i] = binary;
         }
@@ -467,7 +469,7 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
         fprintf(stderr, "Create kernel from binary\n");
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
-                                           mpArryDevsID.get(), &length, (const unsigned char**) &pBinary,
+                                           mpArryDevsID.get(), &length, (const unsigned char**) pBinary.get(),
                                            &binary_status, &clStatus );
         if(clStatus != CL_SUCCESS)
         {
