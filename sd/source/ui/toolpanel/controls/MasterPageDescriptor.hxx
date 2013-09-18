@@ -40,9 +40,9 @@ public:
     MasterPageDescriptor (
         MasterPageContainer::Origin eOrigin,
         const sal_Int32 nTemplateIndex,
-        const String& rURL,
-        const String& rPageName,
-        const String& rStyleName,
+        const OUString& rURL,
+        const OUString& rPageName,
+        const OUString& rStyleName,
         const bool bIsPrecious,
         const ::boost::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
         const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider);
