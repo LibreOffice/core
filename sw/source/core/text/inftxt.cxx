@@ -642,20 +642,27 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     if( !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
     {
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
-        switch( m_pFnt->GetOrientation(GetTxtFrm()->IsVertical()) )
+        if ( GetTxtFrm()->IsRightToLeft() )
         {
-            case 0 :
-                aFontPos.X() += nLeftBorderSpace;
-                break;
-            case 900 :
-                aFontPos.Y() -= nLeftBorderSpace;
-                break;
-            case 1800 :
-                aFontPos.X() -= nLeftBorderSpace;
-                break;
-            case 2700 :
-                aFontPos.Y() += nLeftBorderSpace;
-                break;
+            aFontPos.X() -= nLeftBorderSpace;
+        }
+        else
+        {
+            switch( m_pFnt->GetOrientation(GetTxtFrm()->IsVertical()) )
+            {
+                case 0 :
+                    aFontPos.X() += nLeftBorderSpace;
+                    break;
+                case 900 :
+                    aFontPos.Y() -= nLeftBorderSpace;
+                    break;
+                case 1800 :
+                    aFontPos.X() -= nLeftBorderSpace;
+                    break;
+                case 2700 :
+                    aFontPos.Y() += nLeftBorderSpace;
+                    break;
+            }
         }
     }
 
