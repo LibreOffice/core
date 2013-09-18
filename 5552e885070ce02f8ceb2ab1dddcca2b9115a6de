@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///3Y\u003d",
+        "filename": "include/xmloff/xmlexppr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-18T11:34:26Z",
+      "side": 1,
+      "message": "A bit confusing, bDisableFoFontFamily in the declaration here but implementation in xmloff/source/style/xmlexppr.cxx names it bEnableFoFontFamily as all other places do.",
+      "revId": "5552e885070ce02f8ceb2ab1dddcca2b9115a6de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
