@@ -50,11 +50,11 @@ namespace sd {
 class TemplateEntry
 {
 public:
-    TemplateEntry   (const String& rsTitle, const String& rsPath)
+    TemplateEntry   (const OUString& rsTitle, const OUString& rsPath)
         :   msTitle(rsTitle), msPath(rsPath) {}
 
-    String msTitle;
-    String msPath;
+    OUString msTitle;
+    OUString msPath;
 };
 
 
@@ -80,12 +80,12 @@ private:
 class TemplateDir
 {
 public:
-    TemplateDir (const String& rsRegion, const String& rsUrl )
+    TemplateDir (const OUString& rsRegion, const OUString& rsUrl )
         :   msRegion(rsRegion), msUrl(rsUrl), maEntries(),
             mbSortingEnabled(false), mpEntryCompare(NULL) {}
 
-    String msRegion;
-    String msUrl;
+    OUString msRegion;
+    OUString msUrl;
     ::std::vector<TemplateEntry*> maEntries;
 
     void EnableSorting(bool bSortingEnabled = true);

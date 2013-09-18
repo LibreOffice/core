@@ -887,7 +887,7 @@ void AssistentDlgImpl::TemplateScanDone (
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
             if (pEntry != NULL)
-                if (pEntry->msPath.SearchAscii("presnt") != STRING_NOTFOUND)
+                if (pEntry->msPath.indexOf("presnt") != -1)
                     nFirstEntry = i;
         }
 
@@ -912,7 +912,7 @@ void AssistentDlgImpl::TemplateScanDone (
         {
             TemplateEntry* pEntry = pDir->maEntries.front();
             if (pEntry != NULL)
-                if (pEntry->msPath.SearchAscii("layout") != STRING_NOTFOUND)
+                if (pEntry->msPath.indexOf("layout") != -1)
                     nFirstEntry = i;
         }
 
@@ -1361,7 +1361,7 @@ void AssistentDlgImpl::SelectTemplateRegion( const OUString& rRegion )
     {
         TemplateDir * pDir = *I;
         mpTemplateRegion = *I;
-        if (pDir->msRegion.Equals( rRegion ) )
+        if (pDir->msRegion == rRegion)
         {
             std::vector<TemplateEntry*>::iterator   J;
             for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
@@ -1387,7 +1387,7 @@ void AssistentDlgImpl::SelectLayoutRegion( const OUString& rRegion )
         TemplateDir * pDir = *I;
         mpLayoutRegion = *I;
 
-        if (pDir->msRegion.Equals (rRegion))
+        if (pDir->msRegion == rRegion)
         {
             std::vector<TemplateEntry*>::iterator   J;
             for (J=pDir->maEntries.begin(); J!=pDir->maEntries.end(); ++J)
