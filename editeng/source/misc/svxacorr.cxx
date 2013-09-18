@@ -642,10 +642,15 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
             while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
                 ;
 
-            if(INetURLObject::CompareProtocolScheme(rTxt.copy(nSttWdPos + (bWasWordDelim ? 1 : 0), nEndPos - nSttWdPos + 1)) != INET_PROT_NOT_VALID) {
-                return sal_False;
+            //See if the text is the start of a protocol string, e.g. have text of
+            //"http" see if it is the start of "http:" and if so leave it alone
+            sal_Int32 nIndex = nSttWdPos + (bWasWordDelim ? 1 : 0);
+            sal_Int32 nProtocolLen = nEndPos - nSttWdPos + 1;
+            if (nIndex + nProtocolLen <= rTxt.getLength())
+            {
+                if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INET_PROT_NOT_VALID)
+                    return sal_False;
             }
-
 
             // Check the presence of "://" in the word
             xub_StrLen nStrPos = rTxt.indexOf( "://", nSttWdPos + 1 );
