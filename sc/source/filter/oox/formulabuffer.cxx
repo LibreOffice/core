@@ -65,7 +65,6 @@ void FormulaBuffer::finalizeImport()
         FormulaDataMap::iterator cellIt = maCellFormulas.find( nTab );
         if ( cellIt != maCellFormulas.end() )
         {
-            compileOpenCLKernels();
             applyCellFormulas( cellIt->second );
         }
 

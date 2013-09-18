@@ -511,7 +511,16 @@ void WorksheetFragment::importDimension( const AttributeList& rAttribs )
         be set. If the cell A1 exists, the used area will be updated while
         importing the cell. */
     if( (aRange.EndColumn > 0) || (aRange.EndRow > 0) )
+    {
         extendUsedArea( aRange );
+
+        // Start pre-compiling OpenCL kernels if we have a large number of
+        // cells to import.  The current threshold is 100,000.
+        double fCellCount = aRange.EndColumn - aRange.StartColumn + 1.0;
+        fCellCount *= aRange.EndRow - aRange.StartRow + 1.0;
+        if (fCellCount > 100000.0)
+            compileOpenCLKernels();
+    }
 }
 
 void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )
