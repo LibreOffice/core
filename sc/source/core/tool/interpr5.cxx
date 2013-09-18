@@ -1590,7 +1590,27 @@ void ScInterpreter::ScPow()
             PushIllegalArgument();
     }
     else
-        PushDouble(pow(fVal1,fVal2));
+    {
+        if (fVal1 < 0 && fVal2 < 1)
+        {
+            // The goal is to know if it's possible to calcule the nth root, eg:
+            // (-8)^(1/3) = -2
+            // but (-4)^(1/2) can't be calculated with real numbers
+            sal_Int32 nThRoot = ::rtl::math::round(1/fVal2);
+
+            // it's possible to calculate only if nth root is odd
+            if (nThRoot % 2 == 0)
+                // we'll fail to calculate here, so let pow function return its error as before
+                PushDouble(pow(fVal1,fVal2));
+            else
+                // but we'll be able to calculate here
+                // since the inner minus allows pow function to work
+                // and the other minus puts back the right sign
+                PushDouble(-pow(-fVal1,fVal2));
+        }
+        else
+            PushDouble(pow(fVal1,fVal2));
+    }
 }
 
 namespace {
