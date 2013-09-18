@@ -43,7 +43,11 @@ void badUsage() {
         << std::endl
         << ("last <registry> is written to stdout; if --published is specified,"
             " only the")
-        << std::endl << "published entities are written out." << std::endl;
+        << std::endl
+        << ("published entities (plus any non-published entities referenced"
+            " from published")
+        << std::endl
+        << "via any unpublished optional bases) are written out." << std::endl;
     std::exit(EXIT_FAILURE);
 }
 
@@ -133,13 +137,15 @@ OUString decomposeType(
 }
 
 struct Entity {
-    explicit Entity(rtl::Reference<unoidl::Entity> const & theEntity):
-        entity(theEntity), sorted(false), written(false)
+    explicit Entity(
+        rtl::Reference<unoidl::Entity> const & theEntity, bool theRelevant):
+        entity(theEntity), relevant(theRelevant), sorted(false), written(false)
     {}
 
     rtl::Reference<unoidl::Entity> const entity;
     std::set<OUString> dependencies;
     std::set<OUString> interfaceDependencies;
+    bool relevant;
     bool sorted;
     bool written;
 };
@@ -229,12 +235,18 @@ void scanMap(
                 manager,
                 static_cast<unoidl::ModuleEntity *>(ent.get())->createCursor(),
                 published, name + ".", entities);
-        } else if (!published
-                   || (static_cast<unoidl::PublishableEntity *>(ent.get())
-                       ->isPublished()))
-        {
+        } else {
             std::map<OUString, Entity>::iterator i(
-                entities.insert(std::make_pair(name, Entity(ent))).first);
+                entities.insert(
+                    std::make_pair(
+                        name,
+                        Entity(
+                            ent,
+                            (!published
+                             || (static_cast<unoidl::PublishableEntity *>(
+                                     ent.get())
+                                 ->isPublished())))))
+                .first);
             switch (ent->getSort()) {
             case unoidl::Entity::SORT_MODULE:
                 assert(false); // this cannot happen
@@ -390,6 +402,22 @@ void scanMap(
     }
 }
 
+void propagateRelevant(std::map<OUString, Entity> & entities, Entity & entity) {
+    if (!entity.relevant) {
+        entity.relevant = true;
+        if (entity.sorted) {
+            for (std::set<OUString>::iterator i(entity.dependencies.begin());
+                 i != entity.dependencies.end(); ++i)
+            {
+                std::map<OUString, Entity>::iterator j(entities.find(*i));
+                if (j != entities.end()) {
+                    propagateRelevant(entities, j->second);
+                }
+            }
+        }
+    }
+}
+
 void visit(
     std::map<OUString, Entity> & entities,
     std::map<OUString, Entity>::iterator const & iterator,
@@ -405,6 +433,9 @@ void visit(
         {
             std::map<OUString, Entity>::iterator j(entities.find(*i));
             if (j != entities.end()) {
+                if (iterator->second.relevant) {
+                    propagateRelevant(entities, j->second);
+                }
                 visit(entities, j, result);
             }
         }
@@ -555,7 +586,7 @@ void writeEntity(
     OUString const & name)
 {
     std::map<OUString, Entity>::iterator i(entities.find(name));
-    if (i != entities.end()) {
+    if (i != entities.end() && i->second.relevant) {
         assert(!i->second.written);
         i->second.written = true;
         for (std::set<OUString>::iterator j(
