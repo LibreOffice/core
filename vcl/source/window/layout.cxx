@@ -1691,7 +1691,7 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     }
 
     Size aInnerSize(aChildAllocation);
-    long nScrollBarWidth, nScrollBarHeight;
+    long nScrollBarWidth = 0, nScrollBarHeight = 0;
 
     if (m_aVScroll.IsVisible())
     {
