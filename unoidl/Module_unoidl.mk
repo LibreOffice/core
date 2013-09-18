@@ -10,7 +10,8 @@
 $(eval $(call gb_Module_Module,unoidl))
 
 $(eval $(call gb_Module_add_targets,unoidl, \
-    Executable_unoidl-read \
+    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
+        Executable_unoidl-read) \
     Library_unoidl \
 ))
 
