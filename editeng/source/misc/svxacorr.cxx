@@ -653,8 +653,8 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
             }
 
             // Check the presence of "://" in the word
-            xub_StrLen nStrPos = rTxt.indexOf( "://", nSttWdPos + 1 );
-            if ( STRING_NOTFOUND == nStrPos && nEndPos > 0 )
+            sal_Int32 nStrPos = rTxt.indexOf( "://", nSttWdPos + 1 );
+            if ( nStrPos == -1 && nEndPos > 0 )
             {
                 // Check the previous char
                 sal_Unicode cPrevChar = rTxt[ nEndPos - 1 ];
