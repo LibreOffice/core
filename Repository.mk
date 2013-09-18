@@ -65,7 +65,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	xrmex \
 ))
 
-$(eval $(call gb_Helper_register_executables,SDK, \
+$(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	$(if $(filter MSC,$(COM)),climaker) \
 	cppumaker \
 	idlc \

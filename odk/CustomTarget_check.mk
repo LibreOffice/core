@@ -28,7 +28,8 @@ odk_PLATFORM := $(if $(filter WNT,$(OS)),\
 $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(SRCDIR)/odk/util/check.pl \
 		$(if $(DOXYGEN),$(call gb_GeneratedPackage_get_target,odk_doxygen)) \
-		$(call gb_Package_get_target,odk_bin) \
+		$(foreach exe,$(if $(filter WNT,$(OS)),climaker) cppumaker idlc javamaker regcompare $(if $(SYSTEM_UCPP),,ucpp) uno-skeletonmaker unoapploader,\
+			$(call gb_Executable_get_target,$(exe))) \
 		$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,odk_cli)) \
 		$(call gb_Package_get_target,odk_config) \
 		$(if $(filter WNT,$(OS)),\
