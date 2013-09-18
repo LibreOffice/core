@@ -137,16 +137,13 @@ endef
 
 # adding a file creates a dependency to it
 # file is copied to $(WORKDIR)
-# $(3) is the target of the copied file, and $(4) can be used to override that
-# with a different actual file, which is needed in gb_Extension_add_library
-# to make it work on Windows where the DLL doesn't have a gbuild target...
 define gb_Extension_add_file
 $(call gb_Extension_get_target,$(1)) : FILES += $(2)
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
 $(3) :| $(call gb_Extension__get_preparation_target,$(1))
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	mkdir -p $$(dir $$@) && \
-	cp -f $(if $(4),$(4),$(3)) $$@
+	cp -f $(3) $$@
 
 endef
 
@@ -164,7 +161,6 @@ endef
 # add a library from the solver; DO NOT use gb_Library_get_target
 define gb_Extension_add_library
 $(call gb_Extension_add_file,$(1),$(call gb_Library_get_runtime_filename,$(2)),\
-	$(call gb_Library_get_target,$(2)),\
 	$(gb_Helper_OUTDIRLIBDIR)/$(call gb_Library_get_runtime_filename,$(2)))
 
 endef
@@ -177,7 +173,6 @@ endef
 # add an executable from the solver
 define gb_Extension_add_executable
 $(call gb_Extension_add_file,$(1),$(notdir $(call gb_Executable_get_target,$(2))),\
-	$(call gb_Executable_get_target,$(2)),\
 	$(call gb_Executable_get_target,$(2)))
 
 endef
