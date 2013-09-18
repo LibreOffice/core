@@ -473,14 +473,16 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
                                            &binary_status, &clStatus );
         if(clStatus != CL_SUCCESS)
         {
+            // something went wrong, fall back to compiling from source
+            bBinaryExisted = false;
             for(size_t i = 0; i < numDevices; ++i)
             {
                 delete[] pBinary[i];
             }
         }
-        CHECK_OPENCL( clStatus, "clCreateProgramWithBinary" );
     }
-    else
+
+    if(!bBinaryExisted)
     {
         // create a CL program using the kernel source
         fprintf(stderr, "Create kernel from source\n");
