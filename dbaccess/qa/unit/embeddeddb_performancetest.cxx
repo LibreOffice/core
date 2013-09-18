@@ -15,7 +15,11 @@
 #include <osl/time.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
+#include <unotools/tempfile.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -24,8 +28,12 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
@@ -61,8 +69,11 @@ OUString getPrintableTimeValue(const TimeValue* pTimeValue)
  * 'SAL_LOG="" DBA_PERFTEST=YES make CppunitTest_dbaccess_embeddeddb_performancetest'
  * This blocks the unnecessary exception output and show only the performance data.
  *
- * You also need to create the file dbacess/qa/unit/data/wordlist, one easy way
- * of generating a list is using 'aspell dump master > dbacess/qa/unit/data/wordlist'
+ * You also need to create the file dbacess/qa/unit/data/wordlist, this list cannot
+ * contain any unescaped apostrophes (since the words are used directly to assemble
+ * sql statement), apostrophes are escaped using a double apostrophe, i.e. ''.
+ * one easy way of generating a list is using:
+ * 'for WORD in $(aspell dump master); do echo ${WORD//\'/\'\'}; done > dbaccess/qa/unit/data/wordlist'
  *
  * Note that wordlist cannot have more than 220580 lines, this is due to a hard
  * limit in our hsqldb version.
@@ -83,12 +94,17 @@ private:
 
     void printTimes(const TimeValue* pTime1, const TimeValue* pTime2, const TimeValue* pTime3);
 
-    void doPerformanceTestOnODB(const OUString& rFileName, const OUString& rDBName);
+    void doPerformanceTestOnODB(const OUString& rDriverURL,
+                                const OUString& rDBName,
+                                const bool bUsePreparedStatement);
 
     void setupTestTable(uno::Reference< XConnection >& xConnection);
 
     // Individual Tests
     void performPreparedStatementInsertTest(
+        uno::Reference< XConnection >& xConnection,
+        const OUString& rDBName);
+    void performStatementInsertTest(
         uno::Reference< XConnection >& xConnection,
         const OUString& rDBName);
     void performReadTest(
@@ -152,13 +168,19 @@ void EmbeddedDBPerformanceTest::testPerformance()
 
 void EmbeddedDBPerformanceTest::testFirebird()
 {
-    doPerformanceTestOnODB("firebird_empty.odb", "Firebird");
 
+    m_aOutputBuffer.append("Standard Insert\n");
+    doPerformanceTestOnODB("sdbc:embedded:firebird", "Firebird", false);
+    m_aOutputBuffer.append("PreparedStatement Insert\n");
+    doPerformanceTestOnODB("sdbc:embedded:firebird", "Firebird", true);
 }
 
 void EmbeddedDBPerformanceTest::testHSQLDB()
 {
-      doPerformanceTestOnODB("hsqldb_empty.odb", "HSQLDB");
+    m_aOutputBuffer.append("Standard Insert\n");
+    doPerformanceTestOnODB("sdbc:embedded:hsqldb", "HSQLDB", false);
+    m_aOutputBuffer.append("PreparedStatement Insert\n");
+    doPerformanceTestOnODB("sdbc:embedded:hsqldb", "HSQLDB", true);
 }
 
 /**
@@ -166,22 +188,40 @@ void EmbeddedDBPerformanceTest::testHSQLDB()
  * a table of the name PFTESTTABLE.
  */
 void EmbeddedDBPerformanceTest::doPerformanceTestOnODB(
-    const OUString& rFileName,
-    const OUString& rDBName)
+    const OUString& rDriverURL,
+    const OUString& rDBName,
+    const bool bUsePreparedStatement)
 {
-    uno::Reference< XOfficeDatabaseDocument > xDocument =
-        getDocumentForFileName(rFileName);
+    ::utl::TempFile aFile;
+    aFile.EnableKillingFile();
+
+    {
+        uno::Reference< XOfficeDatabaseDocument > xDocument(
+            m_xSFactory->createInstance("com.sun.star.sdb.OfficeDatabaseDocument"),
+            UNO_QUERY_THROW);
+        uno::Reference< XStorable > xStorable(xDocument, UNO_QUERY_THROW);
+
+        uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
+        uno::Reference< XPropertySet > xPropertySet(xDataSource, UNO_QUERY_THROW);
+        xPropertySet->setPropertyValue("URL", Any(rDriverURL));
+
+        xStorable->storeAsURL(aFile.GetURL(), uno::Sequence< beans::PropertyValue >());
+    }
+
+    uno::Reference< XOfficeDatabaseDocument > xDocument(
+        loadFromDesktop(aFile.GetURL()), UNO_QUERY_THROW);
 
     uno::Reference< XConnection > xConnection =
         getConnectionForDocument(xDocument);
 
     setupTestTable(xConnection);
 
-    performPreparedStatementInsertTest(xConnection, rDBName);
+    if (bUsePreparedStatement)
+        performPreparedStatementInsertTest(xConnection, rDBName);
+    else
+        performStatementInsertTest(xConnection, rDBName);
+
     performReadTest(xConnection, rDBName);
-
-//     xConnection.dispose();
-
 }
 
 void EmbeddedDBPerformanceTest::setupTestTable(
@@ -243,7 +283,53 @@ void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
     getTimeDifference(&aStart, &aMiddle, &aTimeInsert);
     getTimeDifference(&aMiddle, &aEnd, &aTimeCommit);
     getTimeDifference(&aStart, &aEnd, &aTimeTotal);
-    m_aOutputBuffer.append("PreparedStatement Insert: " + rDBName + "\n");
+    m_aOutputBuffer.append("Insert: " + rDBName + "\n");
+    printTimes(&aTimeInsert, &aTimeCommit, &aTimeTotal);
+
+    pFile->Close();
+}
+
+void EmbeddedDBPerformanceTest::performStatementInsertTest(
+    uno::Reference< XConnection >& xConnection,
+    const OUString& rDBName)
+{
+    uno::Reference< XStatement > xStatement =
+        xConnection->createStatement();
+
+    ::boost::scoped_ptr< SvFileStream > pFile(new SvFileStream(
+            getSrcRootURL() + our_sFilePath + "wordlist",
+            STREAM_READ));
+
+    if (!pFile)
+    {
+        fprintf(stderr, "Please ensure the wordlist is present\n");
+        CPPUNIT_ASSERT(false);
+    }
+
+    OUString aWord;
+    sal_Int32 aID = 0;
+
+    TimeValue aStart, aMiddle, aEnd;
+    osl_getSystemTime(&aStart);
+
+    while (pFile->ReadByteStringLine(aWord, RTL_TEXTENCODING_UTF8))
+    {
+        xStatement->execute(
+            "INSERT INTO \"PFTESTTABLE\" ( \"ID\", "
+            "\"STRINGCOLUMNA\" "
+            ") VALUES ( "
+            + OUString::number(aID++) + ", '" + aWord + "' )"
+                    );
+    }
+    osl_getSystemTime(&aMiddle);
+    xConnection->commit();
+    osl_getSystemTime(&aEnd);
+
+    TimeValue aTimeInsert, aTimeCommit, aTimeTotal;
+    getTimeDifference(&aStart, &aMiddle, &aTimeInsert);
+    getTimeDifference(&aMiddle, &aEnd, &aTimeCommit);
+    getTimeDifference(&aStart, &aEnd, &aTimeTotal);
+    m_aOutputBuffer.append("Insert: " + rDBName + "\n");
     printTimes(&aTimeInsert, &aTimeCommit, &aTimeTotal);
 
     pFile->Close();
