@@ -216,7 +216,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
         "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
         "Calculation/OpenCLAutoSelect",  // SCFORMULAOPT_OPENCL_AUTOSELECT
-        "Calculation/OpenCLAutoDevice"   // SCFORMULAOPT_OPENCL_DEVICE
+        "Calculation/OpenCLDevice"   // SCFORMULAOPT_OPENCL_DEVICE
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -428,6 +428,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     pValues[nProp] >>= aOpenCLDevice;
                     GetCalcConfig().maOpenCLDevice = aOpenCLDevice;
                 }
+                break;
                 default:
                     ;
                 }
@@ -540,6 +541,8 @@ void ScFormulaCfg::Commit()
             {
                 sal_Bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
                 pValues[nProp] <<= bVal;
+                sc::FormulaGroupInterpreter::switchOpenCLDevice(
+                        GetCalcConfig().maOpenCLDevice, bVal);
             }
             break;
             case SCFORMULAOPT_OPENCL_DEVICE:
