@@ -207,10 +207,10 @@ static void LaunchModifiedEvent(
 // - e.g. "Table1.A2:E5"
 bool FillRangeDescriptor(
         SwRangeDescriptor &rDesc,
-        const String &rCellRangeName )
+        const OUString &rCellRangeName )
 {
-    xub_StrLen nToken = STRING_NOTFOUND == rCellRangeName.Search('.') ? 0 : 1;
-    String aCellRangeNoTableName( rCellRangeName.GetToken( nToken, '.' ) );
+    xub_StrLen nToken = -1 == rCellRangeName.indexOf('.') ? 0 : 1;
+    String aCellRangeNoTableName( rCellRangeName.getToken( nToken, '.' ) );
     String aTLName( aCellRangeNoTableName.GetToken(0, ':') );  // name of top left cell
     String aBRName( aCellRangeNoTableName.GetToken(1, ':') );  // name of bottom right cell
     if(!aTLName.Len() || !aBRName.Len())

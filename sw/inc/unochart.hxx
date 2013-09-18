@@ -66,7 +66,7 @@ class SwFrmFmt;
 
 //////////////////////////////////////////////////////////////////////
 
-bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const String &rCellRangeName );
+bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const OUString &rCellRangeName );
 
 //////////////////////////////////////////////////////////////////////
 
@@ -265,8 +265,8 @@ class SwChartDataSequence :
     ::cppu::OInterfaceContainerHelper                       aModifyListeners;
     ::com::sun::star::chart2::data::DataSequenceRole        aRole;
 
-    String  aRowLabelText;
-    String  aColLabelText;
+    OUString  aRowLabelText;
+    OUString  aColLabelText;
 
     // holds a reference to the data-provider to guarantee it's lifetime last as
     // long as the pointer may be used.
