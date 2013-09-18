@@ -62,14 +62,14 @@ class SdAnimationPrmsUndoAction : public SdUndoAction
     Color           aNewDimColor;
     Color           aOldBlueScreen;
     Color           aNewBlueScreen;
-    String          aOldSoundFile;
-    String          aNewSoundFile;
+    OUString        aOldSoundFile;
+    OUString        aNewSoundFile;
     SdrPathObj*     pOldPathObj;
     SdrPathObj*     pNewPathObj;
     ::com::sun::star::presentation::ClickAction     eOldClickAction;
     ::com::sun::star::presentation::ClickAction     eNewClickAction;
-    String          aOldBookmark;
-    String          aNewBookmark;
+    OUString        aOldBookmark;
+    OUString        aNewBookmark;
     sal_Bool            bOldInvisibleInPres;
     sal_Bool            bNewInvisibleInPres;
     sal_uInt16          nOldVerb;
@@ -104,7 +104,7 @@ public:
             { bOldDimHide = bTheOldDimHide; bNewDimHide = bTheNewDimHide; }
         void SetSoundOn(sal_Bool bTheOldSoundOn, sal_Bool bTheNewSoundOn)
             { bOldSoundOn = bTheOldSoundOn; bNewSoundOn = bTheNewSoundOn; }
-        void SetSound(String aTheOldSound, String aTheNewSound)
+        void SetSound(String aTheOldSound, OUString aTheNewSound)
             { aOldSoundFile = aTheOldSound; aNewSoundFile = aTheNewSound; }
         void SetBlueScreen(Color aTheOldBlueScreen, Color aTheNewBlueScreen)
             { aOldBlueScreen = aTheOldBlueScreen; aNewBlueScreen = aTheNewBlueScreen; }
@@ -114,7 +114,7 @@ public:
             { pOldPathObj = pTheOldPath; pNewPathObj = pTheNewPath; }
         void SetClickAction(::com::sun::star::presentation::ClickAction eTheOldAction, ::com::sun::star::presentation::ClickAction eTheNewAction)
             { eOldClickAction = eTheOldAction; eNewClickAction = eTheNewAction; }
-        void SetBookmark(String aTheOldBookmark, String aTheNewBookmark)
+        void SetBookmark(String aTheOldBookmark, OUString aTheNewBookmark)
             { aOldBookmark = aTheOldBookmark; aNewBookmark = aTheNewBookmark; }
         void SetInvisibleInPres(sal_Bool bTheOldInvisibleInPres, sal_Bool bTheNewInvisibleInPres)
             { bOldInvisibleInPres = bTheOldInvisibleInPres; bNewInvisibleInPres = bTheNewInvisibleInPres; }
