@@ -134,7 +134,24 @@ private:
      * xml stream, so that you can do the asserting.
      */
     xmlDocPtr parseExport(const OUString& rStreamName = OUString("word/document.xml"));
-    void assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute = OString(), OUString aExpectedValue = OUString());
+
+    /**
+     * Helper method to return nodes represented by rXPath.
+     */
+    xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
+
+    /**
+     * Assert that rXPath exists, and returns exactly one node.
+     * In case rAttribute is provided, the rXPath's attribute's value must
+     * equal to the rExpected value.
+     */
+    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute = OString(), const OUString& rExpectedValue = OUString());
+
+    /**
+     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
+     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
+     */
+    void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
 };
 
 void Test::run()
@@ -258,19 +275,30 @@ xmlDocPtr Test::parseExport(const OUString& rStreamName)
     return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
 }
 
-void Test::assertXPath(xmlDocPtr pXmlDoc, OString aXPath, OString aAttribute, OUString aExpectedValue)
+xmlNodeSetPtr Test::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
 {
     xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
-    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
-    xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
+    return pXmlXpathObj->nodesetval;
+}
+
+void Test::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
+{
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
     CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-    if (aAttribute.isEmpty())
+    if (rAttribute.isEmpty())
         return;
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
-    CPPUNIT_ASSERT_EQUAL(aExpectedValue, aValue);
+    OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    CPPUNIT_ASSERT_EQUAL(rExpectedValue, aValue);
+}
+
+void Test::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
+{
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT_EQUAL(nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
 void Test::testZoom()
@@ -1336,6 +1364,9 @@ void Test::testStyleInheritance()
     assertXPath(pXmlStyles, "/w:styles/w:style[1]", "styleId", "Normal");
     // some random style later
     assertXPath(pXmlStyles, "/w:styles/w:style[4]", "styleId", "Heading3");
+
+    // Check that we do _not_ export w:next for styles that point to themselves.
+    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:next", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
