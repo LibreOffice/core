@@ -315,7 +315,7 @@ void MSWordStyles::BuildStyleIds()
                 ('A' <= nChar && nChar <= 'Z'))
             {
                 // first letter should be uppercase
-                if (aStyleIdBuf.isEmpty() && ('a' < nChar && nChar <= 'z'))
+                if (aStyleIdBuf.isEmpty() && 'a' <= nChar && nChar <= 'z')
                     aStyleIdBuf.append(char(nChar - ('a' - 'A')));
                 else
                     aStyleIdBuf.append(char(nChar));
