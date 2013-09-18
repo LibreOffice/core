@@ -296,8 +296,8 @@ private:
 
     // Descriptor-interface
     SwTableProperties_Impl*     pTableProps;
-    String                      m_sTableName;
-    sal_Bool                        bIsDescriptor;
+    OUString                    m_sTableName;
+    sal_Bool                    bIsDescriptor;
     unsigned short              nRows;
     unsigned short              nColumns;
 
@@ -388,7 +388,7 @@ public:
     sal_uInt16          getRowCount(void);
     sal_uInt16          getColumnCount(void);
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >     GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
-                        const String& sTLName, const String& sBRName,
+                        const OUString& sTLName, const OUString& sBRName,
                         SwRangeDescriptor& rDesc);
 
     //SwClient

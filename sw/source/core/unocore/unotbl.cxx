@@ -2338,7 +2338,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                 lcl_FormatTable( pTblFmt );
 
                 pTblFmt->Add(this);
-                if(m_sTableName.Len())
+                if(!m_sTableName.isEmpty())
                 {
                     sal_uInt16 nIndex = 1;
                     const String sTmpName(m_sTableName);
@@ -2441,7 +2441,7 @@ uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColum
 }
 
 uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
-                    const String& rTLName, const String& rBRName,
+                    const OUString& rTLName, const OUString& rBRName,
                     SwRangeDescriptor& rDesc)
 {
     SolarMutexGuard aGuard;
