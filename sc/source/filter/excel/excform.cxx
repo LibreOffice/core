@@ -142,8 +142,6 @@ void ImportExcel::Formula(
                     GetXFRangeBuffer().SetXF(aScPos, nXF);
                     SetLastFormula(aScPos.Col(), aScPos.Row(), fCurVal, nXF, pCell);
                 }
-                else
-                    fprintf(stdout, "ImportExcel::Formula:   what!?\n");
             }
             else
             {
