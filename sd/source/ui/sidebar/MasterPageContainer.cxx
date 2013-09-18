@@ -172,9 +172,6 @@ private:
 
     typedef ::std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
     DECL_LINK(AsynchronousNotifyCallback, EventData*);
-    ::sd::DrawDocShell* LoadDocument (
-        const String& sFileName,
-        SfxObjectShellLock& rxDocumentShell);
 
     Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
 
