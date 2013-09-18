@@ -693,7 +693,7 @@ XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 
 bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bValue = ( (rStrImpValue == sTransparent) == bTransPropValue);
+    sal_Bool bValue = (sal_Bool) ( (rStrImpValue == sTransparent) == bTransPropValue);
     rValue.setValue( &bValue, ::getBooleanCppuType() );
 
     return true;
