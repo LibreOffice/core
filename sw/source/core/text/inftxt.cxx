@@ -639,7 +639,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
 
     // Draw text next to the left border
     Point aFontPos(aPos);
-    if( !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
+    if( m_pFnt->GetLeftBorder() && !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
     {
         const sal_uInt16 nLeftBorderSpace = m_pFnt->GetLeftBorderSpace();
         if ( GetTxtFrm()->IsRightToLeft() )
@@ -664,6 +664,10 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
                     break;
             }
         }
+        if( aFontPos.X() < 0 )
+            aFontPos.X() = 0;
+        if( aFontPos.X() < 0 )
+            aFontPos.X() = 0;
     }
 
     if( GetTxtFly()->IsOn() )

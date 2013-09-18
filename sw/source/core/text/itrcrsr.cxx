@@ -940,12 +940,13 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 {
                                     pCurrPart = pCurrPart->GetFollow();
                                 }
-                                if( pCurrPart && nSumLength != nOfst - aInf.GetIdx() && !pCurrPart->GetJoinBorderWithNext() )
+                                if( pCurrPart && nSumLength != nOfst - aInf.GetIdx() &&
+                                    pCurrPart->GetFont().GetRightBorder() && !pCurrPart->GetJoinBorderWithNext() )
                                 {
                                     nX -= pCurrPart->GetFont().GetRightBorderSpace();
                                 }
                             }
-                            else if( !pPor->GetJoinBorderWithNext())
+                            else if( GetInfo().GetFont()->GetRightBorder() && !pPor->GetJoinBorderWithNext())
                             {
                                 nX -= GetInfo().GetFont()->GetRightBorderSpace();
                             }
@@ -1650,11 +1651,12 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     while( pCurrPart && nSumWidth <= nX - nCurrStart )
                     {
                         nSumWidth += pCurrPart->GetWidth();
-                        if( !pCurrPart->GetJoinBorderWithPrev() )
+                        if( pCurrPart->GetFont().GetLeftBorder() && !pCurrPart->GetJoinBorderWithPrev() )
                         {
                             nSumBorderWidth += pCurrPart->GetFont().GetLeftBorderSpace();
                         }
-                        if( nSumWidth <= nX - nCurrStart && !pCurrPart->GetJoinBorderWithNext() )
+                        if( nSumWidth <= nX - nCurrStart && pCurrPart->GetFont().GetRightBorder() &&
+                            !pCurrPart->GetJoinBorderWithNext() )
                         {
                             nSumBorderWidth += pCurrPart->GetFont().GetRightBorderSpace();
                         }
@@ -1663,7 +1665,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nX = std::max(0, nX - nSumBorderWidth);
                 }
                 // Shift the offset with the left border width
-                else if( !pPor->GetJoinBorderWithPrev() )
+                else if( GetInfo().GetFont()->GetLeftBorder() && !pPor->GetJoinBorderWithPrev() )
                 {
                     nX = std::max(0, nX - GetInfo().GetFont()->GetLeftBorderSpace());
                 }
