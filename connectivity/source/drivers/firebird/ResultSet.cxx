@@ -375,7 +375,7 @@ T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
     if ((m_bWasNull = isNull(nColumnIndex)))
         return T();
 
-    if (m_pSqlda->sqlvar[nColumnIndex-1].sqltype == nType)
+    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
         return *((T*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
     else
         return T();
@@ -419,7 +419,7 @@ ISC_QUAD* OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHOR
     // TODO: this is probably wrong
     if ((m_bWasNull = isNull(nColumnIndex)))
         return 0;
-    if (m_pSqlda->sqlvar[nColumnIndex-1].sqltype == nType)
+    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
         return (ISC_QUAD*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata;
     else
         throw SQLException(); // TODO: better exception (can't convert Blob)
