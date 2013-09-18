@@ -597,7 +597,10 @@ void LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize 
     mbInitializedBcp47  = !mbSystemLocale;
 
     if (bCanonicalize)
-        getImpl()->canonicalize();
+    {
+        if (getImpl()->canonicalize())
+            syncFromImpl();
+    }
 }
 
 
