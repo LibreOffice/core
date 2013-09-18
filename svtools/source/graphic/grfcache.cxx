@@ -978,10 +978,10 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
                 // delete graphic cache entry
                 delete *it;
                 it = maGraphicCache.erase( it );
+                continue;
             }
         }
-        else
-            ++it;
+        ++it;
     }
 
     DBG_ASSERT( bRemoved, "GraphicCache::ReleaseGraphicObject(...): GraphicObject not found in cache" );
