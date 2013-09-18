@@ -20,7 +20,7 @@ CLBuildKernelThread::~CLBuildKernelThread() {}
 
 void CLBuildKernelThread::execute()
 {
-    sc::FormulaGroupInterpreter::compileKernels();
+    sc::FormulaGroupInterpreter::compileOpenCLKernels();
 }
 
 }

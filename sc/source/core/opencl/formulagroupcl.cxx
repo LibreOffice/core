@@ -1095,9 +1095,9 @@ SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(const OUString* pDeviceId,
     return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect);
 }
 
-SAL_DLLPUBLIC_EXPORT void compileKernels(const OUString* pDeviceId)
+SAL_DLLPUBLIC_EXPORT void compileOpenCLKernels(const OUString* pDeviceId)
 {
-    sc::opencl::compileKernels(pDeviceId);
+    sc::opencl::compileOpenCLKernels(pDeviceId);
 }
 
 }

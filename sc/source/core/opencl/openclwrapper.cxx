@@ -2744,7 +2744,7 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
     return !OpenclDevice::initOpenclRunEnv(0);
 }
 
-void compileKernels(const OUString* pDeviceId)
+void compileOpenCLKernels(const OUString* pDeviceId)
 {
     if (!pDeviceId)
         return;

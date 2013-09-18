@@ -56,7 +56,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
     static FormulaGroupInterpreter *getStatic();
     static void fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rPlatforms);
     static void switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect);
-    static void compileKernels();
+    static void compileOpenCLKernels();
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
