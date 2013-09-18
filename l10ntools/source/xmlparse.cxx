@@ -439,8 +439,6 @@ XMLFile& XMLFile::operator=(const XMLFile& obj){
 void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
 /*****************************************************************************/
 {
-    static const OString LOCALIZE("localize");
-    static const OString THEID("id");
     bool bInsert    = true;
     if ( !pCur )
         SearchL10NElements( this  );
@@ -465,10 +463,10 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                     for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; ++j )
                     {
                         const OString tmpStr = OUStringToOString((*pElement->GetAttributeList())[j]->GetName(), RTL_TEXTENCODING_UTF8);
-                        if (tmpStr == THEID) { // Get the "id" Attribute
+                        if (tmpStr == "id") {
                             tmpStrVal=OUStringToOString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                         }
-                        if (tmpStr == LOCALIZE) { // Get the "localize" Attribute
+                        if (tmpStr == "localize") {
                             bInsert=false;
                         }
                         if (tmpStr == XML_LANG) { // Get the "xml-lang" Attribute
@@ -510,10 +508,6 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 /*****************************************************************************/
 {
     static bool bStatusExport = true;
-    const OString STATUS(RTL_CONSTASCII_STRINGPARAM("status"));
-    const OString PUBLISH(RTL_CONSTASCII_STRINGPARAM("PUBLISH"));
-    const OString DEPRECATED(RTL_CONSTASCII_STRINGPARAM("DEPRECATED"));
-    const OString TOPIC(RTL_CONSTASCII_STRINGPARAM("topic"));
 
     bool bInsert    = true;
     if ( !pCur )
@@ -533,7 +527,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
                 OString sName(OUStringToOString(pElement->GetName(), RTL_TEXTENCODING_ASCII_US));
-                if (sName.equalsIgnoreAsciiCase(TOPIC))
+                if (sName.equalsIgnoreAsciiCase("TOPIC"))
                 {
                     if ( pElement->GetAttributeList())
                     {
@@ -541,12 +535,12 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                         {
                             const OString tmpStr(OUStringToOString((*pElement->GetAttributeList())[j]->GetName(),
                                 RTL_TEXTENCODING_UTF8));
-                            if (tmpStr.equalsIgnoreAsciiCase(STATUS))
+                            if (tmpStr.equalsIgnoreAsciiCase("STATUS"))
                             {
                                 OString tmpStrVal(OUStringToOString( (*pElement->GetAttributeList())[j]->GetValue(),
                                     RTL_TEXTENCODING_UTF8));
-                                if (!tmpStrVal.equalsIgnoreAsciiCase(PUBLISH) &&
-                                    !tmpStrVal.equalsIgnoreAsciiCase(DEPRECATED))
+                                if (!tmpStrVal.equalsIgnoreAsciiCase("PUBLISH") &&
+                                    !tmpStrVal.equalsIgnoreAsciiCase("DEPRECATED"))
                                 {
                                     bStatusExport = false;
                                 }
@@ -695,8 +689,6 @@ OUString XMLElement::ToOUString(){
 /*****************************************************************************/
 void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
-    static const OUString XML_LANG ( "xml-lang" );
-
     if(pCur!=NULL){
         if(rootelement){
             XMLElement *pElement = ( XMLElement * ) pCur;
@@ -723,7 +715,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
 
                             OUString aAttrName( (*pElement->GetAttributeList())[ j ]->GetName() );
-                            if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
+                            if( !aAttrName.equalsIgnoreAsciiCase( "xml-lang" ) ) {
                                 buffer.append( OUString(" ") );
                                 buffer.append( aAttrName );
                                 buffer.append( OUString("=") );
