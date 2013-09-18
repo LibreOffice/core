@@ -192,7 +192,7 @@ endef
 
 else
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
     cppunit \
 ))
 
