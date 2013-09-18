@@ -38,8 +38,8 @@ $(call android_get_po,$(1)):
 	mkdir -p res/values-$(1)
 	$(if $(filter-out qtz,$(1)), \
 	    echo $(SRCDIR)/translations/source/$(1)/android/sdremote/res/values.po > translations-$(1).db &&\
-	    $(OUTDIR_FOR_BUILD)/bin/stringex -i res/values/strings.xml -o res/values-$(1)/strings.xml -m translations-$(1).db -l $(1), \
-	    $(OUTDIR_FOR_BUILD)/bin/stringex -i res/values/strings.xml -o res/values-$(1)/strings.xml -m -l $(1))
+	    $(gb_Executable_BINDIR_FOR_BUILD)/stringex -i res/values/strings.xml -o res/values-$(1)/strings.xml -m translations-$(1).db -l $(1), \
+	    $(gb_Executable_BINDIR_FOR_BUILD)/stringex -i res/values/strings.xml -o res/values-$(1)/strings.xml -m -l $(1))
 
 endef
 

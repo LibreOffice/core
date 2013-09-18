@@ -39,7 +39,7 @@
 # SrsPartMergeTarget class
 
 gb_SrsPartMergeTarget_TRANSEXDEPS := $(call gb_Executable_get_runtime_dependencies,transex3)
-gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(call gb_Executable_get_command,transex3)
+gb_SrsPartMergeTarget_TRANSEXCOMMAND = $(call gb_Executable_get_command,transex3)
 
 define gb_SrsPartMergeTarget__command
 MERGEINPUT=`$(gb_MKTEMP)` && \
@@ -78,7 +78,7 @@ endef
 #  gb_SrsPartTarget__command_dep
 
 gb_ResTarget_RSCDEPS := $(call gb_Executable_get_runtime_dependencies,rsc)
-gb_ResTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,rsc)
+gb_ResTarget_RSCCOMMAND = SOLARBINDIR=$(gb_Executable_BINDIR_FOR_BUILD) $(call gb_Executable_get_command,rsc)
 
 define gb_SrsPartTarget__command
 $(call gb_Helper_abbreviate_dirs,\

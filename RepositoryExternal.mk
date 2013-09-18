@@ -2995,7 +2995,7 @@ gb_ExternalExecutable__register_xmllint :=
 else # ! SYSTEM_LIBXML_FOR_BUILD
 
 define gb_ExternalExecutable__register_xmllint
-$(call gb_ExternalExecutable_set_internal,xmllint)
+$(call gb_ExternalExecutable_set_internal,xmllint,$(OUTDIR_FOR_BUILD)/bin/xmllint$(gb_Executable_EXT_for_build))
 
 endef
 
@@ -3008,7 +3008,7 @@ gb_ExternalExecutable__register_xsltproc :=
 else # ! SYSTEM_LIBXSLT_FOR_BUILD
 
 define gb_ExternalExecutable__register_xsltproc
-$(call gb_ExternalExecutable_set_internal,xsltproc)
+$(call gb_ExternalExecutable_set_internal,xsltproc,$(OUTDIR_FOR_BUILD)/bin/xsltproc$(gb_Executable_EXT_for_build))
 $(call gb_ExternalExecutable_add_dependencies,xsltproc,$(call gb_Package_get_target,xslt))
 
 endef
@@ -3057,7 +3057,7 @@ endef
 else # ! SYSTEM_GENBRK
 
 define gb_ExternalExecutable__register_genbrk
-$(call gb_ExternalExecutable_set_internal,genbrk)
+$(call gb_ExternalExecutable_set_internal,genbrk,$(OUTDIR_FOR_BUILD)/bin/genbrk$(gb_Executable_EXT_for_build))
 $(call gb_ExternalExecutable_add_dependencies,genbrk,\
 	$(call gb_Package_get_target_for_build,icu) \
 )
@@ -3076,7 +3076,7 @@ endef
 else # ! SYSTEM_GENCCODE
 
 define gb_ExternalExecutable__register_genccode
-$(call gb_ExternalExecutable_set_internal,genccode)
+$(call gb_ExternalExecutable_set_internal,genccode,$(OUTDIR_FOR_BUILD)/bin/genccode$(gb_Executable_EXT_for_build))
 $(call gb_ExternalExecutable_add_dependencies,genccode,\
 	$(call gb_Package_get_target_for_build,icu) \
 )
@@ -3095,7 +3095,7 @@ endef
 else # ! SYSTEM_GENCMN
 
 define gb_ExternalExecutable__register_gencmn
-$(call gb_ExternalExecutable_set_internal,gencmn)
+$(call gb_ExternalExecutable_set_internal,gencmn,$(OUTDIR_FOR_BUILD)/bin/gencmn$(gb_Executable_EXT_for_build))
 $(call gb_ExternalExecutable_add_dependencies,gencmn,\
 	$(call gb_Package_get_target_for_build,icu) \
 )
