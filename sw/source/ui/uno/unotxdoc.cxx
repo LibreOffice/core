@@ -754,7 +754,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
-                    pSearch->sSearchText.Len() ? &aSearchOpt : 0,
+                    !pSearch->sSearchText.isEmpty() ? &aSearchOpt : 0,
                     &aReplace );
     }
     else if(pSearch->bStyles)
@@ -884,7 +884,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
             nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
                         eStart, eEnd, bCancel,
                         (FindRanges)eRanges,
-                        pSearch->sSearchText.Len() ? &aSearchOpt : 0,
+                        !pSearch->sSearchText.isEmpty() ? &aSearchOpt : 0,
                         0 );
         }
         else if(pSearch->bStyles)

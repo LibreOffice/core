@@ -44,8 +44,8 @@ class SwXTextSearch : public cppu::WeakImplHelper3
 {
     friend class SwXTextDocument;
 
-    String                  sSearchText;
-    String                  sReplaceText;
+    OUString                sSearchText;
+    OUString                sReplaceText;
 
     SwSearchProperties_Impl*    pSearchProperties;
     SwSearchProperties_Impl*    pReplaceProperties;
