@@ -107,10 +107,10 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     Reference< XInputStream > xStream;
     Reference< XContent > xContent;
     Reference< XInteractionHandler > xInteraction;
-    String aURL;
+    OUString aURL;
     OUString sTemp;
     OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
     OUString aDocumentTitle; // interesting only if set in this method
 
@@ -141,7 +141,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
+        else if( aURL.isEmpty() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
@@ -189,22 +189,22 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = OUString("private:factory/");
-    if( aURL.Match( aPrefix ) == aPrefix.Len() )
+    OUString aPrefix = OUString("private:factory/");
+    if( aURL.startsWith( aPrefix ) )
     {
         if( SvtModuleOptions().IsImpress() )
         {
-            String aPattern( aPrefix );
-            aPattern += OUString("simpress");
-            if ( aURL.Match( aPattern ) >= aPattern.Len() )
+            OUString aPattern( aPrefix );
+            aPattern += "simpress";
+            if ( aURL.startsWith( aPattern ) )
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
         }
 
         if( !pFilter && SvtModuleOptions().IsDraw() )
         {
-            String aPattern( aPrefix );
-            aPattern += OUString("sdraw");
-            if ( aURL.Match( aPattern ) >= aPattern.Len() )
+            OUString aPattern( aPrefix );
+            aPattern += "sdraw";
+            if ( aURL.startsWith( aPattern ) )
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
         }
     }
@@ -213,7 +213,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
         // ctor of SfxMedium uses owner transition of ItemSet
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
         aMedium.UseInteractionHandler( sal_True );
-        if ( aPreselectedFilterName.Len() )
+        if ( !aPreselectedFilterName.isEmpty() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if (!aTypeName.isEmpty())
         {
@@ -400,17 +400,17 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                             }
                             else
                             {
-                                String aShortName( aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ) );
+                                OUString aShortName( aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ) );
                                 GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
-                                const String aName( rGrfFilter.GetImportFormatTypeName( rGrfFilter.GetImportFormatNumberForShortName( aShortName ) ) );
+                                const OUString aName( rGrfFilter.GetImportFormatTypeName( rGrfFilter.GetImportFormatNumberForShortName( aShortName ) ) );
 
-                                if ( pFilter && aShortName.EqualsIgnoreCaseAscii( "PCD" ) )    // there is a multiple pcd selection possible
+                                if ( pFilter && aShortName.equalsIgnoreAsciiCase( "PCD" ) )    // there is a multiple pcd selection possible
                                 {
                                     sal_Int32 nBase = 2;    // default Base0
-                                    String aFilterTypeName( pFilter->GetRealTypeName() );
-                                    if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base4" ) == COMPARE_EQUAL )
+                                    OUString aFilterTypeName( pFilter->GetRealTypeName() );
+                                    if ( aFilterTypeName == "pcd_Photo_CD_Base4" )
                                         nBase = 1;
-                                    else if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base16" ) == COMPARE_EQUAL )
+                                    else if ( aFilterTypeName == "pcd_Photo_CD_Base16" )
                                         nBase = 0;
                                     FilterConfigItem aFilterConfigItem( "Office.Common/Filter/Graphic/Import/PCD" );
                                     aFilterConfigItem.WriteInt32( "Resolution" , nBase );

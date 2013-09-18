@@ -1176,8 +1176,7 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
 
 static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 {
-    const String aEmpty;
-    pInfo->SetBookmark( aEmpty );
+    pInfo->SetBookmark( "" );
     pInfo->mbSecondSoundOn = sal_False;
     pInfo->mbSecondPlayFull = sal_False;
     pInfo->meClickAction = presentation::ClickAction_NONE;
@@ -1425,11 +1424,11 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             }
             else
             {
-                String aMacro = aStrMacro;
+                OUString aMacro = aStrMacro;
 
-                String aLibName   = aMacro.GetToken(0, sal_Unicode('.'));
-                String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
-                String aMacroName = aMacro.GetToken(2, sal_Unicode('.'));
+                OUString aLibName   = aMacro.getToken(0, '.');
+                OUString aModulName = aMacro.getToken(1, '.');
+                OUString aMacroName = aMacro.getToken(2, '.');
 
                 OUStringBuffer sBuffer;
                 sBuffer.append( aMacroName );
@@ -1537,14 +1536,14 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            String aMacro = pInfo->GetBookmark();
+            OUString aMacro = pInfo->GetBookmark();
 
             // aMacro has got following format:
             // "Macroname.Modulname.Libname.Documentname" or
             // "Macroname.Modulname.Libname.Applicationname"
-            String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
-            String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
-            String aLibName   = aMacro.GetToken(2, sal_Unicode('.'));
+            OUString aMacroName = aMacro.getToken(0, '.');
+            OUString aModulName = aMacro.getToken(1, '.');
+            OUString aLibName   = aMacro.getToken(2, '.');
 
             OUStringBuffer sBuffer;
             sBuffer.append( aLibName );

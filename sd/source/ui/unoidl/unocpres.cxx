@@ -481,7 +481,7 @@ SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( const OUString& Nam
     SdCustomShowList* pList = GetCustomShowList();
     const sal_uInt32 nCount = pList ? pList->size() : 0;
 
-    const String aName( Name );
+    const OUString aName( Name );
 
     while( nIdx < nCount )
     {

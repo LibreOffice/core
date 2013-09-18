@@ -484,8 +484,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
         SdPage* pPreviousNotesPage = (SdPage*) mpDoc->GetPage( nStandardPageNum - 1 );
         sal_uInt16 nNotesPageNum = nStandardPageNum + 1;
-        String aStandardPageName;
-        String aNotesPageName;
+        OUString aStandardPageName;
+        OUString aNotesPageName;
 
         /**************************************************************
         * standard page
@@ -966,78 +966,78 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
 
     uno::Reference< uno::XInterface > xRet;
 
-    const String aType( aServiceSpecifier );
-    if( aType.EqualsAscii( "com.sun.star.presentation.", 0, 26 ) )
+    if( aServiceSpecifier.startsWith( "com.sun.star.presentation.") )
     {
+        const OUString aType( aServiceSpecifier.copy(26) );
         SvxShape* pShape = NULL;
 
         sal_uInt16 nType = OBJ_TEXT;
         // create a shape wrapper
-        if( aType.EqualsAscii( "TitleTextShape", 26, 14 ) )
+        if( aType.startsWith( "TitleTextShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "OutlinerShape", 26, 13 ) )
+        else if( aType.startsWith( "OutlinerShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "SubtitleShape", 26, 13 ) )
+        else if( aType.startsWith( "SubtitleShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "GraphicObjectShape", 26, 18 ) )
+        else if( aType.startsWith( "GraphicObjectShape" ) )
         {
             nType = OBJ_GRAF;
         }
-        else if( aType.EqualsAscii( "PageShape", 26, 9 ) )
+        else if( aType.startsWith( "PageShape" ) )
         {
             nType = OBJ_PAGE;
         }
-        else if( aType.EqualsAscii( "OLE2Shape", 26, 9 ) )
+        else if( aType.startsWith( "OLE2Shape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "ChartShape", 26, 10 ) )
+        else if( aType.startsWith( "ChartShape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "CalcShape", 26, 9 ) )
+        else if( aType.startsWith( "CalcShape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        else if( aType.startsWith( "TableShape" ) )
         {
             nType = OBJ_TABLE;
         }
-        else if( aType.EqualsAscii( "OrgChartShape", 26, 13 ) )
+        else if( aType.startsWith( "OrgChartShape" ) )
         {
             nType = OBJ_OLE2;
         }
-        else if( aType.EqualsAscii( "NotesShape", 26, 13 ) )
+        else if( aType.startsWith( "NotesShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "HandoutShape", 26, 13 ) )
+        else if( aType.startsWith( "HandoutShape" ) )
         {
             nType = OBJ_PAGE;
         }
-        else if( aType.EqualsAscii( "FooterShape", 26, 12 ) )
+        else if( aType.startsWith( "FooterShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "HeaderShape", 26, 12 ) )
+        else if( aType.startsWith( "HeaderShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "SlideNumberShape", 26, 17 ) )
+        else if( aType.startsWith( "SlideNumberShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "DateTimeShape", 26, 17 ) )
+        else if( aType.startsWith( "DateTimeShape" ) )
         {
             nType = OBJ_TEXT;
         }
-        else if( aType.EqualsAscii( "MediaShape", 26, 10 ) )
+        else if( aType.startsWith( "MediaShape" ) )
         {
             nType = OBJ_MEDIA;
         }
@@ -1538,17 +1538,17 @@ ImplRenderPaintProc::~ImplRenderPaintProc()
 {
 }
 
-sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc )
+sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument& rDoc )
 {
     sal_Int32 nPage = -1;
 
     OSL_TRACE("GotoBookmark %s",
         OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
 
-    String aBookmark( rBookmark );
+    OUString aBookmark( rBookmark );
 
-    if( rBookmark.Len() && rBookmark.GetChar( 0 ) == sal_Unicode('#') )
-        aBookmark = rBookmark.Copy( 1 );
+    if( !rBookmark.isEmpty() && rBookmark[ 0 ] == '#' )
+        aBookmark = rBookmark.copy( 1 );
 
     // is the bookmark a page ?
     sal_Bool        bIsMasterPage;
@@ -1585,11 +1585,11 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
 
             Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
             Time aTime( Time::EMPTY );
-            String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, SVXDATEFORMAT_B, *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
+            OUString aStr( SvxDateTimeField::GetFormatted( aDate, aTime, SVXDATEFORMAT_B, *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
 
             vcl::PDFNote aNote;
-            String sTitle( xAnnotation->getAuthor() );
-            sTitle.AppendAscii( ", " );
+            OUString sTitle( xAnnotation->getAuthor() );
+            sTitle += ", ";
             sTitle += aStr;
             aNote.Title = sTitle;
             aNote.Contents = xText->getString();
@@ -1803,7 +1803,7 @@ sal_Bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
         const SdrLayer* pSdrLayer = rLayerAdmin.GetLayer( nLayerId );
         if ( pSdrLayer )
         {
-            String aLayerName = pSdrLayer->GetName();
+            OUString aLayerName = pSdrLayer->GetName();
             bVisible = pSdrPageView->IsLayerVisible( aLayerName );
         }
     }
@@ -1818,7 +1818,7 @@ sal_Bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
         const SdrLayer* pSdrLayer = rLayerAdmin.GetLayer( nLayerId );
         if ( pSdrLayer )
         {
-            String aLayerName = pSdrLayer->GetName();
+            OUString aLayerName = pSdrLayer->GetName();
             bPrintable = pSdrPageView->IsLayerPrintable( aLayerName );
         }
     }
@@ -2108,8 +2108,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 rBookmarks.clear();
                                 //---> #i56629, #i40318
                                 //get the page name, will be used as outline element in PDF bookmark pane
-                                String aPageName = mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1 , PK_STANDARD )->GetName();
-                                if( aPageName.Len() > 0 )
+                                OUString aPageName = mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1 , PK_STANDARD )->GetName();
+                                if( !aPageName.isEmpty() )
                                 {
                                     // insert the bookmark to this page into the NamedDestinations
                                     if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
@@ -2676,8 +2676,8 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             nInsertPos = nMPageCount;
 
         // now generate a unique name for the new masterpage
-        const String aStdPrefix( SdResId(STR_LAYOUT_DEFAULT_NAME) );
-        String aPrefix( aStdPrefix );
+        const OUString aStdPrefix( SdResId(STR_LAYOUT_DEFAULT_NAME) );
+        OUString aPrefix( aStdPrefix );
 
         sal_Bool bUnique = sal_True;
         sal_Int32 i = 0;
@@ -2697,15 +2697,13 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             if( !bUnique )
             {
                 i++;
-                aPrefix = aStdPrefix;
-                aPrefix += sal_Unicode( ' ' );
-                aPrefix += OUString::number( i );
+                aPrefix = aStdPrefix + " " + OUString::number( i );
             }
 
         } while( !bUnique );
 
-        String aLayoutName( aPrefix );
-        aLayoutName.AppendAscii( SD_LT_SEPARATOR );
+        OUString aLayoutName( aPrefix );
+        aLayoutName += SD_LT_SEPARATOR;
         aLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
         // create styles
@@ -2974,7 +2972,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
     sal_uInt16 nPage;
     SdPage* pPage;
 
-    const String aName( rName );
+    const OUString aName( rName );
 
     const bool bDraw = mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW;
 

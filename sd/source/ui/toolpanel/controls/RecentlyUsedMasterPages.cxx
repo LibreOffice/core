@@ -206,7 +206,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
                     MasterPageContainer::TEMPLATE,
                     -1,
                     sURL,
-                    String(),
+                    OUString(),
                     sName,
                     false,
                     ::boost::shared_ptr<PageObjectProvider>(

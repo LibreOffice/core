@@ -45,9 +45,9 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
     SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
         MasterPageContainer::DEFAULT,
         0,
-        String(),
-        String(),
-        String(),
+        OUString(),
+        OUString(),
+        OUString(),
         false,
         ::boost::shared_ptr<PageObjectProvider>(new DefaultPageObjectProvider()),
         ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
@@ -162,7 +162,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate (void)
             mnIndex,
             mpLastAddedEntry->msPath,
             mpLastAddedEntry->msTitle,
-            String(),
+            OUString(),
             false,
             ::boost::shared_ptr<PageObjectProvider>(
                 new TemplatePageObjectProvider(mpLastAddedEntry->msPath)),
