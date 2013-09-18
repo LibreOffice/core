@@ -971,7 +971,7 @@ void SlideSorterController::FinishEditModeChange (void)
 
 
 
-void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rsOldName)
+void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& rsOldName)
 {
     // Request a repaint for the page object whose name has changed.
     model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));

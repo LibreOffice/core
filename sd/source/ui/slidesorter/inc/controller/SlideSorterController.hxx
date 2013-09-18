@@ -209,7 +209,7 @@ public:
             The old name of the page.  The new name can be taken from the
             page object.
     */
-    void PageNameHasChanged (int nPageIndex, const String& rsOldName);
+    void PageNameHasChanged (int nPageIndex, const OUString& rsOldName);
 
     /** Provide the set of pages to be displayed in the slide sorter.  The
         GetDocumentSlides() method can be found only in the SlideSorterModel.
