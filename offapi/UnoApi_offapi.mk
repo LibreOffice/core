@@ -4318,6 +4318,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/org/freedesktop/Package
     SyncDbusSessionHelper \
 ))
 
-$(eval $(call gb_UnoApi_set_reference_rdbfile,offapi,offapi/type_reference/offapi))
+$(eval $(call gb_UnoApi_set_reference_rdbfile,offapi,udkapi/type_reference/udkapi offapi/type_reference/offapi))
 
 # vim: set noet sw=4 ts=4:

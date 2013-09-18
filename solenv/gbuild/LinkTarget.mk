@@ -850,10 +850,10 @@ gb_BUILD_HELPER_LIBS := basegfx \
 
 gb_BUILD_HELPER_TOOLS := cppumaker \
 	idlc \
-	regcompare \
 	regmerge \
 	rsc \
 	svidl \
+	unoidl-check \
 	unoidl-write \
 
 define gb_LinkTarget__is_build_lib

@@ -7,17 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,unoidl))
+$(eval $(call gb_Executable_Executable,unoidl-check))
 
-$(eval $(call gb_Module_add_targets,unoidl, \
-    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
-        Executable_unoidl-read) \
-    Library_unoidl \
+$(eval $(call gb_Executable_add_exception_objects,unoidl-check, \
+    unoidl/source/unoidl-check \
 ))
 
-$(eval $(call gb_Module_add_targets_for_build,unoidl, \
-    Executable_unoidl-check \
-    Executable_unoidl-write \
+$(eval $(call gb_Executable_use_libraries,unoidl-check, \
+    sal \
+    salhelper \
+    unoidl \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -24,7 +24,6 @@ gb_BUILD_TOOLS = \
 		javamaker \
 		makedepend \
 		propex \
-		regcompare \
 		regmerge \
 		regview \
 		rsc \
@@ -35,6 +34,8 @@ gb_BUILD_TOOLS = \
 		treex \
 		uiex \
 		ulfex \
+		unoidl-check \
+		unoidl-write \
 		xrmex \
 		$(call gb_Helper_optional_for_host,DESKTOP, \
 			gengal \

@@ -18,8 +18,7 @@ $(eval $(call gb_Module_add_targets,registry,\
 	) \
 ))
 
-# if not cross-compiling or we need this for ODK
-ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
+ifneq (,$(filter ODK,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,registry,\
 	Executable_regcompare \

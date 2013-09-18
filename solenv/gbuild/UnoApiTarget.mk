@@ -78,8 +78,8 @@ endif
 
 # UnoApiTarget
 
-gb_UnoApiTarget_REGCOMPAREDEPS := $(call gb_Executable_get_runtime_dependencies,regcompare)
-gb_UnoApiTarget_REGCOMPARECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regcompare)
+gb_UnoApiTarget_UNOIDLCHECKDEPS := $(call gb_Executable_get_runtime_dependencies,unoidl-check)
+gb_UnoApiTarget_UNOIDLCHECKCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,unoidl-check)
 gb_UnoApiTarget_REGMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,regmerge) $(call gb_Executable_get_runtime_dependencies,unoidl-write)
 gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regmerge)
 
@@ -103,10 +103,8 @@ rm -f $(1) && \
 $(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES),$(UNOAPI_DEPRDBS)) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$(2),$(true),DBc,3) \
-	&& $(gb_UnoApiTarget_REGCOMPARECOMMAND) \
-		-f -t \
-		-r1 $(UNOAPI_REFERENCE) \
-		-r2 $(1).oldformat)
+	&& $(gb_UnoApiTarget_UNOIDLCHECKCOMMAND) $(UNOAPI_REFERENCE) -- \
+		$(foreach rdb,$(4),$(call gb_UnoApiTarget_get_target,$(rdb))) $(1))
 endef
 
 define gb_UnoApiTarget__check_mode
@@ -223,8 +221,9 @@ $$(call gb_Output_error,gb_UnoApiTarget_add_reference_rdbfile: use gb_UnoApiTarg
 endef
 
 define gb_UnoApiTarget_set_reference_rdbfile
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(SRCDIR)/$(strip $(2)).rdb
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGCOMPAREDEPS)
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(foreach rdb,$(2),$(SRCDIR)/$(rdb).rdb)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(foreach rdb,$(2),$(SRCDIR)/$(rdb).rdb)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_UNOIDLCHECKDEPS)
 
 endef
 
