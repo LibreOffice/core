@@ -606,6 +606,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         mbInitializedBcp47 = !maBcp47.isEmpty();
     }
 
+    osl::MutexGuard aGuard( theMutex::get());
+
     // Prefer LangID map as find+insert needs less comparison work.
     if (mbInitializedLangID)
     {
