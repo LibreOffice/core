@@ -45,8 +45,8 @@ endif
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 # DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
-gb_CppunitTest_CPPTESTDEPS := $(call gb_Executable_get_runtime_dependencies,cppunit/cppunittester)
-gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppunit/cppunittester)
+gb_CppunitTest_CPPTESTDEPS := $(call gb_Executable_get_runtime_dependencies,cppunittester)
+gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppunittester)
 
 define gb_CppunitTest__make_args
 $(HEADLESS) \
