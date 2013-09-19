@@ -194,6 +194,12 @@ void SAL_CALL VLCPlayer::setWindowID( const intptr_t windowID )
     mPlayer.setWindow( windowID );
 }
 
+void VLCPlayer::setVideoSize( unsigned width, unsigned height )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    mPlayer.setVideoSize( width, height );
+}
+
 uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
      throw ( ::com::sun::star::uno::RuntimeException )
 {

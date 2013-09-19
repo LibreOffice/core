@@ -58,6 +58,7 @@ namespace wrapper
         bool hasVout() const;
 
         void setScale( float factor );
+        void setVideoSize( unsigned width, unsigned height );
 
         unsigned getWidth() const;
         unsigned getHeight() const;

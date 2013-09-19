@@ -197,6 +197,13 @@ namespace wrapper
         return libvlc_audio_get_mute( mPlayer );
     }
 
+    void Player::setVideoSize( unsigned width, unsigned )
+    {
+        unsigned currentWidth, currentHeight;
+        libvlc_video_get_size( mPlayer, 0, &currentWidth, &currentHeight );
+        if ( currentWidth != 0 )
+            setScale( static_cast<float>( width ) / currentWidth );
+    }
 
     void Player::setWindow( intptr_t id )
     {

@@ -44,15 +44,14 @@ void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException)
         switch ( static_cast<int>( eZoomLevel ) )
         {
         case media::ZoomLevel_ORIGINAL:
-            mPlayer.setScale( 1.0 );
-            break;
-        case media::ZoomLevel_FIT_TO_WINDOW:
+        case media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT:
+            mPlayer.setVideoSize( mSize.Width, mSize.Height );
             break;
         case media::ZoomLevel_ZOOM_1_TO_2:
-            mPlayer.setScale( 0.5 );
+            mPlayer.setVideoSize( mSize.Width / 2, mSize.Height / 2 );
             break;
         case media::ZoomLevel_ZOOM_2_TO_1:
-            mPlayer.setScale( 2.0 );
+            mPlayer.setVideoSize( mSize.Width * 2, mSize.Height * 2 );
             break;
         }
 

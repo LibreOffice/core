@@ -57,6 +57,7 @@ public:
                wrapper::Instance& instance,
                wrapper::EventHandler& eh );
 
+    void setVideoSize( unsigned width, unsigned height );
     unsigned getWidth() const;
     unsigned getHeight() const;
 
