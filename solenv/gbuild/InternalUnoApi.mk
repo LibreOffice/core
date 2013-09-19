@@ -24,10 +24,8 @@ $(call gb_InternalUnoApi_get_clean_target,%) :
 		rm -f $(call gb_InternalUnoApi_get_target,$*))
 
 define gb_InternalUnoApi_InternalUnoApi
-$(call gb_UnoApiTarget_UnoApiTarget,$(1))
+$(call gb_UnoApiTarget_UnoApiTarget,$(1),$(2))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
-
-$(call gb_UnoApiTarget_set_root,$(1),UCR)
 
 $(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_InternalUnoApi_get_target,$(1)) :| $(dir $(call gb_InternalUnoApi_get_target,$(1))).dir
@@ -77,11 +75,6 @@ endef
 
 define gb_InternalUnoApi_define_api_dependencies
 $(foreach dep,$(3),$(call gb_InternalUnoApi_define_api_dependency,$(1),$(2),$(dep)))
-
-endef
-
-define gb_InternalUnoApi_set_include
-$(call gb_UnoApiTarget_set_include,$(1),$(2))
 
 endef
 

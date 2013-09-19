@@ -1015,11 +1015,6 @@ off_t size;
                     created_line = generate_phony_line(src_relative+10, "o");
                     rc = generate_phony_file(fn, created_line);
                 }
-                else if(strncmp(fn+work_dir_len+5, "UnoApiPartTarget/", 17) == 0)
-                {
-                    created_line = generate_phony_line(src_relative+17, "urd");
-                    rc = generate_phony_file(fn, created_line);
-                }
                 else if(strncmp(fn+work_dir_len+5, "SrsPartTarget/", 14) == 0)
                 {
                     created_line = generate_phony_line(src_relative+14, "");

@@ -23,7 +23,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	i18nutil \
 	i18npool \
 	idl \
-	idlc \
 	io \
 	javaunohelper \
 	jurt \

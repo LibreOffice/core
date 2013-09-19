@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_InternalUnoApi_InternalUnoApi,scaddins))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,scaddins,scaddins/idl))
 
 $(eval $(call gb_InternalUnoApi_use_api,scaddins,\
     offapi \
@@ -18,14 +18,7 @@ $(eval $(call gb_InternalUnoApi_define_api_dependencies,scaddins,offapi,\
     udkapi \
 ))
 
-$(eval $(call gb_InternalUnoApi_set_include,scaddins,\
-    -I$(SRCDIR)/scaddins/idl \
-    -I$(SRCDIR)/offapi \
-    -I$(SRCDIR)/udkapi \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_InternalUnoApi_add_idlfiles,scaddins,scaddins/idl/com/sun/star/sheet/addin,\
+$(eval $(call gb_InternalUnoApi_add_idlfiles,scaddins,com/sun/star/sheet/addin,\
     Analysis \
     DateFunctions \
     PricingFunctions \

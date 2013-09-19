@@ -7,19 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_InternalUnoApi_InternalUnoApi,test_urp))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,test_urp,jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl))
 
 $(eval $(call gb_InternalUnoApi_use_api,test_urp,\
     udkapi \
-))
-
-$(eval $(call gb_InternalUnoApi_set_include,test_urp,\
-    -I$(SRCDIR)/udkapi \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_InternalUnoApi_add_idlfiles,test_urp,jurt/test/com/sun/star/lib/uno/protocols/urp,\
-	interfaces \
 ))
 
 # vim: set noet sw=4 ts=4:

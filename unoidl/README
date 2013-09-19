@@ -18,15 +18,12 @@ files.)  unoidl::loadProvider transparently detects the registry format for a
 given URI and instantiates the corresponding provider implementation.
 
 Executable_unoidl-write is a helper tool to convert from any of the registry
-formats to the UNOIDL format.  It is currently used at build-time.  idlc still
-generates the old format, and any new-format files (used at build-time only, or
-included in installation sets in URE or program/types/ or as part of bundled
-extensions that are created during the build and not merely included as pre-
-built .oxt files) are explicitly generated via unoidl-write.  The SDK is still
-designed to generate old-format files exclusively (especially, any non-bundled
-extensions will only contain old-format files for now; that allows to modify the
-new format further without having to worry about compatibility with multiple
-versions of that format).
+formats to the UNOIDL format.  It is used at build-time to compile UNOIDL format
+.rdb files (that are used at build-time only, or included in installation sets
+in URE or program/types/ or as part of bundled extensions that are created
+during the build and not merely included as pre-built .oxt files) from source
+.idl files.  (The SDK still uses idlc and generates legacy format .rdb files for
+now.)
 
 Executable_unoidl-read is a helper tool to convert from any of the registry
 formats to the source-file format.  It can be used manually after a LibreOffice

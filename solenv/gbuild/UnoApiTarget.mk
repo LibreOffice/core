@@ -17,202 +17,57 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# UnoApiPartTarget
-
-gb_UnoApiPartTarget_IDLCDEPS := $(call gb_Executable_get_runtime_dependencies,idlc)
-gb_UnoApiPartTarget_IDLCCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,idlc)
-
-# The .urd files are actually created by the gb_UnoApiPartTarget__command,
-# invoked for the per-directory .done files.
-# The reason why .urd files are tracked is so new files that are added are
-# picked up and cause a rebuild, even if older than the .done file (also, as a
-# convenience for users who delete them from the workdir by hand; this dummy
-# rule plus the dependency from the .done target to the .urd file plus the
-# sort/patsubst call in gb_UnoApiPartTarget__command cause command to be
-# invoked with the .idl file corresponding to the .urd in that case.
-# Touch the .urd file, so it is newer than the .done file, causing that to
-# be rebuilt and overwriting the .urd file again.
-# the .dir is for make 3.81, which ignores trailing /
-$(dir $(call gb_UnoApiPartTarget_get_target,))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_UnoApiPartTarget_get_target,%.urd) :
-	touch $@
-
-# TODO:
-# - get idlc switch "-P" (generate .urd into package dir)
-# - empty $? in headertarget?
-
-define gb_UnoApiPartTarget__command
-	$(call gb_Output_announce,$(2),$(true),IDL,2)
-	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
-		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3)))) && \
-	$(gb_UnoApiPartTarget_IDLCCOMMAND) \
-		$(INCLUDE) \
-		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
-		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose \
-		@$${RESPONSEFILE} > /dev/null && \
-	rm -f $${RESPONSEFILE} && \
-	touch $(1)
-
-endef
-
-# If idlc changed, rebuild everything; otherwise just the changed files.
-# In order for this to work the .urd files need to have a dependency on
-# idlc as well so their dummy rule fires if that changes.
-$(call gb_UnoApiPartTarget_get_target,%.done) : $(gb_UnoApiPartTarget_IDLCDEPS)
-	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCDEPS),$(if $(filter $(gb_UnoApiPartTarget_IDLCDEPS),$?),$^,$?)))
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(dir $(call gb_UnoApiPartTarget_get_dep_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_UnoApiPartTarget_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_UnoApiPartTarget_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@)
-
-endif
-
 # UnoApiTarget
+
+gb_UnoApiTarget_UNOIDLWRITEDEPS := $(call gb_Executable_get_runtime_dependencies,unoidl-write)
+gb_UnoApiTarget_UNOIDLWRITECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,unoidl-write)
 
 gb_UnoApiTarget_UNOIDLCHECKDEPS := $(call gb_Executable_get_runtime_dependencies,unoidl-check)
 gb_UnoApiTarget_UNOIDLCHECKCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,unoidl-check)
-gb_UnoApiTarget_REGMERGEDEPS := $(call gb_Executable_get_runtime_dependencies,regmerge) $(call gb_Executable_get_runtime_dependencies,unoidl-write)
-gb_UnoApiTarget_REGMERGECOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,regmerge)
 
-gb_UnoApiTarget_TYPESRDB := $(call gb_UnoApiTarget_get_target,types)
-
-define gb_UnoApiTarget__command_impl
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(1).oldformat $(2) $(3)) && \
-$(gb_UnoApiTarget_REGMERGECOMMAND) @$${RESPONSEFILE} && \
-rm -f $${RESPONSEFILE} && \
-SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin \
-	$(call gb_Executable_get_command,unoidl-write) \
-	$(foreach rdb,$(4),$(call gb_UnoApiTarget_get_target,$(rdb))) \
-	$(1).oldformat $(1)
-endef
-
-# first delete target rdb file to detect problems when removing IDL files
 define gb_UnoApiTarget__command
 $(call gb_Output_announce,$(2),$(true),UNO,4)
-mkdir -p $(dir $(1)) && \
-rm -f $(1) && \
-$(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES),$(UNOAPI_DEPRDBS)) \
+mkdir -p $(dir $(1)) \
+$(if $(UNOAPI_ENTITIES), \
+	&& RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(UNOAPI_ENTITIES))) \
+&& $(gb_UnoApiTarget_UNOIDLWRITECOMMAND) \
+	$(foreach rdb,$(UNOAPI_DEPRDBS),$(call gb_UnoApiTarget_get_target,$(rdb))) \
+	$(SRCDIR)/$(gb_UnoApiTarget_REG_$(2)) $(if $(UNOAPI_ENTITIES),@$${RESPONSEFILE}) $(1) \
+$(if $(UNOAPI_ENTITIES),&& rm -f $${RESPONSEFILE}) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$(2),$(true),DBc,3) \
 	&& $(gb_UnoApiTarget_UNOIDLCHECKCOMMAND) $(UNOAPI_REFERENCE) -- \
-		$(foreach rdb,$(4),$(call gb_UnoApiTarget_get_target,$(rdb))) $(1))
+		$(foreach rdb,$(UNOAPI_DEPRDBS),$(call gb_UnoApiTarget_get_target,$(rdb))) \
+		$(1))
 endef
 
-define gb_UnoApiTarget__check_mode
-$(if $(UNOAPI_FILES),,$(error No IDL files have been set for the rdb file))
-$(if $(UNOAPI_ROOT),,$(error No root has been set for the rdb file))
-endef
-
-# This recipe actually also builds the dep-target as a side-effect, which
-# is an optimization to reduce incremental build time.
-# Note this requires the variable UNOAPI_DEPFILES to be in sync on both targets.
 $(call gb_UnoApiTarget_get_target,%) :
-ifeq ($(gb_FULLDEPS),$(true))
-	$(call gb_UnoApiTarget__command_dep,$(call gb_UnoApiTarget_get_dep_target,$*),$*)
-endif
-	$(call gb_UnoApiTarget__check_mode)
 	$(call gb_UnoApiTarget__command,$@,$*)
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
 $(call gb_UnoApiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,4)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -rf $(call gb_UnoApiTarget_get_target,$*) \
-			$(call gb_UnoApiTarget_get_target,$*).oldformat \
-			$(call gb_UnoApiTarget_get_dep_target,$*) \
-			$(basename $(call gb_UnoApiPartTarget_get_dep_target,$*)) \
-			$(call gb_UnoApiPartTarget_get_target,$*))
-
-# cat the deps of all IDLs in one file, then we need only open that one file
-define gb_UnoApiTarget__command_dep
-$(call gb_Output_announce,IDL:$(2),$(true),DEP,1)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
-		$(foreach idl,$(UNOAPI_DEPFILES),$(call gb_UnoApiPartTarget_get_dep_target,$(idl)))) && \
-	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
-	rm -f $${RESPONSEFILE}
-
-endef
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(dir $(call gb_UnoApiTarget_get_dep_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_UnoApiTarget_get_dep_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
-	$(call gb_UnoApiTarget__command_dep,$@,$*)
-
-endif
+		rm -rf $(call gb_UnoApiTarget_get_target,$*))
 
 define gb_UnoApiTarget_UnoApiTarget
-$(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES :=
+gb_UnoApiTarget_REG_$(1) := $(2)
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ENTITIES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPRDBS :=
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPFILES :=
-$(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_DEPFILES :=
--include $(call gb_UnoApiTarget_get_dep_target,$(1))
-$(call gb_UnoApiTarget_get_dep_target,$(1)) :| $(dir $(call gb_UnoApiTarget_get_dep_target,$(1))).dir
-endif
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_UNOIDLWRITEDEPS)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(SRCDIR)/$(2) # may be dir, though
 
 endef
 
-define gb_UnoApiTarget__add_urdfile
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES += $(2)
-$(call gb_UnoApiTarget_get_target,$(1)) : $(2)
-
-endef
-
-define gb_UnoApiTarget__add_idlfile
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-$(call gb_UnoApiTarget__add_urdfile,$(1),$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd))
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) \
-	: $(gb_UnoApiPartTarget_IDLCDEPS) \
-	| $(call gb_UnoApiPartTarget_get_target,$(2)/.dir)
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPFILES += $(2)/$(3)
-$(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_DEPFILES += $(2)/$(3)
-$(call gb_UnoApiTarget_get_dep_target,$(1)) : \
-	$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))
-$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3)) :| $(dir $(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))).dir
-endif
-
-endef
-
-define gb_UnoApiTarget__add_idlfiles
-$(call gb_UnoApiTarget_get_target,$(1)) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
-	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
+define gb_UnoApiTarget_add_idlfile
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ENTITIES += $(subst /,.,$(2))$(if $(2),.)$(3)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(SRCDIR)/$(gb_UnoApiTarget_REG_$(1))/$(2)/$(3).idl
 
 endef
 
 define gb_UnoApiTarget_add_idlfiles
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
-$(call gb_UnoApiTarget__add_idlfiles,$(1),$(2),$(3))
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGEDEPS)
-
-endef
-
-define gb_UnoApiTarget_add_idlfile
-$(call gb_UnoApiTarget__add_idlfile,$(1),$(2),$(3))
 
 endef
 
@@ -220,16 +75,6 @@ define gb_UnoApiTarget_set_reference_rdbfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(2)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(2)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_UNOIDLCHECKDEPS)
-
-endef
-
-define gb_UnoApiTarget_set_include
-$(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE := $(2)
-
-endef
-
-define gb_UnoApiTarget_set_root
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT := $(2)
 
 endef
 
@@ -354,13 +199,6 @@ $(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$(1))/%.hdl :| \
 $(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$(1))/%.hpp :| \
 		$(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,$(1))
 	touch $$@
-
-endef
-
-# ensure that new urd triggers the dummy rule to rebuild the headers
-define gb_UnoApiHeadersTarget_add_headerfile
-$(call gb_UnoApiHeadersTarget_get_dir,$(1))/$(3) : \
-	$(call gb_UnoApiPartTarget_get_target,$(basename $(2)).urd)
 
 endef
 

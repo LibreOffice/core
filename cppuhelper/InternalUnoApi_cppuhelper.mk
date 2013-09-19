@@ -7,18 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_InternalUnoApi_InternalUnoApi,cppuhelper))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,cppuhelper,cppuhelper/unotypes))
 
 $(eval $(call gb_InternalUnoApi_use_api,cppuhelper,\
     udkapi \
 ))
 
-$(eval $(call gb_InternalUnoApi_set_include,cppuhelper,\
-    -I$(SRCDIR)/udkapi \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_InternalUnoApi_add_idlfiles,cppuhelper,cppuhelper/unotypes/cppuhelper/detail,\
+$(eval $(call gb_InternalUnoApi_add_idlfiles,cppuhelper,cppuhelper/detail,\
     XExceptionThrower \
 ))
 

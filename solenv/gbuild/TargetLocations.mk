@@ -196,7 +196,6 @@ gb_UnoApiHeadersTarget_get_real_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/nor
 gb_UnoApiHeadersTarget_get_bootstrap_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/$(call gb_UnoApiHeadersTarget_select_variant,$(1),bootstrap).done
 gb_UnoApiHeadersTarget_get_comprehensive_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/$(call gb_UnoApiHeadersTarget_select_variant,$(1),comprehensive).done
 gb_UnoApiHeadersTarget_get_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/$(call gb_UnoApiHeadersTarget_select_variant,$(1),normal).done
-gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
 gb_UnpackedTarball_get_dir = $(WORKDIR)/UnpackedTarball/$(1)
 gb_UnpackedTarball_get_pristine_dir = $(WORKDIR)/UnpackedTarball/$(1).org
 gb_UnpackedTarball_get_final_target = $(WORKDIR)/UnpackedTarball/$(1).update
@@ -334,8 +333,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	SdiTarget \
 	SrsPartTarget \
 	SrsTarget \
-	UnoApiTarget \
-	UnoApiPartTarget \
 ))
 
 # other getters

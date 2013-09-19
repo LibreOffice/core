@@ -849,7 +849,6 @@ gb_BUILD_HELPER_LIBS := basegfx \
 	xmlreader \
 
 gb_BUILD_HELPER_TOOLS := cppumaker \
-	idlc \
 	regmerge \
 	rsc \
 	svidl \

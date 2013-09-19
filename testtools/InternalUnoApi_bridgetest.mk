@@ -7,19 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_InternalUnoApi_InternalUnoApi,bridgetest))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,bridgetest,testtools/source/bridgetest/idl/bridgetest.idl))
 
 $(eval $(call gb_InternalUnoApi_use_api,bridgetest,\
     udkapi \
-))
-
-$(eval $(call gb_InternalUnoApi_set_include,bridgetest,\
-    -I$(SRCDIR)/udkapi \
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_InternalUnoApi_add_idlfiles,bridgetest,testtools/source/bridgetest/idl,\
-    bridgetest \
 ))
 
 # vim:set noet sw=4 ts=4:

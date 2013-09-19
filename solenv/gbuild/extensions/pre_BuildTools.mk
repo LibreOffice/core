@@ -19,13 +19,10 @@ gb_BUILD_TOOLS = \
 		gendict \
 		genindex_data \
 		helpex \
-		idlc \
 		idxdict \
 		javamaker \
 		makedepend \
 		propex \
-		regmerge \
-		regview \
 		rsc \
 		saxparser \
 		stringex \

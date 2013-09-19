@@ -15,14 +15,12 @@ $(call gb_UnoApi_get_clean_target,%) :
 		rm -f $(call gb_UnoApi_get_target,$*))
 
 define gb_UnoApi_UnoApi
-$(call gb_UnoApiTarget_UnoApiTarget,$(1))
+$(call gb_UnoApiTarget_UnoApiTarget,$(1),$(2))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 ifneq ($(gb_UnoApi_ENABLE_INSTALL),)
 $(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
 $(call gb_Package_set_outdir,$(1)_idl,$(INSTDIR))
 endif
-
-$(call gb_UnoApiTarget_set_root,$(1),UCR)
 
 $(call gb_UnoApi_get_target,$(1)) :| $(dir $(call gb_UnoApi_get_target,$(1))).dir
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
@@ -57,7 +55,7 @@ $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1
 endef
 
 define gb_UnoApi__add_idlfile
-$(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,$(gb_Package_SDKDIRNAME)/idl/%,$(2)),$(2))
+$(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,$(gb_Package_SDKDIRNAME)/idl/%,$(2).idl),$(2).idl)
 
 endef
 
@@ -68,72 +66,43 @@ gb_UnoApi__add_idlfile :=
 
 endif
 
-define gb_UnoApi__add_headerfile_impl
-$(call gb_UnoApiHeadersTarget_add_headerfile,$(1),$(2),$(3))
-
-endef
-
-# Note: the expression in 3rd arg of call of gb_UnoApi__add_headerfile_impl
-# removes the leftmost dir in the subpath .-)
-define gb_UnoApi__add_headerfile
-$(call gb_UnoApi__add_headerfile_impl,$(1),$(2),$(subst $() $(),/,$(wordlist 2,$(words $(subst /, ,$(2))),$(subst /, ,$(2)))))
-
-endef
-
-define gb_UnoApi__add_idlfile_noheader
-$(call gb_UnoApi__add_idlfile,$(1),$(2).idl)
-
-endef
-
-define gb_UnoApi__add_idlfile_nohdl
-$(call gb_UnoApi__add_idlfile_noheader,$(1),$(2))
-$(call gb_UnoApi__add_headerfile,$(1),$(2).hpp)
-
-endef
-
-define gb_UnoApi__add_idlfile_full
-$(call gb_UnoApi__add_idlfile_nohdl,$(1),$(2))
-$(call gb_UnoApi__add_headerfile,$(1),$(2).hdl)
-
-endef
-
 # For enum types, plain struct types, polymorphic struct type templates,
 # exception types, interface types, typedefs, and constant groups:
 define gb_UnoApi_add_idlfile
 $(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
-$(call gb_UnoApi__add_idlfile_full,$(1),$(2)/$(3))
+$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(3))
 
 endef
 
 define gb_UnoApi_add_idlfiles
 $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
-$(foreach idl,$(3),$(call gb_UnoApi__add_idlfile_full,$(1),$(2)/$(idl)))
+$(foreach idl,$(3),$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(idl)))
 
 endef
 
 # For single-interface--based services and interface-based singletons:
 define gb_UnoApi_add_idlfile_nohdl
 $(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
-$(call gb_UnoApi__add_idlfile_nohdl,$(1),$(2)/$(3))
+$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(3))
 
 endef
 
 define gb_UnoApi_add_idlfiles_nohdl
 $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
-$(foreach idl,$(3),$(call gb_UnoApi__add_idlfile_nohdl,$(1),$(2)/$(idl)))
+$(foreach idl,$(3),$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(idl)))
 
 endef
 
 # For accumulation-based services and service-based singletons:
 define gb_UnoApi_add_idlfile_noheader
 $(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
-$(call gb_UnoApi__add_idlfile_noheader,$(1),$(2)/$(3))
+$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(3))
 
 endef
 
 define gb_UnoApi_add_idlfiles_noheader
 $(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
-$(foreach idl,$(3),$(call gb_UnoApi__add_idlfile_noheader,$(1),$(2)/$(idl)))
+$(foreach idl,$(3),$(call gb_UnoApi__add_idlfile,$(1),$(gb_UnoApiTarget_REG_$(1))/$(2)/$(idl)))
 
 endef
 
@@ -151,11 +120,6 @@ endef
 
 define gb_UnoApi_set_reference_rdbfile
 $(call gb_UnoApiTarget_set_reference_rdbfile,$(1),$(2))
-
-endef
-
-define gb_UnoApi_set_include
-$(call gb_UnoApiTarget_set_include,$(1),$(2))
 
 endef
 

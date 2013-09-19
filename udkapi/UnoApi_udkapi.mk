@@ -17,22 +17,17 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_UnoApi_UnoApi,udkapi))
+$(eval $(call gb_UnoApi_UnoApi,udkapi,udkapi))
 
 $(eval $(call gb_UnoApi_install,udkapi,$(LIBO_URE_SHARE_FOLDER)/misc/types.rdb))
 
 $(eval $(call gb_UnoApi_package_idlfiles,udkapi))
 
-$(eval $(call gb_UnoApi_set_include,udkapi,\
-	$$(INCLUDE) \
-	-I$(SRCDIR)/udkapi \
-))
 
-
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/beans,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/beans,\
 	PropertySet \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/bridge,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/bridge,\
 	Bridge \
 	IiopBridge \
 	OleApplicationRegistration \
@@ -42,12 +37,12 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/bridge,
 	OleObjectFactory \
 	UrpBridge \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/bridge/oleautomation,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/bridge/oleautomation,\
 	ApplicationRegistration \
 	BridgeSupplier \
 	Factory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/io,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/io,\
 	DataInputStream \
 	DataOutputStream \
 	MarkableInputStream \
@@ -56,50 +51,50 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/io,\
 	ObjectOutputStream \
 	Pump \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/lang,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/lang,\
 	MultiServiceFactory \
 	RegistryServiceManager \
 	ServiceManager \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/loader,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/loader,\
 	Dynamic \
 	Java \
 	Java2 \
 	SharedLibrary \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/reflection,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/reflection,\
 	CoreReflection \
 	TypeDescriptionManager \
 	TypeDescriptionProvider \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/registry,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/registry,\
 	DefaultRegistry \
 	NestedRegistry \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/script,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/script,\
 	Engine \
 	JavaScript \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/util,\
 	BootstrapMacroExpander \
 ))
 
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/beans,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/beans,\
 	PropertyBag \
 	Introspection \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/bridge,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/bridge,\
 	BridgeFactory \
 	UnoUrlResolver \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/connection,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/connection,\
 	Acceptor \
 	Connector \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/container,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/container,\
 	EnumerableMap \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/io,\
 	Pipe \
 	SequenceInputStream \
 	SequenceOutputStream \
@@ -107,44 +102,44 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
 	TextInputStream \
 	TextOutputStream \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/java,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/java,\
 	JavaVirtualMachine \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/reflection,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/reflection,\
 	theCoreReflection \
 	ProxyFactory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/registry,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/registry,\
 	ImplementationRegistration \
 	SimpleRegistry \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/security,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/security,\
 	AccessController \
 	Policy \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/script,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/script,\
 	AllListenerAdapter \
 	Converter \
 	Invocation \
 	InvocationAdapterFactory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/uno,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/uno,\
 	NamingService \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/uri,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/uri,\
 	ExternalUriReferenceTranslator \
 	UriReferenceFactory \
 	UriSchemeParser_vndDOTsunDOTstarDOTexpand \
 	UriSchemeParser_vndDOTsunDOTstarDOTscript \
 	VndSunStarPkgUrlReferenceFactory \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/util,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/util,\
 	MacroExpander \
 	theMacroExpander \
 ))
 
 
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/beans,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/beans,\
 	Ambiguous \
 	Defaulted \
 	GetDirectPropertyTolerantResult \
@@ -200,7 +195,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/beans,\
 	XTolerantMultiPropertySet \
 	XVetoableChangeListener \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/bridge,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/bridge,\
 	BridgeExistsException \
 	InvalidProtocolChangeException \
 	ModelDependent \
@@ -214,7 +209,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/bridge,\
 	XProtocolProperties \
 	XUnoUrlResolver \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/bridge/oleautomation,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/bridge/oleautomation,\
 	Currency \
 	Date \
 	Decimal \
@@ -223,7 +218,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/bridge/oleautoma
 	SCode \
 	XAutomationObject \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/connection,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/connection,\
 	AlreadyAcceptingException \
 	ConnectionSetupException \
 	NoConnectException \
@@ -234,7 +229,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/connection,\
 	XConnectionBroadcaster \
 	XConnector \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/container,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/container,\
 	ContainerEvent \
 	ElementExistException \
 	NoSuchElementException \
@@ -273,7 +268,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/container,\
 	XStringKeyMap \
 	XUniqueIDAccess \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/io,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/io,\
 	AlreadyConnectedException \
 	BufferSizeExceededException \
 	ConnectException \
@@ -319,7 +314,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/io,\
 	XTruncate \
 	XXMLExtractor \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/java,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/java,\
 	InvalidJavaSettingsException \
 	JavaDisabledException \
 	JavaInitializationException \
@@ -332,7 +327,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/java,\
 	XJavaThreadRegister_11 \
 	XJavaVM \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/lang,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/lang,\
 	ArrayIndexOutOfBoundsException \
 	ClassNotFoundException \
 	DisposedException \
@@ -369,11 +364,11 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/lang,\
 	XTypeProvider \
 	XUnoTunnel \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/loader,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/loader,\
 	CannotActivateFactoryException \
 	XImplementationLoader \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/reflection,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/reflection,\
 	FieldAccessMode \
 	InvalidTypeNameException \
 	InvocationTargetException \
@@ -419,7 +414,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/reflection,\
 	XTypeDescriptionEnumerationAccess \
 	XUnionTypeDescription \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/registry,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/registry,\
 	CannotRegisterImplementationException \
 	InvalidRegistryException \
 	InvalidValueException \
@@ -431,7 +426,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/registry,\
 	XRegistryKey \
 	XSimpleRegistry \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/script,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/script,\
 	AllEventObject \
 	ArrayWrapper \
 	BasicErrorException \
@@ -475,7 +470,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/script,\
 	XStarBasicModuleInfo \
 	XTypeConverter \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/security,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/security,\
 	AccessControlException \
 	AllPermission \
 	RuntimePermission \
@@ -484,7 +479,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/security,\
 	XAction \
 	XPolicy \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/task,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/task,\
 	XInteractionAbort \
 	XInteractionContinuation \
 	XInteractionHandler \
@@ -492,7 +487,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/task,\
 	XInteractionRequest \
 	XInteractionRetry \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/uno,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uno,\
 	DeploymentException \
 	Exception \
 	RuntimeException \
@@ -509,7 +504,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/uno,\
 	XUnloadingPreference \
 	XWeak \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/uri,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/uri,\
 	RelativeUriExcessParentSegments \
 	XExternalUriReferenceTranslator \
 	XUriReference \
@@ -521,7 +516,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/uri,\
 	XVndSunStarScriptUrl \
 	XVndSunStarScriptUrlReference \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,udkapi,udkapi/com/sun/star/util,\
+$(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/util,\
 	XMacroExpander \
 	XVeto \
 ))

@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_InternalUnoApi_InternalUnoApi,touch))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,touch,touch/idl))
 
 $(eval $(call gb_InternalUnoApi_use_api,touch,\
 	udkapi \
@@ -17,13 +17,7 @@ $(eval $(call gb_InternalUnoApi_define_api_dependencies,touch, \
 	udkapi \
 ))
 
-$(eval $(call gb_InternalUnoApi_set_include,touch,\
-	-I$(SRCDIR)/touch/idl \
-	-I$(SRCDIR)/udkapi \
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_InternalUnoApi_add_idlfiles,touch,touch/idl/org/libreoffice/touch,\
+$(eval $(call gb_InternalUnoApi_add_idlfiles,touch,org/libreoffice/touch,\
 	Document \
 	XDocument \
 	XDocumentRenderCallback \
