@@ -210,6 +210,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         bool bColSel = _GetCrsr()->IsColumnSelection();
         if( bColSel && pInsDoc->IsClipBoard() )
             pInsDoc->SetColumnSelection( true );
+        bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
         {
         FOREACHPAM_START(this)
 
@@ -228,7 +229,16 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             }
             else
             {
-                bRet = GetDoc()->CopyRange( *PCURCRSR, aPos, false ) || bRet;
+                // Make a copy, so that in case we need to adjust the selection
+                // for the purpose of copying, our shell cursor is not touched.
+                // (Otherwise we would have to restore it.)
+                SwPaM aPaM(*PCURCRSR);
+                if (bSelectAll)
+                    // Selection starts at the first para of the first cell,
+                    // but we want to copy the table and the start node before
+                    // the first cell as well.
+                    aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
+                bRet = GetDoc()->CopyRange( aPaM, aPos, false ) || bRet;
             }
 
         FOREACHPAM_END()
