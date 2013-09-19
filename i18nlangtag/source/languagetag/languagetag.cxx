@@ -81,6 +81,21 @@ static const KnownTagSet & getKnowns()
 }
 
 
+namespace {
+struct compareIgnoreAsciiCaseLess
+{
+    bool operator()( const OUString& r1, const OUString& r2 ) const
+    {
+        return r1.compareToIgnoreAsciiCase( r2) < 0;
+    }
+};
+typedef ::std::map< OUString, LanguageTag::ImplPtr, compareIgnoreAsciiCaseLess > MapBcp47;
+typedef ::std::map< LanguageType, LanguageTag::ImplPtr > MapLangID;
+struct theMapBcp47 : public rtl::Static< MapBcp47, theMapBcp47 > {};
+struct theMapLangID : public rtl::Static< MapLangID, theMapLangID > {};
+}
+
+
 /* TODO: this is how on-the-fly LangID assignment will work, now implement
  * usage and registration. */
 #if 0
@@ -567,11 +582,89 @@ LanguageTag::~LanguageTag()
 }
 
 
-LanguageTagImpl* LanguageTag::getImpl() const
+LanguageTag::ImplPtr LanguageTag::registerImpl() const
+{
+    // Do not use LanguageTag::convert...() methods here as they access
+    // getImpl() and syncFromImpl()
+
+    ImplPtr pImpl;
+
+    // Do not register unresolved system locale.
+    if (mbSystemLocale && !mbInitializedLangID)
+    {
+        mnLangID = MsLangId::getRealLanguage( LANGUAGE_SYSTEM);
+        mbInitializedLangID = true;
+    }
+    if (!mbInitializedBcp47 && mbInitializedLocale)
+    {
+        if (maLocale.Language == I18NLANGTAG_QLT)
+            maBcp47 = maLocale.Variant;
+        else if (!maLocale.Language.isEmpty() && !maLocale.Country.isEmpty())
+            maBcp47 = maLocale.Language + "-" + maLocale.Country;
+        else
+            maBcp47 = maLocale.Language;
+        mbInitializedBcp47 = !maBcp47.isEmpty();
+    }
+
+    // Prefer LangID map as find+insert needs less comparison work.
+    if (mbInitializedLangID)
+    {
+        MapLangID& rMap = theMapLangID::get();
+        MapLangID::const_iterator it( rMap.find( mnLangID));
+        if (it != rMap.end())
+            pImpl = (*it).second;
+        else
+        {
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for mnLangID 0x" << ::std::hex << mnLangID);
+            pImpl.reset( new LanguageTagImpl( *this));
+            rMap.insert( ::std::make_pair( mnLangID, pImpl));
+        }
+        // Try to cross-insert a previously uninitialized tag string.
+        if (!pImpl->maBcp47.isEmpty())
+        {
+            if (theMapBcp47::get().insert( ::std::make_pair( pImpl->maBcp47, pImpl)).second)
+            {
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted tag '" << pImpl->maBcp47 << "'"
+                        << " for 0x" << ::std::hex << mnLangID);
+            }
+        }
+    }
+    else if (!maBcp47.isEmpty())
+    {
+        MapBcp47& rMap = theMapBcp47::get();
+        MapBcp47::const_iterator it( rMap.find( maBcp47));
+        if (it != rMap.end())
+            pImpl = (*it).second;
+        else
+        {
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for tag '" << maBcp47 << "'");
+            pImpl.reset( new LanguageTagImpl( *this));
+            rMap.insert( ::std::make_pair( maBcp47, pImpl));
+        }
+        // Try to cross-insert a previously uninitialized LangID.
+        if (pImpl->mbInitializedLangID)
+        {
+            if (theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)).second)
+            {
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted 0x"
+                        << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+            }
+        }
+    }
+    else
+    {
+        SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for mnLangID " << ::std::hex << mnLangID );
+        pImpl.reset( new LanguageTagImpl( *this));
+    }
+    return pImpl;
+}
+
+
+LanguageTag::ImplPtr LanguageTag::getImpl() const
 {
     if (!mpImpl)
-        mpImpl.reset( new LanguageTagImpl( *this));
-    return mpImpl.get();
+        mpImpl = registerImpl();
+    return mpImpl;
 }
 
 
@@ -824,7 +917,7 @@ bool LanguageTagImpl::synCanonicalize()
 
 void LanguageTag::syncFromImpl()
 {
-    LanguageTagImpl* pImpl = getImpl();
+    ImplPtr pImpl = getImpl();
     mbInitializedBcp47  = pImpl->mbInitializedBcp47;
     maBcp47             = pImpl->maBcp47;
     mbInitializedLocale = pImpl->mbInitializedLocale;
@@ -863,7 +956,7 @@ void LanguageTagImpl::convertLocaleToBcp47()
 
 void LanguageTag::convertLocaleToBcp47()
 {
-    LanguageTagImpl* pImpl = getImpl();
+    ImplPtr pImpl = getImpl();
     pImpl->convertLocaleToBcp47();
     maBcp47 = pImpl->maBcp47;
     mbInitializedBcp47 = pImpl->mbInitializedBcp47;
@@ -886,7 +979,7 @@ void LanguageTagImpl::convertLocaleToLang()
 
 void LanguageTag::convertLocaleToLang()
 {
-    LanguageTagImpl* pImpl = getImpl();
+    ImplPtr pImpl = getImpl();
     pImpl->convertLocaleToLang();
     mnLangID = pImpl->mnLangID;
     mbInitializedLangID = pImpl->mbInitializedLangID;
@@ -914,7 +1007,7 @@ void LanguageTagImpl::convertBcp47ToLocale()
 
 void LanguageTag::convertBcp47ToLocale()
 {
-    LanguageTagImpl* pImpl = getImpl();
+    ImplPtr pImpl = getImpl();
     pImpl->convertBcp47ToLocale();
     maLocale = pImpl->maLocale;
     mbInitializedLocale = pImpl->mbInitializedLocale;
@@ -939,7 +1032,7 @@ void LanguageTagImpl::convertBcp47ToLang()
 
 void LanguageTag::convertBcp47ToLang()
 {
-    LanguageTagImpl* pImpl = getImpl();
+    ImplPtr pImpl = getImpl();
     pImpl->convertBcp47ToLang();
     maLocale = pImpl->maLocale;
     mbInitializedLocale = pImpl->mbInitializedLocale;
@@ -963,7 +1056,7 @@ void LanguageTagImpl::convertLangToLocale()
 
 void LanguageTag::convertLangToLocale()
 {
-    LanguageTagImpl* pImpl = getImpl();
+    ImplPtr pImpl = getImpl();
     pImpl->convertLangToLocale();
     maLocale = pImpl->maLocale;
     mbInitializedLocale = pImpl->mbInitializedLocale;
@@ -981,7 +1074,7 @@ void LanguageTagImpl::convertLangToBcp47()
 
 void LanguageTag::convertLangToBcp47()
 {
-    LanguageTagImpl* pImpl = getImpl();
+    ImplPtr pImpl = getImpl();
     pImpl->convertLangToBcp47();
     maLocale = pImpl->maLocale;
     mbInitializedLocale = pImpl->mbInitializedLocale;

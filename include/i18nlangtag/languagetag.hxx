@@ -484,19 +484,22 @@ public:
      */
     static com::sun::star::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
 
+    typedef ::boost::shared_ptr< LanguageTagImpl > ImplPtr;
+
 private:
 
-    mutable com::sun::star::lang::Locale            maLocale;
-    mutable OUString                                maBcp47;
-    mutable LanguageType                            mnLangID;
-    mutable boost::shared_ptr< LanguageTagImpl >    mpImpl;
-            bool                                    mbSystemLocale      : 1;
-    mutable bool                                    mbInitializedBcp47  : 1;
-    mutable bool                                    mbInitializedLocale : 1;
-    mutable bool                                    mbInitializedLangID : 1;
-            bool                                    mbIsFallback        : 1;
+    mutable com::sun::star::lang::Locale    maLocale;
+    mutable OUString                        maBcp47;
+    mutable LanguageType                    mnLangID;
+    mutable ImplPtr                         mpImpl;
+            bool                            mbSystemLocale      : 1;
+    mutable bool                            mbInitializedBcp47  : 1;
+    mutable bool                            mbInitializedLocale : 1;
+    mutable bool                            mbInitializedLangID : 1;
+            bool                            mbIsFallback        : 1;
 
-    LanguageTagImpl*    getImpl() const;
+    ImplPtr             getImpl() const;
+    ImplPtr             registerImpl() const;
     void                syncFromImpl();
 
     void                convertLocaleToBcp47();
