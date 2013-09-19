@@ -289,8 +289,6 @@ private:
     OUString            getRegionFromLangtag();
     OUString            getVariantsFromLangtag();
 
-    void                resetVars();
-
     /** Obtain Language, Script, Country and Variants via simpleExtract() and
         assign them to the cached variables if successful.
 
@@ -416,42 +414,6 @@ LanguageTagImpl::~LanguageTagImpl()
         lt_tag_unref( mpImplLangtag);
         theDataRef::get().decRef();
     }
-}
-
-
-void LanguageTagImpl::resetVars()
-{
-    if (mpImplLangtag)
-    {
-        lt_tag_unref( mpImplLangtag);
-        mpImplLangtag = NULL;
-        theDataRef::get().decRef();
-    }
-
-    maLocale            = lang::Locale();
-    if (!maBcp47.isEmpty())
-        maBcp47         = OUString();
-    if (!maCachedLanguage.isEmpty())
-        maCachedLanguage= OUString();
-    if (!maCachedScript.isEmpty())
-        maCachedScript  = OUString();
-    if (!maCachedCountry.isEmpty())
-        maCachedCountry = OUString();
-    if (!maCachedVariants.isEmpty())
-        maCachedVariants = OUString();
-    mnLangID            = LANGUAGE_DONTKNOW;
-    meIsValid           = DECISION_DONTKNOW;
-    meIsIsoLocale       = DECISION_DONTKNOW;
-    meIsIsoODF          = DECISION_DONTKNOW;
-    meIsLiblangtagNeeded= DECISION_DONTKNOW;
-    mbSystemLocale      = true;
-    mbInitializedBcp47  = false;
-    mbInitializedLocale = false;
-    mbInitializedLangID = false;
-    mbCachedLanguage    = false;
-    mbCachedScript      = false;
-    mbCachedCountry     = false;
-    mbCachedVariants    = false;
 }
 
 
