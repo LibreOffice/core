@@ -1338,12 +1338,12 @@ void LanguageTag::getIsoLanguageScriptCountry( OUString& rLanguage, OUString& rS
 namespace
 {
 
-bool isLowerAscii( sal_Unicode c )
+inline bool isLowerAscii( sal_Unicode c )
 {
     return 'a' <= c && c <= 'z';
 }
 
-bool isUpperAscii( sal_Unicode c )
+inline bool isUpperAscii( sal_Unicode c )
 {
     return 'A' <= c && c <= 'Z';
 }
