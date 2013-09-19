@@ -368,13 +368,21 @@ bool OResultSet::isNull(const sal_Int32 nColumnIndex)
     return false;
 }
 
-ORowSetValue OResultSet::retrieveConvertibleValue(const sal_Int32 nColumnIndex)
+template <typename T>
+T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    if ((m_bWasNull = isNull(nColumnIndex)))
+        return T();
 
-    checkColumnIndex(nColumnIndex);
-    checkRowIndex();
+    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
+        return *((T*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+    else
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
+}
+
+template <>
+ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*nType*/)
+{
     // See http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/Using_the_getXXX_Methods
     // (bottom of page) for a chart of possible conversions, we should allow all
     // of these -- Blob/Clob will probably need some specialist handling especially
@@ -399,37 +407,23 @@ ORowSetValue OResultSet::retrieveConvertibleValue(const sal_Int32 nColumnIndex)
             return getFloat(nColumnIndex);
         case SQL_TIMESTAMP:
             return getTimestamp(nColumnIndex);
-//     case SQL_BLOB:
-//         return DataType::BLOB;
-//     case SQL_ARRAY:
-//         return DataType::ARRAY;
         case SQL_TYPE_TIME:
             return getTime(nColumnIndex);
         case SQL_TYPE_DATE:
             return getTime(nColumnIndex);
         case SQL_INT64:
             return getLong(nColumnIndex);
+        case SQL_BLOB:
         case SQL_NULL:
-            assert(false); // We shouldn't really be returning this ever since
-            // detection is separate.
-//     case SQL_QUAD:      // Is a "Blob ID" according to the docs
-//         return 0;       // TODO: verify
+        case SQL_QUAD:
+        case SQL_ARRAY:
+            // TODO: these are all invalid conversions, so maybe we should
+            // throw an exception?
+            return ORowSetValue();
         default:
             assert(false);
             return ORowSetValue();
     }
-}
-
-template <typename T>
-T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
-{
-    if ((m_bWasNull = isNull(nColumnIndex)))
-        return T();
-
-    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
-        return *((T*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
-    else
-        return retrieveConvertibleValue(nColumnIndex);
 }
 
 template <>
@@ -446,7 +440,7 @@ Date OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
     }
     else
     {
-        return retrieveConvertibleValue(nColumnIndex);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
     }
 }
 
@@ -466,7 +460,7 @@ Time OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*n
     }
     else
     {
-        return retrieveConvertibleValue(nColumnIndex);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
     }
 }
 
@@ -487,16 +481,13 @@ DateTime OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     }
     else
     {
-        return retrieveConvertibleValue(nColumnIndex);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
     }
 }
 
 template <>
 OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*nType*/)
 {
-    if ((m_bWasNull = isNull(nColumnIndex)))
-        return OUString();
-
     // &~1 to remove the "can contain NULL" indicator
     int aSqlType = m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1;
     if (aSqlType == SQL_TEXT )
@@ -516,7 +507,7 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     }
     else
     {
-        return retrieveConvertibleValue(nColumnIndex);
+        return retrieveValue< ORowSetValue >(nColumnIndex, 0);
     }
 }
 
@@ -524,8 +515,6 @@ template <>
 ISC_QUAD* OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
     // TODO: this is probably wrong
-    if ((m_bWasNull = isNull(nColumnIndex)))
-        return 0;
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
         return (ISC_QUAD*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata;
     else
@@ -540,6 +529,9 @@ T OResultSet::safelyRetrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT 
 
     checkColumnIndex(nColumnIndex);
     checkRowIndex();
+
+    if ((m_bWasNull = isNull(nColumnIndex)))
+        return T();
 
     return retrieveValue< T >(nColumnIndex, nType);
 }
@@ -558,14 +550,14 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException)
 {
     // Not a native firebird type hence we always have to convert.
-    return retrieveConvertibleValue(nColumnIndex);
+    return safelyRetrieveValue< ORowSetValue >(nColumnIndex, 0);
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException)
 {
     // Not a native firebird type hence we always have to convert.
-    return retrieveConvertibleValue(nColumnIndex);
+    return safelyRetrieveValue< ORowSetValue >(nColumnIndex, 0);
 }
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)

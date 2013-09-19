@@ -94,13 +94,6 @@ namespace connectivity
 
             bool isNull(const sal_Int32 nColumnIndex);
 
-            /**
-             * Retrieves a value to an ORowSetValue allowing for conversion
-             * at will. Should only be used if conversion is needed to avoid
-             * any performance hit otherwise.
-             */
-            ORowSetValue                retrieveConvertibleValue(const sal_Int32 nColumnIndex);
-
             template <typename T> T     retrieveValue(const sal_Int32 nColumnIndex,
                                                       const ISC_SHORT nType);
 
@@ -204,6 +197,10 @@ namespace connectivity
 
         // Specialisations have to be in the namespace and can't be within the class.
         template <> ::com::sun::star::util::Date
+            OResultSet::retrieveValue(
+                const sal_Int32 nColumnIndex,
+                const ISC_SHORT nType);
+        template <> ::connectivity::ORowSetValue
             OResultSet::retrieveValue(
                 const sal_Int32 nColumnIndex,
                 const ISC_SHORT nType);
