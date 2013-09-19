@@ -474,7 +474,7 @@ void ScParameterClassification::GenerateDocumentation()
     for ( size_t i=0; i<nCount; ++i )
     {
         OpCode eOp = OpCode(i);
-        if ( xMap->getSymbol(eOp).Len() )
+        if ( !xMap->getSymbol(eOp).isEmpty() )
         {
             fprintf( stdout, "%s: ", aEnvVarName);
             OStringBuffer aStr(OUStringToOString(xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8));
