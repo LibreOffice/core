@@ -17,6 +17,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <boost/unordered_set.hpp>
+#include <map>
 
 //#define erDEBUG
 
