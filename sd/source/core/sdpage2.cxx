@@ -161,11 +161,10 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
 
                 for (sal_Int16 i = -1; i < 9; i++)
                 {
-                    aOldFullName = aOldLayoutName;
-                    aFullName = maLayoutName + " " +
-                                OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1) +
-                                " " +
+                    aOldFullName = aOldLayoutName + " " +
                                 OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1 );
+                    aFullName = maLayoutName + " " +
+                                OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1);
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "Old outline style sheet not found");
                     aOldOutlineStyles.push_back(pSheet);
