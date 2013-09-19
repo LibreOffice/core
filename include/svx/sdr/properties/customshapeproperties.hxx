@@ -45,6 +45,10 @@ namespace sdr
             // react on Item change
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
 
+            // Called after ItemChange() is done for all items. Allows local reactions on
+            // specific item changes
+            virtual void PostItemChange(const sal_uInt16 nWhich);
+
             // clear single item
             virtual void ClearObjectItem(const sal_uInt16 nWhich = 0);
 

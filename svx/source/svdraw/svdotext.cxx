@@ -542,39 +542,98 @@ bool SdrTextObj::NbcSetEckenradius(long nRad)
     return true;
 }
 
-bool SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
+bool SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
 {
-    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // #i44922#
+    if(bTextFrame)
     {
-        SetObjectItem(SdrTextMinFrameHeightItem(nHgt));
-
-        // use bDisableAutoWidthOnDragging as
-        // bDisableAutoHeightOnDragging if vertical.
-        if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
-        {
-            bDisableAutoWidthOnDragging = false;
-            SetObjectItem(SdrTextAutoGrowHeightItem(false));
-        }
-
+        SetObjectItem(SdrTextAutoGrowHeightItem(bAuto));
         return true;
     }
     return false;
 }
 
-bool SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
+bool SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
 {
-    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // #i44922#
+    if(bTextFrame)
     {
-        SetObjectItem(SdrTextMinFrameWidthItem(nWdt));
+        SetObjectItem(SdrTextMaxFrameHeightItem(nHgt));
+        return true;
+    }
+    return false;
+}
 
-        // use bDisableAutoWidthOnDragging only
-        // when not vertical.
-        if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
+// #115391# This implementation is based on the object size (aRect) and the
+// states of IsAutoGrowWidth/Height to correctly set TextMinFrameWidth/Height
+void SdrTextObj::AdaptTextMinSize()
+{
+    if(bTextFrame && (!pModel || !pModel->isLocked()))
+    {
+        const bool bW(IsAutoGrowWidth());
+        const bool bH(IsAutoGrowHeight());
+
+        if(bW || bH)
         {
-            bDisableAutoWidthOnDragging = false;
-            SetObjectItem(SdrTextAutoGrowWidthItem(false));
-        }
+            SfxItemSet aSet(GetObjectItemSet());
 
+            if(bW)
+            {
+                const long nDist(GetTextLeftDistance() + GetTextRightDistance());
+                const long nW(std::max(long(0), (long)(aRect.GetWidth() - 1 - nDist)));
+
+                aSet.Put(SdrTextMinFrameWidthItem(nW));
+
+                if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
+                {
+                    bDisableAutoWidthOnDragging = true;
+                    aSet.Put(SdrTextAutoGrowWidthItem(false));
+                }
+            }
+
+            if(bH)
+            {
+                const long nDist(GetTextUpperDistance() + GetTextLowerDistance());
+                const long nH(std::max(long(0), (long)(aRect.GetHeight() - 1 - nDist)));
+
+                aSet.Put(SdrTextMinFrameHeightItem(nH));
+
+                if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+                {
+                    bDisableAutoWidthOnDragging = false;
+                    SetObjectItem(SdrTextAutoGrowHeightItem(false));
+                }
+            }
+
+            SetObjectItemSet(aSet);
+            NbcAdjustTextFrameWidthAndHeight();
+        }
+    }
+}
+
+bool SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
+{
+    if(bTextFrame)
+    {
+        SetObjectItem(SdrTextAutoGrowWidthItem(bAuto));
+        return true;
+    }
+    return false;
+}
+
+bool SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
+{
+    if(bTextFrame)
+    {
+        SetObjectItem(SdrTextMaxFrameWidthItem(nWdt));
+        return true;
+    }
+    return false;
+}
+
+bool SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
+{
+    if(bTextFrame)
+    {
+        SetObjectItem(SdrTextFitToSizeTypeItem(eFit));
         return true;
     }
     return false;

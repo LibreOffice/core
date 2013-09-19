@@ -1443,27 +1443,60 @@ const Rectangle& SdrObjCustomShape::GetLogicRect() const
 {
     return SdrTextObj::GetLogicRect();
 }
+
+// #115391# This implementation is based on the TextFrame size of the CustomShape and the
+// state of the ResizeShapeToFitText flag to correctly set TextMinFrameWidth/Height
+void SdrObjCustomShape::AdaptTextMinSize()
+{
+    if(!pModel || !pModel->IsPasteResize())
+    {
+        const bool bResizeShapeToFitText(0 != static_cast< const SdrTextAutoGrowHeightItem& >(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue());
+        SfxItemSet aSet(GetObjectItemSet());
+        bool bChanged(false);
+
+        if(bResizeShapeToFitText)
+        {
+            // always reset MinWidthHeight to zero to only rely on text size and frame size
+            // to allow resizing being completely dependent on text size only
+            aSet.Put(SdrTextMinFrameWidthItem(0));
+            aSet.Put(SdrTextMinFrameHeightItem(0));
+            bChanged = true;
+        }
+        else
+        {
+            // recreate from CustomShape-specific TextBounds
+            Rectangle aTextBound(aRect);
+
+            if(GetTextBounds(aTextBound))
+            {
+                const long nHDist(GetTextLeftDistance() + GetTextRightDistance());
+                const long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
+                const long nTWdt(std::max(long(0), (long)(aTextBound.GetWidth() - 1 - nHDist)));
+                const long nTHgt(std::max(long(0), (long)(aTextBound.GetHeight() - 1 - nVDist)));
+
+                aSet.Put(SdrTextMinFrameWidthItem(nTWdt));
+                aSet.Put(SdrTextMinFrameHeightItem(nTHgt));
+                bChanged = true;
+            }
+        }
+
+        if(bChanged)
+        {
+            SetObjectItemSet(aSet);
+            NbcAdjustTextFrameWidthAndHeight();
+        }
+    }
+}
+
 void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
 {
     aRect=rRect;
     ImpJustifyRect(aRect);
     InvalidateRenderGeometry();
-    Rectangle aTextBound( aRect );
-    if ( GetTextBounds( aTextBound ) )
-    {
-        if ( pModel==NULL || !pModel->IsPasteResize() )
-        {
-            long nHDist=GetTextLeftDistance()+GetTextRightDistance();
-            long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-            long nTWdt=aTextBound.GetWidth ()-1-nHDist; if (nTWdt<0) nTWdt=0;
-            long nTHgt=aTextBound.GetHeight()-1-nVDist; if (nTHgt<0) nTHgt=0;
-            if ( IsAutoGrowWidth() )
-                NbcSetMinTextFrameWidth( nTWdt );
-            if ( IsAutoGrowHeight() )
-                NbcSetMinTextFrameHeight( nTHgt );
-            NbcAdjustTextFrameWidthAndHeight();
-        }
-    }
+
+    // #115391#
+    AdaptTextMinSize();
+
     ImpCheckShear();
     SetRectsDirty();
     SetChanged();
@@ -1482,20 +1515,10 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
     aRect = rRect;
     ImpJustifyRect( aRect );
     InvalidateRenderGeometry();
-    Rectangle aTextBound( aRect );
-    if ( GetTextBounds( aTextBound ) )
-    {
-        long nHDist=GetTextLeftDistance()+GetTextRightDistance();
-        long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
 
-        long nTWdt=aTextBound.GetWidth()-1-nHDist; if (nTWdt<0) nTWdt=0;
-        long nTHgt=aTextBound.GetHeight()-1-nVDist; if (nTHgt<0) nTHgt=0;
-        if ( IsAutoGrowWidth() )
-            NbcSetMinTextFrameWidth( nTWdt );
-        if ( IsAutoGrowHeight() )
-            NbcSetMinTextFrameHeight( nTHgt );
-        NbcAdjustTextFrameWidthAndHeight();
-    }
+    // #115391#
+    AdaptTextMinSize();
+
     SetRectsDirty();
     SetChanged();
 }
@@ -2197,25 +2220,9 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     DragCreateObject( rStat );
 
-    if ( bTextFrame )
-    {
-        if ( IsAutoGrowHeight() )
-        {
-            // MinTextHeight
-            long nHgt=aRect.GetHeight()-1;
-            if (nHgt==1) nHgt=0;
-            NbcSetMinTextFrameHeight( nHgt );
-        }
-        if ( IsAutoGrowWidth() )
-        {
-            // MinTextWidth
-            long nWdt=aRect.GetWidth()-1;
-            if (nWdt==1) nWdt=0;
-            NbcSetMinTextFrameWidth( nWdt );
-        }
-        // re-calculate text frame
-        NbcAdjustTextFrameWidthAndHeight();
-    }
+    // #115391#
+    AdaptTextMinSize();
+
     SetRectsDirty();
     return ( eCmd == SDRCREATE_FORCEEND || rStat.GetPointAnz() >= 2 );
 }

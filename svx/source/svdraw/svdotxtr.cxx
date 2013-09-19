@@ -58,11 +58,15 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         long nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
         aRect=rRect;
         ImpJustifyRect(aRect);
-        if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) {
-            if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
-            if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
+
+        // #115391#
+        AdaptTextMinSize();
+
+        if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize()))
+        {
             NbcAdjustTextFrameWidthAndHeight();
         }
+
         ImpCheckShear();
         SetRectsDirty();
     }
@@ -83,11 +87,15 @@ void SdrTextObj::NbcSetLogicRect(const Rectangle& rRect)
     long nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
     aRect=rRect;
     ImpJustifyRect(aRect);
-    if (bTextFrame) {
-        if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
-        if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
+
+    // #115391#
+    AdaptTextMinSize();
+
+    if(bTextFrame)
+    {
         NbcAdjustTextFrameWidthAndHeight();
     }
+
     SetRectsDirty();
 }
 
@@ -185,13 +193,18 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     ImpJustifyRect(aRect);
+
     long nTWdt1=aRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
     long nTHgt1=aRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
-    if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize())) {
-        if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) NbcSetMinTextFrameWidth(nTWdt1);
-        if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) NbcSetMinTextFrameHeight(nTHgt1);
+
+    // #115391#
+    AdaptTextMinSize();
+
+    if(bTextFrame && (!pModel || !pModel->IsPasteResize()))
+    {
         NbcAdjustTextFrameWidthAndHeight();
     }
+
     ImpCheckShear();
     SetRectsDirty();
 }
