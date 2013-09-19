@@ -25,9 +25,73 @@
 #include "sourceprovider-scanner.hxx"
 #include "sourcetreeprovider.hxx"
 
+#if defined MACOSX
+#include <dirent.h>
+#include "osl/thread.h"
+#endif
+
 namespace unoidl { namespace detail {
 
 namespace {
+
+//TODO: Bad hack to work around osl::FileStatus::getFileName not determining the
+// original spelling of a file name (not even with
+// osl_FileStatus_Mask_Validate):
+OUString getFileName(OUString const & uri, osl::FileStatus & status) {
+#if defined MACOSX
+     sal_Int32 i = uri.lastIndexOf('/') + 1;
+     OUString path;
+     if (osl::FileBase::getSystemPathFromFileURL(uri.copy(0, i), path)
+         != osl::FileBase::E_None)
+     {
+         SAL_WARN(
+             "unoidl",
+             "cannot getSystemPathFromFileURL(" << uri.copy(0, i) << ")");
+         return status.getFileName();
+     }
+     OString dir(OUStringToOString(path, osl_getThreadTextEncoding()));
+     OString name(OUStringToOString(uri.copy(i), osl_getThreadTextEncoding()));
+     DIR * d = opendir(dir.getStr());
+     if (d == 0) {
+         SAL_WARN("unoidl", "cannot opendir(" << dir << ")");
+         return status.getFileName();
+     }
+     for (;;) {
+         dirent ent;
+         dirent * p;
+         int e = readdir_r(d, &ent, &p);
+         if (e != 0) {
+             SAL_WARN("unoidl", "cannot readdir_r");
+             closedir(d);
+             return status.getFileName();
+         }
+         if (p == 0) {
+             SAL_WARN(
+                 "unoidl", "cannot find " << name << " via readdir of " << dir);
+             closedir(d);
+             return status.getFileName();
+         }
+         if (name.equalsIgnoreAsciiCase(p->d_name)) {
+             closedir(d);
+             return OUString(
+                 p->d_name, std::strlen(p->d_name),
+                 osl_getThreadTextEncoding());
+         }
+     }
+#else
+    return status.getFileName();
+#endif
+}
+
+bool exists(OUString const & uri, bool directory) {
+    osl::DirectoryItem item;
+    osl::FileStatus status(
+        osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName);
+    return osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None
+        && item.getFileStatus(status) == osl::FileBase::E_None
+        && (status.getFileType() == osl::FileStatus::Directory) == directory
+        && getFileName(uri, status) == uri.copy(uri.lastIndexOf('/') + 1);
+}
 
 class Cursor: public MapCursor {
 public:
@@ -119,12 +183,9 @@ rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
     }
     OUString uri(uri_ + buf.makeStringAndClear());
     rtl::Reference<Entity> ent;
-    osl::DirectoryItem item;
-    osl::FileStatus status(osl_FileStatus_Mask_Type);
-    if (osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None
-        && item.getFileStatus(status) == osl::FileBase::E_None
-        && status.getFileType() == osl::FileStatus::Directory)
-    {
+    // Prevent conflicts between foo/ and Foo.idl on case-preserving file
+    // systems:
+    if (exists(uri, true) && !exists(uri + ".idl", false)) {
         ent = new SourceModuleEntity;
     } else {
         uri += ".idl";
