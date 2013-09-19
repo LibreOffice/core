@@ -483,7 +483,6 @@ darwin*) # Mac OS X or iOS
         _os=Darwin
     fi
     enable_systray=no
-    enable_orcus=no
     # See comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
 
@@ -576,7 +575,6 @@ linux-android*)
     enable_opengl=no
     enable_lpsolve=no
     enable_report_builder=no
-    enable_orcus=no
     with_theme="tango"
     test_cups=no
     test_dbus=no
@@ -8947,7 +8945,7 @@ dnl Orcus
 dnl ===================================================================
 
 AC_MSG_CHECKING([whether to enable orcus])
-if test $_os != Darwin -a $_os != Android -a $_os != iOS -a \( -z "$enable_orcus" -o "$enable_orcus" != no \); then
+if test -z "$enable_orcus" -o "$enable_orcus" != no; then
     AC_MSG_RESULT([yes])
     ENABLE_ORCUS="TRUE"
     AC_DEFINE(ENABLE_ORCUS)
