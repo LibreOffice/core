@@ -690,7 +690,6 @@ exception TestException2: TestException1 {};
 constants Constants {
     const byte byteMin = -128;
     const byte byteMax = 127;
-    const byte byteNeg = 255;
     const short shortMin = -32768;
     const short shortMax = 32767;
     const unsigned short unsignedShortMin = 0;

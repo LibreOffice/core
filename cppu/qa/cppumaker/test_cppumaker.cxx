@@ -533,9 +533,6 @@ void Test::testConstants() {
     CPPUNIT_ASSERT_EQUAL(
         SAL_MAX_INT8, test::codemaker::cppumaker::Constants::byteMax);
     CPPUNIT_ASSERT_EQUAL(
-        static_cast< sal_Int8 >(-1),
-        test::codemaker::cppumaker::Constants::byteNeg);
-    CPPUNIT_ASSERT_EQUAL(
         SAL_MIN_INT16, test::codemaker::cppumaker::Constants::shortMin);
     CPPUNIT_ASSERT_EQUAL(
         SAL_MAX_INT16, test::codemaker::cppumaker::Constants::shortMax);
