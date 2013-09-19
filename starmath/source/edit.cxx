@@ -436,7 +436,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 sal_Int32 index = selected.indexOf("\n", aSelection.nEndPos);
                 if (index != -1)
                 {
-                    selected = selected.copy(index, sal_Int32(aSelection.nEndPos));
+                    selected = selected.copy(index, sal_Int32(aSelection.nEndPos-index));
                     if (selected.trim().isEmpty())
                         autoClose = true;
                 }
@@ -447,7 +447,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                         autoClose = true;
                     else
                     {
-                        selected = selected.copy(aSelection.nEndPos, length);
+                        selected = selected.copy(aSelection.nEndPos);
                         if (selected.trim().isEmpty())
                             autoClose = true;
                     }
