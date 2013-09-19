@@ -1436,6 +1436,17 @@ File gid_License_Odt
     Styles = (PACKED);
 End
 
+File gid_Eula_Odt
+    BIN_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Dir_Bundle_Contents;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Name = "EULA.odt";
+    Styles = (PACKED);
+End
+
 File gid_Credits_Odt
     BIN_FILE_BODY;
 #if defined MACOSX
