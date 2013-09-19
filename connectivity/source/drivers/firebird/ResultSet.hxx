@@ -24,6 +24,7 @@
 
 #include <ibase.h>
 
+#include <connectivity/FValue.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase8.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -92,6 +93,14 @@ namespace connectivity
             ISC_STATUS_ARRAY                            m_statusVector;
 
             bool isNull(const sal_Int32 nColumnIndex);
+
+            /**
+             * Retrieves a value to an ORowSetValue allowing for conversion
+             * at will. Should only be used if conversion is needed to avoid
+             * any performance hit otherwise.
+             */
+            ORowSetValue                retrieveConvertibleValue(const sal_Int32 nColumnIndex);
+
             template <typename T> T     retrieveValue(const sal_Int32 nColumnIndex,
                                                       const ISC_SHORT nType);
 
@@ -194,6 +203,22 @@ namespace connectivity
         };
 
         // Specialisations have to be in the namespace and can't be within the class.
+        template <> ::com::sun::star::util::Date
+            OResultSet::retrieveValue(
+                const sal_Int32 nColumnIndex,
+                const ISC_SHORT nType);
+        template <> ::com::sun::star::util::Time
+            OResultSet::retrieveValue(
+                const sal_Int32 nColumnIndex,
+                const ISC_SHORT nType);
+        template <> ::com::sun::star::util::DateTime
+            OResultSet::retrieveValue(
+                const sal_Int32 nColumnIndex,
+                const ISC_SHORT nType);
+        template <> ISC_QUAD*
+             OResultSet::retrieveValue(
+                 const sal_Int32 nColumnIndex,
+                 const ISC_SHORT nType);
         template <> ::rtl::OUString
             OResultSet::retrieveValue(
                 const sal_Int32 nColumnIndex,

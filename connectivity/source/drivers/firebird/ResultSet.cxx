@@ -368,22 +368,126 @@ bool OResultSet::isNull(const sal_Int32 nColumnIndex)
     return false;
 }
 
+ORowSetValue OResultSet::retrieveConvertibleValue(const sal_Int32 nColumnIndex)
+{
+    // See http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/Using_the_getXXX_Methods
+    // (bottom of page) for a chart of possible conversions, we should allow all
+    // of these -- Blob/Clob will probably need some specialist handling especially
+    // w.r.t. to generating Strings for them.
+    //
+    // Basically we just have to map to the correct direct request and
+    // ORowSetValue does the rest for us here.
+    switch (m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1)
+    {
+        case SQL_TEXT:
+        case SQL_VARYING:
+            return getString(nColumnIndex);
+        case SQL_SHORT:
+            return getShort(nColumnIndex);
+        case SQL_LONG:
+            return getInt(nColumnIndex);
+        case SQL_FLOAT:
+            return getFloat(nColumnIndex);
+        case SQL_DOUBLE:
+            return getDouble(nColumnIndex);
+        case SQL_D_FLOAT:
+            return getFloat(nColumnIndex);
+        case SQL_TIMESTAMP:
+            return getTimestamp(nColumnIndex);
+//     case SQL_BLOB:
+//         return DataType::BLOB;
+//     case SQL_ARRAY:
+//         return DataType::ARRAY;
+        case SQL_TYPE_TIME:
+            return getTime(nColumnIndex);
+        case SQL_TYPE_DATE:
+            return getTime(nColumnIndex);
+        case SQL_INT64:
+            return getLong(nColumnIndex);
+        case SQL_NULL:
+            assert(false); // We shouldn't really be returning this ever since
+            // detection is separate.
+//     case SQL_QUAD:      // Is a "Blob ID" according to the docs
+//         return 0;       // TODO: verify
+        default:
+            assert(false);
+            return ORowSetValue();
+    }
+}
+
 template <typename T>
 T OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
-    // TODO: check we have the right type.
     if ((m_bWasNull = isNull(nColumnIndex)))
         return T();
 
     if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
         return *((T*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
     else
-        return T();
-    // TODO: fix
+        return retrieveConvertibleValue(nColumnIndex);
 }
 
 template <>
-OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
+Date OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*nType*/)
+{
+    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == SQL_TYPE_DATE)
+    {
+        ISC_DATE aISCDate = *((ISC_DATE*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+
+        struct tm aCTime;
+        isc_decode_sql_date(&aISCDate, &aCTime);
+
+        return Date(aCTime.tm_mday, aCTime.tm_mon, aCTime.tm_year);
+    }
+    else
+    {
+        return retrieveConvertibleValue(nColumnIndex);
+    }
+}
+
+template <>
+Time OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*nType*/)
+{
+    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == SQL_TYPE_TIME)
+    {
+        ISC_TIME aISCTime = *((ISC_TIME*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+
+        struct tm aCTime;
+        isc_decode_sql_time(&aISCTime, &aCTime);
+
+        // first field is nanoseconds -- not supported in firebird or struct tm.
+        // last field denotes UTC (true) or unknown (false)
+        return Time(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, false);
+    }
+    else
+    {
+        return retrieveConvertibleValue(nColumnIndex);
+    }
+}
+
+template <>
+DateTime OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*nType*/)
+{
+    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == SQL_TIMESTAMP)
+    {
+        ISC_TIMESTAMP aISCTimestamp = *((ISC_TIMESTAMP*) m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
+
+        struct tm aCTime;
+        isc_decode_timestamp(&aISCTimestamp, &aCTime);
+
+        // first field is nanoseconds -- not supported in firebird or struct tm.
+        // last field denotes UTC (true) or unknown (false)
+        return DateTime(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, aCTime.tm_mday,
+                    aCTime.tm_mon, aCTime.tm_year, false);
+    }
+    else
+    {
+        return retrieveConvertibleValue(nColumnIndex);
+    }
+}
+
+template <>
+OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT /*nType*/)
 {
     if ((m_bWasNull = isNull(nColumnIndex)))
         return OUString();
@@ -407,9 +511,7 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     }
     else
     {
-        (void) nType;
-        return OUString();
-        // TODO: Possibly do some sort of type conversion?
+        return retrieveConvertibleValue(nColumnIndex);
     }
 }
 
@@ -504,49 +606,29 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
 }
 
 // ---- XRow: More complex types ----------------------------------------------
-OUString SAL_CALL OResultSet::getString(sal_Int32 columnIndex)
+OUString SAL_CALL OResultSet::getString(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
     // TODO: special handling for char type?
-    return safelyRetrieveValue< OUString >(columnIndex, 0);
+    return safelyRetrieveValue< OUString >(nIndex, 0);
 }
 
 Date SAL_CALL OResultSet::getDate(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
-    ISC_DATE aISCDate = safelyRetrieveValue< ISC_DATE >(nIndex, SQL_TYPE_DATE);
-
-    struct tm aCTime;
-    isc_decode_sql_date(&aISCDate, &aCTime);
-
-    return Date(aCTime.tm_mday, aCTime.tm_mon, aCTime.tm_year);
+    return safelyRetrieveValue< Date >(nIndex, SQL_TYPE_DATE);
 }
 
 Time SAL_CALL OResultSet::getTime(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
-    ISC_TIME aISCTime = safelyRetrieveValue< ISC_TIME >(nIndex, SQL_TYPE_TIME);
-
-    struct tm aCTime;
-    isc_decode_sql_time(&aISCTime, &aCTime);
-
-    // first field is nanoseconds -- not supported in firebird or struct tm.
-    // last field denotes UTC (true) or unknown (false)
-    return Time(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, false);
+    return safelyRetrieveValue< Time >(nIndex, SQL_TYPE_TIME);
 }
 
 DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
-    ISC_TIMESTAMP aISCTimestamp = safelyRetrieveValue< ISC_TIMESTAMP >(nIndex, SQL_TIMESTAMP);
-
-    struct tm aCTime;
-    isc_decode_timestamp(&aISCTimestamp, &aCTime);
-
-    // first field is nanoseconds -- not supported in firebird or struct tm.
-    // last field denotes UTC (true) or unknown (false)
-    return DateTime(0, aCTime.tm_sec, aCTime.tm_min, aCTime.tm_hour, aCTime.tm_mday,
-                    aCTime.tm_mon, aCTime.tm_year, false);
+    return safelyRetrieveValue< DateTime >(nIndex, SQL_TIMESTAMP);
 }
 
 // -------------------------------------------------------------------------
