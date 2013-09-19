@@ -418,16 +418,6 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <orcus/css_parser.hpp>
-#include <orcus/global.hpp>
-#include <orcus/orcus_csv.hpp>
-#include <orcus/orcus_gnumeric.hpp>
-#include <orcus/orcus_ods.hpp>
-#include <orcus/orcus_xlsx.hpp>
-#include <orcus/orcus_xml.hpp>
-#include <orcus/spreadsheet/import_interface.hpp>
-#include <orcus/xml_namespace.hpp>
-#include <orcus/xml_structure_tree.hpp>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/mutex.hxx>
