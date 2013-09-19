@@ -12,6 +12,8 @@ $(eval $(call gb_Library_Library,guesslang))
 
 $(eval $(call gb_Library_set_componentfile,guesslang,lingucomponent/source/languageguessing/guesslang))
 
+$(eval $(call gb_Library_use_external,guesslang,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,guesslang))
 
 $(eval $(call gb_Library_use_libraries,guesslang,\

@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,t602filter))
 
 $(eval $(call gb_Library_set_componentfile,t602filter,filter/source/t602/t602filter))
 
+$(eval $(call gb_Library_use_external,t602filter,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,t602filter))
 
 $(eval $(call gb_Library_use_libraries,t602filter,\
