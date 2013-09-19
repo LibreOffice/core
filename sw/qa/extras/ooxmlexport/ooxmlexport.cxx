@@ -1367,6 +1367,15 @@ void Test::testStyleInheritance()
 
     // Check that we do _not_ export w:next for styles that point to themselves.
     assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:next", 0);
+
+    // Check that we roundtrip <w:next> correctly - on XML level
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:next", "val", "Normal");
+    // And to be REALLY sure, check it on the API level too ;-)
+    uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
+    uno::Reference< beans::XPropertySet > properties(paragraphStyles->getByName("Heading 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(properties, "FollowStyle"));
+    properties = uno::Reference< beans::XPropertySet >(paragraphStyles->getByName("Heading 11"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getProperty<OUString>(properties, "FollowStyle"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
