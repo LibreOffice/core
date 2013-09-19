@@ -147,6 +147,7 @@ gb_LinkTarget_get_manifestfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).manifest
 
 gb_LinkTarget_get_linksearchpath_for_layer = \
+	-LIBPATH:$(WORKDIR)/LinkTarget/StaticLibrary \
 	-LIBPATH:$(INSTDIR)/$(gb_Package_SDKDIRNAME)/lib \
 	$(if $(filter OXT,$(1)),\
 		-LIBPATH:$(WORKDIR)/LinkTarget/ExtensionLibrary, \
