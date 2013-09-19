@@ -300,12 +300,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     throw(SQLException, RuntimeException)
 {
-    if (!execute())
-    {
-        // execute succeeded but no results
-        throw SQLException(); // TODO: add message to exception
-    }
-
+    execute();
     return m_xResultSet;
 }
 
