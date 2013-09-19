@@ -93,7 +93,7 @@ namespace wrapper
         return InitApiMap( VLC_PLAYER_API );
     }
 
-    Player::Player(Media& media)
+    Player::Player( Media& media )
         : mPlayer( libvlc_media_player_new_from_media( media ) )
     {
     }
@@ -209,7 +209,7 @@ namespace wrapper
 #endif
     }
 
-    bool Player::takeSnapshot(const rtl::OUString& file)
+    bool Player::takeSnapshot( const rtl::OUString& file )
     {
         rtl::OString dest;
         file.convertToString( &dest, RTL_TEXTENCODING_UTF8, 0 );
