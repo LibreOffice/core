@@ -625,7 +625,7 @@ NPError MacPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPErro
     m_eCall = eNPP_DestroyStream;
     m_aArgs[0] = (void*)instance;
     m_aArgs[1] = (void*)stream;
-    m_aArgs[2] = (void*)reason;
+    m_aArgs[2] = (void*)(intptr_t)reason;
     return (NPError)execute();
 }
 
@@ -650,8 +650,8 @@ NPError MacPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mo
     m_eCall = eNPP_New;
     m_aArgs[0] = (void*)pluginType;
     m_aArgs[1] = (void*)instance;
-    m_aArgs[2] = (void*)mode;
-    m_aArgs[3] = (void*)argc;
+    m_aArgs[2] = (void*)(intptr_t)mode;
+    m_aArgs[3] = (void*)(intptr_t)argc;
     m_aArgs[4] = (void*)argn;
     m_aArgs[5] = (void*)argv;
     m_aArgs[6] = (void*)saved;
@@ -668,7 +668,7 @@ NPError MacPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
     m_aArgs[0] = (void*)instance;
     m_aArgs[1] = (void*)type;
     m_aArgs[2] = (void*)stream;
-    m_aArgs[3] = (void*)seekable;
+    m_aArgs[3] = (void*)(intptr_t)seekable;
     m_aArgs[4] = (void*)stype;
     return (NPError)execute();
 }
@@ -721,7 +721,7 @@ void MacPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reaso
     m_eCall = eNPP_URLNotify;
     m_aArgs[0] = (void*)instance;
     m_aArgs[1] = (void*)url;
-    m_aArgs[2] = (void*)reason;
+    m_aArgs[2] = (void*)(intptr_t)reason;
     m_aArgs[3] = notifyData;
     execute();
 }
