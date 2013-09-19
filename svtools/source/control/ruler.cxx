@@ -300,7 +300,7 @@ void Ruler::ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 )
         if ( nX2 < -RULER_CLIP )
             return;
     }
-    long nClip = mnVirWidth+RULER_CLIP;
+    long nClip = mnVirWidth + RULER_CLIP;
     if ( nX2 > nClip )
     {
         nX2 = nClip;
@@ -322,7 +322,7 @@ void Ruler::ImplVDrawRect( long nX1, long nY1, long nX2, long nY2 )
         if ( nX2 < -RULER_CLIP )
             return;
     }
-    long nClip = mnVirWidth+RULER_CLIP;
+    long nClip = mnVirWidth + RULER_CLIP;
     if ( nX2 > nClip )
     {
         nX2 = nClip;
@@ -344,7 +344,7 @@ void Ruler::ImplVDrawText( long nX, long nY, const OUString& rText, long nMin, l
     long nShiftX = ( aRect.GetWidth() / 2 ) + aRect.Left();
     long nShiftY = ( aRect.GetHeight() / 2 ) + aRect.Top();
 
-    if ( (nX > -RULER_CLIP) && (nX < mnVirWidth+RULER_CLIP) && ( nX < nMax - nShiftX ) && ( nX > nMin + nShiftX ) )
+    if ( (nX > -RULER_CLIP) && (nX < mnVirWidth + RULER_CLIP) && ( nX < nMax - nShiftX ) && ( nX > nMin + nShiftX ) )
     {
         if ( mnWinStyle & WB_HORZ )
             maVirDev.DrawText( Point( nX - nShiftX, nY - nShiftY ), rText );
@@ -586,14 +586,22 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
                         aNumString = OUString::number( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
 
                     long nHorizontalLocation = nStart + n;
-                    ImplVDrawText( nHorizontalLocation, nCenter, aNumString,          nMin, nMax );
-                    ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1 );
-                    ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1 );
+                    ImplVDrawText(nHorizontalLocation, nCenter, aNumString, nMin, nMax);
+
+                    if(nMin < nHorizontalLocation && nHorizontalLocation < nMax)
+                    {
+                        ImplVDrawLine(nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1);
+                        ImplVDrawLine(nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1);
+                    }
 
                     nHorizontalLocation = nStart - n;
-                    ImplVDrawText( nHorizontalLocation, nCenter, aNumString,          nMin, nMax );
-                    ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1 );
-                    ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1 );
+                    ImplVDrawText(nHorizontalLocation, nCenter, aNumString, nMin, nMax);
+
+                    if(nMin < nHorizontalLocation && nHorizontalLocation < nMax)
+                    {
+                        ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1 );
+                        ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1 );
+                    }
                 }
                 // Tick/Tick2 - Output (Strokes)
                 else
