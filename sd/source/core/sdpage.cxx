@@ -638,7 +638,9 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 {
     OUString aStyleName( pPage->GetLayoutName() );
     const OUString aSep( SD_LT_SEPARATOR );
-    aStyleName = aStyleName.copy(0, aStyleName.indexOf(aSep) + aSep.getLength());
+    sal_Int32 nIndex = aStyleName.indexOf(aSep);
+    if( nIndex != -1 )
+        aStyleName = aStyleName.copy(0, nIndex + aSep.getLength());
 
     sal_uInt16 nNameId;
     switch( nHelpId )

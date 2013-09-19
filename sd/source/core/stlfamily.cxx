@@ -210,7 +210,9 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException)
 
         OUString aLayoutName( pPage->GetLayoutName() );
         const OUString aSep( SD_LT_SEPARATOR );
-        aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(aSep));
+        sal_Int32 nIndex = aLayoutName.indexOf(aSep);
+        if( nIndex != -1 )
+            aLayoutName = aLayoutName.copy(0, nIndex);
 
         return OUString( aLayoutName );
     }

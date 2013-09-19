@@ -83,7 +83,9 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     // ===================================================
 
     OUString aFullNameLayout( pBMMPage->GetLayoutName() );
-    aFullNameLayout = aFullNameLayout.copy(0, aFullNameLayout.indexOf( SD_LT_SEPARATOR ));
+    sal_Int32 nIndex = aFullNameLayout.indexOf( SD_LT_SEPARATOR );
+    if( nIndex != -1 )
+        aFullNameLayout = aFullNameLayout.copy(0, nIndex);
 
     OUString aLayout(aFullNameLayout);
 
@@ -98,7 +100,9 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         // Do the layouts already exist within the document?
         SdPage* pTestPage = (SdPage*) rDoc.GetMasterPage(nMPage);
         OUString aFullTest(pTestPage->GetLayoutName());
-        aFullTest = aFullTest.copy(0, aFullTest.indexOf( SD_LT_SEPARATOR ));
+        sal_Int32 nIndex2 = aFullTest.indexOf( SD_LT_SEPARATOR );
+        if( nIndex2 != -1 )
+            aFullTest = aFullTest.copy(0, nIndex2);
 
         OUString aTest(aFullTest);
 
@@ -816,7 +820,9 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             }
 
             OUString aLayout(pRefPage->GetLayoutName());
-            aLayout = aLayout.copy(0, aLayout.indexOf( SD_LT_SEPARATOR ));
+            sal_Int32 nIndex = aLayout.indexOf( SD_LT_SEPARATOR );
+            if( nIndex != -1 )
+                aLayout = aLayout.copy(0, nIndex);
 
             // update layout and referred master page
             pRefPage->SetPresentationLayout(aLayout);
@@ -1297,7 +1303,9 @@ bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, const OUString& rC
     {
         const SdrPage* pCandidate = rDoc.GetMasterPage(a);
         OUString aPageLayoutName(pCandidate->GetLayoutName());
-        aPageLayoutName = aPageLayoutName.copy(0, aPageLayoutName.indexOf(SD_LT_SEPARATOR));
+        sal_Int32 nIndex = aPageLayoutName.indexOf(SD_LT_SEPARATOR);
+        if( nIndex != -1 )
+            aPageLayoutName = aPageLayoutName.copy(0, nIndex);
 
         if(aPageLayoutName == rCandidate)
         {
@@ -1362,7 +1370,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     SdPage* pPage           = NULL;
     OUString aOldPageLayoutName(pSelectedPage->GetLayoutName());
     OUString aOldLayoutName(aOldPageLayoutName);
-    aOldLayoutName = aOldLayoutName.copy(0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ));
+    sal_Int32 nIndex = aOldLayoutName.indexOf( SD_LT_SEPARATOR );
+    if( nIndex != -1 )
+        aOldLayoutName = aOldLayoutName.copy(0, nIndex);
 
     if (pSourceDoc)
     {
@@ -1443,7 +1453,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
             // layout name needs to be unique
             aTargetNewLayoutName = pMaster->GetLayoutName();
-            aTargetNewLayoutName = aTargetNewLayoutName.copy(0, aTargetNewLayoutName.indexOf(SD_LT_SEPARATOR));
+            sal_Int32 nIndex2 = aTargetNewLayoutName.indexOf(SD_LT_SEPARATOR);
+            if( nIndex2 != -1 )
+                aTargetNewLayoutName = aTargetNewLayoutName.copy(0, nIndex2);
 
             if(!isMasterPageLayoutNameUnique(*this, aTargetNewLayoutName))
             {
@@ -1595,7 +1607,9 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         // master page
         OUString aPageLayoutName(pMaster->GetLayoutName());
         OUString aLayoutName = aPageLayoutName;
-        aLayoutName = aLayoutName.copy( 0, aLayoutName.indexOf( SD_LT_SEPARATOR ));
+        sal_Int32 nIndex2 = aLayoutName.indexOf( SD_LT_SEPARATOR );
+        if( nIndex2 != -1 )
+            aLayoutName = aLayoutName.copy( 0, nIndex2);
 
         // #i121863# Do *not* remove from original document any longer, it is potentially used there
         // and would lead to crashes. Rely on the automatic process of removing unused masterpages

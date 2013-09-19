@@ -266,7 +266,9 @@ void SdPage::EndListenOutlineText()
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*)pModel->GetStyleSheetPool();
         DBG_ASSERT(pSPool, "StyleSheetPool missing");
         OUString aTrueLayoutName(maLayoutName);
-        aTrueLayoutName = aTrueLayoutName.copy(0, aTrueLayoutName.indexOf( SD_LT_SEPARATOR ));
+        sal_Int32 nIndex = aTrueLayoutName.indexOf( SD_LT_SEPARATOR );
+        if( nIndex != -1 )
+            aTrueLayoutName = aTrueLayoutName.copy(0, nIndex);
 
         SfxStyleSheet *pSheet = NULL;
         std::vector<SfxStyleSheetBase*> aOutlineStyles;
