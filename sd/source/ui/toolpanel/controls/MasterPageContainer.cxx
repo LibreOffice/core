@@ -168,7 +168,6 @@ private:
 
     Size maSmallPreviewSizePixel;
     Size maLargePreviewSizePixel;
-    bool mbPageRatioKnown;
 
     bool mbContainerCleaningPending;
 
@@ -596,7 +595,6 @@ MasterPageContainer::Implementation::Implementation (void)
       maChangeListeners(),
       maSmallPreviewSizePixel(),
       maLargePreviewSizePixel(),
-      mbPageRatioKnown(false),
       mbContainerCleaningPending(true)
 
 {
