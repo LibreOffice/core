@@ -222,12 +222,13 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
     case SQL_TEXT:
         memcpy(pVar->sqldata, str.getStr(), str.getLength());
         // Fill remainder with spaces
-        // TODO: would 0 be better here for filling?
         memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
         break;
     default:
-        // TODO: sane error message
-        throw SQLException();
+        ::dbtools::throwSQLException(
+            "Incorrect type for setString",
+            ::dbtools::SQL_INVALID_SQL_DATA_TYPE,
+            *this);
     }
 }
 
@@ -341,7 +342,12 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
 
     if ((pVar->sqltype & ~1) != nType)
-        throw SQLException(); // TODO: cast instead?
+    {
+       ::dbtools::throwSQLException(
+            "Incorrect type for setString",
+            ::dbtools::SQL_INVALID_SQL_DATA_TYPE,
+            *this);
+    }
 
     memcpy(pVar->sqldata, &nValue, sizeof(nValue));
 }
