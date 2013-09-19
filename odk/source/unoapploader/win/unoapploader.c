@@ -72,7 +72,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     const char* PATHSEPARATOR = ";";
 
     char const* path = NULL;
-    char path2[MAX_PATH];
     char* value = NULL;
     char* envstr = NULL;
     char* cmdline = NULL;
@@ -90,130 +89,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     if ( path != NULL )
     {
-        wchar_t cmd[
-            MY_LENGTH(L"\"") + MAX_PATH +
-            MY_LENGTH(L"\\unoinfo.exe\" c++")];
-            /* hopefully does not overflow */
-        int pathsize;
-        SECURITY_ATTRIBUTES sec;
-        HANDLE temp;
-        HANDLE stdoutRead;
-        HANDLE stdoutWrite;
-        STARTUPINFOW startinfo;
-        PROCESS_INFORMATION procinfo;
-        int ret;
-        cmd[0] = L'"';
-        pathsize = MultiByteToWideChar(CP_ACP, 0, path, -1, cmd + 1, MAX_PATH);
-        if (pathsize == 0) {
-            writeError("Error: MultiByteToWideChar failed!\n");
-            closeErrorFile();
-            return 1;
-        }
-        if (wcschr(cmd + 1, L'"') != NULL) {
-            writeError("Error: bad characters in UNO installation path!\n");
-            closeErrorFile();
-            return 1;
-        }
-        wcscpy(
-            cmd + pathsize,
-            (L"\\unoinfo.exe\" c++" +
-             (pathsize == 1 || cmd[pathsize - 1] != L'\\' ? 0 : 1)));
-        sec.nLength = sizeof (SECURITY_ATTRIBUTES);
-        sec.lpSecurityDescriptor = NULL;
-        sec.bInheritHandle = TRUE;
-        if (CreatePipe(&temp, &stdoutWrite, &sec, 0) == 0 ||
-            DuplicateHandle(
-                GetCurrentProcess(), temp, GetCurrentProcess(), &stdoutRead, 0,
-                FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS) == 0)
-        {
-            writeError("Error: CreatePipe/DuplicateHandle failed!\n");
-            closeErrorFile();
-            return 1;
-        }
-        memset(&startinfo, 0, sizeof (STARTUPINFOW));
-        startinfo.cb = sizeof (STARTUPINFOW);
-        startinfo.lpDesktop = L"";
-        startinfo.dwFlags = STARTF_USESTDHANDLES;
-        startinfo.hStdOutput = stdoutWrite;
-        ret = CreateProcessW(
-            NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &startinfo, &procinfo);
-        if (ret != 0) {
-            char * buf = NULL;
-            size_t n = 1000;
-            size_t k = 0;
-            DWORD exitcode;
-            int path2size;
-            CloseHandle(stdoutWrite);
-            CloseHandle(procinfo.hThread);
-            for (;;) {
-                DWORD m;
-                buf = realloc(buf, n);
-                if (buf == NULL) {
-                    writeError(
-                        "Error: out of memory reading unoinfo output!\n");
-                    closeErrorFile();
-                    return 1;
-                }
-                if (!ReadFile(stdoutRead, buf + k, n - k, &m, NULL))
-                {
-                    DWORD err = GetLastError();
-                    if (err == ERROR_HANDLE_EOF || err == ERROR_BROKEN_PIPE) {
-                        break;
-                    }
-                    writeError("Error: cannot read unoinfo output!\n");
-                    closeErrorFile();
-                    return 1;
-                }
-                if (m == 0) {
-                    break;
-                }
-                k += m;
-                if (k >= n) {
-                    if (n >= SAL_MAX_SIZE / 2) {
-                        writeError(
-                            "Error: out of memory reading unoinfo output!\n");
-                        closeErrorFile();
-                        return 1;
-                    }
-                    n *= 2;
-                }
-            }
-            if ((k & 1) == 1) {
-                writeError("Error: bad unoinfo output!\n");
-                closeErrorFile();
-                return 1;
-            }
-            CloseHandle(stdoutRead);
-            if (!GetExitCodeProcess(procinfo.hProcess, &exitcode) ||
-                exitcode != 0)
-            {
-                writeError("Error: executing unoinfo failed!\n");
-                closeErrorFile();
-                return 1;
-            }
-            if (k == 0) {
-                path2size = 0;
-            } else {
-                path2size = WideCharToMultiByte(
-                    CP_ACP, 0, (wchar_t *) buf, k / 2, path2, MAX_PATH - 1,
-                    NULL, NULL);
-                if (path2size == 0) {
-                    writeError("Error: converting unoinfo output failed!\n");
-                    closeErrorFile();
-                    return 1;
-                }
-            }
-            path2[path2size] = '\0';
-            path = path2;
-        } else {
-            if (GetLastError() != ERROR_FILE_NOT_FOUND) {
-                writeError("Error: calling unoinfo failed!\n");
-                closeErrorFile();
-                return 1;
-            }
-            CloseHandle(stdoutRead);
-            CloseHandle(stdoutWrite);
-        }
+        /* The former code to call unoinfo first is removed because we can use the office path
+           from the registry or from the UNO_PATH variable directly.
+           Further cleanup can remove unoinfo from the installation when all places where it is
+           used are checked.
+          */
 
         /* get the value of the PATH environment variable */
         value = getenv( ENVVARNAME );
