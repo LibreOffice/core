@@ -159,7 +159,7 @@ public:
     short               GetCategory4Entry(short nEntry);
     bool                GetUserDefined4Entry(short nEntry);
     OUString            GetFormat4Entry(short nEntry);
-    void                SetComment4Entry(short nEntry,String aCommentString);
+    void                SetComment4Entry(short nEntry, const OUString& aCommentString);
 
     void                SetCurrencySymbol(sal_uInt16 nPos);
     sal_uInt32          GetCurrencySymbol();

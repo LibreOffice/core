@@ -1263,7 +1263,7 @@ void SvxNumberFormatShell::MakePrevStringFromVal(
 #*
 #************************************************************************/
 
-void SvxNumberFormatShell::SetComment4Entry(short nEntry,String aEntStr)
+void SvxNumberFormatShell::SetComment4Entry(short nEntry, const OUString& aEntStr)
 {
     SvNumberformat *pNumEntry;
     if(nEntry<0) return;
