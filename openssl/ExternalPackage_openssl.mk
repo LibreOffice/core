@@ -20,10 +20,5 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,openssl,bin,\
 	out32dll/ssleay32.dll \
 	out32dll/libeay32.dll \
 ))
-else
-$(eval $(call gb_ExternalPackage_add_files,openssl,lib,\
-	libcrypto.a \
-	libssl.a \
-))
 endif
 # vim: set noet sw=4 ts=4:

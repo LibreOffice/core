@@ -9,20 +9,12 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,hyphen,hyphen))
 
-ifneq ($(COM),MSC)
-
-$(eval $(call gb_ExternalPackage_use_external_project,hyphen,hyphen))
-
-ifeq ($(SYSTEM_HYPH),NO)
-$(eval $(call gb_ExternalPackage_add_file,hyphen,lib/libhyphen.a,.libs/libhyphen.a))
-endif
-
-endif
-
 ifeq ($(WITH_MYSPELL_DICTS),YES)
-$(eval $(call gb_ExternalPackage_add_files,hyphen,bin,\
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,hyphen,bin,\
     hyph_en_US.dic \
 ))
+
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -20,7 +20,6 @@ $(eval $(call gb_Module_add_targets,libexttextcat,\
 ))
 else
 $(eval $(call gb_Module_add_targets,libexttextcat,\
-	ExternalPackage_exttextcat \
 	ExternalProject_exttextcat \
 ))
 endif

@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,hunspell))
 ifeq ($(SYSTEM_HUNSPELL),NO)
 $(eval $(call gb_Module_add_targets,hunspell,\
 	UnpackedTarball_hunspell \
-	ExternalPackage_hunspell \
 ))
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,hunspell,\

@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,libcdr))
 ifeq ($(SYSTEM_CDR),NO)
 
 $(eval $(call gb_Module_add_targets,libcdr,\
-	ExternalPackage_libcdr \
 	ExternalProject_libcdr \
 	UnpackedTarball_libcdr \
 ))

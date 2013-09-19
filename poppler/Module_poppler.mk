@@ -13,7 +13,6 @@ ifeq ($(SYSTEM_POPPLER),NO)
 
 $(eval $(call gb_Module_add_targets,poppler,\
 	ExternalProject_poppler \
-	ExternalPackage_poppler \
 	UnpackedTarball_poppler \
 ))
 
