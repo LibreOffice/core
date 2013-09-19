@@ -566,7 +566,7 @@ bool SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
 // states of IsAutoGrowWidth/Height to correctly set TextMinFrameWidth/Height
 void SdrTextObj::AdaptTextMinSize()
 {
-    if(bTextFrame && (!pModel || !pModel->isLocked()))
+    if(bTextFrame && (!pModel || !pModel->IsPasteResize()))
     {
         const bool bW(IsAutoGrowWidth());
         const bool bH(IsAutoGrowHeight());
