@@ -894,7 +894,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             std::vector< StyleSheetEntryPtr >::iterator it = m_pImpl->m_aStyleSheetEntries.begin();
                             for (; it != m_pImpl->m_aStyleSheetEntries.end(); ++it)
                             {
-                                if (!(*it)->sStyleName.isEmpty() && (*it)->sStyleName == pEntry->sNextStyleIdentifier)
+                                if (!(*it)->sStyleName.isEmpty() && (*it)->sStyleIdentifierD == pEntry->sNextStyleIdentifier)
                                 {
                                     beans::PropertyValue aNew;
                                     aNew.Name = "FollowStyle";
