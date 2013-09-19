@@ -76,23 +76,23 @@ public:
     sal_Bool            GetAutoSumArea(ScRangeList& rRangeList);
     void            EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr);
     bool            AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue );
-    String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr );
+    OUString        GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr );
 
-    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                                const EditTextObject* pData = NULL );
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                const EditTextObject& rData, bool bTestSimple = false );
     void            EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
 
-    void            EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram );
+    void            EnterMatrix( const OUString& rString, ::formula::FormulaGrammar::Grammar eGram );
 
     /**
      * @param pData The caller must manage the life cycle of the object this
      *              pointer points to.  NULL is allowed.
      */
-    void            EnterBlock( const String& rString, const EditTextObject* pData );
+    void            EnterBlock( const OUString& rString, const EditTextObject* pData );
 
-    void            EnterDataAtCursor( const String& rString );         //! Not used?
+    void            EnterDataAtCursor( const OUString& rString );         //! Not used?
 
     SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, sal_Bool bIncludeObjects = false );
     SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc = NULL, sal_Bool bCut = false, sal_Bool bApi = false,
@@ -128,12 +128,12 @@ public:
                                         SCCOL nPosX, SCROW nPosY, Point* pLogicPos = NULL,
                                         sal_Bool bLink = false, sal_Bool bAllowDialogs = false );
 
-    sal_Bool            PasteFile( const Point&, const String&, sal_Bool bLink=false );
+    sal_Bool            PasteFile( const Point&, const OUString&, sal_Bool bLink=false );
     sal_Bool            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const OUString& = OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
     sal_Bool            PasteBitmapEx( const Point&, const BitmapEx& );
     sal_Bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     sal_Bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
-                                    const String& rFile, const String& rFilter );
+                                    const OUString& rFile, const OUString& rFilter );
     sal_Bool            PasteBookmark( sal_uLong nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
@@ -143,8 +143,8 @@ public:
 
     sal_Bool            ApplyGraphicToObject( SdrObject* pObject, const Graphic& rGraphic );
 
-    void            InsertBookmark( const String& rDescription, const String& rURL,
-                                    SCCOL nPosX, SCROW nPosY, const String* pTarget = NULL,
+    void            InsertBookmark( const OUString& rDescription, const OUString& rURL,
+                                    SCCOL nPosX, SCROW nPosY, const OUString* pTarget = NULL,
                                     sal_Bool bTryReplace = false );
     bool HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
@@ -157,7 +157,7 @@ public:
     void            CreateNames( sal_uInt16 nFlags );
     sal_uInt16          GetCreateNameFlags();
     void            InsertNameList();
-    sal_Bool            InsertName( const String& rName, const String& rSymbol,
+    sal_Bool            InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType );
 
     void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet,
@@ -179,7 +179,7 @@ public:
     void                    UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
 
     void            SetNumberFormat( short nFormatType, sal_uLong nAdd = 0 );
-    void            SetNumFmtByStr( const String& rCode );
+    void            SetNumFmtByStr( const OUString& rCode );
     void            ChangeNumFmtDecimals( sal_Bool bIncrement );
 
     void            SetValidation( const ScValidationData& rNew );
@@ -188,8 +188,8 @@ public:
 
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
-    void            Protect( SCTAB nTab, const String& rPassword );
-    sal_Bool            Unprotect( SCTAB nTab, const String& rPassword );
+    void            Protect( SCTAB nTab, const OUString& rPassword );
+    sal_Bool            Unprotect( SCTAB nTab, const OUString& rPassword );
 
     void            DeleteCells( DelCellCmd eCmd, sal_Bool bRecord = sal_True );
     sal_Bool            InsertCells( InsCellCmd eCmd, sal_Bool bRecord = sal_True, sal_Bool bPartOfPaste = false );
@@ -247,17 +247,17 @@ public:
     void            Solve( const ScSolveParam& rParam );
     void            TabOp( const ScTabOpParam& rParam,  sal_Bool bRecord = sal_True );
 
-    sal_Bool            InsertTable( const String& rName, SCTAB nTabNr, sal_Bool bRecord = sal_True );
+    sal_Bool            InsertTable( const OUString& rName, SCTAB nTabNr, sal_Bool bRecord = sal_True );
     sal_Bool            InsertTables(std::vector<OUString>& aNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
 
 
-    sal_Bool            AppendTable( const String& rName, sal_Bool bRecord = sal_True );
+    sal_Bool            AppendTable( const OUString& rName, sal_Bool bRecord = sal_True );
 
     sal_Bool            DeleteTable( SCTAB nTabNr, sal_Bool bRecord = true );
     sal_Bool            DeleteTables(const std::vector<SCTAB>& TheTabs, sal_Bool bRecord = true );
     bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
 
-    sal_Bool            RenameTable( const String& rName, SCTAB nTabNr );
+    sal_Bool            RenameTable( const OUString& rName, SCTAB nTabNr );
     void MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName = NULL );
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
@@ -266,20 +266,20 @@ public:
     bool            SetTabBgColor( const Color& rColor, SCTAB nTabNr );
     bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList );
 
-    void            InsertTableLink( const String& rFile,
-                                        const String& rFilter, const String& rOptions,
-                                        const String& rTabName );
-    void            InsertAreaLink( const String& rFile,
-                                        const String& rFilter, const String& rOptions,
-                                        const String& rSource, sal_uLong nRefresh );
+    void            InsertTableLink( const OUString& rFile,
+                                        const OUString& rFilter, const OUString& rOptions,
+                                        const OUString& rTabName );
+    void            InsertAreaLink( const OUString& rFile,
+                                        const OUString& rFilter, const OUString& rOptions,
+                                        const OUString& rSource, sal_uLong nRefresh );
 
     void            ShowTable( const std::vector<String>& rNames );
     void            HideTable( const ScMarkData& rMark );
 
-    void            MakeScenario( const String& rName, const String& rComment,
+    void            MakeScenario( const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags );
     void            ExtendScenario();
-    void            UseScenario( const String& rName );
+    void            UseScenario( const OUString& rName );
 
     void            InsertSpecialChar( const OUString& rStr, const Font& rFont );
 
@@ -291,7 +291,7 @@ public:
     void            SetSelectionFrameLines( const ::editeng::SvxBorderLine* pLine,
                                             sal_Bool bColorOnly );
 
-    void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
+    void            SetNoteText( const ScAddress& rPos, const OUString& rNoteText );
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate );
     void            DoRefConversion( sal_Bool bRecord = sal_True );
 
@@ -302,8 +302,8 @@ public:
     void            DoSheetConversion( const ScConversionParam& rParam, sal_Bool bRecord = sal_True );
 
     void            SetPrintRanges( sal_Bool bEntireSheet,
-                                    const String* pPrint,
-                                    const String* pRepCol, const String* pRepRow,
+                                    const OUString* pPrint,
+                                    const OUString* pRepCol, const OUString* pRepRow,
                                     sal_Bool bAddPrint );
 
     void            DetectiveAddPred();

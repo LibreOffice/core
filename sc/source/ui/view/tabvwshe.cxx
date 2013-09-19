@@ -119,7 +119,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 
 //------------------------------------------------------------------------
 
-void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const String& rTarget,
+void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const OUString& rTarget,
                                 sal_uInt16 nMode )
 {
     SvxLinkInsertMode eMode = (SvxLinkInsertMode) nMode;

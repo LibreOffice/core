@@ -149,9 +149,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )         // OK aus Dialog
                 {
-                    String aPrintStr;
-                    String aRowStr;
-                    String aColStr;
+                    OUString aPrintStr;
+                    OUString aRowStr;
+                    OUString aColStr;
                     sal_Bool bEntire = false;
                     const SfxPoolItem* pItem;
                     if ( pReqArgs->GetItemState( SID_CHANGE_PRINTAREA, sal_True, &pItem ) == SFX_ITEM_SET )
@@ -176,7 +176,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 sal_Bool bAdd = ( nSlot == SID_ADD_PRINTAREA );
                 if ( pReqArgs )
                 {
-                    String aPrintStr;
+                    OUString aPrintStr;
                     const SfxPoolItem* pItem;
                     if ( pReqArgs->GetItemState( SID_DEFINE_PRINTAREA, sal_True, &pItem ) == SFX_ITEM_SET )
                         aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -192,7 +192,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_DELETE_PRINTAREA:
             {
-                String aEmpty;
+                OUString aEmpty;
                 SetPrintRanges( false, &aEmpty, NULL, NULL, false );        // Druckbereich loeschen
                 rReq.Done();
             }

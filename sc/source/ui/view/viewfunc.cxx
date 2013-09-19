@@ -327,7 +327,7 @@ static sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 //  input - undo OK
 
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                            const String& rString,
+                            const OUString& rString,
                             const EditTextObject* pData )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -348,14 +348,14 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         bool bFormula = false;
 
         // a single '=' character is handled as string (needed for special filters)
-        if ( rString.Len() > 1 )
+        if ( rString.getLength() > 1 )
         {
-            if ( rString.GetChar(0) == '=' )
+            if ( rString[0] == '=' )
             {
                 // handle as formula
                 bFormula = true;
             }
-            else if ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' )
+            else if ( rString[0] == '+' || rString[0] == '-' )
             {
                 // if there is more than one leading '+' or '-' character, remove the additional ones
                 String aString( rString );
@@ -392,7 +392,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             aComp.SetGrammar(pDoc->GetGrammar());
 //2do: enable/disable autoCorrection via calcoptions
             aComp.SetAutoCorrection( sal_True );
-            if ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' )
+            if ( rString[0] == '+' || rString[0] == '-' )
             {
                 aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
             }
@@ -505,7 +505,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 sal_uLong nIndex = (sal_uLong) ((SfxUInt32Item*) pDoc->GetAttr(
                     nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
                 if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
-                     ( ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' ) && nError && rString.Equals( aFormula ) ) )
+                     ( ( rString[0] == '+' || rString[0] == '-' ) && nError && rString == aFormula ) )
                 {
                     if ( pData )
                     {
@@ -755,7 +755,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
-void ScViewFunc::EnterDataAtCursor( const String& rString )
+void ScViewFunc::EnterDataAtCursor( const OUString& rString )
 {
     SCCOL nPosX = GetViewData()->GetCurX();
     SCROW nPosY = GetViewData()->GetCurY();
@@ -764,7 +764,7 @@ void ScViewFunc::EnterDataAtCursor( const String& rString )
     EnterData( nPosX, nPosY, nTab, rString );
 }
 
-void ScViewFunc::EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram )
+void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar::Grammar eGram )
 {
     ScViewData* pData = GetViewData();
     const ScMarkData& rMark = pData->GetMarkData();
@@ -2450,7 +2450,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     UpdateLayerLocks();         //! broadcast to all views
 }
 
-void ScViewFunc::Protect( SCTAB nTab, const String& rPassword )
+void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
 {
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -2481,7 +2481,7 @@ void ScViewFunc::Protect( SCTAB nTab, const String& rPassword )
     UpdateLayerLocks();         //! broadcast to all views
 }
 
-sal_Bool ScViewFunc::Unprotect( SCTAB nTab, const String& rPassword )
+sal_Bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
 {
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -2517,7 +2517,7 @@ sal_Bool ScViewFunc::Unprotect( SCTAB nTab, const String& rPassword )
     return bChanged;
 }
 
-void ScViewFunc::SetNoteText( const ScAddress& rPos, const String& rNoteText )
+void ScViewFunc::SetNoteText( const ScAddress& rPos, const OUString& rNoteText )
 {
     GetViewData()->GetDocShell()->GetDocFunc().SetNoteText( rPos, rNoteText, false );
 }
@@ -2563,7 +2563,7 @@ void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
     ApplySelectionPattern( aNewAttrs, sal_True );
 }
 
-void ScViewFunc::SetNumFmtByStr( const String& rCode )
+void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
 {
     // not editable because of matrix only? attribute OK nonetheless
     bool bOnlyNotBecauseOfMatrix;
@@ -2760,7 +2760,7 @@ void ScViewFunc::ChangeIndent( sal_Bool bIncrement )
     }
 }
 
-sal_Bool ScViewFunc::InsertName( const String& rName, const String& rSymbol,
+sal_Bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType )
 {
     //  Type = P,R,C,F (and combinations)

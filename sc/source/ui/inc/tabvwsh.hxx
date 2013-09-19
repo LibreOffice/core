@@ -372,7 +372,7 @@ public:
 
     FmFormShell*    GetFormShell() const    { return pFormShell; }
 
-    void    InsertURL( const String& rName, const String& rURL, const String& rTarget,
+    void    InsertURL( const String& rName, const String& rURL, const OUString& rTarget,
                             sal_uInt16 nMode );
     void    InsertURLButton( const String& rName, const String& rURL, const String& rTarget,
                             const Point* pInsPos = NULL );

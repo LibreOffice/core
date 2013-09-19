@@ -374,7 +374,7 @@ sal_Bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
 }
 
 sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
-                                const String& rFile, const String& rFilter )
+                                const OUString& rFile, const OUString& rFilter )
 {
     MakeDrawLayer();
     ScDrawView* pScDrawView = GetScDrawView();
@@ -415,7 +415,7 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     // SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
     // See #i37444#.
-    if (rFile.Len())
+    if (!rFile.isEmpty())
         pGrafObj->SetGraphicLink( rFile, rFilter );
 
     return sal_True;

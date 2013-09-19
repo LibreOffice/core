@@ -712,7 +712,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 
 //----------------------------------------------------------------------------
 
-String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr )
+OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr )
 {
     ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -757,7 +757,7 @@ String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTo
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData )
+void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pData )
 {
     //  test for multi selection
 
@@ -929,8 +929,8 @@ void ScViewFunc::AdjustPrintZoom()
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const String* pPrint,
-                                const String* pRepCol, const String* pRepRow,
+void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const OUString* pPrint,
+                                const OUString* pRepCol, const OUString* pRepRow,
                                 sal_Bool bAddPrint )
 {
     //  on all selected tables
@@ -962,13 +962,13 @@ void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const String* pPrint,
         }
         else if ( pPrint )
         {
-            if ( pPrint->Len() )
+            if ( !pPrint->isEmpty() )
             {
                 const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
                 sal_uInt16 nTCount = comphelper::string::getTokenCount(*pPrint, sep);
                 for (sal_uInt16 i=0; i<nTCount; i++)
                 {
-                    String aToken = pPrint->GetToken(i, sep);
+                    String aToken = pPrint->getToken(i, sep);
                     if ( aRange.ParseAny( aToken, pDoc, aDetails ) & SCA_VALID )
                         pDoc->AddPrintRange( nTab, aRange );
                 }
@@ -997,7 +997,7 @@ void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const String* pPrint,
 
         if ( pRepCol )
         {
-            if ( !pRepCol->Len() )
+            if ( pRepCol->isEmpty() )
                 pDoc->SetRepeatColRange( nTab, NULL );
             else
                 if ( aRange.ParseAny( *pRepCol, pDoc, aDetails ) & SCA_VALID )
@@ -1008,7 +1008,7 @@ void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const String* pPrint,
 
         if ( pRepRow )
         {
-            if ( !pRepRow->Len() )
+            if ( pRepRow->isEmpty() )
                 pDoc->SetRepeatRowRange( nTab, NULL );
             else
                 if ( aRange.ParseAny( *pRepRow, pDoc, aDetails ) & SCA_VALID )
@@ -1905,7 +1905,7 @@ void ScViewFunc::TabOp( const ScTabOpParam& rParam, sal_Bool bRecord )
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::MakeScenario( const String& rName, const String& rComment,
+void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags )
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
@@ -1949,7 +1949,7 @@ void ScViewFunc::ExtendScenario()
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::UseScenario( const String& rName )
+void ScViewFunc::UseScenario( const OUString& rName )
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     SCTAB       nTab    = GetViewData()->GetTabNo();
@@ -1963,7 +1963,7 @@ void ScViewFunc::UseScenario( const String& rName )
 //----------------------------------------------------------------------------
 //  Insert table
 
-sal_Bool ScViewFunc::InsertTable( const String& rName, SCTAB nTab, sal_Bool bRecord )
+sal_Bool ScViewFunc::InsertTable( const OUString& rName, SCTAB nTab, sal_Bool bRecord )
 {
     //  Order Tabl/Name is inverted for DocFunc
     sal_Bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().
@@ -2027,7 +2027,7 @@ sal_Bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScViewFunc::AppendTable( const String& rName, sal_Bool bRecord )
+sal_Bool ScViewFunc::AppendTable( const OUString& rName, sal_Bool bRecord )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc   = pDocSh->GetDocument();
@@ -2253,7 +2253,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScViewFunc::RenameTable( const String& rName, SCTAB nTab )
+sal_Bool ScViewFunc::RenameTable( const OUString& rName, SCTAB nTab )
 {
     //  order Table/Name is inverted for DocFunc
     sal_Bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().
@@ -2291,9 +2291,9 @@ bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfo
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::InsertAreaLink( const String& rFile,
-                                    const String& rFilter, const String& rOptions,
-                                    const String& rSource, sal_uLong nRefresh )
+void ScViewFunc::InsertAreaLink( const OUString& rFile,
+                                    const OUString& rFilter, const OUString& rOptions,
+                                    const OUString& rSource, sal_uLong nRefresh )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     SCCOL nPosX = GetViewData()->GetCurX();
@@ -2307,9 +2307,9 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::InsertTableLink( const String& rFile,
-                                    const String& rFilter, const String& rOptions,
-                                    const String& rTabName )
+void ScViewFunc::InsertTableLink( const OUString& rFile,
+                                    const OUString& rFilter, const OUString& rOptions,
+                                    const OUString& rTabName )
 {
     OUString aFilterName = rFilter;
     OUString aOpt = rOptions;
@@ -2320,7 +2320,7 @@ void ScViewFunc::InsertTableLink( const String& rFile,
         ScDocShell* pSrcSh = aLoader.GetDocShell();
         ScDocument* pSrcDoc = pSrcSh->GetDocument();
         SCTAB nTab = MAXTAB+1;
-        if (!rTabName.Len())                // no name given -> first table
+        if (rTabName.isEmpty())                // no name given -> first table
             nTab = 0;
         else
         {

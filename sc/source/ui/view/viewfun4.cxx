@@ -578,7 +578,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
 // Pasten von FORMAT_FILE-Items
 //  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
 
-sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool bLink )
+sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bool bLink )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rFile );
@@ -695,8 +695,8 @@ sal_Bool ScViewFunc::PasteBookmark( sal_uLong nFormatId,
     return sal_True;
 }
 
-void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
-                                    SCCOL nPosX, SCROW nPosY, const String* pTarget,
+void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& rURL,
+                                    SCCOL nPosX, SCROW nPosY, const OUString* pTarget,
                                     sal_Bool bTryReplace )
 {
     ScViewData* pViewData = GetViewData();

@@ -1024,7 +1024,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
         {
             //  Druckbereich setzen
 
-            String aNewRanges;
+            OUString aNewRanges;
             sal_uInt16 nOldCount = pDoc->GetPrintRangeCount( nTab );
             if ( nOldCount )
             {
@@ -1040,8 +1040,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
                             aTemp = aPagebreakDrag.Format(SCA_VALID);
                         if (!aTemp.isEmpty())
                         {
-                            if ( aNewRanges.Len() )
-                                aNewRanges += ';';
+                            if ( !aNewRanges.isEmpty() )
+                                aNewRanges += ";";
                             aNewRanges += aTemp;
                         }
                     }
