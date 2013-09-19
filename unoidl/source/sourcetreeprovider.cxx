@@ -39,45 +39,44 @@ namespace {
 // osl_FileStatus_Mask_Validate):
 OUString getFileName(OUString const & uri, osl::FileStatus & status) {
 #if defined MACOSX
-     sal_Int32 i = uri.lastIndexOf('/') + 1;
-     OUString path;
-     if (osl::FileBase::getSystemPathFromFileURL(uri.copy(0, i), path)
-         != osl::FileBase::E_None)
-     {
-         SAL_WARN(
-             "unoidl",
-             "cannot getSystemPathFromFileURL(" << uri.copy(0, i) << ")");
-         return status.getFileName();
-     }
-     OString dir(OUStringToOString(path, osl_getThreadTextEncoding()));
-     OString name(OUStringToOString(uri.copy(i), osl_getThreadTextEncoding()));
-     DIR * d = opendir(dir.getStr());
-     if (d == 0) {
-         SAL_WARN("unoidl", "cannot opendir(" << dir << ")");
-         return status.getFileName();
-     }
-     for (;;) {
-         dirent ent;
-         dirent * p;
-         int e = readdir_r(d, &ent, &p);
-         if (e != 0) {
-             SAL_WARN("unoidl", "cannot readdir_r");
-             closedir(d);
-             return status.getFileName();
-         }
-         if (p == 0) {
-             SAL_WARN(
-                 "unoidl", "cannot find " << name << " via readdir of " << dir);
-             closedir(d);
-             return status.getFileName();
-         }
-         if (name.equalsIgnoreAsciiCase(p->d_name)) {
-             closedir(d);
-             return OUString(
-                 p->d_name, std::strlen(p->d_name),
-                 osl_getThreadTextEncoding());
-         }
-     }
+    sal_Int32 i = uri.lastIndexOf('/') + 1;
+    OUString path;
+    if (osl::FileBase::getSystemPathFromFileURL(uri.copy(0, i), path)
+        != osl::FileBase::E_None)
+    {
+        SAL_WARN(
+            "unoidl",
+            "cannot getSystemPathFromFileURL(" << uri.copy(0, i) << ")");
+        return status.getFileName();
+    }
+    OString dir(OUStringToOString(path, osl_getThreadTextEncoding()));
+    OString name(OUStringToOString(uri.copy(i), osl_getThreadTextEncoding()));
+    DIR * d = opendir(dir.getStr());
+    if (d == 0) {
+        SAL_WARN("unoidl", "cannot opendir(" << dir << ")");
+        return status.getFileName();
+    }
+    for (;;) {
+        dirent ent;
+        dirent * p;
+        int e = readdir_r(d, &ent, &p);
+        if (e != 0) {
+            SAL_WARN("unoidl", "cannot readdir_r");
+            closedir(d);
+            return status.getFileName();
+        }
+        if (p == 0) {
+            SAL_WARN(
+                "unoidl", "cannot find " << name << " via readdir of " << dir);
+            closedir(d);
+            return status.getFileName();
+        }
+        if (name.equalsIgnoreAsciiCase(p->d_name)) {
+            closedir(d);
+            return OUString(
+                p->d_name, std::strlen(p->d_name), osl_getThreadTextEncoding());
+        }
+    }
 #else
     (void) uri;
     return status.getFileName();
