@@ -364,7 +364,7 @@ void SaneDlg::InitFields()
     sal_Bool bGroupRejected = sal_False;
     for( i = 1; i < mrSane.CountOptions(); i++ )
     {
-        String aOption=mrSane.GetOptionName( i );
+        OUString aOption=mrSane.GetOptionName( i );
         sal_Bool bInsertAdvanced =
             mrSane.GetOptionCap( i ) & SANE_CAP_ADVANCED &&
             ! maAdvancedBox.IsChecked() ? sal_False : sal_True;
@@ -379,7 +379,7 @@ void SaneDlg::InitFields()
             else
                 bGroupRejected = sal_True;
         }
-        else if( aOption.Len() &&
+        else if( !aOption.isEmpty() &&
                  ! ( mrSane.GetOptionCap( i ) &
                      (
                          SANE_CAP_HARD_SELECT |
@@ -391,7 +391,7 @@ void SaneDlg::InitFields()
             for( size_t n = 0; !bIsSpecial &&
                      n < SAL_N_ELEMENTS(ppSpecialOptions); n++ )
             {
-                if( aOption.EqualsAscii( ppSpecialOptions[n] ) )
+                if( aOption == OUString::createFromAscii(ppSpecialOptions[n]) )
                     bIsSpecial=sal_True;
             }
             if( ! bIsSpecial )
@@ -411,12 +411,11 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     {
         if( pButton == &maDeviceInfoButton )
         {
-            String aString(SaneResId(RID_SANE_DEVICEINFO_TXT).toString());
-            String aSR( RTL_CONSTASCII_USTRINGPARAM( "%s" ) );
-            aString.SearchAndReplace( aSR, Sane::GetName( mrSane.GetDeviceNumber() ) );
-            aString.SearchAndReplace( aSR, Sane::GetVendor( mrSane.GetDeviceNumber() ) );
-            aString.SearchAndReplace( aSR, Sane::GetModel( mrSane.GetDeviceNumber() ) );
-            aString.SearchAndReplace( aSR, Sane::GetType( mrSane.GetDeviceNumber() ) );
+            OUString aString(SaneResId(RID_SANE_DEVICEINFO_TXT).toString());
+            aString = aString.replaceFirst( "%s", Sane::GetName( mrSane.GetDeviceNumber() ) );
+            aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
+            aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
+            aString = aString.replaceFirst( "%s", Sane::GetType( mrSane.GetDeviceNumber() ) );
             InfoBox aInfoBox( this, aString );
             aInfoBox.Execute();
         }
@@ -489,9 +488,9 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
 {
     if( pListBox == &maDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
-        String aNewDevice = maDeviceBox.GetSelectEntry();
+        OUString aNewDevice = maDeviceBox.GetSelectEntry();
         int nNumber;
-        if( aNewDevice.Equals( Sane::GetName( nNumber = mrSane.GetDeviceNumber() ) ) )
+        if( aNewDevice == Sane::GetName( nNumber = mrSane.GetDeviceNumber() ) )
         {
             mrSane.Close();
             mrSane.Open( nNumber );
@@ -519,7 +518,7 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
 {
     if( pBox == &maOptionBox && Sane::IsSane() )
     {
-        String aOption =
+        OUString aOption =
             maOptionBox.GetEntryText( maOptionBox.FirstSelected() );
         int nOption = mrSane.GetOptionByName(OUStringToOString(aOption,
             osl_getThreadTextEncoding()).getStr());
@@ -636,7 +635,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
                 else if( fValue > mfMax )
                     fValue = mfMax;
                 sprintf( pBuf, "%g", fValue );
-                maNumericEdit.SetText( String( pBuf, osl_getThreadTextEncoding() ) );
+                maNumericEdit.SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
             }
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
@@ -647,7 +646,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
             double fValue;
             mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
             sprintf( pBuf, "%g", fValue );
-            String aValue( pBuf, osl_getThreadTextEncoding() );
+            OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
             maNumericEdit.SetText( aValue );
             maQuantumRangeBox.SelectEntry( aValue );
         }
@@ -833,7 +832,7 @@ void SaneDlg::EstablishStringRange()
     const char** ppStrings = mrSane.GetStringConstraint( mnCurrentOption );
     maStringRangeBox.Clear();
     for( int i = 0; ppStrings[i] != 0; i++ )
-        maStringRangeBox.InsertEntry( String( ppStrings[i], osl_getThreadTextEncoding() ) );
+        maStringRangeBox.InsertEntry( OUString( ppStrings[i], strlen(ppStrings[i]), osl_getThreadTextEncoding() ) );
     OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
     maStringRangeBox.SelectEntry(OStringToOUString(aValue, osl_getThreadTextEncoding()));
@@ -867,17 +866,17 @@ void SaneDlg::EstablishQuantumRange()
         for( int i = 0; i < nValues; i++ )
         {
             sprintf( pBuf, "%g", mpRange[ i ] );
-            maQuantumRangeBox.InsertEntry( String( pBuf, osl_getThreadTextEncoding() ) );
+            maQuantumRangeBox.InsertEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         double fValue;
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ) )
         {
             sprintf( pBuf, "%g", fValue );
-            maQuantumRangeBox.SelectEntry( String( pBuf, osl_getThreadTextEncoding() ) );
+            maQuantumRangeBox.SelectEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         maQuantumRangeBox.Show( sal_True );
-        String aText( mrSane.GetOptionName( mnCurrentOption ) );
-        aText += ' ';
+        OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
+        aText += " ";
         aText += mrSane.GetOptionUnitName( mnCurrentOption );
         maOptionDescTxt.SetText( aText );
         maOptionDescTxt.Show( sal_True );
@@ -894,18 +893,18 @@ void SaneDlg::EstablishNumericOption()
         return;
 
     char pBuf[256];
-    String aText( mrSane.GetOptionName( mnCurrentOption ) );
-    aText += ' ';
+    OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
+    aText += " ";
     aText += mrSane.GetOptionUnitName( mnCurrentOption );
     if( mfMin != mfMax )
     {
         sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
-        aText += String( pBuf, osl_getThreadTextEncoding() );
+        aText += OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
     }
     maOptionDescTxt.SetText( aText );
     maOptionDescTxt.Show( sal_True );
     sprintf( pBuf, "%g", fValue );
-    maNumericEdit.SetText( String( pBuf, osl_getThreadTextEncoding() ) );
+    maNumericEdit.SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
     maNumericEdit.Show( sal_True );
 }
 
@@ -1173,8 +1172,8 @@ sal_Bool SaneDlg::LoadState()
         return sal_False;
 
     const char* pEnv = getenv("HOME");
-    String aFileName( pEnv ? pEnv : "", osl_getThreadTextEncoding() );
-    aFileName += String( RTL_CONSTASCII_USTRINGPARAM( "/.so_sane_state" ) );
+    OUString aFileName = pEnv ? OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding() ) : OUString();
+    aFileName += "/.so_sane_state";
     Config aConfig( aFileName );
     if( ! aConfig.HasGroup( "SANE" ) )
         return sal_False;

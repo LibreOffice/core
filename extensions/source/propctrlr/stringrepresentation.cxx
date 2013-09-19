@@ -334,7 +334,7 @@ namespace
     template < class ElementType, class Transformer >
     OUString composeSequenceElements( const Sequence< ElementType >& _rElements, const Transformer& _rTransformer )
     {
-        String sCompose;
+        OUString sCompose;
 
         // loop through the elements and concatenate the string representations of the integers
         // (separated by a line break)
@@ -342,9 +342,9 @@ namespace
         const ElementType* pElementsEnd = pElements + _rElements.getLength();
         for ( ; pElements != pElementsEnd; ++pElements )
         {
-            sCompose += String( _rTransformer( *pElements ) );
+            sCompose += OUString( _rTransformer( *pElements ) );
             if ( pElements != pElementsEnd )
-                sCompose += '\n';
+                sCompose += "\n";
         }
 
         return sCompose;
@@ -531,7 +531,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
     {
         uno::Type aElementType = ::comphelper::getSequenceElementType( _rTargetType );
 
-        String aStr( _rStringRep );
+        OUString aStr( _rStringRep );
         switch ( aElementType.getTypeClass() )
         {
             case uno::TypeClass_STRING:

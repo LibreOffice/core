@@ -89,15 +89,15 @@ namespace abp
         INetURLObject aURL( rSettings.sDataSourceName );
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            String sPath = SvtPathOptions().GetWorkPath();
-            sPath += '/';
-            sPath += String(rSettings.sDataSourceName);
+            OUString sPath = SvtPathOptions().GetWorkPath();
+            sPath += "/";
+            sPath += rSettings.sDataSourceName;
 
             const SfxFilter* pFilter = lcl_getBaseFilter();
             if ( pFilter )
             {
-                String sExt = pFilter->GetDefaultExtension();
-                sPath += sExt.GetToken(1,'*');
+                OUString sExt = pFilter->GetDefaultExtension();
+                sPath += sExt.getToken(1,'*');
             }
 
             aURL.SetURL(sPath);
@@ -105,11 +105,11 @@ namespace abp
         OSL_ENSURE( aURL.GetProtocol() != INET_PROT_NOT_VALID ,"No valid file name!");
         rSettings.sDataSourceName = aURL.GetMainURL( INetURLObject::NO_DECODE );
         m_aLocationController.setURL( rSettings.sDataSourceName );
-        String sName = aURL.getName( );
-        xub_StrLen nPos = sName.Search(String(aURL.GetExtension()));
-        if ( nPos != STRING_NOTFOUND )
+        OUString sName = aURL.getName( );
+        sal_Int32 nPos = sName.indexOf(aURL.GetExtension());
+        if ( nPos != -1 )
         {
-            sName.Erase(nPos-1,4);
+            sName = sName.replaceAt(nPos-1, 4, "");
         }
         m_aName.SetText(sName);
 

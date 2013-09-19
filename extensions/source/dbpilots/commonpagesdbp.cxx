@@ -205,7 +205,7 @@ namespace dbp
 
         if (0 == aFileDlg.Execute())
         {
-            String sDataSourceName = aFileDlg.GetPath();
+            OUString sDataSourceName = aFileDlg.GetPath();
             ::svt::OFileNotation aFileNotation(sDataSourceName);
             sDataSourceName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
             m_aDatasource.InsertEntry(sDataSourceName);
@@ -416,19 +416,19 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OMaybeListSelectionPage::implInitialize(const String& _rSelection)
+    void OMaybeListSelectionPage::implInitialize(const OUString& _rSelection)
     {
         DBG_ASSERT(m_pYes, "OMaybeListSelectionPage::implInitialize: no controls announced!");
-        sal_Bool bIsSelection = (0 != _rSelection.Len());
+        sal_Bool bIsSelection = ! _rSelection.isEmpty();
         m_pYes->Check(bIsSelection);
         m_pNo->Check(!bIsSelection);
         m_pList->Enable(bIsSelection);
 
-        m_pList->SelectEntry(bIsSelection ? _rSelection : String());
+        m_pList->SelectEntry(bIsSelection ? _rSelection : OUString());
     }
 
     //---------------------------------------------------------------------
-    void OMaybeListSelectionPage::implCommit(String& _rSelection)
+    void OMaybeListSelectionPage::implCommit(OUString& _rSelection)
     {
         _rSelection = m_pYes->IsChecked() ? m_pList->GetSelectEntry() : OUString();
     }

@@ -422,16 +422,16 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         Window* pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 
-        String aCommand( _rURL.Path);
-        if(aCommand.EqualsAscii("Bib/Mapping"))
+        OUString aCommand( _rURL.Path);
+        if(aCommand == "Bib/Mapping")
         {
             pDatMan->CreateMappingDialog(pParent);
         }
-        else if(aCommand.EqualsAscii("Bib/source"))
+        else if(aCommand == "Bib/source")
         {
             ChangeDataSource(aArgs);
         }
-        else if(aCommand.EqualsAscii("Bib/sdbsource"))
+        else if(aCommand == "Bib/sdbsource")
         {
             OUString aURL = pDatMan->CreateDBChangeDialog(pParent);
             if(!aURL.isEmpty())
@@ -450,7 +450,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
             }
         }
-        else if(aCommand.EqualsAscii("Bib/autoFilter"))
+        else if(aCommand == "Bib/autoFilter")
         {
             sal_uInt16 nCount = aStatusListeners.size();
             for ( sal_uInt16 n=0; n<nCount; n++ )
@@ -480,7 +480,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             pConfig->setQueryField(aQueryField);
             pDatMan->startQueryWith(aQuery);
         }
-        else if(aCommand.EqualsAscii("Bib/standardFilter"))
+        else if(aCommand == "Bib/standardFilter")
         {
             try
             {
@@ -518,17 +518,17 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
             }
         }
-        else if(aCommand.EqualsAscii("Bib/removeFilter"))
+        else if(aCommand == "Bib/removeFilter")
         {
             RemoveFilter();
         }
-        else if( _rURL.Complete == "slot:5503" || aCommand.EqualsAscii("CloseDoc") )
+        else if( _rURL.Complete == "slot:5503" || aCommand == "CloseDoc" )
         {
             Application::PostUserEvent( STATIC_LINK( this, BibFrameController_Impl,
                                         DisposeHdl ), 0 );
 
         }
-        else if(aCommand.EqualsAscii("Bib/InsertRecord"))
+        else if(aCommand == "Bib/InsertRecord")
         {
             Reference<form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
             if(SaveModified(xFormCtrl))
@@ -547,7 +547,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
             }
         }
-        else if(aCommand.EqualsAscii("Bib/DeleteRecord"))
+        else if(aCommand == "Bib/DeleteRecord")
         {
             Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
             Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
@@ -609,7 +609,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 }
             }
         }
-        else if(aCommand.EqualsAscii("Cut"))
+        else if(aCommand == "Cut")
         {
             Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
@@ -618,7 +618,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 pChild->KeyInput( aEvent );
             }
         }
-        else if(aCommand.EqualsAscii("Copy"))
+        else if(aCommand == "Copy")
         {
             Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
@@ -627,7 +627,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 pChild->KeyInput( aEvent );
             }
         }
-        else if(aCommand.EqualsAscii("Paste"))
+        else if(aCommand == "Paste")
         {
             Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)

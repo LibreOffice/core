@@ -1030,8 +1030,8 @@ void PluginInputStream::load()
     INetURLObject aUrl;
     aUrl.SetSmartProtocol( INET_PROT_FILE );
     aUrl.SetSmartURL(
-        String( getStream()->url,
-                ::sal::static_int_cast< sal_uInt16, size_t >( strlen( getStream()->url ) ),
+        OUString( getStream()->url,
+                  strlen( getStream()->url ),
                 RTL_TEXTENCODING_MS_1252
             ) );
     try

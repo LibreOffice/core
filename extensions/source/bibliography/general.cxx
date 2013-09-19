@@ -391,8 +391,8 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     xFormCtrl->setContainer(xCtrlContnr);
     xFormCtrl->activateTabOrder();
 
-    if(sTableErrorString.Len())
-        sTableErrorString.Insert(sErrorPrefix, 0);
+    if(!sTableErrorString.isEmpty())
+        sTableErrorString = sErrorPrefix + sTableErrorString;
 }
 //-----------------------------------------------------------------------------
 BibGeneralPage::~BibGeneralPage()
@@ -432,7 +432,7 @@ void BibGeneralPage::CommitActiveControl()
 }
 //-----------------------------------------------------------------------------
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::Point& rPos, const ::Size& rSize,
-                                String& rErrorString, String aColumnUIName, const OString& sHelpId, sal_uInt16 nIndexInFTArray )
+                                OUString& rErrorString, OUString aColumnUIName, const OString& sHelpId, sal_uInt16 nIndexInFTArray )
 {
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 
@@ -447,15 +447,15 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
     }
     else
     {
-        if( rErrorString.Len() )
-            rErrorString += '\n';
+        if( !rErrorString.isEmpty() )
+            rErrorString += "\n";
 
         rErrorString += MnemonicGenerator::EraseAllMnemonicChars( aColumnUIName );
     }
 }
 //-----------------------------------------------------------------------------
 uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
-        const String& rName,
+        const OUString& rName,
         ::Point rPos, ::Size rSize, const OString& sHelpId, sal_Int16& rIndex )
 {
     uno::Reference< awt::XControlModel >  xCtrModel;
@@ -615,7 +615,7 @@ void BibGeneralPage::Resize()
 
 void BibGeneralPage::InitFixedTexts( void )
 {
-    String      aFixedStrings[ FIELD_COUNT ] =
+    OUString      aFixedStrings[ FIELD_COUNT ] =
     {
         BIB_RESSTR( ST_IDENTIFIER     ),
         BIB_RESSTR( ST_AUTHTYPE       ),

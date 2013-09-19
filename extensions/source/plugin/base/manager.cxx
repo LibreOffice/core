@@ -84,8 +84,8 @@ const Sequence< OUString >& PluginManager::getAdditionalSearchPaths()
     if( ! aPaths.getLength() )
     {
         SvtPathOptions aOptions;
-        String aPluginPath( aOptions.GetPluginPath() );
-        if( aPluginPath.Len() )
+        OUString aPluginPath( aOptions.GetPluginPath() );
+        if( !aPluginPath.isEmpty() )
         {
             sal_Int32 nPaths = comphelper::string::getTokenCount(aPluginPath, ';');
             aPaths.realloc( nPaths );

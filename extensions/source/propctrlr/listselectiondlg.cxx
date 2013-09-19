@@ -38,7 +38,7 @@ namespace pcr
     //====================================================================
     //--------------------------------------------------------------------
     ListSelectionDialog::ListSelectionDialog( Window* _pParent, const Reference< XPropertySet >& _rxListBox,
-            const OUString& _rPropertyName, const String& _rPropertyUIName )
+            const OUString& _rPropertyName, const OUString& _rPropertyUIName )
         :ModalDialog( _pParent, PcrRes( RID_DLG_SELECTION ) )
         ,m_aLabel   ( this, PcrRes( FT_ENTRIES ) )
         ,m_aEntries ( this, PcrRes( LB_ENTRIES ) )

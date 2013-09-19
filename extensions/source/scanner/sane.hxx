@@ -118,24 +118,24 @@ public:
         { return maHandle ? sal_True : sal_False; }
     static int              CountDevices()
         { return nDevices; }
-    static String           GetName( int n )
-        { return String( ppDevices[n]->name ? ppDevices[n]->name : "", osl_getThreadTextEncoding() ); }
-    static String           GetVendor( int n )
-        { return String( ppDevices[n]->vendor ? ppDevices[n]->vendor : "", osl_getThreadTextEncoding() ); }
-    static String           GetModel( int n )
-        { return String( ppDevices[n]->model ? ppDevices[n]->model : "", osl_getThreadTextEncoding() ); }
-    static String           GetType( int n )
-        { return String( ppDevices[n]->type ? ppDevices[n]->type : "", osl_getThreadTextEncoding() ); }
+    static OUString         GetName( int n )
+        { return ppDevices[n]->name ? OUString( ppDevices[n]->name, strlen(ppDevices[n]->name),  osl_getThreadTextEncoding() ) : OUString(); }
+    static OUString         GetVendor( int n )
+        { return ppDevices[n]->vendor ? OUString( ppDevices[n]->vendor, strlen(ppDevices[n]->vendor), osl_getThreadTextEncoding() ) : OUString(); }
+    static OUString         GetModel( int n )
+        { return ppDevices[n]->model ? OUString( ppDevices[n]->model, strlen(ppDevices[n]->model), osl_getThreadTextEncoding() ) : OUString(); }
+    static OUString         GetType( int n )
+        { return ppDevices[n]->type ? OUString( ppDevices[n]->type, strlen(ppDevices[n]->type), osl_getThreadTextEncoding() ) : OUString(); }
 
-    String          GetOptionName( int n )
-        { return String( mppOptions[n]->name ? (char*)mppOptions[n]->name : "", osl_getThreadTextEncoding() ); }
-    String          GetOptionTitle( int n )
-        { return String( mppOptions[n]->title ? (char*)mppOptions[n]->title : "", osl_getThreadTextEncoding() ); }
+    OUString        GetOptionName( int n )
+        { return mppOptions[n]->name ? OUString( (char*)mppOptions[n]->name, strlen((char*)mppOptions[n]->name), osl_getThreadTextEncoding() ) : OUString(); }
+    OUString        GetOptionTitle( int n )
+        { return mppOptions[n]->title ? OUString( (char*)mppOptions[n]->title, strlen((char*)mppOptions[n]->title), osl_getThreadTextEncoding() ) : OUString(); }
     SANE_Value_Type GetOptionType( int n )
         { return mppOptions[n]->type; }
     SANE_Unit       GetOptionUnit( int n )
         { return mppOptions[n]->unit; }
-    String          GetOptionUnitName( int n );
+    OUString        GetOptionUnitName( int n );
     SANE_Int        GetOptionCap( int n )
         { return mppOptions[n]->cap; }
     SANE_Constraint_Type GetOptionConstraintType( int n )
@@ -152,7 +152,7 @@ public:
     sal_Bool            GetOptionValue( int, double* );
 
     sal_Bool            SetOptionValue( int, sal_Bool );
-    sal_Bool            SetOptionValue( int, const String& );
+    sal_Bool            SetOptionValue( int, const OUString& );
     sal_Bool            SetOptionValue( int, double, int nElement = 0 );
     sal_Bool            SetOptionValue( int, double* );
 

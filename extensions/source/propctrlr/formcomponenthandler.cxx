@@ -986,8 +986,8 @@ namespace pcr
                 nPropId = PROPERTY_ID_WORDBREAK;
         }
 
-        String sDisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        if ( !sDisplayName.Len() )
+        OUString sDisplayName = m_pInfoService->getPropertyTranslation( nPropId );
+        if ( sDisplayName.isEmpty() )
         {
             OSL_FAIL( "FormComponentPropertyHandler::describePropertyLine: did getSupportedProperties not work properly?" );
             throw UnknownPropertyException();
@@ -2606,7 +2606,7 @@ namespace pcr
     {
         OSL_PRECOND( m_pInfoService.get(), "FormComponentPropertyHandler::impl_dialogListSelection_nothrow: no property meta data!" );
 
-        String sPropertyUIName( m_pInfoService->getPropertyTranslation( m_pInfoService->getPropertyId( _rProperty ) ) );
+        OUString sPropertyUIName( m_pInfoService->getPropertyTranslation( m_pInfoService->getPropertyId( _rProperty ) ) );
         ListSelectionDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, _rProperty, sPropertyUIName );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog.Execute() );

@@ -121,8 +121,8 @@ namespace bib
             // "delayed" GetFocus() because GetFocus() is initially called before GeneralPage is created
             m_pGeneralPage->GrabFocus();
 
-        String sErrorString( m_pGeneralPage->GetErrorString() );
-        if ( sErrorString.Len() )
+        OUString sErrorString( m_pGeneralPage->GetErrorString() );
+        if ( !sErrorString.isEmpty() )
         {
             sal_Bool bExecute = BibModul::GetConfig()->IsShowColumnAssignmentWarning();
             if(!m_pDatMan->HasActiveConnection())
@@ -133,7 +133,7 @@ namespace bib
             }
             else if(bExecute)
             {
-                sErrorString += '\n';
+                sErrorString += "\n";
                 sErrorString += BIB_RESSTR(RID_MAP_QUESTION);
                 QueryBox aQuery( this, WB_YES_NO, sErrorString );
                 aQuery.SetDefaultCheckBoxText();

@@ -45,20 +45,20 @@ namespace pcr
 
     public:
         // IPropertyInfoService
-        virtual sal_Int32                           getPropertyId(const String& _rName) const;
-        virtual String                              getPropertyTranslation(sal_Int32 _nId) const;
+        virtual sal_Int32                      getPropertyId(const OUString& _rName) const;
+        virtual OUString                       getPropertyTranslation(sal_Int32 _nId) const;
         virtual OString                        getPropertyHelpId(sal_Int32 _nId) const;
-        virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const;
-        virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
-        virtual ::std::vector< OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const;
-        virtual String                              getPropertyName( sal_Int32 _nPropId );
+        virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const;
+        virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const;
+        virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const;
+        virtual OUString                       getPropertyName( sal_Int32 _nPropId );
 
         virtual sal_Bool                isComposeable( const OUString& _rPropertyName ) const;
 
     protected:
         static const OPropertyInfoImpl* getPropertyInfo();
 
-        static const OPropertyInfoImpl* getPropertyInfo(const String& _rName);
+        static const OPropertyInfoImpl* getPropertyInfo(const OUString& _rName);
         static const OPropertyInfoImpl* getPropertyInfo(sal_Int32 _nId);
     };
 

@@ -37,8 +37,8 @@ class PluginComm
 {
 protected:
     int                         m_nRefCount;
-    OString              m_aLibName;
-    std::list< String >         m_aFilesToDelete;
+    OString                     m_aLibName;
+    std::list< OUString >       m_aFilesToDelete;
 public:
     PluginComm( const OString& rLibName, bool bReusable = true );
     virtual ~PluginComm();
@@ -50,7 +50,7 @@ public:
     const OString& getLibName() { return m_aLibName; }
     void setLibName( const OString& rName ) { m_aLibName = rName; }
 
-    void addFileToDelete( const String& filename )
+    void addFileToDelete( const OUString& filename )
         { m_aFilesToDelete.push_back( filename ); }
 
     virtual NPError NPP_Destroy( NPP instance, NPSavedData** save ) = 0;

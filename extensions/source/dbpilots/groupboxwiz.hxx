@@ -35,9 +35,9 @@ namespace dbp
     {
         StringArray     aLabels;
         StringArray     aValues;
-        String          sDefaultField;
-        String          sDBField;
-        String          sName;
+        OUString        sDefaultField;
+        OUString        sDBField;
+        OUString        sName;
     };
 
     //=====================================================================
@@ -186,7 +186,7 @@ namespace dbp
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
 
         // ODBFieldPage overridables
-        virtual String& getDBFieldSetting();
+        virtual OUString& getDBFieldSetting();
     };
 
     //=====================================================================

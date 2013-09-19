@@ -549,7 +549,7 @@ namespace pcr
                     {
                         // find a nice name for it
                         OUString sBaseName(PcrRes(RID_STR_BINDING_UI_NAME).toString());
-                        sBaseName += OUString(" ");
+                        sBaseName += " ";
                         OUString sNewName;
                         sal_Int32 nNumber = 1;
                         do

@@ -104,7 +104,7 @@ namespace pcr
                         ::com::sun::star::uno::Sequence< OUString >& _rMasterFields
                     );
 
-        String      getFormDataSourceType(
+        OUString    getFormDataSourceType(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm
                     ) const SAL_THROW(());
 

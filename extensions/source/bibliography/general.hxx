@@ -102,11 +102,11 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     Size                aStdSize;
     Point               aBasePos;
 
-    String              aBibTypeArr[ TYPE_COUNT ];
-    String              sErrorPrefix;
-    String              sTableErrorString;
+    OUString            aBibTypeArr[ TYPE_COUNT ];
+    OUString            sErrorPrefix;
+    OUString            sTableErrorString;
 
-    String              sTypeColumnName;
+    OUString            sTypeColumnName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                         xCtrlContnr;
@@ -124,11 +124,11 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     BibDataManager*     pDatMan;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                                AddXControl( const String& rName, Point aPos, Size aSize, const OString& sHelpId,
+                                AddXControl( const OUString& rName, Point aPos, Size aSize, const OString& sHelpId,
                                             sal_Int16& rIndex );
 
     void                        AddControlWithError( const OUString& rColumnName, const Point& rPos,
-                                            const Size& rSize, String& rErrorString, String aColumnUIName,
+                                            const Size& rSize, OUString& rErrorString, OUString aColumnUIName,
                                             const OString& sHelpId, sal_uInt16 nIndexInFTArray );
 
     void                        AdjustScrollbars();
@@ -143,7 +143,7 @@ public:
                                 BibGeneralPage(Window* pParent, BibDataManager* pDatMan);
     virtual                     ~BibGeneralPage();
 
-    inline const String&        GetErrorString() const;
+    inline const OUString&      GetErrorString() const;
 
     inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundComponent >&
                                 GetTypeListBoxModel() const;
@@ -167,7 +167,7 @@ public:
 };
 
 
-inline const String& BibGeneralPage::GetErrorString() const
+inline const OUString& BibGeneralPage::GetErrorString() const
 {
     return sTableErrorString;
 }

@@ -426,7 +426,7 @@ sal_Bool Sane::SetOptionValue( int n, sal_Bool bSet )
     return sal_True;
 }
 
-sal_Bool Sane::SetOptionValue( int n, const String& rSet )
+sal_Bool Sane::SetOptionValue( int n, const OUString& rSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
         return sal_False;
@@ -980,15 +980,15 @@ static const char *ppUnits[] = {
     "[usec]"
 };
 
-String Sane::GetOptionUnitName( int n )
+OUString Sane::GetOptionUnitName( int n )
 {
-    String aText;
+    OUString aText;
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = (size_t)nUnit;
     if (nUnitAsSize >= SAL_N_ELEMENTS( ppUnits ))
-        aText = OUString("[unknown units]");
+        aText = "[unknown units]";
     else
-        aText = String( ppUnits[ nUnit ], osl_getThreadTextEncoding() );
+        aText = OUString( ppUnits[ nUnit ], strlen(ppUnits[ nUnit ]), osl_getThreadTextEncoding() );
     return aText;
 }
 

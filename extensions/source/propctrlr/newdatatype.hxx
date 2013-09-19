@@ -50,7 +50,7 @@ namespace pcr
     public:
         NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames );
 
-        inline String   GetName() const { return m_aName.GetText(); }
+        inline OUString GetName() const { return m_aName.GetText(); }
 
     private:
         DECL_LINK( OnNameModified, void* );

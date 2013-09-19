@@ -54,7 +54,7 @@ namespace pcr
 
             if ((KEY_DELETE == nKey) || (KEY_BACKSPACE == nKey))
             {
-                SetText( String() );
+                SetText( "" );
                 if ( m_pHelper )
                     m_pHelper->ModifiedHdl( this );
                 return 1;
@@ -79,7 +79,7 @@ namespace pcr
         {
             TreatAsNumber( sal_False );
             SetFormatter( NULL, sal_True );
-            SetText( String() );
+            SetText( "" );
         }
     }
 
@@ -112,7 +112,7 @@ namespace pcr
                 getTypedControlWindow()->SetValue( pEntry ? getPreviewValue( *pEntry ) : 1234.56789 );
         }
         else
-            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetText( "" );
     }
     //------------------------------------------------------------------
     double OFormatSampleControl::getPreviewValue( const SvNumberformat& i_rEntry )
@@ -193,7 +193,7 @@ namespace pcr
         if ( _rValue >>= nValue )
             getTypedControlWindow()->SetValue( nValue );
         else
-            getTypedControlWindow()->SetText(String());
+            getTypedControlWindow()->SetText("");
     }
 
     //------------------------------------------------------------------
@@ -256,7 +256,7 @@ namespace pcr
         {
             getTypedControlWindow()->TreatAsNumber(sal_False);
             getTypedControlWindow()->SetFormatter(NULL, sal_True);
-            getTypedControlWindow()->SetText(String());
+            getTypedControlWindow()->SetText("");
             m_nLastDecimalDigits = 0;
         }
     }
@@ -289,7 +289,7 @@ namespace pcr
                 getTypedControlWindow()->DisplayURL( sURL );
         }
         else
-            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetText( "" );
     }
 
     //------------------------------------------------------------------

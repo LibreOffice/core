@@ -233,8 +233,8 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
 
     m_pBibMod = OpenBibModul();
 
-    String aURLStr( rURL );
-    String aPartName = aURLStr.GetToken( 1, '/' );
+    OUString aURLStr( rURL );
+    OUString aPartName = aURLStr.getToken( 1, '/' );
     Reference<XPropertySet> xPrSet(rFrame, UNO_QUERY);
     if(xPrSet.is())
     {
@@ -242,7 +242,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
         aTitle <<= BibResId(RID_BIB_STR_FRAME_TITLE).toString();
         xPrSet->setPropertyValue("Title", aTitle);
     }
-    if(aPartName.EqualsAscii("View") || aPartName.EqualsAscii("View1"))
+    if(aPartName == "View" || aPartName == "View1")
     {
         loadView(rFrame, rURL, rArgs, rListener);
     }
@@ -421,14 +421,14 @@ Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
 }
 
 static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
-        const Mapping* pMapping, const String& rColumnName)
+        const Mapping* pMapping, const OUString& rColumnName)
 {
-    String sColumnName(rColumnName);
+    OUString sColumnName(rColumnName);
     if(pMapping)
     {
         for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
         {
-            if(pMapping->aColumnPairs[nEntry].sLogicalColumnName == OUString(rColumnName))
+            if(pMapping->aColumnPairs[nEntry].sLogicalColumnName == rColumnName)
             {
                 sColumnName = pMapping->aColumnPairs[nEntry].sRealColumnName;
                 break;
@@ -462,7 +462,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
         if (!xColumns.is())
             return aRet;
 
-        String sIdentifierMapping = pDatMan->GetIdentifierMapping();
+        OUString sIdentifierMapping = pDatMan->GetIdentifierMapping();
         OUString sId = sIdentifierMapping;
         Reference< sdb::XColumn >  xColumn;
         if (xColumns->hasByName(sId))
@@ -480,7 +480,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
                     const Mapping* pMapping = pConfig->GetMapping(aBibDesc);
                     for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
                     {
-                        const String sColName = pConfig->GetDefColumnName(
+                        const OUString sColName = pConfig->GetDefColumnName(
                                                     nEntry);
                         pValues[nEntry].Name = sColName;
                         pValues[nEntry].Value <<= lcl_AddProperty(xColumns, pMapping, sColName);

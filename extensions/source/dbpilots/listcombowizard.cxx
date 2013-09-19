@@ -350,7 +350,7 @@ namespace dbp
 
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
-        if (!rSettings.sListContentTable.Len() && (::svt::WizardTypes::eTravelBackward != _eReason))
+        if (rSettings.sListContentTable.isEmpty() && (::svt::WizardTypes::eTravelBackward != _eReason))
             // need to select a table
             return sal_False;
 
@@ -521,7 +521,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    String& OComboDBFieldPage::getDBFieldSetting()
+    OUString& OComboDBFieldPage::getDBFieldSetting()
     {
         return getSettings().sLinkedFormField;
     }

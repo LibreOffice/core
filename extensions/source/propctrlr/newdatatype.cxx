@@ -58,9 +58,9 @@ namespace pcr
             }
         }
 
-        String sNameBase( _rNameBase.copy( 0, nStripUntil ? nStripUntil + 1 : 0 ) );
-        sNameBase.Append( ' ' );
-        String sInitialName;
+        OUString sNameBase( _rNameBase.copy( 0, nStripUntil ? nStripUntil + 1 : 0 ) );
+        sNameBase += " ";
+        OUString sInitialName;
         sal_Int32 nPostfixNumber = 1;
         do
         {
@@ -75,8 +75,8 @@ namespace pcr
     //--------------------------------------------------------------------
     IMPL_LINK( NewDataTypeDialog, OnNameModified, void*, /*_pNotInterestedIn*/ )
     {
-        String sCurrentName = GetName();
-        bool bNameIsOK = ( sCurrentName.Len() > 0 )
+        OUString sCurrentName = GetName();
+        bool bNameIsOK = ( !sCurrentName.isEmpty() )
                       && ( m_aProhibitedNames.find( sCurrentName ) == m_aProhibitedNames.end() );
 
         m_aOK.Enable( bNameIsOK );

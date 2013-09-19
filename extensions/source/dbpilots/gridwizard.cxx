@@ -428,7 +428,7 @@ namespace dbp
         }
 
         // the text of the entry to move
-        String sMovingEntry = bMoveRight ? m_aExistFields.GetEntry(nSelected) : m_aSelFields.GetEntry(nSelected);
+        OUString sMovingEntry = bMoveRight ? m_aExistFields.GetEntry(nSelected) : m_aSelFields.GetEntry(nSelected);
 
         // insert the entry
         nInsertPos = rMoveTo.InsertEntry(sMovingEntry, nInsertPos);

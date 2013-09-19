@@ -82,7 +82,7 @@ namespace pcr
         util::Time aUNOTime;
         if ( !( _rValue >>= aUNOTime ) )
         {
-            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetText( "" );
             getTypedControlWindow()->SetEmptyTime();
         }
         else
@@ -134,7 +134,7 @@ namespace pcr
         util::Date aUNODate;
         if ( !( _rValue >>= aUNODate ) )
         {
-            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetText( "" );
             getTypedControlWindow()->SetEmptyDate();
         }
         else
@@ -273,7 +273,7 @@ namespace pcr
     {
         if ( !_rValue.hasValue() )
         {
-            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetText( "" );
         }
         else
         {
@@ -597,7 +597,7 @@ namespace pcr
     {
         if ( !_rValue.hasValue() )
         {
-            getTypedControlWindow()->SetText( String() );
+            getTypedControlWindow()->SetText( "" );
             getTypedControlWindow()->SetEmptyFieldValue();
         }
         else
@@ -648,19 +648,19 @@ namespace pcr
     //==================================================================
     #define LB_DEFAULT_COUNT 20
     //------------------------------------------------------------------
-    String MakeHexStr(sal_uInt32 nVal, sal_uInt32 nLength)
+    OUString MakeHexStr(sal_uInt32 nVal, sal_Int32 nLength)
     {
-        String aStr;
+        OUStringBuffer aStr;
         while (nVal>0)
         {
-            char c=char(nVal & 0x000F);
-            nVal>>=4;
-            if (c<=9) c+='0';
-            else c+='A'-10;
-            aStr.Insert(c,0);
+            char c = char(nVal & 0x000F);
+            nVal >>= 4;
+            if (c<=9) c += '0';
+            else c += 'A' - 10;
+            aStr.insert(c,0);
         }
-        while (aStr.Len() < nLength) aStr.Insert('0',0);
-        return aStr;
+        while (aStr.getLength() < nLength) aStr.insert('0',0);
+        return aStr.makeStringAndClear();
     }
 
     //------------------------------------------------------------------
@@ -713,7 +713,7 @@ namespace pcr
                 getTypedControlWindow()->SelectEntry( aRgbCol );
                 if ( !getTypedControlWindow()->IsEntrySelected( aRgbCol ) )
                 {   // the given color is not part of the list -> insert a new entry with the hex code of the color
-                    String aStr = OUString("0x");
+                    OUString aStr("0x");
                     aStr += MakeHexStr(nColor,8);
                     getTypedControlWindow()->InsertEntry( aRgbCol, aStr );
                     getTypedControlWindow()->SelectEntry( aRgbCol );
@@ -1156,32 +1156,32 @@ namespace pcr
     namespace
     {
         //..............................................................
-        StlSyntaxSequence< OUString > lcl_convertMultiLineToList( const String& _rCompsedTextWithLineBreaks )
+        StlSyntaxSequence< OUString > lcl_convertMultiLineToList( const OUString& _rCompsedTextWithLineBreaks )
         {
             xub_StrLen nLines( comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n') );
             StlSyntaxSequence< OUString > aStrings( nLines );
             StlSyntaxSequence< OUString >::iterator stringItem = aStrings.begin();
             for ( xub_StrLen token = 0; token < nLines; ++token, ++stringItem )
-                *stringItem = _rCompsedTextWithLineBreaks.GetToken( token, '\n' );
+                *stringItem = _rCompsedTextWithLineBreaks.getToken( token, '\n' );
             return aStrings;
         }
 
-        String lcl_convertListToMultiLine( const StlSyntaxSequence< OUString >& _rStrings )
+        OUString lcl_convertListToMultiLine( const StlSyntaxSequence< OUString >& _rStrings )
         {
-            String sMultiLineText;
+            OUString sMultiLineText;
             for (   StlSyntaxSequence< OUString >::const_iterator item = _rStrings.begin();
                     item != _rStrings.end();
                 )
             {
-                sMultiLineText += String( *item );
+                sMultiLineText += *item;
                 if ( ++item != _rStrings.end() )
-                    sMultiLineText += '\n';
+                    sMultiLineText += "\n";
             }
             return sMultiLineText;
         }
 
         //..............................................................
-        String lcl_convertListToDisplayText( const StlSyntaxSequence< OUString >& _rStrings )
+        OUString lcl_convertListToDisplayText( const StlSyntaxSequence< OUString >& _rStrings )
         {
             OUStringBuffer aComposed;
             for (   StlSyntaxSequence< OUString >::const_iterator strings = _rStrings.begin();
@@ -1219,7 +1219,7 @@ namespace pcr
             m_bDropdown=sal_True;
             if ( m_nOperationMode == eMultiLineText )
                 m_pFloatingEdit->getEdit()->SetText( m_pImplEdit->GetText() );
-            m_pImplEdit->SetText(String());
+            m_pImplEdit->SetText("");
         }
         else
         {
@@ -1228,7 +1228,7 @@ namespace pcr
             m_pFloatingEdit->Update();
 
             // transfer the text from the floating edit to our own edit
-            String sDisplayText( m_pFloatingEdit->getEdit()->GetText() );
+            OUString sDisplayText( m_pFloatingEdit->getEdit()->GetText() );
             if ( m_nOperationMode == eStringList )
                 sDisplayText = lcl_convertListToDisplayText( lcl_convertMultiLineToList( sDisplayText ) );
 
@@ -1245,31 +1245,31 @@ namespace pcr
     long DropDownEditControl::FindPos(long nSinglePos)
     {
         long nPos=0;
-        String aOutput;
-        String aStr=m_pFloatingEdit->getEdit()->GetText();
-        String aStr1 = GetText();
+        OUString aOutput;
+        OUString aStr=m_pFloatingEdit->getEdit()->GetText();
+        OUString aStr1 = GetText();
 
-        if ((nSinglePos == 0) || (nSinglePos == aStr1.Len()))
+        if ((nSinglePos == 0) || (nSinglePos == aStr1.getLength()))
         {
             return nSinglePos;
         }
 
-        if (aStr.Len()>0)
+        if (!aStr.isEmpty())
         {
             long nDiff=0;
             sal_Int32 nCount = comphelper::string::getTokenCount(aStr, '\n');
 
-            String aInput = aStr.GetToken(0,'\n' );
+            OUString aInput = aStr.getToken(0,'\n' );
 
-            if (aInput.Len()>0)
+            if (!aInput.isEmpty())
             {
-                aOutput+='\"';
+                aOutput += "\"";
                 nDiff++;
-                aOutput+=aInput;
-                aOutput+='\"';
+                aOutput += aInput;
+                aOutput += "\"";
             }
 
-            if (nSinglePos <= aOutput.Len())
+            if (nSinglePos <= aOutput.getLength())
             {
                 nPos=nSinglePos-nDiff;
             }
@@ -1277,16 +1277,16 @@ namespace pcr
             {
                 for (sal_Int32 i=1; i<nCount; ++i)
                 {
-                    aInput=aStr.GetToken((sal_uInt16)i, '\n');
-                    if (aInput.Len()>0)
+                    aInput=aStr.getToken((sal_uInt16)i, '\n');
+                    if (!aInput.isEmpty())
                     {
-                        aOutput += ';';
-                        aOutput += '\"';
+                        aOutput += ";";
+                        aOutput += "\"";
                         nDiff += 2;
                         aOutput += aInput;
-                        aOutput += '\"';
+                        aOutput += "\"";
 
-                        if (nSinglePos <= aOutput.Len())
+                        if (nSinglePos <= aOutput.getLength())
                         {
                             nPos=nSinglePos-nDiff;
                             break;
@@ -1302,8 +1302,8 @@ namespace pcr
     IMPL_LINK( DropDownEditControl, ReturnHdl, OMultilineFloatingEdit*, /*pMEd*/)
     {
 
-        String aStr = m_pFloatingEdit->getEdit()->GetText();
-        String aStr2 = GetText();
+        OUString aStr = m_pFloatingEdit->getEdit()->GetText();
+        OUString aStr2 = GetText();
         ShowDropDown(sal_False);
 
         if (aStr!=aStr2 || ( m_nOperationMode == eStringList ) )

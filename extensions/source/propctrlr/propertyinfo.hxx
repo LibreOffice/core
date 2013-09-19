@@ -37,15 +37,15 @@ namespace pcr
     class SAL_NO_VTABLE IPropertyInfoService
     {
     public:
-        virtual sal_Int32                           getPropertyId(const String& _rName) const = 0;
-        virtual String                              getPropertyTranslation(sal_Int32 _nId) const = 0;
+        virtual sal_Int32                      getPropertyId(const OUString& _rName) const = 0;
+        virtual OUString                       getPropertyTranslation(sal_Int32 _nId) const = 0;
         virtual OString                        getPropertyHelpId(sal_Int32 _nId) const = 0;
-        virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const = 0;
-        virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const = 0;
-        virtual ::std::vector< OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
+        virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const = 0;
+        virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const = 0;
+        virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
 
         // this is only temporary, until the UNOization of the property browser is completed
-        virtual String                  getPropertyName( sal_Int32 _nPropId ) = 0;
+        virtual OUString                       getPropertyName( sal_Int32 _nPropId ) = 0;
 
         virtual ~IPropertyInfoService() { }
     };

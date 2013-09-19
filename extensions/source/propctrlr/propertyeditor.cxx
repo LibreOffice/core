@@ -206,7 +206,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::AppendPage( const String & _rText, const OString& _rHelpId )
+    sal_uInt16 OPropertyEditor::AppendPage( const OUString & _rText, const OString& _rHelpId )
     {
         // obtain a new id
         sal_uInt16 nId = m_nNextId++;

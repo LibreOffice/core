@@ -98,8 +98,8 @@ namespace dbp
 
         void implEnableWindows();
 
-        void implInitialize(const String& _rSelection);
-        void implCommit(String& _rSelection);
+        void implInitialize(const OUString& _rSelection);
+        void implCommit(OUString& _rSelection);
     };
 
     //=====================================================================
@@ -119,14 +119,14 @@ namespace dbp
         ODBFieldPage( OControlWizard* _pParent );
 
     protected:
-        void setDescriptionText(const String& _rDesc) { m_aDescription.SetText(_rDesc); }
+        void setDescriptionText(const OUString& _rDesc) { m_aDescription.SetText(_rDesc); }
 
         // OWizardPage overridables
         virtual void initializePage();
         virtual sal_Bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         // own overridables
-        virtual String& getDBFieldSetting() = 0;
+        virtual OUString& getDBFieldSetting() = 0;
     };
 
 //.........................................................................

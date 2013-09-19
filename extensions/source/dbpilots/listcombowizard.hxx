@@ -39,10 +39,10 @@ namespace dbp
     //=====================================================================
     struct OListComboSettings : public OControlWizardSettings
     {
-        String          sListContentTable;
-        String          sListContentField;
-        String          sLinkedFormField;
-        String          sLinkedListField;
+        OUString          sListContentTable;
+        OUString          sListContentField;
+        OUString          sLinkedFormField;
+        OUString          sLinkedListField;
     };
 
     //=====================================================================
@@ -208,7 +208,7 @@ namespace dbp
         virtual bool    canAdvance() const;
 
         // ODBFieldPage overridables
-        virtual String& getDBFieldSetting();
+        virtual OUString& getDBFieldSetting();
     };
 
 //.........................................................................

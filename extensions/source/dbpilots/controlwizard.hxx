@@ -46,7 +46,7 @@ namespace dbp
     //=====================================================================
     struct OControlWizardSettings
     {
-        String      sControlLabel;
+        OUString      sControlLabel;
     };
 
     //=====================================================================

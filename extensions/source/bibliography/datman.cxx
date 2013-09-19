@@ -261,7 +261,7 @@ class MappingDialog_Impl : public ModalDialog
     FixedText       aCustom5FT;
     ListBox         aCustom5LB;
     ListBox*        aListBoxes[COLUMN_COUNT];
-    String          sNone;
+    OUString        sNone;
 
     sal_Bool        bModified;
 
@@ -398,8 +398,8 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     aCustom5FT.SetText(BIB_RESSTR(ST_CUSTOM5));
 
     aOKBT.SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
-    String sTitle = GetText();
-    sTitle.SearchAndReplace(OUString("%1"), pDatMan->getActiveDataTable(), 0);
+    OUString sTitle = GetText();
+    sTitle = sTitle.replaceFirst("%1", pDatMan->getActiveDataTable());
     SetText(sTitle);
 
     aListBoxes[0] = &aIdentifierLB;
@@ -500,14 +500,14 @@ IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl)
     if(bModified)
     {
         Mapping aNew;
-        aNew.sTableName = String(pDatMan->getActiveDataTable());
-        aNew.sURL = String(pDatMan->getActiveDataSource());
+        aNew.sTableName = pDatMan->getActiveDataTable();
+        aNew.sURL = pDatMan->getActiveDataSource();
 
         sal_uInt16 nWriteIndex = 0;
         BibConfig* pConfig = BibModul::GetConfig();
         for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
         {
-            String sSel = aListBoxes[nEntry]->GetSelectEntry();
+            OUString sSel = aListBoxes[nEntry]->GetSelectEntry();
             if(sSel != sNone)
             {
                 aNew.aColumnPairs[nWriteIndex].sRealColumnName = sSel;
@@ -535,8 +535,8 @@ class DBChangeDialog_Impl : public ModalDialog
     SvTabListBox    aSelectionLB;
     HeaderBar       aSelectionHB;
     DBChangeDialogConfig_Impl   aConfig;
-    String          aEntryST;
-    String          aURLST;
+    OUString        aEntryST;
+    OUString        aURLST;
 
     BibDataManager* pDatMan;
 
@@ -545,7 +545,7 @@ public:
     DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan );
     ~DBChangeDialog_Impl();
 
-    String      GetCurrentURL()const;
+    OUString     GetCurrentURL()const;
 };
 
 DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan ) :
@@ -607,9 +607,9 @@ DBChangeDialog_Impl::~DBChangeDialog_Impl()
 {
 }
 
-String  DBChangeDialog_Impl::GetCurrentURL()const
+OUString  DBChangeDialog_Impl::GetCurrentURL()const
 {
-    String sRet;
+    OUString sRet;
     SvTreeListEntry* pEntry = aSelectionLB.FirstSelected();
     if(pEntry)
     {
@@ -647,8 +647,8 @@ void BibInterceptorHelper::ReleaseInterceptor()
 {
     Reference< XDispatch > xReturn;
 
-    String aCommand( aURL.Path );
-    if ( aCommand.EqualsAscii("FormSlots/ConfirmDeletion") )
+    OUString aCommand( aURL.Path );
+    if ( aCommand == "FormSlots/ConfirmDeletion" )
         xReturn = xFormDispatch;
     else
         if ( xSlaveDispatchProvider.is() )
@@ -1042,9 +1042,9 @@ void BibDataManager::startQueryWith(const OUString& rQuery)
         aQueryString+=getQueryField();
         aQueryString+=aQuoteChar;
         aQueryString+=" like '";
-        String sQuery(rQuery);
-        sQuery.SearchAndReplaceAll('?','_');
-        sQuery.SearchAndReplaceAll('*','%');
+        OUString sQuery(rQuery);
+        sQuery = sQuery.replaceAll("?","_");
+        sQuery = sQuery.replaceAll("*","%");
         aQueryString += sQuery;
         aQueryString+="%'";
     }
@@ -1587,8 +1587,8 @@ OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
     DBChangeDialog_Impl * pDlg = new DBChangeDialog_Impl(pParent, this );
     if(RET_OK == pDlg->Execute())
     {
-        String sNewURL = pDlg->GetCurrentURL();
-        if(sNewURL != String(getActiveDataSource()))
+        OUString sNewURL = pDlg->GetCurrentURL();
+        if(sNewURL != getActiveDataSource())
         {
             uRet = sNewURL;
         }

@@ -40,17 +40,17 @@ namespace pcr
     //========================================================================
     struct OPropertyInfoImpl
     {
-        String          sName;
-        String          sTranslation;
-        OString    sHelpId;
+        OUString        sName;
+        OUString        sTranslation;
+        OString         sHelpId;
         sal_Int32       nId;
         sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const OUString&      rName,
+                        const OUString&            rName,
                         sal_Int32                   _nId,
-                        const String&               aTranslation,
+                        const OUString&             aTranslation,
                         sal_uInt16                  nPosId,
                         const OString&,
                         sal_uInt32                  _nUIFlags);
@@ -58,7 +58,7 @@ namespace pcr
 
     //------------------------------------------------------------------------
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, sal_uInt16 nP, const OString& sHid, sal_uInt32 _nUIFlags)
+                                   const OUString& aString, sal_uInt16 nP, const OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
        ,sHelpId(sHid)
@@ -74,7 +74,7 @@ namespace pcr
     {
         bool operator()( const OPropertyInfoImpl& _rLHS, const OPropertyInfoImpl& _rRHS )
         {
-            return _rLHS.sName.CompareTo( _rRHS.sName ) == COMPARE_LESS;
+            return _rLHS.sName.compareTo( _rRHS.sName ) < 0;
         }
     };
 
@@ -363,24 +363,24 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OPropertyInfoService::getPropertyId(const String& _rName) const
+    sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
     //------------------------------------------------------------------------
-    String OPropertyInfoService::getPropertyName( sal_Int32 _nPropId )
+    OUString OPropertyInfoService::getPropertyName( sal_Int32 _nPropId )
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nPropId);
-        return pInfo ? pInfo->sName : String();
+        return pInfo ? pInfo->sName : OUString();
     }
 
     //------------------------------------------------------------------------
-    String OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
+    OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sTranslation : String();
+        return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
     //------------------------------------------------------------------------
@@ -540,12 +540,12 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const String& _rName)
+    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
     {
         // Initialization
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), 0, "", 0);
 
         const OPropertyInfoImpl* pInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );

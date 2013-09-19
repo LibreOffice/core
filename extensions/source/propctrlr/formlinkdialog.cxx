@@ -83,8 +83,8 @@ namespace pcr
         /** retrieves the selected field name for either the master or the detail field
             @return <TRUE/> if and only a valid field is selected
         */
-        bool    GetFieldName( LinkParticipant _eWhich, String& /* [out] */ _rName ) const;
-        void    SetFieldName( LinkParticipant _eWhich, const String& _rName );
+        bool    GetFieldName( LinkParticipant _eWhich, OUString& /* [out] */ _rName ) const;
+        void    SetFieldName( LinkParticipant _eWhich, const OUString& _rName );
 
         void    fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames );
 
@@ -120,15 +120,15 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool FieldLinkRow::GetFieldName( LinkParticipant _eWhich, String& /* [out] */ _rName ) const
+    bool FieldLinkRow::GetFieldName( LinkParticipant _eWhich, OUString& /* [out] */ _rName ) const
     {
         const ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
         _rName = pBox->GetText();
-        return _rName.Len() != 0;
+        return !_rName.isEmpty();
     }
 
     //------------------------------------------------------------------------
-    void FieldLinkRow::SetFieldName( LinkParticipant _eWhich, const String& _rName )
+    void FieldLinkRow::SetFieldName( LinkParticipant _eWhich, const OUString& _rName )
     {
         ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
         pBox->SetText( _rName );
@@ -203,10 +203,10 @@ namespace pcr
 
         for ( sal_Int32 i = 0; i < 4; ++i )
         {
-            String sDetailField, sMasterField;
+            OUString sDetailField, sMasterField;
             aRows[ i ]->GetFieldName( FieldLinkRow::eDetailField, sDetailField );
             aRows[ i ]->GetFieldName( FieldLinkRow::eMasterField, sMasterField );
-            if ( !sDetailField.Len() && !sMasterField.Len() )
+            if ( sDetailField.isEmpty() && sMasterField.isEmpty() )
                 continue;
 
             aDetailFields.push_back( sDetailField );
@@ -266,8 +266,8 @@ namespace pcr
     void FormLinkDialog::initializeColumnLabels()
     {
         // label for the detail form
-        String sDetailType = getFormDataSourceType( m_xDetailForm );
-        if ( !sDetailType.Len() )
+        OUString sDetailType = getFormDataSourceType( m_xDetailForm );
+        if ( sDetailType.isEmpty() )
         {
             if ( m_sDetailLabel.isEmpty() )
             {
@@ -279,8 +279,8 @@ namespace pcr
         m_aDetailLabel.SetText( sDetailType );
 
         // label for the master form
-        String sMasterType = getFormDataSourceType( m_xMasterForm );
-        if ( !sMasterType.Len() )
+        OUString sMasterType = getFormDataSourceType( m_xMasterForm );
+        if ( sMasterType.isEmpty() )
         {
             if ( m_sMasterLabel.isEmpty() )
             {
@@ -349,7 +349,7 @@ namespace pcr
 
         for ( sal_Int32 i = 0; ( i < 4 ) && bEnable; ++i )
         {
-            String sNotInterestedInRightNow;
+            OUString sNotInterestedInRightNow;
             if  (  aRows[ i ]->GetFieldName( FieldLinkRow::eDetailField, sNotInterestedInRightNow )
                 != aRows[ i ]->GetFieldName( FieldLinkRow::eMasterField, sNotInterestedInRightNow )
                 )
@@ -360,9 +360,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    String FormLinkDialog::getFormDataSourceType( const Reference< XPropertySet >& _rxForm ) const SAL_THROW(())
+    OUString FormLinkDialog::getFormDataSourceType( const Reference< XPropertySet >& _rxForm ) const SAL_THROW(())
     {
-        String sReturn;
+        OUString sReturn;
         if ( !_rxForm.is() )
             return sReturn;
 
@@ -424,11 +424,11 @@ namespace pcr
 
         if ( aErrorInfo.isValid() )
         {
-            String sErrorMessage;
+            OUString sErrorMessage;
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 sErrorMessage = PcrRes(STR_ERROR_RETRIEVING_COLUMNS).toString();
-                sErrorMessage.SearchAndReplace(OUString('#'), sCommand);
+                sErrorMessage = sErrorMessage.replaceFirst("#", sCommand);
             }
 
             SQLContext aContext;

@@ -107,7 +107,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
             OUString aEntry;
             for( sal_uInt32 i=0; i<nCount; i++ )
             {
-                aEntry = String(pStringArray[i]);
+                aEntry = pStringArray[i];
                 pToolBar->InsertSourceEntry(aEntry);
             }
             pToolBar->UpdateSourceList(sal_True);
@@ -144,7 +144,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
             sal_uInt32 nCount = pStringSeq->getLength();
             for( sal_uInt32 i=0; i<nCount; i++ )
             {
-                sal_uInt16 nID=pToolBar->InsertFilterItem(String(pStringArray[i]));
+                sal_uInt16 nID = pToolBar->InsertFilterItem(pStringArray[i]);
                 if(pStringArray[i]==rEvt.FeatureDescriptor)
                 {
                     pToolBar->SelectFilterItem(nID);
@@ -173,7 +173,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
         uno::Any aState=rEvt.State;
         if(aState.getValueType()==::getCppuType((const OUString*)0))
         {
-            String aStr = String(*(OUString*) aState.getValue());
+            OUString aStr = *(OUString*) aState.getValue();
             pToolBar->SetQueryString(aStr);
         }
     }
@@ -468,7 +468,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
     pPropertyVal[0].Name = "DataSourceName";
-    String aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
+    OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
     OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
     SendDispatch(TBC_LB_SOURCE,aPropVal);

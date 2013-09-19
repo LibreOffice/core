@@ -39,8 +39,8 @@ class UnxPluginComm : public PluginComm, public PluginConnector
 private:
     pid_t       m_nCommPID;
 public:
-    UnxPluginComm( const String& mimetype,
-                   const String& library,
+    UnxPluginComm( const OUString& mimetype,
+                   const OUString& library,
                    XLIB_Window aParent,
                    int nDescriptor1,
                    int nDescriptor2

@@ -28,9 +28,9 @@ namespace dbp
 {
 //.........................................................................
 
-    DECLARE_STL_VECTOR( String, StringArray );
-    DECLARE_STL_STDKEY_SET( String, StringBag );
-    DECLARE_STL_STDKEY_MAP( sal_uInt32, String, MapInt2String );
+    DECLARE_STL_VECTOR( OUString, StringArray );
+    DECLARE_STL_STDKEY_SET( OUString, StringBag );
+    DECLARE_STL_STDKEY_MAP( sal_uInt32, OUString, MapInt2String );
 
 //.........................................................................
 }   // namespace dbp

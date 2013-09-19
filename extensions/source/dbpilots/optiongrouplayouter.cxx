@@ -132,7 +132,7 @@ namespace dbp
                 xRadioModel->setPropertyValue("DefaultState", makeAny(sal_Int16(1)));
 
             // the connection to the database field
-            if (0 != _rSettings.sDBField.Len())
+            if (!_rSettings.sDBField.isEmpty())
                 xRadioModel->setPropertyValue("DataField", makeAny(OUString(_rSettings.sDBField)));
 
             // the name for the model

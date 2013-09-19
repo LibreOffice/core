@@ -50,8 +50,8 @@
 }
 
 UnxPluginComm::UnxPluginComm(
-                             const String& /*mimetype*/,
-                             const String& library,
+                             const OUString& /*mimetype*/,
+                             const OUString& library,
                              XLIB_Window aParent,
                              int nDescriptor1,
                              int nDescriptor2

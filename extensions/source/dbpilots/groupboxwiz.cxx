@@ -238,7 +238,7 @@ namespace dbp
     {
         OGBWPage::initializePage();
 
-        m_aRadioName.SetText(String());
+        m_aRadioName.SetText("");
 
         // no need to initialize the list of radios here
         // (we're the only one affecting this special setting, so it will be in the same state as last time this
@@ -281,7 +281,7 @@ namespace dbp
         else
         {
             m_aExistingRadios.InsertEntry(m_aRadioName.GetText());
-            m_aRadioName.SetText(String());
+            m_aRadioName.SetText("");
         }
 
         implCheckMoveButtons();
@@ -494,7 +494,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    String& OOptionDBFieldPage::getDBFieldSetting()
+    OUString& OOptionDBFieldPage::getDBFieldSetting()
     {
         return getSettings().sDBField;
     }
