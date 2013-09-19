@@ -891,16 +891,15 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         if(bAddFollowStyle)
                         {
                             //find the name of the Next style
-                            std::vector< StyleSheetEntryPtr >::iterator aNextStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
-                            for( ; aNextStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aNextStyleIt )
+                            std::vector< StyleSheetEntryPtr >::iterator it = m_pImpl->m_aStyleSheetEntries.begin();
+                            for (; it != m_pImpl->m_aStyleSheetEntries.end(); ++it)
                             {
-                                if( !( *aNextStyleIt )->sStyleName.isEmpty() &&
-                                        ( *aNextStyleIt )->sStyleName == pEntry->sNextStyleIdentifier)
+                                if (!(*it)->sStyleName.isEmpty() && (*it)->sStyleName == pEntry->sNextStyleIdentifier)
                                 {
                                     beans::PropertyValue aNew;
                                     aNew.Name = "FollowStyle";
-                                    aNew.Value = uno::makeAny(ConvertStyleName( ( *aNextStyleIt )->sStyleIdentifierD ));
-                                    aSortedPropVals.Insert( aNew );
+                                    aNew.Value = uno::makeAny(ConvertStyleName((*it)->sStyleIdentifierD));
+                                    aSortedPropVals.Insert(aNew);
                                     break;
                                 }
                             }
