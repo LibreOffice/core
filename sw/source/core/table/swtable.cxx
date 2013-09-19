@@ -1414,7 +1414,7 @@ sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, sal_Bool bFirstPart,
 
 // #i80314#
 // add 2nd parameter and its handling
-const SwTableBox* SwTable::GetTblBox( const String& rName,
+const SwTableBox* SwTable::GetTblBox( const OUString& rName,
                                       const bool bPerformValidCheck ) const
 {
     const SwTableBox* pBox = 0;
@@ -1895,7 +1895,7 @@ void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm )
     } while( 1 );
 }
 
-String SwTableBox::GetName() const
+OUString SwTableBox::GetName() const
 {
     if( !pSttNd )       // box without content?
     {

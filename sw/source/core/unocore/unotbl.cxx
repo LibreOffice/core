@@ -571,7 +571,7 @@ static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString*>& rAllN
         for(sal_uInt16 j = 0; j < rBoxes.size(); j++)
         {
             SwTableBox* pBox = rBoxes[j];
-            if(pBox->GetName().Len() && pBox->getRowSpan() > 0 )
+            if(!pBox->GetName().isEmpty() && pBox->getRowSpan() > 0 )
                 rAllNames.push_back( new OUString(pBox->GetName()) );
             SwTableLines& rBoxLines = pBox->GetTabLines();
             if(!rBoxLines.empty())

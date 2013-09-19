@@ -52,10 +52,10 @@ void SwTable::UpdateCharts() const
     GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
 }
 
-bool SwTable::IsTblComplexForChart( const String& rSelection ) const
+bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
 {
     const SwTableBox* pSttBox, *pEndBox;
-    if( 2 < rSelection.Len() )
+    if( 2 < rSelection.getLength() )
     {
         // Remove brackets at the beginning and from the end
         String sBox( rSelection );
