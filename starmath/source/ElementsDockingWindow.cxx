@@ -300,6 +300,7 @@ void SmElementsControl::Paint(const Rectangle&)
 void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
 {
     mpCurrentElement = NULL;
+    OUString tooltip;
     if (Rectangle(Point(0, 0), GetOutputSizePixel()).IsInside(rMouseEvent.GetPosPixel()))
     {
         for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
@@ -312,6 +313,7 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
                 {
                     mpCurrentElement = element;
                     Invalidate();
+                    tooltip = element->getText();
                 }
             }
         }
@@ -320,6 +322,8 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
     {
         Control::MouseMove (rMouseEvent);
     }
+
+    SetQuickHelpText(tooltip);
 }
 
 void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
