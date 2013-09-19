@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,openldap))
 ifeq ($(SYSTEM_OPENLDAP),NO)
 
 $(eval $(call gb_Module_add_targets,openldap,\
-	ExternalPackage_openldap \
 	ExternalProject_openldap \
 	UnpackedTarball_openldap \
 ))

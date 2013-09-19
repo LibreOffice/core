@@ -15,7 +15,6 @@ ifeq ($(SYSTEM_LIBLANGTAG),NO)
 $(eval $(call gb_Module_add_targets,liblangtag,\
 	UnpackedTarball_langtag \
 	ExternalPackage_langtag_data \
-	ExternalPackage_langtag \
 	ExternalProject_langtag \
 	ExternalPackage_liblangtag_data \
 ))

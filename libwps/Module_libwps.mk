@@ -13,7 +13,6 @@ ifeq ($(SYSTEM_WPS),NO)
 
 $(eval $(call gb_Module_add_targets,libwps,\
 	ExternalProject_libwps \
-	ExternalPackage_libwps \
 	UnpackedTarball_libwps \
 ))
 
