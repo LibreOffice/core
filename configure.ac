@@ -12648,22 +12648,19 @@ fi
 
 cat << _EOF
 ****************************************************************************
+
 To build, issue:
 $GNUMAKE
 
-run: $GNUMAKE help
-for details
+For details, run:
+$GNUMAKE help
 
 _EOF
 
 if test $_os != WINNT -a "$CROSS_COMPILING" != YES; then
     cat << _EOF
-
-To install when the build is finished, issue:
-$GNUMAKE install
-
-If you want to develop LibreOffice, you might prefer:
-$GNUMAKE dev-install
+After the build has finished, your can immediately run it using:
+instdir/*/program/soffice
 
 If you want to run the smoketest, issue:
 $GNUMAKE check
