@@ -63,12 +63,6 @@ $(eval $(call gb_Library_use_libraries,scfilt,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_externals,scfilt,\
-	orcus \
-	orcus-parser \
-	zlib \
-))
-
 $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/dif/difexp \
 	sc/source/filter/dif/difimp \
@@ -221,16 +215,28 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/worksheetfragment \
 	sc/source/filter/oox/worksheethelper \
 	sc/source/filter/oox/worksheetsettings \
-	sc/source/filter/orcus/interface \
-	sc/source/filter/orcus/orcusfiltersimpl \
-	sc/source/filter/orcus/xmlcontext \
 	sc/source/filter/services \
+))
+
+ifeq ($(ENABLE_ORCUS),TRUE)
+$(eval $(call gb_Library_use_externals,scfilt,\
+	orcus \
+	orcus-parser \
+	zlib \
 ))
 
 ifeq ($(SYSTEM_ZLIB),YES)
 $(eval $(call gb_Library_add_defs,scfilt,\
 	-DSYSTEM_ZLIB \
 ))
+endif
+
+$(eval $(call gb_Library_add_exception_objects,scfilt,\
+	sc/source/filter/orcus/interface \
+	sc/source/filter/orcus/orcusfiltersimpl \
+	sc/source/filter/orcus/xmlcontext \
+))
+
 endif
 
 # vim: set noet sw=4 ts=4:

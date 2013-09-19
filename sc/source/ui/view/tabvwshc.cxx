@@ -68,6 +68,8 @@
 #include "CorrelationDialog.hxx"
 #include "CovarianceDialog.hxx"
 
+#include <config_orcus.h>
+
 //------------------------------------------------------------------
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
@@ -397,7 +399,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_MANAGE_XML_SOURCE:
         {
+#if ENABLE_ORCUS
             pResult = new ScXMLSourceDlg(pB, pCW, pParent, pDoc);
+#endif
         }
         break;
 

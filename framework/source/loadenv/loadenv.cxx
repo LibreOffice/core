@@ -86,6 +86,8 @@
 #include "rtl/bootstrap.hxx"
 #include <vcl/svapp.hxx>
 
+#include <config_orcus.h>
+
 const char PROP_TYPES[] = "Types";
 const char PROP_NAME[] = "Name";
 
@@ -711,6 +713,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
 namespace {
 
+#if ENABLE_ORCUS
+
 bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
 {
     // depending on the experimental mode
@@ -774,6 +778,15 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
 
     return false;
 }
+
+#else
+
+bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>&, OUString&, OUString&)
+{
+    return false;
+}
+
+#endif
 
 }
 

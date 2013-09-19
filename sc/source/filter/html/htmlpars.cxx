@@ -56,7 +56,9 @@
 #include "document.hxx"
 #include "rangelst.hxx"
 
+#if ENABLE_ORCUS
 #include <orcus/css_parser.hpp>
+#endif
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -3164,6 +3166,8 @@ void ScHTMLQueryParser::CloseTable( const ImportInfo& rInfo )
     mpCurrTable = mpCurrTable->CloseTable( rInfo );
 }
 
+#if ENABLE_ORCUS
+
 namespace {
 
 /**
@@ -3266,6 +3270,12 @@ void ScHTMLQueryParser::ParseStyle(const OUString& rStrm)
         // TODO: Parsing of CSS failed.  Do nothing for now.
     }
 }
+
+#else
+
+void ScHTMLQueryParser::ParseStyle(const OUString&) {}
+
+#endif
 
 // ----------------------------------------------------------------------------
 

@@ -15,10 +15,14 @@
 #include "svx/svdpage.hxx"
 #include "svx/svdoole2.hxx"
 
+#include <config_orcus.h>
+
+#if ENABLE_ORCUS
 #if defined WNT
 #define __ORCUS_STATIC_LIB
 #endif
 #include <orcus/csv_parser.hpp>
+#endif
 
 #include <fstream>
 
@@ -93,6 +97,8 @@ void loadFile(const OUString& aFileName, std::string& aContent)
     aContent = aOStream.str();
 }
 
+#if ENABLE_ORCUS
+
 void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat)
 {
     csv_handler aHandler(pDoc, nTab, aStringFormat);
@@ -141,6 +147,13 @@ void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
         CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }
+
+#else
+
+void testFile(OUString&, ScDocument*, SCTAB, StringType) {}
+void testCondFile(OUString&, ScDocument*, SCTAB) {}
+
+#endif
 
 const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
 {

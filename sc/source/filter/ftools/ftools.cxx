@@ -32,7 +32,12 @@
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 #include "compiler.hxx"
+
+#include <config_orcus.h>
+
+#if ENABLE_ORCUS
 #include "orcusfiltersimpl.hxx"
+#endif
 
 #include <stdio.h>
 
@@ -348,8 +353,12 @@ ScFormatFilterPluginImpl::~ScFormatFilterPluginImpl() {}
 
 ScOrcusFilters* ScFormatFilterPluginImpl::GetOrcusFilters()
 {
+#if ENABLE_ORCUS
     static ScOrcusFiltersImpl aImpl;
     return &aImpl;
+#else
+    return NULL;
+#endif
 }
 
 SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)

@@ -59,6 +59,8 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 
+#include <config_orcus.h>
+
 using namespace com::sun::star;
 
 static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
@@ -1142,6 +1144,11 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                 }
                 break;
+#if !ENABLE_ORCUS
+            case SID_MANAGE_XML_SOURCE:
+                rSet.DisableItem(nWhich);
+            break;
+#endif
         }
         nWhich = aIter.NextWhich();
     }
