@@ -796,9 +796,9 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 
                     uno::Sequence< beans::PropertyValue > aPropValues = pEntry->pProperties->GetPropertyValues();
                     bool bAddFollowStyle = false;
-                    if(bParaStyle && pEntry->sNextStyleIdentifier.isEmpty() )
+                    if(bParaStyle && !pEntry->sNextStyleIdentifier.isEmpty() )
                     {
-                            bAddFollowStyle = true;
+                        bAddFollowStyle = true;
                     }
 
                     // remove Left/RightMargin values from TOX heading styles
