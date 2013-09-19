@@ -316,16 +316,11 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType
     setParameterNull(nIndex, true);
 }
 
-void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 nIndex, sal_Bool x)
+void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 /*nIndex*/, sal_Bool /*bValue*/)
     throw(SQLException, RuntimeException)
 {
-    (void) nIndex;
-    (void) x;
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-
-    // TODO: decide how to deal with bools. Probably just as a byte, although
-    // it might be best to just determine the db type and set as appropriate?
+    // FIREBIRD3: will need to be implemented.
+    ::dbtools::throwFunctionNotSupportedException("XParameters::setBoolean", *this);
 }
 
 template <typename T>
@@ -355,9 +350,7 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 /*nIndex*/, sal_Int8 /*nValue*/)
     throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException("setByte not supported in firebird",
-                                                  *this,
-                                                  Any());
+    ::dbtools::throwFunctionNotSupportedException("XParameters::setByte", *this);
 }
 
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 nIndex, sal_Int16 nValue)
@@ -588,8 +581,12 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
 {
     ensurePrepared();
     if ((nParameterIndex == 0) || (nParameterIndex > m_pInSqlda->sqld))
-        throw SQLException();
-    // TODO: sane error message here.
+    {
+        ::dbtools::throwSQLException(
+            "No column " + OUString::number(nParameterIndex),
+            ::dbtools::SQL_COLUMN_NOT_FOUND,
+            *this);
+    }
 }
 
 void OPreparedStatement::setParameterNull(sal_Int32 nParameterIndex,
