@@ -79,6 +79,7 @@ OUString getFileName(OUString const & uri, osl::FileStatus & status) {
          }
      }
 #else
+    (void) uri;
     return status.getFileName();
 #endif
 }
