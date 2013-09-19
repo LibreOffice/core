@@ -2429,7 +2429,7 @@ module com {
       [property, maybevoid] ::com::sun::star::util::Color InactiveSelectionBackgroundColor;
       [property, maybevoid] ::com::sun::star::util::Color ActiveSelectionTextColor;
       [property, maybevoid] ::com::sun::star::util::Color InactiveSelectionTextColor;
-      [property, maybevoid] sequence< ::com::sun::star::util::Color > RowBackgroundColors;
+      [property, maybevoid] sequence< long > RowBackgroundColors;
       [property] ::com::sun::star::style::VerticalAlignment VerticalAlign;
       [property] ::com::sun::star::awt::FontDescriptor FontDescriptor;
       [property, maybevoid] ::com::sun::star::util::Color TextColor;
@@ -2848,10 +2848,8 @@ module com {
      CONTROL = 2,
      SYMMETRIC = 3
     };
-    published typedef sequence< ::com::sun::star::drawing::PolygonFlags > FlagSequence;
-    published typedef sequence< ::com::sun::star::drawing::FlagSequence > FlagSequenceSequence;
-    published typedef sequence< ::com::sun::star::awt::Point > PointSequence;
-    published typedef sequence< ::com::sun::star::drawing::PointSequence > PointSequenceSequence;
+    published typedef sequence< sequence< ::com::sun::star::drawing::PolygonFlags > > FlagSequenceSequence;
+    published typedef sequence< sequence< ::com::sun::star::awt::Point > > PointSequenceSequence;
     published struct PolyPolygonBezierCoords {
      ::com::sun::star::drawing::PointSequenceSequence Coordinates;
      ::com::sun::star::drawing::FlagSequenceSequence Flags;
@@ -5221,7 +5219,7 @@ module com {
      interface ::com::sun::star::drawing::XControlShape;
     };
     published typedef sequence< long > CoordinateSequence;
-    published typedef sequence< ::com::sun::star::drawing::CoordinateSequence > CoordinateSequenceSequence;
+    published typedef sequence< sequence< long > > CoordinateSequenceSequence;
     published service DashTable {
      interface ::com::sun::star::container::XNameContainer;
     };
@@ -5283,7 +5281,7 @@ module com {
      [property, optional] boolean ParagraphSummation;
     };
     published typedef sequence< double > DoubleSequence;
-    published typedef sequence< ::com::sun::star::drawing::DoubleSequence > DoubleSequenceSequence;
+    published typedef sequence< sequence< double > > DoubleSequenceSequence;
     published interface XShapes;
     published interface XShapeBinder {
      interface ::com::sun::star::uno::XInterface;
@@ -5535,6 +5533,7 @@ module com {
      HORIZONTAL = 5,
      VERTICAL = 6
     };
+    published typedef sequence< ::com::sun::star::drawing::PolygonFlags > FlagSequence;
     /** @deprecated */ published struct GluePoint {
      ::com::sun::star::awt::Point Position;
      short EscapeDirection;
@@ -5722,6 +5721,7 @@ module com {
      [property] string PluginURL;
      [property] sequence< ::com::sun::star::beans::PropertyValue > PluginCommands;
     };
+    published typedef sequence< ::com::sun::star::awt::Point > PointSequence;
     published service PolyLineShape {
      service ::com::sun::star::drawing::Shape;
      service ::com::sun::star::drawing::LineProperties;
@@ -14164,7 +14164,7 @@ module com {
     published interface XDefaultNumberingProvider {
      interface ::com::sun::star::uno::XInterface;
      sequence< ::com::sun::star::container::XIndexAccess > getDefaultOutlineNumberings([in] ::com::sun::star::lang::Locale aLocale);
-     sequence< ::com::sun::star::beans::PropertyValues > getDefaultContinuousNumberingLevels([in] ::com::sun::star::lang::Locale aLocale);
+     sequence< sequence< ::com::sun::star::beans::PropertyValue > > getDefaultContinuousNumberingLevels([in] ::com::sun::star::lang::Locale aLocale);
     };
     published service DefaultNumberingProvider: ::com::sun::star::text::XDefaultNumberingProvider;
     published service Defaults {
@@ -15347,8 +15347,8 @@ module com {
     };
     published interface XRubySelection {
      interface ::com::sun::star::uno::XInterface;
-     sequence< ::com::sun::star::beans::PropertyValues > getRubyList([in] boolean Automatic);
-     void setRubyList([in] sequence< ::com::sun::star::beans::PropertyValues > RubyList, [in] boolean Automatic);
+     sequence< sequence< ::com::sun::star::beans::PropertyValue > > getRubyList([in] boolean Automatic);
+     void setRubyList([in] sequence< sequence< ::com::sun::star::beans::PropertyValue > > RubyList, [in] boolean Automatic);
     };
     published interface XTextCopy {
      interface ::com::sun::star::uno::XInterface;
@@ -15371,7 +15371,7 @@ module com {
       [property] boolean IsSortByPosition;
       [property] string BracketBefore;
       [property] string BracketAfter;
-      [property] sequence< ::com::sun::star::beans::PropertyValues > SortKeys;
+      [property] sequence< sequence< ::com::sun::star::beans::PropertyValue > > SortKeys;
       [property] ::com::sun::star::lang::Locale Locale;
       [property] string SortAlgorithm;
      };
