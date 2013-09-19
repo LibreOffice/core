@@ -1789,16 +1789,28 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             eRet = EXTRACTED_LSC;
         }
     }
-    else if (  (nHyph1 == 2 && nLen ==  7)          // ll-Ssss
-            || (nHyph1 == 3 && nLen ==  8))         // lll-Ssss
+    else if (  (nHyph1 == 2 && nLen ==  7)          // ll-Ssss or ll-vvvv
+            || (nHyph1 == 3 && nLen ==  8))         // lll-Ssss or lll-vvvv
     {
-        /* TODO: also accept a (DIGIT 3*ALNUM) vvvv variant instead of Ssss */
         if (nHyph2 < 0)
         {
-            rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-            rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
-            rCountry  = rVariants = OUString();
-            eRet = EXTRACTED_LSC;
+            sal_Unicode c = rBcp47[nHyph1+1];
+            if ('0' <= c && c <= '9')
+            {
+                // (DIGIT 3*ALNUM) vvvv variant instead of Ssss script
+                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+                rScript   = rCountry = OUString();
+                rVariants = rBcp47.copy( nHyph1 + 1);
+                eRet = EXTRACTED_LV;
+            }
+            else
+            {
+                rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
+                rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() +
+                            rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
+                rCountry  = rVariants = OUString();
+                eRet = EXTRACTED_LSC;
+            }
         }
     }
     else if (  (nHyph1 == 2 && nHyph2 == 7 && nLen == 10)   // ll-Ssss-CC

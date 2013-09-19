@@ -318,6 +318,24 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getLanguageType() == LANGUAGE_GERMAN );
     }
 
+    // 'de-1901' derived from 'de-DE-1901' grandfathered to check that it is
+    // accepted as (DIGIT 3*ALNUM) variant
+    {
+        OUString s_de_1901( "de-1901" );
+        LanguageTag de_1901( s_de_1901 );
+        lang::Locale aLocale = de_1901.getLocale();
+        CPPUNIT_ASSERT( de_1901.getBcp47() == s_de_1901 );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == s_de_1901 );
+        CPPUNIT_ASSERT( de_1901.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( de_1901.isValidBcp47() == true );
+        CPPUNIT_ASSERT( de_1901.isIsoLocale() == false );
+        CPPUNIT_ASSERT( de_1901.isIsoODF() == false );
+        CPPUNIT_ASSERT( de_1901.getLanguageAndScript() == "de" );
+        CPPUNIT_ASSERT( de_1901.getVariants() == "1901" );
+    }
+
     // 'en-GB-oed' is known grandfathered for English, Oxford English
     // Dictionary spelling
     {
@@ -327,7 +345,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( en_GB_oed.getBcp47() == s_en_GB_oed );
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "GB" );  // only 'GB' because we handle it, liblangtag would not fill this
-        CPPUNIT_ASSERT( aLocale.Variant == "en-GB-oed" );
+        CPPUNIT_ASSERT( aLocale.Variant == s_en_GB_oed );
         CPPUNIT_ASSERT( en_GB_oed.getLanguageType() == LANGUAGE_USER_ENGLISH_UK_OED );
         CPPUNIT_ASSERT( en_GB_oed.isValidBcp47() == true );
         CPPUNIT_ASSERT( en_GB_oed.isIsoLocale() == false );
