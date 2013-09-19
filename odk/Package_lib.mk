@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,odk_lib,$(OUTDIR)/lib))
+$(eval $(call gb_Package_Package,odk_lib,$(WORKDIR)/LinkTarget/StaticLibrary))
 
 $(eval $(call gb_Package_set_outdir,odk_lib,$(INSTDIR)))
 

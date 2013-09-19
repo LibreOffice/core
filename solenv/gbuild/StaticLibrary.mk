@@ -21,7 +21,6 @@
 # Static Library class
 
 # defined globally in gbuild.mk
-#  gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 # defined by platform
 #  gb_StaticLibrary_get_filename
 #  gb_StaticLibrary_PLAINEXT
@@ -29,11 +28,10 @@
 
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
-.PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT)
-$(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) :
+.PHONY : $(WORKDIR)/Clean/StaticLibrary/%
+$(WORKDIR)/Clean/StaticLibrary/% :
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(OUTDIR)/lib/$*$(gb_StaticLibrary_PLAINEXT) \
-			$(AUXTARGETS))
+		rm -f $(AUXTARGETS))
 
 define gb_StaticLibrary_StaticLibrary
 $(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_linktarget,$(1)))
@@ -44,14 +42,13 @@ endef
 define gb_StaticLibrary__StaticLibrary_impl
 $(call gb_LinkTarget_LinkTarget,$(2),StaticLibrary_$(1),NONE)
 $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
-$(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
+$(call gb_StaticLibrary_get_target,$(1)) : \
 	| $(dir $(call gb_StaticLibrary_get_target,$(1))).dir
 $(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_StaticLibrary_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_StaticLibrary_StaticLibrary_platform,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),StaticLibrary)
-$(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 

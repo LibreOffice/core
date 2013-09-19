@@ -53,9 +53,7 @@ gb_Executable_get_target_for_build = $(gb_Executable__get_linktarget_target)
 # FIXME: cleanup?
 gb_Library_get_target = $(gb_Library__get_linktarget_target)
 
-define gb_StaticLibrary_get_target
-$(gb_StaticLibrary_OUTDIRLOCATION)/$(call gb_StaticLibrary_get_filename,$(1))
-endef
+gb_StaticLibrary_get_target = $(gb_StaticLibrary__get_linktarget_target)
 
 
 # workdir target patterns
@@ -296,6 +294,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SdiTarget \
 	SrsTarget \
 	SrsTemplateTarget \
+	StaticLibrary \
 	ThesaurusIndexTarget \
 	CppunitTest \
 	CppunitTestFakeExecutable \
@@ -327,7 +326,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	CliNativeLibrary \
 	CliUnoApi \
 	InstallScript \
-	StaticLibrary \
 	UnoApi \
 ))
 
@@ -434,7 +432,6 @@ gb_Executable_BINDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Executable
 gb_Library_OUTDIRLOCATION = $(if $(filter WNT,$(OS)),$(OUTDIR)/bin,$(OUTDIR)/lib)
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
-gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
 # static variables declared here because they are used globally
 
