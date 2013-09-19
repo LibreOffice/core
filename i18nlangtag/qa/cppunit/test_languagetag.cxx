@@ -319,7 +319,7 @@ void TestLanguageTag::testAllTags()
     }
 
     // 'de-1901' derived from 'de-DE-1901' grandfathered to check that it is
-    // accepted as (DIGIT 3*ALNUM) variant
+    // accepted as (DIGIT 3ALNUM) variant
     {
         OUString s_de_1901( "de-1901" );
         LanguageTag de_1901( s_de_1901 );
@@ -334,6 +334,10 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_1901.isIsoODF() == false );
         CPPUNIT_ASSERT( de_1901.getLanguageAndScript() == "de" );
         CPPUNIT_ASSERT( de_1901.getVariants() == "1901" );
+        ::std::vector< OUString > de_1901_Fallbacks( de_1901.getFallbackStrings( true));
+        CPPUNIT_ASSERT( de_1901_Fallbacks.size() == 2);
+        CPPUNIT_ASSERT( de_1901_Fallbacks[0] == "de-1901");
+        CPPUNIT_ASSERT( de_1901_Fallbacks[1] == "de");
     }
 
     // 'en-GB-oed' is known grandfathered for English, Oxford English
@@ -350,6 +354,14 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( en_GB_oed.isValidBcp47() == true );
         CPPUNIT_ASSERT( en_GB_oed.isIsoLocale() == false );
         CPPUNIT_ASSERT( en_GB_oed.isIsoODF() == false );
+        CPPUNIT_ASSERT( en_GB_oed.getLanguageAndScript() == "en" );
+        CPPUNIT_ASSERT( en_GB_oed.getVariants() == "oed" );
+        ::std::vector< OUString > en_GB_oed_Fallbacks( en_GB_oed.getFallbackStrings( true));
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks.size() == 3);
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[0] == "en-GB-oed");
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[1] == "en-GB");
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[2] == "en");
+        // 'en-oed' is not a valid fallback!
     }
 
     // 'qtz' is a local use known pseudolocale for key ID resource

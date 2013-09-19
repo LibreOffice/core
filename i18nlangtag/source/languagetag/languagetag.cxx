@@ -1682,10 +1682,17 @@ LanguageTag & LanguageTag::makeFallback()
                 aVec.push_back( aTmp);
             // Language with variant but without country before language
             // without variant but with country.
-            aTmp = aLanguage + "-" + aVariants;
-            if (aTmp != maBcp47)
-                aVec.push_back( aTmp);
-            bHaveLanguageVariant = true;
+            // But only if variant is not from a grandfathered tag that
+            // wouldn't match the rules, i.e. "de-1901" is fine but "en-oed" is
+            // not.
+            if (aVariants.getLength() >= 5 ||
+                    (aVariants.getLength() == 4 && '0' <= aVariants[0] && aVariants[0] <= '9'))
+            {
+                aTmp = aLanguage + "-" + aVariants;
+                if (aTmp != maBcp47)
+                    aVec.push_back( aTmp);
+                bHaveLanguageVariant = true;
+            }
         }
         aTmp = aLanguage + "-" + aCountry;
         if (aTmp != maBcp47)
@@ -1693,9 +1700,15 @@ LanguageTag & LanguageTag::makeFallback()
     }
     if (!aVariants.isEmpty() && !bHaveLanguageVariant)
     {
-        aTmp = aLanguage + "-" + aVariants;
-        if (aTmp != maBcp47)
-            aVec.push_back( aTmp);
+        // Only if variant is not from a grandfathered tag that wouldn't match
+        // the rules, i.e. "de-1901" is fine but "en-oed" is not.
+        if (aVariants.getLength() >= 5 ||
+                (aVariants.getLength() == 4 && '0' <= aVariants[0] && aVariants[0] <= '9'))
+        {
+            aTmp = aLanguage + "-" + aVariants;
+            if (aTmp != maBcp47)
+                aVec.push_back( aTmp);
+        }
     }
 
     // Insert legacy fallbacks with country before language-only, but only
@@ -1797,7 +1810,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             sal_Unicode c = rBcp47[nHyph1+1];
             if ('0' <= c && c <= '9')
             {
-                // (DIGIT 3*ALNUM) vvvv variant instead of Ssss script
+                // (DIGIT 3ALNUM) vvvv variant instead of Ssss script
                 rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
                 rScript   = rCountry = OUString();
                 rVariants = rBcp47.copy( nHyph1 + 1);
