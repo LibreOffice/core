@@ -31,6 +31,7 @@ class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPla
     VLCPlayer& mPlayer;
     const intptr_t mPrevWinID;
     ::com::sun::star::media::ZoomLevel meZoomLevel;
+    ::com::sun::star::awt::Rectangle mSize;
 public:
     VLCWindow( VLCPlayer& player, const intptr_t prevWinID );
     virtual ~VLCWindow();
