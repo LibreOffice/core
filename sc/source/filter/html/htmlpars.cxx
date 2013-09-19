@@ -56,6 +56,8 @@
 #include "document.hxx"
 #include "rangelst.hxx"
 
+#include <config_orcus.h>
+
 #if ENABLE_ORCUS
 #include <orcus/css_parser.hpp>
 #endif
