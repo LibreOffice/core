@@ -370,6 +370,11 @@ bool OResultSet::isNull(const sal_Int32 nColumnIndex)
 
 ORowSetValue OResultSet::retrieveConvertibleValue(const sal_Int32 nColumnIndex)
 {
+    MutexGuard aGuard(m_rMutex);
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+
+    checkColumnIndex(nColumnIndex);
+    checkRowIndex();
     // See http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/Using_the_getXXX_Methods
     // (bottom of page) for a chart of possible conversions, we should allow all
     // of these -- Blob/Clob will probably need some specialist handling especially
@@ -549,22 +554,18 @@ sal_Bool SAL_CALL OResultSet::wasNull() throw(SQLException, RuntimeException)
 }
 
 // ---- XRow: Simple Numerical types ------------------------------------------
-sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 columnIndex)
+sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException)
 {
-//     // TODO: maybe retrieve as string and test for "true", "t", "1" etc. instead?
-//     return safelyRetrieveValue< bool >(columnIndex);
-    (void) columnIndex;
-    return sal_False;
+    // Not a native firebird type hence we always have to convert.
+    return retrieveConvertibleValue(nColumnIndex);
 }
 
-sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex )
+sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException)
 {
-    // TODO: this doesn't exist in firebird, we have to always convert.
-//     return safelyRetrieveValue< sal_Int8 >(columnIndex);
-    (void) columnIndex;
-    return 0;
+    // Not a native firebird type hence we always have to convert.
+    return retrieveConvertibleValue(nColumnIndex);
 }
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
