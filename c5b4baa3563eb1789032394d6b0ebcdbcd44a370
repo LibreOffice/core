@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///3A\u003d",
+        "filename": "svtools/source/graphic/grfcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-09-19T06:44:15Z",
+      "side": 1,
+      "message": "instead of using continue, how about just merging the two nested if\u0027s into one if statement using \u0026\u0026",
+      "revId": "c5b4baa3563eb1789032394d6b0ebcdbcd44a370",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
