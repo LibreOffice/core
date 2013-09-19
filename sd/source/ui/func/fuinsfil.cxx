@@ -446,7 +446,9 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
         SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
         aLayoutName = pPage->GetLayoutName();
-        aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+        sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
+        if( nIndex != -1 )
+            aLayoutName = aLayoutName.copy(0, nIndex);
 
         pOutliner->SetPaperSize(pPage->GetSize());
 
@@ -583,7 +585,9 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     }
     SdPage* pPage = mpDoc->GetSdPage(nPage, PK_STANDARD);
     aLayoutName = pPage->GetLayoutName();
-    aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
+    sal_Int32 nIndex = aLayoutName.indexOf(SD_LT_SEPARATOR);
+    if( nIndex != -1 )
+        aLayoutName = aLayoutName.copy(0, nIndex);
 
     /* create our own outline since:
        - it is possible that the document outliner is actually used in the
