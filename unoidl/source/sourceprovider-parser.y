@@ -3078,15 +3078,19 @@ unaryExpr:
           $$ = unoidl::detail::SourceProviderExpr::Int(-$2.ival);
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_UINT:
-          if ($2.uval > SAL_MAX_INT64) {
-              error(
-                  @2, yyscanner,
-                  ("cannot negate out-of-range value "
-                   + OUString::number($2.uval)));
-              YYERROR;
+          if ($2.uval == SAL_CONST_UINT64(0x8000000000000000)) {
+              $$ = unoidl::detail::SourceProviderExpr::Int(SAL_MIN_INT64);
+          } else {
+              if ($2.uval > SAL_MAX_INT64) {
+                  error(
+                      @2, yyscanner,
+                      ("cannot negate out-of-range value "
+                       + OUString::number($2.uval)));
+                  YYERROR;
+              }
+              $$ = unoidl::detail::SourceProviderExpr::Int(
+                  -static_cast<sal_Int64>($2.uval));
           }
-          $$ = unoidl::detail::SourceProviderExpr::Int(
-              -static_cast<sal_Int64>($2.uval));
           break;
       case unoidl::detail::SourceProviderExpr::TYPE_FLOAT:
           $$ = unoidl::detail::SourceProviderExpr::Float(-$2.fval);
