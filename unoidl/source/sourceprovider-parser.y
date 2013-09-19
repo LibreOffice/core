@@ -590,7 +590,7 @@ Found findEntity(
                 } else if (typeNucleus == "hyper") {
                     t = unoidl::detail::SourceProviderType(
                         unoidl::detail::SourceProviderType::TYPE_HYPER);
-                } else if (typeNucleus == "usigned hyper") {
+                } else if (typeNucleus == "unsigned hyper") {
                     t = unoidl::detail::SourceProviderType(
                         unoidl::detail::SourceProviderType::TYPE_UNSIGNED_HYPER);
                 } else if (typeNucleus == "float") {
