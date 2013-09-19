@@ -644,23 +644,51 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(bool bAuto)
     return sal_False;
 }
 
-FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
+// #115391# This implementation is based on the object size (aRect) and the
+// states of IsAutoGrowWidth/Height to correctly set TextMinFrameWidth/Height
+void SdrTextObj::AdaptTextMinSize()
 {
-    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
+    if(bTextFrame && (!pModel || !pModel->isLocked()))
     {
-        SetObjectItem(SdrTextMinFrameHeightItem(nHgt));
+        const bool bW(IsAutoGrowWidth());
+        const bool bH(IsAutoGrowHeight());
 
-        // #84974# use bDisableAutoWidthOnDragging as
-        // bDisableAutoHeightOnDragging if vertical.
-        if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+        if(bW || bH)
         {
-            bDisableAutoWidthOnDragging = sal_False;
-            SetObjectItem(SdrTextAutoGrowHeightItem(sal_False));
-        }
+            SfxItemSet aSet(GetObjectItemSet());
 
-        return sal_True;
+            if(bW)
+            {
+                const long nDist(GetTextLeftDistance() + GetTextRightDistance());
+                const long nW(std::max(long(0), (long)(aRect.GetWidth() - 1 - nDist)));
+
+                aSet.Put(SdrTextMinFrameWidthItem(nW));
+
+                if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
+                {
+                    bDisableAutoWidthOnDragging = true;
+                    aSet.Put(SdrTextAutoGrowWidthItem(false));
+                }
+            }
+
+            if(bH)
+            {
+                const long nDist(GetTextUpperDistance() + GetTextLowerDistance());
+                const long nH(std::max(long(0), (long)(aRect.GetHeight() - 1 - nDist)));
+
+                aSet.Put(SdrTextMinFrameHeightItem(nH));
+
+                if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+                {
+                    bDisableAutoWidthOnDragging = false;
+                    SetObjectItem(SdrTextAutoGrowHeightItem(false));
+                }
+            }
+
+            SetObjectItemSet(aSet);
+            NbcAdjustTextFrameWidthAndHeight();
+        }
     }
-    return sal_False;
 }
 
 FASTBOOL SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
@@ -678,25 +706,6 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(bool bAuto)
     if(bTextFrame)
     {
         SetObjectItem(SdrTextAutoGrowWidthItem(bAuto));
-        return sal_True;
-    }
-    return sal_False;
-}
-
-FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
-{
-    if( bTextFrame && ( !pModel || !pModel->isLocked() ) )          // SJ: #i44922#
-    {
-        SetObjectItem(SdrTextMinFrameWidthItem(nWdt));
-
-        // #84974# use bDisableAutoWidthOnDragging only
-        // when not vertical.
-        if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
-        {
-            bDisableAutoWidthOnDragging = sal_False;
-            SetObjectItem(SdrTextAutoGrowWidthItem(sal_False));
-        }
-
         return sal_True;
     }
     return sal_False;

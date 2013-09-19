@@ -229,22 +229,10 @@ FASTBOOL SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     rStat.TakeCreateRect(aRect);
     ImpJustifyRect(aRect);
-    if (bTextFrame) {
-        if (IsAutoGrowHeight()) {
-            // MinTextHeight
-            long nHgt=aRect.GetHeight()-1;
-            if (nHgt==1) nHgt=0;
-            NbcSetMinTextFrameHeight(nHgt);
-        }
-        if (IsAutoGrowWidth()) {
-            // MinTextWidth
-            long nWdt=aRect.GetWidth()-1;
-            if (nWdt==1) nWdt=0;
-            NbcSetMinTextFrameWidth(nWdt);
-        }
-        // Textrahmen neu berechnen
-        NbcAdjustTextFrameWidthAndHeight();
-    }
+
+    // #115391#
+    AdaptTextMinSize();
+
     SetRectsDirty();
     if (HAS_BASE(SdrRectObj,this)) {
         ((SdrRectObj*)this)->SetXPolyDirty();
