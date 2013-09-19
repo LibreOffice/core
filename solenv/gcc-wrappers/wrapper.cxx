@@ -87,11 +87,7 @@ string processccargs(vector<string> rawargs) {
 
     for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         args.append(" ");
-        if(i->find("/") == 0) {
-            cerr << "Error: absolute unix path passed that looks like an option: '" << *i << "'";
-            args.append(*i);
-        }
-        else if(*i == "-o") {
+        if(*i == "-o") {
             // TODO: handle more than just exe output
             ++i;
             size_t dot=(*i).find_last_of(".");
