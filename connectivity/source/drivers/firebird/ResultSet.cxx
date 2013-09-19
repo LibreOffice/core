@@ -278,15 +278,18 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row) throw(SQLException, Runtim
     }
 }
 
-void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 index)
+void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 nIndex)
     throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    if( index < 1 || index > m_fieldCount )
+    if( nIndex < 1 || nIndex > m_fieldCount )
     {
-        throw SQLException( "Column Index is outwith valid range", *this, OUString(), 1, Any() );
+        ::dbtools::throwSQLException(
+            "No column " + OUString::number(nIndex),
+            ::dbtools::SQL_COLUMN_NOT_FOUND,
+            *this);
     }
 }
 
@@ -298,7 +301,10 @@ void SAL_CALL OResultSet::checkRowIndex()
 
     if((m_currentRow < 1) || m_bIsAfterLastRow)
     {
-        throw SQLException( "Row index is out of valid range.", *this, OUString(),1, Any() );
+        ::dbtools::throwSQLException(
+            "Invalid Row",
+            ::dbtools::SQL_INVALID_CURSOR_POSITION,
+            *this);
     }
 }
 
