@@ -400,7 +400,7 @@ void SwDLL::RegisterControls()
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
 
     SvxSmartTagsControl::RegisterControl(SID_OPEN_SMARTTAGMENU, pMod);
-    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindowIfEnabled(0, pMod);
+    ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(0, pMod);
     ::sfx2::TaskPaneWrapper::RegisterChildWindow(0, pMod);
 }
 

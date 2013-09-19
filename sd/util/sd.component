@@ -63,9 +63,6 @@
   <implementation name="com.sun.star.comp.Draw.framework.ResourceId">
     <service name="com.sun.star.drawing.framework.ResourceId"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.TaskPanelFactory">
-    <service name="com.sun.star.drawing.framework.TaskPanelFactory"/>
-  </implementation>
   <implementation name="org.openoffice.comp.Draw.framework.PanelFactory">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>
   </implementation>
@@ -80,9 +77,6 @@
   </implementation>
   <implementation name="com.sun.star.comp.draw.SdHtmlOptionsDialog">
     <service name="com.sun.star.ui.dialog.FilterOptionsDialog"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.drawing.ToolPanelFactory">
-    <service name="com.sun.star.drawing.DefaultToolPanelFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.sd.InsertSlideController">
     <service name="com.sun.star.frame.ToolbarController"/>

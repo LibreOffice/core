@@ -76,20 +76,6 @@
           <value>com.sun.star.comp.framework.StatusBarFactory</value>
         </prop>
       </node>
-      <node oor:name="org.openoffice.Office.Impress.ImpressToolPanelFactory" oor:op="replace">
-        <prop oor:name="Type">
-          <value>toolpanel</value>
-        </prop>
-        <prop oor:name="Name">
-          <value>DrawingFramework</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.presentation.PresentationDocument</value>
-        </prop>
-        <prop oor:name="FactoryImplementation">
-          <value>com.sun.star.drawing.DefaultToolPanelFactory</value>
-        </prop>
-      </node>
       <node oor:name="SvxPanelFactory" oor:op="replace">
         <prop oor:name="Type">
           <value>toolpanel</value>

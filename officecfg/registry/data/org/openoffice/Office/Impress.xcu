@@ -82,11 +82,6 @@
                 <value>private:resource/pane/LeftDrawPane</value>
               </prop>
             </node>
-            <node oor:name="R3" oor:op="replace">
-              <prop oor:name="URL">
-                <value>private:resource/pane/RightPane</value>
-              </prop>
-            </node>
           </node>
         </node>
         <node oor:name="F1" oor:op="replace">
@@ -126,11 +121,6 @@
             </node>
             <node oor:name="R6" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/view/TaskPane</value>
-              </prop>
-            </node>
-            <node oor:name="R7" oor:op="replace">
-              <prop oor:name="URL">
                 <value>private:resource/view/PresentationView</value>
               </prop>
             </node>
@@ -150,7 +140,7 @@
         </node>
         <node oor:name="F3" oor:op="replace">
           <prop oor:name="ServiceName">
-            <value>com.sun.star.drawing.framework.TaskPanelFactory</value>
+            <value>com.sun.star.comp.Draw.framework.TaskPanelFactory</value>
           </prop>
           <node oor:name="ResourceList">
             <node oor:name="R0a" oor:op="replace">
@@ -165,27 +155,27 @@
             </node>
             <node oor:name="R0c" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/DrawingFramework/MasterPages</value>
+                <value>private:resource/toolpanel/UsedMasterPages</value>
               </prop>
             </node>
             <node oor:name="R1" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/DrawingFramework/Layouts</value>
+                <value>private:resource/toolpanel/Layouts</value>
               </prop>
             </node>
             <node oor:name="R2" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/DrawingFramework/TableDesign</value>
+                <value>private:resource/toolpanel/TableDesign</value>
               </prop>
             </node>
             <node oor:name="R3" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/DrawingFramework/CustomAnimations</value>
+                <value>private:resource/toolpanel/CustomAnimations</value>
               </prop>
             </node>
             <node oor:name="R4" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/toolpanel/DrawingFramework/SlideTransitions</value>
+                <value>private:resource/toolpanel/SlideTransitions</value>
               </prop>
             </node>
           </node>

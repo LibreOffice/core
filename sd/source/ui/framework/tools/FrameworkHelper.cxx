@@ -19,8 +19,6 @@
 
 #include <osl/time.h>
 
-#include "sfx2/viewfrm.hxx"
-
 #include "framework/FrameworkHelper.hxx"
 
 #include "framework/ConfigurationController.hxx"
@@ -173,7 +171,6 @@ const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane")
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
 const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPane");
-const OUString FrameworkHelper::msRightPaneURL( msPaneURLPrefix + "RightPane");
 const OUString FrameworkHelper::msSidebarPaneURL( msPaneURLPrefix + "SidebarPane");
 
 
@@ -187,7 +184,6 @@ const OUString FrameworkHelper::msNotesViewURL( msViewURLPrefix + "NotesView");
 const OUString FrameworkHelper::msHandoutViewURL( msViewURLPrefix + "HandoutView");
 const OUString FrameworkHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 const OUString FrameworkHelper::msPresentationViewURL( msViewURLPrefix + "PresentationView");
-const OUString FrameworkHelper::msTaskPaneURL( msViewURLPrefix + "TaskPane");
 const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView");
 
 
@@ -198,17 +194,10 @@ const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBa
 
 
 // Task panel URLs.
-// cf. uielementfactorymanager.cxx (WindowContentFactoryManager::RetrieveTypeNameFromResourceURL) which
-// requires the DrawingFramework/ sub-path to get it's lookup right.
-const OUString FrameworkHelper::msTaskPanelURLPrefix("private:resource/toolpanel/DrawingFramework/");
-// const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
-const OUString FrameworkHelper::msMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "MasterPages");
-
-// these three appear to be unused ...
+const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
 const OUString FrameworkHelper::msAllMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "AllMasterPages" );
 const OUString FrameworkHelper::msRecentMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "RecentMasterPages" );
 const OUString FrameworkHelper::msUsedMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "UsedMasterPages" );
-
 const OUString FrameworkHelper::msLayoutTaskPanelURL( msTaskPanelURLPrefix + "Layouts" );
 const OUString FrameworkHelper::msTableDesignPanelURL( msTaskPanelURLPrefix + "TableDesign" );
 const OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPrefix + "CustomAnimations" );
@@ -614,14 +603,6 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
     const OUString& rsTaskPanelURL,
     const bool bEnsureTaskPaneIsVisible)
 {
-    OUString aViewURL, aPaneURL;
-    bool bSidebar = SfxViewFrame::IsSidebarEnabled();
-
-    aViewURL = bSidebar ? FrameworkHelper::msSidebarViewURL :
-                          FrameworkHelper::msTaskPaneURL;
-    aPaneURL = bSidebar ? FrameworkHelper::msSidebarPaneURL :
-                          FrameworkHelper::msRightPaneURL;
-
     try
     {
         if (mxConfigurationController.is())
@@ -633,7 +614,7 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
                     mxConfigurationController->getCurrentConfiguration());
                 if (xConfiguration.is())
                     if ( ! xConfiguration->hasResource(
-                            CreateResourceId(aViewURL, aPaneURL)))
+                            CreateResourceId(msSidebarViewURL, msSidebarPaneURL)))
                     {
                         // Task pane is not active.  Do not force it.
                         return NULL;
@@ -643,12 +624,12 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
             // Create the resource id from URLs for the sidebar pane
             // and view and the requested panel.
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(aPaneURL),
+                CreateResourceId(msSidebarPaneURL),
                 ResourceActivationMode_ADD);
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(aViewURL, aPaneURL),
+                CreateResourceId(msSidebarViewURL, msSidebarPaneURL),
                 ResourceActivationMode_REPLACE);
-            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, aViewURL, aPaneURL));
+            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, msSidebarViewURL, msSidebarPaneURL));
             mxConfigurationController->requestResourceActivation(
                 xPanelId,
                 ResourceActivationMode_REPLACE);
@@ -677,7 +658,6 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
         (*mpViewURLMap)[msHandoutViewURL] = ViewShell::ST_HANDOUT;
         (*mpViewURLMap)[msSlideSorterURL] = ViewShell::ST_SLIDE_SORTER;
         (*mpViewURLMap)[msPresentationViewURL] = ViewShell::ST_PRESENTATION;
-        (*mpViewURLMap)[msTaskPaneURL] = ViewShell::ST_TASK_PANE;
         (*mpViewURLMap)[msSidebarViewURL] = ViewShell::ST_SIDEBAR;
     }
     ViewURLMap::const_iterator iView (mpViewURLMap->find(rsViewURL));
@@ -701,7 +681,6 @@ OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
         case ViewShell::ST_HANDOUT : return msHandoutViewURL;
         case ViewShell::ST_SLIDE_SORTER : return msSlideSorterURL;
         case ViewShell::ST_PRESENTATION : return msPresentationViewURL;
-        case ViewShell::ST_TASK_PANE : return msTaskPaneURL;
         case ViewShell::ST_SIDEBAR : return msSidebarViewURL;
         default:
             return OUString();

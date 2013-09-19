@@ -172,10 +172,8 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/accessibility/AccessiblePresentationGraphicShape \
 	sd/source/ui/accessibility/AccessiblePresentationOLEShape \
 	sd/source/ui/accessibility/AccessiblePresentationShape \
-	sd/source/ui/accessibility/AccessibleScrollPanel \
 	sd/source/ui/accessibility/AccessibleSlideSorterObject \
 	sd/source/ui/accessibility/AccessibleSlideSorterView \
-	sd/source/ui/accessibility/AccessibleTreeNode \
 	sd/source/ui/accessibility/AccessibleViewForwarder \
 	sd/source/ui/accessibility/SdShapeTypes \
 	sd/source/ui/animations/CustomAnimationCreateDialog \
@@ -251,7 +249,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/framework/factories/FullScreenPane \
 	sd/source/ui/framework/factories/Pane \
 	sd/source/ui/framework/factories/PresentationFactory \
-	sd/source/ui/framework/factories/TaskPanelFactory \
 	sd/source/ui/framework/factories/ViewShellWrapper \
 	sd/source/ui/framework/module/CenterViewFocusModule \
 	sd/source/ui/framework/module/DrawModule \
@@ -340,6 +337,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/sidebar/MasterPageContainerProviders \
 	sd/source/ui/sidebar/MasterPageContainerQueue \
 	sd/source/ui/sidebar/MasterPageDescriptor \
+	sd/source/ui/sidebar/MasterPageObserver \
 	sd/source/ui/sidebar/MasterPagesSelector \
 	sd/source/ui/sidebar/NavigatorWrapper \
 	sd/source/ui/sidebar/PanelBase \
@@ -406,38 +404,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/table/TableDesignPane \
 	sd/source/ui/table/tablefunction \
 	sd/source/ui/table/tableobjectbar \
-	sd/source/ui/toolpanel/ControlContainer \
-	sd/source/ui/toolpanel/LayoutMenu \
-	sd/source/ui/toolpanel/ScrollPanel \
-	sd/source/ui/toolpanel/SlideSorterCacheDisplay \
-	sd/source/ui/toolpanel/SubToolPanel \
-	sd/source/ui/toolpanel/TaskPaneControlFactory \
-	sd/source/ui/toolpanel/TaskPaneFocusManager \
-	sd/source/ui/toolpanel/TaskPaneShellManager \
-	sd/source/ui/toolpanel/TaskPaneTreeNode \
-	sd/source/ui/toolpanel/TitleBar \
-	sd/source/ui/toolpanel/TitledControl \
-	sd/source/ui/toolpanel/ToolPanel \
-	sd/source/ui/toolpanel/ToolPanelFactory \
-	sd/source/ui/toolpanel/ToolPanelUIElement \
-	sd/source/ui/toolpanel/ToolPanelViewShell \
-	sd/source/ui/toolpanel/controls/AllMasterPagesSelector \
-	sd/source/ui/toolpanel/controls/CurrentMasterPagesSelector \
-	sd/source/ui/toolpanel/controls/CustomAnimationPanel \
-	sd/source/ui/toolpanel/controls/DocumentHelper \
-	sd/source/ui/toolpanel/controls/MasterPageContainer \
-	sd/source/ui/toolpanel/controls/MasterPageContainerFiller \
-	sd/source/ui/toolpanel/controls/MasterPageContainerProviders \
-	sd/source/ui/toolpanel/controls/MasterPageContainerQueue \
-	sd/source/ui/toolpanel/controls/MasterPageDescriptor \
-	sd/source/ui/toolpanel/controls/MasterPageObserver \
-	sd/source/ui/toolpanel/controls/MasterPagesPanel \
-	sd/source/ui/toolpanel/controls/MasterPagesSelector \
-	sd/source/ui/toolpanel/controls/PreviewValueSet \
-	sd/source/ui/toolpanel/controls/RecentMasterPagesSelector \
-	sd/source/ui/toolpanel/controls/RecentlyUsedMasterPages \
-	sd/source/ui/toolpanel/controls/SlideTransitionPanel \
-	sd/source/ui/toolpanel/controls/TableDesignPanel \
 	sd/source/ui/tools/AsynchronousCall \
 	sd/source/ui/tools/ConfigurationAccess \
 	sd/source/ui/tools/EventMultiplexer \

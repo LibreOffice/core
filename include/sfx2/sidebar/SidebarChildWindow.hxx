@@ -40,8 +40,6 @@ public:
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
 
-    static void RegisterChildWindowIfEnabled (sal_Bool bVisible=sal_False, SfxModule *pMod=NULL, sal_uInt16 nFlags=0);
-
     SFX_DECL_CHILDWINDOW_WITHID(SidebarChildWindow);
 
     static sal_Int32 GetDefaultWidth (Window* pWindow);

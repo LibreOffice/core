@@ -37,7 +37,6 @@
 #include "DrawDocShell.hxx"
 #include "GraphicDocShell.hxx"
 #include "SlideSorterViewShell.hxx"
-#include "taskpane/ToolPanelViewShell.hxx"
 #include "FactoryIds.hxx"
 #include "sdmod.hxx"
 #include "app.hrc"
@@ -115,11 +114,6 @@ void SdDLL::RegisterInterfaces()
 
     // View shells for the side panes.
     ::sd::slidesorter::SlideSorterViewShell::RegisterInterface (pMod);
-
-    ::sd::toolpanel::ToolPanelViewShell::RegisterInterface(pMod);
-    // Tell the tool panel view shell to register the interfaces of its
-    // controls.
-    ::sd::toolpanel::ToolPanelViewShell::RegisterControls();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

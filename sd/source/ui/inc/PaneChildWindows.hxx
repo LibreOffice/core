@@ -40,6 +40,9 @@ public:
     virtual ~PaneChildWindow (void);
 };
 
+
+
+
 class LeftPaneImpressChildWindow
     : public PaneChildWindow
 {
@@ -48,6 +51,9 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneImpressChildWindow);
 };
+
+
+
 
 class LeftPaneDrawChildWindow
     : public PaneChildWindow
@@ -58,23 +64,6 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneDrawChildWindow);
 };
 
-class ToolPanelChildWindow : public PaneChildWindow
-                           , public ::sfx2::ITaskPaneToolPanelAccess
-{
-public:
-    ToolPanelChildWindow(
-        ::Window* i_pParentWindow,
-        sal_uInt16 i_nId,
-        SfxBindings* i_pBindings,
-        SfxChildWinInfo* i_pChildWindowInfo );
-
-    SFX_DECL_CHILDWINDOW_WITHID( ToolPanelChildWindow );
-
-    static void RegisterChildWindowIfEnabled (sal_Bool bVisible=sal_False, SfxModule *pMod=NULL, sal_uInt16 nFlags=0);
-
-    // ::sfx2::ITaskPaneToolPanelAccess
-    virtual void ActivateToolPanel( const OUString& i_rPanelURL );
-};
 
 } // end of namespace ::sd
 

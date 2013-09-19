@@ -101,20 +101,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="reason_sidebar">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">For the modified sidebar setting to take effect, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">50</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -124,7 +110,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>

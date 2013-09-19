@@ -35,7 +35,7 @@ class ToolPanelModule
 public:
     ToolPanelModule (
         const css::uno::Reference<css::frame::XController>& rxController,
-        const OUString& rsViewURL, const OUString& rsPaneURL);
+        const OUString& rsRightPaneURL);
     virtual ~ToolPanelModule (void);
 
     virtual void SaveResourceState (void);

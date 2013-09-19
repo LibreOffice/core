@@ -66,7 +66,6 @@ public:
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
     static const OUString msLeftDrawPaneURL;
-    static const OUString msRightPaneURL;
     static const OUString msSidebarPaneURL;
 
     // URLs of frequently used views.
@@ -78,7 +77,6 @@ public:
     static const OUString msHandoutViewURL;
     static const OUString msSlideSorterURL;
     static const OUString msPresentationViewURL;
-    static const OUString msTaskPaneURL;
     static const OUString msSidebarViewURL;
 
     // URLs of frequently used tool bars.
@@ -87,7 +85,6 @@ public:
 
     // URLs of task panels.
     static const OUString msTaskPanelURLPrefix;
-    static const OUString msMasterPagesTaskPanelURL;
     static const OUString msAllMasterPagesTaskPanelURL;
     static const OUString msRecentMasterPagesTaskPanelURL;
     static const OUString msUsedMasterPagesTaskPanelURL;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/viewfrm.hxx"
 #include "framework/ImpressModule.hxx"
 
 #include "framework/FrameworkHelper.hxx"
@@ -45,15 +44,9 @@ void ImpressModule::Initialize (Reference<frame::XController>& rxController)
     new SlideSorterModule(
         rxController,
         FrameworkHelper::msLeftImpressPaneURL);
-
-    bool bSidebar = SfxViewFrame::IsSidebarEnabled();
     new ToolPanelModule(
         rxController,
-        bSidebar ? FrameworkHelper::msSidebarViewURL :
-                   FrameworkHelper::msTaskPaneURL,
-        bSidebar ? FrameworkHelper::msSidebarPaneURL :
-                   FrameworkHelper::msRightPaneURL
-        );
+        FrameworkHelper::msSidebarViewURL);
     new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }

@@ -54,7 +54,6 @@
 #include "PresentationViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
-#include "taskpane/PanelId.hxx"
 #include "SidebarPanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
@@ -689,13 +688,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 rRequest,
                 framework::FrameworkHelper::msLeftImpressPaneURL,
                 framework::FrameworkHelper::msSlideSorterURL);
-            break;
-
-        case SID_TASKPANE:
-            mpImpl->SetPaneVisibility(
-                rRequest,
-                framework::FrameworkHelper::msRightPaneURL,
-                framework::FrameworkHelper::msTaskPaneURL);
             break;
 
         case SID_NORMAL_MULTI_PANE_GUI:
@@ -1385,11 +1377,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
-                        break;
-
-                    case SID_TASKPANE:
-                        xResourceId = ResourceId::create(
-                            xContext, FrameworkHelper::msRightPaneURL);
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:

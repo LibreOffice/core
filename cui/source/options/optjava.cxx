@@ -148,7 +148,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     get(m_pParameterBtn, "parameters");
     get(m_pClassPathBtn, "classpath");
     get(m_pExperimentalCB, "experimental");
-    get(m_pExpSidebarCB, "exp_sidebar");
     get(m_pMacroCB, "macrorecording");
     m_sAccessibilityText = get<FixedText>("a11y")->GetText();
     m_sAddDialogText = get<FixedText>("selectruntime")->GetText();
@@ -630,18 +629,6 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
         bModified = sal_True;
     }
 
-    if ( m_pExpSidebarCB->IsChecked() != m_pExpSidebarCB->GetSavedValue() )
-    {
-        SvtMiscOptions aMiscOpt;
-        aMiscOpt.SetExperimentalSidebar( m_pExpSidebarCB->IsChecked() );
-
-        svtools::executeRestartDialog(
-            comphelper::getProcessComponentContext(), this,
-            svtools::RESTART_REASON_MODIFIED_SIDEBAR);
-
-        bModified = sal_True;
-    }
-
     if ( m_pMacroCB->IsChecked() != m_pMacroCB->GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
@@ -759,8 +746,6 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 
     m_pExperimentalCB->Check( aMiscOpt.IsExperimentalMode() );
     m_pExperimentalCB->SaveValue();
-    m_pExpSidebarCB->Check( aMiscOpt.IsExperimentalSidebar() );
-    m_pExpSidebarCB->SaveValue();
     m_pMacroCB->Check( aMiscOpt.IsMacroRecorderMode() );
     m_pMacroCB->SaveValue();
 

@@ -62,10 +62,8 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_ALWAYSALLOWSAVE          8
 #define PROPERTYNAME_EXPERIMENTALMODE       "ExperimentalMode"
 #define PROPERTYHANDLE_EXPERIMENTALMODE         9
-#define PROPERTYNAME_MACRORECORDERMODE      "MacroRecorderMode"
+#define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
 #define PROPERTYHANDLE_MACRORECORDERMODE        10
-#define PROPERTYNAME_EXPERIMENTALSIDEBAR    "ExperimentalSidebar"
-#define PROPERTYHANDLE_EXPERIMENTALSIDEBAR      11
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
@@ -89,7 +87,6 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bDisableUICustomization;
     sal_Bool    m_bAlwaysAllowSave;
     sal_Bool    m_bExperimentalMode;
-    sal_Bool    m_bExperimentalSidebar;
     sal_Bool    m_bMacroRecorderMode;
 
     public:
@@ -161,12 +158,6 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool IsExperimentalMode() const
         { return m_bExperimentalMode; }
-
-        inline void SetExperimentalSidebar( sal_Bool bSet )
-        { m_bExperimentalSidebar = bSet; SetModified(); }
-
-        inline sal_Bool IsExperimentalSidebar() const
-        { return m_bExperimentalSidebar; }
 
         inline void SetMacroRecorderMode( sal_Bool bSet )
         { m_bMacroRecorderMode = bSet; SetModified(); }
@@ -280,7 +271,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsShowLinkWarningDialogRO( sal_False )
     , m_bAlwaysAllowSave( sal_False )
     , m_bExperimentalMode( sal_False )
-    , m_bExperimentalSidebar( sal_False )
     , m_bMacroRecorderMode( sal_False )
 
 {
@@ -398,12 +388,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bMacroRecorderMode) )
                     OSL_FAIL("Wrong type of \"Misc\\MacroRecorderMode\"!" );
-                break;
-            }
-            case PROPERTYHANDLE_EXPERIMENTALSIDEBAR :
-            {
-                if( !(seqValues[nProperty] >>= m_bExperimentalSidebar) )
-                    OSL_FAIL("Wrong type of \"Misc\\ExperimentalSidebar\"!" );
                 break;
             }
         }
@@ -688,11 +672,6 @@ void SvtMiscOptions_Impl::Commit()
                 seqValues[nProperty] <<= m_bMacroRecorderMode;
                 break;
             }
-            case PROPERTYHANDLE_EXPERIMENTALSIDEBAR :
-            {
-                seqValues[nProperty] <<= m_bExperimentalSidebar;
-                break;
-            }
         }
     }
     // Set properties in configuration.
@@ -717,8 +696,7 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         OUString(PROPERTYNAME_DISABLEUICUSTOMIZATION),
         OUString(PROPERTYNAME_ALWAYSALLOWSAVE),
         OUString(PROPERTYNAME_EXPERIMENTALMODE),
-        OUString(PROPERTYNAME_MACRORECORDERMODE),
-        OUString(PROPERTYNAME_EXPERIMENTALSIDEBAR)
+        OUString(PROPERTYNAME_MACRORECORDERMODE)
     };
 
     // Initialize return sequence with these list ...
@@ -896,16 +874,6 @@ void SvtMiscOptions::SetExperimentalMode( sal_Bool bSet )
 sal_Bool SvtMiscOptions::IsExperimentalMode() const
 {
     return m_pDataContainer->IsExperimentalMode();
-}
-
-void SvtMiscOptions::SetExperimentalSidebar( sal_Bool bSet )
-{
-    m_pDataContainer->SetExperimentalSidebar( bSet );
-}
-
-sal_Bool SvtMiscOptions::IsExperimentalSidebar() const
-{
-    return m_pDataContainer->IsExperimentalSidebar();
 }
 
 void SvtMiscOptions::SetMacroRecorderMode( sal_Bool bSet )

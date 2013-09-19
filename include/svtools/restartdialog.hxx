@@ -29,11 +29,8 @@ enum RestartReason {
     RESTART_REASON_PDF_AS_STANDARD_JOB_FORMAT,
         // For the modified default print job format to take effect,
         // %PRODUCTNAME must be restarted.
-    RESTART_REASON_BIBLIOGRAPHY_INSTALL,
+    RESTART_REASON_BIBLIOGRAPHY_INSTALL
         // "For the bibliography to work properly,
-        // %PRODUCTNAME must be restarted."
-    RESTART_REASON_MODIFIED_SIDEBAR
-        // "For the sidebar to work properly,
         // %PRODUCTNAME must be restarted."
 };
 

@@ -113,13 +113,6 @@ extern OUString BasicViewFactory_getImplementationName(void) throw (uno::Runtime
 extern uno::Sequence<OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
 
-extern uno::Reference<uno::XInterface> SAL_CALL TaskPanelFactory_createInstance(
-    const uno::Reference<uno::XComponentContext>& rxContext)
-    throw(uno::Exception);
-extern OUString TaskPanelFactory_getImplementationName(void) throw (uno::RuntimeException);
-extern uno::Sequence<OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void)
-    throw (uno::RuntimeException);
-
 extern uno::Reference<uno::XInterface> SAL_CALL ResourceId_createInstance(
     const uno::Reference<uno::XComponentContext>& rxContext)
     throw(uno::Exception);
@@ -143,16 +136,6 @@ extern uno::Reference<uno::XInterface> SAL_CALL PanelFactory_createInstance(
     throw(uno::Exception);
 extern OUString PanelFactory_getImplementationName(void) throw (uno::RuntimeException);
 extern uno::Sequence<OUString> SAL_CALL PanelFactory_getSupportedServiceNames (void)
-    throw (uno::RuntimeException);
-
-} }
-
-namespace sd { namespace toolpanel {
-extern uno::Reference<uno::XInterface> SAL_CALL ToolPanelFactory_createInstance(
-     const uno::Reference<uno::XComponentContext>& rxContext)
-     throw(uno::Exception);
-extern OUString ToolPanelFactory_getImplementationName(void) throw (uno::RuntimeException);
-extern uno::Sequence<OUString> SAL_CALL ToolPanelFactory_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
 
 } }
@@ -215,7 +198,6 @@ using namespace ::sd::framework;
 using namespace ::sd::presenter;
 using namespace ::sd::slidesorter;
 using namespace ::sd::sidebar;
-using namespace ::sd::toolpanel;
 
 
 
@@ -238,8 +220,6 @@ enum FactoryId
     BasicPaneFactoryFactoryId,
     BasicToolBarFactoryFactoryId,
     BasicViewFactoryFactoryId,
-    TaskPanelFactoryFactoryId,
-    ToolPanelFactoryFactoryId,
     PanelFactoryFactoryId,
     ResourceIdFactoryId,
     PresentationFactoryProviderFactoryId,
@@ -273,9 +253,7 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
         (*spFactoryMap)[BasicPaneFactory_getImplementationName()] = BasicPaneFactoryFactoryId;
         (*spFactoryMap)[BasicToolBarFactory_getImplementationName()] = BasicToolBarFactoryFactoryId;
         (*spFactoryMap)[BasicViewFactory_getImplementationName()] = BasicViewFactoryFactoryId;
-        (*spFactoryMap)[TaskPanelFactory_getImplementationName()] = TaskPanelFactoryFactoryId;
-        (*spFactoryMap)[ToolPanelFactory_getImplementationName()] = ToolPanelFactoryFactoryId;
-        (*spFactoryMap)[PanelFactory_getImplementationName()] = PanelFactoryFactoryId;
+        (*spFactoryMap)[sidebar::PanelFactory_getImplementationName()] = PanelFactoryFactoryId;
         (*spFactoryMap)[ResourceId_getImplementationName()] = ResourceIdFactoryId;
         (*spFactoryMap)[PresentationFactoryProvider_getImplementationName()] = PresentationFactoryProviderFactoryId;
         (*spFactoryMap)[SlideRenderer_getImplementationName()] = SlideRendererFactoryId;
@@ -397,20 +375,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
                         sd::framework::BasicViewFactory_getImplementationName(),
                         sd::framework::BasicViewFactory_getSupportedServiceNames());
                     break;
-
-                case TaskPanelFactoryFactoryId:
-                    xComponentFactory = ::cppu::createSingleComponentFactory(
-                        sd::framework::TaskPanelFactory_createInstance,
-                        sd::framework::TaskPanelFactory_getImplementationName(),
-                        sd::framework::TaskPanelFactory_getSupportedServiceNames());
-                    break;
-
-                case ToolPanelFactoryFactoryId:
-                     xComponentFactory = ::cppu::createSingleComponentFactory(
-                        sd::toolpanel::ToolPanelFactory_createInstance,
-                        sd::toolpanel::ToolPanelFactory_getImplementationName(),
-                        sd::toolpanel::ToolPanelFactory_getSupportedServiceNames());
-                     break;
 
                 case PanelFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(

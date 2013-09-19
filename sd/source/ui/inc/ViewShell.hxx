@@ -93,7 +93,6 @@ public:
         ST_OUTLINE,
         ST_SLIDE_SORTER,
         ST_PRESENTATION,
-        ST_TASK_PANE,
         ST_SIDEBAR
     };
     static const int MAX_HSPLIT_CNT = 1;

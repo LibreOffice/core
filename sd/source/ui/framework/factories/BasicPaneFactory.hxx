@@ -59,7 +59,6 @@ namespace sd { namespace framework {
         private:resource/pane/FullScreenPane
         private:resource/pane/LeftImpressPane
         private:resource/pane/LeftDrawPane
-        private:resource/pane/RightPane
     There are two left panes because this is (seems to be) the only way to
     show different titles for the left pane in Draw and Impress.
 */

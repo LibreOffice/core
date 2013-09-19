@@ -109,9 +109,6 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         void        SetExperimentalMode( sal_Bool bSet );
         sal_Bool    IsExperimentalMode() const;
 
-        void        SetExperimentalSidebar( sal_Bool bSet );
-        sal_Bool    IsExperimentalSidebar() const;
-
         void        SetMacroRecorderMode( sal_Bool bSet );
         sal_Bool    IsMacroRecorderMode() const;
 

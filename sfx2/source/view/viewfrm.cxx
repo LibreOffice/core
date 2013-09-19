@@ -30,8 +30,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/ui/UIElementFactoryManager.hpp>
-
+#include "officecfg/Office/Common.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/splitwin.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -90,10 +89,6 @@
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <framework/framelistanalyzer.hxx>
-
-#include <comphelper/processfactory.hxx>
-#include <comphelper/configuration.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #include <boost/optional.hpp>
 
@@ -3200,7 +3195,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_TASKPANE )
         {
-            if ( !KnowsChildWindow( nSID ) )
+            if  ( !KnowsChildWindow( nSID ) )
             {
                 OSL_FAIL( "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
                 rState.DisableItem( nSID );
@@ -3216,11 +3211,6 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_SIDEBAR )
         {
-            if ( !IsSidebarEnabled() )
-            {
-                rState.DisableItem( nSID );
-                rState.Put( SfxVisibilityItem( nSID, sal_False ) );
-            }
             if  ( !KnowsChildWindow( nSID ) )
             {
                 OSL_ENSURE( false, "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
@@ -3378,50 +3368,6 @@ void SfxViewFrame::RemoveInfoBar( const OUString& sId )
         pInfoBars->removeInfoBar( pInfoBar );
         ShowChildWindow( nId );
     }
-}
-
-bool SfxViewFrame::IsSidebarEnabled()
-{
-    static bool bInitialized = false;
-    static bool bEnabled = false;
-
-    // read the setting once at start, and that's what we
-    // stick with for now.
-    if (!bInitialized)
-    {
-        bInitialized = true;
-        css::uno::Reference< css::uno::XComponentContext > xContext;
-        xContext = ::comphelper::getProcessComponentContext();
-        try {
-            bEnabled = officecfg::Office::Common::Misc::ExperimentalSidebar::get( xContext );
-        } catch (const uno::Exception &) {
-            SAL_WARN("sfx.view", "don't have experimental sidebar option installed");
-        }
-
-        // rip out the services from framework/ for good measure
-        try
-        {
-            uno::Reference< ui::XUIElementFactoryManager > xUIElementFactory = ui::UIElementFactoryManager::create( xContext );
-            if( !bEnabled )
-            {
-                xUIElementFactory->deregisterFactory( "toolpanel", "ScPanelFactory", "" );
-                xUIElementFactory->deregisterFactory( "toolpanel", "SwPanelFactory", "" );
-                xUIElementFactory->deregisterFactory( "toolpanel", "SvxPanelFactory", "" );
-                xUIElementFactory->deregisterFactory( "toolpanel", "SdPanelFactory", "" );
-            }
-            else
-            {
-                xUIElementFactory->deregisterFactory( "toolpanel", "DrawingFramework",
-                                                      "com.sun.star.presentation.PresentationDocument" );
-            }
-        }
-        catch ( const uno::Exception &e )
-        {
-            SAL_WARN( "sfx.view", "Exception de-registering sidebar factories " << e.Message );
-        }
-    }
-
-    return bEnabled;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
