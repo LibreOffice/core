@@ -208,11 +208,11 @@ private:
     formula::RefEdit            maEdMax;
     FixedText                   maFtHint;       /// Hint text for cell range validity.
 
-    String                      maStrMin;
-    String                      maStrMax;
-    String                      maStrValue;
-    String                      maStrRange;
-    String                      maStrList;
+    OUString                    maStrMin;
+    OUString                    maStrMax;
+    OUString                    maStrValue;
+    OUString                    maStrRange;
+    OUString                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
     Point                       maRefEditPos;
@@ -243,10 +243,10 @@ private:
 
     void            TidyListBoxes();
 public:
-    sal_uInt16          GetAllowEntryPos();
-    String          GetMinText();
-    void    SetupRefDlg();
-    void    RemoveRefDlg();
+    sal_uInt16      GetAllowEntryPos();
+    OUString        GetMinText();
+    void            SetupRefDlg();
+    void            RemoveRefDlg();
 };
 
 
