@@ -32,17 +32,6 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_NO_XSLT \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
-	xmlsec1 \
-))
-else
-$(eval $(call gb_Library_use_static_libraries,xsec_xmlsec,\
-	xmlsec1 \
-))
-endif
-
-
 $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	comphelper \
 	cppu \
@@ -88,6 +77,7 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 ))
 
 $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
+	xmlsec1 \
 	xmlsec1-mscrypto \
 ))
 
@@ -115,11 +105,13 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 
 ifeq ($(OS)$(CROSS_COMPILING),WNTYES)
 $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
+	xmlsec1 \
 	xmlsec1-nss \
 ))
 else
-$(eval $(call gb_Library_use_static_libraries,xsec_xmlsec,\
-	xmlsec1-nss \
+$(eval $(call gb_Library_add_libs,xsec_xmlsec,\
+	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/nss/.libs/libxmlsec1-nss.a \
+	$(call gb_UnpackedTarball_get_dir,xmlsec)/src/.libs/libxmlsec1.a \
 ))
 endif
 

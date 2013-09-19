@@ -426,6 +426,7 @@ endef
 
 # static members declared here because they are used globally
 
+gb_StaticLibrary_WORKDIR = $(WORKDIR)/LinkTarget/StaticLibrary
 gb_Library_WORKDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Library
 gb_Executable_BINDIR = $(WORKDIR)/LinkTarget/Executable
 gb_Executable_BINDIR_FOR_BUILD = $(WORKDIR_FOR_BUILD)/LinkTarget/Executable

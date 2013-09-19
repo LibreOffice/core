@@ -29,9 +29,12 @@ $(eval $(call gb_Library_use_custom_headers,scfilt,\
 ))
 
 $(eval $(call gb_Library_use_externals,scfilt,\
+	orcus \
+	orcus-parser \
 	boost_headers \
 	boostsystem \
 	mdds_headers \
+	zlib \
 ))
 
 $(eval $(call gb_Library_use_libraries,scfilt,\

@@ -38,7 +38,7 @@ endif
 ifeq ($(SYSTEM_BOOST),YES)
 liborcus_LIBS+=$(BOOST_SYSTEM_LIB)
 else
-liborcus_LIBS+=$(SOLARLIB) -lboostsystem
+liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboostsystem
 endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=-lgnustl_shared -lm

@@ -54,8 +54,8 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
     mspub \
 	odfgen \
 	visio \
-	wpd \
 	wpg \
+	wpd \
 	zlib \
 ))
 
