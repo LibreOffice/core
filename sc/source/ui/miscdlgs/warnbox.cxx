@@ -27,13 +27,13 @@
 
 // ============================================================================
 
-ScCbWarningBox::ScCbWarningBox( Window* pParent, const String& rMsgStr, bool bDefYes ) :
+ScCbWarningBox::ScCbWarningBox( Window* pParent, const OUString& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
     // By default, the check box is ON, and the user needs to un-check it to
     // disable all future warnings.
     SetCheckBoxState(true);
-    SetCheckBoxText(String(ScResId(SCSTR_WARN_ME_IN_FUTURE_CHECK)));
+    SetCheckBoxText(ScResId(SCSTR_WARN_ME_IN_FUTURE_CHECK));
 }
 
 sal_Int16 ScCbWarningBox::Execute()
