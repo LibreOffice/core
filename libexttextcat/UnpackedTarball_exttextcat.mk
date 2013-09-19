@@ -11,4 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,exttextcat))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,exttextcat,$(LIBEXTTEXTCAT_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_add_patches,exttextcat,\
+    libexttextcat/exttextcat-msvc-stdint.patch \
+))
+
 # vim: set noet sw=4 ts=4:
