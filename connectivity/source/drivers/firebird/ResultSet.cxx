@@ -550,14 +550,14 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException)
 {
     // Not a native firebird type hence we always have to convert.
-    return safelyRetrieveValue< ORowSetValue >(nColumnIndex, 0);
+    return safelyRetrieveValue< ORowSetValue >(nColumnIndex);
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)
     throw(SQLException, RuntimeException)
 {
     // Not a native firebird type hence we always have to convert.
-    return safelyRetrieveValue< ORowSetValue >(nColumnIndex, 0);
+    return safelyRetrieveValue< ORowSetValue >(nColumnIndex);
 }
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
@@ -603,7 +603,7 @@ OUString SAL_CALL OResultSet::getString(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
     // TODO: special handling for char type?
-    return safelyRetrieveValue< OUString >(nIndex, 0);
+    return safelyRetrieveValue< OUString >(nIndex);
 }
 
 Date SAL_CALL OResultSet::getDate(sal_Int32 nIndex)

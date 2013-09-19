@@ -99,7 +99,7 @@ namespace connectivity
 
             template <typename T> T safelyRetrieveValue(
                     const sal_Int32 nColumnIndex,
-                    const ISC_SHORT nType);
+                    const ISC_SHORT nType = 0);
 
             // OIdPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
