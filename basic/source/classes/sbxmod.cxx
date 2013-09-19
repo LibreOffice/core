@@ -1795,16 +1795,16 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     {
         SbiSymDef* pSymDef = pPool->Get(i);
         //std::cerr << "i: " << i << ", type: " << pSymDef->GetType() << "; name:" << pSymDef->GetName() << std::endl;
-        if( (pSymDef->GetType() != SbxEMPTY) || (pSymDef->GetType() != SbxNULL) )
-            aCache.InsertGlobalVar( pSymDef->GetName(), CodeCompleteOptions::AddUnoPrefix(pParser->aGblStrings.Find(pSymDef->GetTypeId())) );
+        if( ((pSymDef->GetType() != SbxEMPTY) || (pSymDef->GetType() != SbxNULL))/* && !CodeCompleteOptions::GetUnoType(pParser->aGblStrings.Find(pSymDef->GetTypeId())).isEmpty() */)
+            aCache.InsertGlobalVar( pSymDef->GetName(), CodeCompleteOptions::GetUnoType(pParser->aGblStrings.Find(pSymDef->GetTypeId())) );
 
         SbiSymPool& pChildPool = pSymDef->GetPool();
         for(sal_uInt16 j = 0; j < pChildPool.GetSize(); ++j )
         {
             SbiSymDef* pChildSymDef = pChildPool.Get(j);
             //std::cerr << "j: " << j << ", type: " << pChildSymDef->GetType() << "; name:" << pChildSymDef->GetName() << std::endl;
-            if( (pChildSymDef->GetType() != SbxEMPTY) || (pChildSymDef->GetType() != SbxNULL) )
-                aCache.InsertLocalVar( pSymDef->GetName(), pChildSymDef->GetName(), CodeCompleteOptions::AddUnoPrefix(pParser->aGblStrings.Find(pChildSymDef->GetTypeId())) );
+            if( ((pChildSymDef->GetType() != SbxEMPTY) || (pChildSymDef->GetType() != SbxNULL))/* && !CodeCompleteOptions::GetUnoType(pParser->aGblStrings.Find(pSymDef->GetTypeId())).isEmpty() */)
+                aCache.InsertLocalVar( pSymDef->GetName(), pChildSymDef->GetName(), CodeCompleteOptions::GetUnoType(pParser->aGblStrings.Find(pChildSymDef->GetTypeId())) );
         }
     }
     delete pParser;

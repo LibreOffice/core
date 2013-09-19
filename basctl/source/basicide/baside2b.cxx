@@ -833,6 +833,7 @@ void EditorWindow::HandleCodeCompletition()
             return;
         OUString sBaseName = aVect[0];//variable name
         OUString sVarType = aCodeCompleteCache.GetVarType( sBaseName );
+
         if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
         {//correct variable name, if autocorrection on
             const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sBaseName, GetActualSubName(nLine) );

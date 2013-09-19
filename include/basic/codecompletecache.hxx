@@ -70,7 +70,7 @@ public:
     static bool IsAutoCorrectOn();
     static void SetAutoCorrectOn( const bool& b );
 
-    static OUString AddUnoPrefix( const OUString& sTypeName );
+    static OUString GetUnoType( const OUString& sTypeName );
 };
 
 class BASIC_DLLPUBLIC CodeCompleteDataCache

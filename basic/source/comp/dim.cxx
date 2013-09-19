@@ -21,13 +21,19 @@
 #include "sbcomp.hxx"
 #include "sbunoobj.hxx"
 #include <svtools/miscopt.hxx>
-#include "com/sun/star/reflection/XIdlReflection.hpp"
+/*#include "com/sun/star/reflection/XIdlReflection.hpp"
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
 #include "com/sun/star/reflection/XIdlMethod.hpp"
+#include "com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp"
+#include "com/sun/star/reflection/XTypeDescription.hpp"
+#include "com/sun/star/reflection/TypeDescriptionSearchDepth.hpp"
 #include "com/sun/star/uno/Exception.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uno/TypeClass.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"*/
 #include <basic/codecompletecache.hxx>
 #include <iostream>
 
@@ -1334,28 +1340,7 @@ void SbiParser::DefStatic( bool bPrivate )
 
 bool SbiParser::IsUnoInterface(const OUString& sTypeName)
 {
-    OUString sNewTypeName = CodeCompleteOptions::AddUnoPrefix( sTypeName );
-    try
-    {
-        Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-        Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
-        //DBG_ASSERT(xRefl.Is(), "No reflection class!"); ???
-        if( !xRefl.is() )
-        {
-            return false;
-        }
-        Reference< reflection::XIdlClass > xClass = xRefl->forName(sNewTypeName);
-        if( xClass != NULL )
-        {
-            return true;
-        }
-        return false;
-    }
-    catch( const Exception& ex )
-    {
-        OSL_FAIL("Could not create reflection.CoreReflection.");
-    }
-    return false;
+    return !CodeCompleteOptions::GetUnoType( sTypeName ).isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

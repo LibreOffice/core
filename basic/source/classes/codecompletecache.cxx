@@ -21,6 +21,22 @@
 #include <iostream>
 #include <rtl/instance.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
+#include "com/sun/star/reflection/XIdlReflection.hpp"
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/configurationhelper.hxx>
+#include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
+#include "com/sun/star/reflection/XIdlMethod.hpp"
+#include "com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp"
+#include "com/sun/star/reflection/XTypeDescription.hpp"
+#include "com/sun/star/reflection/TypeDescriptionSearchDepth.hpp"
+#include "com/sun/star/uno/Exception.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uno/TypeClass.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace
 {
@@ -97,21 +113,70 @@ void CodeCompleteOptions::SetAutoCorrectOn( const bool& b )
     theCodeCompleteOptions::get().bIsAutoCorrectOn = b;
 }
 
-OUString CodeCompleteOptions::AddUnoPrefix( const OUString& sTypeName )
+OUString CodeCompleteOptions::GetUnoType( const OUString& sTypeName )
 {
+    //returns the fully qualified UNO type name if exsists, else empty string
     OUString sNewTypeName = sTypeName;
     if( sNewTypeName.toAsciiLowerCase().startsWith("css.") )
-    {//enables shorthand "css" instead of "com.sun.star"
-        sNewTypeName = sNewTypeName.replaceFirst("css","com.sun.star");
-    }
-    else
+    //enables shorthand "css" instead of "com.sun.star"
+        sNewTypeName = sNewTypeName.replaceFirst("css.","");
+    //if "com.sun.star" or any of it left out, add it
+    else if( sNewTypeName.toAsciiLowerCase().startsWith("com.sun.star.") )
+        sNewTypeName = sNewTypeName.replaceFirst("com.sun.star.","");
+
+    else if( sNewTypeName.toAsciiLowerCase().startsWith("sun.star.") )
+        sNewTypeName = sNewTypeName.replaceFirst("sun.star.","");
+
+    else if( sNewTypeName.toAsciiLowerCase().startsWith("star.") )
+        sNewTypeName = sNewTypeName.replaceFirst("star.","");
+
+    try
     {
-        if( !sNewTypeName.toAsciiLowerCase().startsWith("com.sun.star.") )
-        {//if "com.sun.star" left out, add it
-            sNewTypeName = OUString("com.sun.star.") + sTypeName;
+        Reference< container::XHierarchicalNameAccess > xAccess;
+        Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        if( xContext.is() )
+        {
+            xContext->getValueByName(
+            OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) )
+                >>= xAccess;
+            OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessible!?" );
+        }
+        if( xAccess.is() )
+        {
+            uno::Sequence< uno::TypeClass > aParams(3);
+            aParams[0] = uno::TypeClass_INTERFACE;
+            aParams[1] = uno::TypeClass_STRUCT;
+            aParams[2] = uno::TypeClass_ENUM;
+            Reference< reflection::XTypeDescriptionEnumeration > sxEnum;
+            Reference< reflection::XTypeDescriptionEnumerationAccess> xTypeEnumAccess( xAccess, UNO_QUERY );
+            if ( xTypeEnumAccess.is() )
+            {
+                try
+                {
+                    sxEnum = xTypeEnumAccess->createTypeDescriptionEnumeration(
+                        "com.sun.star", aParams, reflection::TypeDescriptionSearchDepth_INFINITE  );
+
+                    Reference< reflection::XTypeDescription > xDesc = sxEnum->nextTypeDescription();
+                    //check the modules
+                    while( sxEnum->hasMoreElements() )
+                    {
+                        if( xDesc->getName().endsWithIgnoreAsciiCase(sNewTypeName) )
+                        {
+                            return xDesc->getName();
+                        }
+
+                        xDesc = sxEnum->nextTypeDescription();
+                    }
+                }
+                catch( const Exception& ex ) { return OUString(""); }
+            }
         }
     }
-    return sNewTypeName;
+    catch( const Exception& ex )
+    {
+        OSL_FAIL("Could not create com.sun.star.reflection.TypeDescriptionManager");
+    }
+    return OUString("");
 }
 
 std::ostream& operator<< (std::ostream& aStream, const CodeCompleteDataCache& aCache)
