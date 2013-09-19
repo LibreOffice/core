@@ -8,24 +8,24 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Executable_Executable,cppunit/cppunittester))
+$(eval $(call gb_Executable_Executable,cppunittester))
 
-$(eval $(call gb_Executable_set_include,cppunit/cppunittester,\
+$(eval $(call gb_Executable_set_include,cppunittester,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/sal/inc \
 ))
 
-$(eval $(call gb_Executable_use_libraries,cppunit/cppunittester,\
+$(eval $(call gb_Executable_use_libraries,cppunittester,\
 	sal \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_use_externals,cppunit/cppunittester,\
+$(eval $(call gb_Executable_use_externals,cppunittester,\
 	boost_headers \
 	cppunit \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,cppunit/cppunittester,\
+$(eval $(call gb_Executable_add_exception_objects,cppunittester,\
 	sal/cppunittester/cppunittester \
 ))
 
