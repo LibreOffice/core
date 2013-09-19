@@ -24,10 +24,10 @@
       <DefaultName>Serbian Latin</DefaultName>
     </Language>
     <Country>
-      <CountryID>YU</CountryID>
+      <CountryID>CS</CountryID>
       <DefaultName>Serbia and Montenegro</DefaultName>
     </Country>
-    <Variant>sr-Latn-YU</Variant>
+    <Variant>sr-Latn-CS</Variant>
   </LC_INFO>
   <LC_CTYPE ref="sr_Latn_RS"/>
   <LC_FORMAT ref="sr_Latn_RS" replaceTo="[$Din-81A]"/>

@@ -80,10 +80,10 @@ $(eval $(call gb_Library_add_generated_exception_objects,localedata_euro,\
 	CustomTarget/i18npool/localedata/localedata_sl_SI \
 	CustomTarget/i18npool/localedata/localedata_sr_Latn_ME \
 	CustomTarget/i18npool/localedata/localedata_sr_Latn_RS \
-	CustomTarget/i18npool/localedata/localedata_sr_Latn_YU \
+	CustomTarget/i18npool/localedata/localedata_sr_Latn_CS \
 	CustomTarget/i18npool/localedata/localedata_sr_ME \
 	CustomTarget/i18npool/localedata/localedata_sr_RS \
-	CustomTarget/i18npool/localedata/localedata_sr_YU \
+	CustomTarget/i18npool/localedata/localedata_sr_CS \
 	CustomTarget/i18npool/localedata/localedata_sv_FI \
 	CustomTarget/i18npool/localedata/localedata_sv_SE \
 	CustomTarget/i18npool/localedata/localedata_tr_TR \
