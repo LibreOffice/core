@@ -40,7 +40,7 @@ import org.libreoffice.impressremote.util.Preferences;
 import org.libreoffice.impressremote.util.SavedStates;
 
 public class SlideShowActivity extends SherlockFragmentActivity implements ServiceConnection {
-    private static enum Mode {
+    public static enum Mode {
         PAGER, GRID, EMPTY
     }
 
@@ -160,6 +160,12 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
         @Override
         public void onReceive(Context aContext, Intent aIntent) {
+            if (Intents.Actions.SLIDE_SHOW_MODE_CHANGED.equals(aIntent.getAction())) {
+                Mode aMode = (Mode) aIntent.getSerializableExtra(Intents.Extras.MODE);
+                mSlideShowActivity.changeMode(aMode);
+                return;
+            }
+
             if (Intents.Actions.SLIDE_CHANGED.equals(aIntent.getAction())) {
                 mSlideShowActivity.setUpSlideShowInformation();
                 return;
@@ -193,6 +199,7 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
     private IntentFilter buildIntentsReceiverFilter() {
         IntentFilter aIntentFilter = new IntentFilter();
+        aIntentFilter.addAction(Intents.Actions.SLIDE_SHOW_MODE_CHANGED);
         aIntentFilter.addAction(Intents.Actions.SLIDE_CHANGED);
         aIntentFilter.addAction(Intents.Actions.TIMER_UPDATED);
         aIntentFilter.addAction(Intents.Actions.TIMER_STARTED);

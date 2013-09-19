@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import org.libreoffice.impressremote.activity.SlideShowActivity;
 import org.libreoffice.impressremote.communication.SlideShow;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
@@ -86,7 +87,23 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
 
     @Override
     public void onItemClick(AdapterView<?> aAdapterView, View aView, int aPosition, long aId) {
-        mCommunicationService.getCommandsTransmitter().setCurrentSlide(aPosition);
+        changeCurrentSlide(aPosition);
+        changeSlideShowMode();
+    }
+
+    private void changeCurrentSlide(int aSlideIndex) {
+        mCommunicationService.getCommandsTransmitter().setCurrentSlide(aSlideIndex);
+    }
+
+    private void changeSlideShowMode() {
+        Intent aIntent = Intents.buildSlideShowModeChangedIntent(SlideShowActivity.Mode.PAGER);
+        getBroadcastManager().sendBroadcast(aIntent);
+    }
+
+    private LocalBroadcastManager getBroadcastManager() {
+        Context aContext = getActivity().getApplicationContext();
+
+        return LocalBroadcastManager.getInstance(aContext);
     }
 
     @Override
@@ -136,12 +153,6 @@ public class SlidesGridFragment extends SherlockFragment implements ServiceConne
         aIntentFilter.addAction(Intents.Actions.SLIDE_PREVIEW);
 
         return aIntentFilter;
-    }
-
-    private LocalBroadcastManager getBroadcastManager() {
-        Context aContext = getActivity().getApplicationContext();
-
-        return LocalBroadcastManager.getInstance(aContext);
     }
 
     private void refreshSlidesGrid() {

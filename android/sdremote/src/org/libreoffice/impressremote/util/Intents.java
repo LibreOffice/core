@@ -38,6 +38,8 @@ public final class Intents {
         public static final String SLIDE_SHOW_RUNNING = "SLIDE_SHOW_RUNNING";
         public static final String SLIDE_SHOW_STOPPED = "SLIDE_SHOW_STOPPED";
 
+        public static final String SLIDE_SHOW_MODE_CHANGED = "SLIDE_SHOW_MODE_CHANGED";
+
         public static final String SLIDE_CHANGED = "SLIDE_CHANGED";
         public static final String SLIDE_PREVIEW = "SLIDE_PREVIEW";
         public static final String SLIDE_NOTES = "SLIDE_NOTES";
@@ -53,12 +55,12 @@ public final class Intents {
         }
 
         public static final String MINUTES = "MINUTES";
+        public static final String MODE = "MODE";
         public static final String PIN = "PIN";
-        public static final String SLIDE_INDEX = "SLIDE_INDEX";
-
         public static final String SERVER = "SERVER";
         public static final String SERVER_ADDRESS = "SERVER_ADDRESS";
         public static final String SERVER_NAME = "SERVER_NAME";
+        public static final String SLIDE_INDEX = "SLIDE_INDEX";
     }
 
     public static final class RequestCodes {
@@ -93,6 +95,13 @@ public final class Intents {
 
     public static Intent buildSlideShowStoppedIntent() {
         return new Intent(Actions.SLIDE_SHOW_STOPPED);
+    }
+
+    public static Intent buildSlideShowModeChangedIntent(SlideShowActivity.Mode aMode) {
+        Intent aIntent = new Intent(Actions.SLIDE_SHOW_MODE_CHANGED);
+        aIntent.putExtra(Extras.MODE, aMode);
+
+        return aIntent;
     }
 
     public static Intent buildSlideChangedIntent(int aSlideIndex) {
