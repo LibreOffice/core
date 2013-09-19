@@ -24,6 +24,10 @@ $(eval $(call gb_CppunitTest_use_libraries,i18nlangtag_test_languagetag,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,i18nlangtag_test_languagetag,\
+	boost_headers \
+))
+
 ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 $(eval $(call gb_CppunitTest_use_externals,i18nlangtag_test_languagetag,\
 	liblangtag \
