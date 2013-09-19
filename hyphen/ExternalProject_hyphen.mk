@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,hyphen))
 
-$(eval $(call gb_ExternalProject_use_package,hyphen,hunspell))
+$(eval $(call gb_ExternalProject_use_external,hyphen,hunspell))
 
 $(eval $(call gb_ExternalProject_register_targets,hyphen,\
 	build \

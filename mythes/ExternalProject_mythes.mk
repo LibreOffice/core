@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,mythes))
 
-$(eval $(call gb_ExternalProject_use_package,mythes,hunspell))
+$(eval $(call gb_ExternalProject_use_external,mythes,hunspell))
 
 $(eval $(call gb_ExternalProject_register_targets,mythes,\
 	build \
