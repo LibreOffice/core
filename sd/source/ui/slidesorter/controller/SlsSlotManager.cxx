@@ -872,7 +872,9 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     {
         pFirstPage = pPage;
         aLayoutStr = pFirstPage->GetLayoutName();
-        aLayoutStr = aLayoutStr.copy(0, aLayoutStr.indexOf( SD_LT_SEPARATOR ) );
+        sal_Int32 nIndex = aLayoutStr.indexOf( SD_LT_SEPARATOR );
+        if( nIndex != -1 )
+            aLayoutStr = aLayoutStr.copy(0, nIndex);
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )

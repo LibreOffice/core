@@ -264,7 +264,9 @@ void DocumentHelper::ProvideStyles (
 {
     // Get the layout name of the given page.
     OUString sLayoutName (pPage->GetLayoutName());
-    sLayoutName = sLayoutName.copy(0, sLayoutName.indexOf(SD_LT_SEPARATOR));
+    sal_Int32 nIndex = sLayoutName.indexOf(SD_LT_SEPARATOR);
+    if( nIndex != -1 )
+        sLayoutName = sLayoutName.copy(0, nIndex);
 
     // Copy the style sheet from source to target document.
     SdStyleSheetPool* pSourceStyleSheetPool =
@@ -308,7 +310,9 @@ void DocumentHelper::AssignMasterPageToPageList (
     // layout name of the given master page.
     OUString sFullLayoutName(pMasterPage->GetLayoutName());
     OUString sBaseLayoutName (sFullLayoutName);
-    sBaseLayoutName = sBaseLayoutName.copy(0, sBaseLayoutName.indexOf(SD_LT_SEPARATOR));
+    sal_Int32 nIndex = sBaseLayoutName.indexOf(SD_LT_SEPARATOR);
+    if( nIndex != -1 )
+        sBaseLayoutName = sBaseLayoutName.copy(0, nIndex);
 
     if (rpPageList->empty())
         return;
