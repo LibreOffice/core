@@ -20,13 +20,14 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
   <LC_INFO>
     <Language>
-      <LangID>mn</LangID>
-      <DefaultName>Mongolian</DefaultName>
+      <LangID>qlt</LangID>
+      <DefaultName>Mongolian Cyrillic</DefaultName>
     </Language>
     <Country>
       <CountryID>MN</CountryID>
       <DefaultName>Mongolia</DefaultName>
     </Country>
+    <Variant>mn-Cyrl-MN</Variant>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
     <Separators>

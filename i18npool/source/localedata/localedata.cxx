@@ -200,7 +200,7 @@ static const struct {
     { "id_ID",  lcl_DATA_OTHERS },
     { "ms_MY",  lcl_DATA_OTHERS },
     { "ia",     lcl_DATA_OTHERS },
-    { "mn_MN",  lcl_DATA_OTHERS },
+    { "mn_Cyrl_MN",  lcl_DATA_OTHERS },
     { "az_AZ",  lcl_DATA_OTHERS },
     { "sw_TZ",  lcl_DATA_OTHERS },
     { "km_KH",  lcl_DATA_OTHERS },
