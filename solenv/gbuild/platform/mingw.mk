@@ -110,7 +110,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(NATIVERES) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))))) \
-		$(LIBS) \
+		$(T_LIBS) \
 		-Wl$(COMMA)-Map$(COMMA)$(WORKDIR)/LinkTarget/$(2).map \
 		-o $(1)))
 endef
@@ -130,7 +130,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(NATIVERES) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))))) \
-		$(LIBS) \
+		$(T_LIBS) \
 		-Wl$(COMMA)-Map$(COMMA)$(WORKDIR)/LinkTarget/$(2).map \
 		-Wl$(COMMA)--out-implib$(COMMA)$(ILIBTARGET) \
 		-o $(1) \

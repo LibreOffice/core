@@ -589,7 +589,7 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(call gb_LinkTarget_get_linksearchpath_for_layer,$(3)) $(call gb_LinkTarget__get_ldflags,$(2))
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
-$(call gb_LinkTarget_get_target,$(1)) : LIBS :=
+$(call gb_LinkTarget_get_target,$(1)) : T_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -777,7 +777,7 @@ endef
 
 # call gb_LinkTarget_add_libs,linktarget,libs
 define gb_LinkTarget_add_libs
-$(call gb_LinkTarget_get_target,$(1)) : LIBS += $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_LIBS += $(2)
 
 endef
 
@@ -786,7 +786,7 @@ endef
 # exceptional cases this disable method may be used
 # call gb_LinkTarget_disable_standard_system_libs,linktarget
 define gb_LinkTarget_disable_standard_system_libs
-$(call gb_LinkTarget_get_target,$(1)) : LIBS := $$(filter-out $$(gb_STDLIBS),$$(LIBS))
+$(call gb_LinkTarget_get_target,$(1)) : T_LIBS := $$(filter-out $$(gb_STDLIBS),$$(T_LIBS))
 
 endef
 

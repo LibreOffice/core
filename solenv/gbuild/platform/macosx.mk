@@ -150,7 +150,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
-		$(LIBS) \
+		$(T_LIBS) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		-o $(1) && \
 	$(if $(SOVERSIONSCRIPT),ln -sf $(1) $(ILIBTARGET),:) && \
