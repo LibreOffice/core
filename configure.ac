@@ -443,6 +443,7 @@ cygwin*|interix*|mingw32*)
     test_xrender=no
     test_freetype=no
     test_fontconfig=no
+    enable_orcus=no
     _os=WINNT
 
     DLLPOST=".dll"
@@ -482,6 +483,7 @@ darwin*) # Mac OS X or iOS
         _os=Darwin
     fi
     enable_systray=no
+    enable_orcus=no
     # See comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
 
@@ -574,6 +576,7 @@ linux-android*)
     enable_opengl=no
     enable_lpsolve=no
     enable_report_builder=no
+    enable_orcus=no
     with_theme="tango"
     test_cups=no
     test_dbus=no
