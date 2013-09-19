@@ -294,66 +294,13 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Text[ en-US ] = "Untitled";
     };
-    String ST_SUBJECTQUERY
-    {
-        Text[ en-US ] = "You did not specify a subject for this message. If you would like to provide one, please type it now.";
-    };
     String ST_NOSUBJECT
     {
         Text[ en-US ] = "No subject";
     };
-    String ST_NOATTACHMENTNAME
-    {
-        Text[ en-US ] = "You did not specify a new name for the attachment. If you would like to provide one, please type it now.";
-    };
     String ST_CONFIGUREMAIL
     {
         Text[ en-US ] = "In order to be able to send mail merge documents by e-mail, %PRODUCTNAME requires information about the e-mail account to be used.\n\nDo you want to enter e-mail account information now?";
-    };
-};
-
-ModalDialog DLG_MM_QUERY
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_MM_QUERY;
-    Size = MAP_APPFONT ( 240 , 88 ) ;
-    Moveable = TRUE ;
-
-    Text = "%PRODUCTNAME";
-    FixedImage IM_QUERY
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 30 , 30 ) ;
-    };
-    FixedText FI_QUERY
-    {
-        Pos = MAP_APPFONT ( 40 , 6 ) ;
-        Size = MAP_APPFONT ( 190 , 30 ) ;
-        WordBreak = TRUE;
-    };
-    Edit ED_TEXT
-    {
-        HelpID = "sw:Edit:DLG_MM_QUERY:ED_TEXT";
-        Pos = MAP_APPFONT ( 40 , 39 ) ;
-        Size = MAP_APPFONT ( 194 , 12 ) ;
-        Border = TRUE;
-    };
-    FixedLine FL_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( 0 , 57 ) ;
-        Size = MAP_APPFONT ( 240 , 8 ) ;
-    };
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 69 ,  68) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 122 , 68 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
 

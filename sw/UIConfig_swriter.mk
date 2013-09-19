@@ -65,6 +65,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/alreadyexistsdialog \
 	sw/uiconfig/swriter/ui/asciifilterdialog \
 	sw/uiconfig/swriter/ui/assignstylesdialog \
+	sw/uiconfig/swriter/ui/attachnamedialog \
 	sw/uiconfig/swriter/ui/authenticationsettingsdialog \
 	sw/uiconfig/swriter/ui/autoformattable \
 	sw/uiconfig/swriter/ui/autotext \
@@ -183,6 +184,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \
 	sw/uiconfig/swriter/ui/stringinput \
+	sw/uiconfig/swriter/ui/subjectdialog \
 	sw/uiconfig/swriter/ui/testmailsettings \
 	sw/uiconfig/swriter/ui/tocdialog \
 	sw/uiconfig/swriter/ui/tocentriespage \

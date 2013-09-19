@@ -65,9 +65,7 @@
 #define FT_ATTACHMENT               51
 #define ED_ATTACHMENT               52
 #define ST_DEFAULTATTACHMENT        53
-#define ST_SUBJECTQUERY             54
 #define ST_NOSUBJECT                55
-#define ST_NOATTACHMENTNAME         56
 #define ST_CONFIGUREMAIL            57
 
 #define IM_QUERY                    58

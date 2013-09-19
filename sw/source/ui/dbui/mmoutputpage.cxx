@@ -22,6 +22,7 @@
 #include <mmconfigitem.hxx>
 #include <mailmergechildwindow.hxx>
 #include <mailconfigpage.hxx>
+#include <swmessdialog.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <view.hxx>
@@ -106,76 +107,56 @@ static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < contai
     return sRet;
 }
 
-class SwSaveWarningBox_Impl : public ModalDialog
+class SwSaveWarningBox_Impl : public SwMessageAndEditDialog
 {
-    OKButton*         m_pOKPB;
-    FixedImage*       m_pWarningImageIM;
-    VclMultiLineEdit* m_pPrimaryMessage;
-    VclMultiLineEdit* m_pSecondaryMessage;
-    Edit*             m_pFileNameED;
-
     DECL_LINK( ModifyHdl, Edit*);
 public:
     SwSaveWarningBox_Impl(Window* pParent, const OUString& rFileName);
 
     OUString        GetFileName() const
     {
-        return m_pFileNameED->GetText();
+        return m_pEdit->GetText();
     }
 };
 
-class SwSendQueryBox_Impl : public ModalDialog
+class SwSendQueryBox_Impl : public SwMessageAndEditDialog
 {
-    FixedImage      aQueryImageIM;
-    FixedInfo       aQueryFI;
-
-    Edit            aTextED;
-
-    FixedLine       aSeparatorFL;
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-
     bool            bIsEmptyAllowed;
     DECL_LINK( ModifyHdl, Edit*);
 public:
-    SwSendQueryBox_Impl(Window* pParent, const String& rQueryText);
-    ~SwSendQueryBox_Impl();
+    SwSendQueryBox_Impl(Window* pParent, const OString& rID,
+        const OUString& rUIXMLDescription);
 
-    void            SetValue(const String& rSet)
-                        {
-                            aTextED.SetText(rSet);
-                            ModifyHdl( &aTextED );
-                        }
-    String          GetValue() const {return aTextED.GetText();}
+    void SetValue(const OUString& rSet)
+    {
+        m_pEdit->SetText(rSet);
+        ModifyHdl(m_pEdit);
+    }
 
-    void            SetIsEmptyTextAllowed(bool bSet)
-                        {
-                            bIsEmptyAllowed = bSet;
-                            ModifyHdl( &aTextED );
-                        }
+    OUString GetValue() const
+    {
+        return m_pEdit->GetText();
+    }
+
+    void SetIsEmptyTextAllowed(bool bSet)
+    {
+        bIsEmptyAllowed = bSet;
+        ModifyHdl(m_pEdit);
+    }
 };
 
 SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(Window* pParent, const OUString& rFileName)
-    : ModalDialog(pParent, "AlreadyExistsDialog",
+    : SwMessageAndEditDialog(pParent, "AlreadyExistsDialog",
         "modules/swriter/ui/alreadyexistsdialog.ui")
 {
-    get(m_pOKPB, "ok");
-    get(m_pPrimaryMessage, "primarymessage");
-    m_pPrimaryMessage->SetPaintTransparent(true);
-    get(m_pSecondaryMessage, "secondarymessage");
-    m_pSecondaryMessage->SetPaintTransparent(true);
-    MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, m_pSecondaryMessage);
-    get(m_pWarningImageIM, "image");
-    get(m_pFileNameED, "filename");
-    m_pWarningImageIM->SetImage(WarningBox::GetStandardImage());
-    m_pFileNameED->SetText(rFileName);
-    m_pFileNameED->SetModifyHdl(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
+    m_pEdit->SetText(rFileName);
+    m_pEdit->SetModifyHdl(LINK(this, SwSaveWarningBox_Impl, ModifyHdl));
 
     INetURLObject aTmp(rFileName);
     m_pPrimaryMessage->SetText(m_pPrimaryMessage->GetText().replaceAll("%1", aTmp.getName(
             INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)));
 
-    ModifyHdl(m_pFileNameED);
+    ModifyHdl(m_pEdit);
 }
 
 IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
@@ -184,30 +165,19 @@ IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-SwSendQueryBox_Impl::SwSendQueryBox_Impl(Window* pParent, const String& rText) :
-    ModalDialog(pParent, SW_RES(   DLG_MM_QUERY )),
-    aQueryImageIM( this,    SW_RES( IM_QUERY     )),
-    aQueryFI( this,         SW_RES( FI_QUERY     )),
-    aTextED( this,          SW_RES( ED_TEXT      )),
-    aSeparatorFL(this,      SW_RES( FL_SEPARATOR )),
-    aOKPB(this,             SW_RES( PB_OK        )),
-    aCancelPB(this,         SW_RES( PB_CANCEL    )),
-    bIsEmptyAllowed(true)
+SwSendQueryBox_Impl::SwSendQueryBox_Impl(Window* pParent, const OString& rID,
+        const OUString& rUIXMLDescription)
+    : SwMessageAndEditDialog(pParent, rID, rUIXMLDescription)
+    , bIsEmptyAllowed(true)
 {
-    FreeResource();
-    aQueryFI.SetText(rText);
-    aQueryImageIM.SetImage(QueryBox::GetStandardImage());
-    aTextED.SetModifyHdl(LINK(this, SwSendQueryBox_Impl, ModifyHdl));
-    ModifyHdl( &aTextED );
-}
-
-SwSendQueryBox_Impl::~SwSendQueryBox_Impl()
-{
+    m_pImageIM->SetImage(QueryBox::GetStandardImage());
+    m_pEdit->SetModifyHdl(LINK(this, SwSendQueryBox_Impl, ModifyHdl));
+    ModifyHdl(m_pEdit);
 }
 
 IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit*, pEdit)
 {
-    aOKPB.Enable(bIsEmptyAllowed  || !pEdit->GetText().isEmpty());
+    m_pOKPB->Enable(bIsEmptyAllowed  || !pEdit->GetText().isEmpty());
     return 0;
 }
 
@@ -282,9 +252,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_sSendMailST(SW_RES(            ST_SENDMAIL   ) ),
 
     m_sDefaultAttachmentST(SW_RES(   ST_DEFAULTATTACHMENT )),
-    m_sNoSubjectQueryST(SW_RES(      ST_SUBJECTQUERY      )),
     m_sNoSubjectST(SW_RES(           ST_NOSUBJECT )),
-    m_sNoAttachmentNameST(SW_RES(    ST_NOATTACHMENTNAME )),
     m_sConfigureMail(SW_RES(         ST_CONFIGUREMAIL)),
 #ifdef _MSC_VER
 #pragma warning (default : 4355)
@@ -1068,7 +1036,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     if(m_aSubjectED.GetText().isEmpty())
     {
-        SwSendQueryBox_Impl aQuery(pButton, m_sNoSubjectQueryST);
+        SwSendQueryBox_Impl aQuery(pButton, "SubjectDialog",
+         "modules/swriter/ui/subjectdialog.ui");
         aQuery.SetIsEmptyTextAllowed(true);
         aQuery.SetValue(m_sNoSubjectST);
         if(RET_OK == aQuery.Execute())
@@ -1081,7 +1050,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     }
     if(!bAsBody && m_aAttachmentED.GetText().isEmpty())
     {
-        SwSendQueryBox_Impl aQuery(pButton, m_sNoAttachmentNameST);
+        SwSendQueryBox_Impl aQuery(pButton, "AttachNameDialog",
+         "modules/swriter/ui/attachnamedialog.ui");
         aQuery.SetIsEmptyTextAllowed(false);
         if(RET_OK == aQuery.Execute())
         {

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="AlreadyExistsDialog">
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">You did not specify a new name for the attachment.</property>
+  </object>
+  <object class="GtkDialog" id="AttachNameDialog">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">File already exists</property>
+    <property name="title" translatable="yes">No Attachment Name</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -119,22 +122,6 @@
                 <property name="hexpand">True</property>
                 <property name="row_spacing">7</property>
                 <child>
-                  <object class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">New document name:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">edit</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkEntry" id="edit">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -144,6 +131,22 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Name:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">edit</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
@@ -185,10 +188,7 @@
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">A document with the name '%1' already exists.</property>
-  </object>
   <object class="GtkTextBuffer" id="textbuffer2">
-    <property name="text" translatable="yes">Please save this document under a different name.</property>
+    <property name="text" translatable="yes">If you would like to provide one, please type it now.</property>
   </object>
 </interface>

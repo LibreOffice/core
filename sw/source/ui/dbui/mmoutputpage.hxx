@@ -91,9 +91,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
 
     //misc strings
     String          m_sDefaultAttachmentST;
-    String          m_sNoSubjectQueryST;
     String          m_sNoSubjectST;
-    String          m_sNoAttachmentNameST;
     String          m_sConfigureMail;
 
     String          m_sBody;
