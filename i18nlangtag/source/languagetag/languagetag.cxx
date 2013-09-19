@@ -429,8 +429,10 @@ LanguageTag::LanguageTag( const OUString & rBcp47LanguageTag, bool bCanonicalize
 {
     if (bCanonicalize)
     {
-        if (getImpl()->canonicalize())
-            syncFromImpl();
+        getImpl()->canonicalize();
+        // Registration itself may already have canonicalized, so do an
+        // unconditional sync.
+        syncFromImpl();
     }
 
 }
@@ -547,26 +549,24 @@ LanguageTag::~LanguageTag()
 
 LanguageTag::ImplPtr LanguageTag::registerImpl() const
 {
-    // Do not use LanguageTag::convert...() methods here as they access
-    // getImpl() and syncFromImpl()
+    // XXX NOTE: Do not use non-static LanguageTag::convert...() member methods
+    // here as they access getImpl() and syncFromImpl() and would lead to
+    // recursion.
 
     ImplPtr pImpl;
 
-    // Do not register unresolved system locale.
+    // Do not register unresolved system locale, also force LangID if system.
     if (mbSystemLocale && !mbInitializedLangID)
     {
         mnLangID = MsLangId::getRealLanguage( LANGUAGE_SYSTEM);
         mbInitializedLangID = true;
     }
-    if (!mbInitializedBcp47 && mbInitializedLocale)
+
+    // Force Bcp47 if not LangID.
+    if (!mbInitializedLangID && !mbInitializedBcp47 && mbInitializedLocale)
     {
-        if (maLocale.Language == I18NLANGTAG_QLT)
-            maBcp47 = maLocale.Variant;
-        else if (!maLocale.Language.isEmpty() && !maLocale.Country.isEmpty())
-            maBcp47 = maLocale.Language + "-" + maLocale.Country;
-        else
-            maBcp47 = maLocale.Language;
-        mbInitializedBcp47 = !maBcp47.isEmpty();
+        maBcp47 = LanguageTag::convertToBcp47( maLocale, true);
+        mbInitializedBcp47 = true;
     }
 
     osl::MutexGuard aGuard( theMutex::get());
@@ -577,20 +577,44 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         MapLangID& rMap = theMapLangID::get();
         MapLangID::const_iterator it( rMap.find( mnLangID));
         if (it != rMap.end())
+        {
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: found impl for 0x" << ::std::hex << mnLangID);
             pImpl = (*it).second;
+        }
         else
         {
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for mnLangID 0x" << ::std::hex << mnLangID);
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for 0x" << ::std::hex << mnLangID);
             pImpl.reset( new LanguageTagImpl( *this));
             rMap.insert( ::std::make_pair( mnLangID, pImpl));
-        }
-        // Try to cross-insert a previously uninitialized tag string.
-        if (!pImpl->maBcp47.isEmpty())
-        {
-            if (theMapBcp47::get().insert( ::std::make_pair( pImpl->maBcp47, pImpl)).second)
+            // Try round-trip.
+            if (!pImpl->mbInitializedLocale)
+                pImpl->convertLangToLocale();
+            LanguageType nLang = MsLangId::Conversion::convertLocaleToLanguage( pImpl->maLocale);
+            // If round-trip is identical cross-insert to Bcp47 map.
+            if (nLang == pImpl->mnLangID)
             {
-                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted tag '" << pImpl->maBcp47 << "'"
-                        << " for 0x" << ::std::hex << mnLangID);
+                if (!pImpl->mbInitializedBcp47)
+                    pImpl->convertLocaleToBcp47();
+                ::std::pair< MapBcp47::const_iterator, bool > res(
+                        theMapBcp47::get().insert( ::std::make_pair( pImpl->maBcp47, pImpl)));
+                if (res.second)
+                {
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted '" << pImpl->maBcp47 << "'"
+                            << " for 0x" << ::std::hex << mnLangID);
+                }
+                else
+                {
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "'"
+                            << " for 0x" << ::std::hex << mnLangID << " have 0x"
+                            << ::std::hex << (*res.first).second->mnLangID);
+                }
+            }
+            else
+            {
+                if (!pImpl->mbInitializedBcp47)
+                    pImpl->convertLocaleToBcp47();
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "'"
+                        << " for 0x" << ::std::hex << mnLangID << " round-trip to 0x" << ::std::hex << nLang);
             }
         }
     }
@@ -599,26 +623,52 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         MapBcp47& rMap = theMapBcp47::get();
         MapBcp47::const_iterator it( rMap.find( maBcp47));
         if (it != rMap.end())
+        {
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: found impl for '" << maBcp47 << "'");
             pImpl = (*it).second;
+        }
         else
         {
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for tag '" << maBcp47 << "'");
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for '" << maBcp47 << "'");
             pImpl.reset( new LanguageTagImpl( *this));
             rMap.insert( ::std::make_pair( maBcp47, pImpl));
-        }
-        // Try to cross-insert a previously uninitialized LangID.
-        if (pImpl->mbInitializedLangID)
-        {
-            if (theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)).second)
+            // Try round-trip Bcp47->Locale->LangID->Locale->Bcp47.
+            if (!pImpl->mbInitializedLocale)
+                pImpl->convertBcp47ToLocale();
+            if (!pImpl->mbInitializedLangID)
+                pImpl->convertLocaleToLang();
+            OUString aBcp47( LanguageTag::convertToBcp47(
+                        MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true)));
+            // If round-trip is identical cross-insert to Bcp47 map.
+            // May have involved canonicalize(), so compare with
+            // pImpl->maBcp47!
+            if (aBcp47 == pImpl->maBcp47)
             {
-                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted 0x"
-                        << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+                ::std::pair< MapLangID::const_iterator, bool > res(
+                        theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)));
+                if (res.second)
+                {
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted 0x"
+                            << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+                }
+                else
+                {
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted 0x"
+                            << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
+                            << (*res.first).second->maBcp47 << "'");
+                }
+            }
+            else
+            {
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted 0x"
+                        << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' round-trip to '"
+                        << aBcp47 << "'");
             }
         }
     }
     else
     {
-        SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for mnLangID " << ::std::hex << mnLangID );
+        SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for " << ::std::hex << mnLangID );
         pImpl.reset( new LanguageTagImpl( *this));
     }
     return pImpl;
@@ -656,8 +706,10 @@ void LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize 
 
     if (bCanonicalize)
     {
-        if (getImpl()->canonicalize())
-            syncFromImpl();
+        getImpl()->canonicalize();
+        // Registration itself may already have canonicalized, so do an
+        // unconditional sync.
+        syncFromImpl();
     }
 }
 
@@ -882,13 +934,21 @@ bool LanguageTagImpl::synCanonicalize()
 
 void LanguageTag::syncFromImpl()
 {
-    ImplPtr pImpl = getImpl();
+    ImplPtr xImpl = getImpl();
+    LanguageTagImpl* pImpl = xImpl.get();
+    bool bRegister = ((mbInitializedBcp47 && maBcp47 != pImpl->maBcp47) ||
+            (mbInitializedLangID && mnLangID != pImpl->mnLangID));
+    SAL_INFO_IF( bRegister, "i18nlangtag",
+            "LanguageTag::syncFromImpl: re-registering, '" << pImpl->maBcp47 << "' vs '" << maBcp47 <<
+            " and 0x" << ::std::hex << pImpl->mnLangID << " vs 0x" << ::std::hex << mnLangID);
     mbInitializedBcp47  = pImpl->mbInitializedBcp47;
     maBcp47             = pImpl->maBcp47;
     mbInitializedLocale = pImpl->mbInitializedLocale;
     maLocale            = pImpl->maLocale;
     mbInitializedLangID = pImpl->mbInitializedLangID;
     mnLangID            = pImpl->mnLangID;
+    if (bRegister)
+        mpImpl = registerImpl();
 }
 
 
@@ -921,10 +981,8 @@ void LanguageTagImpl::convertLocaleToBcp47()
 
 void LanguageTag::convertLocaleToBcp47()
 {
-    ImplPtr pImpl = getImpl();
-    pImpl->convertLocaleToBcp47();
-    maBcp47 = pImpl->maBcp47;
-    mbInitializedBcp47 = pImpl->mbInitializedBcp47;
+    getImpl()->convertLocaleToBcp47();
+    syncFromImpl();
 }
 
 
@@ -944,10 +1002,8 @@ void LanguageTagImpl::convertLocaleToLang()
 
 void LanguageTag::convertLocaleToLang()
 {
-    ImplPtr pImpl = getImpl();
-    pImpl->convertLocaleToLang();
-    mnLangID = pImpl->mnLangID;
-    mbInitializedLangID = pImpl->mbInitializedLangID;
+    getImpl()->convertLocaleToLang();
+    syncFromImpl();
 }
 
 
@@ -972,10 +1028,8 @@ void LanguageTagImpl::convertBcp47ToLocale()
 
 void LanguageTag::convertBcp47ToLocale()
 {
-    ImplPtr pImpl = getImpl();
-    pImpl->convertBcp47ToLocale();
-    maLocale = pImpl->maLocale;
-    mbInitializedLocale = pImpl->mbInitializedLocale;
+    getImpl()->convertBcp47ToLocale();
+    syncFromImpl();
 }
 
 
@@ -997,12 +1051,8 @@ void LanguageTagImpl::convertBcp47ToLang()
 
 void LanguageTag::convertBcp47ToLang()
 {
-    ImplPtr pImpl = getImpl();
-    pImpl->convertBcp47ToLang();
-    maLocale = pImpl->maLocale;
-    mbInitializedLocale = pImpl->mbInitializedLocale;
-    mnLangID = pImpl->mnLangID;
-    mbInitializedLangID = pImpl->mbInitializedLangID;
+    getImpl()->convertBcp47ToLang();
+    syncFromImpl();
 }
 
 
@@ -1021,10 +1071,8 @@ void LanguageTagImpl::convertLangToLocale()
 
 void LanguageTag::convertLangToLocale()
 {
-    ImplPtr pImpl = getImpl();
-    pImpl->convertLangToLocale();
-    maLocale = pImpl->maLocale;
-    mbInitializedLocale = pImpl->mbInitializedLocale;
+    getImpl()->convertLangToLocale();
+    syncFromImpl();
 }
 
 
@@ -1039,12 +1087,8 @@ void LanguageTagImpl::convertLangToBcp47()
 
 void LanguageTag::convertLangToBcp47()
 {
-    ImplPtr pImpl = getImpl();
-    pImpl->convertLangToBcp47();
-    maLocale = pImpl->maLocale;
-    mbInitializedLocale = pImpl->mbInitializedLocale;
-    maBcp47 = pImpl->maBcp47;
-    mbInitializedBcp47 = pImpl->mbInitializedBcp47;
+    getImpl()->convertLangToBcp47();
+    syncFromImpl();
 }
 
 
@@ -1105,8 +1149,6 @@ const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
         return theEmptyBcp47::get();
-    if (!mbInitializedBcp47)
-        const_cast<LanguageTag*>(this)->syncFromImpl();
     if (!mbInitializedBcp47)
     {
         getImpl()->getBcp47();
@@ -1240,8 +1282,6 @@ const com::sun::star::lang::Locale & LanguageTag::getLocale( bool bResolveSystem
     if (!bResolveSystem && mbSystemLocale)
         return theEmptyLocale::get();
     if (!mbInitializedLocale)
-        const_cast<LanguageTag*>(this)->syncFromImpl();
-    if (!mbInitializedLocale)
     {
         if (mbInitializedBcp47)
             const_cast<LanguageTag*>(this)->convertBcp47ToLocale();
@@ -1256,8 +1296,6 @@ LanguageType LanguageTag::getLanguageType( bool bResolveSystem ) const
 {
     if (!bResolveSystem && mbSystemLocale)
         return LANGUAGE_SYSTEM;
-    if (!mbInitializedLangID)
-        const_cast<LanguageTag*>(this)->syncFromImpl();
     if (!mbInitializedLangID)
     {
         if (mbInitializedBcp47)
@@ -1373,7 +1411,9 @@ OUString LanguageTagImpl::getLanguage() const
 
 OUString LanguageTag::getLanguage() const
 {
-    return getImpl()->getLanguage();
+    OUString aRet( getImpl()->getLanguage());
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return aRet;
 }
 
 
@@ -1390,7 +1430,9 @@ OUString LanguageTagImpl::getScript() const
 
 OUString LanguageTag::getScript() const
 {
-    return getImpl()->getScript();
+    OUString aRet( getImpl()->getScript());
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return aRet;
 }
 
 
@@ -1421,7 +1463,9 @@ OUString LanguageTagImpl::getCountry() const
 
 OUString LanguageTag::getCountry() const
 {
-    return getImpl()->getCountry();
+    OUString aRet( getImpl()->getCountry());
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return aRet;
 }
 
 
@@ -1433,7 +1477,9 @@ OUString LanguageTagImpl::getRegion() const
 
 OUString LanguageTag::getRegion() const
 {
-    return getImpl()->getRegion();
+    OUString aRet( getImpl()->getRegion());
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return aRet;
 }
 
 
@@ -1450,7 +1496,9 @@ OUString LanguageTagImpl::getVariants() const
 
 OUString LanguageTag::getVariants() const
 {
-    return getImpl()->getVariants();
+    OUString aRet( getImpl()->getVariants());
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return aRet;
 }
 
 
@@ -1487,7 +1535,9 @@ bool LanguageTagImpl::hasScript() const
 
 bool LanguageTag::hasScript() const
 {
-    return getImpl()->hasScript();
+    bool bRet = getImpl()->hasScript();
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return bRet;
 }
 
 
@@ -1525,7 +1575,9 @@ bool LanguageTagImpl::isIsoLocale() const
 
 bool LanguageTag::isIsoLocale() const
 {
-    return getImpl()->isIsoLocale();
+    bool bRet = getImpl()->isIsoLocale();
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return bRet;
 }
 
 
@@ -1552,7 +1604,9 @@ bool LanguageTagImpl::isIsoODF() const
 
 bool LanguageTag::isIsoODF() const
 {
-    return getImpl()->isIsoODF();
+    bool bRet = getImpl()->isIsoODF();
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return bRet;
 }
 
 
@@ -1570,7 +1624,9 @@ bool LanguageTagImpl::isValidBcp47() const
 
 bool LanguageTag::isValidBcp47() const
 {
-    return getImpl()->isValidBcp47();
+    bool bRet = getImpl()->isValidBcp47();
+    const_cast<LanguageTag*>(this)->syncFromImpl();
+    return bRet;
 }
 
 

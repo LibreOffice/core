@@ -521,6 +521,8 @@ void TestLanguageTag::testAllIsoLangEntries()
 #endif
     }
 
+    // Uncommenting this makes the test break and output SAL_WARN/INFO
+    //CPPUNIT_ASSERT( true == false );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestLanguageTag );
