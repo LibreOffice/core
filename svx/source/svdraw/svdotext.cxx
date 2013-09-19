@@ -681,7 +681,7 @@ void SdrTextObj::AdaptTextMinSize()
                 if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
                 {
                     bDisableAutoWidthOnDragging = false;
-                    SetObjectItem(SdrTextAutoGrowHeightItem(false));
+                    aSet.Put(SdrTextAutoGrowHeightItem(false));
                 }
             }
 
