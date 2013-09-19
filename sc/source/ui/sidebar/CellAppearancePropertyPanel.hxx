@@ -156,11 +156,11 @@ private:
 
     // for fill color picker
     svx::sidebar::PopupControl* CreateFillColorPopupControl(svx::sidebar::PopupContainer* pParent);
-    void SetFillColor(const String& rsColorName, const Color aColor);
+    void SetFillColor(const OUString& rsColorName, const Color aColor);
 
     // for line color picker
     svx::sidebar::PopupControl* CreateLineColorPopupControl(svx::sidebar::PopupContainer* pParent);
-    void SetLineColor(const String& rsColorName, const Color aColor);
+    void SetLineColor(const OUString& rsColorName, const Color aColor);
 
     // for CellLineStyle popup
     svx::sidebar::PopupControl* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);

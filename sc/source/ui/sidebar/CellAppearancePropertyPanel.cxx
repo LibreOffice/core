@@ -87,7 +87,7 @@ svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateFillColorPopupCon
 }
 
 void CellAppearancePropertyPanel::SetFillColor(
-    const String& /*rsColorName*/,
+    const OUString& /*rsColorName*/,
     const Color aColor)
 {
     const SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);
@@ -111,7 +111,7 @@ svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateLineColorPopupCon
 }
 
 void CellAppearancePropertyPanel::SetLineColor(
-    const String& /*rsColorName*/,
+    const OUString& /*rsColorName*/,
     const Color aColor)
 {
     const SvxColorItem aColorItem(aColor, SID_FRAME_LINECOLOR);
