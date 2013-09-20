@@ -56,9 +56,6 @@ namespace cli_ure {
 // in main\scp2\source\ooo\registryitem_ooo.scp
 #define INSTALL_PATH L"Software\\OpenOffice\\UNO\\InstallPath"
 #define INSTALL_PATH_64 L"Software\\Wow6432Node\\OpenOffice\\UNO\\InstallPath"
-#define BASIS_LINK L"\\basis-link"
-#define URE_LINK L"\\ure-link"
-#define URE_BIN L"\\bin"
 #define UNO_PATH L"UNO_PATH"
 
 namespace
@@ -110,23 +107,6 @@ WCHAR* getPathFromRegistryKey( HKEY hroot, LPCWSTR subKeyName )
     return data;
 }
 
-/* If the path does not end with '\' the las segment will be removed.
-    path: C:\a\b
-    ->    C:\a
-    @param io_path
-        in/out parameter. The string is not reallocated. Simply a '\0'
-        will be inserted to shorten the string.
-*/
-void oneDirUp(LPTSTR io_path)
-{
-    WCHAR * pEnd = io_path + lstrlen(io_path) - 1;
-    while (pEnd > io_path //prevent crashing if provided string does not contain a backslash
-        && *pEnd != L'\\')
-        pEnd --;
-    *pEnd = L'\0';
-}
-
-
 /* Returns the path to the program folder of the brand layer,
     for example c:/openoffice.org 3/program
    This path is either obtained from the environment variable UNO_PATH
@@ -142,8 +122,8 @@ WCHAR * getInstallPath()
     DWORD  cChars = GetEnvironmentVariable(UNO_PATH, NULL, 0);
     if (cChars > 0)
     {
-        szInstallPath = new WCHAR[cChars];
-        cChars = GetEnvironmentVariable(UNO_PATH, szInstallPath, cChars);
+        szInstallPath = new WCHAR[cChars+1];
+        cChars = GetEnvironmentVariable(UNO_PATH, szInstallPath, cChars+1);
         //If PATH is not set then it is no error
         if (cChars == 0)
         {
@@ -158,81 +138,20 @@ WCHAR * getInstallPath()
         if ( szInstallPath == NULL )
         {
             /* read the key's default value from HKEY_LOCAL_USER */
-            szInstallPath = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, INSTALL_PATH_64 );
+            szInstallPath = getPathFromRegistryKey( HKEY_CURRENT_USER, INSTALL_PATH_64 );
         }
-        else if ( szInstallPath == NULL )
+        if ( szInstallPath == NULL )
         {
             /* read the key's default value from HKEY_LOCAL_MACHINE */
             szInstallPath = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, INSTALL_PATH );
         }
-        else if ( szInstallPath == NULL )
+        if ( szInstallPath == NULL )
         {
             /* read the key's default value from HKEY_LOCAL_MACHINE */
             szInstallPath = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, INSTALL_PATH_64 );
         }
     }
     return szInstallPath;
-}
-
-/* Returns the path to the URE/bin path, where cppuhelper lib resides.
-    The returned string must be freed with delete[]
-*/
-WCHAR* getUnoPath()
-{
-    WCHAR * szLinkPath = NULL;
-    WCHAR * szUrePath = NULL;
-    WCHAR * szUreBin = NULL; //the return value
-
-    WCHAR * szInstallPath = getInstallPath();
-    if (szInstallPath)
-    {
-        //build the path tho the basis-link file
-        oneDirUp(szInstallPath);
-        int sizeLinkPath = lstrlen(szInstallPath) + lstrlen(INSTALL_PATH) + 1;
-        if (sizeLinkPath < MAX_PATH)
-            sizeLinkPath = MAX_PATH;
-        szLinkPath = new WCHAR[sizeLinkPath];
-        szLinkPath[0] = L'\0';
-        lstrcat(szLinkPath, szInstallPath);
-        lstrcat(szLinkPath, BASIS_LINK);
-
-        //get the path to the actual Basis folder
-        if (cli_ure::resolveLink(szLinkPath))
-        {
-            //build the path to the ure-link file
-            int sizeUrePath = lstrlen(szLinkPath) + lstrlen(URE_LINK) + 1;
-            if (sizeUrePath < MAX_PATH)
-                sizeUrePath = MAX_PATH;
-            szUrePath = new WCHAR[sizeUrePath];
-            szUrePath[0] = L'\0';
-            lstrcat(szUrePath, szLinkPath);
-            lstrcat(szUrePath, URE_LINK);
-
-            //get the path to the actual Ure folder
-            if (cli_ure::resolveLink(szUrePath))
-            {
-                //build the path to the URE/bin directory
-                szUreBin = new WCHAR[lstrlen(szUrePath) + lstrlen(URE_BIN) + 1];
-                 szUreBin[0] = L'\0';
-                lstrcat(szUreBin, szUrePath);
-                 lstrcat(szUreBin, URE_BIN);
-            }
-        }
-    }
-#if OSL_DEBUG_LEVEL >=2
-    if (szUreBin)
-    {
-        fwprintf(stdout,L"[cli_cppuhelper]: Path to URE libraries:\n %s \n", szUreBin);
-    }
-    else
-    {
-        fwprintf(stdout,L"[cli_cppuhelper]: Failed to determine location of URE.\n");
-    }
-#endif
-    delete[] szInstallPath;
-    delete[] szLinkPath;
-    delete[] szUrePath;
-    return szUreBin;
 }
 
 
@@ -280,7 +199,6 @@ HMODULE loadFromPath(LPCWSTR sLibName)
     if (sLibName == NULL)
         return NULL;
 
-//  WCHAR * szUreBinPath =  getUnoPath();
     WCHAR * szUreBinPath =  getInstallPath();
     if (!szUreBinPath)
         return NULL;
@@ -344,10 +262,10 @@ namespace util
 
     Bootstrapping requires the existence of many libraries which are contained
     in an URE installation. To find and load these libraries the Windows
-    registry keys HKEY_CURRENT_USER\Software\OpenOffice\Layer\URE\1
-    and HKEY_LOCAL_MACHINE\Software\OpenOffice\Layer\URE\1 are examined.
-    These contain a named value UREINSTALLLOCATION which holds a path to the URE
-    installation folder.
+    registry keys HKEY_CURRENT_USER\Software\OpenOffice\UNO\InstallPath
+    and HKEY_LOCAL_MACHINE\Software\OpenOffice\UNO\InstallPath are examined.
+    The default value contain the path to the office prgoram dir. No seaparate URE
+    anymore.
 */
 public __sealed __gc class Bootstrap
 {
