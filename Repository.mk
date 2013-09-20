@@ -100,7 +100,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter WNT,$(OS)), \
 		crashrep_com \
 		odbcconfig \
-		pyuno/python \
+		python \
 		quickstart \
 		sbase \
 		scalc \
