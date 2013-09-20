@@ -24,11 +24,10 @@ $(eval $(call gb_Library_add_ldflags,cli_cppuhelper,\
 	-keyfile:$(call gb_Helper_windows_path,$(SRCDIR)/cli_ure/source/cliuno.snk) \
 ))
 
-# TODO do not encode filenames here
 $(eval $(call gb_Library_add_ldflags,cli_cppuhelper,\
-	-delayload:cppuhelper3MSC.dll \
-	-delayload:cppu3.dll \
-	-delayload:sal3.dll \
+	-delayload:$(call gb_Library_get_filename,cppuhelper) \
+	-delayload:$(call gb_Library_get_filename,cppu) \
+	-delayload:$(call gb_Library_get_filename,sal) \
 ))
 
 $(eval $(call gb_Library_use_internal_bootstrap_api,cli_cppuhelper,\
