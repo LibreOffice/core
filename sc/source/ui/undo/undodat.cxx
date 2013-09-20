@@ -1852,7 +1852,7 @@ void ScUndoChartData::Init()
     pDoc->GetOldChartParameters( aChartName, *aOldRangeListRef, bOldColHeaders, bOldRowHeaders );
 }
 
-ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
+ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rName,
                                     const ScRange& rNew, bool bColHdr, bool bRowHdr,
                                     bool bAdd ) :
     ScSimpleUndo( pNewDocShell ),
@@ -1867,7 +1867,7 @@ ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
     Init();
 }
 
-ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
+ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rName,
                                     const ScRangeListRef& rNew, bool bColHdr, bool bRowHdr,
                                     bool bAdd ) :
     ScSimpleUndo( pNewDocShell ),

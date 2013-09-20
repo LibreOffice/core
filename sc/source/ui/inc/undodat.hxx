@@ -461,10 +461,10 @@ class ScUndoChartData: public ScSimpleUndo
 public:
                         TYPEINFO();
                         ScUndoChartData( ScDocShell* pNewDocShell,
-                                const String& rName, const ScRange& rNew,
+                                const OUString& rName, const ScRange& rNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
                         ScUndoChartData( ScDocShell* pNewDocShell,
-                                const String& rName, const ScRangeListRef& rNew,
+                                const OUString& rName, const ScRangeListRef& rNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
     virtual             ~ScUndoChartData();
 
@@ -476,7 +476,7 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String              aChartName;
+    OUString            aChartName;
     ScRangeListRef      aOldRangeListRef;
     bool                bOldColHeaders;
     bool                bOldRowHeaders;
