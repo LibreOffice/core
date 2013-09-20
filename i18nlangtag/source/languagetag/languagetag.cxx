@@ -676,7 +676,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 #endif
 
     // Prefer LangID map as find+insert needs less comparison work.
-    if (mbInitializedLangID)
+    // Never insert LANGUAGE_DONTKNOW
+    if (mbInitializedLangID && mnLangID != LANGUAGE_DONTKNOW)
     {
         MapLangID& rMap = theMapLangID::get();
         MapLangID::const_iterator it( rMap.find( mnLangID));
@@ -753,10 +754,13 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             OUString aBcp47;
             if (!bInsert)
             {
-                // May have involved canonicalize(), so compare with pImpl->maBcp47!
-                aBcp47 = LanguageTagImpl::convertToBcp47(
+                if (pImpl->mnLangID != LANGUAGE_DONTKNOW)
+                {
+                    // May have involved canonicalize(), so compare with pImpl->maBcp47!
+                    aBcp47 = LanguageTagImpl::convertToBcp47(
                             MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true));
-                bInsert = (aBcp47 == pImpl->maBcp47);
+                    bInsert = (aBcp47 == pImpl->maBcp47);
+                }
             }
             // If round-trip is identical cross-insert to Bcp47 map.
             if (bInsert)
