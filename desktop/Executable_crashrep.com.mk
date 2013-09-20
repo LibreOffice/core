@@ -23,8 +23,4 @@ $(eval $(call gb_Executable_add_exception_objects,crashrep_com,\
     desktop/win32/source/guistdio/guistdio \
 ))
 
-# the resulting executable is called crashrep_com.exe, copy it to crashrep.com
-$(eval $(call gb_Package_Package,crashrep_com,$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,crashrep_com,bin/crashrep.com,crashrep_com.exe))
-
 # vim: set ts=4 sw=4 et:

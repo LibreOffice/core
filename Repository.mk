@@ -85,7 +85,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(ENABLE_NPAPI_INTO_BROWSER),nsplugin) \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
 	$(if $(ENABLE_NPAPI_FROM_BROWSER),pluginapp.bin) \
-	$(if $(filter-out WNT,$(OS)),soffice.bin) \
+	soffice_bin \
 	spadmin.bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
 		tdefilepicker \
@@ -95,7 +95,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		kdefilepicker \
 	) \
 	ui-previewer \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg.bin) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	xpdfimport \
 	$(if $(filter WNT,$(OS)), \
 		crashrep_com \
@@ -108,13 +108,11 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		senddoc \
 		simpress \
 		soffice \
-		soffice_bin \
 		smath \
 		sweb \
 		swriter \
 		unoinfo \
 		unopkg \
-		unopkg_bin \
 		unopkg_com \
 	) \
 ))
