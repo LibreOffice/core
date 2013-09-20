@@ -98,6 +98,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     sot/util/sot \
     svl/source/fsstor/fsstorage \
     svl/util/svl \
+    svtools/util/svt \
     svx/util/svx \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
