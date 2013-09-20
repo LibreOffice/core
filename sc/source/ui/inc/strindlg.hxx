@@ -32,9 +32,9 @@ class ScStringInputDlg : public ModalDialog
 {
 public:
             ScStringInputDlg(     Window* pParent,
-                            const String& rTitle,
-                            const String& rEditTitle,
-                            const String& rDefault,
+                            const OUString& rTitle,
+                            const OUString& rEditTitle,
+                            const OUString& rDefault,
                             const OString& sHelpId, const OString& sEditHelpId );
             ~ScStringInputDlg();
 

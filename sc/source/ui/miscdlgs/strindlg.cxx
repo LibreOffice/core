@@ -31,9 +31,9 @@
 //==================================================================
 
 ScStringInputDlg::ScStringInputDlg( Window*         pParent,
-                                    const String&   rTitle,
-                                    const String&   rEditTitle,
-                                    const String&   rDefault,
+                                    const OUString&   rTitle,
+                                    const OUString&   rEditTitle,
+                                    const OUString&   rDefault,
                                     const OString& sHelpId, const OString& sEditHelpId    ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_STRINPUT ) ),
     //
