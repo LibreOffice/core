@@ -2891,6 +2891,7 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
+	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -2923,6 +2924,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	)) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
+	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,offapi) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
@@ -2954,6 +2956,7 @@ $(call gb_Executable_add_runtime_dependencies,localize,\
 )
 endef
 
+# FIXME ure/services.rdb needs cleanup
 # The dependencies on ure/services.rdb and udkapi.rdb are implicitly required
 # due to the settings for URE_SERVICES and URE_TYPES in cppuhelper/source/unorc:
 # FIXME: the library target should be for build too
@@ -2963,6 +2966,7 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,saxparser) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
+	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -2976,6 +2980,7 @@ $(call gb_Executable_add_runtime_dependencies,uno,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
+	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
