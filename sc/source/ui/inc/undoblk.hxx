@@ -491,7 +491,7 @@ public:
                     ScUndoReplace( ScDocShell* pNewDocShell,
                                    const ScMarkData& rMark,
                                    SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                                   const String& rNewUndoStr, ScDocument* pNewUndoDoc,
+                                   const OUString& rNewUndoStr, ScDocument* pNewUndoDoc,
                                    const SvxSearchItem* pItem );
     virtual         ~ScUndoReplace();
 
@@ -505,7 +505,7 @@ public:
 private:
     ScAddress       aCursorPos;
     ScMarkData      aMarkData;
-    String          aUndoStr;           // Data at single selection
+    OUString        aUndoStr;           // Data at single selection
     ScDocument*     pUndoDoc;           // Block mark and deleted data
     SvxSearchItem*  pSearchItem;
     sal_uLong           nStartChangeAction;
@@ -641,7 +641,7 @@ public:
                     ScUndoUseScenario( ScDocShell* pNewDocShell,
                                        const ScMarkData& rMark,
                                        const ScArea& rDestArea, ScDocument* pNewUndoDoc,
-                                       const String& rNewName );
+                                       const OUString& rNewName );
     virtual         ~ScUndoUseScenario();
 
     virtual void    Undo();
@@ -655,7 +655,7 @@ private:
     ScDocument*     pUndoDoc;
     ScRange         aRange;
     ScMarkData      aMarkData;
-    String          aName;
+    OUString        aName;
 };
 
 
@@ -666,7 +666,7 @@ public:
                     ScUndoSelectionStyle( ScDocShell* pNewDocShell,
                                           const ScMarkData& rMark,
                                           const ScRange& rRange,
-                                          const String& rName,
+                                          const OUString& rName,
                                           ScDocument* pNewUndoDoc );
     virtual         ~ScUndoSelectionStyle();
 
@@ -681,7 +681,7 @@ public:
 private:
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;
-    String          aStyleName;
+    OUString        aStyleName;
     ScRange         aRange;
 
     void            DoChange( const sal_Bool bUndo );
@@ -716,7 +716,7 @@ public:
                     ScUndoEnterMatrix( ScDocShell* pNewDocShell,
                                        const ScRange& rArea,
                                        ScDocument* pNewUndoDoc,
-                                       const String& rForm );
+                                       const OUString& rForm );
     virtual         ~ScUndoEnterMatrix();
 
     virtual void    Undo();
@@ -728,9 +728,9 @@ public:
 
 private:
     ScDocument*     pUndoDoc;
-    String          aFormula;
-    sal_uLong           nStartChangeAction;
-    sal_uLong           nEndChangeAction;
+    OUString        aFormula;
+    sal_uLong       nStartChangeAction;
+    sal_uLong       nEndChangeAction;
 
     void            SetChangeTrack();
 };
@@ -742,7 +742,7 @@ public:
                     TYPEINFO();
                     ScUndoInsertAreaLink( ScDocShell* pShell,
                                           const OUString& rDocName,
-                                          const OUString& rFltName, const String& rOptions,
+                                          const OUString& rFltName, const OUString& rOptions,
                                           const OUString& rAreaName, const ScRange& rDestRange,
                                           sal_uLong nRefreshDelay );
     virtual         ~ScUndoInsertAreaLink();
@@ -757,7 +757,7 @@ public:
 private:
     OUString        aDocName;
     OUString        aFltName;
-    String          aOptions;
+    OUString        aOptions;
     OUString        aAreaName;
     ScRange         aRange;
     sal_uLong           nRefreshDelay;
@@ -770,7 +770,7 @@ public:
                     TYPEINFO();
                     ScUndoRemoveAreaLink( ScDocShell* pShell,
                                           const OUString& rDocName,
-                                          const OUString& rFltName, const String& rOptions,
+                                          const OUString& rFltName, const OUString& rOptions,
                                           const OUString& rAreaName, const ScRange& rDestRange,
                                           sal_uLong nRefreshDelay );
     virtual         ~ScUndoRemoveAreaLink();
@@ -785,7 +785,7 @@ public:
 private:
     OUString        aDocName;
     OUString        aFltName;
-    String          aOptions;
+    OUString        aOptions;
     OUString        aAreaName;
     ScRange         aRange;
     sal_uLong           nRefreshDelay;
@@ -797,13 +797,13 @@ class ScUndoUpdateAreaLink : public ScSimpleUndo        //! also change BlockUnd
 public:
                     TYPEINFO();
                     ScUndoUpdateAreaLink( ScDocShell* pShell,
-                                          const String& rOldD,
-                                          const String& rOldF, const String& rOldO,
-                                          const String& rOldA, const ScRange& rOldR,
+                                          const OUString& rOldD,
+                                          const OUString& rOldF, const OUString& rOldO,
+                                          const OUString& rOldA, const ScRange& rOldR,
                                           sal_uLong nOldRD,
-                                          const String& rNewD,
-                                          const String& rNewF, const String& rNewO,
-                                          const String& rNewA, const ScRange& rNewR,
+                                          const OUString& rNewD,
+                                          const OUString& rNewF, const OUString& rNewO,
+                                          const OUString& rNewA, const ScRange& rNewR,
                                           sal_uLong nNewRD,
                                           ScDocument* pUndo, ScDocument* pRedo,
                                           sal_Bool bDoInsert );
@@ -817,15 +817,15 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String          aOldDoc;
-    String          aOldFlt;
-    String          aOldOpt;
-    String          aOldArea;
+    OUString        aOldDoc;
+    OUString        aOldFlt;
+    OUString        aOldOpt;
+    OUString        aOldArea;
     ScRange         aOldRange;
-    String          aNewDoc;
-    String          aNewFlt;
-    String          aNewOpt;
-    String          aNewArea;
+    OUString        aNewDoc;
+    OUString        aNewFlt;
+    OUString        aNewOpt;
+    OUString        aNewArea;
     ScRange         aNewRange;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;

@@ -1408,7 +1408,7 @@ ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
                         const ScMarkData& rMark,
 /*C*/                   const ScArea& rDestArea,
                               ScDocument* pNewUndoDoc,
-                        const String& rNewName ) :
+                        const OUString& rNewName ) :
     ScSimpleUndo( pNewDocShell ),
     pUndoDoc( pNewUndoDoc ),
     aMarkData( rMark ),
@@ -1527,7 +1527,7 @@ bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
                                       const ScMarkData& rMark,
                                       const ScRange& rRange,
-                                      const String& rName,
+                                      const OUString& rName,
                                             ScDocument* pNewUndoDoc ) :
     ScSimpleUndo( pNewDocShell ),
     aMarkData( rMark ),
@@ -1635,7 +1635,7 @@ sal_uInt16 ScUndoSelectionStyle::GetId() const
 }
 
 ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& rArea,
-                                      ScDocument* pNewUndoDoc, const String& rForm ) :
+                                      ScDocument* pNewUndoDoc, const OUString& rForm ) :
     ScBlockUndo( pNewDocShell, rArea, SC_UNDO_SIMPLE ),
     pUndoDoc( pNewUndoDoc ),
     aFormula( rForm )

@@ -915,7 +915,7 @@ bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoReplace::ScUndoReplace( ScDocShell* pNewDocShell, const ScMarkData& rMark,
                                     SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
-                                    const String& rNewUndoStr, ScDocument* pNewUndoDoc,
+                                    const OUString& rNewUndoStr, ScDocument* pNewUndoDoc,
                                     const SvxSearchItem* pItem )
     :   ScSimpleUndo( pNewDocShell ),
         aCursorPos  ( nCurX, nCurY, nCurZ ),
@@ -1024,7 +1024,7 @@ void ScUndoReplace::Undo()
     else
     {
         // aUndoStr may contain line breaks
-        if ( aUndoStr.Search('\n') != STRING_NOTFOUND )
+        if ( aUndoStr.indexOf('\n') != -1 )
         {
             ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
             rEngine.SetText(aUndoStr);
@@ -1490,7 +1490,7 @@ static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const Stri
 
 ScUndoInsertAreaLink::ScUndoInsertAreaLink( ScDocShell* pShell,
                             const OUString& rDoc,
-                            const OUString& rFlt, const String& rOpt,
+                            const OUString& rFlt, const OUString& rOpt,
                             const OUString& rArea, const ScRange& rDestRange,
                             sal_uLong nRefresh )
     :   ScSimpleUndo    ( pShell ),
@@ -1552,7 +1552,7 @@ bool ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoRemoveAreaLink::ScUndoRemoveAreaLink( ScDocShell* pShell,
-                            const OUString& rDoc, const OUString& rFlt, const String& rOpt,
+                            const OUString& rDoc, const OUString& rFlt, const OUString& rOpt,
                             const OUString& rArea, const ScRange& rDestRange,
                             sal_uLong nRefresh )
     :   ScSimpleUndo    ( pShell ),
@@ -1614,10 +1614,10 @@ bool ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
-                            const String& rOldD, const String& rOldF, const String& rOldO,
-                            const String& rOldA, const ScRange& rOldR, sal_uLong nOldRD,
-                            const String& rNewD, const String& rNewF, const String& rNewO,
-                            const String& rNewA, const ScRange& rNewR, sal_uLong nNewRD,
+                            const OUString& rOldD, const OUString& rOldF, const OUString& rOldO,
+                            const OUString& rOldA, const ScRange& rOldR, sal_uLong nOldRD,
+                            const OUString& rNewD, const OUString& rNewF, const OUString& rNewO,
+                            const OUString& rNewA, const ScRange& rNewR, sal_uLong nNewRD,
                             ScDocument* pUndo, ScDocument* pRedo, sal_Bool bDoInsert )
     :   ScSimpleUndo( pShell ),
         aOldDoc     ( rOldD ),
