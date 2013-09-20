@@ -373,7 +373,7 @@ void MediaWindowImpl::Paint( const Rectangle& )
     if( pLogo && !pLogo->IsEmpty() && ( aVideoRect.GetWidth() > 0 ) && ( aVideoRect.GetHeight() > 0 ) )
     {
         Size        aLogoSize( pLogo->GetSizePixel() );
-        const Color aBackgroundColor( 67, 67, 67 );
+        const Color aBackgroundColor( 0, 0, 0 );
 
         SetLineColor( aBackgroundColor );
         SetFillColor( aBackgroundColor );
