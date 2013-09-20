@@ -102,8 +102,7 @@ void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
             "com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY);
     }
 
-    LanguageTag aLangTag(rArgs.meLanguage);
-    lang::Locale aLocale(aLangTag.getLocale());
+    lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
 
     //if position nCharPos is missing in the font, grab the entire grapheme and
     //mark all glyphs as missing so the whole thing is rendered with the same
@@ -417,8 +416,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
         meScriptCode = eScriptCode;
 
-        LanguageTag aLangTag(rArgs.meLanguage);
-        OString sLanguage = OUStringToOString(aLangTag.getLanguage(), RTL_TEXTENCODING_UTF8);
+        OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getLanguage(), RTL_TEXTENCODING_UTF8);
 
         if (pHbUnicodeFuncs == NULL)
             pHbUnicodeFuncs = getUnicodeFuncs();

@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <tools/string.hxx>
-#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/fntstyle.hxx>
@@ -79,6 +79,11 @@ public:
     FontFamily          GetFamily() const;
     void                SetCharSet( rtl_TextEncoding );
     rtl_TextEncoding    GetCharSet() const;
+    // Prefer LanguageTag over LanguageType
+    void                SetLanguageTag( const LanguageTag & );
+    const LanguageTag&  GetLanguageTag() const;
+    void                SetCJKContextLanguageTag( const LanguageTag& );
+    const LanguageTag&  GetCJKContextLanguageTag() const;
     void                SetLanguage( LanguageType );
     LanguageType        GetLanguage() const;
     void                SetCJKContextLanguage( LanguageType );

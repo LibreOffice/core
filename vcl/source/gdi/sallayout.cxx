@@ -506,9 +506,9 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 // =======================================================================
 
 ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
-    int nMinCharPos, int nEndCharPos, int nFlags, LanguageType eLanguage )
+    int nMinCharPos, int nEndCharPos, int nFlags, const LanguageTag& rLanguageTag )
 :
-    meLanguage( eLanguage ),
+    maLanguageTag( rLanguageTag ),
     mnFlags( nFlags ),
     mnLength( nLen ),
     mnMinCharPos( nMinCharPos ),

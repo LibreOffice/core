@@ -5744,7 +5744,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
 
     // set layout options
-    ImplLayoutArgs aLayoutArgs( rStr.getStr(), rStr.getLength(), nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguage() );
+    ImplLayoutArgs aLayoutArgs( rStr.getStr(), rStr.getLength(), nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag() );
 
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );

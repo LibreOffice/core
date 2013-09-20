@@ -41,12 +41,12 @@ DBG_NAME( Font )
 
 Impl_Font::Impl_Font() :
     maColor( COL_TRANSPARENT ),
-    maFillColor( COL_TRANSPARENT )
+    maFillColor( COL_TRANSPARENT ),
+    maLanguageTag( LANGUAGE_DONTKNOW ),
+    maCJKLanguageTag( LANGUAGE_DONTKNOW )
 {
     mnRefCount          = 1;
     meCharSet           = RTL_TEXTENCODING_DONTKNOW;
-    meLanguage          = LANGUAGE_DONTKNOW;
-    meCJKLanguage       = LANGUAGE_DONTKNOW;
     meFamily            = FAMILY_DONTKNOW;
     mePitch             = PITCH_DONTKNOW;
     meAlign             = ALIGN_TOP;
@@ -73,12 +73,12 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont )
     maStyleName( rImplFont.maStyleName ),
     maSize( rImplFont.maSize ),
     maColor( rImplFont.maColor ),
-    maFillColor( rImplFont.maFillColor )
+    maFillColor( rImplFont.maFillColor ),
+    maLanguageTag( rImplFont.maLanguageTag ),
+    maCJKLanguageTag( rImplFont.maCJKLanguageTag )
 {
     mnRefCount          = 1;
     meCharSet           = rImplFont.meCharSet;
-    meLanguage          = rImplFont.meLanguage;
-    meCJKLanguage       = rImplFont.meCJKLanguage;
     meFamily            = rImplFont.meFamily;
     mePitch             = rImplFont.mePitch;
     meAlign             = rImplFont.meAlign;
@@ -109,10 +109,10 @@ bool Impl_Font::operator==( const Impl_Font& rOther ) const
     ||  (mePitch    != rOther.mePitch) )
         return false;
 
-    if( (meCharSet     != rOther.meCharSet)
-    ||  (meLanguage    != rOther.meLanguage)
-    ||  (meCJKLanguage != rOther.meCJKLanguage)
-    ||  (meAlign       != rOther.meAlign) )
+    if( (meCharSet        != rOther.meCharSet)
+    ||  (maLanguageTag    != rOther.maLanguageTag)
+    ||  (maCJKLanguageTag != rOther.maCJKLanguageTag)
+    ||  (meAlign          != rOther.meAlign) )
         return false;
 
     if( (maSize         != rOther.maSize)
@@ -384,14 +384,36 @@ void Font::SetCharSet( rtl_TextEncoding eCharSet )
     }
 }
 
+void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
+{
+    DBG_CHKTHIS( Font, NULL );
+
+    if( mpImplFont->maLanguageTag != rLanguageTag )
+    {
+        MakeUnique();
+        mpImplFont->maLanguageTag = rLanguageTag;
+    }
+}
+
+void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
+{
+    DBG_CHKTHIS( Font, NULL );
+
+    if( mpImplFont->maCJKLanguageTag != rLanguageTag )
+    {
+        MakeUnique();
+        mpImplFont->maCJKLanguageTag = rLanguageTag;
+    }
+}
+
 void Font::SetLanguage( LanguageType eLanguage )
 {
     DBG_CHKTHIS( Font, NULL );
 
-    if( mpImplFont->meLanguage != eLanguage )
+    if( mpImplFont->maLanguageTag.getLanguageType( false) != eLanguage )
     {
         MakeUnique();
-        mpImplFont->meLanguage = eLanguage;
+        mpImplFont->maLanguageTag.reset( eLanguage);
     }
 }
 
@@ -399,10 +421,10 @@ void Font::SetCJKContextLanguage( LanguageType eLanguage )
 {
     DBG_CHKTHIS( Font, NULL );
 
-    if( mpImplFont->meCJKLanguage != eLanguage )
+    if( mpImplFont->maCJKLanguageTag.getLanguageType( false) != eLanguage )
     {
         MakeUnique();
-        mpImplFont->meCJKLanguage = eLanguage;
+        mpImplFont->maCJKLanguageTag.reset( eLanguage);
     }
 }
 
@@ -623,8 +645,8 @@ void Font::Merge( const Font& rFont )
         SetName( rFont.GetName() );
         SetStyleName( rFont.GetStyleName() );
         SetCharSet( GetCharSet() );
-        SetLanguage( rFont.GetLanguage() );
-        SetCJKContextLanguage( rFont.GetCJKContextLanguage() );
+        SetLanguageTag( rFont.GetLanguageTag() );
+        SetCJKContextLanguageTag( rFont.GetCJKContextLanguageTag() );
         // don't use access methods here, might lead to AskConfig(), if DONTKNOW
         SetFamily( rFont.mpImplFont->meFamily );
         SetPitch( rFont.mpImplFont->mePitch );
@@ -697,7 +719,7 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     rIStm >> nTmp16; rImpl_Font.meUnderline = (FontUnderline) nTmp16;
     rIStm >> nTmp16; rImpl_Font.meStrikeout = (FontStrikeout) nTmp16;
     rIStm >> nTmp16; rImpl_Font.meItalic = (FontItalic) nTmp16;
-    rIStm >> nTmp16; rImpl_Font.meLanguage = (LanguageType) nTmp16;
+    rIStm >> nTmp16; rImpl_Font.maLanguageTag.reset( (LanguageType) nTmp16);
     rIStm >> nTmp16; rImpl_Font.meWidthType = (FontWidth) nTmp16;
 
     rIStm >> rImpl_Font.mnOrientation;
@@ -710,7 +732,7 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     if( aCompat.GetVersion() >= 2 )
     {
         rIStm >> nTmp8;     rImpl_Font.meRelief = (FontRelief)nTmp8;
-        rIStm >> nTmp16;    rImpl_Font.meCJKLanguage = (LanguageType)nTmp16;
+        rIStm >> nTmp16;    rImpl_Font.maCJKLanguageTag.reset( (LanguageType)nTmp16);
         rIStm >> bTmp;      rImpl_Font.mbVertical = bTmp;
         rIStm >> nTmp16;    rImpl_Font.meEmphasisMark = (FontEmphasisMark)nTmp16;
     }
@@ -738,7 +760,7 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm << (sal_uInt16) rImpl_Font.meUnderline;
     rOStm << (sal_uInt16) rImpl_Font.meStrikeout;
     rOStm << (sal_uInt16) rImpl_Font.meItalic;
-    rOStm << (sal_uInt16) rImpl_Font.meLanguage;
+    rOStm << (sal_uInt16) rImpl_Font.maLanguageTag.getLanguageType( false);
     rOStm << (sal_uInt16) rImpl_Font.meWidthType;
 
     rOStm << rImpl_Font.mnOrientation;
@@ -750,7 +772,7 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
 
     // new in version 2
     rOStm << (sal_uInt8)        rImpl_Font.meRelief;
-    rOStm << (sal_uInt16)   rImpl_Font.meCJKLanguage;
+    rOStm << (sal_uInt16)   rImpl_Font.maCJKLanguageTag.getLanguageType( false);
     rOStm << (sal_Bool)     rImpl_Font.mbVertical;
     rOStm << (sal_uInt16)   rImpl_Font.meEmphasisMark;
 
@@ -1004,9 +1026,13 @@ long Font::GetWidth() const { return mpImplFont->maSize.Width(); }
 
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->meCharSet; }
 
-LanguageType Font::GetLanguage() const { return mpImplFont->meLanguage; }
+const LanguageTag& Font::GetLanguageTag() const { return mpImplFont->maLanguageTag; }
 
-LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->meCJKLanguage; }
+const LanguageTag& Font::GetCJKContextLanguageTag() const { return mpImplFont->maCJKLanguageTag; }
+
+LanguageType Font::GetLanguage() const { return mpImplFont->maLanguageTag.getLanguageType( false); }
+
+LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->maCJKLanguageTag.getLanguageType( false); }
 
 short Font::GetOrientation() const { return mpImplFont->mnOrientation; }
 

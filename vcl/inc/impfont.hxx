@@ -22,7 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
-#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx>
@@ -60,8 +60,8 @@ private:
     Color               maColor;        // compatibility, now on output device
     Color               maFillColor;    // compatibility, now on output device
     rtl_TextEncoding    meCharSet;
-    LanguageType        meLanguage;
-    LanguageType        meCJKLanguage;
+    LanguageTag         maLanguageTag;
+    LanguageTag         maCJKLanguageTag;
     FontFamily          meFamily;
     FontPitch           mePitch;
     TextAlign           meAlign;
