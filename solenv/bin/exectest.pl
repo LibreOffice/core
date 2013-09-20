@@ -23,8 +23,11 @@ sub encode($)
     return $arg
 }
 
-$#ARGV >= 1 or die "Usage: $0 <input file> <command> <arguments...>";
-open INPUT, $ARGV[0] or die "cannot open $ARGV[0]: $!";
+$#ARGV >= 2
+    or die "Usage: $0 <input file> <temp file> <command> <arguments...>";
+open INPUT, '<', $ARGV[0] or die "cannot open $ARGV[0]: $!";
+shift @ARGV;
+$temp = $ARGV[0];
 shift @ARGV;
 $failed = 0;
 $open = 0;
@@ -35,7 +38,31 @@ while (1) {
     {
         if ($open)
         {
-            close PIPE;
+            close OUTPUT;
+            my $prog = '';
+            my $assigns = 1;
+            for ($i = 0; $i != scalar(@ARGV); ++$i)
+            {
+                $prog .= ' ' unless $i == 0;
+                if ($assigns && $ARGV[$i] =~ /^([A-Za-z_][A-Za-z0-9_]+)=(.*)$/)
+                {
+                    $prog .= $1 . "='" . encode($2) . "'";
+                }
+                else
+                {
+                    if ($ARGV[$i] =~ /^{}$/)
+                    {
+                        $prog .= "'" . encode($temp) . "'";
+                    }
+                    else
+                    {
+                        $prog .= "'" . encode($ARGV[$i]) . "'";
+                    }
+                    $assigns = 0;
+                }
+            }
+            system("$prog");
+            unlink $temp;
             if ($? % 256 == 0)
             {
                 $exit = $? / 256;
@@ -60,27 +87,12 @@ while (1) {
         last if $eof;
         $expect = $1;
         $title = $2;
-        my $prog = '';
-        my $assigns = 1;
-        for ($i = 0; $i != scalar(@ARGV); ++$i)
-        {
-            $prog .= ' ' unless $i == 0;
-            if ($assigns && $ARGV[$i] =~ /^([A-Za-z_][A-Za-z0-9_]+)=(.*)$/)
-            {
-                $prog .= $1 . "='" . encode($2) . "'";
-            }
-            else
-            {
-                $prog .= "'" . encode($ARGV[$i]) . "'";
-                $assigns = 0;
-            }
-        }
-        open PIPE, "| $prog" or die "cannot start process: $!";
+        open OUTPUT, '>', $temp or die "cannot open $temp: $!";
         $open = 1;
     }
     elsif ($open)
     {
-        print PIPE $in or die "cannot write to pipe: $!";
+        print OUTPUT $in or die "cannot write to $temp: $!";
     }
 }
 exit(0);
