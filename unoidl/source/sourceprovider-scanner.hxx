@@ -177,13 +177,13 @@ public:
             name(theName), annotations(theAnnotations)
         {}
 
-        rtl::OUString const name;
+        rtl::OUString name;
 
         std::vector< Parameter > parameters;
 
         std::vector< rtl::OUString > exceptions;
 
-        std::vector< rtl::OUString > const annotations;
+        std::vector< rtl::OUString > annotations;
     };
 
     explicit SourceProviderSingleInterfaceBasedServiceEntityPad(
