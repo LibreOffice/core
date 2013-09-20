@@ -559,16 +559,16 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
                                   aGrammar,
                                   boost::spirit::space_p );
 #if OSL_DEBUG_LEVEL > 1
-        SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop = " << aInfo.stop << " (buff=" << pBuffer << ", offset = " << aInfo.stop - pBuffer << "), hit = " << aInfo.hit ? "true" : "false" << ", full = " << aInfo.full ? "true" : "false" << ", length = " << (int)aInfo.length );
+        SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop = " << aInfo.stop << " (buff=" << pBuffer << ", offset = " << aInfo.stop - pBuffer << "), hit = " << (aInfo.hit ? OUString("true") : OUString("false")) << ", full = " << (aInfo.full ? OUString("true") : OUString("false")) << ", length = " << (int)aInfo.length );
 #endif
     }
     catch( const parser_error<const char*, const char*>& rError )
     {
 #if OSL_DEBUG_LEVEL > 1
-        OUString aTmp;
-        unsigned int nElem = aGrammar.m_aObjectStack.size()
+        OString aTmp;
+        unsigned int nElem = aGrammar.m_aObjectStack.size();
         for( unsigned int i = 0; i < nElem; i++ )
-            aTmp += "   " + OUString(typeid( *(aGrammar.m_aObjectStack[i]) ).name());
+            aTmp += "   " + OString(typeid( *(aGrammar.m_aObjectStack[i]) ).name());
 
         SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - pBuffer << ", object stack: " << aTmp);
 #endif
