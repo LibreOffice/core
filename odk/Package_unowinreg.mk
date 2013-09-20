@@ -9,7 +9,7 @@
 
 ifeq ($(BUILD_UNOWINREG),YES)
 ifeq ($(COM),MSC)
-odk_unowinreg_DIR := $(OUTDIR)/bin
+odk_unowinreg_DIR := $(WORKDIR)/LinkTarget/Library
 else
 odk_unowinreg_DIR := $(call gb_CustomTarget_get_workdir,odk/unowinreg)
 endif

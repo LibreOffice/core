@@ -449,6 +449,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	testtools_bridgetest \
 	testtools_constructors \
 	scqahelper \
+	unowinreg \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
@@ -612,7 +613,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	so_activex_x64 \
 	sysdtrans \
 	thidxmsi \
-	unowinreg \
 ))
 endif
 
