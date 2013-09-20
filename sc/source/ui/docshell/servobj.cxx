@@ -66,7 +66,7 @@ void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& /* rBC */, cons
     pObj->Notify( aBroadcaster, rHint);
 }
 
-ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
+ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
     aForwarder( this ),
     pDocSh( pShell ),
     bRefreshListener( false )
@@ -141,7 +141,7 @@ sal_Bool ScServerObject::GetData(
         return false;
 
     // named ranges may have changed -> update aRange
-    if ( aItemStr.Len() )
+    if ( !aItemStr.isEmpty() )
     {
         ScRange aNew;
         if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
@@ -214,7 +214,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (rBC.ISA(SfxApplication))
     {
-        if ( aItemStr.Len() && rHint.ISA(SfxSimpleHint) &&
+        if ( !aItemStr.isEmpty() && rHint.ISA(SfxSimpleHint) &&
                 ((const SfxSimpleHint&)rHint).GetId() == SC_HINT_AREAS_CHANGED )
         {
             //  check if named range was modified

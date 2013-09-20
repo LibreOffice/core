@@ -45,13 +45,13 @@ private:
     ScServerObjectSvtListenerForwarder  aForwarder;
     ScDocShell*     pDocSh;
     ScRange         aRange;
-    String          aItemStr;
+    OUString        aItemStr;
     sal_Bool            bRefreshListener;
 
     void    Clear();
 
 public:
-            ScServerObject( ScDocShell* pShell, const String& rItem );
+            ScServerObject( ScDocShell* pShell, const OUString& rItem );
     virtual ~ScServerObject();
 
     virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
