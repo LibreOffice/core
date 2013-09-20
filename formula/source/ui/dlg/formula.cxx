@@ -899,7 +899,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     }
     else
     {
-        aFtEditName.SetText(String());
+        aFtEditName.SetText("");
         pMEdit->SetHelpId( m_aEditHelpId );
     }
         //  Test, ob vorne/hinten noch mehr Funktionen sind
@@ -917,8 +917,8 @@ void FormulaDlg_Impl::ClearAllParas()
     DeleteArgs();
     pFuncDesc = NULL;
     pParaWin->ClearAll();
-    aWndResult.SetValue(String());
-    aFtFuncName.SetText(String());
+    aWndResult.SetValue(OUString());
+    aFtFuncName.SetText(OUString());
     FuncSelHdl(NULL);
 
     if(pFuncPage->IsVisible())

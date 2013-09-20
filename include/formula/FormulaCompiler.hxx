@@ -189,7 +189,7 @@ public:
 
             Does NOT check eOp range!
          */
-        void putCopyOpCode( const String& rSymbol, OpCode eOp );
+        void putCopyOpCode( const OUString& rSymbol, OpCode eOp );
     };
 
 public:
@@ -241,8 +241,6 @@ public:
 
     void CreateStringFromTokenArray( OUString& rFormula );
     void CreateStringFromTokenArray( OUStringBuffer& rBuffer );
-    FormulaToken* CreateStringFromToken( String& rFormula, FormulaToken* pToken,
-                                    bool bAllowArrAdvance = false );
     FormulaToken* CreateStringFromToken( OUString& rFormula, FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
     FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pToken,

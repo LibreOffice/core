@@ -819,11 +819,11 @@ FormulaCompiler::OpCodeMap::~OpCodeMap()
     delete mpHashMap;
 }
 
-void FormulaCompiler::OpCodeMap::putCopyOpCode( const String& rSymbol, OpCode eOp )
+void FormulaCompiler::OpCodeMap::putCopyOpCode( const OUString& rSymbol, OpCode eOp )
 {
-    SAL_WARN_IF( !mpTable[eOp].isEmpty() && !rSymbol.Len(), "formula.core",
+    SAL_WARN_IF( !mpTable[eOp].isEmpty() && rSymbol.isEmpty(), "formula.core",
             "OpCodeMap::putCopyOpCode: NOT replacing OpCode " << eOp << " '" << mpTable[eOp] << "' with empty name!");
-    if (!mpTable[eOp].isEmpty() && !rSymbol.Len())
+    if (!mpTable[eOp].isEmpty() && rSymbol.isEmpty())
         mpHashMap->insert( OpCodeHashMap::value_type( mpTable[eOp], eOp));
     else
     {
@@ -857,15 +857,15 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKno
     {
         for (sal_uInt16 i = 1; i < n; ++i)
         {
-            String aSymbol;
+            OUString aSymbol;
             OpCode eOp = OpCode(i);
             switch (eOp)
             {
                 case ocZGZ:
-                    aSymbol = OUString("RRI");
+                    aSymbol = "RRI";
                     break;
                 case ocTableOp:
-                    aSymbol = OUString("MULTIPLE.OPERATIONS");
+                    aSymbol = "MULTIPLE.OPERATIONS";
                     break;
                 default:
                     aSymbol = r.mpTable[i];
@@ -1699,13 +1699,6 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
     }
 }
 
-FormulaToken* FormulaCompiler::CreateStringFromToken( String& rFormula, FormulaToken* pTokenP, bool bAllowArrAdvance )
-{
-    OUStringBuffer aBuffer;
-    FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
-    rFormula += aBuffer.makeStringAndClear();
-    return p;
-}
 FormulaToken* FormulaCompiler::CreateStringFromToken( OUString& rFormula, FormulaToken* pTokenP,bool bAllowArrAdvance )
 {
     OUStringBuffer aBuffer;

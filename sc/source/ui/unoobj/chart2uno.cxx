@@ -862,7 +862,7 @@ public:
     {
         ScCompiler aCompiler(mpDoc, ScAddress(0,0,0));
         aCompiler.SetGrammar(meGrammar);
-        String aStr;
+        OUString aStr;
         aCompiler.CreateStringFromToken(aStr, rToken.get());
         if (mbFirst)
             mbFirst = false;
@@ -931,13 +931,13 @@ public:
         ScCompiler aCompiler(mpDoc, ScAddress(0,0,0));
         aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
         {
-            String aStr;
+            OUString aStr;
             aCompiler.CreateStringFromToken(aStr, aStart.get());
             mpRangeStr->append(aStr);
         }
         mpRangeStr->append(mcAddrSep);
         {
-            String aStr;
+            OUString aStr;
             aCompiler.CreateStringFromToken(aStr, aEnd.get());
             mpRangeStr->append(aStr);
         }
