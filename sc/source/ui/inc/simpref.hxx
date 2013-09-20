@@ -85,9 +85,9 @@ public:
 
     void            StartRefInput();
 
-    virtual String  GetRefString() const;
-    virtual void    SetRefString(const String &rStr);
-    virtual void    FillInfo(SfxChildWinInfo&) const;
+    OUString       GetRefString() const;
+    void           SetRefString(const OUString &rStr);
+    virtual void   FillInfo(SfxChildWinInfo&) const;
 
     void            SetCloseHdl( const Link& rLink );
     void            SetUnoLinks( const Link& rDone, const Link& rAbort,

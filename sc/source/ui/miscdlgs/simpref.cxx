@@ -81,7 +81,7 @@ void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
 }
 
 //----------------------------------------------------------------------------
-void ScSimpleRefDlg::SetRefString(const String &rStr)
+void ScSimpleRefDlg::SetRefString(const OUString &rStr)
 {
     aEdAssign.SetText(rStr);
 }
@@ -157,7 +157,7 @@ sal_Bool ScSimpleRefDlg::IsRefInputMode() const
     return sal_True;
 }
 
-String ScSimpleRefDlg::GetRefString() const
+OUString ScSimpleRefDlg::GetRefString() const
 {
     return aEdAssign.GetText();
 }
