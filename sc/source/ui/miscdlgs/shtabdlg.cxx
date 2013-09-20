@@ -51,7 +51,7 @@ ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
 //------------------------------------------------------------------------
 
 void ScShowTabDlg::SetDescription(
-        const String& rTitle, const String& rFixedText,
+        const OUString& rTitle, const OUString& rFixedText,
         const OString& rDlgHelpId, const OString& sLbHelpId )
 {
     SetText( rTitle );
@@ -60,7 +60,7 @@ void ScShowTabDlg::SetDescription(
     aLb.SetHelpId( sLbHelpId );
 }
 
-void ScShowTabDlg::Insert( const String& rString, sal_Bool bSelected )
+void ScShowTabDlg::Insert( const OUString& rString, sal_Bool bSelected )
 {
     aLb.InsertEntry( rString );
     if( bSelected )
@@ -74,7 +74,7 @@ sal_uInt16 ScShowTabDlg::GetSelectEntryCount() const
     return aLb.GetSelectEntryCount();
 }
 
-String ScShowTabDlg::GetSelectEntry(sal_uInt16 nPos) const
+OUString ScShowTabDlg::GetSelectEntry(sal_uInt16 nPos) const
 {
     return aLb.GetSelectEntry(nPos);
 }

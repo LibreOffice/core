@@ -44,14 +44,14 @@ public:
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void    SetDescription(
-                const String& rTitle, const String& rFixedText,
+                const OUString& rTitle, const OUString& rFixedText,
                 const OString& nDlgHelpId, const OString& nLbHelpId );
 
     /** Inserts a string into the ListBox. */
-    void    Insert( const String& rString, sal_Bool bSelected );
+    void    Insert( const OUString& rString, sal_Bool bSelected );
 
     sal_uInt16  GetSelectEntryCount() const;
-    String  GetSelectEntry(sal_uInt16 nPos) const;
+    OUString    GetSelectEntry(sal_uInt16 nPos) const;
     sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const;
 };
 
