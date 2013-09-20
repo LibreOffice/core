@@ -13,7 +13,6 @@ $(eval $(call gb_Package_set_outdir,odk_cli,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,odk_cli,$(gb_Package_SDKDIRNAME)/cli,\
 	cli_basetypes.dll \
-	cli_cppuhelper.dll \
 	cli_oootypes.dll \
 	cli_ure.dll \
 	cli_uretypes.dll \
