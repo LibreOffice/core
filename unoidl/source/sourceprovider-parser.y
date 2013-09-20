@@ -1810,8 +1810,23 @@ typedefDefn:
   deprecated_opt published_opt TOK_TYPEDEF type identifier ';'
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
-      unoidl::detail::SourceProviderType t(*$4); //TODO: service/singleton typedefs?
+      unoidl::detail::SourceProviderType t(*$4);
       delete $4;
+      // There is no good reason to forbid typedefs to VOID and to instantiated
+      // polymorphic struct types, but some old client code of registry data
+      // expects this typedef restriction (like the assert(false) default in
+      // handleTypedef in codemaker/source/javamaker/javatype.cxx), so forbid
+      // them for now:
+      switch (t.type) {
+      case unoidl::detail::SourceProviderType::TYPE_VOID:
+      case unoidl::detail::SourceProviderType::TYPE_INSTANTIATED_POLYMORPHIC_STRUCT:
+          error(@4, yyscanner, "bad typedef type");
+          YYERROR;
+      case unoidl::detail::SourceProviderType::TYPE_PARAMETER:
+          assert(false); // this cannot happen
+      default:
+          break;
+      }
       OUString name(convertToFullName(data, $5));
       if (!data->entities.insert(
               std::map<OUString, unoidl::detail::SourceProviderEntity>::value_type(
