@@ -32,6 +32,7 @@
 gb_Library_LAYER_DIRS := \
 	URELIB:$(gb_INSTROOT)/$(LIBO_URE_LIB_FOLDER) \
 	OOO:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME) \
+	SHLXTHDL:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)/shlxthdl \
 	OXT:$(WORKDIR)/LinkTarget/ExtensionLibrary \
 	NONE:$(gb_Library_DLLDIR) \
 
@@ -169,6 +170,7 @@ gb_Library__COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dLO_LIB_DIR/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
     OXT:./ \
+	SHLXTHDL:ERROR_NOT_ALLOWED \
 
 define gb_Library__forward_to_Linktarget
 gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktarget,$$(1)),$$(2),$$(3),Library_$$(1))

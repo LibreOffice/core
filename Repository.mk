@@ -599,16 +599,19 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,winexplorer
 	shlxtmsi \
 ))
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	fop \
-	jfregca \
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_SHLXTHDL, \
 	ooofilt \
 	ooofilt_x64 \
 	propertyhdl \
 	propertyhdl_x64 \
-	regpatchactivex \
 	shlxthdl \
 	shlxthdl_x64 \
+))
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	fop \
+	jfregca \
+	regpatchactivex \
 	so_activex \
 	so_activex_x64 \
 	sysdtrans \
