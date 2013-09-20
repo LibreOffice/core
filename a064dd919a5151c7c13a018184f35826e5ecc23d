@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///zk\u003d",
+        "filename": "oox/source/shape/ShapeContextHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-09-20T08:01:24Z",
+      "side": 1,
+      "message": "Aha, first I thought this just a trick not to end with \".OLE2Shape\", but now I see the ODF import does the same. A comment explaining will help here.",
+      "revId": "a064dd919a5151c7c13a018184f35826e5ecc23d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///zo\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-09-20T08:01:24Z",
+      "side": 1,
+      "message": "Can be removed, this gerrit review already contains my comments.",
+      "revId": "a064dd919a5151c7c13a018184f35826e5ecc23d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
