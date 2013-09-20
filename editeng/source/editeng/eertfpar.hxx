@@ -67,7 +67,7 @@ class EditRTFParser : public SvxRTFParser
 private:
     EditSelection       aCurSel;
     EditEngine*         mpEditEngine;
-    CharSet             eDestCharSet;
+    rtl_TextEncoding    eDestCharSet;
     MapMode             aRTFMapMode;
     MapMode             aEditMapMode;
 
@@ -102,8 +102,9 @@ public:
     virtual SvParserState   CallParser();
 
 
-    void        SetDestCharSet( CharSet eCharSet )  { eDestCharSet = eCharSet; }
-    CharSet     GetDestCharSet() const              { return eDestCharSet; }
+    void        SetDestCharSet( rtl_TextEncoding eCharSet )  { eDestCharSet = eCharSet; }
+    rtl_TextEncoding
+                GetDestCharSet() const              { return eDestCharSet; }
 
     sal_uInt16      GetDefTab() const                   { return nDefTab; }
     Font        GetDefFont()                        { return GetFont( nDefFont ); }

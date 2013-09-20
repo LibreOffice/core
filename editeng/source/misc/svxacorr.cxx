@@ -113,7 +113,7 @@ static inline int IsUpperLetter( sal_Int32 nCharType )
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
 }
 
-bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
+bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
                                    xub_StrLen nStt, xub_StrLen nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
@@ -141,7 +141,7 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
     return false;
 }
 
-static sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
+static sal_Bool lcl_IsSymbolChar( CharClass& rCC, const OUString& rTxt,
                                   xub_StrLen nStt, xub_StrLen nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
@@ -403,7 +403,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTx
             0x1 != rTxt[ nSttPos ] && 0x2 != rTxt[ nSttPos ])
         {
             // test if the word is in an exception list
-            String sWord( rTxt.copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
+            OUString sWord( rTxt.copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
             if( !FindInWrdSttExceptList(eLang, sWord) )
             {
                 // Check that word isn't correctly spelled before correcting:
@@ -483,8 +483,8 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLanguageTag().getLocale( ) );
         for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
         {
-            String sSuffix( aSuffixes[ nSuff ] );
-            String sEnd = rTxt.copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
+            OUString sSuffix( aSuffixes[ nSuff ] );
+            OUString sEnd = rTxt.copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
 
             if ( sSuffix == sEnd )
             {
@@ -709,11 +709,11 @@ sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rT
     sal_Int32 nStart(nSttPos);
     sal_Int32 nEnd(nEndPos);
 
-    String sURL( URIHelper::FindFirstURLInText( rTxt, nStart, nEnd,
+    OUString sURL( URIHelper::FindFirstURLInText( rTxt, nStart, nEnd,
                                                 GetCharClass( eLang ) ));
     nSttPos = (xub_StrLen)nStart;
     nEndPos = (xub_StrLen)nEnd;
-    sal_Bool bRet = 0 != sURL.Len();
+    sal_Bool bRet = !sURL.isEmpty();
     if( bRet )          // also Attribut setzen:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
     return bRet;
@@ -736,7 +736,8 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString
     --nEndPos;
 
     sal_Bool bAlphaNum = sal_False;
-    xub_StrLen nPos = nEndPos, nFndPos = STRING_NOTFOUND;
+    xub_StrLen nPos = nEndPos;
+    sal_Int32  nFndPos = -1;
     CharClass& rCC = GetCharClass( eLang );
 
     while( nPos )
@@ -753,7 +754,7 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString
                         nFndPos = nPos;
                 else
                     // Condition is not satisfied, so cancel
-                    nFndPos = STRING_NOTFOUND;
+                    nFndPos = -1;
                 nPos = 0;
             }
             break;
@@ -763,7 +764,7 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString
         }
     }
 
-    if( STRING_NOTFOUND != nFndPos )
+    if( -1 != nFndPos )
     {
         // first delete the Character at the end - this allows insertion
         // of an empty hint in SetAttr which would be removed by Delete
@@ -788,7 +789,7 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString
         }
     }
 
-    return STRING_NOTFOUND != nFndPos;
+    return -1 != nFndPos;
 }
 
 
@@ -802,8 +803,8 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         return sal_False;
 
     CharClass& rCC = GetCharClass( eLang );
-    String aText( rTxt );
-    const sal_Unicode *pStart = aText.GetBuffer(),
+    OUString aText( rTxt );
+    const sal_Unicode *pStart = aText.getStr(),
                       *pStr = pStart + nEndPos,
                       *pWordStt = 0,
                       *pDelim = 0;
@@ -896,8 +897,8 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
         aText = aPrevPara;
         bAtStart = sal_False;
-        pStart = aText.GetBuffer();
-        pStr = pStart + aText.Len();
+        pStart = aText.getStr();
+        pStr = pStart + aText.getLength();
 
         do {            // overwrite all blanks
             --pStr;
@@ -1037,7 +1038,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     if( IsWordDelim( *pStr ))
         ++pStr;
 
-    String sWord;
+    OUString sWord;
 
     // check on the basis of the exception list
     if( pExceptStt )
@@ -1048,20 +1049,20 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
         // Delete all non alphanumeric. Test the characters at the
         // beginning/end of the word ( recognizes: "(min.", "/min.", and so on.)
-        String sTmp( sWord );
-        while( sTmp.Len() &&
+        OUString sTmp( sWord );
+        while( !sTmp.isEmpty() &&
                 !rCC.isLetterNumeric( sTmp, 0 ) )
-            sTmp.Erase( 0, 1 );
+            sTmp = sTmp.copy(1);
 
         // Remove all non alphanumeric characters towards the end up until
         // the last one.
-        xub_StrLen nLen = sTmp.Len();
+        xub_StrLen nLen = sTmp.getLength();
         while( nLen && !rCC.isLetterNumeric( sTmp, nLen-1 ) )
             --nLen;
-        if( nLen + 1 < sTmp.Len() )
-            sTmp.Erase( nLen + 1 );
+        if( nLen + 1 < sTmp.getLength() )
+            sTmp = sTmp.copy( 0, nLen + 1 );
 
-        if( sTmp.Len() && sTmp.Len() != sWord.Len() &&
+        if( !sTmp.isEmpty() && sTmp.getLength() != sWord.getLength() &&
             FindInCplSttExceptList(eLang, sTmp))
             return sal_False;
 
@@ -1100,9 +1101,9 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
     if ( !IsUpperLetter(rCC.getCharacterType(rTxt, nSttPos+1)) )
         return false;
 
-    String aConverted;
-    aConverted.Append( rCC.uppercase(OUString(rTxt[nSttPos])) );
-    aConverted.Append( rCC.lowercase(OUString(rTxt[nSttPos+1])) );
+    OUString aConverted;
+    aConverted += rCC.uppercase(OUString(rTxt[nSttPos]));
+    aConverted += rCC.lowercase(OUString(rTxt[nSttPos+1]));
 
     for (xub_StrLen i = nSttPos+2; i < nEndPos; ++i)
     {
@@ -1112,10 +1113,10 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
 
         if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
             // Another uppercase letter.  Convert it.
-            aConverted.Append(rCC.lowercase(OUString(rTxt[i])));
+            aConverted += rCC.lowercase(OUString(rTxt[i]));
         else
             // This is not an alphabetic letter.  Leave it as-is.
-            aConverted.Append(rTxt[i]);
+            aConverted += OUString( rTxt[i] );
     }
 
     // Replace the word.
@@ -1143,14 +1144,14 @@ sal_Unicode SvxAutoCorrect::GetQuote( sal_Unicode cInsChar, sal_Bool bSttQuote,
         else
         {
             LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
-            String sRet( bSttQuote
+            OUString sRet( bSttQuote
                             ? ( '\"' == cInsChar
                                 ? rLcl.getDoubleQuotationMarkStart()
                                 : rLcl.getQuotationMarkStart() )
                             : ( '\"' == cInsChar
                                 ? rLcl.getDoubleQuotationMarkEnd()
                                 : rLcl.getQuotationMarkEnd() ));
-            cRet = sRet.Len() ? sRet.GetChar( 0 ) : cInsChar;
+            cRet = !sRet.isEmpty() ? sRet[0] : cInsChar;
         }
     }
     return cRet;
@@ -1204,7 +1205,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     LanguageType eLang = rDoc.GetLanguage( nInsPos, sal_False );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
-    String sRet = OUString(cRet);
+    OUString sRet = OUString(cRet);
 
     if( '\"' == cInsChar )
     {
@@ -1218,9 +1219,9 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
         case LANGUAGE_FRENCH_SWISS:
         case LANGUAGE_FRENCH_LUXEMBOURG:
             if( bSttQuote )
-                sRet += ' ';
+                sRet += " ";
             else
-                sRet.Insert( ' ', 0 );
+                sRet = " " + sRet;
             break;
         }
     }
@@ -1690,7 +1691,7 @@ static void GeneratePackageName ( const OUString& rShort, OUString& rPackageName
 }
 
 static const SvxAutocorrWord* lcl_SearchWordsInList(
-                SvxAutoCorrectLanguageListsPtr pList, const String& rTxt,
+                SvxAutoCorrectLanguageListsPtr pList, const OUString& rTxt,
                 sal_Int32& rStt, sal_Int32 nEndPos)
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
@@ -1991,8 +1992,8 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
         rpLst = new SvStringsISortDtor;
 
     {
-        String sStrmName( pStrmName, RTL_TEXTENCODING_MS_1252 );
-        String sTmp( sStrmName );
+        OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
+        OUString sTmp( sStrmName );
 
         if( rStg.Is() && rStg->IsStream( sStrmName ) )
         {
@@ -2059,7 +2060,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
 {
     if( rStg.Is() )
     {
-        String sStrmName( pStrmName, RTL_TEXTENCODING_MS_1252 );
+        OUString sStrmName( pStrmName, strlen(pStrmName), RTL_TEXTENCODING_MS_1252 );
         if( rLst.empty() )
         {
             rStg->Remove( sStrmName );
@@ -2120,7 +2121,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     try
     {
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sShareAutoCorrFile, embed::ElementModes::READ );
-        String aXMLWordListName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
+        OUString aXMLWordListName( pXMLImplAutocorr_ListStr, strlen(pXMLImplAutocorr_ListStr), RTL_TEXTENCODING_MS_1252 );
         uno::Reference < io::XStream > xStrm = xStg->openStreamElement( aXMLWordListName, embed::ElementModes::READ );
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
@@ -2222,7 +2223,7 @@ sal_Bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
 {
     SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_True );
-    String sTemp ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplCplStt_ExcptLstStr ) );
+    OUString sTemp ( pXMLImplCplStt_ExcptLstStr );
     if( xStg.Is() && xStg->IsContained( sTemp ) )
         LoadXMLExceptList_Imp( pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
 
@@ -2261,7 +2262,7 @@ void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
 {
     SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_True );
-    String sTemp ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplWrdStt_ExcptLstStr ) );
+    OUString sTemp ( pXMLImplWrdStt_ExcptLstStr );
     if( xStg.Is() && xStg->IsContained( sTemp ) )
         LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
     return pWrdStt_ExcptLst;
@@ -2375,8 +2376,8 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
 
         if( xSrcStg.Is() && xDstStg.Is() )
         {
-            String sXMLWord     ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplWrdStt_ExcptLstStr ) );
-            String sXMLSentence ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplCplStt_ExcptLstStr ) );
+            OUString sXMLWord     ( pXMLImplWrdStt_ExcptLstStr );
+            OUString sXMLSentence ( pXMLImplCplStt_ExcptLstStr );
             SvStringsISortDtor  *pTmpWordList = NULL;
 
             if (xSrcStg->IsContained( sXMLWord ) )
@@ -2419,7 +2420,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
 
 sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 {
-    String sStrmName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
+    OUString sStrmName( pXMLImplAutocorr_ListStr, strlen(pXMLImplAutocorr_ListStr), RTL_TEXTENCODING_MS_1252 );
     sal_Bool bRet = sal_True, bRemove = !pAutocorr_List || pAutocorr_List->empty();
     if( !bRemove )
     {
@@ -2429,7 +2430,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
         {
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
-            String aPropName( OUString( "MediaType" ) );
+            OUString aPropName( "MediaType" );
             OUString aMime( "text/xml" );
             uno::Any aAny;
             aAny <<= aMime;
@@ -2764,21 +2765,21 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                                       sal_Int32 &rStt,
                                       sal_Int32 nEndPos) const
 {
-    const String& rChk = pFnd->GetShort();
-    xub_StrLen left_wildcard = ( rChk.GetChar( 0 ) == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
+    const OUString& rChk = pFnd->GetShort();
+    xub_StrLen left_wildcard = ( rChk[0] == C_ASTERISK ) ? 1 : 0; // "*word" pattern?
     xub_StrLen nSttWdPos = nEndPos;
-    if( nEndPos >= rChk.Len() - left_wildcard)
+    if( nEndPos >= rChk.getLength() - left_wildcard)
     {
 
         bool bWasWordDelim = false;
-        xub_StrLen nCalcStt = nEndPos - rChk.Len() + left_wildcard;
+        xub_StrLen nCalcStt = nEndPos - rChk.getLength() + left_wildcard;
         if( ( !nCalcStt || nCalcStt == rStt || left_wildcard ||
               ( nCalcStt < rStt &&
                 IsWordDelim( rTxt[ nCalcStt - 1 ] ))) )
         {
             TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-            OUString sWord = rTxt.copy(nCalcStt, rChk.Len() - left_wildcard);
-            if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.Copy(1), sWord) ))
+            OUString sWord = rTxt.copy(nCalcStt, rChk.getLength() - left_wildcard);
+            if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.copy(1), sWord) ))
             {
                 rStt = nCalcStt;
                 if (!left_wildcard) return pFnd;
@@ -2786,14 +2787,14 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                 while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
                     ;
                 if (bWasWordDelim) rStt++;
-                SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), rTxt.copy(rStt, nEndPos - rStt - rChk.Len() + 1) + pFnd->GetLong());
+                SvxAutocorrWord* pNew = new SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + 1) + pFnd->GetLong());
                 if( Insert( pNew ) ) return pNew; else delete pNew;
             }
         }
         // match "word*" patterns, eg. "i18n*"
-        if ( rChk.GetChar( rChk.Len() - 1) == C_ASTERISK )
+        if ( rChk[ rChk.getLength() - 1] == C_ASTERISK )
         {
-            String sTmp( rChk.Copy( 0, rChk.Len() - 1 ) );
+            OUString sTmp( rChk.copy( 0, rChk.getLength() - 1 ) );
             // Get the last word delimiter position
             bool not_suffix;
             while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt[ --nSttWdPos ])))
@@ -2802,13 +2803,13 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             sal_Int32 nFndPos = -1;
             do {
                 nFndPos = rTxt.indexOf( sTmp, nFndPos + 1);
-                not_suffix = (bWasWordDelim && (nSttWdPos >= nFndPos + sTmp.Len()));
+                not_suffix = (bWasWordDelim && (nSttWdPos >= nFndPos + sTmp.getLength()));
             } while ( nFndPos != -1 && (!(!nFndPos || IsWordDelim( rTxt[ nFndPos - 1 ])) || not_suffix));
             if ( nFndPos != -1 )
             {
                 // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
                 OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + ((rTxt[nEndPos] != 0x20) ? 1: 0));
-                OUString aLong = pFnd->GetLong() + rTxt.copy(nFndPos + sTmp.Len(), nEndPos - nFndPos - sTmp.Len());
+                OUString aLong = pFnd->GetLong() + rTxt.copy(nFndPos + sTmp.getLength(), nEndPos - nFndPos - sTmp.getLength());
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);
                 if( Insert( pNew ) )
                 {

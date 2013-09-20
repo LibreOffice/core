@@ -421,7 +421,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         }
         rOutput.WriteNumber( static_cast<sal_uInt32>( nVal ) );
 
-        CharSet eChrSet = pFontItem->GetCharSet();
+        rtl_TextEncoding eChrSet = pFontItem->GetCharSet();
         DBG_ASSERT( eChrSet != 9, "SystemCharSet?!" );
         if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
             eChrSet = osl_getThreadTextEncoding();

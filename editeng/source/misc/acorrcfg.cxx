@@ -444,12 +444,12 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case  19:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
-                        rSwFlags.aBulletFont.SetCharSet(CharSet(nVal));
+                        rSwFlags.aBulletFont.SetCharSet(rtl_TextEncoding(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset",
                     case  20:
                     {
-                                            sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
@@ -520,7 +520,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case 45 :
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
-                        rSwFlags.aByInputBulletFont.SetCharSet(CharSet(nVal));
+                        rSwFlags.aByInputBulletFont.SetCharSet(rtl_TextEncoding(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",
                     case 46 :
