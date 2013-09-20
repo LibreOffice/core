@@ -31,8 +31,8 @@ class SfxStyleSheetBase;
 class ScStyleSaveData
 {
 private:
-    String          aName;
-    String          aParent;
+    OUString        aName;
+    OUString        aParent;
     SfxItemSet*     pItems;
 
 public:
@@ -43,8 +43,8 @@ public:
 
     void                InitFromStyle( const SfxStyleSheetBase* pSource );
 
-    const String&       GetName() const     { return aName; }
-    const String&       GetParent() const   { return aParent; }
+    const OUString&     GetName() const     { return aName; }
+    const OUString&     GetParent() const   { return aParent; }
     const SfxItemSet*   GetItems() const    { return pItems; }
 };
 
@@ -56,7 +56,7 @@ private:
     ScStyleSaveData aNewData;
 
     static void     DoChange( ScDocShell* pDocSh,
-                                const String& rName, SfxStyleFamily eStyleFamily,
+                                const OUString& rName, SfxStyleFamily eStyleFamily,
                                 const ScStyleSaveData& rData );
 
 public:
@@ -79,10 +79,10 @@ class ScUndoApplyPageStyle: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoApplyPageStyle( ScDocShell* pDocSh, const String& rNewStyle );
+                    ScUndoApplyPageStyle( ScDocShell* pDocSh, const OUString& rNewStyle );
     virtual         ~ScUndoApplyPageStyle();
 
-    void            AddSheetAction( SCTAB nTab, const String& rOld );
+    void            AddSheetAction( SCTAB nTab, const OUString& rOld );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -95,13 +95,13 @@ private:
     struct ApplyStyleEntry
     {
         SCTAB           mnTab;
-        String          maOldStyle;
-        explicit        ApplyStyleEntry( SCTAB nTab, const String& rOldStyle );
+        OUString        maOldStyle;
+        explicit        ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle );
     };
     typedef ::std::vector< ApplyStyleEntry > ApplyStyleVec;
 
     ApplyStyleVec   maEntries;
-    String          maNewStyle;
+    OUString        maNewStyle;
 };
 
 

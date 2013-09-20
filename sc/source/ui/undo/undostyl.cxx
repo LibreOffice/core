@@ -125,17 +125,17 @@ static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, sa
         pHdl->ForgetLastPattern();
 }
 
-void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
+void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
                                     SfxStyleFamily eStyleFamily, const ScStyleSaveData& rData )
 {
     ScDocument* pDoc = pDocSh->GetDocument();
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     String aNewName = rData.GetName();
     sal_Bool bDelete = ( aNewName.Len() == 0 );         // no new name -> delete style
-    sal_Bool bNew = ( rName.Len() == 0 && !bDelete );   // creating new style
+    sal_Bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
 
     SfxStyleSheetBase* pStyle = NULL;
-    if ( rName.Len() )
+    if ( !rName.isEmpty() )
     {
         // find old style to modify
         pStyle = pStlPool->Find( rName, eStyleFamily );
@@ -234,13 +234,13 @@ bool ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //
 //      apply page style
 //
-ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, const String& rOldStyle ) :
+ScUndoApplyPageStyle::ApplyStyleEntry::ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle ) :
     mnTab( nTab ),
     maOldStyle( rOldStyle )
 {
 }
 
-ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, const String& rNewStyle ) :
+ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, const OUString& rNewStyle ) :
     ScSimpleUndo( pDocSh ),
     maNewStyle( rNewStyle )
 {
@@ -250,7 +250,7 @@ ScUndoApplyPageStyle::~ScUndoApplyPageStyle()
 {
 }
 
-void ScUndoApplyPageStyle::AddSheetAction( SCTAB nTab, const String& rOldStyle )
+void ScUndoApplyPageStyle::AddSheetAction( SCTAB nTab, const OUString& rOldStyle )
 {
     maEntries.push_back( ApplyStyleEntry( nTab, rOldStyle ) );
 }
