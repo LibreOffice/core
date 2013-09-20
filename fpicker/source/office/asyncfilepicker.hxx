@@ -55,8 +55,8 @@ namespace svt
         Action                      m_eAction;
         SvtFileView*                m_pView;
         SvtFileDialog*              m_pDialog;
-        String                      m_sURL;
-        String                      m_sFileName;
+        OUString                    m_sURL;
+        OUString                    m_sFileName;
         bool                        m_bRunning;
 
     public:
@@ -75,8 +75,8 @@ namespace svt
                 <arg>_nMinTimeout</arg> + 30000.
         */
         void execute(
-            const String& _rURL,
-            const String& _rFilter,
+            const OUString& _rURL,
+            const OUString& _rFilter,
             sal_Int32 _nMinTimeout,
             sal_Int32 _nMaxTimeout,
             const OUStringList& rBlackList = OUStringList() );

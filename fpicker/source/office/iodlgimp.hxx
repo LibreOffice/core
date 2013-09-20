@@ -49,16 +49,16 @@ class SvtFileDialog;
 class SvtFileDialogFilter_Impl
 {
 private:
-    String  m_aName;    // name of the entry
+    OUString m_aName;    // name of the entry
     OUString m_aType;    // filter wildcard - if empty, the entry marks a group
 
 public:
-    SvtFileDialogFilter_Impl( const String& rName, const String& rType );
+    SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType );
     ~SvtFileDialogFilter_Impl();
 
-    const String&       GetName() const     { return m_aName; }
+    const OUString&     GetName() const     { return m_aName; }
     const OUString&     GetType() const     { return m_aType; }
-    const String        GetExtension() const    { return m_aType.copy( 2 ); }
+    const OUString      GetExtension() const    { return m_aType.copy( 2 ); }
 
     sal_Bool            isGroupSeparator() const    { return m_aType.isEmpty(); }
 };
@@ -127,7 +127,7 @@ private:
     ListBox*                        _pLbFilter;
 
     const SvtFileDialogFilter_Impl* _pCurFilter;
-    String                          m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
+    OUString                        m_sCurrentFilterDisplayName;    // may differ from _pCurFilter->GetName in case it is a cached entry
 
     ::com::sun::star::uno::Sequence< OUString > _aBlackList;
 
@@ -166,7 +166,7 @@ public:
     SvtFileDlgState                 _nState;
     WinBits                         _nStyle;
 
-    String                          _aStdDir;
+    OUString                        _aStdDir;
 
     // delay filter when traveling the filterbox
     Timer                           _aFilterTimer;
@@ -186,7 +186,7 @@ public:
     long                            _nFixDeltaHeight;
     Size                            _a6Size;
     Size                            _aDlgSize;
-    String                          _aIniKey;
+    OUString                        _aIniKey;
 
     sal_Bool                        _bFolderHasOpened;
 
@@ -196,8 +196,8 @@ public:
 
     inline void             SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) { _aBlackList = rBlackList; }
     inline const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const { return _aBlackList; }
-    void                    SetStandardDir( const String& _rDir );
-    inline const String&    GetStandardDir() const          { return _aStdDir; }
+    void                    SetStandardDir( const OUString& _rDir );
+    inline const OUString&  GetStandardDir() const          { return _aStdDir; }
     inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( sal_False ); }
 
     // ------------------------------------------
@@ -210,19 +210,19 @@ public:
     // inits the listbox for the filters from the filter list (_pFilter)
             void            ClearFilterList( );
             void            InitFilterList( );
-    inline  sal_Bool        HasFilterListEntry( const String& _rFilterName );
-    inline  void            SelectFilterListEntry( const String& _rFilterName );
+    inline  sal_Bool        HasFilterListEntry( const OUString& _rFilterName );
+    inline  void            SelectFilterListEntry( const OUString& _rFilterName );
     inline  void            SetNoFilterListSelection( );
             void            InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc );
                                 // _pFilterDesc must already have been added to _pFilter
-    inline  SvtFileDialogFilter_Impl*   GetSelectedFilterEntry( String& /* [out] */ _rDisplayName ) const;
+    inline  SvtFileDialogFilter_Impl*   GetSelectedFilterEntry( OUString& /* [out] */ _rDisplayName ) const;
     inline  sal_Bool        IsFilterListTravelSelect() const;
 
     // ------------------------------------------
     // access to the current filter via methods only - need to care for consistency between _pCurFilter and m_sCurrentFilterDisplayName
     inline      const SvtFileDialogFilter_Impl*     GetCurFilter( ) const;
-    inline      const String&                       GetCurFilterDisplayName() const;
-                void                                SetCurFilter( SvtFileDialogFilter_Impl* _pFilter, const String& _rDisplayName );
+    inline      const OUString&                     GetCurFilterDisplayName() const;
+                void                                SetCurFilter( SvtFileDialogFilter_Impl* _pFilter, const OUString& _rDisplayName );
     inline      void                                SetCurFilter( SvtFileDialogFilter_Impl* _pFilter );
 };
 
@@ -231,12 +231,12 @@ inline void SvtExpFileDlg_Impl::SetFilterListSelectHdl( const Link& _rHandler )
     _pLbFilter->SetSelectHdl( _rHandler );
 }
 
-inline sal_Bool SvtExpFileDlg_Impl::HasFilterListEntry( const String& _rFilterName )
+inline sal_Bool SvtExpFileDlg_Impl::HasFilterListEntry( const OUString& _rFilterName )
 {
     return ( LISTBOX_ENTRY_NOTFOUND != _pLbFilter->GetEntryPos( _rFilterName ) );
 }
 
-inline void SvtExpFileDlg_Impl::SelectFilterListEntry( const String& _rFilterName )
+inline void SvtExpFileDlg_Impl::SelectFilterListEntry( const OUString& _rFilterName )
 {
     _pLbFilter->SelectEntry( _rFilterName );
 }
@@ -246,7 +246,7 @@ inline  void SvtExpFileDlg_Impl::SetNoFilterListSelection( )
     _pLbFilter->SetNoSelection( );
 }
 
-inline SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetSelectedFilterEntry( String& _rDisplayName ) const
+inline SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetSelectedFilterEntry( OUString& _rDisplayName ) const
 {
     _rDisplayName = _pLbFilter->GetSelectEntry();
     return static_cast< SvtFileDialogFilter_Impl* >( _pLbFilter->GetEntryData ( _pLbFilter->GetSelectEntryPos() ) );
@@ -262,7 +262,7 @@ inline const SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetCurFilter( ) const
     return _pCurFilter;
 }
 
-inline const String& SvtExpFileDlg_Impl::GetCurFilterDisplayName() const
+inline const OUString& SvtExpFileDlg_Impl::GetCurFilterDisplayName() const
 {
     return m_sCurrentFilterDisplayName;
 }

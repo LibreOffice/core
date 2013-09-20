@@ -141,7 +141,7 @@ private:
     @return
         the filter which has been found
     */
-    SvtFileDialogFilter_Impl*   FindFilter_Impl( const String& _rFilter,
+    SvtFileDialogFilter_Impl*   FindFilter_Impl( const OUString& _rFilter,
                                                  sal_Bool _bMultiExt,
                                                  sal_Bool& _rFilterChanged
                                                  );
@@ -159,7 +159,7 @@ private:
 
 
     // removes a filter with wildcards from the path and returns it
-    sal_Bool IsolateFilterFromPath_Impl( String& rPath, String& rFilter );
+    sal_Bool IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter );
 
     void    implArrangeControls();
     void    implUpdateImages( );
@@ -173,8 +173,8 @@ protected:
     Link                        _aFileSelectHdl;
     Link                        _aFilterSelectHdl;
 
-    String                      _aPath;
-    String                      _aDefExt;
+    OUString                    _aPath;
+    OUString                    _aDefExt;
 
     void                        ReleaseOwnership( Window* pUserControl );
 
@@ -211,33 +211,33 @@ public:
 
     void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
     const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
-    void                        SetStandardDir( const String& rStdDir );
-    const String&               GetStandardDir() const;
-    std::vector<OUString>  GetPathList() const;        // for MultiSelection
+    void                        SetStandardDir( const OUString& rStdDir );
+    const OUString&            GetStandardDir() const;
+    std::vector<OUString>       GetPathList() const;        // for MultiSelection
 
-            void                AddFilter( const String& rFilter,
-                                           const String& rType );
+            void                AddFilter( const OUString& rFilter,
+                                           const OUString& rType );
 
             void                AddFilterGroup(
-                const String& _rFilter,
-                const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters );
+                                  const OUString& _rFilter,
+                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters );
 
-            void                SetCurFilter( const String& rFilter );
-            String              GetCurFilter() const;
-            sal_uInt16              GetFilterCount() const;
-            const String&       GetFilterName( sal_uInt16 nPos ) const;
+            void                SetCurFilter( const OUString& rFilter );
+            OUString            GetCurFilter() const;
+            sal_uInt16          GetFilterCount() const;
+            const OUString&     GetFilterName( sal_uInt16 nPos ) const;
 
     virtual void                Resize();
     virtual void                DataChanged( const DataChangedEvent& _rDCEvt );
 
     void                        PrevLevel_Impl();
-    void                        OpenURL_Impl( const String& rURL );
+    void                        OpenURL_Impl( const OUString& rURL );
 
     inline SvtFileView*         GetView() const;
 
     void                        DisableSaveLastDirectory();
     void                        InitSize();
-    void                        UpdateControls( const String& rURL );
+    void                        UpdateControls( const OUString& rURL );
     void                        EnableAutocompletion( sal_Bool _bEnable = sal_True );
 
     void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) { _pFileNotifier = pNotifier; }
@@ -250,26 +250,26 @@ public:
     sal_Bool                    getShowState();
     sal_Bool                    isAutoExtensionEnabled();
 
-    String                      getCurrentFileText( ) const;
-    void                        setCurrentFileText( const String& _rText, bool _bSelectAll = false );
+    OUString                    getCurrentFileText( ) const;
+    void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false );
 
     void                        onAsyncOperationStarted();
     void                        onAsyncOperationFinished();
 
     void                        RemovablePlaceSelected(bool enable = true);
 
-    void                        displayIOException( const String& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
+    void                        displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
 
     // originally from VclFileDialog
     virtual sal_Bool                AddControl( Window* pControl, sal_Bool bNewLine = sal_False );
 
     // inline
-    inline void                 SetPath( const String& rNewURL );
+    inline void                 SetPath( const OUString& rNewURL );
     inline void                 SetHasFilename( bool bHasFilename );
-    inline const String&        GetPath() const;
-    inline void                 SetDefaultExt( const String& rExt );
+    inline const OUString&      GetPath() const;
+    inline void                 SetDefaultExt( const OUString& rExt );
     inline void                 EraseDefaultExt( xub_StrLen _nIndex = 0 );
-    inline const String&        GetDefaultExt() const;
+    inline const OUString&      GetDefaultExt() const;
     inline void                 SetOKHdl( const Link& rLink );
     inline const Link&          GetOKHdl() const;
     inline void                 SetFileSelectHdl( const Link& rLink );
@@ -282,7 +282,7 @@ public:
     sal_Bool                    ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
     sal_Bool                    ContentHasParentFolder( const OUString& rURL );
     sal_Bool                    ContentCanMakeFolder( const OUString& rURL );
-    sal_Bool                    ContentGetTitle( const OUString& rURL, String& rTitle );
+    sal_Bool                    ContentGetTitle( const OUString& rURL, OUString& rTitle );
 
     /** updates the sizes of the listboxes in the bottom area of the dialog, and of their labels,
         according to the space occupied by the current label texts
@@ -292,7 +292,7 @@ public:
     void                        updateListboxLabelSizes();
 
 private:
-    SvtFileDialogFilter_Impl*   implAddFilter( const String& _rFilter, const String& _rType );
+    SvtFileDialogFilter_Impl*   implAddFilter( const OUString& _rFilter, const OUString& _rType );
 
     /** updates _pUserFilter with a new filter
         <p>No checks for necessity are made.</p>
@@ -308,22 +308,22 @@ private:
             </p>
         @return <TRUE/> if the new filter is "*.*"
     */
-    sal_Bool                    createNewUserFilter( const String& _rNewFilter, sal_Bool _bAllowUserDefExt );
+    sal_Bool                    createNewUserFilter( const OUString& _rNewFilter, sal_Bool _bAllowUserDefExt );
 
-    sal_uInt16                  adjustFilter( const String& _rFilter );
+    sal_uInt16                  adjustFilter( const OUString& _rFilter );
 
     // IFilePickerController, needed by OControlAccess
     virtual Control*            getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl = sal_False ) const;
     virtual void                enableControl( sal_Int16 _nControlId, sal_Bool _bEnable );
-    virtual String              getCurFilter( ) const;
+    virtual OUString            getCurFilter( ) const;
 
-    String                      implGetInitialURL( const String& _rPath, const String& _rFallback );
+    OUString                    implGetInitialURL( const OUString& _rPath, const OUString& _rFallback );
 
     /// executes a certain FileView action asynchronously
     void                        executeAsync(
                                     ::svt::AsyncPickerAction::Action _eAction,
-                                    const String& _rURL,
-                                    const String& _rFilter
+                                    const OUString& _rURL,
+                                    const OUString& _rFilter
                                 );
 
     /** helper function to check and append the default filter extension if
@@ -339,16 +339,16 @@ private:
 
      */
     static void                 appendDefaultExtension(
-                                        String& _rFileName,
-                                        const String& _rFilterDefaultExtension,
-                                        const String& _rFilterExtensions);
+                                        OUString& _rFileName,
+                                        const OUString& _rFilterDefaultExtension,
+                                        const OUString& _rFilterExtensions);
 
     void                        initDefaultPlaces( );
 };
 
 //***************************************************************************
 
-inline void SvtFileDialog::SetPath( const String& rNewURL )
+inline void SvtFileDialog::SetPath( const OUString& rNewURL )
 {
     _aPath = rNewURL;
 }
@@ -362,24 +362,24 @@ inline void SvtFileDialog::SetHasFilename( bool bHasFilename )
 
 //***************************************************************************
 
-inline const String& SvtFileDialog::GetPath() const
+inline const OUString& SvtFileDialog::GetPath() const
 {
     return _aPath;
 }
 
 //***************************************************************************
 
-inline void SvtFileDialog::SetDefaultExt( const String& rExt )
+inline void SvtFileDialog::SetDefaultExt( const OUString& rExt )
 {
     _aDefExt = rExt;
 }
 
 inline void SvtFileDialog::EraseDefaultExt( xub_StrLen _nIndex )
 {
-    _aDefExt.Erase( _nIndex );
+    _aDefExt = _aDefExt.copy( 0, _nIndex );
 }
 
-inline const String& SvtFileDialog::GetDefaultExt() const
+inline const OUString& SvtFileDialog::GetDefaultExt() const
 {
     return _aDefExt;
 }

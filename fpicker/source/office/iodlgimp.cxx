@@ -47,18 +47,18 @@ using namespace ::utl;
 static const sal_Char*      pViewOptDataName = "dialog data";
 #define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
-static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
+static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
     rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( OUString( rData ) ) );
 }
 
-static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
+static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
 {
     Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
     OUString aUserData;
     aAny >>= aUserData;
 
-    return String( aUserData );
+    return aUserData;
 }
 
 //*****************************************************************************
@@ -92,7 +92,7 @@ namespace
 //*****************************************************************************
 
 DBG_NAME( SvtFileDialogFilter_Impl )
-SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const String& rName, const String& rType )
+SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType )
     :m_aName( rName )
     ,m_aType( rType )
 {
@@ -180,11 +180,11 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     while ( nCount >= 1 )
     {
         aObject.removeSegment();
-        String aParentURL(aObject.GetMainURL(INetURLObject::NO_DECODE));
+        OUString aParentURL(aObject.GetMainURL(INetURLObject::NO_DECODE));
 
-        String aTitle;
+        OUString aTitle;
         // 97148# --------------------------------
-        if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.Len() == 0)
+        if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.isEmpty())
             aTitle = aObject.getName();
 
         Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
@@ -296,18 +296,18 @@ SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 
 //*****************************************************************************
 
-void SvtExpFileDlg_Impl::SetStandardDir( const String& _rDir )
+void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
 {
     _aStdDir = _rDir;
-    if ( 0 == _aStdDir.Len() )
-        _aStdDir.AssignAscii( "file:///" );
+    if ( _aStdDir.isEmpty() )
+        _aStdDir = "file:///";
 }
 
 //*****************************************************************************
 #if defined DBG_UTIL
 //-----------------------------------------------------------------------------
 namespace {
-    String lcl_DecoratedFilter( const String& _rOriginalFilter )
+    OUString lcl_DecoratedFilter( const OUString& _rOriginalFilter )
     {
         OUStringBuffer aDecoratedFilter;
         aDecoratedFilter.append('<');
@@ -325,7 +325,7 @@ void SvtExpFileDlg_Impl::ClearFilterList( )
 }
 
 //-----------------------------------------------------------------------------
-void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const String& rDisplayName )
+void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const OUString& rDisplayName )
 {
     DBG_ASSERT( pFilter, "SvtExpFileDlg_Impl::SetCurFilter: invalid filter!" );
     DBG_ASSERT( ( rDisplayName == pFilter->GetName() )
@@ -339,7 +339,7 @@ void SvtExpFileDlg_Impl::SetCurFilter( SvtFileDialogFilter_Impl* pFilter, const 
 //-----------------------------------------------------------------------------
 void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* _pFilterDesc )
 {
-    String sName = _pFilterDesc->GetName();
+    OUString sName = _pFilterDesc->GetName();
     if ( _pFilterDesc->isGroupSeparator() )
         sName = OUString( "------------------------------------------" );
     else

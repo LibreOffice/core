@@ -473,7 +473,7 @@ SvtFileDialog* SvtFilePicker::implCreateDialog( Window* _pParent )
     // Set StandardDir if present
     if ( !m_aStandardDir.isEmpty())
     {
-        String sStandardDir = String( m_aStandardDir );
+        OUString sStandardDir = m_aStandardDir;
         dialog->SetStandardDir( sStandardDir );
         dialog->SetBlackList( m_aBlackList );
     }

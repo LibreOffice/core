@@ -83,8 +83,8 @@ namespace svt
 
     //--------------------------------------------------------------------
     void AsyncPickerAction::execute(
-        const String& _rURL,
-        const String& _rFilter,
+        const OUString& _rURL,
+        const OUString& _rFilter,
         sal_Int32 _nMinTimeout,
         sal_Int32 _nMaxTimeout,
         const OUStringList& rBlackList )
