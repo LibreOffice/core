@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Executable_Executable,climaker))
 
+$(eval $(call gb_Executable_use_package,climaker,\
+	cli_basetypes_copy \
+))
+
 $(eval $(call gb_Executable_add_cxxflags,climaker,\
 	-AI $(gb_Helper_OUTDIRLIBDIR) \
 	-clr \
