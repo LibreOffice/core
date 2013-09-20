@@ -1883,7 +1883,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrCellSize(aGDIFont.GetSize());
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
-                aStr=String(pA->GetText(),pA->GetIndex(),pA->GetLen());
+                aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
 
                 if( pA->GetDXArray()!=NULL )
                 {
@@ -1939,7 +1939,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrCellSize(aGDIFont.GetSize());
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
-                aStr=String(pA->GetText(),pA->GetIndex(),pA->GetLen());
+                aStr = pA->GetText().copy(pA->GetIndex(),pA->GetLen());
                 pDXAry = new sal_Int32[aStr.getLength()];
                 nNormSize = aVDev.GetTextArray( aStr, pDXAry );
 

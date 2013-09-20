@@ -862,7 +862,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
         aFilterData[0].Value <<= nJPEGQualityLevel;
     }
 
-    if( aFilter.ExportGraphic( aGraphic, String(), aDstStm,
+    if( aFilter.ExportGraphic( aGraphic, OUString(), aDstStm,
                                 aFilter.GetExportFormatNumberForShortName( OUString(JPG_SHORTNAME) ), &aFilterData ) == ERRCODE_NONE )
     {
         pJpgData = reinterpret_cast<const sal_uInt8*>(aDstStm.GetData());
@@ -1773,7 +1773,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_TEXT_ACTION ):
             {
                 const MetaTextAction* pA = (const MetaTextAction*) pAction;
-                Impl_writeText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), NULL, 0);
+                Impl_writeText( pA->GetPoint(),  pA->GetText().copy( pA->GetIndex(), pA->GetLen() ), NULL, 0);
             }
             break;
 
@@ -1787,14 +1787,14 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_TEXTARRAY_ACTION ):
             {
                 const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
-                Impl_writeText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), pA->GetDXArray(), 0 );
+                Impl_writeText( pA->GetPoint(), pA->GetText().copy( pA->GetIndex(), pA->GetLen() ), pA->GetDXArray(), 0 );
             }
             break;
 
             case( META_STRETCHTEXT_ACTION ):
             {
                 const MetaStretchTextAction* pA = (const MetaStretchTextAction*) pAction;
-                Impl_writeText( pA->GetPoint(), String( pA->GetText(), pA->GetIndex(), pA->GetLen() ), NULL, pA->GetWidth() );
+                Impl_writeText( pA->GetPoint(), pA->GetText().copy( pA->GetIndex(), pA->GetLen() ), NULL, pA->GetWidth() );
             }
             break;
 

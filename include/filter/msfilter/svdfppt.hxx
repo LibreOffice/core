@@ -265,7 +265,7 @@ struct PptFontEntityAtom
     sal_uInt8           lfQuality;
 
     sal_uInt32          nUniqueFontId;          // not used anymore
-    CharSet             eCharSet;
+    rtl_TextEncoding    eCharSet;
     FontFamily          eFamily;
     FontPitch           ePitch;
     sal_Bool            bAvailable;
@@ -406,7 +406,7 @@ protected:
     sal_uInt32          nStreamLen;
     sal_uInt16          nTextStylesIndex;
 
-    CharSet             eCharSetSystem;
+    rtl_TextEncoding    eCharSetSystem;
 
     sal_Bool            bWingdingsChecked       : 1;
     sal_Bool            bWingdingsAvailable     : 1;

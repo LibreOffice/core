@@ -763,7 +763,7 @@ SvStream& operator>>( SvStream& rOStm, CGM& /*rCGM*/ )
 //================== GraphicImport - the exported function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL
-ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
+ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
 {
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR
