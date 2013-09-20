@@ -24,9 +24,7 @@
 
 #define USE_DUMMY_INTERPRETER 0
 
-#if USE_DUMMY_INTERPRETER
 #include <cstdio>
-#endif
 
 namespace sc {
 
