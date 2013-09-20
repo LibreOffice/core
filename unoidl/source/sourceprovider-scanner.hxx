@@ -156,14 +156,43 @@ class SourceProviderSingleInterfaceBasedServiceEntityPad:
     public SourceProviderEntityPad
 {
 public:
+    struct Constructor {
+        struct Parameter {
+            Parameter(
+                rtl::OUString const & theName,
+                SourceProviderType const & theType, bool theRest):
+                name(theName), type(theType), rest(theRest)
+            {}
+
+            rtl::OUString name;
+
+            SourceProviderType type;
+
+            bool rest;
+        };
+
+        Constructor(
+            rtl::OUString const & theName,
+            std::vector< rtl::OUString > const & theAnnotations):
+            name(theName), annotations(theAnnotations)
+        {}
+
+        rtl::OUString const name;
+
+        std::vector< Parameter > parameters;
+
+        std::vector< rtl::OUString > exceptions;
+
+        std::vector< rtl::OUString > const annotations;
+    };
+
     explicit SourceProviderSingleInterfaceBasedServiceEntityPad(
         bool published, OUString const & theBase):
         SourceProviderEntityPad(published), base(theBase)
     {}
 
     OUString const base;
-    std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor>
-        constructors;
+    std::vector<Constructor> constructors;
 
 private:
     virtual ~SourceProviderSingleInterfaceBasedServiceEntityPad() throw () {}

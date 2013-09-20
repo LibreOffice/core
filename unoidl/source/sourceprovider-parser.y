@@ -2205,13 +2205,32 @@ singleInterfaceBasedServiceDefn:
           dynamic_cast<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad *>(
               ent->pad.get());
       assert(pad != 0);
-      if (!$7) {
+      std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor> ctors;
+      if ($7) {
+          for (std::vector<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor>::iterator
+                   i(pad->constructors.begin());
+               i != pad->constructors.end(); ++i)
+          {
+              std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter> parms;
+              for (std::vector<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor::Parameter>::iterator
+                       j(i->parameters.begin());
+                   j != i->parameters.end(); ++j)
+              {
+                  parms.push_back(
+                      unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter(
+                          j->name, j->type.getName(), j->rest));
+              }
+              ctors.push_back(
+                  unoidl::SingleInterfaceBasedServiceEntity::Constructor(
+                      i->name, parms, i->exceptions, i->annotations));
+          }
+      } else {
           assert(pad->constructors.empty());
-          pad->constructors.push_back(
+          ctors.push_back(
               unoidl::SingleInterfaceBasedServiceEntity::Constructor());
       }
       ent->entity = new unoidl::SingleInterfaceBasedServiceEntity(
-          pad->isPublished(), pad->base, pad->constructors, annotations($1));
+          pad->isPublished(), pad->base, ctors, annotations($1));
       ent->pad.clear();
       clearCurrentName(data);
   }
@@ -2235,7 +2254,7 @@ ctor:
       rtl::Reference<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>
           pad(getCurrentPad<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>(
                   data));
-      for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor>::iterator
+      for (std::vector<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor>::iterator
                i(pad->constructors.begin());
            i != pad->constructors.end(); ++i)
       {
@@ -2249,21 +2268,48 @@ ctor:
           }
       }
       pad->constructors.push_back(
-          unoidl::SingleInterfaceBasedServiceEntity::Constructor(
-              id, std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter>(),
-              std::vector<OUString>(), annotations($1)));
+          unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor(
+              id, annotations($1)));
   }
   '(' ctorParams_opt ')' exceptionSpec_opt ';'
   {
+      unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
+      rtl::Reference<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>
+          pad(getCurrentPad<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>(
+                  data));
+      assert(!pad->constructors.empty());
       if ($7 != 0) {
-          unoidl::detail::SourceProviderScannerData * data
-              = yyget_extra(yyscanner);
-          rtl::Reference<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>
-              pad(getCurrentPad<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad>(
-                      data));
-          assert(!pad->constructors.empty());
           pad->constructors.back().exceptions = *$7;
           delete $7;
+      }
+      for (std::vector<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor>::iterator
+               i(pad->constructors.begin());
+           i != pad->constructors.end() - 1; ++i)
+      {
+          if (i->parameters.size()
+              == pad->constructors.back().parameters.size())
+          {
+              bool same = true;
+              for (std::vector<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor::Parameter>::iterator
+                       j(i->parameters.begin()),
+                       k(pad->constructors.back().parameters.begin());
+                   j != i->parameters.end(); ++j, ++k)
+              {
+                  if (!j->type.equals(k->type) || j->rest != k->rest) {
+                      same = false;
+                      break;
+                  }
+              }
+              if (same) {
+                  error(
+                      @2, yyscanner,
+                      ("single-interface--based service " + data->currentName
+                       + " constructor " + pad->constructors.back().name
+                       + " has similar paramete list to constructor "
+                       + i->name));
+                  YYERROR;
+              }
+          }
       }
   }
 ;
@@ -2338,7 +2384,7 @@ ctorParam:
                + " rest parameter must be last parameter"));
           YYERROR;
       }
-      for (std::vector<unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter>::iterator
+      for (std::vector<unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor::Parameter>::iterator
                i(pad->constructors.back().parameters.begin());
            i != pad->constructors.back().parameters.end(); ++i)
       {
@@ -2353,8 +2399,8 @@ ctorParam:
           }
       }
       pad->constructors.back().parameters.push_back(
-          unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter(
-              id, t.getName(), $5));
+          unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor::Parameter(
+              id, t, $5));
   }
 ;
 
@@ -3680,6 +3726,23 @@ OUString SourceProviderType::getName() const {
     default:
         assert(false); for (;;) { std::abort(); } // this cannot happen
     }
+}
+
+bool SourceProviderType::equals(SourceProviderType const & other) const {
+    if (type != other.type || name != other.name
+        || subtypes.size() != other.subtypes.size())
+    {
+        return false;
+    }
+    for (std::vector<SourceProviderType>::const_iterator
+             i(subtypes.begin()), j(other.subtypes.begin());
+         i != subtypes.end(); ++i, ++j)
+    {
+        if (!i->equals(*j)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool parse(OUString const & uri, SourceProviderScannerData * data) {

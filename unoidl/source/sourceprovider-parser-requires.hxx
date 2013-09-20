@@ -118,6 +118,8 @@ struct SourceProviderType {
 
     OUString getName() const;
 
+    bool equals(SourceProviderType const & other) const;
+
     Type type;
     OUString name; // TYPE_ENUM ... TYPE_PARAMETER
     SourceProviderEntity const * entity;
