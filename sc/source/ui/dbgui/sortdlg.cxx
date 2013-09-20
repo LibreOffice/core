@@ -46,8 +46,8 @@ ScSortDlg::~ScSortDlg()
 
 //==================================================================
 ScSortWarningDlg::ScSortWarningDlg( Window* pParent,
-                                   const String& rExtendText,
-                                   const String& rCurrentText ):
+                                   const OUString& rExtendText,
+                                   const OUString& rCurrentText ):
     ModalDialog     ( pParent, "SortWarning", "modules/scalc/ui/sortwarning.ui" )
 {
     get(aFtText, "sorttext" );

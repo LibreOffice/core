@@ -52,7 +52,7 @@ inline sal_Bool ScSortDlg::GetByRows () const           { return bIsByRows; }
 class ScSortWarningDlg : public ModalDialog
 {
 public:
-    ScSortWarningDlg( Window* pParent, const String& rExtendText,const String& rCurrentText );
+    ScSortWarningDlg( Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
             ~ScSortWarningDlg();
     DECL_LINK( BtnHdl, PushButton* );
 private:
