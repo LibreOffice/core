@@ -196,8 +196,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
-		$(T_LIBS) \
-		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),user32.lib) \
+		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),$(T_LIBS) user32.lib) \
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),-manifestfile:$(WORKDIR)/LinkTarget/$(2).manifest) \
 		-pdb:$(WORKDIR)/LinkTarget/$(2).pdb \
 		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
