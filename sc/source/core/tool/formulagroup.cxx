@@ -26,6 +26,16 @@
 
 #include <cstdio>
 
+#ifdef DISABLE_DYNLOADING
+
+extern "C" size_t getOpenCLPlatformCount(void);
+extern "C" void fillOpenCLInfo(OpenclPlatformInfo*, size_t);
+extern "C" bool switchOpenClDevice(const OUString*, bool);
+extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
+extern "C" void compileOpenCLKernels(const OUString*);
+
+#endif
+
 namespace sc {
 
 rtl_uString* FormulaGroupContext::intern( const OUString& rStr )
@@ -402,9 +412,6 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
     reinterpret_cast<__fillOpenCLInfo>(fn)(&aPlatforms[0], aPlatforms.size());
     rPlatforms.swap(aPlatforms);
 #else
-    extern "C" size_t getOpenCLPlatformCount(void);
-    extern "C" void fillOpenCLInfo(OpenclPlatformInfo*, size_t);
-
     size_t nPlatforms = getOpenCLPlatformCount();
     if (!nPlatforms)
         return;
@@ -445,8 +452,6 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     if(!bSuccess)
         return;
 #else
-    extern "C" bool switchOpenClDevice(const OUString*, bool);
-
     bool bSuccess = switchOpenClDevice(&rDeviceId, bAutoSelect);
     if(!bSuccess)
         return;
@@ -460,7 +465,6 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
     {
 #ifdef DISABLE_DYNLOADING
-        extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
         msInstance = createFormulaGroupOpenCLInterpreter();
 #else
         // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
@@ -493,7 +497,6 @@ void FormulaGroupInterpreter::compileOpenCLKernels()
 
     reinterpret_cast<__compileOpenCLKernels>(fn)(&rConfig.maOpenCLDevice);
 #else
-    extern "C" void compileOpenCLKernels(const OUString*);
 
     compileOpenCLKernels(&rConfig.maOpenCLDevice);
 #endif
