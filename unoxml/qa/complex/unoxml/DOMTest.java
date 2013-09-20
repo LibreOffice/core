@@ -2706,7 +2706,7 @@ public class DOMTest
             "<xlink:test/>" +
             "<office:automatic-styles teststyle=\"test\"/>" +
             "<moretest/>" +
-            "some text \303\266\303\244\303\274" +
+            "some text \uC3B6\uC3A4\uC3BC" +
             "</office:document-content>";
 
         XDocumentBuilder xBuilder =
@@ -2714,7 +2714,7 @@ public class DOMTest
             m_xMSF.createInstance("com.sun.star.xml.dom.DocumentBuilder"));
 
         XInputStream xIn =
-            SequenceInputStream.createStreamFromSequence(m_xContext, file.getBytes());
+            SequenceInputStream.createStreamFromSequence(m_xContext, file.getBytes("UTF-8"));
 
         XDocument xDoc =
             xBuilder.parse(xIn);
