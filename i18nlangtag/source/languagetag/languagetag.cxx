@@ -789,7 +789,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     }
     else
     {
-        SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for " << ::std::hex << mnLangID );
+        SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for 0x" << ::std::hex << mnLangID );
         pImpl.reset( new LanguageTagImpl( *this));
     }
     return pImpl;
