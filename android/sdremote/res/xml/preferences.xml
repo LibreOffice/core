@@ -3,11 +3,13 @@
 
     <CheckBoxPreference
         android:key="volume_keys_actions"
+        android:defaultValue="true"
         android:title="@string/preferences_volume_keys_actions_title"
         android:summary="@string/preferences_volume_keys_actions_summary"/>
 
     <CheckBoxPreference
         android:key="keep_screen_on"
+        android:defaultValue="true"
         android:title="@string/preferences_keep_screen_on_title"
         android:summary="@string/preferences_keep_screen_on_summary"/>
 
