@@ -323,6 +323,10 @@ private:
                                        OUString& rCountry,
                                        OUString& rVariants );
 
+    /** Convert Locale to BCP 47 string without resolving system and creating
+        temporary LanguageTag instances. */
+    static OUString convertToBcp47( const com::sun::star::lang::Locale& rLocale );
+
 };
 
 
@@ -551,7 +555,9 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 {
     // XXX NOTE: Do not use non-static LanguageTag::convert...() member methods
     // here as they access getImpl() and syncFromImpl() and would lead to
-    // recursion.
+    // recursion. Also do not use the static LanguageTag::convertTo...()
+    // methods as they may create temporary LanguageTag instances. Only
+    // LanguageTagImpl::convertToBcp47(Locale) is ok.
 
     ImplPtr pImpl;
 
@@ -565,8 +571,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     // Force Bcp47 if not LangID.
     if (!mbInitializedLangID && !mbInitializedBcp47 && mbInitializedLocale)
     {
-        maBcp47 = LanguageTag::convertToBcp47( maLocale, true);
-        mbInitializedBcp47 = true;
+        maBcp47 = LanguageTagImpl::convertToBcp47( maLocale);
+        mbInitializedBcp47 = !maBcp47.isEmpty();
     }
 
     osl::MutexGuard aGuard( theMutex::get());
@@ -637,7 +643,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                 pImpl->convertBcp47ToLocale();
             if (!pImpl->mbInitializedLangID)
                 pImpl->convertLocaleToLang();
-            OUString aBcp47( LanguageTag::convertToBcp47(
+            OUString aBcp47( LanguageTagImpl::convertToBcp47(
                         MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true)));
             // If round-trip is identical cross-insert to Bcp47 map.
             // May have involved canonicalize(), so compare with
@@ -966,7 +972,19 @@ void LanguageTagImpl::convertLocaleToBcp47()
     if (mbSystemLocale && !mbInitializedLocale)
         convertLangToLocale();
 
-    if (maLocale.Language == I18NLANGTAG_QLT)
+    if (maLocale.Language.isEmpty())
+    {
+        // Do not call LanguageTag::convertToBcp47(Locale) that for an empty
+        // locale via LanguageTag::convertToBcp47(LanguageType) and
+        // LanguageTag::convertToLocale(LanguageType) would instanciate another
+        // LanguageTag.
+        maLocale = MsLangId::Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, true);
+    }
+    if (maLocale.Language.isEmpty())
+    {
+        maBcp47 = OUString();   // bad luck
+    }
+    else if (maLocale.Language == I18NLANGTAG_QLT)
     {
         maBcp47 = maLocale.Variant;
         meIsIsoLocale = DECISION_NO;
@@ -994,7 +1012,7 @@ void LanguageTagImpl::convertLocaleToLang()
     }
     else
     {
-        mnLangID = LanguageTag::convertToLanguageType( maLocale, true);
+        mnLangID = MsLangId::Conversion::convertLocaleToLanguage( maLocale);
     }
     mbInitializedLangID = true;
 }
@@ -1064,7 +1082,7 @@ void LanguageTagImpl::convertLangToLocale()
         mbInitializedLangID = true;
     }
     // Resolve system here! The original is remembered as mbSystemLocale.
-    maLocale = LanguageTag::convertToLocale( mnLangID, true);
+    maLocale = MsLangId::Conversion::convertLanguageToLocale( mnLangID, true);
     mbInitializedLocale = true;
 }
 
@@ -2126,7 +2144,7 @@ com::sun::star::lang::Locale LanguageTag::convertToLocale( LanguageType nLangID,
     if (!bResolveSystem && lcl_isSystem( nLangID))
         return lang::Locale();
 
-    return MsLangId::Conversion::convertLanguageToLocale( nLangID, bResolveSystem);
+    return LanguageTag( nLangID).getLocale( bResolveSystem);
 }
 
 
@@ -2136,19 +2154,17 @@ LanguageType LanguageTag::convertToLanguageType( const com::sun::star::lang::Loc
     if (rLocale.Language.isEmpty() && !bResolveSystem)
         return LANGUAGE_SYSTEM;
 
-    return MsLangId::Conversion::convertLocaleToLanguage( rLocale);
+    return LanguageTag( rLocale).getLanguageType( bResolveSystem);
 }
 
 
 // static
-OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem )
+OUString LanguageTagImpl::convertToBcp47( const com::sun::star::lang::Locale& rLocale )
 {
     OUString aBcp47;
     if (rLocale.Language.isEmpty())
     {
-        if (bResolveSystem)
-            aBcp47 = convertToBcp47( LANGUAGE_SYSTEM, true);
-        // else aBcp47 stays empty
+        // aBcp47 stays empty
     }
     else if (rLocale.Language == I18NLANGTAG_QLT)
     {
@@ -2171,25 +2187,46 @@ OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocal
 
 
 // static
+OUString LanguageTag::convertToBcp47( const com::sun::star::lang::Locale& rLocale, bool bResolveSystem )
+{
+    OUString aBcp47;
+    if (rLocale.Language.isEmpty())
+    {
+        if (bResolveSystem)
+            aBcp47 = LanguageTag::convertToBcp47( LANGUAGE_SYSTEM, true);
+        // else aBcp47 stays empty
+    }
+    else
+    {
+        aBcp47 = LanguageTagImpl::convertToBcp47( rLocale);
+    }
+    return aBcp47;
+}
+
+
+// static
 OUString LanguageTag::convertToBcp47( LanguageType nLangID, bool bResolveSystem )
 {
     // Catch this first so we don't need the rest.
     if (!bResolveSystem && lcl_isSystem( nLangID))
         return OUString();
 
-    lang::Locale aLocale( convertToLocale( nLangID, bResolveSystem));
+    lang::Locale aLocale( LanguageTag::convertToLocale( nLangID, bResolveSystem));
     // If system for some reason (should not happen.. haha) could not be
-    // resolved DO NOT CALL convertToBcp47() because that would recurse into
-    // this method here!
+    // resolved DO NOT CALL LanguageTag::convertToBcp47(Locale) because that
+    // would recurse into this method here!
     if (aLocale.Language.isEmpty() && bResolveSystem)
         return OUString();      // bad luck, bail out
-    return convertToBcp47( aLocale, bResolveSystem);
+    return LanguageTagImpl::convertToBcp47( aLocale);
 }
 
 
 // static
 com::sun::star::lang::Locale LanguageTag::convertToLocale( const OUString& rBcp47, bool bResolveSystem )
 {
+    if (rBcp47.isEmpty() && !bResolveSystem)
+        return lang::Locale();
+
     return LanguageTag( rBcp47).getLocale( bResolveSystem);
 }
 
@@ -2197,6 +2234,9 @@ com::sun::star::lang::Locale LanguageTag::convertToLocale( const OUString& rBcp4
 // static
 LanguageType LanguageTag::convertToLanguageType( const OUString& rBcp47, bool bResolveSystem )
 {
+    if (rBcp47.isEmpty() && !bResolveSystem)
+        return LANGUAGE_SYSTEM;
+
     return LanguageTag( rBcp47).getLanguageType( bResolveSystem);
 }
 

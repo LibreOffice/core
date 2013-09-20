@@ -200,6 +200,7 @@ public:
     private:
 
         friend class LanguageTag;
+        friend class LanguageTagImpl;
 
         friend ::com::sun::star::lang::Locale MsLangId::getFallbackLocale(
                 const ::com::sun::star::lang::Locale & rLocale );
