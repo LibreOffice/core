@@ -2706,7 +2706,7 @@ public class DOMTest
             "<xlink:test/>" +
             "<office:automatic-styles teststyle=\"test\"/>" +
             "<moretest/>" +
-            "some text \uC3B6\uC3A4\uC3BC" +
+            "some text \u00F6\u00E4\u00FC" +
             "</office:document-content>";
 
         XDocumentBuilder xBuilder =
