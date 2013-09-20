@@ -647,8 +647,8 @@ bool ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
                                   SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-                                  const String& rNewUndoStr, const EditTextObject* pUndoTObj,
-                                  const String& rNewRedoStr, const EditTextObject* pRedoTObj) :
+                                  const OUString& rNewUndoStr, const EditTextObject* pUndoTObj,
+                                  const OUString& rNewRedoStr, const EditTextObject* pRedoTObj) :
     ScSimpleUndo( pNewDocShell ),
     nCol( nNewCol ),
     nRow( nNewRow ),
@@ -698,7 +698,7 @@ void ScUndoThesaurus::SetChangeTrack( const ScCellValue& rOldCell )
         nEndChangeAction = 0;
 }
 
-void ScUndoThesaurus::DoChange( sal_Bool bUndo, const String& rStr,
+void ScUndoThesaurus::DoChange( sal_Bool bUndo, const OUString& rStr,
             const EditTextObject* pTObj )
 {
     ScDocument* pDoc = pDocShell->GetDocument();

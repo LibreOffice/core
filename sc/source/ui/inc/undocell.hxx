@@ -224,8 +224,8 @@ public:
                     TYPEINFO();
                     ScUndoThesaurus( ScDocShell* pNewDocShell,
                             SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
-                            const String& rNewUndoStr, const EditTextObject* pUndoTObj,
-                            const String& rNewRedoStr, const EditTextObject* pRedoTObj);
+                            const OUString& rNewUndoStr, const EditTextObject* pUndoTObj,
+                            const OUString& rNewRedoStr, const EditTextObject* pRedoTObj);
     virtual         ~ScUndoThesaurus();
 
     virtual void    Undo();
@@ -239,13 +239,13 @@ private:
     SCCOL           nCol;
     SCROW           nRow;
     SCTAB           nTab;
-    String          aUndoStr;           // Data at String cell
+    OUString        aUndoStr;           // Data at String cell
     EditTextObject* pUndoTObject;       //      at Edit cell
-    String          aRedoStr;
+    OUString        aRedoStr;
     EditTextObject* pRedoTObject;
     sal_uLong           nEndChangeAction;
 
-    void            DoChange( sal_Bool bUndo, const String& rStr,
+    void            DoChange( sal_Bool bUndo, const OUString& rStr,
                                 const EditTextObject* pTObj );
     void SetChangeTrack( const ScCellValue& rOldCell );
 };
