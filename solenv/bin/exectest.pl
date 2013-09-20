@@ -23,31 +23,15 @@ sub encode($)
     return $arg
 }
 
-$#ARGV >= 1
-    or die "Usage: $0 <input file>|-SUCCESS|-FAILURE <command> <arguments...>";
-if ($ARGV[0] eq "-SUCCESS")
-{
-    $expect = "SUCCESS";
-    $input = 0;
-}
-elsif ($ARGV[0] eq "-FAILURE")
-{
-    $expect = "FAILURE";
-    $input = 0;
-}
-else
-{
-    open INPUT, $ARGV[0] or die "cannot open $ARGV[0]: $!";
-    $input = 1;
-}
+$#ARGV >= 1 or die "Usage: $0 <input file> <command> <arguments...>";
+open INPUT, $ARGV[0] or die "cannot open $ARGV[0]: $!";
 shift @ARGV;
 $failed = 0;
 $open = 0;
 while (1) {
-    $eof = $input ? eof INPUT : $open;
-    $in = <INPUT> if $input && !$eof;
-    if (!$input || $eof
-        || $in =~ /^EXPECT (SUCCESS|FAILURE|\d+)( "([^"]*)")?:\n$/)
+    $eof = eof INPUT;
+    $in = <INPUT> unless $eof;
+    if ($eof || $in =~ /^EXPECT (SUCCESS|FAILURE) "([^"]*)"?:\n$/)
     {
         if ($open)
         {
@@ -55,16 +39,14 @@ while (1) {
             if ($? % 256 == 0)
             {
                 $exit = $? / 256;
-                $ok = $expect eq "SUCCESS" ? $exit == 0
-                    : $expect eq "FAILURE" ? $exit != 0 : $exit == $expect;
+                $ok = ($? == 0) == ($expect eq "SUCCESS");
             }
             else
             {
                 $exit = "signal";
                 $ok = 0;
             }
-            print "\"$title\", " if defined $title;
-            print "expected $expect, got $exit ($?): ";
+            print "\"$title\" expected $expect, got $exit ($?): ";
             if ($ok)
             {
                 print "ok\n";
@@ -72,19 +54,12 @@ while (1) {
             else
             {
                 print "FAILED!\n";
-                $failed = 1;
+                exit(1);
             }
         }
         last if $eof;
-        $expect = $1 if $input;
-        if (defined $3)
-        {
-            $title = $3;
-        }
-        else
-        {
-            undef $title;
-        }
+        $expect = $1;
+        $title = $2;
         my $prog = '';
         my $assigns = 1;
         for ($i = 0; $i != scalar(@ARGV); ++$i)
@@ -103,9 +78,9 @@ while (1) {
         open PIPE, "| $prog" or die "cannot start process: $!";
         $open = 1;
     }
-    elsif ($open && $input)
+    elsif ($open)
     {
         print PIPE $in or die "cannot write to pipe: $!";
     }
 }
-exit $failed;
+exit(0);
