@@ -76,6 +76,6 @@ $(call gb_CustomTarget_get_target,idlc/parser_test) : \
                 $(call gb_CustomTarget_get_workdir,idlc/parser_test)/in.idl \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {}) \
-            > ${}.log 2>&1 || (cat ${}.log && false))
+            > $@.log 2>&1 || (cat $@.log && false))
 
 # vim: set noet sw=4 ts=4:
