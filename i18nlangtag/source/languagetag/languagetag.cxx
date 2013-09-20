@@ -383,6 +383,9 @@ LanguageTagImpl::LanguageTagImpl( const LanguageTagImpl & rLanguageTagImpl )
 
 LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTagImpl )
 {
+    if (&rLanguageTagImpl == this)
+        return *this;
+
     maLocale            = rLanguageTagImpl.maLocale;
     maBcp47             = rLanguageTagImpl.maBcp47;
     maCachedLanguage    = rLanguageTagImpl.maCachedLanguage;
@@ -534,6 +537,9 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
 
 LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
 {
+    if (&rLanguageTag == this)
+        return *this;
+
     maLocale            = rLanguageTag.maLocale;
     maBcp47             = rLanguageTag.maBcp47;
     mnLangID            = rLanguageTag.mnLangID;
