@@ -38,8 +38,8 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
-                                        const String& rTarget,
+void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rURL,
+                                        const OUString& rTarget,
                                         const Point* pInsPos )
 {
     //  Tabelle geschuetzt ?
@@ -78,9 +78,9 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     aAny <<= aTmp;
     xPropSet->setPropertyValue("TargetURL", aAny );
 
-    if( rTarget.Len() )
+    if( !rTarget.isEmpty() )
     {
-        aAny <<= OUString(rTarget);
+        aAny <<= rTarget;
         xPropSet->setPropertyValue("TargetFrame", aAny );
     }
 

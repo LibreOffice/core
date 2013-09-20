@@ -104,7 +104,7 @@ private:
     sal_uInt16                  nDrawSfxId;
     sal_uInt16                  nCtrlSfxId;
     sal_uInt16                  nFormSfxId;
-    String                  sDrawCustom;                // current custom shape type
+    OUString                sDrawCustom;                // current custom shape type
     ScDrawShell*            pDrawShell;
     ScDrawTextObjectBar*    pDrawTextShell;
     ScEditShell*            pEditShell;
@@ -164,7 +164,7 @@ private:
     SbxObject*              pScSbxObject;
 
     sal_Bool                    bChartAreaValid;            // if chart is drawn
-    String                  aEditChartName;
+    OUString                aEditChartName;
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
     SCTAB                   nChartDestTab;
@@ -173,7 +173,7 @@ private:
     SfxBroadcaster*         pAccessibilityBroadcaster;
 
     static const int        MASTERENUMCOMMANDS = 6;
-    String                  aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
+    OUString                aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
     // ugly hack for Add button in ScNameDlg
     boost::ptr_map<OUString, ScRangeName> maRangeMap;
@@ -186,14 +186,14 @@ private:
 
     SfxShell*       GetMySubShell() const;
 
-    void            DoReadUserData( const String& rData );
+    void            DoReadUserData( const OUString& rData );
     void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
                                      ::com::sun::star::beans::PropertyValue >& rSettings );
 
     DECL_LINK( SimpleRefClose, void* );
-    DECL_LINK( SimpleRefDone, String* );
-    DECL_LINK( SimpleRefAborted, String* );
-    DECL_LINK( SimpleRefChange, String* );
+    DECL_LINK( SimpleRefDone, OUString* );
+    DECL_LINK( SimpleRefAborted, OUString* );
+    DECL_LINK( SimpleRefChange, OUString* );
     DECL_LINK( FormControlActivated, void* );
 
 protected:
@@ -215,7 +215,7 @@ protected:
 
     virtual OUString GetSelectionText( bool bWholeWord );
     virtual sal_Bool    HasSelection( sal_Bool bText ) const;
-    virtual String  GetDescription() const;
+    virtual OUString GetDescription() const;
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false);
     virtual void    ReadUserData(const OUString &, bool bBrowse = false);
@@ -340,7 +340,7 @@ public:
     void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
     sal_Bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
-    void            SetEditChartName(const String& aStr){aEditChartName=aStr;}
+    void            SetEditChartName(const OUString& aStr){aEditChartName=aStr;}
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -372,13 +372,13 @@ public:
 
     FmFormShell*    GetFormShell() const    { return pFormShell; }
 
-    void    InsertURL( const String& rName, const String& rURL, const OUString& rTarget,
+    void    InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                             sal_uInt16 nMode );
-    void    InsertURLButton( const String& rName, const String& rURL, const String& rTarget,
+    void    InsertURLButton( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                             const Point* pInsPos = NULL );
-    void    InsertURLField( const String& rName, const String& rURL, const String& rTarget );
+    void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget );
 
-    sal_Bool    SelectObject( const String& rName );
+    sal_Bool    SelectObject( const OUString& rName );
 
     void    SetInFormatDialog(sal_Bool bFlag) {bInFormatDialog=bFlag;}
     sal_Bool    IsInFormatDialog() {return bInFormatDialog;}
@@ -393,9 +393,9 @@ public:
 
     void    ExecuteCellFormatDlg    ( SfxRequest& rReq, const OString &rTabPage = OString());
 
-    sal_Bool    GetFunction( String& rFuncStr, sal_uInt16 nErrCode = 0 );
+    sal_Bool    GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode = 0 );
 
-    void    StartSimpleRefDialog( const String& rTitle, const String& rInitVal,
+    void    StartSimpleRefDialog( const OUString& rTitle, const OUString& rInitVal,
                                     sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection );
     void    StopSimpleRefDialog();
 

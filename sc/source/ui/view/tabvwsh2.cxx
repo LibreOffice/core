@@ -154,7 +154,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         if ( pArgs->GetItemState( nNewId, sal_True, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
             sStringItemValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
-    bool bSwitchCustom = ( sStringItemValue.Len() && sDrawCustom.Len() && sStringItemValue != sDrawCustom );
+    bool bSwitchCustom = ( sStringItemValue.Len() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );
 
     if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
         nNewId = SID_DRAW_TEXT;
@@ -222,7 +222,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
 
     nDrawSfxId = nNewId;
-    sDrawCustom.Erase();    // value is set below for custom shapes
+    sDrawCustom = "";    // value is set below for custom shapes
 
     if ( nNewId != SID_DRAW_CHART )             // Chart nicht mit DrawShell
     {
@@ -445,7 +445,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
     }
 }
 
-sal_Bool ScTabViewShell::SelectObject( const String& rName )
+sal_Bool ScTabViewShell::SelectObject( const OUString& rName )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     if (!pView)

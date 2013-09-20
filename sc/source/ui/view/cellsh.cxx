@@ -699,7 +699,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                                 nErrCode = pCell->GetErrCode();
                         }
 
-                        String aFuncStr;
+                        OUString aFuncStr;
                         if ( pTabViewShell->GetFunction( aFuncStr, nErrCode ) )
                             rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
                     }
@@ -716,7 +716,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_STATUS_SUM:
                 {
-                    String aFuncStr;
+                    OUString aFuncStr;
                     if ( pTabViewShell->GetFunction( aFuncStr ) )
                         rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
                 }

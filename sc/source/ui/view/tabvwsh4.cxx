@@ -535,7 +535,7 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
 
 // DoReadUserData is also called from ctor when switching from print preview
 
-void ScTabViewShell::DoReadUserData( const String& rData )
+void ScTabViewShell::DoReadUserData( const OUString& rData )
 {
     Window* pOldWin = GetActiveWin();
     sal_Bool bFocus = pOldWin && pOldWin->HasFocus();
@@ -1126,7 +1126,7 @@ static ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
     return pRet;
 }
 
-IMPL_LINK( ScTabViewShell, SimpleRefDone, String*, pResult )
+IMPL_LINK( ScTabViewShell, SimpleRefDone, OUString*, pResult )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
     if ( pImpObj && pResult )
@@ -1134,7 +1134,7 @@ IMPL_LINK( ScTabViewShell, SimpleRefDone, String*, pResult )
     return 0;
 }
 
-IMPL_LINK( ScTabViewShell, SimpleRefAborted, String*, pResult )
+IMPL_LINK( ScTabViewShell, SimpleRefAborted, OUString*, pResult )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
     if ( pImpObj && pResult )
@@ -1142,7 +1142,7 @@ IMPL_LINK( ScTabViewShell, SimpleRefAborted, String*, pResult )
     return 0;
 }
 
-IMPL_LINK( ScTabViewShell, SimpleRefChange, String*, pResult )
+IMPL_LINK( ScTabViewShell, SimpleRefChange, OUString*, pResult )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
     if ( pImpObj && pResult )
@@ -1151,7 +1151,7 @@ IMPL_LINK( ScTabViewShell, SimpleRefChange, String*, pResult )
 }
 
 void ScTabViewShell::StartSimpleRefDialog(
-            const String& rTitle, const String& rInitVal,
+            const OUString& rTitle, const OUString& rInitVal,
             sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection )
 {
     SfxViewFrame* pViewFrm = GetViewFrame();

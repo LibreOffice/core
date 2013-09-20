@@ -115,7 +115,7 @@ ScInputHandler* ScTabViewShell::GetInputHandler() const
 
 //------------------------------------------------------------------
 
-String ScTabViewShell::GetDescription() const
+OUString ScTabViewShell::GetDescription() const
 {
     return OUString(" ** Test ** ");
 }

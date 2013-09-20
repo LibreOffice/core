@@ -119,7 +119,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
 
 //------------------------------------------------------------------------
 
-void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const OUString& rTarget,
+void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                                 sal_uInt16 nMode )
 {
     SvxLinkInsertMode eMode = (SvxLinkInsertMode) nMode;
@@ -166,7 +166,7 @@ static void lcl_SelectFieldAfterInsert( EditView& rView )
     }
 }
 
-void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, const String& rTarget )
+void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget )
 {
     SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
     aURLField.SetTargetFrame( rTarget );

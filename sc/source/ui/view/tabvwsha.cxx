@@ -53,7 +53,7 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 
-sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
+sal_Bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 {
     String aStr;
 
