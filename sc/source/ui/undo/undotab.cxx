@@ -76,7 +76,7 @@ TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   SCTAB nTabNum,
                                   sal_Bool bApp,
-                                  const String& rNewName) :
+                                  const OUString& rNewName) :
     ScSimpleUndo( pNewDocShell ),
     sNewName( rNewName ),
     pDrawUndo( NULL ),
@@ -424,8 +424,8 @@ bool ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
                                   SCTAB nT,
-                                  const String& rOldName,
-                                  const String& rNewName) :
+                                  const OUString& rOldName,
+                                  const OUString& rNewName) :
     ScSimpleUndo( pNewDocShell ),
     nTab     ( nT )
 {
@@ -442,7 +442,7 @@ OUString ScUndoRenameTab::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_RENAME_TAB );
 }
 
-void ScUndoRenameTab::DoChange( SCTAB nTabP, const String& rName ) const
+void ScUndoRenameTab::DoChange( SCTAB nTabP, const OUString& rName ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->RenameTab( nTabP, rName );
@@ -795,7 +795,7 @@ bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
                         SCTAB nSrc, SCTAB nDest,
-                        const String& rN, const String& rC,
+                        const OUString& rN, const OUString& rC,
                         const Color& rCol, sal_uInt16 nF,
                         const ScMarkData& rMark ) :
     ScSimpleUndo( pNewDocShell ),
@@ -1036,7 +1036,7 @@ bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return rTarget.ISA(ScTabViewTarget);
 }
 
-ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
+ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDoc ) :
     ScSimpleUndo( pShell ),
     aDocName( rDoc ),
     nCount( 0 )
@@ -1045,7 +1045,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
     SCTAB nTabCount = pDoc->GetTableCount();
     pTabs     = new SCTAB[nTabCount];
     pModes    = new sal_uInt8[nTabCount];
-    pTabNames = new String[nTabCount];
+    pTabNames = new OUString[nTabCount];
 
     for (SCTAB i=0; i<nTabCount; i++)
     {
@@ -1390,7 +1390,7 @@ OUString ScUndoPrintRange::GetComment() const
 }
 
 ScUndoScenarioFlags::ScUndoScenarioFlags( ScDocShell* pNewDocShell, SCTAB nT,
-                    const String& rON, const String& rNN, const String& rOC, const String& rNC,
+                    const OUString& rON, const OUString& rNN, const OUString& rOC, const OUString& rNC,
                     const Color& rOCol, const Color& rNCol, sal_uInt16 nOF, sal_uInt16 nNF ) :
     ScSimpleUndo( pNewDocShell ),
     nTab        ( nT ),
@@ -1459,8 +1459,8 @@ bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 //      (move to different file?)
-ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const String& rPN,
-                                        const String& rON, const String& rNN ) :
+ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const OUString& rPN,
+                                        const OUString& rON, const OUString& rNN ) :
     ScSimpleUndo( pNewDocShell ),
     aPersistName( rPN ),
     aOldName    ( rON ),

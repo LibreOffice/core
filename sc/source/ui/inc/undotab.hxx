@@ -52,7 +52,7 @@ public:
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
                             sal_Bool bApp,
-                            const String& rNewName);
+                            const OUString& rNewName);
     virtual         ~ScUndoInsertTab();
 
     virtual void    Undo();
@@ -63,11 +63,11 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String          sNewName;
+    OUString        sNewName;
     SdrUndoAction*  pDrawUndo;
-    sal_uLong           nEndChangeAction;
+    sal_uLong       nEndChangeAction;
     SCTAB           nTab;
-    sal_Bool            bAppend;
+    sal_Bool        bAppend;
 
     void            SetChangeTrack();
 };
@@ -135,8 +135,8 @@ public:
                     ScUndoRenameTab(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
-                            const String& rOldName,
-                            const String& rNewName);
+                            const OUString& rOldName,
+                            const OUString& rNewName);
     virtual         ~ScUndoRenameTab();
 
     virtual void    Undo();
@@ -147,11 +147,11 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    SCTAB   nTab;
-    String  sOldName;
-    String  sNewName;
+    SCTAB     nTab;
+    OUString  sOldName;
+    OUString  sNewName;
 
-    void DoChange( SCTAB nTab, const String& rName ) const;
+    void DoChange( SCTAB nTab, const OUString& rName ) const;
 };
 
 
@@ -247,7 +247,7 @@ public:
                     ScUndoMakeScenario(
                             ScDocShell* pNewDocShell,
                             SCTAB nSrc, SCTAB nDest,
-                            const String& rN, const String& rC,
+                            const OUString& rN, const OUString& rC,
                             const Color& rCol, sal_uInt16 nF,
                             const ScMarkData& rMark );
     virtual         ~ScUndoMakeScenario();
@@ -263,8 +263,8 @@ private:
     boost::scoped_ptr<ScMarkData> mpMarkData;
     SCTAB       nSrcTab;
     SCTAB       nDestTab;
-    String      aName;
-    String      aComment;
+    OUString    aName;
+    OUString    aComment;
     Color       aColor;
     sal_uInt16      nFlags;
     SdrUndoAction* pDrawUndo;
@@ -303,7 +303,7 @@ public:
                     TYPEINFO();
                     ScUndoRemoveLink(               // Call before delete!
                             ScDocShell* pShell,
-                            const String& rDoc );
+                            const OUString& rDoc );
     virtual         ~ScUndoRemoveLink();
 
     virtual void    Undo();
@@ -314,14 +314,14 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String  aDocName;
-    String  aFltName;
-    String  aOptions;
+    OUString    aDocName;
+    OUString    aFltName;
+    OUString    aOptions;
     sal_uLong   nRefreshDelay;
     sal_uInt16  nCount;
-    SCTAB*  pTabs;
+    SCTAB*      pTabs;
     sal_uInt8*  pModes;
-    String* pTabNames;
+    OUString*   pTabNames;
 
     void DoChange( sal_Bool bLink ) const;
 };
@@ -438,8 +438,8 @@ public:
                     TYPEINFO();
                     ScUndoScenarioFlags(
                             ScDocShell* pNewDocShell, SCTAB nT,
-                            const String& rON, const String& rNN,
-                            const String& rOC, const String& rNC,
+                            const OUString& rON, const OUString& rNN,
+                            const OUString& rOC, const OUString& rNC,
                             const Color& rOCol, const Color& rNCol,
                             sal_uInt16 nOF, sal_uInt16 nNF );
 
@@ -453,13 +453,13 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    SCTAB   nTab;
-    String  aOldName;
-    String  aNewName;
-    String  aOldComment;
-    String  aNewComment;
-    Color   aOldColor;
-    Color   aNewColor;
+    SCTAB       nTab;
+    OUString    aOldName;
+    OUString    aNewName;
+    OUString    aOldComment;
+    OUString    aNewComment;
+    Color       aOldColor;
+    Color       aNewColor;
     sal_uInt16  nOldFlags;
     sal_uInt16  nNewFlags;
 };
@@ -470,8 +470,8 @@ class ScUndoRenameObject: public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoRenameObject(
-                            ScDocShell* pNewDocShell, const String& rPN,
-                            const String& rON, const String& rNN );
+                            ScDocShell* pNewDocShell, const OUString& rPN,
+                            const OUString& rON, const OUString& rNN );
 
     virtual         ~ScUndoRenameObject();
 
@@ -483,9 +483,9 @@ public:
     virtual OUString GetComment() const;
 
 private:
-    String  aPersistName;       // to find object (works only for OLE objects)
-    String  aOldName;
-    String  aNewName;
+    OUString  aPersistName;       // to find object (works only for OLE objects)
+    OUString  aOldName;
+    OUString  aNewName;
 
     SdrObject*  GetObject();
 };
