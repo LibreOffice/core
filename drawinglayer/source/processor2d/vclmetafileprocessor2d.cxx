@@ -862,10 +862,13 @@ namespace drawinglayer
                                 sal_Int32(ceil(aCropRange.getMaxX())), sal_Int32(ceil(aCropRange.getMaxY())));
                         }
 
+                        // #i123295# 3rd param is uncropped rect, 4th is cropped. The primitive has the cropped
+                        // object transformation, thus aCurrentRect *is* the clip region while aCropRect is the expanded,
+                        // uncropped region. Thus, correct order is aCropRect, aCurrentRect
                         mpPDFExtOutDevData->EndGroup(rGraphicPrimitive.getGraphicObject().GetGraphic(),
                             rAttr.GetTransparency(),
-                            aCurrentRect,
-                            aCropRect);
+                            aCropRect,
+                            aCurrentRect);
                     }
 
                     break;
