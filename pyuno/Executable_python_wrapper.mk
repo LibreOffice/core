@@ -7,17 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Executable_Executable,pyuno/python))
+$(eval $(call gb_Executable_Executable,python))
 
-$(eval $(call gb_Executable_add_defs,pyuno/python,\
+$(eval $(call gb_Executable_add_defs,python,\
     -DMY_PYVERSION=L\"$(PYTHON_VERSION)\" \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,pyuno/python,\
+$(eval $(call gb_Executable_use_static_libraries,python,\
     ooopathutils \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,pyuno/python,\
+$(eval $(call gb_Executable_add_exception_objects,python,\
     pyuno/zipcore/python \
 ))
 
