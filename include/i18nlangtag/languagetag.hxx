@@ -484,6 +484,9 @@ public:
      */
     static com::sun::star::lang::Locale convertToLocaleWithFallback( const OUString& rBcp47 );
 
+    /** If nLang is a generated on-the-fly LangID */
+    static bool         isOnTheFlyID( LanguageType nLang );
+
     typedef ::boost::shared_ptr< LanguageTagImpl > ImplPtr;
 
 private:

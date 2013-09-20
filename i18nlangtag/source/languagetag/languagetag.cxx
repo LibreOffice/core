@@ -126,6 +126,17 @@ static LanguageType getNextOnTheFlyLanguage()
 }
 
 
+// static
+bool LanguageTag::isOnTheFlyID( LanguageType nLang )
+{
+    LanguageType nPri = MsLangId::getPrimaryLanguage( nLang);
+    LanguageType nSub = MsLangId::getSubLanguage( nLang);
+    return
+        LANGUAGE_ON_THE_FLY_START <= nPri && nPri <= LANGUAGE_ON_THE_FLY_END &&
+        LANGUAGE_ON_THE_FLY_SUB_START <= nSub && nSub <= LANGUAGE_ON_THE_FLY_SUB_END;
+}
+
+
 /** A reference holder for liblangtag data de/initialization, one static
     instance. Currently implemented such that the first "ref" inits and dtor
     (our library deinitialized) tears down.
