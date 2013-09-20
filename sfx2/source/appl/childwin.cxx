@@ -17,13 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <boost/scoped_ptr.hpp>
 #include <vcl/toolbox.hxx>
 #include <tools/rcid.h>
+#include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -288,7 +291,12 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
         aWinData.append(rInfo.aExtraString);
     }
 
-    SvtViewOptions aWinOpt( E_WINDOW, OUString::number( nID ) );
+    OUString sName(OUString::number(nID));
+    //Try and save window state per-module, e.g. sidebar on in one application
+    //but off in another
+    if (!rInfo.aModule.isEmpty())
+        sName = rInfo.aModule + "/" + sName;
+    SvtViewOptions aWinOpt(E_WINDOW, sName);
     aWinOpt.SetWindowState(OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
@@ -313,7 +321,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
     DBG_CHKTHIS(SfxChildWindow,0);
 
-    SfxChildWinInfo aInfo;
+    SfxChildWinInfo aInfo(pImp->pFact->aInfo);
     aInfo.aPos  = pWindow->GetPosPixel();
     aInfo.aSize = pWindow->GetSizePixel();
     if ( pWindow->IsSystemWindow() )
@@ -347,22 +355,30 @@ sal_uInt16 SfxChildWindow::GetPosition()
 }
 
 //-------------------------------------------------------------------------
-void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWinInfo& rInfo )
+void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinInfo& rInfo)
 {
     // load configuration
-    SvtViewOptions aWinOpt( E_WINDOW, OUString::number( nId ) );
 
-    if ( aWinOpt.Exists() && aWinOpt.HasVisible() )
-        rInfo.bVisible  = aWinOpt.IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
+    boost::scoped_ptr<SvtViewOptions> xWinOpt;
+    // first see if a module specific id exists
+    if (rInfo.aModule.getLength())
+        xWinOpt.reset(new SvtViewOptions(E_WINDOW, rInfo.aModule + "/" + OUString::number(nId)));
 
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();
+    // if not then try the generic id
+    if (!xWinOpt || !xWinOpt->Exists())
+        xWinOpt.reset(new SvtViewOptions(E_WINDOW, OUString::number(nId)));
+
+    if (xWinOpt->Exists() && xWinOpt->HasVisible() )
+        rInfo.bVisible  = xWinOpt->IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
+
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = xWinOpt->GetUserData();
 
     OUString aTmp;
     if ( aSeq.getLength() )
         aSeq[0].Value >>= aTmp;
 
     OUString aWinData( aTmp );
-    rInfo.aWinState = OUStringToOString(aWinOpt.GetWindowState(), RTL_TEXTENCODING_UTF8);
+    rInfo.aWinState = OUStringToOString(xWinOpt->GetWindowState(), RTL_TEXTENCODING_UTF8);
 
 
     if ( !aWinData.isEmpty() )

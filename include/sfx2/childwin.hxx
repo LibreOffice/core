@@ -55,6 +55,7 @@ struct SfxChildWinInfo
     Size                aSize;
     sal_uInt16          nFlags;
     OUString            aExtraString;
+    OUString            aModule;
     OString             aWinState;
 
                         SfxChildWinInfo()

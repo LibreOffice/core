@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <comphelper/processfactory.hxx>
 #include <stdio.h>
 #include <boost/unordered_map.hpp>
 
@@ -46,10 +46,12 @@
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
+#include <com/sun/star/frame/LayoutManagerEvents.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
-#include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -2445,6 +2447,27 @@ void SfxWorkWindow::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInf
 
 void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
 {
+    SfxDispatcher *pDisp = pBindings->GetDispatcher_Impl();
+    SfxViewFrame *pFrame = pDisp ? pDisp->GetFrame() :0;
+    SfxModule *pMod = pFrame ? SfxModule::GetActiveModule(pFrame) :0;
+
+    OUString sModule;
+    if (pFrame)
+    {
+        try
+        {
+            using namespace ::com::sun::star;
+            uno::Reference< frame::XModuleManager2 > xModuleManager(
+                frame::ModuleManager::create(::comphelper::getProcessComponentContext()));
+            sModule = xModuleManager->identify(pFrame->GetFrame().GetFrameInterface());
+            SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(sModule);
+            sModule = SvtModuleOptions::GetFactoryShortName(eFac);
+        }
+        catch (...)
+        {
+        }
+    }
+
     SfxChildWinFactory* pFact=0;
     SfxApplication *pApp = SFX_APP();
     {
@@ -2455,6 +2478,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
             if ( pFact->nId == pCW->nSaveId )
             {
                 pCW->aInfo   = pFact->aInfo;
+                pCW->aInfo.aModule = sModule;
                 SfxChildWindow::InitializeChildWinFactory_Impl(
                                             pCW->nSaveId, pCW->aInfo);
                 pCW->bCreate = pCW->aInfo.bVisible;
@@ -2471,8 +2495,6 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
         }
     }
 
-    SfxDispatcher *pDisp = pBindings->GetDispatcher_Impl();
-    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :0;
     if ( pMod )
     {
         SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
@@ -2485,6 +2507,7 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
                 if ( pFact->nId == pCW->nSaveId )
                 {
                     pCW->aInfo   = pFact->aInfo;
+                    pCW->aInfo.aModule = sModule;
                     SfxChildWindow::InitializeChildWinFactory_Impl(
                                                 pCW->nSaveId, pCW->aInfo);
                     pCW->bCreate = pCW->aInfo.bVisible;

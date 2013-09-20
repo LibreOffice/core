@@ -321,7 +321,6 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         sal_Bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
         ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
         OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
-        OUString GetFactoryShortName       (       SvtModuleOptions::EFactory    eFactory   ) const;
         OUString GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
         OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   ) const;
         OUString GetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ) const;
@@ -602,7 +601,7 @@ OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFact
 }
 
 //*****************************************************************************************************************
-OUString SvtModuleOptions_Impl::GetFactoryShortName( SvtModuleOptions::EFactory eFactory ) const
+OUString SvtModuleOptions::GetFactoryShortName(SvtModuleOptions::EFactory eFactory)
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
     //            But it's good to plan further possibilities!
@@ -1357,21 +1356,21 @@ OUString SvtModuleOptions::GetDefaultModuleName()
 {
     OUString aModule;
     if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITER);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_WRITER);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SCALC))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_CALC);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_CALC);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_IMPRESS);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_IMPRESS);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DATABASE);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_DATABASE);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDRAW))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DRAW);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_DRAW);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWEB))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SGLOBAL))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERGLOBAL);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_WRITERGLOBAL);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SMATH))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_MATH);
+        aModule = GetFactoryShortName(SvtModuleOptions::E_MATH);
     return aModule;
 }
 

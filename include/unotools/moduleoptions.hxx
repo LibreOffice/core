@@ -172,6 +172,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
          */
         static EFactory ClassifyFactoryByModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
+        static OUString GetFactoryShortName(EFactory eFactory);
+
         OUString GetDefaultModuleName();
 
         sal_Bool   IsMath     () const;
