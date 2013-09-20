@@ -76,6 +76,12 @@ public:
     /** Init LanguageTag with LanguageType MS-LangID. */
     explicit LanguageTag( LanguageType nLanguage );
 
+    /** Default ctor, init LanguageTag with LanguageType LANGUAGE_DONTKNOW.
+
+        To be able to use LanguageTag in maps etc., avoid otherwise.
+     */
+    explicit LanguageTag();
+
     /** Init LanguageTag with either BCP 47 language tag (precedence if not
         empty), or a combination of language, script and country.
 

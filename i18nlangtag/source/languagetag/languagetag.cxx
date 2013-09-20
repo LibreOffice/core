@@ -487,6 +487,18 @@ LanguageTag::LanguageTag( LanguageType nLanguage )
 }
 
 
+LanguageTag::LanguageTag()
+    :
+        mnLangID( LANGUAGE_DONTKNOW),
+        mbSystemLocale( false),
+        mbInitializedBcp47( false),
+        mbInitializedLocale( false),
+        mbInitializedLangID( false),
+        mbIsFallback( false)
+{
+}
+
+
 LanguageTag::LanguageTag( const OUString& rBcp47, const OUString& rLanguage,
                           const OUString& rScript, const OUString& rCountry )
     :
