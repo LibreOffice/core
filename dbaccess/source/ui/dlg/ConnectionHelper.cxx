@@ -95,6 +95,7 @@ DBG_NAME(OConnectionHelper)
         ,m_aFT_Connection   ( this, ResId( FT_AUTOBROWSEURL, *_rId.GetResMgr() ) )
            ,m_aConnectionURL   ( this, ResId( ET_AUTOBROWSEURL, *_rId.GetResMgr() ) )
         ,m_aPB_Connection   ( this, ResId( PB_AUTOBROWSEURL, *_rId.GetResMgr() ) )
+        ,m_aPB_CreateDB     ( this, ResId( PB_CREATEDB, *_rId.GetResMgr() ) )
     {
         DBG_CTOR(OConnectionHelper,NULL);
 
@@ -103,6 +104,7 @@ DBG_NAME(OConnectionHelper)
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
         m_aPB_Connection.SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
+        m_aPB_CreateDB.SetClickHdl(LINK(this, OConnectionHelper, OnCreateDatabase));
         OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
         m_aConnectionURL.SetTypeCollection(m_pCollection);
     }
@@ -125,6 +127,9 @@ DBG_NAME(OConnectionHelper)
 
         sal_Bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
         m_aPB_Connection.Show( bEnableBrowseButton );
+
+        sal_Bool bEnableCreateButton = m_pCollection->supportsDBCreation( m_eType );
+        m_aPB_CreateDB.Show( bEnableCreateButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
 
@@ -308,6 +313,43 @@ DBG_NAME(OConnectionHelper)
                     setURLNoPrefix(aSelector.GetSelected());
                 break;
             }
+            case ::dbaccess::DST_FIREBIRD:
+            {
+                const OUString sExt("*.fdb");
+                OUString sFilterName(ModuleRes (STR_FIREBIRD_FILTERNAME));
+                ::sfx2::FileDialogHelper aFileDlg(
+                    ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                    0);
+                aFileDlg.AddFilter(sFilterName,sExt);
+                aFileDlg.SetCurrentFilter(sFilterName);
+                askForFileName(aFileDlg);
+            }
+            default:
+                break;
+        }
+
+        checkTestConnection();
+
+        return 0L;
+    }
+
+    IMPL_LINK(OConnectionHelper, OnCreateDatabase, PushButton*, /*_pButton*/)
+    {
+        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
+        switch ( eType )
+        {
+        case ::dbaccess::DST_FIREBIRD:
+            {
+                const OUString sExt("*.fdb");
+                OUString sFilterName(ModuleRes (STR_FIREBIRD_FILTERNAME));
+                ::sfx2::FileDialogHelper aFileDlg(
+                    ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+                    0);
+                aFileDlg.AddFilter(sFilterName,sExt);
+                aFileDlg.SetCurrentFilter(sFilterName);
+                askForFileName(aFileDlg);
+            }
             default:
                 break;
         }
@@ -421,7 +463,8 @@ DBG_NAME(OConnectionHelper)
     sal_Int32 OConnectionHelper::checkPathExistence(const OUString& _rURL)
     {
         IS_PATH_EXIST e_exists = pathExists(_rURL, sal_False);
-        if (( e_exists == PATH_NOT_EXIST) || ( e_exists == PATH_NOT_KNOWN))
+        if (!m_pCollection->supportsDBCreation(m_eType) &&
+            (( e_exists == PATH_NOT_EXIST) || ( e_exists == PATH_NOT_KNOWN)))
         {
             OUString sQuery(ModuleRes(STR_ASK_FOR_DIRECTORY_CREATION));
             OFileNotation aTransformer(_rURL);
@@ -605,6 +648,7 @@ DBG_NAME(OConnectionHelper)
     {
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Connection));
         _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aPB_Connection));
+        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aPB_CreateDB));
     }
 
     void OConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)

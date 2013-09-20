@@ -45,6 +45,7 @@ namespace dbaui
         FixedText           m_aFT_Connection;
         OConnectionURLEdit  m_aConnectionURL;
         PushButton          m_aPB_Connection;
+        PushButton          m_aPB_CreateDB;
         OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.
 
     public:
@@ -90,6 +91,7 @@ namespace dbaui
 
     private:
         DECL_LINK(OnBrowseConnections, PushButton*);
+        DECL_LINK(OnCreateDatabase, PushButton*);
         OUString    impl_getURL( sal_Bool _bPrefix ) const;
         void        impl_setURL( const OUString& _rURL, sal_Bool _bPrefix );
         void        implUpdateURLDependentStates() const;

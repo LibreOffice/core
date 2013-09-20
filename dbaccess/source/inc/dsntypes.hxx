@@ -147,6 +147,9 @@ public:
     // check if a Browse button may be shown to insert connection url
     sal_Bool supportsBrowsing(const OUString& _sURL) const;
 
+    // check if a Create New Database button may be shown to insert connection url
+    sal_Bool supportsDBCreation(const OUString& _sURL) const;
+
     /// check if the given data source tyoe is based on the file system - i.e. the URL is a prefix plus a file URL
     sal_Bool isFileSystemBased(const OUString& _sURL) const;
 
