@@ -109,6 +109,9 @@ namespace connectivity
             ::boost::scoped_ptr< ::utl::TempFile >  m_pExtractedFDBFile;
 
 
+            /** We are using an external (local) file */
+            bool                m_bIsFile;
+
             /* REMOTE CONNECTION DATA */
             ::rtl::OUString     m_sUser;
 

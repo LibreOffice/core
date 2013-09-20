@@ -81,6 +81,7 @@ Connection::Connection(FirebirdDriver*    _pDriver)
     , m_sFirebirdURL()
     , m_bIsEmbedded(sal_False)
     , m_xEmbeddedStorage(0)
+    , m_bIsFile(sal_False)
     , m_sUser()
     , m_bIsAutoCommit(sal_False)
     , m_bIsReadOnly(sal_False)
@@ -184,13 +185,16 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
     else if (url.startsWith("sdbc:firebird:"))
     {
         m_sFirebirdURL = url.copy(OUString("sdbc:firebird:").getLength());
-        if (m_sFirebirdURL.startsWith("file://")) // TODO: are file urls really like this?
+        if (m_sFirebirdURL.startsWith("file://"))
         {
+            m_bIsFile = true;
             uno::Reference< ucb::XSimpleFileAccess > xFileAccess(
                 ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()),
                 uno::UNO_QUERY);
             if (!xFileAccess->exists(m_sFirebirdURL))
                 bIsNewDatabase = true;
+
+            m_sFirebirdURL = m_sFirebirdURL.copy(OUString("file://").getLength());
         }
     }
 
@@ -209,7 +213,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
         *dpb++ = FIREBIRD_SQL_DIALECT;
         // Do any more dpbBuffer additions here
 
-        if (m_bIsEmbedded)  // TODO: || m_bIsLocalFile
+        if (m_bIsEmbedded || m_bIsFile)
         {
             *dpb++ = isc_dpb_trusted_auth;
             *dpb++ = 1; // Length of data
