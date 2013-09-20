@@ -31,8 +31,8 @@ class ScTabBgColorDlg : public ModalDialog
 {
 public:
     ScTabBgColorDlg( Window* pParent,
-                     const String& rTitle,
-                     const String& rTabBgColorNoColorText,
+                     const OUString& rTitle,
+                     const OUString& rTabBgColorNoColorText,
                      const Color& rDefaultColor,
                      const OString& nHelpId );
     ~ScTabBgColorDlg();
@@ -56,8 +56,8 @@ private:
     CancelButton            aBtnCancel;
     HelpButton              aBtnHelp;
     Color                   aTabBgColor;
-    const String            aTabBgColorNoColorText;
-    OString            msHelpId;
+    const OUString          aTabBgColorNoColorText;
+    OString                 msHelpId;
 
     void            FillColorValueSets_Impl();
 

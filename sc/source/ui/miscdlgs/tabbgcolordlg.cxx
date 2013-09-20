@@ -42,8 +42,8 @@
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
 ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
-                                  const String&   rTitle,
-                                  const String&   rTabBgColorNoColorText,
+                                  const OUString&   rTitle,
+                                  const OUString&   rTabBgColorNoColorText,
                                   const Color&    rDefaultColor,
                                   const OString& sHelpId ) :
     ModalDialog    ( pParent, ScResId( RID_SCDLG_TAB_BG_COLOR ) ),
