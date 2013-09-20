@@ -399,6 +399,11 @@ public:
      */
     bool    operator!=( const LanguageTag & rLanguageTag ) const;
 
+    /** Test this less than that.
+
+        For sorted containers. Internally uses the LanguageType for comparison.
+     */
+    bool    operator<( const LanguageTag & rLanguageTag ) const;
 
     /** Convert MS-LangID to Locale.
 

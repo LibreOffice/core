@@ -2086,6 +2086,12 @@ bool LanguageTag::operator!=( const LanguageTag & rLanguageTag ) const
 }
 
 
+bool LanguageTag::operator<( const LanguageTag & rLanguageTag ) const
+{
+    return getLanguageType() < rLanguageTag.getLanguageType();
+}
+
+
 // static
 LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp47,
         OUString& rLanguage, OUString& rScript, OUString& rCountry, OUString& rVariants )
