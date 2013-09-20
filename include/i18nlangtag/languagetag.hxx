@@ -504,6 +504,8 @@ private:
     ImplPtr             getImpl() const;
     ImplPtr             registerImpl() const;
     void                syncFromImpl();
+    void                syncVarsFromRawImpl() const;
+    void                syncVarsFromImpl() const;
 
     void                convertLocaleToBcp47();
     void                convertLocaleToLang();
