@@ -2638,7 +2638,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         bFlushCharBuffer = bSave;
 
         // maybe show Tip-Help
-        String sWord;
+        OUString sWord;
         if( bNormalChar && pACfg && pACorr &&
             ( pACfg->IsAutoTextTip() ||
               pACorr->GetSwFlags().bAutoCompleteWords ) &&
@@ -5110,7 +5110,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( m_pQuickHlpData->m_bIsDisplayed )
                 m_pQuickHlpData->Stop( rSh );
 
-            String sWord;
+            OUString sWord;
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
                 bCallBase = false;

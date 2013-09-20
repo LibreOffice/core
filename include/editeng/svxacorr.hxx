@@ -297,8 +297,8 @@ public:
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm
-    sal_Bool GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc, const String& rTxt,
-                                xub_StrLen nPos, String& rWord ) const;
+    sal_Bool GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+                                xub_StrLen nPos, OUString& rWord ) const;
 
     // Search for or or the words in the replacement table.
     // rText - check in this text the words of the list
@@ -373,7 +373,7 @@ public:
         {   return _GetLanguageList( eLang ).GetCplSttExceptList(); }
 
     // Adds a single word. The list will be immediately written to the file!
-    sal_Bool AddCplSttException( const String& rNew,
+    sal_Bool AddCplSttException( const OUString& rNew,
                                 LanguageType eLang = LANGUAGE_SYSTEM );
 
     // Load, Set, Get the exception list for 2 Capital letters at the
@@ -386,7 +386,7 @@ public:
                                     LanguageType eLang = LANGUAGE_SYSTEM )
         {   return _GetLanguageList( eLang ).GetWrdSttExceptList(); }
     // Adds a single word. The list will be immediately written to the file!
-    sal_Bool AddWrtSttException( const String& rNew, LanguageType eLang = LANGUAGE_SYSTEM);
+    sal_Bool AddWrtSttException( const OUString& rNew, LanguageType eLang = LANGUAGE_SYSTEM);
 
     // Search through the Languages for the entry
     sal_Bool FindInWrdSttExceptList( LanguageType eLang, const OUString& sWord );

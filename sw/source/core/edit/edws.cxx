@@ -268,7 +268,7 @@ void SwEditShell::SetNewDoc(sal_Bool bNew)
     GetDoc()->SetNewDoc(bNew);
 }
 
-sal_Bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, String& rWord )
+sal_Bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )
 {
     SET_CURR_SHELL( this );
 

@@ -1473,7 +1473,7 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
 }
 
     // Adds a single word. The list will immediately be written to the file!
-sal_Bool SvxAutoCorrect::AddCplSttException( const String& rNew,
+sal_Bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
                                         LanguageType eLang )
 {
     SvxAutoCorrectLanguageLists* pLists = 0;
@@ -1495,7 +1495,7 @@ sal_Bool SvxAutoCorrect::AddCplSttException( const String& rNew,
 }
 
 // Adds a single word. The list will immediately be written to the file!
-sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
+sal_Bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
                                          LanguageType eLang )
 {
     SvxAutoCorrectLanguageLists* pLists = 0;
@@ -1517,8 +1517,8 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
 }
 
 sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
-                                        const String& rTxt, xub_StrLen nPos,
-                                        String& rWord ) const
+                                        const OUString& rTxt, xub_StrLen nPos,
+                                        OUString& rWord ) const
 {
     if( !nPos )
         return sal_False;
@@ -1526,21 +1526,21 @@ sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
     xub_StrLen nEnde = nPos;
 
     // it must be followed by a blank or tab!
-    if( ( nPos < rTxt.Len() &&
-        !IsWordDelim( rTxt.GetChar( nPos ))) ||
-        IsWordDelim( rTxt.GetChar( --nPos )))
+    if( ( nPos < rTxt.getLength() &&
+        !IsWordDelim( rTxt[ nPos ])) ||
+        IsWordDelim( rTxt[ --nPos ]))
         return sal_False;
 
-    while( nPos && !IsWordDelim( rTxt.GetChar( --nPos )))
+    while( nPos && !IsWordDelim( rTxt[ --nPos ]))
         ;
 
     // Found a Paragraph-start or a Blank, search for the word shortcut in
     // auto.
     xub_StrLen nCapLttrPos = nPos+1;        // on the 1st Character
-    if( !nPos && !IsWordDelim( rTxt.GetChar( 0 )))
+    if( !nPos && !IsWordDelim( rTxt[ 0 ]))
         --nCapLttrPos;          // Beginning of pargraph and no Blank!
 
-    while( lcl_IsInAsciiArr( sImplSttSkipChars, rTxt.GetChar( nCapLttrPos )) )
+    while( lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nCapLttrPos ]) )
         if( ++nCapLttrPos >= nEnde )
             return sal_False;
 
@@ -1557,7 +1557,7 @@ sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
     if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nEnde ))
         return sal_False;
 
-    rWord = rTxt.Copy( nCapLttrPos, nEnde - nCapLttrPos );
+    rWord = rTxt.copy( nCapLttrPos, nEnde - nCapLttrPos );
     return sal_True;
 }
 
