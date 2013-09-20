@@ -22,7 +22,8 @@ VLCWindow::VLCWindow( VLCPlayer& player, const intptr_t prevWinID )
 
 VLCWindow::~VLCWindow()
 {
-    mPlayer.setWindowID( mPrevWinID );
+    if ( mPrevWinID != 0 )
+        mPlayer.setWindowID( mPrevWinID );
 }
 
 void SAL_CALL VLCWindow::update() throw (css::uno::RuntimeException)

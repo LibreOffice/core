@@ -189,7 +189,6 @@ namespace
 void SAL_CALL VLCPlayer::setWindowID( const intptr_t windowID )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    mPrevWinID = windowID;
     mPlayer.stop();
     mPlayer.setWindow( windowID );
 }
@@ -206,14 +205,21 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
     ::osl::MutexGuard aGuard( m_aMutex );
 
     const intptr_t winID = GetWindowID( aArguments );
-    VLCWindow * const window = new VLCWindow( *this, mPrevWinID );
+    VLCWindow * window;
+    if ( mPrevWinID == 0 )
+    {
+        mPrevWinID = winID;
+        window = new VLCWindow( *this, 0 );
+    }
+    else
+        window = new VLCWindow( *this, mPrevWinID );
 
     if ( winID != -1 )
     {
         setWindowID( winID );
     }
 
-    return uno::Reference< css::media::XPlayerWindow >( window );
+    return ::com::sun::star::uno::Reference< css::media::XPlayerWindow >( window );
 }
 
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
