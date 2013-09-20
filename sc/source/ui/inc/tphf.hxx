@@ -34,7 +34,7 @@ public:
     virtual void    Reset( const SfxItemSet& rSet );
     virtual sal_Bool    FillItemSet( SfxItemSet& rOutSet );
 
-    void            SetPageStyle( const String& rName )    { aStrPageStyle = rName; }
+    void            SetPageStyle( const OUString& rName )    { aStrPageStyle = rName; }
     void            SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
 
 protected:
