@@ -250,16 +250,16 @@ public:
 
 
     /** Reset with existing BCP 47 language tag string. See ctor. */
-    void                            reset( const OUString & rBcp47LanguageTag, bool bCanonicalize = false );
+    LanguageTag &                   reset( const OUString & rBcp47LanguageTag, bool bCanonicalize = false );
 
     /** Reset with Locale. */
-    void                            reset( const com::sun::star::lang::Locale & rLocale );
+    LanguageTag &                   reset( const com::sun::star::lang::Locale & rLocale );
 
     /** Reset with LanguageType MS-LangID. */
-    void                            reset( LanguageType nLanguage );
+    LanguageTag &                   reset( LanguageType nLanguage );
 
     /** Reset with rtl_Locale. */
-    void                            reset( const rtl_Locale & rLocale );
+    LanguageTag &                   reset( const rtl_Locale & rLocale );
 
 
     /** Fall back to a known locale.

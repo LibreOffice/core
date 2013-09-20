@@ -844,7 +844,7 @@ void LanguageTag::resetVars()
 }
 
 
-void LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize )
+LanguageTag & LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize )
 {
     resetVars();
     maBcp47             = rBcp47LanguageTag;
@@ -858,31 +858,35 @@ void LanguageTag::reset( const OUString & rBcp47LanguageTag, bool bCanonicalize 
         // unconditional sync.
         syncFromImpl();
     }
+    return *this;
 }
 
 
-void LanguageTag::reset( const com::sun::star::lang::Locale & rLocale )
+LanguageTag & LanguageTag::reset( const com::sun::star::lang::Locale & rLocale )
 {
     resetVars();
     maLocale            = rLocale;
     mbSystemLocale      = rLocale.Language.isEmpty();
     mbInitializedLocale = !mbSystemLocale;
+    return *this;
 }
 
 
-void LanguageTag::reset( LanguageType nLanguage )
+LanguageTag & LanguageTag::reset( LanguageType nLanguage )
 {
     resetVars();
     mnLangID            = nLanguage;
     mbSystemLocale      = nLanguage == LANGUAGE_SYSTEM;
     mbInitializedLangID = !mbSystemLocale;
+    return *this;
 }
 
 
-void LanguageTag::reset( const rtl_Locale & rLocale )
+LanguageTag & LanguageTag::reset( const rtl_Locale & rLocale )
 {
     reset( lang::Locale( rLocale.Language, rLocale.Country, rLocale.Variant));
     convertFromRtlLocale();
+    return *this;
 }
 
 
