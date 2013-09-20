@@ -12,6 +12,12 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <swmodeltestbase.hxx>
 
+#include <wrtsh.hxx>
+#include <ndtxt.hxx>
+#include <swdtflvr.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+
 typedef std::map<OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > StringSequencePair;
 
@@ -28,6 +34,8 @@ public:
     void testFdo56272();
     void testFdo55814();
     void testFdo68839();
+    void testFdo37606();
+    void testFdo37606Copy();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -52,6 +60,8 @@ void Test::run()
         {"fdo56272.odt", &Test::testFdo56272},
         {"fdo55814.odt", &Test::testFdo55814},
         {"fdo68839.odt", &Test::testFdo68839},
+        {"fdo37606.odt", &Test::testFdo37606},
+        {"fdo37606.odt", &Test::testFdo37606Copy},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -354,6 +364,67 @@ void Test::testFdo68839()
             getProperty<OUString>(xFrame2, "ChainNextName"));
 }
 
+void Test::testFdo37606()
+{
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+
+    {
+        pWrtShell->SelAll();
+        SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
+        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
+
+        SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+        // This was "A1", i.e. Ctrl-A only selected the A1 cell of the table, not the whole document.
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
+    }
+
+    {
+        pWrtShell->SttEndDoc(false); // Go to the end of the doc.
+        pWrtShell->SelAll(); // And now that we're outside of the table, try Ctrl-A again.
+        SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
+        // This was "Hello", i.e. Ctrl-A did not select the starting table.
+        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
+
+        SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
+    }
+
+    {
+        pWrtShell->Delete(); // Delete the selection
+        // And make sure the table got deleted as well.
+        SwNodes& rNodes = pWrtShell->GetDoc()->GetNodes();
+        SwNodeIndex nNode(rNodes.GetEndOfExtras());
+        SwCntntNode* pCntntNode = rNodes.GoNext(&nNode);
+        // First content node was in a table -> table wasn't deleted.
+        CPPUNIT_ASSERT(!pCntntNode->FindTableNode());
+    }
+}
+
+void Test::testFdo37606Copy()
+{
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    // Ctrl-A
+    pWrtShell->SelAll();
+
+    // Ctrl-C
+    SwTransferable* pTransferable = new SwTransferable(*pWrtShell);
+    uno::Reference<datatransfer::XTransferable> xTransferable(pTransferable);
+    pTransferable->Copy();
+
+    pWrtShell->SttEndDoc(false); // Go to the end of the doc.
+
+    // Ctrl-V
+    TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(&pWrtShell->GetView().GetEditWin()));
+    SwTransferable::Paste( *pWrtShell, aDataHelper );
+
+    // Previously copy&paste failed to copy the table in case it was the document-starting one.
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

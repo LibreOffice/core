@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfimport, \
     cppu \
     cppuhelper \
     sal \
+	svt \
 	sw \
     test \
     unotest \
@@ -36,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_odfimport,\
 $(eval $(call gb_CppunitTest_set_include,sw_odfimport,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
 	-I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \
 ))
@@ -71,6 +73,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
     unotools/util/utl \
     unoxml/source/service/unoxml \
     uui/util/uui \
+    $(if $(filter-out MACOSX WNT,$(OS)), \
+		vcl/vcl.unx \
+    ) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
     xmloff/util/xo \
 ))

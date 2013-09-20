@@ -53,7 +53,7 @@ namespace nsTransferBufferType
 }
 
 
-class SwTransferable : public TransferableHelper
+class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
     SfxObjectShellLock             aDocShellRef;
