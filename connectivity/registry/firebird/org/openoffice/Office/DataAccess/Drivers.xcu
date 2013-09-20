@@ -33,6 +33,7 @@
  ************************************************************************ -->
 <oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <node oor:name="Installed" install:module="firebird">
+    <!-- Firebird EMBEDDED Driver -->
     <node oor:name="sdbc:embedded:firebird" oor:op="replace">
       <prop oor:name="Driver">
         <value>com.sun.star.comp.sdbc.firebird.Driver</value>
@@ -66,12 +67,13 @@
       <node oor:name="MetaData">
       </node>
     </node>
+    <!-- Firebird FILE Driver -->
     <node oor:name="sdbc:firebird:*" oor:op="replace">
       <prop oor:name="Driver">
         <value>com.sun.star.comp.sdbc.firebird.Driver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Firebird</value>
+        <value xml:lang="en-US">Firebird File</value>
       </prop>
       <node oor:name="Properties">
         <!-- Don't use ODBC syntax for date&time literals and (full) outer joins,
@@ -95,21 +97,16 @@
         </node>
       </node>
       <node oor:name="Features">
-        <node oor:name="UseCatalogInSelect" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:boolean">
-            <value>false</value>
-          </prop>
-        </node>
-        <node oor:name="UseSchemaInSelect" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:boolean">
-            <value>false</value>
-          </prop>
-        </node>
       </node>
       <node oor:name="MetaData">
-       <node oor:name="Authentication" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:string">
-            <value>UserPassword</value>
+        <node oor:name="SupportsBrowsing" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="SupportsDBCreation" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
           </prop>
         </node>
       </node>
