@@ -225,7 +225,7 @@ namespace svgio
 
                             if(GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(
                                 aGraphic,
-                                String(),
+                                OUString(),
                                 aStream))
                             {
                                 extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
