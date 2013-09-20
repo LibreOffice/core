@@ -94,6 +94,7 @@ typedef ::std::map< OUString, LanguageTag::ImplPtr, compareIgnoreAsciiCaseLess >
 typedef ::std::map< LanguageType, LanguageTag::ImplPtr > MapLangID;
 struct theMapBcp47 : public rtl::Static< MapBcp47, theMapBcp47 > {};
 struct theMapLangID : public rtl::Static< MapLangID, theMapLangID > {};
+struct theDontKnow : public rtl::Static< LanguageTag::ImplPtr, theDontKnow > {};
 }
 
 
@@ -786,6 +787,16 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                         << aBcp47 << "'");
             }
         }
+    }
+    else if (mbInitializedLangID && mnLangID == LANGUAGE_DONTKNOW)
+    {
+        // Heavy usage of LANGUAGE_DONTKNOW, make it an own Impl for all the
+        // conversion attempts. At the same time provide a central breakpoint
+        // to inspect such places.
+        LanguageTag::ImplPtr& rDontKnow = theDontKnow::get();
+        if (!rDontKnow)
+            rDontKnow.reset( new LanguageTagImpl( *this));
+        pImpl = rDontKnow;
     }
     else
     {
