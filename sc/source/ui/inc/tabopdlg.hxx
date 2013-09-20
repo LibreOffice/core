@@ -79,16 +79,16 @@ private:
     ScRefAddress    theRowCell;
     ScRefAddress    theColCell;
 
-    ScDocument*     pDoc;
-    const SCTAB     nCurTab;
-    formula::RefEdit*       pEdActive;
+    ScDocument*         pDoc;
+    const SCTAB         nCurTab;
+    formula::RefEdit*   pEdActive;
     sal_Bool            bDlgLostFocus;
-    const String    errMsgNoFormula;
-    const String    errMsgNoColRow;
-    const String    errMsgWrongFormula;
-    const String    errMsgWrongRowCol;
-    const String    errMsgNoColFormula;
-    const String    errMsgNoRowFormula;
+    const OUString      errMsgNoFormula;
+    const OUString      errMsgNoColRow;
+    const OUString      errMsgWrongFormula;
+    const OUString      errMsgWrongRowCol;
+    const OUString      errMsgNoColFormula;
+    const OUString      errMsgNoRowFormula;
 
 #ifdef _TABOPDLG_CXX
     void    Init();

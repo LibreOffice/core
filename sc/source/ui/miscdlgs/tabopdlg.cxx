@@ -174,8 +174,8 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 {
-    const String* pMsg = &errMsgNoFormula;
-    Edit*         pEd  = &aEdFormulaRange;
+    const OUString* pMsg = &errMsgNoFormula;
+    Edit*           pEd  = &aEdFormulaRange;
 
     switch ( eError )
     {
