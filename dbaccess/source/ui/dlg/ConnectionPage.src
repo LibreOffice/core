@@ -167,4 +167,9 @@ String STR_MSACCESS_2007_FILTERNAME
     Text [ en-US ] = "MS Access 2007 file";
 };
 
+String STR_FIREBIRD_FILTERNAME
+{
+    Text [ en-US ] = "Firebird Database";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

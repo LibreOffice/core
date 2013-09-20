@@ -275,6 +275,12 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(const OUString& _sURL) const
     return aFeatures.getOrDefault("SupportsBrowsing",sal_False);
 }
 
+sal_Bool ODsnTypeCollection::supportsDBCreation(const OUString& _sURL) const
+{
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
+    return aFeatures.getOrDefault("SupportsDBCreation",sal_False);
+}
+
 bool ODsnTypeCollection::needsJVM(const OUString& _sURL) const
 {
     const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);

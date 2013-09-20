@@ -58,6 +58,7 @@
 
 #define PB_AUTOTESTDRIVERCLASS      80
 #define PB_AUTOBROWSEURL            81
+#define PB_CREATEDB                 82
 
 #define CM_AUTOFIELDSEPARATOR       80
 #define CM_AUTOTEXTSEPARATOR        81
@@ -132,6 +133,15 @@
           HelpId = AUTO_HID2;                                                                   \
         TabStop = TRUE ;                                                                            \
          Text[ en-US ]  = "Browse";                                                                  \
+    };                                                                                               \
+                                                                                                     \
+    PushButton PB_CREATEDB                                                                        \
+    {                                                                                               \
+         Pos = MAP_APPFONT ( AUTOPAGE_X  - BUTTON_WIDTH - 6 , AUTO_Y - BUTTON_HEIGHT ) ; \
+         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;                                      \
+          HelpId = AUTO_HID2;                                                                   \
+        TabStop = TRUE ;                                                                            \
+         Text[ en-US ]  = "Create New";                                                     \
     };
 
 // --------------------------------------------------------------------------------------------------
