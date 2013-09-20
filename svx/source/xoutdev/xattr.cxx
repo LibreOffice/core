@@ -3031,7 +3031,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
         // #85953# if disabled, force name to empty string
         if( !GetName().isEmpty() )
         {
-            return new XFillFloatTransparenceItem(String(), GetGradientValue(), sal_False);
+            return new XFillFloatTransparenceItem(OUString(), GetGradientValue(), sal_False);
         }
     }
 

@@ -525,12 +525,12 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
             if( !aMimeType.isEmpty() )
             {
                 aAny <<= aMimeType;
-                xProps->setPropertyValue( String(  "MediaType"  ), aAny );
+                xProps->setPropertyValue( "MediaType", aAny );
             }
 
             const sal_Bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff";
             aAny <<= bCompressed;
-            xProps->setPropertyValue( String(  "Compressed"  ), aAny );
+            xProps->setPropertyValue( "Compressed", aAny );
 
             SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )

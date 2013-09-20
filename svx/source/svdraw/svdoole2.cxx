@@ -1333,11 +1333,11 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
         pClone->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         const svtools::ColorConfig aColorConfig;
         const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
-        pClone->SetMergedItem(XLineColorItem(String(), aColor.nColor));
+        pClone->SetMergedItem(XLineColorItem(OUString(), aColor.nColor));
 
         // bitmap fill
         pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmptyOLEReplacementGraphic()));
+        pClone->SetMergedItem(XFillBitmapItem(OUString(), GetEmptyOLEReplacementGraphic()));
         pClone->SetMergedItem(XFillBmpTileItem(false));
         pClone->SetMergedItem(XFillBmpStretchItem(false));
 

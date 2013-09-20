@@ -345,7 +345,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
 
     SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
-    String aEmpty;
+    OUString aEmpty;
     appendEntry( 0, aEmpty, maImgDepth0 );
     appendEntry( 1, aEmpty, maImgDepth1 );
     appendEntry( 2, aEmpty, maImgDepth2 );

@@ -736,7 +736,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
             // Fill color must be the color line, because the object was
             // previously just a line
             Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
-            aSet.Put(XFillColorItem(String(), aColorLine));
+            aSet.Put(XFillColorItem(OUString(), aColorLine));
         }
 
         // Create a new extrude object
@@ -1578,7 +1578,7 @@ void E3dView::Break3DObj()
         // ALL selected objects are changed
         sal_uInt32 nCount = GetMarkedObjectCount();
 
-        BegUndo(String(SVX_RESSTR(RID_SVX_3D_UNDO_BREAK_LATHE)));
+        BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_BREAK_LATHE));
         for(sal_uInt32 a=0;a<nCount;a++)
         {
             E3dObject* pObj = (E3dObject*)GetMarkedObjectByIndex(a);

@@ -269,7 +269,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         maLBKerning.Enable();
         maFTSpacing.Enable();
         maLBKerning.SetNoSelection();
-        maEditKerning.SetText(String());
+        maEditKerning.SetText(OUString());
         maEditKerning.Disable();
         maFTBy.Disable();
     }
@@ -278,7 +278,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         maVSSpacing.SetNoSelection();
         maVSSpacing.SelectItem(0);
         mbVS = false;
-        maEditKerning.SetText(String());
+        maEditKerning.SetText(OUString());
         maLBKerning.SetNoSelection();
         maLBKerning.Disable();
         maFTSpacing.Disable();

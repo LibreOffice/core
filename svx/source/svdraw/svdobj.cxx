@@ -1241,7 +1241,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
         // solid black lines and no fill
         aNewSet.Put(XLineStyleItem(XLINE_SOLID));
-        aNewSet.Put(XLineColorItem(String(), Color(COL_BLACK)));
+        aNewSet.Put(XLineColorItem(OUString(), Color(COL_BLACK)));
         aNewSet.Put(XFillStyleItem(XFILL_NONE));
         pClone->SetMergedItemSet(aNewSet);
 
@@ -3355,7 +3355,7 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
             case sal_uInt16(OBJ_FRAME      ): pObj=new SdrOle2Obj(true);            break;
             case sal_uInt16(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
             case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
-            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(String());         break;
+            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(OUString());       break;
             case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
             case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;

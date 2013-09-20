@@ -246,7 +246,7 @@ SdrLayer* SdrLayerAdmin::NewLayer(const OUString& rName, sal_uInt16 nPos)
 SdrLayer* SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
 {
     SdrLayerID nID=GetUniqueLayerID();
-    SdrLayer* pLay=new SdrLayer(nID,String());
+    SdrLayer* pLay=new SdrLayer(nID,OUString());
     pLay->SetStandardLayer();
     pLay->SetModel(pModel);
     if(nPos==0xFFFF)

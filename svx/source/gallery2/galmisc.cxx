@@ -211,7 +211,7 @@ OUString GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen )
     return aReduced;
 }
 
-String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
+OUString GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 {
     OUString aRet;
 

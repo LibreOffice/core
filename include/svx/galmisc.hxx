@@ -84,18 +84,20 @@ class FmFormModel;
 class ImageMap;
 class Gallery;
 
-SVX_DLLPUBLIC ResMgr*           GetGalleryResMgr();
+SVX_DLLPUBLIC ResMgr*
+                    GetGalleryResMgr();
 sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, sal_Bool bShowProgress = sal_False );
 sal_Bool            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 sal_Bool            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
-SVX_DLLPUBLIC OUString            GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen );
-String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
+SVX_DLLPUBLIC OUString
+                    GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen );
+OUString            GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
 sal_Bool            FileExists( const INetURLObject& rURL );
 sal_Bool            CreateDir(  const INetURLObject& rURL );
 sal_Bool            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
 sal_Bool            KillFile( const INetURLObject& rURL );
-BitmapEx        GalleryResGetBitmapEx( sal_uInt32 nId );
+BitmapEx            GalleryResGetBitmapEx( sal_uInt32 nId );
 
 class SgaIMapInfo : public SdrObjUserData, public SfxListener
 {

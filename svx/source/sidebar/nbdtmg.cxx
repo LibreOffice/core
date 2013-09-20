@@ -174,7 +174,7 @@ OUString NBOTypeMgrBase::GetBulCharFmtName()
 {
     return aNumCharFmtName;
 }
-void NBOTypeMgrBase::ImplLoad(String filename)
+void NBOTypeMgrBase::ImplLoad(OUString filename)
 {
     bIsLoading = true;
     SfxMapUnit      eOldCoreUnit=eCoreUnit;
@@ -214,7 +214,7 @@ void NBOTypeMgrBase::ImplLoad(String filename)
     eCoreUnit = eOldCoreUnit;
     bIsLoading = false;
 }
-void NBOTypeMgrBase::ImplStore(String filename)
+void NBOTypeMgrBase::ImplStore(OUString filename)
 {
     if (bIsLoading) return;
     SfxMapUnit      eOldCoreUnit=eCoreUnit;
@@ -594,7 +594,7 @@ GraphyicBulletsTypeMgr& GraphyicBulletsTypeMgr::GetInstance()
 
 void GraphyicBulletsTypeMgr::Init()
 {
-    std::vector<String> aGrfNames;
+    std::vector<OUString> aGrfNames;
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
     for(sal_uInt16 i = 0; i < aGrfNames.size(); i++)
     {
@@ -1370,13 +1370,13 @@ void NumberingTypeMgr::Init()
                         {
                             aLevel.realloc(aLevel.getLength() + 1);
                             PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
-                            rValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                            rValue.Name = OUString("Value");
                             rValue.Value <<= (sal_Int32)(j + 1);
 
                             if (j!=0)
-                                sText += OUString(" ");
+                                sText += " ";
 
-                            sText+=String(xFormatter->makeNumberingString( aLevel, aLocale ));
+                            sText += xFormatter->makeNumberingString( aLevel, aLocale );
                         }
                         catch (const Exception&)
                         {
@@ -1824,7 +1824,7 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
                         else
                         {
                          //if it cannot be found then create a new one
-                         Font aCreateFont( pLevelSettings->sBulletFont,String(), Size( 0, 14 ) );
+                         Font aCreateFont( pLevelSettings->sBulletFont, OUString(), Size( 0, 14 ) );
                          aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
                          aCreateFont.SetFamily( FAMILY_DONTKNOW );
                          aCreateFont.SetPitch( PITCH_DONTKNOW );

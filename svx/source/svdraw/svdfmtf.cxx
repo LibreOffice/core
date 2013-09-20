@@ -346,7 +346,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         if(maVD.IsLineColor())
         {
             mpLineAttr->Put(XLineStyleItem(XLINE_SOLID));
-            mpLineAttr->Put(XLineColorItem(String(), maVD.GetLineColor()));
+            mpLineAttr->Put(XLineColorItem(OUString(), maVD.GetLineColor()));
         }
         else
         {
@@ -377,11 +377,11 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
         if(((maDash.GetDots() && maDash.GetDotLen()) || (maDash.GetDashes() && maDash.GetDashLen())) && maDash.GetDistance())
         {
-            mpLineAttr->Put(XLineDashItem(String(), maDash));
+            mpLineAttr->Put(XLineDashItem(OUString(), maDash));
         }
         else
         {
-            mpLineAttr->Put(XLineDashItem(String(), XDash(XDASH_RECT)));
+            mpLineAttr->Put(XLineDashItem(OUString(), XDash(XDASH_RECT)));
         }
     }
     else
@@ -394,7 +394,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         if(maVD.IsFillColor())
         {
             mpFillAttr->Put(XFillStyleItem(XFILL_SOLID));
-            mpFillAttr->Put(XFillColorItem(String(), maVD.GetFillColor()));
+            mpFillAttr->Put(XFillColorItem(OUString(), maVD.GetFillColor()));
         }
         else
         {
@@ -599,7 +599,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                             aClipSize);
 
                         pObj->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-                        pObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aClippedBitmap)));
+                        pObj->SetMergedItem(XFillBitmapItem(OUString(), Graphic(aClippedBitmap)));
                         pObj->SetMergedItem(XFillBmpTileItem(false));
                         pObj->SetMergedItem(XFillBmpStretchItem(true));
                     }
@@ -1045,7 +1045,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     {
         SfxItemSet aAttr(*mpFillAttr->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0, 0);
         aAttr.Put(XFillStyleItem(XFILL_SOLID));
-        aAttr.Put(XFillColorItem(String(), aFnt.GetFillColor()));
+        aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
     sal_uInt32 nWink = aFnt.GetOrientation();

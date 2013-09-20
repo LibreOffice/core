@@ -283,7 +283,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             else
             {
                 mpMtrBrightness->Enable();
-                mpMtrBrightness->SetText(String());
+                mpMtrBrightness->SetText(OUString());
             }
             break;
         }
@@ -307,7 +307,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             else
             {
                 mpMtrContrast->Enable();
-                mpMtrContrast->SetText(String());
+                mpMtrContrast->SetText(OUString());
             }
             break;
         }
@@ -331,7 +331,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             else
             {
                 mpMtrTrans->Enable();
-                mpMtrTrans->SetText(String());
+                mpMtrTrans->SetText(OUString());
             }
             break;
         }
@@ -379,7 +379,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             else
             {
                 mpMtrRed->Enable();
-                mpMtrRed->SetText(String());
+                mpMtrRed->SetText(OUString());
             }
             break;
         }
@@ -403,7 +403,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             else
             {
                 mpMtrGreen->Enable();
-                mpMtrGreen->SetText(String());
+                mpMtrGreen->SetText(OUString());
             }
             break;
         }
@@ -427,7 +427,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             else
             {
                 mpMtrBlue->Enable();
-                mpMtrBlue->SetText(String());
+                mpMtrBlue->SetText(OUString());
             }
             break;
         }
@@ -451,7 +451,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             else
             {
                 mpMtrGamma->Enable();
-                mpMtrGamma->SetText(String());
+                mpMtrGamma->SetText(OUString());
             }
             break;
         }

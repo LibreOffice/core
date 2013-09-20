@@ -780,7 +780,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
     aSvxFontItem.SetFamily(aFont.GetFamily());
     aSvxFontItem.SetFamilyName(aFont.GetName());
-    aSvxFontItem.SetStyleName(String());
+    aSvxFontItem.SetStyleName(OUString());
     aSvxFontItem.SetPitch( aFont.GetPitch());
     aSvxFontItem.SetCharSet( aFont.GetCharSet() );
     pItemPool->SetPoolDefaultItem(aSvxFontItem);
@@ -789,7 +789,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     Font aFontCJK(OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
     aSvxFontItemCJK.SetFamily( aFontCJK.GetFamily());
     aSvxFontItemCJK.SetFamilyName(aFontCJK.GetName());
-    aSvxFontItemCJK.SetStyleName(String());
+    aSvxFontItemCJK.SetStyleName(OUString());
     aSvxFontItemCJK.SetPitch( aFontCJK.GetPitch());
     aSvxFontItemCJK.SetCharSet( aFontCJK.GetCharSet());
     pItemPool->SetPoolDefaultItem(aSvxFontItemCJK);
@@ -798,7 +798,7 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     Font aFontCTL(OutputDevice::GetDefaultFont(DEFAULTFONT_CTL_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
     aSvxFontItemCTL.SetFamily(aFontCTL.GetFamily());
     aSvxFontItemCTL.SetFamilyName(aFontCTL.GetName());
-    aSvxFontItemCTL.SetStyleName(String());
+    aSvxFontItemCTL.SetStyleName(OUString());
     aSvxFontItemCTL.SetPitch( aFontCTL.GetPitch() );
     aSvxFontItemCTL.SetCharSet( aFontCTL.GetCharSet());
     pItemPool->SetPoolDefaultItem(aSvxFontItemCTL);

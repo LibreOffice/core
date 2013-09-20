@@ -1205,7 +1205,7 @@ void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUStrin
     long nCount = pList->Count();
     XGradientEntry* pEntry;
     bool bFound = false;
-    String aStr;
+    OUString aStr;
 
     long i;
     for( i = 0; i < nCount && !bFound; i++ )

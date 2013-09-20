@@ -802,7 +802,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
 
     sal_uInt16 i = 0;
-    for(std::vector<String>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+    for(std::vector<OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
     {
         m_pExamplesVS->InsertItem( i + 1, i);
 
@@ -1972,8 +1972,8 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
             GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
 
             Graphic aGraphic;
-            String sGrfName;
-            std::vector<String>::const_iterator it = aGrfNames.begin();
+            OUString sGrfName;
+            std::vector<OUString>::const_iterator it = aGrfNames.begin();
             for(sal_uInt16 i = 0; it != aGrfNames.end(); ++it, ++i)
             {
                 sGrfName = *it;

@@ -123,7 +123,7 @@ namespace sdr
                     // #41666# Hatch color is set hard to shadow color
                     XHatch aHatch = ((XFillHatchItem&)(rItemSet.Get(XATTR_FILLHATCH))).GetHatchValue();
                     aHatch.SetColor(aShadowColor);
-                    aSet.Put(XFillHatchItem(String(),aHatch));
+                    aSet.Put(XFillHatchItem(OUString(),aHatch));
                 }
                 else
                 {
@@ -133,7 +133,7 @@ namespace sdr
                         aSet.Put(XFillStyleItem(XFILL_SOLID));
                     }
 
-                    aSet.Put(XFillColorItem(String(),aShadowColor));
+                    aSet.Put(XFillColorItem(OUString(),aShadowColor));
                     aSet.Put(XFillTransparenceItem(nShadowTransparence));
                 }
 

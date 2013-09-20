@@ -52,11 +52,10 @@ class SVX_DLLPUBLIC GalleryExplorer
 {
 public:
 
-    static bool                 FillThemeList( std::vector<String>& rThemeList );
+    static bool                 FillThemeList( std::vector<OUString>& rThemeList );
 
                                 // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
-    static sal_Bool                 FillObjList( const OUString& rThemeName, std::vector<String> &rObjList );
-    static sal_Bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList );
+    static sal_Bool             FillObjList( const OUString& rThemeName, std::vector<OUString> &rObjList );
     static bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<OUString> &rObjList );
 
                                 // FillObjTitleList is filling the rList with the title for each gallery object

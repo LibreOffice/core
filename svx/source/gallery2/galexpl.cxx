@@ -34,7 +34,7 @@ namespace
 
 // - GalleryExplorer -
 
-bool GalleryExplorer::FillThemeList( std::vector<String>& rThemeList )
+bool GalleryExplorer::FillThemeList( std::vector<OUString>& rThemeList )
 {
     Gallery* pGal = ::Gallery::GetGalleryInstance();
 
@@ -52,7 +52,7 @@ bool GalleryExplorer::FillThemeList( std::vector<String>& rThemeList )
     return !rThemeList.empty();
 }
 
-sal_Bool GalleryExplorer::FillObjList( const OUString& rThemeName, std::vector<String> &rObjList )
+sal_Bool GalleryExplorer::FillObjList( const OUString& rThemeName, std::vector<OUString> &rObjList )
 {
     Gallery* pGal = ::Gallery::GetGalleryInstance();
 
@@ -73,7 +73,7 @@ sal_Bool GalleryExplorer::FillObjList( const OUString& rThemeName, std::vector<S
     return !rObjList.empty();
 }
 
-sal_Bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList )
+bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<OUString> &rObjList )
 {
     Gallery* pGal = ::Gallery::GetGalleryInstance();
 
@@ -81,22 +81,6 @@ sal_Bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<St
         return false;
 
     return FillObjList( pGal->GetThemeName( nThemeId ), rObjList );
-}
-
-bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<OUString> &rObjList )
-{
-    std::vector<String> aObjList;
-    if (!FillObjList(nThemeId, aObjList))
-        return false;
-
-    std::vector<OUString> aList;
-    aList.reserve(aObjList.size());
-    std::vector<String>::const_iterator it = aObjList.begin(), itEnd = aObjList.end();
-    for (; it != itEnd; ++it)
-        aList.push_back(*it);
-
-    rObjList.swap(aList);
-    return true;
 }
 
 sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vector< OUString >& rList )

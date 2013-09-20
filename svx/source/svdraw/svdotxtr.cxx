@@ -363,7 +363,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     if(rCandidate.getIsFilled())
                     {
                         // set needed items
-                        aAttributeSet.Put(XFillColorItem(String(), Color(rCandidate.getBColor())));
+                        aAttributeSet.Put(XFillColorItem(OUString(), Color(rCandidate.getBColor())));
                         aAttributeSet.Put(XLineStyleItem(XLINE_NONE));
                         aAttributeSet.Put(XFillStyleItem(XFILL_SOLID));
 
@@ -373,7 +373,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     else
                     {
                         // set needed items
-                        aAttributeSet.Put(XLineColorItem(String(), Color(rCandidate.getBColor())));
+                        aAttributeSet.Put(XLineColorItem(OUString(), Color(rCandidate.getBColor())));
                         aAttributeSet.Put(XLineStyleItem(XLINE_SOLID));
                         aAttributeSet.Put(XLineWidthItem(0));
                         aAttributeSet.Put(XFillStyleItem(XFILL_NONE));

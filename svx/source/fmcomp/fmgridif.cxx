@@ -108,7 +108,7 @@ Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
     aFont.SetStyleName( rDescr.StyleName );
     aFont.SetSize( ::Size( rDescr.Width, rDescr.Height ) );
     aFont.SetFamily( (FontFamily)rDescr.Family );
-    aFont.SetCharSet( (CharSet)rDescr.CharSet );
+    aFont.SetCharSet( (rtl_TextEncoding)rDescr.CharSet );
     aFont.SetPitch( (FontPitch)rDescr.Pitch );
     aFont.SetWidthType( VCLUnoHelper::ConvertFontWidth( rDescr.CharacterWidth ) );
     aFont.SetWeight( VCLUnoHelper::ConvertFontWeight( rDescr.Weight ) );

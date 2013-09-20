@@ -406,7 +406,7 @@ void Svx3DLightControl::ConstructLightObjects()
             SfxItemSet aSet(mpModel->GetItemPool());
             aSet.Put( XLineStyleItem( XLINE_NONE ) );
             aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-            aSet.Put( XFillColorItem(String(), GetLightColor(a)));
+            aSet.Put( XFillColorItem(OUString(), GetLightColor(a)));
             pNewLight->SetMergedItemSet(aSet);
 
             maLightObjects[a] = pNewLight;
@@ -433,7 +433,7 @@ void Svx3DLightControl::AdaptToSelectedLight()
         // make mpLampBottomObject/mpLampShaftObject visible (yellow hairline)
         SfxItemSet aSet(mpModel->GetItemPool());
         aSet.Put( XLineStyleItem( XLINE_SOLID ) );
-        aSet.Put( XLineColorItem(String(), COL_YELLOW));
+        aSet.Put( XLineColorItem(OUString(), COL_YELLOW));
         aSet.Put( XLineWidthItem(0));
         aSet.Put( XFillStyleItem( XFILL_NONE ) );
         mpLampBottomObject->SetMergedItemSet(aSet);

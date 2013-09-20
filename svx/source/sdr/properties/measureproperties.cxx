@@ -117,9 +117,9 @@ namespace sdr
             aNewPolygon.append(basegfx::B2DPoint(0.0, 400.0));
             aNewPolygon.setClosed(true);
 
-            mpItemSet->Put(XLineStartItem(String(), basegfx::B2DPolyPolygon(aNewPolygon)));
+            mpItemSet->Put(XLineStartItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
             mpItemSet->Put(XLineStartWidthItem(200));
-            mpItemSet->Put(XLineEndItem(String(), basegfx::B2DPolyPolygon(aNewPolygon)));
+            mpItemSet->Put(XLineEndItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
             mpItemSet->Put(XLineEndWidthItem(200));
             mpItemSet->Put(XLineStyleItem(XLINE_SOLID));
         }

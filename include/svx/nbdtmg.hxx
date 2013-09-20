@@ -196,14 +196,14 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
             : eType(aType)
             , pSet(0)
             , eCoreUnit(SFX_MAPUNIT_TWIP)
-            , aNumCharFmtName(String())
+            , aNumCharFmtName(OUString())
             , bIsLoading(false)
         {}
         NBOTypeMgrBase(const NBOType aType,const SfxItemSet* pArg)
             : eType(aType)
             , pSet(pArg)
             , eCoreUnit(SFX_MAPUNIT_TWIP)
-            , aNumCharFmtName(String())
+            , aNumCharFmtName(OUString())
             , bIsLoading(false)
         {}
         NBOTypeMgrBase(const NBOTypeMgrBase& aTypeMgr)
@@ -230,8 +230,8 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         SfxMapUnit GetMapUnit();
     protected:
         bool    bIsLoading;
-        void    ImplLoad(String filename);
-        void    ImplStore(String filename);
+        void    ImplLoad(OUString filename);
+        void    ImplStore(OUString filename);
 
 };
 

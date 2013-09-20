@@ -513,7 +513,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
         uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
         if (xSet.is())
         {
-            uno::Any aValue( xSet->getPropertyValue(String("DefaultControl", osl_getThreadTextEncoding())) );
+            uno::Any aValue( xSet->getPropertyValue("DefaultControl") );
             OUString aStr;
             if( aValue >>= aStr )
                 aUnoControlTypeName = aStr;

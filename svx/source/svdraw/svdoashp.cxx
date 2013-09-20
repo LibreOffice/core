@@ -286,14 +286,14 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // line color and transparency like shadow
         if(bLineUsed)
         {
-            aTempSet.Put(XLineColorItem(String(), aShadowColor));
+            aTempSet.Put(XLineColorItem(OUString(), aShadowColor));
             aTempSet.Put(XLineTransparenceItem(nShadowTransparence));
         }
 
         // fill color and transparency like shadow
         if(bSolidFillUsed)
         {
-            aTempSet.Put(XFillColorItem(String(), aShadowColor));
+            aTempSet.Put(XFillColorItem(OUString(), aShadowColor));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 

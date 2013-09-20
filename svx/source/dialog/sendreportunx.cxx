@@ -151,10 +151,10 @@ static bool get_profile_bool( const char *pFileName, const char *pSectionName, c
     return false;
 }
 
-static String get_profile_String( const char *pFileName, const char *pSectionName, const char *pKeyName, const char * = NULL )
+static OUString get_profile_String( const char *pFileName, const char *pSectionName, const char *pKeyName, const char * = NULL )
 {
     string  str = get_profile_string( pFileName, pSectionName, pKeyName );
-    String  result( str.c_str(), RTL_TEXTENCODING_UTF8 );
+    OUString  result( str.c_str(), str.length(), RTL_TEXTENCODING_UTF8 );
 
     return result;
 }

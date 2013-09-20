@@ -375,7 +375,7 @@ namespace sdr
             if(bTextFrame)
             {
                 mpItemSet->Put(XLineStyleItem(XLINE_NONE));
-                mpItemSet->Put(XFillColorItem(String(), Color(COL_WHITE)));
+                mpItemSet->Put(XFillColorItem(OUString(), Color(COL_WHITE)));
                 mpItemSet->Put(XFillStyleItem(XFILL_NONE));
             }
             else

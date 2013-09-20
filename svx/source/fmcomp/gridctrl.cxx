@@ -640,7 +640,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                 m_aAbsolute.SetValue(m_nCurrentPos + 1);
             }
             else
-                m_aAbsolute.SetText(String());
+                m_aAbsolute.SetText(OUString());
             break;
         case NavigationBar::RECORD_TEXT:
             pWnd = &m_aRecordText;
@@ -916,7 +916,7 @@ void DbGridControl::InsertHandleColumn()
 {
     // BrowseBox has problems when painting without a handleColumn (hide it here)
     if (HasHandle())
-        BrowseBox::InsertHandleColumn(GetDefaultColumnWidth(String()));
+        BrowseBox::InsertHandleColumn(GetDefaultColumnWidth(OUString()));
     else
         BrowseBox::InsertHandleColumn(0);
 }

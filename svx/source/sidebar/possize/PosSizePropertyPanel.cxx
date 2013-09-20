@@ -1015,25 +1015,25 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
         bPosXBlank = true;
     SetFieldUnit( *mpMtrPosX, meDlgUnit, true );
     if(bPosXBlank)
-        mpMtrPosX->SetText(String());
+        mpMtrPosX->SetText(OUString());
 
     if (mpMtrPosY->GetText().isEmpty())
         bPosYBlank = true;
     SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
     if(bPosYBlank)
-        mpMtrPosY->SetText(String());
+        mpMtrPosY->SetText(OUString());
 
     if (mpMtrWidth->GetText().isEmpty())
         bWidthBlank = true;
     SetFieldUnit( *mpMtrWidth, meDlgUnit, true );
     if(bWidthBlank)
-        mpMtrWidth->SetText(String());
+        mpMtrWidth->SetText(OUString());
 
     if (mpMtrHeight->GetText().isEmpty())
         bHeightBlank = true;
     SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
     if(bHeightBlank)
-        mpMtrHeight->SetText(String());
+        mpMtrHeight->SetText(OUString());
 }
 
 

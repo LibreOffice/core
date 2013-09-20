@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     sal_uInt16 nPos = aColorSet.GetSelectItemId();
     Color  aColor( aColorSet.GetItemColor( nPos ) );
-    String aStr( aColorSet.GetItemText( nPos ) );
+    OUString aStr( aColorSet.GetItemText( nPos ) );
 
     if (aColorSet.IsLeftButton())
     {

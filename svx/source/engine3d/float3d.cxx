@@ -1672,7 +1672,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         // set FillColor hard to WHITE when it's SFX_ITEM_DONTCARE so that
         // the default (Blue7) is not used for 3d preview
         if(SFX_ITEM_DONTCARE == aSet.GetItemState(XATTR_FILLCOLOR, sal_False))
-            aSet.Put(XFillColorItem(String(), Color(COL_WHITE)));
+            aSet.Put(XFillColorItem(OUString(), Color(COL_WHITE)));
 
         aCtlPreview.Set3DAttributes(aSet);
         aCtlLightPreview.GetSvx3DLightControl().Set3DAttributes(aSet);

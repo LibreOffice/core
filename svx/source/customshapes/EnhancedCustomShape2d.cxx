@@ -2197,7 +2197,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
                         static_cast< short > ( GetLuminanceChange(
                             std::min(nColorIndex, nColorCount-1))));
 
-                    rObj.SetMergedItem(XFillBitmapItem(String(), Graphic(aBitmap)));
+                    rObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(aBitmap)));
                 }
 
                 break;

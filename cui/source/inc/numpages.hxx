@@ -213,7 +213,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     FixedText*          m_pErrorText;
     SvxBmpNumValueSet*  m_pExamplesVS;
 
-    std::vector<String> aGrfNames;
+    std::vector<OUString> aGrfNames;
     String              sNumCharFmtName;
 
     SvxNumRule*         pActNum;
@@ -307,7 +307,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     sal_Bool                bHTMLMode           : 1;
     sal_Bool                bMenuButtonInitialized : 1;
 
-    std::vector<String> aGrfNames;
+    std::vector<OUString> aGrfNames;
     Font                aActBulletFont;
 
     sal_uInt8               nBullet;

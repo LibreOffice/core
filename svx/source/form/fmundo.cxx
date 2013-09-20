@@ -165,7 +165,7 @@ DECLARE_STL_STDKEY_MAP(Reference< XPropertySet >, PropertySetInfo, PropertySetIn
 
 //------------------------------------------------------------------------------
 
-String static_STR_UNDO_PROPERTY;
+OUString static_STR_UNDO_PROPERTY;
 //------------------------------------------------------------------------------
 DBG_NAME(FmXUndoEnvironment)
 //------------------------------------------------------------------------------
@@ -973,7 +973,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 {
     if (rNewMod.GetObjectShell())
         rNewMod.GetObjectShell()->SetModified(sal_True);
-    if(static_STR_UNDO_PROPERTY.Len() == 0)
+    if(static_STR_UNDO_PROPERTY.isEmpty())
         static_STR_UNDO_PROPERTY = SVX_RESSTR(RID_STR_UNDO_PROPERTY);
 }
 

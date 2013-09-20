@@ -447,7 +447,7 @@ void LinePropertyPanel::NotifyItemUpdate(
             }
 
             mpMFTransparent->SetValue(0);//add
-            mpMFTransparent->SetText(String());
+            mpMFTransparent->SetText(OUString());
             break;
         }
         case SID_ATTR_LINE_WIDTH:

@@ -185,7 +185,7 @@ void CompressGraphicsDialog::Update()
     aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number(aNativeSize / 1024));
     m_pFixedText5->SetText(aNativeSizeString);
 
-    m_pFixedText6->SetText(String("??"));
+    m_pFixedText6->SetText("??");
 }
 
 void CompressGraphicsDialog::UpdateNewWidthMF()

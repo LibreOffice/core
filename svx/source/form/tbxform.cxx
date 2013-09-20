@@ -282,7 +282,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 
     sal_Bool bEnable = SFX_ITEM_DISABLED != eState && pState;
     if (!bEnable)
-        pWin->SetText(String());
+        pWin->SetText(OUString());
 
     //////////////////////////////////////////////////////////////////////
     // Enablen/disablen des Fensters
