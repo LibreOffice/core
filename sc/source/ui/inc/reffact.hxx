@@ -119,8 +119,8 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         SFX_DECL_CHILDWINDOW_WITHID(Class);
 
         static void     SetDefaultPosSize(Point aPos, Size aSize, sal_Bool bSet=sal_True);
-        virtual String  GetRefString();
-        virtual void    SetRefString(const String& rStr);
+        OUString        GetRefString();
+        void            SetRefString(const OUString& rStr);
         void            SetCloseHdl( const Link& rLink );
         void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                         const Link& rChange );

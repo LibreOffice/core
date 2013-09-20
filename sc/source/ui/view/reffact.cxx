@@ -185,9 +185,9 @@ void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, sal_Bool b
 }
 
 
-String ScSimpleRefDlgWrapper::GetRefString()
+OUString ScSimpleRefDlgWrapper::GetRefString()
 {
-    String aResult;
+    OUString aResult;
     if(pWindow!=NULL)
     {
         aResult=((ScSimpleRefDlg*)pWindow)->GetRefString();
@@ -200,7 +200,7 @@ void ScSimpleRefDlgWrapper::SetAutoReOpen(sal_Bool bFlag)
     bAutoReOpen=bFlag;
 }
 
-void ScSimpleRefDlgWrapper::SetRefString(const String& rStr)
+void ScSimpleRefDlgWrapper::SetRefString(const OUString& rStr)
 {
     if(pWindow!=NULL)
     {
