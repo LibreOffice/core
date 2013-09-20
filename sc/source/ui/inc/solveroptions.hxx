@@ -50,7 +50,7 @@ class ScSolverOptionsDialog : public ModalDialog
     SvLBoxButtonData* mpCheckButtonData;
     com::sun::star::uno::Sequence<OUString> maImplNames;
     com::sun::star::uno::Sequence<OUString> maDescriptions;
-    String          maEngine;
+    OUString        maEngine;
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 
     DECL_LINK( EngineSelectHdl, void* );
@@ -66,11 +66,11 @@ public:
     ScSolverOptionsDialog( Window* pParent,
                            const com::sun::star::uno::Sequence<OUString>& rImplNames,
                            const com::sun::star::uno::Sequence<OUString>& rDescriptions,
-                           const String& rEngine,
+                           const OUString& rEngine,
                            const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
     ~ScSolverOptionsDialog();
 
-    const String& GetEngine() const;
+    const OUString& GetEngine() const;
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& GetProperties();
 };
 
@@ -87,7 +87,7 @@ public:
     ScSolverIntegerDialog( Window * pParent );
     ~ScSolverIntegerDialog();
 
-    void        SetOptionName( const String& rName );
+    void        SetOptionName( const OUString& rName );
     void        SetValue( sal_Int32 nValue );
     sal_Int32   GetValue() const;
 };
@@ -104,7 +104,7 @@ public:
     ScSolverValueDialog( Window * pParent );
     ~ScSolverValueDialog();
 
-    void        SetOptionName( const String& rName );
+    void        SetOptionName( const OUString& rName );
     void        SetValue( double fValue );
     double      GetValue() const;
 };

@@ -111,7 +111,7 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
 ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,
                         const uno::Sequence<OUString>& rDescriptions,
-                        const String& rEngine,
+                        const OUString& rEngine,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVEROPTIONS ) ),
     maFtEngine      ( this, ScResId( FT_ENGINE ) ),
@@ -158,7 +158,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
             nSelect = 0;
         }
         else
-            maEngine.Erase();
+            maEngine = "";
         maProperties.realloc(0);        // don't use options from different engine
     }
     if ( nSelect >= 0 )                 // select in list box
@@ -176,7 +176,7 @@ ScSolverOptionsDialog::~ScSolverOptionsDialog()
     delete mpCheckButtonData;
 }
 
-const String& ScSolverOptionsDialog::GetEngine() const
+const OUString& ScSolverOptionsDialog::GetEngine() const
 {
     return maEngine;    // already updated in selection handler
 }
@@ -416,7 +416,7 @@ ScSolverIntegerDialog::~ScSolverIntegerDialog()
 {
 }
 
-void ScSolverIntegerDialog::SetOptionName( const String& rName )
+void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 {
     maFtName.SetText( rName );
 }
@@ -453,7 +453,7 @@ ScSolverValueDialog::~ScSolverValueDialog()
 {
 }
 
-void ScSolverValueDialog::SetOptionName( const String& rName )
+void ScSolverValueDialog::SetOptionName( const OUString& rName )
 {
     maFtName.SetText( rName );
 }
