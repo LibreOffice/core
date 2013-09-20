@@ -97,9 +97,6 @@ struct theMapLangID : public rtl::Static< MapLangID, theMapLangID > {};
 }
 
 
-/* TODO: this is how on-the-fly LangID assignment will work, now implement
- * usage and registration. */
-#if 0
 static LanguageType getNextOnTheFlyLanguage()
 {
     static LanguageType nOnTheFlyLanguage = 0;
@@ -116,15 +113,17 @@ static LanguageType getNextOnTheFlyLanguage()
             if (nSub != LANGUAGE_ON_THE_FLY_SUB_END)
                 nOnTheFlyLanguage = MsLangId::makeLangID( ++nSub, LANGUAGE_ON_THE_FLY_START);
             else
+            {
                 SAL_WARN( "i18nlangtag", "getNextOnTheFlyLanguage: none left! ("
                         << ((LANGUAGE_ON_THE_FLY_END - LANGUAGE_ON_THE_FLY_START + 1)
                             * (LANGUAGE_ON_THE_FLY_SUB_END - LANGUAGE_ON_THE_FLY_SUB_START + 1))
                         << " consumed?!?)");
+                return 0;
+            }
         }
     }
     return nOnTheFlyLanguage;
 }
-#endif
 
 
 /** A reference holder for liblangtag data de/initialization, one static
@@ -289,6 +288,12 @@ private:
     OUString            getRegionFromLangtag();
     OUString            getVariantsFromLangtag();
 
+    /** Generates on-the-fly LangID and registers the maBcp47,mnLangID pair.
+
+        @return NULL if no ID could be obtained or registration failed.
+     */
+    LanguageTag::ImplPtr registerOnTheFly();
+
     /** Obtain Language, Script, Country and Variants via simpleExtract() and
         assign them to the cached variables if successful.
 
@@ -325,7 +330,7 @@ private:
 
     /** Convert Locale to BCP 47 string without resolving system and creating
         temporary LanguageTag instances. */
-    static OUString convertToBcp47( const com::sun::star::lang::Locale& rLocale );
+    static OUString     convertToBcp47( const com::sun::star::lang::Locale& rLocale );
 
 };
 
@@ -554,6 +559,72 @@ LanguageTag& LanguageTag::operator=( const LanguageTag & rLanguageTag )
 
 LanguageTag::~LanguageTag()
 {
+}
+
+
+LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly()
+{
+    LanguageTag::ImplPtr pImpl;
+
+    if (!mbInitializedBcp47)
+    {
+        if (mbInitializedLocale)
+        {
+            maBcp47 = LanguageTagImpl::convertToBcp47( maLocale);
+            mbInitializedBcp47 = !maBcp47.isEmpty();
+        }
+    }
+    if (maBcp47.isEmpty())
+    {
+        SAL_WARN( "i18nlangtag", "LanguageTagImpl::registerOnTheFly: no Bcp47 string, no registering");
+        return pImpl;
+    }
+
+    LanguageType nLang = getNextOnTheFlyLanguage();
+    if (!nLang)
+    {
+        // out of IDs, nothing to register
+        return pImpl;
+    }
+    mnLangID = nLang;
+    mbInitializedLangID = true;
+
+    osl::MutexGuard aGuard( theMutex::get());
+
+    MapBcp47& rMap = theMapBcp47::get();
+    MapBcp47::const_iterator it( rMap.find( maBcp47));
+    if (it != rMap.end())
+    {
+        SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: found impl for '" << maBcp47 << "'");
+        pImpl = (*it).second;
+        if (pImpl.get() != this)
+        {
+            SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: impl should be this");
+            *pImpl = *this;     // ensure consistency
+        }
+    }
+    else
+    {
+        SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: new impl for '" << maBcp47 << "'");
+        pImpl.reset( new LanguageTagImpl( *this));
+        rMap.insert( ::std::make_pair( maBcp47, pImpl));
+    }
+
+    ::std::pair< MapLangID::const_iterator, bool > res(
+            theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)));
+    if (res.second)
+    {
+        SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: cross-inserted 0x"
+                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+    }
+    else
+    {
+        SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: not cross-inserted 0x"
+                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
+                << (*res.first).second->maBcp47 << "'");
+    }
+
+    return pImpl;
 }
 
 
