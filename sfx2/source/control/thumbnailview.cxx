@@ -568,6 +568,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     switch ( aKeyCode.GetCode() )
     {
         case KEY_RIGHT:
+            if (!mFilteredItemList.empty())
             {
                 if ( bFoundLast && nLastPos + 1 < mFilteredItemList.size() )
                 {
@@ -579,6 +580,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             }
             break;
         case KEY_LEFT:
+            if (!mFilteredItemList.empty())
             {
                 if ( nLastPos > 0 )
                 {
@@ -590,6 +592,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             }
             break;
         case KEY_DOWN:
+            if (!mFilteredItemList.empty())
             {
                 if ( bFoundLast )
                 {
@@ -614,6 +617,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             }
             break;
         case KEY_UP:
+            if (!mFilteredItemList.empty())
             {
                 if ( nLastPos >= mnCols )
                 {
