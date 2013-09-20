@@ -97,14 +97,14 @@ static char* platformSpecific()
     if ( path == NULL )
     {
         /* read the key's default value from HKEY_LOCAL_USER 64 */
-        path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME64 );
+        path = getPathFromRegistryKey( HKEY_CURRENT_USER, SUBKEYNAME64 );
     }
-    else if ( path == NULL )
+    if ( path == NULL )
     {
         /* read the key's default value from HKEY_LOCAL_MACHINE */
         path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME );
     }
-    else if ( path == NULL )
+    if ( path == NULL )
     {
         /* read the key's default value from HKEY_LOCAL_MACHINE 64*/
         path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME64 );

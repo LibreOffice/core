@@ -200,7 +200,7 @@ final class InstallationFinder {
         } catch ( WinRegKeyException e ) {
             try {
                 // read the key's default value from HKEY_LOCAL_MACHINE
-                WinRegKey key = new WinRegKey( "HKEY_LOCAL_USER",
+                WinRegKey key = new WinRegKey( "HKEY_CURRENT_USER",
                                                SUBKEYNAME64 );
                 path = key.getStringValue( "" ); // default
             } catch ( WinRegKeyException e64 ) {
