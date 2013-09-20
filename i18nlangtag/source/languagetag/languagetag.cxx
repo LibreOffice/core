@@ -277,7 +277,7 @@ private:
     bool                isValidBcp47() const;
 
     void                convertLocaleToBcp47();
-    void                convertLocaleToLang();
+    void                convertLocaleToLang( bool bAllowOnTheFlyID );
     void                convertBcp47ToLocale();
     void                convertBcp47ToLang();
     void                convertLangToLocale();
@@ -736,17 +736,28 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for '" << maBcp47 << "'");
             pImpl.reset( new LanguageTagImpl( *this));
             rMap.insert( ::std::make_pair( maBcp47, pImpl));
+            // If changed after canonicalize() also add the resulting tag to map.
+            if (pImpl->synCanonicalize())
+            {
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: canonicalized to '" << pImpl->maBcp47 << "'");
+                rMap.insert( ::std::make_pair( pImpl->maBcp47, pImpl));
+            }
             // Try round-trip Bcp47->Locale->LangID->Locale->Bcp47.
             if (!pImpl->mbInitializedLocale)
                 pImpl->convertBcp47ToLocale();
             if (!pImpl->mbInitializedLangID)
-                pImpl->convertLocaleToLang();
-            OUString aBcp47( LanguageTagImpl::convertToBcp47(
-                        MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true)));
+                pImpl->convertLocaleToLang( true);
+            bool bInsert = LanguageTag::isOnTheFlyID( pImpl->mnLangID);
+            OUString aBcp47;
+            if (!bInsert)
+            {
+                // May have involved canonicalize(), so compare with pImpl->maBcp47!
+                aBcp47 = LanguageTagImpl::convertToBcp47(
+                            MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true));
+                bInsert = (aBcp47 == pImpl->maBcp47);
+            }
             // If round-trip is identical cross-insert to Bcp47 map.
-            // May have involved canonicalize(), so compare with
-            // pImpl->maBcp47!
-            if (aBcp47 == pImpl->maBcp47)
+            if (bInsert)
             {
                 ::std::pair< MapLangID::const_iterator, bool > res(
                         theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)));
@@ -940,7 +951,7 @@ bool LanguageTagImpl::canonicalize()
             {
                 if (!mbInitializedLangID)
                 {
-                    convertLocaleToLang();
+                    convertLocaleToLang( false);
                     if (bTemporaryLocale)
                         bTemporaryLangID = true;
                 }
@@ -1102,7 +1113,7 @@ void LanguageTag::convertLocaleToBcp47()
 }
 
 
-void LanguageTagImpl::convertLocaleToLang()
+void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
 {
     if (mbSystemLocale)
     {
@@ -1111,6 +1122,7 @@ void LanguageTagImpl::convertLocaleToLang()
     else
     {
         mnLangID = MsLangId::Conversion::convertLocaleToLanguage( maLocale);
+        (void)bAllowOnTheFlyID;
     }
     mbInitializedLangID = true;
 }
@@ -1118,7 +1130,7 @@ void LanguageTagImpl::convertLocaleToLang()
 
 void LanguageTag::convertLocaleToLang()
 {
-    getImpl()->convertLocaleToLang();
+    getImpl()->convertLocaleToLang( true);
     syncFromImpl();
 }
 
@@ -1159,7 +1171,7 @@ void LanguageTagImpl::convertBcp47ToLang()
     {
         if (!mbInitializedLocale)
             convertBcp47ToLocale();
-        convertLocaleToLang();
+        convertLocaleToLang( true);
     }
     mbInitializedLangID = true;
 }
