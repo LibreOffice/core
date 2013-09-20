@@ -70,21 +70,21 @@ private:
 
     ScAddress       theFormulaCell;
     ScAddress       theVariableCell;
-    String          theTargetValStr;
+    OUString        theTargetValStr;
 
     ScDocument*     pDoc;
     const SCTAB     nCurTab;
     formula::RefEdit*       pEdActive;
     sal_Bool            bDlgLostFocus;
-    const String    errMsgInvalidVar;
-    const String    errMsgInvalidForm;
-    const String    errMsgNoFormula;
-    const String    errMsgInvalidVal;
+    const OUString  errMsgInvalidVar;
+    const OUString  errMsgInvalidForm;
+    const OUString  errMsgNoFormula;
+    const OUString  errMsgInvalidVal;
 
 
 #ifdef _SOLVRDLG_CXX
     void    Init();
-    sal_Bool    CheckTargetValue( String& rStrVal );
+    sal_Bool    CheckTargetValue( const OUString& rStrVal );
     void    RaiseError( ScSolverErr eError );
 
     DECL_LINK( BtnHdl, PushButton* );
