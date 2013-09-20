@@ -654,6 +654,16 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 
     osl::MutexGuard aGuard( theMutex::get());
 
+#if OSL_DEBUG_LEVEL > 0
+    static long nRunning = 0;
+    // Entering twice here is ok, which is needed for fallback init in
+    // getKnowns() in canonicalize() via pImpl->convertBcp47ToLocale() below,
+    // everything else is suspicious.
+    SAL_WARN_IF( nRunning > 1, "i18nlangtag", "LanguageTag::registerImpl: re-entered for '"
+            << maBcp47 << "' 0x" << ::std::hex << mnLangID );
+    struct Runner { Runner() { ++nRunning; } ~Runner() { --nRunning; } } aRunner;
+#endif
+
     // Prefer LangID map as find+insert needs less comparison work.
     if (mbInitializedLangID)
     {
