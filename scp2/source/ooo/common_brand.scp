@@ -531,17 +531,10 @@ End
 
 #ifndef MACOSX
 File gid_Brand_File_Bin_Soffice_Bin
-#ifdef WNT
-// FIXME quick hack
-    Dir = FILELIST_DIR;
-    Name = "desktop_soffice_bin.filelist";
-    Styles = (FILELIST, PACKED);
-#else
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "soffice.bin";
-#endif
 End
 #endif
 

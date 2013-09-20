@@ -7,22 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(OS),WNT)
-desktop_UNOPKGBIN := unopkg_bin
-else
-desktop_UNOPKGBIN := unopkg.bin
-endif
+$(eval $(call gb_Executable_Executable,unopkg_bin))
 
-$(eval $(call gb_Executable_Executable,$(desktop_UNOPKGBIN)))
+$(eval $(call gb_Executable_set_targettype_gui,unopkg_bin,YES))
 
-$(eval $(call gb_Executable_set_targettype_gui,$(desktop_UNOPKGBIN),YES))
-
-$(eval $(call gb_Executable_set_include,$(desktop_UNOPKGBIN),\
+$(eval $(call gb_Executable_set_include,unopkg_bin,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Executable_use_libraries,$(desktop_UNOPKGBIN),\
+$(eval $(call gb_Executable_use_libraries,unopkg_bin,\
     comphelper \
     sal \
     tl \
@@ -30,16 +24,8 @@ $(eval $(call gb_Executable_use_libraries,$(desktop_UNOPKGBIN),\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,$(desktop_UNOPKGBIN),\
+$(eval $(call gb_Executable_add_cobjects,unopkg_bin,\
     desktop/source/pkgchk/unopkg/unopkg_main \
 ))
-
-ifeq ($(OS),WNT)
-
-# the resulting executable is called $(desktop_UNOPKGBIN).exe, copy it to $(desktop_UNOPKGBIN)
-$(eval $(call gb_Package_Package,$(desktop_UNOPKGBIN),$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,$(desktop_UNOPKGBIN),bin/unopkg.bin,$(desktop_UNOPKGBIN).exe))
-
-endif
 
 # vim: set ts=4 sw=4 et:

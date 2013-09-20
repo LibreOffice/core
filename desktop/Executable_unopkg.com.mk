@@ -19,8 +19,4 @@ $(eval $(call gb_Executable_add_exception_objects,unopkg_com,\
     desktop/win32/source/guistdio/unopkgio \
 ))
 
-# the resulting executable is called unopkg_com.exe, copy it to unopkg.com
-$(eval $(call gb_Package_Package,unopkg_com,$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,unopkg_com,bin/unopkg.com,unopkg_com.exe))
-
 # vim: set ts=4 sw=4 et:
