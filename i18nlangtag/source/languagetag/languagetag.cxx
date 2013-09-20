@@ -740,7 +740,9 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             if (pImpl->synCanonicalize())
             {
                 SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: canonicalized to '" << pImpl->maBcp47 << "'");
-                rMap.insert( ::std::make_pair( pImpl->maBcp47, pImpl));
+                bool bInserted = rMap.insert( ::std::make_pair( pImpl->maBcp47, pImpl)).second;
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << (bInserted ? "" : "not ") << "inserted '"
+                        << pImpl->maBcp47 << "'");
             }
             // Try round-trip Bcp47->Locale->LangID->Locale->Bcp47.
             if (!pImpl->mbInitializedLocale)
@@ -1122,7 +1124,16 @@ void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
     else
     {
         mnLangID = MsLangId::Conversion::convertLocaleToLanguage( maLocale);
-        (void)bAllowOnTheFlyID;
+        if (mnLangID == LANGUAGE_DONTKNOW && bAllowOnTheFlyID)
+        {
+            if (isValidBcp47())
+                registerOnTheFly();
+            else
+            {
+                SAL_WARN( "i18nlangtag", "LanguageTagImpl::convertLocaleToLang: with bAllowOnTheFlyID invalid '"
+                        << maBcp47 << "'");
+            }
+        }
     }
     mbInitializedLangID = true;
 }

@@ -74,7 +74,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "DE" );
         CPPUNIT_ASSERT( aLocale.Variant == "de-Latn-DE" );
-        CPPUNIT_ASSERT( nLanguageType == LANGUAGE_SYSTEM );     // XXX not resolved!
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( nLanguageType) );    // XXX not canonicalized!
         CPPUNIT_ASSERT( de_DE.getLanguage() == "de" );
         CPPUNIT_ASSERT( de_DE.getCountry() == "DE" );
         CPPUNIT_ASSERT( de_DE.getScript() == "Latn" );
@@ -92,19 +92,25 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "tlh" );
         CPPUNIT_ASSERT( aLocale.Country == "" );
         CPPUNIT_ASSERT( aLocale.Variant == "" );
-        CPPUNIT_ASSERT( klingon.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( klingon.getLanguageType()) );
         CPPUNIT_ASSERT( klingon.isValidBcp47() == true );
         CPPUNIT_ASSERT( klingon.isIsoLocale() == true );
         CPPUNIT_ASSERT( klingon.isIsoODF() == true );
+        LanguageType nLang = klingon.getLanguageType();
+        LanguageTag klingon_id( nLang);
+        CPPUNIT_ASSERT( klingon_id.getBcp47() == "tlh" );
 #else
         CPPUNIT_ASSERT( klingon.getBcp47() == s_klingon );
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "" );
         CPPUNIT_ASSERT( aLocale.Variant == s_klingon );
-        CPPUNIT_ASSERT( klingon.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( klingon.getLanguageType()) );
         CPPUNIT_ASSERT( klingon.isValidBcp47() == true );
         CPPUNIT_ASSERT( klingon.isIsoLocale() == false );
         CPPUNIT_ASSERT( klingon.isIsoODF() == false );
+        LanguageType nLang = klingon.getLanguageType();
+        LanguageTag klingon_id( nLang);
+        CPPUNIT_ASSERT( klingon_id.getBcp47() == s_klingon );
 #endif
     }
 
@@ -232,7 +238,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "" );
         CPPUNIT_ASSERT( aLocale.Variant == s_ca_valencia );
-        CPPUNIT_ASSERT( ca_valencia.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( ca_valencia.getLanguageType()) );
         CPPUNIT_ASSERT( ca_valencia.isValidBcp47() == true );
         CPPUNIT_ASSERT( ca_valencia.isIsoLocale() == false );
         CPPUNIT_ASSERT( ca_valencia.isIsoODF() == false );
@@ -328,7 +334,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "" );
         CPPUNIT_ASSERT( aLocale.Variant == s_de_1901 );
-        CPPUNIT_ASSERT( de_1901.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( de_1901.getLanguageType()) );
         CPPUNIT_ASSERT( de_1901.isValidBcp47() == true );
         CPPUNIT_ASSERT( de_1901.isIsoLocale() == false );
         CPPUNIT_ASSERT( de_1901.isIsoODF() == false );
@@ -385,7 +391,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qty" );
         CPPUNIT_ASSERT( aLocale.Country == "" );
         CPPUNIT_ASSERT( aLocale.Variant == "" );
-        CPPUNIT_ASSERT( qty.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( qty.getLanguageType()) );
     }
 
     // 'x-comment' is a privateuse known "locale"
@@ -409,7 +415,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "" );
         CPPUNIT_ASSERT( aLocale.Variant == "x-foobar" );
-        CPPUNIT_ASSERT( xfoobar.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( xfoobar.getLanguageType()) );
     }
 
     // '*' the dreaded jolly joker is a "privateuse" known "locale"
@@ -470,7 +476,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "" );
         CPPUNIT_ASSERT( aLocale.Variant == s_uab );
-        CPPUNIT_ASSERT( uab.getLanguageType() == LANGUAGE_SYSTEM );
+        CPPUNIT_ASSERT( uab.getLanguageType() == LANGUAGE_DONTKNOW );
         CPPUNIT_ASSERT( uab.isValidBcp47() == false );
         CPPUNIT_ASSERT( uab.isIsoLocale() == false );
         CPPUNIT_ASSERT( uab.isIsoODF() == false );

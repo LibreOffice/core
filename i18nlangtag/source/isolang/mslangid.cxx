@@ -177,11 +177,7 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguage(
     if (rLocale.Language.isEmpty())
         return LANGUAGE_SYSTEM;
 
-    LanguageType nRet = convertLocaleToLanguageImpl( rLocale);
-    if (nRet == LANGUAGE_DONTKNOW)
-        nRet = LANGUAGE_SYSTEM;
-
-    return nRet;
+    return convertLocaleToLanguageImpl( rLocale);
 }
 
 
