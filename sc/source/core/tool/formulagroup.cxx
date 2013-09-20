@@ -29,7 +29,7 @@
 #ifdef DISABLE_DYNLOADING
 
 extern "C" size_t getOpenCLPlatformCount(void);
-extern "C" void fillOpenCLInfo(OpenclPlatformInfo*, size_t);
+extern "C" void fillOpenCLInfo(sc::OpenclPlatformInfo*, size_t);
 extern "C" bool switchOpenClDevice(const OUString*, bool);
 extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
 extern "C" void compileOpenCLKernels(const OUString*);
@@ -417,7 +417,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
         return;
 
     std::vector<OpenclPlatformInfo> aPlatforms(nPlatforms);
-    fillOpenCLInfo(&aPlatforms[0], aPlatforms.size());
+    ::fillOpenCLInfo(&aPlatforms[0], aPlatforms.size());
     rPlatforms.swap(aPlatforms);
 #endif
 }
@@ -497,8 +497,7 @@ void FormulaGroupInterpreter::compileOpenCLKernels()
 
     reinterpret_cast<__compileOpenCLKernels>(fn)(&rConfig.maOpenCLDevice);
 #else
-
-    compileOpenCLKernels(&rConfig.maOpenCLDevice);
+    ::compileOpenCLKernels(&rConfig.maOpenCLDevice);
 #endif
 }
 
