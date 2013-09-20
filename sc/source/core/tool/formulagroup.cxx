@@ -449,7 +449,7 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
 #else
     extern bool switchOpenClDevice(const OUString*, bool);
 
-    bool bSuccesss = switchOpenClDevice(&rDeviceId, bAutoSelect);
+    bool bSuccess = switchOpenClDevice(&rDeviceId, bAutoSelect);
     if(!bSuccess)
         return;
 #endif
