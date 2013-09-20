@@ -342,10 +342,10 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
 static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
 {
-    if (RenderAsPNGThroughConvert(pBuf, nBytesRead, rGraphic))
+    if (RenderAsPNGThroughGS(pBuf, nBytesRead, rGraphic))
         return true;
     else
-        return RenderAsPNGThroughGS(pBuf, nBytesRead, rGraphic);
+        return RenderAsPNGThroughConvert(pBuf, nBytesRead, rGraphic);
 }
 
 // this method adds a replacement action containing the original wmf or tiff replacement,
