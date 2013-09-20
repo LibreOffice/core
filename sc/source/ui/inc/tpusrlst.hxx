@@ -65,10 +65,10 @@ private:
 
     PushButton*         mpBtnCopy;
 
-    const String    aStrQueryRemove;
-    const String    aStrCopyList;
-    const String    aStrCopyFrom;
-    const String    aStrCopyErr;
+    const OUString      aStrQueryRemove;
+    const OUString      aStrCopyList;
+    const OUString      aStrCopyFrom;
+    const OUString      aStrCopyErr;
 
     const sal_uInt16    nWhichUserLists;
     ScUserList*     pUserLists;
@@ -76,7 +76,7 @@ private:
     ScDocument*     pDoc;
     ScViewData*     pViewData;
     ScRangeUtil*    pRangeUtil;
-    String          aStrSelectedArea;
+    OUString        aStrSelectedArea;
 
     sal_Bool            bModifyMode;
     sal_Bool            bCancelMode;
@@ -88,11 +88,11 @@ private:
     void    Init                ();
     sal_uInt16  UpdateUserListBox   ();
     void    UpdateEntries       ( size_t nList );
-    void    MakeListStr         ( String& rListStr );
-    void    AddNewList          ( const String& rEntriesStr );
+    void    MakeListStr         ( OUString& rListStr );
+    void    AddNewList          ( const OUString& rEntriesStr );
     void    RemoveList          ( size_t nList );
     void    ModifyList          ( sal_uInt16        nSelList,
-                                  const String& rEntriesStr );
+                                  const OUString& rEntriesStr );
     void    CopyListFromArea    ( const ScRefAddress& rStartPos,
                                   const ScRefAddress& rEndPos );
 

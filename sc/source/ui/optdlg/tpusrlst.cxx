@@ -310,7 +310,7 @@ void ScTpUserLists::UpdateEntries( size_t nList )
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::MakeListStr( String& rListStr )
+void ScTpUserLists::MakeListStr( OUString& rListStr )
 {
     String  aStr;
 
@@ -318,7 +318,7 @@ void ScTpUserLists::MakeListStr( String& rListStr )
 
     for(xub_StrLen i=0;i<nToken;i++)
     {
-        OUString aString = comphelper::string::strip(rListStr.GetToken(i, LF), ' ');
+        OUString aString = comphelper::string::strip(rListStr.getToken(i, LF), ' ');
         aStr+=aString;
         aStr+=cDelimiter;
     }
@@ -326,18 +326,18 @@ void ScTpUserLists::MakeListStr( String& rListStr )
     aStr = comphelper::string::strip(aStr, cDelimiter);
     xub_StrLen nLen = aStr.Len();
 
-    rListStr.Erase();
+    rListStr = "";
 
     // Alle Doppelten cDelimiter entfernen:
     xub_StrLen c = 0;
     while ( c < nLen )
     {
-        rListStr += aStr.GetChar(c);
+        rListStr += OUString(aStr.GetChar(c));
         c++;
 
         if ( aStr.GetChar(c) == cDelimiter )
         {
-            rListStr += aStr.GetChar(c);
+            rListStr += OUString(aStr.GetChar(c));
 
             while ( (aStr.GetChar(c) == cDelimiter) && (c < nLen) )
                 c++;
@@ -348,9 +348,9 @@ void ScTpUserLists::MakeListStr( String& rListStr )
 
 // -----------------------------------------------------------------------
 
-void ScTpUserLists::AddNewList( const String& rEntriesStr )
+void ScTpUserLists::AddNewList( const OUString& rEntriesStr )
 {
-    String theEntriesStr( rEntriesStr );
+    OUString theEntriesStr( rEntriesStr );
 
     if ( !pUserLists )
         pUserLists = new ScUserList;
@@ -455,13 +455,13 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 // -----------------------------------------------------------------------
 
 void ScTpUserLists::ModifyList( sal_uInt16          nSelList,
-                                const String&   rEntriesStr )
+                                const OUString&   rEntriesStr )
 {
     if ( !pUserLists ) return;
 
     //----------------------------------------------------------
 
-    String theEntriesStr( rEntriesStr );
+    OUString theEntriesStr( rEntriesStr );
 
     MakeListStr( theEntriesStr );
 
@@ -646,10 +646,10 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         if ( mpLbLists->GetEntryCount() > 0 )
         {
             sal_uInt16 nRemovePos   = mpLbLists->GetSelectEntryPos();
-            String aMsg         ( aStrQueryRemove.GetToken( 0, '#' ) );
+            String aMsg         ( aStrQueryRemove.getToken( 0, '#' ) );
 
             aMsg += mpLbLists->GetEntry( nRemovePos );
-            aMsg += aStrQueryRemove.GetToken( 1, '#' );
+            aMsg += aStrQueryRemove.getToken( 1, '#' );
 
 
             if ( RET_YES == QueryBox( this,
