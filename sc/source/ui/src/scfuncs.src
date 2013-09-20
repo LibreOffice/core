@@ -3007,7 +3007,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_MATH;
+            ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_AVERAGEIF );
             3;  0;  0;  1;
             0;
@@ -3088,7 +3088,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_MATH;
+            ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_AVERAGEIFS );
             PAIRED_VAR_ARGS+1;  0;  0;  0;
             0;
