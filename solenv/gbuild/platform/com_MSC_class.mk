@@ -136,13 +136,12 @@ gb_LinkTarget_INCLUDE :=\
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 	-I$(BUILDDIR)/config_$(gb_Side) \
 
-gb_LinkTarget_get_pdbfile = \
- $(WORKDIR)/LinkTarget/pdb/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).pdb
-# substitute .pyd here because pyuno has to follow python's crazy conventions
-gb_LinkTarget_get_pdbfile2 = \
- $(WORKDIR)/LinkTarget/$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
+gb_LinkTarget_get_pdbfile_in = \
+ $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).objects.pdb
+gb_LinkTarget_get_pdbfile_out = \
+ $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).pdb
 gb_LinkTarget_get_ilkfile = \
- $(WORKDIR)/LinkTarget/$(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(call gb_LinkTarget__get_workdir_linktargetname,$(1))))
+ $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).ilk
 gb_LinkTarget_get_manifestfile = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).manifest
 
@@ -299,8 +298,8 @@ $(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(3)) \
 	$(call gb_LinkTarget_get_manifestfile,$(2)) \
-	$(call gb_LinkTarget_get_pdbfile,$(2)) \
-	$(call gb_LinkTarget_get_pdbfile2,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile_in,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile_out,$(2)) \
 	$(call gb_LinkTarget_get_ilkfile,$(2)) \
 )
 
@@ -309,7 +308,7 @@ $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(notdir $(3)),$(3),$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile_in,$(2))
 
 endef
 
@@ -354,10 +353,10 @@ gb_StaticLibrary_PLAINEXT := .lib
 
 define gb_StaticLibrary_StaticLibrary_platform
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile_in,$(2))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile_in,$(2)) \
 )
 
 endef
@@ -376,13 +375,13 @@ $(call gb_LinkTarget_set_ilibtarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(3)) \
-	$(call gb_LinkTarget_get_pdbfile2,$(2)).pdb \
-	$(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile_out,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile_in,$(2)) \
 	$(call gb_LinkTarget_get_manifestfile,$(2)) \
 )
 
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE := $(call gb_LinkTarget_get_pdbfile,$(2))
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE := $(call gb_LinkTarget_get_pdbfile_in,$(2))
 $(call gb_LinkTarget_get_target,$(2)) : TARGETGUI :=
 
 endef
@@ -405,13 +404,13 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(3)) \
 	$(3) \
 	$(call gb_LinkTarget_get_manifestfile,$(2)) \
-	$(call gb_LinkTarget_get_pdbfile2,$(2)) \
-	$(call gb_LinkTarget_get_pdbfile,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile_out,$(2)) \
+	$(call gb_LinkTarget_get_pdbfile_in,$(2)) \
 	$(call gb_LinkTarget_get_ilkfile,$(2)) \
 )
 
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile_in,$(2))
 
 endef
 
