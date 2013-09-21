@@ -62,7 +62,10 @@ class BasicManager;
 class SfxBasicManagerHolder;
 class SfxBasicManagerCreationListener;
 
-namespace sfx2 { namespace appl { class ImeStatusWindow; } }
+namespace sfx2 {
+    namespace appl { class ImeStatusWindow; }
+    namespace sidebar { class Theme; }
+}
 
 typedef Link* LinkPtr;
 
@@ -130,6 +133,7 @@ public:
     SfxSlotPool*                pSlotPool;
     SfxDispatcher*              pAppDispat;     // Dispatcher if no document
     SfxInterface**              pInterfaces;
+    ::rtl::Reference<sfx2::sidebar::Theme> m_pSidebarTheme;
 
     sal_uInt16                      nDocNo;             // current Doc-Number (AutoName)
     sal_uInt16                      nInterfaces;

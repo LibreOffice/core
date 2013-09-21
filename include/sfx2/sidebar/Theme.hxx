@@ -154,6 +154,8 @@ public:
 
     static void HandleDataChange (void);
 
+    void InitializeTheme();
+
     Theme (void);
     virtual ~Theme (void);
 
@@ -208,8 +210,7 @@ public:
         throw(cssu::RuntimeException);
 
 private:
-    static ::rtl::Reference<Theme> mpInstance;
-    static Theme& GetCurrentTheme (void);
+    static Theme& GetCurrentTheme();
 
     ::std::vector<Image> maImages;
     ::std::vector<Color> maColors;
@@ -246,7 +247,6 @@ private:
     };
 
     void SetupPropertyMaps (void);
-    void InitializeTheme (void);
     void UpdateTheme (void);
     static PropertyType GetPropertyType (const ThemeItem eItem);
     static cssu::Type GetCppuType (const PropertyType eType);

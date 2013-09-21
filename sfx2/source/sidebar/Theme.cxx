@@ -20,6 +20,7 @@
 #include "Paint.hxx"
 #include "SidebarResource.hxx"
 #include "sfx2/sidebar/Tools.hxx"
+#include <sfx2/app.hxx>
 
 #include <tools/svborder.hxx>
 #include <tools/rc.hxx>
@@ -31,25 +32,13 @@ using namespace cssu;
 
 namespace sfx2 { namespace sidebar {
 
-::rtl::Reference<Theme> Theme::mpInstance;
 
-
-
-
-Theme& Theme::GetCurrentTheme (void)
+Theme& Theme::GetCurrentTheme()
 {
-    if ( ! mpInstance.is())
-    {
-        mpInstance.set(new Theme());
-        mpInstance->InitializeTheme();
-    }
-    return *mpInstance;
+    return SFX_APP()->GetSidebarTheme();
 }
 
-
-
-
-Theme::Theme (void)
+Theme::Theme()
     : ThemeInterfaceBase(m_aMutex),
       maImages(),
       maColors(),
