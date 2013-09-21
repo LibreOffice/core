@@ -415,7 +415,6 @@ LanguageTagImpl& LanguageTagImpl::operator=( const LanguageTagImpl & rLanguageTa
     maCachedScript      = rLanguageTagImpl.maCachedScript;
     maCachedCountry     = rLanguageTagImpl.maCachedCountry;
     maCachedVariants    = rLanguageTagImpl.maCachedVariants;
-    mpImplLangtag       = rLanguageTagImpl.mpImplLangtag;
     mpImplLangtag       = rLanguageTagImpl.mpImplLangtag ?
                             lt_tag_copy( rLanguageTagImpl.mpImplLangtag) : NULL;
     mnLangID            = rLanguageTagImpl.mnLangID;
