@@ -1,6 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module access {
     constants AcPrintItemLayout {
         const long acPRHorizontalColumnLayout = 1953;
         const long acPRVerticalColumnLayout = 1954;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

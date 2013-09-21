@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module access {
     constants AcExportXMLObjectType {
         const long acExportForm = 2;
@@ -9,3 +10,5 @@ module ooo { module vba { module access {
         const long acExportTable = 0;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

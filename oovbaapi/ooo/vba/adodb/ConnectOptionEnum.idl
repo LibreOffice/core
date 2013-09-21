@@ -1,6 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module adodb {
     constants ConnectOptionEnum {
         const long adAsyncConnect = 16;
         const long adConnectUnspecified = -1;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

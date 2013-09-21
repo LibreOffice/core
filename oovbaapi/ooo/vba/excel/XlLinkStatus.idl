@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants XlLinkStatus {
         const long xlLinkStatusCopiedValues = 10;
@@ -13,3 +14,5 @@ module ooo { module vba { module excel {
         const long xlLinkStatusSourceOpen = 9;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

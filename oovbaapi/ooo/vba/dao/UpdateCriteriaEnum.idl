@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module dao {
     constants UpdateCriteriaEnum {
         const long dbCriteriaAllCols = 4;
@@ -8,3 +9,5 @@ module ooo { module vba { module dao {
         const long dbCriteriaUpdate = 32;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

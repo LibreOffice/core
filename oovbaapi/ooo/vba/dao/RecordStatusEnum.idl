@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module dao {
     constants RecordStatusEnum {
         const long dbRecordDBDeleted = 4;
@@ -7,3 +8,5 @@ module ooo { module vba { module dao {
         const long dbRecordUnmodified = 0;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

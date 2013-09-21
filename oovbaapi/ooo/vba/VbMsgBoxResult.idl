@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba {
     constants VbMsgBoxResult {
         const long vbAbort = 3;
@@ -9,3 +10,5 @@ module ooo { module vba {
         const long vbYes = 6;
     };
 }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

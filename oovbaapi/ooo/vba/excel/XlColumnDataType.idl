@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants XlColumnDataType {
         const long xlDMYFormat = 4;
@@ -12,3 +13,5 @@ module ooo { module vba { module excel {
         const long xlYMDFormat = 5;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

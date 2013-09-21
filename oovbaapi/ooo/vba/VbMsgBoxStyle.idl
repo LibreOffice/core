@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba {
     constants VbMsgBoxStyle {
         const long vbAbortRetryIgnore = 2;
@@ -22,3 +23,5 @@ module ooo { module vba {
         const long vbYesNoCancel = 3;
     };
 }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

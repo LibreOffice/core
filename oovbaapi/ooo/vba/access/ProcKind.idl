@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module access {
     constants ProcKind {
         const long Get = 3;
@@ -6,3 +7,5 @@ module ooo { module vba { module access {
         const long Set = 2;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

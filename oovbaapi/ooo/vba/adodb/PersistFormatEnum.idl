@@ -1,6 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module adodb {
     constants PersistFormatEnum {
         const long adPersistADTG = 0;
         const long adPersistXML = 1;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

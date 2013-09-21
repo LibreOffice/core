@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants Constants {
         const long xl3DBar = -4099;
@@ -169,3 +170,5 @@ module ooo { module vba { module excel {
         const long xlWorksheetShort = 5;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

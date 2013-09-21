@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -73,3 +74,5 @@ bool RemoveForwardStringDecl::tryRemoveStringForwardDecl( const Decl* decl )
 static Plugin::Registration< RemoveForwardStringDecl > X( "removeforwardstringdecl" );
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

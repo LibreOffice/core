@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module access {
     constants AcFormatConditionOperator {
         const long acBetween = 0;
@@ -10,3 +11,5 @@ module ooo { module vba { module access {
         const long acNotEqual = 3;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

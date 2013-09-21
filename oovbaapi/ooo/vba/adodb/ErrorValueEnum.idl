@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module adodb {
     constants ErrorValueEnum {
         const long adErrBoundToCommand = 3707;
@@ -23,3 +24,5 @@ module ooo { module vba { module adodb {
         const long adErrUnsafeOperation = 3716;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

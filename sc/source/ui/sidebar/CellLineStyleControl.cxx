@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -245,3 +246,5 @@ void CellLineStyleControl::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal
 } } // end of namespace svx::sidebar
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

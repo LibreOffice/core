@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -183,3 +184,5 @@
 #define MARGIN_PANEL_HEIGHT                 POP_BORDER_Y +  BD_HEIGHT + POPUP_MARGIN + OFFSET_Y
 #define CUST_MORE_BUTTON_IMG_OFF_X          POPUPPANEL_MARGIN_HORIZONTAL + OFFSET_X
 #define PAGE_HEIGHT                         TBX_COLUMN_Y + 20 + SECTIONPAGE_MARGIN_VERTICAL_BOT
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -72,3 +73,5 @@ void Tutorial3::modifyReturnFalse( const Stmt* stmt )
 static Plugin::Registration< Tutorial3 > X( "tutorial3" );
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

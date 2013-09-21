@@ -1,6 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module access {
     constants AcPrintColor {
         const long acPRCMColor = 2;
         const long acPRCMMonochrome = 1;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

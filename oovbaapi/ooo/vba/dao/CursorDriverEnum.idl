@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module dao {
     constants CursorDriverEnum {
         const long dbUseClientBatchCursor = 3;
@@ -7,3 +8,5 @@ module ooo { module vba { module dao {
         const long dbUseServerCursor = 2;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module dao {
     constants UpdateTypeEnum {
         const long dbUpdateBatch = 4;
@@ -5,3 +6,5 @@ module ooo { module vba { module dao {
         const long dbUpdateRegular = 1;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

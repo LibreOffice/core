@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -251,3 +252,5 @@ bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const vector< string
 static FrontendPluginRegistry::Add< loplugin::LibreOfficeAction > X( "loplugin", "LibreOffice compile check plugin" );
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

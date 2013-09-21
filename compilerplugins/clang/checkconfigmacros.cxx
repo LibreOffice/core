@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -136,3 +137,5 @@ void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation loca
 static Plugin::Registration< CheckConfigMacros > X( "bodynotinblock" );
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants XlHAlign {
         const long xlHAlignCenter = -4108;
@@ -10,3 +11,5 @@ module ooo { module vba { module excel {
         const long xlHAlignRight = -4152;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

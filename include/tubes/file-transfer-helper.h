@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * empathy-ft-handler.h - Header for EmpathyFTHandler
  * Copyright (C) 2009 Collabora Ltd.
@@ -124,3 +125,5 @@ gboolean empathy_ft_handler_is_cancelled (EmpathyFTHandler *handler);
 G_END_DECLS
 
 #endif /* __EMPATHY_FT_HANDLER_H__ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants XlChartType {
         const long xl3DArea = -4098;
@@ -75,3 +76,5 @@ module ooo { module vba { module excel {
         const long xlXYScatterSmoothNoMarkers = 73;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

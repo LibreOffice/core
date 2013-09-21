@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants XlDisplayBlanksAs {
         const long xlInterpolated = 3;
@@ -5,3 +6,5 @@ module ooo { module vba { module excel {
         const long xlZero = 2;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

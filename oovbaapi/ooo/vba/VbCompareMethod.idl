@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba {
     constants VbCompareMethod {
         const long vbBinaryCompare = 0;
@@ -5,3 +6,5 @@ module ooo { module vba {
         const long vbTextCompare = 1;
     };
 }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

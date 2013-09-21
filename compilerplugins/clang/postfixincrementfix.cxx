@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -127,3 +128,5 @@ bool PostfixIncrementFix::shouldDoChange( const Expr* operand )
 static Plugin::Registration< PostfixIncrementFix > X( "postfixincrementfix" );
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module adodb {
     constants CursorOptionEnum {
         const long adAddNew = 16778240;
@@ -15,3 +16,5 @@ module ooo { module vba { module adodb {
         const long adUpdateBatch = 65536;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants XlDisplayUnit {
         const long xlHundredMillions = -8;
@@ -11,3 +12,5 @@ module ooo { module vba { module excel {
         const long xlThousands = -3;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

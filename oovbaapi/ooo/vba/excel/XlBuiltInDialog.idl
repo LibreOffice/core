@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module excel {
     constants XlBuiltInDialog {
         const long xlDialogActivate = 103;
@@ -244,3 +245,5 @@ module ooo { module vba { module excel {
         const long xlDialogZoom = 256;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

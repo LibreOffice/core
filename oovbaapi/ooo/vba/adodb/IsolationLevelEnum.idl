@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module adodb {
     constants IsolationLevelEnum {
         const long adXactBrowse = 256;
@@ -11,3 +12,5 @@ module ooo { module vba { module adodb {
         const long adXactUnspecified = -1;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

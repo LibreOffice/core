@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module access {
     constants AcSpreadSheetType {
         const long acSpreadsheetTypeExcel3 = 0;
@@ -13,3 +14,5 @@ module ooo { module vba { module access {
         const long acSpreadsheetTypeLotusWK4 = 7;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

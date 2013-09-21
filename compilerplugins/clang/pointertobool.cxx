@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -162,3 +163,5 @@ bool PointerToBool::ignoreConversion( const Stmt* stmt )
 static Plugin::Registration< PointerToBool > X( "pointertobool" );
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

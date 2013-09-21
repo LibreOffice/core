@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 module ooo { module vba { module dao {
     constants TableDefAttributeEnum {
         const long dbAttachedODBC = 536870912;
@@ -8,3 +9,5 @@ module ooo { module vba { module dao {
         const long dbSystemObject = -2147483646;
     };
 }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
