@@ -499,7 +499,7 @@ LanguageTag::LanguageTag()
         mbSystemLocale( false),
         mbInitializedBcp47( false),
         mbInitializedLocale( false),
-        mbInitializedLangID( false),
+        mbInitializedLangID( true),
         mbIsFallback( false)
 {
 }
