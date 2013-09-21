@@ -100,6 +100,8 @@
 		8C3A648D17DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */; };
 		8C3A648E17DCBE9E004A77D9 /* timer_start_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */; };
 		8C8C7FB017EDA9330022A6BD /* UINavigationController+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8C7FAF17EDA9330022A6BD /* UINavigationController+Theme.m */; };
+		8C8C7FB317EDAFD20022A6BD /* more_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C8C7FB117EDAFD20022A6BD /* more_ipad.png */; };
+		8C8C7FB417EDAFD20022A6BD /* more_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C8C7FB217EDAFD20022A6BD /* more_ipad@2x.png */; };
 		8C94E69617CF7BF000B4848D /* WTPairingScreenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */; };
 		8CAD658517A2E84A00CFB661 /* MainSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */; };
 		8CAD658817A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658717A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m */; };
@@ -108,8 +110,6 @@
 		8CAD65A017A3F76300CFB661 /* SlideShowSwipeInList~ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD659F17A3F76300CFB661 /* SlideShowSwipeInList~ipad.m */; };
 		8CAF3DDF17D0DFFD00F931E5 /* WTcontrol~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */; };
 		8CAF3DE017D0DFFD00F931E5 /* WTcontrol~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */; };
-		8CAF3DE317D1D5D700F931E5 /* more_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DE117D1D5D600F931E5 /* more_ipad.png */; };
-		8CAF3DE417D1D5D700F931E5 /* more_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */; };
 		8CBF9DEB17DDBFA70044D949 /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF9DC417DDBFA70044D949 /* IASKAppSettingsViewController.m */; };
 		8CBF9DEC17DDBFA70044D949 /* IASKAppSettingsWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF9DC617DDBFA70044D949 /* IASKAppSettingsWebViewController.m */; };
 		8CBF9DED17DDBFA70044D949 /* IASKSpecifierValuesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF9DC817DDBFA70044D949 /* IASKSpecifierValuesViewController.m */; };
@@ -289,6 +289,8 @@
 		8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_start_btn_dark.png; sourceTree = "<group>"; };
 		8C8C7FAE17EDA9330022A6BD /* UINavigationController+Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Theme.h"; path = "iosremote/Categories/UINavigationController+Theme.h"; sourceTree = "<group>"; };
 		8C8C7FAF17EDA9330022A6BD /* UINavigationController+Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Theme.m"; path = "iosremote/Categories/UINavigationController+Theme.m"; sourceTree = "<group>"; };
+		8C8C7FB117EDAFD20022A6BD /* more_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_ipad.png; sourceTree = "<group>"; };
+		8C8C7FB217EDAFD20022A6BD /* more_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_ipad@2x.png"; sourceTree = "<group>"; };
 		8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WTPairingScreenshot.png; sourceTree = "<group>"; };
 		8CAD658317A2E84A00CFB661 /* MainSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainSplitViewController.h; path = iosremote/Classes/MainSplitViewController.h; sourceTree = "<group>"; };
 		8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainSplitViewController.m; path = iosremote/Classes/MainSplitViewController.m; sourceTree = "<group>"; };
@@ -302,8 +304,6 @@
 		8CAD659F17A3F76300CFB661 /* SlideShowSwipeInList~ipad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SlideShowSwipeInList~ipad.m"; path = "iosremote/Classes/SlideShowSwipeInList~ipad.m"; sourceTree = "<group>"; };
 		8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WTcontrol~ipad.png"; sourceTree = "<group>"; };
 		8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WTcontrol~iphone.png"; sourceTree = "<group>"; };
-		8CAF3DE117D1D5D600F931E5 /* more_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_ipad.png; sourceTree = "<group>"; };
-		8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_ipad@2x.png"; sourceTree = "<group>"; };
 		8CBF9DC317DDBFA70044D949 /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		8CBF9DC417DDBFA70044D949 /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
 		8CBF9DC517DDBFA70044D949 /* IASKAppSettingsWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsWebViewController.h; sourceTree = "<group>"; };
@@ -469,6 +469,8 @@
 		8C06B31917B7EC62002F5CF8 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				8C8C7FB117EDAFD20022A6BD /* more_ipad.png */,
+				8C8C7FB217EDAFD20022A6BD /* more_ipad@2x.png */,
 				8C2937BA17E837BA00C3B887 /* Default-568h@2x.png */,
 				8C2937BB17E837BA00C3B887 /* Default.png */,
 				8C2937BC17E837BA00C3B887 /* Default@2x.png */,
@@ -481,8 +483,6 @@
 				8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */,
 				8C23B46A17DB3B8600FB4DE6 /* timer_settime_btn.png */,
 				8C23B46B17DB3B8600FB4DE6 /* timer_settime_btn@2x.png */,
-				8CAF3DE117D1D5D600F931E5 /* more_ipad.png */,
-				8CAF3DE217D1D5D700F931E5 /* more_ipad@2x.png */,
 				8CAF3DDD17D0DFFD00F931E5 /* WTcontrol~ipad.png */,
 				8CAF3DDE17D0DFFD00F931E5 /* WTcontrol~iphone.png */,
 				8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */,
@@ -891,6 +891,7 @@
 				8C0DC83D17A4177C0099E5AE /* previousButton_pressed@2x.png in Resources */,
 				8C0DC84217A4185A0099E5AE /* nextButton_normal.png in Resources */,
 				8C0DC84317A4185A0099E5AE /* nextButton_normal@2x.png in Resources */,
+				8C8C7FB417EDAFD20022A6BD /* more_ipad@2x.png in Resources */,
 				8C0DC84417A4185A0099E5AE /* previousButton_normal.png in Resources */,
 				8C0DC84517A4185A0099E5AE /* previousButton_normal@2x.png in Resources */,
 				8C26E5C617A5539D007DA4B7 /* UserDefaults.plist in Resources */,
@@ -918,14 +919,13 @@
 				8C94E69617CF7BF000B4848D /* WTPairingScreenshot.png in Resources */,
 				8CAF3DDF17D0DFFD00F931E5 /* WTcontrol~ipad.png in Resources */,
 				8CAF3DE017D0DFFD00F931E5 /* WTcontrol~iphone.png in Resources */,
-				8CAF3DE317D1D5D700F931E5 /* more_ipad.png in Resources */,
-				8CAF3DE417D1D5D700F931E5 /* more_ipad@2x.png in Resources */,
 				8C23B46C17DB3B8600FB4DE6 /* timer_settime_btn.png in Resources */,
 				8C23B46D17DB3B8600FB4DE6 /* timer_settime_btn@2x.png in Resources */,
 				8C3A648817DCBE9E004A77D9 /* timer_clear_btn_dark.png in Resources */,
 				8C3A648A17DCBE9E004A77D9 /* timer_pause_btn_dark.png in Resources */,
 				8C3A648B17DCBE9E004A77D9 /* timer_pause_btn_dark@2x.png in Resources */,
 				8C3A648C17DCBE9E004A77D9 /* timer_settime_btn_dark.png in Resources */,
+				8C8C7FB317EDAFD20022A6BD /* more_ipad.png in Resources */,
 				8C3A648D17DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png in Resources */,
 				8C3A648E17DCBE9E004A77D9 /* timer_start_btn_dark.png in Resources */,
 				8CBF9DFA17DDBFA70044D949 /* IASKAppSettingsView.xib in Resources */,

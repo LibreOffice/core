@@ -121,7 +121,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="请将以上pin码输入到LibreOffice Impress - 幻灯片播放 - Impress远程 中" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="upW-oF-qOa">
-                                <rect key="frame" x="29" y="419.00000000000006" width="271" height="65"/>
+                                <rect key="frame" x="29" y="419" width="271" height="65"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="15"/>
                                 <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
@@ -607,7 +607,7 @@
         <image name="add.png" width="30" height="30"/>
         <image name="buttonBackground.png" width="45" height="45"/>
         <image name="ic_launcher.png" width="16" height="16"/>
-        <image name="more_icon.png" width="30" height="30"/>
+        <image name="more_icon.png" width="60" height="60"/>
         <image name="pointer.png" width="143" height="147"/>
         <image name="pointer_pushed.png" width="143" height="147"/>
         <image name="pushed_next_button.png" width="315" height="220"/>
