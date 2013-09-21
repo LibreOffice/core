@@ -36,8 +36,6 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
     private ServersManager mServersManager;
 
-    private BluetoothOperator.State mBluetoothState;
-
     private Timer mTimer;
     private SlideShow mSlideShow;
 
@@ -53,19 +51,8 @@ public class CommunicationService extends Service implements Runnable, MessagesL
 
         mServersManager = new ServersManager(this);
 
-        saveBluetoothState();
-        enableBluetooth();
-
         mTimer = new Timer(this);
         mSlideShow = new SlideShow(mTimer);
-    }
-
-    private void saveBluetoothState() {
-        mBluetoothState = BluetoothOperator.getState();
-    }
-
-    private void enableBluetooth() {
-        BluetoothOperator.enable();
     }
 
     @Override
@@ -237,24 +224,6 @@ public class CommunicationService extends Service implements Runnable, MessagesL
     public void onDestroy() {
         stopServersSearch();
         disconnectServer();
-
-        restoreBluetoothState();
-    }
-
-    private void restoreBluetoothState() {
-        if (!BluetoothOperator.isStateValid(mBluetoothState)) {
-            return;
-        }
-
-        if (mBluetoothState.wasBluetoothEnabled()) {
-            return;
-        }
-
-        disableBluetooth();
-    }
-
-    private void disableBluetooth() {
-        BluetoothOperator.disable();
     }
 }
 

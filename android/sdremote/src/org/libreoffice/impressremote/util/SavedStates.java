@@ -16,6 +16,7 @@ public final class SavedStates {
         private Keys() {
         }
 
+        public static final String BLUETOOTH_ENABLED ="BLUETOOTH_ENABLED";
         public static final String CURRENT_VIEW_ID = "CURRENT_VIEW_ID";
         public static final String ERROR_MESSAGE = "ERROR_MESSAGE";
         public static final String MODE = "MODE";

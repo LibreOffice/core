@@ -26,6 +26,7 @@ import org.libreoffice.impressremote.util.Fragments;
 import org.libreoffice.impressremote.util.Intents;
 import org.libreoffice.impressremote.R;
 import org.libreoffice.impressremote.util.Preferences;
+import org.libreoffice.impressremote.util.SavedStates;
 
 public class ComputersActivity extends SherlockFragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
     private static final class TabsIndices {
@@ -36,12 +37,42 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
         public static final int WIFI = 1;
     }
 
+    private boolean mBluetoothWasEnabled;
+
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
         super.onCreate(aSavedInstanceState);
 
+        saveBluetoothState(aSavedInstanceState);
+        enableBluetooth();
+
         setUpTitle();
         setUpContent();
+    }
+
+    private void saveBluetoothState(Bundle aSavedInstanceState) {
+        // In more ideal world this work should be done at the service.
+        // Unfortunately service cannot save or restore its state
+        // but enabling or disabling Bluetooth is quite a long operation,
+        // so we have more chances to manage state right at the activity.
+
+        if (!BluetoothOperator.isAvailable()) {
+            return;
+        }
+
+        mBluetoothWasEnabled = wasBluetoothEnabled(aSavedInstanceState);
+    }
+
+    private boolean wasBluetoothEnabled(Bundle aSavedInstanceState) {
+        if (aSavedInstanceState == null) {
+            return BluetoothOperator.getAdapter().isEnabled();
+        }
+
+        return aSavedInstanceState.getBoolean(SavedStates.Keys.BLUETOOTH_ENABLED);
+    }
+
+    private void enableBluetooth() {
+        BluetoothOperator.enable();
     }
 
     private void setUpTitle() {
@@ -233,6 +264,40 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
         int aTabIndex = getSupportActionBar().getSelectedNavigationIndex();
 
         aPreferences.setInt(Preferences.Keys.SELECTED_COMPUTERS_TAB_INDEX, aTabIndex);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle aSavedInstanceState) {
+        super.onSaveInstanceState(aSavedInstanceState);
+
+        rememberBluetoothState(aSavedInstanceState);
+    }
+
+    private void rememberBluetoothState(Bundle aSavedInstanceState) {
+        aSavedInstanceState.putBoolean(SavedStates.Keys.BLUETOOTH_ENABLED, mBluetoothWasEnabled);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        restoreBluetoothState();
+    }
+
+    private void restoreBluetoothState() {
+        if (!BluetoothOperator.isAvailable()) {
+            return;
+        }
+
+        if (mBluetoothWasEnabled) {
+            return;
+        }
+
+        disableBluetooth();
+    }
+
+    private void disableBluetooth() {
+        BluetoothOperator.disable();
     }
 }
 
