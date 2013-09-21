@@ -1018,7 +1018,8 @@ sub get_Source_Directory_For_Files_From_Includepathlist
 
     installer::logger::include_header_into_logfile("$item:");
 
-    my $extrarootdir = $allvariables->{'WINDOWSBASISROOTNAME'};
+    my ($foundit, $dontcare, $extrarootdir) =
+        get_office_directory_gid_and_hostname($dirsref);
     my $infoline = "";
 
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
@@ -1045,7 +1046,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $instdirdestination;
         if ($destination)
         {
-            if ($extrarootdir)
+            if (($installer::globals::iswindowsbuild) && $foundit && $extrarootdir)
             {
                 $destination =~ s,$extrarootdir/,,; # remove it from path
             }
