@@ -95,6 +95,7 @@ typedef ::std::map< LanguageType, LanguageTag::ImplPtr > MapLangID;
 struct theMapBcp47 : public rtl::Static< MapBcp47, theMapBcp47 > {};
 struct theMapLangID : public rtl::Static< MapLangID, theMapLangID > {};
 struct theDontKnow : public rtl::Static< LanguageTag::ImplPtr, theDontKnow > {};
+struct theSystemLocale : public rtl::Static< LanguageTag::ImplPtr, theSystemLocale > {};
 }
 
 
@@ -665,19 +666,49 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     // methods as they may create temporary LanguageTag instances. Only
     // LanguageTagImpl::convertToBcp47(Locale) is ok.
 
-#if OSL_DEBUG_LEVEL > 0
-    static size_t nAccesses = 0;
-    ++nAccesses;
-    SAL_INFO( "i18nlangtag", "LanguageTagImpl::registerImpl: " << nAccesses << " calls");
-#endif
-
     ImplPtr pImpl;
 
-    // Do not register unresolved system locale, also force LangID if system.
-    if (mbSystemLocale && !mbInitializedLangID)
+#if OSL_DEBUG_LEVEL > 0
+    static size_t nCalls = 0;
+    ++nCalls;
+    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCalls << " calls");
+#endif
+
+    // Do not register unresolved system locale, also force LangID if system
+    // and take the system locale shortcut if possible.
+    if (mbSystemLocale)
     {
-        mnLangID = MsLangId::getRealLanguage( LANGUAGE_SYSTEM);
-        mbInitializedLangID = true;
+        pImpl = theSystemLocale::get();
+        if (pImpl)
+        {
+#if OSL_DEBUG_LEVEL > 0
+            static size_t nCallsSystem = 0;
+            ++nCallsSystem;
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystem << " system calls");
+#endif
+            return pImpl;
+        }
+        if (!mbInitializedLangID)
+        {
+            mnLangID = MsLangId::getRealLanguage( LANGUAGE_SYSTEM);
+            mbInitializedLangID = (mnLangID != LANGUAGE_SYSTEM);
+            SAL_WARN_IF( !mbInitializedLangID, "i18nlangtag", "LanguageTag::registerImpl: can't resolve system!");
+        }
+    }
+
+    if (mbInitializedLangID)
+    {
+        // A great share are calls for a system equal locale.
+        pImpl = theSystemLocale::get();
+        if (pImpl && pImpl->mnLangID == mnLangID)
+        {
+#if OSL_DEBUG_LEVEL > 0
+            static size_t nCallsSystemEqual = 0;
+            ++nCallsSystemEqual;
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystemEqual << " system equal LangID calls");
+#endif
+            return pImpl;
+        }
     }
 
     // Force Bcp47 if not LangID.
@@ -686,6 +717,27 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         maBcp47 = LanguageTagImpl::convertToBcp47( maLocale);
         mbInitializedBcp47 = !maBcp47.isEmpty();
     }
+
+    if (mbInitializedBcp47)
+    {
+        // A great share are calls for a system equal locale.
+        pImpl = theSystemLocale::get();
+        if (pImpl && pImpl->maBcp47 == maBcp47)
+        {
+#if OSL_DEBUG_LEVEL > 0
+            static size_t nCallsSystemEqual = 0;
+            ++nCallsSystemEqual;
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystemEqual << " system equal BCP47 calls");
+#endif
+            return pImpl;
+        }
+    }
+
+#if OSL_DEBUG_LEVEL > 0
+    static size_t nCallsNonSystem = 0;
+    ++nCallsNonSystem;
+    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsNonSystem << " non-system calls");
+#endif
 
     osl::MutexGuard aGuard( theMutex::get());
 
@@ -820,12 +872,27 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         if (!rDontKnow)
             rDontKnow.reset( new LanguageTagImpl( *this));
         pImpl = rDontKnow;
+#if OSL_DEBUG_LEVEL > 0
+        static size_t nCallsDontKnow = 0;
+        ++nCallsDontKnow;
+        SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsDontKnow << " DontKnow calls");
+#endif
     }
     else
     {
         SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for 0x" << ::std::hex << mnLangID );
         pImpl.reset( new LanguageTagImpl( *this));
     }
+
+    // If we reach here for mbSystemLocale we didn't have theSystemLocale
+    // above, so add it.
+    if (mbSystemLocale && mbInitializedLangID)
+    {
+        theSystemLocale::get() = pImpl;
+        SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: added system locale 0x"
+                << ::std::hex << pImpl->mnLangID << " '" << pImpl->maBcp47 << "'");
+    }
+
     return pImpl;
 }
 
