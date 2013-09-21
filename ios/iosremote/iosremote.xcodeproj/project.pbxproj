@@ -67,8 +67,6 @@
 		8C19F42717B04E7C005BDB61 /* navBarBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F42517B04E7C005BDB61 /* navBarBackground@2x.png */; };
 		8C19F42817B04E7C005BDB61 /* navBarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F42617B04E7C005BDB61 /* navBarBackground.png */; };
 		8C19F42F17B05089005BDB61 /* LibONavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42E17B05089005BDB61 /* LibONavigationController.m */; };
-		8C19F43017B0518A005BDB61 /* UINavigationController+Theme.h in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */; };
-		8C19F43117B0518A005BDB61 /* UINavigationController+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */; };
 		8C19F43317B056B3005BDB61 /* navBarButtonNormal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */; };
 		8C19F43617B10D49005BDB61 /* UIViewController+LibOStyling.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */; };
 		8C19F43917B145AD005BDB61 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C19F43717B145AD005BDB61 /* backButton.png */; };
@@ -101,6 +99,7 @@
 		8C3A648C17DCBE9E004A77D9 /* timer_settime_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */; };
 		8C3A648D17DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */; };
 		8C3A648E17DCBE9E004A77D9 /* timer_start_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */; };
+		8C8C7FB017EDA9330022A6BD /* UINavigationController+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8C7FAF17EDA9330022A6BD /* UINavigationController+Theme.m */; };
 		8C94E69617CF7BF000B4848D /* WTPairingScreenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */; };
 		8CAD658517A2E84A00CFB661 /* MainSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */; };
 		8CAD658817A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAD658717A2EDB200CFB661 /* SlideShowPreviewViewController~ipad.m */; };
@@ -245,8 +244,6 @@
 		8C19F42317B02C2E005BDB61 /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PopoverViewCompatibility.h; path = PopoverView/PopoverViewCompatibility.h; sourceTree = "<group>"; };
 		8C19F42517B04E7C005BDB61 /* navBarBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBarBackground@2x.png"; sourceTree = "<group>"; };
 		8C19F42617B04E7C005BDB61 /* navBarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBarBackground.png; sourceTree = "<group>"; };
-		8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Theme.h"; path = "iosremote/Categories/UINavigationController+Theme.h"; sourceTree = "<group>"; };
-		8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Theme.m"; path = "iosremote/Categories/UINavigationController+Theme.m"; sourceTree = "<group>"; };
 		8C19F42D17B05089005BDB61 /* LibONavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LibONavigationController.h; path = iosremote/Classes/LibONavigationController.h; sourceTree = "<group>"; };
 		8C19F42E17B05089005BDB61 /* LibONavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LibONavigationController.m; path = iosremote/Classes/LibONavigationController.m; sourceTree = "<group>"; };
 		8C19F43217B056B3005BDB61 /* navBarButtonNormal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navBarButtonNormal@2x.png"; sourceTree = "<group>"; };
@@ -290,6 +287,8 @@
 		8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_settime_btn_dark.png; sourceTree = "<group>"; };
 		8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timer_settime_btn_dark@2x.png"; sourceTree = "<group>"; };
 		8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_start_btn_dark.png; sourceTree = "<group>"; };
+		8C8C7FAE17EDA9330022A6BD /* UINavigationController+Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Theme.h"; path = "iosremote/Categories/UINavigationController+Theme.h"; sourceTree = "<group>"; };
+		8C8C7FAF17EDA9330022A6BD /* UINavigationController+Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Theme.m"; path = "iosremote/Categories/UINavigationController+Theme.m"; sourceTree = "<group>"; };
 		8C94E69517CF7BF000B4848D /* WTPairingScreenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WTPairingScreenshot.png; sourceTree = "<group>"; };
 		8CAD658317A2E84A00CFB661 /* MainSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainSplitViewController.h; path = iosremote/Classes/MainSplitViewController.h; sourceTree = "<group>"; };
 		8CAD658417A2E84A00CFB661 /* MainSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainSplitViewController.m; path = iosremote/Classes/MainSplitViewController.m; sourceTree = "<group>"; };
@@ -615,6 +614,8 @@
 		8C1A170617A28DDF00B4BB3C /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				8C8C7FAE17EDA9330022A6BD /* UINavigationController+Theme.h */,
+				8C8C7FAF17EDA9330022A6BD /* UINavigationController+Theme.m */,
 				57B152971764703500EECC67 /* NSString+Base64.h */,
 				57B152981764703500EECC67 /* NSString+Base64.m */,
 				57CFED9717838FDC00E82E05 /* EditableTableViewCell.h */,
@@ -630,8 +631,6 @@
 				8C23B46817DA158C00FB4DE6 /* UIView+Shadowing.m */,
 				57DC7010178E16A40050FC58 /* UIView+FadeInFadeOut.h */,
 				57DC7011178E16A40050FC58 /* UIView+FadeInFadeOut.m */,
-				8C19F42917B04EC6005BDB61 /* UINavigationController+Theme.h */,
-				8C19F42A17B04EC6005BDB61 /* UINavigationController+Theme.m */,
 				8C19F42D17B05089005BDB61 /* LibONavigationController.h */,
 				8C19F42E17B05089005BDB61 /* LibONavigationController.m */,
 				8C19F43417B10D48005BDB61 /* UIViewController+LibOStyling.h */,
@@ -967,8 +966,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C19F43017B0518A005BDB61 /* UINavigationController+Theme.h in Sources */,
-				8C19F43117B0518A005BDB61 /* UINavigationController+Theme.m in Sources */,
 				8C19F42417B02C7A005BDB61 /* PopoverView.m in Sources */,
 				57C6E3FF175E06E800E8BC5F /* main.m in Sources */,
 				57C6E403175E06E800E8BC5F /* AppDelegate.m in Sources */,
@@ -984,6 +981,7 @@
 				57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */,
 				57FE71E31785C61400B50125 /* PinValidationViewController.m in Sources */,
 				57FE71E917861A9000B50125 /* SlideShowPreviewViewController.m in Sources */,
+				8C8C7FB017EDA9330022A6BD /* UINavigationController+Theme.m in Sources */,
 				57867A571787385800EBBE52 /* SlideShowViewController~iphone.m in Sources */,
 				57701742178B0A6900B99793 /* SlideShowSwipeInList~iphone.m in Sources */,
 				57DC7012178E16A40050FC58 /* UIView+FadeInFadeOut.m in Sources */,
