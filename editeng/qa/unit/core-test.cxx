@@ -281,8 +281,9 @@ private:
         if (m_rText.isEmpty())
             return false;
 
+        LanguageTag aLanguageTag( m_eLang);
         const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
-                m_rText, rSttPos, nEndPos, *this, m_eLang);
+                m_rText, rSttPos, nEndPos, *this, aLanguageTag);
         if (pFnd && pFnd->IsTextOnly())
         {
             m_rText = m_rText.replaceAt(rSttPos, nEndPos, pFnd->GetLong());

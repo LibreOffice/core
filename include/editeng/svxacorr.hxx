@@ -24,7 +24,7 @@
 
 #include <o3tl/sorted_vector.hxx>
 #include <tools/rtti.hxx>
-#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <tools/string.hxx>
@@ -244,8 +244,8 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     SvxSwAutoFmtFlags aSwFlags;     // StarWriter AutoFormat Flags
 
     // all languages in a table
-    boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>* pLangTable;
-    std::map<LanguageType, long> aLastFileTable;
+    boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists>* pLangTable;
+    std::map<LanguageTag, long> aLastFileTable;
     CharClass* pCharClass;
 
     bool bRunNext;
@@ -269,7 +269,7 @@ protected:
                               const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& );
 
     // required language in the table add if possible only when the file exists
-    sal_Bool    CreateLanguageFile(LanguageType eLang, sal_Bool bNewFile = sal_True);
+    sal_Bool    CreateLanguageFile(const LanguageTag& rLanguageTag, sal_Bool bNewFile = sal_True);
     //  - Return the replacement text (only for SWG format, all others can be
     //      taken from the word list!)
     //      rShort is the stream name - encrypted!
@@ -309,7 +309,7 @@ public:
     const SvxAutocorrWord* SearchWordsInList( const OUString& rTxt,
                                     sal_Int32& rStt, sal_Int32 nEndPos,
                                     SvxAutoCorrDoc& rDoc,
-                                    LanguageType& rLang );
+                                    LanguageTag& rLang );
 
     // Query/Set the Character for the Quote substitution
     sal_Unicode GetStartSingleQuote() const         { return cStartSQuote; }
@@ -329,7 +329,7 @@ public:
 
     // Query/Set the name of the AutoCorrect file
     // the default is "autocorr.dat"
-    OUString GetAutoCorrFileName( LanguageType eLang = LANGUAGE_SYSTEM,
+    OUString GetAutoCorrFileName( const LanguageTag& rLanguageTag /* = LANGUAGE_SYSTEM */ ,
                                 sal_Bool bNewFile = sal_False,
                                 sal_Bool bTstUserExist = sal_False ) const;
 

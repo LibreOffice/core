@@ -312,13 +312,14 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     LanguageType eLang = GetLanguage(nEndPos, sal_False);
     if(LANGUAGE_SYSTEM == eLang)
         eLang = GetAppLanguage();
+    LanguageTag aLanguageTag( eLang);
 
     //JP 22.04.99: Bug 63883 - Special treatment for dots.
     bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().getLength() &&
                             ('.' == pTxtNd->GetTxt()[nEndPos]);
 
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
-                                pTxtNd->GetTxt(), rSttPos, nEndPos, *this, eLang );
+                                pTxtNd->GetTxt(), rSttPos, nEndPos, *this, aLanguageTag );
     SwDoc* pDoc = rEditSh.GetDoc();
     if( pFnd )
     {
@@ -338,7 +339,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         }
         else
         {
-            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( eLang, sal_False, sal_True ));
+            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( aLanguageTag, sal_False, sal_True ));
             sal_uInt16 nPos = aTBlks.GetIndex( pFnd->GetShort() );
             if( USHRT_MAX != nPos && aTBlks.BeginGetDoc( nPos ) )
             {

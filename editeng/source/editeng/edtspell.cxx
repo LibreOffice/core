@@ -741,8 +741,9 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
     if( aShort.isEmpty() )
         return bRet;
 
-    LanguageType eLang = mpEditEngine->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) );
-    const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(pCurNode->GetString(), rSttPos, nEndPos, *this, eLang);
+    LanguageTag aLanguageTag( mpEditEngine->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) ));
+    const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
+            pCurNode->GetString(), rSttPos, nEndPos, *this, aLanguageTag);
     if( pFnd && pFnd->IsTextOnly() )
     {
         // then replace
