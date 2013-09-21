@@ -448,7 +448,7 @@ $(WORKDIR)/LinkTarget/Library/%.exports :
 # This recipe actually also builds the dep-target as a side-effect, which
 # is an optimization to reduce incremental build time.
 # (with exception for concat-dep executable itself which does not exist yet...)
-$(WORKDIR)/LinkTarget/% : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
+$(WORKDIR)/LinkTarget/% : $(gb_Helper_MISCDUMMY)
 	$(call gb_LinkTarget__command_impl,$@,$*)
 
 # call gb_LinkTarget__make_installed_rule,linktarget
@@ -494,11 +494,15 @@ define gb_LinkTarget__get_headers_check
 ifneq ($$(SELF),$$*)
 $$(eval $$(call gb_Output_info,LinkTarget $$* not defined: Assuming headers to be there!,ALL))
 endif
-$$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touch $$@ && mkdir -p $(WORKDIR)/LinkTarget/pdb/$$(dir $$*))
+$$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, touch $$@)
 
 endef
 
-$(call gb_LinkTarget_get_headers_target,%) :
+$(WORKDIR)/Headers/%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+# sadly because of the subdirectories can't have pattern deps on .dir here
+$(WORKDIR)/Headers/% :
 	$(eval $(gb_LinkTarget__get_headers_check))
 	$(COMMAND)
 
@@ -542,6 +546,10 @@ define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : LINKTARGET := $(1)
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(call gb_LinkTarget__get_workdir_linktargetname,$(1))
+$(call gb_LinkTarget_get_headers_target,$(1)) : \
+	| $(dir $(call gb_LinkTarget_get_headers_target,$(1))).dir \
+	  $(dir $(call gb_LinkTarget_get_target,$(1))).dir \
+	  $(dir $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))).dir
 $(call gb_LinkTarget_get_target,$(1)) : ILIBTARGET :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
