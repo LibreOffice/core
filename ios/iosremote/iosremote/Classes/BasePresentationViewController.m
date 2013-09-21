@@ -78,7 +78,7 @@
     [cell.thumbnail setShadow];
     
     [self.comManager.interpreter.slideShow getContentAtIndex:indexPath.row forView:cell];
-    
+    cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
 
@@ -293,7 +293,7 @@
     
     self.horizontalTableView.rowHeight = kCellWidth;
     
-    self.horizontalTableView.backgroundColor = [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0];
+    self.horizontalTableView.backgroundColor = kHorizontalTableBackgroundColor;
     
     self.horizontalTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     

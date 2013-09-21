@@ -12,21 +12,18 @@
 @class EditableTableViewCell;
 @class CommunicationManager;
 
-//  Constants representing the book's fields.
-//
 enum {
     ServerAddr,
     ServerName
 };
 
-//  Constants representing the various sections of our grouped table view.
-//
 enum {
     InformationSection
 };
 
 typedef NSUInteger ServerAttribute;
 
+// View controller used to add new server
 @interface NewServerViewController : UITableViewController <UITextFieldDelegate>
 @property (nonatomic, strong) Server *server;
 @property (nonatomic, strong) EditableTableViewCell *nameCell;

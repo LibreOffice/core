@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+// Horizontal cell used in the horizontal swipe list on iPad
 @interface HorizontalSlideCell : UITableViewCell
 
 @property (strong, nonatomic) UIImageView *thumbnail;

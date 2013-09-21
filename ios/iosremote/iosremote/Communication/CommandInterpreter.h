@@ -11,6 +11,7 @@
 
 @class SlideShow;
 
+// Interprete server-remote messages
 @interface CommandInterpreter : NSObject
 
 @property (atomic, strong) SlideShow* slideShow;

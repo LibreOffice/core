@@ -38,8 +38,9 @@
 
 - (void) start;
 - (void) clear;
+// Keep start/pause/clear button up to date
 - (void) updateStartButtonIcon;
-
+// set the seconds left property
 - (void) setSecondsLeft:(NSTimeInterval)duration;
 
 @end

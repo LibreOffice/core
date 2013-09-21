@@ -6,6 +6,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+
+// This is the global configuration file that is included automatically
 #ifndef iosremote_ControlVariables_h
 #define iosremote_ControlVariables_h
 
@@ -29,11 +31,11 @@
 // Horizontal padding for the embedded table view within the row
 #define kRowHorizontalPadding                       1
 
-// Background color for the horizontal table view (the one embedded inside the rows of our vertical table)
-#define kHorizontalTableBackgroundColor             [UIColor blackColor]
+// Background color for the horizontal table view (the one embedded beneath the slideshow previews)
+#define kHorizontalTableBackgroundColor             [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0]
 
 // The background color on the horizontal table view for when we select a particular cell
-#define kHorizontalTableSelectedBackgroundColor     [UIColor colorWithRed:0.0 green:0.59607843 blue:0.37254902 alpha:1.0]
+#define kHorizontalTableSelectedBackgroundColor     [UIColor lightGrayColor]
 
 #define kHorizontalTableCellHighlightedBackgroundColor [UIColor colorWithRed:0 green:0.4745098 blue:0.29019808 alpha:0.9]
 
