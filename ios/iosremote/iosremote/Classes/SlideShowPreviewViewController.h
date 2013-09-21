@@ -9,10 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CommunicationManager.h"
 
-#define OPTION_TIMER NSLocalizedString(@"Timer auto-start", nil)
-#define OPTION_POINTER NSLocalizedString(@"Touch pointer", nil)
-#define STOPWATCH_AUTO_START @"STOPWATCH_AUTO_START"
-
+// Once connected, users will be directed to this page. If the slideshow is not running yet, users may change the preferences and start the presentation. Otherwise, users will be directly taken to the presentation view controller.
 @interface SlideShowPreviewViewController : UIViewController
 
 @property (nonatomic, strong) CommunicationManager * comManager;

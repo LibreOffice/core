@@ -62,7 +62,7 @@ enum ConnectionState : NSInteger {
     CONNECTED
 };
 
-//
+// Used in serverlist view controller. When searching, display an activity indicator and relative text in the searching tablecell
 enum SearchState : NSInteger {
     WAITING,
     SEARCHING
@@ -70,17 +70,23 @@ enum SearchState : NSInteger {
 
 @interface CommunicationManager : NSObject
 
+// load previously added servers
 - (id) initWithExistingServers;
+// load previously generated pin code or generate a new one
 - (NSNumber *) getPairingPin;
+// connect the client to its server
 - (void) connectToServer:(Server*)server;
+// add a new server and preserve it in the userdefaults. Servers are bundled with comManager
 - (void) addServersWithName:(NSString*)name
                   AtAddress:(NSString*)addr;
 - (void) removeServerAtIndex:(NSUInteger)index;
 
+// acquire currently connected WiFi's SSID
 + (id)fetchSSIDInfo;
 
 @property ConnectionState state;
 @property SearchState searchState;
+// Used to display connection error message. Create protocol or take precautions like respondToSelector before calling on delegate's method
 @property (nonatomic, strong) id delegate;
 @property (atomic, strong) NSMutableArray* servers;
 @property (atomic, strong) NSMutableArray* autoDiscoveryServers;

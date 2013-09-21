@@ -70,7 +70,7 @@ dispatch_queue_t backgroundQueue;
                                                        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
                                                    }
                                                }];
-    self.tableView.backgroundColor = [UIColor colorWithRed:.674509804 green:.729411765 blue:.760784314 alpha:1.0];
+    self.tableView.backgroundColor = kHorizontalTableBackgroundColor;
 }
 
 - (void)viewDidUnload
@@ -133,6 +133,7 @@ dispatch_queue_t backgroundQueue;
     [cell setTag:20+indexPath.row];
     [self.slideshow getContentAtIndex:indexPath.row forView:cell];
     [slideNumber setText:[NSString stringWithFormat:@"%u", indexPath.row+1]];
+    cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
 
@@ -140,9 +141,7 @@ dispatch_queue_t backgroundQueue;
     // Otherwise selection will disable background color and make slide number unreadable
     if(cell.selected){
         UILabel *label = (UILabel *)[cell viewWithTag:2];
-        if ([label backgroundColor]!=[UIColor lightGrayColor]) {
-            [label setBackgroundColor:[UIColor lightGrayColor]];
-        }
+        [label setBackgroundColor:[UIColor lightGrayColor]];
     }
 }
 

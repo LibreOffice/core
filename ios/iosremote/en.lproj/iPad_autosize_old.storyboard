@@ -559,10 +559,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" image="Default.png" id="dn1-99-Dde">
-                                            <rect key="frame" x="44" y="3.5" width="233" height="163"/>
+                                            <rect key="frame" x="44" y="7" width="233" height="163"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="b5V-aR-n9S">
-                                            <rect key="frame" x="245" y="145" width="32" height="21"/>
+                                            <rect key="frame" x="245" y="149" width="32" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.80146555659999996" alpha="1" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
