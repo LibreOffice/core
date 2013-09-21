@@ -133,8 +133,7 @@ class TcpServersFinder implements ServersFinder, Runnable {
     private DatagramPacket buildSearchResultPacket() {
         byte[] aSearchResultBuffer = new byte[SEARCH_RESULT_BUFFER_SIZE];
 
-        return new DatagramPacket(
-            aSearchResultBuffer, aSearchResultBuffer.length);
+        return new DatagramPacket(aSearchResultBuffer, aSearchResultBuffer.length);
     }
 
     private String receiveSearchResult(DatagramPacket aSearchResultPacket) {
@@ -145,7 +144,7 @@ class TcpServersFinder implements ServersFinder, Runnable {
         } catch (SocketTimeoutException e) {
             return "";
         } catch (IOException e) {
-            throw new RuntimeException("Unable to receive search result.");
+            return "";
         }
     }
 
