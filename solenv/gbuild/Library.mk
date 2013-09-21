@@ -76,6 +76,13 @@ $(call gb_Package_add_file,Library_Copy_$(1),$(2),$(2))
 $(OUTDIR)/lib/$(notdir $(2)) : $(gb_INSTROOT)/$(2)
 endef
 
+# Note: there may be targets in 3 different directories: the library itself,
+# the exports target (and other misc. MSVC files) (always in
+# $(WORKDIR)/LinkTarget), and the import library, which may be in SDK;
+# the first 2 are always created by gb_LinkTarget_LinkTarget
+# Also: the directory dependencies must be on the headers_target because
+# MSVC will write a PDB file when compiling objects.
+#
 # call gb_Library__Library_impl,library,linktarget
 define gb_Library__Library_impl
 $(call gb_LinkTarget_LinkTarget,$(2),Library_$(1),$(call gb_Library_get_layer,$(1)))
@@ -86,10 +93,8 @@ $(call gb_LinkTarget_add_defs,$(2),\
 )
 $(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
 $(call gb_Library_get_exports_target,$(1)) : $(call gb_Library_get_target,$(1))
-$(call gb_Library_get_target,$(1)) : \
-	| $(dir $(call gb_Library_get_target,$(1))).dir \
-	  $(dir $(call gb_Library_get_ilib_target,$(1))).dir \
-	  $(gb_Library_DLLDIR)/.dir
+$(call gb_LinkTarget_get_headers_target,$(2)) : \
+	| $(dir $(call gb_Library_get_ilib_target,$(1))).dir
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(call gb_Library_get_ilib_target,$(1)))
