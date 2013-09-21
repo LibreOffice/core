@@ -193,7 +193,11 @@ class UnoInProcess:
         props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", True)]
         loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
         path = os.getenv("TDOC")
-        url = "file://" + quote(path) + "/" + quote(file)
+        if os.name == "nt":
+            # do not quote drive letter - it must be "X:"
+            url = "file:///" + path + "/" + quote(file)
+        else:
+            url = "file://" + quote(path) + "/" + quote(file)
         self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
         assert(self.xDoc)
         return self.xDoc
