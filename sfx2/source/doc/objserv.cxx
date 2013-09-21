@@ -994,7 +994,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                                 uno::Sequence< sal_Bool > bTmp;
                                 aCmisProperties[i].Value >>= bTmp;
                                 bCheckedOut = bTmp[0];
-
                             }
                         }
                         bShow = bCheckedOut;
