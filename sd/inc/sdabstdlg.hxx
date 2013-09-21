@@ -24,7 +24,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/NamedValue.hpp>

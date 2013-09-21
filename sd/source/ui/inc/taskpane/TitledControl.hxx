@@ -24,7 +24,6 @@
 #include "taskpane/ControlContainer.hxx"
 #include "TitleBar.hxx"
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <vcl/window.hxx>
 #include <memory>

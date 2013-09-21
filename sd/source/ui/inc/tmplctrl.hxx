@@ -20,7 +20,6 @@
 #define _SD_TMPLCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
-#include <tools/string.hxx>
 
 class SdTemplateControl : public SfxStatusBarControl
 {

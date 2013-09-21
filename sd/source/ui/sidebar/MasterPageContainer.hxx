@@ -23,7 +23,6 @@
 #include "MasterPageContainerProviders.hxx"
 
 #include <osl/mutex.hxx>
-#include <tools/string.hxx>
 #include <vcl/image.hxx>
 #include <memory>
 #include "PreviewRenderer.hxx"

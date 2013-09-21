@@ -22,7 +22,6 @@
 
 #include "taskpane/TaskPaneTreeNode.hxx"
 #include <vcl/image.hxx>
-#include <tools/string.hxx>
 #include <vcl/window.hxx>
 #include <memory>
 

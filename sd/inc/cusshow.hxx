@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <cppuhelper/weakref.hxx>
 #include "sddllapi.h"
 

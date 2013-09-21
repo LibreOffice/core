@@ -25,7 +25,6 @@
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
-#include <tools/string.hxx>
 
 #include <boost/shared_ptr.hpp>
 

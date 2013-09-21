@@ -23,7 +23,6 @@
 #include "tools/AsynchronousTask.hxx"
 #include "sddllapi.h"
 #include <ucbhelper/content.hxx>
-#include <tools/string.hxx>
 #include "com/sun/star/uno/Reference.hxx"
 
 #include <vector>
