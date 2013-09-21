@@ -2093,7 +2093,7 @@ bool LanguageTag::operator!=( const LanguageTag & rLanguageTag ) const
 
 bool LanguageTag::operator<( const LanguageTag & rLanguageTag ) const
 {
-    return getLanguageType() < rLanguageTag.getLanguageType();
+    return getBcp47( false).compareToIgnoreAsciiCase( rLanguageTag.getBcp47( false)) < 0;
 }
 
 

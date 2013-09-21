@@ -399,9 +399,9 @@ public:
      */
     bool    operator!=( const LanguageTag & rLanguageTag ) const;
 
-    /** Test this less than that.
+    /** Test this LanguageTag less than that LanguageTag.
 
-        For sorted containers. Internally uses the LanguageType for comparison.
+        For sorted containers. Does NOT resolve system.
      */
     bool    operator<( const LanguageTag & rLanguageTag ) const;
 
