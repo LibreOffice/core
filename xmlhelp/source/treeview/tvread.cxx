@@ -183,6 +183,7 @@ ConfigData::ConfigData()
       vendVersion("%VENDORVERSION"),
       vendShort("%VENDORSHORT")
 {
+    memset(m_vAdd, 0, sizeof(m_vAdd));
 }
 
 void SAL_CALL ConfigData::replaceName( OUString& oustring ) const
