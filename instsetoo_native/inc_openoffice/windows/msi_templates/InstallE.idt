@@ -54,6 +54,7 @@ RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
 SameProductFound	SAMEPRODUCTS	120
 ScheduleReboot	ISSCHEDULEREBOOT	3125
 SetARPInstallLocation		990
+SetARPNoRemove	VersionNT < 600	995
 SetODBCFolders		550
 StartServices	VersionNT	2800
 StopServices	VersionNT	950
