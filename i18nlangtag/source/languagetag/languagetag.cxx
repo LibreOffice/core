@@ -698,16 +698,36 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 
     if (mbInitializedLangID)
     {
-        // A great share are calls for a system equal locale.
-        pImpl = theSystemLocale::get();
-        if (pImpl && pImpl->mnLangID == mnLangID)
+        if (mnLangID == LANGUAGE_DONTKNOW)
         {
+            // Heavy usage of LANGUAGE_DONTKNOW, make it an own Impl for all the
+            // conversion attempts. At the same time provide a central breakpoint
+            // to inspect such places.
+            LanguageTag::ImplPtr& rDontKnow = theDontKnow::get();
+            if (!rDontKnow)
+                rDontKnow.reset( new LanguageTagImpl( *this));
+            pImpl = rDontKnow;
 #if OSL_DEBUG_LEVEL > 0
-            static size_t nCallsSystemEqual = 0;
-            ++nCallsSystemEqual;
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystemEqual << " system equal LangID calls");
+            static size_t nCallsDontKnow = 0;
+            ++nCallsDontKnow;
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsDontKnow << " DontKnow calls");
 #endif
             return pImpl;
+        }
+        else
+        {
+            // A great share are calls for a system equal locale.
+            pImpl = theSystemLocale::get();
+            if (pImpl && pImpl->mnLangID == mnLangID)
+            {
+#if OSL_DEBUG_LEVEL > 0
+                static size_t nCallsSystemEqual = 0;
+                ++nCallsSystemEqual;
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsSystemEqual
+                        << " system equal LangID calls");
+#endif
+                return pImpl;
+            }
         }
     }
 
@@ -752,8 +772,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
 #endif
 
     // Prefer LangID map as find+insert needs less comparison work.
-    // Never insert LANGUAGE_DONTKNOW
-    if (mbInitializedLangID && mnLangID != LANGUAGE_DONTKNOW)
+    if (mbInitializedLangID)
     {
         MapLangID& rMap = theMapLangID::get();
         MapLangID::const_iterator it( rMap.find( mnLangID));
@@ -862,21 +881,6 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                         << aBcp47 << "'");
             }
         }
-    }
-    else if (mbInitializedLangID && mnLangID == LANGUAGE_DONTKNOW)
-    {
-        // Heavy usage of LANGUAGE_DONTKNOW, make it an own Impl for all the
-        // conversion attempts. At the same time provide a central breakpoint
-        // to inspect such places.
-        LanguageTag::ImplPtr& rDontKnow = theDontKnow::get();
-        if (!rDontKnow)
-            rDontKnow.reset( new LanguageTagImpl( *this));
-        pImpl = rDontKnow;
-#if OSL_DEBUG_LEVEL > 0
-        static size_t nCallsDontKnow = 0;
-        ++nCallsDontKnow;
-        SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCallsDontKnow << " DontKnow calls");
-#endif
     }
     else
     {
