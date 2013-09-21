@@ -588,9 +588,9 @@ void SidebarController::SwitchToDeck (
 
 #ifdef DEBUG
     // Show the context name in the deck title bar.
-    DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
-    if (pTitleBar != NULL)
-        pTitleBar->SetTitle(rDeckDescriptor.msTitle+A2S(" (")+maCurrentContext.msContext+A2S(")"));
+    DeckTitleBar* pDebugTitleBar = mpCurrentDeck->GetTitleBar();
+    if (pDebugTitleBar != NULL)
+        pDebugTitleBar->SetTitle(rDeckDescriptor.msTitle + " (" + maCurrentContext.msContext + ")");
 #endif
 
     // Update the panel list.
