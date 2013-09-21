@@ -665,6 +665,12 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     // methods as they may create temporary LanguageTag instances. Only
     // LanguageTagImpl::convertToBcp47(Locale) is ok.
 
+#if OSL_DEBUG_LEVEL > 0
+    static size_t nAccesses = 0;
+    ++nAccesses;
+    SAL_INFO( "i18nlangtag", "LanguageTagImpl::registerImpl: " << nAccesses << " calls");
+#endif
+
     ImplPtr pImpl;
 
     // Do not register unresolved system locale, also force LangID if system.
