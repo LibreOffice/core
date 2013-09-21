@@ -3317,7 +3317,15 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
 
                     if( pTxtNd->IsCountedInList())
                     {
-                        nLvl = static_cast< sal_uInt8 >(pTxtNd->GetActualListLevel());
+                        int nLevel = pTxtNd->GetActualListLevel();
+
+                        if (nLevel < 0)
+                            nLevel = 0;
+
+                        if (nLevel >= MAXLEVEL)
+                            nLevel = MAXLEVEL - 1;
+
+                        nLvl = static_cast< sal_uInt8 >(nLevel);
 
                         if ( pTxtNd->IsListRestart() )
                         {
