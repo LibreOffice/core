@@ -134,14 +134,9 @@ SwParaDlg::SwParaDlg(Window *pParent,
             m_nParaNumPara = AddTabPage("labelTP_NUMPARA", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
         else
             RemoveTabPage("labelTP_NUMPARA");
-        if(!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES))
-        {
-            m_nParaDrpCps = AddTabPage("labelTP_DROPCAPS",  SwDropCapsPage::Create, SwDropCapsPage::GetRanges);
-        }
-        else
-        {
-            RemoveTabPage("labelTP_DROPCAPS");
-        }
+
+        m_nParaDrpCps = AddTabPage("labelTP_DROPCAPS",  SwDropCapsPage::Create, SwDropCapsPage::GetRanges);
+
         if(!bHtmlMode || (nHtmlMode & (HTMLMODE_SOME_STYLES|HTMLMODE_FULL_STYLES)))
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
