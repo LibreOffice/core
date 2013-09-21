@@ -623,10 +623,8 @@
     </scenes>
     <resources>
         <image name="Default.png" width="320" height="480"/>
-        <image name="Default.png" width="320" height="480"/>
         <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
-        <image name="buttonBackground.png" width="45" height="45"/>
         <image name="buttonBackground.png" width="45" height="45"/>
         <image name="more_icon.png" width="30" height="30"/>
         <image name="more_ipad.png" width="60" height="60"/>
@@ -635,9 +633,7 @@
         <image name="previousButton_normal.png" width="42" height="230"/>
         <image name="previousButton_pressed.png" width="42" height="230"/>
         <image name="timer_clear_btn_dark.png" width="60" height="60"/>
-        <image name="timer_clear_btn_dark.png" width="60" height="60"/>
         <image name="timer_settime_btn.png" width="60" height="60"/>
-        <image name="timer_start_btn_dark.png" width="60" height="60"/>
         <image name="timer_start_btn_dark.png" width="60" height="60"/>
     </resources>
     <color key="tintColor" red="1" green="0.50196078430000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

@@ -404,7 +404,7 @@ const int FrontViewPositionNone = 0xff;
     }
     CGRect toolbarTargetFrame = CGRectMake(0, self.view.bounds.size.height-216-44, 320, 44);
     CGRect datePickerTargetFrame = CGRectMake(0, self.view.bounds.size.height-216, 320, 216);
-    
+
     UIView *darkView = [[UIView alloc] initWithFrame:self.view.bounds];
     darkView.alpha = 0;
     darkView.backgroundColor = [UIColor blackColor];
@@ -412,9 +412,11 @@ const int FrontViewPositionNone = 0xff;
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissDatePicker:)];
     [darkView addGestureRecognizer:tapGesture];
     [self.view addSubview:darkView];
+    darkView.alpha = 0.5;
     
     UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height+44, 320, 216)];
     datePicker.tag = 90;
+    datePicker.backgroundColor = [UIColor whiteColor];
     [datePicker setDatePickerMode:UIDatePickerModeCountDownTimer];
     [datePicker addTarget:self action:@selector(changeDate:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:datePicker];
@@ -430,7 +432,7 @@ const int FrontViewPositionNone = 0xff;
     [UIView beginAnimations:@"MoveIn" context:nil];
     toolBar.frame = toolbarTargetFrame;
     datePicker.frame = datePickerTargetFrame;
-    darkView.alpha = 0.5;
+
     [UIView commitAnimations];
 }
 

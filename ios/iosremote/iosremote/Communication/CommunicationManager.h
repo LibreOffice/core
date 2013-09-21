@@ -62,6 +62,7 @@ enum ConnectionState : NSInteger {
     CONNECTED
 };
 
+//
 enum SearchState : NSInteger {
     WAITING,
     SEARCHING

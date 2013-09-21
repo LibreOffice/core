@@ -18,6 +18,10 @@
 
 @end
 
+/**
+ This class controls the behavior of stopwatch timing widget.
+ **/
+
 @interface StopWatch : NSObject
 
 // StopWatch
@@ -26,13 +30,18 @@
 @property BOOL set;
 @property (weak, nonatomic) id<StopWatchDelegate> delegate;
 
+// initialzie Stopwatch with relative UIButton/UILabel elements
 - (StopWatch *) initWithStartButton:(UIButton *)startButton
                         ClearButton:(UIButton *)clearButton
                           TimeLabel:(UILabel *)timeLabel;
+// initialzie Stopwatch with a tableviewCell which contains relative UIButton/UILabel elements
 - (void) setupWithTableViewCell:(UITableViewCell *)cell;
 
+// Start/Pause/Resume the stopwatch
 - (void) start;
+// Stop the stopwatch and update seconds left to its original value
 - (void) clear;
+// Keep start button icon up-to-date with respect to its current state
 - (void) updateStartButtonIcon;
 
 @end

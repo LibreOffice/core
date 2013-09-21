@@ -565,7 +565,6 @@ static BOOL isBlank = NO;
     popoverView.backgroundColor = [UIColor blackColor];
     
     UIDatePicker *datePicker=[[UIDatePicker alloc]init];//Date picker
-    datePicker.frame=CGRectMake(0,44,320, 216);
     datePicker.datePickerMode = UIDatePickerModeCountDownTimer;
     [datePicker setTag:10];
     [datePicker addTarget:self action:@selector(changeDate:) forControlEvents:UIControlEventValueChanged];
@@ -575,7 +574,12 @@ static BOOL isBlank = NO;
     self.popoverTimePickerController = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
     self.popoverTimePickerController.delegate = self;
     
-    [self.popoverTimePickerController setPopoverContentSize:CGSizeMake(320, 264) animated:NO];
+    // iOS7's time picker has default clearcolor background
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        datePicker.backgroundColor = [UIColor whiteColor];
+    }
+    datePicker.frame=CGRectMake(0,0,320, 216);
+    [self.popoverTimePickerController setPopoverContentSize:CGSizeMake(320, 216) animated:NO];
     [self.popoverTimePickerController presentPopoverFromRect:self.timerSetTimeButton.frame inView:self.timerView permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
 }
 
