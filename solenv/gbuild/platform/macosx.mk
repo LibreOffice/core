@@ -133,7 +133,6 @@ endef
 
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
 	$(if $(CXXOBJECTS)$(OBJCXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Bundle,$(TARGETTYPE)),$(gb_Bundle_TARGETTYPEFLAGS)) \
@@ -177,7 +176,6 @@ endef
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \

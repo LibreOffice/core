@@ -168,7 +168,6 @@ endif
 # we want to use @$(extraobjectlist) in the long run
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter-out $(foreach lib,frm scfilt wpftdraw,$(call gb_Library__get_workdir_linktargetname,$(lib))),$(2)),$(gb_LTOFLAGS)) \
@@ -205,7 +204,6 @@ endef
 
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \

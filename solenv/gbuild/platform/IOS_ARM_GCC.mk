@@ -105,7 +105,6 @@ endef
 
 define gb_LinkTarget__command_dynamiclink
 	$(if $(filter Library CppunitTest,$(TARGETTYPE)),@echo No dynamic libraries should be built for iOS && exit 1, \
-	mkdir -p $(dir $(1)) && \
 	$(if $(CXXOBJECTS)$(OBJCXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(gb_Executable_TARGETTYPEFLAGS) \
 		$(subst \d,$$,$(RPATH)) \
@@ -129,7 +128,6 @@ endef
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
