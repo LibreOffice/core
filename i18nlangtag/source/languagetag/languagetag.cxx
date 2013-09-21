@@ -123,6 +123,11 @@ static LanguageType getNextOnTheFlyLanguage()
             }
         }
     }
+#if OSL_DEBUG_LEVEL > 0
+    static size_t nOnTheFlies = 0;
+    ++nOnTheFlies;
+    SAL_INFO( "i18nlangtag", "getNextOnTheFlyLanguage: number " << nOnTheFlies);
+#endif
     return nOnTheFlyLanguage;
 }
 
