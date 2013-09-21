@@ -610,27 +610,25 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly()
         return pImpl;
     }
 
-    LanguageType nLang = getNextOnTheFlyLanguage();
-    if (!nLang)
-    {
-        // out of IDs, nothing to register
-        return pImpl;
-    }
-    mnLangID = nLang;
-    mbInitializedLangID = true;
-
     osl::MutexGuard aGuard( theMutex::get());
 
     MapBcp47& rMap = theMapBcp47::get();
     MapBcp47::const_iterator it( rMap.find( maBcp47));
+    bool bOtherImpl = false;
     if (it != rMap.end())
     {
         SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: found impl for '" << maBcp47 << "'");
         pImpl = (*it).second;
         if (pImpl.get() != this)
         {
-            SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: impl should be this for '" << maBcp47 << "'");
-            *pImpl = *this;     // ensure consistency
+            // Could happen for example if during registerImpl() the tag was
+            // changed via canonicalize() and the result was already present in
+            // the map before, for example 'bn-Beng' => 'bn'. This specific
+            // case is now taken care of in registerImpl() and doesn't reach
+            // here. However, use the already existing impl if it matches.
+            SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: using other impl for this '" << maBcp47 << "'");
+            *this = *pImpl;     // ensure consistency
+            bOtherImpl = true;
         }
     }
     else
@@ -638,6 +636,23 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly()
         SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: new impl for '" << maBcp47 << "'");
         pImpl.reset( new LanguageTagImpl( *this));
         rMap.insert( ::std::make_pair( maBcp47, pImpl));
+    }
+
+    if (!bOtherImpl || !pImpl->mbInitializedLangID)
+    {
+        LanguageType nLang = getNextOnTheFlyLanguage();
+        if (!nLang)
+        {
+            // out of IDs, nothing to register
+            return pImpl;
+        }
+        pImpl->mnLangID = nLang;
+        pImpl->mbInitializedLangID = true;
+        if (pImpl.get() != this)
+        {
+            mnLangID = nLang;
+            mbInitializedLangID = true;
+        }
     }
 
     ::std::pair< MapLangID::const_iterator, bool > res(
@@ -831,54 +846,73 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         {
             SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for '" << maBcp47 << "'");
             pImpl.reset( new LanguageTagImpl( *this));
-            rMap.insert( ::std::make_pair( maBcp47, pImpl));
-            // If changed after canonicalize() also add the resulting tag to map.
+            ::std::pair< MapBcp47::iterator, bool > insOrig( rMap.insert( ::std::make_pair( maBcp47, pImpl)));
+            // If changed after canonicalize() also add the resulting tag to
+            // the map.
             if (pImpl->synCanonicalize())
             {
                 SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: canonicalized to '" << pImpl->maBcp47 << "'");
-                bool bInserted = rMap.insert( ::std::make_pair( pImpl->maBcp47, pImpl)).second;
-                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << (bInserted ? "" : "not ") << "inserted '"
-                        << pImpl->maBcp47 << "'");
-            }
-            // Try round-trip Bcp47->Locale->LangID->Locale->Bcp47.
-            if (!pImpl->mbInitializedLocale)
-                pImpl->convertBcp47ToLocale();
-            if (!pImpl->mbInitializedLangID)
-                pImpl->convertLocaleToLang( true);
-            bool bInsert = LanguageTag::isOnTheFlyID( pImpl->mnLangID);
-            OUString aBcp47;
-            if (!bInsert)
-            {
-                if (pImpl->mnLangID != LANGUAGE_DONTKNOW)
+                ::std::pair< MapBcp47::const_iterator, bool > insCanon(
+                        rMap.insert( ::std::make_pair( pImpl->maBcp47, pImpl)));
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << (insCanon.second ? "" : "not ")
+                        << "inserted '" << pImpl->maBcp47 << "'");
+                // If the canonicalized tag already existed (was not inserted)
+                // and impls are different, make this impl that impl and skip
+                // the rest if that LangID is present as well. The existing
+                // entry may or may not be different, it may even be strictly
+                // identical to this if it differs only in case (e.g. ko-kr =>
+                // ko-KR) which was corrected in canonicalize() hence also in
+                // the map entry but comparison is case insensitive and found
+                // it again.
+                if (!insCanon.second && (*insCanon.first).second != pImpl)
                 {
-                    // May have involved canonicalize(), so compare with pImpl->maBcp47!
-                    aBcp47 = LanguageTagImpl::convertToBcp47(
-                            MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true));
-                    bInsert = (aBcp47 == pImpl->maBcp47);
+                    (*insOrig.first).second = pImpl = (*insCanon.first).second;
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: share impl with 0x"
+                            << ::std::hex << pImpl->mnLangID);
                 }
             }
-            // If round-trip is identical cross-insert to Bcp47 map.
-            if (bInsert)
+            if (!pImpl->mbInitializedLangID)
             {
-                ::std::pair< MapLangID::const_iterator, bool > res(
-                        theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)));
-                if (res.second)
+                // Try round-trip Bcp47->Locale->LangID->Locale->Bcp47.
+                if (!pImpl->mbInitializedLocale)
+                    pImpl->convertBcp47ToLocale();
+                if (!pImpl->mbInitializedLangID)
+                    pImpl->convertLocaleToLang( true);
+                bool bInsert = LanguageTag::isOnTheFlyID( pImpl->mnLangID);
+                OUString aBcp47;
+                if (!bInsert)
                 {
-                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted 0x"
-                            << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+                    if (pImpl->mnLangID != LANGUAGE_DONTKNOW)
+                    {
+                        // May have involved canonicalize(), so compare with pImpl->maBcp47!
+                        aBcp47 = LanguageTagImpl::convertToBcp47(
+                                MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true));
+                        bInsert = (aBcp47 == pImpl->maBcp47);
+                    }
+                }
+                // If round-trip is identical cross-insert to Bcp47 map.
+                if (bInsert)
+                {
+                    ::std::pair< MapLangID::const_iterator, bool > res(
+                            theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)));
+                    if (res.second)
+                    {
+                        SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted 0x"
+                                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+                    }
+                    else
+                    {
+                        SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted 0x"
+                                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
+                                << (*res.first).second->maBcp47 << "'");
+                    }
                 }
                 else
                 {
                     SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted 0x"
-                            << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
-                            << (*res.first).second->maBcp47 << "'");
+                            << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' round-trip to '"
+                            << aBcp47 << "'");
                 }
-            }
-            else
-            {
-                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted 0x"
-                        << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' round-trip to '"
-                        << aBcp47 << "'");
             }
         }
     }
