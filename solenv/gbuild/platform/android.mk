@@ -35,7 +35,6 @@ gb_LinkTarget_LDFLAGS += \
 
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
 	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		-shared \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
@@ -110,7 +109,7 @@ gb_CppunitTest_get_filename = libtest_$(1).a
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(if $(filter CppunitTest,$(TARGETTYPE)), \
-	mkdir -p $(dir $(1)) && touch $(1), \
+	touch $(1), \
 	$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
