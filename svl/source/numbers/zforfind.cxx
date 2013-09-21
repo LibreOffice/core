@@ -68,6 +68,8 @@ const sal_uInt8 ImpSvNumberInputScan::nMatchedUsedAsReturn = 0x10;
  * would work, together with the nTimezonePos handling in GetTimeRef(). */
 #define NF_RECOGNIZE_ISO8601_TIMEZONES 0
 
+static const sal_Unicode cNonBreakingSpace = 0xA0;
+
 //---------------------------------------------------------------------------
 //      Konstruktor
 
@@ -483,7 +485,7 @@ inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
     if ( nPos < rString.getLength() )
     {
         register const sal_Unicode* p = rString.getStr() + nPos;
-        while ( *p == ' ' )
+        while ( *p == ' ' || *p == cNonBreakingSpace )
         {
             nPos++;
             p++;
