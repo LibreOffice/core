@@ -61,7 +61,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <vcl/help.hxx>
 
-#define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
+static const sal_Unicode cNonBreakingSpace = 0xA0;
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -662,7 +662,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                 {
                     // Remove any previous normal space
                     xub_StrLen nPos = nEndPos - 1;
-                    while ( cPrevChar == ' ' || cPrevChar == CHAR_HARDBLANK )
+                    while ( cPrevChar == ' ' || cPrevChar == cNonBreakingSpace )
                     {
                         if ( nPos == 0 ) break;
                         nPos--;
@@ -675,7 +675,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 
                     // Add the non-breaking space at the end pos
                     if ( bHasSpace )
-                        rDoc.Insert( nPos, OUString(CHAR_HARDBLANK) );
+                        rDoc.Insert( nPos, OUString(cNonBreakingSpace) );
                     bRunNext = true;
                     bRet = true;
                 }
@@ -688,7 +688,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
             // Remove the hardspace right before to avoid formatting URLs
             sal_Unicode cPrevChar = rTxt[ nEndPos - 1 ];
             sal_Unicode cMaybeSpaceChar = rTxt[ nEndPos - 2 ];
-            if ( cPrevChar == ':' && cMaybeSpaceChar == CHAR_HARDBLANK )
+            if ( cPrevChar == ':' && cMaybeSpaceChar == cNonBreakingSpace )
             {
                 rDoc.Delete( nEndPos - 2, nEndPos - 1 );
                 bRet = true;
@@ -1284,7 +1284,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 {
                     // Remove the NBSP if it wasn't an autocorrection
                     if ( nInsPos != 0 && NeedsHardspaceAutocorr( rTxt[ nInsPos - 1 ] ) &&
-                            cChar != ' ' && cChar != '\t' && cChar != CHAR_HARDBLANK )
+                            cChar != ' ' && cChar != '\t' && cChar != cNonBreakingSpace )
                     {
                         // Look for the last HARD_SPACE
                         sal_Int32 nPos = nInsPos - 1;
@@ -1292,7 +1292,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                         while ( bContinue )
                         {
                             const sal_Unicode cTmpChar = rTxt[ nPos ];
-                            if ( cTmpChar == CHAR_HARDBLANK )
+                            if ( cTmpChar == cNonBreakingSpace )
                             {
                                 rDoc.Delete( nPos, nPos + 1 );
                                 nRet = AddNonBrkSpace;
