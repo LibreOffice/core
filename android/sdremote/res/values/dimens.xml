@@ -31,7 +31,7 @@
     <dimen name="margin_slide">8dp</dimen>
 
     <dimen name="width_action_bar_divider">0.5dp</dimen>
-    <dimen name="width_slides_grid_column">90dp</dimen>
+    <dimen name="width_slides_grid_column">88dp</dimen>
 
     <dimen name="text_size_list_item">18sp</dimen>
     <dimen name="text_size_pin">35sp</dimen>
