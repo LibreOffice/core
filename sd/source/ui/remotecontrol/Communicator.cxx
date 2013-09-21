@@ -15,6 +15,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "Communicator.hxx"
 #include "Listener.hxx"
@@ -54,6 +55,15 @@ void Communicator::execute()
 
     pTransmitter->addMessage( "LO_SERVER_SERVER_PAIRED\n\n",
                               Transmitter::PRIORITY_HIGH );
+
+    OStringBuffer aServerInformationBuffer;
+    aServerInformationBuffer
+      .append( "LO_SERVER_INFO\n" )
+      .append( OUStringToOString( utl::ConfigManager::getProductVersion() , RTL_TEXTENCODING_UTF8 ) )
+      .append("\n\n");
+
+    pTransmitter->addMessage( aServerInformationBuffer.makeStringAndClear(), Transmitter::PRIORITY_HIGH );
+
     Receiver aReceiver( pTransmitter );
     try {
         uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
@@ -76,9 +86,10 @@ void Communicator::execute()
         }
 
         OStringBuffer aBuffer;
-            aBuffer.append( "slideshow_info\n" )
-                .append( OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) )
-               .append("\n\n");
+        aBuffer
+          .append( "slideshow_info\n" )
+          .append( OUStringToOString( ::comphelper::DocumentInfo::getDocumentTitle( xFrame->getController()->getModel() ), RTL_TEXTENCODING_UTF8 ) )
+          .append("\n\n");
 
         pTransmitter->addMessage( aBuffer.makeStringAndClear(), Transmitter::PRIORITY_LOW );
     }
