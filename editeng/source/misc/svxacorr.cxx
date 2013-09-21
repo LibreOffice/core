@@ -63,8 +63,6 @@
 #include <vcl/help.hxx>
 #include <rtl/logfile.hxx>
 
-#define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
-
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -76,6 +74,7 @@ static const int C_NONE             = 0x00;
 static const int C_FULL_STOP        = 0x01;
 static const int C_EXCLAMATION_MARK = 0x02;
 static const int C_QUESTION_MARK    = 0x04;
+static const sal_Unicode cNonBreakingSpace = 0xA0;
 
 static const sal_Char pImplAutocorr_ListStr[]      = "DocumentList";
 static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
@@ -100,7 +99,7 @@ typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
 static inline int IsWordDelim( const sal_Unicode c )
 {
     return ' ' == c || '\t' == c || 0x0a == c ||
-            0xA0 == c || 0x2011 == c || 0x1 == c;
+            cNonBreakingSpace == c || 0x2011 == c || 0x1 == c;
 }
 
 static inline int IsLowerLetter( sal_Int32 nCharType )
@@ -659,7 +658,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                 {
                     // Remove any previous normal space
                     xub_StrLen nPos = nEndPos - 1;
-                    while ( cPrevChar == ' ' || cPrevChar == CHAR_HARDBLANK )
+                    while ( cPrevChar == ' ' || cPrevChar == cNonBreakingSpace )
                     {
                         if ( nPos == 0 ) break;
                         nPos--;
@@ -672,7 +671,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 
                     // Add the non-breaking space at the end pos
                     if ( bHasSpace )
-                        rDoc.Insert( nPos, OUString(CHAR_HARDBLANK) );
+                        rDoc.Insert( nPos, OUString(cNonBreakingSpace) );
                     bRunNext = true;
                     bRet = true;
                 }
@@ -685,7 +684,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
             // Remove the hardspace right before to avoid formatting URLs
             sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
             sal_Unicode cMaybeSpaceChar = rTxt.GetChar( nEndPos - 2 );
-            if ( cPrevChar == ':' && cMaybeSpaceChar == CHAR_HARDBLANK )
+            if ( cPrevChar == ':' && cMaybeSpaceChar == cNonBreakingSpace )
             {
                 rDoc.Delete( nEndPos - 2, nEndPos - 1 );
                 bRet = true;
@@ -1166,7 +1165,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
         case LANGUAGE_FRENCH_SWISS:
         case LANGUAGE_FRENCH_LUXEMBOURG:
             {
-                OUString s( static_cast< sal_Unicode >(0xA0) );
+                OUString s( cNonBreakingSpace );
                     // UNICODE code for no break space
                 if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
                 {
@@ -1266,7 +1265,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 {
                     // Remove the NBSP if it wasn't an autocorrection
                     if ( nInsPos != 0 && NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) &&
-                            cChar != ' ' && cChar != '\t' && cChar != CHAR_HARDBLANK )
+                            cChar != ' ' && cChar != '\t' && cChar != cNonBreakingSpace )
                     {
                         // Look for the last HARD_SPACE
                         xub_StrLen nPos = nInsPos - 1;
@@ -1274,7 +1273,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                         while ( bContinue )
                         {
                             const sal_Unicode cTmpChar = rTxt.GetChar( nPos );
-                            if ( cTmpChar == CHAR_HARDBLANK )
+                            if ( cTmpChar == cNonBreakingSpace )
                             {
                                 rDoc.Delete( nPos, nPos + 1 );
                                 nRet = AddNonBrkSpace;
