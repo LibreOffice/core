@@ -1258,8 +1258,6 @@ namespace cmis
                     m_pObjectType.reset( );
                     m_pObjectProps.clear( );
                     m_bTransient = false;
-                    uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(m_sURL));
-                    m_xIdentifier = xId;
                     inserted();
                 }
             }
@@ -1538,10 +1536,16 @@ namespace cmis
             return parentUrl;
         else
         {
-            INetURLObject aParentUrl( m_sURL );
-            aParentUrl.removeSegment( );
-            return aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
+            INetURLObject aUrl( m_sURL );
+            if ( aUrl.getSegmentCount( ) > 0 )
+            {
+                URL aCmisUrl( m_sURL );
+                aUrl.removeSegment( );
+                aCmisUrl.setObjectPath( aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+                parentUrl = aCmisUrl.asString( );
+            }
         }
+        return parentUrl;
     }
 
     XTYPEPROVIDER_COMMON_IMPL( Content );

@@ -102,8 +102,7 @@ namespace cmis
             }
             while ( nPos != -1 );
             sUrl += sEncodedPath;
-        }
-        if ( !m_sId.isEmpty( ) )
+        } else if ( !m_sId.isEmpty( ) )
         {
             sUrl += "#" + rtl::Uri::encode( m_sId,
                 rtl_UriCharClassRelSegment,
