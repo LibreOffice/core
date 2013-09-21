@@ -585,7 +585,15 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 return false;
             }
 
-            SwNumFmt aNumFmt = pNumRule->Get(static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()));
+            int nLevel = pTxtNd->GetActualListLevel();
+
+            if (nLevel < 0)
+                nLevel = 0;
+
+            if (nLevel >= MAXLEVEL)
+                nLevel = MAXLEVEL - 1;
+
+            SwNumFmt aNumFmt = pNumRule->Get(static_cast<sal_uInt16>(nLevel));
             SwCharFmt * pCharFmt =
                 pDoc->FindCharFmtByName(aNumFmt.GetCharFmtName());
 
