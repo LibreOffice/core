@@ -550,7 +550,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         const String& aFName = rSection.GetLinkFileName();
         String aURL( aFName.GetToken(0,sfx2::cTokenSeparator) );
         String aFilter( aFName.GetToken(1,sfx2::cTokenSeparator) );
-        String aSection( aFName.GetToken(2,sfx2::cTokenSeparator) );
+        OUString aSection( aFName.GetToken(2,sfx2::cTokenSeparator) );
 
         String aEncURL( URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aURL ) );
         sal_Unicode cDelim = 255U;
@@ -561,28 +561,26 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                   rHTMLWrt.eDestEnc,
                                   &rHTMLWrt.aNonConvertableCharacters );
         const sal_Char *pDelim = "&#255;";
-        if( aFilter.Len() || aSection.Len() || bURLContainsDelim )
+        if( aFilter.Len() || !aSection.isEmpty() || bURLContainsDelim )
             rHTMLWrt.Strm() << pDelim;
         if( aFilter.Len() )
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter,
                                       rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-        if( aSection.Len() || bURLContainsDelim  )
+        if( !aSection.isEmpty() || bURLContainsDelim  )
                 rHTMLWrt.Strm() << pDelim;
-        if( aSection.Len() )
+        if( !aSection.isEmpty() )
         {
-            xub_StrLen nPos = aSection.Search( '%' );
-            while( STRING_NOTFOUND != nPos )
+            sal_Int32 nPos = aSection.indexOf( '%' );
+            while( nPos != -1 )
             {
-                aSection.Erase( nPos, 1 );
-                aSection.InsertAscii( "%25", nPos );
-                nPos = aSection.Search( '%', nPos+3 );
+                aSection.replaceAt(nPos, 1, "%25");
+                nPos = aSection.indexOf( '%', nPos+3 );
             }
-            nPos = aSection.Search( cDelim );
-            while( STRING_NOTFOUND != nPos )
+            nPos = aSection.indexOf( cDelim );
+            while( nPos != -1 )
             {
-                aSection.Erase( nPos, 1 );
-                aSection.InsertAscii( "%FF", nPos );
-                nPos = aSection.Search( cDelim, nPos+3 );
+                aSection.replaceAt(nPos, 1, "%FF" );
+                nPos = aSection.indexOf( cDelim, nPos+3 );
             }
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection,
                                       rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );

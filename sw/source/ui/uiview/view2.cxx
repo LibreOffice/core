@@ -1513,7 +1513,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if( rShell.HasReadonlySel() )
                 {
                     if( sStr.Len() )
-                        sStr.InsertAscii( sStatusDelim, 0 );
+                        sStr = OUString(sStatusDelim) + sStr;
                     sStr.Insert( SW_RESSTR(SW_STR_READONLY), 0 );
                 }
                 if( sStr.Len() )

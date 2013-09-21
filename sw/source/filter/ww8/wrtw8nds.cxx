@@ -1065,7 +1065,7 @@ void WW8AttributeOutput::FieldVanish( const String& rTxt, ww::eField /*eType*/ )
 void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAttr )
 {
     // its a field; so get the Text form the Node and build the field
-    String sTxt;
+    OUString sTxt;
     ww::eField eType = ww::eNONE;
 
     const SwTxtTOXMark& rTxtTOXMark = *rAttr.GetTxtTOXMark();
@@ -1086,31 +1086,26 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
             {
                 if ( !rAttr.GetSecondaryKey().isEmpty() )
                 {
-                    sTxt.Insert( ':', 0 );
-                    sTxt.Insert( rAttr.GetSecondaryKey(), 0 );
+                    sTxt = rAttr.GetSecondaryKey() + ":" + sTxt;
                 }
 
-                sTxt.Insert( ':', 0 );
-                sTxt.Insert( rAttr.GetPrimaryKey(), 0 );
+                sTxt = rAttr.GetPrimaryKey() + ":" + sTxt;
             }
-            sTxt.InsertAscii( " XE \"", 0 );
-            sTxt.InsertAscii( "\" " );
+            sTxt = " XE \"" + sTxt + "\" ";
             break;
 
         case TOX_USER:
-            ( sTxt.AppendAscii( "\" \\f \"" ) )
-                += (sal_Char)( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) );
+            sTxt += "\" \\f \"" + OUString((sal_Char)( 'A' + GetExport( ).GetId( *rAttr.GetTOXType() ) ));
             // fall through - no break;
         case TOX_CONTENT:
             {
                 eType = ww::eTC;
-                sTxt.InsertAscii( " TC \"", 0 );
+                sTxt = " TC \"" + sTxt;
                 sal_uInt16 nLvl = rAttr.GetLevel();
                 if (nLvl > WW8ListManager::nMaxLevel)
                     nLvl = WW8ListManager::nMaxLevel;
 
-                ((sTxt.AppendAscii( "\" \\l " ))
-                 += OUString::number( nLvl )) += ' ';
+                sTxt += "\" \\l " + OUString::number(nLvl) + " ";
             }
             break;
         default:
@@ -1118,7 +1113,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
             break;
     }
 
-    if ( sTxt.Len() )
+    if (!sTxt.isEmpty())
         FieldVanish( sTxt, eType );
 }
 

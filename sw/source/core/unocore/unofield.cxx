@@ -2623,7 +2623,7 @@ static sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
             //rName.SearchAndReplace('.', DB_DELIM);
             //rName.SetChar( rName.SearchBackward( '.' ), DB_DELIM );
 
-            rName.InsertAscii( "DataBase.", 0 );
+            rName = OUString("DataBase.") + rName;
             nResId = RES_DBFLD;
         }
     }

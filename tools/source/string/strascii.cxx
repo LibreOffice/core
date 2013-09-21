@@ -294,41 +294,6 @@ UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
     return *this;
 }
 
-UniString& UniString::InsertAscii( const char* pAsciiStr, xub_StrLen nIndex )
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::InsertAscii() - pAsciiStr is NULL" );
-
-    // Determine string length
-    sal_Int32 nCopyLen = ImplStringLen( pAsciiStr );
-
-    // detect overflow
-    nCopyLen = ImplGetCopyLen( mpData->mnLen, nCopyLen );
-
-    // If appended string is not empty
-    if ( !nCopyLen )
-        return *this;
-
-    // Adjust index if exceeds length
-    if ( nIndex > mpData->mnLen )
-        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
-
-    // Allocate new string
-    UniStringData* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
-
-    // copy string data
-    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( sal_Unicode ) );
-    ImplCopyAsciiStr( pNewData->maStr+nIndex, pAsciiStr, nCopyLen );
-    memcpy( pNewData->maStr+nIndex+nCopyLen, mpData->maStr+nIndex,
-            (mpData->mnLen-nIndex)*sizeof( sal_Unicode ) );
-
-    // release old string
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
-}
-
 StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
                                          xub_StrLen nLen ) const
 {

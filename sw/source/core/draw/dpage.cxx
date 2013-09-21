@@ -139,14 +139,14 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
-            String sTxt;
+            OUString sTxt;
             if( rURL.GetMap() )
             {
                 IMapObject *pTmpObj = pFly->GetFmt()->GetIMapObject( aPos, pFly );
                 if( pTmpObj )
                 {
                     sTxt = pTmpObj->GetAltText();
-                    if ( !sTxt.Len() )
+                    if ( sTxt.isEmpty() )
                         sTxt = URIHelper::removePassword( pTmpObj->GetURL(),
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
@@ -167,12 +167,12 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(
                             aPt, MapMode( MAP_TWIP ) );
-                    ((( sTxt += '?' ) += OUString::number( aPt.getX() ))
-                             += ',' ) += OUString::number( aPt.getY() );
+                    sTxt += "?" + OUString::number( aPt.getX() )
+                          + "," + OUString::number( aPt.getY() );
                 }
             }
 
-            if ( sTxt.Len() )
+            if ( !sTxt.isEmpty() )
             {
                 // #i80029#
                 sal_Bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
@@ -183,8 +183,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
                     if ( !bExecHyperlinks )
                     {
-                        sTxt.InsertAscii( ": ", 0 );
-                        sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                        sTxt = ViewShell::GetShellRes()->aHyperlinkClick + ": " + sTxt;
                     }
                 }
 

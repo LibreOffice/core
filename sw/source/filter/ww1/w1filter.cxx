@@ -876,16 +876,15 @@ oncemore:
         case 51: // macro button
         {
             pos = aStr.Search(' ');
-            String aName( aStr.Copy( 0, pos ));
+            OUString aName( aStr.Copy( 0, pos ));
             aStr.Erase(0, pos );
             aStr.Erase(0, 1);
-            if( !aName.Len() || !aStr.Len() )
+            if( aName.isEmpty() || !aStr.Len() )
                 break;
-            aName.InsertAscii( "StarOffice.Standard.Modul1.", 0 );
 
             pField = new SwMacroField( (SwMacroFieldType*)
                             rOut.GetSysFldType( RES_MACROFLD ),
-                            aName, aStr );
+                            "StarOffice.Standard.Modul1." + aName, aStr );
         }
         break;
         case 55: // read tiff / or better: import anything

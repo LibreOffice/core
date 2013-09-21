@@ -1069,24 +1069,24 @@ bool SwCompareLine::Compare( const CompareLine& rLine ) const
 
 namespace
 {
-    static String SimpleTableToText(const SwNode &rNode)
+    static OUString SimpleTableToText(const SwNode &rNode)
     {
-        String sRet;
+        OUStringBuffer sRet;
         const SwNode* pEndNd = rNode.EndOfSectionNode();
         SwNodeIndex aIdx( rNode );
         while (&aIdx.GetNode() != pEndNd)
         {
             if (aIdx.GetNode().IsTxtNode())
             {
-                if (sRet.Len())
+                if (sRet.getLength())
                 {
-                    sRet.Append( '\n' );
+                    sRet.append( '\n' );
                 }
-                sRet.Append( aIdx.GetNode().GetTxtNode()->GetExpandTxt() );
+                sRet.append( aIdx.GetNode().GetTxtNode()->GetExpandTxt() );
             }
             ++aIdx;
         }
-        return sRet;
+        return sRet.makeStringAndClear();
     }
 }
 
@@ -1185,7 +1185,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 
 String SwCompareLine::GetText() const
 {
-    String sRet;
+    OUString sRet;
     switch( rNode.GetNodeType() )
     {
     case ND_TEXTNODE:
@@ -1194,14 +1194,13 @@ String SwCompareLine::GetText() const
 
     case ND_TABLENODE:
         {
-            sRet = SimpleTableToText(rNode);
-            sRet.InsertAscii( "Tabelle: ", 0 );
+            sRet = "Tabelle: " + SimpleTableToText(rNode);
         }
         break;
 
     case ND_SECTIONNODE:
         {
-            sRet.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Section - Node:" ));
+            sRet = "Section - Node:";
 
             const SwSectionNode& rSNd = (SwSectionNode&)rNode;
             const SwSection& rSect = rSNd.GetSection();
@@ -1209,8 +1208,8 @@ String SwCompareLine::GetText() const
             {
             case CONTENT_SECTION:
                 if( rSect.IsProtect() )
-                    sRet.Append( OUString::number(
-                            rSNd.EndOfSectionIndex() - rSNd.GetIndex() ));
+                    sRet += OUString::number(
+                            rSNd.EndOfSectionIndex() - rSNd.GetIndex() );
                 break;
 
             case TOX_HEADER_SECTION:
@@ -1218,9 +1217,8 @@ String SwCompareLine::GetText() const
                 {
                     const SwTOXBase* pTOX = rSect.GetTOXBase();
                     if( pTOX )
-                        sRet.Append( pTOX->GetTitle() )
-                            .Append( pTOX->GetTypeName() )
-                            .Append( OUString::number( pTOX->GetType() ));
+                        sRet += pTOX->GetTitle() + pTOX->GetTypeName() +
+                            OUString::number(pTOX->GetType());
                 }
                 break;
 
@@ -1233,10 +1231,10 @@ String SwCompareLine::GetText() const
         break;
 
     case ND_GRFNODE:
-        sRet.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Grafik - Node:" ));
+        sRet = "Grafik - Node:";
         break;
     case ND_OLENODE:
-        sRet.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "OLE - Node:" ));
+        sRet = "OLE - Node:";
         break;
     }
     return sRet;
