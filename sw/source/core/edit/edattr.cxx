@@ -373,7 +373,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
     if( !nDefDist )
         return false;
 
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
 
         sal_uLong nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
               nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
@@ -523,7 +523,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
     sal_uInt16 nRet = 0;
 
     {
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
 
             const SwPosition *pStt = PCURCRSR->Start(),
                              *pEnd = pStt == PCURCRSR->GetMark()

@@ -58,7 +58,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     aRewriter.AddRule(UndoArg1, pLocal->GetName());
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
 
         if( !PCURCRSR->HasReadonlySel(
                     // Formular view

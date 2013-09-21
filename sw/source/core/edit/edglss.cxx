@@ -212,7 +212,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             pInsDoc->SetColumnSelection( true );
         bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
         {
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
 
             if( !PCURCRSR->HasMark() )
             {

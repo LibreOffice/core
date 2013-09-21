@@ -124,7 +124,7 @@ sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
     sal_Bool bRet = sal_False;
     StartAllAction();
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
         if( PCURCRSR->HasMark() )
             bRet |= 0 != GetDoc()->TextToTable( rInsTblOpts, *PCURCRSR, cCh,
                                                 eAdj, pTAFmt );
@@ -183,7 +183,7 @@ sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
 sal_Bool SwEditShell::IsTextToTableAvailable() const
 {
     sal_Bool bOnlyText = sal_False;
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
         if( PCURCRSR->HasMark() && *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() )
         {
             bOnlyText = sal_True;

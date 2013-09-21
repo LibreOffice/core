@@ -56,7 +56,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 
 void SwEditShell::GCAttr()
 {
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
         if ( !PCURCRSR->HasMark() )
         {
             SwTxtNode *const pTxtNode =
@@ -106,7 +106,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
         sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
                 *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() ))
             {

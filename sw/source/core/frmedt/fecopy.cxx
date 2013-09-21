@@ -821,7 +821,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
     }
     else
     {
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
 
         if( pSrcNd &&
             0 != ( pDestNd = GetDoc()->IsIdxInTbl( PCURCRSR->GetPoint()->nNode )))

@@ -95,7 +95,7 @@ sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
 sal_Bool SwEditShell::SetRedlineComment( const String& rS )
 {
     sal_Bool bRet = sal_False;
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
         bRet = bRet || GetDoc()->SetRedlineComment( *PCURCRSR, rS );
     FOREACHPAM_END()
 

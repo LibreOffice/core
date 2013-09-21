@@ -199,7 +199,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;
 
-    FOREACHPAM_START(this) // for each PaM
+    FOREACHPAM_START(GetCrsr()) // for each PaM
         bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
@@ -307,7 +307,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         sal_Bool bTblSelBreak = sal_False;
 
         SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Search-Hint
-        FOREACHPAM_START(this)                    // for each PaM
+        FOREACHPAM_START(GetCrsr())               // for each PaM
             if( PCURCRSR->HasMark() && bOkay )    // ... with selection
             {
                 // copy of the PaM

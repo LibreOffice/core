@@ -2556,7 +2556,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
     // There are more than one or a selection is open
     if( pCrsr->GetNext() != pCrsr || pCrsr->HasMark() )
     {
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
             if( PCURCRSR->HasMark() )
             {
                 SwAutoFormat aFmt( this, aAFFlags, &PCURCRSR->Start()->nNode,

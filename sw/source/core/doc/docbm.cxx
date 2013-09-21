@@ -46,6 +46,7 @@
 #include <swundo.hxx>
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
+#include <edimp.hxx>
 #include <stdio.h>
 
 using namespace ::std;
@@ -874,15 +875,6 @@ namespace sw { namespace mark
 
 }} // namespace ::sw::mark
 
-#define PCURCRSR (_pCurrCrsr)
-#define FOREACHPAM_START(pSttCrsr) \
-    {\
-        SwPaM *_pStartCrsr = pSttCrsr, *_pCurrCrsr = pSttCrsr; \
-        do {
-
-#define FOREACHPAM_END() \
-        } while( (_pCurrCrsr=(SwPaM *)_pCurrCrsr->GetNext()) != _pStartCrsr ); \
-    }
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
     {\

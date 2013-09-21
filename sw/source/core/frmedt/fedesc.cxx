@@ -211,7 +211,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     const SwPageDesc* pFnd, *pRetDesc = (SwPageDesc*)0xffffffff;
     const Point aNulPt;
 
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
 
         if( 0 != (pCNd = PCURCRSR->GetCntntNode() ) &&
             0 != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, sal_False )) )

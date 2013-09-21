@@ -30,6 +30,7 @@
 #include <unocrsr.hxx>
 #include <swundo.hxx>
 #include <hints.hxx>
+#include <edimp.hxx>
 
 /*
  * Macros to iterate over all CrsrShells
@@ -45,16 +46,6 @@
 #define FOREACHSHELL_END( pEShell ) \
             } \
         } while((_pStartShell=(ViewShell*)_pStartShell->GetNext())!= pEShell ); \
-    }
-
-#define PCURCRSR (_pCurrCrsr)
-#define FOREACHPAM_START(pSttCrsr) \
-    {\
-        SwPaM *_pStartCrsr = pSttCrsr, *_pCurrCrsr = pSttCrsr; \
-        do {
-
-#define FOREACHPAM_END() \
-        } while( (_pCurrCrsr=(SwPaM *)_pCurrCrsr->GetNext()) != _pStartCrsr ); \
     }
 
 namespace

@@ -115,7 +115,7 @@ long SwEditShell::Delete()
             GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_DELETE, &aRewriter);
         }
 
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
             DeleteSel( *PCURCRSR, &bUndo );
         FOREACHPAM_END()
 
@@ -145,7 +145,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         SwPosition * pPos = 0;
         boost::shared_ptr<SwPosition> pInsertPos;
         sal_uInt16 nMove = 0;
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
 
             if( !pPos )
             {
@@ -193,7 +193,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
     pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
 
         if( !pPos )
         {
@@ -297,7 +297,7 @@ sal_Bool SwEditShell::Replace( const String& rNewStr, sal_Bool bRegExpRplc )
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
             {
                 bRet = GetDoc()->ReplaceRange( *PCURCRSR, rNewStr, bRegExpRplc )

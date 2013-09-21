@@ -854,7 +854,7 @@ SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
     SwFlyFrmFmt* pFmt = 0;
     SET_CURR_SHELL( this );
     StartAllAction();
-        FOREACHPAM_START( this )
+        FOREACHPAM_START(GetCrsr())
             pFmt = GetDoc()->Insert(*PCURCRSR, xObj,
                                     pFlyAttrSet, pGrfAttrSet, pFrmFmt );
             OSL_ENSURE( pFmt, "Doc->Insert(notxt) failed." );

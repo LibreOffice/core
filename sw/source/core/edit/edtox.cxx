@@ -59,7 +59,7 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
 {
     sal_Bool bInsAtPos = rMark.IsAlternativeText();
     StartAllAction();
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
 
         const SwPosition *pStt = PCURCRSR->Start(),
                          *pEnd = PCURCRSR->End();

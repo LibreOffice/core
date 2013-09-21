@@ -174,7 +174,7 @@ void SwInputFieldList::RemoveUnselectedFlds()
 {
     _SetGetExpFlds* pNewLst = new _SetGetExpFlds();
 
-    FOREACHPAM_START(pSh)
+    FOREACHPAM_START(pSh->GetCrsr())
     {
         for (sal_uInt16 i = 0; i < Count();)
         {

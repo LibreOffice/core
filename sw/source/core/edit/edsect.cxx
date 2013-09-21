@@ -41,7 +41,7 @@ SwEditShell::InsertSection(
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
             SwSection const*const pNew =
                 GetDoc()->InsertSwSection( *PCURCRSR, rNewData, 0, pAttr );
             if( !pRet )
@@ -183,7 +183,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
     {
         // for all section in the selection
 
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
 
             const SwPosition* pStt = PCURCRSR->Start(),
                             * pEnd = PCURCRSR->End();
@@ -253,7 +253,7 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
 sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 {
     sal_uInt16 nRet = 0;
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
 
         const SwPosition* pStt = PCURCRSR->Start(),
                         * pEnd = PCURCRSR->End();

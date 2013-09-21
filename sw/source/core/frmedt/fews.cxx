@@ -571,7 +571,7 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
     else
     {
         // Sort text nothing else
-        FOREACHPAM_START(this)
+        FOREACHPAM_START(GetCrsr())
 
             SwPaM* pPam = PCURCRSR;
 

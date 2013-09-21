@@ -31,7 +31,7 @@ class SwNodeIndex;
 
 #define FOREACHPAM_START(pCURSH) \
     {\
-        SwPaM *_pStartCrsr = (pCURSH)->GetCrsr(), *__pStartCrsr = _pStartCrsr; \
+        SwPaM *_pStartCrsr = (pCURSH), *__pStartCrsr = _pStartCrsr; \
         do {
 
 #define FOREACHPAM_END() \

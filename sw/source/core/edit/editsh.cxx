@@ -63,7 +63,7 @@ using namespace com::sun::star;
 void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
 {
     StartAllAction();
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
 
         const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, OUString(c));
         OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
@@ -163,7 +163,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
 void SwEditShell::Overwrite(const String &rStr)
 {
     StartAllAction();
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
         if( !GetDoc()->Overwrite(*PCURCRSR, rStr ) )
         {
             OSL_FAIL( "Doc->Overwrite(Str) failed." );
@@ -178,7 +178,7 @@ long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
         // Here, a table cell becomes a normal text cell.
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
         GetDoc()->SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
@@ -201,7 +201,7 @@ sal_Bool SwEditShell::AppendTxtNode()
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-    FOREACHPAM_START(this)
+    FOREACHPAM_START(GetCrsr())
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
         bRet = GetDoc()->AppendTxtNode( *PCURCRSR->GetPoint()) || bRet;
     FOREACHPAM_END()
@@ -1050,7 +1050,7 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
     if( pCrsr->GetNext() != pCrsr )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-        FOREACHPAM_START( this )
+        FOREACHPAM_START(GetCrsr())
 
         if( PCURCRSR->HasMark() )
             GetDoc()->TransliterateText( *PCURCRSR, aTrans );
@@ -1066,7 +1066,7 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
 
 void SwEditShell::CountWords( SwDocStat& rStat ) const
 {
-    FOREACHPAM_START( this )
+    FOREACHPAM_START(GetCrsr())
 
         if( PCURCRSR->HasMark() )
             GetDoc()->CountWords( *PCURCRSR, rStat );
