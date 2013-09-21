@@ -242,7 +242,7 @@ namespace myImplHelpers
     private:
         MapperImpl<C> maHelper;
         std::set<const C*> maUsedStyles;
-        C* MakeNonCollidingStyle(const String& rName);
+        C* MakeNonCollidingStyle(const OUString& rName);
     public:
         typedef std::pair<C*, bool> StyleResult;
         StyleMapperImpl(SwDoc &rDoc) : maHelper(rDoc) {}
@@ -286,9 +286,9 @@ namespace myImplHelpers
     }
 
     template<class C>
-    C* StyleMapperImpl<C>::MakeNonCollidingStyle(const String& rName)
+    C* StyleMapperImpl<C>::MakeNonCollidingStyle(const OUString& rName)
     {
-        String aName(rName);
+        OUString aName(rName);
         C* pColl = 0;
 
         if (0 != (pColl = maHelper.GetStyle(aName)))
@@ -296,11 +296,11 @@ namespace myImplHelpers
             //If the style collides first stick WW- in front of it, unless
             //it already has it and then successively add a larger and
             //larger number after it, its got to work at some stage!
-            if (!aName.EqualsIgnoreCaseAscii("WW-", 0, 3))
-                aName.InsertAscii("WW-" , 0);
+            if (!aName.startsWith("WW-"))
+                aName = "WW-" + aName;
 
             sal_Int32 nI = 1;
-            String aBaseName = aName;
+            OUString aBaseName = aName;
             while (
                     0 != (pColl = maHelper.GetStyle(aName)) &&
                     (nI < SAL_MAX_INT32)

@@ -69,7 +69,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 
-static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool bBalloon )
+static OUString lcl_GetRedlineHelp( const SwRedline& rRedl, sal_Bool bBalloon )
 {
     sal_uInt16 nResId = 0;
     switch( rRedl.GetType() )
@@ -81,16 +81,18 @@ static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool b
     case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLL; break;
     }
 
+    OUStringBuffer sBuf;
     if( nResId )
     {
-        rTxt = SW_RESSTR( nResId );
-        rTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM(": " ));
-        rTxt += rRedl.GetAuthorString();
-        rTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ));
-        rTxt += GetAppLangDateTimeString( rRedl.GetTimeStamp() );
+        sBuf.append(SW_RESSTR(nResId));
+        sBuf.append(": ");
+        sBuf.append(rRedl.GetAuthorString());
+        sBuf.append(" - ");
+        sBuf.append(GetAppLangDateTimeString(rRedl.GetTimeStamp()));
         if( bBalloon && rRedl.GetComment().Len() )
-            ( rTxt += '\n' ) += rRedl.GetComment();
+            sBuf.append('\n').append(rRedl.GetComment());
     }
+    return sBuf.makeStringAndClear();
 }
 
 
@@ -102,7 +104,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         return;
     bool bWeiter = true;
     SET_CURR_SHELL(&rSh);
-    String sTxt;
+    OUString sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
     sal_Bool bBalloon = static_cast< sal_Bool >(rEvt.GetMode() & HELPMODE_BALLOON);
 
@@ -140,7 +142,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
-                sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
+                sTxt = "= ";
                 sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
 #ifdef DBG_UTIL
@@ -163,10 +165,10 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 //#i63832# remove the link target type
-                xub_StrLen nFound = sTxt.Search(cMarkSeparator);
-                if( nFound != STRING_NOTFOUND && (++nFound) < sTxt.Len() )
+                sal_Int32 nFound = sTxt.indexOf(cMarkSeparator);
+                if( nFound != -1 && (++nFound) < sTxt.getLength() )
                 {
-                    OUString sSuffix( sTxt.Copy(nFound) );
+                    OUString sSuffix( sTxt.copy(nFound) );
                     if( sSuffix == "table" ||
                         sSuffix == "frame" ||
                         sSuffix == "region" ||
@@ -174,12 +176,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix == "text" ||
                         sSuffix == "graphic" ||
                         sSuffix == "ole" )
-                    sTxt = sTxt.Copy( 0, nFound - 1);
+                    sTxt = sTxt.copy( 0, nFound - 1);
                 }
                 // #i104300#
                 // special handling if target is a cross-reference bookmark
                 {
-                    String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
+                    String sTmpSearchStr = sTxt.copy( 1, sTxt.getLength() );
                     IDocumentMarkAccess* const pMarkAccess =
                                                 rSh.getIDocumentMarkAccess();
                     IDocumentMarkAccess::const_iterator_t ppBkmk =
@@ -193,7 +195,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             sTxt = pTxtNode->GetExpandTxt( 0, pTxtNode->Len(), true, true );
 
-                            if( sTxt.Len() )
+                            if( !sTxt.isEmpty() )
                             {
                                 OUStringBuffer sTmp(comphelper::string::remove(sTxt, 0xad));
                                 for (sal_Int32 i = 0; i < sTmp.getLength(); ++i)
@@ -217,8 +219,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                     if ( !bExecHyperlinks )
                     {
-                        sTxt.InsertAscii( ": ", 0 );
-                        sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                        sTxt = ": " + sTxt;
+                        sTxt = ViewShell::GetShellRes()->aHyperlinkClick + sTxt;
                     }
                 }
                 break;
@@ -240,9 +242,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     const SwFmtFtn* pFtn = (SwFmtFtn*)aCntntAtPos.aFnd.pAttr;
                     OUString sTmp;
                     pFtn->GetFtnText( sTmp );
-                    sTxt = sTmp;
-                    sTxt.Insert( SW_RESSTR( pFtn->IsEndNote()
-                                    ? STR_ENDNOTE : STR_FTNNOTE ), 0 );
+                    sTxt = SW_RESSTR( pFtn->IsEndNote()
+                                    ? STR_ENDNOTE : STR_FTNNOTE ) + sTmp;
                     bBalloon = sal_True;
                     if( aCntntAtPos.IsInRTLText() )
                         nStyle |= QUICKHELP_BIDI_RTL;
@@ -250,19 +251,19 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 break;
 
             case SwContentAtPos::SW_REDLINE:
-                lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl, sTxt, bBalloon );
+                sTxt = lcl_GetRedlineHelp(*aCntntAtPos.aFnd.pRedl, bBalloon);
                 break;
 
             case SwContentAtPos::SW_TOXMARK:
                 sTxt = aCntntAtPos.sStr;
-                if( sTxt.Len() && aCntntAtPos.pFndTxtAttr )
+                if( !sTxt.isEmpty() && aCntntAtPos.pFndTxtAttr )
                 {
                     const SwTOXType* pTType = aCntntAtPos.pFndTxtAttr->
                                         GetTOXMark().GetTOXType();
                     if( pTType && !pTType->GetTypeName().isEmpty() )
                     {
-                        sTxt.InsertAscii( ": ", 0 );
-                        sTxt.Insert( pTType->GetTypeName(), 0 );
+                        sTxt = ": " + sTxt;
+                        sTxt = pTType->GetTypeName() + sTxt;
                     }
                 }
                 break;
@@ -270,7 +271,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if(aCntntAtPos.aFnd.pAttr)
                 {
                     sTxt = SW_RESSTR(STR_CONTENT_TYPE_SINGLE_REFERENCE);
-                    sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": "));
+                    sTxt += ": ";
                     sTxt += ((const SwFmtRefMark*)aCntntAtPos.aFnd.pAttr)->GetRefName();
                 }
             break;
@@ -333,12 +334,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                      pRefFld->IsRefToNumItemCrossRefBookmark() )
                                 {
                                     sTxt = pRefFld->GetExpandedTxtOfReferencedTxtNode();
-                                    if ( sTxt.Len() > 80  )
+                                    if ( sTxt.getLength() > 80  )
                                     {
-                                        sTxt.Erase( 80 );
-                                        sTxt += '.';
-                                        sTxt += '.';
-                                        sTxt += '.';
+                                        sTxt = sTxt.copy(0, 80) + "...";
                                     }
                                 }
                                 else
@@ -351,16 +349,15 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                     }
 
-                    if( !sTxt.Len() )
+                    if( sTxt.isEmpty() )
                     {
                         aCntntAtPos.eCntntAtPos = SwContentAtPos::SW_REDLINE;
                         if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
-                            lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl,
-                                                    sTxt, bBalloon );
+                            sTxt = lcl_GetRedlineHelp(*aCntntAtPos.aFnd.pRedl, bBalloon);
                     }
                 }
             }
-            if (sTxt.Len() )
+            if (!sTxt.isEmpty())
             {
                 if( bBalloon )
                     Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sTxt );
@@ -465,7 +462,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
             }
         }
-        if (sTxt.Len() && pObj)
+        if (!sTxt.isEmpty() && pObj)
         {
             sTxt = URIHelper::removePassword( sTxt, INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);

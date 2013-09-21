@@ -2281,7 +2281,7 @@ bool ConvertMacroSymbol( const String& rName, String& rReference )
 // "MACROSCHALTFL"ACHE"
 eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
 {
-    String aName;
+    OUString aName;
     String aVText;
     bool bNewVText = true;
     bool bBracket  = false;
@@ -2297,7 +2297,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
         switch( nRet )
         {
         case -2:
-            if( !aName.Len() )
+            if( aName.isEmpty() )
                 aName = aReadParam.GetResult();
             else if( !aVText.Len() || bBracket )
             {
@@ -2318,12 +2318,12 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
             break;
         }
     }
-    if( !aName.Len() )
+    if( aName.isEmpty() )
         return FLD_TAGIGN;  // makes no sense without Makro-Name
 
     //try converting macro symbol according to macro name
     bool bApplyWingdings = ConvertMacroSymbol( aName, aVText );
-    aName.InsertAscii( "StarOffice.Standard.Modul1.", 0 );
+    aName = "StarOffice.Standard.Modul1." + aName;
 
     SwMacroField aFld( (SwMacroFieldType*)
                     rDoc.GetSysFldType( RES_MACROFLD ), aName, aVText );

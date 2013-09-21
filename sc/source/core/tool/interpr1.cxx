@@ -8041,14 +8041,14 @@ bool IsDBCS(sal_Unicode ch)
 {
     return lcl_getScriptClass(ch);
 }
-sal_Int32 getLengthB(String &str)
+sal_Int32 getLengthB(const OUString &str)
 {
+    if(str.isEmpty())
+        return 0;
     sal_Int32 index = 0;
     sal_Int32 length = 0;
-    if(0 == str.Len())
-        return 0;
-    while(index < str.Len()){
-        if(IsDBCS(str.GetChar(index)))
+    while(index < str.getLength()){
+        if(IsDBCS(str[index]))
             length += 2;
         else
             length++;
@@ -8058,33 +8058,35 @@ sal_Int32 getLengthB(String &str)
 }
 void ScInterpreter::ScLenB()
 {
-    String aStr( GetString() );
-    PushDouble( getLengthB(aStr) );
+    PushDouble( getLengthB(GetString()) );
 }
-void lcl_RightB(String &aStr, sal_Int32 n)
+OUString lcl_RightB(const OUString &rStr, sal_Int32 n)
 {
-    if( n < getLengthB(aStr) )
+    if( n < getLengthB(rStr) )
     {
-        sal_Int32 index = aStr.Len();
+        OUStringBuffer aBuf(rStr);
+        sal_Int32 index = aBuf.getLength();
         while(index-- >= 0)
         {
             if(0 == n)
             {
-                aStr.Erase( 0, index + 1);
+                aBuf.remove( 0, index + 1);
                 break;
             }
             if(-1 == n)
             {
-                aStr.Erase( 0, index + 2 );
-                aStr.InsertAscii(" ", 0);
+                aBuf.remove( 0, index + 2 );
+                aBuf.insert( 0, " ");
                 break;
             }
-            if(IsDBCS(aStr.GetChar(index)))
+            if(IsDBCS(aBuf[index]))
                 n -= 2;
             else
                 n--;
         }
+        return aBuf.makeStringAndClear();
     }
+    return rStr;
 }
 void ScInterpreter::ScRightB()
 {
@@ -8105,35 +8107,37 @@ void ScInterpreter::ScRightB()
         }
         else
             n = 1;
-        String aStr( GetString() );
-        lcl_RightB(aStr, n);
+        OUString aStr(lcl_RightB(GetString(), n));
         PushString( aStr );
     }
 }
-void lcl_LeftB(String &aStr, sal_Int32 n)
+OUString lcl_LeftB(const OUString &rStr, sal_Int32 n)
 {
-    if( n < getLengthB(aStr) )
+    if( n < getLengthB(rStr) )
     {
+        OUStringBuffer aBuf(rStr);
         sal_Int32 index = -1;
-        while(index++ < aStr.Len())
+        while(index++ < aBuf.getLength())
         {
             if(0 == n)
             {
-                aStr.Erase( index );
+                aBuf.truncate(index);
                 break;
             }
             if(-1 == n)
             {
-                aStr.Erase( index - 1 );
-                aStr.InsertAscii(" ");
+                aBuf.truncate( index - 1 );
+                aBuf.append(" ");
                 break;
             }
-            if(IsDBCS(aStr.GetChar(index)))
+            if(IsDBCS(aBuf[index]))
                 n -= 2;
             else
                 n--;
         }
+        return aBuf.makeStringAndClear();
     }
+    return rStr;
 }
 void ScInterpreter::ScLeftB()
 {
@@ -8154,8 +8158,7 @@ void ScInterpreter::ScLeftB()
         }
         else
             n = 1;
-        String aStr( GetString() );
-        lcl_LeftB(aStr, n);
+        OUString aStr(lcl_LeftB(GetString(), n));
         PushString( aStr );
     }
 }
@@ -8165,16 +8168,16 @@ void ScInterpreter::ScMidB()
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
         double fAnfang = ::rtl::math::approxFloor(GetDouble());
-        String rStr( GetString() );
+        OUString aStr( GetString() );
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             PushIllegalArgument();
         else
         {
 
-            lcl_LeftB(rStr, (xub_StrLen)fAnfang + (xub_StrLen)fAnz - 1);
-            sal_Int32 nCnt = getLengthB(rStr) - (xub_StrLen)fAnfang + 1;
-            lcl_RightB(rStr, nCnt>0 ? nCnt:0);
-            PushString(rStr);
+            aStr = lcl_LeftB(aStr, (xub_StrLen)fAnfang + (xub_StrLen)fAnz - 1);
+            sal_Int32 nCnt = getLengthB(aStr) - (xub_StrLen)fAnfang + 1;
+            aStr = lcl_RightB(aStr, nCnt>0 ? nCnt:0);
+            PushString(aStr);
         }
     }
 }

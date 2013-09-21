@@ -241,12 +241,11 @@ void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
             const SvxURLField* pURL = PTR_CAST( SvxURLField, pFld );
             if ( pURL )
             {
-                String sURL( pURL->GetURL() );
+                OUString sURL( pURL->GetURL() );
                 SvtSecurityOptions aSecOpts;
                 if ( aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK) )
                 {
-                    sURL.InsertAscii( ": ", 0 );
-                    sURL.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                    sURL = ViewShell::GetShellRes()->aHyperlinkClick + ": " + sURL;
                 }
                 Help::ShowQuickHelp( this,PixelToLogic(Rectangle(GetPosPixel(),Size(50,10))),sURL);
             }
