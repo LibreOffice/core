@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,padmin,$(SRCDIR)/padmin/source))
 
-$(eval $(call gb_Package_set_outdir,padmin,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,padmin,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_file,padmin,$(gb_PROGRAMDIRNAME)/spadmin,spadmin.sh))
 

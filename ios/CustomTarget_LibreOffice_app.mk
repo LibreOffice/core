@@ -81,7 +81,7 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 #
 # soffice.cfg
 #
-	cp -R $(gb_INSTROOT)/share/config/soffice.cfg $(appdir)/share/config
+	cp -R $(INSTROOT)/share/config/soffice.cfg $(appdir)/share/config
 #
 # "registry"
 #

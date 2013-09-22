@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_tpllayoutimpr,$(SRCDIR)/extras/source/templates/layout))
 
-$(eval $(call gb_Package_set_outdir,extras_tpllayoutimpr,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,extras_tpllayoutimpr,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_tpllayoutimpr,$(LIBO_SHARE_FOLDER)/template/common/layout,\
 	AbstractGreen.otp \

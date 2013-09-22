@@ -30,9 +30,9 @@
 #  gb_Library_Library_platform
 
 gb_Library_LAYER_DIRS := \
-	URELIB:$(gb_INSTROOT)/$(LIBO_URE_LIB_FOLDER) \
-	OOO:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME) \
-	SHLXTHDL:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)/shlxthdl \
+	URELIB:$(INSTROOT)/$(LIBO_URE_LIB_FOLDER) \
+	OOO:$(INSTROOT)/$(gb_PROGRAMDIRNAME) \
+	SHLXTHDL:$(INSTROOT)/$(gb_PROGRAMDIRNAME)/shlxthdl \
 	OXT:$(WORKDIR)/LinkTarget/ExtensionLibrary \
 	NONE:$(gb_Library_DLLDIR) \
 
@@ -71,9 +71,9 @@ endef
 
 define gb_Library__Library_impl_copy
 $(call gb_Package_Package,Library_Copy_$(1),$(gb_Package_PRESTAGEDIR))
-$(call gb_Package_set_outdir,Library_Copy_$(1),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,Library_Copy_$(1),$(INSTROOT))
 $(call gb_Package_add_file,Library_Copy_$(1),$(2),$(2))
-$(OUTDIR)/lib/$(notdir $(2)) : $(gb_INSTROOT)/$(2)
+$(OUTDIR)/lib/$(notdir $(2)) : $(INSTROOT)/$(2)
 endef
 
 # Note: there may be targets in 3 different directories: the library itself,

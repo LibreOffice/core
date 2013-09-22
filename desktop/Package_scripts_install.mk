@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,desktop_scripts_install,$(SRCDIR)/desktop/scripts))
 
-$(eval $(call gb_Package_set_outdir,desktop_scripts_install,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,desktop_scripts_install,$(INSTROOT)))
 
 ifneq ($(OS),WNT)
 

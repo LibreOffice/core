@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,vcl_osxres,$(SRCDIR)/vcl/aqua/source/res))
 
-$(eval $(call gb_Package_set_outdir,vcl_osxres,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,vcl_osxres,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files_with_dir,vcl_osxres,Resources,\
     MainMenu.nib/classes.nib \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_cfgsrvbitmapunx,$(SRCDIR)/extras/unx/source/bitmaps))
 
-$(eval $(call gb_Package_set_outdir,extras_cfgsrvbitmapunx,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,extras_cfgsrvbitmapunx,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_cfgsrvbitmapunx,$(LIBO_SHARE_FOLDER)/config,\
 	psetupl.xpm \

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_Rdb__get_install_target = $(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)/services/$(1).rdb
+gb_Rdb__get_install_target = $(INSTROOT)/$(gb_PROGRAMDIRNAME)/services/$(1).rdb
 
 define gb_Rdb__command
 $(call gb_Helper_abbreviate_dirs,\
@@ -45,9 +45,9 @@ endef
 
 # FIXME this needs some layer-like thing for the special case in URE
 define gb_Rdb_Rdb_install
-$(call gb_Rdb__Rdb_impl,$(1),$(if $(2),$(gb_INSTROOT)/$(2),$(call gb_Rdb__get_install_target,$(1))))
+$(call gb_Rdb__Rdb_impl,$(1),$(if $(2),$(INSTROOT)/$(2),$(call gb_Rdb__get_install_target,$(1))))
 $(call gb_Helper_install_final, \
-	$(if $(2),$(gb_INSTROOT)/$(2),$(call gb_Rdb__get_install_target,$(1))), \
+	$(if $(2),$(INSTROOT)/$(2),$(call gb_Rdb__get_install_target,$(1))), \
 	$(call gb_Rdb_get_target,$(1)))
 
 endef

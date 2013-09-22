@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,shell_scripts_gnome,$(SRCDIR)/shell/source/unix/misc))
 
-$(eval $(call gb_Package_set_outdir,shell_scripts_gnome,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,shell_scripts_gnome,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_file,shell_scripts_gnome,$(gb_PROGRAMDIRNAME)/gnome-open-url,gnome-open-url.sh))
 

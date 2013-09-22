@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_opensans,font_opensans))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_opensans,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_opensans,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_opensans,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	OpenSans-BoldItalic.ttf \

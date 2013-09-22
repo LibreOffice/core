@@ -17,9 +17,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_INSTROOT := $(INSTDIR)/$(PRODUCTNAME).app/Contents
-gb_DEVINSTALLROOT := $(gb_INSTROOT)
-
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
@@ -300,7 +297,7 @@ else
 ifneq ($(gb_JunitTest_DEBUGRUN),)
 gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
 else
-gb_JunitTest_SOFFICEARG:=path:$(gb_DEVINSTALLROOT)/MacOS/soffice
+gb_JunitTest_SOFFICEARG:=path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice
 endif
 endif
 
@@ -315,9 +312,9 @@ endef
 
 # PythonTest class
 
-gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(gb_DEVINSTALLROOT)/$(LIBO_URE_LIB_FOLDER)
+gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)
 ifneq ($(LIBO_LIB_FOLDER),$(LIBO_URE_LIB_FOLDER))
-gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(gb_DEVINSTALLROOT)/$(LIBO_LIB_FOLDER)
+gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(INSTROOT)/$(LIBO_LIB_FOLDER)
 endif
 gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(OUTDIR)/lib
 
@@ -326,7 +323,7 @@ gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(OUTDIR)/lib
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=$$($(gb_MKTEMP)) && \
 printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(gb_USER_INSTALLATION)" > $${OFFICESCRIPT} && \
-gdb -x $${OFFICESCRIPT} $(gb_DEVINSTALLROOT)/MacOS/soffice && \
+gdb -x $${OFFICESCRIPT} $(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice && \
 rm $${OFFICESCRIPT}
 endef
 
@@ -391,7 +388,7 @@ endef
 
 # Python
 gb_Python_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
-gb_Python_INSTALLED_EXECUTABLE := $(gb_DEVINSTALLROOT)/$(LIBO_LIB_FOLDER)/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
+gb_Python_INSTALLED_EXECUTABLE := $(INSTROOT)/$(LIBO_LIB_FOLDER)/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/Resources/Python.app/Contents/MacOS/LibreOfficePython
 # this is passed to gdb as executable when running tests
 gb_Python_INSTALLED_EXECUTABLE_GDB := $(gb_Python_INSTALLED_EXECUTABLE)
 

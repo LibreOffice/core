@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcecode,font_sourcecode))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_sourcecode,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_sourcecode,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcecode,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	SourceCodePro-Bold.ttf \

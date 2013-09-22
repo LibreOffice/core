@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,afms_fontunxafm,afms))
 
-$(eval $(call gb_ExternalPackage_set_outdir,afms_fontunxafm,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,afms_fontunxafm,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,afms_fontunxafm,$(LIBO_SHARE_FOLDER)/psprint/fontmetric,\
 	Courier-Bold.afm \

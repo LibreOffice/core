@@ -53,8 +53,8 @@ define gb_Gallery__make_env_args
 		$(call gb_Helper_make_url,$(call gb_ComponentTarget_get_target_for_build,$(item))))" \
 "-env:UNO_TYPES=$(foreach item,$(gb_Gallery__UNO_TYPES),\
 	$(call gb_Helper_make_url,$(call gb_UnoApi_get_target,$(item))))" \
--env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(gb_INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
--env:LO_LIB_DIR=$(call gb_Helper_make_url,$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME))
+-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
+-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(gb_PROGRAMDIRNAME))
 endef
 
 define gb_Gallery__command
@@ -140,7 +140,7 @@ $(call gb_Gallery__Gallery_impl,$(1),$(call gb_Gallery_get_packagename,$(1)),$(2
 
 # setup the files package - we install all of these too
 $(call gb_Package_Package_internal,$(call gb_Gallery_get_files_packagename,$(1)),$(SRCDIR)/$(2))
-$(call gb_Package_set_outdir,$(call gb_Gallery_get_files_packagename,$(1)),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,$(call gb_Gallery_get_files_packagename,$(1)),$(INSTROOT))
 $(call gb_Gallery__get_final_target,$(1)) : $(call gb_Package_get_target,$(call gb_Gallery_get_files_packagename,$(1)))
 $(call gb_Gallery_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_Gallery_get_files_packagename,$(1)))
 
@@ -155,7 +155,7 @@ gb_Gallery_basedir = $(patsubst %/,%,$(dir $(SRCDIR)/$(1)))
 # gb_Gallery__Gallery_impl gallery package basedir name
 define gb_Gallery__Gallery_impl
 $(call gb_Package_Package_internal,$(2),$(call gb_Gallery_get_workdir,$(1)))
-$(call gb_Package_set_outdir,$(2),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,$(2),$(INSTROOT))
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdg,$(1).sdg)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdv,$(1).sdv)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).thm,$(1).thm)

@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,wizards_basicsrveuro,$(SRCDIR)/wizards/source/euro))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicsrveuro,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,wizards_basicsrveuro,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,wizards_basicsrveuro,$(LIBO_SHARE_FOLDER)/basic/Euro,\
 	AutoPilotRun.xba \

@@ -17,9 +17,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-gb_INSTROOT := $(INSTDIR)
-gb_DEVINSTALLROOT := $(gb_INSTROOT)
-
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
@@ -329,7 +326,7 @@ else
 ifneq ($(gb_JunitTest_DEBUGRUN),)
 gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
 else
-gb_JunitTest_SOFFICEARG:=path:$(gb_DEVINSTALLROOT)/program/soffice
+gb_JunitTest_SOFFICEARG:=path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice
 endif
 endif
 
@@ -352,8 +349,8 @@ gb_PythonTest_PRECOMMAND :=
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
-printf ". $(gb_DEVINSTALLROOT)/program/ooenv\\n" > $${OFFICESCRIPT} && \
-printf "gdb --tui $(gb_DEVINSTALLROOT)/program/soffice.bin" >> $${OFFICESCRIPT} && \
+printf ". $(INSTROOT)/program/ooenv\\n" > $${OFFICESCRIPT} && \
+printf "gdb --tui $(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice.bin" >> $${OFFICESCRIPT} && \
 printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(gb_USER_INSTALLATION)\"" >> $${OFFICESCRIPT} && \
 printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
@@ -411,9 +408,9 @@ gb_UIMenubarTarget_UIMenubarTarget_platform :=
 
 # Python
 gb_Python_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib:$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload"
-gb_Python_INSTALLED_EXECUTABLE := /bin/sh $(gb_DEVINSTALLROOT)/program/python
+gb_Python_INSTALLED_EXECUTABLE := /bin/sh $(INSTROOT)/program/python
 # this is passed to gdb as executable when running tests
-gb_Python_INSTALLED_EXECUTABLE_GDB := $(gb_DEVINSTALLROOT)/program/python.bin
+gb_Python_INSTALLED_EXECUTABLE_GDB := $(INSTROOT)/program/python.bin
 
 include $(GBUILDDIR)/platform/com_GCC_class.mk
 

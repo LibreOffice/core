@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,scripting_ScriptsJavaScript,$(SRCDIR)/scripting/examples))
 
-$(eval $(call gb_Package_set_outdir,scripting_ScriptsJavaScript,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,scripting_ScriptsJavaScript,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsJavaScript,$(LIBO_SHARE_FOLDER)/Scripts,\
 	javascript/ExportSheetsToHTML/exportsheetstohtml.js \

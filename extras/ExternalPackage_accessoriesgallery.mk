@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgallery,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgallery,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgallery,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallery,$(LIBO_SHARE_FOLDER)/gallery,\
 	accessories/sg1010.sdg \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,scriptproviderforpython,$(SRCDIR)/scripting/source/pyprov))
 
-$(eval $(call gb_Package_set_outdir,scriptproviderforpython,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,scriptproviderforpython,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_file,scriptproviderforpython,$(LIBO_ETC_FOLDER)/services/scriptproviderforpython.rdb,scriptproviderforpython.rdb))
 $(eval $(call gb_Package_add_file,scriptproviderforpython,$(LIBO_LIB_PYUNO_FOLDER)/pythonscript.py,pythonscript.py))

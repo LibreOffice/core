@@ -27,7 +27,7 @@ $(eval $(call gb_Executable_add_exception_objects,libtest,\
 	smoketest/libtest \
 ))
 
-liblibreoffice_OWN_LD_PATH_DIR := $(gb_DEVINSTALLROOT)/program/libolib
+liblibreoffice_OWN_LD_PATH_DIR := $(INSTROOT)/program/libolib
 liblibreoffice_OWN_LD_SO := $(liblibreoffice_OWN_LD_PATH_DIR)/$(call gb_Library__get_workdir_linktargetname,libreoffice)
 
 $(liblibreoffice_OWN_LD_SO) : $(call gb_Library_get_target,libreoffice)
@@ -37,6 +37,6 @@ $(liblibreoffice_OWN_LD_SO) : $(call gb_Library_get_target,libreoffice)
 run_libtest: $(liblibreoffice_OWN_LD_SO)
 	$(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}":$(liblibreoffice_OWN_LD_PATH_DIR)/Library" \
 	$(WORKDIR)/LinkTarget/Executable/libtest \
-		$(gb_DEVINSTALLROOT)/program $(OUTDIR)/bin/smoketestdoc.sxw \
+		$(INSTROOT)/program $(OUTDIR)/bin/smoketestdoc.sxw \
 
 # vim: set noet sw=4 ts=4:

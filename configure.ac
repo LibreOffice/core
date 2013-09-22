@@ -90,6 +90,15 @@ dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
 AC_CANONICAL_HOST
 
+AC_MSG_CHECKING([for product name])
+if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
+    PRODUCTNAME=AC_PACKAGE_NAME"Dev"
+else
+    PRODUCTNAME=AC_PACKAGE_NAME
+fi
+AC_MSG_RESULT([$PRODUCTNAME])
+AC_SUBST(PRODUCTNAME)
+
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
@@ -371,6 +380,8 @@ LINKFLAGSNOUNDEFS="-Wl,-z,defs"
 CPP_LIBRARY="GLIBCXX"
 AC_SUBST(CPP_LIBRARY)
 
+INSTROOTSUFFIX=
+
 case "$host_os" in
 
 solaris*)
@@ -481,6 +492,7 @@ darwin*) # Mac OS X or iOS
         test_cups=no
     else
         _os=Darwin
+        INSTROOTSUFFIX=/$(PRODUCTNAME).app/Contents
     fi
     enable_systray=no
     # See comment above the case "$host_os"
@@ -4298,6 +4310,7 @@ else
     WORKDIR=${BUILDDIR}/workdir/${INPATH}
     INSTDIR=${BUILDDIR}/instdir/${INPATH}
 fi
+INSTROOT="${INSTDIR}${INSTROOTSUFFIX}"
 OUTDIR="${SOLARVER}/${INPATH}"
 SOLARINC="-I. -I$SRC_ROOT/include $SOLARINC"
 AC_SUBST(COM)
@@ -4309,6 +4322,7 @@ AC_SUBST(EPM_FLAGS)
 AC_SUBST(GUIBASE)
 AC_SUBST(INPATH)
 AC_SUBST([INSTDIR])
+AC_SUBST([INSTROOT])
 AC_SUBST(OS)
 AC_SUBST(OUTDIR)
 AC_SUBST(OUTPATH)
@@ -4469,9 +4483,9 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
-    . ./bin/get_config_variables OS PATH CC CXX INPATH SYSTEM_LIBXSLT OUTDIR WORKDIR
+    . ./bin/get_config_variables CC CXX INPATH INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS OUTDIR PATH SYSTEM_LIBXSLT WORKDIR
 
-    for V in OS CC CXX INPATH SYSTEM_LIBXSLT; do
+    for V in CC CXX INPATH LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
         if test -n "$VV"; then
@@ -4480,7 +4494,7 @@ if test "$cross_compiling" = "yes"; then
         fi
     done
 
-    for V in OUTDIR WORKDIR; do
+    for V in INSTDIR INSTROOT OUTDIR WORKDIR; do
         VV='$'$V
         VV=`eval "echo $VV"`
         VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
@@ -4505,11 +4519,21 @@ else
     CC_FOR_BUILD="$CC"
     CXX_FOR_BUILD="$CXX"
     INPATH_FOR_BUILD="$INPATH"
+    INSTDIR_FOR_BUILD="$INSTDIR"
+    INSTROOT_FOR_BUILD="$INSTROOT"
+    LIBO_BIN_FOLDER_FOR_BUILD="$LIBO_BIN_FOLDER"
+    LIBO_LIB_FOLDER_FOR_BUILD="$LIBO_LIB_FOLDER"
+    LIBO_URE_LIB_FOLDER_FOR_BUILD="$LIBO_URE_LIB_FOLDER"
     OUTDIR_FOR_BUILD="$OUTDIR"
     WORKDIR_FOR_BUILD="$WORKDIR"
 fi
 AC_SUBST(OS_FOR_BUILD)
 AC_SUBST(INPATH_FOR_BUILD)
+AC_SUBST(INSTDIR_FOR_BUILD)
+AC_SUBST(INSTROOT_FOR_BUILD)
+AC_SUBST(LIBO_BIN_FOLDER_FOR_BUILD)
+AC_SUBST(LIBO_LIB_FOLDER_FOR_BUILD)
+AC_SUBST(LIBO_URE_LIB_FOLDER_FOR_BUILD)
 AC_SUBST(OUTDIR_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 
@@ -12178,15 +12202,6 @@ else
     AC_MSG_RESULT(no)
 fi
 AC_SUBST(WITH_COMPAT_OOWRAPPERS)
-
-AC_MSG_CHECKING([for product name])
-if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
-    PRODUCTNAME=AC_PACKAGE_NAME"Dev"
-else
-    PRODUCTNAME=AC_PACKAGE_NAME
-fi
-AC_MSG_RESULT([$PRODUCTNAME])
-AC_SUBST(PRODUCTNAME)
 
 INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr '[[:upper:]]' '[[:lower:]]'`
 AC_MSG_CHECKING([for install dirname])

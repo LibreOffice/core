@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,wizards_basicsrvdepot,$(SRCDIR)/wizards/source/depot))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicsrvdepot,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvdepot,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvdepot,$(LIBO_SHARE_FOLDER)/basic/Depot,\
 	CommonLang.xba \

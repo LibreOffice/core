@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotoscities,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoscities,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoscities,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoscities,$(LIBO_SHARE_FOLDER)/gallery/Photos/Cities,\
 	accessories/Photos/Cities/ArkSoft0507170040.jpg \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosspace,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosspace,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosspace,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosspace,$(LIBO_SHARE_FOLDER)/gallery/Photos/Space,\
 	accessories/Photos/Space/Wikimedia_Space_120px-Atlantis_taking_off_on_STS-27.jpg \

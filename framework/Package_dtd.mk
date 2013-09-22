@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Package_Package,framework_dtd,$(SRCDIR)/framework/dtd))
 
-$(eval $(call gb_Package_set_outdir,framework_dtd,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,framework_dtd,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,framework_dtd,$(LIBO_SHARE_FOLDER)/dtd/officedocument/1_0,\
 	accelerator.dtd \

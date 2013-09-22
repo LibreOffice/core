@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotoscelebration,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoscelebration,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotoscelebration,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotoscelebration,$(LIBO_SHARE_FOLDER)/gallery/Photos/Celebration,\
 	accessories/Photos/Celebration/JS_PDPhO_fireworks_burst.jpg \

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonlabels,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonlabels,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonlabels,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonlabels,$(LIBO_SHARE_FOLDER)/template/common/labels,\
 	templates/common/labels/24_port_patch_text.otg \

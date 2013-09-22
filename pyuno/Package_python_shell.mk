@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,python_shell,$(call gb_CustomTarget_get_workdir,pyuno/python_shell)))
 
-$(eval $(call gb_Package_set_outdir,python_shell,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,python_shell,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_file,python_shell,$(gb_Package_PROGRAMDIRNAME)/python,python.sh))
 

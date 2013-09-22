@@ -594,7 +594,7 @@ $(call gb_HelpLinkTarget_HelpLinkTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpIndexTarget_HelpIndexTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
 $(call gb_Package_Package_internal,$(5),$(4))
-$(call gb_Package_set_outdir,$(5),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,$(5),$(INSTROOT))
 
 $(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))

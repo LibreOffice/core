@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryelementsbullets2,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryelementsbullets2,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryelementsbullets2,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryelementsbullets2,$(LIBO_SHARE_FOLDER)/gallery/Elements/Bullets2,\
 	accessories/Elements/Bullets2/amethyst.arrow.png \

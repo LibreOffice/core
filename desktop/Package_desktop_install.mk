@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,desktop_install,$(SRCDIR)))
 
-$(eval $(call gb_Package_set_outdir,desktop_install,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,desktop_install,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_symbolic_link,desktop_install,program,MacOS))
 

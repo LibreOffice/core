@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_cfgsrvnolang,$(SRCDIR)/extras/source/misc_config))
 
-$(eval $(call gb_Package_set_outdir,extras_cfgsrvnolang,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,extras_cfgsrvnolang,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files_with_dir,extras_cfgsrvnolang,$(LIBO_SHARE_FOLDER)/config,\
 	wizard/form/styles/beige.css \

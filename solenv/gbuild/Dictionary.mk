@@ -213,8 +213,8 @@ $(call gb_Package_Package_internal,$(call gb_Dictionary_get_packagename,$(1)),$(
 $(call gb_Package_Package_internal,$(call gb_Dictionary_get_packagename,$(1)_generated),$(WORKDIR))
 $(call gb_PackageSet_PackageSet_internal,$(call gb_Dictionary_get_packagesetname,$(1)))
 
-$(call gb_Package_set_outdir,$(call gb_Dictionary_get_packagename,$(1)),$(gb_INSTROOT))
-$(call gb_Package_set_outdir,$(call gb_Dictionary_get_packagename,$(1)_generated),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,$(call gb_Dictionary_get_packagename,$(1)),$(INSTROOT))
+$(call gb_Package_set_outdir,$(call gb_Dictionary_get_packagename,$(1)_generated),$(INSTROOT))
 $(call gb_PackageSet_add_package,$(call gb_Dictionary_get_packagesetname,$(1)),$(call gb_Dictionary_get_packagename,$(1)))
 
 ifeq (,$(gb_Dictionary_ALL_LANGS))

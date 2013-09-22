@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,desktop_soffice_sh,$(call gb_CustomTarget_get_workdir,desktop/soffice)))
 
-$(eval $(call gb_Package_set_outdir,desktop_soffice_sh,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,desktop_soffice_sh,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_file,desktop_soffice_sh,$(gb_PROGRAMDIRNAME)/soffice,soffice.sh))
 

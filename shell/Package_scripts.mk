@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,shell_scripts,$(SRCDIR)/shell/source/unix/misc))
 
-$(eval $(call gb_Package_set_outdir,shell_scripts,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,shell_scripts,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_file,shell_scripts,$(gb_PROGRAMDIRNAME)/open-url,open-url.sh))
 

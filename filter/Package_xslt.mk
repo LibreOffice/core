@@ -18,7 +18,7 @@
 
 $(eval $(call gb_Package_Package,filter_xslt,$(SRCDIR)/filter/source/xslt))
 
-$(eval $(call gb_Package_set_outdir,filter_xslt,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,filter_xslt,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/common/copy.xsl,common/copy.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,$(LIBO_SHARE_FOLDER)/xslt/common/math.xsl,common/math.xsl))

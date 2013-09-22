@@ -10,7 +10,7 @@
 # AllLangPackage class
 
 # Handles creation of a bunch of packages with content dependent on
-# language. The package files are placed into $(gb_INSTROOT).
+# language. The package files are placed into $(INSTROOT).
 
 gb_AllLangPackage_LANGS := $(if $(strip $(gb_WITH_LANG)),$(gb_WITH_LANG),en-US)
 
@@ -44,7 +44,7 @@ endef
 # gb_AllLangPackage__AllLangPackage_lang group package srcdir
 define gb_AllLangPackage__AllLangPackage_onelang
 $(call gb_Package_Package_internal,$(2),$(3))
-$(call gb_Package_set_outdir,$(2),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,$(2),$(INSTROOT))
 $(call gb_AllLangPackage_get_target,$(1)) : $(call gb_Package_get_target,$(2))
 $(call gb_AllLangPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 

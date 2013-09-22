@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,postprocess_registry_install,$(call gb_CustomTarget_get_workdir,postprocess/registry)))
 
-$(eval $(call gb_Package_set_outdir,postprocess_registry_install,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,postprocess_registry_install,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,postprocess_registry_install,$(LIBO_SHARE_FOLDER)/registry,\
 	$(postprocess_XCDS) \

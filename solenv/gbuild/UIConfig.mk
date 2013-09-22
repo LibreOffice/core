@@ -209,8 +209,8 @@ $(call gb_PackageSet_PackageSet_internal,$(call gb_UIConfig_get_packagesetname,$
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)),$(SRCDIR))
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)_generated),$(WORKDIR))
 
-$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename,$(1)),$(gb_INSTROOT))
-$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename,$(1)_generated),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename,$(1)),$(INSTROOT))
+$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename,$(1)_generated),$(INSTROOT))
 $(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(call gb_UIConfig_get_packagename,$(1)))
 
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
@@ -230,7 +230,7 @@ endef
 
 define gb_UIConfig__UIConfig_for_lang
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(gb_UILocalizeTarget_WORKDIR))
-$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(gb_INSTROOT))
+$(call gb_Package_set_outdir,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(INSTROOT))
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
 

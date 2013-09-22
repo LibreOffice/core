@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_gentium,font_gentium))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_gentium,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_gentium,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_gentium,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	GenBasB.ttf \

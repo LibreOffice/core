@@ -38,7 +38,7 @@ endef
 define gb_UnoApi_install
 $(if $(2),,$(call gb_Output_error,gb_UnoApi_install: missing install name.))
 $(call gb_Helper_install,$(call gb_UnoApi_get_target,$(1)), \
-	$(gb_INSTROOT)/$(2), \
+	$(INSTROOT)/$(2), \
 	$(call gb_UnoApiTarget_get_target,$(1)))
 
 endef

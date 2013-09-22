@@ -59,8 +59,8 @@ $(if $(URE),\
 	    "-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))") \
     $(if $(strip $(UNO_SERVICES)),\
 	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
-	-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(gb_INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
-	-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)) \
+	-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
+	-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(gb_PROGRAMDIRNAME)) \
 	--protector $(call gb_Library_get_target,unoexceptionprotector) unoexceptionprotector \
 	--protector $(call gb_Library_get_target,unobootstrapprotector) unobootstrapprotector \
  ) $(ARGS)

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,librelogo,$(SRCDIR)/librelogo/source))
 
-$(eval $(call gb_Package_set_outdir,librelogo,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,librelogo,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,librelogo,$(LIBO_SHARE_FOLDER)/Scripts/python/LibreLogo,\
     LibreLogo/LibreLogo.py \

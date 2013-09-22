@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_extra_fonts,fonts-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_extra_fonts,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,extras_extra_fonts,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_use_unpacked,extras_extra_fonts,fonts-pack))
 

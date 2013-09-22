@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,bridges_jnilib_java_uno,$(SRCDIR)))
 
-$(eval $(call gb_Package_set_outdir,bridges_jnilib_java_uno,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,bridges_jnilib_java_uno,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_symbolic_link,bridges_jnilib_java_uno,$(LIBO_URE_LIB_FOLDER)/$(basename $(notdir $(call gb_Library_get_target,java_uno))).jnilib,$(notdir $(call gb_Library_get_target,java_uno))))
 

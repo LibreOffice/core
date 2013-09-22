@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,extras_tplwizreport,$(SRCDIR)/extras/source/templates/wizard/report))
 
-$(eval $(call gb_Package_set_outdir,extras_tplwizreport,$(gb_INSTROOT)))
+$(eval $(call gb_Package_set_outdir,extras_tplwizreport,$(INSTROOT)))
 
 $(eval $(call gb_Package_add_files,extras_tplwizreport,$(LIBO_SHARE_FOLDER)/template/common/wizard/report,\
     cnt-011.ott \

@@ -47,8 +47,12 @@ gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 
 gb_Executable_get_target = $(gb_Executable__get_linktarget_target)
 
-# FIXME broken
+ifneq ($(CROSS_COMPILING),)
+# Can we assume this is used only for executables registered for "NONE"?
+gb_Executable_get_target_for_build = $(call gb_Executable_get_install_target_for_build,$(1))
+else
 gb_Executable_get_target_for_build = $(gb_Executable__get_linktarget_target)
+endif
 
 # FIXME: cleanup?
 gb_Library_get_target = $(gb_Library__get_linktarget_target)

@@ -23,10 +23,16 @@
 #  gb_Executable_Executable_platform
 
 gb_Executable_LAYER_DIRS := \
-	UREBIN:$(gb_INSTROOT)/$(LIBO_URE_BIN_FOLDER) \
-	OOO:$(gb_INSTROOT)/$(gb_PROGRAMDIRNAME) \
+	UREBIN:$(INSTROOT)/$(LIBO_URE_BIN_FOLDER) \
+	OOO:$(INSTROOT)/$(LIBO_BIN_FOLDER) \
 	SDKBIN:$(INSTDIR)/$(gb_Package_SDKDIRNAME)/bin \
 	NONE:$(gb_Executable_BINDIR) \
+
+gb_Executable_LAYER_DIRS_FOR_BUILD := \
+	UREBIN:$(INSTROOT_FOR_BUILD)/$(LIBO_URE_BIN_FOLDER_FOR_BUILD) \
+	OOO:$(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER_FOR_BUILD) \
+	SDKBIN:$(INSTDIR_FOR_BUILD)/$(gb_Package_SDKDIRNAME)/bin \
+	NONE:$(gb_Executable_BINDIR_FOR_BUILD) \
 
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
@@ -45,8 +51,11 @@ $(call gb_Executable_get_clean_target,%) :
 			$(AUXTARGETS))
 
 gb_Executable__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS)))
+gb_Executable__get_dir_for_layer_for_build = $(patsubst $(1):%,%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS_FOR_BUILD)))
 gb_Executable__get_dir_for_exe = $(call gb_Executable__get_dir_for_layer,$(call gb_Executable_get_layer,$(1)))
+gb_Executable__get_dir_for_exe_for_build = $(call gb_Executable__get_dir_for_layer_for_build,$(call gb_Executable_get_layer,$(1)))
 gb_Executable_get_install_target = $(call gb_Executable__get_dir_for_exe,$(1))/$(call gb_Executable_get_filename,$(1))
+gb_Executable_get_install_target_for_build = $(call gb_Executable__get_dir_for_exe_for_build,$(1))/$(call gb_Executable_get_filename,$(1))
 
 define gb_Executable_Executable
 $(call gb_Postprocess_register_target,AllExecutables,Executable,$(1))

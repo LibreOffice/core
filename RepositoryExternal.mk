@@ -2911,7 +2911,7 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
+	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -2944,7 +2944,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	)) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
+	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,offapi) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
@@ -2986,7 +2986,7 @@ $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,saxparser) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
+	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -3000,7 +3000,7 @@ $(call gb_Executable_add_runtime_dependencies,uno,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
-	$(gb_INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
+	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -3050,7 +3050,7 @@ $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_GeneratedPackage_
 
 else
 
-$(call gb_ExternalExecutable_set_internal,python,$(gb_INSTROOT)/$(LIBO_BIN_FOLDER)/$(if $(filter WNT,$(OS)),python-core-$(PYTHON_VERSION)/bin/python.exe,python.bin))
+$(call gb_ExternalExecutable_set_internal,python,$(INSTROOT)/$(LIBO_BIN_FOLDER)/$(if $(filter WNT,$(OS)),python-core-$(PYTHON_VERSION)/bin/python.exe,python.bin))
 $(call gb_ExternalExecutable_set_precommand,python,$(gb_Python_PRECOMMAND))
 $(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Package_get_target_for_build,python3))
 

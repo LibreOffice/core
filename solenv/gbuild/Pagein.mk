@@ -18,7 +18,7 @@ gb_Pagein__make_library_path = $(call gb_Pagein__get_libdir,$(1))$(call gb_Libra
 gb_Pagein__make_path = \
 $(if $(call gb_Pagein__is_library,$(1)),$(call gb_Pagein__make_library_path,$(1)),$(1))
 
-gb_Pagein__get_install_target = $(gb_INSTROOT)/$(gb_PROGRAMDIRNAME)/pagein-$(1)
+gb_Pagein__get_install_target = $(INSTROOT)/$(gb_PROGRAMDIRNAME)/pagein-$(1)
 
 define gb_Pagein__command
 $(call gb_Output_announce,$(2),$(true),PAG,5)

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_sourcesans,font_sourcesans))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_sourcesans,$(gb_INSTROOT)))
+$(eval $(call gb_ExternalPackage_set_outdir,fonts_sourcesans,$(INSTROOT)))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_sourcesans,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	SourceSansPro-BoldItalic.ttf \
