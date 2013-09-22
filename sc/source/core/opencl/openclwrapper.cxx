@@ -2112,7 +2112,7 @@ bool OclCalc::oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArra
     {
         float *afBuffer = new float[nElements];
         if ( !afBuffer )
-            return -1;
+            return false;
         clStatus = clEnqueueReadBuffer(kEnv.mpkCmdQueue,
                                        outputCl,
                                        CL_TRUE,0,
@@ -2124,8 +2124,7 @@ bool OclCalc::oclGroundWaterGroup( uint *eOp, uint eOpNum, const double *pOpArra
         {
             dpResult[i] = (double)afBuffer[i];
         }
-        if ( !afBuffer )
-            delete [] afBuffer;
+        delete [] afBuffer;
     }
 
     clStatus = clFinish( kEnv.mpkCmdQueue );
