@@ -186,28 +186,6 @@ private:
     Outliner*   pOwner;
     EditView*   pEditView;
 
-    // Drag & Drop
-    sal_Bool        bBeginDragAtMove_OLDMEMBER;
-    sal_Bool        bInDragMode;
-    Point       aDDStartPosRef;
-    Point       aDDStartPosPix;
-    sal_Int32       nDDStartPara;
-    sal_Int32       nDDStartParaVisChildCount;
-    sal_Int32       nDDCurPara;
-    sal_uInt16      nDDStartDepth;
-    sal_uInt16      nDDCurDepth;
-    sal_uInt16      nDDMaxDepth;
-    sal_Bool        bDDChangingDepth;
-    sal_Bool        bDDCursorVisible;
-    long*       pHorTabArrDoc;
-    long        nDDScrollLRBorderWidthWin;  // Left Right
-    long        nDDScrollTBBorderWidthWin;  // Top Bottom
-    long        nDDScrollLROffs;
-    long        nDDScrollTDOffs;
-
-    void*       pDummy;
-    sal_uLong       nDummy;
-
     enum MouseTarget {
         MouseText = 0,
         MouseBullet = 1,
@@ -215,7 +193,6 @@ private:
         MouseOutside = 3,    // Outside OutputArea
         MouseDontKnow = 4
     };
-    MouseTarget OLD_ePrevMouseTarget;
 
     EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, sal_Bool bExpand );
 
@@ -223,11 +200,9 @@ private:
     EDITENG_DLLPRIVATE void         ImpToggleExpand( Paragraph* pParentPara );
     EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChildren );
 
-    EDITENG_DLLPRIVATE Pointer      ImpGetMousePointer( MouseTarget eTarget );
     EDITENG_DLLPRIVATE sal_Int32    ImpInitPaste( sal_Int32& rStart );
     EDITENG_DLLPRIVATE void         ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize);
     EDITENG_DLLPRIVATE sal_Int32    ImpCalcSelectedPages( sal_Bool bIncludeFirstSelected );
-    EDITENG_DLLPRIVATE sal_Bool        ImpIsIndentingPages();
 
 public:
                 OutlinerView( Outliner* pOut, Window* pWindow );

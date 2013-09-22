@@ -54,11 +54,6 @@ OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
     DBG_CTOR( OutlinerView, 0 );
 
     pOwner                      = pOut;
-    bDDCursorVisible            = sal_False;
-    bInDragMode                 = sal_False;
-    nDDScrollLRBorderWidthWin   = 0;
-    nDDScrollTBBorderWidthWin   = 0;
-    pHorTabArrDoc               = 0;
 
     pEditView = new EditView( pOut->pEditEngine, pWin );
     pEditView->SetSelectionMode( EE_SELMODE_TXTONLY );
@@ -348,8 +343,6 @@ sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         else if( rMEvt.GetClicks() == 2 && bHasChildren )
             ImpToggleExpand( pPara );
 
-        aDDStartPosPix = rMEvt.GetPosPixel();
-        aDDStartPosRef=pEditView->GetWindow()->PixelToLogic( aDDStartPosPix,pOwner->GetRefMapMode());
         return sal_True;
     }
 
