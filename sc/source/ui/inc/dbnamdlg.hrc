@@ -40,5 +40,6 @@
 #define STR_MODIFY      31
 #define STR_DB_INVALID  32
 #define BTN_MORE        33
+#define BTN_FORMATTING  34
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

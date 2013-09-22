@@ -142,6 +142,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     get(m_pBtnOk, "ok");
     get(m_pBtnCancel, "cancel");
     get(m_pBtnAdd, "add");
+    get(m_pBtnFormatting, "formatting");
     aStrAdd = m_pBtnAdd->GetText();
     aStrModify = get<Window>("modify")->GetText();
     get(m_pBtnRemove, "delete");
@@ -178,6 +179,7 @@ void ScDbNameDlg::Init()
     m_pBtnCancel->SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
     m_pBtnAdd->SetClickHdl     ( LINK( this, ScDbNameDlg, AddBtnHdl ) );
     m_pBtnRemove->SetClickHdl  ( LINK( this, ScDbNameDlg, RemoveBtnHdl ) );
+    m_pBtnFormatting->SetClickHdl( LINK( this, ScDbNameDlg, FormattingBtnHdl ) );
     m_pEdName->SetModifyHdl    ( LINK( this, ScDbNameDlg, NameModifyHdl ) );
     m_pEdAssign->SetModifyHdl  ( LINK( this, ScDbNameDlg, AssModifyHdl ) );
     UpdateNames();
@@ -492,6 +494,13 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
         }
     }
     return 0;
+}
+
+// ---------------------------------------------------------------------
+
+IMPL_LINK_NOARG(ScDbNameDlg, FormattingBtnHdl)
+{
+    //Invoke the db formatting dialog here
 }
 
 namespace {

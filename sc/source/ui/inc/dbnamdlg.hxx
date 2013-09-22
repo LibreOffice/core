@@ -68,6 +68,7 @@ private:
     CancelButton*       m_pBtnCancel;
     PushButton*         m_pBtnAdd;
     PushButton*         m_pBtnRemove;
+    PushButton*         m_pBtnFormatting;
 
     sal_Bool            bSaved;
 
@@ -99,6 +100,8 @@ private:
     DECL_LINK( RemoveBtnHdl, void * );
     DECL_LINK( NameModifyHdl, void * );
     DECL_LINK( AssModifyHdl, void * );
+    DECL_LINK( FormattingBtnHdl, void * );
+
 };
 
 
