@@ -8996,7 +8996,7 @@ if test $_os != WINNT -a $_os != Darwin -a $_os != iOS; then
     if $PKG_CONFIG --atleast-version 0.9.18 harfbuzz; then
         libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz -lharfbuzz-icu"])
     else
-        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10],[-I${WORKDIR}/UnpackedTarball/harfbuzz/src],[${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.a ${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz-icu.a])
+        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10],[-I${WORKDIR}/UnpackedTarball/harfbuzz/src],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz -lharfbuzz-icu"])
     fi
 else
     AC_MSG_RESULT([no])
