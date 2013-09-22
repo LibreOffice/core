@@ -1103,7 +1103,7 @@ bool LanguageTagImpl::canonicalize()
                 if (!mbInitializedLangID)
                 {
                     convertLocaleToLang( false);
-                    if (bTemporaryLocale)
+                    if (bTemporaryLocale || mnLangID == LANGUAGE_DONTKNOW)
                         bTemporaryLangID = true;
                 }
                 if (mnLangID != LANGUAGE_DONTKNOW && mnLangID != LANGUAGE_SYSTEM)
