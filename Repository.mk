@@ -496,8 +496,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 	xmlreader \
 ))
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+# FIXME fdo#69601
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
+))
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	$(if $(filter MSC,$(COM)),cli_uno) \
 	getuid \
 	jpipe \

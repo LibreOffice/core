@@ -544,7 +544,7 @@ gb_InstallScript_EXT := .inf
 # CliAssemblyTarget class
 
 gb_CliAssemblyTarget_POLICYEXT := $(gb_Library_DLLEXT)
-gb_CliAssemblyTarget_get_dll = $(call gb_Library__get_dir_for_layer,URELIB)/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
+gb_CliAssemblyTarget_get_dll = $(call gb_Library__get_dir_for_layer,NONE)/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 
 # Extension class
 
