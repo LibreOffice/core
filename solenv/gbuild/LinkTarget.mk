@@ -1350,7 +1350,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTa
 
 endef
 
-# call gb_LinkTarget__set_precompiled_header_impl,linktarget,pchcxxfile,pchtarget
+# call gb_LinkTarget__set_precompiled_header_impl,linktarget,pchcxxfile,pchtarget,linktargetmakefilename
 define gb_LinkTarget__set_precompiled_header_impl
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
 $(call gb_PrecompiledHeader_get_target,$(3)) : $(2).cxx
@@ -1364,7 +1364,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(4))
 
 $(call gb_PrecompiledHeader_get_target,$(3)) : VISIBILITY :=
 
@@ -1373,15 +1373,15 @@ $(call gb_PrecompiledHeader_get_timestamp,$(call gb_LinkTarget__get_workdir_link
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_PrecompiledHeader_get_dep_target,$(3)) 
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(4))
 endif
 
 endef
 
-# call gb_LinkTarget_set_precompiled_header,linktarget,pchcxxfile
+# call gb_LinkTarget_set_precompiled_header,linktarget,pchcxxfile,linktargetmakefilename
 define gb_LinkTarget_set_precompiled_header
 ifeq ($(gb_ENABLE_PCH),$(true))
-$(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)))
+$(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)),$(4))
 endif
 
 endef
