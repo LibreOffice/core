@@ -38,6 +38,8 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
 
+#include "rtl/ustring.hxx"
+
 #include <actctrl.hxx>
 
 class SwGlossaryHdl;
@@ -53,7 +55,7 @@ const short RET_EDIT = 100;
 
 class SwGlTreeListBox : public SvTreeListBox
 {
-    const String    sReadonly;
+    const OUString    sReadonly;
 
     SvTreeListEntry*  pDragEntry;
 
@@ -103,15 +105,15 @@ class SwGlossaryDlg : public SvxStandardDialog
     PushButton*     m_pBibBtn;
     PushButton*     m_pPathBtn;
 
-    String          sReadonlyPath;
+    OUString        sReadonlyPath;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextContainer2 > m_xAutoText;
     SwOneExampleFrame*  pExampleFrame;
 
     SwGlossaryHdl*  pGlossaryHdl;
 
-    String          sResumeGroup;
-    String          sResumeShortName;
+    OUString        sResumeGroup;
+    OUString        sResumeShortName;
     sal_Bool            bResume;
 
 
@@ -140,30 +142,30 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     virtual void    Apply();
     void            Init();
-    SvTreeListEntry*    DoesBlockExist(const String& sBlock, const String& rShort);
-    void            ShowAutoText(const String& rGroup, const String& rShortName);
+    SvTreeListEntry*    DoesBlockExist(const OUString& sBlock, const OUString& rShort);
+    void            ShowAutoText(const OUString& rGroup, const OUString& rShortName);
     void            ResumeShowAutoText();
 
-    sal_Bool            GetResumeData(String& rGroup, String& rShortName)
+    sal_Bool            GetResumeData(OUString& rGroup, OUString& rShortName)
                         {rGroup = sResumeGroup; rShortName = sResumeShortName; return bResume;}
-    void            SetResumeData(const String& rGroup, const String& rShortName)
+    void            SetResumeData(const OUString& rGroup, const OUString& rShortName)
                         {sResumeGroup = rGroup; sResumeShortName = rShortName; bResume = sal_True;}
     void            ResetResumeData() {bResume = sal_False;}
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     ~SwGlossaryDlg();
-    String GetCurrGrpName() const;
-    String GetCurrLongName() const
+    OUString GetCurrGrpName() const;
+    OUString GetCurrLongName() const
     {
         return m_pNameED->GetText();
     }
-    String GetCurrShortName() const
+    OUString GetCurrShortName() const
     {
         return m_pShortNameEdit->GetText();
     }
     static OUString GetCurrGroup();
     static void     SetActGroup(const OUString& rNewGroup);
-    static String   GetExtension();
+    static OUString GetExtension();
 };
 
 #endif
