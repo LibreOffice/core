@@ -25,7 +25,6 @@
 #include "sal/log.hxx"
 #include "osl/module.h"
 #include "osl/module.hxx"
-#include "osl/thread.h"
 #include "rtl/malformeduriexception.hxx"
 #include "rtl/uri.hxx"
 #include "rtl/ustring.h"
@@ -40,22 +39,22 @@ oslModule SAL_CALL osl_loadModuleRelative(
     oslGenericFunction const baseModule, rtl_uString * const relativePath,
     sal_Int32 const mode)
 {
-    ::rtl::OUString base;
-    if (!::osl::Module::getUrlFromAddress(baseModule, base)) {
+    rtl::OUString base;
+    if (!osl::Module::getUrlFromAddress(baseModule, base)) {
         SAL_INFO("sal.osl","osl::Module::getUrlFromAddress failed");
         return NULL;
     }
-    ::rtl::OUString abs;
+    rtl::OUString abs;
     try {
-        abs = ::rtl::Uri::convertRelToAbs(base, relativePath);
-    } catch (const ::rtl::MalformedUriException & e) {
+        abs = rtl::Uri::convertRelToAbs(base, relativePath);
+    } catch (const rtl::MalformedUriException & e) {
         (void) e; // avoid warnings
         SAL_INFO("sal.osl",
             "rtl::MalformedUriException <" << e.getMessage() << ">");
             //TODO: let some OSL_TRACE variant take care of text conversion?
         return NULL;
     }
-    return ::osl_loadModule(abs.pData, mode);
+    return osl_loadModule(abs.pData, mode);
 }
 
 #endif // !DISABLE_DYNLOADING

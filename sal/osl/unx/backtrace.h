@@ -19,7 +19,7 @@
 
 
 #if defined (SOLARIS) || defined (FREEBSD) || defined (NETBSD) || \
-    defined (OPENBSD) || defined (DRAGONFLY)
+    defined (OPENBSD) || defined (DRAGONFLY) || defined (MACOSX)
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,23 +52,5 @@ struct frame {
 #if defined (LINUX)
 #include <execinfo.h>
 #endif
-
-#if defined (MACOSX)
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* backtrace function with same behaviour as defined in GNU libc */
-
-int backtrace( void **buffer, int max_frames );
-
-void backtrace_symbols_fd( void **buffer, int size, int fd );
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
-
-#endif /* defined MACOSX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -72,9 +72,6 @@ oslMutex SAL_CALL osl_createMutex()
     return pMutex;
 }
 
-/*****************************************************************************/
-/* osl_destroyMutex */
-/*****************************************************************************/
 void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 {
     OSL_ASSERT(pMutex);
@@ -96,9 +93,6 @@ void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
     return;
 }
 
-/*****************************************************************************/
-/* osl_acquireMutex */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
 {
     OSL_ASSERT(pMutex);
@@ -121,9 +115,6 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)
     return sal_False;
 }
 
-/*****************************************************************************/
-/* osl_tryToAcquireMutex */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
 {
     OSL_ASSERT(pMutex);
@@ -142,9 +133,6 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutexImpl *pMutex)
     return sal_False;
 }
 
-/*****************************************************************************/
-/* osl_releaseMutex */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
 {
     OSL_ASSERT(pMutex);
@@ -167,9 +155,6 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutexImpl *pMutex)
     return sal_False;
 }
 
-/*****************************************************************************/
-/* osl_getGlobalMutex */
-/*****************************************************************************/
 
 static oslMutexImpl globalMutexImpl;
 

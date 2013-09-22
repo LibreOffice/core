@@ -66,7 +66,7 @@ inline bool isSubStr( char const* pStr, rtl::OString const& subStr )
     return rtl_str_indexOfStr( pStr, subStr.getStr() ) >= 0;
 }
 
-struct DebugBaseMutex : ::rtl::Static<osl::Mutex, DebugBaseMutex> {};
+struct DebugBaseMutex : rtl::Static<osl::Mutex, DebugBaseMutex> {};
 
 } // anon namespace
 

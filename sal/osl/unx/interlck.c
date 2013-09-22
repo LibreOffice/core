@@ -32,9 +32,6 @@
 
 extern int osl_isSingleCPU;
 
-/*****************************************************************************/
-/* osl_incrementInterlockedCount */
-/*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     // Fast case for old, slow, single CPU Intel machines for whom
@@ -110,9 +107,6 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 
 static pthread_mutex_t InterLock = PTHREAD_MUTEX_INITIALIZER;
 
-/*****************************************************************************/
-/* osl_incrementInterlockedCount */
-/*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     oslInterlockedCount Count;
@@ -124,9 +118,6 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     return (Count);
 }
 
-/*****************************************************************************/
-/* osl_decrementInterlockedCount */
-/*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
     oslInterlockedCount Count;

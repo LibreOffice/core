@@ -39,10 +39,6 @@ sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent,
 oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 
 
-/*****************************************************************************/
-/* enum oslPipeError */
-/*****************************************************************************/
-
 static struct
 {
     int            errcode;
@@ -97,10 +93,6 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
 #define ERROR_FROM_NATIVE(y)    osl_PipeErrorFromNative(y)
 
 
-/*****************************************************************************/
-/* osl_create/destroy-PipeImpl */
-/*****************************************************************************/
-
 oslPipe __osl_createPipeImpl()
 {
     oslPipe pPipeImpl;
@@ -122,9 +114,6 @@ void __osl_destroyPipeImpl(oslPipe pImpl)
 }
 
 
-/*****************************************************************************/
-/* osl_createPipe  */
-/*****************************************************************************/
 oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
 {
     oslPipe pPipe=0;
@@ -434,9 +423,6 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 }
 
 
-/*****************************************************************************/
-/* osl_acceptPipe  */
-/*****************************************************************************/
 oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
     int     s, flags;
@@ -502,9 +488,6 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     return pAcceptedPipe;
 }
 
-/*****************************************************************************/
-/* osl_receivePipe  */
-/*****************************************************************************/
 sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                         void* pBuffer,
                         sal_Int32 BytesToRead)
@@ -532,10 +515,6 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
       return nRet;
 }
 
-
-/*****************************************************************************/
-/* osl_sendPipe  */
-/*****************************************************************************/
 sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
                        const void* pBuffer,
                        sal_Int32 BytesToSend)
@@ -564,10 +543,6 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
      return nRet;
 }
 
-
-/*****************************************************************************/
-/* osl_getLastPipeError  */
-/*****************************************************************************/
 oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 {
     (void) pPipe; /* unused */
