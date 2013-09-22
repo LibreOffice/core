@@ -376,6 +376,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/dbgui/csvsplits \
 	sc/source/ui/dbgui/csvtablebox \
 	sc/source/ui/dbgui/dbnamdlg \
+    sc/source/ui/dbgui/dbformattingdlg \
 	sc/source/ui/dbgui/expftext \
 	$(if $(filter TRUE,$(MPL_SUBSET)),, \
 	    sc/source/ui/dbgui/fieldwnd) \

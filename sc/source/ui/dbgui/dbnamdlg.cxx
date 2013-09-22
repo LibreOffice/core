@@ -26,6 +26,7 @@
 #include "globstr.hrc"
 #include "rangenam.hxx"     // IsNameValid
 #include "globalnames.hxx"
+#include "dbformattingdlg.hxx"
 #include "dbnamdlg.hxx"
 
 
@@ -119,7 +120,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     : ScAnyRefDlg(pB, pCW, pParent,
         "DefineDatabaseRangeDialog",
             "modules/scalc/ui/definedatabaserangedialog.ui")
-    , pViewData(ptrViewData)
+    , pViewData( ptrViewData )
     , pDoc(ptrViewData->GetDocument())
     , bRefInputMode(false)
     , aAddrDetails(pDoc->GetAddressConvention(), 0, 0)
@@ -501,6 +502,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 IMPL_LINK_NOARG(ScDbNameDlg, FormattingBtnHdl)
 {
     //Invoke the db formatting dialog here
+    //ScDbFormattingDlg* pDbDataFormattingDlg = new ScDbFormattingDlg( mpB, mpCW, GetParent(), pViewData );
+    return 0;
 }
 
 namespace {

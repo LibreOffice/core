@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <!-- interface-requires gtk+ 3.0 -->
+    <!-- interface-requires LibreOffice 1.0 -->
+    <object class="GtkDialog" id="DbDataFormatting">
+        <property name="can_focus">False</property>
+        <property name="border_width">5</property>
+        <property name="title" translatable="yes">Database Range Formatting</property>
+        <property name="type_hint">dialog</property>
+        <child internal-child="vbox">
+            <object class="GtkBox" id="dialog-vbox1">
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                    <object class="GtkBox" id="box1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">12</property>
+                        <child>
+                            <object class="GtkFrame" id="NameFrame">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="label_xalign">0</property>
+                                <property name="shadow_type">none</property>
+                                <child>
+                                    <object class="GtkAlignment" id="alignment1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="vexpand">True</property>
+                                        <property name="top_padding">6</property>
+                                        <property name="left_padding">12</property>
+                                        <child>
+                                            <object class="GtkGrid" id="grid1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="row_spacing">6</property>
+                                                <property name="column_spacing">12</property>
+                                                <child>
+                                                    <object class="GtkComboBox" id="firstrowstripe">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="valign">center</property>
+                                                        <property name="hexpand">True</property>
+                                                    </object>
+                                                    <packing>
+                                                        <property name="left_attach">0</property>
+                                                        <property name="top_attach">0</property>
+                                                        <property name="width">1</property>
+                                                        <property name="height">2</property>
+                                                    </packing>
+                                                </child>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>
