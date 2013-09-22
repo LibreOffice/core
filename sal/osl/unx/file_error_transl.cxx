@@ -21,10 +21,6 @@
 #include "file_error_transl.h"
 #include <osl/diagnose.h>
 
-/********************************************
- * oslTranslateFileError
- *******************************************/
-
 oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
 {
     oslFileError osl_error = osl_File_E_invalidError;

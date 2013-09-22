@@ -34,17 +34,9 @@
 #include "osl/diagnose.h"
 
 
-/*****************************************************************************/
-/* Static Module Functions */
-/*****************************************************************************/
-
 static int   osl_getHWAddr(const char *ifname, char* hard_addr);
 static int   osl_checkAddr(const char* addr);
 
-
-/*****************************************************************************/
-/* osl_getEthernetAddress */
-/*****************************************************************************/
 
 sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
 {
@@ -110,10 +102,6 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
 #endif
 }
 
-
-/*****************************************************************************/
-/* osl_getHWAddr */
-/*****************************************************************************/
 
 static int osl_getHWAddr(const char *ifname, char* hard_addr)
 {
@@ -197,10 +185,6 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 }
 
 
-/*****************************************************************************/
-/* osl_checkAddr */
-/*****************************************************************************/
-
 static int osl_checkAddr(const char* addr)
 {
     if (addr[0]==0 && addr[1]==0 &&
@@ -218,10 +202,6 @@ static int osl_checkAddr(const char* addr)
 #if defined (SOLARIS) && !defined(__sparcv8plus) && !defined(__sparcv9)
 #include <sys/types.h>
 #include <sys/processor.h>
-
-/*****************************************************************************/
-/* osl_InitSparcV9 */
-/*****************************************************************************/
 
 void osl_InterlockedCountSetV9(sal_Bool bV9);
 

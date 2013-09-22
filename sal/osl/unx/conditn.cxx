@@ -37,9 +37,6 @@ typedef struct _oslConditionImpl
 } oslConditionImpl;
 
 
-/*****************************************************************************/
-/* osl_createCondition */
-/*****************************************************************************/
 oslCondition SAL_CALL osl_createCondition()
 {
       oslConditionImpl* pCond;
@@ -89,9 +86,6 @@ oslCondition SAL_CALL osl_createCondition()
     return (oslCondition)pCond;
 }
 
-/*****************************************************************************/
-/* osl_destroyCondition */
-/*****************************************************************************/
 void SAL_CALL osl_destroyCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
@@ -118,9 +112,6 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
     return;
 }
 
-/*****************************************************************************/
-/* osl_setCondition */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
    oslConditionImpl* pCond;
@@ -171,9 +162,6 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 
 }
 
-/*****************************************************************************/
-/* osl_resetCondition */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
@@ -212,9 +200,6 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
     return sal_True;
 }
 
-/*****************************************************************************/
-/* osl_waitCondition */
-/*****************************************************************************/
 oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout)
 {
     oslConditionImpl* pCond;
@@ -315,9 +300,6 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     return Result;
 }
 
-/*****************************************************************************/
-/* osl_checkCondition */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
     sal_Bool State;

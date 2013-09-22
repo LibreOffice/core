@@ -336,10 +336,6 @@ static sal_Bool DeInitSignal()
 
 #if defined (SAL_ENABLE_CRASH_REPORT) && defined(INCLUDE_BACKTRACE)
 
-/*****************************************************************************/
-/* Generate MD5 checksum    */
-/*****************************************************************************/
-
 static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
 {
     sal_uInt32  nBytesProcessed = 0;
@@ -937,9 +933,6 @@ static void DUMPCURRENTALLOCS()
 }
 #endif
 
-/*****************************************************************************/
-/* SignalHandlerFunction    */
-/*****************************************************************************/
 void SignalHandlerFunction(int Signal)
 {
     oslSignalInfo    Info;
@@ -1020,9 +1013,6 @@ void SignalHandlerFunction(int Signal)
     }
 }
 
-/*****************************************************************************/
-/* osl_addSignalHandler */
-/*****************************************************************************/
 oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler, void* pData)
 {
     oslSignalHandlerImpl* pHandler;
@@ -1056,9 +1046,6 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
     return (NULL);
 }
 
-/*****************************************************************************/
-/* osl_removeSignalHandler */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 {
     oslSignalHandlerImpl *pHandler, *pPrevious = NULL;
@@ -1100,9 +1087,6 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
     return (sal_False);
 }
 
-/*****************************************************************************/
-/* osl_raiseSignal */
-/*****************************************************************************/
 oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
 {
     oslSignalInfo   Info;
@@ -1124,9 +1108,6 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
     return (Action);
 }
 
-/*****************************************************************************/
-/* osl_setErrorReporting */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
 {
     sal_Bool bOld = bErrorReportingEnabled;

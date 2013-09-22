@@ -183,12 +183,6 @@ struct FileHandle_Impl
     };
 };
 
-/*******************************************************************
- *
- * FileHandle_Impl implementation
- *
- ******************************************************************/
-
 FileHandle_Impl::Allocator &
 FileHandle_Impl::Allocator::get()
 {
@@ -747,9 +741,6 @@ oslFileHandle osl::detail::createFileHandleFromFD( int fd )
     return (oslFileHandle)(pImpl);
 }
 
-/*******************************************************************
- * osl_file_adjustLockFlags
- ******************************************************************/
 static int osl_file_adjustLockFlags (const char * path, int flags)
 {
 #ifdef MACOSX
@@ -780,9 +771,6 @@ static int osl_file_adjustLockFlags (const char * path, int flags)
     return flags;
 }
 
-/****************************************************************************
- *  osl_file_queryLocking
- ***************************************************************************/
 static bool osl_file_queryLocking (sal_uInt32 uFlags)
 {
 #if !defined HAVE_O_EXLOCK
@@ -832,9 +820,6 @@ SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandl
 
 #endif
 
-/****************************************************************************
- *  osl_openFile
- ***************************************************************************/
 #ifdef HAVE_O_EXLOCK
 #define OPEN_WRITE_FLAGS ( O_RDWR | O_EXLOCK | O_NONBLOCK )
 #define OPEN_CREATE_FLAGS ( O_CREAT | O_RDWR | O_EXLOCK | O_NONBLOCK )
@@ -1042,9 +1027,6 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
     return osl_openFilePath (buffer, pHandle, uFlags);
 }
 
-/****************************************************************************/
-/*  osl_closeFile */
-/****************************************************************************/
 oslFileError
 SAL_CALL osl_closeFile( oslFileHandle Handle )
 {
@@ -1084,9 +1066,6 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
     return (result);
 }
 
-/************************************************
- * osl_syncFile
- ***********************************************/
 oslFileError
 SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
@@ -1110,9 +1089,6 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
     return osl_File_E_None;
 }
 
-/************************************************
- * osl_fileGetOSHandle
- ***********************************************/
 oslFileError
 SAL_CALL osl_getFileOSHandle(
     oslFileHandle Handle,
@@ -1128,9 +1104,6 @@ SAL_CALL osl_getFileOSHandle(
     return osl_File_E_None;
 }
 
-/*******************************************
-    osl_mapFile
-********************************************/
 oslFileError
 SAL_CALL osl_mapFile (
     oslFileHandle Handle,
@@ -1244,9 +1217,6 @@ unmapFile (void* pAddr, sal_uInt64 uLength)
 // folder osl_mapFile just returns a pointer to the file inside the
 // already mmapped .apk archive.
 
-/*******************************************
-    osl_unmapFile
-********************************************/
 oslFileError
 SAL_CALL osl_unmapFile (void* pAddr, sal_uInt64 uLength)
 {
@@ -1255,9 +1225,6 @@ SAL_CALL osl_unmapFile (void* pAddr, sal_uInt64 uLength)
 
 #endif
 
-/*******************************************
-    osl_unmapMappedFile
-********************************************/
 oslFileError
 SAL_CALL osl_unmapMappedFile (oslFileHandle Handle, void* pAddr, sal_uInt64 uLength)
 {
@@ -1274,9 +1241,6 @@ SAL_CALL osl_unmapMappedFile (oslFileHandle Handle, void* pAddr, sal_uInt64 uLen
     return osl_File_E_None;
 }
 
-/*******************************************
-    osl_readLine
-********************************************/
 oslFileError
 SAL_CALL osl_readLine (
     oslFileHandle   Handle,
@@ -1297,9 +1261,6 @@ SAL_CALL osl_readLine (
     return (result);
 }
 
-/*******************************************
-    osl_readFile
-********************************************/
 oslFileError
 SAL_CALL osl_readFile (
     oslFileHandle Handle,
@@ -1326,9 +1287,6 @@ SAL_CALL osl_readFile (
     return (result);
 }
 
-/*******************************************
-    osl_writeFile
-********************************************/
 oslFileError
 SAL_CALL osl_writeFile (
     oslFileHandle Handle,
@@ -1357,9 +1315,6 @@ SAL_CALL osl_writeFile (
     return (result);
 }
 
-/*******************************************
-    osl_readFileAt
-********************************************/
 oslFileError
 SAL_CALL osl_readFileAt (
     oslFileHandle Handle,
@@ -1390,9 +1345,6 @@ SAL_CALL osl_readFileAt (
     return pImpl->readFileAt (nOffset, pBuffer, nBytesRequested, pBytesRead);
 }
 
-/*******************************************
-    osl_writeFileAt
-********************************************/
 oslFileError
 SAL_CALL osl_writeFileAt (
     oslFileHandle Handle,
@@ -1425,9 +1377,6 @@ SAL_CALL osl_writeFileAt (
     return pImpl->writeFileAt (nOffset, pBuffer, nBytesToWrite, pBytesWritten);
 }
 
-/****************************************************************************/
-/*  osl_isEndOfFile */
-/****************************************************************************/
 oslFileError
 SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF )
 {
@@ -1441,9 +1390,6 @@ SAL_CALL osl_isEndOfFile( oslFileHandle Handle, sal_Bool *pIsEOF )
     return osl_File_E_None;
 }
 
-/************************************************
- * osl_getFilePos
- ***********************************************/
 oslFileError
 SAL_CALL osl_getFilePos( oslFileHandle Handle, sal_uInt64* pPos )
 {
@@ -1457,9 +1403,6 @@ SAL_CALL osl_getFilePos( oslFileHandle Handle, sal_uInt64* pPos )
     return osl_File_E_None;
 }
 
-/*******************************************
-    osl_setFilePos
-********************************************/
 oslFileError
 SAL_CALL osl_setFilePos (oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset)
 {
@@ -1504,9 +1447,6 @@ SAL_CALL osl_setFilePos (oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffse
     return pImpl->setPos (nPos + nOffset);
 }
 
-/****************************************************************************
- *  osl_getFileSize
- ****************************************************************************/
 oslFileError
 SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64* pSize )
 {
@@ -1520,9 +1460,6 @@ SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64* pSize )
     return osl_File_E_None;
 }
 
-/************************************************
- * osl_setFileSize
- ***********************************************/
 oslFileError
 SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize )
 {

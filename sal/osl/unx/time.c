@@ -53,10 +53,6 @@ typedef struct timeval osl_time_t;
 static osl_time_t startTime;
 
 
-/*--------------------------------------------------
- * osl_getSystemTime
- *-------------------------------------------------*/
-
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
 #ifdef __MACH__
@@ -94,10 +90,6 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 }
 
 
-/*--------------------------------------------------
- * osl_getDateTimeFromTimeValue
- *-------------------------------------------------*/
-
 sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     struct tm *pSystemTime;
@@ -127,10 +119,6 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
 
     return sal_False;
 }
-
-/*--------------------------------------------------
- * osl_getTimeValueFromDateTime
- *--------------------------------------------------*/
 
 sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
@@ -199,10 +187,6 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
 }
 
 
-/*--------------------------------------------------
- * osl_getLocalTimeFromSystemTime
- *--------------------------------------------------*/
-
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     struct tm *pLocalTime;
@@ -235,10 +219,6 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVa
 
     return sal_False;
 }
-
-/*--------------------------------------------------
- * osl_getSystemTimeFromLocalTime
- *--------------------------------------------------*/
 
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {

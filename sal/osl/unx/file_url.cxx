@@ -363,10 +363,6 @@ namespace
         return (pStr + rtl_ustr_getLength(pStr));
     }
 
-    /*********************************************
-
-     ********************************************/
-
     sal_Unicode* ustrchrcat(const sal_Unicode chr, sal_Unicode* d)
     {
         sal_Unicode* p = ustrtoend(d);
@@ -374,10 +370,6 @@ namespace
         *p   = 0;
         return d;
     }
-
-    /******************************************************
-     *
-     ******************************************************/
 
     bool _islastchr(sal_Unicode* pStr, sal_Unicode Chr)
     {
@@ -423,10 +415,6 @@ namespace
 
         return aPath;
     }
-
-    /******************************************************
-     *
-     ******************************************************/
 
     oslFileError _osl_resolvepath(
         /*inout*/ sal_Unicode* path,
@@ -676,10 +664,6 @@ namespace
         }
         return bfound;
     }
-
-    /*********************************************
-
-     ********************************************/
 
     bool find_in_searchPath(const rtl::OUString& file_path, rtl_uString* search_path, rtl::OUString& result)
     {

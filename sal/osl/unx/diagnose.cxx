@@ -60,9 +60,7 @@ static void osl_diagnose_backtrace_Impl (
 ((f != 0) ? (*(f))((s)) : (void)fprintf(stderr, "%s", (s)))
 
 #if defined (LINUX) || defined (SOLARIS)
-/************************************************************************/
-/* osl_diagnose_frame_Impl */
-/************************************************************************/
+
 static void osl_diagnose_frame_Impl (
     oslDebugMessageFunc f,
     int                 depth,
@@ -102,9 +100,6 @@ static void osl_diagnose_frame_Impl (
 }
 #endif
 
-/************************************************************************/
-/* osl_diagnose_backtrace_Impl */
-/************************************************************************/
 #if defined(LINUX)
 
 #include <execinfo.h>
@@ -126,7 +121,6 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 
 #elif defined(SOLARIS)
 
-#include <pthread.h>
 #include <setjmp.h>
 #include <sys/frame.h>
 
@@ -190,10 +184,6 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 
 #endif /* (LINUX || SOLARIS) */
 
-/************************************************************************/
-/* osl_assertFailedLine */
-/************************************************************************/
-
 namespace {
 
 // getenv is not thread safe, so minimize use of result:
@@ -255,17 +245,11 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     return doAbort;
 }
 
-/************************************************************************/
-/* osl_breakDebug */
-/************************************************************************/
 void SAL_CALL osl_breakDebug()
 {
     abort();
 }
 
-/************************************************************************/
-/* osl_reportError */
-/************************************************************************/
 sal_Int32 SAL_CALL osl_reportError (
     sal_uInt32      nType,
     const sal_Char* pszMessage)
@@ -275,9 +259,6 @@ sal_Int32 SAL_CALL osl_reportError (
     return 0;
 }
 
-/************************************************************************/
-/* osl_setDebugMessageFunc */
-/************************************************************************/
 oslDebugMessageFunc SAL_CALL osl_setDebugMessageFunc (
     oslDebugMessageFunc pNewFunc)
 {
@@ -286,9 +267,6 @@ oslDebugMessageFunc SAL_CALL osl_setDebugMessageFunc (
     return pOldFunc;
 }
 
-/************************************************************************/
-/* osl_setDetailedDebugMessageFunc */
-/************************************************************************/
 pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc (
     pfunc_osl_printDetailedDebugMessage pNewFunc)
 {

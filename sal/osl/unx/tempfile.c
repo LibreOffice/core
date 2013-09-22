@@ -269,10 +269,6 @@ static oslFileError osl_create_temp_file_impl_(
     return osl_error;
 }
 
-/*****************************************************************
- * osl_createTempFile
- *****************************************************************/
-
 oslFileError SAL_CALL osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
