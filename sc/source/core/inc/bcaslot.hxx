@@ -39,7 +39,7 @@ private:
     SvtBroadcaster      aBroadcaster;
     ScRange             aRange;
     sal_uLong               nRefCount;
-    sal_Bool                bInUpdateChain;
+    bool                bInUpdateChain;
 
 public:
             ScBroadcastArea( const ScRange& rRange )
@@ -57,8 +57,8 @@ public:
     inline sal_uLong        GetRef() { return nRefCount; }
     inline ScBroadcastArea* GetUpdateChainNext() const { return pUpdateChainNext; }
     inline void         SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
-    inline sal_Bool         IsInUpdateChain() const { return bInUpdateChain; }
-    inline void         SetInUpdateChain( sal_Bool b ) { bInUpdateChain = b; }
+    inline bool         IsInUpdateChain() const { return bInUpdateChain; }
+    inline void         SetInUpdateChain( bool b ) { bInUpdateChain = b; }
 
     /** Equalness of this or range. */
     inline  bool        operator==( const ScBroadcastArea & rArea ) const;
@@ -139,7 +139,7 @@ private:
         whether there would be an overflow when adding an area, setting the
         proper state if so.
 
-        @return sal_True if a HardRecalcState is effective and area is not to be
+        @return true if a HardRecalcState is effective and area is not to be
         added.
       */
     bool                CheckHardRecalcStateCondition() const;
@@ -173,7 +173,7 @@ public:
             as InsertListeningArea(), so use that instead.
 
         @return
-            sal_True if rpArea passed was NULL and ScBroadcastArea is newly
+            true if rpArea passed was NULL and ScBroadcastArea is newly
             created.
      */
     bool                StartListeningArea( const ScRange& rRange,
@@ -189,9 +189,9 @@ public:
     void                EndListeningArea( const ScRange& rRange,
                                             SvtListener* pListener,
                                             ScBroadcastArea*& rpArea );
-    sal_Bool                AreaBroadcast( const ScHint& rHint );
-    /// @return sal_True if at least one broadcast occurred.
-    sal_Bool                AreaBroadcastInRange( const ScRange& rRange,
+    bool                AreaBroadcast( const ScHint& rHint );
+    /// @return true if at least one broadcast occurred.
+    bool                AreaBroadcastInRange( const ScRange& rRange,
                                               const ScHint& rHint );
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateRemove( UpdateRefMode eUpdateRefMode,
@@ -281,9 +281,9 @@ public:
                                             SvtListener* pListener );
     void                EndListeningArea( const ScRange& rRange,
                                             SvtListener* pListener );
-    sal_Bool                AreaBroadcast( const ScHint& rHint ) const;
+    bool                AreaBroadcast( const ScHint& rHint ) const;
         // return: at least one broadcast occurred
-    sal_Bool                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
+    bool                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
