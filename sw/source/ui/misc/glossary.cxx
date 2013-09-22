@@ -78,23 +78,23 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::ucbhelper;
 using namespace ::sfx2;
 
-static String lcl_GetValidShortCut( const String& rName )
+static OUString lcl_GetValidShortCut( const OUString& rName )
 {
-    const sal_uInt16 nSz = rName.Len();
+    const sal_Int32 nSz = rName.getLength();
 
     if ( 0 == nSz )
         return rName;
 
-    sal_uInt16 nStart = 1;
-    while( rName.GetChar( nStart-1 ) == ' ' && nStart < nSz )
+    sal_Int32 nStart = 1;
+    while( rName[nStart-1]==' ' && nStart < nSz )
         nStart++;
 
-    String aBuf = OUString(rName.GetChar(nStart-1));
+    OUString aBuf = OUString(rName[nStart-1]);
 
     for( ; nStart < nSz; ++nStart )
     {
-        if( rName.GetChar( nStart-1 ) == ' ' && rName.GetChar( nStart ) != ' ')
-            aBuf += rName.GetChar( nStart );
+        if( rName[nStart-1]==' ' && rName[nStart]!=' ')
+            aBuf += OUString(rName[nStart]);
     }
     return aBuf;
 }
@@ -258,7 +258,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     {
         OUString aName(pBox->GetEntryText(pEntry));
         m_pNameED->SetText(aName);
-        m_pShortNameEdit->SetText(*(String*)pEntry->GetUserData());
+        m_pShortNameEdit->SetText(*reinterpret_cast<OUString*>(pEntry->GetUserData()));
         pEntry = pBox->GetParent(pEntry);
         m_pInsertBtn->Enable( !bIsDocReadOnly);
         ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
@@ -282,8 +282,11 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
 
 void SwGlossaryDlg::Apply()
 {
-    const String aGlosName(m_pShortNameEdit->GetText());
-    if(aGlosName.Len()) pGlossaryHdl->InsertGlossary(aGlosName);
+    const OUString aGlosName(m_pShortNameEdit->GetText());
+    if (!aGlosName.isEmpty())
+    {
+        pGlossaryHdl->InsertGlossary(aGlosName);
+    }
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
@@ -306,8 +309,8 @@ void SwGlossaryDlg::EnableShortName(sal_Bool bOn)
 /* --------------------------------------------------
  * does the title exist in the selected group?
  * --------------------------------------------------*/
-SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
-                const String& rShort)
+SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
+                const OUString& rShort)
 {
     // look for possible entry in TreeListBox
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
@@ -319,8 +322,10 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
         for(sal_uInt32 i = 0; i < nChildCount; i++)
         {
             SvTreeListEntry* pChild = m_pCategoryBox->GetEntry( pEntry, i );
-            if(rBlock == m_pCategoryBox->GetEntryText(pChild) &&
-                (!rShort.Len() || rShort == *(String*)pChild->GetUserData()))
+            if (rBlock == m_pCategoryBox->GetEntryText(pChild) &&
+                (rShort.isEmpty() ||
+                 rShort==*reinterpret_cast<OUString*>(pChild->GetUserData()))
+               )
             {
                 return pChild;
             }
@@ -331,19 +336,16 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
 
 IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
 {
-    String aName(m_pNameED->GetText());
+    const OUString aName(m_pNameED->GetText());
     bool bNameED = pEdit == m_pNameED;
-    if( !aName.Len() )
+    if( aName.isEmpty() )
     {
         if(bNameED)
             m_pShortNameEdit->SetText(aName);
         m_pInsertBtn->Enable(sal_False);
         return 0;
     }
-    String sShortSearch;
-    if(!bNameED)
-        sShortSearch = pEdit->GetText();
-    bool bNotFound = !DoesBlockExist(aName, sShortSearch);
+    const bool bNotFound = !DoesBlockExist(aName, bNameED ? OUString() : pEdit->GetText());
     if(bNameED)
     {
             // did the text get in to the Listbbox in the Edit with a click?
@@ -385,8 +387,8 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
 {
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
 
-    const String aEditText(m_pNameED->GetText());
-    const bool bHasEntry = aEditText.Len() && !m_pShortNameEdit->GetText().isEmpty();
+    const OUString aEditText(m_pNameED->GetText());
+    const bool bHasEntry = !aEditText.isEmpty() && !m_pShortNameEdit->GetText().isEmpty();
     const bool bExists = 0 != DoesBlockExist(aEditText, m_pShortNameEdit->GetText());
     const bool bIsGroup = pEntry && !m_pCategoryBox->GetParent(pEntry);
     pMn->EnableItem("new", bSelection && bHasEntry && !bExists);
@@ -423,8 +425,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     {
         bool bNoAttr = sItemIdent == "newtext";
 
-        const String aStr(m_pNameED->GetText());
-        const String aShortName(m_pShortNameEdit->GetText());
+        const OUString aStr(m_pNameED->GetText());
+        const OUString aShortName(m_pShortNameEdit->GetText());
         if(pGlossaryHdl->HasShortName(aShortName))
         {
             InfoBox(this, SW_RES(MSG_DOUBLE_SHORTNAME)).Execute();
@@ -439,7 +441,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 pEntry = m_pCategoryBox->GetParent(pEntry);
 
             SvTreeListEntry* pChild = m_pCategoryBox->InsertEntry(aStr, pEntry);
-            pChild->SetUserData(new String(aShortName));
+            pChild->SetUserData(new OUString(aShortName));
             m_pNameED->SetText(aStr);
             m_pShortNameEdit->SetText(aShortName);
             NameModify(m_pNameED);       // for toggling the buttons
@@ -475,8 +477,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
             SvTreeListEntry* pNewEntry = m_pCategoryBox->InsertEntry(
                     pNewNameDlg->GetNewName(), m_pCategoryBox->GetParent(pEntry));
-            pNewEntry->SetUserData(new String(pNewNameDlg->GetNewShort()));
-            delete (String*)pEntry->GetUserData();
+            pNewEntry->SetUserData(new OUString(pNewNameDlg->GetNewShort()));
+            delete reinterpret_cast<OUString*>(pEntry->GetUserData());
             m_pCategoryBox->GetModel()->Remove(pEntry);
             m_pCategoryBox->Select(pNewEntry);
             m_pCategoryBox->MakeVisible(pNewEntry);
@@ -489,9 +491,9 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         QueryBox aQuery(this, SW_RES(MSG_QUERY_DELETE));
         if(RET_YES == aQuery.Execute())
         {
-            const String aShortName(m_pShortNameEdit->GetText());
-            const String aTitle(m_pNameED->GetText());
-            if(aTitle.Len() && pGlossaryHdl->DelGlossary(aShortName))
+            const OUString aShortName(m_pShortNameEdit->GetText());
+            const OUString aTitle(m_pNameED->GetText());
+            if (!aTitle.isEmpty() && pGlossaryHdl->DelGlossary(aShortName))
             {
                 SvTreeListEntry* pChild = DoesBlockExist(aTitle, aShortName);
                 OSL_ENSURE(pChild, "entry not found!");
@@ -590,13 +592,13 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
     {
         //check if at least one glossary path is write enabled
         SvtPathOptions aPathOpt;
-        String sGlosPath( aPathOpt.GetAutoTextPath() );
+        const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
         sal_uInt16 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
         bool bIsWritable = false;
         for(sal_uInt16 nPath = 0; nPath < nPaths; nPath++)
         {
-            String sPath = URIHelper::SmartRel2Abs(
-                INetURLObject(), sGlosPath.GetToken(nPath, ';'),
+            const OUString sPath = URIHelper::SmartRel2Abs(
+                INetURLObject(), sGlosPath.getToken(nPath, ';'),
                 URIHelper::GetMaybeFileHdl());
             try
             {
@@ -623,16 +625,16 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
             {
                 Init();
                 //if new groups were created - select one of them
-                String sNewGroup = pDlg->GetCreatedGroupName();
+                const OUString sNewGroup = pDlg->GetCreatedGroupName();
                 SvTreeListEntry* pEntry = m_pCategoryBox->First();
-                while(sNewGroup.Len() && pEntry)
+                while (!sNewGroup.isEmpty() && pEntry)
                 {
                     if(!m_pCategoryBox->GetParent(pEntry))
                     {
                         GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
-                        String sGroup = pGroupData->sGroupName;
-                        sGroup += GLOS_DELIM;
-                        sGroup += OUString::number(pGroupData->nPathIdx);
+                        const OUString sGroup = pGroupData->sGroupName
+                            + OUString(GLOS_DELIM)
+                            + OUString::number(pGroupData->nPathIdx);
                         if(sGroup == sNewGroup)
                         {
                             m_pCategoryBox->Select(pEntry);
@@ -700,10 +702,9 @@ void SwGlossaryDlg::Init()
             const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
             for(sal_uInt16 i = 0; i < nCount; ++i)
             {
-                String sGroupTitle(pGlossaryHdl->GetGlossaryName(i));
                 SvTreeListEntry* pChild = m_pCategoryBox->InsertEntry(
-                                    sGroupTitle, pEntry);
-                pChild->SetUserData(new String(pGlossaryHdl->GetGlossaryShortName(i)));
+                                    pGlossaryHdl->GetGlossaryName(i), pEntry);
+                pChild->SetUserData(new OUString(pGlossaryHdl->GetGlossaryShortName(i)));
             }
         }
     }
@@ -842,7 +843,7 @@ void SwGlTreeListBox::Clear()
     while(pEntry)
     {
         if(GetParent(pEntry))
-            delete (String*)pEntry->GetUserData();
+            delete reinterpret_cast<OUString*>(pEntry->GetUserData());
         else
             delete (GroupUserData*)pEntry->GetUserData();
         pEntry = Next(pEntry);
@@ -869,33 +870,27 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
                 aSize.Width() = GetSizePixel().Width() - aPos.X();
             aPos = OutputToScreenPixel(aPos);
              Rectangle aItemRect( aPos, aSize );
-            String sMsg;
+            OUString sMsg;
             if(!GetParent(pEntry))
             {
                 GroupUserData* pData = (GroupUserData*)pEntry->GetUserData();
                 const std::vector<OUString> & rPathArr = ::GetGlossaries()->GetPathArray();
                 if( !rPathArr.empty() )
                 {
-                    sMsg = rPathArr[pData->nPathIdx];
-                    sMsg += INET_PATH_TOKEN;
-                    sMsg += pData->sGroupName;
-                    sMsg += SwGlossaries::GetExtension();
-                    INetURLObject aTmp(sMsg);
+                    INetURLObject aTmp(rPathArr[pData->nPathIdx]
+                                       + OUString(INET_PATH_TOKEN)
+                                       + pData->sGroupName
+                                       + SwGlossaries::GetExtension());
                     sMsg = aTmp.GetPath();
 
                     if(pData->bReadonly)
                     {
-                        sMsg += ' ';
-                        sMsg += '(';
-                        sMsg += sReadonly;
-                        sMsg += ')';
+                        sMsg += " (" + sReadonly + ")";
                     }
-
-
                 }
             }
             else
-                sMsg = *(String*)pEntry->GetUserData();
+                sMsg = *reinterpret_cast<OUString*>(pEntry->GetUserData());
             Help::ShowQuickHelp( this, aItemRect, sMsg,
                         QUICKHELP_LEFT|QUICKHELP_VCENTER );
         }
@@ -987,7 +982,7 @@ sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
 
         pDlg->pGlossaryHdl->SetCurGroup(sSourceGroup);
         OUString sTitle(GetEntryText(pEntry));
-        OUString sShortName(*(String*)pEntry->GetUserData());
+        OUString sShortName(*reinterpret_cast<OUString*>(pEntry->GetUserData()));
 
         GroupUserData* pDestData = (GroupUserData*)pDestParent->GetUserData();
         OUString sDestName = pDestData->sGroupName
@@ -999,7 +994,7 @@ sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
         if(bRet)
         {
             SvTreeListEntry* pChild = InsertEntry(sTitle, pDestParent);
-            pChild->SetUserData(new String(sShortName));
+            pChild->SetUserData(new OUString(sShortName));
             if (bIsMove)
             {
                 GetModel()->Remove(pEntry);
@@ -1009,20 +1004,17 @@ sal_Bool SwGlTreeListBox::NotifyCopyingOrMoving(
     return sal_False; // otherwise the entry is being set automatically
 }
 
-String SwGlossaryDlg::GetCurrGrpName() const
+OUString SwGlossaryDlg::GetCurrGrpName() const
 {
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
-    String sRet;
     if(pEntry)
     {
         pEntry =
             m_pCategoryBox->GetParent(pEntry) ? m_pCategoryBox->GetParent(pEntry) : pEntry;
         GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
-        sRet = pGroupData->sGroupName;
-        sRet += GLOS_DELIM;
-        sRet += OUString::number(pGroupData->nPathIdx);
+        return pGroupData->sGroupName + OUString(GLOS_DELIM) + OUString::number(pGroupData->nPathIdx);
     }
-    return sRet;
+    return OUString();
 }
 
 IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
@@ -1033,11 +1025,11 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
         AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn );
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
-        String sGlosPath( aPathOpt.GetAutoTextPath() );
+        const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
         pDlg->SetPath(sGlosPath);
         if(RET_OK == pDlg->Execute())
         {
-            String sTmp(pDlg->GetPath());
+            const OUString sTmp(pDlg->GetPath());
             if(sTmp != sGlosPath)
             {
                 aPathOpt.SetAutoTextPath( sTmp );
@@ -1075,7 +1067,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl)
     return 0;
 }
 
-void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
+void SwGlossaryDlg::ShowAutoText(const OUString& rGroup, const OUString& rShortName)
 {
     if(m_pExampleWIN->IsVisible())
     {
@@ -1087,7 +1079,8 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 
 void SwGlossaryDlg::ResumeShowAutoText()
 {
-    String sGroup, sShortName;
+    OUString sGroup;
+    OUString sShortName;
     if(GetResumeData(sGroup, sShortName) && m_pExampleWIN->IsVisible())
     {
         if(!m_xAutoText.is())
@@ -1099,7 +1092,7 @@ void SwGlossaryDlg::ResumeShowAutoText()
         uno::Reference< XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
         if(xCrsr.is())
         {
-            if(sShortName.Len())
+            if (!sShortName.isEmpty())
             {
                 uno::Any aGroup = m_xAutoText->getByName(sGroup);
                 uno::Reference< XAutoTextGroup >  xGroup;
