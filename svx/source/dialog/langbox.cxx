@@ -456,6 +456,9 @@ void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, sal_Bool bSel
 
     sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
 
+    if ( nAt == LISTBOX_ENTRY_NOTFOUND )
+        nAt = InsertLanguage( nLang );      // on-the-fly-ID
+
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         SelectEntryPos( nAt, bSelect );
 }
