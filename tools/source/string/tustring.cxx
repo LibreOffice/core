@@ -172,31 +172,6 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, x
     return (ImplStringICompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
 }
 
-StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
-                                                xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    if ( mpData == rStr.mpData )
-        return COMPARE_EQUAL;
-
-    // determine maximal length
-    if ( mpData->mnLen < nLen )
-        nLen = static_cast< xub_StrLen >(mpData->mnLen+1);
-    if ( rStr.mpData->mnLen < nLen )
-        nLen = static_cast< xub_StrLen >(rStr.mpData->mnLen+1);
-
-    sal_Int32 nCompare = ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, nLen );
-
-    if ( nCompare == 0 )
-        return COMPARE_EQUAL;
-    else if ( nCompare < 0 )
-        return COMPARE_LESS;
-    else
-        return COMPARE_GREATER;
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

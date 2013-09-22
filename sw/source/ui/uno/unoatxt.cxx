@@ -600,12 +600,12 @@ sal_Bool SwXAutoTextGroup::hasByName(const OUString& rName)
     else
         throw uno::RuntimeException();
 
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    for( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        String sCompare(pGlosGroup->GetShortName(i));
-        if(COMPARE_EQUAL == sCompare.CompareIgnoreCaseToAscii(String(rName)))
+        OUString sCompare(pGlosGroup->GetShortName(i));
+        if(sCompare.equalsIgnoreAsciiCase(rName))
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }

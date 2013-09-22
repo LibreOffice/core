@@ -127,9 +127,9 @@ namespace basctl
     //====================================================================
     namespace
     {
-        static bool StringCompareLessThan( const String& lhs, const String& rhs )
+        static bool StringCompareLessThan( const OUString& lhs, const OUString& rhs )
         {
-            return ( lhs.CompareIgnoreCaseToAscii( rhs ) == COMPARE_LESS );
+            return ( lhs.compareToIgnoreAsciiCase( rhs ) < 0 );
         }
 
         class FilterDocuments : public docs::IDocumentDescriptorFilter

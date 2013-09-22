@@ -313,24 +313,6 @@ StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
         return COMPARE_GREATER;
 }
 
-StringCompare UniString::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
-                                                   xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "UniString::CompareIgnoreCaseToAscii() - pAsciiStr include characters > 127" );
-
-    // compare strings
-    sal_Int32 nCompare = ImplStringICompareAscii( mpData->maStr, pAsciiStr, nLen );
-
-    if ( nCompare == 0 )
-        return COMPARE_EQUAL;
-    else if ( nCompare < 0 )
-        return COMPARE_LESS;
-    else
-        return COMPARE_GREATER;
-}
-
 sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );

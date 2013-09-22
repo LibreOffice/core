@@ -588,11 +588,11 @@ namespace
 struct TabBarSortHelper
 {
     sal_uInt16      nPageId;
-    String          aPageText;
+    OUString        aPageText;
 
     bool operator < (TabBarSortHelper const& rComp) const
     {
-        return aPageText.CompareIgnoreCaseToAscii(rComp.aPageText) == COMPARE_LESS;
+        return aPageText.compareToIgnoreAsciiCase(rComp.aPageText) < 0;
     }
 };
 

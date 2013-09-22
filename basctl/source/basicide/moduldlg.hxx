@@ -134,8 +134,8 @@ public:
     CheckBox( Window* pParent, const ResId& rResId );
     ~CheckBox();
 
-    SvTreeListEntry*    DoInsertEntry( const String& rStr, sal_uLong nPos = LISTBOX_APPEND );
-    SvTreeListEntry*    FindEntry( const String& rName );
+    SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
+    SvTreeListEntry*    FindEntry( const OUString& rName );
 
     void            CheckEntryPos( sal_uLong nPos );
     bool            IsChecked( sal_uLong nPos ) const;

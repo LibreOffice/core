@@ -1447,19 +1447,19 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
     while ( nFilter-- )
     {
         SvtFileDialogFilter_Impl* pFilter = &(*pList)[ nFilter ];
-        const String& rType = pFilter->GetType();
-        String aSingleType = rType;
+        const OUString& rType = pFilter->GetType();
+        OUString aSingleType = rType;
 
         if ( _bMultiExt )
         {
             sal_Int32 nIdx = 0;
             while ( !pFoundFilter && nIdx != -1 )
             {
-                aSingleType = rType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
+                aSingleType = rType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
 #ifdef UNX
                 if ( aSingleType == _rFilter )
 #else
-                if ( aSingleType.CompareIgnoreCaseToAscii( _rFilter ) == COMPARE_EQUAL )
+                if ( aSingleType.equalsIgnoreAsciiCase( _rFilter ) )
 #endif
                     pFoundFilter = pFilter;
             }
@@ -1467,7 +1467,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 #ifdef UNX
         else if ( rType == _rFilter )
 #else
-        else if ( rType.CompareIgnoreCaseToAscii( _rFilter ) == COMPARE_EQUAL )
+        else if ( rType.equalsIgnoreAsciiCase( _rFilter ) )
 #endif
             pFoundFilter = pFilter;
 

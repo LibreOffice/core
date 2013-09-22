@@ -1542,8 +1542,8 @@ namespace {
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
-    inline bool operator()( const String& rName1, const String& rName2 ) const
-        { return rName1.CompareIgnoreCaseToAscii( rName2 ) == COMPARE_LESS; }
+    inline bool operator()( const OUString& rName1, const OUString& rName2 ) const
+        { return rName1.compareToIgnoreAsciiCase( rName2 ) < 0; }
 };
 
 } // namespace
@@ -1551,7 +1551,7 @@ struct IgnoreCaseCompare
 void XclImpXFBuffer::CreateUserStyles()
 {
     // calculate final names of all styles
-    typedef ::std::map< String, XclImpStyle*, IgnoreCaseCompare > CellStyleNameMap;
+    typedef ::std::map< OUString, XclImpStyle*, IgnoreCaseCompare > CellStyleNameMap;
     typedef ::std::vector< XclImpStyle* > XclImpStyleVector;
 
     CellStyleNameMap aCellStyles;

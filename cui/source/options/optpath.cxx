@@ -489,14 +489,14 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     aNewObj.removeFinalSlash();
 
     // then the new path also an URL else system path
-    String sNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+    OUString sNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
     bool bChanged =
 #ifdef UNX
 // Unix is case sensitive
         ( sNewPathStr != sWritable );
 #else
-        ( sNewPathStr.CompareIgnoreCaseToAscii( sWritable ) != COMPARE_EQUAL );
+        ( !sNewPathStr.equalsIgnoreAsciiCase( sWritable ) );
 #endif
 
     if ( bChanged )

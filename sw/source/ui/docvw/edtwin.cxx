@@ -237,7 +237,7 @@ public:
 struct QuickHelpData
 {
     /// Strings that at least partially match an input word.
-    std::vector<String> m_aHelpStrings;
+    std::vector<OUString> m_aHelpStrings;
     /// Index of the current help string.
     sal_uInt16 nCurArrPos;
     /// Length of the input word associated with the help data.
@@ -5796,17 +5796,17 @@ namespace {
 
 struct CompareIgnoreCaseAscii
 {
-    bool operator()(const String& s1, const String& s2) const
+    bool operator()(const OUString& s1, const OUString& s2) const
     {
-        return s1.CompareIgnoreCaseToAscii(s2) == COMPARE_LESS;
+        return s1.compareToIgnoreAsciiCase(s2) < 0;
     }
 };
 
 struct EqualIgnoreCaseAscii
 {
-    bool operator()(const String& s1, const String& s2) const
+    bool operator()(const OUString& s1, const OUString& s2) const
     {
-        return s1.CompareIgnoreCaseToAscii(s2) == COMPARE_EQUAL;
+        return s1.equalsIgnoreAsciiCase(s2);
     }
 };
 
@@ -5819,7 +5819,7 @@ void QuickHelpData::SortAndFilter()
                m_aHelpStrings.end(),
                CompareIgnoreCaseAscii() );
 
-    std::vector<String>::iterator it = std::unique( m_aHelpStrings.begin(),
+    std::vector<OUString>::iterator it = std::unique( m_aHelpStrings.begin(),
                                                     m_aHelpStrings.end(),
                                                     EqualIgnoreCaseAscii() );
     m_aHelpStrings.erase( it, m_aHelpStrings.end() );

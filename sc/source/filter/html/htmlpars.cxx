@@ -1021,12 +1021,12 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             {
                 bHorJustifyCenterTH = false;
                 SvxCellHorJustify eVal;
-                const String& rOptVal = rOption.GetString();
-                if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
+                const OUString& rOptVal = rOption.GetString();
+                if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right )  )
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
+                else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ) )
                     eVal = SVX_HOR_JUSTIFY_CENTER;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_left ) == COMPARE_EQUAL )
+                else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ) )
                     eVal = SVX_HOR_JUSTIFY_LEFT;
                 else
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
@@ -1037,12 +1037,12 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             case HTML_O_VALIGN:
             {
                 SvxCellVerJustify eVal;
-                const String& rOptVal = rOption.GetString();
-                if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_top ) == COMPARE_EQUAL )
+                const OUString& rOptVal = rOption.GetString();
+                if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_top ) )
                     eVal = SVX_VER_JUSTIFY_TOP;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_middle ) == COMPARE_EQUAL )
+                else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
                     eVal = SVX_VER_JUSTIFY_CENTER;
-                else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_bottom ) == COMPARE_EQUAL )
+                else if ( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_bottom ) )
                     eVal = SVX_VER_JUSTIFY_BOTTOM;
                 else
                     eVal = SVX_VER_JUSTIFY_STANDARD;

@@ -216,21 +216,21 @@ void CheckBox::SetMode (ObjectMode::Mode e)
 
 //----------------------------------------------------------------------------
 
-SvTreeListEntry* CheckBox::DoInsertEntry( const String& rStr, sal_uLong nPos )
+SvTreeListEntry* CheckBox::DoInsertEntry( const OUString& rStr, sal_uLong nPos )
 {
     return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
 }
 
 //----------------------------------------------------------------------------
 
-SvTreeListEntry* CheckBox::FindEntry( const String& rName )
+SvTreeListEntry* CheckBox::FindEntry( const OUString& rName )
 {
     sal_uLong nCount = GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; i++ )
     {
         SvTreeListEntry* pEntry = GetEntry( i );
         DBG_ASSERT( pEntry, "pEntry?!" );
-        if ( rName.CompareIgnoreCaseToAscii( GetEntryText( pEntry, 0 ) ) == COMPARE_EQUAL )
+        if ( rName.equalsIgnoreAsciiCase( GetEntryText( pEntry, 0 ) ) )
             return pEntry;
     }
     return 0;

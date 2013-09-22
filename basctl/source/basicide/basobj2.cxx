@@ -105,9 +105,9 @@ bool IsValidSbxName( const OUString& rName )
     return true;
 }
 
-static bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
+static bool StringCompareLessThan( const OUString& rStr1, const OUString& rStr2 )
 {
-    return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS);
+    return (rStr1.compareToIgnoreAsciiCase( rStr2 ) < 0);
 }
 
 //----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ static bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
 Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
 {
     // create a sorted list of module library names
-    ::std::vector<String> aModLibList;
+    ::std::vector<OUString> aModLibList;
     if ( xModLibContainer.is() )
     {
         Sequence< OUString > aModLibNames = xModLibContainer->getElementNames();

@@ -229,10 +229,6 @@ public:
                                    xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareToAscii( const sal_Char* pAsciiStr,
                                         xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareIgnoreCaseToAscii( const UniString& rStr,
-                                                  xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
-                                                  xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool            Equals( const UniString& rStr ) const;
     sal_Bool            EqualsAscii( const sal_Char* pAsciiStr ) const;
     sal_Bool            EqualsIgnoreCaseAscii( const UniString& rStr ) const;

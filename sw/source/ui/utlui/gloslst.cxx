@@ -378,13 +378,13 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 // Give back all (not exceeding FIND_MAX_GLOS) found modules
 // with matching beginning.
 
-bool SwGlossaryList::HasLongName(const String& rBegin, std::vector<String> *pLongNames)
+bool SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames)
 {
     if(!bFilled)
         Update();
     sal_uInt16 nFound = 0;
     sal_uInt16 nCount = aGroupArr.size();
-    sal_uInt16 nBeginLen = rBegin.Len();
+    sal_Int32 nBeginLen = rBegin.getLength();
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
     for(sal_uInt16 i = 0; i < nCount; i++ )
