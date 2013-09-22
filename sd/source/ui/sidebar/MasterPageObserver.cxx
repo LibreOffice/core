@@ -225,8 +225,6 @@ void MasterPageObserver::Implementation::AddEventListener (
         // Tell the new listener about all the master pages that are
         // currently in use.
         typedef ::std::vector<String> StringList;
-        StringList aNewMasterPages;
-        StringList aRemovedMasterPages;
         MasterPageContainer::iterator aDocumentIterator;
         for (aDocumentIterator=maUsedMasterPages.begin();
              aDocumentIterator!=maUsedMasterPages.end();
