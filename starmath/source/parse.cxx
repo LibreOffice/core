@@ -441,7 +441,7 @@ void SmParser::NextToken()
         }
         else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
         {
-            if (m_aBufferString.copy(nRealStart, 2) == "%%")
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.copy(nRealStart, 2) == "%%")
             {
                 //SkipComment
                 m_nBufferIndex = nRealStart + 2;
