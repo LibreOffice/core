@@ -1,3 +1,5 @@
+-*- Mode: diff -*-
+
 LO needs to build both against MacOSX SDK and not produce universal binaries.
 
 diff -ru python3.old_/configure python3/configure
@@ -24,6 +26,30 @@ diff -ru python3.old_/configure python3/configure
  		   ARCH_RUN_32BIT=""
  		   LIPO_32BIT_FLAGS=""
  	         elif test "$UNIVERSAL_ARCHS" = "64-bit" ; then
+
+On OS X avoid /usr/local/lib and include like the plague, we don't
+want to accidentally get some MacPorts etc stuff.
+
+On OS X, always run the compiler (which is Clang, not gcc) to find out
+what the include paths are. On a clean modern installation, there is
+no /usr/include.
+
+--- python3/setup.py
++++ python3/setup.py
+@@ -460,11 +460,11 @@
+         # Ensure that /usr/local is always used, but the local build
+         # directories (i.e. '.' and 'Include') must be first.  See issue
+         # 10520.
+-        if not cross_compiling:
++        if not cross_compiling and host_platform != 'darwin':
+             add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
+             add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+         # only change this for cross builds for 3.3, issues on Mageia
+-        if cross_compiling:
++        if cross_compiling or host_platform == 'darwin':
+             self.add_gcc_paths()
+         self.add_multiarch_paths()
+ 
 --- python3/Mac/Makefile.in.orig	2013-09-13 20:16:50.558137603 +0200
 +++ python3/Mac/Makefile.in	2013-09-13 21:57:14.790962423 +0200
 @@ -39,7 +39,7 @@

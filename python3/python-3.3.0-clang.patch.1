@@ -1,0 +1,13 @@
+-*- Mode: diff -*-
+
+--- python3/setup.py
++++ python3/setup.py
+@@ -436,7 +436,7 @@
+             if ret >> 8 == 0:
+                 with open(tmpfile) as fp:
+                     for line in fp.readlines():
+-                        if line.startswith("gcc version"):
++                        if line.startswith("gcc version") or line.startswith("clang -cc1 version"):
+                             is_gcc = True
+                         elif line.startswith("#include <...>"):
+                             in_incdirs = True
