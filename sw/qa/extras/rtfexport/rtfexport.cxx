@@ -69,6 +69,7 @@ public:
     void testFdo66682();
     void testParaShadow();
     void testCharacterBorder();
+    void testFdo66743();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -127,6 +128,7 @@ void Test::run()
         {"fdo66682.rtf", &Test::testFdo66682},
         {"para-shadow.rtf", &Test::testParaShadow},
         {"charborder.odt", &Test::testCharacterBorder},
+        {"fdo66743.rtf", &Test::testFdo66743},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -671,6 +673,14 @@ void Test::testCharacterBorder()
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }
+}
+
+void Test::testFdo66743()
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    // This was too dark, 0x7f7f7f.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -3564,8 +3564,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 {
                     case 500: nValue = 2; break;
                     case 1000: nValue = 3; break;
-                    case 1200: nValue = 27; break;
-                    case 1500: nValue = 28; break;
+                    case 1200: nValue = 37; break;
+                    case 1500: nValue = 38; break;
                     case 2000: nValue = 4; break;
                     case 2500: nValue = 5; break;
                     case 3000: nValue = 6; break;
