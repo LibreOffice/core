@@ -1634,9 +1634,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	lcms2 \
-)
 
 endef
 
