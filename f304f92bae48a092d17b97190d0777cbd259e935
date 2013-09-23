@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///ww\u003d",
+        "filename": "svl/source/numbers/zforfind.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-09-23T12:19:20Z",
+      "side": 1,
+      "message": "For type safety please make this a constant and name it according to the Unicode Standard, so for example\n\n static const sal_Unicode cNonBreakingSpace \u003d 0xA0;",
+      "revId": "f304f92bae48a092d17b97190d0777cbd259e935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
