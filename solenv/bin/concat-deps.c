@@ -871,7 +871,11 @@ static inline int generate_phony_file(char* fn, char* content)
 {
 FILE* depfile;
     depfile = fopen(fn, "w");
-    if(depfile)
+    if(!depfile)
+    {
+        fprintf(stderr, "Could not open '%s' for writing: %s\n", fn, strerror(errno));
+    }
+    else
     {
         fputs(content, depfile);
         fclose(depfile);
