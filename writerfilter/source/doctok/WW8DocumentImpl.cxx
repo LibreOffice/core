@@ -23,7 +23,6 @@
 #include <WW8FKPImpl.hxx>
 #include <WW8PieceTableImpl.hxx>
 #include <WW8BinTableImpl.hxx>
-#include <WW8StreamImpl.hxx>
 #include <WW8Sttbf.hxx>
 #include <Dff.hxx>
 #include <iterator>
