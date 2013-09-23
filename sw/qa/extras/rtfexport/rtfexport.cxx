@@ -65,6 +65,7 @@ public:
     void testTextFrameBorders();
     void testTextframeGradient();
     void testFdo66682();
+    void testFdo66743();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -119,6 +120,7 @@ void Test::run()
         {"textframe-borders.rtf", &Test::testTextFrameBorders},
         {"textframe-gradient.rtf", &Test::testTextframeGradient},
         {"fdo66682.rtf", &Test::testFdo66682},
+        {"fdo66743.rtf", &Test::testFdo66743},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -603,6 +605,14 @@ void Test::testFdo66682()
     }
     // Suffix was '\0' instead of ' '.
     CPPUNIT_ASSERT_EQUAL(OUString(" "), aSuffix);
+}
+
+void Test::testFdo66743()
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+    // This was too dark, 0x7f7f7f.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
