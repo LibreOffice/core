@@ -18,7 +18,6 @@
  */
 
 #include "doctok/resources.hxx"
-#include "WW8DocumentImpl.hxx"
 
 namespace writerfilter {
 namespace doctok
@@ -335,41 +334,6 @@ DffBSE::get_blip()
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
 
-    WW8FBSE aFBSE(this, 8);
-    sal_uInt32 nOffset = 8 + WW8FBSE::getSize() + aFBSE.get_cbName();
-
-    if (nOffset + 8 < getCount())
-    {
-        WW8StructBase aTmp(this, nOffset, 0x8);
-
-        sal_uInt32 nCount = getCount() - 8;
-
-        if (aTmp.getU32(0x4) - 8 < nCount)
-            nCount = aTmp.getU32(0x4) - 8;
-
-        if (nCount)
-        {
-            DffRecord * pRecord = createDffRecord(this, nOffset);
-
-            pResult = writerfilter::Reference<Properties>::Pointer_t(pRecord);
-        }
-    }
-    else
-    {
-        nOffset = sal::static_int_cast<sal_Int32>(aFBSE.get_foDelay());
-        if (! (nOffset & 1 << 31) && nOffset > 0 && getDocument() != NULL)
-        {
-            WW8StructBase aStructBase(*getDocument()->getDocStream(),
-                                      nOffset, 0x8);
-
-            DffRecord * pRecord =
-                createDffRecord(*getDocument()->getDocStream(),
-                                aFBSE.get_foDelay());
-
-            pResult = writerfilter::Reference<Properties>::Pointer_t(pRecord);
-        }
-    }
-
     return pResult;
 }
 
@@ -409,14 +373,6 @@ DffSpContainer::get_blip()
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
 
-    if (getShapeType() == 75)
-    {
-        sal_uInt32 nBid = getShapeBid();
-
-        if (getDocument() != NULL && nBid > 0)
-            pResult = getDocument()->getBlip(nBid);
-    }
-
     return pResult;
 }
 
@@ -424,14 +380,6 @@ writerfilter::Reference<Stream>::Pointer_t
 DffSpContainer::get_shptxt()
 {
     writerfilter::Reference<Stream>::Pointer_t pResult;
-
-    if (getShapeType() == 202)
-    {
-        sal_uInt32 nShpId = getShapeId();
-
-        if (getDocument() != NULL)
-            pResult = getDocument()->getTextboxText(nShpId);
-    }
 
     return pResult;
 }

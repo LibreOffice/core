@@ -59,9 +59,6 @@
 namespace writerfilter {
 namespace doctok {
 
-class WW8DocumentImpl;
-typedef const WW8DocumentImpl * WW8DocumentImplPointer;
-
 using namespace ::std;&#xa;</xsl:text>
       <xsl:apply-templates select="//UML:Class" mode="class"/>
       <xsl:text>
@@ -148,7 +145,6 @@ class </xsl:text>
       </xsl:for-each>
     </xsl:if>
     <xsl:if test='.//UML:Stereotype[@xmi.idref ="needsdocument"]'>
-      <xsl:text>    WW8DocumentImplPointer mpDoc;&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test='.//UML:Stereotype[@xmi.idref ="plcf"]'>
       <xsl:text>
@@ -364,12 +360,6 @@ class </xsl:text>
     </xsl:if>
 
     <xsl:if test='.//UML:Stereotype[@xmi.idref ="needsdocument"]'>
-      <xsl:text>
-    void setDoc(WW8DocumentImplPointer pDoc)
-    {
-        mpDoc = pDoc;
-    }
-      </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="declsProperties"/>
     <xsl:if test='$parentresource="Table"'>

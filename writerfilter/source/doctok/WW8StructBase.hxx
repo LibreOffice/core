@@ -27,8 +27,6 @@
 namespace writerfilter {
 namespace doctok {
 
-class WW8DocumentImpl;
-
 /**
    Part of a stream.
 
@@ -63,14 +61,9 @@ protected:
     */
     sal_uInt32 mnOffsetInParent;
 
-    /**
-       The document of this struct.
-     */
-    WW8DocumentImpl * mpDocument;
-
 public:
     WW8StructBase(sal_Int32 nLength)
-    : mSequence(nLength), mpParent(NULL), mpDocument(NULL)
+    : mSequence(nLength), mpParent(NULL)
     {
     }
 
@@ -83,7 +76,7 @@ public:
      */
     WW8StructBase(WW8Stream & rStream,
                   sal_Int32 nOffset, sal_Int32 nCount)
-    : mSequence(rStream.get(nOffset, nCount)), mpParent(0), mpDocument(0)
+    : mSequence(rStream.get(nOffset, nCount)), mpParent(0)
     {
     }
 
@@ -96,7 +89,7 @@ public:
      */
     WW8StructBase(const Sequence & rSequence, sal_uInt32 nOffset = 0,
                   sal_uInt32 nCount = 0)
-    : mSequence(rSequence, nOffset, nCount), mpParent(0), mpDocument(0)
+    : mSequence(rSequence, nOffset, nCount), mpParent(0)
     {
     }
 
@@ -120,7 +113,7 @@ public:
     WW8StructBase(WW8StructBase * pParent,
                   sal_uInt32 nOffset, sal_uInt32 nCount)
     : mSequence(pParent->mSequence, nOffset, nCount), mpParent(pParent),
-      mnOffsetInParent(nOffset), mpDocument(pParent->getDocument())
+      mnOffsetInParent(nOffset)
     {
         if (nOffset + nCount > pParent->mSequence.getCount())
             throw ExceptionOutOfBounds("WW8StructBase");
@@ -142,16 +135,6 @@ public:
        @return this part after assignment
      */
     virtual WW8StructBase & Assign(const WW8StructBase & rSrc);
-
-    /**
-       Set the document of this struct.
-     */
-    void setDocument(WW8DocumentImpl * pDocument);
-
-    /**
-       Return the document of this struct.
-    */
-    WW8DocumentImpl * getDocument() const;
 
     /**
        Return count of bytes in this part.

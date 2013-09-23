@@ -21,7 +21,6 @@
 #define INCLUDED_X_NOTE_HELPER_HXX
 
 #include <PLCF.hxx>
-#include <WW8DocumentImpl.hxx>
 
 namespace writerfilter {
 namespace doctok
@@ -40,9 +39,6 @@ class XNoteHelper
 
     /// piece table for CP to FC conversion
     WW8PieceTable::Pointer_t mpPieceTable;
-
-    /// the document
-    WW8DocumentImpl * mpDocument;
 
     /// type of X-notes handled by this helper (PROP_FOOTNOTE, PROP_ENDNOTE)
     PropertyType meType;
@@ -70,11 +66,10 @@ public:
     XNoteHelper(WW8StructBase::Pointer_t pCps,
                 typename PLCF<T>::Pointer_t pRefs,
                 WW8PieceTable::Pointer_t pPieceTable,
-                WW8DocumentImpl * pDocument,
                 PropertyType eType,
                 CpAndFc cpAndFcOffset)
     : mpCps(pCps), mpRefs(pRefs), mpPieceTable(pPieceTable),
-      mpDocument(pDocument), meType(eType), mCpAndFcOffset(cpAndFcOffset)
+      meType(eType), mCpAndFcOffset(cpAndFcOffset)
     {
     }
 

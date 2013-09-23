@@ -75,10 +75,6 @@ XNoteHelper<T>::get(sal_uInt32 nPos)
     CpAndFc aCpAndFcStart(getCpAndFc(nPos));
     CpAndFc aCpAndFcEnd(getCpAndFc(nPos + 1));
 
-    if (aCpAndFcStart < aCpAndFcEnd)
-        pResult = writerfilter::Reference<Stream>::Pointer_t
-            (new WW8DocumentImpl(*mpDocument, aCpAndFcStart, aCpAndFcEnd));
-
     return pResult;
 }
 

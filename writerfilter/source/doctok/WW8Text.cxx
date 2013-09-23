@@ -55,6 +55,14 @@ WW8sprmPChgTabsPapx::get_tbdAdd(sal_uInt32 pos)
                     + pos, 1));
     return pRet;
 }
+
+writerfilter::Reference<Properties>::Pointer_t
+WW8SED::get_sepx()
+{
+    writerfilter::Reference<Properties>::Pointer_t pResult;
+    return pResult;
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

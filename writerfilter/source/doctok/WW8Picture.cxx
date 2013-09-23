@@ -18,29 +18,13 @@
  */
 
 #include <doctok/resources.hxx>
-#include <WW8DocumentImpl.hxx>
 
 namespace writerfilter {
 namespace doctok
 {
 
-void WW8PICF::resolveNoAuto(Properties & rHandler)
+void WW8PICF::resolveNoAuto(Properties & /*rHandler*/)
 {
-    WW8Stream::Pointer_t pStream = getDocument()->getDataStream();
-
-    {
-        writerfilter::Reference<Properties>::Pointer_t pContent;
-        if (getDocument()->isPicData())
-        {
-            WW8Value::Pointer_t pValue = createValue(get_ffdata());
-            rHandler.attribute(NS_rtf::LN_ffdata, *pValue);
-        }
-        else
-        {
-            WW8Value::Pointer_t pValue = createValue(get_DffRecord());
-            rHandler.attribute(NS_rtf::LN_DffRecord, *pValue);
-        }
-    }
 }
 
 writerfilter::Reference<Properties>::Pointer_t
@@ -70,37 +54,16 @@ WW8PICF::get_ffdata()
 writerfilter::Reference<Properties>::Pointer_t
 WW8FSPA::get_shape()
 {
-    return getDocument()->getShape(get_spid());
+    return writerfilter::Reference<Properties>::Pointer_t();
 }
 
-void WW8FFDATA::resolveNoAuto(Properties & rHandler)
+void WW8FFDATA::resolveNoAuto(Properties & /*rHandler*/)
 {
-    WW8DocumentImpl * pDocument = getDocument();
-
-    if (pDocument != NULL)
-    {
-        WW8FLD::Pointer_t pFLD = pDocument->getCurrentFLD();
-        WW8Value::Pointer_t pValue = createValue(pFLD->get_flt());
-
-        rHandler.attribute(NS_rtf::LN_FLT, *pValue);
-
-    }
 }
 
 sal_uInt32 WW8FFDATA::get_FLT()
 {
     sal_uInt32 nResult = 0;
-
-    WW8DocumentImpl * pDocument = getDocument();
-
-    if (pDocument != NULL)
-    {
-        WW8FLD::Pointer_t pFLD = pDocument->getCurrentFLD();
-
-        if (pFLD.get() != NULL)
-            nResult = pFLD->get_flt();
-    }
-
     return nResult;
 }
 

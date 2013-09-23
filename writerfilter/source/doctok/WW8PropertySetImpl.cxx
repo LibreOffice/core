@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WW8DocumentImpl.hxx"
 #include "WW8ResourceModelImpl.hxx"
 #include <doctok/resourceids.hxx>
 #include <resourcemodel/QNameToString.hxx>
+#include "WW8PropertySetImpl.hxx"
 
 namespace writerfilter {
 namespace doctok
@@ -286,18 +286,13 @@ void WW8PropertySetImpl::resolveLocal(Sprm & sprm, Properties & rHandler)
     case 0x6a03:
         {
             Value::Pointer_t pValue = sprm.getValue();
-            getDocument()->setPicLocation(pValue->getInt());
-            getDocument()->setPicIsData(false);
         }
         break;
     case 0x806:
-        {
-            getDocument()->setPicIsData(true);
-        }
         break;
     case 0x6646:
         {
-            WW8Stream::Pointer_t pStream = getDocument()->getDataStream();
+            WW8Stream::Pointer_t pStream;
 
             if (pStream.get() != NULL)
             {

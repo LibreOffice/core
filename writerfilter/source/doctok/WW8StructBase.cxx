@@ -25,8 +25,7 @@ using namespace ::com::sun::star;
 
 WW8StructBase::WW8StructBase(const WW8StructBase & rParent,
               sal_uInt32 nOffset, sal_uInt32 nCount)
-: mSequence(rParent.mSequence, nOffset, nCount), mpParent(0),
-  mpDocument(rParent.getDocument())
+: mSequence(rParent.mSequence, nOffset, nCount), mpParent(0)
 {
     if (nOffset + nCount > rParent.getCount())
     {
@@ -37,19 +36,8 @@ WW8StructBase::WW8StructBase(const WW8StructBase & rParent,
 WW8StructBase & WW8StructBase::Assign(const WW8StructBase & rSrc)
 {
     mSequence = rSrc.mSequence;
-    mpDocument = rSrc.mpDocument;
 
     return *this;
-}
-
-void WW8StructBase::setDocument(WW8DocumentImpl * pDocument)
-{
-    mpDocument = pDocument;
-}
-
-WW8DocumentImpl * WW8StructBase::getDocument() const
-{
-    return mpDocument;
 }
 
 sal_uInt8 WW8StructBase::getU8(sal_uInt32 nOffset) const

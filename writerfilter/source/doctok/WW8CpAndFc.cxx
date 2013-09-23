@@ -96,9 +96,9 @@ bool operator == (const CpAndFc & rA, const CpAndFc & rB)
     return rA.mCp == rB.mCp;
 }
 
-ostream & operator << (ostream & o, const CpAndFc & rCpAndFc)
+ostream & operator << (ostream & o, const CpAndFc & /*rCpAndFc*/)
 {
-    return o << rCpAndFc.toString();
+    return o;
 }
 
 ostream & operator << (ostream & o, const CpAndFcs & rCpAndFcs)
