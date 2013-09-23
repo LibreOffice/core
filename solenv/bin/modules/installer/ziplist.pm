@@ -791,8 +791,6 @@ sub replace_variables_in_ziplist_variables
     my $localminor = $installer::globals::lastminor;
     if ( $installer::globals::minor ) { $localminor = $installer::globals::minor; }
 
-    my $buildidstringcws = $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . ")";
-
     for ( my $i = 0; $i <= $#{$blockref}; $i++ )
     {
         if ($installer::globals::lastminor) { ${$blockref}[$i] =~ s/\{milestone\}/$milestonevariable/; }
@@ -803,7 +801,6 @@ sub replace_variables_in_ziplist_variables
         else { ${$blockref}[$i] =~ s/\{buildid\}//; }
         if ( $installer::globals::build ) { ${$blockref}[$i] =~ s/\{buildsource\}/$installer::globals::build/; }
         else { ${$blockref}[$i] =~ s/\{build\}//; }
-        ${$blockref}[$i] =~ s/\{buildidcws\}/$buildidstringcws/;
     }
 }
 

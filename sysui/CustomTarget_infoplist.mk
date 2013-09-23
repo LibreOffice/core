@@ -9,6 +9,7 @@
 
 info_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/infoplist)
 info_SRCDIR := $(SRCDIR)/sysui/desktop/macosx
+info_BUILDDIR := $(BUILDDIR)/sysui/desktop/macosx
 
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/infoplist))
@@ -24,8 +25,8 @@ $(info_WORKDIR)/PkgInfo:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo "APPLLIBO" > $@
 
-$(info_WORKDIR)/Info.plist: $(info_SRCDIR)/Info.plist
-	sed -e "s|\%EXECUTABLE|soffice|g" $< > $@
+$(info_WORKDIR)/Info.plist: $(info_BUILDDIR)/Info.plist
+	cp $< $@
 
 $(info_WORKDIR)/InfoPlist_%.zip: $(info_WORKDIR)/InfoPlist_%/InfoPlist.strings
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ZIP,1)

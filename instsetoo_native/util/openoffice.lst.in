@@ -32,7 +32,6 @@ Globals
             WINDOWSPATCHLEVEL 8
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
-            BUILDIDCWS {buildidcws}
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
     }
@@ -58,8 +57,6 @@ LibreOffice
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
-            FILEFORMATNAME OpenOffice.org
-            FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
@@ -112,8 +109,6 @@ LibreOffice_Dev
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
-            FILEFORMATNAME OpenOffice.org
-            FILEFORMATVERSION 1.0
             WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}

@@ -38,10 +38,10 @@
       <value>${PRODUCTEXTENSION}</value>
     </prop>
     <prop oor:name="ooXMLFileFormatVersion">
-      <value>${FILEFORMATVERSION}</value>
+      <value>1.0</value>
     </prop>
     <prop oor:name="ooXMLFileFormatName">
-      <value>${FILEFORMATNAME}</value>
+      <value>OpenOffice.org</value>
     </prop>
     <prop oor:name="ooOpenSourceContext">
       <value>1</value>

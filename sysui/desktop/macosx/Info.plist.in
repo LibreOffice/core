@@ -29,7 +29,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text</string>
+			<string>OpenOffice.org 1.0 Text</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -77,7 +77,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.spreadsheet</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet</string>
+			<string>OpenOffice.org 1.0 Spreadsheet</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -125,7 +125,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.presentation</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation</string>
+			<string>OpenOffice.org 1.0 Presentation</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -175,7 +175,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.graphics</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing</string>
+			<string>OpenOffice.org 1.0 Drawing</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -223,7 +223,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text-master</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Master</string>
+			<string>OpenOffice.org 1.0 Master</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -269,7 +269,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.formula</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Formula</string>
+			<string>OpenOffice.org 1.0 Formula</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -317,7 +317,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text Template</string>
+			<string>OpenOffice.org 1.0 Text Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -363,7 +363,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.spreadsheet-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet Template</string>
+			<string>OpenOffice.org 1.0 Spreadsheet Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -409,7 +409,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.presentation-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation Template</string>
+			<string>OpenOffice.org 1.0 Presentation Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -455,7 +455,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.graphics-template</string>
 			<key>UTTypeDescription</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing Template</string>
+			<string>OpenOffice.org 1.0 Drawing Template</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -525,7 +525,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.extension</string>
 			<key>UTTypeDescription</key>
-			<string>${PRODUCTNAME} Extension</string>
+			<string>@PRODUCTNAME@ Extension</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -865,7 +865,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>text.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text</string>
+			<string>OpenOffice.org 1.0 Text</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -903,7 +903,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>spreadsheet.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet</string>
+			<string>OpenOffice.org 1.0 Spreadsheet</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -943,7 +943,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>presentation.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation</string>
+			<string>OpenOffice.org 1.0 Presentation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -981,7 +981,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>drawing.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing</string>
+			<string>OpenOffice.org 1.0 Drawing</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1017,7 +1017,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>master-document.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Master</string>
+			<string>OpenOffice.org 1.0 Master</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1055,7 +1055,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>formula.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Formula</string>
+			<string>OpenOffice.org 1.0 Formula</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1091,7 +1091,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>text-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text Template</string>
+			<string>OpenOffice.org 1.0 Text Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1127,7 +1127,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>spreadsheet-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet Template</string>
+			<string>OpenOffice.org 1.0 Spreadsheet Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1163,7 +1163,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>presentation-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation Template</string>
+			<string>OpenOffice.org 1.0 Presentation Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1199,7 +1199,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>drawing-template.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing Template</string>
+			<string>OpenOffice.org 1.0 Drawing Template</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1391,7 +1391,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>extension.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>${PRODUCTNAME} Extension</string>
+			<string>@PRODUCTNAME@ Extension</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSIsAppleDefaultForType</key>
@@ -1399,19 +1399,19 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>%EXECUTABLE</string>
+	<string>soffice</string>
 	<key>CFBundleGetInfoString</key>
-	<string>${PRODUCTNAME} ${ABOUTBOXPRODUCTVERSION} ${BUILDIDCWS}</string>
+	<string>@PRODUCTNAME@ @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@</string>
 	<key>CFBundleIconFile</key>
 	<string>main.icns</string>
 	<key>CFBundleShortVersionString</key>
-	<string>${ABOUTBOXPRODUCTVERSION}</string>
+	<string>@MACOSX_BUNDLE_SHORTVERSION@</string>
 	<key>CFBundleIdentifier</key>
-	<string>${BUNDLEIDENTIFIER}</string>
+	<string>@MACOSX_BUNDLE_IDENTIFIER@</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>${PRODUCTNAME}</string>
+	<string>@PRODUCTNAME@</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
