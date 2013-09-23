@@ -362,7 +362,7 @@ public:
     virtual long    GetResult();
 
     virtual void                SetReloadDocument(const OUString& rURL);
-    virtual const OUString&     GetReloadDocument() const;
+    virtual OUString            GetReloadDocument() const;
     virtual sal_Bool            ShowPage( sal_uInt16 nLevel );
     virtual sal_uInt16          GetRestartPage() const;
 };

@@ -20,6 +20,7 @@
 #define _MAILMERGEWIZARD_HXX
 
 #include <svtools/roadmapwizard.hxx>
+#include "rtl/ustring.hxx"
 
 class SwView;
 class SwMailMergeConfigItem;
@@ -41,16 +42,16 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
 
     SwMailMergeConfigItem&  m_rConfigItem;
 
-    String                  m_sStarting;
-    String                  m_sDocumentType;
-    String                  m_sAddressBlock;
-    String                  m_sAddressList;
-    String                  m_sGreetingsLine;
-    String                  m_sLayout;
-    String                  m_sPrepareMerge;
-    String                  m_sMerge;
-    String                  m_sOutput;
-    String                  m_sFinish;
+    OUString                m_sStarting;
+    OUString                m_sDocumentType;
+    OUString                m_sAddressBlock;
+    OUString                m_sAddressList;
+    OUString                m_sGreetingsLine;
+    OUString                m_sLayout;
+    OUString                m_sPrepareMerge;
+    OUString                m_sMerge;
+    OUString                m_sOutput;
+    OUString                m_sFinish;
 
     sal_uInt16              m_nRestartPage;
 
@@ -71,8 +72,8 @@ public:
     SwView*                     GetSwView() {return m_pSwView;}
     SwMailMergeConfigItem&      GetConfigItem() { return m_rConfigItem;}
 
-    void                    SetReloadDocument(const String& rURL){sDocumentURL = rURL;}
-    const OUString&         GetReloadDocument() const {return sDocumentURL;}
+    void                    SetReloadDocument(const OUString& rURL) {sDocumentURL = rURL;}
+    OUString                GetReloadDocument() const {return sDocumentURL;}
 
     //next step requires loading of document
     void                    SetDocumentLoad(bool bSet) {m_bDocumentLoad = bSet;}
@@ -88,7 +89,7 @@ public:
 
     void                    updateRoadmapItemLabel( WizardState _nState );
 
-     virtual short          Execute();
+    virtual short           Execute();
     virtual void            StartExecuteModal( const Link& rEndDialogHdl );
 };
 #endif

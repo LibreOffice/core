@@ -620,7 +620,7 @@ void AbstractMailMergeWizard_Impl::SetReloadDocument(const OUString& rURL)
     pDlg->SetReloadDocument(rURL);
 }
 
-const OUString&     AbstractMailMergeWizard_Impl::GetReloadDocument() const
+OUString AbstractMailMergeWizard_Impl::GetReloadDocument() const
 {
     return pDlg->GetReloadDocument();
 }
