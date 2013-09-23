@@ -4232,7 +4232,6 @@ mingw*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-
     ;;
 
 *netbsd*)
@@ -4295,8 +4294,6 @@ openbsd*)
         ;;
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
-    SOLARLIB="$SOLARLIB -L/usr/local/lib"
-
     ;;
 
 solaris*)
@@ -4331,8 +4328,6 @@ solaris*)
         ;;
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
-    SOLARLIB="$SOLARLIB -L$COMPATH/lib"
-    SOLARLIB="$SOLARLIB -L/usr/local/bin -L/usr/dt/lib -L/usr/openwin/lib"
     ;;
 
 *)
@@ -12593,7 +12588,6 @@ AC_SUBST(WIN_TOUCH)
 AC_SUBST(BUILD_TYPE)
 
 AC_SUBST(SOLARINC)
-AC_SUBST(SOLARLIB)
 
 PathFormat "$PERL"
 PERL="$formatted_path"

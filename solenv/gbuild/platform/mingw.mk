@@ -65,7 +65,6 @@ gb_LinkTarget_LDFLAGS := \
 	-Wl,--exclude-symbols,__main \
 	-Wl,--enable-stdcall-fixup \
 	-Wl,--enable-runtime-pseudo-reloc-v2 \
-	$(SOLARLIB) \
 
 ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
