@@ -9,10 +9,16 @@
 
 include $(SRCDIR)/sysui/productlist.mk
 
+
 ifeq ($(ENABLE_GIO),TRUE)
 	brand_URIPARAM := --urls
-else
-ifeq ($(ENABLE_GNOMEVFS),TRUE)
+else ifeq ($(ENABLE_GNOMEVFS),TRUE)
+	brand_URIPARAM := --urls
+else ifeq ($(ENABLE_TDE),TRUE)
+	brand_URIPARAM := --urls
+else ifeq ($(ENABLE_KDE),TRUE)
+	brand_URIPARAM := --urls
+else ifeq ($(ENABLE_KDE4),TRUE)
 	brand_URIPARAM := --urls
 else
 	brand_URIPARAM :=
