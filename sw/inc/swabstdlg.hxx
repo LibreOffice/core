@@ -311,7 +311,7 @@ class AbstractMailMergeWizard : public VclAbstractDialog2
 {
 public:
     virtual void                SetReloadDocument(const OUString& rURL) = 0;
-    virtual const OUString&     GetReloadDocument() const = 0;
+    virtual OUString            GetReloadDocument() const = 0;
     virtual sal_Bool            ShowPage( sal_uInt16 nLevel ) = 0;
     virtual sal_uInt16          GetRestartPage() const = 0;
 };
