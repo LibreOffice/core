@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_NFKEYTAB_HXX
 
 #include <vector>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 //! For ImpSvNumberformatScan: first the short symbols, then the long symbols!
 //! e.g. first TT then TTTT
@@ -34,7 +34,7 @@
 // Note: 2005-09-02: the above applies to the binary file format.
 //
 // ER 15.12.99: This table is externally only to be used with method
-// String SvNumberformat::GetMappedFormatstring( const NfKeywordTable&, const LocaleDataWrapper& );
+// OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable&, const LocaleDataWrapper& );
 // and method
 // void SvNumberFormatter::FillKeywordTable( NfKeywordTable&, LanguageType );
 enum NfKeywordIndex

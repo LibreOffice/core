@@ -454,7 +454,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
     throw(css::uno::RuntimeException)
 {
-    SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch() starts ..." << OUString(aURL.Complete));
+    SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch() starts ..." << aURL.Complete);
 
     // valid request ?
     sal_Int32 eNewJob = AutoRecovery::implst_classifyJob(aURL);

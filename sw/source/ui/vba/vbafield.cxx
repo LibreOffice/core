@@ -319,7 +319,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     OUString sText;
     Text >>= sText;
 
-    String sFieldName;
+    OUString sFieldName;
     if( ( nType == word::WdFieldType::wdFieldEmpty ) && !sText.isEmpty() )
     {
         SwVbaReadFieldParams aReadParam(sText);
@@ -328,11 +328,11 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     }
 
     uno::Reference< text::XTextContent > xTextField;
-    if( nType == word::WdFieldType::wdFieldFileName || sFieldName.EqualsIgnoreCaseAscii("FILENAME") )
+    if( nType == word::WdFieldType::wdFieldFileName || sFieldName.equalsIgnoreAsciiCase("FILENAME") )
     {
         xTextField.set( Create_Field_FileName( sText ), uno::UNO_QUERY_THROW );
     }
-    else if( nType == word::WdFieldType::wdFieldDocProperty || sFieldName.EqualsIgnoreCaseAscii("DOCPROPERTY") )
+    else if( nType == word::WdFieldType::wdFieldDocProperty || sFieldName.equalsIgnoreAsciiCase("DOCPROPERTY") )
     {
         xTextField.set( Create_Field_DocProperty( sText ), uno::UNO_QUERY_THROW );
     }
@@ -419,7 +419,7 @@ static const DocPropertyTable aDocPropertyTables[] =
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const OUString _text ) throw (uno::RuntimeException)
 {
-    String aDocProperty;
+    OUString aDocProperty;
     SwVbaReadFieldParams aReadParam( _text );
     long nRet;
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
@@ -427,7 +427,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
         switch( nRet )
         {
             case -2:
-                if( !aDocProperty.Len() )
+                if( aDocProperty.isEmpty() )
                     aDocProperty = aReadParam.GetResult();
                 break;
             case '*':
@@ -438,7 +438,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     }
     aDocProperty = comphelper::string::remove(aDocProperty, '"');
     OSL_TRACE("SwVbaFields::Create_Field_DocProperty, the document property name is %s ",OUStringToOString( aDocProperty, RTL_TEXTENCODING_UTF8 ).getStr() );
-    if( aDocProperty.Len() == 0 )
+    if( aDocProperty.isEmpty() )
     {
         throw uno::RuntimeException();
     }
@@ -448,7 +448,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     // find the build in document properties
     for( const DocPropertyTable* pTable = aDocPropertyTables; pTable->sDocPropertyName != NULL; pTable++ )
     {
-        if( aDocProperty.EqualsIgnoreCaseAscii( pTable->sDocPropertyName ) )
+        if( aDocProperty.equalsIgnoreAsciiCaseAscii( pTable->sDocPropertyName ) )
         {
             if( pTable->sFieldService != NULL )
                 sFieldService = OUString::createFromAscii(pTable->sFieldService);

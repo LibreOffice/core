@@ -2382,7 +2382,7 @@ Label_MaskStateMachine:
 
 // Convert symbol to token
 
-bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
+bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
 {
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
     bool bFound = (iLook != mxSymbols->getHashMap()->end());
@@ -2392,9 +2392,9 @@ bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
         OpCode eOp = iLook->second;
         if (bInArray)
         {
-            if (rName.Equals(mxSymbols->getSymbol(ocArrayColSep)))
+            if (rName.equals(mxSymbols->getSymbol(ocArrayColSep)))
                 eOp = ocArrayColSep;
-            else if (rName.Equals(mxSymbols->getSymbol(ocArrayRowSep)))
+            else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
                 eOp = ocArrayRowSep;
         }
         aToken.SetOpCode(eOp);
@@ -2424,7 +2424,7 @@ bool ScCompiler::IsOpCode( const String& rName, bool bInArray )
         static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
         for (size_t i=0; i<nOdffAliases; ++i)
         {
-            if (rName.EqualsIgnoreCaseAscii( aOdffAliases[i].pName))
+            if (rName.equalsIgnoreAsciiCaseAscii( aOdffAliases[i].pName))
             {
                 ScRawToken aToken;
                 aToken.SetOpCode( aOdffAliases[i].eOp);
@@ -2819,7 +2819,7 @@ bool ScCompiler::IsMacro( const String& rName )
 
     return false;
 #else
-    String aName( rName);
+    OUString aName( rName);
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
@@ -2834,8 +2834,8 @@ bool ScCompiler::IsMacro( const String& rName )
     // use only unprefixed name if encountered. BASIC doesn't allow '.' in a
     // function name so a function "USER.FOO" could not exist, and macro check
     // is assigned the lowest priority in function name check.
-    if (FormulaGrammar::isODFF( GetGrammar()) && aName.EqualsIgnoreCaseAscii( "USER.", 0, 5))
-        aName.Erase( 0, 5);
+    if (FormulaGrammar::isODFF( GetGrammar()) && aName.startsWithIgnoreAsciiCase("USER."))
+        aName = aName.copy(5);
 
     SbxMethod* pMeth = (SbxMethod*) pObj->Find( aName, SbxCLASS_METHOD );
     if( !pMeth )
@@ -2850,7 +2850,7 @@ bool ScCompiler::IsMacro( const String& rName )
         return false;
     }
     ScRawToken aToken;
-    aToken.SetExternal( aName.GetBuffer() );
+    aToken.SetExternal( aName.getStr() );
     aToken.eOp = ocMacro;
     pRawToken = aToken.Clone();
     return true;

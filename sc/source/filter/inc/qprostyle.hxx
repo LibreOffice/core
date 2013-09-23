@@ -21,9 +21,9 @@
 #ifndef SC_QPROSTYLE_HXX
 #define SC_QPROSTYLE_HXX
 
+#include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include "filter.hxx"
-#include <tools/string.hxx>
 
 #include "flttypes.hxx"
 #include "ftools.hxx"

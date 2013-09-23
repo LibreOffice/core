@@ -112,7 +112,6 @@
 #include <tools/date.hxx>
 #include <i18nlangtag/lang.h>
 #include <comphelper/extract.hxx>
-#include <tools/string.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -1274,13 +1273,13 @@ namespace {
 OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
 {
     if (!pDoc)
-        return EMPTY_OUSTRING;
+        return OUString();
 
     CellType eType = pDoc->GetCellType(aCellPos);
     switch (eType)
     {
         case CELLTYPE_NONE:
-            return EMPTY_OUSTRING;
+            return OUString();
         case CELLTYPE_EDIT:
         {
             //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
@@ -1306,7 +1305,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
         }
     }
 
-    return EMPTY_OUSTRING;
+    return OUString();
 }
 
 }

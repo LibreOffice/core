@@ -32,7 +32,7 @@
 #include <tools/link.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 namespace svxform {
     class FmSearchConfigItem;

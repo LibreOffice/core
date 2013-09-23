@@ -20,6 +20,7 @@
 #define _XTABLE_HXX
 
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
@@ -28,7 +29,6 @@
 #include <svx/xlnasit.hxx>
 
 #include <tools/color.hxx>
-#include <tools/string.hxx>
 #include <tools/contnr.hxx>
 
 #include <cppuhelper/weak.hxx>

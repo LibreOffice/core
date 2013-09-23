@@ -36,15 +36,15 @@ namespace dbaui
 class OTableIndex
 {
 private:
-    String aIndexFileName;
+    OUString aIndexFileName;
 
 public:
     OTableIndex() { }
     OTableIndex( const OTableIndex& _rSource) : aIndexFileName(_rSource.aIndexFileName) { }
-    OTableIndex( const String& rFileName ) : aIndexFileName( rFileName ) { }
+    OTableIndex( const OUString& rFileName ) : aIndexFileName( rFileName ) { }
 
-    void SetIndexFileName( const String& rFileName ) { aIndexFileName = rFileName; }
-    String GetIndexFileName() const { return aIndexFileName; }
+    void SetIndexFileName( const OUString& rFileName ) { aIndexFileName = rFileName; }
+    OUString GetIndexFileName() const { return aIndexFileName; }
 };
 
 typedef ::std::list< OTableIndex >  TableIndexList;
@@ -58,14 +58,14 @@ class OTableInfo
 {
     friend class ODbaseIndexDialog;
 private:
-    String aTableName;
+    OUString aTableName;
     TableIndexList aIndexList;
 
 public:
     OTableInfo() { }
-    OTableInfo( const String& rName ) : aTableName(rName) { }
+    OTableInfo( const OUString& rName ) : aTableName(rName) { }
 
-    void WriteInfFile( const String& rDSN ) const;
+    void WriteInfFile( const OUString& rDSN ) const;
 };
 
 typedef ::std::list< OTableInfo >   TableInfoList;

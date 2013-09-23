@@ -1500,9 +1500,9 @@ void BibDataManager::SetMeAsUidListener()
         OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {
-            String aName= pFields[i];
+            const OUString& rName = pFields[i];
 
-            if(aName.EqualsIgnoreCaseAscii(StrUID))
+            if (rName.equalsIgnoreAsciiCase(StrUID))
             {
                 theFieldName=pFields[i];
                 break;
@@ -1544,9 +1544,9 @@ void BibDataManager::RemoveMeAsUidListener()
         OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {
-            String aName= pFields[i];
+            const OUString& rName = pFields[i];
 
-            if(aName.EqualsIgnoreCaseAscii(StrUID))
+            if (rName.equalsIgnoreAsciiCase(StrUID))
             {
                 theFieldName=pFields[i];
                 break;

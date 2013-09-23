@@ -22,7 +22,6 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include <tools/string.hxx>
 #include <rtl/ustring.hxx>
 
 #include "address.hxx"

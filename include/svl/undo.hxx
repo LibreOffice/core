@@ -19,9 +19,9 @@
 #ifndef _UNDO_HXX
 #define _UNDO_HXX
 
-#include "svl/svldllapi.h"
+#include <svl/svldllapi.h>
+#include <rtl/ustring.hxx>
 #include <tools/rtti.hxx>
-#include <tools/string.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

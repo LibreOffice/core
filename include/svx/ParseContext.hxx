@@ -19,12 +19,10 @@
 #ifndef SVX_QUERYDESIGNCONTEXT_HXX
 #define SVX_QUERYDESIGNCONTEXT_HXX
 
-#include "svx/svxdllapi.h"
 #include <connectivity/IParseContext.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
 #include <unotools/localedatawrapper.hxx>
-
-
 #include <vector>
 
 namespace svxform

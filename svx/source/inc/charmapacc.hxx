@@ -18,7 +18,6 @@
  */
 
 #include <osl/mutex.hxx>
-#include <tools/string.hxx>
 #include <vcl/image.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>

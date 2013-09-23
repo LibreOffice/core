@@ -20,10 +20,10 @@
 #ifndef _TEXTDATA_HXX
 #define _TEXTDATA_HXX
 
-#include <vcl/dllapi.h>
+#include <rtl/ustring.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
-#include <tools/string.hxx>
+#include <vcl/dllapi.h>
 
 // for Notify, if all paragraphs were deleted
 #define TEXT_PARA_ALL               0xFFFFFFFF

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/docfile.hxx>

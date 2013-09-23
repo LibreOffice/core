@@ -32,7 +32,7 @@
 #include "NumberFormatterWrapper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include <rtl/math.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>

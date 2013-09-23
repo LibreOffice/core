@@ -316,12 +316,12 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16)
         return;
     }
 
-    const String & rName = GetName();
-    if( rName.EqualsAscii( "_Toc", 0, 4 ) ) // "_Toc*" ist ueberfluessig
+    const OUString & rName = GetName();
+    if( rName.startsWith( "_Toc" ) ) // "_Toc*" ist ueberfluessig
         return;
 
     if( rOut.IsFlagSet( SwFltControlStack::HYPO )
-        && rName.EqualsIgnoreCaseAscii( "FORMULAR" ) )
+        && rName.equalsIgnoreAsciiCase( "FORMULAR" ) )
         rOut.SetProtect();
 
     // Fuer UEbersetzung Bookmark -> Variable setzen
@@ -910,15 +910,16 @@ oncemore:
             }
             if( pDot )
             {
-                String sExt;
+                OUStringBuffer sBuf;
                 while( *pDot != '\0' && *pDot != ' ')
-                    sExt += *pDot++;
+                    sBuf.append(*pDot++);
+                OUString sExt = sBuf.makeStringAndClear();
 
-                if( sExt.EqualsIgnoreCaseAscii( ".tiff" )
-                 || sExt.EqualsIgnoreCaseAscii( ".bmp" )
-                 || sExt.EqualsIgnoreCaseAscii( ".gif" )
-                 || sExt.EqualsIgnoreCaseAscii( ".pcx" )
-                 || sExt.EqualsIgnoreCaseAscii( ".pic" ))
+                if( sExt.equalsIgnoreAsciiCase( ".tiff" )
+                 || sExt.equalsIgnoreAsciiCase( ".bmp" )
+                 || sExt.equalsIgnoreAsciiCase( ".gif" )
+                 || sExt.equalsIgnoreAsciiCase( ".pcx" )
+                 || sExt.equalsIgnoreAsciiCase( ".pic" ))
                     rOut.AddGraphic( sName );
                 else
                     bKnown = false;
@@ -1313,7 +1314,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
 {
 // erzeugen eine fonts im sw-sinne aus den word-strukturen
     FontFamily eFamily = FAMILY_DONTKNOW;
-    String aName;
+    OUString aName;
     FontPitch ePitch = PITCH_DONTKNOW;
     rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
     switch (nFCode)
@@ -1323,18 +1324,18 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
 // "Symbol", and "Helv"
     case 0:
          eFamily = FAMILY_ROMAN;
-         aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Tms Rmn" ));
+         aName = "Tms Rmn";
          ePitch = PITCH_VARIABLE;
          eCharSet = RTL_TEXTENCODING_MS_1252;
     break;
     case 1:
-         aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Symbol" ));
+         aName = "Symbol";
          ePitch = PITCH_VARIABLE;
          eCharSet = RTL_TEXTENCODING_SYMBOL;
     break;
     case 2:
          eFamily = FAMILY_SWISS;
-         aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Helv" ));
+         aName = "Helv";
          ePitch = PITCH_VARIABLE;
          eCharSet = RTL_TEXTENCODING_MS_1252;
     break;
@@ -1354,10 +1355,10 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
             ePitch = ePitchA[pF->prgGet()];
         // CharSet ...........................................
             eCharSet = RTL_TEXTENCODING_MS_1252;
-            if (aName.EqualsIgnoreCaseAscii("Symbol")
-             || aName.EqualsIgnoreCaseAscii("Symbol Set")
-             || aName.EqualsIgnoreCaseAscii("Wingdings")
-             || aName.EqualsIgnoreCaseAscii("ITC Zapf Dingbats") )
+            if (aName.equalsIgnoreAsciiCase("Symbol")
+             || aName.equalsIgnoreAsciiCase("Symbol Set")
+             || aName.equalsIgnoreAsciiCase("Wingdings")
+             || aName.equalsIgnoreAsciiCase("ITC Zapf Dingbats") )
                 eCharSet = RTL_TEXTENCODING_SYMBOL;
         // FontFamily ........................................
             sal_uInt16 b = pF->ffGet();
@@ -1373,7 +1374,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         {
             OSL_ENSURE(false, "WW1Fonts::GetFont: Nicht existenter Font !");
             eFamily = FAMILY_SWISS;
-             aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Helv" ));
+             aName = "Helv";
             ePitch = PITCH_VARIABLE;
             eCharSet = RTL_TEXTENCODING_MS_1252;
         }
@@ -1382,10 +1383,10 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
     }
             // Extrawurst Hypo
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO )
-         && ( aName.EqualsIgnoreCaseAscii("Helv")
-            || aName.EqualsIgnoreCaseAscii("Helvetica") ) )
+         && ( aName.equalsIgnoreAsciiCase("Helv")
+            || aName.equalsIgnoreAsciiCase("Helvetica") ) )
     {
-         aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Helvetica Neue" ));
+         aName = "Helvetica Neue";
         if (eFamily==FAMILY_DONTKNOW)
             eFamily = FAMILY_SWISS;
     }
@@ -1397,21 +1398,21 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
             // Nach TH sollen diese durch feste Werte ersetzt werden,
             // also nicht ueber System::GetStandardFont, damit keine
             // Namenslisten auftauchen ( Dieses koennte den User verwirren )
-        if( aName.EqualsIgnoreCaseAscii("Helv"))
+        if( aName.equalsIgnoreAsciiCase("Helv"))
         {
-             aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Helvetica" ));
+            aName  = "Helvetica";
             if (eFamily==FAMILY_DONTKNOW)
                 eFamily = FAMILY_SWISS;
         }
-        else if (aName.EqualsIgnoreCaseAscii("Tms Rmn"))
+        else if (aName.equalsIgnoreAsciiCase("Tms Rmn"))
         {
-             aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Times New Roman" ));
+             aName = "Times New Roman";
             if (eFamily==FAMILY_DONTKNOW)
                 eFamily = FAMILY_ROMAN;
         }
-        else if (aName.EqualsIgnoreCaseAscii("System Monospaced") )
+        else if (aName.equalsIgnoreAsciiCase("System Monospaced") )
         {
-             aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Courier" ));
+             aName = "Courier";
             ePitch = PITCH_FIXED;
         }
     }

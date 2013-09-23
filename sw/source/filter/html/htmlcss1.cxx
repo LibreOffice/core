@@ -1778,7 +1778,8 @@ void SwHTMLParser::InsertLink()
     }
     else
     {
-        String sRel, sHRef, sType;
+        OUString sRel;
+        String sHRef, sType;
 
         const HTMLOptions& rOptions2 = GetOptions();
         for (size_t i = rOptions2.size(); i; )
@@ -1798,7 +1799,7 @@ void SwHTMLParser::InsertLink()
             }
         }
 
-        if( sHRef.Len() && sRel.EqualsIgnoreCaseAscii( "STYLESHEET" ) &&
+        if( sHRef.Len() && sRel.equalsIgnoreAsciiCase( "STYLESHEET" ) &&
             ( !sType.Len() ||
               sType.GetToken(0,';').EqualsAscii(sCSS_mimetype) ) )
         {

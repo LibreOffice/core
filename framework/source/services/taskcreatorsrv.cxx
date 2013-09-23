@@ -330,7 +330,6 @@ void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Referen
     xInit->initialize(lInitData);
 }
 
-//-----------------------------------------------
 OUString TaskCreatorService::impl_filterNames( const OUString& sName )
 {
     OUString sFiltered;

@@ -18,10 +18,9 @@
  */
 
 
-#include <vcl/abstdlg.hxx>
-
+#include <rtl/ustring.hxx>
 #include <osl/module.hxx>
-#include <tools/string.hxx>
+#include <vcl/abstdlg.hxx>
 
 typedef VclAbstractDialogFactory* (SAL_CALL *FuncPtrCreateDialogFactory)();
 

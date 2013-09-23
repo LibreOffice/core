@@ -696,26 +696,26 @@ void ScGlobal::Clear()
 
 //------------------------------------------------------------------------
 
-CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
+CharSet ScGlobal::GetCharsetValue( const OUString& rCharSet )
 {
     // new TextEncoding values
     if ( CharClass::isAsciiNumeric( rCharSet ) )
     {
-        sal_Int32 nVal = rCharSet.ToInt32();
+        sal_Int32 nVal = rCharSet.toInt32();
         if ( !nVal || nVal == RTL_TEXTENCODING_DONTKNOW )
             return osl_getThreadTextEncoding();
         return (CharSet) nVal;
     }
     // old CharSet values for compatibility
-    else if (rCharSet.EqualsIgnoreCaseAscii("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
-    else if (rCharSet.EqualsIgnoreCaseAscii("MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_437")) return RTL_TEXTENCODING_IBM_437;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_850")) return RTL_TEXTENCODING_IBM_850;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_860")) return RTL_TEXTENCODING_IBM_860;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
-    else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
+    else if (rCharSet.equalsIgnoreAsciiCase("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
+    else if (rCharSet.equalsIgnoreAsciiCase("MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
+    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
+    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_437")) return RTL_TEXTENCODING_IBM_437;
+    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_850")) return RTL_TEXTENCODING_IBM_850;
+    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_860")) return RTL_TEXTENCODING_IBM_860;
+    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
+    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
+    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
     else return osl_getThreadTextEncoding();
 }
 

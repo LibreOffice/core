@@ -20,8 +20,8 @@
 #ifndef _SV_OUTFONT_HXX
 #define _SV_OUTFONT_HXX
 
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>

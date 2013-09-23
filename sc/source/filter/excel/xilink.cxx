@@ -342,12 +342,12 @@ XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm
             maName = rStrm.GetRoot().GetScAddInName( maName );
         }
         else if ( (eSubType == EXC_SBTYPE_EUROTOOL) &&
-                maName.EqualsIgnoreCaseAscii( "EUROCONVERT" ) )
+                maName.equalsIgnoreAsciiCase( "EUROCONVERT" ) )
             meType = xlExtEuroConvert;
         else
         {
             meType = xlExtName;
-            ScfTools::ConvertToScDefinedName( maName );
+            maName = ScfTools::ConvertToScDefinedName( maName );
         }
     }
     else

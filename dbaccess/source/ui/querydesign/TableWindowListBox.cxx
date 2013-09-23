@@ -80,7 +80,7 @@ OTableWindowListBox::~OTableWindowListBox()
     m_pTabWin = NULL;
 }
 
-SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
+SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryText )
 {
     // iterate through the list
     SvTreeList* pTreeList = GetModel();
@@ -100,7 +100,7 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText
         }
         while( pEntry )
         {
-            if((bCase ? rEntryText == GetEntryText(pEntry) : rEntryText.EqualsIgnoreCaseAscii(GetEntryText(pEntry))))
+            if((bCase ? rEntryText == GetEntryText(pEntry) : rEntryText.equalsIgnoreAsciiCase(GetEntryText(pEntry))))
             {
                 return pEntry;
             }

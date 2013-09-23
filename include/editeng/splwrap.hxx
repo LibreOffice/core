@@ -19,10 +19,10 @@
 #ifndef _SVX_SPLWRAP_HXX
 #define _SVX_SPLWRAP_HXX
 
+#include <editeng/editengdllapi.h>
 #include <editeng/svxenum.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include "editeng/editengdllapi.h"
 
 // forward ---------------------------------------------------------------
 

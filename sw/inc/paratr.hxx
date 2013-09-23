@@ -27,6 +27,7 @@
 #include <format.hxx>
 #include <swtypes.hxx>
 #include <editeng/adjustitem.hxx>
+#include <tools/string.hxx>
 
 class SwCharFmt;
 class IntlWrapper;

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/date.hxx>
-#include <tools/time.hxx>
-#include <tools/string.hxx>
-#include <ucbhelper/content.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/processfactory.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/fstathelper.hxx>
+#include <tools/date.hxx>
+#include <tools/time.hxx>
+#include <ucbhelper/content.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

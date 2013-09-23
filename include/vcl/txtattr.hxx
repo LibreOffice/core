@@ -20,11 +20,11 @@
 #ifndef _TXTATTR_HXX
 #define _TXTATTR_HXX
 
-#include <vcl/dllapi.h>
+#include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <vcl/vclenum.hxx>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
+#include <vcl/vclenum.hxx>
+#include <vcl/dllapi.h>
 
 class Font;
 

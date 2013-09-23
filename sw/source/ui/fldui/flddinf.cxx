@@ -124,11 +124,11 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     }
 
     sal_uInt16 nSelEntryData = USHRT_MAX;
-    String sUserData = GetUserData();
-    if(sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
+    OUString sUserData = GetUserData();
+    if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
     {
-        String sVal = sUserData.GetToken(1, ';');
-        nSelEntryData = static_cast< sal_uInt16 >(sVal.ToInt32());
+        OUString sVal = sUserData.getToken(1, ';');
+        nSelEntryData = static_cast< sal_uInt16 >(sVal.toInt32());
     }
 
     std::vector<OUString> aLst;

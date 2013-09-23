@@ -20,12 +20,11 @@
 #ifndef _SFX_DOCINSERT_HXX
 #define _SFX_DOCINSERT_HXX
 
+#include <rtl/ustring.hxx>
+#include <sfx2/dllapi.h>
 #include <tools/errcode.hxx>
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <vector>
-
-#include "sfx2/dllapi.h"
 
 namespace sfx2 { class FileDialogHelper; }
 class SfxMedium;

@@ -22,6 +22,7 @@
 
 #include <undobj.hxx>
 #include <tools/mempool.hxx>
+#include <tools/string.hxx>
 
 class SwRedlineSaveDatas;
 class SwTxtNode;

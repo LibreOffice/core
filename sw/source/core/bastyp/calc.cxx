@@ -527,10 +527,10 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
         if( pMgr && sSourceName.Len() && sTableName.Len() &&
             pMgr->OpenDataSource(sSourceName, sTableName, -1, false))
         {
-            String sColumnName( GetColumnName( sTmpName ));
-            OSL_ENSURE(sColumnName.Len(), "Missing DB column name");
+            OUString sColumnName( GetColumnName( sTmpName ));
+            OSL_ENSURE(!sColumnName.isEmpty(), "Missing DB column name");
 
-            String sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
+            OUString sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
             sDBNum = pCharClass->lowercase(sDBNum);
 
             // Initialize again because this doesn't happen in docfld anymore for
@@ -538,7 +538,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
             // an DB_Field in a document.
             VarChange( sDBNum, pMgr->GetSelectedRecordId(sSourceName, sTableName));
 
-            if( sDBNum.EqualsIgnoreCaseAscii(sColumnName) )
+            if( sDBNum.equalsIgnoreAsciiCase(sColumnName) )
             {
                 aErrExpr.nValue.PutLong(long(pMgr->GetSelectedRecordId(sSourceName, sTableName)));
                 return &aErrExpr;
@@ -576,9 +576,9 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
     pNewExp->pNext = VarTable[ ii ];
     VarTable[ ii ] = pNewExp;
 
-    String sColumnName( GetColumnName( sTmpName ));
-    OSL_ENSURE( sColumnName.Len(), "Missing DB column name" );
-    if( sColumnName.EqualsIgnoreCaseAscii(
+    OUString sColumnName( GetColumnName( sTmpName ));
+    OSL_ENSURE( !sColumnName.isEmpty(), "Missing DB column name" );
+    if( sColumnName.equalsIgnoreAsciiCase(
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
         SwNewDBMgr *pMgr = rDoc.GetNewDBMgr();

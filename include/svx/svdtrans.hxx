@@ -20,15 +20,13 @@
 #ifndef _SVDTRANS_HXX
 #define _SVDTRANS_HXX
 
+#include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
-#include <tools/fract.hxx>
-
-#include <vcl/mapmod.hxx>
-#include <tools/string.hxx>
-#include "svx/svxdllapi.h"
-
 #include <vcl/field.hxx>
+#include <vcl/mapmod.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

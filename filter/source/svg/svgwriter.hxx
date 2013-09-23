@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>

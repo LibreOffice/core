@@ -151,15 +151,15 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
 |*
 |************************************************************************/
 
-void SvxHyperlinkDocTp::GetCurentItemData ( String& aStrURL, String& aStrName,
+void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
                                             String& aStrIntName, String& aStrFrame,
                                             SvxLinkInsertMode& eMode )
 {
     // get data from standard-fields
-    aStrURL = GetCurrentURL();
+    rStrURL = GetCurrentURL();
 
-    if( aStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
-         aStrURL=aEmptyStr;
+    if( rStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
+         rStrURL="";
 
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
@@ -198,8 +198,8 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0,
         GetParent() );
-    String aOldURL( GetCurrentURL() );
-    if( aOldURL.EqualsIgnoreCaseAscii( sFileScheme, 0, sizeof( sFileScheme ) - 1 ) )
+    OUString aOldURL( GetCurrentURL() );
+    if( aOldURL.startsWithIgnoreAsciiCase( sFileScheme ) )
     {
         aDlg.SetDisplayDirectory( aOldURL );
     }
@@ -234,15 +234,15 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
 IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl)
 {
     if ( GetPathType ( maStrURL ) == Type_ExistsFile  ||
-         maStrURL == aEmptyStr                        ||
-         maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ||
-         maStrURL.SearchAscii( sHash ) == 0 )
+         maStrURL.isEmpty() ||
+         maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ||
+         maStrURL.indexOf( sHash ) == 0 )
     {
         mpMarkWnd->SetError( LERR_NOERROR );
 
         EnterWait();
 
-        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+        if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
@@ -284,12 +284,12 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl)
 IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl)
 {
     if ( IsMarkWndVisible() && ( GetPathType( maStrURL )==Type_ExistsFile ||
-                                  maStrURL == aEmptyStr                   ||
-                                  maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) ) )
+                                  maStrURL.isEmpty() ||
+                                  maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ) )
     {
         EnterWait();
 
-        if ( maStrURL.EqualsIgnoreCaseAscii( sFileScheme ) )
+        if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
             mpMarkWnd->RefreshTree ( aEmptyStr );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
@@ -352,9 +352,9 @@ void SvxHyperlinkDocTp::SetMarkStr ( const String& aStrMark )
 |*
 |************************************************************************/
 
-SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( String& aStrPath )
+SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( const OUString& rStrPath )
 {
-    INetURLObject aURL( aStrPath, INET_PROT_FILE );
+    INetURLObject aURL( rStrPath, INET_PROT_FILE );
 
     if( aURL.HasError() )
         return Type_Invalid;

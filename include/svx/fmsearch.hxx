@@ -21,16 +21,16 @@
 #define _FMSEARCH_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
-#include <tools/string.hxx>
-#include "svx/svxdllapi.h"
+#include <comphelper/uno3.hxx>
+#include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
+#include <vcl/button.hxx>
+#include <vcl/combobox.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace util {

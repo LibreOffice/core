@@ -88,7 +88,7 @@ namespace dbaui
         virtual void Command(const CommandEvent& rEvt);
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
-        SvTreeListEntry* GetEntryFromText( const String& rEntryText );
+        SvTreeListEntry* GetEntryFromText( const OUString& rEntryText );
 
     private:
         using SvTreeListBox::ExecuteDrop;

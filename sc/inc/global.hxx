@@ -671,7 +671,7 @@ SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const String& rString, sal
      */
 SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote = '\'' );
 
-    static  CharSet         GetCharsetValue( const String& rCharSet );
+    static  CharSet         GetCharsetValue( const OUString& rCharSet );
     static  String          GetCharsetString( CharSet eVal );
 
     /// a "ReadOnly" formatter for UNO/XML export

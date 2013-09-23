@@ -20,9 +20,9 @@
 #ifndef _SVX_XMLEXCHG_HXX_
 #define _SVX_XMLEXCHG_HXX_
 
+#include <rtl/ustring.hxx>
 #include <svtools/transfer.hxx>
-#include <tools/string.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 namespace com {
     namespace sun {

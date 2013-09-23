@@ -422,9 +422,7 @@ TTabPageInfoHash::iterator TabWindowService::impl_getTabPageInfo(::sal_Int32 nID
     return pIt;
 }
 
-//*****************************************************************************************************************
 //  TabWindowService
-//*****************************************************************************************************************
 FwkTabWindow* TabWindowService::mem_TabWin ()
 {
     FwkTabWindow* pWin = NULL;

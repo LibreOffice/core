@@ -19,15 +19,12 @@
 #ifndef _SFXOBJFACE_HXX
 #define _SFXOBJFACE_HXX
 
-#include "sal/config.h"
-
-#include "rtl/ustring.hxx"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
-#include <tools/string.hxx>
-#include <tools/resid.hxx>
-
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+#include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
+#include <tools/resid.hxx>
 
 struct SfxFormalArgument;
 struct SfxInterface_Impl;

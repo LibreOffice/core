@@ -556,7 +556,6 @@
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>

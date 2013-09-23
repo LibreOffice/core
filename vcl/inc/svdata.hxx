@@ -24,11 +24,10 @@
 
 #include <osl/thread.hxx>
 #include <rtl/ref.hxx>
-
+#include <rtl/ustring.hxx>
 #include "tools/shl.hxx"
 #include "tools/link.hxx"
 #include "tools/fldunit.hxx"
-#include "tools/string.hxx"
 #include "tools/color.hxx"
 #include "tools/debug.hxx"
 

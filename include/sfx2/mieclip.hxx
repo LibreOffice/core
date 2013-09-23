@@ -20,11 +20,11 @@
 #ifndef _MIECLIP_HXX
 #define _MIECLIP_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+#include <sfx2/dllapi.h>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 class SvStream;
 class SotDataObject;

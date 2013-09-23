@@ -22,7 +22,7 @@
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/weak.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {

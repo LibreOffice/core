@@ -637,14 +637,14 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         mbOwnBasMgr = true;
 
         OUString aExtension = aInitUrlInetObj.getExtension();
-        if( aExtension.compareToAscii( "xlc" ) == COMPARE_EQUAL )
+        if( aExtension == "xlc" )
         {
             meInitMode = CONTAINER_INIT_FILE;
             INetURLObject aLibPathInetObj( aInitUrlInetObj );
             aLibPathInetObj.removeSegment();
             maLibraryPath = aLibPathInetObj.GetMainURL( INetURLObject::NO_DECODE );
         }
-        else if( aExtension.compareToAscii( "xlb" ) == COMPARE_EQUAL )
+        else if( aExtension == "xlb" )
         {
             meInitMode = LIBRARY_INIT_FILE;
             uno::Reference< embed::XStorage > xDummyStor;
@@ -1308,7 +1308,7 @@ void SfxLibraryContainer::checkStorageURL( const OUString& aSourceURL,
     }
     INetURLObject aInetObj( aExpandedSourceURL );
     OUString aExtension = aInetObj.getExtension();
-    if( aExtension.compareToAscii( "xlb" ) == COMPARE_EQUAL )
+    if( aExtension == "xlb" )
     {
         // URL to xlb file
         aLibInfoFileURL = aExpandedSourceURL;

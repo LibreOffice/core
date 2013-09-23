@@ -29,6 +29,8 @@
 #include <com/sun/star/plugin/PluginManager.hpp>
 #include <com/sun/star/plugin/XPluginManager.hpp>
 
+#include <tools/string.hxx>
+
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

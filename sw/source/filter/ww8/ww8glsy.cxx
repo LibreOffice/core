@@ -79,7 +79,7 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 }
 
 bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
-    bool bSaveRelFile, const std::vector<String>& rStrings,
+    bool bSaveRelFile, const std::vector<OUString>& rStrings,
     const std::vector<ww::bytes>& rExtra)
 {
     // this code will be called after reading all text into the
@@ -147,7 +147,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             if(n != 0xFFFF)
             {
                 rBlocks.ClearDoc();
-                const String &rLNm = rStrings[nGlosEntry];
+                const OUString &rLNm = rStrings[nGlosEntry];
 
                 String sShortcut = rLNm;
 
@@ -195,7 +195,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     if (pGlossary && pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries())
     {
         //read the names of the autotext entries
-        std::vector<String> aStrings;
+        std::vector<OUString> aStrings;
         std::vector<ww::bytes> aData;
 
         rtl_TextEncoding eStructCharSet =

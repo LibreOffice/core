@@ -2706,8 +2706,8 @@ sal_Bool SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
         sal_Int32 nLen = rFileName.getLength();
         if( 4 < nLen && '.' == rFileName[ nLen - 4 ])
         {
-            String sExt( rFileName.copy( nLen - 3 ));
-            if( sExt.EqualsIgnoreCaseAscii( "url" ))
+            OUString sExt( rFileName.copy( nLen - 3 ));
+            if( sExt.equalsIgnoreAsciiCase( "url" ))
             {
                 OSL_ENSURE( !&rFileName, "how do we read today .URL - Files?" );
             }

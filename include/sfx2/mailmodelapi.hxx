@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SFX_MAILMODEL_HXX
 #define INCLUDED_SFX_MAILMODEL_HXX
 
-#include <vector>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include "tools/link.hxx"
-#include <tools/string.hxx>
-#include "sfx2/dllapi.h"
+#include <rtl/ustring.hxx>
+#include <sfx2/dllapi.h>
+#include <tools/link.hxx>
+#include <vector>
 
 // class AddressList_Impl ------------------------------------------------
 typedef ::std::vector< OUString > AddressList_Impl;

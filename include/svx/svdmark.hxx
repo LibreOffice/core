@@ -20,13 +20,13 @@
 #ifndef _SVDMARK_HXX
 #define _SVDMARK_HXX
 
-#include <vector>
-
-#include <tools/string.hxx>
-#include "svx/svxdllapi.h"
+#include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
 #include <svx/sdrobjectuser.hxx>
+#include <tools/solar.h>
 
 #include <set>
+#include <vector>
 
 class Rectangle;
 class SdrPage;

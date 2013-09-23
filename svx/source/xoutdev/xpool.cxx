@@ -18,7 +18,7 @@
  */
 
 #include <svx/xtable.hxx>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svxids.hrc>
@@ -29,7 +29,7 @@ XOutdevItemPool::XOutdevItemPool(
     sal_uInt16 nAttrStart,
     sal_uInt16 nAttrEnd,
     sal_Bool bLoadRefCounts)
-:   SfxItemPool(String("XOutdevItemPool", osl_getThreadTextEncoding()), nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
+:   SfxItemPool(OUString("XOutdevItemPool"), nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
 {
     // prepare some defaults
     const OUString aNullStr;

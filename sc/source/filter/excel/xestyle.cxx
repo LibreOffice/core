@@ -945,7 +945,7 @@ namespace {
 
 sal_uInt32 lclCalcHash( const XclFontData& rFontData )
 {
-    sal_uInt32 nHash = rFontData.maName.Len();
+    sal_uInt32 nHash = rFontData.maName.getLength();
     nHash += rFontData.maColor.GetColor() * 2;
     nHash += rFontData.mnWeight * 3;
     nHash += rFontData.mnCharSet * 5;
@@ -975,7 +975,7 @@ XclExpFont::XclExpFont( const XclExpRoot& rRoot,
     // hash value for faster comparison
     mnHash = lclCalcHash( maData );
     // record size
-    sal_Size nStrLen = maData.maName.Len();
+    sal_Int32 nStrLen = maData.maName.getLength();
     SetRecSize( ((GetBiff() == EXC_BIFF8) ? (nStrLen * 2 + 1) : nStrLen) + 15 );
 }
 
@@ -1003,7 +1003,7 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
     ::set_flag( nAttr, EXC_FONTATTR_OUTLINE, maData.mbOutline );
     ::set_flag( nAttr, EXC_FONTATTR_SHADOW, maData.mbShadow );
 
-    OSL_ENSURE( maData.maName.Len() < 256, "XclExpFont::WriteBody - font name too long" );
+    OSL_ENSURE( maData.maName.getLength() < 256, "XclExpFont::WriteBody - font name too long" );
     XclExpString aFontName;
     if( GetBiff() <= EXC_BIFF5 )
         aFontName.AssignByte( maData.maName, GetTextEncoding(), EXC_STR_8BITLENGTH );
@@ -1142,7 +1142,7 @@ void XclExpFontBuffer::SaveXml( XclExpXmlStream& rStrm )
 void XclExpFontBuffer::InitDefaultFonts()
 {
     XclFontData aFontData;
-    aFontData.maName.AssignAscii( "Arial" );
+    aFontData.maName = "Arial";
     aFontData.SetScFamily( FAMILY_DONTKNOW );
     aFontData.SetFontEncoding( ScfTools::GetSystemTextEncoding() );
     aFontData.SetScHeight( 200 );   // 200 twips = 10 pt

@@ -20,11 +20,11 @@
 #ifndef FORMULA_FORMULA_HELPER_HXX
 #define FORMULA_FORMULA_HELPER_HXX
 
-#include "formula/IFunctionDescription.hxx"
+#include <formula/IFunctionDescription.hxx>
+#include <formula/formuladllapi.h>
+#include <rtl/ustring.hxx>
 #include <vector>
-#include <tools/string.hxx>
 #include <memory>
-#include "formula/formuladllapi.h"
 
 class SvtSysLocale;
 class CharClass;

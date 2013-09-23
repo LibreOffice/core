@@ -19,14 +19,13 @@
 #ifndef _SFX_FRMDESCRHXX
 #define _SFX_FRMDESCRHXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <sfx2/sfxsids.hrc>
 #include <svl/poolitem.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
+#include <tools/urlobj.hxx>
 
 class SvStream;
 struct SfxFrameDescriptor_Impl;

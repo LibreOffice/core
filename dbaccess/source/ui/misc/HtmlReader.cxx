@@ -329,12 +329,12 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
         {
             case HTML_O_ALIGN:
             {
-                const String& rOptVal = rOption.GetString();
-                if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ))
+                const OUString& rOptVal = rOption.GetString();
+                if (rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ))
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
-                else if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_center ))
+                else if (rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ))
                     eVal = SVX_HOR_JUSTIFY_CENTER;
-                else if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_left ))
+                else if (rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ))
                     eVal = SVX_HOR_JUSTIFY_LEFT;
                 else
                     eVal = SVX_HOR_JUSTIFY_STANDARD;

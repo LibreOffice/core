@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>

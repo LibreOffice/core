@@ -188,7 +188,7 @@ XclFontData::XclFontData( const SvxFont& rFont )
 
 void XclFontData::Clear()
 {
-    maName.Erase();
+    maName = "";
     maStyle.Erase();
     maColor.SetColor( COL_AUTO );
     mnHeight = 0;
@@ -239,7 +239,7 @@ FontFamily XclFontData::GetScFamily( rtl_TextEncoding eDefTextEnc ) const
         default:
             eScFamily =
                 ((eDefTextEnc == RTL_TEXTENCODING_APPLE_ROMAN) &&
-                (maName.EqualsIgnoreCaseAscii( "Geneva" ) || maName.EqualsIgnoreCaseAscii( "Chicago" ))) ?
+                (maName.equalsIgnoreAsciiCase( "Geneva" ) || maName.equalsIgnoreAsciiCase( "Chicago" ))) ?
                 FAMILY_SWISS : FAMILY_DONTKNOW;
     }
     return eScFamily;

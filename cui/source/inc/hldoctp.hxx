@@ -42,7 +42,7 @@ private:
     FixedText           maFtFullURL;
     ImageButton         maBtBrowse;
 
-    String              maStrURL;
+    OUString            maStrURL;
 
     sal_Bool                mbMarkWndOpen;
 
@@ -59,11 +59,11 @@ private:
     enum EPathType { Type_Unknown, Type_Invalid,
                      Type_ExistsFile, Type_File,
                      Type_ExistsDir, Type_Dir };
-    EPathType GetPathType ( String& aStrPath );
+    EPathType GetPathType ( const OUString& rStrPath );
 
 protected:
     void FillDlgFields     ( String& aStrURL );
-    void GetCurentItemData ( String& aStrURL, String& aStrName,
+    void GetCurentItemData ( OUString& rStrURL, String& aStrName,
                              String& aStrIntName, String& aStrFrame,
                              SvxLinkInsertMode& eMode );
     virtual sal_Bool   ShouldOpenMarkWnd () {return mbMarkWndOpen;}

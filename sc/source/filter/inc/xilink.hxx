@@ -140,9 +140,9 @@ public:
 
     bool                HasFormulaTokens() const;
 
-    inline XclImpExtNameType GetType() const { return meType; }
-    inline const String& GetName() const { return maName; }
-    inline sal_uInt32   GetStorageId() const { return mnStorageId; }
+    XclImpExtNameType GetType() const { return meType; }
+    const OUString& GetName() const { return maName; }
+    sal_uInt32   GetStorageId() const { return mnStorageId; }
 
 private:
     typedef ::std::auto_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
@@ -151,7 +151,7 @@ private:
     XclImpCachedMatrixPtr mxDdeMatrix;      /// Cached results of the DDE link.
     MOper*              mpMOper;            /// Cached values for OLE link
     TokenArrayPtr       mxArray;            /// Formula tokens for external name.
-    String              maName;             /// The name of the external name.
+    OUString            maName;             /// The name of the external name.
     sal_uInt32          mnStorageId;        /// Storage ID for OLE object storages.
     XclImpExtNameType   meType;             /// Type of the external name.
 };

@@ -23,10 +23,10 @@
 #include <windows.h>
 #include <ddeml.h>
 
-#include <tools/string.hxx>
-#include <tools/shl.hxx>
 #include <boost/noncopyable.hpp>
+#include <rtl/ustring.hxx>
 #include <svl/svdde.hxx>
+#include <tools/shl.hxx>
 #include <vector>
 
 // ----------------

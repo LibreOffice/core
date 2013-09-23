@@ -58,6 +58,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

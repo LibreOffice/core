@@ -19,13 +19,12 @@
 #ifndef _LINKMGR_HXX
 #define _LINKMGR_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
-#include <tools/string.hxx>
-
-#include <vector>
 #include <set>
+#include <vector>
 
 class SfxObjectShell;
 class Graphic;

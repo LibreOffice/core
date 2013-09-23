@@ -35,7 +35,7 @@
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <unotools/pathoptions.hxx>
 #include <i18nlangtag/lang.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>

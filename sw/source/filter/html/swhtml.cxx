@@ -5097,15 +5097,15 @@ void SwHTMLParser::InsertLineBreak()
         {
             case HTML_O_CLEAR:
                 {
-                    const String &aClear = rOption.GetString();
-                    if( aClear.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_all ) )
+                    const OUString &rClear = rOption.GetString();
+                    if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_all ) )
                     {
                         bClearLeft = sal_True;
                         bClearRight = sal_True;
                     }
-                    else if( aClear.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_left ) )
+                    else if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ) )
                         bClearLeft = sal_True;
-                    else if( aClear.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) )
+                    else if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ) )
                         bClearRight = sal_True;
                 }
                 break;
@@ -5386,8 +5386,7 @@ void SwHTMLParser::InsertHorzRule()
 
 void SwHTMLParser::ParseMoreMetaOptions()
 {
-    String aName;
-    OUString aContent;
+    OUString aName, aContent;
     sal_Bool bHTTPEquiv = sal_False;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -5414,22 +5413,22 @@ void SwHTMLParser::ParseMoreMetaOptions()
     // nicht geaendert wurde. Deshalb genuegt es, auf Generator und
     // auf refresh abzufragen, um noch nicht verarbeitete Token zu finden,
     // denn das sind die einzigen, die die Dok-Info nicht modifizieren.
-    if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_generator ) ||
-        aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_refresh ) ||
-        aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) ||
-        aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
+    if( aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_generator ) ||
+        aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_refresh ) ||
+        aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_content_type ) ||
+        aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
         return;
 
     aContent = comphelper::string::remove(aContent, '\r');
     aContent = comphelper::string::remove(aContent, '\n');
 
-    if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_sdendnote ) )
+    if( aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_sdendnote ) )
     {
         FillEndNoteInfo( aContent );
         return;
     }
 
-    if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_sdfootnote ) )
+    if( aName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_sdfootnote ) )
     {
         FillFootNoteInfo( aContent );
         return;

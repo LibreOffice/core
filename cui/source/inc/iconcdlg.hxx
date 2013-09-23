@@ -19,15 +19,15 @@
 #ifndef _ICCDLG_HXX
 #define _ICCDLG_HXX
 
+#include <rtl/ustring.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svtools/ivctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>
-#include <svtools/ivctrl.hxx>
-#include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
-#include <tools/string.hxx>
 #include <vector>
 
 #define CTRLS_OFFSET        3

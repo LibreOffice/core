@@ -20,8 +20,9 @@
 #ifndef SW_UNDO_OVERWRITE_HXX
 #define SW_UNDO_OVERWRITE_HXX
 
-#include <undobj.hxx>
 #include <com/sun/star/uno/Sequence.h>
+#include <tools/string.hxx>
+#include <undobj.hxx>
 
 class SwRedlineSaveDatas;
 class SwTxtNode;

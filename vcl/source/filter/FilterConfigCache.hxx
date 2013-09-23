@@ -20,12 +20,11 @@
 #ifndef _FILTER_CONFIG_CACHE_HXX_
 #define _FILTER_CONFIG_CACHE_HXX_
 
-#include <tools/string.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-
+#include <rtl/ustring.hxx>
 #include <vector>
 
 /** Cache to keep list of graphic filters + the filters themselves. */

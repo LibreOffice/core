@@ -124,54 +124,6 @@ STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
     return *this;
 }
 
-static sal_Int32 ImplStringICompareWithoutZero( const STRCODE* pStr1, const STRCODE* pStr2,
-                                                sal_Int32 nCount )
-{
-    sal_Int32   nRet = 0;
-    STRCODE     c1;
-    STRCODE     c2;
-    do
-    {
-        if ( !nCount )
-            break;
-
-        // convert if char is between 'A' and 'Z'
-        c1 = *pStr1;
-        c2 = *pStr2;
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = ((sal_Int32)((STRCODEU)c1))-((sal_Int32)((STRCODEU)c2));
-
-        ++pStr1,
-        ++pStr2,
-        --nCount;
-    }
-    while ( nRet == 0 );
-
-    return nRet;
-}
-
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    // Are there enough codes for comparing?
-    if ( nIndex > mpData->mnLen )
-        return (rStr.mpData->mnLen == 0);
-    sal_Int32 nMaxLen = mpData->mnLen-nIndex;
-    if ( nMaxLen < nLen )
-    {
-        if ( rStr.mpData->mnLen != nMaxLen )
-            return sal_False;
-        nLen = static_cast< xub_StrLen >(nMaxLen);
-    }
-
-    return (ImplStringICompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
@@ -236,21 +188,6 @@ sal_Bool STRING::Equals( const STRING& rStr ) const
         return sal_False;
 
     return (ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
-}
-
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    if ( mpData == rStr.mpData )
-        return sal_True;
-
-    if ( mpData->mnLen != rStr.mpData->mnLen )
-        return sal_False;
-
-    // compare string while ignoring case
-    return (ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
 }
 
 sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const

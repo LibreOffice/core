@@ -106,9 +106,9 @@ void padmin::FindFiles( const OUString& rDirectory, ::std::list< String >& rResu
                     OUString aSuffix = rSuffixes.getToken( nToken, ';' );
                     if( aFileName.Len() > aSuffix.getLength()+1 )
                     {
-                        String aExtension = aFileName.Copy( aFileName.Len()-aSuffix.getLength() );
+                        OUString aExtension = aFileName.Copy( aFileName.Len()-aSuffix.getLength() );
                         if( aFileName.GetChar( aFileName.Len()-aSuffix.getLength()-1 ) == '.' &&
-                            aExtension.EqualsIgnoreCaseAscii( aSuffix ) )
+                            aExtension.equalsIgnoreAsciiCase( aSuffix ) )
                         {
                             rResult.push_back( aFileName );
                             break;

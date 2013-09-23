@@ -19,12 +19,12 @@
 #ifndef _ZFORSCAN_HXX
 #define _ZFORSCAN_HXX
 
-#include <tools/string.hxx>
-#include <tools/date.hxx>
 #include <i18nlangtag/lang.h>
-#include <tools/color.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/nfkeytab.hxx>
 #include <svl/nfsymbol.hxx>
+#include <tools/color.hxx>
+#include <tools/date.hxx>
 
 class SvNumberFormatter;
 struct ImpSvNumberformatInfo;

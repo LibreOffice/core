@@ -153,11 +153,11 @@ void SwFldDokPage::Reset(const SfxItemSet& )
 
     if( !IsRefresh() )
     {
-        String sUserData = GetUserData();
-        if( sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1 ))
+        OUString sUserData = GetUserData();
+        if (sUserData.getToken(0, ';').equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            String sVal = sUserData.GetToken(1, ';');
-            sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.ToInt32());
+            OUString sVal = sUserData.getToken(1, ';');
+            sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.toInt32());
             if(nVal != USHRT_MAX)
             {
                 for(sal_uInt16 i = 0; i < m_pTypeLB->GetEntryCount(); i++)

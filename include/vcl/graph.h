@@ -20,9 +20,9 @@
 #ifndef _SV_GRAPH_H
 #define _SV_GRAPH_H
 
-#include <vcl/dllapi.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <vcl/dllapi.h>
 
 // ---------------
 // - GraphicType -

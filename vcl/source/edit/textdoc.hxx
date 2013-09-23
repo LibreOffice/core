@@ -20,10 +20,9 @@
 #ifndef _TEXTDOC_HXX
 #define _TEXTDOC_HXX
 
+#include <rtl/ustring.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
-
-#include <tools/string.hxx>
 #include <vector>
 
 class TextCharAttribs : public std::vector<TextCharAttrib*> {

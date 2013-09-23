@@ -20,7 +20,6 @@
 #define _SVX_PAGEITEM_HXX
 
 #include <svl/poolitem.hxx>
-#include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 
 

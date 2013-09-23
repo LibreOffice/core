@@ -19,12 +19,10 @@
 #ifndef _PSPRINT_STRHELPER_HXX_
 #define _PSPRINT_STRHELPER_HXX_
 
-#include "vcl/dllapi.h"
-
-#include <tools/string.hxx>
-#include <rtl/math.hxx>
-
 #include <cstring>
+#include <rtl/math.hxx>
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
 
 namespace psp
 {

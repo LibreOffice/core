@@ -19,9 +19,9 @@
 #ifndef _SVX_CSCOITEM_HXX
 #define _SVX_CSCOITEM_HXX
 
-#include <tools/string.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editengdllapi.h>
+#include <rtl/ustring.hxx>
 
 // class SvxCharSetColorItem ---------------------------------------------
 

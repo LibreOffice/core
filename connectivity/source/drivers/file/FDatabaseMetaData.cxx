@@ -27,6 +27,7 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include "file/FDriver.hxx"
 #include "file/FTable.hxx"

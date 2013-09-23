@@ -20,12 +20,10 @@
 #ifndef EE_SVXSWAFOPT_HXX
 #define EE_SVXSWAFOPT_HXX
 
+#include <editeng/editengdllapi.h>
 #include <o3tl/sorted_vector.hxx>
-
-#include <tools/string.hxx>
-
+#include <rtl/ustring.hxx>
 #include <vcl/font.hxx>
-#include "editeng/editengdllapi.h"
 
 class SmartTagMgr;
 

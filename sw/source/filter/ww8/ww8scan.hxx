@@ -152,7 +152,7 @@ class  WW8PLCFx_PCD;
  attention: the *extra data* of each string are SKIPPED and ignored
  */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
-    sal_uInt16 nExtraLen, rtl_TextEncoding eCS, ::std::vector<String> &rArray,
+    sal_uInt16 nExtraLen, rtl_TextEncoding eCS, ::std::vector<OUString> &rArray,
     ::std::vector<ww::bytes>* pExtraArray = 0, ::std::vector<String>* pValueArray = 0);
 
 struct WW8FieldDesc
@@ -713,7 +713,7 @@ class WW8PLCFx_Book : public WW8PLCFx
 {
 private:
     WW8PLCFspecial* pBook[2];           // Start and End Position
-    ::std::vector<String> aBookNames;   // Name
+    ::std::vector<OUString> aBookNames;   // Name
     eBookStatus* pStatus;
     long nIMax;                         // Number of Booknotes
     sal_uInt16 nIsEnd;
@@ -735,7 +735,7 @@ public:
     virtual WW8_FC Where();
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen );
     virtual void advance();
-    const String* GetName() const;
+    const OUString* GetName() const;
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? WW8_CP_MAX : pBook[0]->Where(); }
     long GetLen() const;

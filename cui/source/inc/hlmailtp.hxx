@@ -52,7 +52,7 @@ private:
 
 protected:
     virtual void FillDlgFields     ( String& aStrURL );
-    virtual void GetCurentItemData ( String& aStrURL, String& aStrName,
+    virtual void GetCurentItemData ( OUString& rStrURL, String& aStrName,
                                      String& aStrIntName, String& aStrFrame,
                                      SvxLinkInsertMode& eMode );
 

@@ -19,11 +19,11 @@
 #ifndef _SFXDOCTEMPL_HXX
 #define _SFXDOCTEMPL_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+#include <sfx2/dllapi.h>
 #include <tools/ref.hxx>
-#include <tools/string.hxx>
 
 // CLASS -----------------------------------------------------------------
 

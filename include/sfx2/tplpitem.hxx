@@ -19,12 +19,12 @@
 #ifndef _SFX_TPLPITEM_HXX
 #define _SFX_TPLPITEM_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include <tools/string.hxx>
-#include <tools/rtti.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <svl/flagitem.hxx>
 #include <svl/style.hrc>
+#include <tools/rtti.hxx>
 
 class SFX2_DLLPUBLIC SfxTemplateItem: public SfxFlagItem
 {

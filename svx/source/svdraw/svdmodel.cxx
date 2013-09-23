@@ -31,7 +31,6 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <tools/string.hxx>
 #include <svl/whiter.hxx>
 #include <svx/xit.hxx>
 #include <svx/xbtmpit.hxx>

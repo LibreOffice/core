@@ -20,13 +20,13 @@
 #ifndef SVX_DBREGISTER_HXX
 #define SVX_DBREGISTER_HXX
 
-#include "optpath.hxx"
-#include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>
-#include <svl/poolitem.hxx>
-#include "ControlFocusHelper.hxx"
+#include <rtl/ustring.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/simptabl.hxx>
+#include "optpath.hxx"
+#include "ControlFocusHelper.hxx"
 
 class SvTreeListEntry;
 namespace svx

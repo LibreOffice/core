@@ -21,7 +21,7 @@
 #define SC_LNKTRANS_HXX
 
 #include <svtools/transfer.hxx>
-
+#include <tools/string.hxx>
 
 class ScLinkTransferObj : public TransferableHelper
 {

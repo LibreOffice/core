@@ -22,7 +22,6 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sfx2/sfx.hrc"
-#include <tools/string.hxx>
 #include <svl/hint.hxx>
 #include <unotools/eventcfg.hxx>
 #include <rtl/ustring.hxx>

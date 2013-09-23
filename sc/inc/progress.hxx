@@ -21,6 +21,7 @@
 #define SC_PROGRESS_HXX
 
 #include <sfx2/progress.hxx>
+#include <tools/string.hxx>
 #include "scdllapi.h"
 
 class ScDocument;

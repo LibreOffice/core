@@ -22,7 +22,6 @@
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

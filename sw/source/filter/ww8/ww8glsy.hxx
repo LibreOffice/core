@@ -70,7 +70,7 @@ private:
     sal_uInt16 nStrings;
 
     bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
-        const ::std::vector<String>& rStrings,
+        const ::std::vector<OUString>& rStrings,
         const ::std::vector<ww::bytes>& rExtra);
     bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
 

@@ -23,11 +23,10 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 
-#include "tools/string.hxx"
-#include "tools/stream.hxx"
-#include "rtl/string.hxx"
-
-#include "vcl/dllapi.h"
+#include <tools/stream.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
 
 #include "com/sun/star/lang/Locale.hpp"
 

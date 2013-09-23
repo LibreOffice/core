@@ -572,7 +572,7 @@ void OSelectionBrowseBox::clearEntryFunctionField(const String& _sFieldName,OTab
 {
     if ( isFieldNameAsterix( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy()) )
     {
-        String sFunctionName;
+        OUString sFunctionName;
         GetFunctionName(SQL_TOKEN_COUNT,sFunctionName);
         String sOldLocalizedFunctionName = _pEntry->GetFunction();
         if ( !sOldLocalizedFunctionName.Equals(sFunctionName) || _pEntry->IsGroupBy() )
@@ -800,7 +800,7 @@ sal_Bool OSelectionBrowseBox::saveField(String& _sFieldName ,OTableFieldDescRef&
             // do we have a aggregate function and only a function?
             else if ( SQL_ISRULE(pColumnRef,general_set_fct) )
             {
-                String sLocalizedFunctionName;
+                OUString sLocalizedFunctionName;
                 if ( GetFunctionName(pColumnRef->getChild(0)->getTokenID(),sLocalizedFunctionName) )
                 {
                     String sOldLocalizedFunctionName = aSelEntry->GetFunction();
@@ -1052,9 +1052,9 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     sal_uInt16 nPos = m_pFunctionCell->GetSelectEntryPos();
                     // these functions are only available in CORE
                     String sFunctionName        = m_pFunctionCell->GetEntry(nPos);
-                    String sGroupFunctionName   = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
+                    OUString sGroupFunctionName   = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
                     sal_Bool bGroupBy = sal_False;
-                    if ( sGroupFunctionName.Equals(sFunctionName) ) // check if the function name is GROUP
+                    if ( sGroupFunctionName.equals(sFunctionName) ) // check if the function name is GROUP
                     {
                         bGroupBy = sal_True;
 
@@ -1555,7 +1555,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
 
     if ( pEntry->GetFunctionType() & (FKT_AGGREGATE) )
     {
-        String sFunctionName = pEntry->GetFunction();
+        OUString sFunctionName = pEntry->GetFunction();
         if ( GetFunctionName(sal_uInt32(-1),sFunctionName) )
             pEntry->SetFunction(sFunctionName);
     }
@@ -2211,7 +2211,7 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
     return aText;
 }
 
-sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,String& rFkt)
+sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     sal_Bool bErg=sal_True;
@@ -2268,7 +2268,7 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,Strin
                 xub_StrLen i;
                 for ( i = 0; i < nCount-1; i++) // grouping is not counted
                 {
-                    if(rFkt.EqualsIgnoreCaseAscii(m_aFunctionStrings.GetToken(i)))
+                    if(rFkt.equalsIgnoreAsciiCase(m_aFunctionStrings.GetToken(i)))
                     {
                         rFkt = m_aFunctionStrings.GetToken(i);
                         break;
@@ -2340,16 +2340,16 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             break;
         case BROW_FUNCTION_ROW:
         {
-            String sGroupFunctionName = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
+            OUString sGroupFunctionName = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
             pEntry->SetFunction(strNewText);
             // first reset this two member
             sal_Int32 nFunctionType = pEntry->GetFunctionType();
             nFunctionType &= ~FKT_AGGREGATE;
             pEntry->SetFunctionType(nFunctionType);
-            if ( pEntry->IsGroupBy() && !sGroupFunctionName.EqualsIgnoreCaseAscii(strNewText) )
+            if ( pEntry->IsGroupBy() && !sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
                 pEntry->SetGroupBy(sal_False);
 
-            if ( sGroupFunctionName.EqualsIgnoreCaseAscii(strNewText) )
+            if ( sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
                 pEntry->SetGroupBy(sal_True);
             else if ( strNewText.Len() )
             {

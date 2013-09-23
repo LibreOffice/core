@@ -102,10 +102,10 @@ void SwHTMLParser::NewDivision( int nToken )
             break;
         case HTML_O_TYPE:
             {
-                const String& rType = rOption.GetString();
-                if( rType.EqualsIgnoreCaseAscii( "HEADER" ) )
+                const OUString& rType = rOption.GetString();
+                if( rType.equalsIgnoreAsciiCase( "HEADER" ) )
                     bHeader = sal_True;
-                else if( rType.EqualsIgnoreCaseAscii( "FOOTER" ) )
+                else if( rType.equalsIgnoreAsciiCase( "FOOTER" ) )
                     bFooter = sal_True;
             }
         }

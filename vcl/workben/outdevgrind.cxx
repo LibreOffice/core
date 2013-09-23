@@ -20,6 +20,7 @@
 
 // bootstrap stuff
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -40,7 +41,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
-#include <tools/string.hxx>
 
 #include <osl/time.h>
 

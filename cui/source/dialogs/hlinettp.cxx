@@ -171,11 +171,11 @@ void SvxHyperlinkInternetTp::setFTPUser(const String& rUser, const String& rPass
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::GetCurentItemData ( String& aStrURL, String& aStrName,
+void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
                                                  String& aStrIntName, String& aStrFrame,
                                                  SvxLinkInsertMode& eMode )
 {
-    aStrURL = CreateAbsoluteURL();
+    rStrURL = CreateAbsoluteURL();
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
@@ -262,8 +262,8 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
 {
-    String aStrLogin ( maEdLogin.GetText() );
-    if ( aStrLogin.EqualsIgnoreCaseAscii( sAnonymous ) )
+    OUString aStrLogin ( maEdLogin.GetText() );
+    if ( aStrLogin.equalsIgnoreAsciiCase( sAnonymous ) )
     {
         maCbAnonymous.Check();
         ClickAnonymousHdl_Impl(NULL);
@@ -492,11 +492,11 @@ void SvxHyperlinkInternetTp::SetOnlineMode( sal_Bool /*bEnable*/ )
     // State of target-button in subject to the current url-string
     // ( Can't display any targets in an document, if there is no
     //   valid url to a document )
-    String aStrCurrentTarget(comphelper::string::stripEnd(maCbbTarget.GetText(), ' '));
+    OUString aStrCurrentTarget(comphelper::string::stripEnd(maCbbTarget.GetText(), ' '));
 
-    if( aStrCurrentTarget == aEmptyStr                ||
-        aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPScheme )  ||
-        aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPSScheme ) )
+    if( aStrCurrentTarget.isEmpty() ||
+        aStrCurrentTarget.equalsIgnoreAsciiCase( sHTTPScheme ) ||
+        aStrCurrentTarget.equalsIgnoreAsciiCase( sHTTPSScheme ) )
         maBtTarget.Enable( sal_False );
     else
         maBtTarget.Enable( sal_True );

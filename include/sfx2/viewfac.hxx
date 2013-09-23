@@ -19,9 +19,9 @@
 #ifndef _VIEWFAC_HXX
 #define _VIEWFAC_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
 #include <tools/resid.hxx>
 
 class SfxViewFrame;

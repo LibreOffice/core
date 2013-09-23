@@ -19,8 +19,12 @@
 #ifndef _SFXMNUITEM_HXX
 #define _SFXMNUITEM_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sfx2/ctrlitem.hxx>
+#include <sfx2/dllapi.h>
 
 class SfxVirtualMenu;
 class SfxBindings;
@@ -30,11 +34,6 @@ class PopupMenu;
 class SfxUnoMenuControl;
 class SfxUnoControllerItem;
 struct SfxMenuCtrlFactory;
-#include <tools/string.hxx>
-#include <sfx2/ctrlitem.hxx>
-
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/util/URL.hpp>
 
 class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
 {

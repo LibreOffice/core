@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/string.hxx>
 #include <textdoc.hxx>
-
 #include <stdlib.h>
-
 
 // compare function called by QuickSort
 static bool CompareStart( const TextCharAttrib* pFirst, const TextCharAttrib* pSecond )

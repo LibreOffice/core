@@ -19,14 +19,12 @@
 #ifndef _OUTLINER_HXX
 #define _OUTLINER_HXX
 
-#include <tools/gen.hxx>
-#include <tools/string.hxx>
-
-#include <svl/brdcst.hxx>
-
 #include <editeng/editdata.hxx>
 #include <editeng/numitem.hxx>
 #include <i18nlangtag/lang.h>
+#include <rtl/ustring.hxx>
+#include <svl/brdcst.hxx>
+#include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <vcl/graph.hxx>

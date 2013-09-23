@@ -236,7 +236,7 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
 
         String        aTmp( cBuf, pLotusRoot->eCharsetQ );
 
-        ScfTools::ConvertToScDefinedName( aTmp );
+        aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
         pLotusRoot->pRangeNames->Append( pRange, aTmp );
     }
@@ -275,7 +275,7 @@ void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
             strcpy( cBuf, cPuffer );           // #100211# - checked
 
         String    aTmp( cBuf, pLotusRoot->eCharsetQ );
-        ScfTools::ConvertToScDefinedName( aTmp );
+        aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
         pLotusRoot->pRangeNames->Append( pRange, aTmp );
     }

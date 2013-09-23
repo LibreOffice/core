@@ -94,12 +94,12 @@ sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator
     {
         if (m_bCaseSensitiv)
         {
-            if (_rPosition->aTableName.Equals(_rName))
+            if (_rPosition->aTableName.equals(_rName))
                 return sal_True;
         }
         else
         {
-            if (_rPosition->aTableName.EqualsIgnoreCaseAscii(_rName))
+            if (_rPosition->aTableName.equalsIgnoreAsciiCase(_rName))
                 return sal_True;
         }
     }
@@ -127,7 +127,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
             ++aSearch, ++nPos
         )
     {
-        if ( m_bCaseSensitiv ? aSearch->GetIndexFileName().Equals(_rName) : aSearch->GetIndexFileName().EqualsIgnoreCaseAscii(_rName) )
+        if ( m_bCaseSensitiv ? aSearch->GetIndexFileName().equals(_rName) : aSearch->GetIndexFileName().equalsIgnoreAsciiCase(_rName) )
         {
             aReturn = *aSearch;
 
@@ -425,12 +425,12 @@ void ODbaseIndexDialog::SetCtrls()
     checkButtons();
 }
 
-void OTableInfo::WriteInfFile( const String& rDSN ) const
+void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 {
     // open INF file
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
-    String aDsn = rDSN;
+    OUString aDsn = rDSN;
     {
         SvtPathOptions aPathOptions;
         aDsn = aPathOptions.SubstituteVariable(aDsn);

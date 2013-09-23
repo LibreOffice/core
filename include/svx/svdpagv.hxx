@@ -21,13 +21,13 @@
 #define _SVDPAGV_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <tools/string.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svdhlpln.hxx>
-#include <cppuhelper/implbase4.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <cppuhelper/implbase3.hxx>
 #include <vector>

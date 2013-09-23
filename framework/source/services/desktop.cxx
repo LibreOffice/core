@@ -1941,7 +1941,6 @@ sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::uno::XComponentCo
           );
 }
 
-//*****************************************************************************************************************
 //  We work with valid listener only.
 sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
@@ -1951,7 +1950,6 @@ sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang:
           );
 }
 
-//*****************************************************************************************************************
 //  We work with valid listener only.
 sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {

@@ -23,6 +23,7 @@
 #include <undobj.hxx>
 #include <memory>
 #include <svl/itemset.hxx>
+#include <tools/string.hxx>
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <set>

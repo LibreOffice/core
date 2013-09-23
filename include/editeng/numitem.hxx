@@ -19,8 +19,8 @@
 #ifndef _SVX_NUMITEM_HXX
 #define _SVX_NUMITEM_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <tools/gen.hxx>

@@ -21,11 +21,11 @@
 
 // class SvxMacroItem ----------------------------------------------------
 
-#include "svl/svldllapi.h"
+#include <rtl/ustring.hxx>
+#include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <map>
 
 class SvStream;

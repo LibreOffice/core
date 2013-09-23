@@ -19,11 +19,11 @@
 #ifndef _SVX_HLNKITEM_HXX
 #define _SVX_HLNKITEM_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #define HYPERDLG_EVENT_MOUSEOVER_OBJECT     0x0001
 #define HYPERDLG_EVENT_MOUSECLICK_OBJECT    0x0002

@@ -19,13 +19,11 @@
 #ifndef _SFXMSGPOOL_HXX
 #define _SFXMSGPOOL_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
-
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+#include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
-#include <tools/string.hxx>
-
 #include <string>
 #include <vector>
 

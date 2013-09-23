@@ -20,8 +20,8 @@
 #ifndef _SVDFPPT_HXX
 #define _SVDFPPT_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <svx/svdobj.hxx>

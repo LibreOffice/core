@@ -35,14 +35,12 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <cppuhelper/weak.hxx>
+#include <rtl/ustring.hxx>
+#include <svl/lstner.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
-#include <svl/lstner.hxx>
-
-#include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
-
 #include <vector>
 
 class SvKeyValueIterator;
@@ -78,17 +76,6 @@ public:
                                    StreamMode nOpenMode,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
-                        //TODO: the next, non-defined overload is only there to
-                        // detect uses of the above (String, StreamMode, etc.)
-                        // overload from when it still had an additional third
-                        // parameter sal_Bool bDirect, where now a leftover
-                        // "false" or "sal_False" could be mistaken for a null
-                        // pointer argument for the pFilter parameter; it can be
-                        // removed once we are confident all old uses of the
-                        // original overload have been adapted (in platform
-                        // specific code etc.):
-                        SfxMedium(String const &, StreamMode, void *)
-                            SAL_DELETED_FUNCTION;
 
                         /**
                          * @param pSet does NOT take ownership

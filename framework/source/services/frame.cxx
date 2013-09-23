@@ -3255,7 +3255,6 @@ sal_Bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
             );
 }
 
-//*****************************************************************************************************************
 sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 {
     return  (

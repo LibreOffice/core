@@ -218,16 +218,16 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
 |*
 |************************************************************************/
 
-void SvxHyperlinkNewDocTp::GetCurentItemData ( String& aStrURL, String& aStrName,
+void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
                                                String& aStrIntName, String& aStrFrame,
                                                SvxLinkInsertMode& eMode )
 {
     // get data from dialog-controls
-    aStrURL = maCbbPath.GetText();
+    rStrURL = maCbbPath.GetText();
     INetURLObject aURL;
-    if ( ImplGetURLObject( aStrURL, maCbbPath.GetBaseURL(), aURL ) )
+    if ( ImplGetURLObject( rStrURL, maCbbPath.GetBaseURL(), aURL ) )
     {
-        aStrURL     = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        rStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );

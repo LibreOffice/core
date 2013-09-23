@@ -23,14 +23,14 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <limits.h>
-
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <osl/thread.h>
+#include <rtl/bootstrap.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/urlobj.hxx>
 #include "vcl/helper.hxx"
 #include "vcl/ppdparser.hxx"
-#include "tools/string.hxx"
-#include "tools/urlobj.hxx"
-#include "osl/file.hxx"
-#include "osl/process.h"
-#include "rtl/bootstrap.hxx"
 
 using ::rtl::Bootstrap;
 

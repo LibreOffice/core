@@ -20,12 +20,11 @@
 #ifndef _SVDETC_HXX
 #define _SVDETC_HXX
 
-#include <tools/string.hxx>
-
-#include <vcl/outdev.hxx>
-#include <tools/shl.hxx>
+#include <rtl/ustring.hxx>
 #include <editeng/outliner.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
+#include <tools/shl.hxx>
+#include <vcl/outdev.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

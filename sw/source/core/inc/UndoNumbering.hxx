@@ -23,6 +23,7 @@
 #include <vector>
 #include <undobj.hxx>
 #include <boost/shared_ptr.hpp>
+#include <tools/string.hxx>
 #include <numrule.hxx>
 
 //----------- Undo for Numbering -------------------------------------

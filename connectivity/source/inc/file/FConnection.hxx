@@ -23,18 +23,16 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "connectivity/OSubComponent.hxx"
-#ifndef _MAP_
-#include <map>
-#endif
 #include "connectivity/CommonTools.hxx"
 #include "OTypeInfo.hxx"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include "connectivity/sqlparse.hxx"
 #include "connectivity/sqliterator.hxx"
 #include "TConnection.hxx"
 #include "file/filedllapi.hxx"
+#include <map>
 
 namespace connectivity
 {

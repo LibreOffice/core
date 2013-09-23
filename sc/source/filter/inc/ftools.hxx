@@ -158,7 +158,7 @@ public:
         @descr  Defined names in Calc may contain letters, digits (*), underscores, periods (*),
         colons (*), question marks, and dollar signs.
         (*) = not allowed at first position. */
-    static void         ConvertToScDefinedName( String& rName );
+    static OUString  ConvertToScDefinedName( const OUString& rName );
 
 // *** streams and storages *** -----------------------------------------------
 
@@ -250,7 +250,7 @@ public:
         @param rSource  The string to be determined.
         @param rName  The HTML table name.
         @return  true, if conversion was successful. */
-    static bool         GetHTMLNameFromName( const String& rSource, OUString& rName );
+    static bool         GetHTMLNameFromName( const OUString& rSource, OUString& rName );
 
 private:
     /** Returns the prefix for table index names. */

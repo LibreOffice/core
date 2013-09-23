@@ -19,22 +19,21 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #define _SFX_DOCFILT_HACK_HXX
 
-#include <sal/config.h>
-#include <sfx2/dllapi.h>
-#include <sal/types.h>
-#include <tools/solar.h>
-#include <tools/string.hxx>
 #include <com/sun/star/plugin/PluginDescription.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <comphelper/documentconstants.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+#include <sfx2/dllapi.h>
+#include <sfx2/sfxdefs.hxx>
+#include <tools/solar.h>
 #include <tools/wldcrd.hxx>
 
-#include <comphelper/documentconstants.hxx>
 #define SFX_FILTER_STARTPRESENTATION 0x20000000L
-
-#include <sfx2/sfxdefs.hxx>
 
 class SfxFilterContainer;
 class SotStorage;

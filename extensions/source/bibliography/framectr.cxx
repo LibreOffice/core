@@ -874,7 +874,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         BibStatusDispatch *pObj = &aStatusListeners[n];
-        if(COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/MenuFilter"))
+        if (pObj->aURL.Path == "Bib/MenuFilter")
         {
             FeatureStateEvent  aEvent;
             aEvent.FeatureURL = pObj->aURL;
@@ -889,7 +889,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             pObj->xListener->statusChanged( aEvent );
             bMenuFilter=sal_True;
         }
-        else if(COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/query"))
+        else if (pObj->aURL.Path == "Bib/query")
         {
             FeatureStateEvent  aEvent;
             aEvent.FeatureURL = pObj->aURL;

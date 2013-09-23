@@ -20,9 +20,9 @@
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #define _VCL_CONTROLLAYOUT_HXX
 
-#include <vector>
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
+#include <vector>
 #include <vcl/dllapi.h>
 
 class Control;

@@ -56,8 +56,8 @@
 
 #include <svl/stritem.hxx>
 
-#include <tools/string.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <drwlayer.hxx>
@@ -321,7 +321,7 @@ void ImportExcel8::ReadBasic( void )
             rFilterOpt.IsLoadExcelBasicExecutable() )
         {
             // see if we have the XCB stream
-            SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "XCB" ) ), STREAM_STD_READ | STREAM_NOCREATE  );
+            SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( OUString("XCB"), STREAM_STD_READ | STREAM_NOCREATE  );
             if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
             {
                 ScCTBWrapper wrapper;

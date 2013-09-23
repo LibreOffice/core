@@ -287,7 +287,7 @@ class SvxFont;
  */
 struct XclFontData
 {
-    String              maName;         /// Font name.
+    OUString            maName;         /// Font name.
     String              maStyle;        /// String with styles (bold, italic).
     Color               maColor;        /// Font color.
     sal_uInt16          mnHeight;       /// Font height in twips (1/20 of a point).

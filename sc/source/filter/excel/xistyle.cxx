@@ -300,7 +300,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
 
 // Font item
     // #i36997# do not set default Tahoma font from notes
-    bool bDefNoteFont = (eType == EXC_FONTITEM_NOTE) && (maData.maName.EqualsIgnoreCaseAscii( "Tahoma" ));
+    bool bDefNoteFont = (eType == EXC_FONTITEM_NOTE) && (maData.maName.equalsIgnoreAsciiCase( "Tahoma" ));
     if( mbFontNameUsed && !bDefNoteFont )
     {
         rtl_TextEncoding eFontEnc = maData.GetFontEncoding();
@@ -499,12 +499,12 @@ XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
         case EXC_BIFF3:
         case EXC_BIFF4:
         case EXC_BIFF5:
-            aCtrlFontData.maName.AssignAscii( "Helv" );
+            aCtrlFontData.maName = "Helv";
             aCtrlFontData.mnHeight = 160;
             aCtrlFontData.mnWeight = EXC_FONTWGHT_BOLD;
         break;
         case EXC_BIFF8:
-            aCtrlFontData.maName.AssignAscii( "Tahoma" );
+            aCtrlFontData.maName = "Tahoma";
             aCtrlFontData.mnHeight = 160;
             aCtrlFontData.mnWeight = EXC_FONTWGHT_NORMAL;
         break;
@@ -520,7 +520,7 @@ void XclImpFontBuffer::Initialize()
 
     // application font for column width calculation, later filled with first font from font list
     XclFontData aAppFontData;
-    aAppFontData.maName.AssignAscii( "Arial" );
+    aAppFontData.maName = "Arial";
     aAppFontData.mnHeight = 200;
     aAppFontData.mnWeight = EXC_FONTWGHT_NORMAL;
     UpdateAppFont( aAppFontData, false );

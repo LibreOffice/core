@@ -29,8 +29,8 @@
 #include <vector>
 
 #include <comphelper/solarmutex.hxx>
+#include <rtl/ustring.hxx>
 #include <osl/thread.hxx>
-#include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>

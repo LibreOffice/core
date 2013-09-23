@@ -20,9 +20,9 @@
 #ifndef _SV_FONT_HXX
 #define _SV_FONT_HXX
 
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
-#include <tools/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>

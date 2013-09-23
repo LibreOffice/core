@@ -22,24 +22,24 @@
 
 #include <memory>
 #include <typeinfo>
-#include <cppuhelper/weakref.hxx>
-#include <vcl/mapmod.hxx>
-#include <tools/string.hxx>
-#include <tools/weakbase.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/lstner.hxx>
-#include <vcl/timer.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx> // fuer SdrLayerID
 #include <svx/svdglue.hxx> // Klebepunkte
 #include <svx/xdash.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xenum.hxx>
-#include <vcl/bitmapex.hxx>
 #include <svx/sdrobjectuser.hxx>
-#include "svx/svxdllapi.h"
-#include "svx/shapeproperty.hxx"
-#include <svl/poolitem.hxx>
+#include <svx/svxdllapi.h>
+#include <svx/shapeproperty.hxx>
+#include <tools/weakbase.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/timer.hxx>
 
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>

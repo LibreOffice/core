@@ -20,7 +20,7 @@
 #ifndef _VCL_WMADAPTOR_HXX_
 #define _VCL_WMADAPTOR_HXX_
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #ifndef _PREX_H
 #include <prex.h>

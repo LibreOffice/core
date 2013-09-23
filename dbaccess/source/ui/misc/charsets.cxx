@@ -35,7 +35,7 @@ namespace dbaui
     {
         {
             LocalResourceAccess aCharsetStrings( RSC_CHARSETS, RSC_RESOURCE );
-            m_aSystemDisplayName = String( ModuleRes( 1 ) );
+            m_aSystemDisplayName = ModuleRes( 1 ).toString();
         }
     }
 

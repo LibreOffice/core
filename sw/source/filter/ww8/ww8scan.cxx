@@ -3787,7 +3787,7 @@ bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 
 /*  to be optimized like this:    */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
-    sal_uInt16 nExtraLen, rtl_TextEncoding eCS, std::vector<String> &rArray,
+    sal_uInt16 nExtraLen, rtl_TextEncoding eCS, std::vector<OUString> &rArray,
     std::vector<ww::bytes>* pExtraArray, ::std::vector<String>* pValueArray)
 {
     if (nLen==0)     // Handle Empty STTBF
@@ -3879,7 +3879,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     rArray.push_back(OStringToOUString(aTmp, eCS));
                 }
                 else
-                    rArray.push_back(aEmptyStr);
+                    rArray.push_back(OUString());
 
                 // Skip the extra data (for bVer67 versions this must come from
                 // external knowledge)
@@ -4112,7 +4112,7 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
         }
         while (i < pBook[0]->GetIMax());
     }
-    return bFound ? aBookNames[i] : aEmptyStr;
+    return bFound ? aBookNames[i] : OUString();
 }
 
 OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
@@ -4156,9 +4156,9 @@ bool WW8PLCFx_Book::MapName(OUString& rName)
     return bFound;
 }
 
-const String* WW8PLCFx_Book::GetName() const
+const OUString* WW8PLCFx_Book::GetName() const
 {
-    const String *pRet = 0;
+    const OUString *pRet = 0;
     if (!nIsEnd && (pBook[0]->GetIdx() < nIMax))
         pRet = &(aBookNames[pBook[0]->GetIdx()]);
     return pRet;

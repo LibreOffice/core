@@ -24,7 +24,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/font.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <vector>

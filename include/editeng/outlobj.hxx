@@ -22,11 +22,11 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-#include <tools/solar.h>
-#include <tools/string.hxx>
-#include <rsc/rscsfx.hxx>
 #include <editeng/paragraphdata.hxx>
-#include "editeng/editengdllapi.h"
+#include <editeng/editengdllapi.h>
+#include <rtl/ustring.hxx>
+#include <rsc/rscsfx.hxx>
+#include <tools/solar.h>
 
 class EditTextObject;
 class ImplOutlinerParaObject;

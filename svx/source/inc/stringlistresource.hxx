@@ -21,7 +21,6 @@
 #define SVX_STRINGLISTRESOURCE_HXX
 
 #include <tools/rc.hxx>
-#include <tools/string.hxx>
 #include <svx/svxdllapi.h>
 
 #include <memory>

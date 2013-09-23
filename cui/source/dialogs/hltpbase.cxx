@@ -414,12 +414,12 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
     return ( (SvxMacroTableDtor*)pHyperlinkItem->GetMacroTbl() );
 }
 
-// try to detect the current protocol that is used in aStrURL
-String SvxHyperlinkTabPageBase::GetSchemeFromURL( String aStrURL )
+// try to detect the current protocol that is used in rStrURL
+OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
 {
     String aStrScheme;
 
-    INetURLObject aURL( aStrURL );
+    INetURLObject aURL( rStrURL );
     INetProtocol aProtocol = aURL.GetProtocol();
 
     // #77696#
@@ -427,23 +427,23 @@ String SvxHyperlinkTabPageBase::GetSchemeFromURL( String aStrURL )
     // to detect if an Url is valid or not :-(
     if ( aProtocol == INET_PROT_NOT_VALID )
     {
-        if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTP_SCHEME, 0, 7 ) )
+        if ( rStrURL.startsWithIgnoreAsciiCase( INET_HTTP_SCHEME ) )
         {
             aStrScheme = OUString( INET_HTTP_SCHEME );
         }
-        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTPS_SCHEME, 0, 8 ) )
+        else if ( rStrURL.startsWithIgnoreAsciiCase( INET_HTTPS_SCHEME ) )
         {
             aStrScheme = OUString( INET_HTTPS_SCHEME );
         }
-        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_FTP_SCHEME, 0, 6 ) )
+        else if ( rStrURL.startsWithIgnoreAsciiCase( INET_FTP_SCHEME ) )
         {
             aStrScheme = OUString( INET_FTP_SCHEME );
         }
-        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_MAILTO_SCHEME, 0, 7 ) )
+        else if ( rStrURL.startsWithIgnoreAsciiCase( INET_MAILTO_SCHEME ) )
         {
             aStrScheme = OUString( INET_MAILTO_SCHEME );
         }
-        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_NEWS_SCHEME, 0, 5 ) )
+        else if ( rStrURL.startsWithIgnoreAsciiCase( INET_NEWS_SCHEME ) )
         {
             aStrScheme = OUString( INET_NEWS_SCHEME );
         }
@@ -492,7 +492,8 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 // Fill output-ItemSet
 sal_Bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 {
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
+    OUString aStrURL;
+    String aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
 
     GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
@@ -563,7 +564,8 @@ int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
     HideMarkWnd ();
 
     // retrieve data of dialog
-    String aStrURL, aStrName, aStrIntName, aStrFrame;
+    OUString aStrURL;
+    String aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
 
     GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);

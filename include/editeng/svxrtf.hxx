@@ -20,9 +20,9 @@
 #ifndef _SVXRTF_HXX
 #define _SVXRTF_HXX
 
-#include <tools/string.hxx>
 #include <svl/itemset.hxx>
 #include <svtools/parrtf.hxx>
+#include <rtl/ustring.hxx>
 
 #include <editeng/editengdllapi.h>
 

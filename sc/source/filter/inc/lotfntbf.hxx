@@ -21,7 +21,7 @@
 #define SC_LOTFNTBF_HXX
 
 #include <tools/solar.h>
-
+#include <tools/string.hxx>
 #include "scitems.hxx"
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

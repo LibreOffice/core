@@ -41,6 +41,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include "file/fanalyzer.hxx"
 #include <comphelper/broadcasthelper.hxx>
+#include <tools/string.hxx>
 #include "TSortIndex.hxx"
 
 #define SQL_COLUMN_NOTFOUND STRING_NOTFOUND

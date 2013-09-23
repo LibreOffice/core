@@ -149,17 +149,18 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
 
 /* XXX As in sc/source/core/tool/rangenam.cxx ScRangeData::IsValidName() */
 
-void ScfTools::ConvertToScDefinedName( String& rName )
+OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
 {
     //fdo#37872: we don't allow points in range names any more
-    rName.SearchAndReplaceAll(static_cast<sal_Unicode>('.'),
+    String sName = rName.replace(static_cast<sal_Unicode>('.'),
         static_cast<sal_Unicode>('_'));
-    xub_StrLen nLen = rName.Len();
-    if( nLen && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
-        rName.SetChar( 0, '_' );
+    xub_StrLen nLen = sName.Len();
+    if( nLen && !ScCompiler::IsCharFlagAllConventions( sName, 0, SC_COMPILER_C_CHAR_NAME ) )
+        sName.SetChar( 0, '_' );
     for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )
-        if( !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME ) )
-            rName.SetChar( nPos, '_' );
+        if( !ScCompiler::IsCharFlagAllConventions( sName, nPos, SC_COMPILER_C_NAME ) )
+            sName.SetChar( nPos, '_' );
+    return sName;
 }
 
 // *** streams and storages *** -----------------------------------------------
@@ -331,17 +332,17 @@ bool ScfTools::IsHTMLTablesName( const OUString& rSource )
     return rSource.equalsIgnoreAsciiCase( GetHTMLTablesName() );
 }
 
-bool ScfTools::GetHTMLNameFromName( const String& rSource, OUString& rName )
+bool ScfTools::GetHTMLNameFromName( const OUString& rSource, OUString& rName )
 {
     rName = "";
-    if( rSource.EqualsIgnoreCaseAscii( GetHTMLNamePrefix(), 0, GetHTMLNamePrefix().Len() ) )
+    if( rSource.startsWithIgnoreAsciiCase( GetHTMLNamePrefix() ) )
     {
-        rName = rSource.Copy( GetHTMLNamePrefix().Len() );
+        rName = rSource.copy( GetHTMLNamePrefix().Len() );
         ScGlobal::AddQuotes( rName, '"', false );
     }
-    else if( rSource.EqualsIgnoreCaseAscii( GetHTMLIndexPrefix(), 0, GetHTMLIndexPrefix().Len() ) )
+    else if( rSource.startsWithIgnoreAsciiCase( GetHTMLIndexPrefix() ) )
     {
-        OUString aIndex( rSource.Copy( GetHTMLIndexPrefix().Len() ) );
+        OUString aIndex( rSource.copy( GetHTMLIndexPrefix().Len() ) );
         if( CharClass::isAsciiNumeric( aIndex ) && (aIndex.toInt32() > 0) )
             rName = aIndex;
     }

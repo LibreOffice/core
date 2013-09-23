@@ -20,10 +20,10 @@
 #ifndef _SVX_GALLERY1_HXX_
 #define _SVX_GALLERY1_HXX_
 
-#include <tools/string.hxx>
-#include <tools/urlobj.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/brdcst.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
+#include <tools/urlobj.hxx>
 
 #include <cstdio>
 #include <vector>

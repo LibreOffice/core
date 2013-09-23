@@ -20,10 +20,10 @@
 #ifndef _SV_KEYCODE_HXX
 #define _SV_KEYCODE_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <vcl/dllapi.h>
 #include <tools/resid.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/keycodes.hxx>
 
 #include <vcl/vclenum.hxx>

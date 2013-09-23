@@ -20,7 +20,7 @@
 #ifndef SC_LOTIMPOP_HXX
 #define SC_LOTIMPOP_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include "imp_op.hxx"
 #include "flttypes.hxx"

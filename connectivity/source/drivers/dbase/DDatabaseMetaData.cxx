@@ -32,6 +32,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
+#include <tools/string.hxx>
 #include <ucbhelper/content.hxx>
 
 using namespace ::comphelper;

@@ -20,9 +20,9 @@
 #ifndef SC_QPRO_HXX
 #define SC_QPRO_HXX
 
+#include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include "filter.hxx"
-#include <tools/string.hxx>
 
 #include "flttypes.hxx"
 #include "ftools.hxx"

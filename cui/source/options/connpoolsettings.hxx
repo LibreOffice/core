@@ -20,9 +20,10 @@
 #ifndef _OFFAPP_CONNPOOLSETTINGS_HXX_
 #define _OFFAPP_CONNPOOLSETTINGS_HXX_
 
-#include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
+#include <tools/string.hxx>
 
 //........................................................................
 namespace offapp

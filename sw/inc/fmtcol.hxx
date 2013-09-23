@@ -23,6 +23,7 @@
 #include <frmatr.hxx>
 #include <swtypes.hxx> // For MAXLEVEL.
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <tools/string.hxx>
 
 class SwDoc; // For friend.
 
@@ -35,7 +36,7 @@ protected:
           : SwFmt( rPool, pFmtName, pWhichRanges, pDerFrom, nFmtWhich )
     { SetAuto( sal_False ); }
 
-    SwFmtColl( SwAttrPool& rPool, const String &rFmtName,
+    SwFmtColl( SwAttrPool& rPool, const OUString &rFmtName,
                 const sal_uInt16* pWhichRanges, SwFmtColl* pDerFrom,
                 sal_uInt16 nFmtWhich )
           : SwFmt( rPool, rFmtName, pWhichRanges, pDerFrom, nFmtWhich )
@@ -73,7 +74,7 @@ protected:
           mbAssignedToOutlineStyle(false)
     { pNextTxtFmtColl = this; }
 
-    SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
+    SwTxtFmtColl( SwAttrPool& rPool, const OUString &rFmtCollName,
                     SwTxtFmtColl* pDerFrom = 0,
                     sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange,
@@ -155,7 +156,7 @@ protected:
                     pDerFrom, RES_GRFFMTCOLL )
     {}
 
-    SwGrfFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
+    SwGrfFmtColl( SwAttrPool& rPool, const OUString &rFmtCollName,
                     SwGrfFmtColl* pDerFrom = 0 )
         : SwFmtColl( rPool, rFmtCollName, aGrfFmtCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )

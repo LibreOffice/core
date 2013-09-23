@@ -20,8 +20,8 @@
 #ifndef _SV_IMPFONT_HXX
 #define _SV_IMPFONT_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <vcl/dllapi.h>

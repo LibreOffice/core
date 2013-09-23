@@ -66,7 +66,6 @@ using namespace com::sun::star::container;
 
 namespace framework{
 
-//***********************************************
 // XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(

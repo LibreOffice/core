@@ -20,11 +20,11 @@
 #ifndef _SV_GFXLINK_HXX
 #define _SV_GFXLINK_HXX
 
-#include <vcl/dllapi.h>
-#include <tools/solar.h>
-#include <vcl/mapmod.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
+#include <tools/solar.h>
+#include <vcl/dllapi.h>
+#include <vcl/mapmod.hxx>
 
 // -------------
 // - ImpBuffer -

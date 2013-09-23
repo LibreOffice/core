@@ -20,7 +20,7 @@
 #ifndef _VCL_STDTEXT_HXX
 #define _VCL_STDTEXT_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 

@@ -22,6 +22,7 @@
 
 // header for TYPEINFO
 #include <tools/rtti.hxx>
+#include <tools/string.hxx>
 // header for ConfigItem
 #include <unotools/configitem.hxx>
 // header for SfxPoolItem

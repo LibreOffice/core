@@ -21,9 +21,9 @@
 #define _VCL_I18NHELP_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <osl/mutex.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <tools/string.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
 namespace com {

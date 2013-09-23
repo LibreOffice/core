@@ -20,10 +20,9 @@
 #ifndef _ACCESSIBLESTRINGWRAP_HXX
 #define _ACCESSIBLESTRINGWRAP_HXX
 
-#include <sal/types.h>
-#include <tools/string.hxx>
-
 #include <editeng/editengdllapi.h>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 class OutputDevice;
 class SvxFont;

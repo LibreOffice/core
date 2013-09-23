@@ -20,11 +20,9 @@
 #ifndef VCL_TEXTLAYOUT_HXX
 #define VCL_TEXTLAYOUT_HXX
 
-#include "vcl/outdev.hxx"
-
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
-
+#include <vcl/outdev.hxx>
 #include <memory>
 
 class Control;

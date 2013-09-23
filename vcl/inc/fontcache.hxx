@@ -20,11 +20,9 @@
 #ifndef _PSPRINT_FONTCACHE_HXX
 #define _PSPRINT_FONTCACHE_HXX
 
-#include "vcl/dllapi.h"
-#include "vcl/fontmanager.hxx"
-
-#include "tools/string.hxx"
-
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/fontmanager.hxx>
 #include <boost/unordered_map.hpp>
 
 namespace psp

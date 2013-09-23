@@ -21,7 +21,7 @@
 #define _UNO_LINGU_HXX
 
 #include <i18nlangtag/lang.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/util/Language.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>

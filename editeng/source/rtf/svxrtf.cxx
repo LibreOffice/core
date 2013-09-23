@@ -42,7 +42,7 @@
 using namespace ::com::sun::star;
 
 
-static CharSet lcl_GetDefaultTextEncodingForRTF()
+static rtl_TextEncoding lcl_GetDefaultTextEncodingForRTF()
 {
 
     OUString aLangString( Application::GetSettings().GetLanguageTag().getLanguage());
@@ -463,7 +463,7 @@ void SvxRTFParser::ReadFontTable()
     OUString sAltNm, sFntNm;
     sal_Bool bIsAltFntNm = sal_False, bCheckNewFont;
 
-    CharSet nSystemChar = lcl_GetDefaultTextEncodingForRTF();
+    rtl_TextEncoding nSystemChar = lcl_GetDefaultTextEncodingForRTF();
     pFont->SetCharSet( nSystemChar );
     SetEncoding( nSystemChar );
 
@@ -516,7 +516,7 @@ void SvxRTFParser::ReadFontTable()
             case RTF_FDECOR:
                 pFont->SetFamily( FAMILY_DECORATIVE );
                 break;
-            // for technical/symbolic font of the CharSet is changed!
+            // for technical/symbolic font of the rtl_TextEncoding is changed!
             case RTF_FTECH:
                 pFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
                 // deliberate fall through
@@ -526,14 +526,14 @@ void SvxRTFParser::ReadFontTable()
             case RTF_FCHARSET:
                 if (-1 != nTokenValue)
                 {
-                    CharSet nCharSet = rtl_getTextEncodingFromWindowsCharset(
+                    rtl_TextEncoding nrtl_TextEncoding = rtl_getTextEncodingFromWindowsCharset(
                         (sal_uInt8)nTokenValue);
-                    pFont->SetCharSet(nCharSet);
+                    pFont->SetCharSet(nrtl_TextEncoding);
                     //When we're in a font, the fontname is in the font
                     //charset, except for symbol fonts I believe
-                    if (nCharSet == RTL_TEXTENCODING_SYMBOL)
-                        nCharSet = RTL_TEXTENCODING_DONTKNOW;
-                    SetEncoding(nCharSet);
+                    if (nrtl_TextEncoding == RTL_TEXTENCODING_SYMBOL)
+                        nrtl_TextEncoding = RTL_TEXTENCODING_DONTKNOW;
+                    SetEncoding(nrtl_TextEncoding);
                 }
                 break;
             case RTF_FPRQ:

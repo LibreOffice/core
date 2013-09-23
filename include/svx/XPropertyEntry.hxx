@@ -19,8 +19,8 @@
 #ifndef _XPROPERTYENTRY_HXX
 #define _XPROPERTYENTRY_HXX
 
+#include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/string.hxx>
 #include <vcl/bitmap.hxx>
 
 // ---------------------

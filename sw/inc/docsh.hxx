@@ -31,6 +31,7 @@
 
 #include <svl/lstner.hxx>
 #include <svtools/embedhlp.hxx>
+#include <tools/string.hxx>
 
 class SwDoc;
 class SfxDocumentInfoDialog;

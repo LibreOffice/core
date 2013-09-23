@@ -20,12 +20,12 @@
 #define _LNKBASE_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sfx2/linksrc.hxx>
 #include <sot/exchange.hxx>
 #include <tools/ref.hxx>
-#include <tools/string.hxx>
-#include <sfx2/linksrc.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno
 {

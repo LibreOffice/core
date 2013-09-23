@@ -226,7 +226,7 @@ namespace dbaui
         Rectangle       GetInvalidRect( sal_uInt16 nColId );
         long            GetRealRow(long nRow) const;
         long            GetBrowseRow(long nRowId) const;
-        sal_Bool        GetFunctionName(sal_uInt32 _nFunctionTokenId,String& rFkt);
+        sal_Bool        GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt);
         void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow,sal_Bool& _bListAction);
         void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;

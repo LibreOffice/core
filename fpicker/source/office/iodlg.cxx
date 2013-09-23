@@ -156,20 +156,20 @@ namespace
     }
 
     //-----------------------------------------------------------------------------
-    String GetFsysExtension_Impl( const String& rFile, const String& rLastFilterExt )
+    OUString GetFsysExtension_Impl( const OUString& rFile, const OUString& rLastFilterExt )
     {
-        xub_StrLen nDotPos = rFile.SearchBackward( '.' );
-        if ( nDotPos != STRING_NOTFOUND )
+        sal_Int32 nDotPos = rFile.lastIndexOf( '.' );
+        if ( nDotPos != -1 )
         {
-            if ( rLastFilterExt.Len() )
+            if ( !rLastFilterExt.isEmpty() )
             {
-                if ( rFile.Copy( nDotPos + 1 ).EqualsIgnoreCaseAscii( rLastFilterExt ) )
-                    return String( rLastFilterExt );
+                if ( rFile.copy( nDotPos + 1 ).equalsIgnoreAsciiCase( rLastFilterExt ) )
+                    return rLastFilterExt;
             }
             else
-                return String( rFile.Copy( nDotPos ) );
+                return rFile.copy( nDotPos );
         }
-        return String();
+        return OUString();
     }
 
     //-----------------------------------------------------------------------------

@@ -20,10 +20,8 @@
 #ifndef VCL_QUICKSELECTIONENGINE_HXX
 #define VCL_QUICKSELECTIONENGINE_HXX
 
-#include "dllapi.h"
-
-#include <tools/string.hxx>
-
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
 #include <memory>
 
 class KeyEvent;

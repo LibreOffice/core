@@ -22,6 +22,7 @@
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <tools/gen.hxx>
+#include <tools/string.hxx>
 #include <format.hxx>
 #include "swdllapi.h"
 

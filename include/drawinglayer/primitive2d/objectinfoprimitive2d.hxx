@@ -21,7 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

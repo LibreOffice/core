@@ -2645,12 +2645,12 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
             case HTML_O_ALIGN:
             {
                 SvxCellHorJustify eVal = SVX_HOR_JUSTIFY_STANDARD;
-                const String& rOptVal = itr->GetString();
-                if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) )
+                const OUString& rOptVal = itr->GetString();
+                if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ) )
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
-                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) )
+                else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ) )
                     eVal = SVX_HOR_JUSTIFY_CENTER;
-                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_left ) )
+                else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ) )
                     eVal = SVX_HOR_JUSTIFY_LEFT;
                 if( eVal != SVX_HOR_JUSTIFY_STANDARD )
                     rItemSet.Put( SvxHorJustifyItem( eVal, ATTR_HOR_JUSTIFY ) );
@@ -2660,12 +2660,12 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
             case HTML_O_VALIGN:
             {
                 SvxCellVerJustify eVal = SVX_VER_JUSTIFY_STANDARD;
-                const String& rOptVal = itr->GetString();
-                if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_top ) )
+                const OUString& rOptVal = itr->GetString();
+                if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_top ) )
                     eVal = SVX_VER_JUSTIFY_TOP;
-                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
+                else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
                     eVal = SVX_VER_JUSTIFY_CENTER;
-                else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_bottom ) )
+                else if( rOptVal.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_VA_bottom ) )
                     eVal = SVX_VER_JUSTIFY_BOTTOM;
                 if( eVal != SVX_VER_JUSTIFY_STANDARD )
                     rItemSet.Put( SvxVerJustifyItem( eVal, ATTR_VER_JUSTIFY ) );

@@ -20,8 +20,6 @@
 #ifndef _SAL_I18N_STATUS_HXX
 #define _SAL_I18N_STATUS_HXX
 
-#include <tools/string.hxx>
-
 #include <rtl/ustring.hxx>
 #include <salimestatus.hxx>
 

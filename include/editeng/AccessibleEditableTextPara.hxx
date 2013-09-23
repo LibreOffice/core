@@ -20,8 +20,8 @@
 #ifndef _SVX_ACCESSIBLE_EDITABLE_TEXT_PARA_HXX
 #define _SVX_ACCESSIBLE_EDITABLE_TEXT_PARA_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase9.hxx>
 #include <cppuhelper/typeprovider.hxx>

@@ -719,7 +719,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         {
             XclFontData aFontData;
             GetFontPropSetHelper().ReadFontProperties( aFontData, aCtrlProp, EXC_FONTPROPSET_CONTROL );
-            if( (aFontData.maName.Len() > 0) && (aFontData.mnHeight > 0) )
+            if( (!aFontData.maName.isEmpty() ) && (aFontData.mnHeight > 0) )
                 nXclFont = GetFontBuffer().Insert( aFontData, EXC_COLOR_CTRLTEXT );
         }
 

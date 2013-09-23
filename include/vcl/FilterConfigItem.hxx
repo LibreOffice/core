@@ -23,7 +23,7 @@
 
 #include <vcl/dllapi.h>
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>

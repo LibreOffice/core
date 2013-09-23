@@ -44,7 +44,7 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, Font
     rFont.SetStyleName( rDesc.StyleName );
     rFont.SetSize( Size( rDesc.Width, rDesc.Height ) );
     rFont.SetFamily( (FontFamily)rDesc.Family );
-    rFont.SetCharSet( (CharSet)rDesc.CharSet );
+    rFont.SetCharSet( (rtl_TextEncoding)rDesc.CharSet );
     rFont.SetPitch( (FontPitch)rDesc.Pitch );
     rFont.SetOrientation( (short)(rDesc.Orientation*10) );
     rFont.SetKerning( rDesc.Kerning );

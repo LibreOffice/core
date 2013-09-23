@@ -20,10 +20,10 @@
 #ifndef _SV_MNEMONIC_HXX
 #define _SV_MNEMONIC_HXX
 
-#include <vcl/dllapi.h>
-#include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
 
 // ---------------------
 // - ImplMnemonicTypes -

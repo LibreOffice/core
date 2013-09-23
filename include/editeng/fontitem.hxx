@@ -19,10 +19,10 @@
 #ifndef _SVX_FONTITEM_HXX
 #define _SVX_FONTITEM_HXX
 
+#include <editeng/editengdllapi.h>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
-#include <tools/string.hxx>
 #include <vcl/font.hxx>
-#include "editeng/editengdllapi.h"
 
 class SvXMLUnitConverter;
 

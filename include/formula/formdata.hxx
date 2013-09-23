@@ -20,9 +20,9 @@
 #ifndef FORMULA_FORMDATA_HXX
 #define FORMULA_FORMDATA_HXX
 
-#include <tools/string.hxx>
+#include <formula/formuladllapi.h>
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include "formula/formuladllapi.h"
 
 //============================================================================
 namespace formula

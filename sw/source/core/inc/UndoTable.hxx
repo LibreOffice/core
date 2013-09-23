@@ -28,6 +28,7 @@
 #include <itabenum.hxx>
 #include "boost/noncopyable.hpp"
 #include "boost/scoped_ptr.hpp"
+#include <tools/string.hxx>
 
 class SfxItemSet;
 

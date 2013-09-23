@@ -20,12 +20,11 @@
 #ifndef _SFXITEMPOOL_HXX
 #define _SFXITEMPOOL_HXX
 
-#include "svl/svldllapi.h"
-
 #include <limits.h>
-#include <tools/solar.h>
-#include <tools/string.hxx>
+#include <rtl/string.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/svldllapi.h>
+#include <tools/solar.h>
 #include <vector>
 
 class SvStream;

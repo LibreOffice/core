@@ -136,7 +136,6 @@ private:
     TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
     TOOLS_DLLPRIVATE sal_Bool   Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    TOOLS_DLLPRIVATE sal_Bool   EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
     TOOLS_DLLPRIVATE xub_StrLen Search( const sal_Unicode* pCharStr, xub_StrLen nIndex = 0 ) const;
 public:
                         UniString();
@@ -231,16 +230,10 @@ public:
                                         xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool            Equals( const UniString& rStr ) const;
     sal_Bool            EqualsAscii( const sal_Char* pAsciiStr ) const;
-    sal_Bool            EqualsIgnoreCaseAscii( const UniString& rStr ) const;
-    sal_Bool            EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const;
     sal_Bool            Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
     sal_Bool            EqualsAscii( const sal_Char* pAsciiStr,
                                      xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool            EqualsIgnoreCaseAscii( const UniString& rStr,
-                                               xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool            EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
-                                               xub_StrLen nIndex, xub_StrLen nLen ) const;
 
     xub_StrLen          Match( const UniString& rStr ) const;
 

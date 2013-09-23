@@ -314,10 +314,10 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     }
 
     //"_Toc*" and "_Hlt*" are unnecessary
-    const String* pName = pB->GetName();
+    const OUString* pName = pB->GetName();
 #if !defined(WW_NATIVE_TOC)
-    if(    !pName || pName->EqualsIgnoreCaseAscii( "_Toc", 0, 4 )
-        || pName->EqualsIgnoreCaseAscii( "_Hlt", 0, 4 ) )
+    if(    !pName || pName->startsWithIgnoreAsciiCase( "_Toc" )
+        || pName->startsWithIgnoreAsciiCase( "_Hlt" ) )
         return 0;
 #endif
 
@@ -504,36 +504,33 @@ String FindPara( const String& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 }
 
 
-static SvxExtNumType GetNumTypeFromName(const String& rStr,
+static SvxExtNumType GetNumTypeFromName(const OUString& rStr,
     bool bAllowPageDesc = false)
 {
     SvxExtNumType eTyp = bAllowPageDesc ? SVX_NUM_PAGEDESC : SVX_NUM_ARABIC;
-    if( rStr.EqualsIgnoreCaseAscii( "Arabi", 0, 5 ) )  // Arabisch, Arabic
+    if( rStr.startsWithIgnoreAsciiCase( "Arabi" ) )  // Arabisch, Arabic
         eTyp = SVX_NUM_ARABIC;
-    else if( rStr.EqualsAscii( "misch", 2, 5 ) )    // r"omisch
+    else if( rStr.startsWith( "misch" ) )    // r"omisch
         eTyp = SVX_NUM_ROMAN_LOWER;
-    else if( rStr.EqualsAscii( "MISCH", 2, 5 ) )    // R"OMISCH
+    else if( rStr.startsWith( "MISCH" ) )    // R"OMISCH
         eTyp = SVX_NUM_ROMAN_UPPER;
-    else if( rStr.EqualsIgnoreCaseAscii( "alphabeti", 0, 9 ) )// alphabetisch, alphabetic
-        eTyp =  ( rStr.GetChar( 0 ) == 'A' )
+    else if( rStr.startsWithIgnoreAsciiCase( "alphabeti" ) )// alphabetisch, alphabetic
+        eTyp =  ( rStr[0] == 'A' )
                 ? SVX_NUM_CHARS_UPPER_LETTER_N
                 : SVX_NUM_CHARS_LOWER_LETTER_N;
-    else if( rStr.EqualsIgnoreCaseAscii( "roman", 0, 5 ) )  // us
-        eTyp =  ( rStr.GetChar( 0 ) == 'R' )
+    else if( rStr.startsWithIgnoreAsciiCase( "roman" ) )  // us
+        eTyp =  ( rStr[0] == 'R' )
                 ? SVX_NUM_ROMAN_UPPER
                 : SVX_NUM_ROMAN_LOWER;
     return eTyp;
 }
 
-static SvxExtNumType GetNumberPara(OUString& rStr, bool bAllowPageDesc = false)
+static SvxExtNumType GetNumberPara(const OUString& rStr, bool bAllowPageDesc = false)
 {
     OUString s( FindPara( rStr, '*', '*' ) );     // Ziffernart
     SvxExtNumType aType = GetNumTypeFromName( s, bAllowPageDesc );
     return aType;
 }
-
-
-
 
 bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, sal_uInt16 nLang)
 {
@@ -2254,10 +2251,10 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
 //helper function
 //For MS MacroButton field, the symbol in plain text is always "(" (0x28),
 //which should be mapped according to the macro type
-bool ConvertMacroSymbol( const String& rName, String& rReference )
+bool ConvertMacroSymbol( const String& rName, OUString& rReference )
 {
     bool bConverted = false;
-    if( rReference.EqualsAscii( "(" ) )
+    if( rReference == "(" )
     {
         bConverted = true;
         sal_Unicode cSymbol = sal_Unicode(); // silence false warning
@@ -2272,7 +2269,7 @@ bool ConvertMacroSymbol( const String& rName, String& rReference )
             bConverted = false;
 
         if( bConverted )
-            rReference = cSymbol;
+            rReference = OUString(cSymbol);
     }
     return bConverted;
 }
@@ -2282,7 +2279,7 @@ bool ConvertMacroSymbol( const String& rName, String& rReference )
 eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
 {
     OUString aName;
-    String aVText;
+    OUString aVText;
     bool bNewVText = true;
     bool bBracket  = false;
     WW8ReadFieldParams aReadParam( rStr );
@@ -2299,20 +2296,20 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
         case -2:
             if( aName.isEmpty() )
                 aName = aReadParam.GetResult();
-            else if( !aVText.Len() || bBracket )
+            else if( aVText.isEmpty() || bBracket )
             {
                 nOffset = aReadParam.GetTokenSttPtr() + 1;
 
                 if( bBracket )
-                    aVText += ' ';
+                    aVText += " ";
                 aVText += aReadParam.GetResult();
                 if (bNewVText)
                 {
-                    bBracket = aVText.EqualsIgnoreCaseAscii(OUString('['), 0, 1)
+                    bBracket = (aVText[0] == '[')
                         ? true : false;
                     bNewVText = false;
                 }
-                else if( aVText.GetChar( aVText.Len()-1 ) == ']' )
+                else if( aVText[aVText.getLength()-1] == ']' )
                     bBracket  = false;
             }
             break;
@@ -2726,20 +2723,20 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         {
         case -2:
             {
-                String sTemp = rReadParam.GetResult();
-                if( sTemp.EqualsIgnoreCaseAscii( "jc", 0, 2 ) )
+                OUString sTemp = rReadParam.GetResult();
+                if( sTemp.startsWithIgnoreAsciiCase( "jc" ) )
                 {
-                    sTemp.Erase(0,2);
-                    nJustificationCode = static_cast<sal_uInt16>(sTemp.ToInt32());
+                    sTemp = sTemp.copy(2);
+                    nJustificationCode = static_cast<sal_uInt16>(sTemp.toInt32());
                 }
-                else if( sTemp.EqualsIgnoreCaseAscii( "hps", 0, 3 ) )
+                else if( sTemp.startsWithIgnoreAsciiCase( "hps" ) )
                 {
-                    sTemp.Erase(0,3);
-                    nFontSize= static_cast<sal_uInt32>(sTemp.ToInt32());
+                    sTemp = sTemp.copy(3);
+                    nFontSize= static_cast<sal_uInt32>(sTemp.toInt32());
                 }
-                else if( sTemp.EqualsIgnoreCaseAscii( "Font:", 0, 5 ) )
+                else if( sTemp.startsWithIgnoreAsciiCase( "Font:" ) )
                 {
-                    sTemp.Erase(0,5);
+                    sTemp = sTemp.copy(5);
                     sFontName = sTemp;
                 }
             }

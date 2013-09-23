@@ -21,7 +21,7 @@
 #define _SV_SALWTYPE_HXX
 
 #include <i18nlangtag/lang.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 
 class SalGraphics;

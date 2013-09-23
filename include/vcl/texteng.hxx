@@ -45,11 +45,12 @@ namespace svl
 
 class TextLine;
 class TETextPortion;
+#include <rtl/ustring.hxx>
 #include <svl/brdcst.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
-#include <vcl/font.hxx>
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
+#include <vcl/font.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.hxx>

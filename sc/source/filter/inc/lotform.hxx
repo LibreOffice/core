@@ -21,10 +21,7 @@
 #define SC_LOTFORM_HXX
 
 #include "formel.hxx"
-#include <tools/string.hxx>
-
-
-
+#include <rtl/ustring.hxx>
 
 enum FUNC_TYPE
 {

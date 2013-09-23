@@ -91,63 +91,6 @@ static sal_Int32 ImplStringCompareWithoutZeroAscii( const sal_Unicode* pStr1, co
     return nRet;
 }
 
-static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2 )
-{
-    sal_Int32   nRet;
-    sal_Unicode c1;
-    sal_Char    c2;
-    do
-    {
-        // Convert if char is between 'A' and 'Z'
-        c1 = *pStr1;
-        c2 = *pStr2;
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = ((sal_Int32)c1)-((sal_Int32)((unsigned char)c2));
-        if ( nRet != 0 )
-            break;
-
-        ++pStr1,
-        ++pStr2;
-    }
-    while ( c2 );
-
-    return nRet;
-}
-
-static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2,
-                                          xub_StrLen nCount )
-{
-    sal_Int32   nRet = 0;
-    sal_Unicode c1;
-    sal_Char    c2;
-    do
-    {
-        if ( !nCount )
-            break;
-
-        // Convert if char is between 'A' and 'Z'
-        c1 = *pStr1;
-        c2 = *pStr2;
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = ((sal_Int32)c1)-((sal_Int32)((unsigned char)c2));
-        if ( nRet != 0 )
-            break;
-
-        ++pStr1,
-        ++pStr2,
-        --nCount;
-    }
-    while ( c2 );
-
-    return nRet;
-}
-
 UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -322,15 +265,6 @@ sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
     return (ImplStringCompareAscii( mpData->maStr, pAsciiStr ) == 0);
 }
 
-sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::EqualsIgnoreCaseAscii() - pAsciiStr include characters > 127" );
-
-    return (ImplStringICompareAscii( mpData->maStr, pAsciiStr ) == 0);
-}
-
 sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
                              xub_StrLen nIndex, xub_StrLen nLen ) const
 {
@@ -343,20 +277,6 @@ sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
         return (*pAsciiStr == 0);
 
     return (ImplStringCompareAscii( mpData->maStr+nIndex, pAsciiStr, nLen ) == 0);
-}
-
-sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
-                                       xub_StrLen nIndex, xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "UniString::EqualsIgnoreCaseAscii() - pAsciiStr include characters > 127" );
-
-    // Are there enough codes for comparing?
-    if ( nIndex > mpData->mnLen )
-        return (*pAsciiStr == 0);
-
-    return (ImplStringICompareAscii( mpData->maStr+nIndex, pAsciiStr, nLen ) == 0);
 }
 
 xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const

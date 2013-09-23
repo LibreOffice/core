@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
-#include <rtl/alloc.h>
 #include <vcl/jobset.hxx>
 
 #include <jobset.h>

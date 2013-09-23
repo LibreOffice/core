@@ -21,6 +21,7 @@
 #define SD_VIEW_MASTER_PAGE_OBSERVER_HXX
 
 #include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/string.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
 #include <set>

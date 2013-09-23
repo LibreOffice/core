@@ -124,8 +124,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     else
     {
         // any other name
-        maScName = maXclName;
-        ScfTools::ConvertToScDefinedName( maScName );
+        maScName = ScfTools::ConvertToScDefinedName( maXclName );
     }
 
     // add index for local names

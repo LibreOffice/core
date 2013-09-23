@@ -48,8 +48,8 @@ ScImportOptions::ScImportOptions( const String& rStr )
     if ( nTokenCount >= 3 )
     {
         // first 3 tokens: common
-        String aToken( rStr.GetToken( 0, ',' ) );
-        if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
+        OUString aToken( rStr.GetToken( 0, ',' ) );
+        if( aToken.equalsIgnoreAsciiCase( pStrFix ) )
             bFixedWidth = sal_True;
         else
             nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);

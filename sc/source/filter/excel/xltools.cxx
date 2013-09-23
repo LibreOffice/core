@@ -503,13 +503,13 @@ OUString XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
 sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 {
     sal_Int32 nPrefixLen = maDefNamePrefix.getLength();
-    if( String(rDefName).EqualsIgnoreCaseAscii( maDefNamePrefix, 0, nPrefixLen ) )
+    if( rDefName.startsWithIgnoreAsciiCase( maDefNamePrefix ) )
     {
         for( sal_Unicode cBuiltIn = 0; cBuiltIn < EXC_BUILTIN_UNKNOWN; ++cBuiltIn )
         {
             OUString aBuiltInName(GetXclBuiltInDefName(cBuiltIn));
             sal_Int32 nBuiltInLen = aBuiltInName.getLength();
-            if( String(rDefName).EqualsIgnoreCaseAscii( aBuiltInName, nPrefixLen, nBuiltInLen ) )
+            if( rDefName.matchIgnoreAsciiCase( aBuiltInName, nPrefixLen ) )
             {
                 // name can be followed by underline or space character
                 xub_StrLen nNextCharPos = nPrefixLen + nBuiltInLen;
@@ -583,9 +583,9 @@ bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyl
     sal_Int32 nNextChar = 0;
 
     sal_Int32 nPrefixLen = 0;
-    if( String(rStyleName).EqualsIgnoreCaseAscii( maStyleNamePrefix1, 0, maStyleNamePrefix1.getLength() ) )
+    if( rStyleName.startsWithIgnoreAsciiCase( maStyleNamePrefix1 ) )
         nPrefixLen = maStyleNamePrefix1.getLength();
-    else if( String(rStyleName).EqualsIgnoreCaseAscii( maStyleNamePrefix2, 0, maStyleNamePrefix2.getLength() ) )
+    else if( rStyleName.startsWithIgnoreAsciiCase( maStyleNamePrefix2 ) )
         nPrefixLen = maStyleNamePrefix2.getLength();
     if( nPrefixLen > 0 )
     {
@@ -594,7 +594,7 @@ bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyl
             if( nId != EXC_STYLE_NORMAL )
             {
                 OUString aShortName = OUString::createFromAscii(ppcStyleNames[nId]);
-                if( String(rStyleName).EqualsIgnoreCaseAscii( aShortName, nPrefixLen, aShortName.getLength() ) &&
+                if( rStyleName.matchIgnoreAsciiCase( aShortName, nPrefixLen ) &&
                     (nNextChar < nPrefixLen + aShortName.getLength()))
                 {
                     nFoundId = nId;
@@ -663,10 +663,10 @@ OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_
 
 bool XclTools::IsCondFormatStyleName( const OUString& rStyleName )
 {
-    if( String(rStyleName).EqualsIgnoreCaseAscii( maCFStyleNamePrefix1, 0, maCFStyleNamePrefix1.getLength() ) )
+    if( rStyleName.startsWithIgnoreAsciiCase( maCFStyleNamePrefix1 ) )
         return true;
 
-    if( String(rStyleName).EqualsIgnoreCaseAscii( maCFStyleNamePrefix2, 0, maCFStyleNamePrefix2.getLength() ) )
+    if( rStyleName.startsWithIgnoreAsciiCase( maCFStyleNamePrefix2 ) )
         return true;
 
     return false;

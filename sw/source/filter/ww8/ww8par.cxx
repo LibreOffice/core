@@ -4222,7 +4222,7 @@ void SwWW8ImplReader::StoreMacroCmds()
 
 void SwWW8ImplReader::ReadDocVars()
 {
-    std::vector<String> aDocVarStrings;
+    std::vector<OUString> aDocVarStrings;
     std::vector<ww::bytes> aDocVarStringIds;
     std::vector<String> aDocValueStrings;
     WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcStwUser,
@@ -4243,11 +4243,11 @@ void SwWW8ImplReader::ReadDocVars()
         for(size_t i=0; i<aDocVarStrings.size(); i++)
         {
             uno::Any aDefaultValue;
-            OUString name(aDocVarStrings[i]);
+            const OUString &rName = aDocVarStrings[i];
             uno::Any aValue;
             aValue <<= OUString(aDocValueStrings[i]);
             try {
-                xUserDefinedProps->addProperty( name,
+                xUserDefinedProps->addProperty( rName,
                     beans::PropertyAttribute::REMOVABLE,
                     aValue );
             } catch (const uno::Exception &) {
@@ -4528,8 +4528,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                                     pWwFib->lcbSttbfRMark, rDoc );
     }
 
-    // M.M. Initialize our String/ID map for Linked Sections
-    std::vector<String> aLinkStrings;
+    // Initialize our String/ID map for Linked Sections
+    std::vector<OUString> aLinkStrings;
     std::vector<ww::bytes> aStringIds;
 
     WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcSttbFnm,
@@ -5543,7 +5543,7 @@ int SwWW8ImplReader::GetAnnotationIndex(sal_uInt32 nTag)
     if (!mpAtnIndexes.get() && pWwFib->lcbSttbfAtnbkmk)
     {
         mpAtnIndexes.reset(new std::map<sal_uInt32, int>());
-        std::vector<String> aStrings;
+        std::vector<OUString> aStrings;
         std::vector<ww::bytes> aEntries;
         WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcSttbfAtnbkmk, pWwFib->lcbSttbfAtnbkmk, sizeof(struct WW8_ATNBE), eStructCharSet, aStrings, &aEntries);
         for (size_t i = 0; i < aStrings.size() && i < aEntries.size(); ++i)

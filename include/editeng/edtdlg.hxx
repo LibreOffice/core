@@ -19,8 +19,8 @@
 #ifndef _EDT_ABSTDLG_HXX
 #define _EDT_ABSTDLG_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>

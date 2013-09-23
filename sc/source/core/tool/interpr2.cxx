@@ -388,7 +388,7 @@ void ScInterpreter::ScGetDateDif()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        String aInterval = GetString();
+        OUString aInterval = GetString();
         double nDate2    = GetDouble();
         double nDate1    = GetDouble();
 
@@ -407,7 +407,7 @@ void ScInterpreter::ScGetDateDif()
 
         long dd = nDate2 - nDate1;
         // Zero difference or number of days can be returned immediately.
-        if (dd == 0 || aInterval.EqualsIgnoreCaseAscii( "d" ))
+        if (dd == 0 || aInterval.equalsIgnoreAsciiCase( "d" ))
         {
             PushDouble( dd );
             return;
@@ -426,7 +426,7 @@ void ScInterpreter::ScGetDateDif()
         m2 = aDate2.GetMonth();
         d2 = aDate2.GetDay();
 
-        if (  aInterval.EqualsIgnoreCaseAscii( "m" ) )
+        if (  aInterval.equalsIgnoreAsciiCase( "m" ) )
         {
             // Return number of months.
             int md = m2 - m1 + 12 * (y2 - y1);
@@ -434,7 +434,7 @@ void ScInterpreter::ScGetDateDif()
                 --md;
             PushInt( md );
         }
-        else if ( aInterval.EqualsIgnoreCaseAscii( "y" ) )
+        else if ( aInterval.equalsIgnoreAsciiCase( "y" ) )
         {
             // Return number of years.
             int yd;
@@ -453,7 +453,7 @@ void ScInterpreter::ScGetDateDif()
             }
             PushInt( yd );
         }
-        else if ( aInterval.EqualsIgnoreCaseAscii( "md" ) )
+        else if ( aInterval.equalsIgnoreAsciiCase( "md" ) )
         {
             // Return number of days, excluding months and years.
             // This is actually the remainder of days when subtracting years
@@ -491,7 +491,7 @@ void ScInterpreter::ScGetDateDif()
             }
             PushDouble( nd );
         }
-        else if ( aInterval.EqualsIgnoreCaseAscii( "ym" ) )
+        else if ( aInterval.equalsIgnoreAsciiCase( "ym" ) )
         {
             // Return number of months, excluding years.
             int md = m2 - m1 + 12 * (y2 - y1);
@@ -500,7 +500,7 @@ void ScInterpreter::ScGetDateDif()
             md %= 12;
             PushInt( md );
         }
-        else if ( aInterval.EqualsIgnoreCaseAscii( "yd" ) )
+        else if ( aInterval.equalsIgnoreAsciiCase( "yd" ) )
         {
             // Return number of days, excluding years.
 
@@ -2527,7 +2527,7 @@ void ScInterpreter::ScHyperLink()
     }
 }
 
-bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
+bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& rnDec )
 {
     struct ConvertInfo
     {
@@ -2556,8 +2556,8 @@ bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
     };
 
     const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
-    for ( size_t i = 0; i < nConversionCount; i++ )
-        if ( aSearchUnit.EqualsIgnoreCaseAscii( aConvertTable[i].pCurrText ) )
+    for ( size_t i = 0; i < nConversionCount; ++i )
+        if ( aSearchUnit.equalsIgnoreAsciiCaseAscii( aConvertTable[i].pCurrText ) )
         {
             rfRate = aConvertTable[i].fRate;
             rnDec  = aConvertTable[i].nDec;
@@ -2584,8 +2584,8 @@ void ScInterpreter::ScEuroConvert()
         bool bFullPrecision = false;
         if ( nParamCount >= 4 )
             bFullPrecision = GetBool();
-        String aToUnit( GetString() );
-        String aFromUnit( GetString() );
+        OUString aToUnit( GetString() );
+        OUString aFromUnit( GetString() );
         double fVal = GetDouble();
         if ( nGlobalError )
             PushError( nGlobalError);
@@ -2600,11 +2600,11 @@ void ScInterpreter::ScEuroConvert()
                 && lclConvertMoney( aToUnit, fToRate, nToDec ) )
             {
                 double fRes;
-                if ( aFromUnit.EqualsIgnoreCaseAscii( aToUnit ) )
+                if ( aFromUnit.equalsIgnoreAsciiCase( aToUnit ) )
                     fRes = fVal;
                 else
                 {
-                    if ( aFromUnit.EqualsIgnoreCaseAscii( aEur ) )
+                    if ( aFromUnit.equalsIgnoreAsciiCase( aEur ) )
                        fRes = fVal * fToRate;
                     else
                     {

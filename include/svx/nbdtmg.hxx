@@ -22,6 +22,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <editeng/numitem.hxx>
+#include <tools/string.hxx>
 #include <vcl/font.hxx>
 
 namespace svx { namespace sidebar {

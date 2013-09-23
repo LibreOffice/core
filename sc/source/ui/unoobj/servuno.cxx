@@ -98,14 +98,13 @@ public:
     {
         SolarMutexGuard aGuard;
         maCachedObject = uno::Any(); // clear cached object
-        String sName = aName;
 
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
-        // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+        // aName is generated from the stream name which can be different ( case-wise )
         // from the code name
-        if( sName.EqualsIgnoreCaseAscii( pDoc->GetCodeName() ) )
+        if( aName.equalsIgnoreAsciiCase( pDoc->GetCodeName() ) )
             maCachedObject = maWorkbook;
         else
         {
@@ -114,9 +113,9 @@ public:
             for( SCTAB i = 0; i < nCount; i++ )
             {
                 pDoc->GetCodeName( i, sCodeName );
-                // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+                // aName is generated from the stream name which can be different ( case-wise )
                 // from the code name
-                if( String(sCodeName).EqualsIgnoreCaseAscii( sName ) )
+                if( sCodeName.equalsIgnoreAsciiCase( aName ) )
                 {
                     OUString sSheetName;
                     if( pDoc->GetName( i, sSheetName ) )

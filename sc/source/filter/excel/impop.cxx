@@ -597,7 +597,7 @@ void ImportExcel::Externname25( void )
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
-        ScfTools::ConvertToScDefinedName( aName );
+        aName = ScfTools::ConvertToScDefinedName( aName );
         pExcRoot->pExtNameBuff->AddName( aName, mnLastRefIdx );
     }
     else if( nOpt & 0x0010 )

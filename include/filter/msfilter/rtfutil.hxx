@@ -10,10 +10,11 @@
 #ifndef INCLUDED_MSFILTER_RTFUTIL_HXX
 #define INCLUDED_MSFILTER_RTFUTIL_HXX
 
-#include "filter/msfilter/msfilterdllapi.h"
+#include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <rtl/textenc.h>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 
 namespace msfilter {
 namespace rtfutil {

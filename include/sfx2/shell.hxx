@@ -19,17 +19,15 @@
 #ifndef _SFX_SHELL_HXX
 #define _SFX_SHELL_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
 #include <com/sun/star/embed/VerbDescriptor.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+#include <sfx2/dllapi.h>
+#include <sfx2/sfxuno.hxx>
+#include <svl/brdcst.hxx>
 #include <tools/debug.hxx>
 #include <tools/rtti.hxx>
-#include <svl/brdcst.hxx>
-
-#include <tools/string.hxx>
-
-#include <sfx2/sfxuno.hxx>
 
 class ResMgr;
 class Window;

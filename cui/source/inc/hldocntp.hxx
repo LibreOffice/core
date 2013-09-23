@@ -48,7 +48,7 @@ private:
 
 protected:
     void FillDlgFields     ( String& aStrURL );
-    void GetCurentItemData ( String& aStrURL, String& aStrName,
+    void GetCurentItemData ( OUString& rStrURL, String& aStrName,
                              String& aStrIntName, String& aStrFrame,
                              SvxLinkInsertMode& eMode );
 

@@ -19,7 +19,6 @@
 
 #include "ResId.hxx"
 #include "ResourceManager.hxx"
-#include <tools/string.hxx>
 
 namespace chart
 {

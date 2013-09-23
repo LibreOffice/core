@@ -332,7 +332,7 @@ private:
     virtual void SetError(sal_uInt16 nError);
     xub_StrLen NextSymbol(bool bInArray);
     bool IsValue( const String& );
-    bool IsOpCode( const String&, bool bInArray );
+    bool IsOpCode( const OUString&, bool bInArray );
     bool IsOpCode2( const String& );
     bool IsString();
     bool IsReference( const String& );

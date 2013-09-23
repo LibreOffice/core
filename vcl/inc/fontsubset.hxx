@@ -20,8 +20,8 @@
 #ifndef _SV_FONTSUBSET_HXX
 #define _SV_FONTSUBSET_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <cstdio>
 
 #include "vcl/dllapi.h"

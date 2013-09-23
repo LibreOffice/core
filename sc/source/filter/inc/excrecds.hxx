@@ -20,9 +20,10 @@
 #ifndef SC_EXCRECDS_HXX
 #define SC_EXCRECDS_HXX
 
-#include <tools/solar.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 #include <vcl/vclenum.hxx>
 
 

@@ -191,12 +191,12 @@ static HTMLOptionEnum aHTMLFileNameFldFmtTable[] =
 };
 
 
-sal_uInt16 SwHTMLParser::GetNumType( const String& rStr, sal_uInt16 nDfltType )
+sal_uInt16 SwHTMLParser::GetNumType( const OUString& rStr, sal_uInt16 nDfltType )
 {
     sal_uInt16 nType = nDfltType;
     const HTMLOptionEnum *pOptEnums = aHTMLPageNumFldFmtTable;
     while( pOptEnums->pName )
-        if( !rStr.EqualsIgnoreCaseAscii( pOptEnums->pName ) )
+        if( !rStr.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
             pOptEnums++;
         else
             break;
@@ -352,10 +352,10 @@ void SwHTMLParser::NewField()
             SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
             if( pFmtOption )
             {
-                const String& rFmt = pFmtOption->GetString();
+                const OUString& rFmt = pFmtOption->GetString();
                 for( sal_uInt16 k = 0; pFmtTbl[k].pName; k++ )
                 {
-                    if( rFmt.EqualsIgnoreCaseAscii( pFmtTbl[k].pName ) )
+                    if( rFmt.equalsIgnoreAsciiCaseAscii( pFmtTbl[k].pName ) )
                     {
                         nNumFmt = pFormatter->GetFormatIndex(
                                         pFmtTbl[k].eFmt, LANGUAGE_SYSTEM);

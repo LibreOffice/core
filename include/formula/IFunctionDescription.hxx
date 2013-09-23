@@ -24,7 +24,7 @@
 #include <memory>
 #include "formula/formuladllapi.h"
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 

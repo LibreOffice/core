@@ -35,6 +35,7 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/types.hxx>
+#include <tools/string.hxx>
 
 using namespace connectivity::calc;
 using namespace connectivity::file;

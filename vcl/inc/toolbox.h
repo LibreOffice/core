@@ -20,8 +20,8 @@
 #ifndef _SV_TOOLBOX_H
 #define _SV_TOOLBOX_H
 
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <tools/solar.h>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>

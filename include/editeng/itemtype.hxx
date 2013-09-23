@@ -23,7 +23,7 @@
 #include <editeng/eerdll.hxx>
 
 // forward ---------------------------------------------------------------
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/resid.hxx>
 #include <tools/bigint.hxx>
 #include <svl/poolitem.hxx>

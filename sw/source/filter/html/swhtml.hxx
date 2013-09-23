@@ -650,7 +650,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // <SDFIELD>
 public:
-    static sal_uInt16 GetNumType( const String& rStr, sal_uInt16 eDfltType );
+    static sal_uInt16 GetNumType( const OUString& rStr, sal_uInt16 eDfltType );
 private:
     void NewField();
     void EndField();
@@ -662,7 +662,7 @@ private:
     // Einfuegen von Grafiken, Plugins und Applets
 
     // Image-Maps suchen und mit Grafik-Nodes verbinden
-    ImageMap *FindImageMap( const String& rURL ) const;
+    ImageMap *FindImageMap( const OUString& rURL ) const;
     void ConnectImageMaps();
 
     // Verankerung eines Fly-Frames bestimmen und entsprechende Attribute

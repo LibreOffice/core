@@ -411,7 +411,6 @@
 #include <tools/shl.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unicode/uchar.h>
 #include <uno/mapping.hxx>

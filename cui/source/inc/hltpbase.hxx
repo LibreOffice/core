@@ -105,7 +105,7 @@ protected:
     void InitStdControls ();
     virtual void FillStandardDlgFields ( SvxHyperlinkItem* pHyperlinkItem );
     virtual void FillDlgFields         ( String& aStrURL ) = 0;
-    virtual void GetCurentItemData     ( String& aStrURL, String& aStrName,
+    virtual void GetCurentItemData     ( OUString& rStrURL, String& aStrName,
                                          String& aStrIntName, String& aStrFrame,
                                          SvxLinkInsertMode& eMode ) = 0;
     virtual String CreateUiNameFromURL( const String& aStrURL );
@@ -118,7 +118,7 @@ protected:
 
     String              aEmptyStr;
 
-    static String   GetSchemeFromURL( String aStrURL );
+    static OUString GetSchemeFromURL( const OUString& rStrURL );
 
     inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
 

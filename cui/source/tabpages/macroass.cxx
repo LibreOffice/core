@@ -150,8 +150,8 @@ void _SfxMacroTabPage::EnableButtons()
         String sEventMacro;
         sEventMacro = ((SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
 
-        String sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
-        mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.EqualsIgnoreCaseAscii( sEventMacro ) );
+        OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
+        mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.equalsIgnoreAsciiCase( sEventMacro ) );
     }
     else
         mpImpl->pAssignPB->Enable( sal_False );

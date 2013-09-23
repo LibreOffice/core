@@ -40,7 +40,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include <utility>
 #include <algorithm>

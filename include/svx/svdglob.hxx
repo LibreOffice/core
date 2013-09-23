@@ -20,9 +20,8 @@
 #ifndef _SVDGLOB_HXX
 #define _SVDGLOB_HXX
 
+#include <rtl/ustring.hxx>
 #include <sal/config.h>
-#include <tools/string.hxx>
-
 #include <svx/svxdllapi.h>
 
 //************************************************************

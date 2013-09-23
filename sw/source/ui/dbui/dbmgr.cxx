@@ -2216,26 +2216,26 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
         String sURL = xFP->getFiles().getConstArray()[0];
         //data sources have to be registered depending on their extensions
         INetURLObject aURL( sURL );
-        String sExt( aURL.GetExtension() );
+        OUString sExt( aURL.GetExtension() );
         Any aURLAny;
         Any aTableFilterAny;
         Any aSuppressVersionsAny;
         Any aInfoAny;
         INetURLObject aTempURL(aURL);
         bool bStore = true;
-        if(sExt.EqualsAscii("odb"))
+        if(sExt == "odb")
         {
             bStore = false;
         }
-        else if(sExt.EqualsIgnoreCaseAscii("sxc")
-            || sExt.EqualsIgnoreCaseAscii("ods")
-                || sExt.EqualsIgnoreCaseAscii("xls"))
+        else if(sExt.equalsIgnoreAsciiCase("sxc")
+            || sExt.equalsIgnoreAsciiCase("ods")
+                || sExt.equalsIgnoreAsciiCase("xls"))
         {
             OUString sDBURL("sdbc:calc:");
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             aURLAny <<= sDBURL;
         }
-        else if(sExt.EqualsIgnoreCaseAscii("dbf"))
+        else if(sExt.equalsIgnoreAsciiCase("dbf"))
         {
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
@@ -2247,7 +2247,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             aFilters[0] = aURL.getBase();
             aTableFilterAny <<= aFilters;
         }
-        else if(sExt.EqualsIgnoreCaseAscii("csv") || sExt.EqualsIgnoreCaseAscii("txt"))
+        else if(sExt.equalsIgnoreAsciiCase("csv") || sExt.equalsIgnoreAsciiCase("txt"))
         {
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
@@ -2263,14 +2263,14 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             aTableFilterAny <<= aFilters;
         }
 #ifdef WNT
-        else if(sExt.EqualsIgnoreCaseAscii("mdb"))
+        else if(sExt.equalsIgnoreAsciiCase("mdb"))
         {
             OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
             sDBURL += aTempURL.PathToFileName();
             aURLAny <<= sDBURL;
             aSuppressVersionsAny <<= makeAny(true);
         }
-        else if(sExt.EqualsIgnoreCaseAscii("accdb"))
+        else if(sExt.equalsIgnoreAsciiCase("accdb"))
         {
             OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
             sDBURL += aTempURL.PathToFileName();
@@ -2331,7 +2331,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                         ::comphelper::copyProperties(
                             uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ),
                             xDSSettings );
-                        xDSSettings->setPropertyValue( "Extension", uno::makeAny( OUString( sExt )));
+                        xDSSettings->setPropertyValue( "Extension", uno::makeAny( sExt ));
                     }
                 }
 

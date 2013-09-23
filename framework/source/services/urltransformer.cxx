@@ -325,11 +325,6 @@ OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL   
         return OUString();
 }
 
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
-
-
 }       //  namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

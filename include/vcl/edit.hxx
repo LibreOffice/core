@@ -21,6 +21,7 @@
 #define _SV_EDIT_HXX
 
 #include <tools/solar.h>
+#include <tools/string.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/ctrl.hxx>

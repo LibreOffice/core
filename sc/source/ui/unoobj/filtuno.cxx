@@ -259,8 +259,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
             //  ascii export (import is handled above)
 
             INetURLObject aURL( aFileName );
-            String aExt(aURL.getExtension());
-            if (aExt.EqualsIgnoreCaseAscii("CSV"))
+            OUString aExt(aURL.getExtension());
+            if (aExt.equalsIgnoreAsciiCase("CSV"))
                 cAsciiDel = ',';
             else
                 cAsciiDel = '\t';

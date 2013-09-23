@@ -22,6 +22,7 @@
 
 #include <undobj.hxx>
 #include <tools/mempool.hxx>
+#include <tools/string.hxx>
 #include <swtypes.hxx>
 #include <IDocumentContentOperations.hxx>
 

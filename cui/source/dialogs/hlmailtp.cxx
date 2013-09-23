@@ -136,11 +136,11 @@ void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
 |*
 |************************************************************************/
 
-void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
+void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
                                              String& aStrIntName, String& aStrFrame,
                                              SvxLinkInsertMode& eMode )
 {
-    aStrURL = CreateAbsoluteURL();
+    rStrURL = CreateAbsoluteURL();
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 

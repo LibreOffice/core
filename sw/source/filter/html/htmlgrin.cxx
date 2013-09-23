@@ -92,18 +92,18 @@ HTMLOptionEnum aHTMLImgVAlignTable[] =
     { 0,                    0                   }
 };
 
-ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
+ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 {
     ImageMap *pMap = 0;
 
-    OSL_ENSURE( rName.GetChar(0) != '#', "FindImageName: Name beginnt mit #!" );
+    OSL_ENSURE( rName[0] != '#', "FindImageName: Name beginnt mit #!" );
 
     if( pImageMaps )
     {
         for( sal_uInt16 i=0; i<pImageMaps->size(); i++ )
         {
             ImageMap *pIMap = &(*pImageMaps)[i];
-            if( rName.EqualsIgnoreCaseAscii( pIMap->GetName() ) )
+            if( rName.equalsIgnoreAsciiCase( pIMap->GetName() ) )
             {
                 pMap = pIMap;
                 break;

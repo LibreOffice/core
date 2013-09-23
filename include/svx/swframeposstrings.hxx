@@ -19,8 +19,8 @@
 #ifndef _SVXSWFRAMEPOSSTRINGS_HXX
 #define _SVXSWFRAMEPOSSTRINGS_HXX
 
-#include <tools/string.hxx>
-#include "svx/svxdllapi.h"
+#include <rtl/ustring.hxx>
+#include <svx/svxdllapi.h>
 
 /*
     contains strings needed for positioning dialogs

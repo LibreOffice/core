@@ -22,11 +22,11 @@
 
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
-#include <tools/solar.h>
 #include <i18nlangtag/lang.h>
+#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
+#include <tools/solar.h>
 #include <vcl/mapmod.hxx>
-#include <tools/string.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>

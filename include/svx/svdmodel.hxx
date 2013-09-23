@@ -22,12 +22,12 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
 #include <tools/link.hxx>
 #include <tools/weakbase.hxx>
 #include <vcl/mapmod.hxx>
 #include <svl/brdcst.hxx>
-#include <tools/string.hxx>
 #include <tools/datetime.hxx>
 #include <svl/hint.hxx>
 

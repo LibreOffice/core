@@ -20,8 +20,7 @@
 #ifndef _URLBMK_HXX
 #define _URLBMK_HXX
 
-
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 //=========================================================================
 

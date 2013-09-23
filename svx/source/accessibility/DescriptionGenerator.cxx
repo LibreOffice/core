@@ -42,7 +42,6 @@
 #include "accessibility.hrc"
 #include "svx/svdstr.hrc"
 #include <svx/dialmgr.hxx>
-#include <tools/string.hxx>
 
 #include <svx/xdef.hxx>
 #include "svx/unoapi.hxx"

@@ -506,8 +506,7 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 
 void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rCRD )
 {
-    String              aScName( rOrgName );
-    ScfTools::ConvertToScDefinedName( aScName );
+    String aScName = ScfTools::ConvertToScDefinedName(rOrgName);
 
     Entry aInsert( rOrgName, aScName, rCRD );
 

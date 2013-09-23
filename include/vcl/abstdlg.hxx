@@ -19,8 +19,8 @@
 #ifndef _VCL_ABSTDLG_HXX
 #define _VCL_ABSTDLG_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <vcl/dllapi.h>
 
 class Window;
