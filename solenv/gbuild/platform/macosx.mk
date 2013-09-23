@@ -279,7 +279,6 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(gb_Library_DLLDIR)"
-gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = libtest_$(1).dylib
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 

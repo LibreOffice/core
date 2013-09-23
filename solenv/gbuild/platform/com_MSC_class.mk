@@ -389,7 +389,6 @@ gb_CppunitTest_DEFS := -D_DLL
 # thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(shell cygpath -w $(gb_Library_DLLDIR))"
 
-gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = test_$(1).dll
 gb_CppunitTest_get_ilibfilename = itest_$(1).lib
 

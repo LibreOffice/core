@@ -301,7 +301,6 @@ endef
 
 gb_CppunitTest_CPPTESTPRECOMMAND := \
     $(call gb_Helper_extend_ld_path,$(OUTDIR_FOR_BUILD)/lib/sqlite)
-gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = libtest_$(1).so
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 
