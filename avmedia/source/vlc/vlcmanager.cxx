@@ -65,6 +65,8 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
         else
             SAL_INFO("avmedia", "VLC version '" << str << "' is acceptable");
     }
+    else
+        SAL_WARN("avmedia", "Cannot load symbols");
 
     if (m_is_vlc_found)
         mEventHandler.create();

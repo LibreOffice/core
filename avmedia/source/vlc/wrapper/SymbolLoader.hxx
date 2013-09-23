@@ -111,6 +111,7 @@ namespace
             return true;
         }
 
+        SAL_WARN("avmedia", "Cannot load libvlc");
         osl_unloadModule( aModule );
 
         return false;
