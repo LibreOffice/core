@@ -469,12 +469,6 @@ en-US = "Galician"
 [STR_DESC_MODULE_LANGPACK_GL]
 en-US = "Installs Galician support in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_LANGPACK_SR_LATN_CS]
-en-US = "Serbian (Latin)"
-
-[STR_DESC_MODULE_LANGPACK_SR_LATN_CS]
-en-US = "Installs Serbian (Latin) support in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_LANGPACK_SR_LATN]
 en-US = "Serbian (Latin)"
 
@@ -486,12 +480,6 @@ en-US = "Irish"
 
 [STR_DESC_MODULE_LANGPACK_GA]
 en-US = "Installs Irish support in %PRODUCTNAME %PRODUCTVERSION"
-
-[STR_NAME_MODULE_LANGPACK_SR_CS]
-en-US = "Serbian (Cyrillic)"
-
-[STR_DESC_MODULE_LANGPACK_SR_CS]
-en-US = "Installs Serbian (Cyrillic) support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_SR]
 en-US = "Serbian (Cyrillic)"
