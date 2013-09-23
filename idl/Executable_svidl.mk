@@ -34,6 +34,11 @@ $(eval $(call gb_Executable_use_libraries,svidl,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_Executable_use_externals,svidl,\
+    icudata \
+    icuuc \
+    icui18n \
+))
 $(eval $(call gb_Executable_add_exception_objects,svidl,\
 	idl/source/cmptools/hash \
 	idl/source/cmptools/lex \
