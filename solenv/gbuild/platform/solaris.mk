@@ -117,7 +117,6 @@ gb_LinkTarget_LDFLAGS += \
 	-L$(SYSBASE)/lib \
 	-L$(SYSBASE)/usr/lib \
 	-Wl,-z,combreloc \
-	$(SOLARLIB) \
 
 ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
 gb_LinkTarget_LDFLAGS += \

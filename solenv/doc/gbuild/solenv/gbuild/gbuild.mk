@@ -30,7 +30,6 @@ static Path WORKDIR;
 // Expected from configure/environment
 static const Integer OSL_DEBUG_LEVEL;
 static const List<Path> SOLARINC;
-static const List<Path> SOLARLIB;
 static const Path GBUILDDIR;
 static const Path JAVA_HOME;
 static const Path UPD;
