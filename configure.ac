@@ -492,7 +492,7 @@ darwin*) # Mac OS X or iOS
         test_cups=no
     else
         _os=Darwin
-        INSTROOTSUFFIX=/$(PRODUCTNAME).app/Contents
+        INSTROOTSUFFIX=/$PRODUCTNAME.app/Contents
     fi
     enable_systray=no
     # See comment above the case "$host_os"
