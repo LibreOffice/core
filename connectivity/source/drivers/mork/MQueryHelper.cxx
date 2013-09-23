@@ -213,23 +213,24 @@ sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const
 
 sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
 {
-    SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()" );
+    SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()");
     reset();
 
     OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );
     std::set<int> listRecords;
     bool handleListTable = false;
+    MorkParser* xMork = xConnection->getMorkParser(oStringTable);
 
     // check if we are retrieving the default table
-    if (oStringTable != "AddressBook")
+    if (oStringTable != "AddressBook" && oStringTable != "CollectedAddressBook")
     {
         handleListTable = true;
         // retrieve row ids for that list table
         std::string listTable = oStringTable.getStr();
-        xConnection->getMorkParser()->getRecordKeysForListTable(listTable, listRecords);
+        xMork->getRecordKeysForListTable(listTable, listRecords);
     }
     MorkTableMap::iterator tableIter;
-    MorkTableMap *Tables = xConnection->getMorkParser()->getTables( 0x80 );
+    MorkTableMap *Tables = xMork->getTables( 0x80 );
     MorkRowMap *Rows = 0;
     MorkRowMap::iterator rowIter;
 
@@ -237,7 +238,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
     {
         if (tableIter->first != 1) break;
-        Rows = xConnection->getMorkParser()->getRows( 0x80, &tableIter->second );
+        Rows = xMork->getRows( 0x80, &tableIter->second );
         if ( Rows )
         {
             // Iterate all rows
@@ -260,8 +261,8 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                 for (MorkCells::iterator CellsIter = rowIter->second.begin();
                      CellsIter != rowIter->second.end(); ++CellsIter )
                 {
-                    std::string column = xConnection->getMorkParser()->getColumn(CellsIter->first);
-                    std::string value = xConnection->getMorkParser()->getValue(CellsIter->second);
+                    std::string column = xMork->getColumn(CellsIter->first);
+                    std::string value = xMork->getValue(CellsIter->second);
                     OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
                     OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
                     OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );

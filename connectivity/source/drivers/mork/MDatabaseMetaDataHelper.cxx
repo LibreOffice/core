@@ -47,18 +47,18 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 {
 }
 
-sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                      _pCon,
+sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
                                                    ::std::vector< OUString >& _rStrings)
 {
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
 
-    /* add default table */
-    OUString table = "AddressBook";
-    _rStrings.push_back(table);
+    /* add default tables */
+    _rStrings.push_back("AddressBook");
+    _rStrings.push_back("CollectedAddressBook");
 
-    /* retrieve list table names */
+    /* retrieve list table names (not from collected ab) */
     std::set<std::string> lists;
-    _pCon->getMorkParser()->retrieveLists(lists);
+    _pCon->getMorkParser("AddressBook")->retrieveLists(lists);
     for (::std::set<std::string>::iterator iter = lists.begin(); iter != lists.end(); ++iter) {
         OUString groupTableName = OStringToOUString((*iter).c_str(), RTL_TEXTENCODING_UTF8);
         SAL_INFO("connectivity.mork", "add Table " << groupTableName);

@@ -52,8 +52,10 @@ namespace connectivity
             OColumnAlias    m_aColumnAlias;
             // Profile Access
             ProfileAccess* m_pProfileAccess;
-            // Mork Parser
-            MorkParser* m_pMork;
+            // Mork Parser (abook)
+            MorkParser* m_pBook;
+            // Mork Parser (history)
+            MorkParser* m_pHistory;
             // Store Catalog
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier> m_xCatalog;
 
@@ -63,7 +65,7 @@ namespace connectivity
             virtual ~OConnection();
 
             MorkDriver* getDriver() {return m_pDriver;};
-            MorkParser* getMorkParser() {return m_pMork;};
+            MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory : m_pBook;};
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
             // OComponentHelper

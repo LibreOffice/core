@@ -53,7 +53,8 @@ OConnection::OConnection(MorkDriver* _pDriver)
 {
     m_pDriver->acquire();
     m_pProfileAccess = new ProfileAccess();
-    m_pMork = new MorkParser();
+    m_pBook = new MorkParser();
+    m_pHistory = new MorkParser();
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
@@ -64,7 +65,8 @@ OConnection::~OConnection()
     m_pDriver->release();
     m_pDriver = NULL;
     delete m_pProfileAccess;
-    delete m_pMork;
+    delete m_pBook;
+    delete m_pHistory;
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()
@@ -113,7 +115,8 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     SAL_INFO("connectivity.mork", "URI = " << aAddrbookURI );
     SAL_INFO("connectivity.mork", "Scheme = " << aAddrbookScheme );
 
-    OUString path;
+    OUString abook;
+    OUString history;
     const OUString UNITTEST_URL = "thunderbird:unittest:";
     sal_Int32 unittestIndex = url.indexOf(UNITTEST_URL);
 
@@ -121,29 +124,42 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     if (unittestIndex == -1)
     {
         OUString defaultProfile = m_pProfileAccess->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
-        path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
+        OUString path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
         SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
         SAL_INFO("connectivity.mork", "ProfilePath: " << path);
-        path += OUString( "/abook.mab" );
+        abook = path + OUString( "/abook.mab" );
+        history = path + OUString( "/history.mab" );
+        SAL_INFO("connectivity.mork", "AdressbookPath (abook): " << abook);
+        SAL_INFO("connectivity.mork", "AdressbookPath (history): " << history);
     }
     else
     {
-        path = aAddrbookURI.replaceFirst(UNITTEST_URL, "");
+        abook = aAddrbookURI.replaceFirst(UNITTEST_URL, "");
+        SAL_INFO("connectivity.mork", "unit test: " << abook);
     }
 
-    SAL_INFO("connectivity.mork", "AdressbookPath: " << path);
-
-    OString strPath = OUStringToOString(path, RTL_TEXTENCODING_UTF8 );
+    OString strPath = OUStringToOString(abook, RTL_TEXTENCODING_UTF8);
 
     // Open and parse mork file
-    if (!m_pMork->open(strPath.getStr()))
+    if (!m_pBook->open(strPath.getStr()))
     {
-        SAL_WARN("connectivity.mork", "Can not parse mork file!");
+        SAL_WARN("connectivity.mork", "Can not parse abook mork file: " << strPath);
         throwGenericSQLException( STR_COULD_NOT_LOAD_FILE, *this );
     }
 
+    // read history only in production
+    if (unittestIndex == -1)
+    {
+        strPath = OUStringToOString(history, RTL_TEXTENCODING_UTF8);
+        if (!m_pHistory->open(strPath.getStr()))
+        {
+            SAL_WARN("connectivity.mork", "Can not parse history mork file: " << strPath);
+            throwGenericSQLException( STR_COULD_NOT_LOAD_FILE, *this );
+        }
+    }
+
     // check that we can retrieve the tables:
-    MorkTableMap *Tables = m_pMork->getTables( defaultScope );
+    MorkTableMap *Tables = m_pBook->getTables( defaultScope );
     MorkTableMap::iterator tableIter;
     if (Tables)
     {
