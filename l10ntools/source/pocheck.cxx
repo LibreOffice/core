@@ -21,7 +21,7 @@ static void checkStyleNames(OString aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedStyleNames;
     std::map<OString,sal_uInt16> aLocalizedNumStyleNames;
-    std::list<PoEntry*> repeatedEntries;
+    std::list<PoEntry> repeatedEntries;
 
     OString aPoPath = OString(getenv("SRC_ROOT")) +
                       "/translations/source/" +
@@ -33,19 +33,18 @@ static void checkStyleNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry* pPoEntry = new PoEntry();
-        aPoInput.readEntry(*pPoEntry);
+        PoEntry aPoEntry;
+        aPoInput.readEntry(aPoEntry);
         bool bRepeated = false;
         if( aPoInput.eof() )
         {
-            delete pPoEntry;
             break;
         }
 
-        if( !pPoEntry->isFuzzy() && pPoEntry->getSourceFile() == "poolfmt.src" &&
-            pPoEntry->getGroupId().startsWith("STR_POOLCOLL") )
+        if( !aPoEntry.isFuzzy() && aPoEntry.getSourceFile() == "poolfmt.src" &&
+            aPoEntry.getGroupId().startsWith("STR_POOLCOLL") )
         {
-            OString aMsgStr = pPoEntry->getMsgStr();
+            OString aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedStyleNames.find(aMsgStr) == aLocalizedStyleNames.end() )
@@ -55,10 +54,10 @@ static void checkStyleNames(OString aLanguage)
                 bRepeated = true;
             }
         }
-        if( !pPoEntry->isFuzzy() && pPoEntry->getSourceFile() == "poolfmt.src" &&
-            pPoEntry->getGroupId().startsWith("STR_POOLNUMRULE") )
+        if( !aPoEntry.isFuzzy() && aPoEntry.getSourceFile() == "poolfmt.src" &&
+            aPoEntry.getGroupId().startsWith("STR_POOLNUMRULE") )
         {
-            OString aMsgStr = pPoEntry->getMsgStr();
+            OString aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedNumStyleNames.find(aMsgStr) == aLocalizedNumStyleNames.end() )
@@ -69,10 +68,7 @@ static void checkStyleNames(OString aLanguage)
             }
         }
         if (bRepeated)
-            repeatedEntries.push_back(pPoEntry);
-         else
-            delete pPoEntry;
-
+            repeatedEntries.push_back(aPoEntry);
     }
     aPoInput.close();
 
@@ -110,8 +106,8 @@ static void checkStyleNames(OString aLanguage)
         aPoInput.readEntry(aPoEntry);
         if( aPoInput.eof() )
             break;
-        for ( std::list<PoEntry*>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it) {
-            if ((*it)->getMsgId() == aPoEntry.getMsgId() && (*it)->getGroupId() == aPoEntry.getGroupId()) {
+        for ( std::list<PoEntry>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it) {
+            if (it->getMsgId() == aPoEntry.getMsgId() && it->getGroupId() == aPoEntry.getGroupId()) {
                 bError = true;
                 break;
             }
@@ -139,7 +135,7 @@ static void checkFunctionNames(OString aLanguage)
     std::map<OString,sal_uInt16> aLocalizedFunctionNames;
     std::map<OString,sal_uInt16> aLocalizedCoreFunctionNames;
     //
-    std::list<PoEntry*> repeatedEntries;
+    std::list<PoEntry> repeatedEntries;
 
     OString aPoPaths[4];
     OUString aPoPathURL;
@@ -155,20 +151,19 @@ static void checkFunctionNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry* aPoEntry = new PoEntry();
-        aPoInput.readEntry(*aPoEntry);
+        PoEntry aPoEntry;
+        aPoInput.readEntry(aPoEntry);
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_STRLIST_FUNCTION_NAMES" )
+        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_STRLIST_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry->getMsgStr();
+            OString aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) == aLocalizedCoreFunctionNames.end() )
                 aLocalizedCoreFunctionNames[aMsgStr] = 1;
             if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-                delete aPoEntry;
             } else {
                 aLocalizedFunctionNames[aMsgStr]++;
                 repeatedEntries.push_back(aPoEntry);
@@ -187,20 +182,19 @@ static void checkFunctionNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry* aPoEntry = new PoEntry();
-        aPoInput.readEntry(*aPoEntry);
+        PoEntry aPoEntry;
+        aPoInput.readEntry(aPoEntry);
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_ANALYSIS_FUNCTION_NAMES" )
+        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_ANALYSIS_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry->getMsgStr();
+            OString aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
                 aMsgStr += "_ADD";
             if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-                delete aPoEntry;
             } else {
                 aLocalizedFunctionNames[aMsgStr]++;
                 repeatedEntries.push_back(aPoEntry);
@@ -220,20 +214,19 @@ static void checkFunctionNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry* aPoEntry = new PoEntry();
-        aPoInput.readEntry(*aPoEntry);
+        PoEntry aPoEntry;
+        aPoInput.readEntry(aPoEntry);
         if( aPoInput.eof() )
             break;
-        if( !aPoEntry->isFuzzy() && aPoEntry->getGroupId() == "RID_DATE_FUNCTION_NAMES" )
+        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_DATE_FUNCTION_NAMES" )
         {
-            OString aMsgStr = aPoEntry->getMsgStr();
+            OString aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
                 aMsgStr += "_ADD";
             if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-                delete aPoEntry;
             } else {
                 aLocalizedFunctionNames[aMsgStr]++;
                 repeatedEntries.push_back(aPoEntry);
@@ -252,27 +245,25 @@ static void checkFunctionNames(OString aLanguage)
 
     for(;;)
     {
-        PoEntry* pPoEntry = new PoEntry();
-        aPoInput.readEntry(*pPoEntry);
+        PoEntry aPoEntry;
+        aPoInput.readEntry(aPoEntry);
         if( aPoInput.eof() )
         {
-            delete pPoEntry;
             break;
         }
 
-        if( !pPoEntry->isFuzzy() && pPoEntry->getGroupId() == "RID_PRICING_FUNCTION_NAMES" )
+        if( !aPoEntry.isFuzzy() && aPoEntry.getGroupId() == "RID_PRICING_FUNCTION_NAMES" )
         {
-            OString aMsgStr = pPoEntry->getMsgStr();
+            OString aMsgStr = aPoEntry.getMsgStr();
             if( aMsgStr.isEmpty() )
                 continue;
             if( aLocalizedCoreFunctionNames.find(aMsgStr) != aLocalizedCoreFunctionNames.end() )
                 aMsgStr += "_ADD";
             if( aLocalizedFunctionNames.find(aMsgStr) == aLocalizedFunctionNames.end() ) {
                 aLocalizedFunctionNames[aMsgStr] = 1;
-                delete pPoEntry;
             } else {
                 aLocalizedFunctionNames[aMsgStr]++;
-                repeatedEntries.push_back(pPoEntry);
+                repeatedEntries.push_back(aPoEntry);
             }
         }
     }
@@ -331,9 +322,9 @@ static void checkFunctionNames(OString aLanguage)
             aPoInput.readEntry(aPoEntry);
             if( aPoInput.eof() )
                 break;
-            for ( std::list<PoEntry*>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it)
+            for ( std::list<PoEntry>::iterator it=repeatedEntries.begin(); it!=repeatedEntries.end(); ++it)
             {
-                if ((*it)->getMsgId() == aPoEntry.getMsgId() && (*it)->getGroupId() == aPoEntry.getGroupId())
+                if (it->getMsgId() == aPoEntry.getMsgId() && it->getGroupId() == aPoEntry.getGroupId())
                 {
                     bError = true;
                     break;
