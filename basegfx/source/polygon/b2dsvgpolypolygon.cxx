@@ -209,6 +209,7 @@ namespace basegfx
             // skip initial whitespace
             lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
+            sal_Unicode aLastCommand('-');
             while(nPos < nLen)
             {
                 bool bRelative(false);
@@ -250,7 +251,7 @@ namespace basegfx
                             bRelative = true;
                         }
 
-                        if(bMoveTo)
+                        if(bMoveTo && aLastCommand != 'm' && aLastCommand != 'M')
                         {
                             // new polygon start, finish old one
                             if(aCurrPoly.count())
@@ -760,6 +761,7 @@ namespace basegfx
                         break;
                     }
                 }
+                aLastCommand = aCurrChar;
             }
 
             if(aCurrPoly.count())
