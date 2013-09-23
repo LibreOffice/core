@@ -292,10 +292,10 @@ en-US = "Catalan"
 [STR_DESC_MODULE_LANGPACK_CA]
 en-US = "Installs the Catalan user interface"
 
-[STR_NAME_MODULE_LANGPACK_CA_XV]
+[STR_NAME_MODULE_LANGPACK_CA_VALENCIA]
 en-US = "Catalan (Valencian)"
 
-[STR_DESC_MODULE_LANGPACK_CA_XV]
+[STR_DESC_MODULE_LANGPACK_CA_VALENCIA]
 en-US = "Installs the Catalan (Valencian) user interface"
 
 [STR_NAME_MODULE_LANGPACK_DA]
@@ -406,10 +406,10 @@ en-US = "Galician"
 [STR_DESC_MODULE_LANGPACK_GL]
 en-US = "Installs the Galician user interface"
 
-[STR_NAME_MODULE_LANGPACK_SH]
+[STR_NAME_MODULE_LANGPACK_SR_LATN]
 en-US = "Serbian (Latin)"
 
-[STR_DESC_MODULE_LANGPACK_SH]
+[STR_DESC_MODULE_LANGPACK_SR_LATN]
 en-US = "Installs the Serbian (Latin) user interface"
 
 [STR_NAME_MODULE_LANGPACK_GA]
