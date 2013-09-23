@@ -284,7 +284,7 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable__get_rpath
-$(strip -Wl,-z,origin $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') -Wl,-rpath-link,-Wl,-rpath-link,$(INSTDIR)/ure/lib -Wl,-rpath-link,$(INSTDIR)/program)
+$(strip -Wl,-z,origin $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') -Wl,-rpath-link,$(INSTDIR)/ure/lib -Wl,-rpath-link,$(INSTDIR)/program)
 endef
 
 define gb_Executable_get_rpath
