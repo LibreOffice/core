@@ -118,10 +118,10 @@ bool PropertySet::implGetPropertyValue( Any& orValue, const OUString& rPropName 
         orValue = mxPropSet->getPropertyValue( rPropName );
         return true;
     }
-    catch( Exception& )
+    catch( Exception& e)
     {
         SAL_WARN( "oox", "PropertySet::implGetPropertyValue - cannot get property \"" <<
-                  rPropName << '"' );
+                  rPropName << "\" Error: " << e.Message);
     }
     return false;
 }
@@ -133,10 +133,10 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
         mxPropSet->setPropertyValue( rPropName, rValue );
         return true;
     }
-    catch( Exception& )
+    catch( Exception& e)
     {
         SAL_WARN( "oox", "PropertySet::implSetPropertyValue - cannot set property \"" <<
-                  rPropName << '"' );
+                  rPropName << "\" Error: " << e.Message);
     }
     return false;
 }
