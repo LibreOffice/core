@@ -259,7 +259,6 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
-#JAD#'-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'
 define gb_Library__get_rpath
 $(if $(1),$(strip '-Wl,-rpath,$(1)'))
 endef
@@ -286,9 +285,7 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable__get_rpath
-$(strip $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') \
--L$(gb_Library_OUTDIRLOCATION))
-#JAD#-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
+$(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)')
 endef
 
 define gb_Executable_get_rpath
