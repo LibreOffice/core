@@ -47,7 +47,7 @@ namespace
         wchar_t arCurrent[MAX_PATH];
         DWORD dwType, dwCurrentSize = sizeof( arCurrent );
 
-        if ( ::RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"Software\\VideoLAN\\VLC",
+        if ( ::RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"SOFTWARE\\VideoLAN\\VLC",
                              0, KEY_READ, &hKey ) == ERROR_SUCCESS )
         {
             if ( ::RegQueryValueExW( hKey, L"InstallDir", NULL, &dwType, (LPBYTE) arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
@@ -95,6 +95,7 @@ namespace
 #elif defined( WNT )
         const OUString& fullPath = GetVLCPath() + OUString::createFromAscii(LibName);
 #endif
+        SAL_INFO("avmedia", fullPath);
 
         oslModule aModule = osl_loadModule( fullPath.pData,
                                             SAL_LOADMODULE_DEFAULT );

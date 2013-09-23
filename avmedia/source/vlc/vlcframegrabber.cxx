@@ -30,7 +30,7 @@ namespace
         "-Vdummy",
         "--snapshot-format=png",
         "--ffmpeg-threads",
-        "--verbose=-1",
+        "--verbose=2",
         "--no-audio"
     };
 }

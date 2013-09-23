@@ -30,7 +30,7 @@ namespace
 
     const char * const VLC_ARGS[] = {
         "-Vdummy",
-        "--verbose=-1"
+        "--verbose=2"
     };
 }
 
