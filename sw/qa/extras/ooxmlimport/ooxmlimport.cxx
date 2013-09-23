@@ -135,6 +135,7 @@ public:
     void testVmlTextVerticalAdjust();
     void testGroupshapeSdt();
     void testDefaultSectBreakCols();
+    void testChart();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -234,6 +235,8 @@ void Test::run()
         {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
         {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
+        {"Chart.docx", &Test::testChart},
+
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1557,6 +1560,12 @@ void Test::testDefaultSectBreakCols()
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
+}
+
+void Test::testChart()
+{
+    // Work in Progress
+    // here we can verify property values for Chart.docx
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
