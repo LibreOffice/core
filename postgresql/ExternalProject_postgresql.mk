@@ -42,7 +42,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			$(if $(and $(filter NO,$(SYSTEM_OPENSSL)), $(filter-out YES,$(DISABLE_OPENSSL))),\
 			-I$(call gb_UnpackedTarball_get_dir,openssl/include))" \
 			$(if $(filter NO,$(SYSTEM_OPENLDAP)), \
-			LDFLAGS="-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs -L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs -L$(OUTDIR)/lib" \
+			LDFLAGS="-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap_r/.libs -L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs -L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs -L$(OUTDIR)/lib" \
 			EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4" \
 			) \
 		&& cd src/interfaces/libpq \
