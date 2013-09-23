@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,odk_examples,$(SRCDIR)/odk/examples))
 
 $(eval $(call gb_Package_set_outdir,odk_examples,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files_with_dir,odk_examples,$(gb_Package_SDKDIRNAME)/examples,\
+$(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,\
     CLI/CSharp/Spreadsheet/GeneralTableSample.cs \
     CLI/CSharp/Spreadsheet/Makefile \
     CLI/CSharp/Spreadsheet/SpreadsheetDocHelper.cs \

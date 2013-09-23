@@ -196,10 +196,10 @@ gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS := 
 
 gb_Executable_LAYER := \
-	$(foreach exe,$(gb_Executable_UREBIN),$(exe):OOO) \
-	$(foreach exe,$(gb_Executable_SDK),$(exe):OOO) \
+	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
+	$(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
-	$(foreach exe,$(gb_Executable_NONE),$(exe):OOO) \
+	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
 
 define gb_Executable_Executable_platform
@@ -256,9 +256,6 @@ gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive
 else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
-
-# Package class
-gb_Package_SDKDIRNAME := sdk
 
 # UIMenubarTarget class
 

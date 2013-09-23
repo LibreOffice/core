@@ -24,7 +24,7 @@ $(odk_allheaders_DIR)/allheaders.hxx : \
 	printf '#endif\n' >> $@ \
 	$(foreach file,$(shell cat $^),\
 		$(if $(findstring /win32/,$(file)),&& printf '#ifdef WNT\n' >> $@) \
-	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,,$(file)) >> $@ \
+	    && printf '#include <%s>\n' $(subst $(INSTDIR)/$(SDKDIRNAME)/include/,,$(file)) >> $@ \
 		$(if $(findstring /win32/,$(file)),&& printf '#endif // WNT\n' >> $@) \
 	)
 

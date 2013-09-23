@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,odk_share_readme,$(OUTDIR)/bin))
 
 $(eval $(call gb_Package_set_outdir,odk_share_readme,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,odk_share_readme,$(gb_Package_SDKDIRNAME)/share/readme,\
+$(eval $(call gb_Package_add_files,odk_share_readme,$(SDKDIRNAME)/share/readme,\
 	LICENSE.html \
 	osl/$(gb_LICENSE) \
 	osl/$(call gb_README,en-US) \

@@ -24,7 +24,7 @@ odk_cpp_INCFILELIST := com/sun/star/uno/Any.h \
 
 # Cygwin Doxygen needs unix paths
 odk_cygwin_path = $(if $(filter WNT,$(OS)),$(shell cygpath -u $(1)),$(1))
-odk_cpp_PREFIX := $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/
+odk_cpp_PREFIX := $(INSTDIR)/$(SDKDIRNAME)/include/
 odk_cpp_DOXY_INPUT := $(SRCDIR)/odk/docs/cpp/main.dox \
 	$(SRCDIR)/include/sal/log-areas.dox \
 	$(addprefix $(odk_cpp_PREFIX),$(odk_cpp_INCDIRLIST) $(odk_cpp_INCFILELIST))

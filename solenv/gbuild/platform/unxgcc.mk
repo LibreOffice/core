@@ -390,9 +390,6 @@ else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
-# Package class
-gb_Package_SDKDIRNAME := sdk
-
 # UIMenubarTarget class
 
 define gb_UIMenubarTarget__command

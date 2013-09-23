@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,odk_settings,$(SRCDIR)/odk/settings))
 
 $(eval $(call gb_Package_set_outdir,odk_settings,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,odk_settings,$(gb_Package_SDKDIRNAME)/settings,\
+$(eval $(call gb_Package_add_files,odk_settings,$(SDKDIRNAME)/settings,\
 	$(if $(filter WNT,$(OS)),component.uno.def) \
 	platform.mk \
 	settings.mk \

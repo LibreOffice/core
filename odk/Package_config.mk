@@ -12,13 +12,13 @@ $(eval $(call gb_Package_Package,odk_config,$(SRCDIR)/odk/config))
 $(eval $(call gb_Package_set_outdir,odk_config,$(INSTDIR)))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Package_add_files,odk_config,$(gb_Package_SDKDIRNAME),\
+$(eval $(call gb_Package_add_files,odk_config,$(SDKDIRNAME),\
 	cfgWin.js \
 	setsdkenv_windows.template \
 	setsdkname.bat \
 ))
 else
-$(eval $(call gb_Package_add_files,odk_config,$(gb_Package_SDKDIRNAME),\
+$(eval $(call gb_Package_add_files,odk_config,$(SDKDIRNAME),\
 	configure.pl \
 	setsdkenv_unix \
 	setsdkenv_unix.sh.in \

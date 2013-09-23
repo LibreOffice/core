@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,odk_javadoc,$(call gb_CustomTarget_get_workdir,
 
 $(eval $(call gb_Package_set_outdir,odk_javadoc,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files_with_dir,odk_javadoc,$(gb_Package_SDKDIRNAME)/docs/java/ref,\
+$(eval $(call gb_Package_add_files_with_dir,odk_javadoc,$(SDKDIRNAME)/docs/java/ref,\
 	allclasses-frame.html \
 	allclasses-noframe.html \
 	com/sun/star/comp/helper/Bootstrap.html \

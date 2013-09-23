@@ -11,6 +11,6 @@ $(eval $(call gb_Package_Package,odk_config_win,$(call gb_CustomTarget_get_workd
 
 $(eval $(call gb_Package_set_outdir,odk_config_win,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,odk_config_win,$(gb_Package_SDKDIRNAME)/setsdkenv_windows.bat,setsdkenv_windows.bat))
+$(eval $(call gb_Package_add_file,odk_config_win,$(SDKDIRNAME)/setsdkenv_windows.bat,setsdkenv_windows.bat))
 
 # vim: set noet sw=4 ts=4:

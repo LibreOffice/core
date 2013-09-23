@@ -47,7 +47,7 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	$(call gb_Helper_print_on_error,\
 		$(PERL) $< \
-			$(INSTDIR)/$(gb_Package_SDKDIRNAME) \
+			$(INSTDIR)/$(SDKDIRNAME) \
 			$(odk_PLATFORM) "$(gb_Executable_EXT)" \
 		,$@.log \
 	)

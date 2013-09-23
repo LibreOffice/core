@@ -65,9 +65,6 @@ endef
 
 gb_Package_PROGRAMDIRNAME := $(LIBO_BIN_FOLDER)
 
-# defined by platform
-#  gb_Package_SDKDIRNAME
-
 $(dir $(call gb_Package_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 

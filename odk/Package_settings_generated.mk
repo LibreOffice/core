@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,odk_settings_generated,$(call gb_CustomTarget_g
 
 $(eval $(call gb_Package_set_outdir,odk_settings_generated,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,odk_settings_generated,$(gb_Package_SDKDIRNAME)/settings,\
+$(eval $(call gb_Package_add_files,odk_settings_generated,$(SDKDIRNAME)/settings,\
 	dk.mk \
 ))
 

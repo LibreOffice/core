@@ -23,6 +23,6 @@ $(eval $(call gb_Package_Package,odk_unowinreg,$(odk_unowinreg_DIR)))
 
 $(eval $(call gb_Package_set_outdir,odk_unowinreg,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,odk_unowinreg,$(gb_Package_SDKDIRNAME)/classes/win/unowinreg.dll,$(odk_unowinreg_FILE)))
+$(eval $(call gb_Package_add_file,odk_unowinreg,$(SDKDIRNAME)/classes/win/unowinreg.dll,$(odk_unowinreg_FILE)))
 
 # vim: set noet sw=4 ts=4:

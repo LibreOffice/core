@@ -12,6 +12,6 @@ $(eval $(call gb_Package_Package,odk_headers_generated,$(BUILDDIR)/config_$(gb_S
 
 $(eval $(call gb_Package_set_outdir,odk_headers_generated,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,odk_headers_generated,$(gb_Package_SDKDIRNAME)/include/sal/typesizes.h,config_typesizes.h))
+$(eval $(call gb_Package_add_file,odk_headers_generated,$(SDKDIRNAME)/include/sal/typesizes.h,config_typesizes.h))
 
 # vim: set noet sw=4 ts=4:

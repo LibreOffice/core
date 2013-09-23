@@ -12,7 +12,7 @@ $(eval $(call gb_Package_Package,odk_headers,$(SRCDIR)/include))
 
 $(eval $(call gb_Package_set_outdir,odk_headers,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files_with_dir,odk_headers,$(gb_Package_SDKDIRNAME)/include,\
+$(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	com/sun/star/uno/Any.h \
 	com/sun/star/uno/Any.hxx \
 	com/sun/star/uno/Reference.h \

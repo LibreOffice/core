@@ -55,7 +55,7 @@ $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1
 endef
 
 define gb_UnoApi__add_idlfile
-$(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,$(gb_Package_SDKDIRNAME)/idl/%,$(2).idl),$(2).idl)
+$(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,$(SDKDIRNAME)/idl/%,$(2).idl),$(2).idl)
 
 endef
 

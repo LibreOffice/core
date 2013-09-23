@@ -231,7 +231,7 @@ $(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).export
 endef
 
 define gb_Library_get_versionlink_target
-$(INSTDIR)/$(gb_Package_SDKDIRNAME)/lib/$(basename $(call gb_Library_get_filename,$(1)))
+$(INSTDIR)/$(SDKDIRNAME)/lib/$(basename $(call gb_Library_get_filename,$(1)))
 endef
 
 gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)

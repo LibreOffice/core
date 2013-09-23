@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,odk_lib,$(WORKDIR)/LinkTarget/StaticLibrary))
 
 $(eval $(call gb_Package_set_outdir,odk_lib,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,odk_lib,$(gb_Package_SDKDIRNAME)/lib,\
+$(eval $(call gb_Package_add_files,odk_lib,$(SDKDIRNAME)/lib,\
 	$(if $(filter LINUX,$(OS)),$(notdir $(call gb_StaticLibrary_get_target,salcpprt))) \
 ))
 

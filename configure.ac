@@ -99,6 +99,57 @@ fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
 
+dnl ===================================================================
+dnl Our version is defined by the AC_INIT() at the top of this script.
+dnl ===================================================================
+
+set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
+
+LIBO_VERSION_MAJOR=$1
+LIBO_VERSION_MINOR=$2
+LIBO_VERSION_MICRO=$3
+LIBO_VERSION_PATCH=$4
+
+LIBO_VERSION_SUFFIX=$5
+# Split out LIBO_VERSION_SUFFIX_SUFFIX... horrible crack. But apparently wanted separately in
+# openoffice.lst as ABOUTBOXPRODUCTVERSIONSUFFIX. Note that the double brackets are for m4's sake,
+# they get undoubled before actually passed to sed.
+LIBO_VERSION_SUFFIX_SUFFIX=`echo "$LIBO_VERSION_SUFFIX" | sed -e 's/.*[[a-zA-Z0-9]]\([[^a-zA-Z0-9]]*\)$/\1/'`
+test -n "$LIBO_VERSION_SUFFIX_SUFFIX" && LIBO_VERSION_SUFFIX="${LIBO_VERSION_SUFFIX%${LIBO_VERSION_SUFFIX_SUFFIX}}"
+# LIBO_VERSION_SUFFIX, if non-empty, should include the period separator
+test -n "$LIBO_VERSION_SUFFIX" && LIBO_VERSION_SUFFIX=".$LIBO_VERSION_SUFFIX"
+
+AC_SUBST(LIBO_VERSION_MAJOR)
+AC_SUBST(LIBO_VERSION_MINOR)
+AC_SUBST(LIBO_VERSION_MICRO)
+AC_SUBST(LIBO_VERSION_PATCH)
+AC_SUBST(LIBO_VERSION_SUFFIX)
+AC_SUBST(LIBO_VERSION_SUFFIX_SUFFIX)
+
+AC_DEFINE_UNQUOTED(LIBO_VERSION_MAJOR,$LIBO_VERSION_MAJOR)
+AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
+AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,$LIBO_VERSION_MICRO)
+AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
+
+LIBO_THIS_YEAR=`date +%Y`
+AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
+
+# This UPD silly thing must go away soon
+UPD="${LIBO_VERSION_MAJOR}${LIBO_VERSION_MINOR}0"
+AC_SUBST(UPD)
+
+# This too should go away
+SOURCEVERSION="OOO$UPD"
+AC_SUBST(SOURCEVERSION)
+
+dnl ===================================================================
+dnl Product version
+dnl ===================================================================
+AC_MSG_CHECKING([for product version])
+PRODUCTVERSION="$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR"
+AC_MSG_RESULT([$PRODUCTVERSION])
+AC_SUBST(PRODUCTVERSION)
+
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
@@ -381,6 +432,7 @@ CPP_LIBRARY="GLIBCXX"
 AC_SUBST(CPP_LIBRARY)
 
 INSTROOTSUFFIX=
+SDKDIRNAME=sdk
 
 case "$host_os" in
 
@@ -493,6 +545,7 @@ darwin*) # Mac OS X or iOS
     else
         _os=Darwin
         INSTROOTSUFFIX=/$PRODUCTNAME.app/Contents
+        SDKDIRNAME=AC_PACKAGE_NAME${PRODUCTVERSION}_SDK
     fi
     enable_systray=no
     # See comment above the case "$host_os"
@@ -636,6 +689,8 @@ if test "$_os" = "AIX"; then
         AC_MSG_ERROR([gawk not found in \$PATH])
     fi
 fi
+
+AC_SUBST(SDKDIRNAME)
 
 AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)
@@ -4483,9 +4538,9 @@ if test "$cross_compiling" = "yes"; then
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
-    . ./bin/get_config_variables CC CXX INPATH INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS OUTDIR PATH SYSTEM_LIBXSLT WORKDIR
+    . ./bin/get_config_variables CC CXX INPATH INSTDIR INSTROOT LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS OUTDIR PATH SDKDIRNAME SYSTEM_LIBXSLT WORKDIR
 
-    for V in CC CXX INPATH LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS SYSTEM_LIBXSLT; do
+    for V in CC CXX INPATH LIBO_BIN_FOLDER LIBO_LIB_FOLDER LIBO_URE_LIB_FOLDER OS SDKDIRNAME SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
         if test -n "$VV"; then
@@ -4525,6 +4580,7 @@ else
     LIBO_LIB_FOLDER_FOR_BUILD="$LIBO_LIB_FOLDER"
     LIBO_URE_LIB_FOLDER_FOR_BUILD="$LIBO_URE_LIB_FOLDER"
     OUTDIR_FOR_BUILD="$OUTDIR"
+    SDKDIRNAME_FOR_BUILD="$SDKDIRNAME"
     WORKDIR_FOR_BUILD="$WORKDIR"
 fi
 AC_SUBST(OS_FOR_BUILD)
@@ -4535,50 +4591,8 @@ AC_SUBST(LIBO_BIN_FOLDER_FOR_BUILD)
 AC_SUBST(LIBO_LIB_FOLDER_FOR_BUILD)
 AC_SUBST(LIBO_URE_LIB_FOLDER_FOR_BUILD)
 AC_SUBST(OUTDIR_FOR_BUILD)
+AC_SUBST(SDKDIRNAME_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
-
-dnl ===================================================================
-dnl Our version is defined by the AC_INIT() at the top of this script.
-dnl ===================================================================
-
-set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
-
-LIBO_VERSION_MAJOR=$1
-LIBO_VERSION_MINOR=$2
-LIBO_VERSION_MICRO=$3
-LIBO_VERSION_PATCH=$4
-
-LIBO_VERSION_SUFFIX=$5
-# Split out LIBO_VERSION_SUFFIX_SUFFIX... horrible crack. But apparently wanted separately in
-# openoffice.lst as ABOUTBOXPRODUCTVERSIONSUFFIX. Note that the double brackets are for m4's sake,
-# they get undoubled before actually passed to sed.
-LIBO_VERSION_SUFFIX_SUFFIX=`echo "$LIBO_VERSION_SUFFIX" | sed -e 's/.*[[a-zA-Z0-9]]\([[^a-zA-Z0-9]]*\)$/\1/'`
-test -n "$LIBO_VERSION_SUFFIX_SUFFIX" && LIBO_VERSION_SUFFIX="${LIBO_VERSION_SUFFIX%${LIBO_VERSION_SUFFIX_SUFFIX}}"
-# LIBO_VERSION_SUFFIX, if non-empty, should include the period separator
-test -n "$LIBO_VERSION_SUFFIX" && LIBO_VERSION_SUFFIX=".$LIBO_VERSION_SUFFIX"
-
-AC_SUBST(LIBO_VERSION_MAJOR)
-AC_SUBST(LIBO_VERSION_MINOR)
-AC_SUBST(LIBO_VERSION_MICRO)
-AC_SUBST(LIBO_VERSION_PATCH)
-AC_SUBST(LIBO_VERSION_SUFFIX)
-AC_SUBST(LIBO_VERSION_SUFFIX_SUFFIX)
-
-AC_DEFINE_UNQUOTED(LIBO_VERSION_MAJOR,$LIBO_VERSION_MAJOR)
-AC_DEFINE_UNQUOTED(LIBO_VERSION_MINOR,$LIBO_VERSION_MINOR)
-AC_DEFINE_UNQUOTED(LIBO_VERSION_MICRO,$LIBO_VERSION_MICRO)
-AC_DEFINE_UNQUOTED(LIBO_VERSION_PATCH,$LIBO_VERSION_PATCH)
-
-LIBO_THIS_YEAR=`date +%Y`
-AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
-
-# This UPD silly thing must go away soon
-UPD="${LIBO_VERSION_MAJOR}${LIBO_VERSION_MINOR}0"
-AC_SUBST(UPD)
-
-# This too should go away
-SOURCEVERSION="OOO$UPD"
-AC_SUBST(SOURCEVERSION)
 
 dnl ===================================================================
 dnl Check for syslog header
@@ -12007,14 +12021,6 @@ fi
 AC_SUBST(WGET)
 AC_SUBST(CURL)
 AC_SUBST(MD5SUM)
-
-dnl ===================================================================
-dnl Product version
-dnl ===================================================================
-AC_MSG_CHECKING([for product version])
-PRODUCTVERSION="$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR"
-AC_MSG_RESULT([$PRODUCTVERSION])
-AC_SUBST(PRODUCTVERSION)
 
 dnl ===================================================================
 dnl Dealing with l10n options

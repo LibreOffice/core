@@ -144,7 +144,7 @@ gb_LinkTarget_get_manifestfile = \
 
 gb_LinkTarget_get_linksearchpath_for_layer = \
 	-LIBPATH:$(WORKDIR)/LinkTarget/StaticLibrary \
-	-LIBPATH:$(INSTDIR)/$(gb_Package_SDKDIRNAME)/lib \
+	-LIBPATH:$(INSTDIR)/$(SDKDIRNAME)/lib \
 	$(if $(filter OXT,$(1)),\
 		-LIBPATH:$(WORKDIR)/LinkTarget/ExtensionLibrary, \
 		-LIBPATH:$(WORKDIR)/LinkTarget/Library)
@@ -558,9 +558,6 @@ gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive
 else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
-
-# Package class
-gb_Package_SDKDIRNAME := sdk
 
 # UIMenubarTarget class
 

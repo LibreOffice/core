@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,odk_config_notwin,$(SRCDIR)))
 
 $(eval $(call gb_Package_set_outdir,odk_config_notwin,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,odk_config_notwin,$(gb_Package_SDKDIRNAME),\
+$(eval $(call gb_Package_add_files,odk_config_notwin,$(SDKDIRNAME),\
 	config.guess \
 	config.sub \
 ))

@@ -25,13 +25,13 @@
 gb_Executable_LAYER_DIRS := \
 	UREBIN:$(INSTROOT)/$(LIBO_URE_BIN_FOLDER) \
 	OOO:$(INSTROOT)/$(LIBO_BIN_FOLDER) \
-	SDKBIN:$(INSTDIR)/$(gb_Package_SDKDIRNAME)/bin \
+	SDKBIN:$(INSTDIR)/$(SDKDIRNAME)/bin \
 	NONE:$(gb_Executable_BINDIR) \
 
 gb_Executable_LAYER_DIRS_FOR_BUILD := \
 	UREBIN:$(INSTROOT_FOR_BUILD)/$(LIBO_URE_BIN_FOLDER_FOR_BUILD) \
 	OOO:$(INSTROOT_FOR_BUILD)/$(LIBO_BIN_FOLDER_FOR_BUILD) \
-	SDKBIN:$(INSTDIR_FOR_BUILD)/$(gb_Package_SDKDIRNAME)/bin \
+	SDKBIN:$(INSTDIR_FOR_BUILD)/$(SDKDIRNAME_FOR_BUILD)/bin \
 	NONE:$(gb_Executable_BINDIR_FOR_BUILD) \
 
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :

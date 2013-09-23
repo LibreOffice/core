@@ -13,7 +13,7 @@ $(eval $(call gb_Package_Package,cli_basetypes_copy,$(WORKDIR)))
 $(eval $(call gb_Package_set_outdir,cli_basetypes_copy,$(INSTDIR)))
 
 # duplicate copy to work around CLR DLL finding brain damage
-$(eval $(call gb_Package_add_files,cli_basetypes_copy,$(gb_Package_SDKDIRNAME)/bin,\
+$(eval $(call gb_Package_add_files,cli_basetypes_copy,$(SDKDIRNAME)/bin,\
 	CliLibraryTarget/cli_basetypes.dll \
 ))
 

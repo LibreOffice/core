@@ -368,9 +368,6 @@ else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
-# Package class
-gb_Package_SDKDIRNAME := LibreOffice$(PRODUCTVERSION)_SDK
-
 # UIMenubarTarget class
 
 define gb_UIMenubarTarget__command
