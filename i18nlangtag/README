@@ -88,3 +88,12 @@ If helpcontent exists:
 * helpcontent2/source/auxiliary/*/*       for example helpcontent2/source/auxiliary/sh/*
 ** change Language=..., for example Language=sh to Language=sr-Latn in helpcontent2/source/auxiliary/sh/*.cfg
 ** rename helpcontent2/source/auxiliary/sh/  git mv sh sr-Latn
+
+For language packs:
+
+* scp2/source/ooo/module_langpack.ulf
+* scp2/source/accessories/module_templates_accessories.ulf
+* scp2/source/accessories/module_samples_accessories.ulf
+* scp2/source/extensions/module_extensions_sun_templates.ulf
+
+** If the upper-cased tag appears in any of these, replace it, for example STR_NAME_MODULE_LANGPACK_SH to STR_NAME_MODULE_LANGPACK_SR_LATN
