@@ -176,23 +176,27 @@ void SwMailMergeWizard::enterState( WizardState _nState )
 
 OUString SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
 {
-    String sRet;
     switch(_nState)
     {
-        case MM_DOCUMENTSELECTPAGE :sRet = m_sStarting;      break;
-        case MM_OUTPUTTYPETPAGE :   sRet = m_sDocumentType;  break;
-        case MM_ADDRESSBLOCKPAGE  :
-            sRet =  m_rConfigItem.IsOutputToLetter() ?
-                    m_sAddressBlock : m_sAddressList;
-
-        break;
-        case MM_GREETINGSPAGE     : sRet = m_sGreetingsLine; break;
-        case MM_LAYOUTPAGE        : sRet = m_sLayout;        break;
-        case MM_PREPAREMERGEPAGE  : sRet = m_sPrepareMerge;  break;
-        case MM_MERGEPAGE         : sRet = m_sMerge;         break;
-        case MM_OUTPUTPAGE       : sRet = m_sOutput;        break;
+        case MM_DOCUMENTSELECTPAGE:
+            return m_sStarting;
+        case MM_OUTPUTTYPETPAGE:
+            return m_sDocumentType;
+        case MM_ADDRESSBLOCKPAGE:
+            return m_rConfigItem.IsOutputToLetter() ?
+                   m_sAddressBlock : m_sAddressList;
+        case MM_GREETINGSPAGE:
+            return m_sGreetingsLine;
+        case MM_LAYOUTPAGE:
+            return m_sLayout;
+        case MM_PREPAREMERGEPAGE:
+            return m_sPrepareMerge;
+        case MM_MERGEPAGE:
+            return m_sMerge;
+        case MM_OUTPUTPAGE:
+            return m_sOutput;
     }
-    return sRet;
+    return OUString();
 }
 /*----------------------------------------------------------------------
     enables/disables pages in the roadmap depending on the current
