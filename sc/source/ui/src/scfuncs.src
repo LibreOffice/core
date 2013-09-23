@@ -2854,7 +2854,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_MATH;
+            ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_ANZAHLLEEREZELLEN );
             1;  0;
             0;
@@ -3129,7 +3129,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_MATH;
+            ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_COUNTIFS );
             PAIRED_VAR_ARGS;    0;  0;
             0;
@@ -3162,7 +3162,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_MATH;
+            ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_ZAEHLENWENN );
             2;  0;  0;
             0;
