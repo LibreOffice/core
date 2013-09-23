@@ -32,9 +32,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include "ado/AConnection.hxx"
-#ifndef _LIST_
 #include <list>
-#endif
 #include "ado/Awrapado.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

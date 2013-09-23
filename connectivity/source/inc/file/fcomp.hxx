@@ -21,9 +21,7 @@
 
 #include "file/fcode.hxx"
 #include "file/filedllapi.hxx"
-#ifndef _LIST_
 #include <list>
-#endif
 
 namespace connectivity
 {

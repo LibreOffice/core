@@ -25,9 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -34,9 +34,7 @@
 #include "connectivity/CommonTools.hxx"
 #include "file/FConnection.hxx"
 #include "file/filedllapi.hxx"
-#ifndef _LIST_
 #include <list>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/propertycontainer.hxx>
 #include "file/fanalyzer.hxx"

@@ -21,10 +21,7 @@
 #define _CONNECTIVITY_ADO_ADATABASEMETADATA_HXX_
 
 #include "TDatabaseMetaDataBase.hxx"
-#ifndef _MAP_
 #include <map>
-#endif
-
 
 namespace connectivity
 {

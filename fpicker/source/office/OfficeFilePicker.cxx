@@ -21,15 +21,9 @@
 #include "OfficeFilePicker.hxx"
 #include "iodlg.hxx"
 
-#ifndef _LIST_
 #include <list>
-#endif
-#ifndef _FUNCTIONAL_
 #include <functional>
-#endif
-#ifndef _ALGORITHM_
 #include <algorithm>
-#endif
 #include <tools/urlobj.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>

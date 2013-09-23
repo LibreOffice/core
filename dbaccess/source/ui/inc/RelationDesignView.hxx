@@ -21,9 +21,7 @@
 #define DBAUI_RELATIONDESIGNVIEW_HXX
 
 #include "JoinDesignView.hxx"
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #include "QEnumTypes.hxx"
 #include "RelationTableView.hxx"
 

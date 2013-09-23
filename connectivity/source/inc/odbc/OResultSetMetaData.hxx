@@ -24,9 +24,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include "odbc/OFunctions.hxx"
 #include "odbc/odbcbasedllapi.hxx"
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #include "odbc/OConnection.hxx"
 
 namespace connectivity

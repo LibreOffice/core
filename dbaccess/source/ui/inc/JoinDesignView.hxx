@@ -21,9 +21,7 @@
 #define DBAUI_JOINDESIGNVIEW_HXX
 
 #include <dbaccess/dataview.hxx>
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #include "QEnumTypes.hxx"
 
 #include <memory>

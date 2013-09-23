@@ -22,9 +22,7 @@
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #include "ado/Awrapado.hxx"
 #include "ado/ADatabaseMetaDataResultSet.hxx"
 #include "OColumn.hxx"

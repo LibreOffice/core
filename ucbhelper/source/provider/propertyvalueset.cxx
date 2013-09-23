@@ -24,9 +24,7 @@
 
  *************************************************************************/
 
-#ifndef __VECTOR__
 #include <vector>
-#endif
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

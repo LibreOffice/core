@@ -19,9 +19,7 @@
 #ifndef DBAUI_RTFREADER_HXX
 #define DBAUI_RTFREADER_HXX
 
-#ifndef _VECTOR_
 #include <vector>
-#endif
 #include <svtools/parrtf.hxx>
 #include "DExport.hxx"
 #include <tools/stream.hxx>

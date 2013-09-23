@@ -20,9 +20,7 @@
 #ifndef _UCBHELPER_PROVIDERHELPER_HXX
 #define _UCBHELPER_PROVIDERHELPER_HXX
 
-#ifndef __LIST__
 #include <list>
-#endif
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
