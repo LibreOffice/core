@@ -61,6 +61,7 @@ $(if $(URE),\
 	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
 	-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
 	-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(gb_PROGRAMDIRNAME)) \
+	-env:LO_JAVA_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)) \
 	--protector $(call gb_Library_get_target,unoexceptionprotector) unoexceptionprotector \
 	--protector $(call gb_Library_get_target,unobootstrapprotector) unobootstrapprotector \
  ) $(ARGS)
