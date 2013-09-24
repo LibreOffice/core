@@ -2238,7 +2238,7 @@ else
     fi
 fi
 AC_MSG_RESULT($STRIP_COMPONENTS)
-if test x$STRIP_COMPONENTS == xunsupported; then
+if test x$STRIP_COMPONENTS = xunsupported; then
     AC_MSG_ERROR([you need a tar that is able to strip components.])
 fi
 AC_SUBST(STRIP_COMPONENTS)
@@ -3463,7 +3463,7 @@ if test "$_os" = "WINNT"; then
 
         MSPDB_PATH=
 
-        if test "$BITNESS_OVERRIDE" == ""; then
+        if test "$BITNESS_OVERRIDE" = ""; then
             MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
         else
             MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
@@ -3628,7 +3628,7 @@ AC_SUBST(SHOWINCLUDES_PREFIX)
 #
 # dbghelp.dll
 #
-if test "$_os" == "WINNT"; then
+if test "$_os" = "WINNT"; then
     BUILD_TYPE="$BUILD_TYPE DBGHELP"
 fi
 
@@ -9065,7 +9065,7 @@ dnl ===================================================================
 dnl Check for NPAPI interface to plug LibreOffice into browser windows
 dnl ===================================================================
 AC_MSG_CHECKING([whether to plug LibreOffice into browser windows])
-if test "$_os" == WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
+if test "$_os" = WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
         "$enable_headless" != yes -a "$enable_gtk" != no
 then
     AC_MSG_RESULT([yes])
@@ -12468,10 +12468,10 @@ if test "$enable_mpl_subset" = "yes"; then
         *) : ;;
         esac
     done
-    if test "$enable_opengl" != "no" -o "x$ENABLE_OPENGL" == "xTRUE"; then
+    if test "$enable_opengl" != "no" -o "x$ENABLE_OPENGL" = "xTRUE"; then
         AC_MSG_ERROR([need to --disable-opengl - GL transitions support.])
     fi
-    if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" == "xTRUE"; then
+    if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" = "xTRUE"; then
         AC_MSG_ERROR([need to --disable-lpsolve - calc linear programming solver.])
     fi
 
