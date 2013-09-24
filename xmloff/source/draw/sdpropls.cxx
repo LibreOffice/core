@@ -364,7 +364,7 @@ const XMLPropertyMapEntry aXMLTableShapeAttributes[] =
 
 // implementation of factory for own graphic properties
 
-SvXMLEnumMapEntry aXML_LineStyle_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_LineStyle_EnumMap[] =
 {
     { XML_NONE,     drawing::LineStyle_NONE },
     { XML_SOLID,    drawing::LineStyle_SOLID },
@@ -372,7 +372,7 @@ SvXMLEnumMapEntry aXML_LineStyle_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_LineJoint_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_LineJoint_EnumMap[] =
 {
     { XML_NONE,     drawing::LineJoint_NONE },
     { XML_MITER,    drawing::LineJoint_MITER },
@@ -382,7 +382,7 @@ SvXMLEnumMapEntry aXML_LineJoint_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_LineCap_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_LineCap_EnumMap[] =
 {
     { XML_BUTT, drawing::LineCap_BUTT },
     { XML_ROUND, drawing::LineCap_ROUND },
@@ -391,7 +391,7 @@ SvXMLEnumMapEntry aXML_LineCap_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_FillStyle_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_FillStyle_EnumMap[] =
 {
     { XML_NONE,     drawing::FillStyle_NONE },
     { XML_SOLID,    drawing::FillStyle_SOLID },
@@ -401,7 +401,7 @@ SvXMLEnumMapEntry aXML_FillStyle_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_PresChange_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_PresChange_EnumMap[] =
 {
     { XML_MANUAL,           0 },
     { XML_AUTOMATIC,        1 },
@@ -409,7 +409,7 @@ SvXMLEnumMapEntry aXML_PresChange_EnumMap[] =
     { XML_TOKEN_INVALID,                    0 }
 };
 
-SvXMLEnumMapEntry aXML_TransSpeed_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_TransSpeed_EnumMap[] =
 {
     { XML_FAST,     presentation::AnimationSpeed_FAST },
     { XML_MEDIUM,   presentation::AnimationSpeed_MEDIUM },
@@ -417,7 +417,7 @@ SvXMLEnumMapEntry aXML_TransSpeed_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_FadeEffect_EnumMap[] =
 {
     { XML_NONE,                 presentation::FadeEffect_NONE },
     { XML_FADE_FROM_LEFT,       presentation::FadeEffect_FADE_FROM_LEFT },
@@ -479,7 +479,7 @@ SvXMLEnumMapEntry aXML_FadeEffect_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry   aXML_ConnectionKind_EnumMap[] =
+SvXMLEnumMapEntry const   aXML_ConnectionKind_EnumMap[] =
 {
     { XML_STANDARD,     drawing::ConnectorType_STANDARD },
     { XML_CURVE,        drawing::ConnectorType_CURVE },
@@ -488,7 +488,7 @@ SvXMLEnumMapEntry   aXML_ConnectionKind_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry   aXML_BitmapMode_EnumMap[] =
+static SvXMLEnumMapEntry const   aXML_BitmapMode_EnumMap[] =
 {
     { XML_REPEAT,                   drawing::BitmapMode_REPEAT },
     { XML_STRETCH,                  drawing::BitmapMode_STRETCH },
@@ -498,7 +498,7 @@ SvXMLEnumMapEntry   aXML_BitmapMode_EnumMap[] =
 
 // 3D EnumMaps
 
-SvXMLEnumMapEntry  aXML_NormalsKind_EnumMap[] =
+static SvXMLEnumMapEntry const  aXML_NormalsKind_EnumMap[] =
 {
     { XML_OBJECT,       drawing::NormalsKind_SPECIFIC },
     { XML_FLAT,         drawing::NormalsKind_FLAT },
@@ -506,7 +506,7 @@ SvXMLEnumMapEntry  aXML_NormalsKind_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry  aXML_TexGenerationX_EnumMap[] =
+static SvXMLEnumMapEntry const  aXML_TexGenerationX_EnumMap[] =
 {
     { XML_OBJECT,       drawing::TextureProjectionMode_OBJECTSPECIFIC },
     { XML_PARALLEL,     drawing::TextureProjectionMode_PARALLEL },
@@ -514,7 +514,7 @@ SvXMLEnumMapEntry  aXML_TexGenerationX_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry  aXML_TexGenerationY_EnumMap[] =
+static SvXMLEnumMapEntry const  aXML_TexGenerationY_EnumMap[] =
 {
     { XML_OBJECT,       drawing::TextureProjectionMode_OBJECTSPECIFIC },
     { XML_PARALLEL,     drawing::TextureProjectionMode_PARALLEL },
@@ -522,14 +522,14 @@ SvXMLEnumMapEntry  aXML_TexGenerationY_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry  aXML_TexKind_EnumMap[] =
+static SvXMLEnumMapEntry const  aXML_TexKind_EnumMap[] =
 {
     { XML_LUMINANCE,    drawing::TextureKind_LUMINANCE },
     { XML_COLOR,        drawing::TextureKind_COLOR },
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry  aXML_TexMode_EnumMap[] =
+static SvXMLEnumMapEntry const  aXML_TexMode_EnumMap[] =
 {
     { XML_REPLACE,      drawing::TextureMode_REPLACE },
     { XML_MODULATE,     drawing::TextureMode_MODULATE },
@@ -537,7 +537,7 @@ SvXMLEnumMapEntry  aXML_TexMode_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_RefPoint_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_RefPoint_EnumMap[] =
 {
     { XML_TOP_LEFT,     drawing::RectanglePoint_LEFT_TOP },
     { XML_TOP,          drawing::RectanglePoint_MIDDLE_TOP },
@@ -551,7 +551,7 @@ SvXMLEnumMapEntry aXML_RefPoint_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_CircleKind_EnumMap[] =
+SvXMLEnumMapEntry const aXML_CircleKind_EnumMap[] =
 {
     { XML_FULL,         drawing::CircleKind_FULL },
     { XML_SECTION,      drawing::CircleKind_SECTION },
@@ -560,14 +560,14 @@ SvXMLEnumMapEntry aXML_CircleKind_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_WritingMode_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_WritingMode_EnumMap[] =
 {
     { XML_TB_RL,        text::WritingMode_TB_RL },
     { XML_LR_TB,        text::WritingMode_LR_TB },
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_TextAnimation_Enum[] =
+static SvXMLEnumMapEntry const pXML_TextAnimation_Enum[] =
 {
     { XML_NONE,         drawing::TextAnimationKind_NONE },
     { XML_BLINKING,     drawing::TextAnimationKind_BLINK }, // will be filtered
@@ -577,7 +577,7 @@ SvXMLEnumMapEntry const pXML_TextAnimation_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_TextAnimation_Blinking_Enum[] =
+static SvXMLEnumMapEntry const pXML_TextAnimation_Blinking_Enum[] =
 {
     { XML_FALSE,        drawing::TextAnimationKind_NONE },
     { XML_TRUE,         drawing::TextAnimationKind_BLINK },
@@ -587,7 +587,7 @@ SvXMLEnumMapEntry const pXML_TextAnimation_Blinking_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_TextAnimationDirection_Enum[] =
+static SvXMLEnumMapEntry const pXML_TextAnimationDirection_Enum[] =
 {
     { XML_LEFT,         drawing::TextAnimationDirection_LEFT },
     { XML_RIGHT,        drawing::TextAnimationDirection_RIGHT },    // will be filtered
@@ -596,7 +596,7 @@ SvXMLEnumMapEntry const pXML_TextAnimationDirection_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_TextAlign_Enum[] =
+static SvXMLEnumMapEntry const pXML_TextAlign_Enum[] =
 {
     { XML_LEFT,         drawing::TextHorizontalAdjust_LEFT },
     { XML_CENTER,       drawing::TextHorizontalAdjust_CENTER },
@@ -605,7 +605,7 @@ SvXMLEnumMapEntry const pXML_TextAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
+static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
 {
     { XML_TOP,          drawing::TextVerticalAdjust_TOP },
     { XML_MIDDLE,       drawing::TextVerticalAdjust_CENTER },
@@ -614,7 +614,7 @@ SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_FitToSize_Enum_Odf12[] =
+static SvXMLEnumMapEntry const pXML_FitToSize_Enum_Odf12[] =
 {
     { XML_FALSE,        drawing::TextFitToSizeType_NONE },
     { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
@@ -623,7 +623,7 @@ SvXMLEnumMapEntry const pXML_FitToSize_Enum_Odf12[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_FitToSize_Enum[] =
+static SvXMLEnumMapEntry const pXML_FitToSize_Enum[] =
 {
     { XML_FALSE,        drawing::TextFitToSizeType_NONE },
     { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
@@ -632,7 +632,7 @@ SvXMLEnumMapEntry const pXML_FitToSize_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_MeasureUnit_Enum[] =
+static SvXMLEnumMapEntry const pXML_MeasureUnit_Enum[] =
 {
     { XML_AUTOMATIC,    0 },
     { XML_UNIT_MM,      1 },
@@ -647,7 +647,7 @@ SvXMLEnumMapEntry const pXML_MeasureUnit_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry const pXML_Measure_HAlign_Enum[] =
+static SvXMLEnumMapEntry const pXML_Measure_HAlign_Enum[] =
 {
     { XML_AUTOMATIC,        drawing::MeasureTextHorzPos_AUTO },
     { XML_LEFT_OUTSIDE,     drawing::MeasureTextHorzPos_LEFTOUTSIDE },
@@ -656,7 +656,7 @@ SvXMLEnumMapEntry const pXML_Measure_HAlign_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry const pXML_Measure_VAlign_Enum[] =
+static SvXMLEnumMapEntry const pXML_Measure_VAlign_Enum[] =
 {
     { XML_AUTOMATIC,    drawing::MeasureTextVertPos_AUTO },
     { XML_ABOVE,        drawing::MeasureTextVertPos_EAST },
@@ -666,7 +666,7 @@ SvXMLEnumMapEntry const pXML_Measure_VAlign_Enum[] =
 };
 
 // #FontWork#
-SvXMLEnumMapEntry const pXML_Fontwork_Style_Enum[] =
+static SvXMLEnumMapEntry const pXML_Fontwork_Style_Enum[] =
 {
     { XML_ROTATE,       0 }, //XFT_ROTATE,
     { XML_UPRIGHT,      1 }, //XFT_UPRIGHT,
@@ -676,7 +676,7 @@ SvXMLEnumMapEntry const pXML_Fontwork_Style_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry const pXML_Fontwork_Adjust_Enum[] =
+static SvXMLEnumMapEntry const pXML_Fontwork_Adjust_Enum[] =
 {
     { XML_LEFT,         0 }, //XFT_LEFT,
     { XML_RIGHT,        1 }, //XFT_RIGHT,
@@ -685,7 +685,7 @@ SvXMLEnumMapEntry const pXML_Fontwork_Adjust_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry const pXML_Fontwork_Shadow_Enum[] =
+static SvXMLEnumMapEntry const pXML_Fontwork_Shadow_Enum[] =
 {
     { XML_NORMAL,       0 }, //XFTSHADOW_NORMAL,
     { XML_SLANT,        1 }, //XFTSHADOW_SLANT,
@@ -693,7 +693,7 @@ SvXMLEnumMapEntry const pXML_Fontwork_Shadow_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry const pXML_Fontwork_Form_Enum[] =
+static SvXMLEnumMapEntry const pXML_Fontwork_Form_Enum[] =
 {
     { XML_NONE,             0 }, //XFTFORM_NONE,
     { XML_TOPCIRCLE,        1 }, //XFTFORM_TOPCIRC,
@@ -711,7 +711,7 @@ SvXMLEnumMapEntry const pXML_Fontwork_Form_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry const pXML_Caption_Esc_Dir_Enum[] =
+static SvXMLEnumMapEntry const pXML_Caption_Esc_Dir_Enum[] =
 {
     { XML_HORIZONTAL,       0 }, //SDRCAPT_ESCHORIZONTAL,
     { XML_VERTICAL,         1 }, //SDRCAPT_ESCVERTICAL,
@@ -719,7 +719,7 @@ SvXMLEnumMapEntry const pXML_Caption_Esc_Dir_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-SvXMLEnumMapEntry const pXML_Caption_Type_Enum[] =
+static SvXMLEnumMapEntry const pXML_Caption_Type_Enum[] =
 {
     { XML_STRAIGHT_LINE,            0 }, //SDRCAPT_TYPE1,
     { XML_ANGLED_LINE,              1 }, //SDRCAPT_TYPE2,

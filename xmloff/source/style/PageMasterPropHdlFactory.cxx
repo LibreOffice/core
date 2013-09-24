@@ -31,7 +31,7 @@
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
-SvXMLEnumMapEntry aXML_TextGridMode_ConstantMap[] =
+static SvXMLEnumMapEntry const aXML_TextGridMode_ConstantMap[] =
 {
     { XML_NONE,         text::TextGridMode::NONE },
     { XML_LINE,         text::TextGridMode::LINES },

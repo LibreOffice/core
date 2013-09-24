@@ -55,7 +55,7 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry aXML_ColorMode_EnumMap[] =
+static SvXMLEnumMapEntry const aXML_ColorMode_EnumMap[] =
 {
     { XML_GREYSCALE,    drawing::ColorMode_GREYS },
     { XML_MONO,         drawing::ColorMode_MONO },
@@ -64,7 +64,7 @@ SvXMLEnumMapEntry aXML_ColorMode_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const aXML_HorizontalAdjust_Enum[] =
+static SvXMLEnumMapEntry const aXML_HorizontalAdjust_Enum[] =
 {
     { XML_LEFT,     text::HorizontalAdjust_LEFT },
     { XML_CENTER,   text::HorizontalAdjust_CENTER },
@@ -75,7 +75,7 @@ SvXMLEnumMapEntry const aXML_HorizontalAdjust_Enum[] =
 // aXML_WritingDirection_Enum is used with and without 'page'
 // attribute, so you'll find uses of aXML_WritingDirection_Enum
 // directly, as well as &(aXML_WritingDirection_Enum[1])
-SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
+static SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
 {
     // aXML_WritingDirection_Enum
     { XML_PAGE,     text::WritingMode2::PAGE },

@@ -52,7 +52,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
+static SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
 {
     { XML_FROM_LEFT,        HoriOrientation::NONE   },
     { XML_FROM_INSIDE,      HoriOrientation::NONE   },  // import only
@@ -64,7 +64,7 @@ SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_HoriPosMirrored_Enum[] =
+static SvXMLEnumMapEntry const pXML_HoriPosMirrored_Enum[] =
 {
     { XML_FROM_INSIDE,      HoriOrientation::NONE   },
     { XML_INSIDE,           HoriOrientation::LEFT   },
@@ -73,7 +73,7 @@ SvXMLEnumMapEntry const pXML_HoriPosMirrored_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_HoriRel_Enum[] =
+static SvXMLEnumMapEntry const pXML_HoriRel_Enum[] =
 {
     { XML_PARAGRAPH,            RelOrientation::FRAME   },
     { XML_PARAGRAPH_CONTENT,    RelOrientation::PRINT_AREA  },
@@ -91,7 +91,7 @@ SvXMLEnumMapEntry const pXML_HoriRel_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_HoriRelFrame_Enum[] =
+static SvXMLEnumMapEntry const pXML_HoriRelFrame_Enum[] =
 {
     { XML_FRAME,                RelOrientation::FRAME   },
     { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },
@@ -105,7 +105,7 @@ SvXMLEnumMapEntry const pXML_HoriRelFrame_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_HoriMirror_Enum[] =
+static SvXMLEnumMapEntry const pXML_HoriMirror_Enum[] =
 {
     { XML_FROM_LEFT,        sal_False   },
     { XML_FROM_INSIDE,      sal_True    },
@@ -117,7 +117,7 @@ SvXMLEnumMapEntry const pXML_HoriMirror_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VertPos_Enum[] =
+static SvXMLEnumMapEntry const pXML_VertPos_Enum[] =
 {
     { XML_FROM_TOP,         VertOrientation::NONE       },
     { XML_TOP,              VertOrientation::TOP        },
@@ -133,7 +133,7 @@ SvXMLEnumMapEntry const pXML_VertPos_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VertPosAtChar_Enum[] =
+static SvXMLEnumMapEntry const pXML_VertPosAtChar_Enum[] =
 {
     { XML_FROM_TOP,         VertOrientation::NONE       },
     { XML_TOP,              VertOrientation::TOP        },
@@ -148,7 +148,7 @@ SvXMLEnumMapEntry const pXML_VertPosAtChar_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VertRel_Enum[] =
+static SvXMLEnumMapEntry const pXML_VertRel_Enum[] =
 {
     { XML_PARAGRAPH,            RelOrientation::FRAME   },
     { XML_PARAGRAPH_CONTENT,    RelOrientation::PRINT_AREA  },
@@ -163,7 +163,7 @@ SvXMLEnumMapEntry const pXML_VertRel_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VertRelPage_Enum[] =
+static SvXMLEnumMapEntry const pXML_VertRelPage_Enum[] =
 {
     { XML_PAGE,         RelOrientation::FRAME   },
     { XML_PAGE_CONTENT, RelOrientation::PRINT_AREA  },
@@ -172,14 +172,14 @@ SvXMLEnumMapEntry const pXML_VertRelPage_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VertRelFrame_Enum[] =
+static SvXMLEnumMapEntry const pXML_VertRelFrame_Enum[] =
 {
     { XML_FRAME,            RelOrientation::FRAME   },
     { XML_FRAME_CONTENT,    RelOrientation::PRINT_AREA  },
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VertRelAsChar_Enum[] =
+static SvXMLEnumMapEntry const pXML_VertRelAsChar_Enum[] =
 {
     { XML_BASELINE,     VertOrientation::TOP        },
     { XML_BASELINE,     VertOrientation::CENTER     },  // export only
@@ -193,7 +193,7 @@ SvXMLEnumMapEntry const pXML_VertRelAsChar_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_RubyAdjust_Enum[] =
+static SvXMLEnumMapEntry const pXML_RubyAdjust_Enum[] =
 {
     { XML_LEFT,                 RubyAdjust_LEFT },
     { XML_CENTER,               RubyAdjust_CENTER },
@@ -203,7 +203,7 @@ SvXMLEnumMapEntry const pXML_RubyAdjust_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_FontRelief_Enum[] =
+static SvXMLEnumMapEntry const pXML_FontRelief_Enum[] =
 {
     { XML_NONE,             FontRelief::NONE        },
     { XML_ENGRAVED,         FontRelief::ENGRAVED    },
@@ -211,7 +211,7 @@ SvXMLEnumMapEntry const pXML_FontRelief_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
+static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
 {
     { XML_TOP,          ParagraphVertAlign::TOP     },
     { XML_MIDDLE,       ParagraphVertAlign::CENTER  },
@@ -222,7 +222,7 @@ SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
 };
 
 // OD 2004-05-05 #i28701#
-SvXMLEnumMapEntry const pXML_WrapInfluenceOnPosition_Enum[] =
+static SvXMLEnumMapEntry const pXML_WrapInfluenceOnPosition_Enum[] =
 {
     // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
     { XML_ONCE_SUCCESSIVE, WrapInfluenceOnPosition::ONCE_SUCCESSIVE },
@@ -231,7 +231,7 @@ SvXMLEnumMapEntry const pXML_WrapInfluenceOnPosition_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry const pXML_FillStyle_Enum[] =
+static SvXMLEnumMapEntry const pXML_FillStyle_Enum[] =
 {
     { XML_NONE,     drawing::FillStyle_NONE },
     { XML_SOLID,    drawing::FillStyle_SOLID },

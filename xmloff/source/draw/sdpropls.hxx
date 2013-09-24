@@ -195,8 +195,8 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 
 // enum maps for attributes
 
-extern SvXMLEnumMapEntry aXML_ConnectionKind_EnumMap[];
-extern SvXMLEnumMapEntry aXML_CircleKind_EnumMap[];
+extern SvXMLEnumMapEntry const aXML_ConnectionKind_EnumMap[];
+extern SvXMLEnumMapEntry const aXML_CircleKind_EnumMap[];
 
 /** contains the attribute to property mapping for a drawing layer table */
 extern const XMLPropertyMapEntry aXMLTableShapeAttributes[];

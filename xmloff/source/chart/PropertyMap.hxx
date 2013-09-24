@@ -222,7 +222,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
 // maps for enums to XML attributes
 
-SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
 {
     { ::xmloff::token::XML_NEAR_AXIS,               ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS },
     { ::xmloff::token::XML_NEAR_AXIS_OTHER_SIDE,    ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE },
@@ -233,7 +233,7 @@ SvXMLEnumMapEntry aXMLChartAxisLabelPositionEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartAxisMarkPositionEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartAxisMarkPositionEnumMap[] =
 {
     { ::xmloff::token::XML_AT_LABELS,           ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS },
     { ::xmloff::token::XML_AT_AXIS,             ::com::sun::star::chart::ChartAxisMarkPosition_AT_AXIS },
@@ -241,7 +241,7 @@ SvXMLEnumMapEntry aXMLChartAxisMarkPositionEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
 {
     { ::xmloff::token::XML_SIDE_BY_SIDE,        ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
     { ::xmloff::token::XML_STAGGER_EVEN,        ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
@@ -249,7 +249,7 @@ SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartErrorBarStyleEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartErrorBarStyleEnumMap[] =
 {
     { ::xmloff::token::XML_NONE,                ::com::sun::star::chart::ErrorBarStyle::NONE },
     { ::xmloff::token::XML_VARIANCE,            ::com::sun::star::chart::ErrorBarStyle::VARIANCE },
@@ -262,7 +262,7 @@ SvXMLEnumMapEntry aXMLChartErrorBarStyleEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
 {
     { ::xmloff::token::XML_CUBOID,      ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID },
     { ::xmloff::token::XML_CYLINDER,    ::com::sun::star::chart::ChartSolidType::CYLINDER },
@@ -271,14 +271,14 @@ SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartDataRowSourceTypeEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartDataRowSourceTypeEnumMap[] =
 {
     { ::xmloff::token::XML_COLUMNS,     ::com::sun::star::chart::ChartDataRowSource_COLUMNS },
     { ::xmloff::token::XML_ROWS,        ::com::sun::star::chart::ChartDataRowSource_ROWS },
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
 {
     // this is neither an enum nor a constants group, but just a
     // documented long property
@@ -298,7 +298,7 @@ SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID,      0 }
 };
 
-SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
 {
     { ::xmloff::token::XML_AVOID_OVERLAP,   ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP },
     { ::xmloff::token::XML_CENTER,          ::com::sun::star::chart::DataLabelPlacement::CENTER },
@@ -316,7 +316,7 @@ SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXMLChartMissingValueTreatmentEnumMap[] =
+const SvXMLEnumMapEntry aXMLChartMissingValueTreatmentEnumMap[] =
 {
     { ::xmloff::token::XML_LEAVE_GAP,    ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP },
     { ::xmloff::token::XML_USE_ZERO,     ::com::sun::star::chart::MissingValueTreatment::USE_ZERO },
