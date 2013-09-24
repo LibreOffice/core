@@ -640,7 +640,8 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
             // alle Zellen der (Teil-)Tabelle zusammen. Dann teste mal ob
             // all huebsch nebeneinander liegen.
-            size_t n, nCellCnt = 0;
+            size_t n;
+            sal_uInt16 nCellCnt = 0;
             long nYPos = LONG_MAX;
             long nXPos = 0;
             long nHeight = 0;

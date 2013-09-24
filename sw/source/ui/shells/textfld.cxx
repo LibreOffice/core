@@ -375,7 +375,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     SwFmtFld* pSwFmtFld = aIter.First();
                     while( pSwFmtFld )
                     {
-                        if ( pSwFmtFld->GetFld() == pPostIt )
+                        if ( pSwFmtFld->GetField() == pPostIt )
                         {
                             pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS, &GetView() ) );
                             break;

@@ -1002,7 +1002,7 @@ OUString SwXFieldMaster::LocalizeFormula(
 
 SwXTextField* SwXTextField::CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
 {
-    SwIterator<SwXTextField,SwFieldType> aIter(*rFmt.GetFld()->GetTyp());
+    SwIterator<SwXTextField,SwFieldType> aIter(*rFmt.GetField()->GetTyp());
     SwXTextField * pField = 0;
     SwXTextField * pTemp = aIter.First();
     while (pTemp)
@@ -1116,7 +1116,7 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
     m_pTextObject(0),
     m_bIsDescriptor(sal_False),
     m_bCallUpdate(sal_False),
-    m_nServiceId( lcl_GetServiceForField( *pFmtFld->GetFld() ) ),
+    m_nServiceId( lcl_GetServiceForField( *pFmtFld->GetField() ) ),
     m_pProps(0)
 {
     pDc->GetUnoCallBack()->Add(this);
@@ -1168,7 +1168,7 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
     {
         if(!GetRegisteredIn())
             throw uno::RuntimeException();
-        pType = pFmtFld->GetFld()->GetTyp();
+        pType = pFmtFld->GetField()->GetTyp();
     }
 
     SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
@@ -1748,7 +1748,7 @@ void SwXTextField::attachToRange(
             // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
             if(pTxtAttr)
             {
-                const SwFmtFld& rFld = pTxtAttr->GetFld();
+                const SwFmtFld& rFld = pTxtAttr->GetFmtFld();
                 pFmtFld = &rFld;
             }
         }
@@ -2366,8 +2366,10 @@ void SwXTextField::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 const SwField*  SwXTextField::GetField() const
 {
-    if(GetRegisteredIn() && pFmtFld)
-        return  pFmtFld->GetFld();
+    if ( GetRegisteredIn() && pFmtFld )
+    {
+        return  pFmtFld->GetField();
+    }
     return 0;
 }
 

@@ -266,20 +266,20 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
     , m_pFldType( 0 )
-    , m_pFld( new SwFmtFld( *pTxtFld->GetFld().GetFld() ) )
+    , m_pFld( new SwFmtFld( *pTxtFld->GetFmtFld().GetField() ) )
 {
     // only copy if not Sys-FieldType
     SwDoc* pDoc = pTxtFld->GetTxtNode().GetDoc();
 
-    m_nFldWhich = m_pFld->GetFld()->GetTyp()->Which();
+    m_nFldWhich = m_pFld->GetField()->GetTyp()->Which();
     if (m_nFldWhich == RES_DBFLD ||
         m_nFldWhich == RES_USERFLD ||
         m_nFldWhich == RES_SETEXPFLD ||
         m_nFldWhich == RES_DDEFLD ||
         !pDoc->GetSysFldType( m_nFldWhich ))
     {
-        m_pFldType.reset( m_pFld->GetFld()->GetTyp()->Copy() );
-        m_pFld->GetFld()->ChgTyp( m_pFldType.get() ); // change field type
+        m_pFldType.reset( m_pFld->GetField()->GetTyp()->Copy() );
+        m_pFld->GetField()->ChgTyp( m_pFldType.get() ); // change field type
     }
     m_nNodeIndex = nNodePos;
     m_nPos = *pTxtFld->GetStart();
@@ -287,7 +287,7 @@ SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
 
 String SwHistorySetTxtFld::GetDescription() const
 {
-    return m_pFld->GetFld()->GetDescription();;
+    return m_pFld->GetField()->GetDescription();;
 }
 
 SwHistorySetTxtFld::~SwHistorySetTxtFld()
@@ -311,7 +311,7 @@ void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
         pNewFldType = pDoc->InsertFldType( *m_pFldType );
     }
 
-    m_pFld->GetFld()->ChgTyp( pNewFldType ); // change field type
+    m_pFld->GetField()->ChgTyp( pNewFldType ); // change field type
 
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
     ASSERT( pTxtNd, "SwHistorySetTxtFld: no TextNode" );

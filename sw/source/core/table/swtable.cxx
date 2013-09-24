@@ -2593,7 +2593,7 @@ sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
                                 // it inserts hidden variable-set fields at
                                 // the beginning of para in cell, but they
                                 // should not turn cell into text cell
-                                const SwField* pField = pAttr->GetFld().GetFld();
+                                const SwField* pField = pAttr->GetFmtFld().GetField();
                                 if (pField &&
                                     (pField->GetTypeId() == TYP_SETFLD) &&
                                     (0 != (static_cast<SwSetExpField const*>

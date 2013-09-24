@@ -643,8 +643,7 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
                 break;
 
             if( RES_TXTATR_FIELD == pAttr->pItem->Which() &&
-                RES_SCRIPTFLD == ((const SwFmtFld *)pAttr->pItem)->GetFld()
-                                                        ->GetTyp()->Which() )
+                RES_SCRIPTFLD == ((const SwFmtFld *)pAttr->pItem)->GetField()->GetTyp()->Which() )
             {
                 bMoveFwd = sal_False;
                 break;

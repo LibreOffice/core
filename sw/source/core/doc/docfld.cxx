@@ -446,7 +446,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
             {
                 if( pFmtFld->GetTxtFld() )
                 {
-                    SwTblField* pFld = (SwTblField*)pFmtFld->GetFld();
+                    SwTblField* pFld = (SwTblField*)pFmtFld->GetField();
 
                     if( pUpdtFld )
                     {
@@ -532,7 +532,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                 // mba: do we really need this "optimization"? Is it still valid?
                 SwTblField* pFld;
                 if( !pFmtFld->GetTxtFld() || (nsSwExtendedSubType::SUB_CMD &
-                    (pFld = (SwTblField*)pFmtFld->GetFld())->GetSubType() ))
+                    (pFld = (SwTblField*)pFmtFld->GetField())->GetSubType() ))
                     continue;
 
                 // muss neu berechnet werden (und ist keine textuelle Anzeige)
@@ -1070,11 +1070,11 @@ String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
                         SwNewDBMgr* pMgr )
 {
-    const SwTxtFld* pTxtFld = rSGEFld.GetFld();
+    const SwTxtFld* pTxtFld = rSGEFld.GetTxtFld();
     if( !pTxtFld )
         return ;
 
-    const SwField* pFld = pTxtFld->GetFld().GetFld();
+    const SwField* pFld = pTxtFld->GetFmtFld().GetField();
     const sal_uInt16 nFldWhich = pFld->GetTyp()->Which();
 
     if( RES_SETEXPFLD == nFldWhich )
@@ -1196,11 +1196,11 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
     for( ; nLast; --nLast, ++ppSortLst )
     {
-        const SwTxtFld* pTxtFld = (*ppSortLst)->GetFld();
+        const SwTxtFld* pTxtFld = (*ppSortLst)->GetTxtFld();
         if( !pTxtFld )
             continue;
 
-        const SwField* pFld = pTxtFld->GetFld().GetFld();
+        const SwField* pFld = pTxtFld->GetFmtFld().GetField();
         switch( pFld->GetTyp()->Which() )
         {
         case RES_SETEXPFLD:
@@ -1341,7 +1341,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         {
             //!SECTION
 
-//          if( pGFld->IsInBodyTxt() )
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
@@ -1349,15 +1348,15 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             continue;
         }
 
-        SwTxtFld* pTxtFld = (SwTxtFld*)(*ppSortLst)->GetFld();
+        SwTxtFld* pTxtFld = (SwTxtFld*)(*ppSortLst)->GetTxtFld();
         if( !pTxtFld )
         {
             ASSERT( !this, "was ist es denn nun" );
             continue;
         }
 
-        SwFmtFld* pFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
-        SwField* pFld = pFmtFld->GetFld();
+        SwFmtFld* pFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
+        const SwField* pFld = pFmtFld->GetField();
 
         switch( nWhich = pFld->GetTyp()->Which() )
         {
@@ -1688,11 +1687,9 @@ const SwDBData& SwDoc::GetDBDesc()
                             if(pFld->IsFldInDoc())
                             {
                                 if(RES_DBFLD == nWhich)
-                                    aDBData =
-                                        (static_cast < SwDBFieldType * > (pFld->GetFld()->GetTyp()))
-                                            ->GetDBData();
+                                    aDBData = (static_cast < SwDBFieldType * > (pFld->GetField()->GetTyp()))->GetDBData();
                                 else
-                                    aDBData = (static_cast < SwDBNameInfField* > (pFld->GetFld()))->GetRealDBData();
+                                    aDBData = (static_cast < SwDBNameInfField* > (pFld->GetField()))->GetRealDBData();
                                 break;
                             }
                         }
@@ -1762,7 +1759,7 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
 
-        const SwField* pFld = pFmtFld->GetFld();
+        const SwField* pFld = pFmtFld->GetField();
         switch( pFld->GetTyp()->Which() )
         {
             case RES_DBFLD:
@@ -1937,7 +1934,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
 
-        SwField* pFld = pFmtFld->GetFld();
+        SwField* pFld = pFmtFld->GetField();
         sal_Bool bExpand = sal_False;
 
         switch( pFld->GetTyp()->Which() )
@@ -2096,18 +2093,18 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
     {
         SwFieldType* pFldType = GetSysFldType( aTypes[ nStt ] );
         SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         {
-            if( pFld && pFld->GetTxtFld() )
+            if( pFmtFld && pFmtFld->GetTxtFld() )
             {
                 sal_Bool bChgd = sal_False;
                 switch( aTypes[ nStt ] )
                 {
                 case RES_DOCINFOFLD:
-                    if( ((SwDocInfoField*)pFld->GetFld())->IsFixed() )
+                    if( ((SwDocInfoField*)pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = sal_True;
-                        SwDocInfoField* pDocInfFld = (SwDocInfoField*)pFld->GetFld();
+                        SwDocInfoField* pDocInfFld = (SwDocInfoField*)pFmtFld->GetField();
                         pDocInfFld->SetExpansion( ((SwDocInfoFieldType*)
                                     pDocInfFld->GetTyp())->Expand(
                                         pDocInfFld->GetSubType(),
@@ -2118,10 +2115,10 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                     break;
 
                 case RES_AUTHORFLD:
-                    if( ((SwAuthorField*)pFld->GetFld())->IsFixed() )
+                    if( ((SwAuthorField*)pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = sal_True;
-                        SwAuthorField* pAuthorFld = (SwAuthorField*)pFld->GetFld();
+                        SwAuthorField* pAuthorFld = (SwAuthorField*)pFmtFld->GetField();
                         pAuthorFld->SetExpansion( ((SwAuthorFieldType*)
                                     pAuthorFld->GetTyp())->Expand(
                                                 pAuthorFld->GetFormat() ) );
@@ -2129,10 +2126,10 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                     break;
 
                 case RES_EXTUSERFLD:
-                    if( ((SwExtUserField*)pFld->GetFld())->IsFixed() )
+                    if( ((SwExtUserField*)pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = sal_True;
-                        SwExtUserField* pExtUserFld = (SwExtUserField*)pFld->GetFld();
+                        SwExtUserField* pExtUserFld = (SwExtUserField*)pFmtFld->GetField();
                         pExtUserFld->SetExpansion( ((SwExtUserFieldType*)
                                     pExtUserFld->GetTyp())->Expand(
                                             pExtUserFld->GetSubType(),
@@ -2141,20 +2138,20 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                     break;
 
                 case RES_DATETIMEFLD:
-                    if( ((SwDateTimeField*)pFld->GetFld())->IsFixed() )
+                    if( ((SwDateTimeField*)pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = sal_True;
-                        ((SwDateTimeField*)pFld->GetFld())->SetDateTime(
+                        ((SwDateTimeField*)pFmtFld->GetField())->SetDateTime(
                                                     DateTime(Date(nDate), Time(nTime)) );
                     }
                     break;
 
                 case RES_FILENAMEFLD:
-                    if( ((SwFileNameField*)pFld->GetFld())->IsFixed() )
+                    if( ((SwFileNameField*)pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = sal_True;
                         SwFileNameField* pFileNameFld =
-                            (SwFileNameField*)pFld->GetFld();
+                            (SwFileNameField*)pFmtFld->GetField();
                         pFileNameFld->SetExpansion( ((SwFileNameFieldType*)
                                     pFileNameFld->GetTyp())->Expand(
                                             pFileNameFld->GetFormat() ) );
@@ -2164,7 +2161,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 
                 // Formatierung anstossen
                 if( bChgd )
-                    pFld->ModifyNotification( 0, 0 );
+                    pFmtFld->ModifyNotification( 0, 0 );
             }
         }
     }
@@ -2243,7 +2240,7 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 
 void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
 {
-    sal_uInt16 nWhich = rFld.GetFld().GetFld()->GetTyp()->Which();
+    const sal_uInt16 nWhich = rFld.GetFmtFld().GetField()->GetTyp()->Which();
     switch( nWhich )
     {
     case RES_DBFLD:
@@ -2381,7 +2378,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
 
-        const SwField* pFld = pFmtFld->GetFld();
+        const SwField* pFld = pFmtFld->GetField();
         switch( nWhich = pFld->GetTyp()->Which() )
         {
             case RES_DBSETNUMBERFLD:
@@ -2396,7 +2393,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 break;
 
             case RES_SETEXPFLD:
-                /// OD 04.10.2002 #102894#
                 /// fields of subtype <string> have also been add
                 /// for calculation (eGetMode == GETFLD_CALC).
                 /// Thus, add fields of subtype <string> in all modes
@@ -2558,12 +2554,12 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     // bei GetExp.-/DB.-Felder immer das BodyTxtFlag setzen
     if( RES_GETEXPFLD == nFldWhich )
     {
-        SwGetExpField* pGetFld = (SwGetExpField*)rTFld.GetFld().GetFld();
+        SwGetExpField* pGetFld = (SwGetExpField*)rTFld.GetFmtFld().GetField();
         pGetFld->ChgBodyTxtFlag( bIsInBody );
     }
     else if( RES_DBFLD == nFldWhich )
     {
-        SwDBField* pDBFld = (SwDBField*)rTFld.GetFld().GetFld();
+        SwDBField* pDBFld = (SwDBField*)rTFld.GetFmtFld().GetField();
         pDBFld->ChgBodyTxtFlag( bIsInBody );
     }
 
@@ -2707,8 +2703,8 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
 
     sal_Bool bTblSelBreak = sal_False;
 
-    SwFmtFld * pDstFmtFld = (SwFmtFld*)&pDstTxtFld->GetFld();
-    SwField * pDstFld = pDstFmtFld->GetFld();
+    SwFmtFld * pDstFmtFld = (SwFmtFld*)&pDstTxtFld->GetFmtFld();
+    SwField * pDstFld = pDstFmtFld->GetField();
     sal_uInt16 nFldWhich = rSrcFld.GetTyp()->Which();
     SwNodeIndex aTblNdIdx(pDstTxtFld->GetTxtNode());
 

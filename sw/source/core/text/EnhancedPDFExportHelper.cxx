@@ -1460,7 +1460,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 const SwField* pFld = 0;
                 if ( pHint && RES_TXTATR_FIELD == pHint->Which() )
                 {
-                    pFld = (SwField*)pHint->GetFld().GetFld();
+                    pFld = (SwField*)pHint->GetFmtFld().GetField();
                     if ( RES_GETREFFLD == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::Link;
@@ -1611,7 +1611,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             vcl::PDFNote aNote;
 
                             // Use the NumberFormatter to get the date string:
-                            const SwPostItField* pField = (SwPostItField*)pFirst->GetFld();
+                            const SwPostItField* pField = (SwPostItField*)pFirst->GetField();
                             SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
                             const Date aDateDiff( pField->GetDate() -
                                                  *pNumFormatter->GetNullDate() );
@@ -1851,8 +1851,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     mrSh.SwCrsrShell::ClearMark();
 
                     // Destination Rectangle
-                    const SwGetRefField* pField =
-                        (SwGetRefField*)pFirst->GetFld();
+                    const SwGetRefField* pField = (SwGetRefField*)pFirst->GetField();
                     const String& rRefName = pField->GetSetRefName();
                     mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
                     const SwRect& rDestRect = mrSh.GetCharRect();

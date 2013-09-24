@@ -757,7 +757,7 @@ lcl_ExportHints(
                         xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FIELD);
                         Reference<XTextField> xField =
-                            SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFld());
+                            SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFmtFld());
                         pPortion->SetTextField(xField);
                     }
                 break;

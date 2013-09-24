@@ -325,7 +325,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
             if(!pTxtFld || !pTxtFld->GetpTxtNode())
             {
 #ifdef DBG_UTIL
-                if(nHandle == ((SwAuthorityField*)pFmtFld->GetFld())->GetHandle())
+                if(nHandle == ((SwAuthorityField*)pFmtFld->GetField())->GetHandle())
                     bCurrentFieldWithoutTextNode = sal_True;
 #endif
                 continue;
@@ -381,7 +381,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
         {
             const SwTOXSortTabBase& rBase = *aSortArr[i];
             SwFmtFld& rFmtFld = ((SwTOXAuthority&)rBase).GetFldFmt();
-            SwAuthorityField* pAFld = (SwAuthorityField*)rFmtFld.GetFld();
+            SwAuthorityField* pAFld = (SwAuthorityField*)rFmtFld.GetField();
             m_pSequArr->Insert(pAFld->GetHandle(), i);
         }
         aSortArr.DeleteAndDestroy(0, aSortArr.Count());

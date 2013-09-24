@@ -318,7 +318,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                             pTxtNd->GetTxtAttrForCharAt(nStt, RES_TXTATR_FIELD);
                         if( pTxtAttr )
                             nStt = SwGetExpField::GetReferenceTextPos(
-                                                pTxtAttr->GetFld(), *pDoc );
+                                                pTxtAttr->GetFmtFld(), *pDoc );
                         else if( nStt + 1 < nEnd )
                             ++nStt;
                     }
@@ -768,23 +768,21 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
     if( !pNew && !pOld )
     {
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         {
             // nur die GetRef-Felder Updaten
             //JP 3.4.2001: Task 71231 - we need the correct language
-            SwGetRefField* pGRef = (SwGetRefField*)pFld->GetFld();
+            SwGetRefField* pGRef = (SwGetRefField*)pFmtFld->GetField();
             const SwTxtFld* pTFld;
             if( !pGRef->GetLanguage() &&
-                0 != ( pTFld = pFld->GetTxtFld()) &&
+                0 != ( pTFld = pFmtFld->GetTxtFld()) &&
                 pTFld->GetpTxtNode() )
             {
                 pGRef->SetLanguage( pTFld->GetpTxtNode()->GetLang(
                                                 *pTFld->GetStart() ) );
             }
 
-            // --> OD 2007-09-06 #i81002#
-            pGRef->UpdateField( pFld->GetTxtFld() );
-            // <--
+            pGRef->UpdateField( pFmtFld->GetTxtFld() );
         }
     }
     // weiter an die Text-Felder, diese "Expandieren" den Text
@@ -820,12 +818,12 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                 nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
             {
                 SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-                for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+                for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
                 {
-                    if( pFld->GetTxtFld() && nSeqNo ==
-                        ((SwSetExpField*)pFld->GetFld())->GetSeqNumber() )
+                    if( pFmtFld->GetTxtFld() && nSeqNo ==
+                        ((SwSetExpField*)pFmtFld->GetField())->GetSeqNumber() )
                     {
-                        SwTxtFld* pTxtFld = pFld->GetTxtFld();
+                        SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
                         pTxtNd = (SwTxtNode*)pTxtFld->GetpTxtNode();
                         *pStt = *pTxtFld->GetStart();
                         if( pEnd )
@@ -939,7 +937,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
                     if( pF->GetTxtFld() &&
                         0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
                         pNd->GetNodes().IsDocNodes() )
-                        aIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+                        aIds.Insert( ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
             }
             if( 0 != ( pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
             {
@@ -948,7 +946,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
                     if( pF->GetTxtFld() &&
                         0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
                         pNd->GetNodes().IsDocNodes() )
-                        aDstIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+                        aDstIds.Insert( ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
             }
         }
         else
@@ -996,8 +994,8 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
                     SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
                     for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
                         if( pF->GetTxtFld() && nSeqNo ==
-                            ((SwSetExpField*)pF->GetFld())->GetSeqNumber() )
-                            ((SwSetExpField*)pF->GetFld())->SetSeqNumber( n );
+                            ((SwSetExpField*)pF->GetField())->GetSeqNumber() )
+                            ((SwSetExpField*)pF->GetField())->SetSeqNumber( n );
                 }
             }
             else
@@ -1035,7 +1033,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );
         for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
         {
-            SwGetRefField& rRefFld = *(SwGetRefField*)pFld->GetFld();
+            SwGetRefField& rRefFld = *(SwGetRefField*)pFld->GetField();
             switch( rRefFld.GetSubType() )
             {
             case REF_SEQUENCEFLD:
