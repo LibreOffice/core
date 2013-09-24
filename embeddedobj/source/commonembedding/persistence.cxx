@@ -211,6 +211,7 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
         xDocument = _rxContext->getServiceManager()->createInstanceWithContext( _rDocumentServiceName, _rxContext );
     }
 
+    SAL_WARN_IF(!xDocument.is(), "embeddedobj.common", "Service " << _rDocumentServiceName << " is not available?");
     return uno::Reference< util::XCloseable >( xDocument, uno::UNO_QUERY );
 }
 
