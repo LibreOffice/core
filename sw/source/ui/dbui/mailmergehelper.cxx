@@ -51,23 +51,20 @@ using namespace ::com::sun::star::sdbcx;
 namespace SwMailMergeHelper
 {
 
-String  CallSaveAsDialog(String& rFilter)
+OUString CallSaveAsDialog(OUString& rFilter)
 {
-    ErrCode nRet;
-    String sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 0,
-                sFactory );
+                OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
 
-    String sRet;
-    nRet = aDialog.Execute();
-    if(ERRCODE_NONE == nRet)
+    if (aDialog.Execute()!=ERRCODE_NONE)
     {
-        uno::Reference < ui::dialogs::XFilePicker > xFP = aDialog.GetFilePicker();
-        sRet = xFP->getFiles().getConstArray()[0];
-        rFilter = aDialog.GetRealFilter();
+        return OUString();
     }
-    return sRet;
+
+    rFilter = aDialog.GetRealFilter();
+    uno::Reference < ui::dialogs::XFilePicker > xFP = aDialog.GetFilePicker();
+    return xFP->getFiles().getConstArray()[0];
 }
 
 /*

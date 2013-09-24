@@ -600,14 +600,14 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
     if(m_aSaveAsOneRB.IsChecked())
     {
-        String sFilter;
-        String sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
-        if(!sPath.Len())
+        OUString sFilter;
+        const OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
+        if (sPath.isEmpty())
             return 0;
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
-        pValues[0].Value <<= OUString(sFilter);
+        pValues[0].Value <<= sFilter;
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         sal_uInt32 nErrorCode = ERRCODE_NONE;
@@ -645,9 +645,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             if(nEnd > rConfigItem.GetMergedDocumentCount())
                 nEnd = rConfigItem.GetMergedDocumentCount();
         }
-        String sFilter;
-        String sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
-        if(!sPath.Len())
+        OUString sFilter;
+        OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
+        if (sPath.isEmpty())
             return 0;
         String sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
@@ -694,12 +694,11 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         {
             SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
             INetURLObject aURL(sPath);
-            String sExtension = aURL.getExtension();
-            if(!sExtension.Len())
+            OUString sExtension = aURL.getExtension();
+            if (sExtension.isEmpty())
             {
                 sExtension = comphelper::string::getToken(pSfxFlt->GetWildcard().getGlob(), 1, '.');
-                sPath += '.';
-                sPath += sExtension;
+                sPath += "." + sExtension;
             }
             String sStat(SW_RES(STR_STATSTR_LETTER));
             sStat += ' ';
@@ -729,7 +728,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             String sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             String sCounter = OUString('_');
             sCounter += OUString::number(nDoc);
-            sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.Len() - 1);
+            sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.getLength() - 1);
 
             while(true)
             {
@@ -739,7 +738,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 bool bFailed = false;
                 try
                 {
-                    pValues[0].Value <<= OUString(sFilter);
+                    pValues[0].Value <<= sFilter;
                     uno::Reference< frame::XStorable > xTempStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
                     xTempStore->storeToURL( sOutPath, aValues   );
                 }

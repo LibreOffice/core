@@ -32,6 +32,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <vcl/scrbar.hxx>
+#include "rtl/ustring.hxx"
 #include "swdllapi.h"
 
 class SwMailMergeConfigItem;
@@ -43,7 +44,7 @@ namespace com { namespace sun { namespace star { namespace mail {
 
 namespace SwMailMergeHelper
 {
-    SW_DLLPUBLIC String  CallSaveAsDialog(String& rFilter);
+    SW_DLLPUBLIC OUString CallSaveAsDialog(OUString& rFilter);
     SW_DLLPUBLIC bool    CheckMailAddress( const OUString& rMailAddress );
     SW_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::mail::XSmtpService >
                          ConnectToSmtpServer( SwMailMergeConfigItem& rConfigItem,
