@@ -36,8 +36,12 @@ gb_Library_LAYER_DIRS := \
 	OXT:$(WORKDIR)/LinkTarget/ExtensionLibrary \
 	NONE:$(gb_Library_DLLDIR) \
 
+$(dir $(call gb_Library__get_final_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 # doesn't do anything, just used for hooking up component target
-.PHONY: $(call gb_Library__get_final_target,%)
+$(call gb_Library__get_final_target,%) :
+	touch $@
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/Library/%
@@ -92,6 +96,7 @@ $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
 $(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
+$(call gb_Library__get_final_target,$(1)) :| $(dir $(call gb_Library__get_final_target,$(1))).dir
 $(call gb_Library_get_exports_target,$(1)) : $(call gb_Library_get_target,$(1))
 $(call gb_LinkTarget_get_headers_target,$(2)) : \
 	| $(dir $(call gb_Library_get_ilib_target,$(1))).dir
