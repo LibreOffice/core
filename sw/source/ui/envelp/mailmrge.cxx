@@ -669,14 +669,13 @@ bool SwMailMergeDlg::ExecQryShell()
         INetURLObject aAbs;
         if( pMedium )
             aAbs = pMedium->GetURLObject();
-        String sPath(
+        OUString sPath(
             URIHelper::SmartRel2Abs(
                 aAbs, aPathED.GetText(), URIHelper::GetMaybeFileHdl()));
         pModOpt->SetMailingPath(sPath);
-        String sDelim = OUString(INET_PATH_TOKEN);
 
-        if (sPath.Len() >= sDelim.Len() &&
-            sPath.Copy(sPath.Len()-sDelim.Len()).CompareTo(sDelim) != COMPARE_EQUAL)
+        const OUString sDelim = OUString(INET_PATH_TOKEN);
+        if (!sPath.endsWith(sDelim))
             sPath += sDelim;
 
         pModOpt->SetIsNameFromColumn(aGenerateFromDataBaseCB.IsChecked());
@@ -693,9 +692,9 @@ bool SwMailMergeDlg::ExecQryShell()
             //#i97667# reset column name - otherwise it's remembered from the last run
             pMgr->SetEMailColumn(OUString());
             //start save as dialog
-            String sFilter;
+            OUString sFilter;
             sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
-            if(!sPath.Len())
+            if (sPath.isEmpty())
                 return false;
             m_sSaveFilter = sFilter;
         }
