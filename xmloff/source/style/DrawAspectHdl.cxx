@@ -33,19 +33,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-//
-// class XMLMeasurePropHdl
-//
-
-SvXMLEnumMapEntry const pXML_DrawAspect_Enum[] =
-{
-    { XML_CONTENT,          1   },
-    { XML_THUMBNAIL,        2   },
-    { XML_ICON,             4   },
-    { XML_PRINT,            8   },
-    { XML_TOKEN_INVALID, 0 }
-};
-
 DrawAspectHdl::~DrawAspectHdl()
 {
     // nothing to do
