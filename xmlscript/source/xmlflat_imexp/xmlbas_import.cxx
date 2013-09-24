@@ -406,7 +406,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
 
     // BasicImport
 
-    BasicImport::BasicImport( const Reference< frame::XModel >& rxModel, sal_Bool bOasis )
+    BasicImport::BasicImport( const Reference< frame::XModel >& rxModel, bool bOasis )
         :m_xModel( rxModel )
         ,m_bOasis( bOasis )
     {
@@ -556,7 +556,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     // XMLBasicImporterBase
 
-    XMLBasicImporterBase::XMLBasicImporterBase( const Reference< XComponentContext >& rxContext, sal_Bool bOasis )
+    XMLBasicImporterBase::XMLBasicImporterBase( const Reference< XComponentContext >& rxContext, bool bOasis )
         :m_xContext( rxContext )
         ,m_bOasis( bOasis )
     {
@@ -685,7 +685,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // XMLBasicImporter
 
     XMLBasicImporter::XMLBasicImporter( const Reference< XComponentContext >& rxContext )
-        :XMLBasicImporterBase( rxContext, sal_False )
+        :XMLBasicImporterBase( rxContext, false )
     {
     }
 
@@ -708,7 +708,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     // XMLOasisBasicImporter
 
     XMLOasisBasicImporter::XMLOasisBasicImporter( const Reference< XComponentContext >& rxContext )
-        :XMLBasicImporterBase( rxContext, sal_True )
+        :XMLBasicImporterBase( rxContext, true )
     {
     }
 

@@ -100,7 +100,7 @@ namespace xmlscript
 
     // XMLBasicExporterBase
 
-    XMLBasicExporterBase::XMLBasicExporterBase( const Reference< XComponentContext >& rxContext, sal_Bool bOasis )
+    XMLBasicExporterBase::XMLBasicExporterBase( const Reference< XComponentContext >& rxContext, bool bOasis )
         :m_xContext( rxContext )
         ,m_bOasis( bOasis )
     {
@@ -407,7 +407,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     // XMLBasicExporter
 
     XMLBasicExporter::XMLBasicExporter( const Reference< XComponentContext >& rxContext )
-        :XMLBasicExporterBase( rxContext, sal_False )
+        :XMLBasicExporterBase( rxContext, false )
     {
     }
 
@@ -430,7 +430,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     // XMLOasisBasicExporter
 
     XMLOasisBasicExporter::XMLOasisBasicExporter( const Reference< XComponentContext >& rxContext )
-        :XMLBasicExporterBase( rxContext, sal_True )
+        :XMLBasicExporterBase( rxContext, true )
     {
     }
 

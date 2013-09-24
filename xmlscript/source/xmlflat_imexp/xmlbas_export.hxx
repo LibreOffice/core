@@ -46,11 +46,11 @@ namespace xmlscript
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-        sal_Bool                                                                            m_bOasis;
+        bool                                                                                m_bOasis;
 
     public:
         XMLBasicExporterBase(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, sal_Bool bOasis );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, bool bOasis );
         virtual ~XMLBasicExporterBase();
 
         // XServiceInfo

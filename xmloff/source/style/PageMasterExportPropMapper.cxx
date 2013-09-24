@@ -32,7 +32,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::xmloff::token;
 
-static inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
+static inline bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
             (rLine1.OuterLineWidth == rLine2.OuterLineWidth) &&
@@ -40,7 +40,7 @@ static inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, c
             (rLine1.LineWidth == rLine2.LineWidth);
 }
 
-inline sal_Bool operator==( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
+inline bool operator==( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.Color == rLine2.Color) &&
             lcl_HasSameLineWidth( rLine1, rLine2 ) &&

@@ -88,8 +88,8 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
                 nFlag = CTF_PM_FOOTERFLAG;
             sal_Int32 nStartIndex (-1);
             sal_Int32 nEndIndex (-1);
-            sal_Bool bFirst(sal_False);
-            sal_Bool bEnd(sal_False);
+            bool bFirst(false);
+            bool bEnd(false);
             sal_Int32 nIndex = 0;
             while ( nIndex < rMapper->GetEntryCount() && !bEnd)
             {
@@ -97,13 +97,13 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
                 {
                     if (!bFirst)
                     {
-                        bFirst = sal_True;
+                        bFirst = true;
                         nStartIndex = nIndex;
                     }
                 }
                 else if (bFirst)
                 {
-                    bEnd = sal_True;
+                    bEnd = true;
                     nEndIndex = nIndex;
                 }
                 nIndex++;
@@ -123,7 +123,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         {
             const UniReference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
             sal_Int32 nEndIndex (-1);
-            sal_Bool bEnd(sal_False);
+            bool bEnd(false);
             sal_Int32 nIndex = 0;
             sal_Int16 nContextID;
             while ( nIndex < rMapper->GetEntryCount() && !bEnd)
@@ -132,7 +132,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
                 if (nContextID && ((nContextID & CTF_PM_FLAGMASK) != XML_PM_CTF_START))
                 {
                     nEndIndex = nIndex;
-                    bEnd = sal_True;
+                    bEnd = true;
                 }
                 nIndex++;
             }

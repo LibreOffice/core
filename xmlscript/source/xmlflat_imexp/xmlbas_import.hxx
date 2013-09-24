@@ -195,10 +195,10 @@ namespace xmlscript
         sal_Int32 XMLNS_UID;
         sal_Int32 XMLNS_XLINK_UID;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
-        sal_Bool m_bOasis;
+        bool m_bOasis;
 
     public:
-        BasicImport( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, sal_Bool bOasis );
+        BasicImport( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, bool bOasis );
         virtual ~BasicImport();
 
         // XRoot
@@ -232,11 +232,11 @@ namespace xmlscript
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-        sal_Bool                                                                            m_bOasis;
+        bool                                                                                m_bOasis;
 
     public:
         XMLBasicImporterBase(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, sal_Bool bOasis );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, bool bOasis );
         virtual ~XMLBasicImporterBase();
 
         // XServiceInfo

@@ -99,7 +99,7 @@ sal_Bool XMLDashStyleImport::importXML(
     aLineDash.Distance = 20;
     OUString aDisplayName;
 
-    sal_Bool bIsRel = sal_False;
+    bool bIsRel = false;
 
     SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
     SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
@@ -143,7 +143,7 @@ sal_Bool XMLDashStyleImport::importXML(
             {
                 if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
                 {
-                    bIsRel = sal_True;
+                    bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.DotLen, rStrValue);
                 }
                 else
@@ -162,7 +162,7 @@ sal_Bool XMLDashStyleImport::importXML(
             {
                 if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
                 {
-                    bIsRel = sal_True;
+                    bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.DashLen, rStrValue);
                 }
                 else
@@ -177,7 +177,7 @@ sal_Bool XMLDashStyleImport::importXML(
             {
                 if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
                 {
-                    bIsRel = sal_True;
+                    bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.Distance, rStrValue);
                 }
                 else
@@ -232,7 +232,7 @@ sal_Bool XMLDashStyleExport::exportXML(
     {
         if( rValue >>= aLineDash )
         {
-            sal_Bool bIsRel = aLineDash.Style == drawing::DashStyle_RECTRELATIVE || aLineDash.Style == drawing::DashStyle_ROUNDRELATIVE;
+            bool bIsRel = aLineDash.Style == drawing::DashStyle_RECTRELATIVE || aLineDash.Style == drawing::DashStyle_ROUNDRELATIVE;
 
             OUString aStrValue;
             OUStringBuffer aOut;
