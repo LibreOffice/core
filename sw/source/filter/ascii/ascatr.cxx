@@ -110,8 +110,8 @@ bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FIELD:
-                    sOut = static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
-                            ->ExpandField(true);
+                    sOut =
+                        static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true);
                     break;
 
                 case RES_TXTATR_FTN:

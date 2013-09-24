@@ -235,7 +235,7 @@ SwField* SwEditShell::GetCurFld() const
         (pCrsr->End()->nContent.GetIndex() -
          pCrsr->Start()->nContent.GetIndex()) <= 1)
     {
-        pCurFld = (SwField*)pTxtFld->GetFld().GetFld();
+        pCurFld = (SwField*)pTxtFld->GetFmtFld().GetField();
         // Table formula? Convert internal into external name:
         if( RES_TABLEFLD == pCurFld->GetTyp()->Which() )
         {
@@ -264,7 +264,7 @@ static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
         for( n = 0; n < nMaxItems; ++n )
             if( 0 != (pItem =
                       pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
-                && ((SwFmtFld*)pItem)->GetFld() == &rFld )
+                && ((SwFmtFld*)pItem)->GetField() == &rFld )
             {
                 pTFld = ((SwFmtFld*)pItem)->GetTxtFld();
                 break;
@@ -333,8 +333,8 @@ void SwEditShell::UpdateFlds( SwField &rFld )
 
                     if( 0 != (pTxtFld = GetDocTxtFld( pCurStt )) )
                     {
-                        pFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
-                        SwField *pCurFld = pFmtFld->GetFld();
+                        pFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
+                        SwField *pCurFld = pFmtFld->GetField();
 
                         // if there are mixed field types
                         if( pCurFld->GetTyp()->Which() !=

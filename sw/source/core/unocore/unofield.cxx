@@ -1156,7 +1156,7 @@ public:
         , m_bIsDescriptor(pFmt == 0)
         , m_bCallUpdate(false)
         , m_nServiceId((pFmt)
-                ? lcl_GetServiceForField(*pFmt->GetFld())
+                ? lcl_GetServiceForField(*pFmt->GetField())
                 : nServiceId)
         , m_pProps((pFmt) ? 0 : new SwFieldProperties_Impl)
     { }
@@ -1263,7 +1263,7 @@ SwXTextField::getTextFieldMaster() throw (uno::RuntimeException)
     {
         if (!m_pImpl->GetRegisteredIn())
             throw uno::RuntimeException();
-        pType = m_pImpl->m_pFmtFld->GetFld()->GetTyp();
+        pType = m_pImpl->m_pFmtFld->GetField()->GetTyp();
     }
 
     uno::Reference<beans::XPropertySet> const xRet(
@@ -1907,7 +1907,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                     aPam,
                     OUString(),
                     ODF_COMMENTRANGE);
-            SwPostItField* pPostItField = (SwPostItField*)aFmt.GetFld();
+            SwPostItField* pPostItField = (SwPostItField*)aFmt.GetField();
             if (pPostItField->GetName().isEmpty())
                 // The fieldmark always has a (generated) name.
                 pPostItField->SetName(pFieldmark->GetName());
@@ -1928,7 +1928,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
         if (pTxtAttr)
         {
-            const SwFmtFld& rFld = pTxtAttr->GetFld();
+            const SwFmtFld& rFld = pTxtAttr->GetFmtFld();
             m_pImpl->m_pFmtFld = &rFld;
         }
     }
@@ -2545,7 +2545,9 @@ void SwXTextField::Impl::Modify(
 const SwField*  SwXTextField::Impl::GetField() const
 {
     if (GetRegisteredIn() && m_pFmtFld)
-        return m_pFmtFld->GetFld();
+    {
+        return m_pFmtFld->GetField();
+    }
     return 0;
 }
 

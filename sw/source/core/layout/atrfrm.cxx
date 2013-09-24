@@ -2706,27 +2706,21 @@ void SwFlyFrmFmt::MakeFrms()
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
             SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetCurrentLayout()->Lower();
-            if( !nPgNum && aAnchorAttr.GetCntntAnchor() )
+            if( nPgNum == 0 && aAnchorAttr.GetCntntAnchor() )
             {
-                SwCntntNode *pCNd =
-                    aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
+                SwCntntNode *pCNd = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
                 SwIterator<SwFrm,SwCntntNode> aIter( *pCNd );
-                for (SwFrm* pFrm = aIter.First();
-                     pFrm;
-                     /* unreachable, note unconditional break below
-                        pFrm = aIter.Next()
-                     */ )
+                for ( SwFrm* pFrm = aIter.First(); pFrm != NULL; pFrm = aIter.Next() )
                 {
-                        pPage = pFrm->FindPageFrm();
-                        if( pPage )
-                        {
-                            nPgNum = pPage->GetPhyPageNum();
-                            // OD 24.07.2003 #111032# - update anchor attribute
-                            aAnchorAttr.SetPageNum( nPgNum );
-                            aAnchorAttr.SetAnchor( 0 );
-                            SetFmtAttr( aAnchorAttr );
-                        }
+                    pPage = pFrm->FindPageFrm();
+                    if( pPage )
+                    {
+                        nPgNum = pPage->GetPhyPageNum();
+                        aAnchorAttr.SetPageNum( nPgNum );
+                        aAnchorAttr.SetAnchor( 0 );
+                        SetFmtAttr( aAnchorAttr );
                         break;
+                    }
                 }
             }
             while ( pPage )
@@ -2842,17 +2836,21 @@ SwAnchoredObject* SwFlyFrmFmt::GetAnchoredObj( const Point* pPoint, const sal_Bo
 
 bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
+    bool bRet = true;
     switch( rInfo.Which() )
     {
     case RES_CONTENT_VISIBLE:
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *this );
         }
-        return false;
+        bRet = false;
+        break;
 
     default:
-        return SwFrmFmt::GetInfo( rInfo );
+        bRet = SwFrmFmt::GetInfo( rInfo );
+        break;
     }
+    return bRet;
 }
 
 // #i73249#

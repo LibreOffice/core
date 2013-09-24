@@ -527,7 +527,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {
                     uno::Reference<text::XTextField> const xField(
                         SwXTextField::CreateXTextField(*rPam.GetDoc(),
-                           pTxtAttr->GetFld()));
+                           pTxtAttr->GetFmtFld()));
                     *pAny <<= xField;
                 }
             }

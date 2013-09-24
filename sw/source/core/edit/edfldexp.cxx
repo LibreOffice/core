@@ -52,13 +52,13 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) cons
                 case RES_DBFLD:
                 {
                     SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
-                    SwFmtFld* pFld = aIter.First();
-                    while(pFld)
+                    SwFmtFld* pFmtFld = aIter.First();
+                    while(pFmtFld)
                     {
-                        if(pFld->IsFldInDoc())
+                        if(pFmtFld->IsFldInDoc())
                         {
                             const SwDBData& rData =
-                                    ((SwDBFieldType*)pFld->GetFld()->GetTyp())->GetDBData();
+                                    ((SwDBFieldType*)pFmtFld->GetField()->GetTyp())->GetDBData();
                             try
                             {
                                 return xDBContext->getByName(rData.sDataSource).hasValue();
@@ -69,7 +69,7 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) cons
                                 return sal_False;
                             }
                         }
-                        pFld = aIter.Next();
+                        pFmtFld = aIter.Next();
                     }
                 }
                 break;

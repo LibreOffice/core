@@ -614,9 +614,9 @@ static void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
     bool bSubType = nSubType != USHRT_MAX;
     for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         if( 0 != ( pTxtFld = pFmtFld->GetTxtFld() ) &&
-            ( !bChkInpFlag || ((SwSetExpField*)pTxtFld->GetFld().GetFld())
+            ( !bChkInpFlag || ((SwSetExpField*)pTxtFld->GetFmtFld().GetField())
                                 ->GetInputFlag() ) &&
-            (!bSubType || (pFmtFld->GetFld()->GetSubType()
+            (!bSubType || (pFmtFld->GetField()->GetSubType()
                                 & 0xff ) == nSubType ))
         {
             SwCntntFrm* pCFrm;
@@ -1099,7 +1099,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
                             aPos.nContent.GetIndex(), RES_TXTATR_FIELD );
                     const SwField* pFld = pTxtAttr
-                                            ? pTxtAttr->GetFld().GetFld()
+                                            ? pTxtAttr->GetFmtFld().GetField()
                                             : 0;
                     if( SwContentAtPos::SW_CLICKFIELD & rCntntAtPos.eCntntAtPos &&
                         pFld && !pFld->HasClickHdl() )
@@ -1520,7 +1520,7 @@ const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
         {
             SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
                     pCursorPos->nContent.GetIndex(), RES_TXTATR_FIELD );
-            const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
+            const SwField* pFld = pTxtAttr ? pTxtAttr->GetFmtFld().GetField() : 0;
             if ( pFld && pFld->Which()== RES_POSTITFLD )
             {
                 pPostItFld = static_cast<const SwPostItField*>(pFld);

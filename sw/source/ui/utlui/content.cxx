@@ -392,7 +392,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            OUString sEntry = aFmtFld->GetFld()->GetPar2();
+                            OUString sEntry = aFmtFld->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,
@@ -718,7 +718,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                         if (aFmtFld->GetTxtFld() && aFmtFld->IsFldInDoc() &&
                             (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                         {
-                            OUString sEntry = aFmtFld->GetFld()->GetPar2();
+                            OUString sEntry = aFmtFld->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
                             SwPostItContent* pCnt = new SwPostItContent(
                                                 this,

@@ -719,8 +719,7 @@ SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
 
 sal_uInt16 SwTOXAuthority::GetLevel() const
 {
-    OUString sText(((SwAuthorityField*)m_rField.GetFld())->
-                        GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
+    OUString sText(((SwAuthorityField*)m_rField.GetField())->GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
     //#i18655# the level '0' is the heading level therefor the values are incremented here
     sal_uInt16 nRet = 1;
     if( pTOXIntl->IsNumeric( sText ) )
@@ -736,7 +735,7 @@ sal_uInt16 SwTOXAuthority::GetLevel() const
 
 static OUString lcl_GetText(SwFmtFld const& rField)
 {
-    return rField.GetFld()->ExpandField(true);
+    return rField.GetField()->ExpandField(true);
 }
 
 TextAndReading SwTOXAuthority::GetText_Impl() const
@@ -747,7 +746,7 @@ TextAndReading SwTOXAuthority::GetText_Impl() const
 void    SwTOXAuthority::FillText( SwTxtNode& rNd,
                         const SwIndex& rInsPos, sal_uInt16 nAuthField ) const
 {
-    SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetFld();
+    SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetField();
     OUString sText;
     if(AUTH_FIELD_IDENTIFIER == nAuthField)
     {
@@ -774,22 +773,22 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
 bool    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
-            ((SwAuthorityField*)m_rField.GetFld())->GetHandle() ==
-                ((SwAuthorityField*)((SwTOXAuthority&)rCmp).m_rField.GetFld())->GetHandle();
+            ((SwAuthorityField*)m_rField.GetField())->GetHandle() ==
+                ((SwAuthorityField*)((SwTOXAuthority&)rCmp).m_rField.GetField())->GetHandle();
 }
 
 bool    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
 {
     bool bRet = false;
-    SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetFld();
+    SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetField();
     SwAuthorityFieldType* pType = (SwAuthorityFieldType*)
                                                 pField->GetTyp();
     if(pType->IsSortByDocument())
         bRet = SwTOXSortTabBase::operator<(rBase);
     else
     {
-        SwAuthorityField* pCmpField = (SwAuthorityField*)
-                        ((SwTOXAuthority&)rBase).m_rField.GetFld();
+        SwAuthorityField* pCmpField =
+            (SwAuthorityField*)((SwTOXAuthority&)rBase).m_rField.GetField();
 
 
         for(sal_uInt16 i = 0; i < pType->GetSortKeyCount(); i++)

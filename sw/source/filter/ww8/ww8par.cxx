@@ -1554,7 +1554,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
 
 bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo)
 {
-    const SwField* pFld = rFmtFld.GetFld();
+    const SwField* pFld = rFmtFld.GetField();
     sal_uInt16 nSubType;
     if(pFld && (RES_GETREFFLD == pFld->Which())
         && ((REF_FOOTNOTE == (nSubType = pFld->GetSubType())) || (REF_ENDNOTE  == nSubType))
@@ -1589,7 +1589,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwPaM aPaM(aIdx, rEntry.m_aMkPos.m_nCntnt);
 
             SwFmtFld& rFmtFld   = *(SwFmtFld*)rEntry.pAttr;
-            SwField* pFld = rFmtFld.GetFld();
+            SwField* pFld = rFmtFld.GetField();
 
             if (!RefToVar(pFld, rEntry))
             {

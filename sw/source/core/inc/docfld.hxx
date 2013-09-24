@@ -84,7 +84,7 @@ public:
                     CNTNT.pTxtFld == rFld.CNTNT.pTxtFld ); }
     bool operator<( const _SetGetExpFld& rFld ) const;
 
-    const SwTxtFld* GetFld() const
+    const SwTxtFld* GetTxtFld() const
         { return TEXTFIELD == eSetGetExpFldType ? CNTNT.pTxtFld : 0; }
     const SwTxtTOXMark* GetTOX() const
         { return TEXTTOXMARK == eSetGetExpFldType ? CNTNT.pTxtTOX : 0; }

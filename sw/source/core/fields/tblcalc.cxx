@@ -83,7 +83,7 @@ const SwNode* SwTblField::GetNodeOfFormula() const
 
     SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
     for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
-            if( this == pFmtFld->GetFld() )
+            if( this == pFmtFld->GetField() )
                 return (SwTxtNode*)&pFmtFld->GetTxtFld()->GetTxtNode();
     return 0;
 }

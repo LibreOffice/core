@@ -1149,7 +1149,7 @@ struct _PostItFld : public _SetGetExpFld
 
     SwPostItField* GetPostIt() const
     {
-        return (SwPostItField*) GetFld()->GetFld().GetFld();
+        return (SwPostItField*) GetTxtFld()->GetFmtFld().GetField();
     }
 };
 
@@ -1165,7 +1165,7 @@ sal_uInt16 _PostItFld::GetPageNo(
     //but the PostIt's first occurrence in the selected area.
     rVirtPgNo = 0;
     sal_uInt16 nPos = GetCntnt();
-    SwIterator<SwTxtFrm,SwTxtNode> aIter( GetFld()->GetTxtNode() );
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( GetTxtFld()->GetTxtNode() );
     for( SwTxtFrm* pFrm = aIter.First(); pFrm;  pFrm = aIter.Next() )
     {
         if( pFrm->GetOfst() > nPos ||
@@ -1293,7 +1293,7 @@ void SwDoc::CalculatePagesForPrinting(
     bool bIsPDFExport,
     sal_Int32 nDocPageCount )
 {
-    const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
+    const sal_Int64 nContent = rOptions.getIntValue( "PrintContent", 0 );
     const bool bPrintSelection = nContent == 2;
 
     // properties to take into account when calcualting the set of pages
@@ -1522,7 +1522,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // 0 -> print all pages (default if aPageRange is empty)
     // 1 -> print range according to PageRange
     // 2 -> print selection
-    const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
+    const sal_Int64 nContent = rOptions.getIntValue( "PrintContent", 0 );
     if (nContent == 1)
         aPageRange = rOptions.getStringValue( "PageRange", OUString() );
     if (aPageRange.isEmpty())    // empty string -> print all
@@ -1599,7 +1599,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
 
     // make sure that all pages are in correct order
-    sal_uInt16 nSPg = 0, nEPg = aVec.size(), nStep = 1;
+    sal_uInt16 nSPg = 0;
+    sal_uInt32 nEPg = aVec.size();
+    sal_uInt16 nStep = 1;
     if ( 0 == (nEPg & 1 ))      // there are no uneven ones!
         --nEPg;
 
@@ -1690,7 +1692,7 @@ bool SwDoc::IncrementalDocStatCalculate(long nChars, bool bFields)
             if (pFmtFld->IsFldInDoc())
             {
                 SwPostItField const * const pField(
-                    static_cast<SwPostItField const*>(pFmtFld->GetFld()));
+                    static_cast<SwPostItField const*>(pFmtFld->GetField()));
                 mpDocStat->nAllPara += pField->GetNumberOfParagraphs();
             }
         }
@@ -1834,8 +1836,8 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
 
-    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
-    sal_uInt32 nCount = 0;
+    const sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    sal_uInt16 nCount = 0;
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
@@ -1846,7 +1848,7 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
                 OUString pTmp(((SwFmtRefMark*)pItem)->GetRefName());
                 pNames->insert(pNames->begin() + nCount, pTmp);
             }
-            nCount ++;
+            ++nCount;
         }
 
     return nCount;
@@ -2406,8 +2408,8 @@ bool SwDoc::ConvertFieldsToText()
             if (!bSkip)
             {
                 bool bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
-                const SwFmtFld& rFmtFld = pTxtFld->GetFld();
-                const SwField*  pField = rFmtFld.GetFld();
+                const SwFmtFld& rFmtFld = pTxtFld->GetFmtFld();
+                const SwField*  pField = rFmtFld.GetField();
 
                 //#i55595# some fields have to be excluded in headers/footers
                 sal_uInt16 nWhich = pField->GetTyp()->Which();
@@ -2631,7 +2633,7 @@ SwField * SwDoc::GetField(const SwPosition & rPos)
 {
     SwTxtFld * const pAttr = GetTxtFld(rPos);
 
-    return (pAttr) ? const_cast<SwField *>( pAttr->GetFld().GetFld() ) : 0;
+    return (pAttr) ? const_cast<SwField *>( pAttr->GetFmtFld().GetField() ) : 0;
 }
 
 SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)

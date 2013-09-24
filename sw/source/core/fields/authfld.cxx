@@ -275,7 +275,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             if(!pTxtFld || !pTxtFld->GetpTxtNode())
             {
 #if OSL_DEBUG_LEVEL > 0
-                if(nHandle == ((SwAuthorityField*)pFmtFld->GetFld())->GetHandle())
+                if(nHandle == ((SwAuthorityField*)pFmtFld->GetField())->GetHandle())
                     bCurrentFieldWithoutTextNode = true;
 #endif
                 continue;
@@ -335,7 +335,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
         {
             const SwTOXSortTabBase& rBase = *aSortArr[i];
             SwFmtFld& rFmtFld = ((SwTOXAuthority&)rBase).GetFldFmt();
-            SwAuthorityField* pAFld = (SwAuthorityField*)rFmtFld.GetFld();
+            SwAuthorityField* pAFld = (SwAuthorityField*)rFmtFld.GetField();
             m_SequArr.push_back(pAFld->GetHandle());
         }
         for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)

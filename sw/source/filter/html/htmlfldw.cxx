@@ -435,7 +435,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwFmtFld & rFld = (SwFmtFld&)rHt;
-    const SwField* pFld = rFld.GetFld();
+    const SwField* pFld = rFld.GetField();
     const SwFieldType* pFldTyp = pFld->GetTyp();
 
     if( RES_SETEXPFLD == pFldTyp->Which() &&

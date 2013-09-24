@@ -724,12 +724,12 @@ lcl_ExportHints(
                         xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FIELD);
                         Reference<XTextField> const xField =
-                            SwXTextField::CreateXTextField(*pDoc, pAttr->GetFld());
+                            SwXTextField::CreateXTextField(*pDoc, pAttr->GetFmtFld());
                         pPortion->SetTextField(xField);
 
                         // If this is a postit field and it has a fieldmark
                         // associated, set the fieldmark as a bookmark.
-                        const SwField* pField = pAttr->GetFld().GetFld();
+                        const SwField* pField = pAttr->GetFmtFld().GetField();
                         if (pField->Which() == RES_POSTITFLD)
                         {
                             const SwPostItField* pPostItField = dynamic_cast<const SwPostItField*>(pField);

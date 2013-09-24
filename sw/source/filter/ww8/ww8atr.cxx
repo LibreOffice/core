@@ -840,13 +840,13 @@ bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, s
 
     SwFieldType* pType = pDoc->GetSysFldType( RES_GETREFFLD );
     SwIterator<SwFmtFld, SwFieldType> aFmtFlds( *pType );
-    for ( SwFmtFld* pFld = aFmtFlds.First(); pFld; pFld = aFmtFlds.Next() )
+    for ( SwFmtFld* pFmtFld = aFmtFlds.First(); pFmtFld; pFmtFld = aFmtFlds.Next() )
     {
-        if ( pFld->GetTxtFld() && nTyp == pFld->GetFld()->GetSubType() &&
-             0 != ( pNd = pFld->GetTxtFld()->GetpTxtNode() ) &&
+        if ( pFmtFld->GetTxtFld() && nTyp == pFmtFld->GetField()->GetSubType() &&
+             0 != ( pNd = pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
              pNd->GetNodes().IsDocNodes() )
         {
-            const SwGetRefField& rRFld = *static_cast< SwGetRefField* >( pFld->GetFld() );
+            const SwGetRefField& rRFld = *static_cast< SwGetRefField* >( pFmtFld->GetField() );
             switch ( nTyp )
             {
                 case REF_BOOKMARK:
@@ -2542,7 +2542,7 @@ void WW8AttributeOutput::WriteExpand( const SwField* pFld )
 
 void AttributeOutputBase::TextField( const SwFmtFld& rField )
 {
-    const SwField* pFld = rField.GetFld();
+    const SwField* pFld = rField.GetField();
     bool bWriteExpand = false;
     sal_uInt16 nSubType = pFld->GetSubType();
 

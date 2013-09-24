@@ -109,7 +109,7 @@ public:
 
     inline const SwFmtCharFmt           &GetCharFmt() const;
     inline const SwFmtAutoFmt           &GetAutoFmt() const;
-    inline const SwFmtFld               &GetFld() const;
+    inline const SwFmtFld               &GetFmtFld() const;
     inline const SwFmtFtn               &GetFtn() const;
     inline const SwFmtFlyCnt            &GetFlyCnt() const;
     inline const SwTOXMark              &GetTOXMark() const;
@@ -180,7 +180,7 @@ inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
     return (const SwFmtAutoFmt&)(*m_pAttr);
 }
 
-inline const SwFmtFld& SwTxtAttr::GetFld() const
+inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FIELD );
     return (const SwFmtFld&)(*m_pAttr);

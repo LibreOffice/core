@@ -577,7 +577,8 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
             // all cells of the (part) table together. Now check if
             // they're all adjacent
-            size_t n, nCellCnt = 0;
+            size_t n;
+            sal_uInt16 nCellCnt = 0;
             long nYPos = LONG_MAX;
             long nXPos = 0;
             long nHeight = 0;

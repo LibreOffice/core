@@ -48,17 +48,20 @@ TYPEINIT1(SwFmtFldHint, SfxHint);
 
     // Konstruktor fuers Default vom Attribut-Pool
 SwFmtFld::SwFmtFld()
-    : SfxPoolItem( RES_TXTATR_FIELD ),
-    SwClient( 0 ),
-    pField( 0 ),
-    pTxtAttr( 0 )
+    : SfxPoolItem( RES_TXTATR_FIELD )
+    , SwClient( 0 )
+    , SfxBroadcaster()
+    , pField( 0 )
+    , pTxtAttr( 0 )
 {
 }
 
 SwFmtFld::SwFmtFld( const SwField &rFld )
-    : SfxPoolItem( RES_TXTATR_FIELD ),
-    SwClient( rFld.GetTyp() ),
-    pTxtAttr( 0 )
+    : SfxPoolItem( RES_TXTATR_FIELD )
+    , SwClient( rFld.GetTyp() )
+    , SfxBroadcaster()
+    , pField( 0 )
+    , pTxtAttr( 0 )
 {
     pField = rFld.CopyField();
 }
@@ -68,14 +71,16 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
 // full pool range, all items need to be clonable. Thus, this one needed to be
 // corrected
 SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
-    : SfxPoolItem( RES_TXTATR_FIELD ), SwClient(), SfxBroadcaster(),
-    pField( 0 ),
-    pTxtAttr( 0 )
+    : SfxPoolItem( RES_TXTATR_FIELD )
+    , SwClient()
+    , SfxBroadcaster()
+    , pField( 0 )
+    , pTxtAttr( 0 )
 {
-    if(rAttr.GetFld())
+    if(rAttr.GetField())
     {
-        rAttr.GetFld()->GetTyp()->Add(this);
-        pField = rAttr.GetFld()->CopyField();
+        rAttr.GetField()->GetTyp()->Add(this);
+        pField = rAttr.GetField()->CopyField();
     }
 }
 
@@ -135,13 +140,10 @@ void SwFmtFld::SetFld(SwField * _pField)
 int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    // OD 2004-05-14 #i29146# - correction: check, if <pField> and
-    // <((SwFmtFld&)rAttr).GetFld()> are set.
-    // OD 2004-05-14 #i29146# - items are equal, if both fields aren't set.
-    return ( pField && ((SwFmtFld&)rAttr).GetFld() &&
-             pField->GetTyp() == ((SwFmtFld&)rAttr).GetFld()->GetTyp() &&
-             pField->GetFormat() == ((SwFmtFld&)rAttr).GetFld()->GetFormat() ) ||
-           ( !pField && !((SwFmtFld&)rAttr).GetFld() );
+    return ( ( pField && ((SwFmtFld&)rAttr).GetField()
+               && pField->GetTyp() == ((SwFmtFld&)rAttr).GetField()->GetTyp()
+               && pField->GetFormat() == ((SwFmtFld&)rAttr).GetField()->GetFormat() ) )
+             || ( !pField && !((SwFmtFld&)rAttr).GetField() );
 }
 
 SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
@@ -164,7 +166,7 @@ void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
         pPaM->GetPoint()->nNode = rTxtNode;
         pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, *pTxtAttr->GetStart() );
 
-        OUString const aEntry( GetFld()->ExpandField( pDoc->IsClipBoard() ) );
+        OUString const aEntry( GetField()->ExpandField( pDoc->IsClipBoard() ) );
         pPaM->SetMark();
         pPaM->Move( fnMoveForward );
         pDoc->DeleteRange( *pPaM );
@@ -194,11 +196,11 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 return;
         case RES_REFMARKFLD_UPDATE:
                 // GetReferenz-Felder aktualisieren
-                if( RES_GETREFFLD == GetFld()->GetTyp()->Which() )
+                if( RES_GETREFFLD == GetField()->GetTyp()->Which() )
                 {
                     // #i81002#
 //                    ((SwGetRefField*)GetFld())->UpdateField();
-                    dynamic_cast<SwGetRefField*>(GetFld())->UpdateField( pTxtAttr );
+                    dynamic_cast<SwGetRefField*>(GetField())->UpdateField( pTxtAttr );
                 }
                 break;
         case RES_DOCPOS_UPDATE:
@@ -215,7 +217,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
     }
 
-    switch (GetFld()->GetTyp()->Which())
+    switch (GetField()->GetTyp()->Which())
     {
         case RES_HIDDENPARAFLD:
             if( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
@@ -228,9 +230,9 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             return;
     }
 
-    if( RES_USERFLD == GetFld()->GetTyp()->Which() )
+    if( RES_USERFLD == GetField()->GetTyp()->Which() )
     {
-        SwUserFieldType* pType = (SwUserFieldType*)GetFld()->GetTyp();
+        SwUserFieldType* pType = (SwUserFieldType*)GetField()->GetTyp();
         if(!pType->IsValid())
         {
             SwCalc aCalc( *pTxtNd->GetDoc() );
@@ -280,7 +282,7 @@ SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
     : SwTxtAttr( rAttr, nStartPos )
 // fdo#39694 the ExpandField here may not give the correct result in all cases,
 // but is better than nothing
-    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
+    , m_aExpand( rAttr.GetField()->ExpandField(bInClipboard) )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;
@@ -309,7 +311,7 @@ void SwTxtFld::Expand() const
     // Wenn das expandierte Feld sich nicht veraendert hat, wird returnt
     OSL_ENSURE( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
-    const SwField* pFld = GetFld().GetFld();
+    const SwField* pFld = GetFmtFld().GetField();
     OUString aNewExpand(
         pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
@@ -339,7 +341,7 @@ void SwTxtFld::Expand() const
     m_aExpand = aNewExpand;
 
     // 0, this for formatting
-    m_pTxtNode->ModifyNotification( 0, const_cast<SwFmtFld*>( &GetFld() ) );
+    m_pTxtNode->ModifyNotification( 0, const_cast<SwFmtFld*>( &GetFmtFld() ) );
 }
 
 /*************************************************************************
@@ -354,8 +356,8 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     IDocumentFieldsAccess* pIDFA = m_pTxtNode->getIDocumentFieldsAccess();
     IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
 
-    SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFld();
-    const sal_uInt16 nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
+    SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFmtFld();
+    const sal_uInt16 nFldWhich = rFmtFld.GetField()->GetTyp()->Which();
 
     if( pIDFA != pDestIDFA )
     {
@@ -368,19 +370,19 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
             RES_AUTHORITY != nFldWhich )
             pFldType = pDestIDFA->GetSysFldType( nFldWhich );
         else
-            pFldType = pDestIDFA->InsertFldType( *rFmtFld.GetFld()->GetTyp() );
+            pFldType = pDestIDFA->InsertFldType( *rFmtFld.GetField()->GetTyp() );
 
         // Sonderbehandlung fuer DDE-Felder
         if( RES_DDEFLD == nFldWhich )
         {
             if( rFmtFld.GetTxtFld() )
-                ((SwDDEFieldType*)rFmtFld.GetFld()->GetTyp())->DecRefCnt();
+                ((SwDDEFieldType*)rFmtFld.GetField()->GetTyp())->DecRefCnt();
             ((SwDDEFieldType*)pFldType)->IncRefCnt();
         }
 
         OSL_ENSURE( pFldType, "unbekannter FieldType" );
         pFldType->Add( &rFmtFld );          // ummelden
-        rFmtFld.GetFld()->ChgTyp( pFldType );
+        rFmtFld.GetField()->ChgTyp( pFldType );
     }
 
     // Expressionfelder Updaten
@@ -392,12 +394,12 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     }
     // Tabellenfelder auf externe Darstellung
     else if( RES_TABLEFLD == nFldWhich &&
-        ((SwTblField*)rFmtFld.GetFld())->IsIntrnlName() )
+        ((SwTblField*)rFmtFld.GetField())->IsIntrnlName() )
     {
         // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
         const SwTableNode* pTblNd = m_pTxtNode->FindTableNode();
         if( pTblNd )        // steht in einer Tabelle
-            ((SwTblField*)rFmtFld.GetFld())->PtrToBoxNm( &pTblNd->GetTable() );
+            ((SwTblField*)rFmtFld.GetField())->PtrToBoxNm( &pTblNd->GetTable() );
     }
 }
 

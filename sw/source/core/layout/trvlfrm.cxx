@@ -250,7 +250,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
             if (pTxtAttr)
             {
-                const SwField* pField = pTxtAttr->GetFld().GetFld();
+                const SwField* pField = pTxtAttr->GetFmtFld().GetField();
                 if (pField->IsClickable())
                     bConsiderBackground = false;
             }

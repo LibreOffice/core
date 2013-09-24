@@ -160,20 +160,20 @@ void SwFldTypes::dumpAsXml( xmlTextWriterPtr w )
             writer.writeFormatAttribute("ptr", "%p", pCurFldFmt);
             writer.writeFormatAttribute("pTxtAttr", "%p", pCurFldFmt->GetTxtFld());
             const char* name = "???";
-            switch(pCurFldFmt->GetFld()->GetTyp()->Which())
+            switch(pCurFldFmt->GetField()->GetTyp()->Which())
             {
                 case RES_PAGENUMBERFLD: name = "swpagenumberfield"; break;
                 case RES_POSTITFLD: name = "swpostitfield"; break;
                 case RES_DATETIMEFLD: name = "swdatetimefield"; break;
                 default:
-                    SAL_INFO("sw.core", "unhandled field type " << pCurFldFmt->GetFld()->GetTyp()->Which());
+                    SAL_INFO("sw.core", "unhandled field type " << pCurFldFmt->GetField()->GetTyp()->Which());
                     break;
             }
             writer.startElement(name);
-            writer.writeFormatAttribute("ptr", "%p", pCurFldFmt->GetFld());
-            if (pCurFldFmt->GetFld()->GetTyp()->Which() == RES_POSTITFLD)
+            writer.writeFormatAttribute("ptr", "%p", pCurFldFmt->GetField());
+            if (pCurFldFmt->GetField()->GetTyp()->Which() == RES_POSTITFLD)
             {
-                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetFld());
+                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetField());
                 OString txt8 = OUStringToOString(pField->GetName(), RTL_TEXTENCODING_UTF8);
                 writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
             }

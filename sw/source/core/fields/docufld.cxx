@@ -1703,10 +1703,10 @@ const SwFmtFld* SwPostItField::GetByName(SwDoc* pDoc, const OUString& rName)
         for (const SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next())
         {
             // Ignore the field if it's not an annotation or it doesn't have an anchor.
-            if (pCurFldFmt->GetFld()->GetTyp()->Which() != RES_POSTITFLD || !pCurFldFmt->GetTxtFld())
+            if (pCurFldFmt->GetField()->GetTyp()->Which() != RES_POSTITFLD || !pCurFldFmt->GetTxtFld())
                 continue;
 
-            const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetFld());
+            const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pCurFldFmt->GetField());
             if (pField->GetName() == rName)
                 return pCurFldFmt;
         }
@@ -2201,7 +2201,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                                         _SetGetExpFlds& rSetList )
 {
-    SwRefPageGetField* pGetFld = (SwRefPageGetField*)pTxtFld->GetFld().GetFld();
+    SwRefPageGetField* pGetFld = (SwRefPageGetField*)pTxtFld->GetFmtFld().GetField();
     pGetFld->SetText( OUString() );
 
     // then search the correct RefPageSet field
@@ -2217,9 +2217,9 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
         if( itLast != rSetList.begin() )
         {
             --itLast;
-            const SwTxtFld* pRefTxtFld = (*itLast)->GetFld();
+            const SwTxtFld* pRefTxtFld = (*itLast)->GetTxtFld();
             const SwRefPageSetField* pSetFld =
-                        (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
+                        (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
             if( pSetFld->IsOn() )
             {
                 // determine the correct offset
@@ -2243,7 +2243,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
         }
     }
     // start formatting
-    ((SwFmtFld&)pTxtFld->GetFld()).ModifyNotification( 0, 0 );
+    ((SwFmtFld&)pTxtFld->GetFmtFld()).ModifyNotification( 0, 0 );
 }
 
 // queries for relative page numbering
@@ -2304,9 +2304,9 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         return;        // there is no corresponding set-field in front
     --itLast;
 
-    const SwTxtFld* pRefTxtFld = (*itLast)->GetFld();
+    const SwTxtFld* pRefTxtFld = (*itLast)->GetTxtFld();
     const SwRefPageSetField* pSetFld =
-                        (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
+                        (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
     Point aPt;
     const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False ) : 0;
     if( pSetFld->IsOn() && pRefFrm )
@@ -2316,7 +2316,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         sal_uInt16 nDiff = pPgFrm->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1;
 
-        SwRefPageGetField* pGetFld = (SwRefPageGetField*)pFld->GetFld().GetFld();
+        SwRefPageGetField* pGetFld = (SwRefPageGetField*)pFld->GetFmtFld().GetField();
         sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                             ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
                             : pGetFld->GetFormat();

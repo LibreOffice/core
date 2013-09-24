@@ -1284,7 +1284,7 @@ static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
         // TabellenFormel muessen relativ kopiert werden.
         case RES_TXTATR_FIELD :
             {
-                const SwFmtFld& rFld = pHt->GetFld();
+                const SwFmtFld& rFld = pHt->GetFmtFld();
                 if( pOtherDoc )
                 {
                     static_cast<const SwTxtFld*>(pHt)->CopyFld(
@@ -1292,18 +1292,16 @@ static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
                 }
 
                 // Tabellenformel ??
-                if( RES_TABLEFLD == rFld.GetFld()->GetTyp()->Which()
-                    && static_cast<const SwTblField*>(rFld.GetFld())->IsIntrnlName())
+                if( RES_TABLEFLD == rFld.GetField()->GetTyp()->Which()
+                    && static_cast<const SwTblField*>(rFld.GetField())->IsIntrnlName())
                 {
                     // wandel die interne in eine externe Formel um
                     const SwTableNode* const pDstTblNd =
-                        static_cast<const SwTxtFld*>(pHt)->
-                                            GetTxtNode().FindTableNode();
+                        static_cast<const SwTxtFld*>(pHt)->GetTxtNode().FindTableNode();
                     if( pDstTblNd )
                     {
                         SwTblField* const pTblFld = const_cast<SwTblField*>(
-                            static_cast<const SwTblField*>(
-                                pNewHt->GetFld().GetFld()));
+                            static_cast<const SwTblField*>(pNewHt->GetFmtFld().GetField()));
                         pTblFld->PtrToBoxNm( &pDstTblNd->GetTable() );
                     }
                 }
@@ -2966,8 +2964,7 @@ Replace0xFF(SwTxtNode const& rNode, OUStringBuffer & rTxt, sal_Int32 & rTxtStt,
                         if( bExpandFlds )
                         {
                             const OUString aExpand(
-                                static_cast<SwTxtFld const*>(pAttr)->GetFld()
-                                    .GetFld()->ExpandField(true));
+                                static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()->ExpandField(true));
                             rTxt.insert(nPos, aExpand);
                             nPos = nPos + aExpand.getLength();
                             nEndPos = nEndPos + aExpand.getLength();
@@ -3115,8 +3112,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 case RES_TXTATR_FIELD:
                     {
                         OUString const aExpand(
-                            static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
-                                ->ExpandField(true));
+                            static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true) );
                         if (!aExpand.isEmpty())
                         {
                             ++aDestIdx;     // dahinter einfuegen;
@@ -3332,7 +3328,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
                 {
                     case RES_TXTATR_FIELD:
                         aExpand =
-                            static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
+                            static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()
                                 ->ExpandField(true);
                         break;
                     case RES_TXTATR_FTN:

@@ -65,7 +65,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwFmtFld* aField )
     : SwSidebarWin( rEditWin, nBits, aMgr, aBits, rSidebarItem )
     , mpFmtFld(aField)
-    , mpFld( static_cast<SwPostItField*>(aField->GetFld()))
+    , mpFld( static_cast<SwPostItField*>(aField->GetField()))
     , mpButtonPopup(0)
 {
 }
@@ -84,7 +84,7 @@ void SwAnnotationWin::SetPostItText()
 
     //If the new text is the same as the old text, keep the same insertion
     //point .e.g. fdo#33599
-    mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
+    mpFld = static_cast<SwPostItField*>(mpFmtFld->GetField());
     OUString sNewText = mpFld->GetPar2();
     bool bTextUnchanged = sNewText.equals(Engine()->GetEditEngine().GetText());
     ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
@@ -174,7 +174,7 @@ bool SwAnnotationWin::CalcFollow()
     aPosition.nContent = *pTxtFld->GetStart();
     SwTxtAttr * const pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
                     aPosition.nContent.GetIndex() - 1, RES_TXTATR_FIELD );
-    const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
+    const SwField* pFld = pTxtAttr ? pTxtAttr->GetFmtFld().GetField() : 0;
     return pFld && (pFld->Which()== RES_POSTITFLD);
 }
 
@@ -190,7 +190,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
                                         aPosition.nContent.GetIndex() + 1,
                                         RES_TXTATR_FIELD );
     SwField* pFld = pTxtAttr
-                    ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld())
+                    ? const_cast<SwField*>(pTxtAttr->GetFmtFld().GetField())
                     : 0;
     while ( pFld && ( pFld->Which()== RES_POSTITFLD ) )
     {
@@ -199,7 +199,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
                                         aPosition.nContent.GetIndex() + aCount,
                                         RES_TXTATR_FIELD );
         pFld = pTxtAttr
-               ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld())
+               ? const_cast<SwField*>(pTxtAttr->GetFmtFld().GetField())
                : 0;
     }
     return aCount - 1;

@@ -332,7 +332,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                         unsigned const nFrom = bHasCat ?
                             std::max<unsigned>(nNumStart + 1, nCatEnd) : nNumStart + 1;
                         nStart = SwGetExpField::GetReferenceTextPos(
-                            pTxtAttr->GetFld(), *pDoc, nFrom
+                            pTxtAttr->GetFmtFld(), *pDoc, nFrom
                         );
                     } else {
                         nStart = bHasCat ?
@@ -790,14 +790,14 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
     if( !pNew && !pOld )
     {
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-        for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         {
             // update only the GetRef fields
             //JP 3.4.2001: Task 71231 - we need the correct language
-            SwGetRefField* pGRef = (SwGetRefField*)pFld->GetFld();
+            SwGetRefField* pGRef = (SwGetRefField*)pFmtFld->GetField();
             const SwTxtFld* pTFld;
             if( !pGRef->GetLanguage() &&
-                0 != ( pTFld = pFld->GetTxtFld()) &&
+                0 != ( pTFld = pFmtFld->GetTxtFld()) &&
                 pTFld->GetpTxtNode() )
             {
                 pGRef->SetLanguage( pTFld->GetpTxtNode()->GetLang(
@@ -805,7 +805,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
             }
 
             // #i81002#
-            pGRef->UpdateField( pFld->GetTxtFld() );
+            pGRef->UpdateField( pFmtFld->GetTxtFld() );
         }
     }
     // forward to text fields, they "expand" the text
@@ -841,12 +841,12 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                 nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
             {
                 SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-                for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
+                for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
                 {
-                    if( pFld->GetTxtFld() && nSeqNo ==
-                        ((SwSetExpField*)pFld->GetFld())->GetSeqNumber() )
+                    if( pFmtFld->GetTxtFld() && nSeqNo ==
+                        ((SwSetExpField*)pFmtFld->GetField())->GetSeqNumber() )
                     {
-                        SwTxtFld* pTxtFld = pFld->GetTxtFld();
+                        SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
                         pTxtNd = (SwTxtNode*)pTxtFld->GetpTxtNode();
                         *pStt = *pTxtFld->GetStart();
                         if( pEnd )
@@ -960,7 +960,7 @@ void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
             if( pF->GetTxtFld() &&
                 0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
                 pNd->GetNodes().IsDocNodes() )
-                rIds.insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+                rIds.insert( ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
     }
 }
 
@@ -999,8 +999,8 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
             for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
                 if( pF->GetTxtFld() )
                 {
-                    sal_uInt16 n = ((SwSetExpField*)pF->GetFld())->GetSeqNumber( );
-                    ((SwSetExpField*)pF->GetFld())->SetSeqNumber( sequencedIds[ n ] );
+                    sal_uInt16 n = ((SwSetExpField*)pF->GetField())->GetSeqNumber( );
+                    ((SwSetExpField*)pF->GetField())->SetSeqNumber( sequencedIds[ n ] );
                 }
         }
     }
@@ -1092,7 +1092,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );
         for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
         {
-            SwGetRefField& rRefFld = *(SwGetRefField*)pFld->GetFld();
+            SwGetRefField& rRefFld = *(SwGetRefField*)pFld->GetField();
             switch( rRefFld.GetSubType() )
             {
             case REF_SEQUENCEFLD:

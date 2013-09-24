@@ -502,15 +502,15 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY2 );
     aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY3 );
 
-    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFmtAutoFmt;
-    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFmtINetFmt( OUString(), OUString() );
     aAttrTab[ RES_TXTATR_REFMARK - POOLATTR_BEGIN ] =       new SwFmtRefMark( aEmptyOUStr );
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] =       new SwTOXMark;
+    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] =          SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
+    aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] =     SwFmtMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
+    aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] =        new SwFmtAutoFmt;
+    aAttrTab[ RES_TXTATR_INETFMT - POOLATTR_BEGIN ] =       new SwFmtINetFmt( OUString(), OUString() );
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] =        new SwFmtCharFmt( 0 );
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] =      new SwFmtRuby( aEmptyOUStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
-    aAttrTab[ RES_TXTATR_META - POOLATTR_BEGIN ] =      SwFmtMeta::CreatePoolDefault(RES_TXTATR_META);
-    aAttrTab[ RES_TXTATR_METAFIELD - POOLATTR_BEGIN ] = SwFmtMeta::CreatePoolDefault(RES_TXTATR_METAFIELD);
 
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFmtFld;
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFmtFlyCnt( 0 );

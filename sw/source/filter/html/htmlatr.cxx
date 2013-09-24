@@ -2475,7 +2475,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                             pTxtHt = pHt;
                             sal_uInt16 nFldWhich;
                             if( RES_TXTATR_FIELD != pHt->Which() ||
-                                ( RES_POSTITFLD != (nFldWhich = ((const SwFmtFld&)pHt->GetAttr()).GetFld()->Which()) &&
+                                ( RES_POSTITFLD != (nFldWhich = ((const SwFmtFld&)pHt->GetAttr()).GetField()->Which()) &&
                                 RES_SCRIPTFLD != nFldWhich ) )
                                 bWriteBreak = sal_False;
                         }

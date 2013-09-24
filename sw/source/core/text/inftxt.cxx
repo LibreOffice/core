@@ -1157,7 +1157,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     if (pField)
                     {
                         // Look up the author name
-                        const OUString& rAuthor = pField->GetFld()->GetPar1();
+                        const OUString& rAuthor = pField->GetField()->GetPar1();
                         sal_uInt16 nIndex = pNd->GetDoc()->InsertRedlineAuthor(rAuthor);
                         pOutDev->SetFillColor(SwPostItMgr::GetColorLight(nIndex));
                         bFilled = true;

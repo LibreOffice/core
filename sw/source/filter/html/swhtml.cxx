@@ -2844,8 +2844,9 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                 case RES_TXTATR_FIELD:
                     {
                         sal_uInt16 nFldWhich =
-                            pPostIts ? ((const SwFmtFld *)pAttr->pItem)
-                                            ->GetFld()->GetTyp()->Which() : 0;
+                            pPostIts
+                            ? ((const SwFmtFld *)pAttr->pItem)->GetField()->GetTyp()->Which()
+                            : 0;
                         if( pPostIts && (RES_POSTITFLD == nFldWhich ||
                                          RES_SCRIPTFLD == nFldWhich) )
                         {

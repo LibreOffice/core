@@ -226,7 +226,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
 
                 for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
                 {
-                    if( pFmtFld->GetFld() == m_pCurFld)
+                    if( pFmtFld->GetField() == m_pCurFld)
                     {
                         pFmtFld->RegisterToFieldType(*pTyp);
                         pTmpFld->ChgTyp(pTyp);

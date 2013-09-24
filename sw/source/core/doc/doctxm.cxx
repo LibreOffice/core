@@ -1273,7 +1273,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode( rTxtNode, 0 ) == pOwnChapterNode ) )
         {
-            const SwSetExpField* pSeqField = dynamic_cast< const SwSetExpField* >( pFmtFld->GetFld() );
+            const SwSetExpField* pSeqField = dynamic_cast< const SwSetExpField* >( pFmtFld->GetField() );
             OUString sName = GetSequenceName();
             sName += OUString( cSequenceMarkSeparator );
             sName += OUString::number( pSeqField->GetSeqNumber() );

@@ -111,13 +111,13 @@ lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
             const SwTxtAttr* pHt = (*pHts)[n];
             if ( pHt->HasDummyChar() && (nStt >= nStart) )
             {
-                   switch( pHt->Which() )
+                switch( pHt->Which() )
                 {
                 case RES_TXTATR_FLYCNT:
                 case RES_TXTATR_FTN:
-                   case RES_TXTATR_FIELD:
+                case RES_TXTATR_FIELD:
                 case RES_TXTATR_REFMARK:
-                   case RES_TXTATR_TOXMARK:
+                case RES_TXTATR_TOXMARK:
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
                     {
@@ -130,24 +130,24 @@ lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
                         // end (might be normal 0x7f).
                         bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             (static_cast<SwTxtFld const*>(pHt)
-                                ->GetFld().GetFld()->ExpandField(true).isEmpty());
+                                ->GetFmtFld().GetField()->ExpandField(true).isEmpty());
                         if ( bEmpty && nStart == nAkt )
-                           {
+                        {
                             rArr.push_back( nAkt );
                             --rEnd;
                             buf.remove(nAkt, 1);
-                           }
+                        }
                         else
-                           {
+                        {
                             if ( bEmpty )
                                 aReplaced.push_back( nAkt );
                             buf[nAkt] = '\x7f';
                            }
-                       }
-                       break;
-                   default:
-                    OSL_FAIL( "unknown case in lcl_CleanStr" );
+                    }
                     break;
+                    default:
+                        OSL_FAIL( "unknown case in lcl_CleanStr" );
+                        break;
                 }
             }
             ++n;
@@ -188,7 +188,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
             if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                    (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+                    (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             {
                 aCount--;
                 if (!aCount)
@@ -201,7 +201,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
         if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
             break;
         else
             aIndex++;
@@ -271,7 +271,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                     xub_StrLen aPos = *(*pHts)[i]->GetStart();
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
                     if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
-                                (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+                                (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
                     {
                         if ( (aPos >= nStart) && (aPos <= nEnd) )
                             aNumberPostits++;
@@ -356,7 +356,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
                         {
                             const SwTxtAttr* pTxtAttr = bSrchForward ?  (*pHts)[GetPostIt(aLoop+aIgnore,pHts)] : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)];
-                            if ( pPostItMgr && pPostItMgr->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFld(),rSearchOpt,bSrchForward) )
+                            if ( pPostItMgr && pPostItMgr->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFmtFld(),rSearchOpt,bSrchForward) )
                             {
                                 bFound = true ;
                                 break;

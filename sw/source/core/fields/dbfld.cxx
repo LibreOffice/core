@@ -138,18 +138,18 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             {
                 sColumn = sTmp;
                 SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-                SwFmtFld* pFld = aIter.First();
-                while(pFld)
+                SwFmtFld* pFmtFld = aIter.First();
+                while(pFmtFld)
                 {
                     // field in Undo?
-                    SwTxtFld *pTxtFld = pFld->GetTxtFld();
+                    SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
                     if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
                     {
-                        SwDBField* pDBField = (SwDBField*)pFld->GetFld();
+                        SwDBField* pDBField = (SwDBField*)pFmtFld->GetField();
                         pDBField->ClearInitialized();
                         pDBField->InitContent();
                     }
-                    pFld = aIter.Next();
+                    pFmtFld = aIter.Next();
                 }
             }
         }
@@ -395,17 +395,17 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         if(GetTyp())
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
-            SwFmtFld* pFld = aIter.First();
-            while(pFld)
+            SwFmtFld* pFmtFld = aIter.First();
+            while(pFmtFld)
             {
-                SwTxtFld *pTxtFld = pFld->GetTxtFld();
-                if(pTxtFld && (SwDBField*)pFld->GetFld() == this )
+                SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
+                if(pTxtFld && (SwDBField*)pFmtFld->GetField() == this )
                 {
                     //notify the change
-                    pTxtFld->NotifyContentChange(*pFld);
+                    pTxtFld->NotifyContentChange(*pFmtFld);
                     break;
                 }
-                pFld = aIter.Next();
+                pFmtFld = aIter.Next();
             }
         }
     }

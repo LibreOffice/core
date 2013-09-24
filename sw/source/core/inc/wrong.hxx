@@ -97,10 +97,10 @@ private:
                 }
             }
         }
-        catch(::com::sun::star::container::NoSuchElementException&)
+        catch(const ::com::sun::star::container::NoSuchElementException&)
         {
         }
-        catch(::com::sun::star::uno::RuntimeException&)
+        catch(const ::com::sun::star::uno::RuntimeException&)
         {
         }
 
@@ -131,10 +131,10 @@ private:
                 }
             }
         }
-        catch(::com::sun::star::container::NoSuchElementException&)
+        catch(const ::com::sun::star::container::NoSuchElementException&)
         {
         }
-        catch(::com::sun::star::uno::RuntimeException&)
+        catch(const ::com::sun::star::uno::RuntimeException&)
         {
         }
 

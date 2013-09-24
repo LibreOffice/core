@@ -378,7 +378,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         if ((*i)->pPostIt)
                         {
-                            sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->GetFmtFld()->GetFld()->GetLanguage() );
+                            sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->GetFmtFld()->GetField()->GetLanguage() );
                             sal_uInt16 nLangWhichId = 0;
                             switch (nScriptType)
                             {
@@ -386,7 +386,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
                                 case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
                             }
-                            (*i)->pPostIt->SetLanguage( SvxLanguageItem((*i)->GetFmtFld()->GetFld()->GetLanguage(),
+                            (*i)->pPostIt->SetLanguage( SvxLanguageItem((*i)->GetFmtFld()->GetField()->GetLanguage(),
                                                         nLangWhichId) );
                         }
                         break;
@@ -1271,7 +1271,7 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItFie
 {
     for(const_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
     {
-        if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld() == pFld))
+        if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetField() == pFld))
             return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt);
     }
     return NULL;

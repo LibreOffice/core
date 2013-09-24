@@ -160,7 +160,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
 
-            const SwField* pFld = pTxtFld->GetFld().GetFld();
+            const SwField* pFld = pTxtFld->GetFmtFld().GetField();
             switch( pFld->GetTyp()->Which()  )
             {
             case RES_SETEXPFLD:

@@ -1617,9 +1617,9 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         if (pTxtNd->GetTxt()[nIndex] == CH_TXTATR_INWORD)
         {
             SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(nIndex, RES_TXTATR_FIELD);
-            if (pTxtAttr && pTxtAttr->GetFld().GetFld()->Which() == RES_POSTITFLD)
+            if (pTxtAttr && pTxtAttr->GetFmtFld().GetField()->Which() == RES_POSTITFLD)
             {
-                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pTxtAttr->GetFld().GetFld());
+                const SwPostItField* pField = dynamic_cast<const SwPostItField*>(pTxtAttr->GetFmtFld().GetField());
                 IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark(pField->GetName());
                 if (ppMark != getIDocumentMarkAccess()->getMarksEnd())
                     getIDocumentMarkAccess()->deleteMark(ppMark);

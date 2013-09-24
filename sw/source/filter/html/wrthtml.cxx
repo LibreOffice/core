@@ -872,8 +872,8 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
             if( nPos-nOldPos > 1 || RES_TXTATR_FIELD != pHt->Which() )
                 break;
 
-            sal_uInt16 nFldWhich = ((const SwFmtFld&)pHt->GetAttr()).GetFld()
-                                                     ->GetTyp()->Which();
+            const sal_uInt16 nFldWhich =
+                ((const SwFmtFld&)pHt->GetAttr()).GetField()->GetTyp()->Which();
             if( RES_POSTITFLD!=nFldWhich &&
                 RES_SCRIPTFLD!=nFldWhich )
                 break;
