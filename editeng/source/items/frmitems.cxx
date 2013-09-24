@@ -3959,8 +3959,7 @@ rtl::Reference< GraphicObject > SvxBrushItem::GetGraphicObject() const
                 }
                 else
                 {
-                    pImpl->mxGraphicObject = GraphicObject::Create();
-                    pImpl->mxGraphicObject->SetGraphic( aGraphic );
+                    pImpl->mxGraphicObject = GraphicObject::Create( aGraphic );
                     const_cast < SvxBrushItem*> (this)->ApplyGraphicTransparency_Impl();
                 }
             }
@@ -4007,10 +4006,7 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
 {
     if ( !pStrLink )
     {
-        if ( pImpl->mxGraphicObject.is() )
-            pImpl->mxGraphicObject->SetGraphic( rNew );
-        else
-            pImpl->mxGraphicObject = GraphicObject::Create( rNew );
+        pImpl->mxGraphicObject = GraphicObject::Create( rNew );
 
         ApplyGraphicTransparency_Impl();
 

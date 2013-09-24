@@ -1085,35 +1085,31 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
     return 0L;
 }
 
-SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
+GraphicObject::GraphicObject( SvStream& rIStm ) :
+    mpLink     ( NULL ),
+    mpUserData ( NULL )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    Graphic         aGraphic;
-    GraphicAttr     aAttr;
     sal_Bool        bLink;
 
-    rIStm >> aGraphic >> aAttr >> bLink;
+    rIStm >> maGraphic >> maAttr >> bLink;
 
-#error - tweak me here ...
-    // FIXME: we need to have a Create method for stream loading ...
-    rGraphicObj.SetGraphic( aGraphic );
-    rGraphicObj.SetAttr( aAttr );
+    ImplConstruct();
+    ImplAssignGraphicData();
+    ImplSetup();
 
     if( bLink )
     {
         OUString aLink = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, RTL_TEXTENCODING_UTF8);
-        rGraphicObj.SetLink(aLink);
+        SetLink(aLink);
     }
     else
-        rGraphicObj.SetLink();
+        SetLink();
 
-    rGraphicObj.SetSwapStreamHdl();
-
-    return rIStm;
+    SetSwapStreamHdl();
 }
 
-// FIXME: should we match the create with a save method ?
-
+// FIXME: should we match the above create with a save method ?
 SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 1 );

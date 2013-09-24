@@ -176,6 +176,7 @@ private:
     explicit GraphicObject();
     GraphicObject( const Graphic& rGraphic );
     GraphicObject( const GraphicObject& rCacheObj );
+    GraphicObject( SvStream &rIStm );
 
     explicit GraphicObject( const OString& rUniqueID );
 
@@ -185,10 +186,6 @@ public: // only for internal access:
         throw( css::uno::RuntimeException );
     virtual ~GraphicObject();
 
-    static rtl::Reference< GraphicObject > Create()
-    {
-        return rtl::Reference< GraphicObject >( new GraphicObject() );
-    }
     static rtl::Reference< GraphicObject > Create( const Graphic& rGraphic )
     {
         return rtl::Reference< GraphicObject >( new GraphicObject( rGraphic ) );
@@ -207,6 +204,10 @@ public: // only for internal access:
     static rtl::Reference< GraphicObject > Create( const OString& rUniqueID )
     {
         return rtl::Reference< GraphicObject >( new GraphicObject( rUniqueID ) );
+    }
+    static rtl::Reference< GraphicObject > Create( SvStream &rIStm )
+    {
+        return rtl::Reference< GraphicObject >( new GraphicObject( rIStm ) );
     }
 
 private:
@@ -416,6 +417,8 @@ public:
     const GraphicAttr&      GetAttr() const { return maAttr; }
 
     sal_Bool                HasLink() const { return( mpLink != NULL && mpLink->Len() > 0 ); }
+
+// FIXME: remove these mutators: 'SetLink' indeed ... [!] ...
     void                    SetLink();
     void                    SetLink( const String& rLink );
     String                  GetLink() const;
