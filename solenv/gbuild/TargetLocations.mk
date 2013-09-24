@@ -397,7 +397,7 @@ define gb_Library__get_workdir_linktargetname
 Library/$(call gb_Library_get_filename,$(1))
 endef
 define gb_Library__get_linktarget_target
-$(if $(filter-out $(gb_MERGEDLIBS),$(1)),$(call gb_Library_get_install_target,$(1)),$(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)))
+$(call gb_Library_get_install_target,$(1))
 endef
 # this returns a tuple of both the linktargetname, and the target file
 define gb_Library_get_linktarget

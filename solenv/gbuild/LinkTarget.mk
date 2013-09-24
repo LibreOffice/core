@@ -900,6 +900,7 @@ $(call gb_LinkTarget_get_headers_target,$(1)) : \
 
 endef
 
+# libraries which are merged but need to be built for gb_BUILD_HELPER_TOOLS
 gb_BUILD_HELPER_LIBS := basegfx \
 	cppu \
 	cppuhelper \
@@ -911,8 +912,8 @@ gb_BUILD_HELPER_LIBS := basegfx \
 	unoidl \
 	xmlreader \
 
+# tools libmerged depends on, so they link against gb_BUILD_HELPER_LIBS
 gb_BUILD_HELPER_TOOLS := cppumaker \
-	regmerge \
 	rsc \
 	svidl \
 	unoidl-check \
@@ -920,12 +921,12 @@ gb_BUILD_HELPER_TOOLS := cppumaker \
 
 # call gb_LinkTarget__is_build_lib,linktargetname
 define gb_LinkTarget__is_build_lib
-$(if $(filter $(1),$(foreach lib,$(gb_BUILD_HELPER_LIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),$(true),$(false))
+$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(foreach lib,$(gb_BUILD_HELPER_LIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),$(true),$(false))
 endef
 
 # call gb_LinkTarget__is_build_tool,linktargetname
 define gb_LinkTarget__is_build_tool
-$(if $(filter $(1),$(foreach exe,$(gb_BUILD_HELPER_TOOLS),$(call gb_Executable__get_workdir_linktargetname,$(exe)))),$(true),$(false))
+$(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(foreach exe,$(gb_BUILD_HELPER_TOOLS),$(call gb_Executable__get_workdir_linktargetname,$(exe)))),$(true),$(false))
 endef
 
 # call gb_LinkTarget_use_libraries,linktarget,libs
