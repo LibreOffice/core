@@ -153,6 +153,7 @@ clean-host:
 
 clean-build:
 ifeq ($(CROSS_COMPILING),YES)
+	rm -fr $(INSTDIR_FOR_BUILD)
 	rm -fr $(OUTDIR_FOR_BUILD)
 	rm -fr $(WORKDIR_FOR_BUILD)
 endif
