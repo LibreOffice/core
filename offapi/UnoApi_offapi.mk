@@ -19,7 +19,7 @@
 
 $(eval $(call gb_UnoApi_UnoApi,offapi,offapi))
 
-$(eval $(call gb_UnoApi_install,offapi,$(gb_PROGRAMDIRNAME)/types/offapi.rdb))
+$(eval $(call gb_UnoApi_install,offapi,$(LIBO_ETC_FOLDER)/types/offapi.rdb))
 
 $(eval $(call gb_UnoApi_package_idlfiles,offapi))
 

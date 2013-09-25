@@ -11,11 +11,11 @@ $(eval $(call gb_Package_Package,desktop_branding_custom,$(CUSTOM_BRAND_DIR)))
 
 $(eval $(call gb_Package_set_outdir,desktop_branding_custom,$(INSTROOT)))
 
-$(eval $(call gb_Package_add_files,desktop_branding_custom,$(gb_PROGRAMDIRNAME),\
+$(eval $(call gb_Package_add_files,desktop_branding_custom,$(LIBO_ETC_FOLDER),\
     $(filter $(BRAND_INTRO_IMAGES),$(CUSTOM_BRAND_IMAGES)) \
 ))
 
-$(eval $(call gb_Package_add_files,desktop_branding_custom,$(gb_PROGRAMDIRNAME)/shell,\
+$(eval $(call gb_Package_add_files,desktop_branding_custom,$(LIBO_ETC_FOLDER)/shell,\
     $(filter-out $(BRAND_INTRO_IMAGES),$(CUSTOM_BRAND_IMAGES)) \
 ))
 

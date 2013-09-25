@@ -11,6 +11,6 @@ $(eval $(call gb_Package_Package,shell_scripts_gnome,$(SRCDIR)/shell/source/unix
 
 $(eval $(call gb_Package_set_outdir,shell_scripts_gnome,$(INSTROOT)))
 
-$(eval $(call gb_Package_add_file,shell_scripts_gnome,$(gb_PROGRAMDIRNAME)/gnome-open-url,gnome-open-url.sh))
+$(eval $(call gb_Package_add_file,shell_scripts_gnome,$(LIBO_BIN_FOLDER)/gnome-open-url,gnome-open-url.sh))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

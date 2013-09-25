@@ -31,8 +31,8 @@
 
 gb_Library_LAYER_DIRS := \
 	URELIB:$(INSTROOT)/$(LIBO_URE_LIB_FOLDER) \
-	OOO:$(INSTROOT)/$(gb_PROGRAMDIRNAME) \
-	SHLXTHDL:$(INSTROOT)/$(gb_PROGRAMDIRNAME)/shlxthdl \
+	OOO:$(INSTROOT)/$(LIBO_LIB_FOLDER) \
+	SHLXTHDL:$(INSTROOT)/$(LIBO_LIB_FOLDER)/shlxthdl \
 	OXT:$(WORKDIR)/LinkTarget/ExtensionLibrary \
 	NONE:$(gb_Library_DLLDIR) \
 

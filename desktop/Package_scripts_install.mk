@@ -13,20 +13,20 @@ $(eval $(call gb_Package_set_outdir,desktop_scripts_install,$(INSTROOT)))
 
 ifeq (,$(filter MACOSX WNT,$(OS)))
 
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/gdbtrace,gdbtrace))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/sbase,sbase.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/scalc,scalc.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/sdraw,sdraw.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/simpress,simpress.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/smath,smath.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/swriter,swriter.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/gdbtrace,gdbtrace))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/sbase,sbase.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/scalc,scalc.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/sdraw,sdraw.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/simpress,simpress.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/smath,smath.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/swriter,swriter.sh))
 
 endif
 
 ifneq ($(OS),WNT)
 
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/unoinfo,unoinfo.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/unopkg,unopkg.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unoinfo,unoinfo.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unopkg,unopkg.sh))
 
 endif
 

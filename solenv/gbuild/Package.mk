@@ -63,8 +63,6 @@ endef
 
 # Package class
 
-gb_Package_PROGRAMDIRNAME := $(LIBO_BIN_FOLDER)
-
 $(dir $(call gb_Package_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 

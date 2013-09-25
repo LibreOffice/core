@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_Rdb__get_install_target = $(INSTROOT)/$(gb_PROGRAMDIRNAME)/services/$(1).rdb
+gb_Rdb__get_install_target = $(INSTROOT)/$(LIBO_ETC_FOLDER)/services/$(1).rdb
 
 define gb_Rdb__command
 $(call gb_Helper_abbreviate_dirs,\

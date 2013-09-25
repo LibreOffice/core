@@ -181,8 +181,6 @@ $(eval $(call gb_Helper_collect_knownlibs))
 
 gb_Library_DLLPOSTFIX := lo
 
-gb_PROGRAMDIRNAME := $(LIBO_BIN_FOLDER)
-
 # Include platform/cpu/compiler specific config/definitions
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 

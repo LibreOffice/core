@@ -11,6 +11,6 @@ $(eval $(call gb_Package_Package,shell_senddoc,$(SRCDIR)/shell/source/unix/misc)
 
 $(eval $(call gb_Package_set_outdir,shell_senddoc,$(INSTROOT)))
 
-$(eval $(call gb_Package_add_file,shell_senddoc,$(gb_PROGRAMDIRNAME)/senddoc,senddoc.sh))
+$(eval $(call gb_Package_add_file,shell_senddoc,$(LIBO_BIN_FOLDER)/senddoc,senddoc.sh))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

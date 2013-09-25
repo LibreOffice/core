@@ -218,7 +218,7 @@ endef
 #
 # gb_ExternalPackage_add_library_for_install package dest src library?
 define gb_ExternalPackage_add_library_for_install
-$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(if $(4),$(call gb_Library_get_instdir,$(4)),$(INSTROOT)/$(gb_Package_PROGRAMDIRNAME))/$(notdir $(2)),$(3))
+$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(if $(4),$(call gb_Library_get_instdir,$(4)),$(INSTROOT)/$(LIBO_LIB_FOLDER))/$(notdir $(2)),$(3))
 
 endef
 
@@ -238,7 +238,7 @@ endef
 #
 # gb_ExternalPackage_add_jar_for_install package dest src
 define gb_ExternalPackage_add_jar_for_install
-$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(INSTROOT)/$(gb_Package_PROGRAMDIRNAME)/classes/$(notdir $(2)),$(3))
+$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)/$(notdir $(2)),$(3))
 
 endef
 

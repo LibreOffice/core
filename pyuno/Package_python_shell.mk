@@ -11,6 +11,6 @@ $(eval $(call gb_Package_Package,python_shell,$(call gb_CustomTarget_get_workdir
 
 $(eval $(call gb_Package_set_outdir,python_shell,$(INSTROOT)))
 
-$(eval $(call gb_Package_add_file,python_shell,$(gb_Package_PROGRAMDIRNAME)/python,python.sh))
+$(eval $(call gb_Package_add_file,python_shell,$(LIBO_BIN_FOLDER)/python,python.sh))
 
 # vim: set noet sw=4 ts=4:

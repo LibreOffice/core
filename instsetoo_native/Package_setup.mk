@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,instsetoo_native_setup,$(call gb_CustomTarget_g
 
 $(eval $(call gb_Package_set_outdir,instsetoo_native_setup,$(INSTROOT)))
 
-$(eval $(call gb_Package_add_files,instsetoo_native_setup,$(gb_PROGRAMDIRNAME),\
+$(eval $(call gb_Package_add_files,instsetoo_native_setup,$(LIBO_ETC_FOLDER),\
 	$(call gb_Helper_get_rcfile,bootstrap) \
 	$(call gb_Helper_get_rcfile,fundamental) \
 	$(if $(ENABLE_OOENV),ooenv) \
