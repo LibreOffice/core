@@ -602,7 +602,7 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
     // Delete attributes just now
     if ((nDelFlag & IDF_ATTRIB) == IDF_ATTRIB)
         pAttrArray->DeleteArea( nStartRow, nEndRow );
-    else if ((nDelFlag & IDF_ATTRIB) != 0)
+    else if ((nDelFlag & IDF_HARDATTR) == IDF_HARDATTR)
         pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
 
     // Broadcast on only cells that were deleted; no point broadcasting on
