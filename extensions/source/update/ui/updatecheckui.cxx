@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -264,17 +265,10 @@ UpdateCheckUI::getSupportedServiceNames() throw (uno::RuntimeException)
     return ::getServiceNames();
 }
 
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL
 UpdateCheckUI::supportsService( OUString const & serviceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServiceNameList = ::getServiceNames();
-
-    for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
-        if( aServiceNameList[n].equals(serviceName) )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 //------------------------------------------------------------------------------

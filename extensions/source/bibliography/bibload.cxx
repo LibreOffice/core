@@ -20,6 +20,7 @@
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
 #include <uno/environment.h>
 #include <svl/urihelper.hxx>
@@ -169,12 +170,7 @@ OUString BibliographyLoader::getImplementationName() throw(  )
 // XServiceInfo
 sal_Bool BibliographyLoader::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

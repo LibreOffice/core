@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "testlistener.hxx"
 
@@ -74,12 +75,7 @@ namespace DOM { namespace events
     sal_Bool SAL_CALL CTestListener::supportsService(const OUString& aServiceName)
         throw (RuntimeException)
     {
-        Sequence< OUString > supported = CTestListener::_getSupportedServiceNames();
-        for (sal_Int32 i=0; i<supported.getLength(); i++)
-        {
-            if (supported[i] == aServiceName) return sal_True;
-        }
-        return sal_False;
+        return cppu::supportsService(this, aServiceName);
     }
 
     // --- XInitialize

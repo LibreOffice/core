@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <comphelper/processfactory.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 
 #include <xcreator.hxx>
 #include <dummyobject.hxx>
@@ -445,17 +445,10 @@ OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
     return impl_staticGetImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 //-------------------------------------------------------------------------

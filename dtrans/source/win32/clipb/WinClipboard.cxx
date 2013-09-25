@@ -22,6 +22,7 @@
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include "WinClipbImpl.hxx"
 
 //------------------------------------------------------------------------
@@ -277,20 +278,11 @@ OUString SAL_CALL CWinClipboard::getImplementationName(  )
     return OUString( WINCLIPBOARD_IMPL_NAME );
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL CWinClipboard::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Sequence < OUString > SupportedServicesNames = WinClipboard_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // -------------------------------------------------

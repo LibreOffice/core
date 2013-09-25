@@ -33,6 +33,7 @@
 #include "platform.h"
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "xdialogcreator.hxx"
 #include "oleembobj.hxx"
@@ -343,13 +344,7 @@ OUString SAL_CALL MSOLEDialogObjectCreator::getImplementationName()
 sal_Bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 //-------------------------------------------------------------------------

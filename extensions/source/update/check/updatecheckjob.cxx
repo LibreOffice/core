@@ -27,6 +27,7 @@
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/frame/XTerminateListener.hpp"
@@ -284,18 +285,10 @@ UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
     return getServiceNames();
 }
 
-//------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL
 UpdateCheckJob::supportsService( OUString const & serviceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServiceNameList = getServiceNames();
-
-    for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
-        if( aServiceNameList[n].equals(serviceName) )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 //------------------------------------------------------------------------------
