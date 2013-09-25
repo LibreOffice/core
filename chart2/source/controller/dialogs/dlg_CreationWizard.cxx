@@ -151,7 +151,7 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
         break;
     }
     if(pRet)
-        pRet->SetText(String());//remove title of pages to not get them in the wizard title
+        pRet->SetText(OUString());//remove title of pages to not get them in the wizard title
     return pRet;
 }
 
