@@ -50,6 +50,7 @@
 #include "rangeseq.hxx"
 #include "funcdesc.hxx"
 #include "svl/sharedstring.hxx"
+#include "formulaopt.hxx"  //fdo50118
 
 using namespace com::sun::star;
 
@@ -746,12 +747,15 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     uno::Reference<lang::XServiceName> xName( xInterface, uno::UNO_QUERY );
     if ( xAddIn.is() && xName.is() )
     {
-        //  AddIns must use the language for which the office is installed
-        lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
-        xAddIn->setLocale( aLocale );
+        // fdo50118 when GetUseEnglishFunctionName() returns true, set the
+        // locale to en-US to get English function names
+        if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
+            xAddIn->setLocale( lang::Locale( "en", "US", ""));
+        else
+            xAddIn->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
 
         OUString aServiceName( xName->getServiceName() );
-        ScUnoAddInHelpIdGenerator aHelpIdGenerator( xName->getServiceName() );
+        ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName );
 
         //! pass XIntrospection to ReadFromAddIn
 
@@ -1001,8 +1005,12 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
     if ( xLoc.is() )        // optional in new add-ins
     {
-        lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
-        xLoc->setLocale( aLocale );
+        // fdo50118 when GetUseEnglishFunctionName() returns true, set the
+        // locale to en-US to get English function names
+        if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
+            xLoc->setLocale( lang::Locale( "en", "US", ""));
+        else
+            xLoc->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
     }
 
     // if function list was already initialized, it must be updated
