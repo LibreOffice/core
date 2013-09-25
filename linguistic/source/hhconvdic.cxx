@@ -25,6 +25,7 @@
 #include <ucbhelper/content.hxx>
 
 #include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -121,11 +122,7 @@ OUString SAL_CALL HHConvDic::getImplementationName(  )
 sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-    sal_Bool bRes = sal_False;
-    if ( rServiceName == SN_CONV_DICTIONARY || rServiceName == SN_HH_CONV_DICTIONARY )
-        bRes = sal_True;
-    return bRes;
+    return cppu::supportsService(this, rServiceName);
 }
 
 

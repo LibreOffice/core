@@ -21,6 +21,7 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <limits.h>
 
 #include <xmloff/xmlcnimp.hxx>
@@ -263,16 +264,7 @@ uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames(void
 sal_Bool SvUnoAttributeContainer::supportsService(const OUString& ServiceName)
     throw( uno::RuntimeException )
 {
-    const uno::Sequence < OUString > aServiceNames( getSupportedServiceNames() );
-    const OUString* pNames = aServiceNames.getConstArray();
-    sal_Int32 nCount = aServiceNames.getLength();
-    while( nCount-- )
-    {
-        if( *pNames++ == ServiceName )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

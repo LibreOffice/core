@@ -54,6 +54,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/sequenceasvector.hxx>
@@ -820,13 +821,7 @@ throw (uno::RuntimeException)
 ::sal_Bool SAL_CALL librdf_Repository::supportsService(
     OUString const & serviceName) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > serviceNames
-        = comp_librdf_Repository::_getSupportedServiceNames();
-    for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
-        if (serviceNames[i] == serviceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

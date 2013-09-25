@@ -20,6 +20,7 @@
 #include <generic_clipboard.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
@@ -66,18 +67,10 @@ OUString SAL_CALL GenericClipboard::getImplementationName(  )
     return OUString(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Sequence < OUString > SupportedServicesNames = GenericClipboard_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // ------------------------------------------------------------------------

@@ -35,6 +35,7 @@
 #include "../dom/node.hxx"
 #include "../dom/document.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 
 using ::com::sun::star::lang::XMultiServiceFactory;
 
@@ -89,15 +90,8 @@ namespace XPath
     sal_Bool SAL_CALL CXPathAPI::supportsService(const OUString& aServiceName)
         throw (RuntimeException)
     {
-        Sequence< OUString > supported = CXPathAPI::_getSupportedServiceNames();
-        for (sal_Int32 i=0; i<supported.getLength(); i++)
-        {
-            if (supported[i] == aServiceName) return sal_True;
-        }
-        return sal_False;
+        return cppu::supportsService(this, aServiceName);
     }
-
-    // -------------------------------------------------------------------
 
     void SAL_CALL CXPathAPI::registerNS(
             const OUString& aPrefix,

@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/security.hxx>
 
 //==============================================================================
@@ -229,20 +230,12 @@ uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceN
     aServices[0] = OUString("com.sun.star.configuration.backend.LdapUserProfileBe") ;
     return aServices ;
 }
-//------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > const svc = getLdapUserProfileBeServiceNames();
-
-    for(sal_Int32 i = 0; i < svc.getLength(); ++i )
-        if(svc[i] == aServiceName)
-            return true;
-    return false;
+    return cppu::supportsService(this, aServiceName);
 }
-
-//------------------------------------------------------------------------------
 
 uno::Sequence<OUString>
 SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)

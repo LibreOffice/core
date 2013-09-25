@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <comphelper/propertycontainerhelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 //........................................................................
 namespace pcr
@@ -233,18 +234,9 @@ namespace pcr
         setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( _IsReadOnly ) );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        StlSyntaxSequence< OUString > aSupported( getSupportedServiceNames() );
-        for (   StlSyntaxSequence< OUString >::const_iterator check = aSupported.begin();
-                check != aSupported.end();
-                ++check
-            )
-            if ( check->equals( ServiceName ) )
-                return sal_True;
-
-        return sal_False;
+        return cppu::supportsService(this, ServiceName);
     }
 
     //--------------------------------------------------------------------

@@ -34,6 +34,7 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 
 #include <boost/checked_delete.hpp>
@@ -2053,14 +2054,7 @@ sal_Bool SAL_CALL
     LngSvcMgr::supportsService( const OUString& ServiceName )
         throw(uno::RuntimeException)
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
-
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 

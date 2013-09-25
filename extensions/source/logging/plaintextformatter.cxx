@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -150,17 +151,9 @@ namespace logging
         return OUString();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL PlainTextFormatter::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
-        for (   const OUString* pServiceNames = aServiceNames.getConstArray();
-                pServiceNames != aServiceNames.getConstArray() + aServiceNames.getLength();
-                ++pServiceNames
-            )
-            if ( _rServiceName == *pServiceNames )
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, _rServiceName);
     }
 
     //--------------------------------------------------------------------

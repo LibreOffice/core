@@ -20,6 +20,7 @@
 #include "CNodes.hxx"
 
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/rdf/XBlankNode.hpp>
@@ -72,12 +73,7 @@ OUString SAL_CALL CBlankNode::getImplementationName() throw (css::uno::RuntimeEx
 
 ::sal_Bool SAL_CALL CBlankNode::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > serviceNames = comp_CBlankNode::_getSupportedServiceNames();
-    for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
-        if (serviceNames[i] == serviceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames() throw (css::uno::RuntimeException)

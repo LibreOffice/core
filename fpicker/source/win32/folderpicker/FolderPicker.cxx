@@ -21,6 +21,7 @@
 
 #include "FolderPicker.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include "WinFOPImpl.hxx"
 
 //------------------------------------------------------------------------
@@ -149,20 +150,11 @@ OUString SAL_CALL CFolderPicker::getImplementationName(  )
     return OUString(RTL_CONSTASCII_USTRINGPARAM( FOLDERPICKER_IMPL_NAME ));
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL CFolderPicker::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
-    Sequence < OUString > SupportedServicesNames = FolderPicker_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // -------------------------------------------------
