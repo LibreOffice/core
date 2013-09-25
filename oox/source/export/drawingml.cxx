@@ -100,10 +100,10 @@ namespace oox {
 namespace drawingml {
 
 #define GETA(propName) \
-    GetProperty( rXPropSet, String( #propName ) )
+    GetProperty( rXPropSet, OUString( #propName ) )
 
 #define GETAD(propName) \
-    ( GetPropertyAndState( rXPropSet, rXPropState, String( #propName ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
+    ( GetPropertyAndState( rXPropSet, rXPropState, OUString( #propName ), eState ) && eState == beans::PropertyState_DIRECT_VALUE )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
@@ -130,7 +130,7 @@ bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, OUString aName
     return bRetValue;
 }
 
-bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Reference< XPropertyState > rXPropState, String aName, PropertyState& eState )
+bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Reference< XPropertyState > rXPropState, OUString aName, PropertyState& eState )
 {
     bool bRetValue = false;
 
@@ -1059,7 +1059,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                                 bPBehind = true;
                         } else if ( aPropName == "BulletChar" )
                         {
-                            aBulletChar = String ( *( (String*)pValue ) ).GetChar( 0 );
+                            aBulletChar = OUString ( *( (OUString*)pValue ) )[ 0 ];
                             //printf ("bullet char: %d\n", aBulletChar.getStr());
                         }
                         else if ( aPropName == "BulletFont" )

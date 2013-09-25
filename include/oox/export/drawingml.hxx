@@ -32,7 +32,6 @@
 #endif
 
 class Graphic;
-class String;
 
 namespace com { namespace sun { namespace star {
 namespace beans {
@@ -79,7 +78,7 @@ protected:
     bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString aName );
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > rXPropState,
-                  String aName, ::com::sun::star::beans::PropertyState& eState );
+                  OUString aName, ::com::sun::star::beans::PropertyState& eState );
     const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField );
 
     OUString WriteImage( const OUString& rURL );
