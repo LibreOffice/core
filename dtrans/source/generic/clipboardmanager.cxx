@@ -19,6 +19,7 @@
 
 #include <clipboardmanager.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::datatransfer;
@@ -53,18 +54,10 @@ OUString SAL_CALL ClipboardManager::getImplementationName(  )
     return OUString(CLIPBOARDMANAGER_IMPLEMENTATION_NAME);
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Sequence < OUString > SupportedServicesNames = ClipboardManager_getSupportedServiceNames();
-
-    for ( sal_Int32 n = 0, nmax = SupportedServicesNames.getLength(); n < nmax; n++ )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // ------------------------------------------------------------------------

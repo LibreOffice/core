@@ -23,6 +23,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <comphelper/string.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
@@ -415,16 +416,8 @@ OUString SAL_CALL SpellChecker::getImplementationName()
 sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
 
 Sequence< OUString > SAL_CALL SpellChecker::getSupportedServiceNames()
         throw(RuntimeException)

@@ -19,6 +19,7 @@
 
 #include "mainthreadexecutor.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -91,17 +92,10 @@ OUString SAL_CALL MainThreadExecutor::getImplementationName()
     return impl_staticGetImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL MainThreadExecutor::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 //-------------------------------------------------------------------------

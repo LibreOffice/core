@@ -21,6 +21,7 @@
 #include "interactionhandler.hxx"
 #include "comphelper/namedvaluecollection.hxx"
 #include "comphelper/processfactory.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/awt/XWindow.hpp"
 
 using namespace com::sun::star;
@@ -48,12 +49,7 @@ sal_Bool SAL_CALL
 UUIInteractionHandler::supportsService(OUString const & rServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString >
-    aNames(getSupportedServiceNames_static());
-    for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
-        if (aNames[i] == rServiceName)
-            return true;
-    return false;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

@@ -42,6 +42,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -2197,14 +2198,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        //  Iterate over all supported service names and return true if on of them
-        //  matches the given name.
-        uno::Sequence< OUString> aSupportedServices (
-            getSupportedServiceNames ());
-        for (int i=0; i<aSupportedServices.getLength(); i++)
-            if (sServiceName == aSupportedServices[i])
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, sServiceName);
     }
 
     uno::Sequence< OUString> SAL_CALL AccessibleEditableTextPara::getSupportedServiceNames (void) throw (uno::RuntimeException)

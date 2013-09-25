@@ -46,6 +46,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -562,15 +563,9 @@ namespace pcr
         return getImplementationName_static();
     }
 
-    //------------------------------------------------------------------------
     sal_Bool SAL_CALL OPropertyBrowserController::supportsService( const OUString& ServiceName ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(getSupportedServiceNames());
-        const OUString* pArray = aSupported.getConstArray();
-        for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
-            if (pArray->equals(ServiceName))
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, ServiceName);
     }
 
     //------------------------------------------------------------------------

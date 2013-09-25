@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/pathoptions.hxx>
 
@@ -161,16 +162,7 @@ OUString SAL_CALL SvtFolderPicker::getImplementationName() throw( RuntimeExcepti
 /* XServiceInfo */
 sal_Bool SAL_CALL SvtFolderPicker::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString* pArray = seqServiceNames.getConstArray();
-    for ( sal_Int32 i = 0; i < seqServiceNames.getLength(); i++ )
-    {
-        if ( sServiceName == pArray[i] )
-        {
-            return sal_True ;
-        }
-    }
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */

@@ -27,6 +27,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -655,17 +656,11 @@ OUString SAL_CALL ConvDic::getImplementationName(  )
     return getImplementationName_Static();
 }
 
-
 sal_Bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-    sal_Bool bRes = sal_False;
-    if ( rServiceName == SN_CONV_DICTIONARY )
-        bRes = sal_True;
-    return bRes;
+    return cppu::supportsService(this, rServiceName);
 }
-
 
 uno::Sequence< OUString > SAL_CALL ConvDic::getSupportedServiceNames(  )
     throw (RuntimeException)
