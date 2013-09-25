@@ -560,12 +560,9 @@ void ImportExcel::Array25( void )
 
         OSL_ENSURE( pErgebnis, "*ImportExcel::Array25(): ScTokenArray is NULL!" );
 
-        ScMarkData          aMarkData;
-        aMarkData.SelectOneTable( GetCurrScTab() );
-        pD->InsertMatrixFormula( static_cast<SCCOL>(nFirstCol),
-                static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
-                static_cast<SCROW>(nLastRow), aMarkData, EMPTY_STRING,
-                pErgebnis );
+        ScDocumentImport& rDoc = GetDocImport();
+        ScRange aArrayRange(nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab());
+        rDoc.setMatrixCells(aArrayRange, *pErgebnis, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
     }
 }
 
@@ -1072,12 +1069,9 @@ void ImportExcel::Array34( void )
 
         OSL_ENSURE( pErgebnis, "+ImportExcel::Array34(): ScTokenArray is NULL!" );
 
-        ScMarkData          aMarkData;
-        aMarkData.SelectOneTable( GetCurrScTab() );
-        pD->InsertMatrixFormula( static_cast<SCCOL>(nFirstCol),
-                static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
-                static_cast<SCROW>(nLastRow), aMarkData, EMPTY_STRING,
-                pErgebnis);
+        ScDocumentImport& rDoc = GetDocImport();
+        ScRange aArrayRange(nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab());
+        rDoc.setMatrixCells(aArrayRange, *pErgebnis, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
     }
 }
 
