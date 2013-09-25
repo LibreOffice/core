@@ -198,7 +198,7 @@ endef
 define gb_ExternalPackage__add_file_for_install
 $(call gb_ExternalPackage_add_file,$(1),$(2),$(4))
 
-$(call gb_Helper_install,$(call gb_ExternalPackage_get_target,$(1)), \
+$(call gb_Helper_install,$(call gb_Package_get_target,$(1)), \
 	$(3), \
 	$(call gb_UnpackedTarball_get_dir,$(gb_ExternalPackage_UNPACKED_$(1)))/$(4))
 
