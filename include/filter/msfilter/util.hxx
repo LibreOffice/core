@@ -95,7 +95,38 @@ public:
  * Example: SEQ "Figure" \someoption -> "Figure"
  */
 MSFILTER_DLLPUBLIC OUString findQuotedText( const OUString& rCommand, const sal_Char* cStartQuote, const sal_Unicode uEndQuote );
+
+class MSFILTER_DLLPUBLIC WW8ReadFieldParams
+{
+private:
+    const OUString aData;
+    sal_Int32 nFnd;
+    sal_Int32 nNext;
+    sal_Int32 nSavPtr;
+public:
+    WW8ReadFieldParams( const OUString& rData );
+    ~WW8ReadFieldParams();
+
+    bool GoToTokenParam();
+    sal_Int32 SkipToNextToken();
+    sal_Int32 GetTokenSttPtr() const   { return nFnd;  }
+
+    sal_Int32 FindNextStringPiece( sal_Int32 _nStart = -1 );
+    bool GetTokenSttFromTo(sal_Int32* _pFrom, sal_Int32* _pTo, sal_Int32 _nMax);
+
+    OUString GetResult() const;
+};
+
+struct MSFILTER_DLLPUBLIC EquationResult
+{
+    OUString sResult;
+    OUString sType;
+};
+
+MSFILTER_DLLPUBLIC EquationResult ParseCombinedChars(const OUString& rStr);
+
 }
+
 }
 
 #endif

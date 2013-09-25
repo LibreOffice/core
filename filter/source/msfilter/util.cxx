@@ -9,6 +9,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <tools/string.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/svapp.hxx>
@@ -443,6 +444,289 @@ OUString findQuotedText( const OUString& rCommand,
     }
     return sRet;
 
+}
+
+WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
+    : aData( _rData )
+    , nFnd( 0 )
+    , nNext( 0 )
+    , nSavPtr( 0 )
+{
+    /*
+        erstmal nach einer oeffnenden Klammer oder einer Leerstelle oder einem
+        Anfuehrungszeichen oder einem Backslash suchen, damit der Feldbefehl
+        (also INCLUDEPICTURE bzw EINFUeGENGRAFIK bzw ...) ueberlesen wird
+    */
+    const sal_Int32 nLen = aData.getLength();
+
+    while ( nNext<nLen && aData[nNext]==' ' )
+        ++nNext;
+
+    while ( nNext<nLen )
+    {
+        const sal_Unicode c = aData[nNext];
+        if ( c==' ' || c=='"' || c=='\\' || c==132 || c==0x201c )
+            break;
+        ++nNext;
+    }
+
+    nFnd      = nNext;
+    nSavPtr   = nNext;
+}
+
+
+WW8ReadFieldParams::~WW8ReadFieldParams()
+{
+
+}
+
+
+OUString WW8ReadFieldParams::GetResult() const
+{
+    if (nFnd<0 && nSavPtr>nFnd)
+        return OUString();
+    else
+    {
+        return nSavPtr == -1 ? aData.copy(nFnd) : aData.copy(nFnd, nSavPtr-nFnd);
+    }
+}
+
+
+bool WW8ReadFieldParams::GoToTokenParam()
+{
+    const sal_Int32 nOld = nNext;
+    if( -2 == SkipToNextToken() )
+        return GetTokenSttPtr()>=0;
+    nNext = nOld;
+    return false;
+}
+
+// ret: -2: NOT a '\' parameter but normal Text
+sal_Int32 WW8ReadFieldParams::SkipToNextToken()
+{
+    if ( nNext<0 || nNext>=aData.getLength() )
+        return -1;
+
+    nFnd = FindNextStringPiece(nNext);
+    if ( nFnd<0 )
+        return -1;
+
+    nSavPtr = nNext;
+
+    if ( aData[nFnd]=='\\' && nFnd+1<aData.getLength() && aData[nFnd+1]!='\\' )
+    {
+        const sal_Int32 nRet = aData[++nFnd];
+        nNext = ++nFnd;             // und dahinter setzen
+        return nRet;
+    }
+
+    if ( nSavPtr>0 && (aData[nSavPtr-1]=='"' || aData[nSavPtr-1]==0x201d ) )
+    {
+        --nSavPtr;
+    }
+    return -2;
+}
+
+// FindNextPara sucht naechsten Backslash-Parameter oder naechste Zeichenkette
+// bis zum Blank oder naechsten "\" oder zum schliessenden Anfuehrungszeichen
+// oder zum String-Ende von pStr.
+//
+// Ausgabe ppNext (falls ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
+//
+// Returnwert: 0 falls String-Ende erreicht,
+//             ansonsten Anfang des Paramters bzw. der Zeichenkette
+//
+sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
+{
+    const sal_Int32 nLen = aData.getLength();
+    sal_Int32  n = nStart<0  ? nFnd : nStart;  // Anfang
+    sal_Int32 n2;          // Ende
+
+    nNext = -1;        // Default fuer nicht gefunden
+
+    while ( n<nLen && aData[n]==' ' )
+        ++n;
+
+    if ( n==nLen )
+        return -1;
+
+    if ( aData[n]==0x13 )
+    {
+        // Skip the nested field code since it's not supported
+        while ( n<nLen && aData[n]!=0x14 )
+            ++n;
+        if ( n==nLen )
+            return -1;
+    }
+
+    // Anfuehrungszeichen vor Para?
+    if ( aData[n]=='"' || aData[n]==0x201c || aData[n]==132 || aData[n]==0x14 )
+    {
+        n++;                        // Anfuehrungszeichen ueberlesen
+        n2 = n;                     // ab hier nach Ende suchen
+        while(     (nLen > n2)
+                && (aData[n2] != '"')
+                && (aData[n2] != 0x201d)
+                && (aData[n2] != 147)
+                && (aData[n2] != 0x15) )
+            n2++;                   // Ende d. Paras suchen
+    }
+    else                        // keine Anfuehrungszeichen
+    {
+        n2 = n;                     // ab hier nach Ende suchen
+        while ( n2<nLen && aData[n2]!=' ' ) // Ende d. Paras suchen
+        {
+            if ( aData[n2]=='\\' )
+            {
+                if ( n2+1<nLen && aData[n2+1]=='\\' )
+                    n2 += 2;        // Doppel-Backslash -> OK
+                else
+                {
+                    if( n2 > n )
+                        n2--;
+                    break;          // einfach-Backslash -> Ende
+                }
+            }
+            else
+                n2++;               // kein Backslash -> OK
+        }
+    }
+    if( nLen > n2 )
+    {
+        if (aData[n2]!=' ') ++n2;
+        nNext = n2;
+    }
+    return n;
+}
+
+
+
+// read parameters "1-3" or 1-3 with both values between 1 and nMax
+bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal_Int32 nMax)
+{
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd   = 0;
+    if ( GoToTokenParam() )
+    {
+
+        const OUString sParams( GetResult() );
+
+        sal_Int32 nIndex = 0;
+        const OUString sStart( sParams.getToken(0, '-', nIndex) );
+        if (nIndex>=0)
+        {
+            nStart = sStart.toInt32();
+            nEnd   = sParams.copy(nIndex).toInt32();
+        }
+    }
+    if( pFrom ) *pFrom = nStart;
+    if( pTo )   *pTo   = nEnd;
+
+    return nStart && nEnd && (nMax >= nStart) && (nMax >= nEnd);
+}
+
+EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
+{
+    EquationResult aResult;
+
+    String sCombinedCharacters;
+    WW8ReadFieldParams aOriFldParam = rReadParam;
+    const sal_Int32 cGetChar = rReadParam.SkipToNextToken();
+    switch( cGetChar )
+    {
+    case 'a':
+    case 'A':
+        if ( !rReadParam.GetResult().startsWithIgnoreAsciiCase("d") )
+        {
+            break;
+        }
+        rReadParam.SkipToNextToken();
+        // intentional fall-through
+    case -2:
+        {
+            if ( rReadParam.GetResult().startsWithIgnoreAsciiCase("(") )
+            {
+                for (int i=0;i<2;i++)
+                {
+                    if ('s' == rReadParam.SkipToNextToken())
+                    {
+                        const sal_Int32 cChar = rReadParam.SkipToNextToken();
+                        if (-2 != rReadParam.SkipToNextToken())
+                            break;
+                        const OUString sF = rReadParam.GetResult();
+                        if ((('u' == cChar) && sF.startsWithIgnoreAsciiCase("p"))
+                            || (('d' == cChar) && sF.startsWithIgnoreAsciiCase("o")))
+                        {
+                            if (-2 == rReadParam.SkipToNextToken())
+                            {
+                                String sPart = rReadParam.GetResult();
+                                xub_StrLen nBegin = sPart.Search('(');
+
+                                //Word disallows brackets in this field, which
+                                //aids figuring out the case of an end of )) vs )
+                                xub_StrLen nEnd = sPart.Search(')');
+
+                                if ((nBegin != STRING_NOTFOUND) &&
+                                    (nEnd != STRING_NOTFOUND))
+                                {
+                                    sCombinedCharacters +=
+                                        sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (sCombinedCharacters.Len())
+                {
+                    aResult.sType = "CombinedCharacters";
+                    aResult.sResult = sCombinedCharacters;
+                }
+                else
+                {
+                    const String sPart = aOriFldParam.GetResult();
+                    xub_StrLen nBegin = sPart.Search('(');
+                    xub_StrLen nEnd = sPart.Search(',');
+                    if ( nEnd == STRING_NOTFOUND )
+                    {
+                        nEnd = sPart.Search(')');
+                    }
+                    if ( (nBegin != STRING_NOTFOUND) && (nEnd != STRING_NOTFOUND) )
+                    {
+                        // skip certain leading characters
+                        for (int i = nBegin;i < nEnd-1;i++)
+                        {
+                            const sal_Unicode cC = sPart.GetChar(nBegin+1);
+                            if ( cC < 32 )
+                            {
+                                nBegin++;
+                            }
+                            else
+                                break;
+                        }
+                        sCombinedCharacters = sPart.Copy( nBegin+1, nEnd-nBegin-1 );
+                        if ( sCombinedCharacters.Len() )
+                        {
+                            aResult.sType = "Input";
+                            aResult.sResult = sCombinedCharacters;
+                        }
+                    }
+                }
+            }
+        }
+    default:
+        break;
+    }
+    return aResult;
+}
+
+EquationResult ParseCombinedChars(const OUString& rStr)
+{
+    EquationResult aResult;
+    WW8ReadFieldParams aReadParam( rStr );
+    const sal_Int32 cChar = aReadParam.SkipToNextToken();
+    if ('o' == cChar || 'O' == cChar)
+        aResult = Read_SubF_Combined(aReadParam);
+    return aResult;
 }
 
 }

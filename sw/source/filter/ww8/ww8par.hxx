@@ -23,6 +23,7 @@
 #include <tools/string.hxx>
 #include "rtl/ustring.hxx"
 #include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/util.hxx>
 #include <editeng/frmdir.hxx>
 #include <fltshell.hxx>
 
@@ -100,7 +101,6 @@ class SwAttrSet;
 class GDIMetaFile;
 struct ESelection;
 class SfxItemSet;
-class WW8ReadFieldParams;
 class wwZOrderer;
 class OutlinerParaObject;
 
@@ -110,6 +110,8 @@ namespace com{namespace sun {namespace star{
     namespace drawing{class XShape;}
     namespace lang{class XMultiServiceFactory;}
 }}}
+
+using namespace msfilter::util;
 
 // defines nur fuer die WW8-variable der INI-Datei
 #define WW8FL_NO_TEXT        1
@@ -1771,7 +1773,6 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_DBNum( WW8FieldDesc*, OUString& );
     eF_ResT Read_F_Equation( WW8FieldDesc*, OUString& );
     void Read_SubF_Ruby( WW8ReadFieldParams& rReadParam);
-    void Read_SubF_Combined( WW8ReadFieldParams& rReadParam);
     eF_ResT Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, OUString& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, OUString& rStr );

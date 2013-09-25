@@ -3000,29 +3000,44 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_EQ:
                     {
                         OUString aCommand = pContext->GetCommand().trim();
-                        nSpaceIndex = aCommand.indexOf(' ');
-                        if(nSpaceIndex > 0)
-                            aCommand = aCommand.copy(nSpaceIndex).trim();
-                        if (aCommand.startsWith("\\s"))
+
+                        msfilter::util::EquationResult aResult(msfilter::util::ParseCombinedChars(aCommand));
+                        if (!aResult.sType.isEmpty() && m_xTextFactory.is())
                         {
-                            aCommand = aCommand.copy(2);
-                            if (aCommand.startsWith("\\do"))
+                            OUString sServiceName("com.sun.star.text.TextField.");
+                            xFieldInterface = m_xTextFactory->createInstance(sServiceName + aResult.sType);
+                            xFieldProperties =
+                                uno::Reference< beans::XPropertySet >( xFieldInterface,
+                                    uno::UNO_QUERY_THROW);
+                            xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_CONTENT), uno::makeAny(aResult.sResult));
+                        }
+                        else
+                        {
+                            //merge Read_SubF_Ruby into filter/.../util.cxx and reuse that ?
+                            nSpaceIndex = aCommand.indexOf(' ');
+                            if(nSpaceIndex > 0)
+                                aCommand = aCommand.copy(nSpaceIndex).trim();
+                            if (aCommand.startsWith("\\s"))
                             {
-                                aCommand = aCommand.copy(3);
-                                sal_Int32 nStartIndex = aCommand.indexOf('(');
-                                sal_Int32 nEndIndex = aCommand.indexOf(')');
-                                if (nStartIndex > 0 && nEndIndex > 0)
+                                aCommand = aCommand.copy(2);
+                                if (aCommand.startsWith("\\do"))
                                 {
-                                    // nDown is the requested "lower by" value in points.
-                                    sal_Int32 nDown = aCommand.copy(0, nStartIndex).toInt32();
-                                    OUString aContent = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
-                                    PropertyMapPtr pCharContext = GetTopContext();
-                                    // dHeight is the font size of the current style.
-                                    double dHeight = 0;
-                                    if (GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight)
-                                        // Character escapement should be given in negative percents for subscripts.
-                                        pCharContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
-                                    appendTextPortion(aContent, pCharContext);
+                                    aCommand = aCommand.copy(3);
+                                    sal_Int32 nStartIndex = aCommand.indexOf('(');
+                                    sal_Int32 nEndIndex = aCommand.indexOf(')');
+                                    if (nStartIndex > 0 && nEndIndex > 0)
+                                    {
+                                        // nDown is the requested "lower by" value in points.
+                                        sal_Int32 nDown = aCommand.copy(0, nStartIndex).toInt32();
+                                        OUString aContent = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
+                                        PropertyMapPtr pCharContext = GetTopContext();
+                                        // dHeight is the font size of the current style.
+                                        double dHeight = 0;
+                                        if (GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight)
+                                            // Character escapement should be given in negative percents for subscripts.
+                                            pCharContext->Insert(PROP_CHAR_ESCAPEMENT, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
+                                        appendTextPortion(aContent, pCharContext);
+                                    }
                                 }
                             }
                         }
