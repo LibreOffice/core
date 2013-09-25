@@ -5482,9 +5482,9 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 
         const XGradient& rGradient = rFillGradient.GetGradientValue();
         OString sStartColor = msfilter::util::ConvertColor(rGradient.GetStartColor());
-        m_pFlyFillAttrList->add(XML_color2, "#" + sStartColor);
         OString sEndColor = msfilter::util::ConvertColor(rGradient.GetEndColor());
-        m_pFlyAttrList->add(XML_fillcolor, "#" + sEndColor);
+        m_pFlyAttrList->add(XML_fillcolor, "#" + sStartColor);
+        m_pFlyFillAttrList->add(XML_color2, "#" + sEndColor);
 
         switch (rGradient.GetGradientStyle())
         {
