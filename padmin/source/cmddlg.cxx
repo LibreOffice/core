@@ -35,7 +35,7 @@ using namespace padmin;
 #define PDF_PERSISTENCE_GROUP "KnowPdfCommands"
 #define MAX_COMMANDS 50
 
-void CommandStore::getSystemPrintCommands( ::std::list< String >& rCommands )
+void CommandStore::getSystemPrintCommands( ::std::list< OUString >& rCommands )
 {
     static ::std::list< OUString > aSysCommands;
     static bool bOnce = false;
@@ -50,10 +50,10 @@ void CommandStore::getSystemPrintCommands( ::std::list< String >& rCommands )
         rCommands.push_back( *it );
 }
 
-void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
+void CommandStore::getSystemPdfCommands( ::std::list< OUString >& rCommands )
 {
     static bool bOnce = false;
-    static ::std::list< String > aSysCommands;
+    static ::std::list< OUString > aSysCommands;
 
     if( ! bOnce )
     {
@@ -108,19 +108,19 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
             pclose( pPipe );
         }
     }
-    ::std::list< String >::const_iterator it;
+    ::std::list< OUString >::const_iterator it;
     for( it = aSysCommands.begin(); it != aSysCommands.end(); ++it )
         rCommands.push_back( *it );
 }
 
 
 
-void CommandStore::getStoredCommands( const char* pGroup, ::std::list< String >& rCommands )
+void CommandStore::getStoredCommands( const char* pGroup, ::std::list< OUString >& rCommands )
 {
     Config& rConfig( getPadminRC() );
     rConfig.SetGroup( pGroup );
     sal_Int32 nKeys = rConfig.GetKeyCount();
-    ::std::list< String >::const_iterator it;
+    ::std::list< OUString >::const_iterator it;
     while( nKeys-- )
     {
         OUString aCommand( rConfig.ReadKey(OString::number(nKeys), RTL_TEXTENCODING_UTF8 ) );
@@ -136,20 +136,20 @@ void CommandStore::getStoredCommands( const char* pGroup, ::std::list< String >&
 
 void CommandStore::setCommands(
                                const char* pGroup,
-                               const ::std::list< String >& rCommands,
-                               const ::std::list< String >& rSysCommands
+                               const ::std::list< OUString >& rCommands,
+                               const ::std::list< OUString >& rSysCommands
                                )
 {
     Config& rConfig( getPadminRC() );
     rConfig.DeleteGroup( pGroup );
     rConfig.SetGroup( pGroup );
-    ::std::list< String >::const_iterator it, loop;
-    ::std::list< String > aWriteList;
+    ::std::list< OUString >::const_iterator it, loop;
+    ::std::list< OUString > aWriteList;
 
     sal_Int32 nWritten = 0;
     for( it = rCommands.begin(); it != rCommands.end(); ++it )
     {
-        if( it->Len() )
+        if( !it->isEmpty() )
         {
             for( loop = rSysCommands.begin(); loop != rSysCommands.end() && *loop != *it; ++loop )
                 ;
@@ -170,43 +170,43 @@ void CommandStore::setCommands(
 }
 
 
-void CommandStore::getPrintCommands( ::std::list< String >& rCommands )
+void CommandStore::getPrintCommands( ::std::list< OUString >& rCommands )
 {
     rCommands.clear();
     getSystemPrintCommands( rCommands );
     getStoredCommands( PRINTER_PERSISTENCE_GROUP, rCommands );
 }
 
-void CommandStore::getPdfCommands( ::std::list< String >& rCommands )
+void CommandStore::getPdfCommands( ::std::list< OUString >& rCommands )
 {
     rCommands.clear();
     getSystemPdfCommands( rCommands );
     getStoredCommands( PDF_PERSISTENCE_GROUP, rCommands );
 }
 
-void CommandStore::getFaxCommands( ::std::list< String >& rCommands )
+void CommandStore::getFaxCommands( ::std::list< OUString >& rCommands )
 {
     rCommands.clear();
     getStoredCommands( FAX_PERSISTENCE_GROUP, rCommands );
 }
 
-void CommandStore::setPrintCommands( const ::std::list< String >& rCommands )
+void CommandStore::setPrintCommands( const ::std::list< OUString >& rCommands )
 {
-    ::std::list< String > aSysCmds;
+    ::std::list< OUString > aSysCmds;
     getSystemPrintCommands( aSysCmds );
     setCommands( PRINTER_PERSISTENCE_GROUP, rCommands, aSysCmds );
 }
 
-void CommandStore::setPdfCommands( const ::std::list< String >& rCommands )
+void CommandStore::setPdfCommands( const ::std::list< OUString >& rCommands )
 {
-    ::std::list< String > aSysCmds;
+    ::std::list< OUString > aSysCmds;
     getSystemPdfCommands( aSysCmds );
     setCommands( PDF_PERSISTENCE_GROUP, rCommands, aSysCmds );
 }
 
-void CommandStore::setFaxCommands( const ::std::list< String >& rCommands )
+void CommandStore::setFaxCommands( const ::std::list< OUString >& rCommands )
 {
-    ::std::list< String > aSysCmds;
+    ::std::list< OUString > aSysCmds;
     setCommands( FAX_PERSISTENCE_GROUP, rCommands, aSysCmds );
 }
 
@@ -237,11 +237,11 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
     // configuring as printer is only sensible in default print system
     PrinterInfoManager& rMgr( PrinterInfoManager::get() );
     if( rMgr.getType() == PrinterInfoManager::Default || rMgr.isCUPSDisabled() )
-        m_nPrinterEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
+        m_nPrinterEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
     else
         m_nPrinterEntry = ~0;
-    m_nFaxEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_FAX ) ) );
-    m_nPdfEntry = m_aConfigureBox.InsertEntry( String( PaResId( RID_RTS_CMD_STR_CONFIGURE_PDF ) ) );
+    m_nFaxEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_FAX ) ) );
+    m_nPdfEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_PDF ) ) );
 
     FreeResource();
 
@@ -301,8 +301,8 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
 
     m_aQuickCB.Enable( m_aExternalCB.IsChecked() );
 
-    String aString( m_aConnectedTo.GetText() );
-    aString += String( m_pParent->m_aJobData.m_aCommand );
+    OUString aString( m_aConnectedTo.GetText() );
+    aString += m_pParent->m_aJobData.m_aCommand;
     m_aConnectedTo.SetText( aString );
 
     UpdateCommands();
@@ -314,10 +314,10 @@ RTSCommandPage::~RTSCommandPage()
 
 void RTSCommandPage::save()
 {
-    String aCommand,aQuickCommand;
+    OUString aCommand,aQuickCommand;
     bool bHaveFax = m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry ? true : false;
     bool bHavePdf = m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry ? true : false;
-    ::std::list< String >::iterator it;
+    ::std::list< OUString >::iterator it;
 
     OUString aFeatures;
     sal_Int32 nIndex = 0;
@@ -352,7 +352,7 @@ void RTSCommandPage::save()
             bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).startsWith( "swallow" );
         }
     }
-    ::std::list< String >* pList = &m_aPrinterCommands;
+    ::std::list< OUString >* pList = &m_aPrinterCommands;
     if( bExternalDialog )
     {
         if( !aFeatures.isEmpty() )
@@ -383,8 +383,8 @@ void RTSCommandPage::save()
     if( it == pList->end() )
         pList->push_back( aCommand );
 
-    if( aCommand != String( m_pParent->m_aJobData.m_aCommand )              ||
-        aQuickCommand != String( m_pParent->m_aJobData.m_aQuickCommand )    ||
+    if( aCommand != m_pParent->m_aJobData.m_aCommand                        ||
+        aQuickCommand != m_pParent->m_aJobData.m_aQuickCommand              ||
         ( m_bWasFax && ! bHaveFax )                                         ||
         ( ! m_bWasFax && bHaveFax )                                         ||
         ( m_bWasPdf && ! bHavePdf )                                         ||
@@ -437,8 +437,8 @@ IMPL_LINK( RTSCommandPage, ClickBtnHdl, Button*, pButton )
     }
     else if( pButton == &m_aRemovePB )
     {
-        String aEntry( m_aCommandsCB.GetText() );
-        ::std::list< String >* pList;
+        OUString aEntry( m_aCommandsCB.GetText() );
+        ::std::list< OUString >* pList;
         if( m_aConfigureBox.GetSelectEntryPos() == m_nPrinterEntry )
             pList = &m_aPrinterCommands;
         else if( m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry )
@@ -452,7 +452,7 @@ IMPL_LINK( RTSCommandPage, ClickBtnHdl, Button*, pButton )
     }
     else if( pButton == &m_aHelpButton )
     {
-        String aHelpText;
+        OUString aHelpText;
         if( m_aConfigureBox.GetSelectEntryPos() == m_nPrinterEntry )
             aHelpText = m_aPrinterHelp;
         else if( m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry )
@@ -488,7 +488,7 @@ IMPL_LINK( RTSCommandPage, ModifyHdl, Edit*, pEdit )
 void RTSCommandPage::UpdateCommands()
 {
     m_aCommandsCB.Clear();
-    ::std::list< String >::iterator it;
+    ::std::list< OUString >::iterator it;
     if( m_aConfigureBox.GetSelectEntryPos() == m_nPrinterEntry )
     {
         for( it = m_aPrinterCommands.begin(); it != m_aPrinterCommands.end(); ++it )
@@ -499,7 +499,7 @@ void RTSCommandPage::UpdateCommands()
         if( ! m_bWasFax )
             m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
         else
-            m_aCommandsCB.SetText( String() );
+            m_aCommandsCB.SetText( OUString() );
     }
     else if( m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry )
     {
@@ -511,7 +511,7 @@ void RTSCommandPage::UpdateCommands()
         if( m_bWasFax )
             m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
         else
-            m_aCommandsCB.SetText( String() );
+            m_aCommandsCB.SetText( OUString() );
     }
     else if( m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry )
     {
@@ -523,7 +523,7 @@ void RTSCommandPage::UpdateCommands()
         if( m_bWasPdf )
             m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
         else
-            m_aCommandsCB.SetText( String() );
+            m_aCommandsCB.SetText( OUString() );
     }
 }
 

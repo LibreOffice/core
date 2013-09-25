@@ -60,7 +60,7 @@ ProgressDialog::~ProgressDialog()
 {
 }
 
-void ProgressDialog::startOperation( const String& rOperation )
+void ProgressDialog::startOperation( const OUString& rOperation )
 {
     maOperation.SetText( rOperation );
     maProgressBar.SetValue( 0 );
@@ -75,7 +75,7 @@ void ProgressDialog::setValue( int nValue )
     Application::Reschedule();
 }
 
-void ProgressDialog::setFilename( const String& rFilename )
+void ProgressDialog::setFilename( const OUString& rFilename )
 {
     maFilename.SetText( rFilename );
     maFilename.Update();

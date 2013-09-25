@@ -58,7 +58,7 @@ APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
     m_aFaxBtn.Check( sal_False );
     m_aPDFBtn.Check( sal_False );
     m_aOldBtn.Check( sal_False );
-    if( ! AddPrinterDialog::getOldPrinterLocation().Len() )
+    if( AddPrinterDialog::getOldPrinterLocation().isEmpty() )
         m_aOldBtn.Enable( sal_False );
     if( ! PrinterInfoManager::get().addOrRemovePossible() )
     {
@@ -112,7 +112,7 @@ APChooseDriverPage::APChooseDriverPage( AddPrinterDialog* pParent )
 APChooseDriverPage::~APChooseDriverPage()
 {
     for( int i = 0; i < m_aDriverBox.GetEntryCount(); i++ )
-        delete (String*)m_aDriverBox.GetEntryData( i );
+        delete (OUString*)m_aDriverBox.GetEntryData( i );
 }
 
 bool APChooseDriverPage::check()
@@ -140,7 +140,7 @@ void APChooseDriverPage::fill( PrinterInfo& rInfo )
 void APChooseDriverPage::updateDrivers( bool bRefresh, const OUString& rSelectDriver )
 {
     for( int k = 0; k < m_aDriverBox.GetEntryCount(); k++ )
-        delete (String*)m_aDriverBox.GetEntryData( k );
+        delete (OUString*)m_aDriverBox.GetEntryData( k );
     m_aDriverBox.Clear();
 
     std::list< OUString > aDrivers;
@@ -305,7 +305,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
 
 //--------------------------------------------------------------------
 
-APNamePage::APNamePage( AddPrinterDialog* pParent, const String& rInitName, DeviceKind::type eKind )
+APNamePage::APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, DeviceKind::type eKind )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_NAME ) ),
           m_aNameTxt(
                      this,
@@ -365,7 +365,7 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
           m_eKind( eKind )
 {
     FreeResource();
-    ::std::list< String > aCommands;
+    ::std::list< OUString > aCommands;
     if( m_eKind == DeviceKind::Printer )
     {
         m_aHelpBtn.Show( sal_False );
@@ -400,7 +400,7 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
     }
 
     // fill in commands
-    ::std::list< String >::iterator it;
+    ::std::list< OUString >::iterator it;
     for( it = aCommands.begin(); it != aCommands.end(); ++it )
         m_aCommandBox.InsertEntry( *it );
 
@@ -415,7 +415,7 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
 
 APCommandPage::~APCommandPage()
 {
-    ::std::list< String > aCommands;
+    ::std::list< OUString > aCommands;
     OUString aLastCommand( m_aCommandBox.GetText() );
     for( int i = 0; i < m_aCommandBox.GetEntryCount(); i++ )
     {
@@ -534,7 +534,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         }
 
 
-        String aUPrinter( AddPrinterDialog::uniquePrinterName(OStringToOUString(aPrinter, aEncoding)) );
+        OUString aUPrinter( AddPrinterDialog::uniquePrinterName(OStringToOUString(aPrinter, aEncoding)) );
 
         PrinterInfo aInfo;
         aInfo.m_aDriverName = OStringToOUString(aNewDriver, aEncoding);
@@ -555,7 +555,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             aInfo.m_pParser->getMargins( OStringToOUString(aValue, aEncoding),
                                          nLeft, nRight, nTop, nBottom ) )
         {
-            const PPDKey* pKey = aInfo.m_pParser->getKey( String(  "PageSize"  ) );
+            const PPDKey* pKey = aInfo.m_pParser->getKey( OUString(  "PageSize"  ) );
             const PPDValue* pValue = pKey ? pKey->getValue( OStringToOUString(aValue, aEncoding) ) : NULL;
             if( pKey && pValue )
                 aInfo.m_aContext.setValue( pKey, pValue );
@@ -1075,7 +1075,7 @@ OUString AddPrinterDialog::uniquePrinterName( const OUString& rBase )
     return aResult;
 }
 
-String AddPrinterDialog::getOldPrinterLocation()
+OUString AddPrinterDialog::getOldPrinterLocation()
 {
     static const char* pHome = getenv( "HOME" );
     OString aFileName;

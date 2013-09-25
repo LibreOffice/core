@@ -37,19 +37,19 @@ class RTSDialog;
 
 class CommandStore
 {
-    static void getStoredCommands( const char* pGroup, ::std::list< String >& rCommands );
-    static void getSystemPrintCommands( ::std::list< String >& rCommands );
-    static void getSystemPdfCommands( ::std::list< String >& rCommands );
-    static void setCommands( const char* pGroup, const ::std::list< String >& rCommands, const ::std::list< String >& rSysCommands );
+    static void getStoredCommands( const char* pGroup, ::std::list< OUString >& rCommands );
+    static void getSystemPrintCommands( ::std::list< OUString >& rCommands );
+    static void getSystemPdfCommands( ::std::list< OUString >& rCommands );
+    static void setCommands( const char* pGroup, const ::std::list< OUString >& rCommands, const ::std::list< OUString >& rSysCommands );
 
 public:
-    static void getPrintCommands( ::std::list< String >& rCommands );
-    static void getFaxCommands( ::std::list< String >& rCommands );
-    static void getPdfCommands( ::std::list< String >& rCommands );
+    static void getPrintCommands( ::std::list< OUString >& rCommands );
+    static void getFaxCommands( ::std::list< OUString >& rCommands );
+    static void getPdfCommands( ::std::list< OUString >& rCommands );
 
-    static void setPrintCommands( const ::std::list< String >& rCommands );
-    static void setFaxCommands( const ::std::list< String >& rCommands );
-    static void setPdfCommands( const ::std::list< String >& rCommands );
+    static void setPrintCommands( const ::std::list< OUString >& rCommands );
+    static void setFaxCommands( const ::std::list< OUString >& rCommands );
+    static void setPdfCommands( const ::std::list< OUString >& rCommands );
 };
 
 class RTSCommandPage : public TabPage
@@ -79,13 +79,13 @@ private:
     PushButton                      m_aHelpButton;
     PushButton                      m_aRemovePB;
 
-    ::std::list< String >           m_aPrinterCommands;
-    ::std::list< String >           m_aFaxCommands;
-    ::std::list< String >           m_aPdfCommands;
+    ::std::list< OUString >         m_aPrinterCommands;
+    ::std::list< OUString >         m_aFaxCommands;
+    ::std::list< OUString >         m_aPdfCommands;
 
-    String                          m_aFaxHelp;
-    String                          m_aPrinterHelp;
-    String                          m_aPdfHelp;
+    OUString                        m_aFaxHelp;
+    OUString                        m_aPrinterHelp;
+    OUString                        m_aPdfHelp;
 
     bool                            m_bWasFax;
     bool                            m_bWasPdf;

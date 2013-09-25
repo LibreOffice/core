@@ -39,7 +39,7 @@ namespace DeviceKind { enum type { Printer, Fax, Pdf }; }
 
 class APTabPage : public TabPage
 {
-    String              m_aTitle;
+    OUString            m_aTitle;
 protected:
     AddPrinterDialog*   m_pParent;
 public:
@@ -48,7 +48,7 @@ public:
     // returns false if information is incomplete or invalid
     virtual bool check() = 0;
     virtual void fill( ::psp::PrinterInfo& rInfo ) = 0;
-    const String& getTitle() const { return m_aTitle; }
+    const OUString& getTitle() const { return m_aTitle; }
 };
 
 class APChooseDevicePage : public APTabPage
@@ -79,8 +79,8 @@ class APChooseDriverPage : public APTabPage
     PushButton              m_aAddBtn;
     PushButton              m_aRemBtn;
 
-    String                  m_aRemStr;
-    String                  m_aLastPrinterName;
+    OUString                m_aRemStr;
+    OUString                m_aLastPrinterName;
 
     DECL_LINK( ClickBtnHdl, PushButton* );
     DECL_LINK( DelPressedHdl, ListBox* );
@@ -101,13 +101,13 @@ class APNamePage : public APTabPage
     CheckBox                m_aDefaultBox;
     CheckBox                m_aFaxSwallowBox;
 public:
-    APNamePage( AddPrinterDialog* pParent, const String& rInitName, DeviceKind::type eKind );
+    APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, DeviceKind::type eKind );
     ~APNamePage();
 
     bool isDefault() { return m_aDefaultBox.IsChecked(); }
     bool isFaxSwallow() { return m_aFaxSwallowBox.IsChecked(); }
 
-    void setText( const String& rText ) { m_aNameEdt.SetText( rText ); }
+    void setText( const OUString& rText ) { m_aNameEdt.SetText( rText ); }
 
     virtual bool check();
     virtual void fill( ::psp::PrinterInfo& rInfo );
@@ -118,7 +118,7 @@ class APCommandPage : public APTabPage
     FixedText               m_aCommandTxt;
     ComboBox                m_aCommandBox;
     PushButton              m_aHelpBtn;
-    String                  m_aHelpTxt;
+    OUString                m_aHelpTxt;
     FixedText               m_aPdfDirTxt;
     Edit                    m_aPdfDirEdt;
     PushButton              m_aPdfDirBtn;
@@ -135,7 +135,7 @@ public:
     virtual bool check();
     virtual void fill( ::psp::PrinterInfo& rInfo );
 
-    String getPdfDir() { return m_aPdfDirEdt.GetText(); }
+    OUString getPdfDir() { return m_aPdfDirEdt.GetText(); }
 };
 
 class APOldPrinterPage : public APTabPage
@@ -230,7 +230,7 @@ public:
     ~AddPrinterDialog();
 
     static OUString uniquePrinterName( const OUString& rString );
-    static String getOldPrinterLocation();
+    static OUString getOldPrinterLocation();
 
     void enableNext( bool bEnable ) { m_aNextPB.Enable( bEnable ); }
 };

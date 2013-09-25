@@ -99,15 +99,15 @@ void padmin::FindFiles( const OUString& rDirectory, ::std::list< OUString >& rRe
             if( aStatus.getFileType() == FileStatus::Regular ||
                 aStatus.getFileType() == FileStatus::Link )
             {
-                String aFileName = aStatus.getFileName();
+                OUString aFileName = aStatus.getFileName();
                 int nToken = comphelper::string::getTokenCount(rSuffixes, ';');
                 while( nToken-- )
                 {
                     OUString aSuffix = rSuffixes.getToken( nToken, ';' );
-                    if( aFileName.Len() > aSuffix.getLength()+1 )
+                    if( aFileName.getLength() > aSuffix.getLength()+1 )
                     {
-                        OUString aExtension = aFileName.Copy( aFileName.Len()-aSuffix.getLength() );
-                        if( aFileName.GetChar( aFileName.Len()-aSuffix.getLength()-1 ) == '.' &&
+                        OUString aExtension = aFileName.copy( aFileName.getLength()-aSuffix.getLength() );
+                        if( aFileName[ aFileName.getLength()-aSuffix.getLength()-1 ] == '.' &&
                             aExtension.equalsIgnoreAsciiCase( aSuffix ) )
                         {
                             rResult.push_back( aFileName );
@@ -180,7 +180,7 @@ long DelListBox::Notify( NotifyEvent& rEvent )
  *  QueryString
  */
 
-QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const ::std::list< String >& rChoices ) :
+QueryString::QueryString( Window* pParent, OUString& rQuery, OUString& rRet, const ::std::list< OUString >& rChoices ) :
         ModalDialog( pParent, PaResId( RID_STRINGQUERYDLG ) ),
         m_aOKButton( this, PaResId( RID_STRQRY_BTN_OK ) ),
         m_aCancelButton( this, PaResId( RID_STRQRY_BTN_CANCEL ) ),
@@ -196,7 +196,7 @@ QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const :
     {
         m_aComboBox.SetText( m_rReturnValue );
         m_aComboBox.InsertEntry( m_rReturnValue );
-        for( ::std::list<String>::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
+        for( ::std::list<OUString>::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
             m_aComboBox.InsertEntry( *it );
         m_aEdit.Show( sal_False );
         m_bUseEdit = false;
@@ -235,7 +235,7 @@ sal_Bool padmin::AreYouSure( Window* pParent, int nRid )
     if( nRid == -1 )
         nRid = RID_YOU_SURE;
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_NO,
-                        String( PaResId( nRid ) ) );
+                        OUString( PaResId( nRid ) ) );
     return aQueryBox.Execute() == RET_NO ? sal_False : sal_True;
 }
 

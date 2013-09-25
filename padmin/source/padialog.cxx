@@ -136,7 +136,7 @@ void PADialog::Init()
         m_aRenamePB.Enable( sal_False );
         m_aStdPB.Enable( sal_False );
         m_aCUPSCB.Enable( sal_False );
-        ErrorBox aBox( GetParent(), WB_OK | WB_DEF_OK, String( PaResId( RID_ERR_NOWRITE ) ) );
+        ErrorBox aBox( GetParent(), WB_OK | WB_DEF_OK, OUString( PaResId( RID_ERR_NOWRITE ) ) );
         aBox.Execute();
     }
 }
@@ -155,7 +155,7 @@ long PADialog::Notify( NotifyEvent& rEv )
     {
         if( m_rPIManager.checkPrintersChanged( true ) )
         {
-            String aSelectEntry = m_aDevicesLB.GetSelectEntry();
+            OUString aSelectEntry = m_aDevicesLB.GetSelectEntry();
             UpdateDevice();
             UpdateText();
             m_aDevicesLB.SelectEntry( aSelectEntry );
@@ -176,7 +176,7 @@ void PADialog::DataChanged( const DataChangedEvent& rEv )
     }
 }
 
-String PADialog::getSelectedDevice()
+OUString PADialog::getSelectedDevice()
 {
     int nPos = m_aDevicesLB.GetSelectEntryPos();
     int nLen = (int)(sal_IntPtr)m_aDevicesLB.GetEntryData( nPos );
@@ -225,8 +225,8 @@ IMPL_LINK( PADialog, SelectHdl, ListBox*, pListBox )
 {
     if( pListBox == &m_aDevicesLB )
     {
-        String sSelect = getSelectedDevice();
-        String sDefPrt = m_rPIManager.getDefaultPrinter();
+        OUString sSelect = getSelectedDevice();
+        OUString sDefPrt = m_rPIManager.getDefaultPrinter();
         if( sDefPrt == sSelect || ! m_rPIManager.removePrinter( sSelect, true ) )
             m_aRemPB.Enable( sal_False );
         else
@@ -264,7 +264,7 @@ void PADialog::UpdateText()
     }
     else // nothing selected
     {
-        String aEmpty;
+        OUString aEmpty;
         m_aDriver.SetText( aEmpty );
         m_aCommand.SetText( aEmpty );
         m_aComment.SetText( aEmpty );
@@ -405,14 +405,14 @@ void SpaPrinterController::printPage( int ) const
                                     Size( aPaperSize.Width()-600,
                                           aPaperSize.Height()-600 ) ) );
 
-    Font aFont( String( "Courier" ), Size( 0, 400 ) );
+    Font aFont( "Courier", Size( 0, 400 ) );
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetItalic( ITALIC_NONE );
     pPrinter->SetFont( aFont );
 
     OUStringBuffer aPrintText(1024);
     long nWidth = 0, nMaxWidth = 0;
-    String aToken;
+    OUString aToken;
 
     static const struct
     {
@@ -434,7 +434,7 @@ void SpaPrinterController::printPage( int ) const
         if( aResIds[i].pDirect )
             aToken = OUString::createFromAscii(aResIds[i].pDirect);
         else
-            aToken = String( PaResId( aResIds[i].nResId ) );
+            aToken = PaResId( aResIds[i].nResId );
         nMaxWidth = ( nWidth = pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
         aPrintText.append( aToken );
         aPrintText.append( (sal_Unicode)'\n' );
@@ -553,9 +553,9 @@ void SpaPrinterController::printPage( int ) const
 
 void SpaPrinterController::jobFinished( com::sun::star::view::PrintableState )
 {
-    String aInfoString( PaResId( RID_PA_TXT_TESTPAGE_PRINTED ) );
+    OUString aInfoString( PaResId( RID_PA_TXT_TESTPAGE_PRINTED ) );
     InfoBox aInfoBox( NULL, aInfoString );
-    aInfoBox.SetText( String( PaResId( RID_BXT_TESTPAGE ) ) );
+    aInfoBox.SetText( OUString( PaResId( RID_BXT_TESTPAGE ) ) );
     aInfoBox.Execute();
 }
 
@@ -567,11 +567,11 @@ void PADialog::PrintTestPage()
 
     if( pPrinter->GetName() != sPrinter )
     {
-        String aString( PaResId( RID_ERR_NOPRINTER ) );
-        aString.SearchAndReplaceAscii( "%s", sPrinter );
+        OUString aString( PaResId( RID_ERR_NOPRINTER ) );
+        aString = aString.replaceFirst( "%s", sPrinter );
 
         ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aString );
-        aErrorBox.SetText( String( PaResId( RID_BXT_ENVIRONMENT ) ) );
+        aErrorBox.SetText( PaResId( RID_BXT_ENVIRONMENT ) );
         aErrorBox.Execute();
         return;
     }
@@ -600,8 +600,8 @@ void PADialog::RemDevice()
 
     if( ! m_rPIManager.removePrinter( aPrinter ) )
     {
-        String aText( PaResId( RID_ERR_PRINTERNOTREMOVABLE ) );
-        aText.SearchAndReplace( String( "%s" ), aPrinter );
+        OUString aText( PaResId( RID_ERR_PRINTERNOTREMOVABLE ) );
+        aText = aText.replaceFirst( "%s", aPrinter );
         ErrorBox aBox( this, WB_OK | WB_DEF_OK, aText );
         aBox.Execute();
         return;
@@ -643,20 +643,20 @@ void PADialog::ConfigureDevice()
 
 void PADialog::RenameDevice()
 {
-    String aPrinter( getSelectedDevice() );
+    OUString aPrinter( getSelectedDevice() );
     OUString aOldPrinter( aPrinter );
 
-    if( ! aPrinter.Len() )
+    if( aPrinter.isEmpty() )
         return;
 
-    String aTmpString( PaResId( RID_QRY_PRTNAME ) );
+    OUString aTmpString( PaResId( RID_QRY_PRTNAME ) );
     QueryString aQuery( this,
                         aTmpString,
                         aPrinter );
     aQuery.SetText( m_aRenameStr );
     aQuery.Execute();
 
-    if( aPrinter.Len() )
+    if( !aPrinter.isEmpty() )
     {
         PrinterInfo aInfo( m_rPIManager.getPrinterInfo( aOldPrinter ) );
         aInfo.m_aPrinterName = aPrinter;

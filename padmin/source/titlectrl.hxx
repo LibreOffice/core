@@ -29,7 +29,7 @@ namespace padmin
 class TitleImage : public Control
 {
     Image               m_aImage;
-    String              m_aText;
+    OUString            m_aText;
     Color               m_aBGColor;
     Point               m_aImagePos;
     Point               m_aTextPos;

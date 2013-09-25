@@ -39,7 +39,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
 
     const PPDValue* pValue = NULL;
     sal_uInt16 nPos = 0;
-    String aOptionText;
+    OUString aOptionText;
 
     for( int i = 0; i < pKey->countValues(); i++ )
     {
@@ -76,7 +76,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
  * RTSDialog
  */
 
-RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool bAllPages, Window* pParent )
+RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, bool bAllPages, Window* pParent )
     : TabDialog(pParent, "PrinterPropertiesDialog", "spa/ui/printerpropertiesdialog.ui" )
     , m_aJobData(rJobData)
     , m_aPrinter(rPrinter)
@@ -250,7 +250,7 @@ void RTSPaperPage::update()
 
     // duplex
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "Duplex" ) )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) )) )
     {
         m_pParent->insertAllPPDValues( *m_pDuplexBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -262,7 +262,7 @@ void RTSPaperPage::update()
 
     // paper
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "PageSize" ) )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) )) )
     {
         m_pParent->insertAllPPDValues( *m_pPaperBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -293,17 +293,17 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     if( pBox == m_pPaperBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "PageSize" ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "PageSize" ) );
     }
     else if( pBox == m_pDuplexBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "Duplex" ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "Duplex" ) );
     }
     else if( pBox == m_pSlotBox )
     {
         if( m_pParent->m_aJobData.m_pParser )
-            pKey = m_pParent->m_aJobData.m_pParser->getKey( String( "InputSlot" ) );
+            pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString( "InputSlot" ) );
     }
     else if( pBox == m_pOrientBox )
     {
@@ -395,7 +395,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
                 ! pKey->getKey().equalsAscii( "Duplex" )
                 )
             {
-                String aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
+                OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
                 sal_uInt16 nPos = m_pPPDKeyBox->InsertEntry( aEntry );
                 m_pPPDKeyBox->SetEntryData( nPos, (void*)pKey );
             }
@@ -499,7 +499,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
         if( m_pParent->m_aJobData.m_aContext.checkConstraints( pKey, pValue ) &&
             m_pParent->m_aJobData.m_pParser )
         {
-            String aEntry( m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption ) );
+            OUString aEntry( m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption ) );
             sal_uInt16 nPos = m_pPPDValueBox->InsertEntry( aEntry );
             m_pPPDValueBox->SetEntryData( nPos, (void*)pValue );
         }
@@ -789,8 +789,8 @@ RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, Wind
         m_aCancelButton( this, PaResId( RID_RTS_PWDIALOG_CANCEL_BTN ) )
 {
     FreeResource();
-    String aText( m_aText.GetText() );
-    aText.SearchAndReplace( String( "%s" ), OStringToOUString( rServer, osl_getThreadTextEncoding() ) );
+    OUString aText( m_aText.GetText() );
+    aText = aText.replaceFirst( "%s", OStringToOUString( rServer, osl_getThreadTextEncoding() ) );
     m_aText.SetText( aText );
     m_aUserEdit.SetText( OStringToOUString( rUserName, osl_getThreadTextEncoding() ) );
 }
@@ -825,9 +825,9 @@ extern "C" {
         return nRet;
     }
 
-    int SPA_DLLPUBLIC Sal_queryFaxNumber( String& rNumber )
+    int SPA_DLLPUBLIC Sal_queryFaxNumber( OUString& rNumber )
     {
-        String aTmpString( PaResId( RID_TXT_QUERYFAXNUMBER ) );
+        OUString aTmpString( PaResId( RID_TXT_QUERYFAXNUMBER ) );
         QueryString aQuery( NULL, aTmpString, rNumber );
         return aQuery.Execute();
     }

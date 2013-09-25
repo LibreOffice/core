@@ -88,13 +88,13 @@ private:
     Edit         m_aEdit;
     ComboBox     m_aComboBox;
 
-    String&      m_rReturnValue;
+    OUString&    m_rReturnValue;
     bool         m_bUseEdit;
 
     DECL_LINK( ClickBtnHdl, Button* );
 
 public:
-    QueryString( Window*, String &, String &, const ::std::list< String >& rChoices = ::std::list<String>() );
+    QueryString( Window*, OUString &, OUString &, const ::std::list< OUString >& rChoices = ::std::list<OUString>() );
     // parent window, Query text, initial value
     ~QueryString();
 };

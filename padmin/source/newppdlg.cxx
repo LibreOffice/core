@@ -60,8 +60,8 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
 {
     FreeResource();
 
-    String aText( m_aDriverTxt.GetText() );
-    aText.SearchAndReplaceAscii( "%s", Button::GetStandardText( BUTTON_OK ) );
+    OUString aText( m_aDriverTxt.GetText() );
+    aText = aText.replaceFirst( "%s", Button::GetStandardText( BUTTON_OK ) );
     m_aDriverTxt.SetText( MnemonicGenerator::EraseAllMnemonicChars( aText ) );
 
     Config& rConfig = getPadminRC();
@@ -88,7 +88,7 @@ PPDImportDialog::~PPDImportDialog()
 {
     while( m_aDriverLB.GetEntryCount() )
     {
-        delete (String*)m_aDriverLB.GetEntryData( 0 );
+        delete (OUString*)m_aDriverLB.GetEntryData( 0 );
         m_aDriverLB.RemoveEntry( 0 );
     }
 }
@@ -115,7 +115,7 @@ void PPDImportDialog::Import()
     }
     while( m_aDriverLB.GetEntryCount() )
     {
-        delete (String*)m_aDriverLB.GetEntryData( 0 );
+        delete (OUString*)m_aDriverLB.GetEntryData( 0 );
         m_aDriverLB.RemoveEntry( 0 );
     }
 
@@ -133,10 +133,10 @@ void PPDImportDialog::Import()
         aProgress.setFilename( aFiles.front() );
         INetURLObject aPath( aImportPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         aPath.Append( aFiles.front() );
-        String aPrinterName = PPDParser::getPPDPrinterName( aPath.PathToFileName() );
+        OUString aPrinterName = PPDParser::getPPDPrinterName( aPath.PathToFileName() );
         aFiles.pop_front();
 
-        if( ! aPrinterName.Len() )
+        if( aPrinterName.isEmpty() )
         {
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Warning: File %s has empty printer name.\n",
@@ -146,7 +146,7 @@ void PPDImportDialog::Import()
         }
 
         sal_uInt16 nPos = m_aDriverLB.InsertEntry( aPrinterName );
-        m_aDriverLB.SetEntryData( nPos, new String( aPath.PathToFileName() ) );
+        m_aDriverLB.SetEntryData( nPos, new OUString( aPath.PathToFileName() ) );
     }
 }
 
@@ -166,7 +166,7 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
 
         for( int i = 0; i < m_aDriverLB.GetSelectEntryCount(); i++ )
         {
-            INetURLObject aFile( *(String*)m_aDriverLB.GetEntryData(
+            INetURLObject aFile( *(OUString*)m_aDriverLB.GetEntryData(
                 m_aDriverLB.GetSelectEntryPos( i )
                 ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
             OUString aFromUni( aFile.GetMainURL(INetURLObject::DECODE_TO_IURI) );

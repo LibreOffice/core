@@ -60,8 +60,8 @@ namespace padmin {
         PushButton                          m_aAddPB;
         CancelButton                        m_aCancelButton;
 
-        String                              m_aDefPrt;
-        String                              m_aRenameStr;
+        OUString                            m_aDefPrt;
+        OUString                            m_aRenameStr;
 
         ::psp::PrinterInfoManager&          m_rPIManager;
         ::std::list< OUString >      m_aPrinters;
@@ -91,7 +91,7 @@ namespace padmin {
         virtual long Notify( NotifyEvent& rEv );
         virtual void DataChanged( const DataChangedEvent& rEv );
 
-        String getSelectedDevice();
+        OUString getSelectedDevice();
     public:
         ~PADialog();
 

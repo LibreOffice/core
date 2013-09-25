@@ -44,7 +44,7 @@ namespace padmin {
         FixedLine           m_aPathGroup;
         FixedLine           m_aDriverGroup;
 
-        String              m_aLoadingPPD;
+        OUString            m_aLoadingPPD;
 
         DECL_LINK( ClickBtnHdl, PushButton* );
         DECL_LINK( SelectHdl, ComboBox* );

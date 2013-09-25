@@ -46,8 +46,8 @@ namespace padmin {
 
         void setValue( int nValue );
         void setRange( int nMin, int nMax ) { mnMin = nMin; mnMax = nMax; }
-        void startOperation( const String& );
-        void setFilename( const String& );
+        void startOperation( const OUString& );
+        void setFilename( const OUString& );
 
         bool isCanceled() { return mbCanceled; }
     };
