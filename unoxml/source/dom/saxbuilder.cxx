@@ -24,7 +24,7 @@
 
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <comphelper/processfactory.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 
 namespace DOM
 {
@@ -73,14 +73,8 @@ namespace DOM
     sal_Bool SAL_CALL CSAXDocumentBuilder::supportsService(const OUString& aServiceName)
         throw (RuntimeException)
     {
-        Sequence< OUString > supported = CSAXDocumentBuilder::_getSupportedServiceNames();
-        for (sal_Int32 i=0; i<supported.getLength(); i++)
-        {
-            if (supported[i] == aServiceName) return sal_True;
-        }
-        return sal_False;
+        return cppu::supportsService(this, aServiceName);
     }
-
 
     SAXDocumentBuilderState SAL_CALL CSAXDocumentBuilder::getState()
         throw (RuntimeException)

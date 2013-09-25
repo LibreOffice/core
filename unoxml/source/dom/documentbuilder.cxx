@@ -33,6 +33,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -132,12 +133,7 @@ namespace DOM
     sal_Bool SAL_CALL CDocumentBuilder::supportsService(const OUString& aServiceName)
         throw (RuntimeException)
     {
-        Sequence< OUString > supported = CDocumentBuilder::_getSupportedServiceNames();
-        for (sal_Int32 i=0; i<supported.getLength(); i++)
-        {
-            if (supported[i] == aServiceName) return sal_True;
-        }
-        return sal_False;
+        return cppu::supportsService(this, aServiceName);
     }
 
     Reference< XDOMImplementation > SAL_CALL CDocumentBuilder::getDOMImplementation()

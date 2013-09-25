@@ -37,6 +37,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -610,20 +611,11 @@ OUString SAL_CALL VistaFilePicker::getImplementationName()
     return OUString("com.sun.star.comp.fpicker.VistaFileDialog");
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
     throw(css::uno::RuntimeException )
 {
-    css::uno::Sequence< OUString > lSupportedServicesNames = VistaFilePicker_getSupportedServiceNames();
-
-    for (sal_Int32 n = lSupportedServicesNames.getLength(); n--;)
-        if (lSupportedServicesNames[n] == sServiceName)
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
 
 // -------------------------------------------------

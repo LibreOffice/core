@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -758,18 +759,10 @@ UpdateInformationProvider::getSupportedServiceNames() throw (uno::RuntimeExcepti
     return getServiceNames();
 }
 
-//------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL
 UpdateInformationProvider::supportsService( OUString const & serviceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServiceNameList = getServiceNames();
-
-    for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
-        if( aServiceNameList[n].equals(serviceName) )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 } // anonymous namespace

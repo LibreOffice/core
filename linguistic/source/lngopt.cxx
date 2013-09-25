@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
 #include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -433,14 +434,7 @@ OUString SAL_CALL LinguProps::getImplementationName()
 sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

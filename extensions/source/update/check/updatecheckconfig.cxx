@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/security.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>
@@ -754,19 +755,11 @@ UpdateCheckConfig::getImplementationName()  throw (uno::RuntimeException)
     return getImplName();
 }
 
-//------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL
 UpdateCheckConfig::supportsService(OUString const & serviceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServiceNameList = getServiceNames();
-
-    for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
-        if( aServiceNameList[n].equals(serviceName) )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 //------------------------------------------------------------------------------

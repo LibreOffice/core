@@ -52,6 +52,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
@@ -1048,12 +1049,7 @@ sal_Bool SAL_CALL GrammarCheckingIterator::supportsService(
     const OUString & rServiceName )
 throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); ++i )
-        if( pArray[i] == rServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 
 

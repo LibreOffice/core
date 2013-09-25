@@ -20,6 +20,7 @@
 #include "requeststringresolver.hxx"
 #include "iahndl.hxx"
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun;
 
@@ -48,12 +49,7 @@ UUIInteractionRequestStringResolver::supportsService(
         OUString const & rServiceName)
     throw (star::uno::RuntimeException)
 {
-    star::uno::Sequence< OUString >
-        aNames(getSupportedServiceNames_static());
-    for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
-        if (aNames[i] == rServiceName)
-            return true;
-    return false;
+    return cppu::supportsService(this, rServiceName);
 }
 
 star::uno::Sequence< OUString > SAL_CALL

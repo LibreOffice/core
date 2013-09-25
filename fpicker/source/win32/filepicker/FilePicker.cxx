@@ -20,6 +20,7 @@
 #include <tchar.h>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
 #include "FilePicker.hxx"
@@ -713,20 +714,11 @@ OUString SAL_CALL CFilePicker::getImplementationName()
     return OUString(RTL_CONSTASCII_USTRINGPARAM(FILE_PICKER_IMPL_NAME));
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL CFilePicker::supportsService(const OUString& ServiceName)
     throw(uno::RuntimeException )
 {
-    uno::Sequence <OUString> SupportedServicesNames = FilePicker_getSupportedServiceNames();
-
-    for (sal_Int32 n = SupportedServicesNames.getLength(); n--;)
-        if (SupportedServicesNames[n] == ServiceName)
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // -------------------------------------------------

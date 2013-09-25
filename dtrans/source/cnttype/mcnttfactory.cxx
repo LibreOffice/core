@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <cppuhelper/supportsservice.hxx>
 #include "mcnttfactory.hxx"
 #include "mcnttype.hxx"
 
@@ -77,20 +78,11 @@ OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     return OUString( MIMECONTENTTYPEFACTORY_IMPL_NAME );
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
-    Sequence < OUString > SupportedServicesNames = MimeContentTypeFactory_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // -------------------------------------------------

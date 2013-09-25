@@ -26,6 +26,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -739,16 +740,8 @@ OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
 sal_Bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    osl::MutexGuard aGuard( GetLinguMutex() );
-
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
 
 uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
         throw(RuntimeException)

@@ -38,6 +38,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
@@ -1117,16 +1118,7 @@ OUString SAL_CALL SvtFilePicker::getImplementationName() throw( RuntimeException
 /* XServiceInfo */
 sal_Bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString* pArray = seqServiceNames.getConstArray();
-    for ( sal_Int32 i = 0; i < seqServiceNames.getLength(); i++ )
-    {
-        if ( sServiceName == pArray[i] )
-        {
-            return sal_True ;
-        }
-    }
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */

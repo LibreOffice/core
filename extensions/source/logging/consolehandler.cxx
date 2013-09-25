@@ -32,6 +32,7 @@
 
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <stdio.h>
 
@@ -276,14 +277,7 @@ namespace logging
     //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
-        for (   const OUString* pServiceNames = aServiceNames.getConstArray();
-                pServiceNames != aServiceNames.getConstArray() + aServiceNames.getLength();
-                ++pServiceNames
-            )
-            if ( _rServiceName == *pServiceNames )
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, _rServiceName);
     }
 
     //--------------------------------------------------------------------

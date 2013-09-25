@@ -23,6 +23,7 @@
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include "../misc/ImplHelper.hxx"
 
 #if defined _MSC_VER
@@ -214,20 +215,11 @@ OUString SAL_CALL CDataFormatTranslator::getImplementationName(  )
     return OUString( IMPL_NAME );
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL CDataFormatTranslator::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
-    Sequence < OUString > SupportedServicesNames = DataFormatTranslator_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // -------------------------------------------------

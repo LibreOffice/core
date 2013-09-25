@@ -20,6 +20,7 @@
 #include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <comphelper/processfactory.hxx>
@@ -193,17 +194,7 @@ namespace drawinglayer
 
         sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName) throw(uno::RuntimeException)
         {
-            const uno::Sequence< OUString > aServices(XPrimitive2DRenderer_getSupportedServiceNames());
-
-            for(sal_Int32 nService(0); nService < aServices.getLength(); nService++)
-            {
-                if(rServiceName == aServices[nService])
-                {
-                    return sal_True;
-                }
-            }
-
-            return sal_False;
+            return cppu::supportsService(this, rServiceName);
         }
 
         uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames() throw(uno::RuntimeException)
