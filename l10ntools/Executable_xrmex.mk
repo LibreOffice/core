@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_add_exception_objects,xrmex,\
 $(eval $(call gb_Executable_use_externals,xrmex,\
     boost_headers \
     libxml2 \
-    icudata \
     icuuc \
     icui18n \
     icu_headers \

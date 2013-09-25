@@ -23,7 +23,6 @@ $(eval $(call gb_Executable_use_externals,helpex,\
 	boost_headers \
 	icu_headers \
     libxml2 \
-	icudata \
     icuuc \
     icui18n \
 ))
