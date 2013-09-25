@@ -1208,7 +1208,7 @@ public:
                 {
                     EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
                     miNewCellsPos = maNewCells.set(
-                            miNewCellsPos, nDestRow-mnRowOffset, pObj);
+                            miNewCellsPos, nDestRow-mnRowOffset, pObj->Clone());
                 }
                 break;
                 case sc::element_type_formula:
