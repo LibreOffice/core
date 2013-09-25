@@ -535,7 +535,7 @@ namespace frm
                 {
                     // display the error and outta here
                     SQLContext aError;
-                    aError.Message = String( FRM_RES_STRING( RID_STR_SYNTAXERROR ) );
+                    aError.Message = FRM_RES_STRING( RID_STR_SYNTAXERROR );
                     aError.Details = sErrorMessage;
                     displayException( aError );
                     return sal_False;

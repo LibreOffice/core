@@ -249,17 +249,17 @@ namespace frm
                     ErrCode nResult = aFP.Execute();
                     if ( nResult == 0 )
                     {
-                        String sFileName = aFP.GetPath();
+                        OUString sFileName = aFP.GetPath();
                         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(
                             sFileName, ( bLoad ? STREAM_READ : STREAM_WRITE | STREAM_TRUNC ) | STREAM_SHARE_DENYALL
                         );
                         if ( pStream )
                         {
                             EETextFormat eFormat = EE_FORMAT_XML;
-                            String sFilter = aFP.GetCurrentFilter();
+                            OUString sFilter = aFP.GetCurrentFilter();
                             for ( size_t i = 0; i < SAL_N_ELEMENTS( aExportFormats ); ++i )
                             {
-                                if ( sFilter.EqualsAscii( aExportFormats[i].pDescription ) )
+                                if ( sFilter.equalsAscii( aExportFormats[i].pDescription ) )
                                 {
                                     eFormat = aExportFormats[i].eFormat;
                                     break;

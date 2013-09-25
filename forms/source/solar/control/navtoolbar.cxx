@@ -55,11 +55,11 @@ namespace frm
                 || ( _nFeatureId == LID_RECORD_FILLER );
         }
 
-        static String getLabelString( sal_uInt16 _nResId )
+        static OUString getLabelString( sal_uInt16 _nResId )
         {
-            String sLabel = OUString( " " );
-            sLabel += String( FRM_RES_STRING( _nResId ) );
-            sLabel += OUString( " " );
+            OUString sLabel( " " );
+            sLabel += FRM_RES_STRING( _nResId );
+            sLabel += " ";
             return sLabel;
         }
 
@@ -294,8 +294,8 @@ namespace frm
             {   // it's _not_ a separator
 
                 // insert the entry
-                m_pToolbar->InsertItem( pSupportedFeatures->nId, String(), pSupportedFeatures->bRepeat ? TIB_REPEAT : 0 );
-                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, String() );  // TODO
+                m_pToolbar->InsertItem( pSupportedFeatures->nId, OUString(), pSupportedFeatures->bRepeat ? TIB_REPEAT : 0 );
+                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, OUString() );  // TODO
 
                 if ( !isArtificialItem( pSupportedFeatures->nId ) )
                 {
@@ -622,7 +622,7 @@ namespace frm
     //---------------------------------------------------------------------
     void NavigationToolBar::adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
-        String sItemText;
+        OUString sItemText;
         switch ( _nItemId )
         {
         case LID_RECORD_LABEL:
@@ -634,11 +634,11 @@ namespace frm
             break;
 
         case FormFeature::MoveAbsolute:
-            sItemText = OUString( "12345678" );
+            sItemText = "12345678";
             break;
 
         case FormFeature::TotalRecords:
-            sItemText = OUString( "123456" );
+            sItemText = "123456";
             break;
         }
 

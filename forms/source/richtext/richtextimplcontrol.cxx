@@ -468,7 +468,7 @@ namespace frm
             {
                 m_pViewport->Push( PUSH_FONT );
                 m_pViewport->SetFont( m_pEngine->GetStandardFont(0) );
-                nFontWidth = m_pViewport->GetTextWidth( String( "x" ) );
+                nFontWidth = m_pViewport->GetTextWidth( "x" );
                 m_pViewport->Pop();
             }
             // ... is the scroll size for the horizontal scrollbar

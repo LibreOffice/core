@@ -104,19 +104,19 @@ void OCurrencyModel::implConstruct()
             switch ( aLocaleInfo.getCurrPositiveFormat() )
             {
                 case 0: // $1
-                    sCurrencySymbol = String(aLocaleInfo.getCurrSymbol());
+                    sCurrencySymbol = aLocaleInfo.getCurrSymbol();
                     bPrependCurrencySymbol = sal_True;
                     break;
                 case 1: // 1$
-                    sCurrencySymbol = String(aLocaleInfo.getCurrSymbol());
+                    sCurrencySymbol = aLocaleInfo.getCurrSymbol();
                     bPrependCurrencySymbol = sal_False;
                     break;
                 case 2: // $ 1
-                    sCurrencySymbol = OUString(String(aLocaleInfo.getCurrSymbol())) + OUString(" ");
+                    sCurrencySymbol = aLocaleInfo.getCurrSymbol() + " ";
                     bPrependCurrencySymbol = sal_True;
                     break;
                 case 3: // 1 $
-                    sCurrencySymbol = OUString(" ") + OUString(String(aLocaleInfo.getCurrSymbol()));
+                    sCurrencySymbol = " " + aLocaleInfo.getCurrSymbol();
                     bPrependCurrencySymbol = sal_False;
                     break;
             }

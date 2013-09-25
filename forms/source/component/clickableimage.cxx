@@ -688,7 +688,7 @@ namespace frm
                 pImgProd->SetImage( sURL );
             else
                 // caution: the medium may be NULL if somebody gave us a invalid URL to work with
-                pImgProd->SetImage(String());
+                pImgProd->SetImage(OUString());
             m_bDownloading = sal_False;
             return;
         }
@@ -702,7 +702,7 @@ namespace frm
         }
         else
         {
-            pImgProd->SetImage(String());
+            pImgProd->SetImage(OUString());
             delete m_pMedium;
             m_pMedium = 0;
             m_bDownloading = sal_False;
@@ -715,7 +715,7 @@ namespace frm
         if (m_pMedium || rURL.isEmpty())
         {
             // Den Stream am Producer freigeben, bevor das Medium geloscht wird.
-            GetImageProducer()->SetImage(String());
+            GetImageProducer()->SetImage(OUString());
             delete m_pMedium;
             m_pMedium = NULL;
         }
