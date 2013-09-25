@@ -1776,19 +1776,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
 }
 
-WW8Stream::Pointer_t
-WW8DocumentFactory::createStream(uno::Reference<uno::XComponentContext> rContext,
-                                 uno::Reference<io::XInputStream> rStream)
-{
-    return WW8Stream::Pointer_t(new WW8StreamImpl(rContext, rStream));
-}
-
-WW8Document *
-WW8DocumentFactory::createDocument(WW8Stream::Pointer_t rpStream)
-{
-    return new WW8DocumentImpl(rpStream);
-}
-
 writerfilter::Reference<Properties>::Pointer_t
 WW8SED::get_sepx()
 {

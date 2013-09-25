@@ -416,17 +416,6 @@ public:
     virtual WW8DocumentIterator::Pointer_t end() = 0;
 };
 
-class WRITERFILTER_DOCTOK_DLLPUBLIC WW8DocumentFactory
-{
-public:
-    static WW8Stream::Pointer_t
-    createStream(uno::Reference<uno::XComponentContext> rContext,
-                 uno::Reference<io::XInputStream> rStream);
-
-    static WW8Document *
-    createDocument(WW8Stream::Pointer_t rpStream);
-};
-
 }}
 
 #endif // INCLUDED_WW8_DOCUMENT_HXX

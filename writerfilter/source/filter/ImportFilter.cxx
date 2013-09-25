@@ -167,13 +167,6 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             aVbaProject.importVbaProject( *xVbaPrjStrg, gHelper );
         }
     }
-    else
-    {
-        writerfilter::doctok::WW8Stream::Pointer_t pDocStream = writerfilter::doctok::WW8DocumentFactory::createStream(m_xContext, xInputStream);
-        writerfilter::doctok::WW8Document::Pointer_t pDocument(writerfilter::doctok::WW8DocumentFactory::createDocument(pDocStream));
-
-        pDocument->resolve(*pStream);
-    }
 
     pStream.reset();
 #ifdef DEBUG_IMPORT
