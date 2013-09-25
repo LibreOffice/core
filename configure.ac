@@ -509,7 +509,6 @@ cygwin*|interix*|mingw32*)
     test_xrender=no
     test_freetype=no
     test_fontconfig=no
-    enable_orcus=no
     _os=WINNT
 
     DLLPOST=".dll"
