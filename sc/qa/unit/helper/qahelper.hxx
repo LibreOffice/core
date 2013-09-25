@@ -97,6 +97,8 @@ std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange);
 
 std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList);
 
+std::ostream& operator<<(std::ostream& rStrm, const Color& rColor);
+
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling
 // wrappers here and there (and then having to handle the Android (and

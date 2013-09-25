@@ -56,6 +56,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
@@ -3854,6 +3855,25 @@ void Test::testDeleteCol()
     pDoc->DeleteCol(0, 0, MAXROW, 0, 1, 1);
 
     CPPUNIT_ASSERT(m_pDoc->GetNotes(0)->empty());
+    pDoc->DeleteTab(0);
+}
+
+void Test::testDeleteArea()
+{
+    ScDocument* pDoc = getDocShell().GetDocument();
+    pDoc->InsertTab(0, "Test");
+
+    pDoc->SetValue(0,0,0,3.2);
+    pDoc->ApplyAttr(0,0,0,SvxBrushItem(Color(COL_LIGHTRED), ATTR_BACKGROUND));
+
+    ScMarkData aMark;
+    ScRange aRange(0,0,0,0,0,0);
+    aMark.SetMarkArea(aRange);
+    pDoc->DeleteArea(0,0,0,0,aMark, IDF_CONTENTS);
+    const SfxPoolItem* pItem = pDoc->GetAttr(0,0,0,ATTR_BACKGROUND);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL(Color(COL_LIGHTRED), static_cast<const SvxBrushItem*>(pItem)->GetColor());
+
     pDoc->DeleteTab(0);
 }
 

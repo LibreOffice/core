@@ -55,6 +55,12 @@ std::ostream& operator<<(std::ostream& rStrm, const ScRangeList& rList)
     return rStrm;
 }
 
+std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Color: R:" << rColor.GetRed() << " G:" << rColor.GetGreen() << " B: << rColor.GetBlue()";
+    return rStrm;
+}
+
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
