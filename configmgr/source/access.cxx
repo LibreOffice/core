@@ -2167,9 +2167,10 @@ css::beans::Property Access::asProperty() {
         (css::beans::PropertyAttribute::BOUND | //TODO: correct for group/set?
          css::beans::PropertyAttribute::CONSTRAINED |
          (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |
-         (getRootAccess()->isUpdate()
-          ? (removable ? css::beans::PropertyAttribute::REMOVABLE : 0)
-          : css::beans::PropertyAttribute::READONLY))); //TODO: MAYBEDEFAULT
+         (getRootAccess()->isUpdate() && removable
+          ? css::beans::PropertyAttribute::REMOVABLE : 0) |
+         (!getRootAccess()->isUpdate() || p->getFinalized() != Data::NO_LAYER
+          ? css::beans::PropertyAttribute::READONLY : 0))); //TODO: MAYBEDEFAULT
 }
 
 void Access::checkFinalized() {
