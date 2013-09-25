@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,desktop_scripts_install,$(SRCDIR)/desktop/scrip
 
 $(eval $(call gb_Package_set_outdir,desktop_scripts_install,$(INSTROOT)))
 
-ifneq ($(OS),WNT)
+ifeq (,$(filter MACOSX WNT,$(OS)))
 
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/gdbtrace,gdbtrace))
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/sbase,sbase.sh))
@@ -20,6 +20,11 @@ $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/s
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/simpress,simpress.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/smath,smath.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/swriter,swriter.sh))
+
+endif
+
+ifneq ($(OS),WNT)
+
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/unoinfo,unoinfo.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/unopkg,unopkg.sh))
 
