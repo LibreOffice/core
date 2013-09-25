@@ -367,7 +367,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             }
             else
             {
-                OSL_ENSURE( pArgs->Count(), "SfxBug ItemSet is empty");
+                SAL_WARN_IF( !pArgs->Count(), "sw.ui", "SfxBug ItemSet is empty" );
 
                 SwWrtShell* pShell = GetWrtShell();
                 if( SFX_ITEM_SET == pArgs->GetItemState(nSlot, sal_False, &pItem ))
@@ -604,7 +604,7 @@ sal_uInt16 SwDocShell::Edit(
     SwWrtShell* pActShell,
     const sal_Bool bBasic )
 {
-    OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
+    assert( GetWrtShell() );
     SfxStyleSheetBase *pStyle = 0;
 
     sal_uInt16 nRet = nMask;
@@ -705,7 +705,7 @@ sal_uInt16 SwDocShell::Edit(
     else
     {
         pStyle = mxBasePool->Find( rName, (SfxStyleFamily)nFamily );
-        OSL_ENSURE(pStyle, "Vorlage nicht gefunden");
+        SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
     }
 
     if(!pStyle)
@@ -743,11 +743,11 @@ sal_uInt16 SwDocShell::Edit(
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialogdiet fail!");
+        assert( pFact );
         SfxAbstractApplyTabDialog* pDlg = pFact->CreateTemplateDialog(
                                                     0, *(xTmp.get()), nFamily, sPage,
                                                     pActShell ? pActShell : pWrtShell, bNew);
-        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+        assert( pDlg );
         ApplyStyle aApplyStyleHelper(*this, bNew, pStyle, nRet, xTmp, nFamily, pDlg, mxBasePool, bModified);
         pDlg->SetApplyHdl(LINK(&aApplyStyleHelper, ApplyStyle, ApplyHdl));
 
@@ -818,7 +818,7 @@ sal_uInt16 SwDocShell::Delete(const String &rName, sal_uInt16 nFamily)
 
     if(pStyle)
     {
-        OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
+        assert( GetWrtShell() );
 
         GetWrtShell()->StartAllAction();
         mxBasePool->Remove(pStyle);
@@ -835,7 +835,7 @@ sal_uInt16 SwDocShell::Hide(const String &rName, sal_uInt16 nFamily, bool bHidde
 
     if(pStyle)
     {
-        OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
+        assert( GetWrtShell() );
 
         GetWrtShell()->StartAllAction();
         rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
@@ -854,14 +854,14 @@ sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
     SwDocStyleSheet* pStyle =
         (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
-    OSL_ENSURE(pStyle, "Where's the StyleSheet");
+    SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
 
     if(!pStyle)
         return sal_False;
 
     SwWrtShell *pSh = pShell ? pShell : GetWrtShell();
 
-    OSL_ENSURE( pSh, "No Shell, no Styles");
+    assert( pSh );
 
     pSh->StartAllAction();
 
@@ -913,7 +913,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
 // start watering-can
 sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
 {
-    OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
+    assert( GetWrtShell() );
 
     SwEditWin& rEdtWin = pView->GetEditWin();
     SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
@@ -930,7 +930,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
         SwDocStyleSheet* pStyle =
             (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
-        OSL_ENSURE (pStyle, "Where's the StyleSheet");
+        SAL_WARN_IF( !pStyle, "sw.ui", "Where's the StyleSheet" );
 
         if(!pStyle) return nFamily;
 
@@ -968,7 +968,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
 sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell)
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
-    OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
+    assert( pCurrWrtShell );
 
     SwDocStyleSheet* pStyle =
         (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
