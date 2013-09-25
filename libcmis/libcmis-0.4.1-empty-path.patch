@@ -1,0 +1,13 @@
+diff --git src/libcmis/document.cxx src/libcmis/document.cxx
+index 1af0d63..7ecfd24 100644
+--- src/libcmis/document.cxx
++++ src/libcmis/document.cxx
+@@ -44,6 +44,8 @@ namespace libcmis
+                  it != parents.end(); ++it )
+             {
+                 string path = ( *it )->getPath( );
++                if ( path.empty() )
++                    continue;
+                 if ( path[path.size() - 1] != '/' )
+                     path += "/";
+                 path += getName( );
