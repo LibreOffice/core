@@ -40,8 +40,8 @@ class PasswordDialog : public ModalDialog
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
     FixedLine       aFixedLine1;
-    sal_uInt16          nMinLen;
-    String          aPasswdMismatch;
+    sal_uInt16      nMinLen;
+    OUString        aPasswdMismatch;
 
 
     DECL_LINK(OKHdl_Impl, void *);
@@ -51,7 +51,7 @@ public:
             bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
 
     void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }
-    String          GetPassword() const { return aEDPassword.GetText(); }
+    OUString        GetPassword() const { return aEDPassword.GetText(); }
 
 private:
     ::com::sun::star::task::PasswordRequestMode     nDialogMode;

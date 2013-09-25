@@ -315,7 +315,7 @@ void LoginDialog::SetUseSystemCredentials( sal_Bool bUse )
 
 void LoginDialog::ClearPassword()
 {
-    aPasswordED.SetText( String() );
+    aPasswordED.SetText( OUString() );
 
     if ( aNameED.GetText().isEmpty() )
         aNameED.GrabFocus();
@@ -325,7 +325,7 @@ void LoginDialog::ClearPassword()
 
 void LoginDialog::ClearAccount()
 {
-    aAccountED.SetText( String() );
+    aAccountED.SetText( OUString() );
     aAccountED.GrabFocus();
 };
 

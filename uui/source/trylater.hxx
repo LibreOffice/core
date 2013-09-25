@@ -24,7 +24,7 @@
 class TryLaterQueryBox : public MessBox
 {
 public:
-    TryLaterQueryBox( Window* pParent, ResMgr* pResMgr, const String& aMessage );
+    TryLaterQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage );
     ~TryLaterQueryBox();
 };
 

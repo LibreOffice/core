@@ -20,7 +20,7 @@
 #include "ids.hrc"
 #include "trylater.hxx"
 
-TryLaterQueryBox::TryLaterQueryBox( Window* pParent, ResMgr* pResMgr, const String& aMessage ) :
+TryLaterQueryBox::TryLaterQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage ) :
     MessBox(pParent, 0,
             ResId(STR_TRYLATER_TITLE, *pResMgr).toString(),
             aMessage )

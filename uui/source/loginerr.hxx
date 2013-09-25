@@ -35,14 +35,14 @@
 class LoginErrorInfo
 {
 private:
-    String m_aTitle;
-    String m_aServer;
-    String m_aAccount;
-    String m_aUserName;
-    String m_aPassword;
-    String m_aPasswordToModify;
-    String m_aPath;
-    String m_aErrorText;
+    OUString m_aTitle;
+    OUString m_aServer;
+    OUString m_aAccount;
+    OUString m_aUserName;
+    OUString m_aPassword;
+    OUString m_aPasswordToModify;
+    OUString m_aPath;
+    OUString m_aErrorText;
     sal_uInt8   m_nFlags;
     sal_uInt16 m_nRet;
     bool   m_bRecommendToOpenReadonly;
@@ -54,15 +54,15 @@ public:
                     {
                     }
 
-    const String&   GetTitle() const                    { return m_aTitle; }
-    const String&   GetServer() const                   { return m_aServer; }
-    const String&   GetAccount() const                  { return m_aAccount; }
-    const String&   GetUserName() const                 { return m_aUserName; }
-    const String&   GetPassword() const                 { return m_aPassword; }
-    const String&   GetPasswordToModify() const         { return m_aPasswordToModify; }
-    bool            IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
-    const String&   GetPath() const                     { return m_aPath; }
-    const String&   GetErrorText() const                { return m_aErrorText; }
+    const OUString&   GetTitle() const                    { return m_aTitle; }
+    const OUString&   GetServer() const                   { return m_aServer; }
+    const OUString&   GetAccount() const                  { return m_aAccount; }
+    const OUString&   GetUserName() const                 { return m_aUserName; }
+    const OUString&   GetPassword() const                 { return m_aPassword; }
+    const OUString&   GetPasswordToModify() const         { return m_aPasswordToModify; }
+    bool              IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
+    const OUString&   GetPath() const                     { return m_aPath; }
+    const OUString&   GetErrorText() const                { return m_aErrorText; }
     sal_Bool            GetCanRememberPassword() const      { return ( m_nFlags & LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD ); }
     sal_Bool            GetIsRememberPersistent() const     { return ( m_nFlags & LOGINERROR_FLAG_REMEMBER_PERSISTENT ); }
     sal_Bool            GetIsRememberPassword() const       { return ( m_nFlags & LOGINERROR_FLAG_IS_REMEMBER_PASSWORD ); }
@@ -75,23 +75,23 @@ public:
     sal_uInt8            GetFlags() const        { return m_nFlags; }
     sal_uInt16          GetResult() const       { return m_nRet; }
 
-    void            SetTitle( const String& aTitle )
+    void            SetTitle( const OUString& aTitle )
                     { m_aTitle = aTitle; }
-    void            SetServer( const String& aServer )
+    void            SetServer( const OUString& aServer )
                     { m_aServer = aServer; }
-    void            SetAccount( const String& aAccount )
+    void            SetAccount( const OUString& aAccount )
                     { m_aAccount = aAccount; }
-    void            SetUserName( const String& aUserName )
+    void            SetUserName( const OUString& aUserName )
                     { m_aUserName = aUserName; }
-    void            SetPassword( const String& aPassword )
+    void            SetPassword( const OUString& aPassword )
                     { m_aPassword = aPassword; }
-    void            SetPasswordToModify( const String& aPassword )
+    void            SetPasswordToModify( const OUString& aPassword )
                     { m_aPasswordToModify = aPassword; }
     void            SetRecommendToOpenReadonly( bool bVal )
                     { m_bRecommendToOpenReadonly = bVal; }
-    void            SetPath( const String& aPath )
+    void            SetPath( const OUString& aPath )
                     { m_aPath = aPath; }
-    void            SetErrorText( const String& aErrorText )
+    void            SetErrorText( const OUString& aErrorText )
                     { m_aErrorText = aErrorText; }
     void            SetFlags( sal_uInt8 nFlags )
                     { m_nFlags = nFlags; }

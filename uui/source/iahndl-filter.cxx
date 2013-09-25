@@ -148,7 +148,7 @@ handleNoSuchFilterRequest_(
                 OUString("Name"), OUString());
             aPair.sUI       = lProps.getUnpackedValueOrDefault(
                  OUString("UIName"), OUString());
-            if ( (!aPair.sInternal.Len()) || (!aPair.sUI.Len() ) )
+            if ( aPair.sInternal.isEmpty() || aPair.sUI.isEmpty() )
             {
                continue;
             }

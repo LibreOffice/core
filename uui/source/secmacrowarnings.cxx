@@ -45,19 +45,22 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    String GetContentPart( const String& _rRawString, const String& _rPartId )
+    OUString GetContentPart( const OUString& _rRawString, const OUString& _rPartId )
     {
-        String      s;
+        OUString      s;
 
-        xub_StrLen  nContStart = _rRawString.Search( _rPartId );
-        if( nContStart != STRING_NOTFOUND )
+        sal_Int32  nContStart = _rRawString.indexOf( _rPartId );
+        if( nContStart != -1 )
         {
-            nContStart = nContStart + _rPartId.Len();
+            nContStart = nContStart + _rPartId.getLength();
             ++nContStart;                   // now it's start of content, directly after Id
 
-            xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+            sal_Int32  nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
 
-            s = String( _rRawString, nContStart, nContEnd - nContStart );
+            if ( nContEnd != -1 )
+                s = _rRawString.copy( nContStart, nContEnd - nContStart );
+            else
+                s = _rRawString.copy( nContStart );
         }
 
         return s;
@@ -103,7 +106,7 @@ short MacroWarning::Execute()
     return ModalDialog::Execute();
 }
 
-void MacroWarning::SetDocumentURL( const String& rDocURL )
+void MacroWarning::SetDocumentURL( const OUString& rDocURL )
 {
     maDocNameFI.SetText( rDocURL );
 }
@@ -222,10 +225,10 @@ void MacroWarning::InitControls()
     }
 
     // check if some buttontexts are to wide
-    String sText = maViewSignsBtn.GetText();
+    OUString sText = maViewSignsBtn.GetText();
     long nTxtW = maViewSignsBtn.GetTextWidth( sText );
     const long nOffset = 12;
-    if ( sText.Search( '~' ) == STRING_NOTFOUND )
+    if ( sText.indexOf( '~' ) == -1 )
         nTxtW += nOffset;
     long nBtnW = maViewSignsBtn.GetSizePixel().Width();
     if ( nTxtW >= nBtnW )
@@ -245,13 +248,13 @@ void MacroWarning::InitControls()
         maSignsFI.SetSizePixel( aNewSize );
     }
     // if the button text (we compare with the longest of both) is too wide, then broaden the buttons
-    String sText1 = maEnableBtn.GetText();
+    OUString sText1 = maEnableBtn.GetText();
     long nTxtW1 = maEnableBtn.GetTextWidth( sText1 );
-    if ( sText1.Search( '~' ) == STRING_NOTFOUND )
+    if ( sText1.indexOf( '~' ) == -1 )
         nTxtW1 += nOffset;
-    String sText2 = maDisableBtn.GetText();
+    OUString sText2 = maDisableBtn.GetText();
     long nTxtW2 = maDisableBtn.GetTextWidth( sText2 );
-    if ( sText2.Search( '~' ) == STRING_NOTFOUND )
+    if ( sText2.indexOf( '~' ) == -1 )
         nTxtW2 += nOffset;
     nTxtW = std::max( nTxtW1, nTxtW2 );
     nBtnW = maEnableBtn.GetSizePixel().Width();
@@ -334,12 +337,12 @@ void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage 
     {
         mpInfos = &rInfos;
         OUString aCN_Id("CN");
-        String      s;
+        OUString s;
         s = GetContentPart( rInfos[ 0 ].Signer->getSubjectName(), aCN_Id );
 
         for( sal_Int32 i = 1 ; i < nCnt ; ++i )
         {
-            s.AppendAscii( "\n" );
+            s += "\n";
             s += GetContentPart( rInfos[ i ].Signer->getSubjectName(), aCN_Id );
         }
 
@@ -354,7 +357,7 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     if( mxCert.is() )
     {
         OUString aCN_Id("CN");
-        String  s;
+        OUString s;
         s = GetContentPart( mxCert->getSubjectName(), aCN_Id );
         maSignsFI.SetText( s );
         maViewSignsBtn.Enable();

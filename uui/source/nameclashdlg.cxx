@@ -71,7 +71,7 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
     maBtnRename.SetClickHdl( aLink );
     maBtnCancel.SetClickHdl( aLink );
 
-    String aInfo;
+    OUString aInfo;
     if ( bAllowOverwrite )
     {
         aInfo = ResId(STR_RENAME_OR_REPLACE, *pResMgr).toString();
@@ -88,8 +88,8 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
 
     maSameName = ResId(STR_SAME_NAME_USED, *pResMgr).toString();
 
-    aInfo.SearchAndReplaceAscii( "%NAME", rClashingName );
-    aInfo.SearchAndReplaceAscii( "%FOLDER", aPath );
+    aInfo = aInfo.replaceFirst( "%NAME", rClashingName );
+    aInfo = aInfo.replaceFirst( "%FOLDER", aPath );
     maFTMessage.SetText( aInfo );
     if ( !rProposedNewName.isEmpty() )
         maEDNewName.SetText( rProposedNewName );

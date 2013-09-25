@@ -20,7 +20,7 @@
 #include "ids.hrc"
 #include "openlocked.hxx"
 
-OpenLockedQueryBox::OpenLockedQueryBox( Window* pParent, ResMgr* pResMgr, const String& aMessage ) :
+OpenLockedQueryBox::OpenLockedQueryBox( Window* pParent, ResMgr* pResMgr, const OUString& aMessage ) :
     MessBox(pParent, 0,
             ResId(STR_OPENLOCKED_TITLE, *pResMgr).toString(),
             aMessage )

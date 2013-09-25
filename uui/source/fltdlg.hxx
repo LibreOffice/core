@@ -36,8 +36,8 @@ namespace uui
 
 struct FilterNamePair
 {
-    String sInternal;
-    String sUI      ;
+    OUString sInternal;
+    OUString sUI      ;
 };
 
 typedef ::std::vector< FilterNamePair > FilterNameList   ;
@@ -49,14 +49,14 @@ class FilterDialog : public ModalDialog
     public:
              FilterDialog (       Window*            pParentWindow  ,
                                   ResMgr*            pResMgr        );
-        void SetURL       ( const String&            sURL           );
+        void SetURL       ( const OUString&          sURL           );
         void ChangeFilters( const FilterNameList*    pFilterNames   );
         bool AskForFilter (       FilterNameListPtr& pSelectedItem  );
 
     // helper (or hided functions!)
     private:
         short Execute() { return RET_CANCEL; };
-        String impl_buildUIFileName( const String& sURL );
+        OUString impl_buildUIFileName( const OUString& sURL );
 
     // member
     private:

@@ -72,9 +72,9 @@ executeLoginDialog(
         bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
 
         sal_uInt16 nFlags = 0;
-        if (rInfo.GetPath().Len() == 0)
+        if (rInfo.GetPath().isEmpty())
             nFlags |= LF_NO_PATH;
-        if (rInfo.GetErrorText().Len() == 0)
+        if (rInfo.GetErrorText().isEmpty())
             nFlags |= LF_NO_ERRORTEXT;
         if (!bAccount)
             nFlags |= LF_NO_ACCOUNT;
@@ -90,7 +90,7 @@ executeLoginDialog(
         boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         boost::scoped_ptr< LoginDialog > xDialog(
                 new LoginDialog( pParent, nFlags, rInfo.GetServer(), rRealm, xManager.get()));
-        if (rInfo.GetErrorText().Len() != 0)
+        if (!rInfo.GetErrorText().isEmpty())
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());
         if (bAccount)
@@ -353,12 +353,12 @@ handleAuthenticationRequest_(
               }
           }
           // Empty user name can not be valid:
-          else if (aInfo.GetUserName().Len() != 0)
+          else if (!aInfo.GetUserName().isEmpty())
           {
               uno::Sequence< OUString >
-                  aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
+                  aPassList(aInfo.GetAccount().isEmpty() ? 1 : 2);
               aPassList[0] = aInfo.GetPassword();
-              if (aInfo.GetAccount().Len() != 0)
+              if (!aInfo.GetAccount().isEmpty())
                   aPassList[1] = aInfo.GetAccount();
 
               if (aInfo.GetIsRememberPassword())
@@ -552,8 +552,8 @@ executePasswordDialog(
             pDialog->SetMinLen(0);
 
             rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
-            rInfo.SetPassword( bIsPasswordToModify ? String() : pDialog->GetPassword() );
-            rInfo.SetPasswordToModify( bIsPasswordToModify ? pDialog->GetPassword() : String() );
+            rInfo.SetPassword( bIsPasswordToModify ? OUString() : pDialog->GetPassword() );
+            rInfo.SetPasswordToModify( bIsPasswordToModify ? pDialog->GetPassword() : OUString() );
         }
     }
     catch (std::bad_alloc const &)

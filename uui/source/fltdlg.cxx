@@ -76,7 +76,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
     @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
-void FilterDialog::SetURL( const String& sURL )
+void FilterDialog::SetURL( const OUString& sURL )
 {
     // convert it and use given pure string as fallback if conversion failed
     m_ftURL.SetText( impl_buildUIFileName(sURL) );
@@ -142,8 +142,8 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     {
         if( ModalDialog::Execute() == RET_OK )
         {
-            String sEntry = m_lbFilters.GetSelectEntry();
-            if( sEntry.Len() > 0 )
+            OUString sEntry = m_lbFilters.GetSelectEntry();
+            if( !sEntry.isEmpty() )
             {
                 int nPos = m_lbFilters.GetSelectEntryPos();
                 if( nPos < (int)(m_pFilterNames->size()) )
@@ -183,7 +183,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
 
         sal_Int32 SAL_CALL queryStringWidth( const OUString& sString ) throw( ::com::sun::star::uno::RuntimeException )
         {
-            return (sal_Int32)(m_pDevice->GetTextWidth(String(sString)));
+            return (sal_Int32)(m_pDevice->GetTextWidth(sString));
         }
 
     private:
@@ -204,7 +204,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
     @onerror    We return given name without any changes.
     @threadsafe no
 *//*-*************************************************************************************************************/
-String FilterDialog::impl_buildUIFileName( const String& sName )
+OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
 {
     OUString sShortName( sName );
 

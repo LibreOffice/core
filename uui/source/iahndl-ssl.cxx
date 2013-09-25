@@ -52,23 +52,25 @@ using namespace com::sun::star;
 
 namespace {
 
-String
-getContentPart( const String& _rRawString )
+OUString
+getContentPart( const OUString& _rRawString )
 {
     // search over some parts to find a string
     static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };
-    String sPart;
+    OUString sPart;
     int i = 0;
     while ( aIDs[i] )
     {
-        String sPartId = OUString::createFromAscii( aIDs[i++] );
-        xub_StrLen nContStart = _rRawString.Search( sPartId );
-        if ( nContStart != STRING_NOTFOUND )
+        OUString sPartId = OUString::createFromAscii( aIDs[i++] );
+        sal_Int32 nContStart = _rRawString.indexOf( sPartId );
+        if ( nContStart != -1 )
         {
-            nContStart = nContStart + sPartId.Len();
-            xub_StrLen nContEnd
-                = _rRawString.Search( sal_Unicode( ',' ), nContStart );
-            sPart = String( _rRawString, nContStart, nContEnd - nContStart );
+            nContStart = nContStart + sPartId.getLength();
+            sal_Int32 nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
+            if ( nContEnd != -1 )
+                sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
+            else
+                sPart = _rRawString.copy( nContStart );
             break;
         }
     }

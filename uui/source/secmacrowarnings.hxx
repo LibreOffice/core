@@ -77,7 +77,7 @@ public:
 
     virtual short   Execute();
 
-    void    SetDocumentURL( const String& rDocURL );
+    void    SetDocumentURL( const OUString& rDocURL );
 
     void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore,
                         const OUString& aODFVersion,

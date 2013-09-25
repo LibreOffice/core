@@ -42,11 +42,11 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
         EndDialog( RET_OK );
     else
     {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
+        OUString aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
-        m_pEDMasterPasswordCrt->SetText( String() );
-        m_pEDMasterPasswordRepeat->SetText( String() );
+        m_pEDMasterPasswordCrt->SetText( OUString() );
+        m_pEDMasterPasswordRepeat->SetText( OUString() );
         m_pEDMasterPasswordCrt->GrabFocus();
     }
     return 1;
