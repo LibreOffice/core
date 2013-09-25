@@ -2060,7 +2060,7 @@
             </info>
           </maxInclusive>
         </constraints>
-        <value>10</value>
+        <value>25</value>
       </prop>
       <set oor:name="HelpBookmarks" oor:node-type="HistoryType">
         <info>
