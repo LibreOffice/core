@@ -4202,6 +4202,27 @@ void Test::testCondFormatInsertRow()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMixData()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue(1,0,0,2);
+    m_pDoc->SetValue(0,1,0,3);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,0,0,1,0,0), &aClipDoc);
+
+    ScDocument aMixDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,1,0,1,1,0), &aMixDoc);
+
+    pasteFromClip(m_pDoc, ScRange(0,1,0,1,1,0), &aClipDoc);
+    m_pDoc->MixDocument(ScRange(0,1,0,1,1,0), 1, false, &aMixDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,1,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,1,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
 {
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();

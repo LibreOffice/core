@@ -224,6 +224,8 @@ public:
     void testSharedFormulasCopyPaste();
     void testFormulaPosition();
 
+    void testMixData();
+
     /**
      * Make sure the sheet streams are invalidated properly.
      */
