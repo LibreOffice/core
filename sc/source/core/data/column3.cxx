@@ -1191,9 +1191,25 @@ public:
             switch (aPos.first->type)
             {
                 case sc::element_type_numeric:
+                {
+                    double fVal = sc::numeric_block::at(*aPos.first->data, aPos.second);
+                    miNewCellsPos = maNewCells.set(
+                            miNewCellsPos, nDestRow-mnRowOffset, fVal);
+                }
+                break;
                 case sc::element_type_string:
+                {
+                    OUString aVal = sc::string_block::at(*aPos.first->data, aPos.second);
+                    miNewCellsPos = maNewCells.set(
+                            miNewCellsPos, nDestRow-mnRowOffset, aVal);
+                }
+                break;
                 case sc::element_type_edittext:
-                    // Dont' do anything.
+                {
+                    EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
+                    miNewCellsPos = maNewCells.set(
+                            miNewCellsPos, nDestRow-mnRowOffset, pObj);
+                }
                 break;
                 case sc::element_type_formula:
                 {
