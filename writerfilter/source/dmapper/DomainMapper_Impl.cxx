@@ -2860,7 +2860,7 @@ void DomainMapper_Impl::CloseFieldCommand()
             OUString sCommand( pContext->GetCommand().trim() );
             sal_Int32 nSpaceIndex = sCommand.indexOf( ' ' );
             if( 0 <= nSpaceIndex )
-                sCommand = sCommand.copy( 0, nSpaceIndex );
+                sCommand = sCommand.copy(0, nSpaceIndex).toAsciiUpperCase();
 
             FieldConversionMap_t::iterator aIt = aFieldConversionMap.find(sCommand);
             if(aIt != aFieldConversionMap.end())
