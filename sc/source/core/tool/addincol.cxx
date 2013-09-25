@@ -49,6 +49,7 @@
 #include "scmod.hxx"
 #include "rangeseq.hxx"
 #include "funcdesc.hxx"
+#include "formulaopt.hxx"  //fdo50118
 
 using namespace com::sun::star;
 
@@ -218,6 +219,8 @@ void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
     nCallerPos = nNewPos;
 }
 
+//------------------------------------------------------------------------
+
 ScUnoAddInCollection::ScUnoAddInCollection() :
     nFuncCount( 0 ),
     ppFuncData( NULL ),
@@ -312,6 +315,8 @@ void ScUnoAddInCollection::Initialize()
 
     bInitialized = true;        // with or without functions
 }
+
+// -----------------------------------------------------------------------------
 
 static sal_uInt16 lcl_GetCategory( const OUString& rName )
 {
@@ -745,12 +750,22 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     uno::Reference<lang::XServiceName> xName( xInterface, uno::UNO_QUERY );
     if ( xAddIn.is() && xName.is() )
     {
-        //  AddIns must use the language for which the office is installed
-        lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
+        // fdo50118 when GetUseEnglishFunctionName() returns true, set the locale to en-US to get English function names
+        lang::Locale aLocale;
+        if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
+        {
+            aLocale.Language = "en";
+            aLocale.Country = "US";
+            aLocale.Variant = "";
+        }
+        else
+        {
+            aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+        }
         xAddIn->setLocale( aLocale );
 
         OUString aServiceName( xName->getServiceName() );
-        ScUnoAddInHelpIdGenerator aHelpIdGenerator( xName->getServiceName() );
+        ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName() );
 
         //! pass XIntrospection to ReadFromAddIn
 
@@ -1000,7 +1015,18 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
     if ( xLoc.is() )        // optional in new add-ins
     {
-        lang::Locale aLocale( Application::GetSettings().GetUILanguageTag().getLocale());
+        // fdo50118 when GetUseEnglishFunctionName() returns true, set the locale to en-US to get English function names
+        lang::Locale aLocale;
+        if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
+        {
+            aLocale.Language = "en";
+            aLocale.Country = "US";
+            aLocale.Variant = "";
+        }
+        else
+        {
+            aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+        }
         xLoc->setLocale( aLocale );
     }
 
@@ -1203,6 +1229,7 @@ void ScUnoAddInCollection::LocalizeString( OUString& rName )
         rName = iLook->second->GetUpperLocal();         //! upper?
 }
 
+
 long ScUnoAddInCollection::GetFuncCount()
 {
     if (!bInitialized)
@@ -1287,6 +1314,9 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     return true;
 }
+
+
+//------------------------------------------------------------------------
 
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
                                 long nParamCount ) :
