@@ -373,12 +373,28 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
             lbr.breakIndex = nStartPos;
             lbr.breakType = BreakType::WORDBOUNDARY;
         } else if (hOptions.rHyphenator.is()) { //Hyphenation break
-            Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
-                    WordType::DICTIONARY_WORD, false);
+            sal_Int32 boundary_with_punctuation = (line.aBreakIterator->next() != BreakIterator::DONE) ? line.aBreakIterator->current() : 0;
+            line.aBreakIterator->preceding(nStartPos + 1); // reset to check correct hyphenation of "word-word"
+
+            sal_Int32 nStartPosWordEnd = nStartPos;
+            while (line.aBreakIterator->current() < nStartPosWordEnd && u_ispunct((sal_uInt32)Text[nStartPosWordEnd])) // starting punctuation
+                nStartPosWordEnd --;
+
+            Boundary wBoundary = getWordBoundary( Text, nStartPosWordEnd, rLocale,
+                WordType::DICTIONARY_WORD, false);
+
+            nStartPosWordEnd = wBoundary.endPos + 1;
+            while (nStartPosWordEnd < Text.getLength() && (u_ispunct((sal_uInt32)Text[nStartPosWordEnd]))) // ending punctuation
+                nStartPosWordEnd ++;
+            nStartPosWordEnd = nStartPosWordEnd - wBoundary.endPos - 1;
+            if (hOptions.hyphenIndex - wBoundary.startPos < nStartPosWordEnd) nStartPosWordEnd = hOptions.hyphenIndex - wBoundary.startPos;
+#define SPACE 0x0020
+            while (boundary_with_punctuation > wBoundary.endPos && Text[--boundary_with_punctuation] == SPACE);
+            if (boundary_with_punctuation != 0) boundary_with_punctuation += 1 - wBoundary.endPos;
             uno::Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
             aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
                         wBoundary.endPos - wBoundary.startPos), rLocale,
-                    (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos), hOptions.aHyphenationOptions);
+                    (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos - nStartPosWordEnd), hOptions.aHyphenationOptions);
             if (aHyphenatedWord.is()) {
                 lbr.rHyphenatedWord = aHyphenatedWord;
                 if(wBoundary.startPos + aHyphenatedWord->getHyphenationPos() + 1 < nMinBreakPos )
@@ -386,6 +402,13 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
                 else
                     lbr.breakIndex = wBoundary.startPos; //aHyphenatedWord->getHyphenationPos();
                 lbr.breakType = BreakType::HYPHENATION;
+
+                // check not optimal hyphenation of "word-word" (word with hyphens)
+                if (lbr.breakIndex > -1 && wBoundary.startPos + aHyphenatedWord->getHyphenationPos() < line.aBreakIterator->current()) {
+                    lbr.breakIndex = line.aBreakIterator->current();
+                    lbr.breakType = BreakType::WORDBOUNDARY;
+                }
+
             } else {
                 lbr.breakIndex = line.aBreakIterator->preceding(nStartPos);
                 lbr.breakType = BreakType::WORDBOUNDARY;;
