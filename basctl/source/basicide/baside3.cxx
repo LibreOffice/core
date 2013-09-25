@@ -718,8 +718,8 @@ bool DialogWindow::SaveDialog()
     xFP->setDefaultName( OUString( GetName() ) );
 
     OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
-    xFP->appendFilter( aDialogStr, String( "*.xdl" ) );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
+    xFP->appendFilter( aDialogStr, OUString( "*.xdl" ) );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
     xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
@@ -966,8 +966,8 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
         xFP->setDisplayDirectory ( aCurPath );
 
     OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
-    xFP->appendFilter( aDialogStr, String( "*.xdl" ) );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
+    xFP->appendFilter( aDialogStr, OUString( "*.xdl" ) );
+    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
     xFP->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )

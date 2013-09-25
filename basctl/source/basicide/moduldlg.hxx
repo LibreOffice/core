@@ -65,8 +65,8 @@ public:
     NewObjectDialog (Window* pParent, ObjectMode::Mode, bool bCheckName = false);
     virtual ~NewObjectDialog ();
 
-    String      GetObjectName() const { return aEdit.GetText(); }
-    void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
+    OUString    GetObjectName() const { return aEdit.GetText(); }
+    void        SetObjectName( const OUString& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.getLength() ) );}
 };
 
 class GotoLineDialog : public ModalDialog
@@ -250,16 +250,16 @@ protected:
     void                DeleteCurrent();
     void                NewLib();
     void                InsertLib();
-    void                implExportLib( const String& aLibName, const String& aTargetURL,
+    void                implExportLib( const OUString& aLibName, const OUString& aTargetURL,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
     void                Export();
-    void                ExportAsPackage( const String& aLibName );
-    void                ExportAsBasic( const String& aLibName );
+    void                ExportAsPackage( const OUString& aLibName );
+    void                ExportAsBasic( const OUString& aLibName );
     void                EndTabDialog( sal_uInt16 nRet );
     void                FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
-    SvTreeListEntry*        ImpInsertLibEntry( const String& rLibName, sal_uLong nPos );
+    SvTreeListEntry*        ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos );
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
 

@@ -129,7 +129,7 @@ namespace basctl
     {
         static bool StringCompareLessThan( const OUString& lhs, const OUString& rhs )
         {
-            return ( lhs.compareToIgnoreAsciiCase( rhs ) < 0 );
+            return lhs.compareToIgnoreAsciiCase( rhs ) < 0;
         }
 
         class FilterDocuments : public docs::IDocumentDescriptorFilter

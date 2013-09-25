@@ -475,7 +475,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     if ( aDocument == m_aCurDocument && aLibName == m_aCurLibName )
                     {
                         m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
-                        m_aCurLibName = String();
+                        m_aCurLibName = "";
                         // no UpdateWindows!
                         if (SfxBindings* pBindings = GetBindingsPtr())
                             pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );
@@ -488,14 +488,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_NEWMODULE:
         {
-            ModulWindow* pWin = CreateBasWin( m_aCurDocument, m_aCurLibName, String() );
+            ModulWindow* pWin = CreateBasWin( m_aCurDocument, m_aCurLibName, OUString() );
             DBG_ASSERT( pWin, "New Module: Konnte Fenster nicht erzeugen!" );
             SetCurWindow( pWin, true );
         }
         break;
         case SID_BASICIDE_NEWDIALOG:
         {
-            DialogWindow* pWin = CreateDlgWin( m_aCurDocument, m_aCurLibName, String() );
+            DialogWindow* pWin = CreateDlgWin( m_aCurDocument, m_aCurLibName, OUString() );
             DBG_ASSERT( pWin, "New Module: Konnte Fenster nicht erzeugen!" );
             SetCurWindow( pWin, true );
         }

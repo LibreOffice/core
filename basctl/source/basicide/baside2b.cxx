@@ -142,34 +142,34 @@ void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
     pWin->SetLineColor( aOldLineColor );
 }
 
-void lcl_SeparateNameAndIndex( const String& rVName, String& rVar, String& rIndex )
+void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString& rIndex )
 {
     rVar = rVName;
-    rIndex.Erase();
-    sal_uInt16 nIndexStart = rVar.Search( '(' );
-    if ( nIndexStart != STRING_NOTFOUND )
+    rIndex = "";
+    sal_Int32 nIndexStart = rVar.indexOf( '(' );
+    if ( nIndexStart != -1 )
     {
-        sal_uInt16 nIndexEnd = rVar.Search( ')', nIndexStart );
-        if ( nIndexStart != STRING_NOTFOUND )
+        sal_Int32 nIndexEnd = rVar.indexOf( ')', nIndexStart );
+        if ( nIndexStart != -1 )
         {
-            rIndex = rVar.Copy( nIndexStart+1, nIndexEnd-nIndexStart-1 );
-            rVar.Erase( nIndexStart );
+            rIndex = rVar.copy( nIndexStart+1, nIndexEnd-nIndexStart-1 );
+            rVar = rVar.copy( 0, nIndexStart );
             rVar = comphelper::string::stripEnd(rVar, ' ');
             rIndex = comphelper::string::strip(rIndex, ' ');
         }
     }
 
-    if ( rVar.Len() )
+    if ( !rVar.isEmpty() )
     {
-        sal_uInt16 nLastChar = rVar.Len()-1;
-        if ( strchr( cSuffixes, rVar.GetChar( nLastChar ) ) )
-            rVar.Erase( nLastChar, 1 );
+        sal_uInt16 nLastChar = rVar.getLength()-1;
+        if ( strchr( cSuffixes, rVar[ nLastChar ] ) )
+            rVar = rVar.replaceAt( nLastChar, 1, "" );
     }
-    if ( rIndex.Len() )
+    if ( !rIndex.isEmpty() )
     {
-        sal_uInt16 nLastChar = rIndex.Len()-1;
-        if ( strchr( cSuffixes, rIndex.GetChar( nLastChar ) ) )
-            rIndex.Erase( nLastChar, 1 );
+        sal_uInt16 nLastChar = rIndex.getLength()-1;
+        if ( strchr( cSuffixes, rIndex[ nLastChar ] ) )
+            rIndex = rIndex.replaceAt( nLastChar, 1, "" );
     }
 }
 
@@ -209,7 +209,7 @@ private:
 class EditorWindow::ProgressInfo : public SfxProgress
 {
 public:
-    ProgressInfo (SfxObjectShell* pObjSh, String const& rText, sal_uLong nRange) :
+    ProgressInfo (SfxObjectShell* pObjSh, OUString const& rText, sal_uLong nRange) :
         SfxProgress(pObjSh, rText, nRange),
         nCurState(0)
     { }
@@ -275,7 +275,7 @@ EditorWindow::~EditorWindow()
 
 OUString EditorWindow::GetWordAtCursor()
 {
-    String aWord;
+    OUString aWord;
 
     if ( pEditView )
     {
@@ -309,11 +309,11 @@ OUString EditorWindow::GetWordAtCursor()
 
             // Not the selected range, but at the CursorPosition,
             // if a word is partially selected.
-            if ( !aWord.Len() )
+            if ( aWord.isEmpty() )
                 aWord = pTextEngine->GetWord( rSelEnd );
 
             // Can be empty when full word selected, as Cursor behing it
-            if ( !aWord.Len() && pEditView->HasSelection() )
+            if ( aWord.isEmpty() && pEditView->HasSelection() )
                 aWord = pTextEngine->GetWord( rSelStart );
         }
     }
@@ -330,13 +330,13 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
         {
-            String aKeyword = GetWordAtCursor();
+            OUString aKeyword = GetWordAtCursor();
             Application::GetHelp()->SearchKeyword( aKeyword );
             bDone = true;
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
-            String aHelpText;
+            OUString aHelpText;
             Point aTopLeft;
             if ( StarBASIC::IsRunning() )
             {
@@ -345,12 +345,12 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 Point aDocPos = GetEditView()->GetDocPos( aWindowPos );
                 TextPaM aCursor = GetEditView()->GetTextEngine()->GetPaM(aDocPos, false);
                 TextPaM aStartOfWord;
-                String aWord = GetEditView()->GetTextEngine()->GetWord( aCursor, &aStartOfWord );
-                if ( aWord.Len() && !comphelper::string::isdigitAsciiString(aWord) )
+                OUString aWord = GetEditView()->GetTextEngine()->GetWord( aCursor, &aStartOfWord );
+                if ( !aWord.isEmpty() && !comphelper::string::isdigitAsciiString(aWord) )
                 {
-                    sal_uInt16 nLastChar =aWord.Len()-1;
-                    if ( strchr( cSuffixes, aWord.GetChar( nLastChar ) ) )
-                        aWord.Erase( nLastChar, 1 );
+                    sal_uInt16 nLastChar = aWord.getLength() - 1;
+                    if ( strchr( cSuffixes, aWord[ nLastChar ] ) )
+                        aWord = aWord.replaceAt( nLastChar, 1, "" );
                     SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
                     if (SbxVariable const* pVar = IsSbxVariable(pSBX))
                     {
@@ -364,13 +364,13 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                         else if ( (sal_uInt8)eType != (sal_uInt8)SbxEMPTY )
                         {
                             aHelpText = pVar->GetName();
-                            if ( !aHelpText.Len() )     // name is not copied with the passed parameters
+                            if ( aHelpText.isEmpty() )     // name is not copied with the passed parameters
                                 aHelpText = aWord;
-                            aHelpText += '=';
+                            aHelpText += "=";
                             aHelpText += pVar->GetOUString();
                         }
                     }
-                    if ( aHelpText.Len() )
+                    if ( !aHelpText.isEmpty() )
                     {
                         aTopLeft = GetEditView()->GetTextEngine()->PaMtoEditCursor( aStartOfWord ).BottomLeft();
                         aTopLeft = GetEditView()->GetWindowPos( aTopLeft );
@@ -1695,10 +1695,10 @@ void WatchWindow::Resize()
 
 struct WatchItem
 {
-    String          maName;
-    String          maDisplayName;
+    OUString        maName;
+    OUString        maDisplayName;
     SbxObjectRef    mpObject;
-    std::vector<String> maMemberList;
+    std::vector<OUString> maMemberList;
 
     SbxDimArrayRef  mpArray;
     int             nDimLevel;  // 0 = Root
@@ -1707,7 +1707,7 @@ struct WatchItem
 
     WatchItem*      mpArrayParentItem;
 
-    WatchItem (String const& rName):
+    WatchItem (OUString const& rName):
         maName(rName),
         nDimLevel(0),
         nDimCount(0),
@@ -1746,7 +1746,7 @@ SbxDimArray* WatchItem::GetRootArray( void )
 
 void WatchWindow::AddWatch( const OUString& rVName )
 {
-    String aVar, aIndex;
+    OUString aVar, aIndex;
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
     WatchItem* pWatchItem = new WatchItem(aVar);
 
@@ -1772,7 +1772,7 @@ bool WatchWindow::RemoveSelectedWatch()
         if ( pEntry )
             aXEdit.SetText( ((WatchItem*)pEntry->GetUserData())->maName );
         else
-            aXEdit.SetText( String() );
+            aXEdit.SetText( OUString() );
         if ( !aTreeListBox.GetEntryCount() )
             aRemoveWatchButton.Disable();
         return true;
@@ -1845,8 +1845,8 @@ IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
     {
         case KEY_RETURN:
         {
-            String aCurText( aXEdit.GetText() );
-            if ( aCurText.Len() )
+            OUString aCurText( aXEdit.GetText() );
+            if ( !aCurText.isEmpty() )
             {
                 AddWatch( aCurText );
                 aXEdit.SetSelection( Selection( 0, 0xFFFF ) );
@@ -1855,7 +1855,7 @@ IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
         break;
         case KEY_ESCAPE:
         {
-            aXEdit.SetText( String() );
+            aXEdit.SetText( OUString() );
         }
         break;
     }
@@ -1884,7 +1884,7 @@ StackWindow::StackWindow (Layout* pParent) :
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
     aTreeListBox.SetSelectionMode( NO_SELECTION );
-    aTreeListBox.InsertEntry( String(), 0, false, LIST_APPEND );
+    aTreeListBox.InsertEntry( OUString(), 0, false, LIST_APPEND );
     aTreeListBox.Show();
 
     SetText(IDEResId(RID_STR_STACKNAME).toString());
@@ -1996,7 +1996,7 @@ void StackWindow::UpdateCalls()
     else
     {
         aTreeListBox.SetSelectionMode( NO_SELECTION );
-        aTreeListBox.InsertEntry( String(), 0, false, LIST_APPEND );
+        aTreeListBox.InsertEntry( OUString(), 0, false, LIST_APPEND );
     }
 
     aTreeListBox.SetUpdateMode(true);
@@ -2176,8 +2176,8 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
         {
             SbxVariable* pVar = pProps->Get( i );
 
-            pItem->maMemberList.push_back(String(pVar->GetName()));
-            String const& rName = pItem->maMemberList.back();
+            pItem->maMemberList.push_back(pVar->GetName());
+            OUString const& rName = pItem->maMemberList.back();
             SvTreeListEntry* pChildEntry = SvTreeListBox::InsertEntry( rName, pEntry );
             pChildEntry->SetUserData(new WatchItem(rName));
         }
@@ -2241,7 +2241,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
     rbArrayElement = false;
 
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
-    String aVName( pItem->maName );
+    OUString aVName( pItem->maName );
 
     SvTreeListEntry* pParentEntry = GetParent( pEntry );
     WatchItem* pParentItem = pParentEntry ? (WatchItem*)pParentEntry->GetUserData() : NULL;
@@ -2302,13 +2302,13 @@ sal_Bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 
 sal_Bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
-    String aResult = comphelper::string::strip(rNewText, ' ');
+    OUString aResult = comphelper::string::strip(rNewText, ' ');
 
-    sal_uInt16 nResultLen = aResult.Len();
-    sal_Unicode cFirst = aResult.GetChar( 0 );
-    sal_Unicode cLast  = aResult.GetChar( nResultLen - 1 );
+    sal_uInt16 nResultLen = aResult.getLength();
+    sal_Unicode cFirst = aResult[0];
+    sal_Unicode cLast  = aResult[ nResultLen - 1 ];
     if( cFirst == '\"' && cLast == '\"' )
-        aResult = aResult.Copy( 1, nResultLen - 2 );
+        aResult = aResult.copy( 1, nResultLen - 2 );
 
     return aResult != aEditingRes && ImplBasicEntryEdited(pEntry, aResult);
 }
@@ -2361,7 +2361,7 @@ void implCollapseModifiedObjectEntry( SvTreeListEntry* pParent, WatchTreeListBox
     }
 }
 
-String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
+OUString implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
 {
     OUString aRetStr = getBasicTypeName( eType );
 
@@ -2418,10 +2418,10 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     while ( pEntry )
     {
         WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
-        String aVName( pItem->maName );
-        DBG_ASSERT( aVName.Len(), "Var? - Must not be empty!" );
-        String aWatchStr;
-        String aTypeStr;
+        OUString aVName( pItem->maName );
+        DBG_ASSERT( !aVName.isEmpty(), "Var? - Must not be empty!" );
+        OUString aWatchStr;
+        OUString aTypeStr;
         if ( pCurMethod )
         {
             bool bArrayElement;
@@ -2522,7 +2522,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )
                             {
                                 SbxVariable* pVar_ = pProps->Get( i );
-                                String aName( pVar_->GetName() );
+                                OUString aName( pVar_->GetName() );
                                 if( pItem->maMemberList[i] != aName )
                                 {
                                     bObjChanged = true;
@@ -2573,11 +2573,11 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         aWatchStr += aStrStr;
                     }
                 }
-                if( !aTypeStr.Len() )
+                if( aTypeStr.isEmpty() )
                 {
                     if( !pVar->IsFixed() )
                     {
-                        aTypeStr = OUString( "Variant/" );
+                        aTypeStr = "Variant/";
                     }
                     aTypeStr += getBasicTypeName( pVar->GetType() );
                 }

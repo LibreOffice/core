@@ -64,7 +64,7 @@ DlgEditor& DlgEdObj::GetDialogEditor ()
 //----------------------------------------------------------------------------
 
 DlgEdObj::DlgEdObj()
-          :SdrUnoObj(String(), false)
+          :SdrUnoObj(OUString(), false)
           ,bIsListening(false)
           ,pDlgEdForm( NULL )
 {
@@ -973,7 +973,7 @@ SdrObject* DlgEdObj::getFullDragClone() const
 {
     // no need to really add the clone for dragging, it's a temporary
     // object
-    SdrObject* pObj = new SdrUnoObj(String());
+    SdrObject* pObj = new SdrUnoObj(OUString());
     *pObj = *((const SdrUnoObj*)this);
 
     return pObj;

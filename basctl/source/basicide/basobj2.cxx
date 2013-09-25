@@ -107,7 +107,7 @@ bool IsValidSbxName( const OUString& rName )
 
 static bool StringCompareLessThan( const OUString& rStr1, const OUString& rStr2 )
 {
-    return (rStr1.compareToIgnoreAsciiCase( rStr2 ) < 0);
+    return rStr1.compareToIgnoreAsciiCase( rStr2 ) < 0;
 }
 
 //----------------------------------------------------------------------------
@@ -127,7 +127,7 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
     }
 
     // create a sorted list of dialog library names
-    ::std::vector<String> aDlgLibList;
+    ::std::vector<OUString> aDlgLibList;
     if ( xDlgLibContainer.is() )
     {
         Sequence< OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
@@ -139,9 +139,9 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
     }
 
     // merge both lists
-    ::std::vector<String> aLibList( aModLibList.size() + aDlgLibList.size() );
+    ::std::vector<OUString> aLibList( aModLibList.size() + aDlgLibList.size() );
     ::std::merge( aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(), aLibList.begin(), StringCompareLessThan );
-    ::std::vector<String>::iterator aIterEnd = ::std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
+    ::std::vector<OUString>::iterator aIterEnd = ::std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
     aLibList.erase( aIterEnd, aLibList.end() ); // remove duplicates
 
     // copy to sequence
@@ -267,7 +267,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
 
     GetExtraData()->ChoosingMacro() = true;
 
-    String aScriptURL;
+    OUString aScriptURL;
     bool bError = false;
     SbMethod* pMethod = NULL;
 
@@ -316,11 +316,11 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
             }
 
             // name
-            String aName;
+            OUString aName;
             aName += pBasic->GetName();
-            aName += '.';
+            aName += ".";
             aName += pModule->GetName();
-            aName += '.';
+            aName += ".";
             aName += pMethod->GetName();
 
             // language

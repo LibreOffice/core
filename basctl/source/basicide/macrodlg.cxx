@@ -131,13 +131,13 @@ MacroChooser::~MacroChooser()
 void MacroChooser::StoreMacroDescription()
 {
     EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(m_pBasicBox->FirstSelected());
-    String aMethodName;
+    OUString aMethodName;
     SvTreeListEntry* pEntry = m_pMacroBox->FirstSelected();
     if ( pEntry )
         aMethodName = m_pMacroBox->GetEntryText( pEntry );
     else
         aMethodName = m_pMacroNameEdit->GetText();
-    if ( aMethodName.Len() )
+    if ( !aMethodName.isEmpty() )
     {
         aDesc.SetMethodName( aMethodName );
         aDesc.SetType( OBJ_TYPE_METHOD );
@@ -163,8 +163,8 @@ void MacroChooser::RestoreMacroDescription()
 
     m_pBasicBox->SetCurrentEntry( aDesc );
 
-    String aLastMacro( aDesc.GetMethodName() );
-    if ( aLastMacro.Len() )
+    OUString aLastMacro( aDesc.GetMethodName() );
+    if ( !aLastMacro.isEmpty() )
     {
         // find entry in macro box
         SvTreeListEntry* pEntry = 0;
@@ -267,7 +267,7 @@ SbMethod* MacroChooser::GetMacro()
         SvTreeListEntry* pEntry = m_pMacroBox->FirstSelected();
         if ( pEntry )
         {
-            String aMacroName( m_pMacroBox->GetEntryText( pEntry ) );
+            OUString aMacroName( m_pMacroBox->GetEntryText( pEntry ) );
             pMethod = (SbMethod*)pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD );
         }
     }
@@ -308,8 +308,8 @@ void MacroChooser::DeleteMacro()
         pModule->SetSource32( aSource );
 
         // update module in library
-        String aLibName = pBasic->GetName();
-        String aModName = pModule->GetName();
+        OUString aLibName = pBasic->GetName();
+        OUString aModName = pModule->GetName();
         OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
 
         SvTreeListEntry* pEntry = m_pMacroBox->FirstSelected();
@@ -329,9 +329,9 @@ SbMethod* MacroChooser::CreateMacro()
     if ( !aDocument.isAlive() )
         return NULL;
 
-    String aLibName( aDesc.GetLibName() );
+    OUString aLibName( aDesc.GetLibName() );
 
-    if ( !aLibName.Len() )
+    if ( aLibName.isEmpty() )
         aLibName = "Standard" ;
 
     aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
@@ -349,14 +349,14 @@ SbMethod* MacroChooser::CreateMacro()
     if ( pBasic )
     {
         SbModule* pModule = 0;
-        String aModName( aDesc.GetName() );
-        if ( aModName.Len() )
+        OUString aModName( aDesc.GetName() );
+        if ( !aModName.isEmpty() )
         {
             // extract the module name from the string like "Sheet1 (Example1)"
             if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
             {
                 sal_Int32 nIndex = 0;
-                aModName = aModName.GetToken( 0, ' ', nIndex );
+                aModName = aModName.getToken( 0, ' ', nIndex );
             }
             pModule = pBasic->FindModule( aModName );
         }
@@ -369,7 +369,7 @@ SbMethod* MacroChooser::CreateMacro()
                 aDocument, *m_pBasicBox, aLibName, aModName );
         }
 
-        String aSubName = m_pMacroNameEdit->GetText();
+        OUString aSubName = m_pMacroNameEdit->GetText();
         DBG_ASSERT( !pModule || !pModule->GetMethods()->Find( aSubName, SbxCLASS_METHOD ), "Macro existiert schon!" );
         pMethod = pModule ? basctl::CreateMacro( pModule, aSubName ) : NULL;
     }
@@ -381,7 +381,7 @@ void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry
 {
     // the edit would be killed by the highlight otherwise:
 
-    String aSaveText( m_pMacroNameEdit->GetText() );
+    OUString aSaveText( m_pMacroNameEdit->GetText() );
     Selection aCurSel( m_pMacroNameEdit->GetSelection() );
 
     rBox.SetCurEntry( pEntry );
@@ -500,7 +500,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
     m_pMacroBox->Clear();
     if ( pModule )
     {
-        String aStr = m_aMacrosInTxtBaseStr;
+        OUString aStr = m_aMacrosInTxtBaseStr;
         aStr += " " ;
         aStr += pModule->GetName();
 
@@ -574,7 +574,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
         }
         if ( m_pMacroBox->GetEntryCount() )
         {
-            String aEdtText( m_pMacroNameEdit->GetText() );
+            OUString aEdtText( m_pMacroNameEdit->GetText() );
             bool bFound = false;
             for ( sal_uInt16 n = 0; n < m_pMacroBox->GetEntryCount(); n++ )
             {
@@ -658,16 +658,16 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         if ( !aDocument.isAlive() )
             return 0;
         BasicManager* pBasMgr = aDocument.getBasicManager();
-        String aLib( aDesc.GetLibName() );
-        String aMod( aDesc.GetName() );
+        OUString aLib( aDesc.GetLibName() );
+        OUString aMod( aDesc.GetName() );
         // extract the module name from the string like "Sheet1 (Example1)"
         if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
         {
             sal_Int32 nIndex = 0;
-            aMod = aMod.GetToken( 0, ' ', nIndex );
+            aMod = aMod.getToken( 0, ' ', nIndex );
         }
-        String aSub( aDesc.GetMethodName() );
-        SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, String() );
+        OUString aSub( aDesc.GetMethodName() );
+        SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, OUString() );
         if (pButton == m_pEditButton)
         {
             SvTreeListEntry* pEntry = m_pMacroBox->FirstSelected();
@@ -731,13 +731,13 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         if ( !aDocument.isAlive() )
             return 0;
         BasicManager* pBasMgr = aDocument.getBasicManager();
-        String aLib( aDesc.GetLibName() );
-        String aMod( aDesc.GetName() );
-        String aSub( m_pMacroNameEdit->GetText() );
+        OUString aLib( aDesc.GetLibName() );
+        OUString aMod( aDesc.GetName() );
+        OUString aSub( m_pMacroNameEdit->GetText() );
         SbMethod* pMethod = GetMacro();
         DBG_ASSERT( pBasMgr, "BasMgr?" );
         DBG_ASSERT( pMethod, "Method?" );
-        String aComment( GetInfo( pMethod ) );
+        OUString aComment( GetInfo( pMethod ) );
         SfxMacroInfoItem aItem( SID_MACROINFO, pBasMgr, aLib, aMod, aSub, aComment );
         SfxAllItemSet Args( SFX_APP()->GetPool() );
         SfxRequest aRequest( SID_CONFIG, SFX_CALLMODE_SYNCHRON, Args );
@@ -756,8 +756,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
-        String aLibName( aDesc.GetLibName() );
-        String aModName;
+        OUString aLibName( aDesc.GetLibName() );
+        OUString aModName;
         createModImpl( static_cast<Window*>( this ), aDocument,
             *m_pBasicBox, aLibName, aModName, true );
     }
@@ -790,7 +790,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 void MacroChooser::UpdateFields()
 {
     SvTreeListEntry*    pMacroEntry = m_pMacroBox->GetCurEntry();
-    String          aEmptyStr;
+    OUString            aEmptyStr;
 
     m_pMacroNameEdit->SetText( aEmptyStr );
     if ( pMacroEntry )
@@ -840,9 +840,9 @@ void MacroChooser::SetMode (Mode nM)
     CheckButtons();
 }
 
-String MacroChooser::GetInfo( SbxVariable* pVar )
+OUString MacroChooser::GetInfo( SbxVariable* pVar )
 {
-    String aComment;
+    OUString aComment;
     SbxInfoRef xInfo = pVar->GetInfo();
     if ( xInfo.Is() )
         aComment = xInfo->GetComment();

@@ -961,7 +961,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
 
     if (aNewDlg.Execute() != 0)
     {
-        if (aNewDlg.GetObjectName().Len() )
+        if (!aNewDlg.GetObjectName().isEmpty() )
             aModName = aNewDlg.GetObjectName();
 
         try

@@ -54,7 +54,7 @@ private:
     FixedText*              m_pMacrosSaveInTxt;
     TreeListBox*            m_pBasicBox;
     FixedText*              m_pMacrosInTxt;
-    String                  m_aMacrosInTxtBaseStr;
+    OUString                m_aMacrosInTxtBaseStr;
     SvTreeListBox*          m_pMacroBox;
 
     PushButton*             m_pRunButton;
@@ -83,7 +83,7 @@ private:
 
     void                EnableButton( Button& rButton, bool bEnable );
 
-    String              GetInfo( SbxVariable* pVar );
+    OUString            GetInfo( SbxVariable* pVar );
 
     void                StoreMacroDescription();
     void                RestoreMacroDescription();

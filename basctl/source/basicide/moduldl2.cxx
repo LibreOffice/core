@@ -120,7 +120,7 @@ public:
 class LibLBoxString : public SvLBoxString
 {
 public:
-    LibLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
+    LibLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
@@ -659,7 +659,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
         SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
-        String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+        OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
@@ -1145,7 +1145,7 @@ void LibPage::InsertLib()
 void LibPage::Export( void )
 {
     SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
-    String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+    OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
     // Password verification
     OUString aOULibName( aLibName );
@@ -1184,7 +1184,7 @@ void LibPage::Export( void )
     }
 }
 
-void LibPage::implExportLib( const String& aLibName, const String& aTargetURL,
+void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetURL,
     const Reference< task::XInteractionHandler >& Handler )
 {
     OUString aOULibName( aLibName );
@@ -1236,7 +1236,7 @@ Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
 
 
 
-void LibPage::ExportAsPackage( const String& aLibName )
+void LibPage::ExportAsPackage( const OUString& aLibName )
 {
     // file open dialog
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -1254,8 +1254,8 @@ void LibPage::ExportAsPackage( const String& aLibName )
     xFP->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
-    String aPath = GetExtraData()->GetAddLibPath();
-    if ( aPath.Len() )
+    OUString aPath = GetExtraData()->GetAddLibPath();
+    if ( !aPath.isEmpty() )
     {
         xFP->setDisplayDirectory( aPath );
     }
@@ -1277,7 +1277,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
         OUString aPackageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        String aTmpPath = SvtPathOptions().GetTempPath();
+        OUString aTmpPath = SvtPathOptions().GetTempPath();
         INetURLObject aInetObj( aTmpPath );
         aInetObj.insertName( aLibName, true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
         OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -1358,7 +1358,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
     }
 }
 
-void LibPage::ExportAsBasic( const String& aLibName )
+void LibPage::ExportAsBasic( const OUString& aLibName )
 {
     // Folder picker
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -1368,8 +1368,8 @@ void LibPage::ExportAsBasic( const String& aLibName )
     xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC).toString());
 
     // set display directory and filter
-    String aPath =GetExtraData()->GetAddLibPath();
-    if( !aPath.Len() )
+    OUString aPath =GetExtraData()->GetAddLibPath();
+    if( aPath.isEmpty() )
         aPath = SvtPathOptions().GetWorkPath();
 
     // INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
@@ -1377,7 +1377,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
     short nRet = xFolderPicker->execute();
     if( nRet == RET_OK )
     {
-        String aTargetURL = xFolderPicker->getDirectory();
+        OUString aTargetURL = xFolderPicker->getDirectory();
         GetExtraData()->SetAddLibPath(aTargetURL);
 
         Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
@@ -1390,7 +1390,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
 void LibPage::DeleteCurrent()
 {
     SvTreeListEntry* pCurEntry = aLibBox.GetCurEntry();
-    String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
+    OUString aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
     // check, if library is link
     bool bIsLibraryLink = false;
@@ -1453,7 +1453,7 @@ void LibPage::FillListBox()
 
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    String aEntryText( rDocument.getTitle( eLocation ) );
+    OUString aEntryText( rDocument.getTitle( eLocation ) );
     sal_uInt16 nPos = aBasicsBox.InsertEntry( aEntryText, LISTBOX_APPEND );
     aBasicsBox.SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
 }
@@ -1485,7 +1485,7 @@ void LibPage::SetCurLib()
 
             for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
             {
-                String aLibName( pLibNames[ i ] );
+                OUString aLibName( pLibNames[ i ] );
                 if ( eLocation == aDocument.getLibraryLocation( aLibName ) )
                     ImpInsertLibEntry( aLibName, i );
             }
@@ -1500,7 +1500,7 @@ void LibPage::SetCurLib()
 
 //----------------------------------------------------------------------------
 
-SvTreeListEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos )
+SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos )
 {
     // check, if library is password protected
     bool bProtected = false;
@@ -1528,7 +1528,7 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong n
     // check, if library is link
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) )
     {
-        String aLinkURL = xModLibContainer->getLibraryLinkURL( aOULibName );
+        OUString aLinkURL = xModLibContainer->getLibraryLinkURL( aOULibName );
         aLibBox.SetEntryText( aLinkURL, pNewEntry, 1 );
     }
 
@@ -1564,7 +1564,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
     if (aNewDlg.Execute())
     {
-        if (aNewDlg.GetObjectName().Len())
+        if (!aNewDlg.GetObjectName().isEmpty())
             aLibName = aNewDlg.GetObjectName();
 
         if ( aLibName.getLength() > 30 )
@@ -1597,7 +1597,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                 }
 
                 // create a module
-                String aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
+                OUString aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
                 OUString sModuleCode;
                 if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
                     throw Exception();

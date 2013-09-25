@@ -42,8 +42,8 @@ private:
 
     EntryDescriptor m_aLastEntryDesc;
 
-    String          aAddLibPath;
-    String          aAddLibFilter;
+    OUString        aAddLibPath;
+    OUString        aAddLibFilter;
 
     sal_uInt16      nBasicDialogCount;
 
@@ -72,11 +72,11 @@ public:
     SvxSearchItem&    GetSearchItem() const { return *pSearchItem; }
     void              SetSearchItem( const SvxSearchItem& rItem );
 
-    const String&     GetAddLibPath() const   { return aAddLibPath; }
-    void              SetAddLibPath( const String& rPath ) { aAddLibPath = rPath; }
+    const OUString&   GetAddLibPath() const   { return aAddLibPath; }
+    void              SetAddLibPath( const OUString& rPath ) { aAddLibPath = rPath; }
 
-    const String&     GetAddLibFilter() const { return aAddLibFilter; }
-    void              SetAddLibFilter( const String& rFilter )  { aAddLibFilter = rFilter; }
+    const OUString&   GetAddLibFilter() const { return aAddLibFilter; }
+    void              SetAddLibFilter( const OUString& rFilter )  { aAddLibFilter = rFilter; }
 };
 
 } // namespace basctl

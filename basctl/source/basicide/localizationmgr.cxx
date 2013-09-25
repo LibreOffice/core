@@ -136,7 +136,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     Reference< XStringResourceResolver > xDummyStringResolver;
     for( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
     {
-        String aDlgName = pDlgNames[ i ];
+        OUString aDlgName = pDlgNames[ i ];
         if (DialogWindow* pWin = m_pShell->FindDlgWin(m_aDocument, m_aLibName, aDlgName))
         {
             Reference< container::XNameContainer > xDialog = pWin->GetDialog();
@@ -828,7 +828,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
     DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::setControlResourceIDsForNewEditorObject: invalid document!" );
     if ( !aDocument.isValid() )
         return;
-    const String& rLibName = pDlgWin->GetLibName();
+    const OUString& rLibName = pDlgWin->GetLibName();
     Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
@@ -858,7 +858,7 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::renameControlResourceIDsForEditorObject: invalid document!" );
     if ( !aDocument.isValid() )
         return;
-    const String& rLibName = pDlgWin->GetLibName();
+    const OUString& rLibName = pDlgWin->GetLibName();
     Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
@@ -886,7 +886,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
     DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject: invalid document!" );
     if ( !aDocument.isValid() )
         return;
-    const String& rLibName = pDlgWin->GetLibName();
+    const OUString& rLibName = pDlgWin->GetLibName();
     Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
@@ -1061,7 +1061,7 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
     DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::copyResourcesForPastedEditorObject: invalid document!" );
     if ( !aDocument.isValid() )
         return;
-    const String& rLibName = pDlgWin->GetLibName();
+    const OUString& rLibName = pDlgWin->GetLibName();
     Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );

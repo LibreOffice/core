@@ -140,8 +140,8 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
             OSL_ENSURE( aDocument.isValid(), "basctl::CreateMacro: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
             {
-                String aLibName = pBasic->GetName();
-                String aModName = pModule->GetName();
+                OUString aLibName = pBasic->GetName();
+                OUString aModName = pModule->GetName();
                 OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aOUSource ) );
             }
         }
