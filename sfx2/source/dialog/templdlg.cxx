@@ -1048,11 +1048,11 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 {
     OUString aEmpty;
     Execute_Impl(SID_STYLE_END_PREVIEW,
-        String(), String(),
+        OUString(), OUString(),
         0, 0, 0, 0 );
 #if defined STYLESPREVIEW
     Execute_Impl(SID_STYLE_END_PREVIEW,
-        String(), String(),
+        OUString(), OUString(),
         0, 0, 0, 0 );
 #endif
     if ( bIsWater )

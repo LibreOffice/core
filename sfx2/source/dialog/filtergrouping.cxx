@@ -903,7 +903,7 @@ namespace sfx2
         const OUString& sFilterName = m_lFilters[nIndex];
         if (sFilterName.isEmpty())
             return 0;
-        return SfxFilter::GetFilterByName(String(sFilterName));
+        return SfxFilter::GetFilterByName(sFilterName);
     }
 
     //--------------------------------------------------------------------

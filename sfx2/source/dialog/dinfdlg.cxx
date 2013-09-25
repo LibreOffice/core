@@ -118,7 +118,7 @@ static const char DOCUMENT_SIGNATURE_MENU_CMD[] = "Signature";
 //------------------------------------------------------------------------
 namespace {
 
-String CreateSizeText( sal_Int64 nSize )
+OUString CreateSizeText( sal_Int64 nSize )
 {
     OUString aUnitStr(" ");
     aUnitStr += SfxResId(STR_BYTES).toString();
@@ -173,7 +173,7 @@ String CreateSizeText( sal_Int64 nSize )
     return aSizeStr;
 }
 
-String ConvertDateTime_Impl( const OUString& rName,
+OUString ConvertDateTime_Impl( const OUString& rName,
     const util::DateTime& uDT, const LocaleDataWrapper& rWrapper )
 {
     Date aD(uDT.Day, uDT.Month, uDT.Year);
@@ -2379,8 +2379,8 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
         aPropertiesSeq[i].OpenChoice = pLine->m_bOpenChoice;
         aPropertiesSeq[i].MultiValued = pLine->m_bMultiValued;
 
-        String sPropertyName = pLine->m_aName->GetText();
-        if ( sPropertyName.Len() > 0 )
+        OUString sPropertyName = pLine->m_aName->GetText();
+        if ( !sPropertyName.isEmpty() )
         {
             aPropertiesSeq[i].Name = sPropertyName;
             OUString sType = pLine->m_aType->GetText( );

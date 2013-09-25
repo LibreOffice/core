@@ -1902,6 +1902,41 @@ void FileDialogHelper_Impl::addGraphicFilter()
 #define GRF_CONFIG_STR      "   "
 #define STD_CONFIG_STR      "1 "
 
+static void SetToken( OUString rOrigStr, sal_Int32 nToken, sal_Unicode cTok, const OUString& rStr)
+{
+    const sal_Unicode*  pStr        = rOrigStr.getStr();
+    sal_Int32     nLen              = rOrigStr.getLength();
+    sal_Int32     nTok              = 0;
+    sal_Int32     nFirstChar        = 0;
+    sal_Int32     i                 = nFirstChar;
+
+    // Determine token position and length
+    pStr += i;
+    while ( i < nLen )
+    {
+        // Increase token count if match
+        if ( *pStr == cTok )
+        {
+            ++nTok;
+
+            if ( nTok == nToken )
+                nFirstChar = i+1;
+            else
+            {
+                if ( nTok > nToken )
+                    break;
+            }
+        }
+
+        ++pStr,
+        ++i;
+    }
+
+    if ( nTok >= nToken )
+        rOrigStr = rOrigStr.replaceAt( nFirstChar, i-nFirstChar, rStr );
+}
+
+
 void FileDialogHelper_Impl::saveConfig()
 {
     uno::Reference < XFilePickerControlAccess > xDlg( mxFileDlg, UNO_QUERY );
@@ -1913,25 +1948,25 @@ void FileDialogHelper_Impl::saveConfig()
     if ( mbHasPreview )
     {
         SvtViewOptions aDlgOpt( E_DIALOG, IMPGRF_CONFIGNAME );
-        String aUserData(GRF_CONFIG_STR);
+        OUString aUserData(GRF_CONFIG_STR);
 
         try
         {
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             sal_Bool bValue = sal_False;
             aValue >>= bValue;
-            aUserData.SetToken( 1, ' ', OUString::number( (sal_Int32) bValue ) );
+            SetToken( aUserData, 1, ' ', OUString::number( (sal_Int32) bValue ) );
 
             INetURLObject aObj( getPath() );
 
             if ( aObj.GetProtocol() == INET_PROT_FILE )
-                aUserData.SetToken( 2, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                SetToken( aUserData, 2, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
             OUString aFilter = getFilter();
             aFilter = EncodeSpaces_Impl( aFilter );
-            aUserData.SetToken( 3, ' ', aFilter );
+            SetToken( aUserData, 3, ' ', aFilter );
 
-            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
+            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
         }
         catch( const IllegalArgumentException& ){}
     }
@@ -1939,7 +1974,7 @@ void FileDialogHelper_Impl::saveConfig()
     {
         sal_Bool bWriteConfig = sal_False;
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-        String aUserData(STD_CONFIG_STR);
+        OUString aUserData(STD_CONFIG_STR);
 
         if ( aDlgOpt.Exists() )
         {
@@ -1956,7 +1991,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0 );
                 sal_Bool bAutoExt = sal_True;
                 aValue >>= bAutoExt;
-                aUserData.SetToken( 0, ' ', OUString::number( (sal_Int32) bAutoExt ) );
+                SetToken( aUserData, 0, ' ', OUString::number( (sal_Int32) bAutoExt ) );
                 bWriteConfig = sal_True;
             }
             catch( const IllegalArgumentException& ){}
@@ -1968,7 +2003,7 @@ void FileDialogHelper_Impl::saveConfig()
             if ( !aPath.isEmpty() &&
                  utl::LocalFileHelper::IsLocalFile( aPath ) )
             {
-                aUserData.SetToken( 1, ' ', aPath );
+                SetToken( aUserData, 1, ' ', aPath );
                 bWriteConfig = sal_True;
             }
         }
@@ -1982,7 +2017,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aValue >>= bSelection;
                 if ( comphelper::string::getTokenCount(aUserData, ' ') < 3 )
                     aUserData += " ";
-                aUserData.SetToken( 2, ' ', OUString::number( (sal_Int32) bSelection ) );
+                SetToken( aUserData, 2, ' ', OUString::number( (sal_Int32) bSelection ) );
                 bWriteConfig = sal_True;
             }
             catch( const IllegalArgumentException& ){}

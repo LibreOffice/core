@@ -87,7 +87,7 @@ void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
 
 void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
 {
-    SetActualURL(String(rURL.GetMainURL( INetURLObject::DECODE_TO_IURI )));
+    SetActualURL(rURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
 }
 
 void SfxFrameDescriptor::SetEditable( sal_Bool bSet )

@@ -1946,7 +1946,7 @@ sal_Bool SfxHelpIndexWindow_Impl::HasFocusOnEdit() const
 
 OUString SfxHelpIndexWindow_Impl::GetSearchText() const
 {
-    String sRet;
+    OUString sRet;
     if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
         sRet = pSPage->GetSearchText();
     return sRet;
@@ -2182,7 +2182,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
     else
     {
         // detect module name
-        String sModuleName;
+        OUString sModuleName;
 
         if ( xConfiguration.is() )
         {
@@ -2197,14 +2197,14 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
             {
                 SAL_WARN( "sfx.appl", "SfxHelpTextWindow_Impl::InitOnStartupBox(): unexpected exception" );
             }
-            sModuleName = String( sTemp );
+            sModuleName = sTemp;
         }
 
-        if ( sModuleName.Len() > 0 )
+        if ( !sModuleName.isEmpty() )
         {
             // set module name in checkbox text
-            String sText( aOnStartupText );
-            sText.SearchAndReplace( OUString("%MODULENAME"), sModuleName );
+            OUString sText( aOnStartupText );
+            sText = sText.replaceFirst( "%MODULENAME", sModuleName );
             aOnStartupCB.SetText( sText );
             // and show it
             aOnStartupCB.Show();
@@ -2213,7 +2213,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
             aOnStartupCB.SaveValue();
 
             // calculate and set optimal width of the onstartup checkbox
-            String sCBText( "XXX" );
+            OUString sCBText( "XXX" );
             sCBText += aOnStartupCB.GetText();
             long nTextWidth = aOnStartupCB.GetTextWidth( sCBText );
             Size aSize = aOnStartupCB.GetSizePixel();
@@ -2333,7 +2333,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
                     xSrchDesc->setPropertyValue( "SearchWords",
                                                 makeAny( sal_Bool( sal_True ) ) );
 
-                String sSearchString = sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false );
+                OUString sSearchString = sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false );
                 xSrchDesc->setSearchString( sSearchString );
                 Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
 
@@ -2375,7 +2375,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
     if ( bWrapAround )
         pDlg = pSrchDlg;
     DBG_ASSERT( pDlg, "invalid search dialog" );
-    String sSearchText = pDlg->GetSearchText();
+    OUString sSearchText = pDlg->GetSearchText();
     try
     {
         // select the words, which are equal to the search text of the search page
@@ -2778,8 +2778,8 @@ void SfxHelpTextWindow_Impl::DoSearch()
         Reference< XTextRange > xCursor = getCursor();
         if ( xCursor.is() )
         {
-            String sText = xCursor->getString();
-            if ( sText.Len() > 0 )
+            OUString sText = xCursor->getString();
+            if ( !sText.isEmpty() )
                 pSrchDlg->SetSearchText( sText );
         }
         pSrchDlg->Show();
@@ -2921,20 +2921,20 @@ void SfxHelpWindow_Impl::LoadConfig()
     if ( aViewOpt.Exists() )
     {
         bIndex = aViewOpt.IsVisible();
-        String aUserData;
+        OUString aUserData;
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )
         {
-            aUserData = String( aTemp );
+            aUserData = aTemp;
             DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
             sal_Int32 nIdx = 0;
-            nIndexSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-            nTextSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-            sal_Int32 nWidth = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-            nHeight = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-            aWinPos.X() = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
-            aWinPos.Y() = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
+            nIndexSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
+            nTextSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
+            sal_Int32 nWidth = aUserData.getToken( 0, ';', nIdx ).toInt32();
+            nHeight = aUserData.getToken( 0, ';', nIdx ).toInt32();
+            aWinPos.X() = aUserData.getToken( 0, ';', nIdx ).toInt32();
+            aWinPos.Y() = aUserData.getToken( 0, ';', nIdx ).toInt32();
             if ( bIndex )
             {
                 nExpandWidth = nWidth;
@@ -2966,19 +2966,19 @@ void SfxHelpWindow_Impl::SaveConfig()
     }
 
     aViewOpt.SetVisible( bIndex );
-    String aUserData = OUString::number( nIndexSize );
-    aUserData += ';';
+    OUString aUserData = OUString::number( nIndexSize );
+    aUserData += ";";
     aUserData += OUString::number( nTextSize );
-    aUserData += ';';
+    aUserData += ";";
     aUserData += OUString::number( nW );
-    aUserData += ';';
+    aUserData += ";";
     aUserData += OUString::number( nH );
 
-       Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
+    Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
     aWinPos = pScreenWin->GetWindowExtentsRelative( NULL ).TopLeft();
-    aUserData += ';';
+    aUserData += ";";
     aUserData += OUString::number( aWinPos.X() );
-    aUserData += ';';
+    aUserData += ";";
     aUserData += OUString::number( aWinPos.Y() );
 
     aViewOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
@@ -3013,30 +3013,30 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
 {
     pIndexWin->SelectExecutableEntry();
-    String aEntry = pIndexWin->GetSelectEntry();
+    OUString aEntry = pIndexWin->GetSelectEntry();
 
-    if ( aEntry.Len() < 1 )
+    if ( aEntry.isEmpty() )
         return 0;
 
     OUString sHelpURL;
 
-    bool bComplete = OUString(aEntry).toAsciiLowerCase().match(OUString("vnd.sun.star.help"),0);
+    bool bComplete = OUString(aEntry).toAsciiLowerCase().match("vnd.sun.star.help");
 
     if (bComplete)
         sHelpURL = OUString(aEntry);
     else
     {
-        String aId;
-        String aAnchor = OUString('#');
+        OUString aId;
+        OUString aAnchor = OUString('#');
         if ( comphelper::string::getTokenCount(aEntry, '#') == 2 )
         {
-            aId = aEntry.GetToken( 0, '#' );
-            aAnchor += aEntry.GetToken( 1, '#' );
+            aId = aEntry.getToken( 0, '#' );
+            aAnchor += aEntry.getToken( 1, '#' );
         }
         else
             aId = aEntry;
 
-        aEntry  = '/';
+        aEntry  = "/";
         aEntry += aId;
 
         sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
@@ -3123,8 +3123,8 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
         }
 
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
-        String sSearchText = comphelper::string::strip(pIndexWin->GetSearchText(), ' ');
-        if ( sSearchText.Len() > 0 )
+        OUString sSearchText = comphelper::string::strip(pIndexWin->GetSearchText(), ' ');
+        if ( !sSearchText.isEmpty() )
             pTextWin->SelectSearchText( sSearchText, pIndexWin->IsFullWordSearch() );
 
         // no page style header -> this prevents a print output of the URL
@@ -3294,7 +3294,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                 else
                     aURL.Complete = ".uno:SearchDialog";
                 PARSE_URL( aURL );
-                Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
+                Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
                 if ( xDisp.is() )
                     xDisp->dispatch( aURL, Sequence < PropertyValue >() );
             }
@@ -3303,8 +3303,8 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
 
         case TBI_BOOKMARKS :
         {
-            String aURL = pHelpInterceptor->GetCurrentURL();
-            if ( aURL.Len() > 0 )
+            OUString aURL = pHelpInterceptor->GetCurrentURL();
+            if ( !aURL.isEmpty() )
             {
                 try
                 {
@@ -3316,7 +3316,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                         OUString aValue;
                         if ( aAny >>= aValue )
                         {
-                            String aTitle( aValue );
+                            OUString aTitle( aValue );
                             SfxAddHelpBookmarkDialog_Impl aDlg( this, sal_False );
                             aDlg.SetTitle( aTitle );
                             if ( aDlg.Execute() == RET_OK )

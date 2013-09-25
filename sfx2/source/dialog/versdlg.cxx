@@ -293,7 +293,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
     m_pVersionBox->setColSizes();
 }
 
-String ConvertWhiteSpaces_Impl( const OUString& rText )
+OUString ConvertWhiteSpaces_Impl( const OUString& rText )
 {
     // converted linebreaks and tabs to blanks; it's necessary for the display
     OUStringBuffer sConverted;

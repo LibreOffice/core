@@ -3135,7 +3135,7 @@ sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
         sal_Int32 nLength = pImp->aVersions.getLength();
         for ( sal_Int32 m=0; m<nLength; m++ )
         {
-            sal_uInt32 nVer = static_cast<sal_uInt32>(String( pImp->aVersions[m].Identifier ).Copy(7).ToInt32());
+            sal_uInt32 nVer = static_cast<sal_uInt32>( pImp->aVersions[m].Identifier.copy(7).toInt32());
             size_t n;
             for ( n=0; n<aLongs.size(); ++n )
                 if ( nVer<aLongs[n] )
