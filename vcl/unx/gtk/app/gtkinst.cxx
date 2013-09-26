@@ -38,10 +38,6 @@
 
 #include <rtl/uri.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -64,11 +60,10 @@ extern "C"
 
     VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "create vcl plugin instance with gtk version %d %d %d\n",
-                 (int) gtk_major_version, (int) gtk_minor_version,
-                 (int) gtk_micro_version );
-#endif
+        SAL_INFO(
+            "vcl.gtk",
+            "create vcl plugin instance with gtk version " << gtk_major_version
+                << " " << gtk_minor_version << " " << gtk_micro_version);
         if( gtk_major_version < 2 || // very unlikely sanity check
             ( gtk_major_version == 2 && gtk_minor_version < 4 ) )
         {
@@ -93,9 +88,7 @@ extern "C"
 #endif
         if( pVersion )
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "gtk version conflict: %s\n", pVersion );
-#endif
+            SAL_WARN("vcl.gtk", "gtk version conflict: " << pVersion);
             return NULL;
         }
 
@@ -109,19 +102,14 @@ extern "C"
 #error "Requires gtk 2.4.0+ for lock hooking"
 #endif
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
-
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "Hooked gdk threads locks\n" );
-#endif
+        SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
 
         pYieldMutex = new GtkYieldMutex();
 
         gdk_threads_init();
 
         GtkInstance* pInstance = new GtkInstance( pYieldMutex );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "creating GtkSalInstance 0x%p\n", pInstance );
-#endif
+        SAL_INFO("vcl.gtk", "creating GtkSalInstance " << pInstance);
 
         //Create SalData, this does not leak
         /*GtkData *pSalData =*/ new GtkData( pInstance );
@@ -342,11 +330,9 @@ void GtkYieldMutex::ThreadsLeave()
 {
     aYieldStack.push_front( mnCount );
 
-#if OSL_DEBUG_LEVEL > 1
-    if( mnThreadId &&
-        mnThreadId != osl::Thread::getCurrentIdentifier())
-        fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
-#endif
+    SAL_WARN_IF(
+        mnThreadId && mnThreadId != osl::Thread::getCurrentIdentifier(),
+        "vcl.gtk", "other thread " << mnThreadId << " owns the mutex");
 
     while( mnCount > 1 )
         release();
