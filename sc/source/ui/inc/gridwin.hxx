@@ -236,12 +236,12 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 
     bool            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            ExecFilter( sal_uLong nSel, SCCOL nCol, SCROW nRow,
-                                const String& aValue, bool bCheckForDates );
+                                const OUString& aValue, bool bCheckForDates );
     void            FilterSelect( sal_uLong nSel );
 
-    void            ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr );
+    void            ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr );
 
-    void            ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSelection, const String& rStr );
+    void            ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSelection, const OUString& rStr );
 
     bool            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
 
@@ -273,9 +273,9 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice* pContentDev );
 
     bool            GetEditUrl( const Point& rPos,
-                                String* pName=0, String* pUrl=0, String* pTarget=0 );
+                                OUString* pName=0, OUString* pUrl=0, OUString* pTarget=0 );
     bool            GetEditUrlOrError( bool bSpellErr, const Point& rPos,
-                                       String* pName=0, String* pUrl=0, String* pTarget=0 );
+                                       OUString* pName=0, OUString* pUrl=0, OUString* pTarget=0 );
 
     bool            HitRangeFinder( const Point& rMouse, RfCorner& rCorner, sal_uInt16* pIndex = NULL,
                                     SCsCOL* pAddX = NULL, SCsROW* pAddY = NULL );

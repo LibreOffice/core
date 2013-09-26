@@ -569,7 +569,7 @@ IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo*, pInfo )
     return 0;
 }
 
-void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSelection, const String& rStr )
+void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSelection, const OUString& rStr )
 {
     //! gridwin2 ?
 
@@ -1361,9 +1361,9 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
     GrabFocus();        // unter OS/2 stimmt der Focus sonst nicht
 }
 
-void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr )
+void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr )
 {
-    if ( rStr.Len() )
+    if ( !rStr.isEmpty() )
     {
         SCTAB nTab = pViewData->GetTabNo();
         ScViewFunc* pView = pViewData->GetView();
@@ -1377,7 +1377,7 @@ void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr )
 
 void ScGridWindow::ExecFilter( sal_uLong nSel,
                                SCCOL nCol, SCROW nRow,
-                               const String& aValue, bool bCheckForDates )
+                               const OUString& aValue, bool bCheckForDates )
 {
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -2301,7 +2301,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         //  beim ButtonUp nur ausfuehren, wenn ButtonDown auch ueber einer URL war
 
-        String aName, aUrl, aTarget;
+        OUString aName, aUrl, aTarget;
         if ( GetEditUrl( rMEvt.GetPosPixel(), &aName, &aUrl, &aTarget ) )
         {
             nMouseStatus = SC_GM_NONE;              // keinen Doppelklick anfangen
@@ -5107,13 +5107,13 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp )
 //------------------------------------------------------------------------
 
 bool ScGridWindow::GetEditUrl( const Point& rPos,
-                               String* pName, String* pUrl, String* pTarget )
+                               OUString* pName, OUString* pUrl, OUString* pTarget )
 {
     return GetEditUrlOrError( false, rPos, pName, pUrl, pTarget );
 }
 
 bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
-                                String* pName, String* pUrl, String* pTarget )
+                                OUString* pName, OUString* pUrl, OUString* pTarget )
 {
     //! nPosX/Y mit uebergeben?
     SCsCOL nPosX;

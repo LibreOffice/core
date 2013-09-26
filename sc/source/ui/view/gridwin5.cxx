@@ -370,7 +370,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
         if ( !aHelpText.Len() )                                 // Text-URL
         {
-            String aUrl;
+            OUString aUrl;
             if ( GetEditUrl( aPosPixel, NULL, &aUrl, NULL ) )
             {
                 aHelpText = INetURLObject::decode( aUrl, INET_HEX_ESCAPE,
