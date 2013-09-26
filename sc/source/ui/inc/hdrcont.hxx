@@ -83,7 +83,7 @@ protected:
 
     virtual SCCOLROW    GetPos() = 0;                               // current position (Scrolling)
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // width / height (Pixel)
-    virtual String  GetEntryText( SCCOLROW nEntryNo ) = 0;
+    virtual OUString  GetEntryText( SCCOLROW nEntryNo ) = 0;
 
     virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo );
     virtual sal_Bool    IsLayoutRTL();
@@ -96,7 +96,7 @@ protected:
     virtual void    SelectWindow();
     virtual sal_Bool    IsDisabled();
     virtual sal_Bool    ResizeAllowed();
-    virtual String  GetDragHelp( long nVal );
+    virtual OUString  GetDragHelp( long nVal );
 
     virtual void    DrawInvert( long nDragPos );
     virtual void    Command( const CommandEvent& rCEvt );

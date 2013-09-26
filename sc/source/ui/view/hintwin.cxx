@@ -26,7 +26,7 @@
 
 //==================================================================
 
-ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& rMsg ) :
+ScHintWindow::ScHintWindow( Window* pParent, const OUString& rTit, const OUString& rMsg ) :
     Window( pParent, WinBits( WB_BORDER ) ),
     aTitle( rTit ),
     aMessage( convertLineEnd(rMsg, LINEEND_CR) )
@@ -49,7 +49,7 @@ ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& r
     sal_Int32 nIndex = 0;
     while ( nIndex != -1 )
     {
-        String aLine = aMessage.GetToken( 0, CHAR_CR, nIndex );
+        String aLine = aMessage.getToken( 0, CHAR_CR, nIndex );
         Size aLineSize( GetTextWidth( aLine ), GetTextHeight() );
         nTextHeight = aLineSize.Height();
         aTextSize.Height() += nTextHeight;
@@ -82,7 +82,7 @@ void ScHintWindow::Paint( const Rectangle& /* rRect */ )
     Point aLineStart = aTextStart;
     while ( nIndex != -1 )
     {
-        String aLine = aMessage.GetToken( 0, CHAR_CR, nIndex );
+        String aLine = aMessage.getToken( 0, CHAR_CR, nIndex );
         DrawText( aLineStart, aLine );
         aLineStart.Y() += nTextHeight;
     }

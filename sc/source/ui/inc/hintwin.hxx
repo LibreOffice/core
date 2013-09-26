@@ -25,18 +25,18 @@
 class ScHintWindow : public Window
 {
 private:
-    String  aTitle;
-    String  aMessage;
-    Point   aTextStart;
-    long    nTextHeight;
-    Font    aTextFont;
-    Font    aHeadFont;
+    OUString  aTitle;
+    OUString  aMessage;
+    Point     aTextStart;
+    long      nTextHeight;
+    Font      aTextFont;
+    Font      aHeadFont;
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
 
 public:
-            ScHintWindow( Window* pParent, const String& rTit, const String& rMsg );
+            ScHintWindow( Window* pParent, const OUString& rTit, const OUString& rMsg );
             ~ScHintWindow();
 };
 

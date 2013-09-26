@@ -41,8 +41,8 @@ public:
                 ~ScColBar();
 
     virtual SCCOLROW    GetPos();
-    virtual sal_uInt16      GetEntrySize( SCCOLROW nEntryNo );
-    virtual String      GetEntryText( SCCOLROW nEntryNo );
+    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
+    virtual OUString    GetEntryText( SCCOLROW nEntryNo );
 
     virtual sal_Bool        IsLayoutRTL();                      // only for columns
 
@@ -56,7 +56,7 @@ public:
 
     virtual void        DrawInvert( long nDragPos );
 
-    virtual String      GetDragHelp( long nVal );
+    virtual OUString    GetDragHelp( long nVal );
 
             sal_Bool        UseNumericHeader() const;
 };
@@ -74,8 +74,8 @@ public:
                 ~ScRowBar();
 
     virtual SCCOLROW    GetPos();
-    virtual sal_uInt16      GetEntrySize( SCCOLROW nEntryNo );
-    virtual String      GetEntryText( SCCOLROW nEntryNo );
+    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
+    virtual OUString    GetEntryText( SCCOLROW nEntryNo );
 
     virtual sal_Bool        IsMirrored();                       // only for columns
     virtual SCROW       GetHiddenCount( SCROW nEntryNo );   // only for columns
@@ -90,7 +90,7 @@ public:
 
     virtual void        DrawInvert( long nDragPos );
 
-    virtual String      GetDragHelp( long nVal );
+    virtual OUString    GetDragHelp( long nVal );
 };
 
 

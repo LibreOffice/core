@@ -991,7 +991,7 @@ void ScHeaderControl::DrawInvert( long /* nDragPos */ )
 {
 }
 
-String ScHeaderControl::GetDragHelp( long /* nVal */ )
+OUString ScHeaderControl::GetDragHelp( long /* nVal */ )
 {
     return EMPTY_STRING;
 }

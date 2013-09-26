@@ -89,7 +89,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
         return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
 }
 
-String ScColBar::GetEntryText( SCCOLROW nEntryNo )
+OUString ScColBar::GetEntryText( SCCOLROW nEntryNo )
 {
     return UseNumericHeader()
         ? OUString::number(nEntryNo + 1) //FIXME remove String again
@@ -211,7 +211,7 @@ void ScColBar::DrawInvert( long nDragPosP )
     pViewData->GetView()->InvertVertical(eWhich,nDragPosP);
 }
 
-String ScColBar::GetDragHelp( long nVal )
+OUString ScColBar::GetDragHelp( long nVal )
 {
     long nTwips = (long) ( nVal / pViewData->GetPPTX() );
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
@@ -255,7 +255,7 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
                     nTab ), pViewData->GetPPTY() );
 }
 
-String ScRowBar::GetEntryText( SCCOLROW nEntryNo )
+OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo )
 {
     return OUString::number( nEntryNo + 1 );
 }
@@ -375,7 +375,7 @@ void ScRowBar::DrawInvert( long nDragPosP )
     pViewData->GetView()->InvertHorizontal(eWhich,nDragPosP);
 }
 
-String ScRowBar::GetDragHelp( long nVal )
+OUString ScRowBar::GetDragHelp( long nVal )
 {
     long nTwips = (long) ( nVal / pViewData->GetPPTY() );
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
