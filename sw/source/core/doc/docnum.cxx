@@ -1653,10 +1653,8 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
     else if (bOnlyNonOutline)
     {
         /* #i24560#
-
         Only promote or demote if all selected paragraphs are
         promotable resp. demotable.
-
         */
         for (sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp)
         {
@@ -2275,7 +2273,6 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
                     ++nNum, nTmp >>= 1;
                 break;
             }
-
     }
     delete [] pSetFlags;
     if( pChkStr && !pChkStr->isEmpty() )

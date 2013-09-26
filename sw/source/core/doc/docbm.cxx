@@ -905,7 +905,6 @@ namespace
     //          0x0801 = Crsr from the CrsrShell Point
     //          0x0400 = UnoCrsr Mark
     //          0x0401 = UnoCrsr Point
-    //
 
     class _SwSaveTypeCountContent
     {

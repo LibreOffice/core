@@ -240,7 +240,6 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
         aTmplDate += a2Min;
     }
 
-
     // Skip all invalid ones
     while( nOutl < pOutlNds->size() &&
         (*pOutlNds)[ nOutl ]->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
@@ -313,7 +312,6 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
 
                     // All Flys in the section
                     CopyFlyInFlyImpl( aRg, 0, aIdx );
-
 
                     // And what's with all the Bookmarks?
                     // ?????

@@ -978,7 +978,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
     // Reset all attributes from the set!
     if( pCharSet && pCharSet->Count() && !( nsSetAttrMode::SETATTR_DONTREPLACE & nFlags ) )
     {
-
         ParaRstFmt aPara( pStt, pEnd, pHistory, 0, pCharSet );
         pDoc->GetNodes().ForEach( aSt, aEnd, lcl_RstTxtAttr, &aPara );
     }
@@ -1047,7 +1046,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 continue;
             SwTxtNode *pCurrentNd = (SwTxtNode*)pNd;
             pCurrentNd->TryCharSetExpandToNum(*pCharSet);
-
         }
     }
 
@@ -1470,7 +1468,6 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
                 --nCount;
         }
     }
-
     return nCount;
 }
 
@@ -1505,7 +1502,6 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
                             SwFrmFmt *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
-
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
 
     pFmt->SetAuto(bAuto);
@@ -1688,7 +1684,6 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
     SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
     if ( pPara->bReset )
     {
-
         if( pFmt->GetAttrOutlineLevel() == 0 && pPara )
             pPara->bKeepOutlineLevelAttr = true;
 
@@ -2372,13 +2367,11 @@ void SwDoc::_CreateNumberFormatter()
 {
     OSL_ENSURE( !mpNumberFormatter, "is already there" );
 
-
     LanguageType eLang = LANGUAGE_SYSTEM;
 
     mpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLang );
     mpNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
     mpNumberFormatter->SetYear2000(static_cast<sal_uInt16>(::utl::MiscCfg().GetYear2000()));
-
 }
 
 SwTblNumFmtMerge::SwTblNumFmtMerge( const SwDoc& rSrc, SwDoc& rDest )
