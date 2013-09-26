@@ -458,10 +458,6 @@ sal_Bool ExportDialog::GetGraphicStream()
             uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
                 drawing::GraphicExportFilter::create( mxContext );
 
-            sal_Int32 nProperties = 2;
-            uno::Sequence< beans::PropertyValue > aFilterData( nProperties );
-
-
             OUString sFormat( maExt );
             uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
             aDescriptor[0].Name = OUString("OutputStream");
