@@ -676,19 +676,19 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) i_pSalMenuItem;
 
     // Delete mnemonics
-    String aText( comphelper::string::remove(i_rText, '~') );
+    OUString aText( comphelper::string::remove(i_rText, '~') );
 
     /* #i90015# until there is a correct solution
        strip out any appended (.*) in menubar entries
     */
     if( mbMenuBar )
     {
-        xub_StrLen nPos = aText.SearchBackward( sal_Unicode(  '(' ) );
-        if( nPos != STRING_NOTFOUND )
+        sal_Int32 nPos = aText.lastIndexOf( sal_Unicode(  '(' ) );
+        if( nPos != -1 )
         {
-            xub_StrLen nPos2 = aText.Search( sal_Unicode( ')' ) );
-            if( nPos2 != STRING_NOTFOUND )
-                aText.Erase( nPos, nPos2-nPos+1 );
+            sal_Int32 nPos2 = aText.indexOf( sal_Unicode( ')' ) );
+            if( nPos2 != -1 )
+                aText = aText.replaceAt( nPos, nPos2-nPos+1, "" );
         }
     }
 

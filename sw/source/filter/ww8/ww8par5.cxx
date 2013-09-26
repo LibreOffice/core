@@ -2483,27 +2483,26 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                     {
                         if (-2 == rReadParam.SkipToNextToken())
                         {
-                            String sPart = rReadParam.GetResult();
-                            xub_StrLen nBegin = sPart.Search('(');
+                            OUString sPart = rReadParam.GetResult();
+                            sal_Int32 nBegin = sPart.indexOf('(');
 
                             //Word disallows brackets in this field,
-                            xub_StrLen nEnd = sPart.Search(')');
+                            sal_Int32 nEnd = sPart.indexOf(')');
 
-                            if ((nBegin != STRING_NOTFOUND) &&
-                                (nEnd != STRING_NOTFOUND))
+                            if ((nBegin != -1) &&
+                                (nEnd != -1))
                             {
-                                sRuby = sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                                sRuby = sPart.copy(nBegin+1,nEnd-nBegin-1);
                             }
-                            if (STRING_NOTFOUND ==
-                                (nBegin = sPart.Search(',',nEnd)))
+                            if (-1 ==
+                                (nBegin = sPart.indexOf(',',nEnd)))
                             {
-                                nBegin = sPart.Search(';',nEnd);
+                                nBegin = sPart.indexOf(';',nEnd);
                             }
-                            nEnd = sPart.SearchBackward(')');
-                            if ((nBegin != STRING_NOTFOUND) &&
-                                (nEnd != STRING_NOTFOUND))
+                            nEnd = sPart.lastIndexOf(')');
+                            if ((nBegin != -1) && (nEnd != -1))
                             {
-                                sText = sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                                sText = sPart.copy(nBegin+1,nEnd-nBegin-1);
                             }
                         }
                     }

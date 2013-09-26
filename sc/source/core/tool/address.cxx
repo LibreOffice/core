@@ -1056,8 +1056,8 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         {
             // Specified table name is not found in this document.  Assume this is an external document.
             aDocName = aTab;
-            xub_StrLen n = aTab.SearchBackward('.');
-            if (n != STRING_NOTFOUND && n > 0)
+            sal_Int32 n = aDocName.lastIndexOf('.');
+            if (n != -1 && n > 0)
             {
                 // Extension found.  Strip it.
                 aTab.Erase(n);

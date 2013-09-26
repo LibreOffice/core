@@ -240,7 +240,6 @@ public:
     xub_StrLen          Search( sal_Unicode c, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const UniString& rStr, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          SearchBackward( sal_Unicode c, xub_StrLen nIndex = STRING_LEN ) const;
 
     xub_StrLen          SearchAndReplace( sal_Unicode c, sal_Unicode cRep,
                                           xub_StrLen nIndex = 0 );

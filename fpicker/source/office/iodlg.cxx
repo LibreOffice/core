@@ -837,13 +837,13 @@ sal_Bool SvtFileDialog::createNewUserFilter( const String& _rNewFilter, sal_Bool
     // if the former is not allowed (_bAllowUserDefExt = <FALSE/>), we have to use the ext of the current filter
     // (if possible)
     sal_Bool bUseCurFilterExt = sal_True;
-    String sUserFilter = _pImp->_pUserFilter->GetType();
-    xub_StrLen nSepPos = sUserFilter.SearchBackward( '.' );
-    if ( STRING_NOTFOUND != nSepPos )
+    OUString sUserFilter = _pImp->_pUserFilter->GetType();
+    sal_Int32 nSepPos = sUserFilter.lastIndexOf( '.' );
+    if ( nSepPos != -1 )
     {
-        String sUserExt = sUserFilter.Copy( nSepPos + 1 );
-        if  (   ( STRING_NOTFOUND == sUserExt.Search( '*' ) )
-            &&  ( STRING_NOTFOUND == sUserExt.Search( '?' ) )
+        OUString sUserExt = sUserFilter.copy( nSepPos + 1 );
+        if  (   ( -1 == sUserExt.indexOf( '*' ) )
+            &&  ( -1 == sUserExt.indexOf( '?' ) )
             )
             bUseCurFilterExt = sal_False;
     }

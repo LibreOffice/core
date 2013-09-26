@@ -122,7 +122,7 @@ void PPDImportDialog::Import()
     ProgressDialog aProgress( Application::GetFocusWindow() );
     aProgress.startOperation( m_aLoadingPPD );
 
-    ::std::list< String > aFiles;
+    ::std::list< OUString > aFiles;
     FindFiles( aImportPath, aFiles, OUString( "PS;PPD;PS.GZ;PPD.GZ" ), true );
 
     int i = 0;

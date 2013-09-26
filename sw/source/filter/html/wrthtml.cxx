@@ -1085,11 +1085,11 @@ void SwHTMLWriter::OutImplicitMark( const String& rMark,
 
 void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
 {
-    String sURL( rURL );
-    xub_StrLen nPos = sURL.SearchBackward( cMarkSeparator );
-    if( STRING_NOTFOUND != nPos )
+    OUString sURL( rURL );
+    sal_Int32 nPos = sURL.lastIndexOf( cMarkSeparator );
+    if( nPos != -1 )
     {
-        OUString sCmp(comphelper::string::remove(sURL.Copy(nPos+1), ' '));
+        OUString sCmp(comphelper::string::remove(sURL.copy(nPos+1), ' '));
         if( !sCmp.isEmpty() )
         {
             sCmp = sCmp.toAsciiLowerCase();
@@ -1101,7 +1101,7 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
                 sCmp == "outline" ||
                 sCmp == "text" )
             {
-                sURL.SearchAndReplaceAll( '?', '_' );   // '?' causes problems in IE/Netscape 5
+                sURL = sURL.replace( '?', '_' );   // '?' causes problems in IE/Netscape 5
             }
         }
     }

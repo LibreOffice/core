@@ -64,8 +64,8 @@ using namespace ::com::sun::star;
 
 void SwHTMLParser::NewDivision( int nToken )
 {
-    OUString aId;
-    String aHRef, aStyle, aLang, aDir;
+    OUString aId, aHRef;
+    String aStyle, aLang, aDir;
     OUString aClass;
     SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
                                                : SVX_ADJUST_END;
@@ -114,7 +114,7 @@ void SwHTMLParser::NewDivision( int nToken )
     sal_Bool bAppended = sal_False;
     if( pPam->GetPoint()->nContent.GetIndex() )
     {
-        AppendTxtNode( bHeader||bFooter||!aId.isEmpty()||aHRef.Len() ? AM_NORMAL
+        AppendTxtNode( bHeader||bFooter||!aId.isEmpty()|| !aHRef.isEmpty() ? AM_NORMAL
                                                                 : AM_NOSPACE );
         bAppended = sal_True;
     }
@@ -242,7 +242,7 @@ void SwHTMLParser::NewDivision( int nToken )
     }
 
     // Bereiche fuegen wir in Rahmen nur dann ein, wenn der Bereich gelinkt ist.
-    if( (!aId.isEmpty() && !bPositioned) || aHRef.Len()  )
+    if( (!aId.isEmpty() && !bPositioned) || !aHRef.isEmpty()  )
     {
         // Bereich einfuegen (muss vor dem Setzten von Attributen erfolgen,
         // weil die Section vor der PaM-Position eingefuegt.
@@ -266,49 +266,49 @@ void SwHTMLParser::NewDivision( int nToken )
         // Namen der Section eindeutig machen
         const OUString aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
 
-        if( aHRef.Len() )
+        if( !aHRef.isEmpty() )
         {
             sal_Unicode cDelim = 255U;
-            String aURL;
-            xub_StrLen nPos = aHRef.SearchBackward( cDelim );
-            xub_StrLen nPos2 = STRING_NOTFOUND;
-            if( STRING_NOTFOUND != nPos )
+            sal_Int32 nPos = aHRef.lastIndexOf( cDelim );
+            sal_Int32 nPos2 = -1;
+            if( nPos != -1 )
             {
-                nPos2 = aHRef.SearchBackward( cDelim, nPos );
-                if( STRING_NOTFOUND != nPos2 )
+                nPos2 = aHRef.lastIndexOf( cDelim, nPos );
+                if( nPos2 != -1 )
                 {
-                    xub_StrLen nTmp = nPos;
+                    sal_Int32 nTmp = nPos;
                     nPos = nPos2;
                     nPos2 = nTmp;
                 }
             }
-            if( STRING_NOTFOUND == nPos )
+            OUString aURL;
+            if( nPos == -1 )
             {
                 aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef, Link(), false);
             }
             else
             {
-                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.Copy( 0, nPos ), Link(), false );
-                aURL += sfx2::cTokenSeparator;
-                if( STRING_NOTFOUND == nPos2 )
+                aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.copy( 0, nPos ), Link(), false );
+                aURL += OUString(sfx2::cTokenSeparator);
+                if( nPos2 == -1 )
                 {
-                    aURL += aHRef.Copy( nPos+1 );
+                    aURL += aHRef.copy( nPos+1 );
                 }
                 else
                 {
-                    aURL += aHRef.Copy( nPos+1, nPos2 - (nPos+1) );
-                    aURL += sfx2::cTokenSeparator;
-                    aURL += String(rtl::Uri::decode( aHRef.Copy( nPos2+1 ),
+                    aURL += aHRef.copy( nPos+1, nPos2 - (nPos+1) );
+                    aURL += OUString(sfx2::cTokenSeparator);
+                    aURL += rtl::Uri::decode( aHRef.copy( nPos2+1 ),
                                               rtl_UriDecodeWithCharset,
-                                              RTL_TEXTENCODING_ISO_8859_1 ));
+                                              RTL_TEXTENCODING_ISO_8859_1 );
                 }
             }
             aHRef = aURL;
         }
 
-        SwSectionData aSection( (aHRef.Len()) ? FILE_LINK_SECTION
+        SwSectionData aSection( (!aHRef.isEmpty()) ? FILE_LINK_SECTION
                                         : CONTENT_SECTION, aName );
-        if( aHRef.Len() )
+        if( !aHRef.isEmpty() )
         {
             aSection.SetLinkFileName( aHRef );
             aSection.SetProtectFlag(true);

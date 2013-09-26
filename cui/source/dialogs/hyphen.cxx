@@ -151,7 +151,7 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
 
         // find position nIdx after which all hyphen positions are unusable
         xub_StrLen  nIdx = STRING_NOTFOUND;
-        xub_StrLen  nPos = 0, nPos1 = 0, nPos2 = 0;
+        xub_StrLen  nPos = 0, nPos1 = 0;
         if (nLen)
         {
             xub_StrLen nStart = 0;
@@ -185,11 +185,11 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
             nPos = aTxt.SearchAndReplace( aTmp, aEmpty, nPos + 1 );
 
         // 2) remove all hyphenation positions from the start that are not considered by the core
-        const String aSearchRange( aTxt.Copy( 0, nPos1 ) );
-        nPos2 = aSearchRange.SearchBackward( '-' );  // the '-' position the core will use by default
-        if (nPos2 != STRING_NOTFOUND)
+        const OUString aSearchRange( aTxt.Copy( 0, nPos1 ) );
+        sal_Int32 nPos2 = aSearchRange.lastIndexOf( '-' );  // the '-' position the core will use by default
+        if (nPos2 != -1 )
         {
-            String aLeft( aSearchRange.Copy( 0, nPos2 ) );
+            String aLeft( aSearchRange.copy( 0, nPos2 ) );
             nPos = 0;
             while (nPos != STRING_NOTFOUND)
             {

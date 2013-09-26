@@ -130,7 +130,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     if( const SfxItemSet* pItemSet = mrMedium.GetItemSet() )
         if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
             maDocUrl = pItem->GetValue();
-    maBasePath = maDocUrl.Copy( 0, maDocUrl.SearchBackward( '/' ) + 1 );
+    maBasePath = maDocUrl.copy( 0, maDocUrl.lastIndexOf( '/' ) + 1 );
 
     // extended document options - always own object, try to copy existing data from document
     if( const ScExtDocOptions* pOldDocOpt = mrDoc.GetExtDocOptions() )

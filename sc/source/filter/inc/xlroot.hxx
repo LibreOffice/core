@@ -82,7 +82,7 @@ struct XclRootData
     SfxMedium&          mrMedium;           /// The medium to import from.
     SotStorageRef       mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
-    String              maDocUrl;           /// Document URL of imported/exported file.
+    OUString            maDocUrl;           /// Document URL of imported/exported file.
     String              maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
     String              maUserName;         /// Current user name.
     const String        maDefPassword;      /// The default password used for stream encryption.
@@ -178,7 +178,7 @@ public:
     /** Returns the medium to import from. */
     inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }
     /** Returns the document URL of the imported/exported file. */
-    inline const String& GetDocUrl() const { return mrData.maDocUrl; }
+    inline const OUString& GetDocUrl() const { return mrData.maDocUrl; }
     /** Returns the base path of the imported/exported file. */
     inline const String& GetBasePath() const { return mrData.maBasePath; }
     /** Returns the current user name. */

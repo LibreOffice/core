@@ -2349,10 +2349,10 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     {
         try
         {
-            String sMain(aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ));
+            OUString sMain(aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ));
             sal_Unicode cSlash = '/';
-            xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
-            sMain.Erase(nSlashPos);
+            sal_Int32 nSlashPos = sMain.lastIndexOf(cSlash);
+            sMain = sMain.copy(0, nSlashPos);
             ::ucbhelper::Content aNewContent( sMain, uno::Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             Any aAny;
             TransferInfo aInfo;

@@ -235,27 +235,6 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
     return STRING_MATCH;
 }
 
-xub_StrLen STRING::SearchBackward( STRCODE c, xub_StrLen nIndex ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    if ( nIndex > mpData->mnLen )
-        nIndex = (xub_StrLen)mpData->mnLen;
-
-    const STRCODE* pStr = mpData->maStr;
-    pStr += nIndex;
-
-    while ( nIndex )
-    {
-        nIndex--;
-        pStr--;
-        if ( *pStr == c )
-            return nIndex;
-    }
-
-    return STRING_NOTFOUND;
-}
-
 void STRING::SearchAndReplaceAll( const STRING& rStr, const STRING& rRepStr )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

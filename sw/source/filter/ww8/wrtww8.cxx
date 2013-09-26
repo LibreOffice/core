@@ -2854,13 +2854,13 @@ void MSWordExportBase::AddLinkTarget(const String& rURL)
     if( !rURL.Len() || rURL.GetChar(0) != INET_MARK_TOKEN )
         return;
 
-    String aURL( BookmarkToWriter( rURL.Copy( 1 ) ) );
-    xub_StrLen nPos = aURL.SearchBackward( cMarkSeparator );
+    OUString aURL( BookmarkToWriter( rURL.Copy( 1 ) ) );
+    sal_Int32 nPos = aURL.lastIndexOf( cMarkSeparator );
 
     if( nPos < 2 )
         return;
 
-    OUString sCmp(comphelper::string::remove(aURL.Copy(nPos+1), ' '));
+    OUString sCmp(comphelper::string::remove(aURL.copy(nPos+1), ' '));
     if( sCmp.isEmpty() )
         return;
 
@@ -2869,7 +2869,7 @@ void MSWordExportBase::AddLinkTarget(const String& rURL)
     if( sCmp == "outline" )
     {
         SwPosition aPos( *pCurPam->GetPoint() );
-        String aOutline( BookmarkToWriter(aURL.Copy( 0, nPos )) );
+        String aOutline( BookmarkToWriter(aURL.copy( 0, nPos )) );
         // If we can find the outline this bookmark refers to
         // save the name of the bookmark and the
         // node index number of where it points to

@@ -1484,12 +1484,12 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                 {
                     //go left to find a predecessor or simple text
                     --nIndex;
-                    String sPara = pTextEngine->GetText( nPara );
-                    xub_StrLen nSearchIndex = sPara.SearchBackward( '>', nIndex+1 );
-                    if( nSearchIndex != STRING_NOTFOUND && nSearchIndex == nIndex )
+                    OUString sPara = pTextEngine->GetText( nPara );
+                    sal_Int32 nSearchIndex = sPara.lastIndexOf( '>', nIndex+1 );
+                    if( nSearchIndex != -1 && nSearchIndex == nIndex )
                     {
-                        nSearchIndex = sPara.SearchBackward( '<', nIndex );
-                        if( nSearchIndex != STRING_NOTFOUND )
+                        nSearchIndex = sPara.lastIndexOf( '<', nIndex );
+                        if( nSearchIndex != -1 )
                             nIndex = nSearchIndex;
                     }
                 }

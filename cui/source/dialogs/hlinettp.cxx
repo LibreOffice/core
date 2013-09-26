@@ -467,16 +467,15 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
 
 void SvxHyperlinkInternetTp::SetMarkStr ( const String& aStrMark )
 {
-    String aStrURL ( maCbbTarget.GetText() );
+    OUString aStrURL ( maCbbTarget.GetText() );
 
     const sal_Unicode sUHash = '#';
-    xub_StrLen nPos = aStrURL.SearchBackward( sUHash );
+    sal_Int32 nPos = aStrURL.lastIndexOf( sUHash );
 
-    if( nPos != STRING_NOTFOUND )
-        aStrURL.Erase ( nPos );
+    if( nPos != -1 )
+        aStrURL = aStrURL.copy(0, nPos);
 
-    aStrURL += sUHash;
-    aStrURL += aStrMark;
+    aStrURL += OUString(sUHash) + aStrMark;
 
     maCbbTarget.SetText ( aStrURL );
 }

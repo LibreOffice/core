@@ -79,7 +79,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
  *  FindFiles
  */
 
-void padmin::FindFiles( const OUString& rDirectory, ::std::list< String >& rResult, const OUString& rSuffixes, bool bRecursive )
+void padmin::FindFiles( const OUString& rDirectory, ::std::list< OUString >& rResult, const OUString& rSuffixes, bool bRecursive )
 {
     rResult.clear();
 
@@ -121,9 +121,9 @@ void padmin::FindFiles( const OUString& rDirectory, ::std::list< String >& rResu
                 OUStringBuffer aSubDir( rDirectory );
                 aSubDir.appendAscii( "/", 1 );
                 aSubDir.append( aStatus.getFileName() );
-                std::list< String > subfiles;
+                std::list< OUString > subfiles;
                 FindFiles( aSubDir.makeStringAndClear(), subfiles, rSuffixes, bRecursive );
-                for( std::list< String >::const_iterator it = subfiles.begin(); it != subfiles.end(); ++it )
+                for( std::list< OUString >::const_iterator it = subfiles.begin(); it != subfiles.end(); ++it )
                 {
                     OUStringBuffer aSubFile( aStatus.getFileName() );
                     aSubFile.appendAscii( "/", 1 );

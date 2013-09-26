@@ -265,8 +265,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 std::list< OUString >::iterator dir;
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
                 {
-                    ::std::list< String > aFiles;
-                    ::std::list< String >::iterator file;
+                    ::std::list< OUString > aFiles;
+                    ::std::list< OUString >::iterator file;
                     OUStringBuffer aDir( *dir );
                     aDir.append( sal_Unicode( '/' ) );
                     aDir.appendAscii( PRINTER_PPDDIR );
@@ -279,8 +279,9 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                             aFile += "/";
                         aFile += *file;
 
-                        int nPos = file->SearchBackward( '.' );
-                        if( file->Copy( 0, nPos ) == String( aPPD ) )
+                        sal_Int32 nPos = file->lastIndexOf( '.' );
+                        OUString sCopy = nPos == -1 ? *file : file->copy(0, nPos);
+                        if( sCopy == aPPD )
                         {
                             OString aSysPath(OUStringToOString(aFile, aEncoding));
                             if (unlink(aSysPath.getStr()))

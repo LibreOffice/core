@@ -1116,13 +1116,13 @@ ANCHOR_SETEVENT:
     // wir hier ganz rigoros raus.
     if( aName.Len() )
     {
-        String sDecoded( INetURLObject::decode( aName, INET_HEX_ESCAPE,
+        OUString sDecoded( INetURLObject::decode( aName, INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-        xub_StrLen nPos = sDecoded.SearchBackward( cMarkSeparator );
-        if( STRING_NOTFOUND != nPos )
+        sal_Int32 nPos = sDecoded.lastIndexOf( cMarkSeparator );
+        if( nPos != -1 )
         {
-            OUString sCmp(comphelper::string::remove(sDecoded.Copy(nPos+1), ' '));
+            OUString sCmp(comphelper::string::remove(sDecoded.copy(nPos+1), ' '));
             if( !sCmp.isEmpty() )
             {
                 sCmp = sCmp.toAsciiLowerCase();
