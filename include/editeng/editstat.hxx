@@ -21,6 +21,7 @@
 #define _EDITSTAT_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 #include <i18nlangtag/lang.h>
 
 #define EE_CNTRL_USECHARATTRIBS     0x00000001  // Use of hard character attributes
