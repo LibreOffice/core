@@ -104,7 +104,7 @@ public:
     virtual Size GetFieldSize() const = 0;
 
     /** @return The description of the control which is used for the accessibility objects. */
-    virtual String GetDescription() const = 0;
+    virtual OUString GetDescription() const = 0;
     /** @return The type of the FieldWindow. */
     virtual ScPivotFieldType GetFieldType() const = 0;
     virtual void ScrollToShowSelection() = 0;
@@ -284,7 +284,7 @@ public:
     virtual Point           GetFieldPosition(size_t nIndex);
     virtual Size            GetFieldSize() const;
     virtual size_t          GetFieldIndex( const Point& rPos );
-    virtual String          GetDescription() const;
+    virtual OUString        GetDescription() const;
 
     virtual void ScrollToEnd();
     virtual void ScrollToShowSelection();
@@ -316,7 +316,7 @@ public:
     virtual ~ScDPPageFieldControl();
 
     virtual ScPivotFieldType GetFieldType() const;
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 };
 
 // ============================================================================
@@ -329,7 +329,7 @@ public:
     virtual ~ScDPColFieldControl();
 
     virtual ScPivotFieldType GetFieldType() const;
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 };
 
 // ============================================================================
@@ -350,7 +350,7 @@ public:
     virtual Point           GetFieldPosition( size_t nIndex );
     virtual Size            GetFieldSize() const;
     virtual size_t          GetFieldIndex( const Point& rPos );
-    virtual String          GetDescription() const;
+    virtual OUString        GetDescription() const;
     virtual ScPivotFieldType   GetFieldType() const;
 
     virtual void ScrollToEnd();
@@ -386,7 +386,7 @@ public:
     virtual ~ScDPSelectFieldControl();
 
     virtual ScPivotFieldType GetFieldType() const;
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 };
 
 // ============================================================================
@@ -400,7 +400,7 @@ public:
 
     virtual ScPivotFieldType GetFieldType() const;
     virtual Size GetFieldSize() const;
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 };
 
 #endif

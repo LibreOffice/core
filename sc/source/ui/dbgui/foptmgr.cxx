@@ -47,7 +47,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 formula::RefButton*     refRbCopyArea,
                                 FixedText*          refFtDbAreaLabel,
                                 FixedText*          refFtDbArea,
-                                const String&       refStrUndefined )
+                                const OUString&     refStrUndefined )
 
     :   pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData ? ptrViewData->GetDocument() : NULL ),
@@ -206,7 +206,7 @@ void ScFilterOptionsMgr::Init()
 
 //----------------------------------------------------------------------------
 
-sal_Bool ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
+sal_Bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 {
     String aPosStr( rPosStr );
     xub_StrLen nColonPos = aPosStr.Search( ':' );

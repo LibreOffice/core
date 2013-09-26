@@ -92,7 +92,7 @@ public:
 
     sal_uInt16          GetFuncPos(const ScFuncDesc*);
     const ScFuncDesc*   GetFuncDesc( sal_uInt16 nPos ) const;
-    String          GetSelFunctionName() const;
+    OUString        GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }
     const Link&     GetDoubleClickHdl() const { return aDoubleClickLink; }

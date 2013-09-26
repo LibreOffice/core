@@ -53,9 +53,9 @@ public:
                         formula::RefButton*     refRbCopyArea,
                         FixedText*          refFtDbAreaLabel,
                         FixedText*          refFtDbArea,
-                        const String&       refStrUndefined );
+                        const OUString&       refStrUndefined );
     ~ScFilterOptionsMgr();
-    sal_Bool    VerifyPosStr ( const String& rPosStr ) const;
+    sal_Bool    VerifyPosStr ( const OUString& rPosStr ) const;
 
 private:
     ScViewData*     pViewData;
@@ -73,7 +73,7 @@ private:
     FixedText*      pFtDbAreaLabel;
     FixedText*      pFtDbArea;
 
-    const String&   rStrUndefined;
+    const OUString&   rStrUndefined;
 
     const ScQueryParam& rQueryData;
 

@@ -1061,7 +1061,7 @@ size_t ScDPHorFieldControl::GetDisplayPosition(size_t nIndex) const
     return nPos;
 }
 
-String ScDPHorFieldControl::GetDescription() const
+OUString ScDPHorFieldControl::GetDescription() const
 {
     return ScResId(STR_ACC_DATAPILOT_COL_DESCR);
 }
@@ -1158,7 +1158,7 @@ ScPivotFieldType ScDPPageFieldControl::GetFieldType() const
     return PIVOTFIELDTYPE_PAGE;
 }
 
-String ScDPPageFieldControl::GetDescription() const
+OUString ScDPPageFieldControl::GetDescription() const
 {
     return ScResId(STR_ACC_DATAPILOT_PAGE_DESCR);
 }
@@ -1180,7 +1180,7 @@ ScPivotFieldType ScDPColFieldControl::GetFieldType() const
     return PIVOTFIELDTYPE_COL;
 }
 
-String ScDPColFieldControl::GetDescription() const
+OUString ScDPColFieldControl::GetDescription() const
 {
     return ScResId(STR_ACC_DATAPILOT_COL_DESCR);
 }
@@ -1333,7 +1333,7 @@ size_t ScDPRowFieldControl::GetDisplayPosition(size_t nIndex) const
 
 //-------------------------------------------------------------------
 
-String ScDPRowFieldControl::GetDescription() const
+OUString ScDPRowFieldControl::GetDescription() const
 {
     return ScResId(STR_ACC_DATAPILOT_ROW_DESCR);
 }
@@ -1433,7 +1433,7 @@ ScPivotFieldType ScDPSelectFieldControl::GetFieldType() const
     return PIVOTFIELDTYPE_SELECT;
 }
 
-String ScDPSelectFieldControl::GetDescription() const
+OUString ScDPSelectFieldControl::GetDescription() const
 {
     return ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
 }
@@ -1463,7 +1463,7 @@ Size ScDPDataFieldControl::GetFieldSize() const
     return aFieldSize;
 }
 
-String ScDPDataFieldControl::GetDescription() const
+OUString ScDPDataFieldControl::GetDescription() const
 {
     return ScResId(STR_ACC_DATAPILOT_DATA_DESCR);
 }
