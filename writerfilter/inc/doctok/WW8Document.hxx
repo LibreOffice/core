@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
    stream consists of substreams that are identified by string
    identifiers.
 */
-class WRITERFILTER_DOCTOK_DLLPUBLIC WW8Stream
+class WW8Stream
 {
 public:
     /**
@@ -269,7 +269,7 @@ enum PropertyType {
 
    The use of the iterator is analogous to WW8PropertySetIterator.
 */
-class WRITERFILTER_DOCTOK_DLLPUBLIC WW8DocumentIterator
+class WW8DocumentIterator
 {
 public:
     typedef boost::shared_ptr<WW8DocumentIterator> Pointer_t;
@@ -384,7 +384,7 @@ public:
 /**
    A Word 8 document.
 */
-class WRITERFILTER_DOCTOK_DLLPUBLIC WW8Document :
+class WW8Document :
     public writerfilter::Reference<Stream>
 {
 public:
