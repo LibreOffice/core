@@ -206,7 +206,7 @@ void ScPreviewShell::InitStartTable(SCTAB nTab)
 
 //------------------------------------------------------------------
 
-String ScPreviewShell::GetDescription() const
+OUString ScPreviewShell::GetDescription() const
 {
     return OUString(" ** Test ** ");
 }

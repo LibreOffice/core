@@ -71,7 +71,7 @@ protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
 
-    virtual String  GetDescription() const;
+    virtual OUString  GetDescription() const;
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false);
     virtual void    ReadUserData(const OUString &, bool bBrowse = false);

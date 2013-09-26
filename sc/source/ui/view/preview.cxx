@@ -652,7 +652,7 @@ void ScPreview::DataChanged(bool bNewTime)
 }
 
 
-String ScPreview::GetPosString()
+OUString ScPreview::GetPosString()
 {
     if (!bValid)
     {

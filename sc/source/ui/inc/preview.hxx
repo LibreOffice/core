@@ -137,7 +137,7 @@ public:
 
     const ScPreviewLocationData& GetLocationData();
 
-    String  GetPosString();
+    OUString  GetPosString();
 
     long    GetPageNo() const   { return nPageNo; }
     sal_uInt16  GetZoom() const     { return nZoom; }
