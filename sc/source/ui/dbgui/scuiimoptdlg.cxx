@@ -112,7 +112,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,
         sal_Bool                    bAscii,
         const ScImportOptions*  pOptions,
-        const String*           pStrTitle,
+        const OUString*         pStrTitle,
         sal_Bool                    bMultiByte,
         sal_Bool                    bOnlyDbtoolsEncodings,
         sal_Bool                    bImport )

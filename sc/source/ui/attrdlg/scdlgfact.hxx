@@ -541,7 +541,7 @@ public:
                                                                     int nId,
                                                                     sal_Bool                    bAscii = sal_True,
                                                                     const ScImportOptions*  pOptions = NULL,
-                                                                    const String*           pStrTitle = NULL,
+                                                                    const OUString*         pStrTitle = NULL,
                                                                     sal_Bool                    bMultiByte = false,
                                                                     sal_Bool                    bOnlyDbtoolsEncodings = false,
                                                                     sal_Bool                    bImport = sal_True );

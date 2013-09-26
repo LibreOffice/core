@@ -70,10 +70,10 @@ class ScImportAsciiDlg : public ModalDialog
 
     ScCsvTableBox*               mpTableBox;
 
-    String                      aCharSetUser;
-    String                      aColumnUser;
-    String                      aTextSepList;
-    String                      maFieldSeparators;  // selected field separators
+    OUString                    aCharSetUser;
+    OUString                    aColumnUser;
+    OUString                    aTextSepList;
+    OUString                    maFieldSeparators;  // selected field separators
     sal_Unicode                 mcTextSep;
 
     CharSet                     meCharSet;          /// Selected char set.
@@ -82,7 +82,7 @@ class ScImportAsciiDlg : public ModalDialog
 
 public:
                                 ScImportAsciiDlg(
-                                    Window* pParent, String aDatName,
+                                    Window* pParent, OUString aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall );
                                 ~ScImportAsciiDlg();
 
@@ -95,7 +95,7 @@ private:
     /** Set separators in ui from maFieldSeparators    */
     void                        SetSeparators();
     /** Returns all separator characters in a string. */
-    String                      GetSeparators() const;
+    OUString                    GetSeparators() const;
 
     /** Enables or disables all separator checkboxes and edit fields. */
     void                        SetupSeparatorCtrls();

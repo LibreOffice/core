@@ -50,12 +50,12 @@ private:
     CheckBox        aBtnAlignment;
     CheckBox        aBtnAdjust;
     PushButton      aBtnRename;
-    String          aStrTitle;
-    String          aStrLabel;
-    String          aStrClose;
-    String          aStrDelTitle;
-    String          aStrDelMsg;
-    String          aStrRename;
+    OUString        aStrTitle;
+    OUString        aStrLabel;
+    OUString        aStrClose;
+    OUString        aStrDelTitle;
+    OUString        aStrDelMsg;
+    OUString        aStrRename;
 
     //------------------------
     ScAutoFormat*           pFormat;

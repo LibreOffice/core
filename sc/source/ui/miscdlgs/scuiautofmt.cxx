@@ -308,10 +308,10 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
     if ( (nIndex > 0) && (aLbFormat.GetEntryCount() > 0) )
     {
-        String aMsg( aStrDelMsg.GetToken( 0, '#' ) );
+        String aMsg( aStrDelMsg.getToken( 0, '#' ) );
 
         aMsg += aLbFormat.GetSelectEntry();
-        aMsg += aStrDelMsg.GetToken( 1, '#' );
+        aMsg += aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES ==
              QueryBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg ).Execute() )

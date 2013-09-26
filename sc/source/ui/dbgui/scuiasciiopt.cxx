@@ -234,7 +234,7 @@ static void save_Separators(
 
 // ----------------------------------------------------------------------------
 
-ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
+ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
         ModalDialog (pParent, "TextImportCsvDialog",
             "modules/scalc/ui/textimportcsv.ui"),
@@ -407,7 +407,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     // *** column type ListBox ***
     xub_StrLen nCount = comphelper::string::getTokenCount(aColumnUser, ';');
     for (xub_StrLen i=0; i<nCount; i++)
-        pLbType->InsertEntry( aColumnUser.GetToken( i ) );
+        pLbType->InsertEntry( aColumnUser.getToken( i, ';' ) );
 
     pLbType->SetSelectHdl( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );
     pFtType->Disable();
@@ -564,7 +564,7 @@ void ScImportAsciiDlg::SetSeparators()
     OString sString(OUStringToOString(maFieldSeparators,
         RTL_TEXTENCODING_MS_1252));
     const sal_Char *aSep = sString.getStr();
-    int len = maFieldSeparators.Len();
+    sal_Int32 len = maFieldSeparators.getLength();
     for (int i = 0; i < len; ++i)
     {
         switch( aSep[i] )
@@ -588,17 +588,17 @@ void ScImportAsciiDlg::SetSelectedCharSet()
         meCharSet = osl_getThreadTextEncoding();
 }
 
-String ScImportAsciiDlg::GetSeparators() const
+OUString ScImportAsciiDlg::GetSeparators() const
 {
-    String aSepChars;
+    OUString aSepChars;
     if( pCkbTab->IsChecked() )
-        aSepChars += '\t';
+        aSepChars += "\t";
     if( pCkbSemicolon->IsChecked() )
-        aSepChars += ';';
+        aSepChars += ";";
     if( pCkbComma->IsChecked() )
-        aSepChars += ',';
+        aSepChars += ",";
     if( pCkbSpace->IsChecked() )
-        aSepChars += ' ';
+        aSepChars += " ";
     if( pCkbOther->IsChecked() )
         aSepChars += pEdOther->GetText();
     return aSepChars;

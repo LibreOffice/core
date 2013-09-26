@@ -252,7 +252,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         sal_Unicode cAsciiDel = ';';
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
 
-        String aTitle;
+        OUString aTitle;
 
         if ( aFilterString == ScDocShell::GetAsciiFilterName() )
         {
