@@ -21,7 +21,6 @@
 #include <optasian.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>
-#include <optasian.hrc>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <i18nlangtag/mslangid.hxx>
@@ -64,7 +63,7 @@ typedef ::std::map< LanguageType, SvxForbiddenChars_Impl* > SvxForbiddenCharacte
 struct SvxAsianLayoutPage_Impl
 {
     SvxAsianConfig  aConfig;
-        SvxAsianLayoutPage_Impl() {}
+    SvxAsianLayoutPage_Impl() {}
 
     ~SvxAsianLayoutPage_Impl();
 
@@ -123,34 +122,31 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
 static LanguageType eLastUsedLanguageTypeForForbiddenCharacters = USHRT_MAX;
 
 SvxAsianLayoutPage::SvxAsianLayoutPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ASIAN_LAYOUT ), rSet),
-    aKerningGB(             this, CUI_RES(GB_KERNING            )),
-    aCharKerningRB(         this, CUI_RES(RB_CHAR_KERNING       )),
-    aCharPunctKerningRB(    this, CUI_RES(RB_CHAR_PUNCT     )),
-    aCharDistGB(            this, CUI_RES(GB_CHAR_DIST      )),
-    aNoCompressionRB(       this, CUI_RES(RB_NO_COMP            )),
-    aPunctCompressionRB(    this, CUI_RES(RB_PUNCT_COMP     )),
-     aPunctKanaCompressionRB(this, CUI_RES(RB_PUNCT_KANA_COMP   )),
-    aStartEndGB(            this, CUI_RES(GB_START_END      )),
-    aLanguageFT(            this, CUI_RES(FT_LANGUAGE           )),
-    aLanguageLB(            this, CUI_RES(LB_LANGUAGE           )),
-    aStandardCB(            this, CUI_RES(CB_STANDARD           )),
-    aStartFT(               this, CUI_RES(FT_START          )),
-    aStartED(               this, CUI_RES(ED_START          )),
-    aEndFT(                 this, CUI_RES(FT_END                )),
-    aEndED(                 this, CUI_RES(ED_END                )),
-    aHintFT(                this, CUI_RES(FT_HINT               )),
+    SfxTabPage(pParent, "OptAsianPage", "cui/ui/optasianpage.ui", rSet),
     pImpl(new SvxAsianLayoutPage_Impl)
 {
-    FreeResource();
-    LanguageHdl(&aLanguageLB);
-    aLanguageLB.SetSelectHdl(LINK(this, SvxAsianLayoutPage, LanguageHdl));
-    aStandardCB.SetClickHdl(LINK(this, SvxAsianLayoutPage, ChangeStandardHdl));
-    Link aLk(LINK(this, SvxAsianLayoutPage, ModifyHdl));
-    aStartED.SetModifyHdl(aLk);
-    aEndED.SetModifyHdl(aLk);
+    get(m_pCharKerningRB, "charkerning");
+    get(m_pCharPunctKerningRB, "charpunctkerning");
+    get(m_pNoCompressionRB, "nocompression");
+    get(m_pPunctCompressionRB, "punctcompression");
+    get(m_pPunctKanaCompressionRB, "punctkanacompression");
+    get(m_pLanguageFT, "languageft");
+    get(m_pLanguageLB, "language");
+    get(m_pStandardCB, "standard");
+    get(m_pStartFT, "startft");
+    get(m_pStartED, "start");
+    get(m_pEndFT, "endft");
+    get(m_pEndED, "end");
+    get(m_pHintFT, "hintft");
 
-    aLanguageLB.SetLanguageList( LANG_LIST_FBD_CHARS, sal_False, sal_False );
+    LanguageHdl(m_pLanguageLB);
+    m_pLanguageLB->SetSelectHdl(LINK(this, SvxAsianLayoutPage, LanguageHdl));
+    m_pStandardCB->SetClickHdl(LINK(this, SvxAsianLayoutPage, ChangeStandardHdl));
+    Link aLk(LINK(this, SvxAsianLayoutPage, ModifyHdl));
+    m_pStartED->SetModifyHdl(aLk);
+    m_pEndED->SetModifyHdl(aLk);
+
+    m_pLanguageLB->SetLanguageList( LANG_LIST_FBD_CHARS, sal_False, sal_False );
 }
 
 SvxAsianLayoutPage::~SvxAsianLayoutPage()
@@ -165,24 +161,24 @@ SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet& rAttr
 
 sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
 {
-    if(aCharKerningRB.IsChecked() != aCharKerningRB.GetSavedValue())
+    if(m_pCharKerningRB->IsChecked() != m_pCharKerningRB->GetSavedValue())
     {
-        pImpl->aConfig.SetKerningWesternTextOnly(aCharKerningRB.IsChecked());
+        pImpl->aConfig.SetKerningWesternTextOnly(m_pCharKerningRB->IsChecked());
         OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal;
-            sal_Bool bVal = !aCharKerningRB.IsChecked();
+            sal_Bool bVal = !m_pCharKerningRB->IsChecked();
             aVal.setValue(&bVal, ::getBooleanCppuType());
             pImpl->xPrSet->setPropertyValue(sPunct, aVal);
         }
     }
 
-    if(aNoCompressionRB.IsChecked() != aNoCompressionRB.GetSavedValue() ||
-            aPunctCompressionRB.IsChecked() != aPunctCompressionRB.GetSavedValue())
+    if(m_pNoCompressionRB->IsChecked() != m_pNoCompressionRB->GetSavedValue() ||
+            m_pPunctCompressionRB->IsChecked() != m_pPunctCompressionRB->GetSavedValue())
     {
-        sal_Int16 nSet = aNoCompressionRB.IsChecked() ? 0 :
-                            aPunctCompressionRB.IsChecked() ? 1 : 2;
+        sal_Int16 nSet = m_pNoCompressionRB->IsChecked() ? 0 :
+                            m_pPunctCompressionRB->IsChecked() ? 1 : 2;
         pImpl->aConfig.SetCharDistanceCompression(nSet);
         OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sCompress))
@@ -213,7 +209,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
             OSL_FAIL("exception in XForbiddenCharacters");
         }
     }
-    eLastUsedLanguageTypeForForbiddenCharacters = aLanguageLB.GetSelectLanguage();
+    eLastUsedLanguageTypeForForbiddenCharacters = m_pLanguageLB->GetSelectLanguage();
 
     return sal_False;
 }
@@ -258,32 +254,31 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     }
     else
     {
-        aStartEndGB.Enable(sal_False);
-        aLanguageFT.Enable(sal_False);
-        aLanguageLB.Enable(sal_False);
-        aStandardCB.Enable(sal_False);
-        aStartFT.Enable(sal_False);
-        aStartED.Enable(sal_False);
-        aEndFT.Enable(sal_False);
-        aEndED.Enable(sal_False);
-        aHintFT.Enable(sal_False);
+        m_pLanguageFT->Enable(sal_False);
+        m_pLanguageLB->Enable(sal_False);
+        m_pStandardCB->Enable(sal_False);
+        m_pStartFT->Enable(sal_False);
+        m_pStartED->Enable(sal_False);
+        m_pEndFT->Enable(sal_False);
+        m_pEndED->Enable(sal_False);
+        m_pHintFT->Enable(sal_False);
     }
     if(bKernWesternText)
-        aCharKerningRB.Check(sal_True);
+        m_pCharKerningRB->Check(sal_True);
     else
-        aCharPunctKerningRB.Check(sal_True);
+        m_pCharPunctKerningRB->Check(sal_True);
     switch(nCompress)
     {
-        case 0 : aNoCompressionRB.Check();        break;
-        case 1 : aPunctCompressionRB.Check();     break;
-        default: aPunctKanaCompressionRB.Check();
+        case 0 : m_pNoCompressionRB->Check();        break;
+        case 1 : m_pPunctCompressionRB->Check();     break;
+        default: m_pPunctKanaCompressionRB->Check();
     }
-    aCharKerningRB.SaveValue();
-    aNoCompressionRB.SaveValue();
-    aPunctCompressionRB.SaveValue();
-    aPunctKanaCompressionRB.SaveValue();
+    m_pCharKerningRB->SaveValue();
+    m_pNoCompressionRB->SaveValue();
+    m_pPunctCompressionRB->SaveValue();
+    m_pPunctKanaCompressionRB->SaveValue();
 
-    aLanguageLB.SelectEntryPos(0);
+    m_pLanguageLB->SelectEntryPos(0);
     //preselect the system language in the box - if available
     if(USHRT_MAX == eLastUsedLanguageTypeForForbiddenCharacters)
     {
@@ -294,14 +289,14 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
         else if (MsLangId::isTraditionalChinese(eLastUsedLanguageTypeForForbiddenCharacters))
             eLastUsedLanguageTypeForForbiddenCharacters = LANGUAGE_CHINESE_TRADITIONAL;
     }
-    aLanguageLB.SelectLanguage( eLastUsedLanguageTypeForForbiddenCharacters );
-    LanguageHdl(&aLanguageLB);
+    m_pLanguageLB->SelectLanguage( eLastUsedLanguageTypeForForbiddenCharacters );
+    LanguageHdl(m_pLanguageLB);
 }
 
 IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
 {
     //set current value
-    LanguageType eSelectLanguage = aLanguageLB.GetSelectLanguage();
+    LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
     LanguageTag aLanguageTag( eSelectLanguage);
     Locale aLocale( aLanguageTag.getLocale());
 
@@ -352,13 +347,13 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
         sStart = aForbidden.beginLine;
         sEnd = aForbidden.endLine;
     }
-    aStandardCB.Check(!bAvail);
-    aStartED.Enable(bAvail);
-    aEndED.Enable(bAvail);
-    aStartFT.Enable(bAvail);
-    aEndFT.Enable(bAvail);
-    aStartED.SetText(sStart);
-    aEndED.SetText(sEnd);
+    m_pStandardCB->Check(!bAvail);
+    m_pStartED->Enable(bAvail);
+    m_pEndED->Enable(bAvail);
+    m_pStartFT->Enable(bAvail);
+    m_pEndFT->Enable(bAvail);
+    m_pStartED->SetText(sStart);
+    m_pEndED->SetText(sEnd);
 
     return 0;
 }
@@ -366,21 +361,21 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
 IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, CheckBox*, pBox)
 {
     sal_Bool bCheck = pBox->IsChecked();
-    aStartED.Enable(!bCheck);
-    aEndED.Enable(!bCheck);
-    aStartFT.Enable(!bCheck);
-    aEndFT.Enable(!bCheck);
+    m_pStartED->Enable(!bCheck);
+    m_pEndED->Enable(!bCheck);
+    m_pStartFT->Enable(!bCheck);
+    m_pEndFT->Enable(!bCheck);
 
-    ModifyHdl(&aStartED);
+    ModifyHdl(m_pStartED);
     return 0;
 }
 
 IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
 {
-    LanguageType eSelectLanguage = aLanguageLB.GetSelectLanguage();
+    LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
     Locale aLocale( LanguageTag::convertToLocale( eSelectLanguage ));
-    OUString sStart = aStartED.GetText();
-    OUString sEnd = aEndED.GetText();
+    OUString sStart = m_pStartED->GetText();
+    OUString sEnd = m_pEndED->GetText();
     sal_Bool bEnable = pEdit->IsEnabled();
     if(pImpl->xForbidden.is())
     {

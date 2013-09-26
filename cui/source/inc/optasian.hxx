@@ -29,26 +29,22 @@
 struct SvxAsianLayoutPage_Impl;
 class SvxAsianLayoutPage : public SfxTabPage
 {
-    FixedLine    aKerningGB;
-    RadioButton aCharKerningRB;
-    RadioButton aCharPunctKerningRB;
+    RadioButton* m_pCharKerningRB;
+    RadioButton* m_pCharPunctKerningRB;
 
-    FixedLine    aCharDistGB;
-    RadioButton aNoCompressionRB;
-    RadioButton aPunctCompressionRB;
-    RadioButton aPunctKanaCompressionRB;
+    RadioButton* m_pNoCompressionRB;
+    RadioButton* m_pPunctCompressionRB;
+    RadioButton* m_pPunctKanaCompressionRB;
 
-    FixedLine    aStartEndGB;
+    FixedText*      m_pLanguageFT;
+    SvxLanguageBox* m_pLanguageLB;
+    CheckBox*       m_pStandardCB;
 
-    FixedText       aLanguageFT;
-    SvxLanguageBox  aLanguageLB;
-    CheckBox        aStandardCB;
-
-    FixedText   aStartFT;
-    Edit        aStartED;
-    FixedText   aEndFT;
-    Edit        aEndED;
-    FixedText   aHintFT;
+    FixedText*   m_pStartFT;
+    Edit*        m_pStartED;
+    FixedText*   m_pEndFT;
+    Edit*        m_pEndED;
+    FixedText*   m_pHintFT;
 
     SvxAsianLayoutPage_Impl* pImpl;
 
@@ -62,8 +58,8 @@ public:
     virtual ~SvxAsianLayoutPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static sal_uInt16*      GetRanges();
-    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
+    static sal_uInt16*  GetRanges();
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
