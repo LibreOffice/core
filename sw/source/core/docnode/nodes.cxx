@@ -341,10 +341,10 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
     if( rNds.GetDoc() != GetDoc() )
         rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
 
-
     if( bNewFrms )
         bNewFrms = &GetDoc()->GetNodes() == (const SwNodes*)&rNds &&
                     GetDoc()->GetCurrentViewShell();    //swmod 071108//swmod 071225
+
     if( bNewFrms )
     {
         // Frames besorgen:

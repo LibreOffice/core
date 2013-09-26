@@ -114,7 +114,6 @@ namespace {
     }
 }
 
-
 //For SwFlyFrm::GetCrsrOfst
 class SwCrsrOszControl
 {
@@ -136,11 +135,13 @@ public:
             }
             return bRet;
         }
+
     void Entry( const SwFlyFrm *pFly )
         {
             if ( !pEntry )
                 pEntry = pStk1 = pFly;
         }
+
     void Exit( const SwFlyFrm *pFly )
         {
             if ( pFly == pEntry )
@@ -1643,7 +1644,6 @@ sal_Bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
         pPage = (const SwPageFrm*)pPage->GetNext();
     return pPage ? pPage->IsEmptyPage() : sal_True;
 }
-
 
 /** Is the Frm or rather the Section in which it lies protected?
  *

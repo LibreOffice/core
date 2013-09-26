@@ -234,7 +234,6 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( !GetFlyFrm()->IsCompletePaint() )
                 aRect._Intersection( aRepaintRect );
 
-
             // GetFlyFrm() may change the layout mode at the output device.
             {
                 SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );

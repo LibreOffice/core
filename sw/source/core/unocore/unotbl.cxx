@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
 // STL includes
 #include <list>
 #include <vector>
@@ -174,6 +172,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEn
             }
         }
         break;
+
         case  FN_TABLE_IS_RELATIVE_WIDTH:
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
@@ -208,6 +207,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEn
             pFmt->GetDoc()->SetAttr(aSz, *pFmt);
         }
         break;
+
         case RES_PAGEDESC:
         {
             OUString sPageStyle;
@@ -222,6 +222,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEn
             pFmt->GetDoc()->SetAttr(aDesc, *pFmt);
         }
         break;
+
         default:
             throw lang::IllegalArgumentException();
     }
@@ -246,6 +247,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
                 aRet <<= (sal_Int32)nRepeat;
         }
         break;
+
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_IS_RELATIVE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
@@ -262,6 +264,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             }
         }
         break;
+
         case RES_PAGEDESC:
         {
             const SfxItemSet& rSet = pFmt->GetAttrSet();
@@ -278,9 +281,11 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             aRet <<= OUString(sPDesc);
         }
         break;
+
         case RES_ANCHOR :
             aRet <<= text::TextContentAnchorType_AT_PARAGRAPH;
         break;
+
         case FN_UNO_ANCHOR_TYPES :
         {
             uno::Sequence<text::TextContentAnchorType> aTypes(1);
@@ -289,14 +294,17 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             aRet <<= aTypes;
         }
         break;
+
         case FN_UNO_WRAP :
         {
             aRet <<= text::WrapTextMode_NONE;
         }
         break;
+
         case FN_PARAM_LINK_DISPLAY_NAME :
             aRet <<= pFmt->GetName();
         break;
+
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
         {
@@ -545,7 +553,6 @@ void sw_NormalizeRange(String &rCell1, String &rCell2)
         rCell1  = sw_GetCellName( std::min(nCol1, nCol2), std::min(nRow1, nRow2) );
         rCell2  = sw_GetCellName( std::max(nCol1, nCol2), std::max(nRow1, nRow2) );
     }
-
 }
 
 void SwRangeDescriptor::Normalize()
@@ -1209,7 +1216,6 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
 uno::Type SAL_CALL SwXCell::getElementType(void) throw( uno::RuntimeException )
 {
     return ::getCppuType((const uno::Reference<text::XTextRange>*)0);
-
 }
 
 sal_Bool SwXCell::hasElements(void) throw( uno::RuntimeException )
@@ -1323,12 +1329,10 @@ SwXTextTableRow::SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLn) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_ROW)),
     pLine(pLn)
 {
-
 }
 
 SwXTextTableRow::~SwXTextTableRow()
 {
-
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextTableRow::getPropertySetInfo(void) throw( uno::RuntimeException )
@@ -1379,6 +1383,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                     pDoc->SetAttr(aFrmSize, *pLn->ClaimFrmFmt());
                 }
                 break;
+
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
                     UnoActionContext aContext(pDoc);
@@ -1386,6 +1391,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                     lcl_SetTblSeparators(aValue, pTable2, pLine->GetTabBoxes()[0], sal_True, pDoc);
                 }
                 break;
+
                 default:
                 {
                     SwFrmFmt* pLnFmt = pLn->ClaimFrmFmt();
@@ -1429,11 +1435,13 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
                         aRet <<= (sal_Int32)(TWIP_TO_MM100(rSize.GetSize().Height()));
                 }
                 break;
+
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
                     lcl_GetTblSeparators(aRet, pTable, pLine->GetTabBoxes()[0], sal_True);
                 }
                 break;
+
                 default:
                 {
                     const SwAttrSet& rSet = pLn->GetFrmFmt()->GetAttrSet();
@@ -1932,7 +1940,6 @@ public:
 
     void        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
-
 
 SwTableProperties_Impl::SwTableProperties_Impl()
 {
@@ -2436,7 +2443,6 @@ uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColum
     if(!aRef.is())
         throw lang::IndexOutOfBoundsException();
     return aRef;
-
 }
 
 uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
@@ -2722,6 +2728,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
         aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
+
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
@@ -2769,6 +2776,7 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
         throw aRuntime;
     }
     uno::Sequence< OUString > aRet(bFirstColumnAsLabel ? nRowCount - 1 : nRowCount);
+
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
@@ -3045,6 +3053,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     setName( sName );
                 }
                 break;
+
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
@@ -3055,6 +3064,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     }
                 }
                 break;
+
                 case FN_UNO_RANGE_COL_LABEL:
                 {
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
@@ -3065,6 +3075,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     }
                 }
                 break;
+
                 case FN_UNO_TABLE_BORDER:
                 case FN_UNO_TABLE_BORDER2:
                 {
@@ -3139,8 +3150,6 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     pUnoCrsr->SetRemainInSection( sal_False );
 
-
-
                     const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
@@ -3184,6 +3193,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     delete pUnoCrsr;
                 }
                 break;
+
                 case FN_UNO_TABLE_BORDER_DISTANCES:
                 {
                     table::TableBorderDistances aTableBorderDistances;
@@ -3234,6 +3244,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
                 }
                 break;
+
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
                     UnoActionContext aContext(pFmt->GetDoc());
@@ -3241,7 +3252,9 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     lcl_SetTblSeparators(aValue, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], sal_False, pFmt->GetDoc());
                 }
                 break;
+
                 case FN_UNO_TABLE_COLUMN_RELATIVE_SUM:/*_readonly_*/ break;
+
                 default:
                 {
                     SwAttrSet aSet(pFmt->GetAttrSet());
@@ -3284,24 +3297,28 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     aRet <<= getName();
                 }
                 break;
+
                 case  FN_UNO_ANCHOR_TYPES:
                 case  FN_UNO_TEXT_WRAP:
                 case  FN_UNO_ANCHOR_TYPE:
                     ::sw::GetDefaultTextContentValue(
                             aRet, OUString(), pEntry->nWID);
                 break;
+
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     sal_Bool bTemp = bFirstRowAsLabel;
                     aRet.setValue(&bTemp, ::getCppuBooleanType());
                 }
                 break;
+
                 case FN_UNO_RANGE_COL_LABEL:
                 {
                     sal_Bool bTemp = bFirstColumnAsLabel;
                     aRet.setValue(&bTemp, ::getCppuBooleanType());
                 }
                 break;
+
                 case FN_UNO_TABLE_BORDER:
                 case FN_UNO_TABLE_BORDER2:
                 {
@@ -3386,6 +3403,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     delete pUnoCrsr;
                 }
                 break;
+
                 case FN_UNO_TABLE_BORDER_DISTANCES :
                 {
                     table::TableBorderDistances aTableBorderDistances( 0, sal_True, 0, sal_True, 0, sal_True, 0, sal_True ) ;
@@ -3449,18 +3467,22 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     aRet <<= aTableBorderDistances;
                 }
                 break;
+
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     lcl_GetTblSeparators(aRet, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], sal_False);
                 }
                 break;
+
                 case FN_UNO_TABLE_COLUMN_RELATIVE_SUM:
                     aRet <<= (sal_Int16) UNO_TABLE_COLUMN_SUM;
                 break;
+
                 case RES_ANCHOR:
                     // AnchorType is readonly and might be void (no return value)
                 break;
+
                 case FN_UNO_TEXT_SECTION:
                 {
                     SwTable* pTable = SwTable::FindTable( pFmt );
@@ -3475,6 +3497,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     }
                 }
                 break;
+
                 default:
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
@@ -3796,7 +3819,6 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
     if(!aRet.is())
         throw lang::IndexOutOfBoundsException();
     return aRet;
-
 }
 
 uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUString& rRange)
@@ -4553,7 +4575,6 @@ sal_Bool SwXCellRange::isNotANumber(double /*fNumber*/) throw( uno::RuntimeExcep
 {
     OSL_FAIL("not implemented");
     return sal_False;
-
 }
 
 double SwXCellRange::getNotANumber(void) throw( uno::RuntimeException )
