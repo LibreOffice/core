@@ -1008,11 +1008,6 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursor(void) throw( uno:
         SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
         aRef =  static_cast<text::XWordCursor*>(pXCursor);
-//      // no Cursor in protected sections
-//      SwCrsrSaveState aSave( *pUnoCrsr );
-//      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
-//          pUnoCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE | nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
-//          throw( uno::RuntimeException() );
     }
     else
         throw uno::RuntimeException();
@@ -1205,11 +1200,6 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
                     pSttNd, pTable);
 
         aRef = pEnum;
-//      // no Cursor in protected sections
-//      SwCrsrSaveState aSave( *pUnoCrsr );
-//      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
-//          pUnoCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE | nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
-//          throw( uno::RuntimeException() );
     }
     return aRef;
 }
@@ -2124,11 +2114,6 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         aSet.Put(aSp);
     }
 
-    //TODO: folgende Propertiers noch impl.
-//  FN_UNO_RANGE_ROW_LABEL
-//  FN_UNO_RANGE_COL_LABEL
-//  FN_UNO_TABLE_BORDER
-
     if(aSet.Count())
     {
         rDoc.SetAttr( aSet, *rTbl.GetFrmFmt() );
@@ -2597,13 +2582,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
                     bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
-                    //const SfxPoolItem* pItem;
-                    //SwDoc* pDoc = pXCell->GetDoc();
-                    //sal_Bool bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
-                    //          ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
-                    //          ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
-
-                    if(!bIsNum/*bIsText*/)
+                    if(!bIsNum)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
                         pColArray[nCol] <<= sw_getValue(*pXCell);
@@ -3851,8 +3830,6 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        /* ASK OLIVER
-        lcl_FormatTable(pFmt);*/
         const SfxItemPropertySimpleEntry* pEntry =
                                     m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
@@ -3968,8 +3945,6 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        /* ASK OLIVER
-        lcl_FormatTable(pFmt);*/
         const SfxItemPropertySimpleEntry* pEntry =
                                     m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
@@ -4130,8 +4105,7 @@ void SwXCellRange::GetDataSequence(
                     {
                         // check if table box value item is set
                         bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
-                        //sal_uLong nNdPos = pBox->IsValidNumTxtNd( sal_True );
-                        if (!bIsNum/* && ULONG_MAX == nNdPos*/)
+                        if (!bIsNum)
                             pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
                         else
                             pAnyData[nDtaCnt++] <<= sw_getValue(*pXCell);
@@ -4249,13 +4223,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
                     bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) == SFX_ITEM_SET;
-                    //const SfxPoolItem* pItem;
-                    //SwDoc* pDoc = pXCell->GetDoc();
-                    //sal_Bool bIsText = (SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, sal_True, &pItem)
-                    //          ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
-                    //          ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT);
-
-                    if(!bIsNum/*bIsText*/)
+                    if(!bIsNum)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
                         pColArray[nCol] <<= sw_getValue(*pXCell);
