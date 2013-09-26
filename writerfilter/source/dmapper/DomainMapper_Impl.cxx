@@ -177,7 +177,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_pSdtHelper(0),
         m_nTableDepth(0),
         m_bHasFtnSep(false),
-        m_bIgnoreNextPara(false)
+        m_bIgnoreNextPara(false),
+        m_bFrameBtLr(false)
 
 {
     appendTableManager( );
@@ -1778,6 +1779,19 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         uno::makeAny( true ) );
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
+                // Extract the special "btLr text frame" mode, requested by oox, if needed.
+                uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+                for (int i = 0; i < aGrabBag.getLength(); ++i)
+                {
+                    if (aGrabBag[i].Name == "mso-layout-flow-alt")
+                    {
+                        m_bFrameBtLr = aGrabBag[i].Value.get<OUString>() == "bottom-to-top";
+                        break;
+                    }
+                }
+
                 uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
                 uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
                 xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
@@ -1858,6 +1872,7 @@ void DomainMapper_Impl::PopShapeContext()
         }
         m_aAnchoredStack.pop();
     }
+    m_bFrameBtLr = false;
 }
 
 sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )

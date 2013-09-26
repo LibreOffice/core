@@ -554,6 +554,28 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             PropertySet( xShape ).setAnyProperty( PROP_RightBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceRight )));
             PropertySet( xShape ).setAnyProperty( PROP_BottomBorderDistance, makeAny( sal_Int32( getTextBox()->borderDistanceBottom )));
         }
+        if (!maTypeModel.maLayoutFlowAlt.isEmpty())
+        {
+            // Can't handle this property here, as the frame is not attached yet: pass it to writerfilter.
+            uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+            uno::Sequence<beans::PropertyValue> aGrabBag;
+            xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
+            beans::PropertyValue aPair;
+            aPair.Name = "mso-layout-flow-alt";
+            aPair.Value = uno::makeAny(maTypeModel.maLayoutFlowAlt);
+            if (aGrabBag.hasElements())
+            {
+                sal_Int32 nLength = aGrabBag.getLength();
+                aGrabBag.realloc(nLength + 1);
+                aGrabBag[nLength + 1] = aPair;
+            }
+            else
+            {
+                aGrabBag.realloc(1);
+                aGrabBag[0] = aPair;
+            }
+            xPropertySet->setPropertyValue("FrameInteropGrabBag", uno::makeAny(aGrabBag));
+        }
     }
     else
     {

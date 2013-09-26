@@ -709,6 +709,7 @@ public:
 
     /// If the next newline should be ignored, used by the special footnote separator paragraph.
     bool m_bIgnoreNextPara;
+    bool m_bFrameBtLr; ///< Bottom to top, left to right text frame direction is requested for the current text frame.
 };
 } //namespace dmapper
 } //namespace writerfilter

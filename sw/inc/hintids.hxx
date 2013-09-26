@@ -227,6 +227,7 @@ RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
     RES_FRMATR_CONDITIONAL_STYLE_NAME,              // 126
     RES_FILL_STYLE,                                 // 127
     RES_FILL_GRADIENT,                              // 128
+    RES_FRMATR_GRABBAG,
 RES_FRMATR_END
 };
 

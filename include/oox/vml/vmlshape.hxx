@@ -101,6 +101,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OUString maWrapDistanceRight;        ///< Distance from the right side of the shape to the text that wraps around it.
     OUString maWrapDistanceTop;          ///< Distance from the top of the shape to the text that wraps around it.
     OUString maWrapDistanceBottom;       ///< Distance from the bottom of the shape to the text that wraps around it.
+    OUString maLayoutFlowAlt; ///< Specifies the alternate layout flow for text in textboxes.
 
     explicit            ShapeTypeModel();
 
