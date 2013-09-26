@@ -41,12 +41,7 @@
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
-
-/*************************************************************************
- *                class SwFlyPortion
- *
- * Wir erwarten ein framelokales SwRect !
- *************************************************************************/
+// class SwFlyPortion => we expect a frame-locale SwRect!
 
 void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 {
@@ -57,12 +52,11 @@ void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
  *************************************************************************/
 sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 {
-    OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format: rush hour" );
-    // 8537: Tabs muessen expandiert werden.
+    OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format" );
+    // tabs must be expanded (Bug 8537)
     if( rInf.GetLastTab() )
         ((SwLinePortion*)rInf.GetLastTab())->FormatEOL( rInf );
 
-    // Der Glue wird aufgespannt.
     rInf.GetLast()->FormatEOL( rInf );
     PrtWidth( static_cast<sal_uInt16>(Fix() - rInf.X() + PrtWidth()) );
     if( !Width() )
@@ -71,7 +65,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
         Width(1);
     }
 
-    // Restaurierung
+    // resetting
     rInf.SetFly( 0 );
     rInf.Width( rInf.RealWidth() );
     rInf.GetParaPortion()->SetFly( sal_True );
@@ -110,9 +104,9 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 
     if( bFull )
     {
-        // 3924: wenn die Zeile voll ist und der zeichengebundene Frame am
-        // Anfang der Zeile steht.
-        // 5157: nicht wenn einem Fly ausgewichen werden kann!
+        // 3924: if the line is full, and the character-bound frame is at
+        //       the beginning of a line
+        // 5157: if it is not possible to side step into a Fly
         // "Begin of line" criteria ( ! rInf.X() ) has to be extended.
         // KerningPortions at beginning of line, e.g., for grid layout
         // must be considered.
@@ -126,7 +120,7 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         if( nLeft == rInf.X() && ! rInf.GetFly() )
         {
             Width( rInf.Width() );
-            bFull = sal_False; // Damit Notizen noch in dieser Zeile landen
+            bFull = sal_False; // so that notes can still be placed in this line
         }
         else
         {
@@ -146,11 +140,15 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-/*************************************************************************
- *  SwTxtFrm::MoveFlyInCnt() haengt jetzt die zeichengebundenen Objekte
- *  innerhalb des angegebenen Bereichs um, damit koennen diese vom Master
- *  zum Follow oder umgekehrt wandern.
- *************************************************************************/
+//TODO: improve documentation
+/** move character-bound objects inside the given area
+ *
+ * This allows moving those objects from Master to Follow, or vice versa.
+ *
+ * @param pNew
+ * @param nStart
+ * @param nEnd
+ */
 void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd )
 {
     SwSortedObjs *pObjs = 0L;
@@ -229,8 +227,8 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
     else
     {
-        // Baseline-Ausgabe !
-        // 7922: Bei CompletePaint alles painten
+        // baseline output
+        // 7922: re-paint everything at a CompletePaint call
         SwRect aRepaintRect( rInf.GetPaintRect() );
 
         if ( rInf.GetTxtFrm()->IsRightToLeft() )
@@ -257,10 +255,8 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             ((SwTxtPaintInfo&)rInf).GetRefDev()->SetLayoutMode(
                     rInf.GetOut()->GetLayoutMode() );
 
-            // Es hilft alles nichts, im zeichengebundenen Frame kann wer weiss
-            // was am OutputDevice eingestellt sein, wir muessen unseren Font
-            // wieder hineinselektieren. Dass wir im const stehen, soll uns
-            // daran nicht hindern:
+            // As the OutputDevice might be anything, the font must be re-selected.
+            // Being in const method should not be a problem.
             ((SwTxtPaintInfo&)rInf).SelectFont();
 
             // I want to know if this can really happen. So here comes a new
@@ -272,12 +268,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/*************************************************************************
- *                  SwFlyCntPortion::SwFlyCntPortion()
- *
- * Es werden die Masze vom pFly->OutRect() eingestellt.
- * Es erfolgt ein SetBase() !
- *************************************************************************/
+// use the dimensions of pFly->OutRect()
 // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
 SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
                                   SwFlyInCntFrm *pFly, const Point &rBase,
@@ -324,15 +315,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     SetWhichPor( POR_FLYCNT );
 }
 
-
-/*************************************************************************
- *                  SwFlyCntPortion::SetBase()
- *
- * Nach dem Setzen des RefPoints muss der Ascent neu berechnet werden,
- * da er von der RelPos abhaengt.
- * pFly->GetRelPos().Y() bezeichnet die relative Position zur Baseline.
- * Bei 0 liegt der obere Rand des FlyCnt auf der Baseline der Zeile.
- *************************************************************************/
+// after setting the RefPoints, the ascent needs to be recalculated because it is dependent on RelPos.
 // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
 void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                                long nLnAscent, long nLnDescent,
@@ -390,6 +373,8 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         SvLSize( aObjPositioning.GetObjBoundRectInclSpacing().SSize() );
     if( Height() )
     {
+        // GetRelPosY returns the relative position to baseline (if 0, the
+        // upper border of the FlyCnt if on the baseline of a line)
         SwTwips nRelPos = aObjPositioning.GetRelPosY();
         if ( nRelPos < 0 )
         {

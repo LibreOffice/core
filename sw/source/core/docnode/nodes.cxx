@@ -43,22 +43,21 @@
 
 typedef std::vector<SwStartNode*> SwSttNdPtrs;
 
-// Funktion zum bestimmen des hoechsten Levels innerhalb des Bereiches
+// function to determine the highest level in the given range
 sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
 
-/*******************************************************************
-|*  SwNodes::SwNodes
-|*
-|*  Beschreibung
-|*      Konstruktor; legt die vier Grundsektions (PostIts,
-|*      Inserts, Icons, Inhalt) an
-*******************************************************************/
+/** Constructor
+ *
+ * creates the base sections (PostIts, Inserts, AutoText, RedLines, Content)
+ *
+ * @param pDocument TODO: provide documentation
+ */
 SwNodes::SwNodes( SwDoc* pDocument )
     : pRoot( 0 ), pMyDoc( pDocument )
 {
     bInNodesDel = bInDelUpdOutl = bInDelUpdNum = sal_False;
 
-    OSL_ENSURE( pMyDoc, "in welchem Doc stehe ich denn?" );
+    OSL_ENSURE( pMyDoc, "in which Doc am I?" );
 
     sal_uLong nPos = 0;
     SwStartNode* pSttNd = new SwStartNode( *this, nPos++ );
@@ -82,17 +81,12 @@ SwNodes::SwNodes( SwDoc* pDocument )
     pOutlineNds = new SwOutlineNodes;
 }
 
-/*******************************************************************
-|*
-|*  SwNodes::~SwNodes
-|*
-|*  Beschreibung
-|*      dtor, loescht alle Nodes, deren Pointer in diesem dynamischen
-|*      Array sind. Ist kein Problem, da Nodes ausserhalb dieses
-|*      Arrays nicht erzeugt werden koennen und somit auch nicht
-|*      in mehreren drin sein koennen
-|*
-*******************************************************************/
+/** Destructor
+ *
+ * Deletes all nodes whose pointer are in a dynamic array. This should be no
+ * problem as nodes cannot be created outside this array and, thus, cannot be
+ * part of multiple arrays.
+ */
 SwNodes::~SwNodes()
 {
     delete pOutlineNds;
@@ -111,33 +105,33 @@ SwNodes::~SwNodes()
         }
     }
 
-    // jetzt muessen alle SwNodeIndizies abgemeldet sein!!!
+    // here, all SwNodeIndices must be unregistered
     delete pEndOfContent;
 }
 
 void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                         SwNodeIndex& rInsPos, sal_Bool bNewFrms )
 {
-    // im UndoBereich brauchen wir keine Frames
+    // no need for frames in the UndoArea
     SwNodes& rNds = rInsPos.GetNodes();
     const SwNode* pPrevInsNd = rNds[ rInsPos.GetIndex() -1 ];
 
-    //JP 03.02.99: alle Felder als invalide erklaeren, aktu. erfolgt im
-    //              Idle-Handler des Docs
+    // declare all fields as invalid, updating will happen
+    // in the idle-handler of the doc
     if( GetDoc()->SetFieldsDirty( true, &rDelPos.GetNode(), nSz ) &&
         rNds.GetDoc() != GetDoc() )
         rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
 
-    //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
+    // NEVER include nodes from the RedLineArea
     sal_uLong nNd = rInsPos.GetIndex();
     bool bInsOutlineIdx = !(
             rNds.GetEndOfRedlines().StartOfSectionNode()->GetIndex() < nNd &&
             nNd < rNds.GetEndOfRedlines().GetIndex() );
 
-    if( &rNds == this )         // im gleichen Nodes-Array -> moven !!
+    if( &rNds == this ) // if in the same node array -> move
     {
-        // wird von vorne nach hinten gemovt, so wird nach vorne immer
-        // nachgeschoben, d.H. die Loeschposition ist immer gleich
+        // Move order: from front to back, so that new entries are added at
+        // first position, thus, deletion position stays the same
         sal_uInt16 nDiff = rDelPos.GetIndex() < rInsPos.GetIndex() ? 0 : 1;
 
         for( sal_uLong n = rDelPos.GetIndex(); nSz; n += nDiff, --nSz )
@@ -203,7 +197,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
         {
             SwNode* pNd = &rDelPos.GetNode();
 
-            // NoTextNode muessen ihre Persitenten Daten mitnehmen
+            // NoTextNode keep their persistent data
             if( pNd->IsNoTxtNode() )
             {
                 if( bSavePersData )
@@ -219,7 +213,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                     pOutlineNds->erase( pNd );
                 }
 
-                // muss die Rule kopiere werden?
+                // copy rules if needed
                 if( pDestDoc )
                 {
                     const SwNumRule* pNumRule = pTxtNd->GetNumRule();
@@ -234,14 +228,13 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                     }
                 }
                 else
-                    // wenns ins UndoNodes-Array gemoved wird, sollten die
-                    // Numerierungen auch aktualisiert werden.
+                    // if movement into the UndoNodes-array, update numbering
                     pTxtNd->InvalidateNumRule();
 
                 pTxtNd->RemoveFromList();
             }
 
-            RemoveNode( rDelPos.GetIndex(), 1, sal_False );     // Indizies verschieben !!
+            RemoveNode( rDelPos.GetIndex(), 1, sal_False ); // move indices
             SwCntntNode * pCNd = pNd->GetCntntNode();
             rNds.InsertNode( pNd, aInsPos );
 
@@ -259,7 +252,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
                     pTxtNd->AddToList();
 
-                    // Sonderbehandlung fuer die Felder!
+                    // special treatment for fields
                     if( pHts && pHts->Count() )
                     {
                         // this looks fishy if pDestDoc != 0
@@ -335,8 +328,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                 }
                 else
                 {
-                    // in unterschiedliche Docs gemoved ?
-                    // dann die Daten wieder persistent machen
+                    // Moved into different Docs? Persist data again!
                     if( pCNd->IsNoTxtNode() && bRestPersData )
                         ((SwNoTxtNode*)pCNd)->RestorePersistentData();
                 }
@@ -344,8 +336,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
         }
     }
 
-    //JP 03.02.99: alle Felder als invalide erklaeren, aktu. erfolgt im
-    //              Idle-Handler des Docs
+    // declare all fields as invalid, updating will happen
+    // in the idle-handler of the doc
     GetDoc()->SetFieldsDirty( true, NULL, 0 );
     if( rNds.GetDoc() != GetDoc() )
         rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
@@ -364,7 +356,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
         if( !pFrmNd && aFrmNdIdx > rNds.GetEndOfExtras().GetIndex() )
         {
-            OSL_ENSURE( !this, "ob das so richtig ist ??" );
+            OSL_ENSURE( !this, "here, something wrong happened" );
             aFrmNdIdx = rNds.GetEndOfContent();
             pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, sal_True, sal_False );
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )
@@ -390,23 +382,22 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
     }
 }
 
-/***********************************************************************
-|*
-|*  SwNodes::Move
-|*
-|*  Beschreibung
-|*  Move loescht die Node-Pointer ab und einschliesslich der Startposition
-|*  bis zu und ausschliesslich der Endposition und fuegt sie an
-|*  der vor der Zielposition ein.
-|*  Wenn das Ziel vor dem ersten oder dem letzten zu bewegenden Element oder
-|*  dazwischen liegt, geschieht nichts.
-|*  Wenn der zu bewegende Bereich leer ist oder das Ende vor
-|*  dem Anfang liegt, geschieht nichts.
-|*
-|*  Allg.: aRange beschreibt den Bereich  -exklusive- aEnd !!
-|*              ( 1.Node: aStart, letzer Node: aEnd-1 !! )
-|*
-***********************************************************************/
+// TODO: provide documentation
+/** move the node pointer
+ *
+ * Move the node pointer from "(inclusive) start position to (exclusive) end
+ * position" to target position.
+ * If the target is in front of the first or in the area between first and
+ * last element to move, nothing happens.
+ * If the area to move is empty or the end position is before the start
+ * position, nothing happens.
+ *
+ * @param aRange range to move (excluding end node)
+ * @param rNodes
+ * @param aIndex
+ * @param bNewFrms
+ * @return
+ */
 sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     const SwNodeIndex& aIndex, sal_Bool bNewFrms )
 {
@@ -418,14 +409,14 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
     SwNodeRange aRg( aRange );
 
-    // "einfache" StartNodes oder EndNodes ueberspringen
+    // skip "simple" start or end nodes
     while( ND_STARTNODE == (pAktNode = &aRg.aStart.GetNode())->GetNodeType()
             || ( pAktNode->IsEndNode() &&
                 !pAktNode->pStartOfSection->IsSectionNode() ) )
         aRg.aStart++;
     aRg.aStart--;
 
-    // falls aEnd-1 auf keinem ContentNode steht, dann suche den vorherigen
+    // if aEnd-1 points to no ContentNode, search previous one
     aRg.aEnd--;
     while( ( (( pAktNode = &aRg.aEnd.GetNode())->GetStartNode() &&
             !pAktNode->IsSectionNode() ) ||
@@ -434,8 +425,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             aRg.aEnd > aRg.aStart )
         aRg.aEnd--;
 
-
-    // wird im selben Array's verschoben, dann ueberpruefe die Einfuegepos.
+    // if in same array, check insertion position
     if( aRg.aStart >= aRg.aEnd )
         return sal_False;
 
@@ -447,34 +437,34 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             return sal_False;
     }
 
-    sal_uInt16 nLevel = 0;                  // Level-Counter
-    sal_uLong nInsPos = 0;                  // Cnt fuer das TmpArray
+    sal_uInt16 nLevel = 0; // level counter
+    sal_uLong nInsPos = 0; // counter for tmp array
 
-    // das Array bildet einen Stack, es werden alle StartOfSelction's gesichert
+    // array as a stack, storing all StartOfSelections
     SwSttNdPtrs aSttNdStack;
 
-    // setze den Start-Index
+    // set start index
     SwNodeIndex  aIdx( aIndex );
 
     SwStartNode* pStartNode = aIdx.GetNode().pStartOfSection;
     aSttNdStack.insert( aSttNdStack.begin(), pStartNode );
 
-    SwNodeRange aOrigInsPos( aIdx, -1, aIdx );      // Originale Insert Pos
+    SwNodeRange aOrigInsPos( aIdx, -1, aIdx ); // original insertion position
 
-    //JP 16.01.98: SectionNodes: DelFrms/MakeFrms beim obersten SectionNode!
+    // call DelFrms/MakeFrms for the upmost SectionNode
     sal_uInt16 nSectNdCnt = 0;
     sal_Bool bSaveNewFrms = bNewFrms;
 
-    // bis alles verschoben ist
+    // continue until everything has been moved
     while( aRg.aStart < aRg.aEnd )
         switch( (pAktNode = &aRg.aEnd.GetNode())->GetNodeType() )
         {
         case ND_ENDNODE:
             {
-                if( nInsPos )       // verschieb schon mal alle bis hier her
+                if( nInsPos ) // move everything until here
                 {
-                    // loeschen und kopieren. ACHTUNG: die Indizies ab
-                    // "aRg.aEnd+1" werden mit verschoben !!
+                    // delete and copy. CAUTION: all indices after
+                    // "aRg.aEnd+1" will be moved as well!
                     SwNodeIndex aSwIndex( aRg.aEnd, 1 );
                     ChgNode( aSwIndex, nInsPos, aIdx, bNewFrms );
                     aIdx -= nInsPos;
@@ -486,24 +476,24 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 {
                     SwTableNode* pTblNd = (SwTableNode*)pSttNd;
 
-                    // dann bewege die gesamte Tabelle/den Bereich !!
+                    // move the whole table/range
                     nInsPos = (aRg.aEnd.GetIndex() -
                                     pSttNd->GetIndex() )+1;
                     aRg.aEnd -= nInsPos;
 
-                    //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
+                    // NEVER include nodes from the RedLineArea
                     sal_uLong nNd = aIdx.GetIndex();
                     bool bInsOutlineIdx = !( rNodes.GetEndOfRedlines().
                             StartOfSectionNode()->GetIndex() < nNd &&
                             nNd < rNodes.GetEndOfRedlines().GetIndex() );
 
                     if( bNewFrms )
-                        // loesche erstmal die Frames
+                        // delete all frames
                         pTblNd->DelFrms();
-                    if( &rNodes == this )   // in sich selbst moven ??
+                    if( &rNodes == this ) // move into self?
                     {
-                        // dann bewege alle Start/End/ContentNodes. Loesche
-                        // bei den ContentNodes auch die Frames !!
+                        // move all Start/End/ContentNodes
+                        // ContentNodes: delete also the frames!
                         pTblNd->pStartOfSection = aIdx.GetNode().pStartOfSection;
                         for( sal_uLong n = 0; n < nInsPos; ++n )
                         {
@@ -536,15 +526,15 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     }
                     else
                     {
-                        // StartNode holen
+                        // get StartNode
                         // Even aIdx points to a startnode, we need the startnode
                         // of the environment of aIdx (#i80941)
                         SwStartNode* pSttNode = aIdx.GetNode().pStartOfSection;
 
-                        // Hole alle Boxen mit Inhalt. Deren Indizies auf die
-                        // StartNodes muessen umgemeldet werden !!
-                        // (Array kopieren und alle gefunden wieder loeschen;
-                        //  erleichtert das suchen!!)
+                        // get all boxes with content because their indices
+                        // pointing to the StartNodes need to be reset
+                        // (copying the array and deleting all found ones eases
+                        // searching)
                         SwNodeIndex aMvIdx( aRg.aEnd, 1 );
                         for( sal_uLong n = 0; n < nInsPos; ++n )
                         {
@@ -552,8 +542,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                             const bool bOutlNd = pNd->IsTxtNode() &&
                                 static_cast<SwTxtNode*>(pNd)->IsOutline();
-                            // loesche die Gliederungs-Indizies aus
-                            // dem alten Nodes-Array
+                            // delete outline indices from old node array
                             if( bOutlNd )
                                 pOutlineNds->erase( pNd );
 
@@ -561,9 +550,9 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             pNd->pStartOfSection = pSttNode;
                             rNodes.InsertNode( pNd, aIdx );
 
-                            // setze bei Start/EndNodes die richtigen Indizies
+                            // set correct indices in Start/EndNodes
                             if( bInsOutlineIdx && bOutlNd )
-                                // und setze sie im neuen Nodes-Array
+                                // and put them into the new node array
                                 rNodes.pOutlineNds->insert( pNd );
                             else if( pNd->IsStartNode() )
                                 pSttNode = (SwStartNode*)pNd;
@@ -608,35 +597,32 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 }
                 else if( pSttNd->GetIndex() < aRg.aStart.GetIndex() )
                 {
-                    // SectionNode: es wird nicht die gesamte Section
-                    //              verschoben, also bewege nur die
-                    //              ContentNodes
-                    // StartNode:   erzeuge an der Postion eine neue Section
+                    // SectionNode: not the whole section will be moved, thus,
+                    //              move only the ContentNodes
+                    // StartNode:   create a new section at the given position
                     do {        // middle check loop
                         if( !pSttNd->IsSectionNode() )
                         {
-                            // Start und EndNode an der InsertPos erzeugen
+                            // create StartNode and EndNode at InsertPos
                             SwStartNode* pTmp = new SwStartNode( aIdx,
                                                     ND_STARTNODE,
-/*?? welcher NodeTyp ??*/
-                                                    SwNormalStartNode );
+/*?? NodeType ??*/                                  SwNormalStartNode );
 
-                            nLevel++;           // den Index auf StartNode auf den Stack
+                            nLevel++; // put the index to StartNode on the stack
                             aSttNdStack.insert( aSttNdStack.begin() + nLevel, pTmp );
 
-                            // noch den EndNode erzeugen
+                            // create EndNode
                             new SwEndNode( aIdx, *pTmp );
                         }
                         else if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(
                                     rNodes))
                         {
-                            // im UndoNodes-Array spendieren wir einen
-                            // Platzhalter
+                            // use placeholder in UndoNodes array
                             new SwDummySectionNode( aIdx );
                         }
                         else
                         {
-                            // JP 18.5.2001: neue Section anlegen?? Bug 70454
+                            // JP 18.5.2001 (Bug 70454) creating new section?
                             aRg.aEnd--;
                             break;
 
@@ -648,10 +634,10 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 }
                 else
                 {
-                    // Start und EndNode komplett verschieben
-// s. u. SwIndex aOldStt( pSttNd->theIndex );
-//JP 21.05.97: sollte der Start genau der Start des Bereiches sein, so muss
-//              der Node auf jedenfall noch besucht werden!
+                    // move StartNode and EndNode in total
+
+                    // if Start is exactly the Start of the area,
+                    // then the Node needs to be re-visited
                     if( &aRg.aStart.GetNode() == pSttNd )
                         --aRg.aStart;
 
@@ -662,7 +648,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     RemoveNode( aRg.aEnd.GetIndex(), 1, sal_False ); // EndNode loeschen
                     sal_uLong nSttPos = pSttNd->GetIndex();
 
-                    // dieser StartNode wird spaeter wieder entfernt!
+                    // this StartNode will be removed later
                     SwStartNode* pTmpSttNd = new SwStartNode( *this, nSttPos+1 );
                     pTmpSttNd->pStartOfSection = pSttNd->pStartOfSection;
 
@@ -676,10 +662,10 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                     aRg.aEnd--;
 
-                    nLevel++;           // den Index auf StartNode auf den Stack
+                    nLevel++; // put the index pointing to the StartNode onto the stack
                     aSttNdStack.insert( aSttNdStack.begin() + nLevel, pSttNd );
 
-                    // SectionNode muss noch ein paar Indizies ummelden
+                    // reset remaining indices if SectionNode
                     if( pSctNd )
                     {
                         pSctNd->NodesArrChgd();
@@ -694,12 +680,11 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             if( !nLevel &&
                 GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
             {
-                // dann muss an der akt. InsPos ein SectionDummyNode
-                // eingefuegt werden
-                if( nInsPos )       // verschieb schon mal alle bis hier her
+                // here, a SectionDummyNode needs to be inserted at the current position
+                if( nInsPos ) // move everything until here
                 {
-                    // loeschen und kopieren. ACHTUNG: die Indizies ab
-                    // "aRg.aEnd+1" werden mit verschoben !!
+                    // delete and copy. CAUTION: all indices after
+                    // "aRg.aEnd+1" will be moved as well!
                     SwNodeIndex aSwIndex( aRg.aEnd, 1 );
                     ChgNode( aSwIndex, nInsPos, aIdx, bNewFrms );
                     aIdx -= nInsPos;
@@ -710,7 +695,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 aIdx--;
                 break;
             }
-            // kein break !!
+            // no break !!
         case ND_TABLENODE:
         case ND_STARTNODE:
             {
@@ -722,9 +707,9 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     break;
                 }
 
-                if( !nLevel )       // es wird eine Stufe runter gestuft
+                if( !nLevel ) // level is decreasing
                 {
-                    // erzeuge die Runterstufung
+                    // create decrease
                     SwNodeIndex aTmpSIdx( aOrigInsPos.aStart, 1 );
                     SwStartNode* pTmpStt = new SwStartNode( aTmpSIdx,
                                 ND_STARTNODE,
@@ -737,7 +722,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     aTmpEIdx--;
                     ++aTmpSIdx;
 
-                    // setze die StartOfSection richtig
+                    // set correct StartOfSection
                     aRg.aEnd++;
                     {
                         SwNodeIndex aCntIdx( aRg.aEnd );
@@ -745,7 +730,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             aCntIdx.GetNode().pStartOfSection = pTmpStt;
                     }
 
-                    // Setze auch bei allen runtergestuften den richtigen StartNode
+                    // also set correct StartNode for all decreased nodes
                     while( aTmpSIdx < aTmpEIdx )
                         if( 0 != (( pAktNode = &aTmpEIdx.GetNode())->GetEndNode()) )
                             aTmpEIdx = pAktNode->StartOfSectionIndex();
@@ -755,28 +740,28 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             aTmpEIdx--;
                         }
 
-                    aIdx--;                 // hinter den eingefuegten StartNode
-                    aRg.aEnd--;             // vor den StartNode
-                    // kopiere jetzt das Array. ACHTUNG: die Indizies ab
-                    // "aRg.aEnd+1" werden mit verschoben !!
+                    aIdx--;     // after the inserted StartNode
+                    aRg.aEnd--; // before StartNode
+                    // copy array. CAUTION: all indices after
+                    // "aRg.aEnd+1" will be moved as well!
                     SwNodeIndex aSwIndex( aRg.aEnd, 1 );
                     ChgNode( aSwIndex, nInsPos, aIdx, bNewFrms );
                     aIdx -= nInsPos+1;
                     nInsPos = 0;
                 }
-                else                // es wurden alle Nodes innerhalb eines
-                {                   // Start- und End-Nodes verschoben
+                else // all nodes between StartNode and EndNode were moved
+                {
                     OSL_ENSURE( pAktNode == aSttNdStack[nLevel] ||
                             ( pAktNode->IsStartNode() &&
                                 aSttNdStack[nLevel]->IsSectionNode()),
-                             "falscher StartNode" );
+                             "wrong StartNode" );
 
                     SwNodeIndex aSwIndex( aRg.aEnd, 1 );
                     ChgNode( aSwIndex, nInsPos, aIdx, bNewFrms );
-                    aIdx -= nInsPos+1;      // vor den eingefuegten StartNode
+                    aIdx -= nInsPos+1; // before inserted StartNode
                     nInsPos = 0;
 
-                    // loesche nur noch den Pointer aus dem Nodes-Array.
+                    // remove pointer from node array
                     RemoveNode( aRg.aEnd.GetIndex(), 1, sal_True );
                     aRg.aEnd--;
 
@@ -787,11 +772,11 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         pSectNd->MakeFrms( &aTmp );
                         bNewFrms = bSaveNewFrms;
                     }
-                    aSttNdStack.erase( aSttNdStack.begin() + nLevel );   // vom Stack loeschen
+                    aSttNdStack.erase( aSttNdStack.begin() + nLevel ); // remove from stack
                     nLevel--;
                 }
 
-                // loesche alle entstehenden leeren Start-/End-Node-Paare
+                // delete all resulting empty start/end node pairs
                 SwNode* pTmpNode = (*this)[ aRg.aEnd.GetIndex()+1 ]->GetEndNode();
                 if( pTmpNode && ND_STARTNODE == (pAktNode = &aRg.aEnd.GetNode())
                     ->GetNodeType() && pAktNode->StartOfSectionIndex() &&
@@ -819,21 +804,20 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
         case ND_SECTIONDUMMY:
             if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
-                if( &rNodes == this )       // innerhalb vom UndoNodesArray
+                if( &rNodes == this ) // inside UndoNodesArray
                 {
-                    // mit verschieben
+                    // move everything
                     pAktNode->pStartOfSection = aSttNdStack[ nLevel ];
                     nInsPos++;
                 }
-                else    // in ein "normales" Nodes-Array verschieben
+                else // move into "normal" node array
                 {
-                    // dann muss an der akt. InsPos auch ein SectionNode
-                    // (Start/Ende) stehen; dann diesen ueberspringen.
-                    // Andernfalls nicht weiter beachten.
-                    if( nInsPos )       // verschieb schon mal alle bis hier her
+                    // than a SectionNode (start/end) is needed at the current
+                    // InsPos; if so skip it, otherwise ignore current node
+                    if( nInsPos ) // move everything until here
                     {
-                        // loeschen und kopieren. ACHTUNG: die Indizies ab
-                        // "aRg.aEnd+1" werden mit verschoben !!
+                        // delete and copy. CAUTION: all indices after
+                        // "aRg.aEnd+1" will be moved as well!
                         SwNodeIndex aSwIndex( aRg.aEnd, 1 );
                         ChgNode( aSwIndex, nInsPos, aIdx, bNewFrms );
                         aIdx -= nInsPos;
@@ -842,38 +826,37 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     SwNode* pTmpNd = &aIdx.GetNode();
                     if( pTmpNd->IsSectionNode() ||
                         pTmpNd->StartOfSectionNode()->IsSectionNode() )
-                        aIdx--; // ueberspringen
+                        aIdx--; // skip
                 }
             }
             else {
-                OSL_FAIL( "wie kommt diser Node ins Nodes-Array??" );
+                OSL_FAIL( "How can this node be in the node array?" );
             }
             aRg.aEnd--;
             break;
 
         default:
-            OSL_FAIL( "was ist das fuer ein Node??" );
+            OSL_FAIL( "Unknown node type" );
             break;
         }
 
-    if( nInsPos )                           // kopiere den Rest
+    if( nInsPos ) // copy remaining rest
     {
-        // der Rest muesste so stimmen
+        // rest should be ok
         SwNodeIndex aSwIndex( aRg.aEnd, 1 );
         ChgNode( aSwIndex, nInsPos, aIdx, bNewFrms );
     }
-    aRg.aEnd++;                     // wieder exklusive Ende
+    aRg.aEnd++; // again, exclusive end
 
-    // loesche alle leeren Start-/End-Node-Paare
+    // delete all resulting empty start/end node pairs
     if( ( pAktNode = &aRg.aStart.GetNode())->GetStartNode() &&
         pAktNode->StartOfSectionIndex() &&
         aRg.aEnd.GetNode().GetEndNode() )
             DelNodes( aRg.aStart, 2 );
 
-    // rufe jetzt noch das Update fuer die Gliederung/Nummerierung auf
+    // initialize numbering update
     aOrigInsPos.aStart++;
-    // im gleichen Nodes-Array verschoben ??,
-    // dann von oben nach unten das Update aufrufen !!
+    // Moved in same node array? Then call update top down!
     if( this == &rNodes &&
         aRg.aEnd.GetIndex() >= aOrigInsPos.aStart.GetIndex() )
     {
@@ -889,45 +872,22 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
     return sal_True;
 }
 
-/*******************************************************************
-|*
-|*  SwNodes::SectionDown
-|*
-|*  Beschreibung
-|*    SectionDown() legt ein Paar von Start- und EndSection-Node
-|*    (andere Nodes koennen dazwischen liegen) an.
-|*
-|*    Zustand des SRange beim Verlassen der Funktion: nStart ist der
-|*    Index des ersten Node hinter dem Start Section Node, nEnd ist
-|*    der Index des End Section Nodes. Beispiel: Wird Insert Section
-|*    mehrmals hintereinander aufgerufen, so werden mehrere
-|*    unmittelbar geschachtelte Sections (keine Content Nodes
-|*    zwischen Start- bzw. End Nodes) angelegt.
-|*
-|*  Allg.: aRange beschreibt den Bereich  -exklusive- aEnd !!
-|*              ( 1.Node: aStart, letzer Node: aEnd-1 !! )
-|*
-|*  Parameter
-|*      SwRange &rRange
-|*          IO:
-|*          IN
-|*          rRange.aStart: Einfuegeposition des StartNodes
-|*          rRange.aEnd: Einfuegeposition des EndNodes
-|*          OUT
-|*          rRange.aStart: steht hinter dem eingefuegten Startnode
-|*          rRange.aEnd: steht auf dem eingefuegen Endnode
-|*
-|*  Ausnahmen
-|*   1. SRange-Anfang und SRange-Ende muessen auf dem gleichen Level sein
-|*   2. duerfen nicht auf dem obersten Level sein
-|*      Ist dies nicht der Fall, wird die
-|*      Funktion durch Aufruf von ERR_RAISE verlassen.
-|*
-|*  Debug-Funktionen
-|*      die Debugging Tools geben rRange beim Eintritt und beim
-|*      Verlassen der Funktion aus
-|*
-*******************************************************************/
+/** create a start/end section pair
+ *
+ * Other nodes might be in between.
+ *
+ * After this method call, the start node of pRange will be pointing to the
+ * first node after the start section node and the end node will be the index
+ * of the end section node. If this method is called multiple times with the
+ * same input, multiple sections containing the previous ones will be created
+ * (no content nodes between start or end node).
+ *
+ * @note Start and end node of the range must be on the same level but MUST
+ *       NOT be on the top level.
+ *
+ * @param [IN,OUT] pRange the range (excl. end)
+ * @param eSttNdTyp type of the start node
+ */
 void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
 {
     if( pRange->aStart >= pRange->aEnd ||
@@ -935,32 +895,32 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
         !CheckNodesRange( pRange->aStart, pRange->aEnd ))
         return;
 
-    // Ist der Anfang vom Bereich vor oder auf einem EndNode, so loesche
-    // diesen, denn sonst wuerden leere S/E-Nodes oder E/S-Nodes enstehen.
-    // Bei anderen Nodes wird eine neuer StartNode eingefuegt
+    // If the beginning of a range is before or at a start node position, so
+    // delete it, otherwise empty S/E or E/S nodes would be created.
+    // For other nodes, create a new start node.
     SwNode * pAktNode = &pRange->aStart.GetNode();
     SwNodeIndex aTmpIdx( *pAktNode->StartOfSectionNode() );
 
     if( pAktNode->GetEndNode() )
-        DelNodes( pRange->aStart, 1 );      // verhinder leere Section
+        DelNodes( pRange->aStart, 1 ); // prevent empty section
     else
     {
-        // fuege einen neuen StartNode ein
+        // insert a new StartNode
         SwNode* pSttNd = new SwStartNode( pRange->aStart, ND_STARTNODE, eSttNdTyp );
         pRange->aStart = *pSttNd;
         aTmpIdx = pRange->aStart;
     }
 
-    // Ist das Ende vom Bereich vor oder auf einem StartNode, so loesche
-    // diesen, denn sonst wuerden leere S/E-Nodes oder E/S-Nodes enstehen
-    // Bei anderen Nodes wird eine neuer EndNode eingefuegt
+    // If the end of a range is before or at a StartNode, so delete it,
+    // otherwise empty S/E or E/S nodes would be created.
+    // For other nodes, insert a new end node.
     pRange->aEnd--;
     if( pRange->aEnd.GetNode().GetStartNode() )
         DelNodes( pRange->aEnd, 1 );
     else
     {
         pRange->aEnd++;
-        // fuege einen neuen EndNode ein
+        // insert a new EndNode
         new SwEndNode( pRange->aEnd, *pRange->aStart.GetNode().GetStartNode() );
     }
     pRange->aEnd--;
@@ -968,37 +928,18 @@ void SwNodes::SectionDown(SwNodeRange *pRange, SwStartNodeType eSttNdTyp )
     SectionUpDown( aTmpIdx, pRange->aEnd );
 }
 
-/*******************************************************************
-|*
-|*  SwNodes::SectionUp
-|*
-|*  Beschreibung
-|*      Der von rRange umspannte Bereich wird auf die naechst hoehere
-|*      Ebene gehoben. Das geschieht dadurch, dass bei
-|*      rRange.aStart ein Endnode und bei rRange.aEnd ein
-|*      Startnode eingefuegt wird. Die Indices fuer den Bereich
-|*      innerhalb von rRange werden geupdated.
-|*
-|*  Allg.: aRange beschreibt den Bereich  -exklusive- aEnd !!
-|*              ( 1.Node: aStart, letzer Node: aEnd-1 !! )
-|*
-|*  Parameter
-|*      SwRange &rRange
-|*          IO:
-|*          IN
-|*          rRange.aStart: Anfang des hoeher zubewegenden Bereiches
-|*          rRange.aEnd:   der 1.Node hinter dem Bereich
-|*          OUT
-|*          rRange.aStart:  an der ersten Position innerhalb des
-|*                          hochbewegten Bereiches
-|*          rRange.aEnd:    an der letzten Position innerhalb des
-|*                          hochbewegten Bereiches
-|*
-|*  Debug-Funktionen
-|*      die Debugging Tools geben rRange beim Eintritt und beim
-|*      Verlassen der Funktion aus
-|*
-*******************************************************************/
+/** increase level of the given range
+ *
+ * The range contained in pRange will be lifted to the next higher level.
+ * This is done by adding a end node at pRange.start and a start node at
+ * pRange.end. Furthermore all indices for this range will be updated.
+ *
+ * After this method call, the start node of pRange will be pointing to the
+ * first node inside the lifted range and the end node will be pointing to the
+ * last position inside the lifted range.
+ *
+ * @param [IN,OUT] pRange the range of nodes where the level should be increased
+ */
 void SwNodes::SectionUp(SwNodeRange *pRange)
 {
     if( pRange->aStart >= pRange->aEnd ||
@@ -1007,9 +948,9 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
         !( HighestLevel( *this, *pRange ) > 1 ))
         return;
 
-    // Ist der Anfang vom Bereich vor oder auf einem StartNode, so loesche
-    // diesen, denn sonst wuerden leere S/E-Nodes oder E/S-Nodes enstehen.
-    // Bei anderen Nodes wird eine neuer EndNode eingefuegt
+    // If the beginning of a range is before or at a start node position, so
+    // delete it, otherwise empty S/E or E/S nodes would be created.
+    // For other nodes, create a new start node.
     SwNode * pAktNode = &pRange->aStart.GetNode();
     SwNodeIndex aIdx( *pAktNode->StartOfSectionNode() );
     if( pAktNode->IsStartNode() )       // selbst StartNode
@@ -1017,7 +958,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
         SwEndNode* pEndNd = pRange->aEnd.GetNode().GetEndNode();
         if( pAktNode == pEndNd->pStartOfSection )
         {
-            // dann wurde paarig aufgehoben, also nur die im Berich neu anpassen
+            // there was a pairwise reset, adjust only those in the range
             SwStartNode* pTmpSttNd = pAktNode->pStartOfSection;
             RemoveNode( pRange->aStart.GetIndex(), 1, sal_True );
             RemoveNode( pRange->aEnd.GetIndex(), 1, sal_True );
@@ -1036,21 +977,21 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
         }
         DelNodes( pRange->aStart, 1 );
     }
-    else if( aIdx == pRange->aStart.GetIndex()-1 )          // vor StartNode
+    else if( aIdx == pRange->aStart.GetIndex()-1 ) // before StartNode
         DelNodes( aIdx, 1 );
     else
         new SwEndNode( pRange->aStart, *aIdx.GetNode().GetStartNode() );
 
-    // Ist das Ende vom Bereich vor oder auf einem StartNode, so loesche
-    // diesen, denn sonst wuerden leere S/E-Nodes oder E/S-Nodes entstehen
-    // Bei anderen Nodes wird eine neuer EndNode eingefuegt
+    // If the end of a range is before or at a StartNode, so delete it,
+    // otherwise empty S/E or E/S nodes would be created.
+    // For other nodes, insert a new end node.
     SwNodeIndex aTmpIdx( pRange->aEnd );
     if( pRange->aEnd.GetNode().IsEndNode() )
         DelNodes( pRange->aEnd, 1 );
     else
     {
         pAktNode = new SwStartNode( pRange->aEnd );
-/*?? welcher NodeTyp ??*/
+/*?? which NodeType ??*/
         aTmpIdx = *pRange->aEnd.GetNode().EndOfSectionNode();
         pRange->aEnd--;
     }
@@ -1058,31 +999,27 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
     SectionUpDown( aIdx, aTmpIdx );
 }
 
-/*************************************************************************
-|*
-|*  SwNodes::SectionUpDown()
-|*
-|*  Beschreibung
-|*      Methode setzt die Indizies die bei SectionUp oder SectionDwon
-|*      veraendert wurden wieder richtig, sodass die Ebenen wieder
-|*      Konsistent sind.
-|*
-|*    Parameter
-|*                      SwIndex & aStart        StartNode !!!
-|*                      SwIndex & aEnd          EndPunkt
-|*
-*************************************************************************/
+/** correct indices after movement
+ *
+ * Update all indices after movement so that the levels are consistent again.
+ *
+ * @param aStart index of the start node
+ * @param aEnd index of the end point
+ *
+ * @see SwNodes::SectionUp
+ * @see SwNodes::SectionDown
+ */
 void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd )
 {
     SwNode * pAktNode;
     SwNodeIndex aTmpIdx( aStart, +1 );
-    // das Array bildet einen Stack, es werden alle StartOfSelction's gesichert
+    // array forms a stack, holding all StartOfSelections
     SwSttNdPtrs aSttNdStack;
     SwStartNode* pTmp = aStart.GetNode().GetStartNode();
     aSttNdStack.push_back( pTmp );
 
-    // durchlaufe bis der erste zu aendernde Start-Node gefunden wurde
-    // ( Es wird vom eingefuegten EndNode bis nach vorne die Indexe gesetzt )
+    // loop until the first start node that needs to be change was found
+    // (the indices are updated from the end node backwards to the start)
     for( ;; ++aTmpIdx )
     {
         pAktNode = &aTmpIdx.GetNode();
@@ -1099,87 +1036,70 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
             pSttNd->pEndOfSection = (SwEndNode*)pAktNode;
             aSttNdStack.pop_back();
             if( !aSttNdStack.empty() )
-                continue;       // noch genuegend EndNodes auf dem Stack
+                continue; // still enough EndNodes on the stack
 
-            else if( aTmpIdx < aEnd )   // Uebergewicht an StartNodes
-                // ist das Ende noch nicht erreicht, so hole den Start von
-                // der uebergeordneten Section
+            else if( aTmpIdx < aEnd ) // too many StartNodes
+                // if the end is not reached, yet, get the start of the section above
             {
                 aSttNdStack.insert( aSttNdStack.begin(), pSttNd->pStartOfSection );
             }
-            else    // wenn ueber den Bereich hinaus, dann Ende
+            else // finished, as soon as out of the range
                 break;
         }
     }
 }
 
-/*******************************************************************
-|*
-|*  SwNodes::Delete
-|*
-|*  Beschreibung
-|*      Spezielle Implementierung der Delete-Funktion des
-|*      variablen Array. Diese spezielle Implementierung ist
-|*      notwendig, da durch das Loeschen von Start- bzw.
-|*      Endnodes Inkonsistenzen entstehen koennen. Diese werden
-|*      durch diese Funktion beseitigt.
-|*
-|*  Parameter
-|*      IN
-|*      SwIndex &rIndex bezeichnet die Position, an der
-|*      geloescht wird
-|*      rIndex ist nach Aufruf der Funktion unveraendert (Kopie?!)
-|*      sal_uInt16 nNodes bezeichnet die Anzahl der zu loeschenden
-|*      Nodes; ist auf 1 defaulted
-|*
-|*  Debug-Funktionen
-|*      geben beim Eintritt in die Funktion Position und Anzahl
-|*      der zu loeschenden Nodes aus.
-|*
-*******************************************************************/
+/** delete nodes
+ *
+ * This is a specific implementation of a delete function for a variable array.
+ * It is necessary as there might be inconsistencies after deleting start or
+ * end nodes. This method can clean those up.
+ *
+ * @param rIndex position to delete at (unchanged afterwards)
+ * @param nNodes number of nodes to delete (default: 1)
+ */
 void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
 {
-    sal_uInt16 nLevel = 0;                      // Level-Counter
+    sal_uInt16 nLevel = 0; // level counter
     SwNode * pAktNode;
 
     sal_uLong nCnt = Count() - rIndex.GetIndex() - 1;
     if( nCnt > nNodes ) nCnt = nNodes;
 
-    if( nCnt == 0 )         // keine Anzahl -> return
+    if( nCnt == 0 ) // no count -> return
         return;
 
     SwNodeRange aRg( rIndex, 0, rIndex, nCnt-1 );
-    // ueberprufe ob rIndex..rIndex + nCnt ueber einen Bereich hinausragt !!
+    // check if [rIndex..rIndex + nCnt] is larger than the range
     if( ( !aRg.aStart.GetNode().StartOfSectionIndex() &&
             !aRg.aStart.GetIndex() ) ||
             ! CheckNodesRange( aRg.aStart, aRg.aEnd ) )
         return;
 
-
-    // falls aEnd auf keinem ContentNode steht, dann suche den vorherigen
+    // if aEnd is not on a ContentNode, search the previous one
     while( ( pAktNode = &aRg.aEnd.GetNode())->GetStartNode() ||
              ( pAktNode->GetEndNode() &&
                 !pAktNode->pStartOfSection->IsTableNode() ))
         aRg.aEnd--;
 
     nCnt = 0;
-    // Start erhoehen, damit auf < abgefragt wird. ( bei <= kann es zu
-    // Problemen fuehren; ist aEnd == aStart und wird aEnd geloscht,
-    // so ist aEnd <= aStart
+//TODO: check/improve comment
+    // increase start so that we are able to use "<" (using "<=" might cause
+    // problems if aEnd == aStart and aEnd is deleted, so aEnd <= aStart)
     aRg.aStart--;
 
     sal_Bool bSaveInNodesDel = bInNodesDel;
     bInNodesDel = sal_True;
     bool bUpdateOutline = false;
 
-    // bis alles geloescht ist
+    // loop until everything is deleted
     while( aRg.aStart < aRg.aEnd )
     {
         pAktNode = &aRg.aEnd.GetNode();
 
         if( pAktNode->GetEndNode() )
         {
-            // die gesamte Section loeschen ?
+            // delete the whole section?
             if( pAktNode->StartOfSectionIndex() > aRg.aStart.GetIndex() )
             {
                 SwTableNode* pTblNd = pAktNode->pStartOfSection->GetTableNode();
@@ -1197,7 +1117,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                         if (pTxtNode->IsOutline() &&
                                 pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                         {
-                            // loesche die Gliederungs-Indizies.
+                            // remove outline indices
                             pOutlineNds->erase(nIdxPos);
                             bUpdateOutline = true;
                         }
@@ -1214,52 +1134,53 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
             }
             else
             {
-                RemoveNode( aRg.aEnd.GetIndex()+1, nCnt, sal_True );    // loesche
+                RemoveNode( aRg.aEnd.GetIndex()+1, nCnt, sal_True ); // delete
                 nCnt = 0;
-                aRg.aEnd--;             // vor den EndNode
+                aRg.aEnd--; // before the EndNode
                 nLevel++;
             }
         }
-        else if( pAktNode->GetStartNode() )   // StartNode gefunden
+        else if( pAktNode->GetStartNode() ) // found StartNode
         {
-            if( nLevel == 0 )       // es wird eine Stufe runter gestuft
+            if( nLevel == 0 ) // decrease one level
             {
                 if( nCnt )
                 {
-                    // loesche jetzt das Array
+                    // now delete array
                     aRg.aEnd++;
                     RemoveNode( aRg.aEnd.GetIndex(), nCnt, sal_True );
                     nCnt = 0;
                 }
             }
-            else    // es werden alle Nodes Innerhalb eines Start- und
-            {       // End-Nodes geloescht, loesche mit Start/EndNode
-                RemoveNode( aRg.aEnd.GetIndex(), nCnt + 2, sal_True );          // loesche Array
+            else // remove all nodes between start and end node (incl. both)
+            {
+                RemoveNode( aRg.aEnd.GetIndex(), nCnt + 2, sal_True ); // delete array
                 nCnt = 0;
                 nLevel--;
             }
 
-            // nach dem loeschen kann aEnd auf einem EndNode stehen
-            // loesche alle leeren Start-/End-Node-Paare
+            // after deletion, aEnd might point to a EndNode...
+            // delete all empty start/end node pairs
             SwNode* pTmpNode = aRg.aEnd.GetNode().GetEndNode();
             aRg.aEnd--;
             while(  pTmpNode &&
                     ( pAktNode = &aRg.aEnd.GetNode())->GetStartNode() &&
                     pAktNode->StartOfSectionIndex() )
             {
-                // loesche den EndNode und StartNode
+                // remove end and start node
                 DelNodes( aRg.aEnd, 2 );
                 pTmpNode = aRg.aEnd.GetNode().GetEndNode();
                 aRg.aEnd--;
             }
         }
-        else        // normaler Node, also ins TmpArray einfuegen
+        else // "normal" node, so insert into TmpArray
         {
             SwTxtNode* pTxtNd = pAktNode->GetTxtNode();
             if( pTxtNd )
             {
                 if( pTxtNd->IsOutline())
-                {                   // loesche die Gliederungs-Indizies.
+                {
+                    // delete outline indices
                     pOutlineNds->erase( pTxtNd );
                     bUpdateOutline = true;
                 }
@@ -1275,15 +1196,15 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
 
     aRg.aEnd++;
     if( nCnt != 0 )
-        RemoveNode( aRg.aEnd.GetIndex(), nCnt, sal_True );              // loesche den Rest
+        RemoveNode( aRg.aEnd.GetIndex(), nCnt, sal_True ); // delete the rest
 
-    // loesche alle leeren Start-/End-Node-Paare
+    // delete all empty start/end node pairs
     while( aRg.aEnd.GetNode().GetEndNode() &&
             ( pAktNode = &aRg.aStart.GetNode())->GetStartNode() &&
             pAktNode->StartOfSectionIndex() )
-    // aber ja keinen der heiligen 5.
+    // but none of the holy 5. (???)
     {
-        DelNodes( aRg.aStart, 2 );  // loesche den Start- und EndNode
+        DelNodes( aRg.aStart, 2 );  // delete start and end node
         aRg.aStart--;
     }
 
@@ -1291,7 +1212,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
 
     if( !bInNodesDel )
     {
-        // rufe jetzt noch das Update fuer die Gliederung/Nummerierung auf
+        // update numbering
         if( bUpdateOutline || bInDelUpdOutl )
         {
             UpdtOutlineIdx( aRg.aEnd.GetNode() );
@@ -1306,66 +1227,42 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
     }
 }
 
-/*******************************************************************
-|*
-|*  SwNodes::GetSectionLevel
-|*
-|*  Beschreibung
-|*      Die Funktion liefert den Sectionlevel an der durch
-|*      aIndex bezeichneten Position. Die Funktion ruft die
-|*      GetSectionlevel-Funktion des durch aIndex bezeichneten
-|*      Nodes. Diese ist eine virtuelle Funktion, die fuer
-|*      Endnodes speziell implementiert werden musste.
-|*      Die Sectionlevels werden ermittelt, indem rekursiv durch
-|*      die Nodesstruktur (jeweils zum naechsten theEndOfSection)
-|*      gegangen wird, bis die oberste Ebene erreicht ist
-|*      (theEndOfSection == 0)
-|*
-|*  Parameter
-|*      aIndex bezeichnet die Position des Nodes, dessen
-|*      Sectionlevel ermittelt werden soll. Hier wird eine Kopie
-|*      uebergeben, da eine Veraenderung der Variablen in der
-|*      rufenden Funktion nicht wuenschenswert ist.
-|*
-|*  Ausnahmen
-|*      Der erste Node im Array  sollte immer ein Startnode sein.
-|*      Dieser erfaehrt in der Funktion SwNodes::GetSectionLevel()
-|*      eine Sonderbehandlung; es wird davon ausgegangen, dass der
-|*      erste Node auch ein Startnode ist.
-|*
-*******************************************************************/
+/** get section level at the given position
+ *
+ * @note The first node in an array should always be a start node.
+ *       Because of this, there is a special treatment here based on the
+ *       assumption that this is true in this context as well.
+ *
+ * @param rIdx position of the node
+ * @return section level at the given position
+ */
 sal_uInt16 SwNodes::GetSectionLevel(const SwNodeIndex &rIdx) const {
-    // Sonderbehandlung 1. Node
+    // special treatment for 1st Node
     if(rIdx == 0) return 1;
-    /*
-     * Keine Rekursion! - hier wird das SwNode::GetSectionLevel
-     * aufgerufen
-     */
+    // no recursion! This calles a SwNode::GetSectionLevel (missing "s")
     return rIdx.GetNode().GetSectionLevel();
 }
 
 void SwNodes::GoStartOfSection(SwNodeIndex *pIdx) const
 {
-    // hinter den naechsten Startnode
+    // after the next start node
     SwNodeIndex aTmp( *pIdx->GetNode().StartOfSectionNode(), +1 );
 
-    // steht der Index auf keinem ContentNode, dann gehe dahin. Ist aber
-    // kein weiterer vorhanden, dann lasse den Index an alter Pos stehen !!!
+    // If index points to no ContentNode, than go to one.
+    // If there is no further available, do not change the index' position!
     while( !aTmp.GetNode().IsCntntNode() )
-    {   // gehe vom StartNode ( es kann nur ein StartNode sein ! ) an sein
-        // Ende
+    {   // go from this StartNode (can only be one) to its end
         if( *pIdx <= aTmp )
-            return;     // FEHLER: Steht schon hinter der Sektion
+            return;     // ERROR: already after the section
         aTmp = aTmp.GetNode().EndOfSectionIndex()+1;
         if( *pIdx <= aTmp )
-            return;     // FEHLER: Steht schon hinter der Sektion
+            return;     // ERROR: already after the section
     }
-    (*pIdx) = aTmp;     // steht auf einem ContentNode
+    (*pIdx) = aTmp;     // is on a ContentNode
 }
 
 void SwNodes::GoEndOfSection(SwNodeIndex *pIdx) const
 {
-    // falls er vor einem Endnode steht --> nichts tun
     if( !pIdx->GetNode().IsEndNode() )
         (*pIdx) = *pIdx->GetNode().EndOfSectionNode();
 }
@@ -1404,33 +1301,20 @@ SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx) const
     return (SwCntntNode*)pNd;
 }
 
-/*************************************************************************
-|*
-|*    sal_Bool SwNodes::CheckNodesRange()
-|*
-|*    Beschreibung
-|*      Teste ob der uebergene SRange nicht ueber die Grenzen der
-|*      einzelnen Bereiche (PosIts, Autotext, Content, Icons und Inserts )
-|*      hinaus reicht.
-|*      Nach Wahrscheinlichkeit des Ranges sortiert.
-|*
-|*  Alg.: Da festgelegt ist, das aRange.aEnd den 1.Node hinter dem Bereich
-|*        bezeichnet, wird hier auf aEnd <= End.. getestet !!
-|*
-|*    Parameter         SwIndex &   Start-Index vom Bereich
-|*                      SwIndex &   End-Index vom Bereich
-|*                      sal_Bool        sal_True:   Start+End in gleicher Section!
-|*                                  sal_False:  Start+End in verschiedenen Sect.
-|*    Return-Wert       sal_Bool        sal_True:   gueltiger SRange
-|*                                  sal_False:  ungueltiger SRange
-|*
-*************************************************************************/
 inline int TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
 {
     return nStt < nSttIdx && nEnd >= nSttIdx &&
             nStt < nEndIdx && nEnd >= nEndIdx;
 }
 
+/** Check if the given range is inside the defined ranges
+ *
+ * The defined ranges are Content, AutoText, PostIts, Inserts, and Redlines.
+ *
+ * @param rStt start index of the range
+ * @param rEnd end index of the range
+ * @return <true> if valid range
+ */
 sal_Bool SwNodes::CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd ) const
 {
     sal_uLong nStt = rStt.GetIndex(), nEnd = rEnd.GetIndex();
@@ -1448,26 +1332,19 @@ sal_Bool SwNodes::CheckNodesRange( const SwNodeIndex& rStt, const SwNodeIndex& r
     return sal_False;       // liegt irgendwo dazwischen, FEHLER
 }
 
-/*************************************************************************
-|*
-|*    void SwNodes::DelNodes()
-|*
-|*    Beschreibung
-|*      Loesche aus den NodesArray ab einer Position entsprechend Node's.
-|*
-|*    Parameter         SwIndex &   Der Startpunkt im Nodes-Array
-|*                      sal_uInt16      die Anzahl
-|*
-*************************************************************************/
+/** Delete a number of nodes
+ *
+ * @param rStart starting position in this nodes array
+ * @param nCnt number of nodes to delete
+ */
 void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
 {
     sal_uLong nSttIdx = rStart.GetIndex();
 
     if( !nSttIdx && nCnt == GetEndOfContent().GetIndex()+1 )
     {
-        // es wird das gesamte Nodes-Array zerstoert, man ist im Doc DTOR!
-        // Die initialen Start-/End-Nodes duerfen nur im SwNodes-DTOR
-        // zerstoert werden!
+        // The whole nodes array will be destroyed, you're in the Doc's DTOR!
+        // The initial start/end nodes should be only destroyed in the SwNodes' DTOR!
         SwNode* aEndNdArr[] = { pEndOfContent,
                                 pEndOfPostIts, pEndOfInserts,
                                 pEndOfAutotext, pEndOfRedlines,
@@ -1494,7 +1371,8 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
             SwNode* pNd = (*this)[ n ];
 
             if (pNd->IsTxtNode() && static_cast<SwTxtNode*>(pNd)->IsOutline())
-            {                   // loesche die Gliederungs-Indizies.
+            {
+                // remove the outline indices
                 sal_uInt16 nIdxPos;
                 if( pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                 {
@@ -1510,24 +1388,11 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
         }
         RemoveNode( nSttIdx, nCnt, sal_True );
 
-        // rufe noch das Update fuer die Gliederungsnumerierung auf
+        // update numbering
         if( bUpdateNum )
             UpdtOutlineIdx( rStart.GetNode() );
     }
 }
-
-/*************************************************************************
-|*
-|*    sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
-|*
-|*    Beschreibung
-|*      Berechne den hoehsten Level innerhalb des Bereiches
-|*
-|*    Parameter         SwNodes &   das Node-Array
-|*                      SwNodeRange &   der zu ueberpruefende Bereich
-|*    Return            sal_uInt16      der hoechste Level
-|*
-*************************************************************************/
 
 struct HighLevel
 {
@@ -1549,6 +1414,12 @@ static bool lcl_HighestLevel( const SwNodePtr& rpNode, void * pPara )
 
 }
 
+/** Calculate the highest level in a range
+ *
+ * @param rNodes the nodes array
+ * @param rRange the range to inspect
+ * @return the highest level
+ */
 sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 {
     HighLevel aPara( rNodes.GetSectionLevel( rRange.aStart ));
@@ -1557,16 +1428,12 @@ sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 
 }
 
-/*************************************************************************
-|*
-|*    SwNodes::Move()
-|*
-|*    Beschreibung
-|*    Parameter         SwPaM&      zu kopierender Bereich
-|*                      SwNodes&    in dieses Nodes-Array
-|*                      SwPosition& auf diese Position im Nodes-Array
-|*
-*************************************************************************/
+/** move a range
+ *
+ * @param rPam the range to move
+ * @param rPos to destination position in the given nodes array
+ * @param rNodes the node array to move the range into
+ */
 void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 {
     SwPosition * const pStt = rPam.Start();
@@ -1587,8 +1454,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     if( pSrcNd )
     {
-        // ist der 1.Node ein TextNode, dann muss im NodesArray auch
-        // ein TextNode vorhanden sein, in den der Inhalt geschoben wird
+        // if the first node is a TextNode, than there must
+        // be also a TextNode in the NodesArray to store the content
         if( !pDestNd )
         {
             pDestNd = rNodes.MakeTxtNode( rPos.nNode, pSrcNd->GetTxtColl() );
@@ -1599,7 +1466,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         bSplitDestNd = pDestNd->Len() > rPos.nContent.GetIndex() ||
                         pEnd->nNode.GetNode().IsTxtNode();
 
-        // verschiebe jetzt noch den Inhalt in den neuen Node
+        // move the content into the new node
         bool bOneNd = pStt->nNode == pEnd->nNode;
         const xub_StrLen nLen =
                 ( (bOneNd) ? pEnd->nContent.GetIndex() : pSrcNd->Len() )
@@ -1620,8 +1487,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
         }
 
-        // das kopieren / setzen der Vorlagen darf erst nach
-        // dem Splitten erfolgen
+        // templates must be copied/set after a split
         if( !bOneNd && bSplitDestNd )
         {
             if( !rPos.nContent.GetIndex() )
@@ -1665,11 +1531,11 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             bCopyCollFmt = false;
         }
 
-        if( bOneNd )        // das wars schon
+        if( bOneNd )
         {
-            // der PaM wird korrigiert, denn falls ueber Nodegrenzen verschoben
-            // wurde, so stehen sie in unterschieden Nodes. Auch die Selektion
-            // wird aufgehoben !
+            // Correct the PaM, because it might have happened that the move
+            // went over the node borders (so the data might be in different nodes).
+            // Also, a selection is invalidated.
             pEnd->nContent = pStt->nContent;
             rPam.DeleteMark();
             GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0,
@@ -1689,11 +1555,10 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
             else if( rPos.nContent.GetIndex() )
             {
-                // falls im EndNode gesplittet wird, dann muss der EndIdx
-                // korrigiert werden !!
+                // if the EndNode is split than correct the EndIdx
                 const bool bCorrEnd = aEndIdx == rPos.nNode;
-                // es wird kein Text an den TextNode angehaengt, also splitte ihn
 
+                // if no text is attached to the TextNode, split it
                 if( rNodes.IsDocNodes() )
                 {
                     SwDoc* const pInsDoc = pDestNd->GetDoc();
@@ -1713,7 +1578,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 }
             }
         }
-        // am Ende steht noch ein leerer Text Node herum.
+        // at the end only an empty TextNode is left over
         bSplitDestNd = true;
     }
 
@@ -1721,7 +1586,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     if ( pEndSrcNd )
     {
         {
-            // am Bereichsende entsteht ein neuer TextNode
+            // at the end of this range a new TextNode will be created
             if( !bSplitDestNd )
             {
                 if( rPos.nNode < rNodes.GetEndOfContent().GetIndex() )
@@ -1741,7 +1606,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
             if( pDestNd && pEnd->nContent.GetIndex() )
             {
-                // verschiebe jetzt noch den Inhalt in den neuen Node
+                // move the content into the new node
                 SwIndex aIdx( pEndSrcNd, 0 );
                 pEndSrcNd->CutText( pDestNd, rPos.nContent, aIdx,
                                 pEnd->nContent.GetIndex());
@@ -1770,21 +1635,20 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     if( aEndIdx != aSttIdx )
     {
-        // verschiebe jetzt die Nodes in das NodesArary
+        // move the nodes into the NodesArary
         const sal_uLong nSttDiff = aSttIdx.GetIndex() - pStt->nNode.GetIndex();
         SwNodeRange aRg( aSttIdx, aEndIdx );
         _MoveNodes( aRg, rNodes, rPos.nNode );
-        // falls ins gleiche Nodes-Array verschoben wurde, stehen die
-        // Indizies jetzt auch an der neuen Position !!!!
-        // (also alles wieder umsetzen)
+
+        // if in the same node array, all indices are now at new positions (so correct them)
         if( &rNodes == this )
         {
             pStt->nNode = aRg.aEnd.GetIndex() - nSttDiff;
         }
     }
 
-    // falls der Start-Node verschoben wurde, in dem der Cursor stand, so
-    // muss der Content im akt. Content angemeldet werden !!!
+    // if the StartNode was moved to whom the the cursor pointed, so
+    // the content must be registered in the current content!
     if ( &pStt->nNode.GetNode() == &GetEndOfContent() )
     {
         const bool bSuccess = GoPrevious( &pStt->nNode );
@@ -1793,25 +1657,15 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     }
     pStt->nContent.Assign( pStt->nNode.GetNode().GetCntntNode(),
                             pStt->nContent.GetIndex() );
-    // der PaM wird korrigiert, denn falls ueber Nodegrenzen verschoben
-    // wurde, so stehen sie in unterschielichen Nodes. Auch die Selektion
-    // wird aufgehoben !
+    // Correct the PaM, because it might have happened that the move
+    // went over the node borders (so the data might be in different nodes).
+    // Also, a selection is invalidated.
     *pEnd = *pStt;
     rPam.DeleteMark();
     GetDoc()->GetDocShell()->Broadcast( SwFmtFldHint( 0,
                 rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
 }
 
-/*************************************************************************
-|*
-|*    SwNodes::_Copy()
-|*
-|*    Beschreibung
-|*    Parameter         SwNodeRange&    zu kopierender Bereich
-|*                      SwDoc&      in dieses Dokument
-|*                      SwIndex&    auf diese Position im Nodes-Array
-|*
-*************************************************************************/
 void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             const SwNodeIndex& rIndex, sal_Bool bNewFrms, sal_Bool bTblInsDummyNode ) const
 {
@@ -1825,13 +1679,13 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
 
     SwNodeRange aRg( rRange );
 
-    // "einfache" StartNodes oder EndNodes ueberspringen
+    // skip "simple" StartNodes or EndNodes
     while( ND_STARTNODE == (pAktNode = & aRg.aStart.GetNode())->GetNodeType()
             || ( pAktNode->IsEndNode() &&
                 !pAktNode->pStartOfSection->IsSectionNode() ) )
         aRg.aStart++;
 
-    // falls aEnd-1 auf keinem ContentNode steht, dann suche den vorherigen
+    // if aEnd-1 points to no ContentNode, search previous one
     aRg.aEnd--;
     // #i107142#: if aEnd is start node of a special section, do nothing.
     // Otherwise this could lead to crash: going through all previous
@@ -1848,7 +1702,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
     }
     aRg.aEnd++;
 
-    // wird im selben Array's verschoben, dann ueberpruefe die Einfuegepos.
+    // if in same array, check insertion position
     if( aRg.aStart >= aRg.aEnd )
         return;
 
@@ -1863,8 +1717,8 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             return;
 
     SwNodeIndex aInsPos( rIndex );
-    SwNodeIndex aOrigInsPos( rIndex, -1 );          // Originale Insert Pos
-    sal_uInt16 nLevel = 0;                          // Level-Counter
+    SwNodeIndex aOrigInsPos( rIndex, -1 ); // original insertion position
+    sal_uInt16 nLevel = 0;                 // level counter
 
     for( sal_uLong nNodeCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
             nNodeCnt > 0; --nNodeCnt )
@@ -1873,8 +1727,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
         switch( pAktNode->GetNodeType() )
         {
         case ND_TABLENODE:
-            // dann kopiere mal den TableNode
-            // Tabell in Fussnote kopieren ?
+            // Does it copy a table in(to) a footnote?
             if( aInsPos < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
                     pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex()
                     < aInsPos.GetIndex() )
@@ -1887,16 +1740,16 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 else
                     nNodeCnt = 1;
 
-                // dann alle Nodes der Tabelle in die akt. Zelle kopieren
-                // fuer den TabellenNode einen DummyNode einfuegen?
+                // insert a DummyNode for a TableNode
                 if( bTblInsDummyNode )
                     new SwDummySectionNode( aInsPos );
 
+                // copy all of the table's nodes into the current cell
                 for( aRg.aStart++; aRg.aStart.GetIndex() <
                     pAktNode->EndOfSectionIndex();
                     aRg.aStart++ )
                 {
-                    // fuer den Box-StartNode einen DummyNode einfuegen?
+                    // insert a DummyNode for the box-StartNode?
                     if( bTblInsDummyNode )
                         new SwDummySectionNode( aInsPos );
 
@@ -1905,12 +1758,12 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                                             *pSttNd->EndOfSectionNode() ),
                                 aInsPos, bNewFrms, sal_False );
 
-                    // fuer den Box-EndNode einen DummyNode einfuegen?
+                    // insert a DummyNode for the box-EndNode?
                     if( bTblInsDummyNode )
                         new SwDummySectionNode( aInsPos );
                     aRg.aStart = *pSttNd->EndOfSectionNode();
                 }
-                // fuer den TabellenEndNode einen DummyNode einfuegen?
+                // insert a DummyNode for the table-EndNode
                 if( bTblInsDummyNode )
                     new SwDummySectionNode( aInsPos );
                 aRg.aStart = *pAktNode->EndOfSectionNode();
@@ -1936,14 +1789,14 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             }
             break;
 
-        case ND_SECTIONNODE:            // SectionNode
+        case ND_SECTIONNODE:
             // If the end of the section is outside the copy range,
             // the section node will skipped, not copied!
             // If someone want to change this behaviour, he has to adjust the function
             // lcl_NonCopyCount(..) in ndcopy.cxx which relies on it.
             if( pAktNode->EndOfSectionIndex() < aRg.aEnd.GetIndex() )
             {
-                // also der gesamte, lege einen neuen SectionNode an
+                // copy of the whole section, so create a new SectionNode
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwSectionNode* pSectNd = ((SwSectionNode*)pAktNode)->
                                     MakeCopy( pDoc, aInsPos );
@@ -1961,7 +1814,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             }
             break;
 
-        case ND_STARTNODE:              // StartNode gefunden
+        case ND_STARTNODE:
             {
                 SwStartNode* pTmp = new SwStartNode( aInsPos, ND_STARTNODE,
                             ((SwStartNode*)pAktNode)->GetStartNodeType() );
@@ -1972,14 +1825,14 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             break;
 
         case ND_ENDNODE:
-            if( nLevel )                        // vollstaendige Section
+            if( nLevel ) // complete section
             {
                 --nLevel;
-                ++aInsPos;                      // EndNode schon vorhanden
+                ++aInsPos; // EndNode already exists
             }
             else if( !pAktNode->pStartOfSection->IsSectionNode() )
             {
-                // erzeuge eine Section an der originalen InsertPosition
+                // create a section at the original InsertPosition
                 SwNodeRange aTmpRg( aOrigInsPos, 1, aInsPos );
                 pDoc->GetNodes().SectionDown( &aTmpRg,
                         pAktNode->pStartOfSection->GetStartNodeType() );
@@ -1992,7 +1845,8 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             {
                 SwCntntNode* pNew = ((SwCntntNode*)pAktNode)->MakeCopy(
                                             pDoc, aInsPos );
-                if( !bNewFrms )         // dflt. werden die Frames immer angelegt
+                // frames are always created as default, so delete if needed
+                if( !bNewFrms )
                     pNew->DelFrms();
             }
             break;
@@ -2000,21 +1854,20 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
         case ND_SECTIONDUMMY:
             if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
-                // dann muss an der akt. InsPos auch ein SectionNode
-                // (Start/Ende) stehen; dann diesen ueberspringen.
-                // Andernfalls nicht weiter beachten.
+                // than a SectionNode (start/end) is needed at the current
+                // InsPos; if so skip it, otherwise ignore current node
                 SwNode *const pTmpNd = & aInsPos.GetNode();
                 if( pTmpNd->IsSectionNode() ||
                     pTmpNd->StartOfSectionNode()->IsSectionNode() )
-                    ++aInsPos;  // ueberspringen
+                    ++aInsPos;  // skip
             }
             else {
-                OSL_FAIL( "wie kommt diser Node ins Nodes-Array??" );
+                OSL_FAIL( "How can this node be in the node array?" );
             }
             break;
 
         default:
-            OSL_FAIL( "weder Start-/End-/Content-Node, unbekannter Typ" );
+            OSL_FAIL( "Unknown node type" );
         }
         aRg.aStart++;
     }
@@ -2051,8 +1904,19 @@ SwStartNode* SwNodes::MakeTextSection( const SwNodeIndex & rWhere,
     return pSttNd;
 }
 
-    // zum naechsten Content-Node, der nicht geschuetzt oder versteckt ist
-    // (beides auf sal_False ==> GoNext/GoPrevious!!!)
+//TODO: provide better documentation
+/** go to next section that is not protected nor hidden
+ *
+ * @note if bSkipHidden == false and bSkipProtect == false, use GoNext/GoPrevious
+ *
+ * @param pIdx
+ * @param bSkipHidden
+ * @param bSkipProtect
+ * @return
+ * @see SwNodes::GoNext
+ * @see SwNodes::GoPrevious
+ * @see SwNodes::GoNextSection (TODO: seems to be C&P programming here)
+*/
 SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
                             int bSkipHidden, int bSkipProtect ) const
 {
@@ -2067,7 +1931,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
             const SwSection& rSect = ((SwSectionNode*)pNd)->GetSection();
             if( (bSkipHidden && rSect.IsHiddenFlag()) ||
                 (bSkipProtect && rSect.IsProtectFlag()) )
-                // dann diese Section ueberspringen
+                // than skip the section
                 aTmp = *pNd->EndOfSectionNode();
             bFirst = false;
         }
@@ -2080,7 +1944,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
                                 pStartOfSection)->GetSection();
                 if( (bSkipHidden && rSect.IsHiddenFlag()) ||
                     (bSkipProtect && rSect.IsProtectFlag()) )
-                    // dann diese Section ueberspringen
+                    // than skip the section
                     aTmp = *pNd->EndOfSectionNode();
             }
         }
@@ -2123,7 +1987,7 @@ SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
                                             pStartOfSection)->GetSection();
                 if( (bSkipHidden && rSect.IsHiddenFlag()) ||
                     (bSkipProtect && rSect.IsProtectFlag()) )
-                    // dann diese Section ueberspringen
+                    // than skip section
                     aTmp = *pNd->StartOfSectionNode();
             }
             bFirst = false;
@@ -2137,7 +2001,7 @@ SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
                                 pStartOfSection)->GetSection();
                 if( (bSkipHidden && rSect.IsHiddenFlag()) ||
                     (bSkipProtect && rSect.IsProtectFlag()) )
-                    // dann diese Section ueberspringen
+                    // than skip section
                     aTmp = *pNd->StartOfSectionNode();
             }
         }
@@ -2162,23 +2026,28 @@ SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
     return 0;
 }
 
-    // suche den vorhergehenden [/nachfolgenden ] ContentNode oder
-    // TabellenNode mit Frames. Wird kein Ende angeben, dann wird mit
-    // dem FrameIndex begonnen; ansonsten, wird mit dem vor rFrmIdx und
-    // dem hintern pEnd die Suche gestartet. Sollte kein gueltiger Node
-    // gefunden werden, wird 0 returnt. rFrmIdx zeigt auf dem Node mit
-    // Frames
+//TODO: improve documentation
+//TODO: The inventor of the "single responsibility principle" will be crying if you ever show this code to him!
+/** find the next/previous ContentNode or a table node with frames
+ *
+ * If no pEnd is given, search is started with FrameIndex; otherwise
+ * search is started with the one before rFrmIdx and after pEnd.
+ *
+ * @param rFrmIdx node with frames to search in
+ * @param pEnd ???
+ * @return result node; 0 (!!!) if not found
+ */
 SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                                     const SwNode* pEnd ) const
 {
     SwNode* pFrmNd = 0;
 
-    // habe wir gar kein Layout, vergiss es
+    // no layout -> skip
     if( GetDoc()->GetCurrentViewShell() )   //swmod 071108//swmod 071225
     {
         SwNode* pSttNd = &rFrmIdx.GetNode();
 
-        // wird in eine versteckte Section verschoben ??
+        // move of a hidden section?
         SwSectionNode* pSectNd = pSttNd->IsSectionNode()
                     ? pSttNd->StartOfSectionNode()->FindSectionNode()
                     : pSttNd->FindSectionNode();
@@ -2202,7 +2071,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
             if( ( pFrmNd = pNd )->IsCntntNode() )
                 rFrmIdx = aIdx;
 
-                // suche nach vorne/hinten nach einem Content Node
+            // search forward or backward for a content node
             else if( 0 != ( pFrmNd = GoPrevSection( &aIdx, sal_True, sal_False )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     // nach vorne nie aus der Tabelle hinaus!
@@ -2223,23 +2092,21 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                 else
                     aIdx = rFrmIdx;
 
-                // JP 19.09.93: aber nie die Section dafuer verlassen !!
+                // NEVER leave the section when doing this!
                 if( ( pEnd && ( pFrmNd = &aIdx.GetNode())->IsCntntNode() ) ||
                     ( 0 != ( pFrmNd = GoNextSection( &aIdx, sal_True, sal_False )) &&
                     ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     ( pFrmNd->FindTableNode() == pTableNd &&
-                        // Bug 37652: nach hinten nie aus der Tabellenzelle hinaus!
+                        // NEVER go out of the table cell at the end
                         (!pFrmNd->FindTableNode() || pFrmNd->FindTableBoxStartNode()
                         == pSttNd->FindTableBoxStartNode() ) ) &&
                      (!pSectNd || pSttNd->IsSectionNode() ||
                       pSectNd->EndOfSectionIndex() > pFrmNd->GetIndex())
                     ))
                 {
-                    //JP 18.02.99: Undo von Merge einer Tabelle mit der
-                    // der vorherigen, wenn dahinter auch noch eine steht
-                    // falls aber der Node in einer Tabelle steht, muss
-                    // natuerlich dieser returnt werden, wenn der SttNode eine
-                    // Section oder Tabelle ist!
+                    // Undo when merging a table with one before, if there is also one after it.
+                    // However, if the node is in a table, it needs to be returned if the
+                    // SttNode is a section or a table!
                     SwTableNode* pTblNd;
                     if( pSttNd->IsTableNode() &&
                         0 != ( pTblNd = pFrmNd->FindTableNode() ) &&
@@ -2357,13 +2224,11 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, sal_Bool bDel )
         sal_uLong nCnt = nSz;
         SwNode *pDel = (*this)[ nDelPos+nCnt-1 ], *pPrev = (*this)[ nDelPos+nCnt-2 ];
 
-// temp. Object setzen
-        //JP 24.08.98: muessten eigentlich einzeln removed werden, weil
-        //      das Remove auch rekursiv gerufen werden kann, z.B. bei
-        //      zeichengebundenen Rahmen. Da aber dabei viel zu viel
-        //      ablaueft, wird hier ein temp. Objekt eingefuegt, das
-        //      dann mit dem Remove wieder entfernt wird.
-        // siehe Bug 55406
+        // set temporary object
+        // JP 24.08.98: this should actually be removed because one could
+        // call Remove recursively, e.g. for character bound frames. However,
+        // since there happens way too much here, this temporary object was
+        // inserted that will be deleted in Remove again (see Bug 55406)
         aTempEntries.resize(nCnt);
 
         while( nCnt-- )
@@ -2384,7 +2249,7 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, sal_Bool bDel )
 
 void SwNodes::RegisterIndex( SwNodeIndex& rIdx )
 {
-    if( !pRoot )        // noch keine Root gesetzt?
+    if( !pRoot ) // no root set, yet?
     {
         pRoot = &rIdx;
         pRoot->pPrev = 0;
@@ -2392,7 +2257,7 @@ void SwNodes::RegisterIndex( SwNodeIndex& rIdx )
     }
     else
     {
-        // immer hinter die Root haengen
+        // add always after root
         rIdx.pNext = pRoot->pNext;
         pRoot->pNext = &rIdx;
         rIdx.pPrev = pRoot;

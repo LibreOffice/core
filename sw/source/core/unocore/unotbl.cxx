@@ -150,7 +150,7 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
 static void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue)
     throw (lang::IllegalArgumentException)
 {
-    //Sonderbehandlung fuer "Nicht-Items"
+    // special treatment for "non-items"
     switch(pEntry->nWID)
     {
         case  FN_TABLE_HEADLINE_REPEAT:
@@ -722,7 +722,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
 {
     if(rCell.IsValid())
     {
-        // Der Text mu? zunaechst (vielleicht) geloescht werden
+        // first this text (maybe) needs to be deleted
         sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
         if(ULONG_MAX != nNdPos)
             sw_setString( rCell, OUString(), sal_True );   // sal_True == keep number format
@@ -746,7 +746,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
         SwTblBoxValue aVal(nVal);
         aSet.Put(aVal);
         pDoc->SetTblBoxFormulaAttrs( *rCell.pBox, aSet );
-        //Tabelle aktualisieren
+        // update table
         SwTableFmlUpdate aTblUpdate( SwTable::FindTable( rCell.GetFrmFmt() ));
         pDoc->UpdateTblFlds( &aTblUpdate );
     }
@@ -912,7 +912,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
     SolarMutexGuard aGuard;
     if(IsValid())
     {
-        // Der Text mu? zunaechst (vielleicht) geloescht werden
+        // first this text (maybe) needs to be deleted
         sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
         if(USHRT_MAX == nNdPos)
             sw_setString( *this, OUString(), sal_True );
@@ -932,7 +932,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
         }
         aSet.Put(aFml);
         GetDoc()->SetTblBoxFormulaAttrs( *pBox, aSet );
-        //Tabelle aktualisieren
+        // update table
         SwTableFmlUpdate aTblUpdate( SwTable::FindTable( GetFrmFmt() ));
         pMyDoc->UpdateTblFlds( &aTblUpdate );
     }
@@ -1228,7 +1228,7 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
             pTable = SwTable::FindTable( pTblFmt );
         SwTableSortBoxes::const_iterator it = pTable->GetTabSortBoxes().find( pBox );
 
-        //wenn es die Box gibt, dann wird auch eine Zelle zurueckgegeben
+        // if the box exists, then return a cell
         if( it != pTable->GetTabSortBoxes().end() )
         {
             size_t const nPos = it - pTable->GetTabSortBoxes().begin();
@@ -1236,12 +1236,12 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
             SwXCell* pXCell = aIter.First();
             while( pXCell )
             {
-                // gibt es eine passende Zelle bereits?
+                // is there already a proper cell?
                 if(pXCell->GetTblBox() == pBox)
                     break;
                 pXCell = aIter.Next();
             }
-            //sonst anlegen
+            // otherwise create it
             if(!pXCell)
             {
                 pXCell = new SwXCell(pTblFmt, pBox, nPos);
@@ -2249,7 +2249,7 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-          // gibts an der Tabelle und an allen Boxen
+          // exists at the table and at all boxes
         SwTableLines& rTblLines = pTable->GetTabLines();
         std::vector<OUString*> aAllNames;
         lcl_InspectLines(rTblLines, aAllNames);
@@ -2319,7 +2319,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
             {
                 pDoc->SplitNode(*aPam.Start(), false );
             }
-            //TODO: wenn es der letzte Absatz ist, dann muss noch ein Absatz angehaengt werden!
+            //TODO: if it is the last paragraph than add another one!
             if( aPam.HasMark() )
             {
                 pDoc->DeleteAndJoin(aPam);
@@ -2332,7 +2332,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                                         text::HoriOrientation::FULL );
             if(pTable)
             {
-                // hier muessen die Properties des Descriptors ausgewertet werden
+                // here, the properties of the descriptor need to be analyzed
                 pTableProps->ApplyTblAttr(*pTable, *pDoc);
                 SwFrmFmt* pTblFmt = pTable->GetFrmFmt();
                 lcl_FormatTable( pTblFmt );
@@ -2427,7 +2427,7 @@ uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColum
     SolarMutexGuard aGuard;
     uno::Reference< table::XCell >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
-    // Sheet interessiert nicht
+    // sheet is unimportant
     if(nColumn >= 0 && nRow >= 0 && nColumn < USHRT_MAX && nRow < USHRT_MAX && pFmt)
     {
         SwXCell* pXCell = lcl_CreateXCell(pFmt, nColumn, nRow);
@@ -2451,11 +2451,11 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
     const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
     if(pTLBox)
     {
-        // hier muessen die Actions aufgehoben werden
+        // invalidate all actions
         UnoActionRemoveContext aRemoveContext(pFmt->GetDoc());
         const SwStartNode* pSttNd = pTLBox->GetSttNd();
         SwPosition aPos(*pSttNd);
-        // Cursor in die obere linke Zelle des Ranges setzen
+        // set cursor to the upper-left cell of the range
         SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
         pUnoCrsr->SetRemainInSection( sal_False );
@@ -2467,7 +2467,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
             pUnoCrsr->Move( fnMoveForward, fnGoNode );
             SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
             pCrsr->MakeBoxSels();
-            // pUnoCrsr wird uebergeben und nicht geloescht
+            // pUnoCrsr will be provided and will not be deleted
             SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFmt, rDesc);
             aRef = pCellRange;
         }
@@ -2797,7 +2797,7 @@ uno::Sequence< OUString > SwXTextTable::getRowDescriptions(void) throw( uno::Run
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            OSL_FAIL("Where do these labels come from?");
         }
     }
     else
@@ -2833,7 +2833,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            OSL_FAIL("Wohin mit den Labels?");
+            OSL_FAIL("Where to put theses labels?");
         }
     }
     else
@@ -2873,7 +2873,7 @@ uno::Sequence< OUString > SwXTextTable::getColumnDescriptions(void)
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            OSL_FAIL("Where do these labels come from?");
         }
     }
     else
@@ -2911,7 +2911,7 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            OSL_FAIL("Where do these labels come from?");
         }
     }
     else
@@ -3136,8 +3136,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
 
-
-                    // hier muessen die Actions aufgehoben werden
+                    // invalidate all actions
                     UnoActionRemoveContext aRemoveContext(pDoc);
                     const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
@@ -3324,7 +3323,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
 
-                    // hier muessen die Actions aufgehoben werden
+                    // invalidate all actions
                     UnoActionRemoveContext aRemoveContext(pDoc);
                     const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
@@ -3776,11 +3775,11 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
-                // hier muessen die Actions aufgehoben
+                // invalidate all actions
                 UnoActionRemoveContext aRemoveContext(pFmt->GetDoc());
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
-                // Cursor in die obere linke Zelle des Ranges setzen
+                // set cursor in the upper-left cell of the range
                 SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
@@ -3792,7 +3791,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
-                    // pUnoCrsr wird uebergeben und nicht geloescht
+                    // pUnoCrsr will be provided and will not be deleted
                     SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFmt, aNewDesc);
                     aRet = pCellRange;
                 }
@@ -3987,7 +3986,6 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                 }
                 break;
                 case RES_BOXATR_FORMAT:
-                    //GetAttr fuer Tabellenselektion am Doc fehlt noch
                     OSL_FAIL("not implemented");
                 break;
                 case FN_UNO_PARA_STYLE:
@@ -4019,7 +4017,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                         RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
-                    // erstmal die Attribute des Cursors
+                    // first look at the attributes of the cursor
                     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
                     SwUnoCursorHelper::GetCrsrAttr(pCrsr->GetSelRing(), aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
@@ -4438,7 +4436,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            OSL_FAIL("Where do these labels come from?");
         }
     }
     else
@@ -4475,7 +4473,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
         }
         else
         {
-            OSL_FAIL("Wohin mit den Labels?");
+            OSL_FAIL("Where to put theses labels?");
         }
     }
 }
@@ -4512,7 +4510,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            OSL_FAIL("Where do these labels come from?");
         }
     }
     else
@@ -4546,7 +4544,7 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
         }
         else
         {
-            OSL_FAIL("Wo kommen die Labels her?");
+            OSL_FAIL("Where to put theses labels?");
         }
     }
 }
@@ -4707,12 +4705,12 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
             SwXTextTableRow* pXRow = aIter.First();
             while( pXRow )
             {
-                // gibt es eine passende Zelle bereits?
+                // is there already a proper cell?
                 if(pXRow->GetTblRow() == pLine)
                     break;
                 pXRow = aIter.Next();
             }
-            //sonst anlegen
+            // otherwise create it
             if(!pXRow)
                 pXRow = new SwXTextTableRow(pFrmFmt, pLine);
             uno::Reference< beans::XPropertySet >  xRet =
@@ -4736,7 +4734,7 @@ sal_Bool SwXTableRows::hasElements(void) throw( uno::RuntimeException )
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if(!pFrmFmt)
         throw uno::RuntimeException();
-    //es gibt keine Tabelle ohne Zeilen
+    // a table always has rows
     return sal_True;
 }
 
@@ -4767,7 +4765,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
             if(!pTLBox)
             {
                 bAppend = true;
-                // am Ende anfuegen, dazu muss der Cursor in die letzte Zeile!
+                // to append at the end the cursor must be in the last line
                 SwTableLines& rLines = pTable->GetTabLines();
                 SwTableLine* pLine = rLines.back();
                 SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -4777,7 +4775,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
             {
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
-                // Cursor in die obere linke Zelle des Ranges setzen
+                // set cursor to the upper-left cell of the range
                 UnoActionContext aAction(pFrmFmt->GetDoc());
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
@@ -4813,12 +4811,12 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
             if(pTLBox)
             {
                 {
-                    // hier muessen die Actions aufgehoben werden
+                    // invalidate all actions
                     UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
                 }
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
-                // Cursor in die obere linke Zelle des Ranges setzen
+                // set cursor to the upper-left cell of the range
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
@@ -4832,14 +4830,14 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                     SwUnoTableCrsr* pCrsr =
                         dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
-                    {   // Die Klammer ist wichtig
+                    {   // these braces are important
                         UnoActionContext aAction(pFrmFmt->GetDoc());
                         pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
                         delete pUnoCrsr;
                         bSuccess = true;
                     }
                     {
-                        // hier muessen die Actions aufgehoben werden
+                        // invalidate all actions
                         UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
                     }
                 }
@@ -4979,7 +4977,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
             if(!pTLBox)
             {
                 bAppend = true;
-                // am Ende anfuegen, dazu muss der Cursor in die letzte Spalte!
+                // to append at the end the cursor must be in the last line
                 SwTableBoxes& rBoxes = pLine->GetTabBoxes();
                 pTLBox = rBoxes.back();
             }
@@ -5022,12 +5020,12 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
             if(pTLBox)
             {
                 {
-                    // hier muessen die Actions aufgehoben werden
+                    // invalidate all actions
                     UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
                 }
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
-                // Cursor in die obere linke Zelle des Ranges setzen
+                // set cursor to the upper-left cell of the range
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
@@ -5041,14 +5039,14 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                     SwUnoTableCrsr* pCrsr =
                         dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                     pCrsr->MakeBoxSels();
-                    {   // Die Klammer ist wichtig
+                    {   // these braces are important
                         UnoActionContext aAction(pFrmFmt->GetDoc());
                         pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
                         delete pUnoCrsr;
                         bSuccess = true;
                     }
                     {
-                        // hier muessen die Actions aufgehoben werden
+                        // invalidate all actions
                         UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
                     }
                 }

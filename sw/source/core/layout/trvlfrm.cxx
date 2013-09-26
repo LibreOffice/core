@@ -772,7 +772,7 @@ static sal_Bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const SwFrm *pCell = pStart->GetUpper();
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
-            OSL_ENSURE( pCell, "Zelle nicht gefunden." );
+            OSL_ENSURE( pCell, "could not find the cell" );
             nX =  (pCell->Frm().*fnRect->fnGetLeft)() +
                   (pCell->Frm().*fnRect->fnGetWidth)() / 2;
 
@@ -973,7 +973,7 @@ sal_Bool SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, sal_Bool bInReadOnly 
  */
 sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
-    OSL_ENSURE( pActualCrsr, "Welche Seite soll's denn sein?" );
+    OSL_ENSURE( pActualCrsr, "got no page cursor" );
     SwFrm const*const pActFrm = pActualCrsr->GetPoint()->nNode.GetNode().
                                     GetCntntNode()->getLayoutFrm( this, 0,
                                                     pActualCrsr->GetPoint(),
