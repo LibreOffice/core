@@ -98,7 +98,6 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     get(aRelativeInetCB, "relative_inet");
 
     get(aODFVersionLB, "odfversion");
-    get(aSizeOptimizationCB, "sizeoptimization");
     get(aWarnAlienFormatCB, "warnalienformat");
     get(aDocTypeLB, "doctype");
     get(aSaveAsFT, "saveas_label");
@@ -268,12 +267,6 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
                                aBackupCB->IsChecked() ) );
-        bModified |= sal_True;
-    }
-
-    if ( aSizeOptimizationCB->IsChecked() != aSizeOptimizationCB->GetSavedValue() )
-    {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PRETTYPRINTING ), !aSizeOptimizationCB->IsChecked() ) );
         bModified |= sal_True;
     }
 
@@ -478,9 +471,6 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aWarnAlienFormatCB->Check(aSaveOpt.IsWarnAlienFormat());
     aWarnAlienFormatCB->Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
 
-    // the pretty printing
-    aSizeOptimizationCB->Check( !aSaveOpt.IsPrettyPrinting());
-
     aAutoSaveEdit->SetValue( aSaveOpt.GetAutoSaveTime() );
 
     // save relatively
@@ -497,7 +487,6 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aDocInfoCB->SaveValue();
     aBackupCB->SaveValue();
     aWarnAlienFormatCB->SaveValue();
-    aSizeOptimizationCB->SaveValue();
     aAutoSaveCB->SaveValue();
     aAutoSaveEdit->SaveValue();
 

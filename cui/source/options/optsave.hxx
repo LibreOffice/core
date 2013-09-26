@@ -55,7 +55,6 @@ private:
     CheckBox*               aRelativeInetCB;
 
     ListBox*                aODFVersionLB;
-    CheckBox*               aSizeOptimizationCB;
     CheckBox*               aWarnAlienFormatCB;
     ListBox*                aDocTypeLB;
     FixedText*              aSaveAsFT;
