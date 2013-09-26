@@ -138,27 +138,27 @@ ScDataPilotServiceDlg::~ScDataPilotServiceDlg()
 {
 }
 
-String ScDataPilotServiceDlg::GetServiceName() const
+OUString ScDataPilotServiceDlg::GetServiceName() const
 {
     return aLbService.GetSelectEntry();
 }
 
-String ScDataPilotServiceDlg::GetParSource() const
+OUString ScDataPilotServiceDlg::GetParSource() const
 {
     return aEdSource.GetText();
 }
 
-String ScDataPilotServiceDlg::GetParName() const
+OUString ScDataPilotServiceDlg::GetParName() const
 {
     return aEdName.GetText();
 }
 
-String ScDataPilotServiceDlg::GetParUser() const
+OUString ScDataPilotServiceDlg::GetParUser() const
 {
     return aEdUser.GetText();
 }
 
-String ScDataPilotServiceDlg::GetParPass() const
+OUString ScDataPilotServiceDlg::GetParPass() const
 {
     return aEdPasswd.GetText();
 }

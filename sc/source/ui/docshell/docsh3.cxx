@@ -620,7 +620,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
     return (ScChangeAction*)pFound;
 }
 
-void ScDocShell::SetChangeComment( ScChangeAction* pAction, const String& rComment )
+void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rComment )
 {
     if (pAction)
     {

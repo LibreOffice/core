@@ -87,7 +87,7 @@ public:
     virtual sal_Bool        TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
                                                sal_Bool bRecord, sal_Bool bApi );
 
-    virtual sal_Bool        SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi );
+    virtual sal_Bool        SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, sal_Bool bApi );
     virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
@@ -107,12 +107,12 @@ public:
     virtual bool            ShowNote( const ScAddress& rPos, bool bShow = true );
     inline bool             HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }
 
-    virtual bool            SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi );
+    virtual bool            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, sal_Bool bApi );
     virtual bool            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, sal_Bool bApi );
 
     virtual sal_Bool        ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                              sal_Bool bRecord, sal_Bool bApi );
-    virtual sal_Bool        ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
+    virtual sal_Bool        ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
                                         sal_Bool bRecord, sal_Bool bApi );
 
     virtual bool InsertCells( const ScRange& rRange,const ScMarkData* pTabMark,
@@ -124,8 +124,8 @@ public:
     virtual sal_Bool        MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                        sal_Bool bCut, sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
 
-    virtual sal_Bool        InsertTable( SCTAB nTab, const String& rName, sal_Bool bRecord, sal_Bool bApi );
-    virtual sal_Bool        RenameTable( SCTAB nTab, const String& rName, sal_Bool bRecord, sal_Bool bApi );
+    virtual sal_Bool        InsertTable( SCTAB nTab, const OUString& rName, sal_Bool bRecord, sal_Bool bApi );
+    virtual sal_Bool        RenameTable( SCTAB nTab, const OUString& rName, sal_Bool bRecord, sal_Bool bApi );
     virtual sal_Bool        DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool bApi );
 
     virtual bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
@@ -147,8 +147,8 @@ public:
 
     virtual void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
-    virtual sal_Bool        Protect( SCTAB nTab, const String& rPassword, sal_Bool bApi );
-    virtual sal_Bool        Unprotect( SCTAB nTab, const String& rPassword, sal_Bool bApi );
+    virtual sal_Bool        Protect( SCTAB nTab, const OUString& rPassword, sal_Bool bApi );
+    virtual sal_Bool        Unprotect( SCTAB nTab, const OUString& rPassword, sal_Bool bApi );
 
     virtual sal_Bool        ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, sal_Bool bApi );
     virtual sal_Bool        ChangeIndent( const ScMarkData& rMark, sal_Bool bIncrement, sal_Bool bApi );
@@ -157,8 +157,8 @@ public:
 
     virtual sal_Bool        EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                          const ScTokenArray* pTokenArray,
-                                         const String& rString, sal_Bool bApi, sal_Bool bEnglish,
-                                         const String& rFormulaNmsp,
+                                         const OUString& rString, sal_Bool bApi, sal_Bool bEnglish,
+                                         const OUString& rFormulaNmsp,
                                          const formula::FormulaGrammar::Grammar );
 
     virtual sal_Bool        TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
@@ -197,8 +197,8 @@ public:
     virtual sal_Bool        CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi, SCTAB nTab = -1 ); // -1 for global range names
     virtual sal_Bool        InsertNameList( const ScAddress& rStartPos, sal_Bool bApi );
 
-    sal_Bool                InsertAreaLink( const String& rFile, const String& rFilter,
-                                            const String& rOptions, const OUString& rSource,
+    sal_Bool                InsertAreaLink( const OUString& rFile, const OUString& rFilter,
+                                            const OUString& rOptions, const OUString& rSource,
                                             const ScRange& rDestRange, sal_uLong nRefresh,
                                             sal_Bool bFitBlock, sal_Bool bApi );
 

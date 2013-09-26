@@ -748,7 +748,7 @@ sal_Bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi )
+sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -1173,7 +1173,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 
 //------------------------------------------------------------------------
 
-bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, sal_Bool bApi )
+bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -1329,7 +1329,7 @@ sal_Bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAtt
 }
 
 
-sal_Bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
+sal_Bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
                                 sal_Bool bRecord, sal_Bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -2953,7 +2953,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
 }
 
 
-sal_Bool ScDocFunc::InsertTable( SCTAB nTab, const String& rName, sal_Bool bRecord, sal_Bool bApi )
+sal_Bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, sal_Bool bRecord, sal_Bool bApi )
 {
     sal_Bool bSuccess = false;
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
@@ -3192,7 +3192,7 @@ sal_Bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL, sal_Bool /* bApi */ )
     return sal_True;
 }
 
-sal_Bool ScDocFunc::RenameTable( SCTAB nTab, const String& rName, sal_Bool bRecord, sal_Bool bApi )
+sal_Bool ScDocFunc::RenameTable( SCTAB nTab, const OUString& rName, sal_Bool bRecord, sal_Bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -3674,7 +3674,7 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     aModificator.SetDocumentModified();
 }
 
-sal_Bool ScDocFunc::Protect( SCTAB nTab, const String& rPassword, sal_Bool /*bApi*/ )
+sal_Bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword, sal_Bool /*bApi*/ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (nTab == TABLEID_DOC)
@@ -3732,7 +3732,7 @@ sal_Bool ScDocFunc::Protect( SCTAB nTab, const String& rPassword, sal_Bool /*bAp
     return true;
 }
 
-sal_Bool ScDocFunc::Unprotect( SCTAB nTab, const String& rPassword, sal_Bool bApi )
+sal_Bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, sal_Bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -4031,8 +4031,8 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 //------------------------------------------------------------------------
 
 sal_Bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
-        const ScTokenArray* pTokenArray, const String& rString, sal_Bool bApi, sal_Bool bEnglish,
-        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
+        const ScTokenArray* pTokenArray, const OUString& rString, sal_Bool bApi, sal_Bool bEnglish,
+        const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -4083,7 +4083,7 @@ sal_Bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMa
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
                     aMark, EMPTY_STRING, pCode, eGrammar);
             delete pCode;
-            pDoc->IncXMLImportedFormulaCount( rString.Len() );
+            pDoc->IncXMLImportedFormulaCount( rString.getLength() );
         }
         else if (bEnglish)
         {
@@ -5226,8 +5226,8 @@ sal_Bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNe
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
-                                const String& rOptions, const OUString& rSource,
+sal_Bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
+                                const OUString& rOptions, const OUString& rSource,
                                 const ScRange& rDestRange, sal_uLong nRefresh,
                                 sal_Bool bFitBlock, sal_Bool bApi )
 {

@@ -341,7 +341,7 @@ void ScDbNameDlg::UpdateNames()
 
 //------------------------------------------------------------------------
 
-void ScDbNameDlg::UpdateDBData( const String& rStrName )
+void ScDbNameDlg::UpdateDBData( const OUString& rStrName )
 {
 
     const ScDBData* pData = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rStrName));

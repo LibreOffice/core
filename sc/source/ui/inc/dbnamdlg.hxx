@@ -90,7 +90,7 @@ private:
 private:
     void            Init();
     void            UpdateNames();
-    void            UpdateDBData( const String& rStrName );
+    void            UpdateDBData( const OUString& rStrName );
     void            SetInfoStrings( const ScDBData* pDBData );
 
     DECL_LINK( CancelBtnHdl, void * );

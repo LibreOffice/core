@@ -141,7 +141,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     SC_DLLPRIVATE bool SaveCurrentChart( SfxMedium& rMedium );
 
-    SC_DLLPRIVATE sal_uLong         DBaseImport( const String& rFullFileName, CharSet eCharSet,
+    SC_DLLPRIVATE sal_uLong         DBaseImport( const OUString& rFullFileName, CharSet eCharSet,
                                              ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
     SC_DLLPRIVATE sal_uLong DBaseExport(
         const OUString& rFullFileName, CharSet eCharSet, bool& bHasMemo );
@@ -242,7 +242,7 @@ public:
 
     void            UpdateFontList();
 
-    String          CreateObjectName( const String& rPrefix );
+    OUString        CreateObjectName( const OUString& rPrefix );
 
     ScDrawLayer*    MakeDrawLayer();
 
@@ -261,7 +261,7 @@ public:
     bool            MergeSharedDocument( ScDocShell* pSharedDocShell );
 
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
-    void            SetChangeComment( ScChangeAction* pAction, const String& rComment );
+    void            SetChangeComment( ScChangeAction* pAction, const OUString& rComment );
     void            ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent,sal_Bool bPrevNext=sal_True );
                     /// Protect/unprotect ChangeTrack and return <TRUE/> if
                     /// protection was successfully changed.
@@ -278,7 +278,7 @@ public:
     void            PageStyleModified( const OUString& rStyleName, sal_Bool bApi );
 
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
-    void            DoAutoStyle( const ScRange& rRange, const String& rStyle );
+    void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );
 
     Window*         GetActiveDialogParent();
     void            ErrorMessage( sal_uInt16 nGlobStrId );
@@ -290,11 +290,11 @@ public:
 
     void            RefreshPivotTables( const ScRange& rSource );
     void            DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bRecord = sal_True );
-    void            UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord = sal_True );
-    SCTAB           MakeScenario( SCTAB nTab, const String& rName, const String& rComment,
+    void            UseScenario( SCTAB nTab, const OUString& rName, sal_Bool bRecord = sal_True );
+    SCTAB           MakeScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags,
                                     ScMarkData& rMark, sal_Bool bRecord = sal_True );
-    void            ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
+    void            ModifyScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags );
     sal_uLong TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
                                 SCTAB nDestPos, sal_Bool bInsertNew,
@@ -399,14 +399,14 @@ public:
     static SCTAB       GetCurTab();
 
     static ScDocShell* GetShellByNum( sal_uInt16 nDocNo );
-    static String   GetOwnFilterName();
-        static String   GetHtmlFilterName();
-    static String   GetWebQueryFilterName();
-    static String   GetAsciiFilterName();
-    static String   GetLotusFilterName();
-    static String   GetDBaseFilterName();
-    static String   GetDifFilterName();
-    static sal_Bool     HasAutomaticTableName( const String& rFilter );
+    static OUString   GetOwnFilterName();
+    static OUString   GetHtmlFilterName();
+    static OUString   GetWebQueryFilterName();
+    static OUString   GetAsciiFilterName();
+    static OUString   GetLotusFilterName();
+    static OUString   GetDBaseFilterName();
+    static OUString   GetDifFilterName();
+    static sal_Bool     HasAutomaticTableName( const OUString& rFilter );
 
     DECL_LINK( RefreshDBDataHdl, ScRefreshTimer* );
 

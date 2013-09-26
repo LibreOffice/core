@@ -623,7 +623,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, sal_Bool bReco
     aModificator.SetDocumentModified();
 }
 
-void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord )
+void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, sal_Bool bRecord )
 {
     if (!aDocument.IsScenario(nTab))
     {
@@ -714,7 +714,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord 
     }
 }
 
-void ScDocShell::ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
+void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags )
 {
     //  Undo
@@ -744,7 +744,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const String& rName, const String& 
         pBindings->Invalidate( SID_SELECT_SCENARIO );
 }
 
-SCTAB ScDocShell::MakeScenario( SCTAB nTab, const String& rName, const String& rComment,
+SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUString& rComment,
                                     const Color& rColor, sal_uInt16 nFlags,
                                     ScMarkData& rMark, sal_Bool bRecord )
 {

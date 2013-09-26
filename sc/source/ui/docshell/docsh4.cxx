@@ -1261,7 +1261,7 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
 
 //------------------------------------------------------------------
 
-void ScDocShell::DoAutoStyle( const ScRange& rRange, const String& rStyle )
+void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
 {
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     ScStyleSheet* pStyleSheet =

@@ -115,7 +115,7 @@ public:
 
     void            SetMarkedOriginalSize();
 
-    sal_Bool            SelectObject( const String& rName );
+    sal_Bool            SelectObject( const OUString& rName );
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 

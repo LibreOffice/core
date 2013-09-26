@@ -628,7 +628,7 @@ void ScDrawView::UpdateUserViewOptions()
     }
 }
 
-sal_Bool ScDrawView::SelectObject( const String& rName )
+sal_Bool ScDrawView::SelectObject( const OUString& rName )
 {
     UnmarkAll();
 

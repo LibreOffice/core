@@ -291,7 +291,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
 
 #endif // !DISABLE_DBCONNECTIVITY
 
-sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
+sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, CharSet eCharSet,
                                ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
 {
 #ifdef DISABLE_DBCONNECTIVITY

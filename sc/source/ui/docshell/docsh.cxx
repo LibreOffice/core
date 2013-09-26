@@ -2519,55 +2519,55 @@ void ScDocShell::PrepareReload()
 }
 
 
-String ScDocShell::GetOwnFilterName()
+OUString ScDocShell::GetOwnFilterName()
 {
     return OUString(pFilterSc50);
 }
 
-String ScDocShell::GetHtmlFilterName()
+OUString ScDocShell::GetHtmlFilterName()
 {
     return OUString(pFilterHtml);
 }
 
-String ScDocShell::GetWebQueryFilterName()
+OUString ScDocShell::GetWebQueryFilterName()
 {
     return OUString(pFilterHtmlWebQ);
 }
 
-String ScDocShell::GetAsciiFilterName()
+OUString ScDocShell::GetAsciiFilterName()
 {
     return OUString(pFilterAscii);
 }
 
-String ScDocShell::GetLotusFilterName()
+OUString ScDocShell::GetLotusFilterName()
 {
     return OUString(pFilterLotus);
 }
 
-String ScDocShell::GetDBaseFilterName()
+OUString ScDocShell::GetDBaseFilterName()
 {
     return OUString(pFilterDBase);
 }
 
-String ScDocShell::GetDifFilterName()
+OUString ScDocShell::GetDifFilterName()
 {
     return OUString(pFilterDif);
 }
 
-sal_Bool ScDocShell::HasAutomaticTableName( const String& rFilter )
+sal_Bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
 {
     //  sal_True for those filters that keep the default table name
     //  (which is language specific)
 
-    return rFilter.EqualsAscii( pFilterAscii )
-        || rFilter.EqualsAscii( pFilterLotus )
-        || rFilter.EqualsAscii( pFilterExcel4 )
-        || rFilter.EqualsAscii( pFilterEx4Temp )
-        || rFilter.EqualsAscii( pFilterDBase )
-        || rFilter.EqualsAscii( pFilterDif )
-        || rFilter.EqualsAscii( pFilterSylk )
-        || rFilter.EqualsAscii( pFilterHtml )
-        || rFilter.EqualsAscii( pFilterRtf );
+    return rFilter.equalsAscii( pFilterAscii )
+        || rFilter.equalsAscii( pFilterLotus )
+        || rFilter.equalsAscii( pFilterExcel4 )
+        || rFilter.equalsAscii( pFilterEx4Temp )
+        || rFilter.equalsAscii( pFilterDBase )
+        || rFilter.equalsAscii( pFilterDif )
+        || rFilter.equalsAscii( pFilterSylk )
+        || rFilter.equalsAscii( pFilterHtml )
+        || rFilter.equalsAscii( pFilterRtf );
 }
 
 #if ! ENABLE_TELEPATHY

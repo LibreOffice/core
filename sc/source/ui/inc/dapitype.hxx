@@ -76,11 +76,11 @@ public:
                     const com::sun::star::uno::Sequence<OUString>& rServices );
             ~ScDataPilotServiceDlg();
 
-    String  GetServiceName() const;
-    String  GetParSource() const;
-    String  GetParName() const;
-    String  GetParUser() const;
-    String  GetParPass() const;
+    OUString  GetServiceName() const;
+    OUString  GetParSource() const;
+    OUString  GetParName() const;
+    OUString  GetParUser() const;
+    OUString  GetParPass() const;
 };
 
 
