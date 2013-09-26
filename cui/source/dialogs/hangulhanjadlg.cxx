@@ -1239,15 +1239,15 @@ namespace svx
     {
     private:
     protected:
-        sal_uInt16          m_nSize;
-        OUString**          m_ppElements;
+        std::vector<OUString*> m_vElements;
         sal_uInt16          m_nNumOfEntries;
+        // index of the internal iterator, used for First() and Next() methods
         sal_uInt16          m_nAct;
 
         const OUString*       _Next( void );
     public:
-                            SuggestionList( sal_uInt16 _nNumOfElements );
-        virtual             ~SuggestionList();
+                            SuggestionList();
+                            ~SuggestionList();
 
         bool                Set( const OUString& _rElement, sal_uInt16 _nNumOfElement );
         bool                Reset( sal_uInt16 _nNumOfElement );
@@ -1257,51 +1257,30 @@ namespace svx
         const OUString*     First( void );
         const OUString*     Next( void );
 
-        inline sal_uInt16   GetCount( void ) const;
+        inline sal_uInt16   GetCount( void ) const { return m_nNumOfEntries; }
     };
 
-    inline sal_uInt16 SuggestionList::GetCount( void ) const
+    SuggestionList::SuggestionList() :
+        m_vElements(MAXNUM_SUGGESTIONS, NULL)
     {
-        return m_nNumOfEntries;
-    }
-
-    SuggestionList::SuggestionList( sal_uInt16 _nNumOfElements )
-    {
-        if( !_nNumOfElements )
-            _nNumOfElements = 1;
-
-        m_nSize = _nNumOfElements;
-
-        m_ppElements = new OUString*[ m_nSize ];
         m_nAct = m_nNumOfEntries = 0;
-
-        OUString**    ppNull = m_ppElements;
-        sal_uInt16  n = _nNumOfElements;
-        while( n )
-        {
-            *ppNull = NULL;
-            ++ppNull;
-            --n;
-        }
     }
 
     SuggestionList::~SuggestionList()
     {
         Clear();
-        delete[] m_ppElements;
     }
 
     bool SuggestionList::Set( const OUString& _rElement, sal_uInt16 _nNumOfElement )
     {
-        bool    bRet = _nNumOfElement < m_nSize;
+        bool    bRet = _nNumOfElement < m_vElements.size();
         if( bRet )
         {
-            OUString**    ppElem = m_ppElements + _nNumOfElement;
-            if( *ppElem )
-                **ppElem = _rElement;
+            if( m_vElements[_nNumOfElement] != NULL )
+                *(m_vElements[_nNumOfElement]) = _rElement;
             else
             {
-                *ppElem = new OUString( _rElement );
+                m_vElements[_nNumOfElement] = new OUString( _rElement );
                 ++m_nNumOfEntries;
             }
         }
@@ -1311,14 +1290,13 @@ namespace svx
 
     bool SuggestionList::Reset( sal_uInt16 _nNumOfElement )
     {
-        bool    bRet = _nNumOfElement < m_nSize;
+        bool    bRet = _nNumOfElement < m_vElements.size();
         if( bRet )
         {
-            OUString**    ppElem = m_ppElements + _nNumOfElement;
-            if( *ppElem )
+            if( m_vElements[_nNumOfElement] != NULL )
             {
-                delete *ppElem;
-                *ppElem = NULL;
+                delete m_vElements[_nNumOfElement];
+                m_vElements[_nNumOfElement] = NULL;
                 --m_nNumOfEntries;
             }
         }
@@ -1328,33 +1306,21 @@ namespace svx
 
     const OUString* SuggestionList::Get( sal_uInt16 _nNumOfElement ) const
     {
-        const OUString*   pRet;
-
-        if( _nNumOfElement < m_nSize )
-            pRet = m_ppElements[ _nNumOfElement ];
-        else
-            pRet = NULL;
-
-        return pRet;
+        if( _nNumOfElement < m_vElements.size())
+            return m_vElements[_nNumOfElement];
+        return NULL;
     }
 
     void SuggestionList::Clear( void )
     {
         if( m_nNumOfEntries )
         {
-            OUString**    ppDel = m_ppElements;
-            sal_uInt16  nCnt = m_nSize;
-            while( nCnt )
-            {
-                if( *ppDel )
+            for( std::vector<OUString*>::iterator it = m_vElements.begin(); it != m_vElements.end(); ++it )
+                if( *it != NULL )
                 {
-                    delete *ppDel;
-                    *ppDel = NULL;
-                }
-
-                ++ppDel;
-                --nCnt;
-            }
+                    delete *it;
+                    *it = NULL;
+                 }
 
             m_nNumOfEntries = m_nAct = 0;
         }
@@ -1363,9 +1329,9 @@ namespace svx
     const OUString* SuggestionList::_Next( void )
     {
         const OUString*   pRet = NULL;
-        while( m_nAct < m_nSize && !pRet )
+        while( m_nAct < m_vElements.size() && !pRet )
         {
-            pRet = m_ppElements[ m_nAct ];
+            pRet = m_vElements[ m_nAct ];
             if( !pRet )
                 ++m_nAct;
         }
@@ -1712,7 +1678,7 @@ namespace svx
             if( nCnt )
             {
                 if( !m_pSuggestions )
-                    m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
+                    m_pSuggestions = new SuggestionList;
 
                 const OUString* pSugg = aEntries.getConstArray();
                 sal_uInt32 n = 0;
@@ -1759,7 +1725,7 @@ namespace svx
         {
             //set suggestion
             if( !m_pSuggestions )
-                m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
+                m_pSuggestions = new SuggestionList;
             m_pSuggestions->Set( aTxt, nEntryNum );
         }
 
