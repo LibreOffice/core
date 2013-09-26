@@ -2571,7 +2571,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     if( (nId  & COLL_GET_RANGE_BITS) != COLL_HTML_BITS)
                     {
                         // but some we also want to see in this section
-                        bool bWeiter = true;
+                        bool bContinue = true;
                         switch( nId )
                         {
                         case RES_POOLCOLL_SENDADRESS:   //  --> ADDRESS
@@ -2588,10 +2588,10 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         case RES_POOLCOLL_STANDARD:     //  --> P
                         case RES_POOLCOLL_FOOTNOTE:
                         case RES_POOLCOLL_ENDNOTE:
-                            bWeiter = false;
+                            bContinue = false;
                             break;
                         }
-                        if( bWeiter )
+                        if( bContinue )
                             continue;
                     }
                     break;

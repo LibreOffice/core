@@ -383,7 +383,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
 {
     std::vector<DdeTopic*>::iterator iter;
     std::vector<DdeTopic*> &rTopics = rService.aTopics;
-    bool bWeiter = false;
+    bool bContinue = false;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
@@ -395,17 +395,17 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
                 return *iter;
         }
 
-        bWeiter = !bWeiter;
-        if( !bWeiter )
+        bContinue = !bContinue;
+        if( !bContinue )
             break;
 
         // dann befragen wir doch mal unsere Ableitung:
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hTopic,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
-        bWeiter = rService.MakeTopic( reinterpret_cast<const sal_Unicode*>(chBuf) );
+        bContinue = rService.MakeTopic( reinterpret_cast<const sal_Unicode*>(chBuf) );
         // dann muessen wir noch mal suchen
     }
-    while( bWeiter );
+    while( bContinue );
 
     return 0;
 }
@@ -418,7 +418,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
     std::vector<DdeItem*> &rItems = rTopic.aItems;
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    bool bWeiter = false;
+    bool bContinue = false;
 
     do
     {            // middle check loop
@@ -428,17 +428,17 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
             if ( *(*iter)->pName == hItem )
                 return *iter;
         }
-        bWeiter = !bWeiter;
-        if( !bWeiter )
+        bContinue = !bContinue;
+        if( !bContinue )
             break;
 
         // dann befragen wir doch mal unsere Ableitung:
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hItem,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
-        bWeiter = rTopic.MakeItem( reinterpret_cast<const sal_Unicode*>(chBuf) );
+        bContinue = rTopic.MakeItem( reinterpret_cast<const sal_Unicode*>(chBuf) );
         // dann muessen wir noch mal suchen
     }
-    while( bWeiter );
+    while( bContinue );
 
     return 0;
 }

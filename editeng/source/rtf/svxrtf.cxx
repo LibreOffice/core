@@ -641,9 +641,9 @@ OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 util::DateTime SvxRTFParser::GetDateTimeStamp( )
 {
     util::DateTime aDT;
-    sal_Bool bWeiter = sal_True;
+    sal_Bool bContinue = sal_True;
 
-    while( bWeiter && IsParserWorking() )
+    while( bContinue && IsParserWorking() )
     {
         int nToken = GetNextToken();
         switch( nToken )
@@ -654,7 +654,7 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
         case RTF_HR:    aDT.Hours = (sal_uInt16)nTokenValue;    break;
         case RTF_MIN:   aDT.Minutes = (sal_uInt16)nTokenValue;  break;
         default:
-            bWeiter = sal_False;
+            bContinue = sal_False;
         }
     }
     SkipToken( -1 );        // the closing brace is evaluated "above"

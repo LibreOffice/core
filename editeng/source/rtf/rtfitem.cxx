@@ -208,7 +208,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
 void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 {
     DBG_ASSERT( pSet, "A SfxItemSet has to be provided as argument!" );
-    int bFirstToken = sal_True, bWeiter = sal_True;
+    int bFirstToken = sal_True, bContinue = sal_True;
     sal_uInt16 nStyleNo = 0;        // default
     FontUnderline eUnderline;
     FontUnderline eOverline;
@@ -219,7 +219,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
     int bChkStkPos = !bNewGroup && !aAttrStack.empty();
 
-    while( bWeiter && IsParserWorking() )  // as long as known Attribute are recognized
+    while( bContinue && IsParserWorking() )  // as long as known Attribute are recognized
     {
         switch( nToken )
         {
@@ -287,7 +287,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     if( !bFirstToken )
                         SkipToken( -1 );
-                    bWeiter = sal_False;
+                    bContinue = sal_False;
                 }
                 else
                 {
@@ -1257,7 +1257,7 @@ ATTR_SETEMPHASIS:
                         if (!bFirstToken)
                             --nSkip;    // BRACELEFT: is the next token
                         SkipToken( nSkip );
-                        bWeiter = sal_False;
+                        bContinue = sal_False;
                     }
                 }
                 break;
@@ -1273,11 +1273,11 @@ ATTR_SETEMPHASIS:
                     // unknown token, so token "returned in Parser"
                     if( !bFirstToken )
                         SkipToken( -1 );
-                    bWeiter = sal_False;
+                    bContinue = sal_False;
                 }
             }
         }
-        if( bWeiter )
+        if( bContinue )
         {
             nToken = GetNextToken();
         }
@@ -1291,7 +1291,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
 // then read all the TabStops
     SvxTabStop aTabStop;
     SvxTabStopItem aAttr( 0, 0, SVX_TAB_ADJUST_DEFAULT, PARDID->nTabStop );
-    int bWeiter = sal_True;
+    int bContinue = sal_True;
     do {
         switch( nToken )
         {
@@ -1344,20 +1344,20 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
                 if( nSkip )
                 {
                     SkipToken( nSkip );     // Ignore back again
-                    bWeiter = sal_False;
+                    bContinue = sal_False;
                 }
             }
             break;
 
         default:
-            bWeiter = sal_False;
+            bContinue = sal_False;
         }
-        if( bWeiter )
+        if( bContinue )
         {
             nToken = GetNextToken();
             bMethodOwnsToken = true;
         }
-    } while( bWeiter );
+    } while( bContinue );
 
     // Fill with defaults is still missing!
     rSet.Put( aAttr );
@@ -1403,7 +1403,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
         aAttr = *(SvxBoxItem*)pItem;
 
     SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // Simple plain line
-    int bWeiter = sal_True, nBorderTyp = 0;
+    int bContinue = sal_True, nBorderTyp = 0;
 
     long nWidth = 1;
     bool bDoubleWidth = false;
@@ -1558,11 +1558,11 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
             break;
 
         default:
-            bWeiter = (nToken & ~(0xff| RTF_SWGDEFS)) == RTF_BRDRDEF;
+            bContinue = (nToken & ~(0xff| RTF_SWGDEFS)) == RTF_BRDRDEF;
         }
-        if( bWeiter )
+        if( bContinue )
             nToken = GetNextToken();
-    } while( bWeiter );
+    } while( bContinue );
 
     // Finally compute the border width
     if ( bDoubleWidth ) nWidth *= 2;
@@ -1585,7 +1585,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
                                         int bTableDef )
 {
     // then read the border attribute
-    int bWeiter = sal_True;
+    int bContinue = sal_True;
     sal_uInt16 nColor = USHRT_MAX, nFillColor = USHRT_MAX;
     sal_uInt8 nFillValue = 0;
 
@@ -1660,13 +1660,13 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
 
         default:
             if( bTableDef )
-                bWeiter = (nToken & ~(0xff | RTF_TABLEDEF) ) == RTF_SHADINGDEF;
+                bContinue = (nToken & ~(0xff | RTF_TABLEDEF) ) == RTF_SHADINGDEF;
             else
-                bWeiter = (nToken & ~0xff) == RTF_SHADINGDEF;
+                bContinue = (nToken & ~0xff) == RTF_SHADINGDEF;
         }
-        if( bWeiter )
+        if( bContinue )
             nToken = GetNextToken();
-    } while( bWeiter );
+    } while( bContinue );
 
     Color aCol( COL_WHITE ), aFCol;
     if( !nFillValue )

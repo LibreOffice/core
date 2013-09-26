@@ -304,8 +304,8 @@ sal_Unicode SvRTFParser::GetHexValue()
 void SvRTFParser::ScanText( const sal_Unicode cBreak )
 {
     OUStringBuffer aStrBuffer;
-    int bWeiter = true;
-    while( bWeiter && IsParserWorking() && aStrBuffer.getLength() < MAX_STRING_LEN)
+    int bContinue = true;
+    while( bContinue && IsParserWorking() && aStrBuffer.getLength() < MAX_STRING_LEN)
     {
         int bNextCh = true;
         switch( nNextCh )
@@ -433,7 +433,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                         else
                         {
                             nNextCh = '\\';
-                            bWeiter = false;        // Abbrechen, String zusammen
+                            bContinue = false;        // Abbrechen, String zusammen
                         }
                     }
                     break;
@@ -441,7 +441,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 default:
                     rInput.SeekRel( -1 );
                     nNextCh = '\\';
-                    bWeiter = false;        // Abbrechen, String zusammen
+                    bContinue = false;        // Abbrechen, String zusammen
                     break;
                 }
             }
@@ -452,7 +452,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 // weiter
         case '{':
         case '}':
-            bWeiter = false;
+            bContinue = false;
             break;
 
         case 0x0a:
@@ -461,7 +461,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
         default:
             if( nNextCh == cBreak || aStrBuffer.getLength() >= MAX_STRING_LEN)
-                bWeiter = false;
+                bContinue = false;
             else
             {
                 do {
@@ -483,7 +483,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             }
         }
 
-        if( bWeiter && bNextCh )
+        if( bContinue && bNextCh )
             nNextCh = GetNextChar();
     }
 

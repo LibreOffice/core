@@ -914,7 +914,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     const sal_Unicode* pExceptStt = 0;
     if( !bAtStart )
     {
-        sal_Bool bWeiter = sal_True;
+        sal_Bool bContinue = sal_True;
         int nFlag = C_NONE;
         do {
             switch( *pStr )
@@ -959,15 +959,15 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                 if( !nFlag )
                     return sal_False;       // no valid separator -> no replacement
                 else
-                    bWeiter = sal_False;
+                    bContinue = sal_False;
                 break;
             }
 
-            if( bWeiter && pStr-- == pStart )
+            if( bContinue && pStr-- == pStart )
             {
                 return sal_False;       // no valid separator -> no replacement
             }
-        } while( bWeiter );
+        } while( bContinue );
         if( C_FULL_STOP != nFlag )
             pExceptStt = 0;
     }
