@@ -88,7 +88,7 @@ DBG_NAME(OTextConnectionPageSetup)
 
     IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, /*_pTextConnectionHelper*/)
     {
-        SetRoadmapStateValue((m_pTextConnectionHelper->GetExtension().Len() > 0) && OConnectionTabPageSetup::checkTestConnection());
+        SetRoadmapStateValue(!m_pTextConnectionHelper->GetExtension().isEmpty() && OConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
         return sal_True;
     }
@@ -96,7 +96,7 @@ DBG_NAME(OTextConnectionPageSetup)
     bool OTextConnectionPageSetup::checkTestConnection()
     {
         bool bDoEnable = OConnectionTabPageSetup::checkTestConnection();
-        bDoEnable = (m_pTextConnectionHelper->GetExtension().Len() > 0) && bDoEnable;
+        bDoEnable = !m_pTextConnectionHelper->GetExtension().isEmpty() && bDoEnable;
         return bDoEnable;
     }
 
@@ -599,7 +599,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     bool OJDBCConnectionPageSetup::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
+        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
         bEnableTestConnection = bEnableTestConnection && (!m_aETDriverClass.GetText().isEmpty());
         return bEnableTestConnection;
     }

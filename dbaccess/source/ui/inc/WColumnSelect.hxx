@@ -78,7 +78,7 @@ namespace dbaui
         virtual void            Reset ( );
         virtual void            ActivatePage();
         virtual sal_Bool        LeavePage();
-        virtual String          GetTitle() const ;
+        virtual OUString        GetTitle() const ;
 
         OWizColumnSelect(Window* pParent);
         virtual ~OWizColumnSelect();

@@ -96,7 +96,7 @@ DBG_NAME(DirectSQLDialog)
         (void)_rSource;
 
         {
-            String sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
+            OUString sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
             ErrorBox aError(this, WB_OK, sMessage);
             aError.Execute();
         }
@@ -127,7 +127,7 @@ DBG_NAME(DirectSQLDialog)
         }
     }
 
-    void DirectSQLDialog::implAddToStatementHistory(const String& _rStatement)
+    void DirectSQLDialog::implAddToStatementHistory(const OUString& _rStatement)
     {
         CHECK_INVARIANTS("DirectSQLDialog::implAddToStatementHistory");
 
@@ -135,8 +135,8 @@ DBG_NAME(DirectSQLDialog)
         m_aStatementHistory.push_back(_rStatement);
 
         // normalize the statement, and remember the normalized form, too
-        String sNormalized(_rStatement);
-        sNormalized.SearchAndReplaceAll((sal_Unicode)'\n', ' ');
+        OUString sNormalized(_rStatement);
+        sNormalized = sNormalized.replaceAll("\n", " ");
         m_aNormalizedHistory.push_back(sNormalized);
 
         // add the normalized version to the list box
@@ -165,13 +165,13 @@ DBG_NAME(DirectSQLDialog)
     }
 #endif
 
-    void DirectSQLDialog::implExecuteStatement(const String& _rStatement)
+    void DirectSQLDialog::implExecuteStatement(const OUString& _rStatement)
     {
         CHECK_INVARIANTS("DirectSQLDialog::implExecuteStatement");
 
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        String sStatus;
+        OUString sStatus;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         try
         {
@@ -193,7 +193,7 @@ DBG_NAME(DirectSQLDialog)
                     while (xResultSet->next())
                     {
                         // initialise the output line for each row
-                        String out = OUString("");
+                        OUString out("");
                         // work along the columns until that are none left
                         try
                         {
@@ -201,7 +201,7 @@ DBG_NAME(DirectSQLDialog)
                             for (;;)
                             {
                                 // be dumb, treat everything as a string
-                                out += xRow->getString(i) + OUString(",");
+                                out += xRow->getString(i) + ",";
                                 i++;
                             }
                         }
@@ -219,7 +219,7 @@ DBG_NAME(DirectSQLDialog)
             }
 
             // successful
-            sStatus = String(ModuleRes(STR_COMMAND_EXECUTED_SUCCESSFULLY));
+            sStatus = ModuleRes(STR_COMMAND_EXECUTED_SUCCESSFULLY);
 
             // dispose the statement
             ::comphelper::disposeComponent(xStatement);
@@ -237,7 +237,7 @@ DBG_NAME(DirectSQLDialog)
         addStatusText(sStatus);
     }
 
-    void DirectSQLDialog::addStatusText(const String& _rMessage)
+    void DirectSQLDialog::addStatusText(const OUString& _rMessage)
     {
         OUString sAppendMessage = OUString::number(m_nStatusCount++) + ": " + _rMessage + "\n\n";
 
@@ -247,12 +247,12 @@ DBG_NAME(DirectSQLDialog)
         m_pStatus->SetSelection(Selection(sCompleteMessage.getLength(), sCompleteMessage.getLength()));
     }
 
-    void DirectSQLDialog::addOutputText(const String& _rMessage)
+    void DirectSQLDialog::addOutputText(const OUString& _rMessage)
     {
-        String sAppendMessage = _rMessage;
-        sAppendMessage += OUString("\n");
+        OUString sAppendMessage = _rMessage;
+        sAppendMessage += "\n";
 
-        String sCompleteMessage = m_pOutput->GetText();
+        OUString sCompleteMessage = m_pOutput->GetText();
         sCompleteMessage += sAppendMessage;
         m_pOutput->SetText(sCompleteMessage);
     }
@@ -261,7 +261,7 @@ DBG_NAME(DirectSQLDialog)
     {
         CHECK_INVARIANTS("DirectSQLDialog::executeCurrent");
 
-        String sStatement = m_pSQL->GetText();
+        OUString sStatement = m_pSQL->GetText();
 
         // execute
         implExecuteStatement(sStatement);
@@ -280,7 +280,7 @@ DBG_NAME(DirectSQLDialog)
         if ((_nHistoryPos >= 0) && (_nHistoryPos < getHistorySize()))
         {
             // set the text in the statement editor
-            String sStatement = m_aStatementHistory[_nHistoryPos];
+            OUString sStatement = m_aStatementHistory[_nHistoryPos];
             m_pSQL->SetText(sStatement);
             OnStatementModified(m_pSQL);
 
@@ -293,7 +293,7 @@ DBG_NAME(DirectSQLDialog)
             }
 
             m_pSQL->GrabFocus();
-            m_pSQL->SetSelection(Selection(sStatement.Len(), sStatement.Len()));
+            m_pSQL->SetSelection(Selection(sStatement.getLength(), sStatement.getLength()));
         }
         else
             OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");

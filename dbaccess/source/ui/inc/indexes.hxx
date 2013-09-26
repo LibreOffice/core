@@ -28,7 +28,7 @@ namespace dbaui
     // OIndexField
     struct OIndexField
     {
-        String              sFieldName;
+        OUString            sFieldName;
         sal_Bool            bSortAscending;
 
         OIndexField() : bSortAscending(sal_True) { }

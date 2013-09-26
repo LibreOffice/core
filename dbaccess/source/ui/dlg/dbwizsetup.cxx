@@ -263,7 +263,7 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
         case PAGE_DBSETUPWIZARD_USERDEFINED:
             {
                 LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-                sRoadmapItem = String(ModuleRes(STR_PAGETITLE_CONNECTION));
+                sRoadmapItem = ModuleRes(STR_PAGETITLE_CONNECTION);
             }
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
@@ -352,7 +352,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     case OGeneralPageWizard::eOpenExisting:
     {
         activatePath( static_cast<PathId>(m_pCollection->size() + 1), sal_True );
-        enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
+        enableButtons( WZB_FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
     }
     break;
     default:
@@ -619,7 +619,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, /*_p
 
 IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard*, /*_pGeneralPage*/)
 {
-    enableButtons( WZB_FINISH, m_pGeneralPage->GetSelectedDocument().sURL.Len() != 0 );
+    enableButtons( WZB_FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
     return 0L;
 }
 
@@ -815,7 +815,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             INetURLObject aWorkURL( m_sWorkPath );
             aFileDlg.SetDisplayFolder( aWorkURL.GetMainURL( INetURLObject::NO_DECODE ));
 
-            OUString sDefaultName = String( ModuleRes( STR_DATABASEDEFAULTNAME ) );
+            OUString sDefaultName = ModuleRes( STR_DATABASEDEFAULTNAME );
             OUString sExtension = pFilter->GetDefaultExtension();
             sDefaultName += sExtension.replaceAt( 0, 1, OUString() );
             aWorkURL.Append( sDefaultName );
@@ -858,7 +858,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
     }
 
-    String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
+    OUString ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
         OUString BaseName = _rURL.getBase();

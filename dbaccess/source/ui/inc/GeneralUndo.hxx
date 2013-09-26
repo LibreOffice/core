@@ -33,11 +33,11 @@ namespace dbaui
         OModuleClient    m_aModuleClient;
 
     protected:
-        String                  m_strComment; // undo, redo comment
+        OUString         m_strComment; // undo, redo comment
 
     public:
         TYPEINFO();
-        OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
+        OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = OUString(ModuleRes(nCommentID)); }
 
         virtual OUString GetComment() const { return m_strComment; }
     };

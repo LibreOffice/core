@@ -740,7 +740,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
     return 1L;
 }
 
-String OTableWindow::getTitle() const
+OUString OTableWindow::getTitle() const
 {
     return m_aTitle.GetText();
 }

@@ -180,7 +180,8 @@ sal_Bool OWizNameMatching::LeavePage()
     return sal_True;
 }
 
-String OWizNameMatching::GetTitle() const { return String(ModuleRes(STR_WIZ_NAME_MATCHING_TITEL)); }
+OUString OWizNameMatching::GetTitle() const { return ModuleRes(STR_WIZ_NAME_MATCHING_TITEL); }
+
 IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
 {
     SvTreeListEntry* pEntry = m_CTRL_LEFT.FirstSelected();
@@ -320,7 +321,7 @@ class OColumnString : public SvLBoxString
 {
     sal_Bool m_bReadOnly;
 public:
-    OColumnString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rStr,sal_Bool _RO)
+    OColumnString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr, sal_Bool _RO)
         :SvLBoxString(pEntry,nFlags,rStr)
         ,m_bReadOnly(_RO)
     {

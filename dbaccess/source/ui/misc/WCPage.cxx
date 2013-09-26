@@ -103,7 +103,7 @@ OCopyTable::OCopyTable( Window * pParent )
 
     FreeResource();
 
-    SetText(String(ModuleRes(STR_COPYTABLE_TITLE_COPY)));
+    SetText(ModuleRes(STR_COPYTABLE_TITLE_COPY));
 }
 
 OCopyTable::~OCopyTable()
@@ -172,7 +172,7 @@ sal_Bool OCopyTable::LeavePage()
         SQLExceptionInfo aErrorInfo;
         if ( !aNameCheck.isNameValid( m_edTableName.GetText(), aErrorInfo ) )
         {
-            aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, String( ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) ) );
+            aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) );
             m_pParent->showError(aErrorInfo.get());
 
             return sal_False;
@@ -192,7 +192,7 @@ sal_Bool OCopyTable::LeavePage()
         sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
         if ( nMaxLength && sTable.getLength() > nMaxLength )
         {
-            String sError(ModuleRes(STR_INVALID_TABLE_NAME_LENGTH));
+            OUString sError(ModuleRes(STR_INVALID_TABLE_NAME_LENGTH));
             m_pParent->showError(sError);
             return sal_False;
         }
@@ -201,8 +201,8 @@ sal_Bool OCopyTable::LeavePage()
         if (    m_pParent->m_bCreatePrimaryKeyColumn
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
-            String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
-            aInfoString += OUString(' ');
+            OUString aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
+            aInfoString += " ";
             aInfoString += m_pParent->m_aKeyName;
             m_pParent->showError(aInfoString);
             return sal_False;
@@ -235,7 +235,7 @@ sal_Bool OCopyTable::LeavePage()
 
     if(m_pParent->m_sName.isEmpty())
     {
-        String sError(ModuleRes(STR_INVALID_TABLE_NAME));
+        OUString sError(ModuleRes(STR_INVALID_TABLE_NAME));
         m_pParent->showError(sError);
         return sal_False;
     }
@@ -252,10 +252,10 @@ void OCopyTable::ActivatePage()
     m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());
 }
 
-String OCopyTable::GetTitle() const
+OUString OCopyTable::GetTitle() const
 {
     DBG_CHKTHIS(OCopyTable,NULL);
-    return String(ModuleRes(STR_WIZ_TABLE_COPY));
+    return ModuleRes(STR_WIZ_TABLE_COPY);
 }
 
 void OCopyTable::Reset()
@@ -314,7 +314,7 @@ sal_Bool OCopyTable::checkAppendData()
 
     if ( !xTable.is() )
     {
-        String sError(ModuleRes(STR_INVALID_TABLE_NAME));
+        OUString sError(ModuleRes(STR_INVALID_TABLE_NAME));
         m_pParent->showError(sError);
         return sal_False;
     }

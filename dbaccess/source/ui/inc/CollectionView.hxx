@@ -43,7 +43,7 @@ namespace dbaui
         PushButton      m_aPB_OK;
         CancelButton    m_aPB_CANCEL;
         HelpButton      m_aPB_HELP;
-        String          m_sPath;
+        OUString        m_sPath;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         Size            m_aDlgSize;

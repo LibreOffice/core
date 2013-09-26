@@ -37,7 +37,7 @@ namespace dbaui
     public:
         virtual void        Reset ( )           = 0;
         virtual sal_Bool    LeavePage()         = 0;
-        virtual String      GetTitle() const    = 0;
+        virtual OUString    GetTitle() const    = 0;
 
         sal_Bool            IsFirstTime() const { return m_bFirstTime; }
     };

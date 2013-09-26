@@ -60,7 +60,7 @@ class ODbDataSourceAdministrationHelper;
         void        successfullyConnected();
         sal_Bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
         void        clearPassword();
-        String      getConnectionURL() const;
+        OUString    getConnectionURL() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
         inline void endExecution() { m_bStopExecution = sal_True; }
 

@@ -325,8 +325,8 @@ namespace dbaui
             xRet = impl_open( _rLinkName, _xDefinition, _eOpenMode, _rAdditionalArgs );
             if ( !xRet.is() )
             {
-                String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
-                sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+                OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
+                sMessage = sMessage.replaceFirst("$file$",_rLinkName);
 
                 com::sun::star::sdbc::SQLException aSQLException;
                 aSQLException.Message = sMessage;
@@ -342,12 +342,12 @@ namespace dbaui
             aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
             // more like a hack, insert an empty message
-            String sText( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
-            sText.SearchAndReplaceAscii("$file$",_rLinkName);
+            OUString sText( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
+            sText = sText.replaceFirst("$file$",_rLinkName);
             aInfo.prepend(sText);
 
-            String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
-            sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+            OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
+            sMessage = sMessage.replaceFirst("$file$",_rLinkName);
             aInfo.prepend(sMessage);
         }
         catch(const Exception& e)
@@ -364,8 +364,8 @@ namespace dbaui
                 // more like a hack, insert an empty message
                 aInfo.prepend(OUString(" \n"));
 
-                String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
-                sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+                OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
+                sMessage = sMessage.replaceFirst("$file$",_rLinkName);
                 aInfo.prepend(sMessage);
             }
         }

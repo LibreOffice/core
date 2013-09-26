@@ -313,7 +313,7 @@ void ODatabaseExport::insertValueIntoColumn()
                 sal_Int32 nPos = m_vColumns[nNewPos].first;
                 if ( nPos != COLUMN_POSITION_NOT_FOUND )
                 {
-                    if ( !m_sTextToken.Len() && pField->IsNullable() )
+                    if ( m_sTextToken.isEmpty() && pField->IsNullable() )
                         m_pUpdateHelper->updateNull(nPos,pField->GetType());
                     else
                     {
@@ -325,7 +325,7 @@ void ODatabaseExport::insertValueIntoColumn()
                             sal_Int32 nNumberFormat = 0;
                             double fOutNumber = 0.0;
                             bool bNumberFormatError = false;
-                            if ( m_pFormatter && m_sNumToken.Len() )
+                            if ( m_pFormatter && !m_sNumToken.isEmpty() )
                             {
                                 LanguageType eNumLang = LANGUAGE_NONE;
                                 sal_uInt32 nNumberFormat2( nNumberFormat );
@@ -411,7 +411,7 @@ void ODatabaseExport::insertValueIntoColumn()
     }
 }
 
-sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOldNumberFormat)
+sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::CheckString" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
@@ -424,7 +424,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
         Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
 
         ensureFormatter();
-        if ( m_pFormatter && m_sNumToken.Len() )
+        if ( m_pFormatter && !m_sNumToken.isEmpty() )
         {
             LanguageType eNumLang;
             sal_uInt32 nFormatKey(0);
@@ -766,9 +766,9 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
     SAL_INFO("dbaccess.ui", "ODatabaseExport::showErrorDialog" );
     if(!m_bDontAskAgain)
     {
-        String aMsg(e.Message);
-        aMsg += '\n';
-        aMsg += String( ModuleRes( STR_QRY_CONTINUE ) );
+        OUString aMsg(e.Message);
+        aMsg += "\n";
+        aMsg += ModuleRes( STR_QRY_CONTINUE );
         OSQLWarningBox aBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO );
 
         if (aBox.Execute() == RET_YES)
@@ -781,7 +781,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
 void ODatabaseExport::adjustFormat()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::adjustFormat" );
-    if ( m_sTextToken.Len() )
+    if ( !m_sTextToken.isEmpty() )
     {
         sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
         OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
@@ -794,7 +794,7 @@ void ODatabaseExport::adjustFormat()
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vNumberFormat.size()),"m_vFormatKey: Illegal index for vector");
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
                 m_vNumberFormat[nColPos] = CheckString(m_sTextToken,m_vNumberFormat[nColPos]);
-                m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
+                m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos], m_sTextToken.getLength());
             }
         }
         eraseTokens();
@@ -804,9 +804,9 @@ void ODatabaseExport::adjustFormat()
 void ODatabaseExport::eraseTokens()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::eraseTokens" );
-    m_sTextToken.Erase();
-    m_sNumToken.Erase();
-    m_sValToken.Erase();
+    m_sTextToken = "";
+    m_sNumToken = "";
+    m_sValToken = "";
 }
 
 void ODatabaseExport::ensureFormatter()

@@ -41,7 +41,7 @@ namespace dbaui
     protected:
         TTableWindowData::value_type m_pReferencingTable;
         TTableWindowData::value_type m_pReferencedTable;
-        String m_aConnName;
+        OUString m_aConnName;
 
         OConnectionLineDataVec m_vConnLineData;
 
@@ -55,7 +55,7 @@ namespace dbaui
         OTableConnectionData();
         OTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
                               const TTableWindowData::value_type& _pReferencedTable,
-                              const String& rConnName = String() );
+                              const OUString& rConnName = OUString() );
         OTableConnectionData( const OTableConnectionData& rConnData );
         virtual ~OTableConnectionData();
 
@@ -70,7 +70,7 @@ namespace dbaui
          */
         virtual OTableConnectionData* NewInstance() const;
 
-        sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
+        sal_Bool SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName );
         sal_Bool AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName );
         /** Deletes list of ConnLines
         */
@@ -94,9 +94,9 @@ namespace dbaui
         inline void setReferencingTable(const TTableWindowData::value_type& _pTable) { m_pReferencingTable = _pTable; }
         inline void setReferencedTable(const TTableWindowData::value_type& _pTable)  { m_pReferencedTable  = _pTable; }
 
-        String GetConnName() const { return m_aConnName; }
+        OUString GetConnName() const { return m_aConnName; }
 
-        virtual void SetConnName( const String& rConnName ){ m_aConnName = rConnName; }
+        virtual void SetConnName( const OUString& rConnName ){ m_aConnName = rConnName; }
         /** Update create a new connection
 
             @return true if successful

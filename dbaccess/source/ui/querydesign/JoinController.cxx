@@ -95,7 +95,7 @@ public:
     virtual bool    allowViews() const;
     virtual bool    allowQueries() const;
     virtual bool    allowAddition() const;
-    virtual void    addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName );
+    virtual void    addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName );
     virtual void    onWindowClosing( const Window* _pWindow );
 
 private:
@@ -122,7 +122,7 @@ bool AddTableDialogContext::allowAddition() const
     return const_cast< OJoinController& >( m_rController ).getJoinView()->getTableView()->IsAddAllowed();
 }
 
-void AddTableDialogContext::addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName )
+void AddTableDialogContext::addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName )
 {
     getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, sal_True );
 }

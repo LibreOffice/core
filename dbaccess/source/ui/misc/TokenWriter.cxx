@@ -90,7 +90,7 @@ DBG_NAME(ODatabaseImportExport)
 ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XComponentContext >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                                             const String& rExchange)
+                                             const OUString& rExchange)
     :m_bBookmarkSelection( sal_False )
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
@@ -110,11 +110,11 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     impl_initFromDescriptor( _aDataDescriptor, false );
 
     xub_StrLen nCount = comphelper::string::getTokenCount(rExchange, char(11));
-    if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
+    if( nCount > SBA_FORMAT_SELECTION_COUNT && !rExchange.getToken(4, ';').isEmpty())
     {
         m_pRowMarker = new sal_Int32[nCount-SBA_FORMAT_SELECTION_COUNT];
         for(xub_StrLen i=SBA_FORMAT_SELECTION_COUNT;i<nCount;++i)
-            m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.GetToken(i,char(11)).ToInt32();
+            m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.getToken(i,char(11)).toInt32();
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -662,7 +662,7 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,
                                      const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                                     const String& rExchange)
+                                     const OUString& rExchange)
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
 #if OSL_DEBUG_LEVEL > 0
@@ -727,7 +727,7 @@ void OHTMLImportExport::WriteHeader()
 
     IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_head );
 
-    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), String(),
+    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), OUString(),
         xDocProps, sIndent );
     OUT_LF();
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
@@ -901,7 +901,7 @@ void OHTMLImportExport::WriteTables()
                     if(i == aNames.getLength())
                         IncIndent(-1);
 
-                    String aValue;
+                    OUString aValue;
                     try
                     {
                         Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
@@ -941,8 +941,8 @@ void OHTMLImportExport::WriteTables()
     IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
 }
 
-void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,
-                                   const String& rValue,const char* pHtmlTag)
+void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal_Int32 nHeightPixel, const char* pChar,
+                                   const OUString& rValue, const char* pHtmlTag)
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteCell" );
     OString aStrTD = pHtmlTag;
@@ -1000,7 +1000,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     if ( bUnderline )   TAG_ON( OOO_STRING_SVTOOLS_HTML_underline );
     if ( bStrikeout )   TAG_ON( OOO_STRING_SVTOOLS_HTML_strike );
 
-    if ( !rValue.Len() )
+    if ( rValue.isEmpty() )
         TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // no completely empty cell
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);

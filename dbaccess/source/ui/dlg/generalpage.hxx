@@ -55,7 +55,7 @@ namespace dbaui
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
-        void                insertDatasourceTypeEntryData( const OUString& _sType, String sDisplayName );
+        void                insertDatasourceTypeEntryData( const OUString& _sType, OUString sDisplayName );
 
     protected:
         ListBox*            m_pDatasourceType;
@@ -128,8 +128,8 @@ namespace dbaui
 
         struct DocumentDescriptor
         {
-            String  sURL;
-            String  sFilter;
+            OUString  sURL;
+            OUString  sFilter;
         };
 
     private:
@@ -160,7 +160,7 @@ namespace dbaui
                                 m_aControlDependencies;
 
         bool                    m_bInitEmbeddedDBList : 1;
-        void                    insertEmbeddedDBTypeEntryData( const OUString& _sType, String sDisplayName );
+        void                    insertEmbeddedDBTypeEntryData( const OUString& _sType, OUString sDisplayName );
 
     public:
         void                    SetCreationModeHandler( const Link& _rHandler ) { m_aCreationModeHandler = _rHandler; }

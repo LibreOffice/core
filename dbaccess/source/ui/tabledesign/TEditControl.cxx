@@ -932,7 +932,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     InvalidateFeatures();
 }
 
-String OTableEditorCtrl::GetControlText( long nRow, sal_uInt16 nColId )
+OUString OTableEditorCtrl::GetControlText( long nRow, sal_uInt16 nColId )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Read the Browser Controls
@@ -952,7 +952,7 @@ String OTableEditorCtrl::GetControlText( long nRow, sal_uInt16 nColId )
         return pDescrWin->GetControlText( nColId );
 }
 
-void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const String& rText )
+void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Set the Browser Controls

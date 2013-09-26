@@ -260,12 +260,12 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::CreateTable" );
     DBG_CHKTHIS(ORTFReader,NULL);
-    String aTableName(ModuleRes(STR_TBL_TITLE));
-    aTableName = aTableName.GetToken(0,' ');
-    aTableName = String(::dbtools::createUniqueName(m_xTables,OUString(aTableName)));
+    OUString aTableName(ModuleRes(STR_TBL_TITLE));
+    aTableName = aTableName.getToken(0,' ');
+    aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
 
     int nTmpToken2 = nToken;
-    String aColumnName;
+    OUString aColumnName;
 
     FontDescriptor aFont = VCLUnoHelper::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     do
@@ -275,11 +275,11 @@ sal_Bool ORTFReader::CreateTable(int nToken)
             case RTF_UNKNOWNCONTROL:
             case RTF_UNKNOWNDATA:
                 m_bInTbl = sal_False;
-                aColumnName.Erase();
+                aColumnName = "";
                 break;
             case RTF_INTBL:
                 if(m_bInTbl)
-                    aColumnName.Erase();
+                    aColumnName = "";
 
                 m_bInTbl = sal_True;
                 break;
@@ -291,11 +291,11 @@ sal_Bool ORTFReader::CreateTable(int nToken)
             case RTF_CELL:
                 {
                     aColumnName = comphelper::string::strip(aColumnName, ' ');
-                    if (!aColumnName.Len() || m_bAppendFirstLine )
-                        aColumnName = String(ModuleRes(STR_COLUMN_NAME));
+                    if (aColumnName.isEmpty() || m_bAppendFirstLine )
+                        aColumnName = ModuleRes(STR_COLUMN_NAME);
 
                     CreateDefaultColumn(aColumnName);
-                    aColumnName.Erase();
+                    aColumnName = "";
                 }
                 break;
             case RTF_CF:
@@ -319,10 +319,10 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     sal_Bool bOk = !m_vDestVector.empty();
     if(bOk)
     {
-        if ( aColumnName.Len() )
+        if ( !aColumnName.isEmpty() )
         {
             if ( m_bAppendFirstLine )
-                aColumnName = String(ModuleRes(STR_COLUMN_NAME));
+                aColumnName = ModuleRes(STR_COLUMN_NAME);
             CreateDefaultColumn(aColumnName);
         }
 

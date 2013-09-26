@@ -63,8 +63,8 @@ namespace dbaui
     public:
         virtual void            Reset();
         virtual void            ActivatePage();
-        virtual sal_Bool            LeavePage();
-        virtual String          GetTitle() const ;
+        virtual sal_Bool        LeavePage();
+        virtual OUString        GetTitle() const ;
 
         OCopyTable( Window * pParent );
         virtual ~OCopyTable();
@@ -74,7 +74,7 @@ namespace dbaui
         inline sal_Bool IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
         inline sal_Bool IsOptionView()          const { return m_aRB_View.IsChecked(); }
         inline sal_Bool UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
-        String      GetKeyName()            const { return m_edKeyName.GetText(); }
+        OUString        GetKeyName()            const { return m_edKeyName.GetText(); }
 
         void setCreateStyleAction();
         inline void disallowViews()

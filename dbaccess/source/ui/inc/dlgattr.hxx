@@ -32,7 +32,7 @@ namespace dbaui
 
     class SbaSbAttrDlg : public SfxTabDialog
     {
-        String aTitle;
+        OUString aTitle;
         SvxNumberInfoItem* pNumberInfoItem;
 
     public:

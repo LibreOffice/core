@@ -50,7 +50,7 @@ namespace dbaui
     class OpenDocumentListBox : public ListBox
     {
     private:
-        typedef ::std::pair< String, String >       StringPair;
+        typedef ::std::pair< OUString, OUString >       StringPair;
         typedef ::std::map< sal_uInt16, StringPair >    MapIndexToStringPair;
 
         OUString         m_sModule;
@@ -59,8 +59,8 @@ namespace dbaui
     public:
         OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName );
 
-        String  GetSelectedDocumentURL() const;
-        String  GetSelectedDocumentFilter() const;
+        OUString  GetSelectedDocumentURL() const;
+        OUString  GetSelectedDocumentFilter() const;
 
     protected:
         virtual void        RequestHelp( const HelpEvent& _rHEvt );

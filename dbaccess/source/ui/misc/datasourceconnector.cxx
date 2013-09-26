@@ -160,8 +160,8 @@ namespace dbaui
                     Any aWarnings( xConnectionWarnings->getWarnings() );
                     if ( aWarnings.hasValue() )
                     {
-                        String sMessage( ModuleRes( STR_WARNINGS_DURING_CONNECT ) );
-                        sMessage.SearchAndReplaceAscii( "$buttontext$", Button::GetStandardText( BUTTON_MORE ) );
+                        OUString sMessage( ModuleRes( STR_WARNINGS_DURING_CONNECT ) );
+                        sMessage = sMessage.replaceFirst( "$buttontext$", Button::GetStandardText( BUTTON_MORE ) );
                         sMessage = OutputDevice::GetNonMnemonicString( sMessage );
 
                         SQLWarning aContext;

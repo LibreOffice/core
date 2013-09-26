@@ -51,9 +51,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
                     m_xDocumentUI;
         Window*     m_pDialogParent;
-        String      m_sCurrentlyEditing;
-        OUString
-                    m_sDataSourceName;
+        OUString    m_sCurrentlyEditing;
+        OUString    m_sDataSourceName;
 
     public:
         OLinkedDocumentsAccess(

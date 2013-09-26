@@ -63,7 +63,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
 
     // add the initial tab page
-    AddTabPage( m_nMainPageID, String( ModuleRes( STR_PAGETITLE_GENERAL ) ), OConnectionTabPage::Create, NULL );
+    AddTabPage( m_nMainPageID, OUString( ModuleRes( STR_PAGETITLE_GENERAL ) ), OConnectionTabPage::Create, NULL );
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -106,7 +106,7 @@ void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, Cre
     // open our own resource block, as the page titles are strings local to this block
     LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
-    AddTabPage(_nPageId, String(ModuleRes(_nTextId)), _pCreateFunc, NULL);
+    AddTabPage(_nPageId, OUString(ModuleRes(_nTextId)), _pCreateFunc, NULL);
     m_aCurrentDetailPages.push(_nPageId);
 }
 
@@ -166,7 +166,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
         case  ::dbaccess::DST_USERDEFINE10:
             {
                 LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-                String aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
+                OUString aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
                 AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, 0, sal_False, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
             }
@@ -214,7 +214,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-        AddTabPage( PAGE_MYSQL_NATIVE, String( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
+        AddTabPage( PAGE_MYSQL_NATIVE, OUString( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
         RemoveTabPage( PAGE_CONNECTION );
         m_nMainPageID = PAGE_MYSQL_NATIVE;
     }

@@ -56,7 +56,7 @@ namespace dbaui
         HelpButton*       m_pHelp;
         PushButton*       m_pClose;
 
-        typedef ::std::deque< String >  StringQueue;
+        typedef ::std::deque< OUString >  StringQueue;
         StringQueue     m_aStatementHistory;    // previous statements
         StringQueue     m_aNormalizedHistory;   // previous statements, normalized to be used in the list box
 
@@ -90,19 +90,19 @@ namespace dbaui
 
     private:
         /// adds a statement to the statement history
-        void implAddToStatementHistory(const String& _rStatement);
+        void implAddToStatementHistory(const OUString& _rStatement);
 
         /// ensures that our history has at most m_nHistoryLimit entries
         void implEnsureHistoryLimit();
 
         /// executes the statement given, adds the status to the status list
-        void implExecuteStatement(const String& _rStatement);
+        void implExecuteStatement(const OUString& _rStatement);
 
         /// adds a status text to the status list
-        void addStatusText(const String& _rMessage);
+        void addStatusText(const OUString& _rMessage);
 
         /// adds a status text to the output list
-        void addOutputText(const String& _rMessage);
+        void addOutputText(const OUString& _rMessage);
 
 #ifdef DBG_UTIL
         const sal_Char* impl_CheckInvariants() const;

@@ -126,7 +126,7 @@ void OTableTreeListBox::notifyHiContrastChanged()
                 }
                 else
                 {
-                    String sCompleteName( getQualifiedTableName( pEntryLoop ) );
+                    OUString sCompleteName( getQualifiedTableName( pEntryLoop ) );
                     m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
                 }
 
@@ -149,11 +149,11 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
 {
     Sequence< OUString > sTables, sViews;
 
-    String sCurrentActionError;
+    OUString sCurrentActionError;
     try
     {
         Reference< XTablesSupplier > xTableSupp( _rxConnection, UNO_QUERY_THROW );
-        sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
+        sCurrentActionError = ModuleRes(STR_NOTABLEINFO);
 
         Reference< XNameAccess > xTables,xViews;
 
@@ -262,18 +262,18 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     {
         if (haveVirtualRoot())
         {
-            String sRootEntryText;
+            OUString sRootEntryText;
             TNames::const_iterator aViews = ::std::find_if(_rTables.begin(),_rTables.end(),
             ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::o3tl::select2nd<TNames::value_type>()));
             TNames::const_iterator aTables = ::std::find_if(_rTables.begin(),_rTables.end(),
             ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::o3tl::select2nd<TNames::value_type>()));
 
             if ( aViews == _rTables.end() )
-                sRootEntryText  = String(ModuleRes(STR_ALL_TABLES));
+                sRootEntryText  = ModuleRes(STR_ALL_TABLES);
             else if ( aTables == _rTables.end() )
-                sRootEntryText  = String(ModuleRes(STR_ALL_VIEWS));
+                sRootEntryText  = ModuleRes(STR_ALL_VIEWS);
             else
-                sRootEntryText  = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
+                sRootEntryText  = ModuleRes(STR_ALL_TABLES_AND_VIEWS);
             InsertEntry( sRootEntryText, NULL, sal_False, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
@@ -546,7 +546,7 @@ bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData 
     return _out_rMetaData.is();
 }
 
-String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) const
+OUString OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) const
 {
     OSL_PRECOND( !isFolderEntry( _pEntry ), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
 
@@ -554,7 +554,7 @@ String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) cons
     {
         Reference< XDatabaseMetaData > xMeta;
         if ( !impl_getAndAssertMetaData( xMeta ) )
-            return String();
+            return OUString();
 
         OUString sCatalog;
         OUString sSchema;
@@ -588,7 +588,7 @@ String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) cons
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return String();
+    return OUString();
 }
 
 SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rName )

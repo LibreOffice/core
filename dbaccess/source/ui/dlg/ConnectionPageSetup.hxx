@@ -63,8 +63,8 @@ namespace dbaui
             <p>The new URL must be of the type which is currently selected, only the parts which do not
             affect the type may be changed (compared to the previous URL).</p>
         */
-        void    changeConnectionURL( const String& _rNewDSN );
-        String  getConnectionURL( ) const;
+        void     changeConnectionURL( const OUString& _rNewDSN );
+        OUString getConnectionURL( ) const;
 
     protected:
         OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);

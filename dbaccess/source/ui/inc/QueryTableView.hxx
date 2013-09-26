@@ -29,9 +29,9 @@ namespace dbaui
     {
         enum ACTION_TYPE    { AT_ADDED_WIN, AT_REMOVED_WIN };
         ACTION_TYPE         atActionPerformed;
-        String              strAffectedTable;
+        OUString            strAffectedTable;
 
-        TabWinsChangeNotification(ACTION_TYPE at, const String& str) : atActionPerformed(at), strAffectedTable(str) { }
+        TabWinsChangeNotification(ACTION_TYPE at, const OUString& str) : atActionPerformed(at), strAffectedTable(str) { }
     };
 
     class OQueryTabWinUndoAct;
@@ -69,8 +69,8 @@ namespace dbaui
         /// AddTabWin, setting an alias
         void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, sal_Bool bNewTable = sal_False);
         /// search TabWin
-        OQueryTableWindow*  FindTable(const String& rAliasName);
-        sal_Bool            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
+        OQueryTableWindow*  FindTable(const OUString& rAliasName);
+        sal_Bool            FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
 
         /// base class overwritten: create and delete Connections
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
@@ -96,7 +96,7 @@ namespace dbaui
         virtual void EnsureVisible(const OTableWindow* _pWin);
 
         /// how many tables with a certain alias do I already have?
-        sal_Int32 CountTableAlias(const String& rName, sal_Int32& rMax);
+        sal_Int32 CountTableAlias(const OUString& rName, sal_Int32& rMax);
 
         /// insert field (simply passed to parents)
         void InsertField(const OTableFieldDescRef& rInfo);

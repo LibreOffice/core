@@ -69,22 +69,22 @@ private:
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
     sal_Bool                m_bIsConnectable : 1;
-    String                  m_sRM_IntroText;
-    String                  m_sRM_dBaseText;
-    String                  m_sRM_TextText;
-    String                  m_sRM_MSAccessText;
-    String                  m_sRM_LDAPText;
-    String                  m_sRM_ADOText;
-    String                  m_sRM_JDBCText;
-    String                  m_sRM_MySQLNativePageTitle;
-    String                  m_sRM_OracleText;
-    String                  m_sRM_MySQLText;
-    String                  m_sRM_ODBCText;
-    String                  m_sRM_SpreadSheetText;
-    String                  m_sRM_AuthentificationText;
-    String                  m_sRM_FinalText;
+    OUString                m_sRM_IntroText;
+    OUString                m_sRM_dBaseText;
+    OUString                m_sRM_TextText;
+    OUString                m_sRM_MSAccessText;
+    OUString                m_sRM_LDAPText;
+    OUString                m_sRM_ADOText;
+    OUString                m_sRM_JDBCText;
+    OUString                m_sRM_MySQLNativePageTitle;
+    OUString                m_sRM_OracleText;
+    OUString                m_sRM_MySQLText;
+    OUString                m_sRM_ODBCText;
+    OUString                m_sRM_SpreadSheetText;
+    OUString                m_sRM_AuthentificationText;
+    OUString                m_sRM_FinalText;
     INetURLObject           m_aDocURL;
-    String                  m_sWorkPath;
+    OUString                m_sWorkPath;
     OGeneralPageWizard*     m_pGeneralPage;
     OMySQLIntroPageSetup*   m_pMySQLIntroPage;
     OFinalDBPageSetup*      m_pFinalPage;
@@ -166,7 +166,7 @@ private:
     void RegisterDataSourceByLocation(const OUString& sPath);
     sal_Bool SaveDatabaseDocument();
     void activateDatabasePath();
-    String createUniqueFileName(const INetURLObject& rURL);
+    OUString createUniqueFileName(const INetURLObject& rURL);
     void CreateDatabase();
     void createUniqueFolderName(INetURLObject* pURL);
     ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const;

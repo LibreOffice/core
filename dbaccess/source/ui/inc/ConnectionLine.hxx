@@ -57,8 +57,8 @@ namespace dbaui
         sal_Bool                RecalcLine();
         void                Draw( OutputDevice* pOutDev );
         bool                CheckHit( const Point& rMousePos ) const;
-        String              GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
-        String              GetDestFieldName() const { return m_pData->GetDestFieldName(); }
+        OUString            GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
+        OUString            GetDestFieldName() const { return m_pData->GetDestFieldName(); }
 
         sal_Bool                IsValid() const;
 

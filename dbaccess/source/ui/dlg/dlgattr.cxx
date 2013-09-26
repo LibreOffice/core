@@ -49,9 +49,9 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
         OSL_FAIL( "found flag TP_ATTR_CHAR" );
     }
     if( nFlags & TP_ATTR_NUMBER )
-        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)) );
+        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,OUString(ModuleRes(TP_ATTR_NUMBER)) );
     if( nFlags & TP_ATTR_ALIGN )
-        AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ModuleRes(TP_ATTR_ALIGN)) );
+        AddTabPage( RID_SVXPAGE_ALIGNMENT,OUString(ModuleRes(TP_ATTR_ALIGN)) );
     FreeResource();
 }
 

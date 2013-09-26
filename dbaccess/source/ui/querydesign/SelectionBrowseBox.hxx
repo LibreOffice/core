@@ -68,7 +68,7 @@ namespace dbaui
 
         sal_Int32                           m_nMaxColumns;              // maximum number of columns in a Select-Statement
 
-        String                              m_aFunctionStrings;
+        OUString                            m_aFunctionStrings;
         sal_uInt16                          m_nVisibleCount;            // maximum number of visible rows
         sal_uInt32                          m_nLastSortColumn;          // index of last (highest) sort column
         sal_Bool                            m_bOrderByUnRelated;
@@ -87,7 +87,7 @@ namespace dbaui
         OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, sal_uInt16 _nColumnPosition = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
         void                        InsertColumn( OTableFieldDescRef pEntry, sal_uInt16& _nColumnPosition );
         void                        RemoveColumn( sal_uInt16 _nColumnId );
-        void                        DeleteFields( const String& rAliasName );
+        void                        DeleteFields( const OUString& rAliasName );
 
         bool                        HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
 
@@ -95,7 +95,7 @@ namespace dbaui
         // the flag is not set
         void                        AddGroupBy( const OTableFieldDescRef& rInfo,sal_uInt32 _nCurrentPos);
         void                        AddCondition( const OTableFieldDescRef& rInfo,
-                                                  const String& rValue,
+                                                  const OUString& rValue,
                                                   const sal_uInt16 nLevel,
                                                   bool _bAddOrOnOneLine  );
         void                        DuplicateConditionLevel( const sal_uInt16 nLevel);
@@ -110,8 +110,8 @@ namespace dbaui
         void                        SetColWidth(sal_uInt16 nColId, long lNewWidth);
                                         // unlike SetColumnWidth of the base class it checks an active cell in this column
 
-        String                      GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId);
-        void                        SetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId, const String& strNewText);
+        OUString                    GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId);
+        void                        SetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId, const OUString& strNewText);
                                         // cell content (formatted as string) set/return
         sal_Int32                   GetNoneVisibleRows() const;
         void                        SetNoneVisbleRow(long nRows);
@@ -205,7 +205,7 @@ namespace dbaui
 
         virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId);
 
-        virtual sal_uInt16          GetDefaultColumnWidth(const String& rName) const;
+        virtual sal_uInt16          GetDefaultColumnWidth(const OUString& rName) const;
         // if you want to have an own header ...
         virtual BrowserHeader*      imp_CreateHeaderBar(BrowseBox* pParent);
 
@@ -227,11 +227,11 @@ namespace dbaui
         long            GetRealRow(long nRow) const;
         long            GetBrowseRow(long nRowId) const;
         sal_Bool        GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt);
-        void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow,sal_Bool& _bListAction);
-        void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
+        void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow,sal_Bool& _bListAction);
+        void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;
         void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
-        void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,const OString& _sHelpId);
+        void            setTextCellContext(const OTableFieldDescRef& _rEntry,const OUString& _sText,const OString& _sHelpId);
         void            invalidateUndoRedo();
         OTableFieldDescRef getEntry(OTableFields::size_type _nPos);
 
@@ -247,7 +247,7 @@ namespace dbaui
             @return
                 <TRUE/> if an error occurred otherwise <FALSE/>
         */
-        sal_Bool        saveField(String& _sFieldName, OTableFieldDescRef& _pEntry, sal_Bool& _bListAction);
+        sal_Bool        saveField(OUString& _sFieldName, OTableFieldDescRef& _pEntry, sal_Bool& _bListAction);
 
         /** sets the table window at the _pEntry
             @param  _pEntry
@@ -289,7 +289,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyTableFieldChanged(const String& _sOldAlias,const String& _sAlias,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
+        void            notifyTableFieldChanged(const OUString& _sOldAlias,const OUString& _sAlias,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** append an undo action for the function field
             @param  _sOldFunctionName
@@ -299,7 +299,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyFunctionFieldChanged(const String& _sOldFunctionName,const String& _sFunctionName,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
+        void            notifyFunctionFieldChanged(const OUString& _sOldFunctionName,const OUString& _sFunctionName,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** clears the function fields of the submitted entry if it doesn't match the SQL standard and append an undo action.
             E.q. AGGREGATE functions are only valid when the field name isn't an asterix
@@ -310,7 +310,7 @@ namespace dbaui
             @param  _bListAction
                 When <TRUE/> an list action will be created.
         */
-        void            clearEntryFunctionField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
+        void            clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** remove or insert the necessary function types
             @param  _pEntry

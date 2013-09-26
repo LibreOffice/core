@@ -51,7 +51,7 @@ namespace dbaui
     class TextResetOperator :public ::svt::IWindowOperator
     {
     public:
-        TextResetOperator( const String& _rDisabledText )
+        TextResetOperator( const OUString& _rDisabledText )
             :m_sDisabledText( _rDisabledText )
         {
         }
@@ -60,8 +60,8 @@ namespace dbaui
         virtual void operateOn( const VclWindowEvent& _rTrigger, Window& _rOperateOn ) const;
 
     private:
-        const String    m_sDisabledText;
-              String    m_sUserText;
+        const OUString    m_sDisabledText;
+              OUString    m_sUserText;
     };
 
     void TextResetOperator::operateOn( const VclWindowEvent& _rTrigger, Window& _rOperateOn ) const
@@ -99,7 +99,7 @@ namespace dbaui
     class TextResetOperatorController_Base
     {
     protected:
-        TextResetOperatorController_Base( const String& _rDisabledText )
+        TextResetOperatorController_Base( const OUString& _rDisabledText )
             :m_pEventFilter( new TextResetOperatorEventFilter )
             ,m_pOperator( new TextResetOperator( _rDisabledText ) )
         {
@@ -117,7 +117,7 @@ namespace dbaui
                                 ,public ::svt::DialogController
     {
     public:
-        TextResetOperatorController( Window& _rObservee, const String& _rDisabledText )
+        TextResetOperatorController( Window& _rObservee, const OUString& _rDisabledText )
             :TextResetOperatorController_Base( _rDisabledText )
             ,::svt::DialogController( _rObservee, getEventFilter(), getOperator() )
         {
@@ -245,8 +245,8 @@ namespace dbaui
         RadioButton& rSocketPipeRadio = m_aNamedPipeRadio;
         const SfxStringItem* pSocketPipeItem = pNamedPipe;
 #endif
-        String sSocketPipe( pSocketPipeItem->GetValue() );
-        if ( sSocketPipe.Len() > 0 )
+        OUString sSocketPipe( pSocketPipeItem->GetValue() );
+        if ( !sSocketPipe.isEmpty() )
             rSocketPipeRadio.Check();
         else
             m_aHostPortRadio.Check();

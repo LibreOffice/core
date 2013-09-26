@@ -28,7 +28,8 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::datatransfer;
 
-    String OJoinExchObj::m_sJoinFormat;
+    OUString OJoinExchObj::m_sJoinFormat;
+
     // class OJoinExchObj
     DBG_NAME(OJoinExchObj)
     OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry)

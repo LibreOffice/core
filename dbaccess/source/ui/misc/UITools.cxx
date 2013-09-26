@@ -229,9 +229,9 @@ Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
                 )
             )
         {
-            String sErrorMessage = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
+            OUString sErrorMessage( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
             OFileNotation aTransformer( e.Message );
-            sErrorMessage.SearchAndReplaceAscii( "$file$", aTransformer.get( OFileNotation::N_SYSTEM ) );
+            sErrorMessage = sErrorMessage.replaceFirst( "$file$", aTransformer.get( OFileNotation::N_SYSTEM ) );
             aSQLError = SQLExceptionInfo( sErrorMessage ).get();
         }
         else
@@ -427,7 +427,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
 }
 
 void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
-                    const String& _rsTypeNames,
+                    const OUString& _rsTypeNames,
                     OTypeInfoMap& _rTypeInfoMap,
                     ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters)
 {
@@ -519,108 +519,108 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             if( pInfo->nMaximumScale < 0)
                 pInfo->nMaximumScale = 0;
 
-            String aName;
+            OUString aName;
             switch(pInfo->nType)
             {
                 case DataType::CHAR:
-                    aName = _rsTypeNames.GetToken(TYPE_CHAR);
+                    aName = _rsTypeNames.getToken(TYPE_CHAR, ';');
                     break;
                 case DataType::VARCHAR:
-                    aName = _rsTypeNames.GetToken(TYPE_TEXT);
+                    aName = _rsTypeNames.getToken(TYPE_TEXT, ';');
                     break;
                 case DataType::DECIMAL:
-                    aName = _rsTypeNames.GetToken(TYPE_DECIMAL);
+                    aName = _rsTypeNames.getToken(TYPE_DECIMAL, ';');
                     break;
                 case DataType::NUMERIC:
-                    aName = _rsTypeNames.GetToken(TYPE_NUMERIC);
+                    aName = _rsTypeNames.getToken(TYPE_NUMERIC, ';');
                     break;
                 case DataType::BIGINT:
-                    aName = _rsTypeNames.GetToken(TYPE_BIGINT);
+                    aName = _rsTypeNames.getToken(TYPE_BIGINT, ';');
                     break;
                 case DataType::FLOAT:
-                    aName = _rsTypeNames.GetToken(TYPE_FLOAT);
+                    aName = _rsTypeNames.getToken(TYPE_FLOAT, ';');
                     break;
                 case DataType::DOUBLE:
-                    aName = _rsTypeNames.GetToken(TYPE_DOUBLE);
+                    aName = _rsTypeNames.getToken(TYPE_DOUBLE, ';');
                     break;
                 case DataType::LONGVARCHAR:
-                    aName = _rsTypeNames.GetToken(TYPE_MEMO);
+                    aName = _rsTypeNames.getToken(TYPE_MEMO, ';');
                     break;
                 case DataType::LONGVARBINARY:
-                    aName = _rsTypeNames.GetToken(TYPE_IMAGE);
+                    aName = _rsTypeNames.getToken(TYPE_IMAGE, ';');
                     break;
                 case DataType::DATE:
-                    aName = _rsTypeNames.GetToken(TYPE_DATE);
+                    aName = _rsTypeNames.getToken(TYPE_DATE, ';');
                     break;
                 case DataType::TIME:
-                    aName = _rsTypeNames.GetToken(TYPE_TIME);
+                    aName = _rsTypeNames.getToken(TYPE_TIME, ';');
                     break;
                 case DataType::TIMESTAMP:
-                    aName = _rsTypeNames.GetToken(TYPE_DATETIME);
+                    aName = _rsTypeNames.getToken(TYPE_DATETIME, ';');
                     break;
                 case DataType::BIT:
                     if ( !pInfo->aCreateParams.isEmpty() )
                     {
-                        aName = _rsTypeNames.GetToken(TYPE_BIT);
+                        aName = _rsTypeNames.getToken(TYPE_BIT, ';');
                         break;
                     }
                     // run through
                 case DataType::BOOLEAN:
-                    aName = _rsTypeNames.GetToken(TYPE_BOOL);
+                    aName = _rsTypeNames.getToken(TYPE_BOOL, ';');
                     break;
                 case DataType::TINYINT:
-                    aName = _rsTypeNames.GetToken(TYPE_TINYINT);
+                    aName = _rsTypeNames.getToken(TYPE_TINYINT, ';');
                     break;
                 case DataType::SMALLINT:
-                    aName = _rsTypeNames.GetToken(TYPE_SMALLINT);
+                    aName = _rsTypeNames.getToken(TYPE_SMALLINT, ';');
                     break;
                 case DataType::INTEGER:
-                    aName = _rsTypeNames.GetToken(TYPE_INTEGER);
+                    aName = _rsTypeNames.getToken(TYPE_INTEGER, ';');
                     break;
                 case DataType::REAL:
-                    aName = _rsTypeNames.GetToken(TYPE_REAL);
+                    aName = _rsTypeNames.getToken(TYPE_REAL, ';');
                     break;
                 case DataType::BINARY:
-                    aName = _rsTypeNames.GetToken(TYPE_BINARY);
+                    aName = _rsTypeNames.getToken(TYPE_BINARY, ';');
                     break;
                 case DataType::VARBINARY:
-                    aName = _rsTypeNames.GetToken(TYPE_VARBINARY);
+                    aName = _rsTypeNames.getToken(TYPE_VARBINARY, ';');
                     break;
                 case DataType::SQLNULL:
-                    aName = _rsTypeNames.GetToken(TYPE_SQLNULL);
+                    aName = _rsTypeNames.getToken(TYPE_SQLNULL, ';');
                     break;
                 case DataType::OBJECT:
-                    aName = _rsTypeNames.GetToken(TYPE_OBJECT);
+                    aName = _rsTypeNames.getToken(TYPE_OBJECT, ';');
                     break;
                 case DataType::DISTINCT:
-                    aName = _rsTypeNames.GetToken(TYPE_DISTINCT);
+                    aName = _rsTypeNames.getToken(TYPE_DISTINCT, ';');
                     break;
                 case DataType::STRUCT:
-                    aName = _rsTypeNames.GetToken(TYPE_STRUCT);
+                    aName = _rsTypeNames.getToken(TYPE_STRUCT, ';');
                     break;
                 case DataType::ARRAY:
-                    aName = _rsTypeNames.GetToken(TYPE_ARRAY);
+                    aName = _rsTypeNames.getToken(TYPE_ARRAY, ';');
                     break;
                 case DataType::BLOB:
-                    aName = _rsTypeNames.GetToken(TYPE_BLOB);
+                    aName = _rsTypeNames.getToken(TYPE_BLOB, ';');
                     break;
                 case DataType::CLOB:
-                    aName = _rsTypeNames.GetToken(TYPE_CLOB);
+                    aName = _rsTypeNames.getToken(TYPE_CLOB, ';');
                     break;
                 case DataType::REF:
-                    aName = _rsTypeNames.GetToken(TYPE_REF);
+                    aName = _rsTypeNames.getToken(TYPE_REF, ';');
                     break;
                 case DataType::OTHER:
-                    aName = _rsTypeNames.GetToken(TYPE_OTHER);
+                    aName = _rsTypeNames.getToken(TYPE_OTHER, ';');
                     break;
             }
-            if ( aName.Len() )
+            if ( !aName.isEmpty() )
             {
-                pInfo->aUIName = aName.GetBuffer();
+                pInfo->aUIName = aName.getStr();
                 pInfo->aUIName += aB1;
             }
             pInfo->aUIName += pInfo->aTypeName;
-            if ( aName.Len() )
+            if ( !aName.isEmpty() )
                 pInfo->aUIName += aB2;
             // Now that we have the type info, save it in the multimap
             _rTypeInfoMap.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
@@ -943,7 +943,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
             {
                 if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_rxContext))
                 {
-                    String aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
+                    OUString aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
                     OSQLWarningBox( _pParent, aMessage ).Execute();
                     bRet = sal_False;
                 }
@@ -1289,12 +1289,12 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
 sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const OUString& _sName)
 {
     SolarMutexGuard aGuard;
-    String aMsg = String(ModuleRes(_nText));
-    aMsg.SearchAndReplace(OUString("%1"),String(_sName));
-    OSQLMessageBox aAsk(_pParent,String(ModuleRes(_nTitle )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
+    OUString aMsg = ModuleRes(_nText);
+    aMsg = aMsg.replaceFirst("%1", _sName);
+    OSQLMessageBox aAsk(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
     if ( _bAll )
     {
-        aAsk.AddButton(String(ModuleRes(STR_BUTTON_TEXT_ALL)), RET_ALL, 0);
+        aAsk.AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL, 0);
         aAsk.GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
     }
     return aAsk.Execute();
@@ -1393,7 +1393,7 @@ Reference<XPropertySet> createView( const OUString& _rName, const Reference< XCo
 
 sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentContext >& _rxContext,
                            const Reference<XHierarchicalNameContainer>& _xNames,
-                           const String& _sParentFolder,
+                           const OUString& _sParentFolder,
                            sal_Bool _bForm,
                            sal_Bool _bCollection,
                            const Reference<XContent>& _xContent,
@@ -1424,14 +1424,14 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
 
     if ( !_bMove || sNewName.isEmpty() )
     {
-        String sTargetName,sLabel;
+        OUString sTargetName,sLabel;
         if ( sNewName.isEmpty() || xNameAccess->hasByName(sNewName) )
         {
             if ( !sNewName.isEmpty() )
                 sTargetName = sNewName;
             else
-                sTargetName = String(ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT)));
-            sLabel = String(ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL)));
+                sTargetName = ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT));
+            sLabel = ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL));
             sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
 
             // here we have everything needed to create a new query object ...
@@ -1452,8 +1452,8 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
     }
     else if ( xNameAccess->hasByName(sNewName) )
     {
-        String sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
-        sError.SearchAndReplaceAscii("#",sNewName);
+        OUString sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
+        sError = sError.replaceFirst("#",sNewName);
         throw SQLException(sError,NULL,OUString("S1000") ,0,Any());
     }
 

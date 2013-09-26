@@ -69,7 +69,7 @@ DBG_NAME(OUserAdminDlg)
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        AddTabPage(TAB_PAGE_USERADMIN, String(ModuleRes(STR_PAGETITLE_USERADMIN)), OUserAdmin::Create,0, sal_False, 1);
+        AddTabPage(TAB_PAGE_USERADMIN, OUString(ModuleRes(STR_PAGETITLE_USERADMIN)), OUserAdmin::Create,0, sal_False, 1);
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();
@@ -101,7 +101,7 @@ DBG_NAME(OUserAdminDlg)
             ::dbtools::DatabaseMetaData aMetaData( createConnection().first );
             if ( !aMetaData.supportsUserAdministration( getORB() ) )
             {
-                String sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
+                OUString sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
                 throw SQLException(sError,NULL,OUString("S1000") ,0,Any());
             }
         }

@@ -84,9 +84,9 @@ namespace dbaui
         struct DisplayedType
         {
             OUString eType;
-            String          sDisplayName;
+            OUString sDisplayName;
 
-            DisplayedType( const OUString& _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
+            DisplayedType( const OUString& _eType, const OUString& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
         };
         typedef ::std::vector< DisplayedType > DisplayedTypes;
 
@@ -194,9 +194,9 @@ namespace dbaui
             sal_uInt16 nResId = 0;
             if ( smUnsupportedType == eMessage )
                 nResId = STR_UNSUPPORTED_DATASOURCE_TYPE;
-            String sMessage;
+            OUString sMessage;
             if ( nResId )
-                sMessage = String( ModuleRes( nResId ) );
+                sMessage = ModuleRes( nResId );
 
             m_pSpecialMessage->SetText( sMessage );
             m_eLastMessage = eMessage;
@@ -238,7 +238,7 @@ namespace dbaui
         getFlags( _rSet, bValid, bReadonly );
 
         // if the selection is invalid, disable everything
-        String sName,sConnectURL;
+        OUString sName,sConnectURL;
         if ( bValid )
         {
             // collect some items and some values
@@ -285,7 +285,7 @@ namespace dbaui
         getFlags( _rSet, bValid, bReadonly );
 
         // if the selection is invalid, disable everything
-        String sName,sConnectURL;
+        OUString sName,sConnectURL;
         m_bDisplayingInvalid = !bValid;
         if ( bValid )
         {
@@ -344,17 +344,17 @@ namespace dbaui
             // do not display the Connector/OOo driver itself, it is always wrapped via the MySQL-Driver, if
             // this driver is installed
             if ( m_pCollection->hasDriver( "sdbc:mysql:mysqlc:" ) )
-                _inout_rDisplayName = String();
+                _inout_rDisplayName = "";
         }
 
         if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB
                 || eType ==  ::dbaccess::DST_EMBEDDED_FIREBIRD )
-            _inout_rDisplayName = String();
+            _inout_rDisplayName = "";
 
         return _inout_rDisplayName.getLength() > 0;
     }
 
-    void OGeneralPage::insertDatasourceTypeEntryData(const OUString& _sType, String sDisplayName)
+    void OGeneralPage::insertDatasourceTypeEntryData(const OUString& _sType, OUString sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pDatasourceType->InsertEntry(sDisplayName);
@@ -363,7 +363,7 @@ namespace dbaui
         m_aURLPrefixes[nPos] = _sType;
     }
 
-    void OGeneralPageWizard::insertEmbeddedDBTypeEntryData(const OUString& _sType, String sDisplayName)
+    void OGeneralPageWizard::insertEmbeddedDBTypeEntryData(const OUString& _sType, OUString sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pEmbeddedDBType->InsertEntry(sDisplayName);
@@ -571,7 +571,7 @@ namespace dbaui
         sal_Bool bValid, bReadonly;
         getFlags( _rSet, bValid, bReadonly );
 
-        SetText( String() );
+        SetText( OUString() );
 
         LayoutHelper::positionBelow( *m_pRB_ConnectDatabase, *m_pDatasourceType, RelatedControls, INDENT_BELOW_RADIO );
 
@@ -617,7 +617,7 @@ namespace dbaui
         case ::dbaccess::DST_MYSQL_NATIVE:
             // don't display those, the decision whether the user connects via JDBC/ODBC/C-OOo is made on another
             // page
-            _inout_rDisplayName = String();
+            _inout_rDisplayName = "";
             break;
         default:
             break;
@@ -668,7 +668,7 @@ namespace dbaui
     OGeneralPageWizard::DocumentDescriptor OGeneralPageWizard::GetSelectedDocument() const
     {
         DocumentDescriptor aDocument;
-        if ( m_aBrowsedDocument.sURL.Len() )
+        if ( !m_aBrowsedDocument.sURL.isEmpty() )
             aDocument = m_aBrowsedDocument;
         else
         {
@@ -713,10 +713,10 @@ namespace dbaui
         }
         if ( aFileDlg.Execute() == ERRCODE_NONE )
         {
-            String sPath = aFileDlg.GetPath();
+            OUString sPath = aFileDlg.GetPath();
             if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() || !pFilter->GetWildcard().Matches(sPath) )
             {
-                String sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
+                OUString sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
                 InfoBox aError(this, sMessage);
                 aError.Execute();
                 m_pRB_ConnectDatabase->Check();
@@ -724,7 +724,7 @@ namespace dbaui
                 return 0L;
             }
             m_aBrowsedDocument.sURL = sPath;
-            m_aBrowsedDocument.sFilter = String();
+            m_aBrowsedDocument.sFilter = "";
             m_aChooseDocumentHandler.Call( this );
             return 1L;
         }

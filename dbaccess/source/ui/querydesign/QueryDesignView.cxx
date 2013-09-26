@@ -264,15 +264,15 @@ namespace
         if ( !bErg )
         {
             eErrorCode = eColumnNotFound;
-            String sError(ModuleRes(STR_QRY_COLUMN_NOT_FOUND));
-            sError.SearchAndReplaceAscii("$name$",aColumnName);
+            OUString sError(ModuleRes(STR_QRY_COLUMN_NOT_FOUND));
+            sError = sError.replaceFirst("$name$",aColumnName);
             _pView->getController().appendError( sError );
 
             try
             {
                 Reference<XDatabaseMetaData> xMeta = _pView->getController().getConnection()->getMetaData();
                 if ( xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() )
-                    _pView->getController().appendError( String( ModuleRes( STR_QRY_CHECK_CASESENSITIVE ) ) );
+                    _pView->getController().appendError( OUString( ModuleRes( STR_QRY_CHECK_CASESENSITIVE ) ) );
             }
             catch(Exception&)
             {
@@ -572,7 +572,7 @@ namespace
                   SQL_ISRULE(pNode->getChild(2),column_ref) &&
                    pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))
             {
-                String sError(ModuleRes(STR_QRY_JOIN_COLUMN_COMPARE));
+                OUString sError(ModuleRes(STR_QRY_JOIN_COLUMN_COMPARE));
                 _pView->getController().appendError( sError );
                 return eIllegalJoin;
             }
@@ -962,14 +962,14 @@ namespace
             }
 
             {
-                String sTemp(comphelper::string::stripEnd(aWorkStr, ','));
+                OUString sTemp(comphelper::string::stripEnd(aWorkStr, ','));
                 aWorkStr = sTemp;
             }
 
             if ( !aWorkStr.isEmpty() )
             {
                 const sal_Int32 nMaxOrder = xMetaData->getMaxColumnsInOrderBy();
-                String sToken(aWorkStr);
+                OUString sToken(aWorkStr);
                 if ( nMaxOrder && nMaxOrder < comphelper::string::getTokenCount(sToken, ',') )
                     eErrorCode = eStatementTooLong;
                 else
@@ -1424,7 +1424,7 @@ namespace
             else
             {
                 eErrorCode = eNoColumnInLike;
-                String sError(ModuleRes(STR_QRY_LIKE_LEFT_NO_COLUMN));
+                OUString sError(ModuleRes(STR_QRY_LIKE_LEFT_NO_COLUMN));
                 _pView->getController().appendError( sError );
             }
         }
@@ -1548,8 +1548,8 @@ namespace
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
                         if (pTabWin->ExistsField( OUString("*"), aDragLeft ))
                         {
-                            aDragLeft->SetAlias(String());
-                            aDragLeft->SetTable(String());
+                            aDragLeft->SetAlias(OUString());
+                            aDragLeft->SetTable(OUString());
                             break;
                         }
                     }
@@ -2209,8 +2209,8 @@ namespace
                                     OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
                                     if (pTabWin->ExistsField( OUString("*"), aInfo ))
                                     {
-                                        aInfo->SetAlias(String());
-                                        aInfo->SetTable(String());
+                                        aInfo->SetAlias(OUString());
+                                        aInfo->SetTable(OUString());
                                         break;
                                     }
                                 }
@@ -2245,8 +2245,8 @@ namespace
                         if ( SQL_ISRULE(pColumnRef,general_set_fct) )
                         {
                             aInfo->SetFunctionType(nFunctionType|FKT_AGGREGATE);
-                            String aCol(aColumns);
-                            aInfo->SetFunction(comphelper::string::stripEnd(aCol.GetToken(0,'('), ' '));
+                            OUString aCol(aColumns);
+                            aInfo->SetFunction(comphelper::string::stripEnd(aCol.getToken(0,'('), ' '));
                         }
                         else
                             aInfo->SetFunctionType(nFunctionType|FKT_OTHER);
@@ -2438,7 +2438,7 @@ namespace
         return eErrorCode;
     }
 
-    String getParseErrorMessage( SqlParseError _eErrorCode )
+    OUString getParseErrorMessage( SqlParseError _eErrorCode )
     {
         sal_uInt16 nResId;
         switch(_eErrorCode)
@@ -2484,7 +2484,7 @@ namespace
                 break;
         }
         ;
-        return String( ModuleRes( nResId ) );
+        return OUString( ModuleRes( nResId ) );
     }
 
 }
@@ -2734,7 +2734,7 @@ SqlParseError OQueryDesignView::InsertField( const OTableFieldDescRef& rInfo, sa
 
 sal_Int32 OQueryDesignView::getColWidth(sal_uInt16 _nColPos) const
 {
-    static sal_Int32 s_nDefaultWidth = GetTextWidth(String(RTL_CONSTASCII_USTRINGPARAM("0"))) * 15;
+    static sal_Int32 s_nDefaultWidth = GetTextWidth(OUString("0")) * 15;
     sal_Int32 nWidth = static_cast<OQueryController&>(getController()).getColWidth(_nColPos);
     if ( !nWidth )
         nWidth = s_nDefaultWidth;
@@ -3031,19 +3031,19 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
     // special handling for functions
     if ( pEntry->GetFunctionType() & (FKT_OTHER | FKT_AGGREGATE | FKT_NUMERIC) )
     {
-        // we have a function here so we have to distinguish the type of return value
-        String sFunction;
+        // we have a function here so we have to distinguish the type of return vOUalue
+        OUString sFunction;
         if ( pEntry->isNumericOrAggreateFunction() )
             sFunction = pEntry->GetFunction();
 
-        if ( !sFunction.Len() )
+        if ( sFunction.isEmpty() )
             sFunction = pEntry->GetField();
 
         if (comphelper::string::getTokenCount(sFunction, '(') > 1)
-            sFunction = sFunction.GetToken(0,'('); // this should be the name of the function
+            sFunction = sFunction.getToken(0,'('); // this should be the name of the function
 
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunction,&rParser.getContext());
-        if ( nType == DataType::OTHER || (!sFunction.Len() && pEntry->isNumericOrAggreateFunction()) )
+        if ( nType == DataType::OTHER || (sFunction.isEmpty() && pEntry->isNumericOrAggreateFunction()) )
         {
             // first try the international version
             OUString sSql;

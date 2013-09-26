@@ -54,26 +54,26 @@ namespace dbaui
         OSaveAsDlg( Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                    const String& rDefault,
+                    const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
         OSaveAsDlg( Window* _pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                    const String& _rDefault,
-                    const String& _sLabel,
+                    const OUString& _rDefault,
+                    const OUString& _sLabel,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
         virtual ~OSaveAsDlg();
 
-        String getName() const;
-        String getCatalog() const;
-        String getSchema() const;
+        OUString getName() const;
+        OUString getCatalog() const;
+        OUString getSchema() const;
     private:
         DECL_LINK(ButtonClickHdl, Button *);
         DECL_LINK(EditModifyHdl,  Edit * );
 
-        void implInitOnlyTitle(const String& _rLabel);
+        void implInitOnlyTitle(const OUString& _rLabel);
         void implInit();
     };
 }

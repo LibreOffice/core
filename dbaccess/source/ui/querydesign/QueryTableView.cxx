@@ -235,7 +235,7 @@ OQueryTableView::~OQueryTableView()
     DBG_DTOR(OQueryTableView,NULL);
 }
 
-sal_Int32 OQueryTableView::CountTableAlias(const String& rName, sal_Int32& rMax)
+sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMax)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     sal_Int32 nRet = 0;
@@ -715,10 +715,10 @@ void OQueryTableView::KeyInput( const KeyEvent& rEvt )
     OJoinTableView::KeyInput( rEvt );
 }
 
-OQueryTableWindow* OQueryTableView::FindTable(const String& rAliasName)
+OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    OSL_ENSURE(rAliasName.Len(), "OQueryTableView::FindTable : the  AliasName should not be empty !");
+    OSL_ENSURE(!rAliasName.isEmpty(), "OQueryTableView::FindTable : the  AliasName should not be empty !");
         // (it is harmless but does not make sense and indicates that there is probably an error in the caller)
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->find(rAliasName);
     if(aIter != GetTabWinMap()->end())
@@ -726,7 +726,7 @@ OQueryTableWindow* OQueryTableView::FindTable(const String& rAliasName)
     return NULL;
 }
 
-sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
+sal_Bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     rCnt = 0;

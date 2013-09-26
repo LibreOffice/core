@@ -93,7 +93,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
     OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
-    sal_uInt16 nPos = aListBox.GetEntryPos( String( pCurFieldDescr->GetName() ) );
+    sal_uInt16 nPos = aListBox.GetEntryPos( OUString( pCurFieldDescr->GetName() ) );
     pCurFieldDescr = static_cast< OFieldDescription* >( aListBox.GetEntryData( nPos ) );
     OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" );
     if ( !pCurFieldDescr )
@@ -128,14 +128,14 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
                 }
                 else
-                    bDoubleName =  ((aListBox.GetEntryPos(String(sNewName)) != LISTBOX_ENTRY_NOTFOUND)
+                    bDoubleName =  ((aListBox.GetEntryPos(OUString(sNewName)) != LISTBOX_ENTRY_NOTFOUND)
                                     || ( pWiz->shouldCreatePrimaryKey()
                                         &&  pWiz->getPrimaryKeyName() == sNewName) );
 
                 if ( bDoubleName )
                 {
-                    String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
-                    strMessage.SearchAndReplaceAscii("$column$", sNewName);
+                    OUString strMessage = ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME);
+                    strMessage = strMessage.replaceFirst("$column$", sNewName);
                     pWiz->showError(strMessage);
                     pCurFieldDescr->SetName(sName);
                     DisplayData(pCurFieldDescr);
@@ -260,10 +260,10 @@ OWizTypeSelect::~OWizTypeSelect()
     DBG_DTOR(OWizTypeSelect,NULL);
 }
 
-String OWizTypeSelect::GetTitle() const
+OUString OWizTypeSelect::GetTitle() const
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
-    return String(ModuleRes(STR_WIZ_TYPE_SELECT_TITEL));
+    return ModuleRes(STR_WIZ_TYPE_SELECT_TITEL);
 }
 
 void OWizTypeSelect::Resize()
@@ -273,7 +273,7 @@ void OWizTypeSelect::Resize()
 
 IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
 {
-    String aColumnName( m_lbColumnNames.GetSelectEntry() );
+    OUString aColumnName( m_lbColumnNames.GetSelectEntry() );
 
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_lbColumnNames.GetEntryData(m_lbColumnNames.GetEntryPos(aColumnName)));
     if(pField)
@@ -324,7 +324,7 @@ void OWizTypeSelect::ActivatePage( )
 sal_Bool OWizTypeSelect::LeavePage()
 {
     DBG_CHKTHIS(OWizTypeSelect,NULL);
-    String aColumnName( m_lbColumnNames.GetSelectEntry() );
+    OUString aColumnName( m_lbColumnNames.GetSelectEntry() );
 
     sal_Bool bDuplicateName = sal_False;
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_lbColumnNames.GetEntryData(m_lbColumnNames.GetEntryPos(aColumnName)));
@@ -374,7 +374,7 @@ sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 
 void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr,sal_uInt16 _nPos,sal_Bool _bSet)
 {
-    String sColumnName = GetEntry(_nPos);
+    OUString sColumnName = GetEntry(_nPos);
     RemoveEntry(_nPos);
     _pFieldDescr->SetPrimaryKey(_bSet);
     if( _bSet )

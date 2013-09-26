@@ -449,7 +449,7 @@ namespace dbaui
     }
     void DBSubComponentController::connectionLostMessage() const
     {
-        String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
+        OUString aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
         Reference< XWindow > xWindow = getTopMostContainerWindow();
         Window* pWin = NULL;
         if ( xWindow.is() )

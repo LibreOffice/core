@@ -99,7 +99,7 @@ namespace dbaui
         FixedText           m_aFT_Message;
         PushButton          m_aIndexes;
 
-        String              m_sDsn;
+        OUString            m_sDsn;
 
     protected:
 
@@ -273,9 +273,9 @@ namespace dbaui
 
     private:
 
-        String      m_aFieldSeparatorList;
-        String      m_aTextSeparatorList;
-        String      m_aTextNone;
+        OUString      m_aFieldSeparatorList;
+        OUString      m_aTextSeparatorList;
+        OUString      m_aTextNone;
     protected:
         virtual ~OTextDetailsPage();
         virtual sal_Bool prepareLeave();

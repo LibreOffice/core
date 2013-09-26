@@ -30,7 +30,7 @@ namespace dbaui
     {
     protected:
         OSqlEdit*   m_pOwner;
-        String      m_strNextText;
+        OUString    m_strNextText;
 
         virtual void    Undo() { ToggleText(); }
         virtual void    Redo() { ToggleText(); }
@@ -39,7 +39,7 @@ namespace dbaui
     public:
         OSqlEditUndoAct(OSqlEdit* pEdit) : OCommentUndoAction(STR_QUERY_UNDO_MODIFYSQLEDIT), m_pOwner(pEdit) { }
 
-        void SetOriginalText(const String& strText) { m_strNextText =strText; }
+        void SetOriginalText(const OUString& strText) { m_strNextText =strText; }
     };
 }
 #endif // DBAUI_UNDOSQLEDIT_HXX

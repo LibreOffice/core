@@ -57,15 +57,15 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     DBG_CTOR(OTableGrantControl,NULL);
     // Spalten einfuegen
     sal_uInt16 i=1;
-    InsertDataColumn( i, String(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
+    InsertDataColumn( i, OUString(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
     FreezeColumn(i++);
-    InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_SELECT)), 75);
-    InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_INSERT)), 75);
-    InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_DELETE)), 75);
-    InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_UPDATE)), 75);
-    InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_ALTER)), 75);
-    InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_REFERENCE)), 75);
-    InsertDataColumn( i++, String(ModuleRes(STR_TABLE_PRIV_DROP)), 75);
+    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_SELECT)), 75);
+    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_INSERT)), 75);
+    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_DELETE)), 75);
+    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_UPDATE)), 75);
+    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_ALTER)), 75);
+    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_REFERENCE)), 75);
+    InsertDataColumn( i++, OUString(ModuleRes(STR_TABLE_PRIV_DROP)), 75);
 
     while(--i)
         SetColumnWidth(i,GetAutoColumnWidth(i));
@@ -278,7 +278,7 @@ OUString OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
 void OTableGrantControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
-    String sTablename = m_aTableNames[nRow];
+    OUString sTablename = m_aTableNames[nRow];
     // special case for tablename
     if(nColumnId == COL_TABLE_NAME)
         m_pEdit->SetText(sTablename);
@@ -413,7 +413,7 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
     }
     else
     {
-        String aText(((OTableGrantControl*)this)->GetCellText( m_nDataPos, nColumnId ));
+        OUString aText(((OTableGrantControl*)this)->GetCellText( m_nDataPos, nColumnId ));
         Point aPos( rRect.TopLeft() );
         sal_Int32 nWidth = GetDataWindow().GetTextWidth( aText );
         sal_Int32 nHeight = GetDataWindow().GetTextHeight();

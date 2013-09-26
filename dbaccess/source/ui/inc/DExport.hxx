@@ -84,9 +84,9 @@ namespace dbaui
         /// for saving the selected tablename
         OUString     m_sDefaultTableName;
 
-        String              m_sTextToken;   ///< cell content
-        String              m_sNumToken;    ///< SDNUM value
-        String              m_sValToken;    ///< SDVAL value
+        OUString            m_sTextToken;   ///< cell content
+        OUString            m_sNumToken;    ///< SDNUM value
+        OUString            m_sValToken;    ///< SDVAL value
         TOTypeInfoSP        m_pTypeInfo;    ///< contains the default type
         const TColumnVector* m_pColumnList;
         const OTypeInfoMap* m_pInfoMap;
@@ -109,7 +109,7 @@ namespace dbaui
                             getTypeSelectionPageFactory()   = 0;
 
         void                CreateDefaultColumn(const OUString& _rColumnName);
-        sal_Int16           CheckString(const String& aToken, sal_Int16 _nOldNumberFormat);
+        sal_Int16           CheckString(const OUString& aToken, sal_Int16 _nOldNumberFormat);
         void                adjustFormat();
         void                eraseTokens();
         void                insertValueIntoColumn();

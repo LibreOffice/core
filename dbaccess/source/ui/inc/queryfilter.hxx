@@ -86,8 +86,8 @@ namespace dbaui
         OKButton        aBT_OK;
         CancelButton    aBT_CANCEL;
         HelpButton      aBT_HELP;
-        String          aSTR_NOENTRY;
-        String          aSTR_COMPARE_OPERATORS;
+        OUString        aSTR_NOENTRY;
+        OUString        aSTR_COMPARE_OPERATORS;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;
@@ -96,13 +96,13 @@ namespace dbaui
 
         ::dbtools::OPredicateInputController    m_aPredicateInput;
 
-        void            SelectField( ListBox& rBox, const String& rField );
+        void            SelectField( ListBox& rBox, const OUString& rField );
         DECL_LINK( ListSelectHdl, ListBox * );
         DECL_LINK( ListSelectCompHdl, ListBox * );
 
         void            SetLine( sal_uInt16 nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,sal_Bool _bOr );
         void            EnableLines();
-        sal_Int32       GetOSQLPredicateType( const String& _rSelectedPredicate ) const;
+        sal_Int32       GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const;
         sal_uInt16          GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const;
         sal_Bool        getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
         void            fillLines(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& _aValues);

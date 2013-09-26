@@ -447,11 +447,11 @@ namespace dbaui
 
         // auto-generated values?
         if ( rFeatures.supportsGeneratedValues() )
-            AddTabPage( PAGE_GENERATED_VALUES, String( ModuleRes( STR_GENERATED_VALUE ) ), ODriversSettings::CreateGeneratedValuesPage, NULL );
+            AddTabPage( PAGE_GENERATED_VALUES, OUString( ModuleRes( STR_GENERATED_VALUE ) ), ODriversSettings::CreateGeneratedValuesPage, NULL );
 
         // any "special settings"?
         if ( rFeatures.supportsAnySpecialSetting() )
-            AddTabPage( PAGE_ADVANCED_SETTINGS_SPECIAL, String( ModuleRes( STR_DS_BEHAVIOUR ) ), ODriversSettings::CreateSpecialSettingsPage, NULL );
+            AddTabPage( PAGE_ADVANCED_SETTINGS_SPECIAL, OUString( ModuleRes( STR_DS_BEHAVIOUR ) ), ODriversSettings::CreateSpecialSettingsPage, NULL );
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
         RemoveResetButton();

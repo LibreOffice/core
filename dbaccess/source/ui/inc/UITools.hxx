@@ -117,7 +117,7 @@ namespace dbaui
         @param  _rTypeInfoIters the vector filled with map iterators
     */
     void fillTypeInfo(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
-                        const String& _rsTypeNames,
+                        const OUString& _rsTypeNames,
                         OTypeInfoMap& _rTypeInfoMap,
                         ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters);
 
@@ -393,7 +393,7 @@ namespace dbaui
                 Window* _pParent,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameContainer>& _xNames,
-                const String& _sParentFolder,
+                const OUString& _sParentFolder,
                 sal_Bool _bForm,
                 sal_Bool _bCollection = sal_True,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = NULL,

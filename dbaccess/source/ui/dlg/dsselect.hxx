@@ -59,8 +59,8 @@ public:
     ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = NULL );
     ~ODatasourceSelectDialog();
 
-    inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}
-    void            Select( const String& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
+    inline OUString GetSelected() const { return m_aDatasource.GetSelectEntry();}
+    void            Select( const OUString& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
 
     virtual sal_Bool    Close();
 

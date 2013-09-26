@@ -67,13 +67,13 @@ class OPasswordDialog : public ModalDialog
     DECL_LINK( ModifiedHdl, Edit * );
 
 public:
-    OPasswordDialog( Window* pParent,const String& _sUserName);
+    OPasswordDialog( Window* pParent,const OUString& _sUserName);
 
-    String          GetOldPassword() const { return aEDOldPassword.GetText(); }
-    String          GetNewPassword() const { return aEDPassword.GetText(); }
+    OUString        GetOldPassword() const { return aEDOldPassword.GetText(); }
+    OUString        GetNewPassword() const { return aEDPassword.GetText(); }
 };
 
-OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
+OPasswordDialog::OPasswordDialog(Window* _pParent,const OUString& _sUserName) :
 
     ModalDialog( _pParent, ModuleRes( DLG_PASSWORD) ),
 
@@ -92,8 +92,8 @@ OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
     aHelpBtn.Hide();
 
     FreeResource();
-    String sUser = aFLUser.GetText();
-    sUser.SearchAndReplaceAscii("$name$:  $",_sUserName);
+    OUString sUser = aFLUser.GetText();
+    sUser = sUser.replaceFirst("$name$:  $",_sUserName);
     aFLUser.SetText(sUser);
     aOKBtn.Disable();
 
@@ -107,11 +107,11 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
         EndDialog( RET_OK );
     else
     {
-        String aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
+        OUString aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
-        aEDPassword.SetText( String() );
-        aEDPasswordRepeat.SetText( String() );
+        aEDPassword.SetText( OUString() );
+        aEDPasswordRepeat.SetText( OUString() );
         aEDPassword.GrabFocus();
     }
     return 0;
@@ -228,7 +228,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
         }
         else if(pButton == &m_PB_CHANGEPWD)
         {
-            String sName = GetUser();
+            OUString sName = GetUser();
 
             if(m_xUsers->hasByName(sName))
             {
@@ -286,7 +286,7 @@ IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
     return 0;
 }
 
-String OUserAdmin::GetUser()
+OUString OUserAdmin::GetUser()
 {
     return m_LB_USER.GetSelectEntry();
 }

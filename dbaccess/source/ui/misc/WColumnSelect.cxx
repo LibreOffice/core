@@ -42,7 +42,8 @@ using namespace dbaui;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-String OWizColumnSelect::GetTitle() const { return String(ModuleRes(STR_WIZ_COLUMN_SELECT_TITEL)); }
+OUString OWizColumnSelect::GetTitle() const { return ModuleRes(STR_WIZ_COLUMN_SELECT_TITEL); }
+
 OWizardPage::OWizardPage( Window* pParent, const ResId& rResId )
     : TabPage(pParent,rResId)
     ,m_pParent(static_cast<OCopyTableWizard*>(pParent))
@@ -310,7 +311,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     if(_pRight == &m_lbNewColumnNames)
     {
         // we copy the column into the new format for the dest
-        OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(String(_sColumnName))));
+        OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(OUString(_sColumnName))));
         createNewColumn(_pRight,pSrcField,_rRightColumns,_sColumnName,_sExtraChars,_nMaxNameLen,_aCase);
     }
     else

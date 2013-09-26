@@ -59,7 +59,7 @@ namespace dbaui
         using ::com::sun::star::frame::UICommandDescription;
         using ::com::sun::star::graphic::XGraphic;
 
-        String GetCommandText( const sal_Char* _pCommandURL, const OUString& _rModuleName )
+        OUString GetCommandText( const sal_Char* _pCommandURL, const OUString& _rModuleName )
         {
             OUString sLabel;
             if ( !_pCommandURL || !*_pCommandURL )
@@ -215,7 +215,7 @@ namespace dbaui
                 ::comphelper::SequenceAsHashMap aItemProperties( aHistory[ nItem ] );
                 OUString sURL = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_URL, OUString() );
                 OUString sFilter = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_FILTER, OUString() );
-                String          sTitle = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_TITLE, OUString() );
+                OUString sTitle = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_TITLE, OUString() );
                 OUString sPassword = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_PASSWORD, OUString() );
 
                 //  If the entry is an impress file then insert it into the
@@ -235,10 +235,10 @@ namespace dbaui
                     if ( !sPassword.isEmpty() )
                         aURL.SetPass( sPassword );
 
-                    if ( !sTitle.Len() )
+                    if ( sTitle.isEmpty() )
                         sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
 
-                    String sDecodedURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    OUString sDecodedURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
                     sal_uInt16 nPos = InsertEntry( sTitle );
                     m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );
@@ -251,18 +251,18 @@ namespace dbaui
         }
     }
 
-    String OpenDocumentListBox::GetSelectedDocumentURL() const
+    OUString OpenDocumentListBox::GetSelectedDocumentURL() const
     {
-        String sURL;
+        OUString sURL;
         sal_uInt16 nSelected = GetSelectEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
             sURL = impl_getDocumentAtIndex( nSelected ).first;
         return sURL;
     }
 
-    String OpenDocumentListBox::GetSelectedDocumentFilter() const
+    OUString OpenDocumentListBox::GetSelectedDocumentFilter() const
     {
-        String sFilter;
+        OUString sFilter;
         sal_uInt16 nSelected = GetSelectEntryPos();
         if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
             sFilter = impl_getDocumentAtIndex( nSelected ).second;
@@ -278,7 +278,7 @@ namespace dbaui
         if ( pos != m_aURLs.end() )
         {
             aDocumentDescriptor = pos->second;
-            if ( _bSystemNotation && aDocumentDescriptor.first.Len() )
+            if ( _bSystemNotation && !aDocumentDescriptor.first.isEmpty() )
             {
                 ::svt::OFileNotation aNotation( aDocumentDescriptor.first );
                 aDocumentDescriptor.first = aNotation.get( ::svt::OFileNotation::N_SYSTEM );
@@ -302,7 +302,7 @@ namespace dbaui
             aItemRect = Rectangle(
                 OutputToScreenPixel( aItemRect.TopLeft() ),
                 OutputToScreenPixel( aItemRect.BottomRight() ) );
-            String sHelpText = impl_getDocumentAtIndex( nItemIndex, true ).first;
+            OUString sHelpText = impl_getDocumentAtIndex( nItemIndex, true ).first;
             Help::ShowQuickHelp( this, aItemRect, sHelpText, QUICKHELP_LEFT | QUICKHELP_VCENTER );
         }
     }

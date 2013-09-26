@@ -101,7 +101,7 @@ DBTreeListBox::~DBTreeListBox()
     implStopSelectionTimer();
 }
 
-SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
+SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
 {
     SvTreeList* myModel = GetModel();
     std::pair<SvTreeListEntries::iterator,SvTreeListEntries::iterator> aIters =
@@ -480,7 +480,7 @@ namespace
                 continue;
 
             sal_uInt16 nId = _rMenu.GetItemId(pos);
-            String aCommand = _rMenu.GetItemCommand( nId );
+            OUString aCommand = _rMenu.GetItemCommand( nId );
             PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
             if ( pPopup )
             {
@@ -516,7 +516,7 @@ namespace
                 continue;
 
             sal_uInt16 nId = _rMenu.GetItemId(pos);
-            String aCommand = _rMenu.GetItemCommand( nId );
+            OUString aCommand = _rMenu.GetItemCommand( nId );
             PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
             if ( pPopup )
             {

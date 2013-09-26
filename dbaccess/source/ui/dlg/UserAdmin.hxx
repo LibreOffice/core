@@ -54,7 +54,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
     ::com::sun::star::uno::Sequence< OUString>                               m_aUserNames;
 
-    String              m_UserName;
+    OUString            m_UserName;
 
     // methods
     DECL_LINK( ListDblClickHdl, ListBox * );
@@ -68,7 +68,7 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
     ~OUserAdmin();
-    String GetUser();
+    OUString GetUser();
 
     // must be overloaded by subclasses, but it isn't pure virtual
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);

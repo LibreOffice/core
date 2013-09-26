@@ -122,8 +122,8 @@ namespace dbaui
                 aReturn.bEnabled = isEditable() && GetUndoManager().GetUndoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
-                    String sUndo(ModuleRes(STR_UNDO_COLON));
-                    sUndo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
+                    OUString sUndo(ModuleRes(STR_UNDO_COLON));
+                    sUndo += " ";
                     sUndo += GetUndoManager().GetUndoActionComment();
                     aReturn.sTitle = sUndo;
                 }
@@ -133,8 +133,8 @@ namespace dbaui
                 aReturn.bEnabled = isEditable() && GetUndoManager().GetRedoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
-                    String sRedo(ModuleRes(STR_REDO_COLON));
-                    sRedo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
+                    OUString sRedo(ModuleRes(STR_REDO_COLON));
+                    sRedo += " ";
                     sRedo += GetUndoManager().GetRedoActionComment();
                     aReturn.sTitle = sRedo;
                 }

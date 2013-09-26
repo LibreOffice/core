@@ -42,7 +42,7 @@ namespace dbaui
     {
     public:
         virtual void    updateTableObjectList( bool _bAllowViews ) = 0;
-        virtual String  getSelectedName( String& _out_rAliasName ) const = 0;
+        virtual OUString  getSelectedName( OUString& _out_rAliasName ) const = 0;
         virtual bool    isLeafSelected() const = 0;
 
         virtual ~TableObjectListFacade();
@@ -56,7 +56,7 @@ namespace dbaui
         virtual bool    allowViews() const = 0;
         virtual bool    allowQueries() const = 0;
         virtual bool    allowAddition() const = 0;
-        virtual void    addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName ) = 0;
+        virtual void    addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName ) = 0;
         virtual void    onWindowClosing( const Window* _pWindow ) = 0;
 
     protected:
@@ -95,7 +95,7 @@ namespace dbaui
         void DetermineAddTable() { aAddButton.Enable( impl_isAddAllowed() ); }
         void Update();
 
-        static  String  getDialogTitleForContext(
+        static  OUString  getDialogTitleForContext(
             IAddTableDialogContext& _rContext );
 
     private:

@@ -96,7 +96,7 @@ void OTableSubscriptionDialog::clearPassword()
     m_pImpl->clearPassword();
 }
 
-String OTableSubscriptionDialog::getConnectionURL() const
+OUString OTableSubscriptionDialog::getConnectionURL() const
 {
     return m_pImpl->getConnectionURL();
 }

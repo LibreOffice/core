@@ -48,7 +48,7 @@ namespace dbaui
         OUString m_sSchemaName;          // schema for update data
         OUString m_sName;                // table for update data
         OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
-        String          m_sTypeNames;           // these type names are the ones out of the resource file
+        OUString        m_sTypeNames;           // these type names are the ones out of the resource file
         TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unknown because database driver has a failure
 
         sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
@@ -59,7 +59,7 @@ namespace dbaui
         void assignTable();                 // set the table if a name is given
         void loadData();
         sal_Bool checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException);      // check if we have double column names
-        String createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const String& _rDefault);
+        OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const OUString& _rDefault);
         void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,sal_Bool _bNew,sal_Bool _bKeyColumns = sal_False);
         void appendPrimaryKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,sal_Bool _bNew);
         void alterColumns();

@@ -34,7 +34,7 @@ OTableConnectionData::OTableConnectionData()
 
 OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
                                           ,const TTableWindowData::value_type& _pReferencedTable
-                                          ,const String& rConnName )
+                                          ,const OUString& rConnName )
  :m_pReferencingTable(_pReferencingTable)
  ,m_pReferencedTable(_pReferencedTable)
  ,m_aConnName( rConnName )
@@ -93,7 +93,7 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     return *this;
 }
 
-sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName )
+sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
     if (sal_uInt16(m_vConnLineData.size()) < nIndex)
         return sal_False;

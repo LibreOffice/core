@@ -67,7 +67,7 @@ namespace
     class ILabelProvider
     {
     public:
-        virtual String  getLabel() const = 0;
+        virtual OUString  getLabel() const = 0;
 
         virtual ~ILabelProvider() { };
     };
@@ -96,14 +96,14 @@ namespace
     class LabelProvider : public ILabelProvider
     {
     private:
-        String  m_label;
+        OUString  m_label;
     public:
         LabelProvider( sal_uInt16 _labelResourceID )
             :m_label( ModuleRes( _labelResourceID ) )
         {
         }
 
-        virtual String  getLabel() const
+        virtual OUString  getLabel() const
         {
             return m_label;
         }
@@ -187,9 +187,9 @@ namespace
 
         bool                                    bSubEntry;
 
-        String                                  sMessage;
-        String                                  sSQLState;
-        String                                  sErrorCode;
+        OUString                                sMessage;
+        OUString                                sSQLState;
+        OUString                                sErrorCode;
 
         ExceptionDisplayInfo() : eType( SQLExceptionInfo::UNDEFINED ), bSubEntry( false ) { }
         ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
@@ -197,9 +197,9 @@ namespace
 
     static bool lcl_hasDetails( const ExceptionDisplayInfo& _displayInfo )
     {
-        return  ( _displayInfo.sErrorCode.Len() )
-                ||  (   _displayInfo.sSQLState.Len()
-                    &&  !_displayInfo.sSQLState.EqualsAscii( "S1000" )
+        return  ( !_displayInfo.sErrorCode.isEmpty() )
+                ||  (   !_displayInfo.sSQLState.isEmpty()
+                    &&  !_displayInfo.sSQLState.equalsAscii( "S1000" )
                     );
     }
 
@@ -251,7 +251,7 @@ namespace
             if ( pCurrentError->ErrorCode )
                 aDisplayInfo.sErrorCode = OUString::number( pCurrentError->ErrorCode );
 
-            if  (   !aDisplayInfo.sMessage.Len()
+            if  (   aDisplayInfo.sMessage.isEmpty()
                 &&  !lcl_hasDetails( aDisplayInfo )
                 )
             {
@@ -300,8 +300,8 @@ class OExceptionChainDialog : public ModalDialog
     MultiLineEdit   m_aExceptionText;
     OKButton        m_aOK;
 
-    String          m_sStatusLabel;
-    String          m_sErrorCodeLabel;
+    OUString        m_sStatusLabel;
+    OUString        m_sErrorCodeLabel;
 
     ExceptionDisplayChain   m_aExceptions;
 
@@ -326,8 +326,8 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
 {
     DBG_CTOR(OExceptionChainDialog,NULL);
 
-    m_sStatusLabel = String( ModuleRes( STR_EXCEPTION_STATUS ) );
-    m_sErrorCodeLabel = String( ModuleRes( STR_EXCEPTION_ERRORCODE ) );
+    m_sStatusLabel = ModuleRes( STR_EXCEPTION_STATUS );
+    m_sErrorCodeLabel = ModuleRes( STR_EXCEPTION_ERRORCODE );
 
     FreeResource();
 
@@ -349,7 +349,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
         )
     {
         lcl_insertExceptionEntry( m_aExceptionList, elementPos, *loop );
-        bHave22018 = loop->sSQLState.EqualsAscii( "22018" );
+        bHave22018 = loop->sSQLState.equalsAscii( "22018" );
     }
 
     // if the error has the code 22018, then add an additional explanation
@@ -359,7 +359,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
         ProviderFactory aProviderFactory;
 
         ExceptionDisplayInfo aInfo22018;
-        aInfo22018.sMessage = String( ModuleRes( STR_EXPLAN_STRINGCONVERSION_ERROR ) );
+        aInfo22018.sMessage = ModuleRes( STR_EXPLAN_STRINGCONVERSION_ERROR );
         aInfo22018.pLabelProvider = aProviderFactory.getLabelProvider( SQLExceptionInfo::SQL_CONTEXT, false );
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::SQL_CONTEXT );
         m_aExceptions.push_back( aInfo22018 );
@@ -385,7 +385,7 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
         size_t pos = reinterpret_cast< size_t >( pSelected->GetUserData() );
         const ExceptionDisplayInfo& aExceptionInfo( m_aExceptions[ pos ] );
 
-        if ( aExceptionInfo.sSQLState.Len() )
+        if ( !aExceptionInfo.sSQLState.isEmpty() )
         {
             sText += m_sStatusLabel;
             sText += ": ";
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
             sText += "\n";
         }
 
-        if ( aExceptionInfo.sErrorCode.Len() )
+        if ( !aExceptionInfo.sErrorCode.isEmpty() )
         {
             sText += m_sErrorCodeLabel;
             sText += ": ";
@@ -464,7 +464,7 @@ void OSQLMessageBox::impl_positionControls()
     const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
     if ( m_pImpl->aDisplayInfo.size() > 1 )
         pSecondInfo = &m_pImpl->aDisplayInfo[1];
-    String sPrimary, sSecondary;
+    OUString sPrimary, sSecondary;
     sPrimary = rFirstInfo.sMessage;
     // one or two texts to display?
     if ( pSecondInfo )
@@ -503,7 +503,7 @@ void OSQLMessageBox::impl_positionControls()
     lcl_positionInAppFont( *this, m_aMessage, TEXT_POS_X, OUTER_MARGIN + 16 + 3, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 8 );
     Rectangle aSecondaryRect( m_aMessage.GetPosPixel(), m_aMessage.GetSizePixel() );
 
-    bool bHaveSecondaryText = sSecondary.Len() != 0;
+    bool bHaveSecondaryText = !sSecondary.isEmpty();
 
     // determine which space the secondary text would occupy
     if ( bHaveSecondaryText )
@@ -720,14 +720,14 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 // OSQLWarningBox
 OSQLWarningBox::OSQLWarningBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
-    :OSQLMessageBox( _pParent, String( ModuleRes( STR_EXCEPTION_WARNING ) ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
+    :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_WARNING ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
 {
 }
 
 // OSQLErrorBox
 OSQLErrorBox::OSQLErrorBox( Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
     const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
-    :OSQLMessageBox( _pParent, String( ModuleRes( STR_EXCEPTION_ERROR ) ), _rMessage, _nStyle, OSQLMessageBox::Error, _pAdditionalErrorInfo )
+    :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_ERROR ), _rMessage, _nStyle, OSQLMessageBox::Error, _pAdditionalErrorInfo )
 {
 }
 

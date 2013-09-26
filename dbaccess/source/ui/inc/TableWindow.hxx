@@ -136,7 +136,7 @@ namespace dbaui
         void                        SetSizePixel( const Size& rNewSize );
         void                        SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
 
-        String                      getTitle() const;
+        OUString                    getTitle() const;
         void                        SetBoldTitle( sal_Bool bBold );
         void                        setActive(sal_Bool _bActive = sal_True);
 

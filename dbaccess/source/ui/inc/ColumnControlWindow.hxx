@@ -38,8 +38,8 @@ namespace dbaui
         ::std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
 
         mutable TOTypeInfoSP        m_pTypeInfo; // default type
-        String                      m_sTypeNames;       // these type names are the ones out of the resource file
-        OUString             m_sAutoIncrementValue;
+        OUString                    m_sTypeNames;       // these type names are the ones out of the resource file
+        OUString                    m_sAutoIncrementValue;
         sal_Bool                    m_bAutoIncrementEnabled;
     protected:
         virtual void        ActivateAggregate( EControlType eType );

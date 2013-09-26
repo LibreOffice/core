@@ -165,8 +165,8 @@ namespace dbaui
         virtual sal_Bool                        isAutoIncrementValueEnabled() const = 0;
         virtual OUString                 getAutoIncrementValue() const = 0;
 
-        String                                  BoolStringPersistent(const String& rUIString) const;
-        String                                  BoolStringUI(const String& rPersistentString) const;
+        OUString                                BoolStringPersistent(const OUString& rUIString) const;
+        OUString                                BoolStringUI(const OUString& rPersistentString) const;
 
         const OPropColumnEditCtrl*              getColumnCtrl() const { return m_pColumnName; }
 
@@ -181,8 +181,8 @@ namespace dbaui
 
         void                SaveData( OFieldDescription* pFieldDescr );
 
-        void                SetControlText( sal_uInt16 nControlId, const String& rText );
-        String              GetControlText( sal_uInt16 nControlId );
+        void                SetControlText( sal_uInt16 nControlId, const OUString& rText );
+        OUString            GetControlText( sal_uInt16 nControlId );
         void                SetReadOnly( sal_Bool bReadOnly );
 
         // when resize is called
@@ -203,7 +203,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() = 0;
 
-        String              getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck = sal_True) const;
+        OUString            getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck = sal_True) const;
 
         inline void setEditWidth(sal_Int32 _nWidth) { m_nWidth = _nWidth; }
     };

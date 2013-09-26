@@ -60,14 +60,14 @@ namespace dbaui
         Indexes::iterator end() { return m_aIndexes.end(); }
 
         // searching
-        Indexes::const_iterator find(const String& _rName) const;
-        Indexes::iterator find(const String& _rName);
-        Indexes::const_iterator findOriginal(const String& _rName) const;
-        Indexes::iterator findOriginal(const String& _rName);
+        Indexes::const_iterator find(const OUString& _rName) const;
+        Indexes::iterator find(const OUString& _rName);
+        Indexes::const_iterator findOriginal(const OUString& _rName) const;
+        Indexes::iterator findOriginal(const OUString& _rName);
 
         // inserting without committing
         // the OriginalName of the newly inserted index will be empty, thus indicating that it's new
-        Indexes::iterator insert(const String& _rName);
+        Indexes::iterator insert(const OUString& _rName);
         // commit a new index, which is already part if the collection, but does not have an equivalent in the
         // data source, yet
         void commitNewIndex(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));

@@ -590,7 +590,7 @@ namespace dbaui
 #endif
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String(), WB_OK | WB_DEF_OK, mt );
+        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
         aMsg.Execute();
         return 0L;
     }
@@ -655,7 +655,7 @@ namespace dbaui
         if ( m_aUserName.GetText() != m_aUserName.GetSavedValue() )
         {
             _rSet.Put( SfxStringItem( DSID_USER, m_aUserName.GetText() ) );
-            _rSet.Put( SfxStringItem( DSID_PASSWORD, String()));
+            _rSet.Put( SfxStringItem( DSID_PASSWORD, OUString()));
             bChangedSomething = sal_True;
         }
         fillBool(_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);

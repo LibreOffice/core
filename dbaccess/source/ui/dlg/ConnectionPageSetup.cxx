@@ -112,7 +112,7 @@ namespace dbaui
 
         if ( USHRT_MAX != _nHelpTextResId )
         {
-            String sHelpText = String(ModuleRes(_nHelpTextResId));
+            OUString sHelpText = ModuleRes(_nHelpTextResId);
             m_aFT_HelpText.SetText(sHelpText);
         }
         else
@@ -123,7 +123,7 @@ namespace dbaui
 
         if ( USHRT_MAX != _nUrlResId )
         {
-            String sLabelText = String(ModuleRes(_nUrlResId));
+            OUString sLabelText = ModuleRes(_nUrlResId);
             m_aFT_Connection.SetText(sLabelText);
             if ( USHRT_MAX == _nHelpTextResId )
             {
@@ -167,7 +167,7 @@ namespace dbaui
         //! TODO
         //if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )
         //{
-        //  String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
+        //  OUString sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
         //  FixedText* ppTextControls[] ={&m_aFT_Connection};
         //  for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
         //  {
@@ -190,7 +190,7 @@ namespace dbaui
     }
     bool OConnectionTabPageSetup::checkTestConnection()
     {
-        return !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
+        return !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
     }
 
     IMPL_LINK(OConnectionTabPageSetup, OnEditModified, Edit*, /*_pEdit*/)

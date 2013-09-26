@@ -109,7 +109,7 @@ namespace dbaui
         virtual void            ActivatePage( );
         virtual void            Resize();
         virtual sal_Bool        LeavePage();
-        virtual String          GetTitle() const;
+        virtual OUString        GetTitle() const;
 
         OWizTypeSelect(Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();

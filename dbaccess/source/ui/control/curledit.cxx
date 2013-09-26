@@ -44,14 +44,14 @@ OConnectionURLEdit::~OConnectionURLEdit()
     delete m_pForcedPrefix;
 }
 
-void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
+void OConnectionURLEdit::SetTextNoPrefix(const OUString& _rText)
 {
     OSL_ENSURE(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
     if (GetSubEdit())
         GetSubEdit()->SetText(_rText);
 }
 
-String OConnectionURLEdit::GetTextNoPrefix() const
+OUString OConnectionURLEdit::GetTextNoPrefix() const
 {
     if (GetSubEdit())
         return GetSubEdit()->GetText();
@@ -82,7 +82,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 
     sal_Bool bIsEmpty = _rStr.isEmpty();
     // calc the prefix
-    String sPrefix;
+    OUString sPrefix;
     if (!bIsEmpty)
     {
         // determine the type of the new URL described by the new text
@@ -109,7 +109,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 
     // do the real SetTex
 //  Edit::SetText(bIsEmpty ? _rStr : m_pTypeCollection->cutPrefix(_rStr), _rNewSelection);
-    String sNewText( _rStr );
+    OUString sNewText( _rStr );
     if ( !bIsEmpty )
         sNewText  = m_pTypeCollection->cutPrefix( _rStr );
     Edit::SetText( sNewText );

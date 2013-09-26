@@ -165,7 +165,7 @@ TOTypeInfoSP OColumnControlWindow::getDefaultTyp() const
     if ( !m_pTypeInfo.get() )
     {
         m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
-        m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
+        m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
     }
     return m_pTypeInfo;
 }

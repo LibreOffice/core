@@ -120,7 +120,7 @@ namespace dbaui
         }
     }
 
-    void ImageProvider::getImages( const String& _rName, const sal_Int32 _nDatabaseObjectType, Image& _out_rImage )
+    void ImageProvider::getImages( const OUString& _rName, const sal_Int32 _nDatabaseObjectType, Image& _out_rImage )
     {
         if ( _nDatabaseObjectType != DatabaseObject::TABLE )
         {

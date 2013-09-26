@@ -44,7 +44,7 @@ OTableDesignHelpBar::~OTableDesignHelpBar()
     m_pTextWin = NULL;
 }
 
-void OTableDesignHelpBar::SetHelpText( const String& rText )
+void OTableDesignHelpBar::SetHelpText( const OUString& rText )
 {
     DBG_CHKTHIS(OTableDesignHelpBar,NULL);
     if(m_pTextWin)

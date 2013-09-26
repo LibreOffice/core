@@ -52,8 +52,8 @@ namespace dbaui
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
         virtual void SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData ) = 0;
         virtual ::com::sun::star::uno::Any          GetCellData( long nRow, sal_uInt16 nColId ) = 0;
-        virtual void SetControlText( long nRow, sal_uInt16 nColId, const String& rText ) = 0;
-        virtual String GetControlText( long nRow, sal_uInt16 nColId ) = 0;
+        virtual void SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText ) = 0;
+        virtual OUString GetControlText( long nRow, sal_uInt16 nColId ) = 0;
 
         virtual OTableDesignView* GetView() const = 0;
 

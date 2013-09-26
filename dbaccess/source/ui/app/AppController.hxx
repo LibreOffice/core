@@ -274,7 +274,7 @@ namespace dbaui
             @return
                 <TRUE/> if the paste opertions was successful, otherwise <FALSE/>.
         */
-        sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const OUString& _sParentFolder = String(),sal_Bool _bMove = sal_False);
+        sal_Bool paste( ElementType _eType,const ::svx::ODataAccessDescriptor& _rPasteData ,const OUString& _sParentFolder = OUString(),sal_Bool _bMove = sal_False);
 
         /// returns the system clipboard.
         const TransferableDataHelper& getViewClipboard() const { return m_aSystemClipboard; }

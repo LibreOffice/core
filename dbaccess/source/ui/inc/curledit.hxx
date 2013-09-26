@@ -38,8 +38,8 @@ class OConnectionURLEdit : public Edit
     ::dbaccess::ODsnTypeCollection*
                         m_pTypeCollection;
     FixedText*          m_pForcedPrefix;
-    String              m_sSaveValueNoPrefix;
-    sal_Bool                m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
+    OUString            m_sSaveValueNoPrefix;
+    sal_Bool            m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 
 public:
     OConnectionURLEdit(Window* pParent, const ResId& rResId,sal_Bool _bShowPrefix = sal_False);
@@ -57,13 +57,13 @@ public:
     */
     void ShowPrefix(sal_Bool _bShowPrefix);
     /// get the currently set text, excluding the prefix indicating the type
-    virtual String  GetTextNoPrefix() const;
+    virtual OUString GetTextNoPrefix() const;
     /// set a new text, leave the current prefix unchanged
-    virtual void    SetTextNoPrefix(const String& _rText);
+    virtual void     SetTextNoPrefix(const OUString& _rText);
 
-    inline void     SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
-    inline String   GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
-    inline void     SetTypeCollection(::dbaccess::ODsnTypeCollection* _pTypeCollection) { m_pTypeCollection = _pTypeCollection; }
+    inline void      SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
+    inline OUString  GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
+    inline void      SetTypeCollection(::dbaccess::ODsnTypeCollection* _pTypeCollection) { m_pTypeCollection = _pTypeCollection; }
 };
 
 }   // namespace dbaui

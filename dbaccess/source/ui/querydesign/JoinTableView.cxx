@@ -262,7 +262,7 @@ bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,sal_Bool _bDelet
     return true;
 }
 
-OTableWindow* OJoinTableView::GetTabWindow( const String& rName )
+OTableWindow* OJoinTableView::GetTabWindow( const OUString& rName )
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     OTableWindowMapIterator aIter = m_aTableMap.find(rName);
@@ -385,7 +385,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             rController.setModified(sal_True);
         }
 
-        String aWinName = pTabWin->GetWinName();
+        OUString aWinName = pTabWin->GetWinName();
         if(m_aTableMap.find(aWinName) != m_aTableMap.end())
             m_aTableMap.erase( aWinName );
         else

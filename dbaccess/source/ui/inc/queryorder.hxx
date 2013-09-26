@@ -74,8 +74,8 @@ namespace dbaui
         CancelButton    aBT_CANCEL;
         HelpButton      aBT_HELP;
         FixedLine       aFL_ORDER;
-        String          aSTR_NOENTRY;
-        OUString m_sOrgOrder;
+        OUString        aSTR_NOENTRY;
+        OUString        m_sOrgOrder;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;

@@ -65,7 +65,7 @@ namespace dbaui
         m_aIndexes.clear();
     }
 
-    Indexes::const_iterator OIndexCollection::find(const String& _rName) const
+    Indexes::const_iterator OIndexCollection::find(const OUString& _rName) const
     {
         OUString sNameCompare(_rName);
 
@@ -79,7 +79,7 @@ namespace dbaui
         return aSearch;
     }
 
-    Indexes::iterator OIndexCollection::find(const String& _rName)
+    Indexes::iterator OIndexCollection::find(const OUString& _rName)
     {
         OUString sNameCompare(_rName);
 
@@ -93,7 +93,7 @@ namespace dbaui
         return aSearch;
     }
 
-    Indexes::const_iterator OIndexCollection::findOriginal(const String& _rName) const
+    Indexes::const_iterator OIndexCollection::findOriginal(const OUString& _rName) const
     {
         OUString sNameCompare(_rName);
 
@@ -107,7 +107,7 @@ namespace dbaui
         return aSearch;
     }
 
-    Indexes::iterator OIndexCollection::findOriginal(const String& _rName)
+    Indexes::iterator OIndexCollection::findOriginal(const OUString& _rName)
     {
         OUString sNameCompare(_rName);
 
@@ -322,10 +322,10 @@ namespace dbaui
         }
     }
 
-    Indexes::iterator OIndexCollection::insert(const String& _rName)
+    Indexes::iterator OIndexCollection::insert(const OUString& _rName)
     {
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
-        String tmpName;
+        OUString tmpName;
         OIndex aNewIndex(tmpName);  // the empty string indicates the index is a new one
         aNewIndex.sName = _rName;
         m_aIndexes.push_back(aNewIndex);

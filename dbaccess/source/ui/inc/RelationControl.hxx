@@ -39,8 +39,8 @@ namespace dbaui
         ORelationControl*                       m_pRC_Tables;
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
         IRelationControlInterface*              m_pParentDialog;
-        String                                  m_strCurrentLeft;
-        String                                  m_strCurrentRight;
+        OUString                                m_strCurrentLeft;
+        OUString                                m_strCurrentRight;
     private:
         DECL_LINK( OnTableChanged, ListBox* );
     public:

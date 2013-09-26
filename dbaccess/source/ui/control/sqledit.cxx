@@ -157,7 +157,7 @@ void OSqlEdit::GetFocus()
 
 IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer)
 {
-    String aText  =GetText();
+    OUString aText = GetText();
     if(aText != m_strOrigText)
     {
         OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();

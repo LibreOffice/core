@@ -260,7 +260,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>  m_xInteractionHandler;
 
-        String                  m_sTypeNames;       // these type names are the ones out of the resource file
+        OUString                m_sTypeNames;       // these type names are the ones out of the resource file
         sal_uInt32              m_nPageCount;
         sal_Bool                m_bDeleteSourceColumns;
         bool                    m_bInterConnectionCopy;    // are we copying between different connections?

@@ -36,7 +36,7 @@ namespace dbaui
         CharSetListBox( Window* _pParent, const ResId& _rResId );
         ~CharSetListBox();
 
-        void    SelectEntryByIanaName( const String& _rIanaName );
+        void    SelectEntryByIanaName( const OUString& _rIanaName );
         bool    StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId );
 
     private:

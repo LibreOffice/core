@@ -120,7 +120,7 @@ public:
         @param _pEntry
             the entry whose name is to be obtained. Must not denote a folder entry.
     */
-    String getQualifiedTableName( SvTreeListEntry* _pEntry ) const;
+    OUString getQualifiedTableName( SvTreeListEntry* _pEntry ) const;
 
     SvTreeListEntry*    getEntryByQualifiedName( const OUString& _rName );
 

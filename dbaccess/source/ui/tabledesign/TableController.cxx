@@ -159,7 +159,7 @@ OTableController::OTableController(const Reference< XComponentContext >& _rM) : 
 
     InvalidateAll();
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
-    m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
+    m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
 }
 
 OTableController::~OTableController()

@@ -70,10 +70,10 @@ namespace dbaui
         FixedLine   m_aCharSetHeader;
         FixedText   m_aCharSetLabel;
         CharSetListBox  m_aCharSet;
-        String      m_aFieldSeparatorList;
-        String      m_aTextSeparatorList;
-        String      m_aTextNone;
-        String      m_aOldExtension;
+        OUString    m_aFieldSeparatorList;
+        OUString    m_aTextSeparatorList;
+        OUString    m_aTextNone;
+        OUString    m_aOldExtension;
         Link        m_aGetExtensionHandler; /// to be called if a new type is selected
 
         short       m_nAvailableSections;
@@ -86,16 +86,16 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     private:
-        String      GetSeparator( const ComboBox& rBox, const String& rList );
-        void        SetSeparator( ComboBox& rBox, const String& rList, const String& rVal );
-        void        SetExtension(const String& _rVal);
+        OUString    GetSeparator( const ComboBox& rBox, const OUString& rList );
+        void        SetSeparator( ComboBox& rBox, const OUString& rList, const OUString& rVal );
+        void        SetExtension(const OUString& _rVal);
 
     public:
         void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bValid);
         void        fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         void        fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
         void        SetClickHandler(const Link& _rHandler) { m_aGetExtensionHandler = _rHandler; }
-        String      GetExtension();
+        OUString    GetExtension();
         sal_Bool FillItemSet( SfxItemSet& rSet, const sal_Bool bChangedSomething );
         sal_Bool prepareLeave();
     };

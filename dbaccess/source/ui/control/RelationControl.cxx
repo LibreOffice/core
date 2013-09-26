@@ -227,7 +227,7 @@ namespace dbaui
         long nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
-            String sFieldName(m_pListCell->GetSelectEntry());
+            OUString sFieldName(m_pListCell->GetSelectEntry());
             OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
             if ( pLines->size() <= static_cast<OConnectionLineDataVec::size_type>(nRow) )
             {
@@ -315,7 +315,7 @@ namespace dbaui
         if ( xDef.is() )
         {
             fillListBox(xDef,nRow,nColumnId);
-            String sName = GetCellText( nRow, nColumnId );
+            OUString sName = GetCellText( nRow, nColumnId );
             m_pListCell->SelectEntry( sName );
             if ( m_pListCell->GetSelectEntry() != sName )
             {
@@ -343,7 +343,7 @@ namespace dbaui
     void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        String aText  =const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
+        OUString aText = const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
 
         Point aPos( rRect.TopLeft() );
         Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
@@ -376,7 +376,7 @@ namespace dbaui
                 {
                     m_pListCell->InsertEntry( *pIter );
                 }
-                m_pListCell->InsertEntry(String(), 0);
+                m_pListCell->InsertEntry(OUString(), 0);
             }
         }
         catch( const Exception& )
@@ -531,7 +531,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     }
     IMPL_LINK( OTableListBoxControl, OnTableChanged, ListBox*, pListBox )
     {
-        String strSelected(pListBox->GetSelectEntry());
+        OUString strSelected(pListBox->GetSelectEntry());
         OTableWindow* pLeft     = NULL;
         OTableWindow* pRight    = NULL;
 
@@ -550,7 +550,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             ++aIter;
             OTableWindow* pSecond = aIter->second;
 
-            if ( m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetName()) )
+            if ( m_lmbLeftTable.GetSelectEntry() == pFirst->GetName() )
             {
                 pLeft   = pFirst;
                 pRight  = pSecond;
@@ -649,7 +649,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         m_pRC_Tables->ActivateCell();
         m_pRC_Tables->m_ops.clear();
     }
-    void fillEntryAndDisable(ListBox& _rListBox,const String& _sEntry)
+    void fillEntryAndDisable(ListBox& _rListBox,const OUString& _sEntry)
     {
         _rListBox.InsertEntry(_sEntry);
         _rListBox.SelectEntryPos(0);

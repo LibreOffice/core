@@ -96,7 +96,7 @@ namespace dbaui
         ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                                const String& rExchange = String());
+                                const OUString& rExchange = OUString());
 
         // import data
         ODatabaseImportExport(  const SharedConnection& _rxConnection,
@@ -136,7 +136,7 @@ namespace dbaui
         ORTFImportExport(   const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const String& rExchange = String())
+                            const OUString& rExchange = OUString())
                             : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
 
         // import data
@@ -169,7 +169,7 @@ namespace dbaui
         void WriteHeader();
         void WriteBody();
         void WriteTables();
-        void WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const String& rValue,const char* pHtmlTag);
+        void WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const OUString& rValue,const char* pHtmlTag);
         void IncIndent( sal_Int16 nVal );
         const char*         GetIndentStr() { return sIndent; }
         void FontOn();
@@ -180,7 +180,7 @@ namespace dbaui
         OHTMLImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                            const String& rExchange = String());
+                            const OUString& rExchange = OUString());
         // import data
         OHTMLImportExport(  const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -215,7 +215,7 @@ namespace dbaui
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >& _xResultSetUpdate,
                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM,
-                            const String& rExchange = String());
+                            const OUString& rExchange = OUString());
 
         // import data
         ORowSetImportExport(const SharedConnection& _rxConnection,

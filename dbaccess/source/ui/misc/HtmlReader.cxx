@@ -198,14 +198,14 @@ void OHTMLReader::NextToken( int nToken )
                 m_sCurrent += m_sTextToken;
                 break;
             case HTML_PARABREAK_ON:
-                m_sTextToken.Erase();
+                m_sTextToken = "";
                 break;
             case HTML_TABLEDATA_ON:
                 fetchOptions();
                 break;
             case HTML_TABLEDATA_OFF:
                 {
-                    if ( m_sCurrent.Len() )
+                    if ( !m_sCurrent.isEmpty() )
                         m_sTextToken = m_sCurrent;
                     try
                     {
@@ -216,7 +216,7 @@ void OHTMLReader::NextToken( int nToken )
                     {
                         showErrorDialog(e);
                     }
-                    m_sCurrent.Erase();
+                    m_sCurrent = "";
                     m_nColumnPos++;
                     eraseTokens();
                     m_bSDNum = m_bInTbl = sal_False;
@@ -272,23 +272,23 @@ void OHTMLReader::NextToken( int nToken )
                 m_sCurrent += m_sTextToken;
                 break;
             case HTML_PARABREAK_ON:
-                m_sTextToken.Erase();
+                m_sTextToken = "";
                 break;
             case HTML_TABLEDATA_OFF:
-                if ( m_sCurrent.Len() )
+                if ( !m_sCurrent.isEmpty() )
                     m_sTextToken = m_sCurrent;
                 adjustFormat();
                 m_nColumnPos++;
                 m_bSDNum = m_bInTbl = sal_False;
-                m_sCurrent.Erase();
+                m_sCurrent = "";
                 break;
             case HTML_TABLEROW_OFF:
-                if ( m_sCurrent.Len() )
+                if ( !m_sCurrent.isEmpty() )
                     m_sTextToken = m_sCurrent;
                 adjustFormat();
                 m_nColumnPos = 0;
                 m_nRows--;
-                m_sCurrent.Erase();
+                m_sCurrent = "";
                 break;
         }
     }
@@ -366,20 +366,20 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
             break;
         case HTML_O_FACE :
             {
-                const String& rFace = rOption.GetString();
-                String aFontName;
+                const OUString& rFace = rOption.GetString();
+                OUString aFontName;
                 sal_Int32 nPos = 0;
                 while( nPos != -1 )
                 {
                     // list fo fonts, VCL: semicolon as separator, HTML: comma
-                    String aFName = rFace.GetToken( 0, ',', nPos );
+                    OUString aFName = rFace.getToken( 0, ',', nPos );
                     aFName = comphelper::string::strip(aFName, ' ');
-                    if( aFontName.Len() )
-                        aFontName += ';';
+                    if( !aFontName.isEmpty() )
+                        aFontName += ";";
                     aFontName += aFName;
                 }
-                if ( aFontName.Len() )
-                    _rFont.Name = OUString(aFontName);
+                if ( !aFontName.isEmpty() )
+                    _rFont.Name = aFontName;
             }
             break;
         case HTML_O_SIZE :
@@ -401,15 +401,15 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::GetWidthPixel" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    const String& rOptVal = rOption.GetString();
-    if ( rOptVal.Search('%') != STRING_NOTFOUND )
+    const OUString& rOptVal = rOption.GetString();
+    if ( rOptVal.indexOf('%') != -1 )
     {   // percentage
         OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
         return (sal_Int16)((rOption.GetNumber() * m_nColumnWidth) / 100);
     }
     else
     {
-        if ( rOptVal.Search('*') != STRING_NOTFOUND )
+        if ( rOptVal.indexOf('*') != -1 )
         {   // relativ to what?!?
 //TODO: collect ColArray of all relevant values and then MakeCol
             return 0;
@@ -423,17 +423,17 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::CreateTable" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    String aTempName(ModuleRes(STR_TBL_TITLE));
-    aTempName = aTempName.GetToken(0,' ');
-    aTempName = String(::dbtools::createUniqueName(m_xTables,OUString(aTempName )));
+    OUString aTempName(ModuleRes(STR_TBL_TITLE));
+    aTempName = aTempName.getToken(0,' ');
+    aTempName = ::dbtools::createUniqueName(m_xTables, aTempName);
 
     int nTmpToken2 = nToken;
     sal_Bool bCaption = sal_False;
     sal_Bool bTableHeader = sal_False;
-    String aColumnName;
+    OUString aColumnName;
     SvxCellHorJustify eVal;
 
-    String aTableName;
+    OUString aTableName;
     FontDescriptor aFont = VCLUnoHelper::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     sal_Int32 nTextColor = 0;
     do
@@ -451,7 +451,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 m_sCurrent += aColumnName;
                 break;
             case HTML_PARABREAK_ON:
-                m_sTextToken.Erase();
+                m_sTextToken = "";
                 break;
             case HTML_TABLEDATA_ON:
             case HTML_TABLEHEADER_ON:
@@ -462,15 +462,15 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
             case HTML_TABLEHEADER_OFF:
                 {
                     aColumnName = comphelper::string::strip(aColumnName, ' ' );
-                    if (!aColumnName.Len() || m_bAppendFirstLine )
-                        aColumnName = String(ModuleRes(STR_COLUMN_NAME));
-                    else if ( m_sCurrent.Len() )
+                    if (aColumnName.isEmpty() || m_bAppendFirstLine )
+                        aColumnName = ModuleRes(STR_COLUMN_NAME);
+                    else if ( !m_sCurrent.isEmpty() )
                         aColumnName = m_sCurrent;
 
                     aColumnName = comphelper::string::strip(aColumnName, ' ');
                     CreateDefaultColumn(aColumnName);
-                    aColumnName.Erase();
-                    m_sCurrent.Erase();
+                    aColumnName = "";
+                    m_sCurrent = "";
 
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
                     bTableHeader = sal_False;
@@ -484,8 +484,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
             case HTML_TITLE_OFF:
             case HTML_CAPTION_OFF:
                 aTableName = comphelper::string::strip(aTableName, ' ');
-                if(!aTableName.Len())
-                    aTableName = String(::dbtools::createUniqueName(m_xTables,OUString(aTableName)));
+                if(aTableName.isEmpty())
+                    aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
                 else
                     aTableName = aTempName;
                 bCaption = sal_False;
@@ -509,16 +509,16 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     }
     while((nTmpToken2 = GetNextToken()) != HTML_TABLEROW_OFF);
 
-    if ( m_sCurrent.Len() )
+    if ( !m_sCurrent.isEmpty() )
         aColumnName = m_sCurrent;
     aColumnName = comphelper::string::strip(aColumnName, ' ');
-    if(aColumnName.Len())
+    if(!aColumnName.isEmpty())
         CreateDefaultColumn(aColumnName);
 
     if ( m_vDestVector.empty() )
         return sal_False;
 
-    if(!aTableName.Len())
+    if(aTableName.isEmpty())
         aTableName = aTempName;
 
     m_bInTbl        = sal_False;

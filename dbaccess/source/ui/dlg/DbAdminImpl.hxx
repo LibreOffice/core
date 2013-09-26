@@ -102,7 +102,7 @@ namespace dbaui
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getCurrentDataSource();
         // returns the Url of a database document
-        String              getDocumentUrl(SfxItemSet& _rDest);
+        OUString            getDocumentUrl(SfxItemSet& _rDest);
 
         void setDataSourceOrName( const ::com::sun::star::uno::Any& _rDataSourceOrName );
 
@@ -115,7 +115,7 @@ namespace dbaui
             @return
                 The connection URL
         */
-        String getConnectionURL() const;
+        OUString getConnectionURL() const;
 
         /// fill the necessary information from the url line
         void convertUrl(SfxItemSet& _rDest);

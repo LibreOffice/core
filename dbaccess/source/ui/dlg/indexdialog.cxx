@@ -108,7 +108,7 @@ namespace dbaui
         if (!SvTreeListBox::EditedEntry(_pEntry, _rNewText))
             return sal_False;
 
-        String sOldText = GetEntryText(_pEntry);
+        OUString sOldText = GetEntryText(_pEntry);
         SvTreeListBox::SetEntryText(_pEntry, _rNewText);
 
         sal_Bool bValid = sal_True;
@@ -350,8 +350,8 @@ DBG_NAME(DbaIndexDialog)
             return;
 
         // get a new unique name for the new index
-        String sNewIndexName;
-        const String sNewIndexNameBase(ModuleRes(STR_LOGICAL_INDEX_NAME));
+        OUString sNewIndexName;
+        const OUString sNewIndexNameBase(ModuleRes(STR_LOGICAL_INDEX_NAME));
         sal_Int32 i;
 
         for ( i = 1; i < 0x7FFFFFFF; ++i )
@@ -397,8 +397,8 @@ DBG_NAME(DbaIndexDialog)
             // let the user confirm the drop
             if (_bConfirm)
             {
-                String sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
-                sConfirm.SearchAndReplaceAscii("$name$", m_aIndexes.GetEntryText(pSelected));
+                OUString sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
+                sConfirm = sConfirm.replaceFirst("$name$", m_aIndexes.GetEntryText(pSelected));
                 QueryBox aConfirm(this, WB_YES_NO, sConfirm);
                 if (RET_YES != aConfirm.Execute())
                     return;
@@ -606,13 +606,13 @@ DBG_NAME(DbaIndexDialog)
         OSL_ENSURE(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
-        String sNewName = m_aIndexes.GetEntryText(_pEntry);
+        OUString sNewName = m_aIndexes.GetEntryText(_pEntry);
 
         Indexes::const_iterator aSameName = m_pIndexes->find(sNewName);
         if ((aSameName != aPosition) && (m_pIndexes->end() != aSameName))
         {
-            String sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
-            sError.SearchAndReplaceAscii("$name$", sNewName);
+            OUString sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
+            sError = sError.replaceFirst("$name$", sNewName);
             ErrorBox aError(this, WB_OK, sError);
             aError.Execute();
 
@@ -681,7 +681,7 @@ DBG_NAME(DbaIndexDialog)
         }
 
         // no double fields
-        std::set< String > aExistentFields;
+        std::set< OUString > aExistentFields;
         for (   ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
                 aFieldCheck != _rPos->aFields.end();
                 ++aFieldCheck
@@ -690,8 +690,8 @@ DBG_NAME(DbaIndexDialog)
             if (aExistentFields.end() != aExistentFields.find(aFieldCheck->sFieldName))
             {
                 // a column is specified twice ... won't work anyway, so prevent this here and now
-                String sMessage(ModuleRes(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
-                sMessage.SearchAndReplaceAscii("$name$", aFieldCheck->sFieldName);
+                OUString sMessage(ModuleRes(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
+                sMessage = sMessage.replaceFirst("$name$", aFieldCheck->sFieldName);
                 ErrorBox aError(this, WB_OK, sMessage);
                 aError.Execute();
                 m_pFields->GrabFocus();
@@ -756,7 +756,7 @@ DBG_NAME(DbaIndexDialog)
         {
             m_aUnique.Check(sal_False);
             m_pFields->initializeFrom(IndexFields());
-            m_aDescription.SetText(String());
+            m_aDescription.SetText(OUString());
         }
     }
 

@@ -43,8 +43,8 @@ namespace dbaui
         ::svt::ListBoxControl*      m_pSortingCell;
         ::svt::ListBoxControl*      m_pFieldNameCell;
 
-        String                      m_sAscendingText;
-        String                      m_sDescendingText;
+        OUString                    m_sAscendingText;
+        OUString                    m_sDescendingText;
 
         sal_Int32                   m_nMaxColumnsInIndex;
         sal_Bool                    m_bAddIndexAppendix;
@@ -79,7 +79,7 @@ namespace dbaui
         void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId);
 
     protected:
-        String GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const;
+        OUString GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const;
         sal_Bool implGetFieldDesc(long _nRow, ConstIndexFieldsIterator& _rPos);
 
         sal_Bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }

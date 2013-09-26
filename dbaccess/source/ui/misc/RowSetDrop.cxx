@@ -42,7 +42,7 @@ ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
                                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                             const Reference< XComponentContext >& _rM,
-                                            const String& rExchange
+                                            const OUString& rExchange
                                             )
                                             : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange)
                                             ,m_xTargetResultSetUpdate(_xResultSetUpdate)
@@ -64,7 +64,7 @@ void ORowSetImportExport::initialize()
 
     m_xTargetResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xTargetResultSetUpdate,UNO_QUERY)->getMetaData();
     if(!m_xTargetResultSetMetaData.is() || !xColumnLocate.is() || !m_xResultSetMetaData.is() )
-        throw SQLException(String(ModuleRes(STR_UNEXPECTED_ERROR)),*this,OUString("S1000") ,0,Any());
+        throw SQLException(ModuleRes(STR_UNEXPECTED_ERROR),*this,OUString("S1000") ,0,Any());
 
     sal_Int32 nCount = m_xTargetResultSetMetaData->getColumnCount();
     m_aColumnMapping.reserve(nCount);
@@ -245,7 +245,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
     {
         if(!m_bAlreadyAsked)
         {
-            String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURRED_WHILE_COPYING));
+            OUString sAskIfContinue = ModuleRes(STR_ERROR_OCCURRED_WHILE_COPYING);
             OSQLWarningBox aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
             if(aDlg.Execute() == RET_YES)
                 m_bAlreadyAsked = sal_True;

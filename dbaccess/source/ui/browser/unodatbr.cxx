@@ -1137,7 +1137,7 @@ OUString SbaTableQueryBrowser::getDataSourceAcessor( SvTreeListEntry* _pDataSour
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( _pDataSourceEntry->GetUserData() );
     OSL_ENSURE( pData, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry data!" );
     OSL_ENSURE( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAcessor: entry does not denote a data source!" );
-    return pData->sAccessor.Len() ? OUString(pData->sAccessor) : GetEntryText( _pDataSourceEntry );
+    return !pData->sAccessor.isEmpty() ? OUString(pData->sAccessor) : GetEntryText( _pDataSourceEntry );
 }
 
 SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSource, const OUString& _rCommand, sal_Int32 _nCommandType,
@@ -3493,7 +3493,7 @@ void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
 sal_Bool SbaTableQueryBrowser::requestQuickHelp( const SvTreeListEntry* _pEntry, OUString& _rText ) const
 {
     const DBTreeListUserData* pData = static_cast< const DBTreeListUserData* >( _pEntry->GetUserData() );
-    if ( ( pData->eType == etDatasource ) && pData->sAccessor.Len() )
+    if ( ( pData->eType == etDatasource ) && !pData->sAccessor.isEmpty() )
     {
         _rText = ::svt::OFileNotation( pData->sAccessor ).get( ::svt::OFileNotation::N_SYSTEM );
         return sal_True;

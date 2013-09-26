@@ -134,7 +134,7 @@ DBG_NAME(IndexFieldsControl)
         Point aPos(_rRect.TopLeft());
         aPos.X() += 1;
 
-        String aText = GetRowCellText(m_aSeekRow,_nColumnId);
+        OUString aText = GetRowCellText(m_aSeekRow,_nColumnId);
         Size TxtSize(GetDataWindow().GetTextWidth(aText), GetDataWindow().GetTextHeight());
 
         // clipping
@@ -185,7 +185,7 @@ DBG_NAME(IndexFieldsControl)
         ConstIndexFieldsIterator aSourceEnd = m_aFields.end();
         IndexFieldsIterator aDest = _rFields.begin();
         for (; aSource < aSourceEnd; ++aSource)
-            if (0 != aSource->sFieldName.Len())
+            if (!aSource->sFieldName.isEmpty())
             {
                 *aDest = *aSource;
                 ++aDest;
@@ -215,11 +215,11 @@ DBG_NAME(IndexFieldsControl)
 
         if ( m_bAddIndexAppendix )
         {
-            m_sAscendingText = String(ModuleRes(STR_ORDER_ASCENDING));
-            m_sDescendingText = String(ModuleRes(STR_ORDER_DESCENDING));
+            m_sAscendingText = ModuleRes(STR_ORDER_ASCENDING);
+            m_sDescendingText = ModuleRes(STR_ORDER_DESCENDING);
 
             // the "sort order" column
-            String sColumnName = String(ModuleRes(STR_TAB_INDEX_SORTORDER));
+            OUString sColumnName = ModuleRes(STR_TAB_INDEX_SORTORDER);
             // the width of the order column is the maximum widths of the texts used
             // (the title of the column)
             sal_Int32 nSortOrderColumnWidth = GetTextWidth(sColumnName);
@@ -244,13 +244,13 @@ DBG_NAME(IndexFieldsControl)
         nFieldNameWidth -= aSystemStyle.GetScrollBarSize();
         nFieldNameWidth -= 8;
         // the "field name" column
-        String sColumnName = String(ModuleRes(STR_TAB_INDEX_FIELD));
+        OUString sColumnName = ModuleRes(STR_TAB_INDEX_FIELD);
         InsertDataColumn(COLUMN_ID_FIELDNAME, sColumnName, nFieldNameWidth, HIB_STDSTYLE, 0);
 
         // create the cell controllers
         // for the field name cell
         m_pFieldNameCell = new ListBoxControl(&GetDataWindow());
-        m_pFieldNameCell->InsertEntry(String());
+        m_pFieldNameCell->InsertEntry(OUString());
         m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
         const OUString* pFields = _rAvailableFields.getConstArray();
         const OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
@@ -270,7 +270,7 @@ DBG_NAME(IndexFieldsControl)
         switch (_nColumnId)
         {
             case COLUMN_ID_ORDER:
-                if (!bNewField && m_pSortingCell && 0 != aRow->sFieldName.Len())
+                if (!bNewField && m_pSortingCell && !aRow->sFieldName.isEmpty())
                     pReturn = new DbaMouseDownListBoxController(m_pSortingCell);
                 break;
 
@@ -311,8 +311,8 @@ DBG_NAME(IndexFieldsControl)
         {
             case COLUMN_ID_FIELDNAME:
             {
-                String sFieldSelected = m_pFieldNameCell->GetSelectEntry();
-                sal_Bool bEmptySelected = 0 == sFieldSelected.Len();
+                OUString sFieldSelected = m_pFieldNameCell->GetSelectEntry();
+                sal_Bool bEmptySelected = sFieldSelected.isEmpty();
                 if (isNewField())
                 {
                     if (!bEmptySelected)
@@ -335,7 +335,7 @@ DBG_NAME(IndexFieldsControl)
 
                         if (bEmptySelected)
                         {
-                            aPos->sFieldName = String();
+                            aPos->sFieldName = "";
 
                             // invalidate the row to force repaint
                             Invalidate(GetRowRectPixel(nRow));
@@ -379,7 +379,7 @@ DBG_NAME(IndexFieldsControl)
         switch (_nColumnId)
         {
             case COLUMN_ID_FIELDNAME:
-                m_pFieldNameCell->SelectEntry(bNewField ? String() : aFieldDescription->sFieldName);
+                m_pFieldNameCell->SelectEntry(bNewField ? OUString() : aFieldDescription->sFieldName);
                 m_pFieldNameCell->SaveValue();
                 break;
 
@@ -402,20 +402,20 @@ DBG_NAME(IndexFieldsControl)
         {   // a field has been selected
             if (GetCurRow() >= GetRowCount() - 2)
             {   // and we're in one of the last two rows
-                String sSelectedEntry = m_pFieldNameCell->GetSelectEntry();
+                OUString sSelectedEntry = m_pFieldNameCell->GetSelectEntry();
                 sal_Int32 nCurrentRow = GetCurRow();
                 sal_Int32 rowCount = GetRowCount();
 
                 OSL_ENSURE(((sal_Int32)(m_aFields.size() + 1)) == rowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
 
-                if (sSelectedEntry.Len() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
+                if (!sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 1) /*&& (!m_nMaxColumnsInIndex || rowCount < m_nMaxColumnsInIndex )*/ )
                 {   // in the last row, an non-empty string has been selected
                     // -> insert a new row
                     m_aFields.push_back(OIndexField());
                     RowInserted(GetRowCount(), 1);
                     Invalidate(GetRowRectPixel(nCurrentRow));
                 }
-                else if (!sSelectedEntry.Len() && (nCurrentRow == rowCount - 2))
+                else if (sSelectedEntry.isEmpty() && (nCurrentRow == rowCount - 2))
                 {   // in the (last-1)th row, an empty entry has been selected
                     // -> remove the last row
                     m_aFields.erase(m_aFields.end() - 1);
@@ -438,7 +438,7 @@ DBG_NAME(IndexFieldsControl)
         }
         return GetRowCellText(aRow,nColId);
     }
-    String IndexFieldsControl::GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const
+    OUString IndexFieldsControl::GetRowCellText(const ConstIndexFieldsIterator& _rRow,sal_uInt16 nColId) const
     {
         if (_rRow < m_aFields.end())
         {
@@ -447,15 +447,15 @@ DBG_NAME(IndexFieldsControl)
                 case COLUMN_ID_FIELDNAME:
                     return _rRow->sFieldName;
                 case COLUMN_ID_ORDER:
-                    if (0 == _rRow->sFieldName.Len())
-                        return String();
+                    if (_rRow->sFieldName.isEmpty())
+                        return OUString();
                     else
                         return _rRow->bSortAscending ? m_sAscendingText : m_sDescendingText;
                 default:
                     OSL_FAIL("IndexFieldsControl::GetCurrentRowCellText: invalid column id!");
             }
         }
-        return String();
+        return OUString();
     }
     sal_Bool IndexFieldsControl::IsTabAllowed(sal_Bool /*bForward*/) const
     {

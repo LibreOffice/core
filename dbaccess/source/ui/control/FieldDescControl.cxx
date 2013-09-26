@@ -246,7 +246,7 @@ OFieldDescControl::~OFieldDescControl()
     DeactivateAggregate( tpAutoIncrementValue );
 }
 
-String OFieldDescControl::BoolStringPersistent(const String& rUIString) const
+OUString OFieldDescControl::BoolStringPersistent(const OUString& rUIString) const
 {
     if (rUIString == aNo)
         return OUString('0');
@@ -255,10 +255,10 @@ String OFieldDescControl::BoolStringPersistent(const String& rUIString) const
     return OUString();
 }
 
-String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
+OUString OFieldDescControl::BoolStringUI(const OUString& rPersistentString) const
 {
     // Older versions may store a language dependend string as a default
-    if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
+    if (rPersistentString == aYes || rPersistentString == aNo)
         return rPersistentString;
 
     if (comphelper::string::equals(rPersistentString, '0'))
@@ -486,7 +486,7 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
     }
 }
 
-String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
+OUString OFieldDescControl::GetControlText( sal_uInt16 nControlId )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     // Read out the Controls' texts
@@ -539,10 +539,10 @@ String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
                 return m_pAutoIncrementValue->GetText();
     }
 
-    return String();
+    return OUString();
 }
 
-void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rText )
+void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
     // Set the Controls' texts
@@ -551,9 +551,9 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rTe
         case FIELD_PROPERTY_BOOL_DEFAULT:
             if (pBoolDefault)
             {
-                String sOld = pBoolDefault->GetSelectEntry();
+                OUString sOld = pBoolDefault->GetSelectEntry();
                 pBoolDefault->SelectEntry(rText);
-                if (!sOld.Equals(rText))
+                if (sOld != rText)
                     LINK(this, OFieldDescControl, ChangeHdl).Call(pBoolDefault);
             }
             break;
@@ -583,9 +583,9 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const String& rTe
         case FIELD_PROPERTY_AUTOINC:
             if (pAutoIncrement)
             {
-                String sOld = pAutoIncrement->GetSelectEntry();
+                OUString sOld = pAutoIncrement->GetSelectEntry();
                 pAutoIncrement->SelectEntry(rText);
-                if (!sOld.Equals(rText))
+                if (sOld != rText)
                     LINK(this, OFieldDescControl, ChangeHdl).Call(pAutoIncrement);
             }
             break;
@@ -673,19 +673,19 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if(pListBox == pRequired && pBoolDefault )
     {
         // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
-        String sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
+        OUString sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
 
         if(pRequired->GetSelectEntryPos() == 0) // Yes
         {
-            pBoolDefault->RemoveEntry(String(ModuleRes(STR_VALUE_NONE)));
-            if (!sDef.Equals(aYes) && !sDef.Equals(aNo))
+            pBoolDefault->RemoveEntry(OUString(ModuleRes(STR_VALUE_NONE)));
+            if (sDef != aYes && sDef != aNo)
                 pBoolDefault->SelectEntryPos(1);  // No as a default
             else
                 pBoolDefault->SelectEntry(sDef);
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
-            pBoolDefault->InsertEntry(String(ModuleRes(STR_VALUE_NONE)));
+            pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
             pBoolDefault->SelectEntry(sDef);
         }
     }
@@ -985,7 +985,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pBoolDefaultText = CreateText(STR_DEFAULT_VALUE);
         pBoolDefault = new OPropListBoxCtrl( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
         pBoolDefault->SetDropDownLineCount(3);
-        pBoolDefault->InsertEntry(String(ModuleRes(STR_VALUE_NONE)));
+        pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
         pBoolDefault->InsertEntry(aYes);
         pBoolDefault->InsertEntry(aNo);
 
@@ -1392,15 +1392,15 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
         OUString sValue;
         pFieldDescr->GetControlDefault() >>= sValue;
-        String sDef = BoolStringUI(sValue);
+        OUString sDef = BoolStringUI(sValue);
 
         // Make sure that <<none>> is only present if the field can be NULL
         if ( ( pFieldType.get() && !pFieldType->bNullable ) || !pFieldDescr->IsNullable() )
         {
             pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS); // The type says so
 
-            pBoolDefault->RemoveEntry(String(ModuleRes(STR_VALUE_NONE)));
-            if ( !sDef.Equals(aYes) && !sDef.Equals(aNo) )
+            pBoolDefault->RemoveEntry(OUString(ModuleRes(STR_VALUE_NONE)));
+            if ( sDef != aYes && sDef != aNo )
                 pBoolDefault->SelectEntryPos(1);  // No as a default
             else
                 pBoolDefault->SelectEntry(sDef);
@@ -1409,7 +1409,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
-            pBoolDefault->InsertEntry(String(ModuleRes(STR_VALUE_NONE)));
+            pBoolDefault->InsertEntry(OUString(ModuleRes(STR_VALUE_NONE)));
             pBoolDefault->SelectEntry(sDef);
         }
         else
@@ -1449,7 +1449,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if(m_pType)
     {
-        sal_uInt16 nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nPos = pFieldType.get() ? m_pType->GetEntryPos(OUString(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
         {
             const OTypeInfoMap* pMap = getTypeInfo();
@@ -1486,7 +1486,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
 IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
 {
-    String strHelpText;
+    OUString strHelpText;
     OPropNumericEditCtrl* pNumeric = dynamic_cast< OPropNumericEditCtrl* >( pControl );
     if ( pNumeric )
     {
@@ -1516,9 +1516,9 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
     }
 
     if (pControl == pFormat)
-        strHelpText  =String(ModuleRes(STR_HELP_FORMAT_BUTTON));
+        strHelpText = ModuleRes(STR_HELP_FORMAT_BUTTON);
 
-    if (strHelpText.Len() && (pHelp != NULL))
+    if (!strHelpText.isEmpty() && (pHelp != NULL))
         pHelp->SetHelpText(strHelpText);
 
     m_pActFocusWindow = pControl;
@@ -1634,7 +1634,7 @@ void OFieldDescControl::implFocusLost(Window* _pWhich)
 
     // Reset HelpText
     if (pHelp && !pHelp->HasChildPathFocus())
-        pHelp->SetHelpText( String() );
+        pHelp->SetHelpText( OUString() );
 }
 
 void OFieldDescControl::LoseFocus()
@@ -1731,7 +1731,7 @@ sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,s
     return bTextFormat;
 }
 
-String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck) const
+OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck) const
 {
     OUString sDefault;
     sal_Bool bCheck = !_bCheck || _pFieldDescr->GetControlDefault().hasValue();

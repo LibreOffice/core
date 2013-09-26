@@ -64,7 +64,7 @@ ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowDa
     DBG_CTOR(ORelationTableConnectionData,NULL);
     m_aConnName = rConnName;
 
-    if ( m_aConnName.Len() )
+    if ( !m_aConnName.isEmpty() )
         SetCardinality();
 }
 
@@ -86,7 +86,7 @@ sal_Bool ORelationTableConnectionData::DropRelation()
     ::osl::MutexGuard aGuard( m_aMutex );
     // Relation loeschen
     Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
-    if( m_aConnName.Len() && xKeys.is() )
+    if( !m_aConnName.isEmpty() && xKeys.is() )
     {
         const sal_Int32 nCount = xKeys->getCount();
         for(sal_Int32 i = 0;i < nCount;++i)

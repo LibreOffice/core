@@ -63,19 +63,19 @@ namespace dbaui
         // setting/retrieving the current connection URL
         // necessary because for some types, the URL must be decoded for display purposes
         //String        getURL( OConnectionURLEdit* _m_pConnection ) const;
-        //void      setURL( const String& _rURL, OConnectionURLEdit* _m_pConnection );
+        //void      setURL( const OUString& _rURL, OConnectionURLEdit* _m_pConnection );
 
-        String      getURLNoPrefix( ) const;
-        void        setURLNoPrefix( const String& _rURL );
+        OUString    getURLNoPrefix( ) const;
+        void        setURLNoPrefix( const OUString& _rURL );
 
         /** checks if the path is existence
             @param  _rURL
                 The URL to check.
         */
-        sal_Int32   checkPathExistence(const String& _rURL);
+        sal_Int32   checkPathExistence(const OUString& _rURL);
 
         IS_PATH_EXIST   pathExists(const OUString& _rURL, sal_Bool bIsFile) const;
-        sal_Bool        createDirectoryDeep(const String& _rPathNormalized);
+        sal_Bool        createDirectoryDeep(const OUString& _rPathNormalized);
         sal_Bool        commitURL();
 
         /** opens the FileOpen dialog and asks for a FileName
@@ -85,13 +85,13 @@ namespace dbaui
         void askForFileName(::sfx2::FileDialogHelper& _aFileOpen);
 
     protected:
-        void            setURL( const String& _rURL );
+        void            setURL( const OUString& _rURL );
         virtual bool    checkTestConnection();
 
     private:
         DECL_LINK(OnBrowseConnections, PushButton*);
-        String      impl_getURL( sal_Bool _bPrefix ) const;
-        void        impl_setURL( const String& _rURL, sal_Bool _bPrefix );
+        OUString    impl_getURL( sal_Bool _bPrefix ) const;
+        void        impl_setURL( const OUString& _rURL, sal_Bool _bPrefix );
         void        implUpdateURLDependentStates() const;
     };
 

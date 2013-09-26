@@ -43,7 +43,7 @@ namespace dbaui
     {
     }
 
-    void CharSetListBox::SelectEntryByIanaName( const String& _rIanaName )
+    void CharSetListBox::SelectEntryByIanaName( const OUString& _rIanaName )
     {
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
         if (aFind == m_aCharSets.end())
@@ -54,18 +54,18 @@ namespace dbaui
 
         if ( aFind == m_aCharSets.end() )
         {
-            SelectEntry( String() );
+            SelectEntry( OUString() );
         }
         else
         {
-            String sDisplayName = (*aFind).getDisplayName();
+            OUString sDisplayName = (*aFind).getDisplayName();
             if ( LISTBOX_ENTRY_NOTFOUND == GetEntryPos( sDisplayName ) )
             {
                 // in our settings, there was an encoding selected which is not valid for the current
                 // data source type
                 // This is worth at least an assertion.
                 OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
-                sDisplayName = String();
+                sDisplayName = "";
             }
 
             SelectEntry( sDisplayName );

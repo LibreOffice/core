@@ -167,7 +167,7 @@ namespace dbaui
         Point GetScrollOffset() const { return m_aScrollOffset; }
 
         OJoinDesignView* getDesignView() const { return m_pView; }
-        OTableWindow* GetTabWindow( const String& rName );
+        OTableWindow* GetTabWindow( const OUString& rName );
 
         OTableConnection* GetSelectedConn() { return m_pSelectedConn; }
         /** @note NULL is explicitly allowed (then no-op) */

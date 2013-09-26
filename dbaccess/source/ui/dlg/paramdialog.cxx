@@ -200,12 +200,12 @@ DBG_NAME(OParameterDialog)
                         DBG_UNHANDLED_EXCEPTION();
                     }
 
-                    String sMessage;
+                    OUString sMessage;
                     {
                         LocalResourceAccess aDummy(DLG_PARAMETERS, RSC_MODALDIALOG);
-                        sMessage = String(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
+                        sMessage = ModuleRes(STR_COULD_NOT_CONVERT_PARAM);
                     }
-                    sMessage.SearchAndReplaceAll( OUString("$name$"), sName );
+                    sMessage = sMessage.replaceAll( "$name$", sName );
                     ErrorBox(NULL, WB_OK, sMessage).Execute();
                     m_aParam.GrabFocus();
                     return 1L;

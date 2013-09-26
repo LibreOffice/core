@@ -330,7 +330,7 @@ namespace dbaui
     bool OConnectionTabPage::checkTestConnection()
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
+        sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || !m_aConnectionURL.GetTextNoPrefix().isEmpty();
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
             bEnableTestConnection = bEnableTestConnection && (!m_aJavaDriver.GetText().isEmpty());
         m_aTestConnection.Enable(bEnableTestConnection);

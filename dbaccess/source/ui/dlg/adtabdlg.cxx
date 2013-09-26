@@ -78,7 +78,7 @@ public:
 
 private:
     virtual void    updateTableObjectList( bool _bAllowViews );
-    virtual String  getSelectedName( String& _out_rAliasName ) const;
+    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const;
     virtual bool    isLeafSelected() const;
     // OContainerListener
     virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -92,11 +92,11 @@ TableListFacade::~TableListFacade()
         m_pContainerListener->dispose();
 }
 
-String TableListFacade::getSelectedName( String& _out_rAliasName ) const
+OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
     SvTreeListEntry* pEntry = m_rTableList.FirstSelected();
     if ( !pEntry )
-        return String();
+        return OUString();
 
     OUString aCatalog, aSchema, aTableName;
     SvTreeListEntry* pSchema = m_rTableList.GetParent(pEntry);
@@ -239,7 +239,7 @@ public:
 
 private:
     virtual void    updateTableObjectList( bool _bAllowViews );
-    virtual String  getSelectedName( String& _out_rAliasName ) const;
+    virtual OUString  getSelectedName( OUString& _out_rAliasName ) const;
     virtual bool    isLeafSelected() const;
     // OContainerListener
     virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -300,9 +300,9 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     }
 }
 
-String QueryListFacade::getSelectedName( String& _out_rAliasName ) const
+OUString QueryListFacade::getSelectedName( OUString& _out_rAliasName ) const
 {
-    String sSelected;
+    OUString sSelected;
     SvTreeListEntry* pEntry = m_rQueryList.FirstSelected();
     if ( pEntry )
         sSelected = _out_rAliasName = m_rQueryList.GetEntryText( pEntry );
@@ -328,7 +328,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
 {
     // the Close-Button already has a standard help text which should not
     // occur here. Therefore, resetting the text and giving a new ID
-    aCloseButton.SetHelpText(String());
+    aCloseButton.SetHelpText(OUString());
     aCloseButton.SetHelpId(HID_JOINSH_ADDTAB_CLOSE);
 
     m_aTableList.SetHelpId( HID_JOINSH_ADDTAB_TABLELIST );
@@ -412,7 +412,7 @@ void OAddTableDlg::impl_addTable()
 {
     if ( m_pCurrentList->isLeafSelected() )
     {
-        String sSelectedName, sAliasName;
+        OUString sSelectedName, sAliasName;
         sSelectedName = m_pCurrentList->getSelectedName( sAliasName );
 
         m_rContext.addTableWindow( sSelectedName, sAliasName );
@@ -469,15 +469,15 @@ bool OAddTableDlg::impl_isAddAllowed()
     return  m_rContext.allowAddition();
 }
 
-String OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rContext )
+OUString OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rContext )
 {
-    String sTitle;
+    OUString sTitle;
 
     ::svt::OLocalResourceAccess aLocalRes( ModuleRes( DLG_JOIN_TABADD ), RSC_MODELESSDIALOG );
     if ( _rContext.allowQueries() )
-        sTitle = String( ModuleRes( STR_ADD_TABLE_OR_QUERY ) );
+        sTitle = ModuleRes( STR_ADD_TABLE_OR_QUERY );
     else
-        sTitle = String( ModuleRes( STR_ADD_TABLES ) );
+        sTitle = ModuleRes( STR_ADD_TABLES );
 
     return sTitle;
 }

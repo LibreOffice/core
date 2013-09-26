@@ -235,9 +235,9 @@ DBG_NAME(OTableSubscriptionPage)
         // get the name of the data source we're working for
         SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
         OSL_ENSURE(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
-        String sDSName = pNameItem->GetValue();
+        OUString sDSName = pNameItem->GetValue();
 
-        if (bValid && sDSName.Len() && !m_xCurrentConnection.is() )
+        if (bValid && !sDSName.isEmpty() && !m_xCurrentConnection.is() )
         {   // get the current table list from the connection for the current settings
 
             // the PropertyValues for the current dialog settings
@@ -270,7 +270,7 @@ DBG_NAME(OTableSubscriptionPage)
             // fill the table list with this connection information
             SQLExceptionInfo aErrorInfo;
             // the current DSN
-            String sURL;
+            OUString sURL;
             if ( m_pTablesDlg )
                 sURL = m_pTablesDlg->getConnectionURL();
 
@@ -424,8 +424,8 @@ DBG_NAME(OTableSubscriptionPage)
         const SvLBoxString* pRightTextItem = static_cast<const SvLBoxString*>(pRHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
         OSL_ENSURE(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
 
-        String sLeftText = pLeftTextItem->GetText();
-        String sRightText = pRightTextItem->GetText();
+        OUString sLeftText = pLeftTextItem->GetText();
+        OUString sRightText = pRightTextItem->GetText();
 
         sal_Int32 nCompareResult = 0;   // equal by default
 
@@ -441,7 +441,7 @@ DBG_NAME(OTableSubscriptionPage)
         }
         else
             // default behaviour if we do not have a collator -> do the simple string compare
-            nCompareResult = sLeftText.CompareTo(sRightText);
+            nCompareResult = sLeftText.compareTo(sRightText);
 
         return nCompareResult;
     }

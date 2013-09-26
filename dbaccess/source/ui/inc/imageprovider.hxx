@@ -77,7 +77,7 @@ namespace dbaui
                 the image to be used for the object.
         */
         void getImages(
-            const String& _rName,
+            const OUString& _rName,
             const sal_Int32 _nDatabaseObjectType,
             Image& _out_rImage
         );

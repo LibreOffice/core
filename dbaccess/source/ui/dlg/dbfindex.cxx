@@ -42,7 +42,7 @@ const OString aGroupIdent(RTL_CONSTASCII_STRINGPARAM("dBase III"));
 
 DBG_NAME(ODbaseIndexDialog)
 
-ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
+ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, OUString aDataSrcName )
     : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
     aPB_OK(             this, ModuleRes( PB_OK ) ),
     aPB_CANCEL(         this, ModuleRes( PB_CANCEL ) ),
@@ -85,7 +85,7 @@ ODbaseIndexDialog::~ODbaseIndexDialog()
     DBG_DTOR(ODbaseIndexDialog,NULL);
 }
 
-sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator& _rPosition)
+sal_Bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoListIterator& _rPosition)
 {
     for (   _rPosition = m_aTableInfoList.begin();
             _rPosition != m_aTableInfoList.end();
@@ -94,7 +94,7 @@ sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator
     {
         if (m_bCaseSensitiv)
         {
-            if (_rPosition->aTableName.equals(_rName))
+            if (_rPosition->aTableName == _rName)
                 return sal_True;
         }
         else
@@ -115,7 +115,7 @@ void ODbaseIndexDialog::checkButtons()
     aIB_RemoveAll.Enable(0 != aLB_TableIndexes.GetEntryCount());
 }
 
-OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist)
+OTableIndex ODbaseIndexDialog::implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist)
 {
     OTableIndex aReturn;
 
@@ -127,7 +127,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
             ++aSearch, ++nPos
         )
     {
-        if ( m_bCaseSensitiv ? aSearch->GetIndexFileName().equals(_rName) : aSearch->GetIndexFileName().equalsIgnoreAsciiCase(_rName) )
+        if ( m_bCaseSensitiv ? aSearch->GetIndexFileName() == _rName : aSearch->GetIndexFileName().equalsIgnoreAsciiCase(_rName) )
         {
             aReturn = *aSearch;
 
@@ -156,7 +156,7 @@ void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexLi
     _rDisplay.SelectEntryPos(0);
 }
 
-OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist )
+OTableIndex ODbaseIndexDialog::RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName, sal_Bool _bMustExist )
 {
     OTableIndex aReturn;
 
@@ -168,7 +168,7 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, cons
     return implRemoveIndex(_rIndexName, aTablePos->aIndexList, aLB_TableIndexes, _bMustExist);
 }
 
-void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex)
+void ODbaseIndexDialog::InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex)
 {
     TableInfoListIterator aTablePos;
     if (!GetTable(_rTableName, aTablePos))
@@ -193,8 +193,8 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
 
 IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
 {
-    String aSelection = aLB_FreeIndexes.GetSelectEntry();
-    String aTableName = aCB_Tables.GetText();
+    OUString aSelection = aLB_FreeIndexes.GetSelectEntry();
+    OUString aTableName = aCB_Tables.GetText();
     OTableIndex aIndex = RemoveFreeIndex( aSelection, sal_True );
     InsertTableIndex( aTableName, aIndex );
 
@@ -204,8 +204,8 @@ IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
 
 IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
 {
-    String aSelection = aLB_TableIndexes.GetSelectEntry();
-    String aTableName = aCB_Tables.GetText();
+    OUString aSelection = aLB_TableIndexes.GetSelectEntry();
+    OUString aTableName = aCB_Tables.GetText();
     OTableIndex aIndex = RemoveTableIndex( aTableName, aSelection, sal_True );
     InsertFreeIndex( aIndex );
 
@@ -216,7 +216,7 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
 IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_FreeIndexes.GetEntryCount();
-    String aTableName = aCB_Tables.GetText();
+    OUString aTableName = aCB_Tables.GetText();
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
         InsertTableIndex( aTableName, RemoveFreeIndex( aLB_FreeIndexes.GetEntry(0), sal_True ) );
@@ -228,7 +228,7 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
 IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_TableIndexes.GetEntryCount();
-    String aTableName = aCB_Tables.GetText();
+    OUString aTableName = aCB_Tables.GetText();
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
         InsertFreeIndex( RemoveTableIndex( aTableName, aLB_TableIndexes.GetEntry(0), sal_True ) );
@@ -313,7 +313,7 @@ void ODbaseIndexDialog::Init()
     OUString aIndexExt("ndx");
     OUString aTableExt("dbf");
 
-    ::std::vector< String > aUsedIndexes;
+    ::std::vector< OUString > aUsedIndexes;
 
     const OUString *pBegin = aFolderContent.getConstArray();
     const OUString *pEnd   = pBegin + aFolderContent.getLength();
@@ -343,7 +343,7 @@ void ODbaseIndexDialog::Init()
             OString aNDX;
             sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
             OString aKeyName;
-            String aEntry;
+            OUString aEntry;
 
             for( sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++ )
             {
@@ -366,7 +366,7 @@ void ODbaseIndexDialog::Init()
         }
     }
 
-    for (   ::std::vector< String >::const_iterator aUsedIndex = aUsedIndexes.begin();
+    for (   ::std::vector< OUString >::const_iterator aUsedIndex = aUsedIndexes.begin();
             aUsedIndex != aUsedIndexes.end();
             ++aUsedIndex
         )

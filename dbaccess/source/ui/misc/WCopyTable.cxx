@@ -162,9 +162,9 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
 
     try
     {
-        const String sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + OUString("."));
+        const OUString sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + OUString("."));
         const OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
-        const String sTargetNameTemp = (sTargetName + OUString("."));
+        const OUString sTargetNameTemp = (sTargetName + OUString("."));
 
         OUString sStatement("SELECT * FROM ");
         sStatement += sTargetName;
@@ -179,8 +179,8 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
                 if ( !sFilter.isEmpty() )
                 {
                     sStatement += aProperties[i].second;
-                    String sReplace = sFilter;
-                    sReplace.SearchAndReplace(sSourceName,sTargetNameTemp);
+                    OUString sReplace = sFilter;
+                    sReplace = sReplace.replaceFirst(sSourceName,sTargetNameTemp);
                     sFilter = sReplace;
                     _rxObject->setPropertyValue( aProperties[i].first, makeAny(sFilter) );
                     sStatement += sFilter;
@@ -685,7 +685,7 @@ void OCopyTableWizard::construct()
     FreeResource();
 
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
-    m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
+    m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
     m_bAddPKFirstTime = sal_True;
 }
 
@@ -876,7 +876,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
-                            String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
+                            OUString sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
                             SQLContext aError;
                             aError.Message = sMsg;
                             ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
@@ -1589,8 +1589,8 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
 void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
 {
     SAL_INFO("dbaccess.ui", "OCopyTableWizard::showColumnTypeNotSupported" );
-    String sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
-    sMessage.SearchAndReplaceAscii("#1",_rColumnName);
+    OUString sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
+    sMessage = sMessage.replaceFirst("#1",_rColumnName);
     showError(sMessage);
 }
 

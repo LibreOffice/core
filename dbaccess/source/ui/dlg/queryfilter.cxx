@@ -50,16 +50,16 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-void Replace_OS_PlaceHolder(String& aString)
+void Replace_OS_PlaceHolder(OUString& aString)
 {
-    while (aString.SearchAndReplace( '*', '%' ) != STRING_NOTFOUND) ;
-    while (aString.SearchAndReplace( '?', '_' ) != STRING_NOTFOUND) ;
+    aString = aString.replaceAll( "*", "%" );
+    aString = aString.replaceAll( "?", "_" );
 }
 
-void Replace_SQL_PlaceHolder(String& aString)
+void Replace_SQL_PlaceHolder(OUString& aString)
 {
-    while (aString.SearchAndReplace( '%', '*' ) != STRING_NOTFOUND) ;
-    while (aString.SearchAndReplace( '_', '?' ) != STRING_NOTFOUND) ;
+    aString = aString.replaceAll( "%", "*" );
+    aString = aString.replaceAll( "_", "?" );
 }
 
 DBG_NAME(DlgFilterCrit);
@@ -207,11 +207,11 @@ DlgFilterCrit::~DlgFilterCrit()
 #define LbText(x)       ((x).GetSelectEntry())
 #define LbPos(x)        ((x).GetSelectEntryPos())
 
-sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate ) const
+sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const
 {
     sal_Int32 nPredicateIndex = -1;
     for ( xub_StrLen i=0; i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';'); ++i)
-        if ( aSTR_COMPARE_OPERATORS.GetToken(i) == _rSelectedPredicate )
+        if ( aSTR_COMPARE_OPERATORS.getToken(i, ';') == _rSelectedPredicate )
         {
             nPredicateIndex = i;
             break;
@@ -356,7 +356,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
     _rFilter.Handle = GetOSQLPredicateType( _rComp.GetSelectEntry() );
     if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
     {
-        String sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_False );
+        OUString sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_False );
         if ( _rFilter.Handle == SQLFilterOperator::LIKE ||
              _rFilter.Handle == SQLFilterOperator::NOT_LIKE )
             ::Replace_OS_PlaceHolder( sPredicateValue );
@@ -469,7 +469,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     DBG_CHKTHIS(DlgFilterCrit,NULL);
     OUString aCondition;
     _rItem.Value >>= aCondition;
-    String aStr = aCondition;
+    OUString aStr = aCondition;
     if ( _rItem.Handle == SQLFilterOperator::LIKE ||
          _rItem.Handle == SQLFilterOperator::NOT_LIKE )
         ::Replace_SQL_PlaceHolder(aStr);
@@ -484,31 +484,31 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             //  aStr.Erase(0,1);
             break;
         case SQLFilterOperator::NOT_EQUAL:
-            aStr.Erase(0,2);
+            aStr = aStr.copy(2);
             break;
         case SQLFilterOperator::LESS:
-            aStr.Erase(0,1);
+            aStr = aStr.copy(1);
             break;
         case SQLFilterOperator::LESS_EQUAL:
-            aStr.Erase(0,2);
+            aStr = aStr.copy(2);
             break;
         case SQLFilterOperator::GREATER:
-            aStr.Erase(0,1);
+            aStr = aStr.copy(1);
             break;
         case SQLFilterOperator::GREATER_EQUAL:
-            aStr.Erase(0,2);
+            aStr = aStr.copy(2);
             break;
         case SQLFilterOperator::NOT_LIKE:
-            aStr.Erase(0,8);
+            aStr = aStr.copy(8);
             break;
         case SQLFilterOperator::LIKE:
-            aStr.Erase(0,4);
+            aStr = aStr.copy(4);
             break;
         case SQLFilterOperator::SQLNULL:
-            aStr.Erase(0,7);
+            aStr = aStr.copy(7);
             break;
         case SQLFilterOperator::NOT_SQLNULL:
-            aStr.Erase(0,11);
+            aStr = aStr.copy(11);
             break;
     }
     aStr = comphelper::string::stripStart(aStr, ' ');
@@ -561,7 +561,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     }
 }
 
-void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
+void DlgFilterCrit::SelectField( ListBox& rBox, const OUString& rField )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
     sal_uInt16 nCnt = rBox.GetEntryCount();
@@ -683,7 +683,7 @@ void DlgFilterCrit::EnableLines()
 
 IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 {
-    String aName;
+    OUString aName;
     ListBox* pComp;
     if(pListBox == &aLB_WHEREFIELD1)
     {
@@ -713,20 +713,20 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         if(eColumnSearch  == ColumnSearch::FULL)
         {
             for(xub_StrLen i=0;i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';');i++)
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
+                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
         }
         else if(eColumnSearch == ColumnSearch::CHAR)
         {
             for(xub_StrLen i=6;i<10;i++)
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
+                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
         }
         else if(eColumnSearch == ColumnSearch::BASIC)
         {
             xub_StrLen i;
             for( i = 0; i < 6; i++ )
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
+                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
             for(i=8; i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';'); ++i)
-                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
+                pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
         }
         else
         {

@@ -49,7 +49,7 @@ namespace dbaui
         /// if the entry denotes a data source, this is the connection for this data source (if already connection)
         SharedConnection                xConnection;
         SbaTableQueryBrowser::EntryType eType;
-        String                          sAccessor;
+        OUString                        sAccessor;
 
         DBTreeListUserData();
         ~DBTreeListUserData();

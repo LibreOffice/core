@@ -33,7 +33,7 @@ namespace dbaui
     class OTableDesignHelpBar : public TabPage, public IClipboardTest
     {
     private:
-        String          m_sHelpText;
+        OUString        m_sHelpText;
         MultiLineEdit*  m_pTextWin;
 
     protected:
@@ -43,8 +43,8 @@ namespace dbaui
         OTableDesignHelpBar( Window* pParent );
         virtual ~OTableDesignHelpBar();
 
-        void SetHelpText( const String& rText );
-        String GetHelpText() const { return m_sHelpText; }
+        void SetHelpText( const OUString& rText );
+        OUString GetHelpText() const { return m_sHelpText; }
 
         virtual long PreNotify( NotifyEvent& rNEvt );
 

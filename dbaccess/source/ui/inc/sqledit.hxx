@@ -42,7 +42,7 @@ namespace dbaui
         Timer                   m_timerInvalidate;
         Timer                   m_timerUndoActionCreation;
         Link                    m_lnkTextModifyHdl;
-        String                  m_strOrigText;      // is restored on undo
+        OUString                m_strOrigText;      // is restored on undo
         OQueryTextView*         m_pView;
         sal_Bool                m_bAccelAction;     // is set on cut, copy, paste
         sal_Bool                m_bStopTimer;

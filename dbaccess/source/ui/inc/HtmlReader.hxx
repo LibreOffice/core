@@ -29,7 +29,7 @@ namespace dbaui
 {
     class OHTMLReader : public HTMLParser, public ODatabaseExport
     {
-        String              m_sCurrent;
+        OUString            m_sCurrent;
         sal_Int32           m_nTableCount;
         sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth; ///< maximum column width

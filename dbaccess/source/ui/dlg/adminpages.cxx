@@ -139,8 +139,8 @@ namespace dbaui
         if (!aEnumeration.isLoaded())
         {
             // show an error message
-            String sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
-            sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
+            OUString sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
+            sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
             ErrorBox aDialog(this, WB_OK, sError);
             aDialog.Execute();
             return sal_False;
@@ -262,16 +262,16 @@ namespace dbaui
             if ( bShowMessage )
             {
                 OSQLMessageBox::MessageType eImage = OSQLMessageBox::Info;
-                String aMessage,sTitle;
-                sTitle = String (ModuleRes(STR_CONNECTION_TEST));
+                OUString aMessage,sTitle;
+                sTitle = ModuleRes(STR_CONNECTION_TEST);
                 if ( bSuccess )
                 {
-                    aMessage = String(ModuleRes(STR_CONNECTION_SUCCESS));
+                    aMessage = ModuleRes(STR_CONNECTION_SUCCESS);
                 }
                 else
                 {
                     eImage = OSQLMessageBox::Error;
-                    aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
+                    aMessage = ModuleRes(STR_CONNECTION_NO_SUCCESS);
                 }
                 OSQLMessageBox aMsg( this, sTitle, aMessage, WB_OK, eImage );
                 aMsg.Execute();
@@ -286,7 +286,7 @@ namespace dbaui
     {
         delete(m_pFT_HeaderText);
         m_pFT_HeaderText = new FixedText(this, ModuleRes(_nFTResId));
-        String sHeaderText = String(ModuleRes(_StringResId));
+        OUString sHeaderText = ModuleRes(_StringResId);
         m_pFT_HeaderText->SetText(sHeaderText);
         SetControlFontWeight(m_pFT_HeaderText);
     }

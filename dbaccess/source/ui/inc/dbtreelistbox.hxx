@@ -104,7 +104,7 @@ namespace dbaui
         // (normally, the expand handler is called only once)
         void            EnableExpandHandler(SvTreeListEntry* _pEntry);
 
-        SvTreeListEntry*    GetEntryPosByName( const String& aName, SvTreeListEntry* pStart = NULL, const IEntryFilter* _pFilter = NULL ) const;
+        SvTreeListEntry*    GetEntryPosByName( const OUString& aName, SvTreeListEntry* pStart = NULL, const IEntryFilter* _pFilter = NULL ) const;
         virtual void    RequestingChildren( SvTreeListEntry* pParent );
         virtual void    SelectHdl();
         virtual void    DeselectHdl();

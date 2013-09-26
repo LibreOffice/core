@@ -385,8 +385,8 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     // get the global DriverManager
     Reference< XConnectionPool > xDriverManager;
 
-    String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
-    sCurrentActionError.SearchAndReplaceAscii("#servicename#", OUString("com.sun.star.sdbc.ConnectionPool"));
+    OUString sCurrentActionError = ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER);
+    sCurrentActionError = sCurrentActionError.replaceFirst("#servicename#", "com.sun.star.sdbc.ConnectionPool");
 
     try
     {
@@ -402,8 +402,8 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
     if (!xDriver.is())
     {
-        sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-        sCurrentActionError.SearchAndReplaceAscii("#connurl#", _sURL);
+        sCurrentActionError = ModuleRes(STR_NOREGISTEREDDRIVER);
+        sCurrentActionError = sCurrentActionError.replaceFirst("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
         throw SQLException(sCurrentActionError, getORB(), OUString("S1000"), 0, Any());
     }
@@ -459,7 +459,7 @@ sal_Bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& 
     return DataSourceMetaData::getAuthentication( getDatasourceType( _rSet ) ) != AuthNone;
 }
 
-String ODbDataSourceAdministrationHelper::getConnectionURL() const
+OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
 {
     OUString sNewUrl;
 
@@ -1018,7 +1018,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
     }
 }
 
-String ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
+OUString ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
 {
     SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
     OSL_ENSURE(pUrlItem,"Document URL is NULL. -> GPF!");

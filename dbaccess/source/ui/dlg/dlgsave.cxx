@@ -59,23 +59,23 @@ public:
     OKButton            m_aPB_OK;
     CancelButton        m_aPB_CANCEL;
     HelpButton          m_aPB_HELP;
-    String              m_aQryLabel;
-    String              m_sTblLabel;
-    String              m_aName;
+    OUString            m_aQryLabel;
+    OUString            m_sTblLabel;
+    OUString            m_aName;
     const IObjectNameCheck&
                         m_rObjectNameCheck;
-    String              m_sParentURL;
+    OUString            m_sParentURL;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>            m_xMetaData;
     sal_Int32           m_nType;
     sal_Int32           m_nFlags;
 
     OSaveAsDlgImpl( Window * pParent,const sal_Int32& _rType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                    const String& rDefault,
+                    const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);
     OSaveAsDlgImpl( Window * pParent,
-                    const String& rDefault,
+                    const OUString& rDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     sal_Int32 _nFlags);
 };
@@ -85,7 +85,7 @@ public:
 OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
                         const sal_Int32& _rType,
                         const Reference< XConnection>& _xConnection,
-                        const String& rDefault,
+                        const OUString& rDefault,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
     :m_aDescription(_pParent, ModuleRes (FT_DESCRIPTION))
@@ -121,7 +121,7 @@ OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
 }
 
 OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
-                        const String& rDefault,
+                        const OUString& rDefault,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
              :m_aDescription(_pParent, ModuleRes (FT_DESCRIPTION))
@@ -168,7 +168,7 @@ namespace
                     _rList.InsertEntry( sValue );
             }
 
-            sal_uInt16 nPos = _rList.GetEntryPos( String( _rCurrent ) );
+            sal_uInt16 nPos = _rList.GetEntryPos( OUString( _rCurrent ) );
             if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                 _rList.SelectEntryPos( nPos );
             else
@@ -185,7 +185,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const sal_Int32& _rType,
                         const Reference< XComponentContext >& _rxContext,
                         const Reference< XConnection>& _xConnection,
-                        const String& rDefault,
+                        const OUString& rDefault,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
     :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
@@ -241,7 +241,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 }
 
                 OSL_ENSURE(m_pImpl->m_xMetaData.is(),"The metadata can not be null!");
-                if(m_pImpl->m_aName.Search('.') != STRING_NOTFOUND)
+                if(m_pImpl->m_aName.indexOf('.') != -1)
                 {
                     OUString sCatalog,sSchema,sTable;
                     ::dbtools::qualifiedNameComponents(m_pImpl->m_xMetaData,
@@ -251,13 +251,13 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                                                         sTable,
                                                         ::dbtools::eInDataManipulation);
 
-                    sal_uInt16 nPos = m_pImpl->m_aCatalog.GetEntryPos(String(sCatalog));
+                    sal_uInt16 nPos = m_pImpl->m_aCatalog.GetEntryPos(OUString(sCatalog));
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_pImpl->m_aCatalog.SelectEntryPos(nPos);
 
                     if ( !sSchema.isEmpty() )
                     {
-                        nPos = m_pImpl->m_aSchema.GetEntryPos(String(sSchema));
+                        nPos = m_pImpl->m_aSchema.GetEntryPos(OUString(sSchema));
                         if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                             m_pImpl->m_aSchema.SelectEntryPos(nPos);
                     }
@@ -299,8 +299,8 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
 
 OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const Reference< XComponentContext >& _rxContext,
-                        const String& rDefault,
-                        const String& _sLabel,
+                        const OUString& rDefault,
+                        const OUString& _sLabel,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
@@ -353,7 +353,7 @@ IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-void OSaveAsDlg::implInitOnlyTitle(const String& _rLabel)
+void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)
 {
     m_pImpl->m_aLabel.SetText(_rLabel);
     m_pImpl->m_aCatalogLbl.Hide();
@@ -409,10 +409,10 @@ void OSaveAsDlg::implInit()
     }
 
     if ( SAD_TITLE_PASTE_AS == ( m_pImpl->m_nFlags & SAD_TITLE_PASTE_AS ) )
-        SetText( String( ModuleRes( STR_TITLE_PASTE_AS ) ) );
+        SetText( ModuleRes( STR_TITLE_PASTE_AS ) );
     else if ( SAD_TITLE_RENAME == ( m_pImpl->m_nFlags & SAD_TITLE_RENAME ) )
     {
-        SetText( String( ModuleRes( STR_TITLE_RENAME ) ) );
+        SetText( ModuleRes( STR_TITLE_RENAME ) );
         m_pImpl->m_aTitle.SetHelpId(HID_DLG_RENAME);
     }
 
@@ -422,8 +422,8 @@ void OSaveAsDlg::implInit()
     FreeResource();
 }
 
-String OSaveAsDlg::getName() const      { return m_pImpl->m_aName; }
-String OSaveAsDlg::getCatalog() const   { return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : OUString(); }
-String OSaveAsDlg::getSchema() const    { return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : OUString(); }
+OUString OSaveAsDlg::getName() const      { return m_pImpl->m_aName; }
+OUString OSaveAsDlg::getCatalog() const   { return m_pImpl->m_aCatalog.IsVisible() ? m_pImpl->m_aCatalog.GetText() : OUString(); }
+OUString OSaveAsDlg::getSchema() const    { return m_pImpl->m_aSchema.IsVisible() ? m_pImpl->m_aSchema.GetText() : OUString(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

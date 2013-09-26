@@ -103,27 +103,27 @@ protected:
     DECL_LINK( OKClickHdl, PushButton* );
     DECL_LINK( OnListEntrySelected, ListBox* );
 
-    String              m_aDSN;
+    OUString            m_aDSN;
     TableInfoList       m_aTableInfoList;
     TableIndexList      m_aFreeIndexList;
     sal_Bool                m_bCaseSensitiv;
 
     void        Init();
     void        SetCtrls();
-    sal_Bool    GetTable(const String& rName, TableInfoListIterator& _rPosition);
+    sal_Bool    GetTable(const OUString& rName, TableInfoListIterator& _rPosition);
 
-    OTableIndex implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist);
+    OTableIndex implRemoveIndex(const OUString& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist);
     void        implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay);
 
-    OTableIndex RemoveFreeIndex( const String& _rName, sal_Bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, aLB_FreeIndexes, _bMustExist); }
+    OTableIndex RemoveFreeIndex( const OUString& _rName, sal_Bool _bMustExist ) { return implRemoveIndex(_rName, m_aFreeIndexList, aLB_FreeIndexes, _bMustExist); }
     void        InsertFreeIndex( const OTableIndex& _rIndex ) { implInsertIndex(_rIndex, m_aFreeIndexList, aLB_FreeIndexes); }
-    OTableIndex RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist );
-    void        InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex );
+    OTableIndex RemoveTableIndex( const OUString& _rTableName, const OUString& _rIndexName, sal_Bool _bMustExist );
+    void        InsertTableIndex( const OUString& _rTableName, const OTableIndex& _rIndex );
 
     void checkButtons();
 
 public:
-    ODbaseIndexDialog( Window * pParent, String aDataSrcName );
+    ODbaseIndexDialog( Window * pParent, OUString aDataSrcName );
     virtual ~ODbaseIndexDialog();
 };
 

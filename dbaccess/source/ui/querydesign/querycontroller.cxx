@@ -222,15 +222,15 @@ namespace dbaui
 
     namespace
     {
-        String lcl_getObjectResourceString( sal_uInt16 _nResId, sal_Int32 _nCommandType )
+        OUString lcl_getObjectResourceString( sal_uInt16 _nResId, sal_Int32 _nCommandType )
         {
-            String sMessageText = String( ModuleRes( _nResId ) );
-            String sObjectType;
+            OUString sMessageText = ModuleRes( _nResId );
+            OUString sObjectType;
             {
                 LocalResourceAccess aLocalRes( RSC_QUERY_OBJECT_TYPE, RSC_RESOURCE );
-                sObjectType = String( ModuleRes( (sal_uInt16)( _nCommandType + 1 ) ) );
+                sObjectType = ModuleRes( (sal_uInt16)( _nCommandType + 1 ) );
             }
-            sMessageText.SearchAndReplace( OUString("$object$"), sObjectType );
+            sMessageText = sMessageText.replaceFirst( "$object$", sObjectType );
             return sMessageText;
         }
     }
@@ -639,7 +639,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             if ( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT || xTabs.begin() == xTabs.end() )
                             {
                                 aError = SQLException(
-                                    String( ModuleRes( STR_QRY_NOSELECT ) ),
+                                    OUString( ModuleRes( STR_QRY_NOSELECT ) ),
                                     NULL,
                                     "S1000",
                                     1000,
@@ -662,7 +662,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     else
                     {
                         aError = SQLException(
-                            String( ModuleRes( STR_QRY_SYNTAX ) ),
+                            OUString( ModuleRes( STR_QRY_SYNTAX ) ),
                             NULL,
                             "S1000",
                             1000,
@@ -692,7 +692,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         break;
         case SID_BROWSER_CLEAR_QUERY:
             {
-                GetUndoManager().EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+                GetUndoManager().EnterListAction( OUString( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), OUString() );
                 getContainer()->clear();
                 GetUndoManager().LeaveListAction();
 
@@ -988,8 +988,8 @@ void OQueryController::impl_initialize()
             m_nCommandType = CommandType::QUERY;
             sal_Bool bClose = sal_False;
             {
-                String aTitle( ModuleRes( STR_QUERYDESIGN_NO_VIEW_SUPPORT ) );
-                String aMessage( ModuleRes( STR_QUERYDESIGN_NO_VIEW_ASK ) );
+                OUString aTitle( ModuleRes( STR_QUERYDESIGN_NO_VIEW_SUPPORT ) );
+                OUString aMessage( ModuleRes( STR_QUERYDESIGN_NO_VIEW_ASK ) );
                 ODataView* pWindow = getView();
                 OSQLMessageBox aDlg( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query );
                 bClose = aDlg.Execute() == RET_NO;
@@ -1006,7 +1006,7 @@ void OQueryController::impl_initialize()
             if ( !( aView >>= m_xAlterView ) )
             {
                 throw IllegalArgumentException(
-                    OUString( String( ModuleRes( STR_NO_ALTER_VIEW_SUPPORT ) ) ),
+                    OUString( ModuleRes( STR_NO_ALTER_VIEW_SUPPORT ) ),
                     *this,
                     1
                 );
@@ -1084,8 +1084,8 @@ OUString OQueryController::getPrivateTitle( ) const
         {
             SolarMutexGuard aSolarGuard;
             ::osl::MutexGuard aGuard( getMutex() );
-            String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
-            sName = aDefaultName.GetToken(0,' ');
+            OUString aDefaultName = ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE );
+            sName = aDefaultName.getToken(0,' ');
             sName += OUString::number(getCurrentStartNumber());
         }
     }
@@ -1391,13 +1391,13 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
     sal_Bool bNew = _bSaveAs || !_xElements->hasByName( m_sName );
     if(bNew)
     {
-        String aDefaultName;
+        OUString aDefaultName;
         if ( ( _bSaveAs && !bNew ) || ( bNew && !m_sName.isEmpty() ) )
-            aDefaultName = String( m_sName );
+            aDefaultName = m_sName;
         else
         {
-            String sName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
-            aDefaultName = sName.GetToken(0,' ');
+            OUString sName = ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE );
+            aDefaultName = sName.getToken(0,' ');
             aDefaultName = ::dbtools::createUniqueName(_xElements,aDefaultName);
         }
 
@@ -1430,7 +1430,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
     OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
     if ( !editingCommand() && !haveDataSource() )
     {
-        String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
+        OUString aMessage(ModuleRes(STR_DATASOURCE_DELETED));
         OSQLWarningBox( getView(), aMessage ).Execute();
         return false;
     }
@@ -1781,7 +1781,7 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
     else if(m_sStatement.isEmpty())
     {
         ModuleRes aModuleRes(STR_QRY_NOSELECT);
-        String sTmpStr(aModuleRes);
+        OUString sTmpStr(aModuleRes);
         OUString sError(sTmpStr);
         showError(SQLException(sError,NULL,"S1000",1000,Any()));
     }
@@ -1805,7 +1805,7 @@ short OQueryController::saveModified()
            )
         )
     {
-        String sMessageText( lcl_getObjectResourceString( STR_QUERY_SAVEMODIFIED, m_nCommandType ) );
+        OUString sMessageText( lcl_getObjectResourceString( STR_QUERY_SAVEMODIFIED, m_nCommandType ) );
         QueryBox aQry( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText );
 
         nRet = aQry.Execute();
@@ -1917,7 +1917,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                 {
                     if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
-                        String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
+                        OUString aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
                         OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
                         aDlg.Execute();
                     }

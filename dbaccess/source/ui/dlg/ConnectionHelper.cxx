@@ -131,7 +131,7 @@ DBG_NAME(OConnectionHelper)
         // forward the values to the controls
         if ( bValid )
         {
-            String sUrl = pUrlItem->GetValue();
+            OUString sUrl = pUrlItem->GetValue();
             setURL( sUrl );
 
             checkTestConnection();
@@ -148,7 +148,7 @@ DBG_NAME(OConnectionHelper)
             return;
 
         if ( m_pCollection->isFileSystemBased(m_eType) )
-            m_pAdminDialog->enableConfirmSettings( getURLNoPrefix().Len() > 0 );
+            m_pAdminDialog->enableConfirmSettings( !getURLNoPrefix().isEmpty() );
     }
 
     IMPL_LINK(OConnectionHelper, OnBrowseConnections, PushButton*, /*_pButton*/)
@@ -165,10 +165,10 @@ DBG_NAME(OConnectionHelper)
                     Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(m_xORB);
 
                     sal_Bool bDoBrowse = sal_False;
-                    String sOldPath = getURLNoPrefix();
+                    OUString sOldPath = getURLNoPrefix();
                     do
                     {
-                        if (sOldPath.Len())
+                        if (!sOldPath.isEmpty())
                             xFolderPicker->setDisplayDirectory(sOldPath);
                         if (0 == xFolderPicker->execute())
                             // cancelled by the user
@@ -188,7 +188,7 @@ DBG_NAME(OConnectionHelper)
                     }
                     while (bDoBrowse);
 
-                    String sSelectedDirectory = xFolderPicker->getDirectory();
+                    OUString sSelectedDirectory = xFolderPicker->getDirectory();
                     INetURLObject aSelectedDirectory( sSelectedDirectory, INetURLObject::WAS_ENCODED, RTL_TEXTENCODING_UTF8 );
 
                     // for UI purpose, we don't want to have the path encoded
@@ -218,7 +218,7 @@ DBG_NAME(OConnectionHelper)
             case  ::dbaccess::DST_MSACCESS:
             {
                 const OUString sExt("*.mdb");
-                String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
+                OUString sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     0);
@@ -230,7 +230,7 @@ DBG_NAME(OConnectionHelper)
             case  ::dbaccess::DST_MSACCESS_2007:
             {
                 const OUString sAccdb("*.accdb");
-                String sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
+                OUString sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     0);
@@ -322,17 +322,17 @@ DBG_NAME(OConnectionHelper)
         return true;
     }
 
-    void OConnectionHelper::impl_setURL( const String& _rURL, sal_Bool _bPrefix )
+    void OConnectionHelper::impl_setURL( const OUString& _rURL, sal_Bool _bPrefix )
     {
-        String sURL( comphelper::string::stripEnd(_rURL, '*') );
+        OUString sURL( comphelper::string::stripEnd(_rURL, '*') );
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
 
-        if ( m_pCollection && sURL.Len() )
+        if ( m_pCollection && !sURL.isEmpty() )
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
                 // get the two parts: prefix and file URL
-                String sTypePrefix, sFileURLEncoded;
+                OUString sTypePrefix, sFileURLEncoded;
                 if ( _bPrefix )
                 {
                     sTypePrefix = m_pCollection->getPrefix( m_eType );
@@ -348,11 +348,11 @@ DBG_NAME(OConnectionHelper)
 
                 // decode the URL
                 sURL = sTypePrefix;
-                if ( sFileURLEncoded.Len() )
+                if ( !sFileURLEncoded.isEmpty() )
                 {
                     OFileNotation aFileNotation(sFileURLEncoded);
                     // set this decoded URL as text
-                    sURL += String(aFileNotation.get(OFileNotation::N_SYSTEM));
+                    sURL += aFileNotation.get(OFileNotation::N_SYSTEM);
                 }
             }
         }
@@ -365,7 +365,7 @@ DBG_NAME(OConnectionHelper)
         implUpdateURLDependentStates();
     }
 
-    String OConnectionHelper::impl_getURL( sal_Bool _bPrefix ) const
+    OUString OConnectionHelper::impl_getURL( sal_Bool _bPrefix ) const
     {
         // get the pure text
         OUString sURL = _bPrefix ? m_aConnectionURL.GetText() : OUString(m_aConnectionURL.GetTextNoPrefix());
@@ -392,7 +392,7 @@ DBG_NAME(OConnectionHelper)
                 if ( !sFileURLDecoded.isEmpty() )
                 {
                     OFileNotation aFileNotation( sFileURLDecoded, OFileNotation::N_SYSTEM );
-                    sURL += String( aFileNotation.get( OFileNotation::N_URL ) );
+                    sURL += aFileNotation.get( OFileNotation::N_URL );
                 }
 
                 // encode the URL
@@ -403,29 +403,29 @@ DBG_NAME(OConnectionHelper)
         return sURL;
     }
 
-    void OConnectionHelper::setURL( const String& _rURL )
+    void OConnectionHelper::setURL( const OUString& _rURL )
     {
         impl_setURL( _rURL, sal_True );
     }
 
-    String OConnectionHelper::getURLNoPrefix( ) const
+    OUString OConnectionHelper::getURLNoPrefix( ) const
     {
         return impl_getURL( sal_False );
     }
 
-    void OConnectionHelper::setURLNoPrefix( const String& _rURL )
+    void OConnectionHelper::setURLNoPrefix( const OUString& _rURL )
     {
         impl_setURL( _rURL, sal_False );
     }
 
-    sal_Int32 OConnectionHelper::checkPathExistence(const String& _rURL)
+    sal_Int32 OConnectionHelper::checkPathExistence(const OUString& _rURL)
     {
         IS_PATH_EXIST e_exists = pathExists(_rURL, sal_False);
         if (( e_exists == PATH_NOT_EXIST) || ( e_exists == PATH_NOT_KNOWN))
         {
-            String sQuery(ModuleRes(STR_ASK_FOR_DIRECTORY_CREATION));
+            OUString sQuery(ModuleRes(STR_ASK_FOR_DIRECTORY_CREATION));
             OFileNotation aTransformer(_rURL);
-            sQuery.SearchAndReplaceAscii("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
+            sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = sal_False;
             QueryBox aQuery(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery);
@@ -441,8 +441,8 @@ DBG_NAME(OConnectionHelper)
                     {
                         if ( !createDirectoryDeep(_rURL) )
                         {   // could not create the directory
-                            sQuery = String(ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY));
-                            sQuery.SearchAndReplaceAscii("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
+                            sQuery = ModuleRes(STR_COULD_NOT_CREATE_DIRECTORY);
+                            sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
                             m_bUserGrabFocus = sal_False;
                             QueryBox aWhatToDo(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery);
@@ -533,7 +533,7 @@ DBG_NAME(OConnectionHelper)
         return OGenericAdministrationPage::PreNotify( _rNEvt );
     }
 
-    sal_Bool OConnectionHelper::createDirectoryDeep(const String& _rPathURL)
+    sal_Bool OConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
     {
         // get an URL object analyzing the URL for us ...
         INetURLObject aParser;
@@ -614,14 +614,14 @@ DBG_NAME(OConnectionHelper)
 
     sal_Bool OConnectionHelper::commitURL()
     {
-        String sURL;
-        String sOldPath;
+        OUString sURL;
+        OUString sOldPath;
         sOldPath = m_aConnectionURL.GetSavedValueNoPrefix();
         sURL = m_aConnectionURL.GetTextNoPrefix();
 
         if ( m_pCollection->isFileSystemBased(m_eType) )
         {
-            if ( ( sURL != sOldPath ) && ( 0 != sURL.Len() ) )
+            if ( ( sURL != sOldPath ) && !sURL.isEmpty() )
             {   // the text changed since entering the control
 
                 // the path may be in system notation ....
@@ -634,8 +634,8 @@ DBG_NAME(OConnectionHelper)
                 {
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {
-                        String sFile = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
-                        sFile.SearchAndReplaceAscii("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
+                        OUString sFile = ModuleRes( STR_FILE_DOES_NOT_EXIST );
+                        sFile = sFile.replaceFirst("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
                         OSQLWarningBox( this, sFile ).Execute();
                         setURLNoPrefix(sOldPath);
                         SetRoadmapStateValue(sal_False);
@@ -667,8 +667,8 @@ DBG_NAME(OConnectionHelper)
     }
     void OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
     {
-        String sOldPath = getURLNoPrefix();
-        if ( sOldPath.Len() )
+        OUString sOldPath = getURLNoPrefix();
+        if ( !sOldPath.isEmpty() )
             _aFileOpen.SetDisplayDirectory(sOldPath);
         else
             _aFileOpen.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
