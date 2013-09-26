@@ -53,6 +53,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport,\
 	canvas/source/factory/canvasfactory \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+	drawinglayer/drawinglayer \
     embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
@@ -71,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport,\
     starmath/util/sm \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
+	svx/util/svx \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
