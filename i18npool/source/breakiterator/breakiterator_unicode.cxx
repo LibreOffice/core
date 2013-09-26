@@ -383,10 +383,10 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
             Boundary wBoundary = getWordBoundary( Text, nStartPosWordEnd, rLocale,
                 WordType::DICTIONARY_WORD, false);
 
-            nStartPosWordEnd = wBoundary.endPos + 1;
+            nStartPosWordEnd = wBoundary.endPos;
             while (nStartPosWordEnd < Text.getLength() && (u_ispunct((sal_uInt32)Text[nStartPosWordEnd]))) // ending punctuation
                 nStartPosWordEnd ++;
-            nStartPosWordEnd = nStartPosWordEnd - wBoundary.endPos - 1;
+            nStartPosWordEnd = nStartPosWordEnd - wBoundary.endPos;
             if (hOptions.hyphenIndex - wBoundary.startPos < nStartPosWordEnd) nStartPosWordEnd = hOptions.hyphenIndex - wBoundary.startPos;
 #define SPACE 0x0020
             while (boundary_with_punctuation > wBoundary.endPos && Text[--boundary_with_punctuation] == SPACE);
