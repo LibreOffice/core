@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     cppu \
     cppuhelper \
     editeng \
+    drawinglayer \
     msfilter \
     sal \
 	i18nlangtag \
@@ -46,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     sfx \
     svl \
     svt \
+    svx \
     svxcore \
     sot \
     tl \
