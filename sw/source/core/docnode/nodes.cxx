@@ -1665,6 +1665,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 rNodes.IsDocNodes() ? SWFMTFLD_INSERTED : SWFMTFLD_REMOVED ) );
 }
 
+///@see SwNodes::_MoveNodes (TODO: seems to be C&P programming here)
 void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             const SwNodeIndex& rIndex, sal_Bool bNewFrms, sal_Bool bTblInsDummyNode ) const
 {
@@ -1969,6 +1970,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
     return 0;
 }
 
+///@see SwNodes::GoNextSection (TODO: seems to be C&P programming here)
 SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
                             int bSkipHidden, int bSkipProtect ) const
 {
@@ -2168,6 +2170,7 @@ void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
 
 namespace {
 
+//TODO: seems to be not/wrongly used
 struct TempBigPtrEntry : public BigPtrEntry
 {
     TempBigPtrEntry() {}

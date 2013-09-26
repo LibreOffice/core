@@ -338,6 +338,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
  * @param [IN,OUT] rColumn (0-based)
  * @param [IN,OUT] rRow (0-based)
  */
+//TODO: potential for throwing proper exceptions instead of having every caller to check for errors
 void sw_GetCellPosition( const String &rCellName,
         sal_Int32 &rColumn, sal_Int32 &rRow)
 {
@@ -918,6 +919,7 @@ OUString SwXCell::getFormula(void) throw( uno::RuntimeException )
     return sRet;
 }
 
+///@see sw_setValue (TODO: seems to be C&P programming here)
 void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -4382,6 +4384,7 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     }
 }
 
+///@see SwXTextTable::getRowDescriptions (TODO: seems to be C&P programming here)
 uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
                                             throw( uno::RuntimeException )
 {
@@ -4422,6 +4425,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
     return aRet;
 }
 
+///@see SwXTextTable::setRowDescriptions (TODO: seems to be C&P programming here)
 void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
                                                     throw( uno::RuntimeException )
 {
@@ -4456,6 +4460,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     }
 }
 
+///@see SwXTextTable::setColumnDescriptions (TODO: seems to be C&P programming here)
 uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
                                         throw( uno::RuntimeException )
 {
@@ -4496,6 +4501,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
     return aRet;
 }
 
+///@see SwXTextTable::setColumnDescriptions (TODO: seems to be C&P programming here)
 void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& ColumnDesc)
                                                         throw( uno::RuntimeException )
 {
@@ -4664,6 +4670,7 @@ sal_Int32 SwXTableRows::getCount(void) throw( uno::RuntimeException )
     return nRet;
 }
 
+///@see SwXCell::CreateXCell (TODO: seems to be C&P programming here)
 uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -4924,6 +4931,7 @@ sal_Bool SwXTableColumns::hasElements(void) throw( uno::RuntimeException )
     return sal_True;
 }
 
+///@see SwXTableRows::insertByIndex (TODO: seems to be C&P programming here)
 void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -4977,6 +4985,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
     }
 }
 
+///@see SwXTableRows::removeByIndex (TODO: seems to be C&P programming here)
 void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
