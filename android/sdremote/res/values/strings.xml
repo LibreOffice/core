@@ -62,8 +62,8 @@
 
     <string name="preferences_volume_keys_actions_title">Volume keys actions</string>
     <string name="preferences_volume_keys_actions_summary">Switch slides and activate animations using volume keys</string>
-    <string name="preferences_keep_screen_on_title">Screen on</string>
-    <string name="preferences_keep_screen_on_summary">Keep screen on while presenting</string>
+    <string name="preferences_keep_screen_on_title">Keep screen on</string>
+    <string name="preferences_keep_screen_on_summary">Prevent phone from sleeping while presenting</string>
 
     <string name="requirements_libreoffice_version">LibreOffice version 4.0.3 or higher running on a computer.</string>
     <string name="requirements_libreoffice_general_enabled">Impress Remote enabled at “Tools → Options → LibreOffice Impress → General” in LibreOffice Impress.</string>
