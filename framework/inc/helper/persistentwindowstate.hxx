@@ -42,8 +42,8 @@ namespace framework{
                     any external process e.g. the office bean) we save and restore the window state of it
                     corresponding to the document service factory. That means: one instance of this class will be
                     a listener on one frame which container window was created by ourself.
-                    We listen for frame action events and everytimes a component will deattached from a frame
-                    we store its current position and size to the configuration. Everytimes a new component is
+                    We listen for frame action events and every time a component will deattached from a frame
+                    we store its current position and size to the configuration. Every time a new component is
                     attached to a frame first time(!) we restore this information again.
 
     @base           ThreadHelpBase

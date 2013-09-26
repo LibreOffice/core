@@ -356,7 +356,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     and return it.
 
             @descr  Note: Because presets resist inside the share
-                    layer, they will be opened readonly everytimes.
+                    layer, they will be opened readonly every time.
 
             @param  sPreset
                     the ALIAS name of an existing preset.

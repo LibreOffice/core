@@ -156,7 +156,7 @@ class ModuleManager:
         //---------------------------------------
         /** @short  open the underlying configuration.
 
-            @descr  This method must be called everytimes
+            @descr  This method must be called every time
                     a (reaonly!) configuration is needed. Because
                     method works together with the member
                     m_xCFG, open it on demand and cache it

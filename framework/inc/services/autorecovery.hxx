@@ -533,7 +533,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
         //---------------------------------------
         /** @short  open the underlying configuration.
 
-            @descr  This method must be called everytimes
+            @descr  This method must be called every time
                     a configuartion call is needed. Because
                     method works together with the member
                     m_xCFG, open it on demand and cache it
@@ -596,7 +596,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
         //---------------------------------------
         /** @short  stops and may be(!) restarts the timer.
 
-            @descr  A running timer is stopped everytimes here.
+            @descr  A running timer is stopped every time here.
                     But starting depends from the different internal
                     timer variables (e.g. AutoSaveEnabled, AutoSaveTimeIntervall,
                     TimerType etcpp.)

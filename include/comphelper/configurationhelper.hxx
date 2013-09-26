@@ -160,7 +160,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *  all operations are made relativ to this access point.
      *
      *  Further this method must be used only with configuration set's.
-     *  Atomic keys can't be "created" ... they "exists everytimes".
+     *  Atomic keys can't be "created" ... they "exists every time".
      *
      *  @param  xCFG
      *          the configuration root, where sRelPathToSet should be interpreted

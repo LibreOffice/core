@@ -143,12 +143,12 @@ class FWE_DLLPUBLIC FrameListAnalyzer
         sal_Bool m_bReferenceIsHidden;
 
         /** is set to true only, if the reference frame contains the help component.
-            In this case the member m_xHelp is set to NULL everytimes.
+            In this case the member m_xHelp is set to NULL every time.
             This value is undefined if m_eDetectMode doesn't have set the flag E_HELP! */
         sal_Bool m_bReferenceIsHelp;
 
         /** is set to true only, if the reference frame contains the backing component.
-            In this case the member m_xBackingComponent is set to NULL everytimes.
+            In this case the member m_xBackingComponent is set to NULL every time.
             This value is undefined if m_eDetectMode doesn't have set the flag E_BACKINGCOMPONENT! */
         sal_Bool m_bReferenceIsBacking;
 

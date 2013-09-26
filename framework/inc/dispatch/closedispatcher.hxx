@@ -257,7 +257,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
         /** @short  notify a DispatchResultListener.
 
             @descr  We check the listener reference before we use it.
-                    So this method can be called everytimes!
+                    So this method can be called every time!
 
             @parama xListener
                     the listener, which should be notified.

@@ -41,7 +41,7 @@ namespace framework{
 /** supports the API XPropertySet and XPropertySetInfo.
  *
  *  It must be used as baseclass. The internal list of supported
- *  properties can be changed everytimes so dynamic property set's
+ *  properties can be changed every time so dynamic property set's
  *  can be implemented.
  *
  *  Further the derived and this base class share the same lock.

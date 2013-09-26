@@ -76,7 +76,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                             FALSE => derived exceptions will be intercepted too.
 
                 @attention  This parameter does not influence the check of the continuation
-                            type! The continuation must be matched exactly everytimes ...
+                            type! The continuation must be matched exactly every time ...
              */
             sal_Bool MatchExact;
 
@@ -245,7 +245,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
             @descr  This base implementation checks, if the request could be intercepted
                     successfully. Then this method intercepted() is called.
-                    The default implementation returns "NOT_INTERCEPTED" everytimes.
+                    The default implementation returns "NOT_INTERCEPTED" every time.
                     So the method impl_interceptRequest() uses the right continuation automaticly.
 
                     If this method was overwritten and something different "NO_INTERCEPTED"

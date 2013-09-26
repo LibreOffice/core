@@ -137,7 +137,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         /** @short  return the corresponding application ID for the given properties.
 
             @descr  Because this search base on filters currently (till we have a better solution)
-                    a result is not guaranteed everytimes. May a filter does not exists for the specified
+                    a result is not guaranteed every time. May a filter does not exists for the specified
                     content (but a FrameLoader which is not bound to any application!) ... or
                     the given properties describe a stream (and we make no deep detection inside here!).
 

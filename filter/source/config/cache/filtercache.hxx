@@ -327,7 +327,7 @@ class FilterCache : public BaseLock
                         Otherwise this method does nothing!
 
                         This method must be called from every user of this cache
-                        everytimes it need a filled cache. Normaly we load
+                        every time it need a filled cache. Normaly we load
                         only standard information into this cache on startup.
                         After a few seconds we start a special thread, which
                         may fill this cache completely. But if somehwere outside
@@ -669,7 +669,7 @@ class FilterCache : public BaseLock
 
             @descr      It checks first, if the internal member m_xConfig already
                         points to an open update access. If not - it opens a new one.
-                        Doing so this method can be called everytimes a configuration
+                        Doing so this method can be called every time a configuration
                         access is needed.
 
             @param      eProvider
