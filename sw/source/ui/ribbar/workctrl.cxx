@@ -596,86 +596,12 @@ OUString SwScrollNaviPopup::GetQuickHelpText(sal_Bool bNext)
     return SW_RESSTR(nResId);
 }
 
-void SwNaviImageButton::Click()
-{
-    pPopup = new
-        SwScrollNaviPopup( FN_SCROLL_NAVIGATION,
-                           m_xFrame, this );
-    Point aPos = OutputToScreenPixel(Point(0,0));
-    Rectangle aRect(aPos, GetSizePixel());
-    SetPopupWindow( pPopup );
-    pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_LEFT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
-}
-
-void SwNaviImageButton::SetPopupWindow( SfxPopupWindow* pWindow )
-{
-    pPopupWindow = pWindow;
-    pPopupWindow->SetPopupModeEndHdl( LINK( this, SwNaviImageButton, PopupModeEndHdl ));
-    pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNaviImageButton, ClosePopupWindow ));
-}
-
-IMPL_LINK_NOARG(SwNaviImageButton, PopupModeEndHdl)
-{
-    if ( pPopupWindow->IsVisible() )
-    {
-        // Replace floating window with popup window and destroy
-        // floating window instance.
-        delete pFloatingWindow;
-        pFloatingWindow = pPopupWindow;
-        pPopupWindow    = 0;
-    }
-    else
-    {
-        // Popup window has been closed by the user. No replacement, instance
-        // will destroy itself.
-        pPopupWindow = 0;
-    }
-
-    return 1;
-}
-
-IMPL_LINK( SwNaviImageButton, ClosePopupWindow, SfxPopupWindow *, pWindow )
-{
-    if ( pWindow == pFloatingWindow )
-        pFloatingWindow = 0;
-    else
-        pPopupWindow = 0;
-
-    return 1;
-}
-
 void SwHlpImageButton::RequestHelp( const HelpEvent& rHEvt )
 {
 
     SetQuickHelpText(SwScrollNaviPopup::GetQuickHelpText(!bUp));
 
     ImageButton::RequestHelp(rHEvt);
-}
-
-SwNaviImageButton::SwNaviImageButton(
-    Window* pParent,
-    const Reference< XFrame >& rFrame ) :
-    ImageButton(pParent, SW_RES(BTN_NAVI)),
-        pPopup(0),
-        aImage(SW_RES(IMG_BTN)),
-        sQuickText(SW_RESSTR(ST_QUICK)),
-        pPopupWindow(0),
-        pFloatingWindow(0),
-        m_xFrame( rFrame )
-{
-    FreeResource();
-    SetStyle(GetStyle()|WB_NOPOINTERFOCUS);
-    SetQuickHelpText(sQuickText);
-    SetModeImage( aImage );
-}
-
-void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            SetModeImage( aImage );
-
-    Window::DataChanged( rDCEvt );
 }
 
 class SwZoomBox_Impl : public ComboBox

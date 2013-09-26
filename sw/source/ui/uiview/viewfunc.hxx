@@ -41,16 +41,11 @@ void ViewResizePixel( const Window &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,
-                    const sal_Bool bInner,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
-                    ImageButton* pPageUpBtn,
-                    ImageButton* pPageDownBtn,
-                    ImageButton* pNaviBtn,
                     Window& rScrollBarBox,
                     SvxRuler* pVRuler = 0,
                     SvxRuler* pHRuler = 0,
-                    sal_Bool bWebView = sal_False,
                     sal_Bool bVRulerRight = sal_False );
 
 

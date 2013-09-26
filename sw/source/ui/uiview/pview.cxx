@@ -1148,8 +1148,6 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     sPageStr(SW_RES(STR_PAGE)),
     pHScrollbar(0),
     pVScrollbar(0),
-    pPageUpBtn(0),
-    pPageDownBtn(0),
     pScrollFill(new ScrollBarBox( &pViewFrame->GetWindow(),
         pViewFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
     mnPageCount( 0 ),
@@ -1225,9 +1223,6 @@ SwPagePreview::~SwPagePreview()
     delete pScrollFill;
     delete pHScrollbar;
     delete pVScrollbar;
-    delete pPageUpBtn;
-    delete pPageDownBtn;
-
 }
 
 SwDocShell* SwPagePreview::GetDocShell()
@@ -1242,26 +1237,11 @@ int SwPagePreview::_CreateScrollbar( sal_Bool bHori )
 
     OSL_ENSURE( !*ppScrollbar, "check beforehand!" );
 
-    if( !bHori )
-    {
-
-        pPageUpBtn      = new ImageButton(pMDI, SW_RES( BTN_PAGEUP ) );
-        pPageUpBtn->SetHelpId(GetStaticInterface()->GetSlot(FN_PAGEUP)->GetCommand());
-        pPageDownBtn    = new ImageButton(pMDI, SW_RES( BTN_PAGEDOWN ) );
-        pPageDownBtn->SetHelpId(GetStaticInterface()->GetSlot(FN_PAGEDOWN)->GetCommand());
-        Link aLk( LINK( this, SwPagePreview, BtnPage ) );
-        pPageUpBtn->SetClickHdl( aLk );
-        pPageDownBtn->SetClickHdl( aLk );
-        pPageUpBtn->Show();
-        pPageDownBtn->Show();
-    }
-
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
 
     ScrollDocSzChg();
     (*ppScrollbar)->EnableDrag( sal_True );
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwPagePreview, EndScrollHdl ));
-
 
     (*ppScrollbar)->SetScrollHdl( LINK( this, SwPagePreview, ScrollHdl ));
 
@@ -1269,17 +1249,6 @@ int SwPagePreview::_CreateScrollbar( sal_Bool bHori )
     (*ppScrollbar)->ExtendedShow();
     return 1;
 }
-
-// Button-Handler
-
-IMPL_LINK_INLINE_START( SwPagePreview, BtnPage, Button *, pButton )
-{
-    // use new helper method to perform page up
-    // respectively page down.
-    _ExecPgUpAndPgDown( pButton == pPageUpBtn );
-    return 0;
-}
-IMPL_LINK_INLINE_END( SwPagePreview, BtnPage, Button *, pButton )
 
 int SwPagePreview::ChgPage( int eMvMode, int bUpdateScrollbar )
 {
@@ -1331,9 +1300,7 @@ void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize )
     aRect += aBorder;
     ViewResizePixel( aViewWin, aRect.TopLeft(), aRect.GetSize(),
                     aViewWin.GetOutputSizePixel(),
-                    sal_True,
-                    *pVScrollbar, *pHScrollbar, pPageUpBtn, pPageDownBtn, 0,
-                    *pScrollFill );
+                    *pVScrollbar, *pHScrollbar, *pScrollFill );
 
     // Never set EditWin !
     // Never set VisArea !
@@ -1361,8 +1328,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
     SvBorder aBorderNew;
     CalcAndSetBorderPixel( aBorderNew, sal_False );
     ViewResizePixel( aViewWin, rOfst, rSize, aViewWin.GetOutputSizePixel(),
-                        sal_False, *pVScrollbar,
-                        *pHScrollbar, pPageUpBtn, pPageDownBtn, 0, *pScrollFill );
+                    *pVScrollbar, *pHScrollbar, *pScrollFill );
 }
 
 void SwPagePreview::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollbar )
@@ -1621,8 +1587,6 @@ void SwPagePreview::ScrollViewSzChg()
             bShowVScrollbar = false;
 
         ShowVScrollbar(bShowVScrollbar);
-        pPageUpBtn->Show(bShowVScrollbar);
-        pPageDownBtn->Show(bShowVScrollbar);
     }
     if(pHScrollbar)
     {

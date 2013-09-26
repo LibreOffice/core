@@ -25,22 +25,7 @@
 #include "popup.hrc"
 #include "helpid.h"
 #include "cmdid.h"
-ImageButton BTN_PAGEUP
-{
-    SVLOOK = TRUE ;
-    HIDE = TRUE ;
-    RectStyle = TRUE ;
-    SmallStyle = TRUE ;
-    SYMBOL = IMAGEBUTTON_PAGEUP ;
-};
-ImageButton BTN_PAGEDOWN
-{
-    SVLOOK = TRUE ;
-    HIDE = TRUE ;
-    RectStyle = TRUE ;
-    SmallStyle = TRUE ;
-    SYMBOL = IMAGEBUTTON_PAGEDOWN ;
-};
+
 QueryBox DLG_SPECIAL_FORCED
 {
     BUTTONS = WB_YES_NO ;
