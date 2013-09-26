@@ -37,7 +37,7 @@ private:
     Window*     pDiagWin;
     ScDocument* pDoc;
     ScAddress   aDocPos;
-    String      aUserText;
+    OUString    aUserText;
     Rectangle   aVisRect;
     Timer       aTimer;
     MapMode     aMapMode;
@@ -53,7 +53,7 @@ private:
 
 public:
                 ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
-                                ScDocument* pD, ScAddress aPos, const String& rUser,
+                                ScDocument* pD, ScAddress aPos, const OUString& rUser,
                                 const MapMode& rMap, sal_Bool bLeftEdge, sal_Bool bForce, sal_Bool bKeyboard );
                 ~ScNoteMarker();
 

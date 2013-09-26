@@ -73,8 +73,8 @@ protected:
 private:
     struct ScenarioEntry
     {
-        String              maName;
-        String              maComment;
+        OUString            maName;
+        OUString            maComment;
         bool                mbProtected;
 
         inline explicit     ScenarioEntry() : mbProtected( false ) {}
@@ -100,11 +100,11 @@ private:
 class ScScenarioWindow : public Window
 {
 public:
-            ScScenarioWindow( Window* pParent,const String& aQH_List,const String& aQH_Comment);
+            ScScenarioWindow( Window* pParent, const OUString& aQH_List, const OUString& aQH_Comment);
             ~ScScenarioWindow();
 
     void    NotifyState( const SfxPoolItem* pState );
-    void    SetComment( const String& rComment )
+    void    SetComment( const OUString& rComment )
                 { aEdComment.SetText( rComment ); }
 
     void    SetSizePixel( const Size& rNewSize );
@@ -245,13 +245,13 @@ private:
 
     Timer           aContentTimer;
 
-    String          aTitleBase;
-    String          aStrDragMode;
-    String          aStrDisplay;
-    String          aStrActive;
-    String          aStrNotActive;
-    String          aStrHidden;
-    String          aStrActiveWin;
+    OUString        aTitleBase;
+    OUString        aStrDragMode;
+    OUString        aStrDisplay;
+    OUString        aStrActive;
+    OUString        aStrNotActive;
+    OUString        aStrHidden;
+    OUString        aStrActiveWin;
 
     SfxChildWindowContext*  pContextWin;
     Size                    aInitSize;
@@ -279,11 +279,11 @@ private:
                     { return rBindings; }
 
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
-    void    SetCurrentCellStr( const String rName );
+    void    SetCurrentCellStr( const OUString rName );
     void    SetCurrentTable( SCTAB nTab );
     void    SetCurrentTableStr( const OUString& rName );
-    void    SetCurrentObject( const String rName );
-    void    SetCurrentDoc( const String& rDocName );
+    void    SetCurrentObject( const OUString rName );
+    void    SetCurrentDoc( const OUString& rDocName );
 
     ScTabViewShell*         GetTabViewShell() const;
     ScNavigatorSettings*    GetNavigatorSettings();
@@ -294,7 +294,7 @@ private:
     void    UpdateTable     ( const SCTAB* pTab = NULL );
     void    UpdateAll       ();
 
-    void    GetDocNames(const String* pSelEntry = NULL);
+    void    GetDocNames(const OUString* pSelEntry = NULL);
 
     void    SetListMode     ( NavListMode eMode, sal_Bool bSetSize = sal_True );
     void    ShowList        ( sal_Bool bShow, sal_Bool bSetSize );
@@ -303,8 +303,8 @@ private:
     void    SetDropMode(sal_uInt16 nNew);
     sal_uInt16  GetDropMode() const         { return nDropMode; }
 
-    const String& GetStrDragMode() const    { return aStrDragMode; }
-    const String& GetStrDisplay() const     { return aStrDisplay; }
+    const OUString& GetStrDragMode() const    { return aStrDragMode; }
+    const OUString& GetStrDisplay() const     { return aStrDisplay; }
 
     void    CheckDataArea   ();
     void    MarkDataArea    ();

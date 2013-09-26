@@ -81,7 +81,7 @@ sal_Bool ScContentTree::bIsInDrag = false;
 ScDocShell* ScContentTree::GetManualOrCurrent()
 {
     ScDocShell* pSh = NULL;
-    if ( aManualDoc.Len() )
+    if ( !aManualDoc.isEmpty() )
     {
         TypeId aScType = TYPE(ScDocShell);
         SfxObjectShell* pObjSh = SfxObjectShell::GetFirst( &aScType );
@@ -280,7 +280,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
 
         String aText( GetEntryText( pEntry ) );
 
-        if ( aManualDoc.Len() )
+        if ( !aManualDoc.isEmpty() )
             pParentWindow->SetCurrentDoc( aManualDoc );
 
         switch( nType )
@@ -462,10 +462,10 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 }
                 //  "aktives Fenster"
                 aDocMenu.InsertItem( ++i, pParentWindow->aStrActiveWin );
-                if (!bHiddenDoc && !aManualDoc.Len())
+                if (!bHiddenDoc && aManualDoc.isEmpty())
                     nPos = i;
                 //  verstecktes Dokument
-                if ( aHiddenTitle.Len() )
+                if ( !aHiddenTitle.isEmpty() )
                 {
                     String aEntry = aHiddenTitle;
                     aEntry += pParentWindow->aStrHidden;
@@ -1332,7 +1332,7 @@ void ScContentTree::ToggleRoot()        // nach Selektion
 
 void ScContentTree::ResetManualDoc()
 {
-    aManualDoc.Erase();
+    aManualDoc = "";
     bHiddenDoc = false;
 
     ActiveDocChanged();
@@ -1340,12 +1340,12 @@ void ScContentTree::ResetManualDoc()
 
 void ScContentTree::ActiveDocChanged()
 {
-    if ( !bHiddenDoc && !aManualDoc.Len() )
+    if ( !bHiddenDoc && aManualDoc.isEmpty() )
         Refresh();                                  // Inhalte nur wenn automatisch
 
         //  Listbox muss immer geupdated werden, wegen aktiv-Flag
 
-    String aCurrent;
+    OUString aCurrent;
     if ( bHiddenDoc )
         aCurrent = aHiddenTitle;
     else
@@ -1357,7 +1357,7 @@ void ScContentTree::ActiveDocChanged()
         {
             //  eingestelltes Dokument existiert nicht mehr
 
-            aManualDoc.Erase();             // wieder automatisch
+            aManualDoc = "";             // wieder automatisch
             Refresh();
             pSh = GetManualOrCurrent();     // sollte jetzt aktives sein
             if (pSh)
@@ -1389,10 +1389,10 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
 
     String aRealName = rName;
     xub_StrLen nLen = rName.Len();
-    xub_StrLen nActiveStart = nLen - pParentWindow->aStrActive.Len();
+    xub_StrLen nActiveStart = nLen - pParentWindow->aStrActive.getLength();
     if ( rName.Copy( nActiveStart ) == pParentWindow->aStrActive )
         aRealName = rName.Copy( 0, nActiveStart );
-    xub_StrLen nNotActiveStart = nLen - pParentWindow->aStrNotActive.Len();
+    xub_StrLen nNotActiveStart = nLen - pParentWindow->aStrNotActive.getLength();
     if ( rName.Copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
         aRealName = rName.Copy( 0, nNotActiveStart );
 
@@ -1414,7 +1414,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
         bHiddenDoc = false;
         SetManualDoc(aRealName);
     }
-    else if (aHiddenTitle.Len())                // verstecktes ausgewaehlt
+    else if (!aHiddenTitle.isEmpty())                // verstecktes ausgewaehlt
     {
         if (!bHiddenDoc)
             LoadFile(aHiddenName);

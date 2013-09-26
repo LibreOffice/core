@@ -49,10 +49,10 @@ class ScContentTree : public SvTreeListBox
     ImageList           aEntryImages;
     SvTreeListEntry*        pRootNodes[SC_CONTENT_COUNT];
     sal_uInt16              nRootType;          // set as Root
-    String              aManualDoc;         // Switched in Navigator (Title)
+    OUString            aManualDoc;         // Switched in Navigator (Title)
     sal_Bool                bHiddenDoc;         // Hidden active?
     String              aHiddenName;        // URL to load
-    String              aHiddenTitle;       // for display
+    OUString            aHiddenTitle;       // for display
     ScDocument*         pHiddenDocument;    // temporary
 
     sal_uInt16              pPosList[SC_CONTENT_COUNT];     // for the sequence
@@ -137,7 +137,7 @@ public:
     sal_Bool    LoadFile(const String& rUrl);
     void    SelectDoc(const String& rName);
 
-    const String& GetHiddenTitle() const    { return aHiddenTitle; }
+    const OUString& GetHiddenTitle() const    { return aHiddenTitle; }
 
     /** Applies the navigator settings to the listbox. */
     void                        ApplySettings();

@@ -37,7 +37,7 @@
 // -----------------------------------------------------------------------
 
 ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
-                            ScDocument* pD, ScAddress aPos, const String& rUser,
+                            ScDocument* pD, ScAddress aPos, const OUString& rUser,
                             const MapMode& rMap, sal_Bool bLeftEdge, sal_Bool bForce, sal_Bool bKeyboard ) :
     pWindow( pWin ),
     pRightWin( pRight ),

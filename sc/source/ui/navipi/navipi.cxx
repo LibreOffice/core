@@ -654,13 +654,13 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     OUString aOpen(" (");
     aStrActive = aOpen;
     aStrActive += String( ScResId( STR_ACTIVE ) );
-    aStrActive += ')';                                      // " (aktiv)"
+    aStrActive += ")";                                      // " (aktiv)"
     aStrNotActive = aOpen;
     aStrNotActive += String( ScResId( STR_NOTACTIVE ) );
-    aStrNotActive += ')';                                   // " (inaktiv)"
+    aStrNotActive += ")";                                   // " (inaktiv)"
     aStrHidden = aOpen;
     aStrHidden += String( ScResId( STR_HIDDEN ) );
-    aStrHidden += ')';                                      // " (versteckt)"
+    aStrHidden += ")";                                      // " (versteckt)"
 
     aTitleBase = GetText();
 
@@ -1009,7 +1009,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
     }
 }
 
-void ScNavigatorDlg::SetCurrentCellStr( const String rName )
+void ScNavigatorDlg::SetCurrentCellStr( const OUString rName )
 {
     ppBoundItems[0]->ClearCache();
     SfxStringItem   aNameItem( SID_CURRENTCELL, rName );
@@ -1054,7 +1054,7 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::SetCurrentObject( const String rName )
+void ScNavigatorDlg::SetCurrentObject( const OUString rName )
 {
     SfxStringItem aNameItem( SID_CURRENTOBJECT, rName );
     rBindings.GetDispatcher()->Execute( SID_CURRENTOBJECT,
@@ -1064,7 +1064,7 @@ void ScNavigatorDlg::SetCurrentObject( const String rName )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::SetCurrentDoc( const String& rDocName )        // aktivieren
+void ScNavigatorDlg::SetCurrentDoc( const OUString& rDocName )        // aktivieren
 {
     SfxStringItem aDocItem( SID_CURRENTDOC, rDocName );
     rBindings.GetDispatcher()->Execute( SID_CURRENTDOC,
@@ -1308,7 +1308,7 @@ void ScNavigatorDlg::ShowScenarios( sal_Bool bShow, sal_Bool bSetSize )
 //
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::GetDocNames( const String* pManualSel )
+void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
 {
     aLbDocuments.Clear();
     aLbDocuments.SetUpdateMode( false );
