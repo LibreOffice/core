@@ -247,7 +247,6 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             // Being in const method should not be a problem.
             ((SwTxtPaintInfo&)rInf).SelectFont();
 
-            // I want to know if this can really happen. So here comes a new
             OSL_ENSURE( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
                     "SwFlyCntPortion::Paint: Outdev has changed" );
             if( rInf.GetVsh() )
@@ -305,13 +304,12 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
 
 // after setting the RefPoints, the ascent needs to be recalculated because it is dependent on RelPos.
 // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
+/// @param rBase CAUTION:needs to be an absolute value
 void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                                long nLnAscent, long nLnDescent,
                                long nFlyAsc, long nFlyDesc,
                                objectpositioning::AsCharFlags nFlags )
 {
-    // Note: rBase have to be an absolute value
-
     // OD 28.10.2003 #113049# - use new class to position object
     // determine drawing object
     SdrObject* pSdrObj = 0L;

@@ -325,17 +325,19 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
     return aRet;
 }
 
-// returns the position for the cell with the specified name
-// (note that the indices rColumn and rRow are 0 based here)
-// Also since the implementations of tables does not really have
-// columns using this function is appropriate only for tables
-// that are not complex (i.e. where IsTblComplex() returns false).
-//
-// returns: both indices for column and row (all >= 0) if everything was Ok.
-//          At least one value < 0 if sth was wrong.
-//
-// Sample for naming scheme of cell in a single row (in groups a 26):
-// A1..Z1, a1..z1, AA1..AZ1, Aa1..Az1, BA1..BZ1, Ba1..Bz1, ...
+/** get position of a cell with a given name
+ *
+ * If everything was OK, the indices for column and row are changed (both >= 0).
+ * In case of errors, at least one of them is < 0.
+ *
+ * Also since the implementations of tables does not really have columns using
+ * this function is appropriate only for tables that are not complex (i.e.
+ * where IsTblComplex() returns false).
+ *
+ * @param rCellName e.g. A1..Z1, a1..z1, AA1..AZ1, Aa1..Az1, BA1..BZ1, Ba1..Bz1, ...
+ * @param [IN,OUT] rColumn (0-based)
+ * @param [IN,OUT] rRow (0-based)
+ */
 void sw_GetCellPosition( const String &rCellName,
         sal_Int32 &rColumn, sal_Int32 &rRow)
 {
@@ -381,14 +383,15 @@ void sw_GetCellPosition( const String &rCellName,
     OSL_ENSURE( rColumn != -1 && rRow != -1, "failed to get column or row index" );
 }
 
-// arguments: must be non-empty strings with valid cell names
-//
-// returns: -1 if first cell < second cell
-//           0 if both cells are equal
-//          +1 if the first cell > second cell
-//
-// Note: this function probably also make sense only
-//      for cell names of non-complex tables
+/** compare position of two cells (check rows first)
+ *
+ * @note this function probably also make sense only
+ *       for cell names of non-complex tables
+ *
+ * @param rCellName1 e.g. "A1" (non-empty string with valid cell name)
+ * @param rCellName2 e.g. "A1" (non-empty string with valid cell name)
+ * @return -1 if cell_1 < cell_2; 0 if both cells are equal; +1 if cell_1 > cell_2
+ */
 int sw_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
@@ -403,14 +406,15 @@ int sw_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName
         return +1;
 }
 
-// arguments: must be non-empty strings with valid cell names
-//
-// returns: -1 if first cell < second cell
-//           0 if both cells are equal
-//          +1 if the first cell > second cell
-//
-// Note: this function probably also make sense only
-//      for cell names of non-complex tables
+/** compare position of two cells (check columns first)
+ *
+ * @note this function probably also make sense only
+ *       for cell names of non-complex tables
+ *
+ * @param rCellName1 e.g. "A1" (non-empty string with valid cell name)
+ * @param rCellName2 e.g. "A1" (non-empty string with valid cell name)
+ * @return -1 if cell_1 < cell_2; 0 if both cells are equal; +1 if cell_1 > cell_2
+ */
 int sw_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
@@ -425,14 +429,19 @@ int sw_CompareCellsByColFirst( const String &rCellName1, const String &rCellName
         return +1;
 }
 
-// arguments: must be non-empty strings with valid cell names
-//
-// returns: -1 if first cell range < second cell range
-//           0 if both cell ranges are identical
-//          +1 if the first cell range > second cell range
-//
-// Note: this function probably also make sense only
-//      for cell names of non-complex tables
+/** compare position of two cell ranges
+ *
+ * @note this function probably also make sense only
+ *       for cell names of non-complex tables
+ *
+ * @param rRange1StartCell e.g. "A1" (non-empty string with valid cell name)
+ * @param rRange1EndCell   e.g. "A1" (non-empty string with valid cell name)
+ * @param rRange2StartCell e.g. "A1" (non-empty string with valid cell name)
+ * @param rRange2EndCell   e.g. "A1" (non-empty string with valid cell name)
+ * @param bCmpColsFirst    if <true> position in columns will be compared first before rows
+ *
+ * @return -1 if cell_range_1 < cell_range_2; 0 if both cell ranges are equal; +1 if cell_range_1 > cell_range_2
+ */
 int sw_CompareCellRanges(
         const String &rRange1StartCell, const String &rRange1EndCell,
         const String &rRange2StartCell, const String &rRange2EndCell,
@@ -453,8 +462,12 @@ int sw_CompareCellRanges(
         return +1;
 }
 
-// returns the cell name for the cell at the specified position
-// (note that the indices nColumn and nRow are 0 based here)
+/** get cell name at a specified coordinate
+ *
+ * @param nColumn column index (0-based)
+ * @param nRow row index (0-based)
+ * @return the cell name
+ */
 String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -482,8 +495,7 @@ String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 /** Find the top left or bottom right corner box in given table.
   Consider nested lines when finding the box.
 
-  @param i_pTable the table
-
+  @param rTableLines the table
   @param i_bTopLeft if true, find top left box, otherwise find bottom
          right box
  */
@@ -513,14 +525,16 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
     return pBox;
 }
 
-// start cell should be in the upper-left corner of the range and
-// end cell in the lower-right.
-// I.e. from the four possible representation
-//      A1:C5, C5:A1, A5:C1, C1:A5
-// only A1:C5 is the one to use
-void sw_NormalizeRange(
-    String &rCell1,     // will hold the upper-left cell of the range upon return
-    String &rCell2 )    // will hold the lower-right cell of the range upon return
+/** cleanup order in a range
+ *
+ * Sorts the input to a uniform format. I.e. for the four possible representation
+ *      A1:C5, C5:A1, A5:C1, C1:A5
+ * the result will be always A1:C5.
+ *
+ * @param [IN,OUT] rCell1 cell name (will be modified to upper-left corner), e.g. "A1" (non-empty string with valid cell name)
+ * @param [IN,OUT] rCell2 cell name (will be modified to lower-right corner), e.g. "A1" (non-empty string with valid cell name)
+ */
+void sw_NormalizeRange(String &rCell1, String &rCell2)
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
     sw_GetCellPosition( rCell1, nCol1, nRow1 );
@@ -650,7 +664,7 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
 
     pTable->GetTabCols( aOldCols, pBox, sal_False, bRow );
     sal_uInt16 nOldCount = aOldCols.Count();
-    //there's no use in setting tab cols if there's only one column
+    // there is no use in setting tab cols if there is only one column
     if( !nOldCount )
         return;
 
@@ -689,7 +703,7 @@ static inline OUString lcl_getString( SwXCell &rCell )
     return rCell.getString();
 }
 
-/*  non UNO function call to set string in SwXCell */
+/* non UNO function call to set string in SwXCell */
 void sw_setString( SwXCell &rCell, const OUString &rTxt,
         sal_Bool bKeepNumberFmt = sal_False )
 {
@@ -1015,7 +1029,7 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursorByRange(const uno:
         && ::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
-        //skip sections
+        // skip sections
         SwStartNode* p1 = aPam.GetNode()->StartOfSectionNode();
         while(p1->IsSectionNode())
             p1 = p1->StartOfSectionNode();
@@ -1249,7 +1263,12 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
     return pRet;
 }
 
-/* does box exist in given table? */
+/** search if a box exists in a table
+ *
+ * @param pTable the table to search in
+ * @param pBox2 box model to find
+ * @return the box if existent in pTable, 0 (!!!) if not found
+ */
 SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
 {
     // check if nFndPos happens to point to the right table box
@@ -2678,7 +2697,7 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData(void)
         aRuntime.Message = "Table too complex";
         throw aRuntime;
     }
-    //
+
     SwFrmFmt* pFmt = GetFrmFmt();
     uno::Sequence< uno::Sequence< double > > aRowSeq(bFirstRowAsLabel ? nRowCount - 1 : nRowCount);
     if(pFmt)
@@ -3459,7 +3478,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     aRet <<= (sal_Int16) UNO_TABLE_COLUMN_SUM;
                 break;
                 case RES_ANCHOR:
-                    //AnchorType ist readonly und maybevoid und wird nicht geliefert
+                    // AnchorType is readonly and might be void (no return value)
                 break;
                 case FN_UNO_TEXT_SECTION:
                 {
@@ -4187,12 +4206,11 @@ void SwXCellRange::GetDataSequence(
         pDblSeq->realloc( nDtaCnt );
 }
 
+///@see SwXCellRange::getData
+///@see SwXCellRange::GetDataSequence
 uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     throw (uno::RuntimeException)
 {
-    // see SwXCellRange::getData also
-    // also see SwXCellRange::GetDataSequence
-
     SolarMutexGuard aGuard;
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();
@@ -4249,12 +4267,11 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     return aRowSeq;
 }
 
+///@see SwXCellRange::setData
 void SAL_CALL SwXCellRange::setDataArray(
         const uno::Sequence< uno::Sequence< uno::Any > >& rArray )
     throw (uno::RuntimeException)
 {
-    // see SwXCellRange::setData also
-
     SolarMutexGuard aGuard;
     sal_Int16 nRowCount = getRowCount();
     sal_Int16 nColCount = getColumnCount();

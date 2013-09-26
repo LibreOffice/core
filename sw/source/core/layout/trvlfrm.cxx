@@ -1042,17 +1042,6 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
     return 0;
 }
 
-/*************************************************************************
-|*
-|*    SwCntntFrm::StartxxPage(), EndxxPage()
-|*
-|*    Description:      Cursor at the beginning/end of the current/previous/next
-|*       page. All six methods call GetFrmInPage() using the according
-|*       parameters. Two parameters define the direction: one defines the
-|*       page, the other one the beginning/end.
-|*       For the determination of the page and the Cntnt (begin/end) the
-|*       following functions are going to be used.
-|*************************************************************************/
 SwCntntFrm *GetFirstSub( const SwLayoutFrm *pLayout )
 {
     return ((SwPageFrm*)pLayout)->FindFirstBodyCntnt();

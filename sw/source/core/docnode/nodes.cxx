@@ -255,7 +255,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                     // special treatment for fields
                     if( pHts && pHts->Count() )
                     {
-                        // this looks fishy if pDestDoc != 0
                         bool const bToUndo = !pDestDoc &&
                             GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds);
                         for( sal_uInt16 i = pHts->Count(); i; )
