@@ -87,7 +87,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
     {
         INetURLObject aPath( xFolderPicker->getDirectory() );
         aPath.removeFinalSlash();
-        String aURL = aPath.GetMainURL( INetURLObject::NO_DECODE );
+        OUString aURL = aPath.GetMainURL( INetURLObject::NO_DECODE );
         OUString sInsPath;
         ::utl::LocalFileHelper::ConvertURLToSystemPath( aURL, sInsPath );
 
@@ -99,13 +99,13 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
                 OUString sNewEntry( '\t' );
                 sNewEntry += sInsPath;
                 SvTreeListEntry* pEntry = aRadioLB.InsertEntry( sNewEntry );
-                String* pData = new String( aURL );
+                OUString* pData = new OUString( aURL );
                 pEntry->SetUserData( pData );
             }
             else
             {
-                String sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
-                sMsg.SearchAndReplaceAscii( "%1", sInsPath );
+                OUString sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
+                sMsg = sMsg.replaceFirst( "%1", sInsPath );
                 InfoBox( this, sMsg ).Execute();
             }
         }
@@ -113,14 +113,14 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
         {
             if ( LISTBOX_ENTRY_NOTFOUND != aPathLB.GetEntryPos( sInsPath ) )
             {
-                String sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
-                sMsg.SearchAndReplaceAscii( "%1", sInsPath );
+                OUString sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
+                sMsg = sMsg.replaceFirst( "%1", sInsPath );
                 InfoBox( this, sMsg ).Execute();
             }
             else
             {
                 sal_uInt16 nPos = aPathLB.InsertEntry( sInsPath, LISTBOX_APPEND );
-                aPathLB.SetEntryData( nPos, (void*)new String( aURL ) );
+                aPathLB.SetEntryData( nPos, (void*)new OUString( aURL ) );
             }
         }
         SelectHdl_Impl( NULL );
@@ -135,7 +135,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
     if ( pImpl->bIsRadioButtonMode )
     {
         SvTreeListEntry* pEntry = aRadioLB.FirstSelected();
-        delete (String*)pEntry->GetUserData();
+        delete (OUString*)pEntry->GetUserData();
         bool bChecked = aRadioLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
         sal_uLong nPos = aRadioLB.GetEntryPos( pEntry );
         aRadioLB.RemoveEntry( pEntry );
@@ -195,9 +195,9 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
 {
     static long aStaticTabs[]= { 2, 0, 12 };
     aRadioLB.SvSimpleTable::SetTabs( aStaticTabs );
-    String sHeader( CUI_RES( STR_HEADER_PATHS ) );
+    OUString sHeader( CUI_RES( STR_HEADER_PATHS ) );
     aRadioLB.SetQuickHelpText( sHeader );
-    sHeader.Insert( '\t', 0 );
+    sHeader = "\t" + sHeader;
     aRadioLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
 
     FreeResource();
@@ -220,49 +220,49 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
 {
     sal_uInt16 nPos = aPathLB.GetEntryCount();
     while ( nPos-- )
-        delete (String*)aPathLB.GetEntryData(nPos);
+        delete (OUString*)aPathLB.GetEntryData(nPos);
     nPos = (sal_uInt16)aRadioLB.GetEntryCount();
     while ( nPos-- )
     {
         SvTreeListEntry* pEntry = aRadioLB.GetEntry( nPos );
-        delete (String*)pEntry->GetUserData();
+        delete (OUString*)pEntry->GetUserData();
     }
     delete pImpl;
 }
 
 // -----------------------------------------------------------------------
 
-String SvxMultiPathDialog::GetPath() const
+OUString SvxMultiPathDialog::GetPath() const
 {
-    String sNewPath;
+    OUString sNewPath;
     sal_Unicode cDelim = pImpl->bIsClassPathMode ? CLASSPATH_DELIMITER : SVT_SEARCHPATH_DELIMITER;
 
     if ( pImpl->bIsRadioButtonMode )
     {
-        String sWritable;
+        OUString sWritable;
         for ( sal_uInt16 i = 0; i < aRadioLB.GetEntryCount(); ++i )
         {
             SvTreeListEntry* pEntry = aRadioLB.GetEntry(i);
             if ( aRadioLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
-                sWritable = *(String*)pEntry->GetUserData();
+                sWritable = *(OUString*)pEntry->GetUserData();
             else
             {
-                if ( sNewPath.Len() > 0 )
-                    sNewPath += cDelim;
-                sNewPath += *(String*)pEntry->GetUserData();
+                if ( !sNewPath.isEmpty() )
+                    sNewPath += OUString(cDelim);
+                sNewPath += *(OUString*)pEntry->GetUserData();
             }
         }
-        if ( sNewPath.Len() > 0 )
-            sNewPath += cDelim;
+        if ( !sNewPath.isEmpty() )
+            sNewPath += OUString(cDelim);
         sNewPath += sWritable;
     }
     else
     {
         for ( sal_uInt16 i = 0; i < aPathLB.GetEntryCount(); ++i )
         {
-            if ( sNewPath.Len() > 0 )
-                sNewPath += cDelim;
-            sNewPath += *(String*)aPathLB.GetEntryData(i);
+            if ( !sNewPath.isEmpty() )
+                sNewPath += OUString(cDelim);
+            sNewPath += *(OUString*)aPathLB.GetEntryData(i);
         }
     }
     return sNewPath;
@@ -270,14 +270,14 @@ String SvxMultiPathDialog::GetPath() const
 
 // -----------------------------------------------------------------------
 
-void SvxMultiPathDialog::SetPath( const String& rPath )
+void SvxMultiPathDialog::SetPath( const OUString& rPath )
 {
     sal_Unicode cDelim = pImpl->bIsClassPathMode ? CLASSPATH_DELIMITER : SVT_SEARCHPATH_DELIMITER;
     sal_uInt16 nPos, nCount = comphelper::string::getTokenCount(rPath, cDelim);
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        String sPath = rPath.GetToken( i, cDelim );
+        OUString sPath = rPath.getToken( i, cDelim );
         OUString sSystemPath;
         sal_Bool bIsSystemPath =
             ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
@@ -287,7 +287,7 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
             OUString sEntry( '\t' );
             sEntry += (bIsSystemPath ? sSystemPath : OUString(sPath));
             SvTreeListEntry* pEntry = aRadioLB.InsertEntry( sEntry );
-            String* pURL = new String( sPath );
+            OUString* pURL = new OUString( sPath );
             pEntry->SetUserData( pURL );
         }
         else
@@ -296,7 +296,7 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
                 nPos = aPathLB.InsertEntry( sSystemPath, LISTBOX_APPEND );
             else
                 nPos = aPathLB.InsertEntry( sPath, LISTBOX_APPEND );
-            aPathLB.SetEntryData( nPos, (void*)new String( sPath ) );
+            aPathLB.SetEntryData( nPos, (void*)new OUString( sPath ) );
         }
     }
 

@@ -30,7 +30,7 @@ namespace svx
 class OptLBoxString_Impl : public SvLBoxString
 {
 public:
-    OptLBoxString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
+    OptLBoxString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
     virtual void Paint(

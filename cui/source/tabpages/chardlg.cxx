@@ -235,7 +235,7 @@ void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp
 struct SvxCharNamePage_Impl
 {
     Timer           m_aUpdateTimer;
-    String          m_aNoStyleText;
+    OUString        m_aNoStyleText;
     const FontList* m_pFontList;
     sal_uInt16          m_nExtraEntryPos;
     sal_Bool            m_bMustDelete;
@@ -265,7 +265,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     : SvxCharBasePage(pParent, "CharNamePage", "cui/ui/charnamepage.ui", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
 {
-    m_pImpl->m_aNoStyleText = String( CUI_RES( RID_SVXSTR_CHARNAME_NOSTYLE ) );
+    m_pImpl->m_aNoStyleText = CUI_RES( RID_SVXSTR_CHARNAME_NOSTYLE );
 
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bShowCJK = aLanguageOptions.IsCJKFontEnabled();
@@ -330,18 +330,18 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     //In Windows the standard dialogs name font-name, font-style as
     //Font, Style
 #ifdef WNT
-    String sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FONT));
+    OUString sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FONT));
 #else
-    String sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FAMILY));
+    OUString sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FAMILY));
 #endif
     m_pWestFontNameFT->SetText(sFontFamilyString);
     m_pEastFontNameFT->SetText(sFontFamilyString);
     m_pCTLFontNameFT->SetText(sFontFamilyString);
 
 #ifdef MACOSX
-    String sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_TYPEFACE));
+    OUString sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_TYPEFACE));
 #else
-    String sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_STYLE));
+    OUString sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_STYLE));
 #endif
     m_pWestFontStyleFT->SetText(sFontStyleString);
     m_pEastFontStyleFT->SetText(sFontStyleString);
@@ -448,7 +448,7 @@ namespace
         Size aSize = _rFont.GetSize();
         aSize.Width() = 0;
         FontInfo aFontInfo;
-        String sFontName(_pFontNameLB->GetText());
+        OUString sFontName(_pFontNameLB->GetText());
         sal_Bool bFontAvailable = _pFontList->IsAvailable( sFontName );
         if (bFontAvailable  || _pFontNameLB->GetSavedValue() != sFontName)
             aFontInfo = _pFontList->Get( sFontName, _pFontStyleLB->GetText() );
@@ -568,12 +568,12 @@ void SvxCharNamePage::FillStyleBox_Impl( const FontNameBox* pNameBox )
     {
         // additional entries for the search:
         // "not bold" and "not italic"
-        String aEntry = m_pImpl->m_aNoStyleText;
+        OUString aEntry = m_pImpl->m_aNoStyleText;
         const sal_Char sS[] = "%1";
-        aEntry.SearchAndReplaceAscii( sS, pFontList->GetBoldStr() );
+        aEntry = aEntry.replaceFirst( sS, pFontList->GetBoldStr() );
         m_pImpl->m_nExtraEntryPos = pStyleBox->InsertEntry( aEntry );
         aEntry = m_pImpl->m_aNoStyleText;
-        aEntry.SearchAndReplaceAscii( sS, pFontList->GetItalicStr() );
+        aEntry = aEntry.replaceFirst( sS, pFontList->GetItalicStr() );
         pStyleBox->InsertEntry( aEntry );
     }
 }
@@ -675,7 +675,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else
     {
-        pNameBox->SetText( String() );
+        pNameBox->SetText( OUString() );
     }
 
     FillStyleBox_Impl( pNameBox );
@@ -725,11 +725,11 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else if ( !m_pImpl->m_bInSearchMode || !bStyle )
     {
-        pStyleBox->SetText( String() );
+        pStyleBox->SetText( OUString() );
     }
     else if ( bStyle )
     {
-        FontInfo aInfo = pFontList->Get( String(), eWeight, eItalic );
+        FontInfo aInfo = pFontList->Get( OUString(), eWeight, eItalic );
         pStyleBox->SetText( pFontList->GetStyleName( aInfo ) );
     }
     if (!bStyleAvailable)
@@ -772,7 +772,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     else
     {
-        pSizeBox->SetText( String() );
+        pSizeBox->SetText( OUString() );
         if ( eState <= SFX_ITEM_READONLY )
         {
             pSizeBox->Disable( );
@@ -885,12 +885,12 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
 
     bool bChanged = true;
-    const String& rFontName  = pNameBox->GetText();
+    const OUString& rFontName  = pNameBox->GetText();
     const FontList* pFontList = GetFontList();
-    String aStyleBoxText =pStyleBox->GetText();
+    OUString aStyleBoxText =pStyleBox->GetText();
     sal_uInt16 nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
-        aStyleBoxText.Erase();
+        aStyleBoxText = "";
     FontInfo aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
     SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetName(), aInfo.GetStyleName(),
                            aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
@@ -912,7 +912,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
          ( (SvxFontItem*)pItem )->GetFamilyName() != aFontItem.GetFamilyName() )
         bChanged = true;
 
-    if ( bChanged && rFontName.Len() )
+    if ( bChanged && !rFontName.isEmpty() )
     {
         rSet.Put( aFontItem );
         bModified = sal_True;
@@ -960,9 +960,9 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         bChanged = ( nEntryPos == m_pImpl->m_nExtraEntryPos );
 
-    String aText( pStyleBox->GetText() ); // Tristate, then text empty
+    OUString aText( pStyleBox->GetText() ); // Tristate, then text empty
 
-    if ( bChanged && aText.Len() )
+    if ( bChanged && !aText.isEmpty() )
     {
         rSet.Put( aWeightItem );
         bModified = sal_True;
@@ -1009,7 +1009,7 @@ sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLan
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         bChanged = ( nEntryPos == ( m_pImpl->m_nExtraEntryPos + 1 ) );
 
-    if ( bChanged && aText.Len() )
+    if ( bChanged && !aText.isEmpty() )
     {
         rSet.Put( aPostureItem );
         bModified = sal_True;
@@ -1558,7 +1558,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
                     m_pFontColorLB->SelectEntryPos( nSelPos );
                 else
                     m_pFontColorLB->SelectEntryPos(
-                        m_pFontColorLB->InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+                        m_pFontColorLB->InsertEntry( aColor, OUString( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
             }
             break;
         }
@@ -1768,7 +1768,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
                     else
                         m_pUnderlineColorLB->SelectEntryPos(
                             m_pUnderlineColorLB->InsertEntry( aColor,
-                                String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+                                OUString( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
                 }
             }
             else
@@ -1825,7 +1825,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
                     else
                         m_pOverlineColorLB->SelectEntryPos(
                             m_pOverlineColorLB->InsertEntry( aColor,
-                                String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+                                OUString( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
                 }
             }
             else
@@ -2889,14 +2889,14 @@ sal_uInt16* SvxCharPositionPage::GetRanges()
 // -----------------------------------------------------------------------
 void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 {
-    String sUser = GetUserData();
+    OUString sUser = GetUserData();
 
-    if ( sUser.Len() )
+    if ( !sUser.isEmpty() )
     {
-        m_nSuperEsc = (short)sUser.GetToken( 0 ).ToInt32();
-        m_nSubEsc = (short)sUser.GetToken( 1 ).ToInt32();
-        m_nSuperProp = (sal_uInt8)sUser.GetToken( 2 ).ToInt32();
-        m_nSubProp = (sal_uInt8)sUser.GetToken( 3 ).ToInt32();
+        m_nSuperEsc = (short)sUser.getToken( 0, ';' ).toInt32();
+        m_nSubEsc = (short)sUser.getToken( 1, ';' ).toInt32();
+        m_nSuperProp = (sal_uInt8)sUser.getToken( 2, ';' ).toInt32();
+        m_nSubProp = (sal_uInt8)sUser.getToken( 3, ';' ).toInt32();
     }
 
     short nEsc = 0;
@@ -3022,7 +3022,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_pKerningMF->SetValue( nKerning );
     }
     else
-        m_pKerningMF->SetText( String() );
+        m_pKerningMF->SetText( OUString() );
 
     // Pair kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );

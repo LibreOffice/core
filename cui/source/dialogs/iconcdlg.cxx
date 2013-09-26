@@ -38,18 +38,18 @@ using ::std::vector;
 static const sal_Char*      pViewOptDataName = "dialog data";
 #define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
-static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
+static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
-    rOpt.SetUserItem( VIEWOPT_DATANAME, ::com::sun::star::uno::makeAny( OUString( rData ) ) );
+    rOpt.SetUserItem( VIEWOPT_DATANAME, css::uno::makeAny( rData ) );
 }
 
-static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
+static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
 {
     ::com::sun::star::uno::Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
     OUString aUserData;
     aAny >>= aUserData;
 
-    return String( aUserData );
+    return aUserData;
 }
 
 
@@ -264,8 +264,8 @@ IconChoiceDialog ::~IconChoiceDialog ()
         if ( pData->pPage )
         {
             pData->pPage->FillUserData();
-            String aPageData(pData->pPage->GetUserData());
-            if ( aPageData.Len() )
+            OUString aPageData(pData->pPage->GetUserData());
+            if ( !aPageData.isEmpty() )
             {
                 SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
 
@@ -302,7 +302,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
 
 SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     sal_uInt16          nId,
-    const String&   rIconText,
+    const OUString&   rIconText,
     const Image&    rChoiceIcon,
     CreatePage      pCreateFunc /* != 0 */,
     GetPageRanges   pRangesFunc /* darf 0 sein */,

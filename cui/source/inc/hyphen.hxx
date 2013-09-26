@@ -50,12 +50,12 @@ class SvxHyphenWordDialog : public SfxModalDialog
     PushButton*         m_pDelBtn;
     PushButton*         m_pHyphAll;
     CloseButton*        m_pCloseBtn;
-    String              aLabel;
+    OUString            aLabel;
     SvxSpellWrapper*    pHyphWrapper;
     css::uno::Reference< css::linguistic2::XHyphenator >        xHyphenator;
     css::uno::Reference< css::linguistic2::XPossibleHyphens >   xPossHyph;
-    String              aEditWord;      // aEditWord and aWordEdit.GetText() differ only by the character for the current selected hyphenation position
-    String              aActWord;           // actual word to be hyphenated
+    OUString            aEditWord;      // aEditWord and aWordEdit.GetText() differ only by the character for the current selected hyphenation position
+    OUString            aActWord;           // actual word to be hyphenated
     LanguageType        nActLanguage;       // and its language
     sal_uInt16          nMaxHyphenationPos; // right most valid hyphenation pos
     sal_uInt16          nHyphPos;
@@ -65,7 +65,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
 
 
     void            EnableLRBtn_Impl();
-    String          EraseUnusableHyphens_Impl( css::uno::Reference< css::linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
+    OUString        EraseUnusableHyphens_Impl( css::uno::Reference< css::linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
 
     void            InitControls_Impl();
     void            ContinueHyph_Impl( sal_uInt16 nInsPos = 0 );
@@ -81,7 +81,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     DECL_LINK(GetFocusHdl_Impl, void *);
 
 public:
-    SvxHyphenWordDialog( const String &rWord, LanguageType nLang,
+    SvxHyphenWordDialog( const OUString &rWord, LanguageType nLang,
                          Window* pParent,
                          css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                          SvxSpellWrapper* pWrapper );

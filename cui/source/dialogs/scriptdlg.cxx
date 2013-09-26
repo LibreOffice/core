@@ -350,7 +350,7 @@ void SFTreeListBox::ExpandAllTrees()
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvTreeListEntry * SFTreeListBox::insertEntry(
-    String const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
+    OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, OUString factoryURL )
 {
     SvTreeListEntry * p;
@@ -371,7 +371,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvTreeListEntry * SFTreeListBox::insertEntry(
-    String const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
+    OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
 {
     Image aImage;
@@ -435,17 +435,17 @@ CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
     aEdit.GrabFocus();
     if ( nMode == INPUTMODE_NEWLIB )
     {
-        SetText( String( CUI_RES( STR_NEWLIB ) ) );
+        SetText( OUString( CUI_RES( STR_NEWLIB ) ) );
     }
     else if ( nMode == INPUTMODE_NEWMACRO )
     {
-        SetText( String( CUI_RES( STR_NEWMACRO ) ) );
-        aText.SetText( String( CUI_RES( STR_FT_NEWMACRO ) ) );
+        SetText( OUString( CUI_RES( STR_NEWMACRO ) ) );
+        aText.SetText( OUString( CUI_RES( STR_FT_NEWMACRO ) ) );
     }
     else if ( nMode == INPUTMODE_RENAME )
     {
-        SetText( String( CUI_RES( STR_RENAME ) ) );
-        aText.SetText( String( CUI_RES( STR_FT_RENAME ) ) );
+        SetText( OUString( CUI_RES( STR_RENAME ) ) );
+        aText.SetText( OUString( CUI_RES( STR_FT_RENAME ) ) );
     }
     FreeResource();
 
@@ -508,8 +508,8 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
     get(m_pDelButton, "delete");
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
-    String winTitle( GetText() );
-    winTitle.SearchAndReplace( OUString( "%MACROLANG" ), m_sLanguage );
+    OUString winTitle( GetText() );
+    winTitle = winTitle.replaceFirst( "%MACROLANG", m_sLanguage );
     SetText( winTitle );
 
     m_pScriptsBox->SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
@@ -738,7 +738,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         pParent = m_pScriptsBox->GetParent( pParent );
                     }
                     xProp->getPropertyValue("URI") >>= tmpString;
-                    const String scriptURL( tmpString );
+                    const OUString scriptURL( tmpString );
 
                     if ( mspNode.is() )
                     {
@@ -929,7 +929,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
 
         do
         {
-            if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
+            if ( xNewDlg->Execute() && !xNewDlg->GetObjectName().isEmpty() )
             {
                 OUString aUserSuppliedName = xNewDlg->GetObjectName();
                 bValid = sal_True;
@@ -938,8 +938,8 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                     if (aUserSuppliedName+extn == childNodes[index]->getName())
                     {
                         bValid = sal_False;
-                        String aError( m_createErrStr );
-                        aError.Append( m_createDupStr );
+                        OUString aError( m_createErrStr );
+                        aError += m_createDupStr;
                         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
                         aErrorBox.SetText( m_createErrTitleStr );
                         aErrorBox.Execute();
@@ -983,7 +983,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     }
     if ( aChildNode.is() )
     {
-        String aChildName = aChildNode->getName();
+        OUString aChildName = aChildNode->getName();
         SvTreeListEntry* pNewEntry = NULL;
 
         Reference<XModel> xDocumentModel = getModel( pEntry );
@@ -1060,7 +1060,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         sal_Bool bValid;
         do
         {
-            if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
+            if ( xNewDlg->Execute() && !xNewDlg->GetObjectName().isEmpty() )
             {
                 OUString aUserSuppliedName = xNewDlg->GetObjectName();
                 bValid = sal_True;
@@ -1104,7 +1104,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        String aError( m_renameErrStr );
+        OUString aError( m_renameErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
         aErrorBox.SetText( m_renameErrTitleStr );
         aErrorBox.Execute();
@@ -1226,14 +1226,14 @@ void SvxScriptOrgDialog::StoreCurrentSelection()
 
 void SvxScriptOrgDialog::RestorePreviousSelection()
 {
-    String aStoredEntry = String( m_lastSelection[ m_sLanguage ] );
-    if( aStoredEntry.Len() <= 0 )
+    OUString aStoredEntry = m_lastSelection[ m_sLanguage ];
+    if( aStoredEntry.isEmpty() )
         return;
     SvTreeListEntry* pEntry = 0;
     sal_Int32 nIndex = 0;
     while ( nIndex != -1 )
     {
-        String aTmp( aStoredEntry.GetToken( 0, ';', nIndex ) );
+        OUString aTmp( aStoredEntry.getToken( 0, ';', nIndex ) );
         SvTreeListEntry* pTmpEntry = m_pScriptsBox->FirstChild( pEntry );
         while ( pTmpEntry )
         {

@@ -206,9 +206,9 @@ private:
     FixedText*          m_pPositionFT;
     ListBox*            m_pPositionLB;
 
-    sal_uInt16              m_nHtmlMode;
+    sal_uInt16          m_nHtmlMode;
 
-    String              m_aTransparentColorName;
+    OUString            m_aTransparentColorName;
 
                         SvxCharEffectsPage( Window* pParent, const SfxItemSet& rSet );
                         ~SvxCharEffectsPage();

@@ -122,18 +122,18 @@ static const sal_Char*      pViewOptDataName = "page data";
 
 static XOutdevItemPool* mpStaticXOutdevItemPool = 0L;
 
-static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
+static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
     rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( OUString( rData ) ) );
 }
 
-static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
+static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
 {
     Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
     OUString aUserData;
     aAny >>= aUserData;
 
-    return String( aUserData );
+    return aUserData;
 }
 
 struct ModuleToGroupNameMap_Impl
@@ -163,7 +163,7 @@ static ModuleToGroupNameMap_Impl ModuleMap[] =
     { NULL, OUString(), 0xFFFF }
 };
 
-static void setGroupName( const OUString& rModule, const String& rGroupName )
+static void setGroupName( const OUString& rModule, const OUString& rGroupName )
 {
     sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
@@ -179,9 +179,9 @@ static void setGroupName( const OUString& rModule, const String& rGroupName )
     }
 }
 
-static String getGroupName( const OUString& rModule, bool bForced )
+static OUString getGroupName( const OUString& rModule, bool bForced )
 {
-    String sGroupName;
+    OUString sGroupName;
     sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
     {
@@ -195,7 +195,7 @@ static String getGroupName( const OUString& rModule, bool bForced )
         ++nIndex;
     }
 
-    if ( sGroupName.Len() == 0 && bForced )
+    if ( sGroupName.isEmpty() && bForced )
     {
         if ( !pPageRes )
             pPageRes = new OfaPageResource;
@@ -423,7 +423,7 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { NULL,                 NULL,                   0 }
 };
 
-static sal_Bool lcl_getStringFromID( sal_uInt16 _nPageId, String& _rGroupName, String& _rPageName )
+static sal_Bool lcl_getStringFromID( sal_uInt16 _nPageId, OUString& _rGroupName, OUString& _rPageName )
 {
     sal_Bool bRet = sal_False;
 
@@ -433,9 +433,9 @@ static sal_Bool lcl_getStringFromID( sal_uInt16 _nPageId, String& _rGroupName, S
         if ( _nPageId == OptionsMap_Impl[nIdx].m_nPageId )
         {
             bRet = sal_True;
-            _rGroupName = String( OptionsMap_Impl[nIdx].m_pGroupName, RTL_TEXTENCODING_ASCII_US );
+            _rGroupName = OUString::createFromAscii( OptionsMap_Impl[nIdx].m_pGroupName );
             if ( OptionsMap_Impl[nIdx].m_pPageName != NULL )
-                _rPageName = String( OptionsMap_Impl[nIdx].m_pPageName, RTL_TEXTENCODING_ASCII_US );
+                _rPageName = OUString::createFromAscii( OptionsMap_Impl[nIdx].m_pPageName );
             break;
         }
         ++nIdx;
@@ -447,10 +447,10 @@ static sal_Bool lcl_getStringFromID( sal_uInt16 _nPageId, String& _rGroupName, S
 static sal_Bool lcl_isOptionHidden( sal_uInt16 _nPageId, const SvtOptionsDialogOptions& _rOptOptions )
 {
     sal_Bool bIsHidden = sal_False;
-    String sGroupName, sPageName;
+    OUString sGroupName, sPageName;
     if ( lcl_getStringFromID( _nPageId, sGroupName, sPageName ) )
     {
-        if ( sPageName.Len() == 0 )
+        if ( sPageName.isEmpty() )
             bIsHidden =  _rOptOptions.IsGroupHidden( sGroupName );
         else
             bIsHidden =  _rOptOptions.IsPageHidden( sPageName, sGroupName );
@@ -558,8 +558,8 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
             if(pPageInfo->m_pPage)
             {
                 pPageInfo->m_pPage->FillUserData();
-                String aPageData(pPageInfo->m_pPage->GetUserData());
-                if ( aPageData.Len() )
+                OUString aPageData(pPageInfo->m_pPage->GetUserData());
+                if ( !aPageData.isEmpty() )
                 {
                     SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number( pPageInfo->m_nPageId) );
                     SetViewOptUserItem( aTabPageOpt, aPageData );
@@ -603,7 +603,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 }
 
 OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
-    sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup )
+    sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup )
 {
     OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
     SvTreeListEntry* pParent = aTreeLB.GetEntry( 0, nGroup );
@@ -614,7 +614,7 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
 }
 
 // the ItemSet* is passed on to the dialog's ownership
-sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
+sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
                                         SfxShell* pCreateShell,
                                         SfxModule* pCreateModule,
                                         sal_uInt16 nDialogId )
@@ -804,7 +804,7 @@ void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
     pLastPageSaver->m_nLastPageId = nTemp;
 }
 
-void OfaTreeOptionsDialog::ActivatePage( const String& rPageURL )
+void OfaTreeOptionsDialog::ActivatePage( const OUString& rPageURL )
 {
     DBG_ASSERT( !bIsFromExtensionManager, "OfaTreeOptionsDialog::ActivatePage(): call from extension manager" );
     if ( !pLastPageSaver )
@@ -821,9 +821,9 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     if ( pLastPageSaver )
     {
         OUString sExpand( EXPAND_PROTOCOL );
-        String sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
+        OUString sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                   : pLastPageSaver->m_sLastPageURL_Tools;
-        if ( sLastURL.Len() == 0 )
+        if ( sLastURL.isEmpty() )
         {
             sLastURL = !bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                 : pLastPageSaver->m_sLastPageURL_Tools;
@@ -1549,7 +1549,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
         for ( i = 1; i < nEnd; ++i )
         {
-            String sNewTitle = rGeneralArray.GetString(i);
+            OUString sNewTitle = rGeneralArray.GetString(i);
             nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
@@ -1906,7 +1906,7 @@ bool isNodeActive( OptionsNode* pNode, Module* pModule )
             return true;
 
         // OOo-Nodes (Writer, Calc, Impress...) are active if node is already inserted
-        if ( getGroupName( pNode->m_sId, false ).Len() > 0 )
+        if ( !getGroupName( pNode->m_sId, false ).isEmpty() )
             return true;
 
         // no module -> not active
@@ -2047,7 +2047,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
     for ( int i = 0; i < seqNames.getLength(); ++i )
     {
-        String sGroupName( seqNames[i] );
+        OUString sGroupName( seqNames[i] );
         Reference< XNameAccess > xNodeAccess;
         xSet->getByName( seqNames[i] ) >>= xNodeAccess;
 
@@ -2066,8 +2066,8 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
             if ( sLabel.isEmpty() )
                 sLabel = sGroupName;
-            String sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
-            if ( sTemp.Len() > 0 )
+            OUString sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
+            if ( !sTemp.isEmpty() )
                 sLabel = sTemp;
             OptionsNode* pNode =
                 new OptionsNode( sNodeId, sLabel, sPageURL, bAllModules, sGroupId, nGroupIndex );
@@ -2181,14 +2181,14 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
 static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const SvTreeListBox& rTreeLB )
 {
-    String sGroupName( rGroupName );
+    OUString sGroupName( rGroupName );
     sal_uInt16 nRet = 0;
     SvTreeListEntry* pEntry = rTreeLB.First();
     while( pEntry )
     {
         if ( !rTreeLB.GetParent( pEntry ) )
         {
-            String sTemp( rTreeLB.GetEntryText( pEntry ) );
+            OUString sTemp( rTreeLB.GetEntryText( pEntry ) );
             if ( sTemp == sGroupName )
                 return nRet;
             nRet++;

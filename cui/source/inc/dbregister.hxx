@@ -66,7 +66,7 @@ namespace svx
 
         DECL_LINK( HeaderSelect_Impl, HeaderBar * );
         DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
-        DECL_LINK( NameValidator, String*);
+        DECL_LINK( NameValidator, OUString*);
 
 
         /** inserts a new entry in the tablistbox
@@ -85,7 +85,7 @@ namespace svx
             @param  _pEntry
                 The entry to remove if the entry will be changed
         */
-        void openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvTreeListEntry* _pEntry = NULL);
+        void openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry = NULL);
 
 #endif
 

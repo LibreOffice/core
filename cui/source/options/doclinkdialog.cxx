@@ -57,7 +57,7 @@ namespace svx
         ,m_aHelp            (this, CUI_RES(BTN_HELP))
         ,m_bCreatingNew(_bCreateNew)
     {
-        String sText = String( CUI_RES( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK ) );
+        OUString sText = CUI_RES( m_bCreatingNew ? STR_NEW_LINK : STR_EDIT_LINK );
         SetText(sText);
 
         FreeResource();
@@ -78,7 +78,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------
-    void ODocumentLinkDialog::set( const String& _rName, const String& _rURL )
+    void ODocumentLinkDialog::set( const OUString& _rName, const OUString& _rURL )
     {
         m_aName.SetText(_rName);
         m_aURL.SetText(_rURL);
@@ -86,7 +86,7 @@ namespace svx
     }
 
     //------------------------------------------------------------------
-    void ODocumentLinkDialog::get( String& _rName, String& _rURL ) const
+    void ODocumentLinkDialog::get( OUString& _rName, OUString& _rURL ) const
     {
         _rName = m_aName.GetText();
         _rURL = m_aURL.GetText();
@@ -121,8 +121,8 @@ namespace svx
 
         if (!bFileExists)
         {
-            String sMsg = String(CUI_RES(STR_LINKEDDOC_DOESNOTEXIST));
-            sMsg.SearchAndReplaceAscii("$file$", m_aURL.GetText());
+            OUString sMsg = CUI_RES(STR_LINKEDDOC_DOESNOTEXIST);
+            sMsg = sMsg.replaceFirst("$file$", m_aURL.GetText());
             ErrorBox aError(this, WB_OK , sMsg);
             aError.Execute();
             return 0L;
@@ -130,24 +130,24 @@ namespace svx
         INetURLObject aURL( sURL );
         if ( aURL.GetProtocol() != INET_PROT_FILE )
         {
-            String sMsg = String(CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE));
-            sMsg.SearchAndReplaceAscii("$file$", m_aURL.GetText());
+            OUString sMsg = CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE);
+            sMsg = sMsg.replaceFirst("$file$", m_aURL.GetText());
             ErrorBox aError(this, WB_OK , sMsg);
             aError.Execute();
             return 0L;
         }
 
-        String sCurrentText = m_aName.GetText();
+        OUString sCurrentText = m_aName.GetText();
         if ( m_aNameValidator.IsSet() )
         {
             if ( !m_aNameValidator.Call( &sCurrentText ) )
             {
-                String sMsg = String(CUI_RES(STR_NAME_CONFLICT));
-                sMsg.SearchAndReplaceAscii("$file$", sCurrentText);
+                OUString sMsg = CUI_RES(STR_NAME_CONFLICT);
+                sMsg = sMsg.replaceFirst("$file$", sCurrentText);
                 InfoBox aError(this, sMsg);
                 aError.Execute();
 
-                m_aName.SetSelection(Selection(0,sCurrentText.Len()));
+                m_aName.SetSelection(Selection(0,sCurrentText.getLength()));
                 m_aName.GrabFocus();
                 return 0L;
             }
@@ -169,8 +169,8 @@ namespace svx
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
 
-        String sPath = m_aURL.GetText();
-        if (sPath.Len())
+        OUString sPath = m_aURL.GetText();
+        if (!sPath.isEmpty())
         {
             OFileNotation aTransformer( sPath, OFileNotation::N_SYSTEM );
             aFileDlg.SetDisplayDirectory( aTransformer.get( OFileNotation::N_URL ) );

@@ -229,16 +229,16 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
         insertNewEntry( aIter->first, aTransformer.get( OFileNotation::N_SYSTEM ), aIter->second.bReadOnly );
     }
 
-    String aUserData = GetUserData();
-    if ( aUserData.Len() )
+    OUString aUserData = GetUserData();
+    if ( !aUserData.isEmpty() )
     {
         HeaderBar &rBar = pPathBox->GetTheHeaderBar();
 
         // restore column width
-        rBar.SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
+        rBar.SetItemSize( ITEMID_TYPE, aUserData.getToken(0, ';').toInt32() );
         HeaderEndDrag_Impl( &rBar );
         // restore sort direction
-        sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
+        sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.getToken(1, ';').toInt32();
         HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
 // -----------------------------------------------------------------------
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
 {
-    String sNewName,sNewLocation;
+    OUString sNewName,sNewLocation;
     openLinkDialog(sNewName,sNewLocation);
     return 0;
 }
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
     if ( !pOldRegistration || pOldRegistration->bReadOnly )
         return 0L;
 
-    String sOldName = pPathBox->GetEntryText(pEntry,0);
+    OUString sOldName = pPathBox->GetEntryText(pEntry,0);
     m_pCurEntry = pEntry;
     openLinkDialog( sOldName, pOldRegistration->sLocation, pEntry );
     m_pCurEntry = NULL;
@@ -392,9 +392,9 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
 // -----------------------------------------------------------------------------
 void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly )
 {
-    String aStr( _sName );
-    aStr += '\t';
-    aStr += String(_sLocation);
+    OUString aStr( _sName );
+    aStr += "\t";
+    aStr += _sLocation;
 
     SvTreeListEntry* pEntry = NULL;
     if ( _bReadOnly )
@@ -411,7 +411,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
 }
 
 // -----------------------------------------------------------------------------
-void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvTreeListEntry* _pEntry)
+void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry)
 {
     ODocumentLinkDialog aDlg(this,_pEntry == NULL);
 
@@ -420,7 +420,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const Str
 
     if ( aDlg.Execute() == RET_OK )
     {
-        String sNewName,sNewLocation;
+        OUString sNewName,sNewLocation;
         aDlg.get(sNewName,sNewLocation);
         if ( _pEntry == NULL || sNewName != _sOldName || sNewLocation != _sOldLocation )
         {
@@ -435,7 +435,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const Str
     }
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
+IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
 {
     if ( _pName )
     {

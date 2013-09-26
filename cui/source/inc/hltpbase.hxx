@@ -96,7 +96,7 @@ protected:
 
     sal_Bool                mbStdControlsInit;
 
-    String              maStrInitURL;
+    OUString            maStrInitURL;
 
     Timer               maTimer;
 
@@ -105,18 +105,18 @@ protected:
     void InitStdControls ();
     virtual void FillStandardDlgFields ( SvxHyperlinkItem* pHyperlinkItem );
     virtual void FillDlgFields(const OUString& rStrURL) = 0;
-    virtual void GetCurentItemData     ( OUString& rStrURL, String& aStrName,
-                                         String& aStrIntName, String& aStrFrame,
+    virtual void GetCurentItemData     ( OUString& rStrURL, OUString& aStrName,
+                                         OUString& aStrIntName, OUString& aStrFrame,
                                          SvxLinkInsertMode& eMode ) = 0;
-    virtual String CreateUiNameFromURL( const String& aStrURL );
+    virtual OUString CreateUiNameFromURL( const OUString& aStrURL );
 
-    void         GetDataFromCommonFields( String& aStrName,
-                                          String& aStrIntName, String& aStrFrame,
+    void         GetDataFromCommonFields( OUString& aStrName,
+                                          OUString& aStrIntName, OUString& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
     DECL_LINK (ClickScriptHdl_Impl, void * ); ///< Button : Script
 
-    String              aEmptyStr;
+    OUString            aEmptyStr;
 
     static OUString GetSchemeFromURL( const OUString& rStrURL );
 
@@ -140,7 +140,7 @@ public:
     virtual void DoApply ();
     virtual void SetOnlineMode( sal_Bool bEnable );
     virtual void SetInitFocus();
-    virtual void SetMarkStr ( const String& aStrMark );
+    virtual void SetMarkStr ( const OUString& aStrMark );
     virtual void Reset( const SfxItemSet& );
     virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void ActivatePage( const SfxItemSet& rItemSet );

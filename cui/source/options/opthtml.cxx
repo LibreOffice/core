@@ -64,16 +64,16 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", rSet )
     aCharSetLB->SetStyle(aCharSetLB->GetStyle() | WB_SORT);
 
     // replace placeholder with UI string from language list
-    String aText( aNumbersEnglishUSCB->GetText());
-    String aPlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%ENGLISHUSLOCALE"));
-    xub_StrLen nPos;
-    if ((nPos = aText.Search( aPlaceholder)) != STRING_NOTFOUND)
+    OUString aText( aNumbersEnglishUSCB->GetText());
+    OUString aPlaceholder("%ENGLISHUSLOCALE");
+    sal_Int32 nPos;
+    if ((nPos = aText.indexOf( aPlaceholder)) != -1)
     {
         SvtLanguageTable aLangTab;
-        const String& rStr = aLangTab.GetString( LANGUAGE_ENGLISH_US);
-        if (rStr.Len())
+        const OUString& rStr = aLangTab.GetString( LANGUAGE_ENGLISH_US);
+        if (!rStr.isEmpty())
         {
-            aText.Replace( nPos, aPlaceholder.Len(), rStr);
+            aText = aText.replaceAt( nPos, aPlaceholder.getLength(), rStr);
             aNumbersEnglishUSCB->SetText( aText);
         }
     }

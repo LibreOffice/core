@@ -149,8 +149,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSe
     static long aStaticTabs[] = { 3, 0, 20, 40 };
     m_pCheckLB->SvSimpleTable::SetTabs( aStaticTabs );
 
-    String sHeader( sHeader1 );
-    (( sHeader += '\t' ) += sHeader2 ) += '\t';
+    OUString sHeader = sHeader1 + "\t" + sHeader2 + "\t";
     m_pCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                     HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED );
 

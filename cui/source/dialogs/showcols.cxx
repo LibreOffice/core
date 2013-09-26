@@ -95,10 +95,10 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
     m_aList.Clear();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  xCurCol;
-    String sCurName;
+    OUString sCurName;
     for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
     {
-        sCurName.Erase();
+        sCurName = "";
         ::cppu::extractInterface(xCurCol, xCols->getByIndex(i));
         sal_Bool bIsHidden = sal_False;
         try

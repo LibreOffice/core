@@ -117,7 +117,7 @@ void SvxConfigFunctionListBox::MouseMove( const MouseEvent& rMEvt )
         aTimer.Start();
     else
     {
-        Help::ShowBalloon( this, aMousePos, String() );
+        Help::ShowBalloon( this, aMousePos, OUString() );
         aTimer.Stop();
     }
 }
@@ -139,7 +139,7 @@ void SvxConfigFunctionListBox::ClearAll()
     Clear();
 }
 
-String SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
+OUString SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo =
         pEntry ? (SvxGroupInfo_Impl*) pEntry->GetUserData(): 0;
@@ -160,12 +160,12 @@ String SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
         }
     }
 
-    return String();
+    return OUString();
 }
 
 void SvxConfigFunctionListBox::FunctionSelected()
 {
-    Help::ShowBalloon( this, Point(), String() );
+    Help::ShowBalloon( this, Point(), OUString() );
 }
 
 // drag and drop support
@@ -500,7 +500,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
             SvxGroupInfo_Impl *pInfo =
                 new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
 
-            String aTitle = CUI_RESSTR(RID_SVXSTR_PRODMACROS);
+            OUString aTitle = CUI_RESSTR(RID_SVXSTR_PRODMACROS);
 
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
@@ -987,12 +987,12 @@ SvxScriptSelectorDialog::SetRunLabel()
 }
 
 void
-SvxScriptSelectorDialog::SetDialogDescription( const String& rDescription )
+SvxScriptSelectorDialog::SetDialogDescription( const OUString& rDescription )
 {
     m_pDialogDescription->SetText( rDescription );
 }
 
-String
+OUString
 SvxScriptSelectorDialog::GetScriptURL() const
 {
     OUString result;
@@ -1012,7 +1012,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
     return result;
 }
 
-String
+OUString
 SvxScriptSelectorDialog::GetSelectedDisplayName()
 {
     return m_pCommands->GetEntryText( m_pCommands->GetLastSelectedEntry() );

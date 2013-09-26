@@ -376,7 +376,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
 
     // quantity
     eState = m_pTsbEndless->GetState();
-    String aStr = m_pNumFldCount->GetText();
+    OUString aStr = m_pNumFldCount->GetText();
     if( eState != m_pTsbEndless->GetSavedValue() ||
         aStr != m_pNumFldCount->GetSavedValue() )
     {

@@ -62,7 +62,7 @@ SvxHatchTabPage::SvxHatchTabPage
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_HATCH ),
-    aXHatchItem         ( String(), XHatch() ),
+    aXHatchItem         ( OUString(), XHatch() ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 
@@ -243,9 +243,9 @@ long SvxHatchTabPage::CheckChanges_Impl()
                                                         &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
         aMessDlg->SetButtonText( MESS_BTN_1,
-                                String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
+                                OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
         aMessDlg->SetButtonText( MESS_BTN_2,
-                                String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
+                                OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
         short nRet = aMessDlg->Execute();
 
@@ -286,7 +286,7 @@ sal_Bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
             // CheckChanges(); <-- duplicate inquiry ?
 
             XHatch* pXHatch = NULL;
-            String  aString;
+            OUString  aString;
             sal_uInt16  nPos = m_pLbHatchings->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -370,7 +370,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
                     GetCoreValue( *m_pMtrDistance, ePoolUnit ),
                     static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 
-    rXFSet.Put( XFillHatchItem( String(), aXHatch ) );
+    rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
     m_pCtlPreview->Invalidate();
@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
         m_pLbLineColor->SelectEntry( pHatch->GetColor() );
         if( m_pLbLineColor->GetSelectEntryCount() == 0 )
         {
-            m_pLbLineColor->InsertEntry( pHatch->GetColor(), String() );
+            m_pLbLineColor->InsertEntry( pHatch->GetColor(), OUString() );
             m_pLbLineColor->SelectEntry( pHatch->GetColor() );
         }
         SetMetricValue( *m_pMtrDistance, pHatch->GetDistance(), ePoolUnit );
@@ -436,7 +436,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
         }
 
         // fill ItemSet and pass it on to m_pCtlPreview
-        rXFSet.Put( XFillHatchItem( String(), *pHatch ) );
+        rXFSet.Put( XFillHatchItem( OUString(), *pHatch ) );
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
         m_pCtlPreview->Invalidate();
@@ -455,8 +455,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 {
-    String aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
-    String aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
+    OUString aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
+    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
     OUString aName;
 
     long nCount = pHatchingList->Count();
@@ -556,7 +556,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        String aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
+        OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
         OUString aName( pHatchingList->GetHatch( nPos )->GetName() );
         OUString aOldName = aName;
 
@@ -627,7 +627,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-            String( CUI_RES( RID_SVXSTR_ASK_DEL_HATCH ) ) );
+            OUString( CUI_RES( RID_SVXSTR_ASK_DEL_HATCH ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
         {
@@ -672,7 +672,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
     if ( nReturn != RET_CANCEL )
     {
         ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,  0 );
-        String aStrFilterType( "*.soh" );
+        OUString aStrFilterType( "*.soh" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -743,7 +743,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( "*.soh" );
+    OUString aStrFilterType( "*.soh" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );

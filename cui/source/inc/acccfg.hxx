@@ -70,7 +70,7 @@ public:
                                     m_pAccelConfigPage( pAccelConfigPage )
                                 {}
 
-    void                        ReplaceEntry( sal_uInt16 nPos, const String &rStr );
+    void                        ReplaceEntry( sal_uInt16 nPos, const OUString &rStr );
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
@@ -131,10 +131,10 @@ private:
     PushButton                      aLoadButton;
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
-    String              aLoadAccelConfigStr;
-    String              aSaveAccelConfigStr;
-    String              aFilterAllStr;
-    String              aFilterCfgStr;
+    OUString                        aLoadAccelConfigStr;
+    OUString                        aSaveAccelConfigStr;
+    OUString                        aFilterAllStr;
+    OUString                        aFilterCfgStr;
     SfxStylesInfo_Impl              m_aStylesInfo;
     sal_Bool                        m_bStylesInfoInitialized;
 
@@ -163,13 +163,13 @@ private:
     OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();
     sal_uInt16                  MapKeyCodeToPos( const KeyCode &rCode ) const;
-    css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
-    void                        StartFileDialog( WinBits nBits, const String& rTitle );
+    css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const OUString& sName);
+    void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
 
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
 
-    void                        CreateCustomItems( SvTreeListEntry* pEntry, const String& aCol1, const String& aCol2 );
+    void                        CreateCustomItems( SvTreeListEntry* pEntry, const OUString& aCol1, const OUString& aCol2 );
 
 public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
@@ -192,8 +192,8 @@ public:
     SfxAcceleratorConfigListBox( Window *pParent, ResId &rResId ) :
         ListBox( pParent, rResId ) {}
 
-    void ReplaceEntry( sal_uInt16 nPos, const String &rStr );
-    void ExpandEntry ( sal_uInt16 nPos, const String &rStr );
+    void ReplaceEntry( sal_uInt16 nPos, const OUString &rStr );
+    void ExpandEntry ( sal_uInt16 nPos, const OUString &rStr );
 };
 
 class SvxShortcutAssignDlg : public SfxNoLayoutSingleTabDialog

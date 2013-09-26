@@ -50,8 +50,8 @@ private:
 
     Image*          mpBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
 
-    String          aStrHorzList;
-    String          aStrVertList;
+    OUString        aStrHorzList;
+    OUString        aStrVertList;
 
     short           nCaptionType;
     sal_Bool            bFixedAngle;

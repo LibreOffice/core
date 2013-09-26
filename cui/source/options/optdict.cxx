@@ -51,7 +51,7 @@ static long nStaticTabs[]=
 
 // static function -------------------------------------------------------
 
-static String getNormDicEntry_Impl(const OUString &rText)
+static OUString getNormDicEntry_Impl(const OUString &rText)
 {
     OUString aTmp(comphelper::string::stripEnd(rText, '.'));
     return comphelper::string::remove(aTmp, '=');
@@ -60,7 +60,7 @@ static String getNormDicEntry_Impl(const OUString &rText)
 // Compare Dictionary Entry  result
 enum CDE_RESULT { CDE_EQUAL, CDE_SIMILAR, CDE_DIFFERENT };
 
-static CDE_RESULT cmpDicEntry_Impl( const String &rText1, const String &rText2 )
+static CDE_RESULT cmpDicEntry_Impl( const OUString &rText1, const OUString &rText2 )
 {
     CDE_RESULT eRes = CDE_DIFFERENT;
 
@@ -139,7 +139,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
         if (xDicList.is())
         {
             lang::Locale aLocale( LanguageTag::convertToLocale(nLang) );
-            String aURL( linguistic::GetWritableDictionaryURL( sDict ) );
+            OUString aURL( linguistic::GetWritableDictionaryURL( sDict ) );
             xNewDic = Reference< XDictionary > (
                     xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
             xNewDic->setActive( sal_True );
@@ -151,7 +151,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
         xNewDic = NULL;
 
         // error: couldn't create new dictionary
-        SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, String(),
+        SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
             this, RID_SVXERRCTX, &CUI_MGR() );
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
@@ -202,7 +202,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxDictEdit(Window *pParent
 
 SvxEditDictionaryDialog::SvxEditDictionaryDialog(
             Window* pParent,
-            const String& rName,
+            const OUString& rName,
             Reference< XSpellChecker1 >  &xSpl ) :
 
     ModalDialog( pParent, "EditDictionaryDialog" ,"cui/ui/editdictionarydialog.ui" ),
@@ -259,15 +259,15 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     const Reference< XDictionary >  *pDic = aDics.getConstArray();
     sal_Int32 nCount = aDics.getLength();
 
-    String aLookUpEntry;
+    OUString aLookUpEntry;
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         Reference< XDictionary >  xDic( pDic[i], UNO_QUERY );
         if (xDic.is())
         {
             bool bNegative = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
-            String aDicName( xDic->getName() );
-            const String aTxt( ::GetDicInfoStr( aDicName,
+            OUString aDicName( xDic->getName() );
+            const OUString aTxt( ::GetDicInfoStr( aDicName,
                         LanguageTag( xDic->getLocale() ).getLanguageType(), bNegative ) );
             pAllDictsLB->InsertEntry( aTxt );
 
@@ -359,7 +359,7 @@ void SvxEditDictionaryDialog::SetLanguage_Impl( util::Language nLanguage )
     pLangLB->SelectLanguage( nLanguage );
 }
 
-sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const String &rDicWord)
+sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
 {
     sal_uInt16 nPos = USHRT_MAX;
 
@@ -370,7 +370,7 @@ sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const String &rDicWord)
     {
         SvTreeListEntry* pEntry = pWordsLB->GetEntry(j);
         DBG_ASSERT( pEntry, "NULL pointer");
-        String aNormEntry( getNormDicEntry_Impl( rDicWord ) );
+        OUString aNormEntry( getNormDicEntry_Impl( rDicWord ) );
         StringCompare eCmpRes = (StringCompare)pCollator->
             compareString( aNormEntry, getNormDicEntry_Impl( pWordsLB->GetEntryText(pEntry, 0) ) );
         if( COMPARE_LESS == eCmpRes )
@@ -388,7 +388,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 
     if ( pEntry != NULL && nLBPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        String sTmpShort(pWordsLB->GetEntryText(pEntry, 0));
+        OUString sTmpShort(pWordsLB->GetEntryText(pEntry, 0));
 
         Reference< XDictionary >  xDic = aDics.getConstArray()[ nLBPos ];
         if (xDic->remove( sTmpShort ))  // sal_True on success
@@ -435,8 +435,8 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
     if ( nLang != nOldLang )
     {
         QueryBox aBox( this, CUI_RES( RID_SFXQB_SET_LANGUAGE ) );
-        String sTxt( aBox.GetMessText() );
-        sTxt.SearchAndReplaceAscii( "%1", pAllDictsLB->GetSelectEntry() );
+        OUString sTxt( aBox.GetMessText() );
+        sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectEntry() );
         aBox.SetMessText( sTxt );
 
         if ( aBox.Execute() == RET_YES )
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
             xDic->setLocale( LanguageTag::convertToLocale( nLang ) );
             bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
 
-            const String sName(
+            const OUString sName(
                 ::GetDicInfoStr( xDic->getName(),
                                  LanguageTag( xDic->getLocale() ).getLanguageType(),
                                  bNegativ ) );
@@ -467,7 +467,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     nOld = nId;
     EnterWait();
 
-    String aStr;
+    OUString aStr;
 
     pWordED->SetText(aStr);
     pReplaceED->SetText(aStr);
@@ -511,12 +511,12 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 
     for (sal_Int32 i = 0;  i < nCount;  i++)
     {
-        aStr = String(pEntry[i]->getDictionaryWord());
+        aStr = pEntry[i]->getDictionaryWord();
         sal_uInt16 nPos = GetLBInsertPos( aStr );
         if(pEntry[i]->isNegative())
         {
-            aStr += '\t';
-            aStr += String(pEntry[i]->getReplacementText());
+            aStr += "\t";
+            aStr += pEntry[i]->getReplacementText();
         }
         pWordsLB->InsertEntry(aStr, 0, sal_False, nPos == USHRT_MAX ?  LIST_APPEND : nPos);
     }
@@ -566,7 +566,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
     if(pBtn == pDeletePB)
     {
         DBG_ASSERT(pEntry, "keine Eintrag selektiert");
-        String aStr;
+        OUString aStr;
 
         pWordED->SetText(aStr);
         pReplaceED->SetText(aStr);
@@ -660,14 +660,14 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
 IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 {
     SvTreeListEntry* pFirstSel = pWordsLB->FirstSelected();
-    String rEntry = pEdt->GetText();
+    OUString rEntry = pEdt->GetText();
 
-    xub_StrLen nWordLen=rEntry.Len();
-    const String& rRepString = pReplaceED->GetText();
+    sal_Int32 nWordLen = rEntry.getLength();
+    const OUString& rRepString = pReplaceED->GetText();
 
     sal_Bool bEnableNewReplace  = sal_False;
     sal_Bool bEnableDelete      = sal_False;
-    String aNewReplaceText  = sNew;
+    OUString aNewReplaceText  = sNew;
 
     if(pEdt == pWordED)
     {
@@ -680,11 +680,11 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
             for(sal_uInt16 i = 0; i < pWordsLB->GetEntryCount(); i++)
             {
                 SvTreeListEntry*  pEntry = pWordsLB->GetEntry( i );
-                String aTestStr( pWordsLB->GetEntryText(pEntry, 0) );
+                OUString aTestStr( pWordsLB->GetEntryText(pEntry, 0) );
                 eCmpRes = cmpDicEntry_Impl( rEntry, aTestStr );
                 if(CDE_DIFFERENT != eCmpRes)
                 {
-                    if(rRepString.Len())
+                    if(!rRepString.isEmpty())
                         bFirstSelect = sal_True;
                     bDoNothing=sal_True;
                     pWordsLB->SetCurEntry(pEntry);
@@ -700,7 +700,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
                     bFound= sal_True;
                     break;
                 }
-                else if(getNormDicEntry_Impl(aTestStr).Search(
+                else if(getNormDicEntry_Impl(aTestStr).indexOf(
                             getNormDicEntry_Impl( rEntry ) ) == 0
                         && !bTmpSelEntry)
                 {
@@ -734,12 +734,12 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
     }
     else if(pEdt == pReplaceED)
     {
-        String aReplaceText;
-        String aWordText;
+        OUString aReplaceText;
+        OUString aWordText;
         if (pFirstSel)  // a pWordsLB entry is selected
         {
             aWordText    = pWordsLB->GetEntryText( pFirstSel, 0 );
-             aReplaceText = pWordsLB->GetEntryText( pFirstSel, 1 );
+            aReplaceText = pWordsLB->GetEntryText( pFirstSel, 1 );
 
             aNewReplaceText = sModify;
             bEnableDelete = sal_True;

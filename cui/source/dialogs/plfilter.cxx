@@ -38,14 +38,14 @@ using namespace com::sun::star::plugin;
 
 struct ltstr
 {
-    bool operator()( const String& s1, const String& s2 ) const
+    bool operator()( const OUString& s1, const OUString& s2 ) const
     {
-        return ( s1.CompareTo( s2 ) == COMPARE_LESS );
+        return s1.compareTo( s2 ) < 0;
     }
 };
 
-typedef set< String, ltstr > StrSet;
-typedef map< String, StrSet, ltstr > FilterMap;
+typedef set< OUString, ltstr > StrSet;
+typedef map< OUString, StrSet, ltstr > FilterMap;
 
 
 //==================================================================================================
@@ -65,13 +65,13 @@ void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OU
         const PluginDescription & rDescr = pDescriptions[nPos];
 
         StrSet& rTypes = aMap[ rDescr.Description ];
-        String aExtension( rDescr.Extension );
+        OUString aExtension( rDescr.Extension );
 
         for ( sal_uInt16 nCnt = comphelper::string::getTokenCount(aExtension,  ';'); nCnt--; )
         {
             // no default plugins anymore
-            String aExt( aExtension.GetToken( nCnt, ';' ) );
-            if ( aExt.CompareToAscii( "*.*" ) != COMPARE_EQUAL )
+            OUString aExt( aExtension.getToken( nCnt, ';' ) );
+            if ( aExt == "*.*" )
                 rTypes.insert( aExt );
         }
     }
@@ -83,8 +83,8 @@ void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OU
     int nIndex = 0;
     for ( FilterMap::iterator iPos = aMap.begin(); iPos != aMap.end(); ++iPos )
     {
-        String aText( (*iPos).first );
-        String aType;
+        OUString aText( (*iPos).first );
+        OUString aType;
         StrSet& rTypes = (*iPos).second;
         StrSet::iterator i = rTypes.begin();
         while ( i != rTypes.end() )
@@ -92,14 +92,14 @@ void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OU
             aType += (*i);
             ++i;
             if ( i != rTypes.end() )
-                aType += ';';
+                aType += ";";
         }
 
-        if ( aType.Len() )
+        if ( !aType.isEmpty() )
         {
-            aText += OUString( " (" );
+            aText += " (";
             aText += aType;
-            aText += ')';
+            aText += ")";
             pPluginNames[nIndex] = aText;
             pPluginTypes[nIndex] = aType;
             nIndex++;

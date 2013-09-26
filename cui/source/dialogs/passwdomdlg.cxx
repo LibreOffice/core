@@ -36,7 +36,7 @@
 
 class PasswordReenterEdit_Impl : public Edit
 {
-    String  m_aDefaultTxt;
+    OUString  m_aDefaultTxt;
 
     // disallow use of copy c-tor and assignment operator
     PasswordReenterEdit_Impl( const PasswordReenterEdit_Impl & );
@@ -100,10 +100,10 @@ struct PasswordToOpenModifyDialog_Impl
     FixedText                   m_aReenterPasswdToModifyFT;
     PasswordReenterEdit_Impl    m_aReenterPasswdToModifyED;
 
-    String                      m_aOneMismatch;
-    String                      m_aTwoMismatch;
-    String                      m_aInvalidStateForOkButton;
-    String                      m_aInvalidStateForOkButton_v2;
+    OUString                    m_aOneMismatch;
+    OUString                    m_aTwoMismatch;
+    OUString                    m_aInvalidStateForOkButton;
+    OUString                    m_aInvalidStateForOkButton_v2;
 
     bool                        m_bIsPasswordToModify;
 
@@ -144,8 +144,8 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
     m_aInvalidStateForOkButton_v2( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON_V2 ) ),
     m_bIsPasswordToModify( bIsPasswordToModify )
 {
-    m_aMoreFewerOptionsBTN.SetMoreText( String( CUI_RES( STR_MORE_OPTIONS ) ) );
-    m_aMoreFewerOptionsBTN.SetLessText( String( CUI_RES( STR_FEWER_OPTIONS ) ) );
+    m_aMoreFewerOptionsBTN.SetMoreText( CUI_RES( STR_MORE_OPTIONS ) );
+    m_aMoreFewerOptionsBTN.SetLessText( CUI_RES( STR_FEWER_OPTIONS ) );
 
     m_aOk.SetClickHdl( LINK( this, PasswordToOpenModifyDialog_Impl, OkBtnClickHdl ) );
 
@@ -194,7 +194,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
 
             Edit &rEdit = !bToOpenMatch? m_aPasswdToOpenED : m_aPasswdToModifyED;
             PasswordReenterEdit_Impl &rRepeatEdit = !bToOpenMatch? m_aReenterPasswdToOpenED : m_aReenterPasswdToModifyED;
-            String aEmpty;
+            OUString aEmpty;
             if (nMismatch == 1)
             {
                 rEdit.SetText( aEmpty );
@@ -240,7 +240,7 @@ PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
 }
 
 
-String PasswordToOpenModifyDialog::GetPasswordToOpen() const
+OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const
 {
     const bool bPasswdOk =
             !m_pImpl->m_aPasswdToOpenED.GetText().isEmpty() &&
@@ -249,7 +249,7 @@ String PasswordToOpenModifyDialog::GetPasswordToOpen() const
 }
 
 
-String PasswordToOpenModifyDialog::GetPasswordToModify() const
+OUString PasswordToOpenModifyDialog::GetPasswordToModify() const
 {
     const bool bPasswdOk =
             !m_pImpl->m_aPasswdToModifyED.GetText().isEmpty() &&

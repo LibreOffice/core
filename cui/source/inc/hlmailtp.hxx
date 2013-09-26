@@ -44,16 +44,16 @@ private:
     DECL_LINK (ModifiedReceiverHdl_Impl, void * ); ///< Combobox "receiver" modified
 
     void    SetScheme(const OUString& rScheme);
-    void    RemoveImproperProtocol(const String& aProperScheme);
-    String  GetSchemeFromButtons() const;
+    void    RemoveImproperProtocol(const OUString& aProperScheme);
+    OUString  GetSchemeFromButtons() const;
     INetProtocol GetSmartProtocolFromButtons() const;
 
-    String  CreateAbsoluteURL() const;
+    OUString  CreateAbsoluteURL() const;
 
 protected:
     virtual void FillDlgFields(const OUString& rStrURL);
-    virtual void GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                                     String& aStrIntName, String& aStrFrame,
+    virtual void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                                     OUString& aStrIntName, OUString& aStrFrame,
                                      SvxLinkInsertMode& eMode );
 
 public:

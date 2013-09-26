@@ -133,11 +133,11 @@ public:
     void    Enlarge( sal_Int32 _nX, sal_Int32 _nY );
 
     // control access methods
-    inline void     SetCurrentText( const String& _rText )  { aAktWord.SetText( _rText ); }
-    inline String   GetCurrentText( ) const                 { return aAktWord.GetText(); }
+    inline void     SetCurrentText( const OUString& _rText )  { aAktWord.SetText( _rText ); }
+    inline OUString GetCurrentText( ) const                 { return aAktWord.GetText(); }
 
-    inline void     SetStatusText( const String& _rText )   { aStatusText.SetText( _rText ); }
-    inline String   GetStatusText( ) const                  { return aStatusText.GetText(); }
+    inline void     SetStatusText( const OUString& _rText )   { aStatusText.SetText( _rText ); }
+    inline OUString GetStatusText( ) const                  { return aStatusText.GetText(); }
 
     inline Edit&        GetWordInputControl()           { return aNewWordED; }
     inline const Edit&  GetWordInputControl() const { return aNewWordED; }

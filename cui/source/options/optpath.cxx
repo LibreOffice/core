@@ -90,10 +90,10 @@ struct OptPath_Impl
 
 struct PathUserData_Impl
 {
-    sal_uInt16          nRealId;
+    sal_uInt16      nRealId;
     SfxItemState    eState;
-    String          sUserPath;
-    String          sWritablePath;
+    OUString        sUserPath;
+    OUString        sWritablePath;
 
     PathUserData_Impl( sal_uInt16 nId ) :
         nRealId( nId ), eState( SFX_ITEM_UNKNOWN ) {}
@@ -122,9 +122,9 @@ static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
     { USHRT_MAX, NULL }
 };
 
-static String getCfgName_Impl( sal_uInt16 _nHandle )
+static OUString getCfgName_Impl( sal_uInt16 _nHandle )
 {
-    String sCfgName;
+    OUString sCfgName;
     sal_uInt16 nIndex = 0;
     while ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle != USHRT_MAX )
     {
@@ -142,21 +142,21 @@ static String getCfgName_Impl( sal_uInt16 _nHandle )
 
 #define MULTIPATH_DELIMITER     ';'
 
-String Convert_Impl( const String& rValue )
+OUString Convert_Impl( const OUString& rValue )
 {
     char cDelim = MULTIPATH_DELIMITER;
     sal_uInt16 nCount = comphelper::string::getTokenCount(rValue, cDelim);
-    String aReturn;
+    OUString aReturn;
     for ( sal_uInt16 i=0; i<nCount ; ++i )
     {
-        String aValue = rValue.GetToken( i, cDelim );
+        OUString aValue = rValue.getToken( i, cDelim );
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INET_PROT_FILE )
-            aReturn += String(aObj.PathToFileName());
+            aReturn += aObj.PathToFileName();
         else if ( ::utl::LocalFileHelper::IsFileContent( aValue ) )
-            aReturn += String(aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ));
+            aReturn += aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
         if ( i+1 < nCount)
-            aReturn += MULTIPATH_DELIMITER;
+            aReturn += OUString(MULTIPATH_DELIMITER);
     }
 
     return aReturn;
@@ -308,17 +308,17 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
 #endif
             case SvtPathOptions::PATH_WORK:
             {
-                String aStr( CUI_RES( RID_SVXSTR_PATH_NAME_START + i ) );
+                OUString aStr( CUI_RES( RID_SVXSTR_PATH_NAME_START + i ) );
                 nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
-                aStr += '\t';
-                String sInternal, sUser, sWritable;
+                aStr += "\t";
+                OUString sInternal, sUser, sWritable;
                 sal_Bool bReadOnly = sal_False;
                 GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
-                String sTmpPath = sUser;
-                if ( sTmpPath.Len() > 0 && sWritable.Len() > 0 )
-                    sTmpPath += MULTIPATH_DELIMITER;
+                OUString sTmpPath = sUser;
+                if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
+                    sTmpPath += OUString(MULTIPATH_DELIMITER);
                 sTmpPath += sWritable;
-                String aValue( sTmpPath );
+                OUString aValue( sTmpPath );
                 aValue = Convert_Impl( aValue );
                 nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
                 aStr += aValue;
@@ -376,10 +376,10 @@ void SvxPathTabPage::FillUserData()
 {
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
 
-    String aUserData = OUString::number( rBar.GetItemSize( ITEMID_TYPE ) ) + ";";
+    OUString aUserData = OUString::number( rBar.GetItemSize( ITEMID_TYPE ) ) + ";";
     HeaderBarItemBits nBits = rBar.GetItemBits( ITEMID_TYPE );
     sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    aUserData += bUp ? '1' : '0';
+    aUserData += bUp ? OUString("1") : OUString("0");
     SetUserData( aUserData );
 }
 
@@ -414,11 +414,11 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
     while ( pEntry )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
-        String aOldPath = pImpl->m_aDefOpt.GetDefaultPath( pPathImpl->nRealId );
+        OUString aOldPath = pImpl->m_aDefOpt.GetDefaultPath( pPathImpl->nRealId );
 
-        if ( aOldPath.Len() )
+        if ( !aOldPath.isEmpty() )
         {
-            String sInternal, sUser, sWritable, sTemp;
+            OUString sInternal, sUser, sWritable, sTemp;
             sal_Bool bReadOnly = sal_False;
             GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
 
@@ -428,29 +428,29 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
             for ( i = 0; i < nOldCount; ++i )
             {
                 bool bFound = false;
-                String sOnePath = aOldPath.GetToken( i, MULTIPATH_DELIMITER );
+                OUString sOnePath = aOldPath.getToken( i, MULTIPATH_DELIMITER );
                 for ( sal_uInt16 j = 0; !bFound && j < nIntCount; ++j )
                 {
-                    if ( sInternal.GetToken( i, MULTIPATH_DELIMITER ) == sOnePath )
+                    if ( sInternal.getToken( i, MULTIPATH_DELIMITER ) == sOnePath )
                         bFound = true;
                 }
                 if ( !bFound )
                 {
-                    if ( sTemp.Len() > 0 )
-                        sTemp += MULTIPATH_DELIMITER;
+                    if ( !sTemp.isEmpty() )
+                        sTemp += OUString(MULTIPATH_DELIMITER);
                     sTemp += sOnePath;
                 }
             }
 
-            String sUserPath, sWritablePath;
+            OUString sUserPath, sWritablePath;
             nOldCount = comphelper::string::getTokenCount(sTemp, MULTIPATH_DELIMITER);
             for ( i = 0; nOldCount > 0 && i < nOldCount - 1; ++i )
             {
-                if ( sUserPath.Len() > 0 )
-                    sUserPath += MULTIPATH_DELIMITER;
-                sUserPath += sTemp.GetToken( i, MULTIPATH_DELIMITER );
+                if ( !sUserPath.isEmpty() )
+                    sUserPath += OUString(MULTIPATH_DELIMITER);
+                sUserPath += sTemp.getToken( i, MULTIPATH_DELIMITER );
             }
-            sWritablePath = sTemp.GetToken( nOldCount - 1, MULTIPATH_DELIMITER );
+            sWritablePath = sTemp.getToken( nOldCount - 1, MULTIPATH_DELIMITER );
 
             pPathBox->SetEntryText( Convert_Impl( sTemp ), pEntry, 1 );
             pPathImpl->eState = SFX_ITEM_SET;
@@ -464,7 +464,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
+void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 {
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     if ( !pEntry )
@@ -473,7 +473,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
         return;
     }
 
-    String sInternal, sUser, sWritable;
+    OUString sInternal, sUser, sWritable;
     PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
     sal_Bool bReadOnly = sal_False;
     GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
@@ -533,7 +533,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 {
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     sal_uInt16 nPos = ( pEntry != NULL ) ? ( (PathUserData_Impl*)pEntry->GetUserData() )->nRealId : 0;
-    String sInternal, sUser, sWritable;
+    OUString sInternal, sUser, sWritable;
     if ( pEntry )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
@@ -556,23 +556,23 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
             DBG_ASSERT( pMultiDlg, "Dialogdiet fail!" );
             pMultiDlg->EnableRadioButtonMode();
 
-            String sPath( sUser );
-            if ( sPath.Len() > 0 )
-                sPath += MULTIPATH_DELIMITER;
+            OUString sPath( sUser );
+            if ( !sPath.isEmpty() )
+                sPath += OUString(MULTIPATH_DELIMITER);
             sPath += sWritable;
             pMultiDlg->SetPath( sPath );
 
-            String sPathName = pPathBox->GetEntryText( pEntry, 0 );
-            String sNewTitle( pImpl->m_sMultiPathDlg );
-            sNewTitle.SearchAndReplace( VAR_ONE, sPathName );
+            OUString sPathName = pPathBox->GetEntryText( pEntry, 0 );
+            OUString sNewTitle( pImpl->m_sMultiPathDlg );
+            sNewTitle = sNewTitle.replaceFirst( VAR_ONE, sPathName );
             pMultiDlg->SetTitle( sNewTitle );
 
             if ( pMultiDlg->Execute() == RET_OK && pEntry )
             {
-                sUser.Erase();
-                sWritable.Erase();
-                String sFullPath;
-                String sNewPath = pMultiDlg->GetPath();
+                sUser = "";
+                sWritable = "";
+                OUString sFullPath;
+                OUString sNewPath = pMultiDlg->GetPath();
                 char cDelim = MULTIPATH_DELIMITER;
                 sal_uInt16 nCount = comphelper::string::getTokenCount(sNewPath, cDelim);
                 if ( nCount > 0 )
@@ -580,16 +580,16 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
                     sal_uInt16 i = 0;
                     for ( ; i < nCount - 1; ++i )
                     {
-                        if ( sUser.Len() > 0 )
-                            sUser += cDelim;
-                        sUser += sNewPath.GetToken( i, cDelim );
+                        if ( !sUser.isEmpty() )
+                            sUser += OUString(cDelim);
+                        sUser += sNewPath.getToken( i, cDelim );
                     }
-                    if ( sFullPath.Len() > 0 )
-                        sFullPath += cDelim;
+                    if ( !sFullPath.isEmpty() )
+                        sFullPath += OUString(cDelim);
                     sFullPath += sUser;
-                    sWritable += sNewPath.GetToken( i, cDelim );
-                    if ( sFullPath.Len() > 0 )
-                        sFullPath += cDelim;
+                    sWritable += sNewPath.getToken( i, cDelim );
+                    if ( !sFullPath.isEmpty() )
+                        sFullPath += OUString(cDelim);
                     sFullPath += sWritable;
                 }
 
@@ -622,7 +622,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
                 if ( ExecutableDialogResults::OK != nRet )
                     return 0;
 
-                String sFolder( xFolderPicker->getDirectory() );
+                OUString sFolder( xFolderPicker->getDirectory() );
                 ChangeCurrentEntry( sFolder );
             }
         }
@@ -702,7 +702,7 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
     {
         DBG_ASSERT( xFolderPicker.is() == sal_True, "SvxPathTabPage::DialogClosedHdl(): no folder picker" );
 
-        String sURL = String( xFolderPicker->getDirectory() );
+        OUString sURL = xFolderPicker->getDirectory();
         ChangeCurrentEntry( sURL );
     }
     return 0L;
@@ -711,10 +711,10 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 // -----------------------------------------------------------------------
 
 void SvxPathTabPage::GetPathList(
-    sal_uInt16 _nPathHandle, String& _rInternalPath,
-    String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly )
+    sal_uInt16 _nPathHandle, OUString& _rInternalPath,
+    OUString& _rUserPath, OUString& _rWritablePath, sal_Bool& _rReadOnly )
 {
-    String sCfgName = getCfgName_Impl( _nPathHandle );
+    OUString sCfgName = getCfgName_Impl( _nPathHandle );
 
     try
     {
@@ -726,7 +726,7 @@ void SvxPathTabPage::GetPathList(
         }
 
         // load internal paths
-        String sProp( sCfgName );
+        OUString sProp( sCfgName );
         sProp += POSTFIX_INTERNAL;
         Any aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
         Sequence< OUString > aPathSeq;
@@ -737,9 +737,9 @@ void SvxPathTabPage::GetPathList(
 
             for ( i = 0; i < nCount; ++i )
             {
-                if ( _rInternalPath.Len() > 0 )
-                    _rInternalPath += ';';
-                _rInternalPath += String( pPaths[i] );
+                if ( !_rInternalPath.isEmpty() )
+                    _rInternalPath += ";";
+                _rInternalPath += pPaths[i];
             }
         }
         // load user paths
@@ -753,9 +753,9 @@ void SvxPathTabPage::GetPathList(
 
             for ( i = 0; i < nCount; ++i )
             {
-                if ( _rUserPath.Len() > 0 )
-                    _rUserPath += ';';
-                _rUserPath += String( pPaths[i] );
+                if ( !_rUserPath.isEmpty() )
+                    _rUserPath += ";";
+                _rUserPath += pPaths[i];
             }
         }
         // then the writable path
@@ -764,7 +764,7 @@ void SvxPathTabPage::GetPathList(
         aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
         OUString sWritablePath;
         if ( aAny >>= sWritablePath )
-            _rWritablePath = String( sWritablePath );
+            _rWritablePath = sWritablePath;
 
         // and the readonly flag
         sProp = sCfgName;
@@ -781,9 +781,9 @@ void SvxPathTabPage::GetPathList(
 // -----------------------------------------------------------------------
 
 void SvxPathTabPage::SetPathList(
-    sal_uInt16 _nPathHandle, const String& _rUserPath, const String& _rWritablePath )
+    sal_uInt16 _nPathHandle, const OUString& _rUserPath, const OUString& _rWritablePath )
 {
-    String sCfgName = getCfgName_Impl( _nPathHandle );
+    OUString sCfgName = getCfgName_Impl( _nPathHandle );
 
     try
     {
@@ -800,8 +800,8 @@ void SvxPathTabPage::SetPathList(
         Sequence< OUString > aPathSeq( nCount );
         OUString* pArray = aPathSeq.getArray();
         for ( sal_uInt16 i = 0; i < nCount; ++i )
-            pArray[i] = OUString( _rUserPath.GetToken( i, cDelim ) );
-        String sProp( sCfgName );
+            pArray[i] = _rUserPath.getToken( i, cDelim );
+        OUString sProp( sCfgName );
         sProp += POSTFIX_USER;
         Any aValue = makeAny( aPathSeq );
         pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );

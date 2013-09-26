@@ -950,7 +950,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
     pItem = GetItem( rSet, SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT );
     if(pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue())
     {
-        String sHLabel = m_pHoriFT->GetText();
+        OUString sHLabel = m_pHoriFT->GetText();
         m_pHoriFT->SetText(m_pVertFT->GetText());
         m_pVertFT->SetText(sHLabel);
         m_bIsVerticalFrame = true;
@@ -1439,13 +1439,13 @@ sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
-            String sSelEntry(rAlignLB.GetSelectEntry());
+            OUString sSelEntry(rAlignLB.GetSelectEntry());
 
             for (std::size_t i = 0; i < nMapCount; i++)
             {
                 SvxSwFramePosString::StringId eResId = pMap[i].eStrId;
 
-                String sEntry = m_aFramePosString.GetString(eResId);
+                OUString sEntry = m_aFramePosString.GetString(eResId);
 
                 if (sEntry == sSelEntry)
                 {
@@ -1647,7 +1647,7 @@ void SvxSwPosSizeTabPage::UpdateExample()
 sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16 nAlign,
         sal_uInt16 nRel, ListBox &rLB, FixedText &rFT)
 {
-    String sSelEntry;
+    OUString sSelEntry;
     sal_uLong  nLBRelations = 0;
     std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
 
@@ -1657,7 +1657,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
     {
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
-            String sOldEntry(rLB.GetSelectEntry());
+            OUString sOldEntry(rLB.GetSelectEntry());
             sal_uInt16 nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1673,7 +1673,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                             SvxSwFramePosString::StringId sStrId1 = aAsCharRelationMap[nRelPos].eStrId;
 
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
-                            String sEntry = m_aFramePosString.GetString(sStrId1);
+                            OUString sEntry = m_aFramePosString.GetString(sStrId1);
                             sal_uInt16 nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
                             if (pMap[_nMapPos].nAlign == nAlign)
@@ -1683,7 +1683,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                     }
                 }
             }
-            if (sSelEntry.Len())
+            if (!sSelEntry.isEmpty())
                 rLB.SelectEntry(sSelEntry);
             else
             {
@@ -1732,16 +1732,16 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                         {
                             SvxSwFramePosString::StringId sStrId1 = m_pHoriMirrorCB->IsChecked() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
-                            String sEntry = m_aFramePosString.GetString(sStrId1);
+                            OUString sEntry = m_aFramePosString.GetString(sStrId1);
                             sal_uInt16 nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
-                            if (!sSelEntry.Len() && aRelationMap[nRelPos].nRelation == nRel)
+                            if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == nRel)
                                 sSelEntry = sEntry;
                         }
                     }
                 }
             }
-            if (sSelEntry.Len())
+            if (!sSelEntry.isEmpty())
                 rLB.SelectEntry(sSelEntry);
             else
             {
@@ -1795,7 +1795,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
                                       const sal_uInt16 _nRel,
                                       ListBox &_rLB)
 {
-    String sSelEntry, sOldEntry;
+    OUString sSelEntry, sOldEntry;
     sOldEntry = _rLB.GetSelectEntry();
 
     _rLB.Clear();
@@ -1815,7 +1815,7 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
         {
             SvxSwFramePosString::StringId eStrId = m_pHoriMirrorCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
             eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft);
-            String sEntry(m_aFramePosString.GetString(eStrId));
+            OUString sEntry(m_aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
                 // don't insert duplicate entries at character wrapped borders

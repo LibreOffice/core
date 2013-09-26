@@ -333,7 +333,7 @@ void SpellDialog::UpdateBoxes_Impl()
     const sal_Int32 nSize = aNewWords.getLength();
     for ( i = 0; i < nSize; ++i )
     {
-        String aTmp( pNewWords[i] );
+        OUString aTmp( pNewWords[i] );
         if ( LISTBOX_ENTRY_NOTFOUND == m_pSuggestionLB->GetEntryPos( aTmp ) )
         {
             m_pSuggestionLB->InsertEntry( aTmp );
@@ -458,7 +458,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
     else if (m_pAutoCorrPB == pBtn)
     {
         //get the currently selected wrong word
-        String sCurrentErrorText = m_pSentenceED->GetErrorText();
+        OUString sCurrentErrorText = m_pSentenceED->GetErrorText();
         //get the wrong word from the XSpellAlternative
         const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
         if( pSpellErrorDescription )
@@ -519,28 +519,28 @@ void SpellDialog::StartSpellOptDlg_Impl()
 
 namespace
 {
-    String getDotReplacementString(const String &rErrorText, const String &rSuggestedReplacement)
+    OUString getDotReplacementString(const OUString &rErrorText, const OUString &rSuggestedReplacement)
     {
-        String aString = rErrorText;
+        OUString aString = rErrorText;
 
         //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
-        bool bDot = aString.Len() && aString.GetChar(aString.Len() - 1 ) == '.';
+        bool bDot = !aString.isEmpty() && aString[aString.getLength() - 1] == '.';
 
         aString = rSuggestedReplacement;
 
-        if(bDot && (!aString.Len() || aString.GetChar(aString.Len() - 1 ) != '.'))
-            aString += '.';
+        if(bDot && (aString.isEmpty() || aString[aString.getLength() - 1] != '.'))
+            aString += ".";
 
         return aString;
     }
 }
 
 
-String SpellDialog::getReplacementString() const
+OUString SpellDialog::getReplacementString() const
 {
-    String sOrigString = m_pSentenceED->GetErrorText();
+    OUString sOrigString = m_pSentenceED->GetErrorText();
 
-    String sReplacement(sOrigString);
+    OUString sReplacement(sOrigString);
 
     if(m_pSuggestionLB->IsEnabled() &&
             m_pSuggestionLB->GetSelectEntryCount()>0 &&
@@ -561,7 +561,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
     else
     {
         m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
-        String aString = getReplacementString();
+        OUString aString = getReplacementString();
         m_pSentenceED->ChangeMarkedWord(aString, GetSelectedLang_Impl());
         SpellContinue_Impl();
         bModified = false;
@@ -577,7 +577,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
 IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
-    String aString = getReplacementString();
+    OUString aString = getReplacementString();
     LanguageType eLang = GetSelectedLang_Impl();
 
     // add new word to ChangeAll list
@@ -629,7 +629,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
     }
     else
     {
-        String sErrorText(m_pSentenceED->GetErrorText());
+        OUString sErrorText(m_pSentenceED->GetErrorText());
         sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
             sErrorText, sal_False,
             OUString(), LANGUAGE_NONE );
@@ -769,9 +769,9 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
 
     //if currently an error is selected then search for alternatives for
     //this word and fill the alternatives ListBox accordingly
-    String sError = m_pSentenceED->GetErrorText();
+    OUString sError = m_pSentenceED->GetErrorText();
     m_pSuggestionLB->Clear();
-    if(sError.Len())
+    if(!sError.isEmpty())
     {
         LanguageType eLanguage = pBox->GetSelectLanguage();
         Reference <XSpellAlternatives> xAlt = xSpell->spell( sError, eLanguage,
@@ -808,7 +808,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
     Graphic aGraphic;
-    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    const OUString aFilterName( IMP_PNG );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
@@ -817,8 +817,8 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 }
 void SpellDialog::SetTitle_Impl(LanguageType nLang)
 {
-    String sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
-    sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", SvtLanguageTable::GetLanguageString(nLang) );
+    OUString sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
+    sTitle = sTitle.replaceFirst( "$LANGUAGE ($LOCATION)", SvtLanguageTable::GetLanguageString(nLang) );
     SetText( sTitle );
 }
 
@@ -914,9 +914,9 @@ int SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
 
     //GetErrorText() returns the current error even if the text is already
     //manually changed
-    const String aNewWord= m_pSentenceED->GetErrorText();
+    const OUString aNewWord = m_pSentenceED->GetErrorText();
 
-    String aDicName ( pMenu->GetItemText( nItemId ) );
+    OUString aDicName ( pMenu->GetItemText( nItemId ) );
 
     uno::Reference< linguistic2::XDictionary >      xDic;
     uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
@@ -1603,7 +1603,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
             m_nErrorStart = pNextError->GetStart();
             m_nErrorEnd = pNextError->GetEnd();
 
-            String sReplacement(getDotReplacementString(GetErrorText(), xEntry->getReplacementText()));
+            OUString sReplacement(getDotReplacementString(GetErrorText(), xEntry->getReplacementText()));
 
             ChangeMarkedWord(sReplacement, LanguageTag::convertToLanguageType( pSpellErrorDescription->aLocale ));
 
@@ -1657,10 +1657,10 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_uInt16 nStart, sal_uInt16 nEnd
 }
 
 //-----------------------------------------------------------------------
-void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageType eLanguage)
+void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage)
 {
     //calculate length changes
-    long nDiffLen = rNewWord.Len() - m_nErrorEnd + m_nErrorStart;
+    long nDiffLen = rNewWord.getLength() - m_nErrorEnd + m_nErrorStart;
     TextSelection aSel(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd));
     //Remove spell errror attribute
     ExtTextEngine* pTextEngine = GetTextEngine();
@@ -1720,7 +1720,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
 }
 
 //-------------------------------------------------
-String SentenceEditWindow_Impl::GetErrorText() const
+OUString SentenceEditWindow_Impl::GetErrorText() const
 {
     return GetTextEngine()->GetText(TextSelection(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd) ));
 }

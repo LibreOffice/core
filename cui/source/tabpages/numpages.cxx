@@ -168,7 +168,7 @@ static Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
     static Font aDefBulletFont( OUString("StarSymbol"),
-                                String(), Size( 0, 14 ) );
+                                OUString(), Size( 0, 14 ) );
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
@@ -340,7 +340,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
             {
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
                 aFmt.SetNumberingType(eNewType);
-                String aEmptyStr;
+                OUString aEmptyStr;
                 if(cLocalPrefix == ' ')
                     aFmt.SetPrefix( aEmptyStr );
                 else
@@ -727,7 +727,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
                     {
                         //if it cannot be found then create a new one
                         Font aCreateFont( pLevelSettings->sBulletFont,
-                                                String(), Size( 0, 14 ) );
+                                                OUString(), Size( 0, 14 ) );
                         aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
                         aCreateFont.SetFamily( FAMILY_DONTKNOW );
                         aCreateFont.SetPitch( PITCH_DONTKNOW );
@@ -930,7 +930,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
         sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
 
         sal_uInt16 nMask = 1;
-        String aEmptyStr;
+        OUString aEmptyStr;
         sal_uInt16 nSetNumberingType = SVX_NUM_BITMAP;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
@@ -1399,13 +1399,13 @@ void SvxNumOptionsTabPage::InitControls()
     bool bSameAdjust    = true;
 
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
-    String sFirstCharFmt;
+    OUString sFirstCharFmt;
     sal_Int16 eFirstOrient = text::VertOrientation::NONE;
     Size aFirstSize(0,0);
     sal_uInt16 nMask = 1;
     sal_uInt16 nLvl = USHRT_MAX;
     sal_uInt16 nHighestLevel = 0;
-    String aEmptyStr;
+    OUString aEmptyStr;
 
     sal_Bool bBullColor = pActNum->IsFeatureSupported(NUM_BULLET_COLOR);
     sal_Bool bBullRelSize = pActNum->IsFeatureSupported(NUM_BULLET_REL_SIZE);
@@ -1560,7 +1560,7 @@ void SvxNumOptionsTabPage::InitControls()
 
     if(bSameCharFmt)
     {
-        if(sFirstCharFmt.Len())
+        if(!sFirstCharFmt.isEmpty())
                 m_pCharFmtLB->SelectEntry(sFirstCharFmt);
         else
             m_pCharFmtLB->SelectEntryPos( 0 );
@@ -1702,10 +1702,10 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
 
 IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
 {
-    String sSelectStyle;
+    OUString sSelectStyle;
     sal_Bool bShowOrient = sal_False;
     sal_Bool bBmp = sal_False;
-    String aEmptyStr;
+    OUString aEmptyStr;
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -1774,7 +1774,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
         m_pOrientLB->Hide();
     }
     SetModified();
-    if(sSelectStyle.Len())
+    if(!sSelectStyle.isEmpty())
     {
         m_pCharFmtLB->SelectEntry(sSelectStyle);
         CharFmtHdl_Impl(m_pCharFmtLB);
@@ -1881,7 +1881,7 @@ IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, MetricField *, pField)
 IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 {
     sal_uInt16                  nItemId = pButton->GetCurItemId();
-    String                  aGrfName;
+    OUString                aGrfName;
     Size                    aSize;
     sal_Bool                bSucc(sal_False);
     SvxOpenGraphicDialog    aGrfDlg( CUI_RES(RID_SVXSTR_EDIT_GRAPHIC) );
@@ -2157,9 +2157,9 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl)
 {
     bAutomaticCharStyles = sal_False;
     sal_uInt16 nEntryPos = m_pCharFmtLB->GetSelectEntryPos();
-    String sEntry = m_pCharFmtLB->GetSelectEntry();
+    OUString sEntry = m_pCharFmtLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
-    String aEmptyStr;
+    OUString aEmptyStr;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
         if(nActNumLvl & nMask)
@@ -2413,7 +2413,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     aNum.SetLevel( nLevel );
                     if(pActNum->IsContinuousNumbering())
                         aNum.GetLevelVal()[nLevel] = nPreNum;
-                    String aText(pActNum->MakeNumString( aNum ));
+                    OUString aText(pActNum->MakeNumString( aNum ));
                     Font aSaveFont = pVDev->GetFont();
                     Font aColorFont(aSaveFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
@@ -2548,7 +2548,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     aNum.SetLevel( nLevel );
                     if(pActNum->IsContinuousNumbering())
                         aNum.GetLevelVal()[nLevel] = nPreNum;
-                    String aText(pActNum->MakeNumString( aNum ));
+                    OUString aText(pActNum->MakeNumString( aNum ));
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     pVDev->SetFont(aStdFont);
                     nTextOffset = (sal_uInt16)pVDev->GetTextWidth(aText);
@@ -2710,7 +2710,7 @@ void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
     }
     else if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
-        String sDebugText( OUString::number( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
+        OUString sDebugText( OUString::number( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
         sDebugText += sHash;
         sDebugText += OUString::number( TWIP_TO_MM100(rNumFmt.GetFirstLineIndent() ) );
         sDebugText += sHash;
@@ -2822,7 +2822,7 @@ void SvxNumPositionTabPage::InitControls()
     else
         bSetDistEmpty = true;
 
-    const String aEmptyStr;
+    const OUString aEmptyStr;
     if(bSameDist)
         SetMetricValue(*m_pDistNumMF, aNumFmtArr[nLvl]->GetCharTextDistance(), eCoreUnit);
     else
@@ -3261,7 +3261,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, MetricField *, pFld )
     SetModified();
     if(!m_pDistBorderMF->IsEnabled())
     {
-        String aEmptyStr;
+        OUString aEmptyStr;
         m_pDistBorderMF->SetText(aEmptyStr);
     }
 
@@ -3300,7 +3300,7 @@ IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
         }
 
     }
-    String aEmptyStr;
+    OUString aEmptyStr;
     if(bSetValue)
         SetMetricValue(*m_pDistBorderMF, nValue,   eCoreUnit);
     else
@@ -3362,7 +3362,7 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl)
     }
     else
     {
-        m_pListtabMF->SetText( String() );
+        m_pListtabMF->SetText( OUString() );
     }
 
     SetModified();

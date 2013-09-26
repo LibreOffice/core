@@ -45,8 +45,8 @@ private:
     Edit                maEdPassword;
     CheckBox            maCbAnonymous;
 
-    String              maStrOldUser;
-    String              maStrOldPassword;
+    OUString            maStrOldUser;
+    OUString            maStrOldPassword;
 
     sal_Bool                mbMarkWndOpen;
 
@@ -63,19 +63,19 @@ private:
 
     void    SetScheme(const OUString& rScheme);
     void    RemoveImproperProtocol(const OUString& rProperScheme);
-    String  GetSchemeFromButtons() const;
+    OUString  GetSchemeFromButtons() const;
     INetProtocol GetSmartProtocolFromButtons() const;
 
     OUString CreateAbsoluteURL() const;
 
     void   setAnonymousFTPUser();
-    void   setFTPUser(const String& rUser, const String& rPassword);
+    void   setFTPUser(const OUString& rUser, const OUString& rPassword);
     void   RefreshMarkWindow();
 
 protected:
     virtual void FillDlgFields(const OUString& rStrURL);
-    virtual void GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                                     String& aStrIntName, String& aStrFrame,
+    virtual void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                                     OUString& aStrIntName, OUString& aStrFrame,
                                      SvxLinkInsertMode& eMode );
     virtual sal_Bool ShouldOpenMarkWnd () {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
     virtual void SetMarkWndShouldOpen (sal_Bool bOpen) {mbMarkWndOpen=bOpen;}
@@ -86,7 +86,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void        SetMarkStr ( const String& aStrMark );
+    virtual void        SetMarkStr ( const OUString& aStrMark );
     virtual void        SetOnlineMode( sal_Bool bEnable );
 
     virtual void        SetInitFocus();

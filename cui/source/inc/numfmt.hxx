@@ -44,7 +44,7 @@ class vector;
 class SvxNumberPreview : public Window
 {
 private:
-    String          aPrevStr;
+    OUString        aPrevStr;
     Color           aPrevCol;
     sal_Int32       mnPos;
     sal_Unicode     mnChar;
@@ -58,7 +58,7 @@ protected:
 public:
     SvxNumberPreview(Window* pParent, WinBits nStyle = WB_BORDER);
 
-    void            NotifyChange( const String& rPrevStr, const Color* pColor = NULL );
+    void            NotifyChange( const OUString& rPrevStr, const Color* pColor = NULL );
 };
 
 // -----------------------------------------------------------------------
@@ -126,7 +126,7 @@ private:
     sal_Bool                bOneAreaFlag;
     short                   nFixedCategory;
 
-    String sAutomaticEntry;
+    OUString sAutomaticEntry;
 
     Window*                 pLastActivWindow;
 
@@ -138,8 +138,8 @@ private:
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );
-    String  GetExpColorString( Color*& rpPreviewColor, const String& aFormatStr, short nTmpCatPos );
-    void    MakePreviewText( const String& rFormat );
+    OUString  GetExpColorString( Color*& rpPreviewColor, const OUString& aFormatStr, short nTmpCatPos );
+    void    MakePreviewText( const OUString& rFormat );
     void    ChangePreviewText( sal_uInt16 nPos );
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, sal_Bool bSelect);
     // Handler

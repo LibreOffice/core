@@ -129,8 +129,8 @@ private:
     sal_Bool        bColTransparency    : 1;
     sal_Bool        bGraphTransparency  : 1;
     Graphic     aBgdGraphic;
-    String      aBgdGraphicPath;
-    String      aBgdGraphicFilter;
+    OUString    aBgdGraphicPath;
+    OUString    aBgdGraphicFilter;
 
     SvxBackgroundPage_Impl* pPageImpl;
     SvxOpenGraphicDialog* pImportDlg;
@@ -150,7 +150,7 @@ private:
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
     SvxGraphicPosition  GetGraphicPosition_Impl();
     void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
-                                            const String& rUserData);
+                                            const OUString& rUserData);
     sal_Bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
     void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 

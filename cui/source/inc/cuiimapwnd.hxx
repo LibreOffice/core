@@ -42,15 +42,15 @@ class URLDlg : public ModalDialog
 public:
 
                         URLDlg( Window* pWindow,
-                                const String& rURL, const String& rAlternativeText, const String& rDescription,
-                                const String& rTarget, const String& rName,
+                                const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription,
+                                const OUString& rTarget, const OUString& rName,
                                 TargetList& rTargetList );
 
-    String              GetURL() const { return m_pEdtURL->GetText(); }
-    String              GetAltText() const { return m_pEdtAlternativeText->GetText(); }
-    String              GetDesc() const { return m_pEdtDescription->GetText(); }
-    String              GetTarget() const { return m_pCbbTargets->GetText(); }
-    String              GetName() const { return m_pEdtName->GetText(); }
+    OUString            GetURL() const { return m_pEdtURL->GetText(); }
+    OUString            GetAltText() const { return m_pEdtAlternativeText->GetText(); }
+    OUString            GetDesc() const { return m_pEdtDescription->GetText(); }
+    OUString            GetTarget() const { return m_pCbbTargets->GetText(); }
+    OUString            GetName() const { return m_pEdtName->GetText(); }
 };
 
 #endif

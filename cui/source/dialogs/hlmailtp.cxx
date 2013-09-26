@@ -136,17 +136,17 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
 |*
 |************************************************************************/
 
-void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                                             String& aStrIntName, String& aStrFrame,
+void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                                             OUString& aStrIntName, OUString& aStrFrame,
                                              SvxLinkInsertMode& eMode )
 {
     rStrURL = CreateAbsoluteURL();
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
-String SvxHyperlinkMailTp::CreateAbsoluteURL() const
+OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 {
-    String aStrURL = maCbbReceiver.GetText();
+    OUString aStrURL = maCbbReceiver.GetText();
     INetURLObject aURL(aStrURL);
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
@@ -160,8 +160,8 @@ String SvxHyperlinkMailTp::CreateAbsoluteURL() const
     {
         if ( maEdSubject.GetText() != OUString(aEmptyStr) )
         {
-            String aQuery = OUString("subject=");
-            aQuery.Append( maEdSubject.GetText() );
+            OUString aQuery("subject=");
+            aQuery += maEdSubject.GetText();
             aURL.SetParam(aQuery);
         }
     }
@@ -223,21 +223,21 @@ void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 |*
 |************************************************************************/
 
-void SvxHyperlinkMailTp::RemoveImproperProtocol(const String& aProperScheme)
+void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
-    String aStrURL ( maCbbReceiver.GetText() );
+    OUString aStrURL ( maCbbReceiver.GetText() );
     if ( aStrURL != aEmptyStr )
     {
-        String aStrScheme = GetSchemeFromURL( aStrURL );
+        OUString aStrScheme = GetSchemeFromURL( aStrURL );
         if ( aStrScheme != aEmptyStr && aStrScheme != aProperScheme )
         {
-            aStrURL.Erase ( 0, aStrScheme.Len() );
+            aStrURL = aStrURL.copy( aStrScheme.getLength() );
             maCbbReceiver.SetText ( aStrURL );
         }
     }
 }
 
-String SvxHyperlinkMailTp::GetSchemeFromButtons() const
+OUString SvxHyperlinkMailTp::GetSchemeFromButtons() const
 {
     if( maRbtNews.IsChecked() )
         return OUString(INET_NEWS_SCHEME);
@@ -261,7 +261,7 @@ INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const
 
 IMPL_LINK_NOARG(SvxHyperlinkMailTp, Click_SmartProtocol_Impl)
 {
-    String aScheme = GetSchemeFromButtons();
+    OUString aScheme = GetSchemeFromButtons();
     SetScheme( aScheme );
     return( 0L );
 }
@@ -274,8 +274,8 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, Click_SmartProtocol_Impl)
 
 IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl)
 {
-    String aScheme = GetSchemeFromURL( maCbbReceiver.GetText() );
-    if(aScheme.Len()!=0)
+    OUString aScheme = GetSchemeFromURL( maCbbReceiver.GetText() );
+    if(!aScheme.isEmpty())
         SetScheme( aScheme );
 
     return( 0L );

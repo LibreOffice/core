@@ -103,7 +103,7 @@ public:
                                     SvxConfigFunctionListBox(Window* pParent);
                                     ~SvxConfigFunctionListBox();
     void                            ClearAll();
-    String                          GetHelpText( SvTreeListEntry *pEntry );
+    OUString                        GetHelpText( SvTreeListEntry *pEntry );
     using Window::GetHelpText;
     SvTreeListEntry*                GetLastSelectedEntry();
     void                            FunctionSelected();
@@ -215,10 +215,10 @@ public:
         m_pCategories->SetImageProvider(provider);
     }
 
-    String      GetScriptURL() const;
-    String      GetSelectedDisplayName();
+    OUString    GetScriptURL() const;
+    OUString    GetSelectedDisplayName();
     void        SetRunLabel();
-    void        SetDialogDescription(const String& rDescription);
+    void        SetDialogDescription(const OUString& rDescription);
 };
 
 #endif

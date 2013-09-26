@@ -35,11 +35,11 @@ namespace offapp
     //====================================================================
     struct DriverPooling
     {
-        String              sName;
+        OUString            sName;
         sal_Bool            bEnabled;
         sal_Int32           nTimeoutSeconds;
 
-        DriverPooling( const String& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout );
+        DriverPooling( const OUString& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout );
 
         sal_Bool operator == (const DriverPooling& _rR) const;
         sal_Bool operator != (const DriverPooling& _rR) const { return !operator ==(_rR); }

@@ -84,9 +84,9 @@ public:
     void            SetText( const OUString& rStr );
 
     bool            MarkNextError( bool bIgnoreCurrentError );
-    void            ChangeMarkedWord(const String& rNewWord, LanguageType eLanguage);
+    void            ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage);
     void            MoveErrorMarkTo(sal_uInt16 nErrorStart, sal_uInt16 nErrorEnd, bool bGrammar);
-    String          GetErrorText() const;
+    OUString        GetErrorText() const;
     void            RestoreCurrentError();
 
     void            SetAlternatives(
@@ -157,8 +157,8 @@ private:
     OUString        m_sIgnoreOnceST;
     OUString        m_sNoSuggestionsST;
 
-    String          m_sTitleSpelling;
-    String          m_sTitleSpellingGrammar;
+    OUString        m_sTitleSpelling;
+    OUString        m_sTitleSpellingGrammar;
 
     Link            aDialogUndoLink;
 
@@ -212,7 +212,7 @@ private:
 protected:
     virtual long    Notify( NotifyEvent& rNEvt );
 
-    String getReplacementString() const;
+    OUString getReplacementString() const;
 
 public:
     SpellDialog(

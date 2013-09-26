@@ -68,9 +68,9 @@ private:
     sal_Int32               m_nInfoSize;
     sal_Int32               m_nParamSize;
 #endif
-    String                  m_sInstallText;
-    String                  m_sAccessibilityText;
-    String                  m_sAddDialogText;
+    OUString                m_sInstallText;
+    OUString                m_sAccessibilityText;
+    OUString                m_sAddDialogText;
     Timer                   m_aResetTimer;
 
     CheckBox*               m_pExperimentalCB;
@@ -154,14 +154,14 @@ private:
     PushButton*              m_pAddPathBtn;
     PushButton*              m_pRemoveBtn;
 
-    String                  m_sOldPath;
+    OUString                m_sOldPath;
 
     DECL_LINK(AddArchiveHdl_Impl, void *);
     DECL_LINK(AddPathHdl_Impl, void *);
     DECL_LINK(RemoveHdl_Impl, void *);
     DECL_LINK(SelectHdl_Impl, void *);
 
-    bool                    IsPathDuplicate( const String& _rPath );
+    bool                    IsPathDuplicate( const OUString& _rPath );
     inline void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
                                     m_pPathList->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
@@ -170,11 +170,11 @@ public:
     SvxJavaClassPathDlg( Window* pParent );
     ~SvxJavaClassPathDlg();
 
-    inline const String&    GetOldPath() const { return m_sOldPath; }
+    inline const OUString&  GetOldPath() const { return m_sOldPath; }
     inline void             SetFocus() { m_pPathList->GrabFocus(); }
 
-    String                  GetClassPath() const;
-    void                    SetClassPath( const String& _rPath );
+    OUString                GetClassPath() const;
+    void                    SetClassPath( const OUString& _rPath );
 };
 
 #endif // #ifndef _SVX_OPTJAVA_HXX

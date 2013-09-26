@@ -75,8 +75,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
     SvSimpleTableContainer* m_pCheckLBContainer;
     MSFltrSimpleTable* m_pCheckLB;
-    String sHeader1, sHeader2;
-    String sChgToFromMath,
+    OUString sHeader1, sHeader2;
+    OUString sChgToFromMath,
            sChgToFromWriter,
            sChgToFromCalc,
            sChgToFromImpress;

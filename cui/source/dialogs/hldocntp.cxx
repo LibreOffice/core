@@ -54,15 +54,15 @@ using namespace ::com::sun::star;
 
 struct DocumentTypeData
 {
-    String aStrURL;
-    String aStrExt;
-    DocumentTypeData (String aURL, String aExt) : aStrURL(aURL), aStrExt(aExt)
+    OUString aStrURL;
+    OUString aStrExt;
+    DocumentTypeData (OUString aURL, OUString aExt) : aStrURL(aURL), aStrExt(aExt)
     {}
 };
 
-sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const String& rBase, INetURLObject& aURLObject ) const
+sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const
 {
-    sal_Bool bIsValidURL = rPath.Len() != 0;
+    sal_Bool bIsValidURL = !rPath.isEmpty();
     if ( bIsValidURL )
     {
         aURLObject.SetURL( rPath );
@@ -78,8 +78,8 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
         bIsValidURL = aURLObject.GetProtocol() != INET_PROT_NOT_VALID;
         if ( bIsValidURL )
         {
-            String aBase( aURLObject.getName( INetURLObject::LAST_SEGMENT, sal_False ) );
-            if ( ( aBase.Len() == 0 ) || ( aBase.GetChar( 0 ) == '.' ) )
+            OUString aBase( aURLObject.getName( INetURLObject::LAST_SEGMENT, sal_False ) );
+            if ( aBase.isEmpty() || ( aBase[0] == '.' ) )
                 bIsValidURL = sal_False;
         }
         if ( bIsValidURL )
@@ -190,19 +190,19 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
         if ( !aDocumentUrl.isEmpty() )
         {
             if ( aDocumentUrl == "private:factory/simpress?slot=6686" )              // SJ: #106216# do not start
-                aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
+                aDocumentUrl = "private:factory/simpress"; // the AutoPilot for impress
 
             // insert private-url and default-extension as user-data
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilterFromFactory( aDocumentUrl );
             if ( pFilter )
             {
                 // insert doc-name and image
-                String aTitleName( aTitle );
-                aTitleName.Erase( aTitleName.Search( (sal_Unicode)'~' ), 1 );
+                OUString aTitleName( aTitle );
+                aTitleName = aTitleName.replaceFirst( "~", "" );
 
                 sal_Int16 nPos = maLbDocTypes.InsertEntry ( aTitleName );
-                String aStrDefExt( pFilter->GetDefaultExtension () );
-                DocumentTypeData *pTypeData = new DocumentTypeData ( aDocumentUrl, aStrDefExt.Copy( 2, aStrDefExt.Len() ) );
+                OUString aStrDefExt( pFilter->GetDefaultExtension () );
+                DocumentTypeData *pTypeData = new DocumentTypeData ( aDocumentUrl, aStrDefExt.copy( 2 ) );
                 maLbDocTypes.SetEntryData ( nPos, pTypeData );
             }
         }
@@ -218,8 +218,8 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
 |*
 |************************************************************************/
 
-void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                                               String& aStrIntName, String& aStrFrame,
+void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                                               OUString& aStrIntName, OUString& aStrFrame,
                                                SvxLinkInsertMode& eMode )
 {
     // get data from dialog-controls
@@ -284,7 +284,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
     EnterWait();
 
     // get data from dialog-controls
-    String aStrNewName = maCbbPath.GetText();
+    OUString aStrNewName = maCbbPath.GetText();
 
     if ( aStrNewName == aEmptyStr )
         aStrNewName = maStrInitURL;
@@ -333,7 +333,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
-                    String aStrDocName ( ( ( DocumentTypeData* )
+                    OUString aStrDocName ( ( ( DocumentTypeData* )
                                          maLbDocTypes.GetEntryData( nPos ) )->aStrURL );
 
                     // create items
@@ -406,8 +406,8 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
     OUString            aTempStrURL( maCbbPath.GetText() );
     utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
 
-    String              aStrPath = aStrURL;
-    sal_Bool            bZeroPath = ( aStrPath.Len() == 0 );
+    OUString            aStrPath = aStrURL;
+    sal_Bool            bZeroPath = aStrPath.isEmpty();
     sal_Bool            bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
                                                         //  as file name, otherwise we do not yet know
 
@@ -425,7 +425,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
         sal_Char const  sSlash[] = "/";
 
         INetURLObject   aURL( aStrURL, INET_PROT_FILE );
-        String          aStrName;
+        OUString        aStrName;
         if( bHandleFileName )
             aStrName = bZeroPath? aTempStrURL : OUString(aURL.getName());
 
@@ -441,7 +441,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
 
         INetURLObject   aNewURL( aStrTmp );
 
-        if( aStrName.Len() > 0 && !aNewURL.getExtension().isEmpty() &&
+        if( !aStrName.isEmpty() && !aNewURL.getExtension().isEmpty() &&
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url

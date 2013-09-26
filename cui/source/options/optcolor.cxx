@@ -1111,9 +1111,9 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
     pExtColorConfig = new EditableExtendedColorConfig;
     m_pColorConfigCT->SetExtendedConfig(*pExtColorConfig);
 
-    String sUser = GetUserData();
+    OUString sUser = GetUserData();
     //has to be called always to speed up accessibility tools
-    m_pColorConfigCT->SetScrollPosition(sUser.ToInt32());
+    m_pColorConfigCT->SetScrollPosition(sUser.toInt32());
     m_pColorSchemeLB->Clear();
     uno::Sequence< OUString >  aSchemes = pColorConfig->GetSchemeNames();
     const OUString* pSchemes = aSchemes.getConstArray();
@@ -1155,10 +1155,10 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pButton,
-                            sName, String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)) );
+                            sName, CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2) );
         DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
-        aNameDlg->SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1)));
+        aNameDlg->SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1));
         aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         if(RET_OK == aNameDlg->Execute())
@@ -1176,7 +1176,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     {
         DBG_ASSERT(m_pColorSchemeLB->GetEntryCount() > 1, "don't delete the last scheme");
         QueryBox aQuery(pButton, CUI_RES(RID_SVXQB_DELETE_COLOR_CONFIG));
-        aQuery.SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE)));
+        aQuery.SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE));
         if(RET_YES == aQuery.Execute())
         {
             OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());

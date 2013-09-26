@@ -90,7 +90,7 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 
         Rectangle aDrawRect( Point( 0, 0 ), GetSizePixel() );
 
-        String aStrMessage;
+        OUString aStrMessage;
 
         switch( mpParentWnd->mnError )
         {
@@ -139,7 +139,7 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
                             WB_HASBUTTONS |  //WB_HASLINESATROOT |
                             WB_HSCROLL | WB_HASBUTTONSATROOT );
 
-    maLbTree.SetAccessibleName(String(CUI_RES(STR_MARK_TREE)));
+    maLbTree.SetAccessibleName(CUI_RES(STR_MARK_TREE));
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
@@ -411,7 +411,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 aAny = xTarget->getPropertyValue( aProp_LinkDisplayName );
                 OUString aDisplayName;
                 aAny >>= aDisplayName;
-                String aStrDisplayname ( aDisplayName );
+                OUString aStrDisplayname ( aDisplayName );
 
                 // is it a target ?
                 uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );

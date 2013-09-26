@@ -131,7 +131,7 @@ void ReplaceEdit::SetText( const OUString& rStr, const Selection& rNewSelection 
 
 AlternativesString::AlternativesString(
     ThesaurusAlternativesCtrl &rControl,
-    SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
+    SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr ) :
 
     SvLBoxString( pEntry, nFlags, rStr ),
     m_rControlImpl( rControl )
@@ -210,7 +210,7 @@ AlternativesExtraData * ThesaurusAlternativesCtrl::GetExtraData(
     return pRes;
 }
 
-SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader )
+SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const OUString &rText, bool bIsHeader )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     OUString aText;
@@ -218,7 +218,7 @@ SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const Str
     {
         aText = OUString::number( nVal ) + ". ";
     }
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) ); // add empty column
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, OUString() ) ); // add empty column
     aText += rText;
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0 ) );  // otherwise crash
     pEntry->AddItem( new AlternativesString( *this, pEntry, 0, aText ) );
@@ -276,7 +276,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::que
     {
         // try again without trailing '.' chars. It may be a word at the
         // end of a sentence and not an abbreviation...
-        String aTxt(comphelper::string::stripEnd(rTerm, '.'));
+        OUString aTxt(comphelper::string::stripEnd(rTerm, '.'));
         aMeanings = xThesaurus->queryMeanings( aTxt, rLocale, rProperties );
         if (aMeanings.getLength())
         {
@@ -320,7 +320,7 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
     return nMeanings > 0;
 }
 
-void SvxThesaurusDialog::LookUp( const String &rText )
+void SvxThesaurusDialog::LookUp( const OUString &rText )
 {
     if (OUString(rText) != m_pWordCB->GetText()) // avoid moving of the cursor if the text is the same
         m_pWordCB->SetText( rText );
@@ -341,7 +341,7 @@ IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn )
 
 IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox*, pLB )
 {
-    String aLangText( pLB->GetSelectEntry() );
+    OUString aLangText( pLB->GetSelectEntry() );
     LanguageType nLang = SvtLanguageTable().GetType( aLangText );
     DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
     if (xThesaurus->hasLocale( LanguageTag::convertToLocale( nLang ) ))
@@ -353,7 +353,7 @@ IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox*, pLB )
 
 void SvxThesaurusDialog::LookUp_Impl()
 {
-    String aText( m_pWordCB->GetText() );
+    OUString aText( m_pWordCB->GetText() );
 
     aLookUpText = OUString( aText );
     if (!aLookUpText.isEmpty() &&
@@ -366,7 +366,7 @@ void SvxThesaurusDialog::LookUp_Impl()
     if ( m_pWordCB->GetEntryPos( aText ) == LISTBOX_ENTRY_NOTFOUND )
         m_pWordCB->InsertEntry( aText );
 
-    m_pReplaceEdit->SetText( String() );
+    m_pReplaceEdit->SetText( OUString() );
     m_pLeftBtn->Enable( aLookUpHistory.size() > 1 );
 }
 
@@ -375,7 +375,7 @@ IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox *, pBox )
     if (pBox && !m_pWordCB->IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
     {
         sal_uInt16 nPos = pBox->GetSelectEntryPos();
-        String aStr( pBox->GetEntry( nPos ) );
+        OUString aStr( pBox->GetEntry( nPos ) );
         aStr = linguistic::GetThesaurusReplaceText( aStr );
         m_pWordCB->SetText( aStr );
         LookUp_Impl();
@@ -390,7 +390,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvxCheckListBox *, pB
     if (pEntry)
     {
         AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );
-        String aStr;
+        OUString aStr;
         if (pData && !pData->IsHeader())
         {
             aStr = pData->GetText();
@@ -407,7 +407,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
     if (pEntry)
     {
         AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );
-        String aStr;
+        OUString aStr;
         if (pData && !pData->IsHeader())
         {
             aStr = pData->GetText();
@@ -415,7 +415,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
         }
 
         m_pWordCB->SetText( aStr );
-        if (aStr.Len() > 0)
+        if (!aStr.isEmpty())
             LookUp_Impl();
     }
 
@@ -438,7 +438,7 @@ IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pB
 SvxThesaurusDialog::SvxThesaurusDialog(
     Window* pParent,
     uno::Reference< linguistic2::XThesaurus >  xThes,
-    const String &rWord,
+    const OUString &rWord,
     LanguageType nLanguage)
     : SvxStandardDialog(pParent, "ThesaurusDialog", "cui/ui/thesaurus.ui")
     , m_aErrStr(CUI_RESSTR(RID_SVXSTR_ERR_TEXTNOTFOUND))
@@ -471,13 +471,13 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     xThesaurus = xThes;
     aLookUpText = OUString( rWord );
     nLookUpLanguage = nLanguage;
-    if (rWord.Len() > 0)
+    if (!rWord.isEmpty())
         aLookUpHistory.push( rWord );
 
     OUString aTmp( rWord );
     linguistic::RemoveHyphens( aTmp );
     linguistic::ReplaceControlChars( aTmp );
-    String aTmp2( aTmp );
+    OUString aTmp2( aTmp );
     m_pReplaceEdit->SetText( aTmp2 );
     m_pWordCB->InsertEntry( aTmp2 );
 
@@ -530,15 +530,17 @@ SvxThesaurusDialog::~SvxThesaurusDialog()
 void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
 {
     // adjust language
-    String aStr( GetText() );
-    aStr.Erase( aStr.Search( sal_Unicode( '(' ) ) - 1 );
-    aStr.Append( OUString(" (") );
+    OUString aStr( GetText() );
+    sal_Int32 nIndex = aStr.indexOf( '(' );
+    if( nIndex != -1 )
+        aStr = aStr.copy( 0, nIndex - 1 );
+    aStr += " (";
     aStr += SvtLanguageTable().GetLanguageString( nLanguage );
-    aStr.Append( sal_Unicode( ')' ) );
+    aStr += ")";
     SetText( aStr );    // set window title
 }
 
-String SvxThesaurusDialog::GetWord()
+OUString SvxThesaurusDialog::GetWord()
 {
     return m_pReplaceEdit->GetText();
 }

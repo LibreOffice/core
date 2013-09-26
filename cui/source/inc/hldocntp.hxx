@@ -39,7 +39,7 @@ private:
     FixedText           maFtDocTypes;
     ListBox             maLbDocTypes;
 
-    sal_Bool            ImplGetURLObject( const String& rPath, const String& rBase, INetURLObject& aURLObject ) const;
+    sal_Bool            ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();
 
     DECL_LINK (ClickNewHdl_Impl          , void * );
@@ -48,8 +48,8 @@ private:
 
 protected:
     void FillDlgFields(const OUString& rStrURL);
-    void GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                             String& aStrIntName, String& aStrFrame,
+    void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                             OUString& aStrIntName, OUString& aStrFrame,
                              SvxLinkInsertMode& eMode );
 
 public:

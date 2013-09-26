@@ -102,17 +102,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNumberPreview(Window *pP
 #*
 #************************************************************************/
 
-void SvxNumberPreview::NotifyChange( const String& rPrevStr,
+void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
                                          const Color* pColor )
 {
     // detect and strip out '*' related placeholders
     aPrevStr = rPrevStr;
-    mnPos = aPrevStr.Search( 0x1B );
-    if ( mnPos != STRING_NOTFOUND )
+    mnPos = aPrevStr.indexOf( 0x1B );
+    if ( mnPos != -1 )
     {
-        mnChar = aPrevStr.GetChar( mnPos + 1 );
+        mnChar = aPrevStr[ mnPos + 1 ];
         // delete placeholder and char to repeat
-        aPrevStr.Erase( mnPos, 2 );
+        aPrevStr = aPrevStr.replaceAt( mnPos, 2, "" );
     }
     svtools::ColorConfig aColorConfig;
     Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
@@ -136,13 +136,13 @@ void SvxNumberPreview::Paint( const Rectangle& )
 {
     Font    aDrawFont   = GetFont();
     Size    aSzWnd      = GetOutputSizePixel();
-    String aTmpStr( aPrevStr );
+    OUString aTmpStr( aPrevStr );
     long    nLeadSpace = (aSzWnd.Width()  - GetTextWidth( aTmpStr )) /2;
 
     aDrawFont.SetColor( aPrevCol );
     SetFont( aDrawFont );
 
-    if ( mnPos != STRING_NOTFOUND )
+    if ( mnPos != -1 )
     {
         long nCharWidth = GetTextWidth( OUString( mnChar ) );
 
@@ -152,10 +152,10 @@ void SvxNumberPreview::Paint( const Rectangle& )
         if ( nNumCharsToInsert > 0)
         {
             for ( int i = 0; i < nNumCharsToInsert; ++i )
-                aTmpStr.Insert( mnChar, mnPos );
+                aTmpStr = aTmpStr.replaceAt( mnPos, 0, OUString(mnChar) );
         }
     }
-    Point   aPosText    = Point( ( mnPos != STRING_NOTFOUND ) ? 0 : nLeadSpace,
+    Point   aPosText    = Point( ( mnPos != -1 ) ? 0 : nLeadSpace,
                                  (aSzWnd.Height() - GetTextHeight())/2 );
     DrawText( aPosText, aTmpStr );
 }
@@ -534,7 +534,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     nFixedCategory=nCatLbSelPos;
     if(bOneAreaFlag)
     {
-        String sFixedCategory=m_pLbCategory->GetEntry(nFixedCategory);
+        OUString sFixedCategory = m_pLbCategory->GetEntry(nFixedCategory);
         m_pLbCategory->Clear();
         m_pLbCategory->InsertEntry(sFixedCategory);
         SetCategory(0);
@@ -611,15 +611,15 @@ void SvxNumberFormatTabPage::Obstructing()
     m_pEdLeadZeroes->Disable();
     m_pEdDecimals->Disable();
     m_pFtOptions->Disable();
-    m_pEdDecimals->SetText( String() );
-    m_pEdLeadZeroes->SetText( String() );
+    m_pEdDecimals->SetText( OUString() );
+    m_pEdLeadZeroes->SetText( OUString() );
     m_pBtnNegRed->Check( sal_False );
     m_pBtnThousand->Check( sal_False );
-    m_pWndPreview->NotifyChange( String() );
+    m_pWndPreview->NotifyChange( OUString() );
 
     m_pLbCategory->SelectEntryPos( 0 );
-    m_pEdFormat->SetText( String() );
-    m_pFtComment->SetText( String() );
+    m_pEdFormat->SetText( OUString() );
+    m_pFtComment->SetText( OUString() );
     m_pEdComment->SetText(m_pLbCategory->GetEntry(1));  // string for user defined
 
     m_pEdFormat->GrabFocus();
@@ -695,7 +695,7 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
         // OK chosen - Is format code input entered already taken over?
         // If not, simulate Add. Upon syntax error ignore input and prevent Put.
-        String      aFormat = m_pEdFormat->GetText();
+        OUString    aFormat = m_pEdFormat->GetText();
         sal_uInt32 nCurKey = pNumFmtShell->GetCurNumFmtKey();
 
         if ( m_pIbAdd->IsEnabled() || pNumFmtShell->IsTmpCurrencyFormat(aFormat) )
@@ -804,7 +804,7 @@ void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )
 void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEntries )
 {
     OUString    aEntry;
-    String      aTmpString;
+    OUString    aTmpString;
     Font        aFont=m_pLbCategory->GetFont();
     size_t      i = 0;
     short       nTmpCatPos;
@@ -851,7 +851,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
             if(aPrivCat!=CAT_TEXT)
             {
                 Color* pPreviewColor = NULL;
-                String aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
+                OUString aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
                 Font aEntryFont( m_pLbFormat->GetFont() );
                 m_pLbFormat->InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
             }
@@ -879,7 +879,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 
 void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sal_False*/ )
 {
-    String  theFormat           = m_pEdFormat->GetText();
+    OUString  theFormat           = m_pEdFormat->GetText();
     sal_uInt16  nCurCategory        = m_pLbCategory->GetSelectEntryPos();
     sal_uInt16  nCategory           = nCurCategory;
     sal_uInt16  nDecimals           = 0;
@@ -1075,8 +1075,8 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 
         if ( bUpdateEdit )
         {
-            m_pEdFormat->SetText( String() );
-            m_pWndPreview->NotifyChange( String() );
+            m_pEdFormat->SetText( OUString() );
+            m_pWndPreview->NotifyChange( OUString() );
         }
     }
 
@@ -1174,8 +1174,8 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
     if (pLb == m_pLbFormat)
     {
         sal_uInt16  nSelPos = (sal_uInt16) m_pLbFormat->GetSelectEntryPos();
-        String  aFormat = m_pLbFormat->GetSelectEntry();
-        String  aComment;
+        OUString  aFormat = m_pLbFormat->GetSelectEntry();
+        OUString  aComment;
 
         short       nFmtLbSelPos = nSelPos;
 
@@ -1189,7 +1189,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
             }
         }
 
-        if ( aFormat.Len() > 0 )
+        if ( !aFormat.isEmpty() )
         {
             if(!m_pEdFormat->HasFocus()) m_pEdFormat->SetText( aFormat );
             m_pFtComment->SetText(aComment);
@@ -1331,7 +1331,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
                     else
                     {
                         pNumFmtShell->SetComment4Entry(nFmtLbSelPos,
-                                                        String());
+                                                        OUString());
                     }
                     m_pLbFormat->SelectEntryPos( (sal_uInt16)nFmtLbSelPos );
                     m_pEdFormat->SetText( aFormat );
@@ -1443,7 +1443,7 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
     }
     else
     {
-        String aFormat = m_pEdFormat->GetText();
+        OUString aFormat = m_pEdFormat->GetText();
         MakePreviewText( aFormat );
 
         if ( pNumFmtShell->FindEntry( aFormat, &nCurKey ) )
@@ -1592,8 +1592,8 @@ IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Edit *, pEd)
 #*
 #************************************************************************/
 
-String SvxNumberFormatTabPage::GetExpColorString(
-        Color*& rpPreviewColor, const String& rFormatStr, short nTmpCatPos)
+OUString SvxNumberFormatTabPage::GetExpColorString(
+        Color*& rpPreviewColor, const OUString& rFormatStr, short nTmpCatPos)
 {
     double nVal = 0;
     switch (nTmpCatPos)
@@ -1623,7 +1623,7 @@ String SvxNumberFormatTabPage::GetExpColorString(
     return aPreviewString;
 }
 
-void SvxNumberFormatTabPage::MakePreviewText( const String& rFormat )
+void SvxNumberFormatTabPage::MakePreviewText( const OUString& rFormat )
 {
     OUString aPreviewString;
     Color* pPreviewColor = NULL;

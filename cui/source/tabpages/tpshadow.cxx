@@ -141,7 +141,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     }
     else
     {
-        rXFSet.Put( XFillColorItem( String(), COL_LIGHTRED ) );
+        rXFSet.Put( XFillColorItem( OUString(), COL_LIGHTRED ) );
     }
 
     if(XFILL_NONE == eXFS)
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
     sal_uInt16 nPos = m_pLbShadowColor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        rXFSet.Put( XFillColorItem( String(), m_pLbShadowColor->GetSelectEntryColor() ) );
+        rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
     }
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
     XFillTransparenceItem aItem( nVal );

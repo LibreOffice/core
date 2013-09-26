@@ -63,7 +63,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXLStyle            ( XLINE_SOLID ),
     aXWidth             ( XOUT_WIDTH ),
-    aXColor             ( String(), COL_BLACK ),
+    aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pLineEndList        ( NULL )

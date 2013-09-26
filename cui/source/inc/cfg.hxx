@@ -256,17 +256,17 @@ public:
     ~SvxConfigEntry();
 
     const OUString&      GetCommand() const { return aCommand; }
-    void    SetCommand( const String& rCmd ) { aCommand = rCmd; }
+    void    SetCommand( const OUString& rCmd ) { aCommand = rCmd; }
 
     const OUString&      GetName() const { return aLabel; }
-    void    SetName( const String& rStr ) { aLabel = rStr; bStrEdited = sal_True; }
+    void    SetName( const OUString& rStr ) { aLabel = rStr; bStrEdited = sal_True; }
     bool    HasChangedName() const { return bStrEdited; }
 
     const OUString&      GetHelpText() ;
-    void    SetHelpText( const String& rStr ) { aHelpText = rStr; }
+    void    SetHelpText( const OUString& rStr ) { aHelpText = rStr; }
 
     const OUString&      GetHelpURL() const { return aHelpURL; }
-    void    SetHelpURL( const String& rStr ) { aHelpURL = rStr; }
+    void    SetHelpURL( const OUString& rStr ) { aHelpURL = rStr; }
 
     void    SetPopup( bool bOn = sal_True ) { bPopUp = bOn; }
     bool    IsPopup() const { return bPopUp; }
@@ -349,8 +349,8 @@ public:
     SvxDescriptionEdit( Window* pParent, const ResId& _rId );
     inline ~SvxDescriptionEdit() {}
 
-    void                SetNewText( const String& _rText );
-    inline void         Clear() { SetNewText( String() ); }
+    void                SetNewText( const OUString& _rText );
+    inline void         Clear() { SetNewText( OUString() ); }
 };
 
 class SvxConfigPage : public SfxTabPage
@@ -361,7 +361,7 @@ private:
     SaveInData*                         pCurrentSaveInData;
 
     DECL_LINK(  SelectSaveInLocation, ListBox * );
-    DECL_LINK(  AsyncInfoMsg, String* );
+    DECL_LINK(  AsyncInfoMsg, OUString* );
 
     bool        SwapEntryData( SvTreeListEntry* pSourceEntry, SvTreeListEntry* pTargetEntry );
     void        AlignControls();
@@ -425,7 +425,7 @@ protected:
                                         SvTreeListEntry* pTarget = NULL,
                                         bool bFront = sal_False );
 
-    void            AddSubMenusToUI(    const String& rBaseTitle,
+    void            AddSubMenusToUI(    const OUString& rBaseTitle,
                                         SvxConfigEntry* pParentData );
 
     SvTreeListEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,

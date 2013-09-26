@@ -99,7 +99,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
-    String aStrTitle;
+    OUString aStrTitle;
     SvxIconChoiceCtrlEntry* pEntry = NULL;
 
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
@@ -238,7 +238,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl)
         SvxHyperlinkItem *aItem = (SvxHyperlinkItem *)
                                   aItemSet.GetItem (SID_HYPERLINK_SETLINK);
 
-        String aStrEmpty;
+        OUString aStrEmpty;
         if ( aItem->GetURL() != aStrEmpty )
             GetDispatcher()->Execute( SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON |
                                       SFX_CALLMODE_RECORD, aItem, 0L);

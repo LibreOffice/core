@@ -60,7 +60,7 @@ class AlternativesExtraData
 
 public:
     AlternativesExtraData() : bHeader( false ) {}
-    AlternativesExtraData( const String &rText, bool bIsHeader ) :
+    AlternativesExtraData( const OUString &rText, bool bIsHeader ) :
         sText(rText),
         bHeader(bIsHeader)
         {
@@ -89,7 +89,7 @@ public:
     virtual ~ThesaurusAlternativesCtrl();
 
 
-    SvTreeListEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
+    SvTreeListEntry *   AddEntry( sal_Int32 nVal, const OUString &rText, bool bIsHeader );
 
     void            ClearExtraData();
     void            SetExtraData( const SvTreeListEntry *pEntry, const AlternativesExtraData &rData );
@@ -154,18 +154,18 @@ public:
             queryMeanings_Impl( OUString& rTerm, const css::lang::Locale& rLocale, const css::beans::PropertyValues& rProperties ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     bool    UpdateAlternativesBox_Impl();
-    void    LookUp( const String &rText );
+    void    LookUp( const OUString &rText );
     void    LookUp_Impl();
     virtual void     Apply();
 
 public:
     SvxThesaurusDialog( Window* pParent,
                         css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
-                        const String &rWord, LanguageType nLanguage );
+                        const OUString &rWord, LanguageType nLanguage );
     ~SvxThesaurusDialog();
 
     void            SetWindowTitle( LanguageType nLanguage );
-    String          GetWord();
+    OUString        GetWord();
     sal_uInt16      GetLanguage() const;
 };
 

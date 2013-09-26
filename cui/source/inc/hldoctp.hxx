@@ -63,12 +63,12 @@ private:
 
 protected:
     void FillDlgFields(const OUString& rStrURL);
-    void GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                             String& aStrIntName, String& aStrFrame,
+    void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                             OUString& aStrIntName, OUString& aStrFrame,
                              SvxLinkInsertMode& eMode );
     virtual sal_Bool   ShouldOpenMarkWnd () {return mbMarkWndOpen;}
     virtual void   SetMarkWndShouldOpen (sal_Bool bOpen) {mbMarkWndOpen=bOpen;}
-    String GetCurrentURL    ();
+    OUString GetCurrentURL    ();
 
 public:
     SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet);
@@ -76,7 +76,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual void        SetMarkStr ( const String& aStrMark );
+    virtual void        SetMarkStr ( const OUString& aStrMark );
 
     virtual void        SetInitFocus();
 };

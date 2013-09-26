@@ -61,8 +61,8 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     aSaveInListBox( this, CUI_RES( LB_SAVEIN ) ),
     bAppConfig  ( sal_True )
 {
-    mpImpl->pStrEvent           = new String( CUI_RES( STR_EVENT ));
-    mpImpl->pAssignedMacro      = new String( CUI_RES( STR_ASSMACRO ));
+    mpImpl->pStrEvent           = new OUString( CUI_RES( STR_EVENT ));
+    mpImpl->pAssignedMacro      = new OUString( CUI_RES( STR_ASSMACRO ));
     mpImpl->pEventLB            = new _HeaderTabListBox( this, CUI_RES( LB_EVENT ));
     mpImpl->pAssignFT           = new FixedText( this,  CUI_RES( FT_ASSIGN ));
     mpImpl->pAssignPB           = new PushButton( this, CUI_RES( PB_ASSIGN ));

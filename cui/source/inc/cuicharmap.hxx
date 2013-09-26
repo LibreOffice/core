@@ -108,7 +108,7 @@ public:
     void            SetChar( sal_UCS4 );
     sal_UCS4        GetChar() const;
 
-    String          GetCharacters() const;
+    OUString        GetCharacters() const;
 
     virtual short   Execute();
 };

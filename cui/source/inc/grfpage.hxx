@@ -86,7 +86,7 @@ class SvxGrfCropPage : public SfxTabPage
 
 
     Timer           aTimer;
-    String          aGraphicName;
+    OUString        aGraphicName;
     Size            aOrigSize;
     Size            aOrigPixelSize;
     Size            aPageSize;

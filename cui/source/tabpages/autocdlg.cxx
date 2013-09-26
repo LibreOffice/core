@@ -139,7 +139,7 @@ void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
     m_pLanguageBox->Enable(bEnable);
 }
 
-static sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
+static sal_Bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
                     CollatorWrapper& rCmpClass )
 {
     sal_uInt16 nCount = rLB.GetEntryCount();
@@ -263,10 +263,10 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
 
 struct ImpUserData
 {
-    String  *pString;
-    Font*   pFont;
+    OUString  *pString;
+    Font      *pFont;
 
-    ImpUserData(String* pText, Font* pFnt)
+    ImpUserData(OUString* pText, Font* pFnt)
         { pString = pText; pFont = pFnt;}
 };
 
@@ -303,7 +303,7 @@ class OfaImpBrwString : public SvLBoxString
 public:
 
     OfaImpBrwString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
+        const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
@@ -333,7 +333,7 @@ void OfaImpBrwString::Paint(
         sal_Bool bFett = sal_True;
         sal_Int32 nPos = 0;
         do {
-            String sTxt( pUserData->pString->GetToken( 0, 1, nPos ));
+            OUString sTxt( pUserData->pString->getToken( 0, 1, nPos ));
 
             if( bFett )
                 rDev.SetFont( aFont );
@@ -437,7 +437,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     m_pEditPB->SetClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
 }
 
-SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
+SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
@@ -449,7 +449,7 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 n
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
 
-    String sEmpty;
+    OUString sEmpty;
     if (nCol == CBCOL_SECOND)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
     else
@@ -536,12 +536,12 @@ sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     bModified |= aBulletFont != pOpt->aBulletFont;
     pOpt->aBulletFont = aBulletFont;
     bModified |= !comphelper::string::equals(sBulletChar, pOpt->cBullet);
-    pOpt->cBullet = sBulletChar.GetChar(0);
+    pOpt->cBullet = sBulletChar[0];
 
     bModified |= aByInputBulletFont != pOpt->aByInputBulletFont;
     bModified |= !comphelper::string::equals(sByInputBulletChar, pOpt->cByInputBullet);
     pOpt->aByInputBulletFont = aByInputBulletFont;
-    pOpt->cByInputBullet = sByInputBulletChar.GetChar(0);
+    pOpt->cByInputBullet = sByInputBulletChar[0];
 
     bCheck = m_pCheckLB->IsChecked(MERGE_SINGLE_LINE_PARA, CBCOL_FIRST);
     bModified |= pOpt->bRightMargin != bCheck;
@@ -654,7 +654,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     m_pCheckLB->CheckEntryPos( REPLACE_BULLETS,    CBCOL_FIRST,    pOpt->bChgEnumNum );
 
     aBulletFont = pOpt->aBulletFont;
-    sBulletChar = pOpt->cBullet;
+    sBulletChar = OUString(pOpt->cBullet);
     ImpUserData* pUserData = new ImpUserData(&sBulletChar, &aBulletFont);
     m_pCheckLB->SetUserData(  REPLACE_BULLETS, pUserData );
 
@@ -666,7 +666,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     m_pCheckLB->CheckEntryPos( APPLY_NUMBERING,    CBCOL_SECOND,   pOpt->bSetNumRule );
 
     aByInputBulletFont = pOpt->aByInputBulletFont;
-    sByInputBulletChar = pOpt->cByInputBullet;
+    sByInputBulletChar = OUString( pOpt->cByInputBullet );
     ImpUserData* pUserData2 = new ImpUserData(&sByInputBulletChar, &aByInputBulletFont);
     m_pCheckLB->SetUserData( APPLY_NUMBERING , pUserData2 );
 
@@ -693,7 +693,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
         SvxCharacterMap *pMapDlg = new SvxCharacterMap(this);
         ImpUserData* pUserData = (ImpUserData*)m_pCheckLB->FirstSelected()->GetUserData();
         pMapDlg->SetCharFont(*pUserData->pFont);
-        pMapDlg->SetChar( pUserData->pString->GetChar(0) );
+        pMapDlg->SetChar( (*pUserData->pString)[0] );
         if(RET_OK == pMapDlg->Execute())
         {
             Font aFont(pMapDlg->GetCharFont());
@@ -993,8 +993,8 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
-                String sEntry(rDouble.sShort);
-                sEntry += '\t';
+                OUString sEntry(rDouble.sShort);
+                sEntry += "\t";
                 sEntry += rDouble.sLong;
                 SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
                 m_pTextOnlyCB->Check(bTextOnly);
@@ -1021,8 +1021,8 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
             {
-                String sEntry(pWordPtr->GetShort());
-                sEntry += '\t';
+                OUString sEntry(pWordPtr->GetShort());
+                sEntry += "\t";
                 sEntry += pWordPtr->GetLong();
                 SvTreeListEntry* pEntry = m_pReplaceTLB->InsertEntry(sEntry);
                 m_pTextOnlyCB->Check(pWordPtr->IsTextOnly());
@@ -1111,7 +1111,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     return 0;
 };
 
-void OfaAutocorrReplacePage::NewEntry(String sShort, String sLong, bool bKeepSourceFormatting)
+void OfaAutocorrReplacePage::NewEntry(OUString sShort, OUString sLong, bool bKeepSourceFormatting)
 {
     DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
     for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
@@ -1141,7 +1141,7 @@ void OfaAutocorrReplacePage::NewEntry(String sShort, String sLong, bool bKeepSou
         rNewArray.back().pUserData = &bHasSelectionText;
 }
 
-void OfaAutocorrReplacePage::DeleteEntry(String sShort, String sLong)
+void OfaAutocorrReplacePage::DeleteEntry(OUString sShort, OUString sLong)
 {
     DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
     for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
@@ -1186,8 +1186,8 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     if(pBtn == m_pNewReplacePB || m_pNewReplacePB->IsEnabled())
     {
         SvTreeListEntry* _pNewEntry = m_pReplaceTLB->FirstSelected();
-        String sEntry(m_pShortED->GetText());
-        if(sEntry.Len() && ( !m_pReplaceED->GetText().isEmpty() ||
+        OUString sEntry(m_pShortED->GetText());
+        if(!sEntry.isEmpty() && ( !m_pReplaceED->GetText().isEmpty() ||
                 ( bHasSelectionText && bSWriter ) ))
         {
             bool bKeepSourceFormatting = !bReplaceEditChanged && !m_pTextOnlyCB->IsChecked();
@@ -1195,7 +1195,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
             NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText(), bKeepSourceFormatting);
             m_pReplaceTLB->SetUpdateMode(sal_False);
             sal_uInt32 nPos = UINT_MAX;
-            sEntry += '\t';
+            sEntry += "\t";
             sEntry += m_pReplaceED->GetText();
             if(_pNewEntry)
             {
@@ -1244,13 +1244,13 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 {
     SvTreeListEntry* pFirstSel = m_pReplaceTLB->FirstSelected();
     sal_Bool bShort = pEdt == m_pShortED;
-    const String rEntry = pEdt->GetText();
-    const String rRepString = m_pReplaceED->GetText();
-    String aWordStr( pCharClass->lowercase( rEntry ));
+    const OUString rEntry = pEdt->GetText();
+    const OUString rRepString = m_pReplaceED->GetText();
+    OUString aWordStr( pCharClass->lowercase( rEntry ));
 
     if(bShort)
     {
-        if(rEntry.Len())
+        if(!rEntry.isEmpty())
         {
             sal_Bool bFound = sal_False;
             sal_Bool bTmpSelEntry=sal_False;
@@ -1258,10 +1258,10 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
             for(sal_uInt32 i = 0; i < m_pReplaceTLB->GetEntryCount(); i++)
             {
                 SvTreeListEntry*  pEntry = m_pReplaceTLB->GetEntry( i );
-                String aTestStr=m_pReplaceTLB->GetEntryText(pEntry, 0);
+                OUString aTestStr = m_pReplaceTLB->GetEntryText(pEntry, 0);
                 if( pCompareClass->compareString(rEntry, aTestStr ) == 0 )
                 {
-                    if( rRepString.Len() )
+                    if( !rRepString.isEmpty() )
                     {
                         bFirstSelect = sal_True;
                     }
@@ -1274,7 +1274,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                 else
                 {
                     aTestStr = pCharClass->lowercase( aTestStr );
-                    if( aTestStr.Search(aWordStr) == 0 && !bTmpSelEntry )
+                    if( aTestStr.indexOf(aWordStr) == 0 && !bTmpSelEntry )
                     {
                         m_pReplaceTLB->MakeVisible( pEntry );
                         bTmpSelEntry = sal_True;
@@ -1307,9 +1307,9 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
         }
     }
 
-    const String& rShortTxt = m_pShortED->GetText();
-    sal_Bool bEnableNew = rShortTxt.Len() &&
-                        ( rRepString.Len() ||
+    const OUString& rShortTxt = m_pShortED->GetText();
+    sal_Bool bEnableNew = !rShortTxt.isEmpty() &&
+                        ( !rRepString.isEmpty() ||
                                 ( bHasSelectionText && bSWriter )) &&
                         ( !pFirstSel || rRepString !=
                                 m_pReplaceTLB->GetEntryText( pFirstSel, 1 ) );
@@ -1329,7 +1329,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-static sal_Bool lcl_FindInArray(std::vector<OUString>& rStrings, const String& rString)
+static sal_Bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rString)
 {
     for(std::vector<OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
     {
@@ -1558,7 +1558,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
     }
     m_pDoubleCapsLB->Clear();
     m_pAbbrevLB->Clear();
-    String sTemp;
+    OUString sTemp;
     m_pAbbrevED->SetText(sTemp);
     m_pDoubleCapsED->SetText(sTemp);
 
@@ -1645,8 +1645,8 @@ IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
 IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit*, pEdt)
 {
 //  sal_Bool bSame = pEdt->GetText() == ->GetSelectEntry();
-    const String& sEntry = pEdt->GetText();
-    sal_Bool bEntryLen = 0!= sEntry.Len();
+    const OUString& sEntry = pEdt->GetText();
+    sal_Bool bEntryLen = !sEntry.isEmpty();
     if(pEdt == m_pAbbrevED)
     {
         sal_Bool bSame = lcl_FindEntry(*m_pAbbrevLB, sEntry, *pCompareClass);
@@ -1693,7 +1693,7 @@ enum OfaQuoteOptions
     REPLACE_1ST
 };
 
-SvTreeListEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
+SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
@@ -1705,7 +1705,7 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
 
-    String sEmpty;
+    OUString sEmpty;
     if (nCol == CBCOL_SECOND)
         pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
     else
@@ -1772,10 +1772,10 @@ OfaQuoteTabPage::OfaQuoteTabPage(Window* pParent, const SfxItemSet& rSet)
         m_pSwCheckLB->SetStyle(m_pSwCheckLB->GetStyle() | WB_HSCROLL| WB_VSCROLL);
 
         m_pSwCheckLB->SvSimpleTable::SetTabs(aStaticTabs);
-        String sHeader(get<Window>("m")->GetText());
-        sHeader += '\t';
+        OUString sHeader(get<Window>("m")->GetText());
+        sHeader += "\t";
         sHeader += get<Window>("t")->GetText();
-        sHeader += '\t';
+        sHeader += "\t";
         m_pSwCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                         HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED);
         m_pCheckLB->Hide(true);
@@ -2038,7 +2038,7 @@ IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
 
 // --------------------------------------------------
 
-String OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
+OUString OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 {
     if (!cChar)
         return m_sStandard;

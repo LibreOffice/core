@@ -488,7 +488,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             ChangeSource().Disable();
             BreakLink().Disable();
 
-            String aEmpty;
+            OUString aEmpty;
             SourceName().SetText( aEmpty );
             TypeName().SetText( aEmpty );
         }
@@ -509,7 +509,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
         SvBaseLinkRef xLink( (SvBaseLink*)pBox->GetUserData() );
         if( xLink.Is() )
         {
-            String sCur( ImplGetStateStr( *xLink ) ),
+            OUString sCur( ImplGetStateStr( *xLink ) ),
                     sOld( Links().GetEntryText( pBox, 3 ) );
             if( sCur != sOld )
                 Links().SetEntryText( sCur, pBox, 3 );
@@ -560,9 +560,9 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
     return 0;
 }
 
-String SvBaseLinksDlg::ImplGetStateStr( const SvBaseLink& rLnk )
+OUString SvBaseLinksDlg::ImplGetStateStr( const SvBaseLink& rLnk )
 {
-    String sRet;
+    OUString sRet;
     if( !rLnk.GetObj() )
         sRet = Brokenlink();
     else if( rLnk.GetObj()->IsPending() )
@@ -631,12 +631,12 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
     nWidthPixel -= SV_TAB_BORDER;
     OUString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
     INetURLObject aPath( sFileNm, INET_PROT_FILE );
-    String aFileName = aPath.getName();
+    OUString aFileName = aPath.getName();
     aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
 
-    if( aFileName.Len() > aTxt.getLength() )
+    if( aFileName.getLength() > aTxt.getLength() )
         aTxt = aFileName;
-    else if( aTxt.indexOf( aFileName, aTxt.getLength() - aFileName.Len() ) == -1 )
+    else if( aTxt.indexOf( aFileName, aTxt.getLength() - aFileName.getLength() ) == -1 )
         // filename not in string
         aTxt = aFileName;
 

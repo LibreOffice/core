@@ -434,14 +434,14 @@ class IconLBoxString : public SvLBoxString
     int m_nxImageOffset;
 
 public:
-    IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& sText,
+    IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText,
         Image* pMacroImg, Image* pComponentImg );
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
 
 
-IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& sText,
+IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText,
     Image* pMacroImg, Image* pComponentImg )
         : SvLBoxString( pEntry, nFlags, sText )
         , m_pMacroImg( pMacroImg )
@@ -455,8 +455,8 @@ void IconLBoxString::Paint(
     const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* /*pEntry*/)
 {
-    String aTxt( GetText() );
-    if( aTxt.Len() )
+    OUString aTxt( GetText() );
+    if( !aTxt.isEmpty() )
     {
         OUString aURL( aTxt );
         sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
@@ -538,13 +538,13 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         }
 
         OUString eventURL = h_it->second.second;
-        String displayName( CUI_RES( displayableEvent->nEventResourceID ) );
+        OUString displayName( CUI_RES( displayableEvent->nEventResourceID ) );
 
-        displayName += '\t';
+        displayName += "\t";
         SvTreeListEntry*    _pE = rListBox.InsertEntry( displayName );
         OUString* pEventName = new OUString( sEventName );
         _pE->SetUserData( (void*)pEventName );
-        String sNew( eventURL );
+        OUString sNew( eventURL );
         _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
             mpImpl->pMacroImg, mpImpl->pComponentImg ), LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
@@ -811,8 +811,8 @@ Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eve
 SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex )
     : _SvxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_MACROASSIGN ), rSet )
 {
-    mpImpl->pStrEvent           = new String(                       CUI_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new String(                       CUI_RES( STR_ASSMACRO ) );
+    mpImpl->pStrEvent           = new OUString(                     CUI_RES( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new OUString(                     CUI_RES( STR_ASSMACRO ) );
     mpImpl->pEventLB            = new _HeaderTabListBox( this,      CUI_RES( LB_EVENT ) );
     mpImpl->pAssignFT           = new FixedText( this,              CUI_RES( FT_ASSIGN ) );
     mpImpl->pAssignPB           = new PushButton( this,             CUI_RES( PB_ASSIGN ) );
@@ -965,7 +965,7 @@ void SvxMacroAssignSingleTabDialog::SetTabPage( SfxTabPage* pTabPage )
 
     if ( pPage )
     {
-        String sUserData;
+        OUString sUserData;
         pPage->SetUserData( sUserData );
         pPage->Reset( *pOptions );
         pPage->Show();

@@ -58,7 +58,7 @@ public:
                             { aNextHdlLink = rLink; }
 
     void EnableTravel(sal_Bool bNext, sal_Bool bPrev);
-    String GetNote()
+    OUString GetNote()
     {
         return m_pEditED->GetText();
     }
@@ -66,7 +66,7 @@ public:
     {
         m_pEditED->SetText(rTxt);
     }
-    void ShowLastAuthor(const String& rAuthor, const String& rDate);
+    void ShowLastAuthor(const OUString& rAuthor, const OUString& rDate);
     void DontChangeAuthor()
     {
         m_pAuthorBtn->Enable(false);

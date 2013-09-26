@@ -154,8 +154,8 @@ private:
 
     SvTreeListBox   aTreeLB;
 
-    String          sTitle;
-    String          sNotLoadedError;
+    OUString        sTitle;
+    OUString        sNotLoadedError;
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
@@ -207,13 +207,13 @@ public:
     OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId );
     ~OfaTreeOptionsDialog();
 
-    OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup );
-    sal_uInt16              AddGroup(   const String& rGroupName,  SfxShell* pCreateShell,
+    OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
+    sal_uInt16              AddGroup(   const OUString& rGroupName,  SfxShell* pCreateShell,
                                     SfxModule* pCreateModule, sal_uInt16 nDialogId );
 
     void                ActivateLastSelection();
     void                ActivatePage( sal_uInt16 nResId );
-    void                ActivatePage( const String& rPageURL );
+    void                ActivatePage( const OUString& rPageURL );
     void                ApplyItemSets();
 
     // helper functions to call the language settings TabPage from the SpellDialog

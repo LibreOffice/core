@@ -473,7 +473,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             nPaperBin = PAPERBIN_PRINTER_SETTINGS;
     }
 
-    String aBinName;
+    OUString aBinName;
 
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
         aBinName = EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
@@ -532,7 +532,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     sal_uInt16 nUserPos = LISTBOX_ENTRY_NOTFOUND;
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
-        String aStr = aPaperAry.GetString(i);
+        OUString aStr = aPaperAry.GetString(i);
         Paper eSize = (Paper)aPaperAry.GetValue(i);
         sal_uInt16 nPos = m_pPaperSizeBox->InsertEntry( aStr );
         m_pPaperSizeBox->SetEntryData( nPos, (void*)(sal_uLong)eSize );
@@ -917,25 +917,25 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
         // already filled
         return 0;
 
-    String aOldName = m_pPaperTrayBox->GetSelectEntry();
+    OUString aOldName = m_pPaperTrayBox->GetSelectEntry();
     m_pPaperTrayBox->SetUpdateMode( sal_False );
     m_pPaperTrayBox->Clear();
     sal_uInt16 nEntryPos = m_pPaperTrayBox->InsertEntry(
         EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS ) );
     m_pPaperTrayBox->SetEntryData( nEntryPos,
         (void*)(sal_uLong)PAPERBIN_PRINTER_SETTINGS );
-    String aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );
+    OUString aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );
     sal_uInt16 nBinCount = pImpl->mpDefPrinter->GetPaperBinCount();
 
     for ( sal_uInt16 i = 0; i < nBinCount; ++i )
     {
-        String aName = pImpl->mpDefPrinter->GetPaperBinName(i);
+        OUString aName = pImpl->mpDefPrinter->GetPaperBinName(i);
 
-        if ( !aName.Len() )
+        if ( aName.isEmpty() )
         {
             aName = aPaperBin;
-            aName.Append( sal_Unicode(' ') );
-            aName.Append( OUString::number( i+1 ) );
+            aName += " ";
+            aName += OUString::number( i+1 );
         }
         nEntryPos = m_pPaperTrayBox->InsertEntry( aName );
         m_pPaperTrayBox->SetEntryData( nEntryPos, (void*)(sal_uLong)i );

@@ -128,31 +128,31 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     OfaACorrCheckListBox*   m_pCheckLB;
     PushButton*     m_pEditPB;
 
-    String          sDeleteEmptyPara;
-    String          sUseReplaceTbl;
-    String          sCptlSttWord;
-    String          sCptlSttSent;
-    String          sUserStyle;
-    String          sBullet;
-    String          sByInputBullet;
-    String          sBoldUnder;
-    String          sNoDblSpaces;
-    String          sCorrectCapsLock;
-    String          sDetectURL;
-    String          sDash;
-    String          sNonBrkSpace;
-    String          sOrdinal;
-    String          sRightMargin;
-    String          sNum;
-    String          sBorder;
-    String          sTable;
-    String          sReplaceTemplates;
-    String          sDelSpaceAtSttEnd;
-    String          sDelSpaceBetweenLines;
+    OUString        sDeleteEmptyPara;
+    OUString        sUseReplaceTbl;
+    OUString        sCptlSttWord;
+    OUString        sCptlSttSent;
+    OUString        sUserStyle;
+    OUString        sBullet;
+    OUString        sByInputBullet;
+    OUString        sBoldUnder;
+    OUString        sNoDblSpaces;
+    OUString        sCorrectCapsLock;
+    OUString        sDetectURL;
+    OUString        sDash;
+    OUString        sNonBrkSpace;
+    OUString        sOrdinal;
+    OUString        sRightMargin;
+    OUString        sNum;
+    OUString        sBorder;
+    OUString        sTable;
+    OUString        sReplaceTemplates;
+    OUString        sDelSpaceAtSttEnd;
+    OUString        sDelSpaceBetweenLines;
 
-    String          sMargin;
-    String          sBulletChar;
-    String          sByInputBulletChar;
+    OUString        sMargin;
+    OUString        sBulletChar;
+    OUString        sByInputBulletChar;
 
     Font            aBulletFont;
     Font            aByInputBulletFont;
@@ -162,7 +162,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
         DECL_LINK(SelectHdl, OfaACorrCheckListBox*);
         DECL_LINK(EditHdl, void *);
-        SvTreeListEntry* CreateEntry(String& rTxt, sal_uInt16 nCol);
+        SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
 
         OfaSwAutoFmtOptionsPage( Window* pParent,
@@ -204,8 +204,8 @@ class AutoCorrEdit : public Edit
 
 struct DoubleString
 {
-    String  sShort;
-    String  sLong;
+    OUString  sShort;
+    OUString  sLong;
     void*   pUserData; ///< CheckBox -> form. Text Bool -> selection text
 };
 
@@ -271,8 +271,8 @@ public:
     virtual void        Resize();
 
     void    SetLanguage(LanguageType eSet);
-    void    DeleteEntry(String sShort, String sLong);
-    void    NewEntry(String sShort, String sLong, bool bKeepSourceFormatting);
+    void    DeleteEntry(OUString sShort, OUString sLong);
+    void    NewEntry(OUString sShort, OUString sLong, bool bKeepSourceFormatting);
 };
 
 // class OfaAutocorrExceptPage ---------------------------------------------
@@ -343,8 +343,8 @@ private:
     /// Just for writer
     OfaACorrCheckListBox*   m_pSwCheckLB;
 
-    String          sNonBrkSpace;
-    String          sOrdinal;
+    OUString        sNonBrkSpace;
+    OUString        sOrdinal;
 
     SvLBoxButtonData*   pCheckButtonData;
 
@@ -377,9 +377,9 @@ private:
     DECL_LINK( QuoteHdl, PushButton* );
     DECL_LINK( StdQuoteHdl, PushButton* );
 
-    String              ChangeStringExt_Impl( sal_UCS4 );
+    OUString            ChangeStringExt_Impl( sal_UCS4 );
 
-    SvTreeListEntry* CreateEntry(String& rTxt, sal_uInt16 nCol);
+    SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
                         OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet );
 public:

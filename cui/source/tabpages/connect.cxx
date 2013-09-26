@@ -500,7 +500,7 @@ void SvxConnectionPage::FillTypeLB()
     {
         const SdrEdgeKindItem* pEdgeKindItem = (const SdrEdgeKindItem*) pItem;
         sal_uInt16 nCount = pEdgeKindItem->GetValueCount();
-        String aStr;
+        OUString aStr;
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {

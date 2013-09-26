@@ -260,8 +260,8 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( SvxHyperlinkItem* pHyperli
         mpCbbFrame->SetText ( pHyperlinkItem->GetTargetFrame() );
 
     // Form
-    String aStrFormText = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FROM_TEXT );
-    String aStrFormButton = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
+    OUString aStrFormText = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FROM_TEXT );
+    OUString aStrFormButton = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
 
     if( pHyperlinkItem->GetInsertMode() & HLINK_HTMLMODE )
     {
@@ -304,7 +304,7 @@ sal_Bool SvxHyperlinkTabPageBase::AskApply ()
 }
 
 // This method would be called from bookmark-window to set new mark-string
-void SvxHyperlinkTabPageBase::SetMarkStr ( const String& /*aStrMark*/ )
+void SvxHyperlinkTabPageBase::SetMarkStr ( const OUString& /*aStrMark*/ )
 {
     // default-implemtation : do nothing
 }
@@ -367,13 +367,13 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
         SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
 
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOVER_OBJECT )
-            pMacroPage->AddEvent( String( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
+            pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
                                   SFX_EVENT_MOUSEOVER_OBJECT );
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSECLICK_OBJECT )
-            pMacroPage->AddEvent( String( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT2) ),
+            pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT2) ),
                                   SFX_EVENT_MOUSECLICK_OBJECT);
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOUT_OBJECT )
-            pMacroPage->AddEvent( String( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
+            pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
         if ( bIsInputEnabled )
@@ -417,7 +417,7 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
 // try to detect the current protocol that is used in rStrURL
 OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
 {
-    String aStrScheme;
+    OUString aStrScheme;
 
     INetURLObject aURL( rStrURL );
     INetProtocol aProtocol = aURL.GetProtocol();
@@ -454,8 +454,8 @@ OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
 }
 
 
-void SvxHyperlinkTabPageBase::GetDataFromCommonFields( String& aStrName,
-                                             String& aStrIntName, String& aStrFrame,
+void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
+                                             OUString& aStrIntName, OUString& aStrFrame,
                                              SvxLinkInsertMode& eMode )
 {
     aStrIntName = mpEdText->GetText();
@@ -482,7 +482,7 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
         FillStandardDlgFields (pHyperlinkItem);
 
         // set all other fields
-        FillDlgFields ( (String&)pHyperlinkItem->GetURL() );
+        FillDlgFields ( (OUString&)pHyperlinkItem->GetURL() );
 
         // Store initial URL
         maStrInitURL = pHyperlinkItem->GetURL();
@@ -492,12 +492,11 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 // Fill output-ItemSet
 sal_Bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 {
-    OUString aStrURL;
-    String aStrName, aStrIntName, aStrFrame;
+    OUString aStrURL, aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
 
     GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-    if ( !aStrName.Len() ) //automatically create a visible name if the link is created without name
+    if ( aStrName.isEmpty() ) //automatically create a visible name if the link is created without name
         aStrName = CreateUiNameFromURL(aStrURL);
 
     sal_uInt16 nEvents = GetMacroEvents();
@@ -510,7 +509,7 @@ sal_Bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
     return sal_True;
 }
 
-String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
+OUString SvxHyperlinkTabPageBase::CreateUiNameFromURL( const OUString& aStrURL )
 {
     OUString          aStrUiURL;
     INetURLObject   aURLObj( aStrURL );
@@ -564,8 +563,7 @@ int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
     HideMarkWnd ();
 
     // retrieve data of dialog
-    OUString aStrURL;
-    String aStrName, aStrIntName, aStrFrame;
+    OUString aStrURL, aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
 
     GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);

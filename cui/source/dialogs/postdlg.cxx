@@ -71,7 +71,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
     }
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR );
-    String aAuthorStr, aDateStr;
+    OUString aAuthorStr, aDateStr;
 
     if ( rSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
@@ -130,7 +130,7 @@ SvxPostItDialog::~SvxPostItDialog()
 
 // -----------------------------------------------------------------------
 
-void SvxPostItDialog::ShowLastAuthor(const String& rAuthor, const String& rDate)
+void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {
     OUString sTxt( rAuthor );
     sTxt += ", ";
@@ -183,12 +183,12 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 {
     Date aDate( Date::SYSTEM );
     Time aTime( Time::SYSTEM );
-    String aTmp( SvtUserOptions().GetID() );
+    OUString aTmp( SvtUserOptions().GetID() );
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     OUString aStr( m_pEditED->GetText() );
     aStr += "\n---- ";
 
-    if ( aTmp.Len() > 0 )
+    if ( !aTmp.isEmpty() )
     {
         aStr += aTmp;
         aStr += ", ";

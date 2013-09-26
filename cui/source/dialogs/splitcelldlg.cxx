@@ -45,7 +45,7 @@ SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical,
     if(bIsTableVertical)
     {
         Image aTmpImg(m_pHorzBox->GetModeRadioImage());
-        String sTmp(m_pHorzBox->GetText());
+        OUString sTmp(m_pHorzBox->GetText());
         m_pHorzBox->SetText(m_pVertBox->GetText());
         m_pHorzBox->SetModeRadioImage(m_pVertBox->GetModeRadioImage());
         m_pVertBox->SetText(sTmp);

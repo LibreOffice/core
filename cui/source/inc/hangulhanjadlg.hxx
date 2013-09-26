@@ -153,9 +153,9 @@ namespace svx
         void    SetConversionFormatChangedHdl( const Link& _rHdl );
         void    SetFindHdl( const Link& _rHdl );
 
-        String  GetCurrentString( ) const;
+        OUString  GetCurrentString( ) const;
         void    SetCurrentString(
-                    const String& _rNewString,
+                    const OUString& _rNewString,
                     const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument = true
                 );
@@ -163,7 +163,7 @@ namespace svx
         void    FocusSuggestion( );
 
         /// retrieves the current suggestion
-        String  GetCurrentSuggestion( ) const;
+        OUString  GetCurrentSuggestion( ) const;
 
         void        SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType );
         editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const;
@@ -231,7 +231,7 @@ namespace svx
                             HangulHanjaOptionsDialog( Window* _pParent );
         virtual             ~HangulHanjaOptionsDialog();
 
-        void                AddDict( const String& _rName, bool _bChecked );
+        void                AddDict( const OUString& _rName, bool _bChecked );
     };
 
 
@@ -281,11 +281,11 @@ namespace svx
     class HangulHanjaEditDictDialog : public ModalDialog
     {
     private:
-        const String    m_aEditHintText;
+        const OUString  m_aEditHintText;
         HHDictList&     m_rDictList;
         sal_uInt32      m_nCurrentDict;
 
-        String          m_aOriginal;
+        OUString        m_aOriginal;
         SuggestionList* m_pSuggestions;
 
         FixedText       m_aBookFT;

@@ -132,7 +132,7 @@ sal_UCS4 SvxCharacterMap::GetChar() const
 
 // -----------------------------------------------------------------------
 
-String SvxCharacterMap::GetCharacters() const
+OUString SvxCharacterMap::GetCharacters() const
 {
     return m_pShowText->GetText();
 }
@@ -190,7 +190,7 @@ void SvxShowText::Paint( const Rectangle& )
     const Color aWindowTextColor( rStyleSettings.GetDialogTextColor() );
     SetTextColor( aWindowTextColor );
 
-    const String aText = GetText();
+    const OUString aText = GetText();
     const Size aSize = GetOutputSizePixel();
 
     long nAvailWidth = aSize.Width();
@@ -326,11 +326,11 @@ void SvxCharacterMap::init()
     }
 
     OUString aDefStr( aFont.GetName() );
-    String aLastName;
+    OUString aLastName;
     int nCount = GetDevFontCount();
     for ( int i = 0; i < nCount; i++ )
     {
-        String aFontName( GetDevFont( i ).GetName() );
+        OUString aFontName( GetDevFont( i ).GetName() );
         if ( aFontName != aLastName )
         {
             aLastName = aFontName;
@@ -403,13 +403,13 @@ void SvxCharacterMap::SetCharFont( const Font& rFont )
 
 IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
 {
-    String aStr = m_pShowText->GetText();
+    OUString aStr = m_pShowText->GetText();
 
-    if ( !aStr.Len() )
+    if ( aStr.isEmpty() )
     {
         sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
         // using the new UCS4 constructor
-    OUString aOUStr( &cChar, 1 );
+        OUString aOUStr( &cChar, 1 );
         m_pShowText->SetText( aOUStr );
     }
     EndDialog( sal_True );
@@ -517,9 +517,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
 {
     if ( !bOne )
     {
-        String aText = m_pShowText->GetText();
+        OUString aText = m_pShowText->GetText();
 
-        if ( aText.Len() != CHARMAP_MAXLEN )
+        if ( aText.getLength() != CHARMAP_MAXLEN )
         {
             sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
             // using the new UCS4 constructor
@@ -537,7 +537,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
 {
-    String aText;
+    OUString aText;
     sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
     sal_Bool bSelect = (cChar > 0);
 
@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, DeleteLastHdl)
 
 IMPL_LINK_NOARG(SvxCharacterMap, DeleteHdl)
 {
-    m_pShowText->SetText( String() );
+    m_pShowText->SetText( OUString() );
     m_pOKBtn->Disable();
     m_pDeleteLastBtn->Disable();
     return 0;

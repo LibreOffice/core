@@ -238,9 +238,9 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
     // set installation directory info
     SvTreeListEntry* pEntry = m_pJavaList->FirstSelected();
     DBG_ASSERT( pEntry, "SvxJavaOptionsPage::SelectHdl_Impl(): no entry" );
-    String* pLocation = static_cast< String* >( pEntry->GetUserData() );
+    OUString* pLocation = static_cast< OUString* >( pEntry->GetUserData() );
     DBG_ASSERT( pLocation, "invalid location string" );
-    String sInfo = m_sInstallText;
+    OUString sInfo = m_sInstallText;
     if ( pLocation )
         sInfo += *pLocation;
     m_pJavaPathText->SetText(sInfo);
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
         Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         xFolderPicker = FolderPicker::create(xContext);
 
-        String sWorkFolder = SvtPathOptions().GetWorkPath();
+        OUString sWorkFolder = SvtPathOptions().GetWorkPath();
         xFolderPicker->setDisplayDirectory( sWorkFolder );
         xFolderPicker->setDescription( m_sAddDialogText );
 
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 {
 #if HAVE_FEATURE_JAVA
-    String sClassPath;
+    OUString sClassPath;
 
     if ( !m_pPathDlg )
     {
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
         javaFrameworkError eErr = jfw_getUserClassPath( &m_pClassPath );
         if ( JFW_E_NONE == eErr && m_pClassPath )
         {
-            sClassPath = String( OUString( m_pClassPath ) );
+            sClassPath = m_pClassPath;
             m_pPathDlg->SetClassPath( sClassPath );
         }
     }
@@ -437,7 +437,7 @@ void SvxJavaOptionsPage::ClearJavaList()
     SvTreeListEntry* pEntry = m_pJavaList->First();
     while ( pEntry )
     {
-        String* pLocation = static_cast< String* >( pEntry->GetUserData() );
+        OUString* pLocation = static_cast< OUString* >( pEntry->GetUserData() );
         delete pLocation;
         pEntry = m_pJavaList->Next( pEntry );
     }
@@ -505,7 +505,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
         sEntry.append(m_sAccessibilityText);
     SvTreeListEntry* pEntry = m_pJavaList->InsertEntry(sEntry.makeStringAndClear());
     INetURLObject aLocObj( OUString( _pInfo->sLocation ) );
-    String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
+    OUString* pLocation = new OUString( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
 #else
     (void)_pInfo;
@@ -658,7 +658,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     if ( m_pPathDlg )
     {
         OUString sPath( m_pPathDlg->GetClassPath() );
-        if ( m_pPathDlg->GetOldPath() != String( sPath ) )
+        if ( m_pPathDlg->GetOldPath() != sPath )
         {
             eErr = jfw_setUserClassPath( sPath.pData );
             DBG_ASSERT( JFW_E_NONE == eErr,
@@ -756,7 +756,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 
 void SvxJavaOptionsPage::FillUserData()
 {
-    String aUserData;
+    OUString aUserData;
     SetUserData( aUserData );
 }
 
@@ -811,7 +811,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
         if ( LISTBOX_ENTRY_NOTFOUND == nPos )
             nPos = m_pAssignedList->InsertEntry( sParam );
         m_pAssignedList->SelectEntryPos( nPos );
-        m_pParameterEdit->SetText( String() );
+        m_pParameterEdit->SetText( OUString() );
         ModifyHdl_Impl( m_pParameterEdit );
         EnableRemoveButton();
     }
@@ -888,7 +888,7 @@ void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
     const OUString* pArray = rParams.getConstArray();
     for ( i = 0; i < nCount; ++i )
     {
-        String sParam = String( *pArray++ );
+        OUString sParam = OUString( *pArray++ );
         m_pAssignedList->InsertEntry( sParam );
     }
 }
@@ -920,7 +920,7 @@ SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
     sal_uInt16 i, nCount = m_pPathList->GetEntryCount();
     for ( i = 0; i < nCount; ++i )
-        delete static_cast< String* >( m_pPathList->GetEntryData(i) );
+        delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
 }
 
 // -----------------------------------------------------------------------
@@ -930,7 +930,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), OUString("*.jar;*.zip") );
-    String sFolder;
+    OUString sFolder;
     if ( m_pPathList->GetSelectEntryCount() > 0 )
     {
         INetURLObject aObj( m_pPathList->GetSelectEntry(), INetURLObject::FSYS_DETECT );
@@ -941,9 +941,9 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
     aDlg.SetDisplayDirectory( sFolder );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        String sURL = aDlg.GetPath();
+        OUString sURL = aDlg.GetPath();
         INetURLObject aURL( sURL );
-        String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        OUString sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
         {
             sal_uInt16 nPos = m_pPathList->InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
@@ -951,8 +951,8 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
         }
         else
         {
-            String sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
-            sMsg.SearchAndReplaceAscii( "%1", sFile );
+            OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            sMsg = sMsg.replaceFirst( "%1", sFile );
             ErrorBox( this, WB_OK, sMsg ).Execute();
         }
     }
@@ -967,7 +967,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
 
-    String sOldFolder;
+    OUString sOldFolder;
     if ( m_pPathList->GetSelectEntryCount() > 0 )
     {
         INetURLObject aObj( m_pPathList->GetSelectEntry(), INetURLObject::FSYS_DETECT );
@@ -978,9 +978,9 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
     xFolderPicker->setDisplayDirectory( sOldFolder );
     if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
     {
-        String sFolderURL( xFolderPicker->getDirectory() );
+        OUString sFolderURL( xFolderPicker->getDirectory() );
         INetURLObject aURL( sFolderURL );
-        String sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        OUString sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
             sal_uInt16 nPos = m_pPathList->InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
@@ -988,8 +988,8 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
         }
         else
         {
-            String sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
-            sMsg.SearchAndReplaceAscii( "%1", sNewFolder );
+            OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            sMsg = sMsg.replaceFirst( "%1", sNewFolder );
             ErrorBox( this, WB_OK, sMsg ).Execute();
         }
     }
@@ -1028,7 +1028,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
+bool SvxJavaClassPathDlg::IsPathDuplicate( const OUString& _rPath )
 {
     bool bRet = false;
     INetURLObject aFileObj( _rPath );
@@ -1048,15 +1048,15 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
 
 // -----------------------------------------------------------------------
 
-String SvxJavaClassPathDlg::GetClassPath() const
+OUString SvxJavaClassPathDlg::GetClassPath() const
 {
-    String sPath;
+    OUString sPath;
     sal_uInt16 nCount = m_pPathList->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        if ( sPath.Len() > 0 )
-            sPath += CLASSPATH_DELIMITER;
-        String* pFullPath = static_cast< String* >( m_pPathList->GetEntryData(i) );
+        if ( !sPath.isEmpty() )
+            sPath += OUString(CLASSPATH_DELIMITER);
+        OUString* pFullPath = static_cast< OUString* >( m_pPathList->GetEntryData(i) );
         if ( pFullPath )
             sPath += *pFullPath;
         else
@@ -1067,9 +1067,9 @@ String SvxJavaClassPathDlg::GetClassPath() const
 
 // -----------------------------------------------------------------------
 
-void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
+void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
 {
-    if ( m_sOldPath.Len() == 0 )
+    if ( m_sOldPath.isEmpty() )
         m_sOldPath = _rPath;
     m_pPathList->Clear();
     xub_StrLen i;
@@ -1077,9 +1077,9 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
     xub_StrLen nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
     for ( i = 0; i < nCount; ++i )
     {
-        String sToken = _rPath.GetToken( 0, CLASSPATH_DELIMITER, nIdx );
+        OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, INetURLObject::FSYS_DETECT );
-        String sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        OUString sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         m_pPathList->InsertEntry( sPath, SvFileInformationManager::GetImage( aURL, false ) );
     }
     // select first entry

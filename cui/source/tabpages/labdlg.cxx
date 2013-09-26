@@ -127,9 +127,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     aCT_CAPTTYPE.SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
     Image aImage;
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, String(CUI_RES(STR_CAPTTYPE_1)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, String(CUI_RES(STR_CAPTTYPE_2)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, String(CUI_RES(STR_CAPTTYPE_3)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, OUString(CUI_RES(STR_CAPTTYPE_1)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, OUString(CUI_RES(STR_CAPTTYPE_2)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, OUString(CUI_RES(STR_CAPTTYPE_3)));
 
     FillValueSet();
 
@@ -419,7 +419,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         aLB_ANSATZ_REL.Clear();
         nCnt = comphelper::string::getTokenCount(aStrHorzList, ';');
         for( nIdx=0 ; nIdx<nCnt ; nIdx++ )
-            aLB_ANSATZ_REL.InsertEntry( aStrHorzList.GetToken(nIdx) );
+            aLB_ANSATZ_REL.InsertEntry( aStrHorzList.getToken(nIdx, ';') );
         aLB_ANSATZ_REL.SelectEntryPos( nAnsatzRelPos );
 
         aMF_ANSATZ.Hide();
@@ -433,7 +433,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
         aLB_ANSATZ_REL.Clear();
         nCnt = comphelper::string::getTokenCount(aStrVertList, ';');
         for( nIdx=0 ; nIdx<nCnt ; nIdx++ )
-            aLB_ANSATZ_REL.InsertEntry( aStrVertList.GetToken(nIdx) );
+            aLB_ANSATZ_REL.InsertEntry( aStrVertList.getToken(nIdx, ';') );
         aLB_ANSATZ_REL.SelectEntryPos( nAnsatzRelPos );
 
         aMF_ANSATZ.Hide();

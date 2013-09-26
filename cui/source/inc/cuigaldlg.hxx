@@ -64,7 +64,7 @@ private:
     INetURLObject               maStartURL;
 
     void                        ImplSearch( const INetURLObject& rStartURL,
-                                            const ::std::vector< String >& rFormats,
+                                            const ::std::vector< OUString >& rFormats,
                                             sal_Bool bRecursive );
 
     virtual                     ~SearchThread();
@@ -101,7 +101,7 @@ public:
 
     virtual short       Execute();
     virtual void        StartExecuteModal( const Link& rEndDialogHdl );
-    void                SetFileType( const String& rType ) { aFtSearchType.SetText( rType ); }
+    void                SetFileType( const OUString& rType ) { aFtSearchType.SetText( rType ); }
     void                SetDirectory( const INetURLObject& rURL ) { aFtSearchDir.SetText( GetReducedString( rURL, 30 ) ); }
 };
 
@@ -185,8 +185,8 @@ private:
 
 public:
 
-                        TitleDialog( Window* pParent, const String& rOldText );
-    String              GetTitle() const { return maEdit.GetText(); }
+                        TitleDialog( Window* pParent, const OUString& rOldText );
+    OUString            GetTitle() const { return maEdit.GetText(); }
 };
 
 class GalleryIdDialog : public ModalDialog
@@ -276,8 +276,8 @@ class TPGalleryThemeProperties : public SfxTabPage
     StringList              aFoundList;
     FilterEntryList_impl    aFilterEntryList;
     Timer                   aPreviewTimer;
-    String                  aLastFilterName;
-    String                  aPreviewString;
+    OUString                aLastFilterName;
+    OUString                aPreviewString;
     INetURLObject           aURL;
     sal_uInt16              nCurFilterPos;
     sal_uInt16              nFirstExtFilterPos;
@@ -318,7 +318,7 @@ public:
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
 
-    void                StartSearchFiles( const String& _rFolderURL, short _nDlgResult );
+    void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 };

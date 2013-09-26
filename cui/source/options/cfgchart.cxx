@@ -122,7 +122,7 @@ void SvxChartColorTable::useDefault()
     }
 }
 
-String SvxChartColorTable::getDefaultName( size_t _nIndex )
+OUString SvxChartColorTable::getDefaultName( size_t _nIndex )
 {
     OUString aName;
 

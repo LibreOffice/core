@@ -85,9 +85,9 @@ struct SfxGroupInfo_Impl
     sal_uInt16  nKind;
     sal_uInt16  nUniqueID;
     void*       pObject;
-    sal_Bool        bWasOpened;
-    String      sCommand;
-    String      sLabel;
+    sal_Bool    bWasOpened;
+    OUString    sCommand;
+    OUString    sLabel;
 
                 SfxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, void* pObj = 0 ) :
                     nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(sal_False) {}
@@ -116,10 +116,10 @@ public:
 
     void          ClearAll();
     using Window::GetHelpText;
-    String        GetHelpText( SvTreeListEntry *pEntry );
-    String        GetCurCommand();
-    String        GetCurLabel();
-    String        GetSelectedScriptURI();
+    OUString      GetHelpText( SvTreeListEntry *pEntry );
+    OUString      GetCurCommand();
+    OUString      GetCurLabel();
+    OUString      GetSelectedScriptURI();
     void          FunctionSelected();
     void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
@@ -179,7 +179,7 @@ public:
     void                Open( SvTreeListEntry*, sal_Bool );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
-    void                SelectMacro( const String&, const String& );
+    void                SelectMacro( const OUString&, const OUString& );
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

@@ -75,27 +75,27 @@ void HyphenEdit::KeyInput( const KeyEvent& rKEvt )
 
 void SvxHyphenWordDialog::EnableLRBtn_Impl()
 {
-    String  aTxt( aEditWord );
-    xub_StrLen nLen = aTxt.Len();
+    OUString  aTxt( aEditWord );
+    xub_StrLen nLen = aTxt.getLength();
     xub_StrLen i;
 
     m_pRightBtn->Disable();
     for ( i = nOldPos + 2; i < nLen; ++i )
     {
-        if ( aTxt.GetChar( i ) == sal_Unicode( HYPH_POS_CHAR ) )
+        if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
             m_pRightBtn->Enable();
             break;
         }
     }
 
-    DBG_ASSERT(nOldPos < aTxt.Len(), "nOldPos out of range");
-    if (nOldPos >= aTxt.Len())
-        nOldPos = aTxt.Len() - 1;
+    DBG_ASSERT(nOldPos < aTxt.getLength(), "nOldPos out of range");
+    if (nOldPos >= aTxt.getLength())
+        nOldPos = aTxt.getLength() - 1;
     m_pLeftBtn->Disable();
     for ( i = nOldPos;  i-- > 0; )
     {
-        if ( aTxt.GetChar( i ) == sal_Unicode( HYPH_POS_CHAR ) )
+        if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
             m_pLeftBtn->Enable();
             break;
@@ -104,7 +104,7 @@ void SvxHyphenWordDialog::EnableLRBtn_Impl()
 }
 
 
-String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
+OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         uno::Reference< linguistic2::XPossibleHyphens >  &rxPossHyph,
         sal_uInt16 _nMaxHyphenationPos )
 {
@@ -135,13 +135,13 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
     // Thus rule 2) just eliminates those positions which will not be used by the core at all
     // even if the user were to select one of them.
 
-    String aTxt;
+    OUString aTxt;
     DBG_ASSERT(rxPossHyph.is(), "missing possible hyphens");
     if (rxPossHyph.is())
     {
-        DBG_ASSERT( aActWord == String( rxPossHyph->getWord() ), "word mismatch"  );
+        DBG_ASSERT( aActWord == rxPossHyph->getWord(), "word mismatch"  );
 
-        aTxt = String( rxPossHyph->getPossibleHyphens() );
+        aTxt = rxPossHyph->getPossibleHyphens();
 
         nHyphenationPositionsOffset = 0;
         uno::Sequence< sal_Int16 > aHyphenationPositions(
@@ -150,11 +150,11 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
         const sal_Int16 *pHyphenationPos = aHyphenationPositions.getConstArray();
 
         // find position nIdx after which all hyphen positions are unusable
-        xub_StrLen  nIdx = STRING_NOTFOUND;
-        xub_StrLen  nPos = 0, nPos1 = 0;
+        sal_Int32  nIdx = -1;
+        sal_Int32  nPos = 0, nPos1 = 0;
         if (nLen)
         {
-            xub_StrLen nStart = 0;
+            sal_Int32 nStart = 0;
             for (sal_Int32 i = 0;  i < nLen;  ++i)
             {
                 if (pHyphenationPos[i] > _nMaxHyphenationPos)
@@ -162,9 +162,9 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                 else
                 {
                     // find corresponding hyphen pos in string
-                    nPos = aTxt.Search( sal_Unicode( HYPH_POS_CHAR ), nStart );
+                    nPos = aTxt.indexOf( sal_Unicode( HYPH_POS_CHAR ), nStart );
 
-                    if (nStart == STRING_NOTFOUND)
+                    if (nStart == -1)
                         break;
                     else
                     {
@@ -174,30 +174,34 @@ String SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                 }
             }
         }
-        DBG_ASSERT(nIdx != STRING_NOTFOUND, "no usable hyphenation position");
+        DBG_ASSERT(nIdx != -1, "no usable hyphenation position");
 
         // 1) remove all not usable hyphenation positions from the end of the string
-        nPos = nIdx == STRING_NOTFOUND ? 0 : nIdx + 1;
+        nPos = nIdx == -1 ? 0 : nIdx + 1;
         nPos1 = nPos;   //save for later use in 2) below
         const OUString aTmp( sal_Unicode( HYPH_POS_CHAR ) );
         const OUString aEmpty;
-        while (nPos != STRING_NOTFOUND)
-            nPos = aTxt.SearchAndReplace( aTmp, aEmpty, nPos + 1 );
+        while (nPos != -1)
+        {
+            nPos++;
+            aTxt = aTxt.replaceFirst( aTmp, aEmpty, &nPos);
+        }
 
         // 2) remove all hyphenation positions from the start that are not considered by the core
-        const OUString aSearchRange( aTxt.Copy( 0, nPos1 ) );
+        const OUString aSearchRange( aTxt.copy( 0, nPos1 ) );
         sal_Int32 nPos2 = aSearchRange.lastIndexOf( '-' );  // the '-' position the core will use by default
         if (nPos2 != -1 )
         {
-            String aLeft( aSearchRange.copy( 0, nPos2 ) );
+            OUString aLeft( aSearchRange.copy( 0, nPos2 ) );
             nPos = 0;
-            while (nPos != STRING_NOTFOUND)
+            while (nPos != -1)
             {
-                nPos = aLeft.SearchAndReplace( aTmp, aEmpty, nPos + 1 );
-                if (nPos != STRING_NOTFOUND)
+                nPos++;
+                aLeft = aLeft.replaceFirst( aTmp, aEmpty, &nPos );
+                if (nPos != -1)
                     ++nHyphenationPositionsOffset;
             }
-            aTxt.Replace( 0, nPos2, aLeft );
+            aTxt = aTxt.replaceAt( 0, nPos2, aLeft );
         }
     }
     return aTxt;
@@ -217,7 +221,7 @@ void SvxHyphenWordDialog::InitControls_Impl()
     }
     m_pWordEdit->SetText( aEditWord );
 
-    nOldPos = aEditWord.Len();
+    nOldPos = aEditWord.getLength();
     SelLeft();
     EnableLRBtn_Impl();
 }
@@ -229,13 +233,13 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
     {
         if (nInsPos)
         {
-            String aTmp( aEditWord );
-            DBG_ASSERT(nInsPos <= aTmp.Len() - 2, "wrong hyphen position");
+            OUString aTmp( aEditWord );
+            DBG_ASSERT(nInsPos <= aTmp.getLength() - 2, "wrong hyphen position");
 
             sal_Int16 nIdxPos = -1;
             for (sal_uInt16 i = 0; i <= nInsPos; ++i)
             {
-                if (HYPH_POS_CHAR == aTmp.GetChar( i ))
+                if (HYPH_POS_CHAR == aTmp[ i ])
                     nIdxPos++;
             }
             // take the possible hyphenation positions that got removed from the
@@ -266,7 +270,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
         // adapt actual word and language to new found hyphenation result
         if(xHyphWord.is())
         {
-            aActWord    = String( xHyphWord->getWord() );
+            aActWord    = xHyphWord->getWord();
             nActLanguage = LanguageTag( xHyphWord->getLocale() ).getLanguageType();
             nMaxHyphenationPos = xHyphWord->getHyphenationPos();
             InitControls_Impl();
@@ -281,11 +285,11 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
 sal_uInt16 SvxHyphenWordDialog::GetHyphIndex_Impl()
 {
     sal_uInt16 nPos = 0;
-    String aTxt( m_pWordEdit->GetText() );
+    OUString aTxt( m_pWordEdit->GetText() );
 
-    for ( sal_uInt16 i=0 ; i < aTxt.Len(); ++i )
+    for ( sal_Int32 i=0; i < aTxt.getLength(); ++i )
     {
-        sal_Unicode cChar = aTxt.GetChar( i );
+        sal_Unicode cChar = aTxt[ i ];
         if ( cChar == CUR_HYPH_POS_CHAR )
             break;
         if ( cChar != HYPH_POS_CHAR )
@@ -300,13 +304,13 @@ void SvxHyphenWordDialog::SelLeft()
     DBG_ASSERT( nOldPos > 0, "invalid hyphenation position" );
     if (nOldPos > 0)
     {
-        String aTxt( aEditWord );
+        OUString aTxt( aEditWord );
         for ( xub_StrLen i = nOldPos - 1;  i > 0; --i)
         {
-            DBG_ASSERT(i <= aTxt.Len(), "index out of range");
-            if (aTxt.GetChar( i ) == sal_Unicode( HYPH_POS_CHAR ))
+            DBG_ASSERT(i <= aTxt.getLength(), "index out of range");
+            if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
             {
-                aTxt.SetChar( i, sal_Unicode( CUR_HYPH_POS_CHAR ) );
+                aTxt = aTxt.replaceAt( i, 1, OUString( CUR_HYPH_POS_CHAR ) );
 
                 nOldPos = i;
                 m_pWordEdit->SetText( aTxt );
@@ -323,12 +327,12 @@ void SvxHyphenWordDialog::SelLeft()
 
 void SvxHyphenWordDialog::SelRight()
 {
-    String aTxt( aEditWord );
-    for ( xub_StrLen i = nOldPos + 1;  i < aTxt.Len();  ++i )
+    OUString aTxt( aEditWord );
+    for ( xub_StrLen i = nOldPos + 1;  i < aTxt.getLength();  ++i )
     {
-        if (aTxt.GetChar( i ) == sal_Unicode( HYPH_POS_CHAR ))
+        if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
         {
-            aTxt.SetChar( i, sal_Unicode( CUR_HYPH_POS_CHAR ) );
+            aTxt = aTxt.replaceAt( i, 1, OUString( CUR_HYPH_POS_CHAR ) );
 
             nOldPos = i;
             m_pWordEdit->SetText( aTxt );
@@ -451,7 +455,7 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl)
 // class SvxHyphenWordDialog ---------------------------------------------
 
 SvxHyphenWordDialog::SvxHyphenWordDialog(
-    const String &rWord, LanguageType nLang,
+    const OUString &rWord, LanguageType nLang,
     Window* pParent,
     uno::Reference< linguistic2::XHyphenator >  &xHyphen,
     SvxSpellWrapper* pWrapper)
@@ -486,7 +490,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     DBG_ASSERT( xHyphWord.is(), "hyphenation result missing" );
     if (xHyphWord.is())
     {
-        DBG_ASSERT( aActWord == String( xHyphWord->getWord() ), "word mismatch" );
+        DBG_ASSERT( aActWord == xHyphWord->getWord(), "word mismatch" );
         DBG_ASSERT( nActLanguage == LanguageTag( xHyphWord->getLocale() ).getLanguageType(), "language mismatch" );
         nMaxHyphenationPos = xHyphWord->getHyphenationPos();
     }
@@ -518,7 +522,7 @@ SvxHyphenWordDialog::~SvxHyphenWordDialog()
 
 void SvxHyphenWordDialog::SetWindowTitle( LanguageType nLang )
 {
-    String aLangStr( SvtLanguageTable::GetLanguageString( nLang ) );
+    OUString aLangStr( SvtLanguageTable::GetLanguageString( nLang ) );
     OUString aTmp( aLabel );
     aTmp += " (";
     aTmp += aLangStr;

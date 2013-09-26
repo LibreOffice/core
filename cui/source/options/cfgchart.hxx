@@ -55,7 +55,7 @@ public:
     void remove( size_t _nIndex );
     void replace( size_t _nIndex, const XColorEntry & _rEntry );
     void useDefault();
-    String getDefaultName(size_t _nIndex);
+    OUString getDefaultName(size_t _nIndex);
 
     // comparison
     bool operator==( const SvxChartColorTable & _rOther ) const;

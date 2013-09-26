@@ -89,13 +89,13 @@ SearchThread::~SearchThread()
 
 void SearchThread::execute()
 {
-    const String aFileType( mpBrowser->aCbbFileType.GetText() );
+    const OUString aFileType( mpBrowser->aCbbFileType.GetText() );
 
-    if( aFileType.Len() )
+    if( !aFileType.isEmpty() )
     {
         const sal_uInt16        nFileNumber = mpBrowser->aCbbFileType.GetEntryPos( aFileType );
         sal_uInt16              nBeginFormat, nEndFormat;
-        ::std::vector< String > aFormats;
+        ::std::vector< OUString > aFormats;
 
         if( !nFileNumber || ( nFileNumber >= mpBrowser->aCbbFileType.GetEntryCount() ) )
         {
@@ -117,7 +117,7 @@ void SearchThread::execute()
 // ------------------------------------------------------------------------
 
 void SearchThread::ImplSearch( const INetURLObject& rStartURL,
-                               const ::std::vector< String >& rFormats,
+                               const ::std::vector< OUString >& rFormats,
                                sal_Bool bRecursive )
 {
     {
@@ -172,7 +172,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                               != rFormats.end() ) ||
                             ::std::find( rFormats.begin(),
                                          rFormats.end(),
-                                         String(aFoundURL.GetExtension().toAsciiLowerCase()) )
+                                         aFoundURL.GetExtension().toAsciiLowerCase() )
                             != rFormats.end() )
                         {
                             SolarMutexGuard aGuard;
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 {
     TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
     ::std::vector<bool, std::allocator<bool> >           aRemoveEntries( mpBrowser->aFoundList.size(), false );
-    ::std::vector< String >     aRemainingVector;
+    ::std::vector< OUString >   aRemainingVector;
     sal_uInt32                  i, nCount;
 
     GetParent()->EnterWait();
@@ -524,7 +524,7 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
 // - TitleDialog -
 // ---------------
 
-TitleDialog::TitleDialog( Window* pParent, const String& rOldTitle ) :
+TitleDialog::TitleDialog( Window* pParent, const OUString& rOldTitle ) :
     ModalDialog ( pParent, CUI_RES( RID_SVXDLG_GALLERY_TITLE ) ),
     maOk        ( this, CUI_RES( BTN_OK ) ),
     maCancel    ( this, CUI_RES( BTN_CANCEL ) ),
@@ -551,7 +551,7 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
 {
     FreeResource();
 
-    aLbResName.InsertEntry( String( RTL_CONSTASCII_USTRINGPARAM( "!!! No Id !!!" ) ) );
+    aLbResName.InsertEntry( OUString( "!!! No Id !!!" ) );
 
     GalleryTheme::InsertAllThemes( aLbResName );
 
@@ -575,11 +575,11 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 
         if( ( pInfo->GetId() == nId ) && ( pInfo->GetThemeName() != pThm->GetName() ) )
         {
-            String aStr( CUI_RES( RID_SVXSTR_GALLERY_ID_EXISTS ) );
+            OUString aStr( CUI_RES( RID_SVXSTR_GALLERY_ID_EXISTS ) );
 
-            aStr += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+            aStr += " (";
             aStr += pInfo->GetThemeName();
-            aStr += ')';
+            aStr += ")";
 
             InfoBox aBox( this, aStr );
             aBox.Execute();
@@ -611,12 +611,12 @@ GalleryThemeProperties::GalleryThemeProperties( Window* pParent, ExchangeData* _
     if( pData->pTheme->IsReadOnly() )
         RemoveTabPage( RID_SVXTABPAGE_GALLERYTHEME_FILES );
 
-    String aText( GetText() );
+    OUString aText( GetText() );
 
     aText += pData->pTheme->GetName();
 
     if( pData->pTheme->IsReadOnly() )
-        aText += String( CUI_RES( RID_SVXSTR_GALLERY_READONLY ) );
+        aText +=  CUI_RES( RID_SVXSTR_GALLERY_READONLY );
 
     SetText( aText );
 }
@@ -652,7 +652,7 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet&
 {
     FreeResource();
 
-    String aAccName(SVX_RES(RID_SVXSTR_GALLERY_THEMENAME));
+    OUString aAccName(SVX_RES(RID_SVXSTR_GALLERY_THEMENAME));
     aEdtMSName.SetAccessibleName(aAccName);
     aFiMSImage.SetAccessibleName(aAccName);
     aEdtMSName.SetAccessibleRelationLabeledBy( &aFiMSImage );
@@ -666,7 +666,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     GalleryTheme*       pThm = pData->pTheme;
     OUString            aOutStr( OUString::number(pThm->GetObjectCount()) );
-    String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
+    OUString            aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     OUString            aAccess;
     OUString            aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     sal_Bool            bReadOnly = pThm->IsReadOnly();
@@ -688,9 +688,9 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     // singular or plural?
     if ( 1 == pThm->GetObjectCount() )
-        aObjStr = aObjStr.GetToken( 0 );
+        aObjStr = aObjStr.getToken( 0, ';' );
     else
-        aObjStr = aObjStr.GetToken( 1 );
+        aObjStr = aObjStr.getToken( 1, ';' );
 
     aOutStr += " " + aObjStr;
 
@@ -756,7 +756,7 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxIt
     FreeResource();
 
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
-    aLbxFound.SetAccessibleName(String(SVX_RES(RID_SVXSTR_GALLERY_FILESFOUND)));
+    aLbxFound.SetAccessibleName(OUString(SVX_RES(RID_SVXSTR_GALLERY_FILESFOUND)));
     aWndPreview.SetAccessibleName(aCbxPreview.GetText());
     aLbxFound.SetAccessibleRelationLabeledBy(&aLbxFound);
 }
@@ -777,7 +777,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     aCbbFileType.EnableDDAutoWidth( sal_False );
     aLbxFound.SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
     aLbxFound.SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
-    aLbxFound.InsertEntry(String(CUI_RES(RID_SVXSTR_GALLERY_NOFILES)));
+    aLbxFound.InsertEntry(OUString(CUI_RES(RID_SVXSTR_GALLERY_NOFILES)));
     aLbxFound.Show();
 
     FillFilterList();
@@ -789,7 +789,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 
 // ------------------------------------------------------------------------
 
-void TPGalleryThemeProperties::StartSearchFiles( const String& _rFolderURL, short _nDlgResult )
+void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult )
 {
     if ( RET_OK == _nDlgResult )
     {
@@ -831,7 +831,7 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
 
     if ( sRet.indexOf( sAllFilter ) == -1 )
     {
-        String sExt = _rExtension;
+        OUString sExt = _rExtension;
         sRet += sOpenBracket;
         sRet += sExt;
         sRet += sCloseBracket;
@@ -844,8 +844,8 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
 void TPGalleryThemeProperties::FillFilterList()
 {
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-    String              aExt;
-    String              aName;
+    OUString            aExt;
+    OUString            aName;
     FilterEntry*        pFilterEntry;
     FilterEntry*        pTestEntry;
     sal_uInt16          i, nKeyCount;
@@ -860,18 +860,18 @@ void TPGalleryThemeProperties::FillFilterList()
         pTestEntry = aFilterEntryList.empty() ? NULL : aFilterEntryList[ entryIndex ];
         bInList = sal_False;
 
-        String aExtensions;
+        OUString aExtensions;
         int j = 0;
-        String sWildcard;
+        OUString sWildcard;
         while( true )
         {
             sWildcard = rFilter.GetImportWildcard( i, j++ );
-            if ( !sWildcard.Len() )
+            if ( sWildcard.isEmpty() )
                 break;
-            if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
+            if ( aExtensions.indexOf( sWildcard ) == -1 )
             {
-                if ( aExtensions.Len() )
-                    aExtensions += sal_Unicode(';');
+                if ( !aExtensions.isEmpty() )
+                    aExtensions += ";";
                 aExtensions += sWildcard;
             }
         }
@@ -931,22 +931,22 @@ void TPGalleryThemeProperties::FillFilterList()
     }
 
     // 'All' filters
-    String aExtensions;
+    OUString aExtensions;
 
     // graphic filters
     for ( i = 0; i < nKeyCount; ++i )
     {
         int j = 0;
-        String sWildcard;
+        OUString sWildcard;
         while( true )
         {
             sWildcard = rFilter.GetImportWildcard( i, j++ );
-            if ( !sWildcard.Len() )
+            if ( sWildcard.isEmpty() )
                 break;
-            if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
+            if ( aExtensions.indexOf( sWildcard ) == -1 )
             {
-                if ( aExtensions.Len() )
-                    aExtensions += sal_Unicode( ';' );
+                if ( !aExtensions.isEmpty() )
+                    aExtensions += ";";
 
                 aExtensions += sWildcard;
             }
@@ -958,9 +958,9 @@ void TPGalleryThemeProperties::FillFilterList()
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
-            if ( aExtensions.Len() )
-                aExtensions += sal_Unicode( ';' );
-            ( aExtensions += String( aWildcard ) ) += String( aFilters[ k ].second.getToken( 0, ';', nIndex ) );
+            if ( !aExtensions.isEmpty() )
+                aExtensions += ";";
+            aExtensions += aWildcard + aFilters[ k ].second.getToken( 0, ';', nIndex );
         }
      }
 
@@ -985,13 +985,13 @@ void TPGalleryThemeProperties::FillFilterList()
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
 {
-    String aText( aCbbFileType.GetText() );
+    OUString aText( aCbbFileType.GetText() );
 
     if( bInputAllowed && ( aLastFilterName != aText ) )
     {
         aLastFilterName = aText;
 
-        if( QueryBox( this, WB_YES_NO, String( CUI_RES( RID_SVXSTR_GALLERY_SEARCH ) ) ).Execute() == RET_YES )
+        if( QueryBox( this, WB_YES_NO, OUString( CUI_RES( RID_SVXSTR_GALLERY_SEARCH ) ) ).Execute() == RET_YES )
             SearchFiles();
     }
 
@@ -1026,7 +1026,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
             com::sun::star::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             xFolderPicker = FolderPicker::create(xContext);
 
-            String  aDlgPathName( SvtPathOptions().GetGraphicPath() );
+            OUString  aDlgPathName( SvtPathOptions().GetGraphicPath() );
             xFolderPicker->setDisplayDirectory(aDlgPathName);
 
             aPreviewTimer.Stop();
@@ -1077,7 +1077,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
     if ( bInputAllowed )
     {
         aPreviewTimer.Stop();
-        aPreviewString.Erase();
+        aPreviewString = "";
 
         if( !aCbxPreview.IsChecked() )
         {
@@ -1096,7 +1096,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
 
 void TPGalleryThemeProperties::DoPreview()
 {
-    String aString( aLbxFound.GetSelectEntry() );
+    OUString aString( aLbxFound.GetSelectEntry() );
 
     if( aString != aPreviewString )
     {
@@ -1131,7 +1131,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
 
         if( !aLbxFound.GetSelectEntryCount() || !bEntriesFound )
         {
-            SvxOpenGraphicDialog aDlg(String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ) );
+            SvxOpenGraphicDialog aDlg("Gallery");
             aDlg.EnableLink(sal_False);
             aDlg.AsLink(sal_False);
 
@@ -1232,7 +1232,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
   }
   else
   {
-      aLbxFound.InsertEntry( String( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
+      aLbxFound.InsertEntry( OUString( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
       aBtnTakeAll.Disable();
       aCbxPreview.Disable();
       bEntriesFound = sal_False;
@@ -1246,7 +1246,7 @@ IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, ::com::sun::star::ui::dial
 {
     DBG_ASSERT( xFolderPicker.is() == sal_True, "TPGalleryThemeProperties::DialogClosedHdl(): no folder picker" );
 
-    String sURL = String( xFolderPicker->getDirectory() );
+    OUString sURL = xFolderPicker->getDirectory();
     StartSearchFiles( sURL, pEvt->DialogResult );
 
     return 0L;

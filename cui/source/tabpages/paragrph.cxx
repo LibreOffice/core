@@ -1422,7 +1422,7 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     bool bIsPageModel = false;
 
     _nWhich = GetWhich( SID_ATTR_PARA_MODEL );
-    String sPage;
+    OUString sPage;
     if ( eState != m_pApplyCollBtn->GetSavedValue() ||
          ( STATE_CHECK == eState &&
            m_pApplyCollBox->GetSelectEntryPos() != m_pApplyCollBox->GetSavedValue() ) )
@@ -1430,7 +1430,7 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         if ( eState == STATE_CHECK )
         {
             sPage = m_pApplyCollBox->GetSelectEntry();
-            bIsPageModel = 0 != sPage.Len();
+            bIsPageModel = !sPage.isEmpty();
         }
         pOld = GetOldItem( rOutSet, SID_ATTR_PARA_MODEL );
 
@@ -1631,9 +1631,9 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             const SvxPageModelItem& rModel =
                 (const SvxPageModelItem&)rSet.Get( _nWhich );
-            String aStr( rModel.GetValue() );
+            OUString aStr( rModel.GetValue() );
 
-            if ( aStr.Len() &&
+            if ( !aStr.isEmpty() &&
                  m_pApplyCollBox->GetEntryPos( aStr ) != LISTBOX_ENTRY_NOTFOUND )
             {
                 m_pApplyCollBox->SelectEntry( aStr );
@@ -1921,7 +1921,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     get(m_pWidowRowLabel,"labelWidow");
 
     m_pApplyCollBox->SetAccessibleRelationLabeledBy(m_pApplyCollBtn);
-    m_pApplyCollBox->SetAccessibleName(String(CUI_RES(STR_PAGE_STYLE)));
+    m_pApplyCollBox->SetAccessibleName(CUI_RES(STR_PAGE_STYLE));
 
     m_pOrphanRowNo->SetAccessibleRelationLabeledBy(m_pOrphanBox);
     m_pWidowRowNo->SetAccessibleRelationLabeledBy(m_pWidowBox);
@@ -1944,11 +1944,11 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
         SfxStyleSheetBasePool* pPool = pSh->GetStyleSheetPool();
         pPool->SetSearchMask( SFX_STYLE_FAMILY_PAGE );
         SfxStyleSheetBase* pStyle = pPool->First();
-        String aStdName;
+        OUString aStdName;
 
         while( pStyle )
         {
-            if ( aStdName.Len() == 0 )
+            if ( aStdName.isEmpty() )
                 // first style == standard style
                 aStdName = pStyle->GetName();
             m_pApplyCollBox->InsertEntry( pStyle->GetName() );

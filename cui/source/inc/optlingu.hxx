@@ -66,17 +66,17 @@ class SvxEditModulesDlg : public ModalDialog
     HelpButton          aHelpPB;
     OKButton            aClosePB;
 
-    String              sSpell;
-    String              sHyph;
-    String              sThes;
-    String              sGrammar;
+    OUString            sSpell;
+    OUString            sHyph;
+    OUString            sThes;
+    OUString            sGrammar;
 
     SvxLinguData_Impl*  pDefaultLinguData;
     SvxLinguData_Impl&  rLinguData;
 
     SvLBoxButtonData*   pCheckButtonData;
 
-    SvTreeListEntry*    CreateEntry(String& rTxt, sal_uInt16 nCol);
+    SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( UpDownHdl_Impl, PushButton * );
@@ -109,17 +109,17 @@ private:
     PushButton*         m_pLinguOptionsEditPB;
     FixedHyperlink*     m_pMoreDictsLink;
 
-    String              sCapitalWords;
-    String              sWordsWithDigits;
-    String              sCapitalization;
-    String              sSpellSpecial;
-    String              sSpellAuto;
-    String              sGrammarAuto;
-    String              sNumMinWordlen;
-    String              sNumPreBreak;
-    String              sNumPostBreak;
-    String              sHyphAuto;
-    String              sHyphSpecial;
+    OUString            sCapitalWords;
+    OUString            sWordsWithDigits;
+    OUString            sCapitalization;
+    OUString            sSpellSpecial;
+    OUString            sSpellAuto;
+    OUString            sGrammarAuto;
+    OUString            sNumMinWordlen;
+    OUString            sNumPreBreak;
+    OUString            sNumPostBreak;
+    OUString            sHyphAuto;
+    OUString            sHyphSpecial;
 
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XLinguProperties >     xProp;
@@ -135,7 +135,7 @@ private:
     SvxLinguData_Impl*  pLinguData;
 
     SvxLinguTabPage( Window* pParent, const SfxItemSet& rCoreSet );
-    SvTreeListEntry*    CreateEntry(String& rTxt, sal_uInt16 nCol);
+    SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
     void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
     sal_uLong   GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );

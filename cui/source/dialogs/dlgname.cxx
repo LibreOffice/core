@@ -32,7 +32,7 @@
 |*
 \************************************************************************/
 
-SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String& rDesc ) :
+SvxNameDialog::SvxNameDialog( Window* pWindow, const OUString& rName, const OUString& rDesc ) :
     ModalDialog     ( pWindow, "NameDialog", "cui/ui/namedialog.ui" )
 {
     get(pBtnOK, "ok");
@@ -60,7 +60,7 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 
 SvxObjectNameDialog::SvxObjectNameDialog(
     Window* pWindow,
-    const String& rName) :
+    const OUString& rName) :
     ModalDialog     ( pWindow, "ObjectNameDialog", "cui/ui/objectnamedialog.ui" )
 {
     get(pBtnOK, "ok");
@@ -90,8 +90,8 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
 
 SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
     Window* pWindow,
-    const String& rTitle,
-    const String& rDescription) :
+    const OUString& rTitle,
+    const OUString& rDescription) :
     ModalDialog     ( pWindow, "ObjectTitleDescDialog", "cui/ui/objecttitledescdialog.ui" )
 {
     get(pEdtTitle, "object_title_entry");
@@ -114,7 +114,7 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 |*
 \************************************************************************/
 
-SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg )
+SvxMessDialog::SvxMessDialog( Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg )
     : ModalDialog(pWindow, "MessBox", "cui/ui/messbox.ui")
     , pImage(NULL)
 {
@@ -162,7 +162,7 @@ IMPL_LINK_NOARG_INLINE_END(SvxMessDialog, Button2Hdl)
 
 /*************************************************************************/
 
-void SvxMessDialog::SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt )
+void SvxMessDialog::SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt )
 {
     switch ( nBtnId )
     {

@@ -43,7 +43,7 @@ class SvxNumberingPreview : public Window
     const SvxNumRule*   pActNum;
     Font                aStdFont;
     long                nPageWidth;
-    const String*       pOutlineNames;
+    const OUString*     pOutlineNames;
     sal_Bool                bPosition;
     sal_uInt16              nActLevel;
 
@@ -57,7 +57,7 @@ class SvxNumberingPreview : public Window
                     {pActNum = pNum; Invalidate();};
         void    SetPageWidth(long nPgWidth)
                                 {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const String* pNames)
+        void    SetOutlineNames(const OUString* pNames)
                         {pOutlineNames = pNames;}
         void    SetPositionMode()
                         { bPosition = sal_True;}
@@ -98,7 +98,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     sal_Bool                    bModified   : 1;
     sal_Bool                    bPreset     : 1;
 
-    String              sNumCharFmtName;
+    OUString              sNumCharFmtName;
     sal_uInt16              nNumItemId;
 
     protected:
@@ -118,7 +118,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
+    void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
 
 
@@ -137,7 +137,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     sal_Bool                bPreset     : 1;
     sal_uInt16              nNumItemId;
 
-    String              sBulletCharFmtName;
+    OUString            sBulletCharFmtName;
     protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
@@ -154,7 +154,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    void                SetCharFmtName(const String& rName){sBulletCharFmtName = rName;}
+    void                SetCharFmtName(const OUString& rName){sBulletCharFmtName = rName;}
     virtual void        PageCreated(SfxAllItemSet aSet);
 };
 
@@ -167,8 +167,8 @@ class SvxNumPickTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
     SvxNumValueSet*     m_pExamplesVS;
-    String              sNumCharFmtName;
-    String              sBulletCharFmtName;
+    OUString            sNumCharFmtName;
+    OUString            sBulletCharFmtName;
 
     SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  // is initialized with the five formats
 
@@ -197,7 +197,7 @@ class SvxNumPickTabPage : public SfxTabPage
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    void                SetCharFmtNames(const String& rCharName, const String& rBulName)
+    void                SetCharFmtNames(const OUString& rCharName, const OUString& rBulName)
                             {   sNumCharFmtName = rCharName;
                                 sBulletCharFmtName = rBulName;}
     virtual void        PageCreated(SfxAllItemSet aSet);
@@ -214,7 +214,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     SvxBmpNumValueSet*  m_pExamplesVS;
 
     std::vector<OUString> aGrfNames;
-    String              sNumCharFmtName;
+    OUString            sNumCharFmtName;
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
@@ -242,7 +242,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
-    void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
+    void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
 
 //------------------------------------------------

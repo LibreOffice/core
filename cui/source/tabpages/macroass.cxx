@@ -45,18 +45,18 @@ public:
     _SfxMacroTabPage_Impl( void );
     ~_SfxMacroTabPage_Impl();
 
-    String                          maStaticMacroLBLabel;
+    OUString                        maStaticMacroLBLabel;
     PushButton*                     pAssignPB;
     PushButton*                     pDeletePB;
-    String*                         pStrEvent;
-    String*                         pAssignedMacro;
+    OUString*                       pStrEvent;
+    OUString*                       pAssignedMacro;
     _HeaderTabListBox*              pEventLB;
     SfxConfigGroupListBox_Impl*     pGroupLB;
     FixedText*                      pFT_MacroLBLabel;
     SfxConfigFunctionListBox_Impl*  pMacroLB;
 
     FixedText*                      pMacroFT;
-    String*                         pMacroStr;
+    OUString*                       pMacroStr;
 
     sal_Bool                            bReadOnly;
     Timer                           maFillGroupTimer;
@@ -115,21 +115,21 @@ static long nTabs[] =
 
 #define LB_MACROS_ITEMPOS   2
 
-String ConvertToUIName_Impl( SvxMacro *pMacro )
+OUString ConvertToUIName_Impl( SvxMacro *pMacro )
 {
-    String aName( pMacro->GetMacName() );
-    String aEntry;
+    OUString aName( pMacro->GetMacName() );
+    OUString aEntry;
     if ( pMacro->GetLanguage() != "JavaScript" )
     {
         sal_uInt16 nCount = comphelper::string::getTokenCount(aName, '.');
-        aEntry = aName.GetToken( nCount-1, '.' );
+        aEntry = aName.getToken( nCount-1, '.' );
         if ( nCount > 2 )
         {
-            aEntry += '(';
-            aEntry += aName.GetToken( 0, '.' );
-            aEntry += '.';
-            aEntry += aName.GetToken( nCount-2, '.' );
-            aEntry += ')';
+            aEntry += "(";
+            aEntry += aName.getToken( 0, '.' );
+            aEntry += ".";
+            aEntry += aName.getToken( nCount-2, '.' );
+            aEntry += ")";
         }
         return aEntry;
     }
@@ -147,7 +147,7 @@ void _SfxMacroTabPage::EnableButtons()
         const SvxMacro* pM = aTbl.Get( (sal_uInt16)(sal_uLong) pE->GetUserData() );
         mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
 
-        String sEventMacro;
+        OUString sEventMacro;
         sEventMacro = ((SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
 
         OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
@@ -169,16 +169,16 @@ _SfxMacroTabPage::~_SfxMacroTabPage()
     DELETEZ( mpImpl );
 }
 
-void _SfxMacroTabPage::AddEvent( const String & rEventName, sal_uInt16 nEventId )
+void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventId )
 {
-    String sTmp( rEventName );
-    sTmp += '\t';
+    OUString sTmp( rEventName );
+    sTmp += "\t";
 
     // if the table is valid already
     SvxMacro* pM = aTbl.Get( nEventId );
     if( pM )
     {
-        String sNew( ConvertToUIName_Impl( pM ) );
+        OUString sNew( ConvertToUIName_Impl( pM ) );
         sTmp += sNew;
     }
 
@@ -303,9 +303,9 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
 {
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     pImpl->pGroupLB->GroupSelected();
-    const String sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
-    String          aLabelText;
-    if( sScriptURI.Len() > 0 )
+    const OUString sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
+    OUString       aLabelText;
+    if( !sScriptURI.isEmpty() )
         aLabelText = pImpl->maStaticMacroLBLabel;
     pImpl->pFT_MacroLBLabel->SetText( aLabelText );
 
@@ -340,11 +340,11 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     sal_uInt16 nEvent = (sal_uInt16)(sal_uLong)pE->GetUserData();
     pThis->aTbl.Erase( nEvent );
 
-    String sScriptURI;
+    OUString sScriptURI;
     if( bAssEnabled )
     {
         sScriptURI = pImpl->pMacroLB->GetSelectedScriptURI();
-        if( sScriptURI.CompareToAscii( "vnd.sun.star.script:", 20 ) == COMPARE_EQUAL )
+        if( sScriptURI.startsWith( "vnd.sun.star.script:" ) )
         {
             pThis->aTbl.Insert(
                 nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_SF ) ) );
@@ -444,8 +444,8 @@ void _SfxMacroTabPage::FillEvents()
             SvLBoxString*   pLItem = ( SvLBoxString* ) pE->GetItem( LB_MACROS_ITEMPOS );
             DBG_ASSERT( pLItem && SV_ITEM_ID_LBOXSTRING == pLItem->GetType(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
 
-            String          sOld( pLItem->GetText() );
-            String          sNew;
+            OUString          sOld( pLItem->GetText() );
+            OUString          sNew;
             sal_uInt16          nEventId = ( sal_uInt16 ) ( sal_uLong ) pE->GetUserData();
             if( aTbl.IsKeyValid( nEventId ) )
                 sNew = ConvertToUIName_Impl( aTbl.Get( nEventId ) );
@@ -462,8 +462,8 @@ void _SfxMacroTabPage::FillEvents()
 SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
     : _SfxMacroTabPage( pParent, rResId, rSet )
 {
-    mpImpl->pStrEvent           = new String(                   CUI_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new String(                   CUI_RES( STR_ASSMACRO ) );
+    mpImpl->pStrEvent           = new OUString(                 CUI_RES( STR_EVENT ) );
+    mpImpl->pAssignedMacro      = new OUString(                 CUI_RES( STR_ASSMACRO ) );
     mpImpl->pEventLB            = new _HeaderTabListBox( this,  CUI_RES( LB_EVENT ) );
     mpImpl->pAssignPB           = new PushButton( this,         CUI_RES( PB_ASSIGN ) );
     mpImpl->pDeletePB           = new PushButton( this,         CUI_RES( PB_DELETE ) );
@@ -472,7 +472,7 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Re
     mpImpl->pFT_MacroLBLabel    = new FixedText( this,          CUI_RES( FT_LABEL4LB_MACROS ) );
     mpImpl->maStaticMacroLBLabel= mpImpl->pFT_MacroLBLabel->GetText();
     mpImpl->pMacroLB            = new SfxConfigFunctionListBox_Impl( this,  CUI_RES( LB_MACROS ) );
-    mpImpl->pMacroStr           = new String(                   CUI_RES( STR_MACROS ) );
+    mpImpl->pMacroStr           = new OUString(                 CUI_RES( STR_MACROS ) );
 
     FreeResource();
 

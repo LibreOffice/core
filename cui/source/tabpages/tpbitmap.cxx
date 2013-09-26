@@ -65,7 +65,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_BITMAP ),
-    aXBitmapItem        ( String(), Graphic() ),
+    aXBitmapItem        ( OUString(), Graphic() ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
@@ -235,7 +235,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
                 const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
-                const String aString(m_pLbBitmaps->GetSelectEntry());
+                const OUString aString(m_pLbBitmaps->GetSelectEntry());
 
                 _rOutAttrs.Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
             }
@@ -243,7 +243,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
             {
                 const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
 
-                _rOutAttrs.Put(XFillBitmapItem(String(), Graphic(aBitmapEx)));
+                _rOutAttrs.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
             }
         }
     }
@@ -368,13 +368,13 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
                 m_pLbColor->SelectEntry( aPixelColor );
             if( m_pLbColor->GetSelectEntryCount() == 0 )
             {
-                m_pLbColor->InsertEntry( aPixelColor, String() );
+                m_pLbColor->InsertEntry( aPixelColor, OUString() );
                 m_pLbColor->SelectEntry( aPixelColor );
             }
             m_pLbBackgroundColor->SelectEntry( aBackColor );
             if( m_pLbBackgroundColor->GetSelectEntryCount() == 0 )
             {
-                m_pLbBackgroundColor->InsertEntry( aBackColor, String() );
+                m_pLbBackgroundColor->InsertEntry( aBackColor, OUString() );
                 m_pLbBackgroundColor->SelectEntry( aBackColor );
             }
         }
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
         m_pCtlPixel->Invalidate();
 
         // display bitmap
-        const XFillBitmapItem aXBmpItem(String(), *pGraphicObject);
+        const XFillBitmapItem aXBmpItem(OUString(), *pGraphicObject);
         rXFSet.Put( aXBmpItem );
 
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
@@ -415,12 +415,12 @@ long SvxBitmapTabPage::CheckChanges_Impl()
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
-                                                        String( SVX_RES( RID_SVXSTR_BITMAP ) ),
-                                                        String( CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ) ),
+                                                        SVX_RES( RID_SVXSTR_BITMAP ),
+                                                        CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
                                                         &aWarningBoxImage  );
             DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
-            aMessDlg->SetButtonText( MESS_BTN_1, String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-            aMessDlg->SetButtonText( MESS_BTN_2, String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
+            aMessDlg->SetButtonText( MESS_BTN_1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
+            aMessDlg->SetButtonText( MESS_BTN_2, ResId( RID_SVXSTR_ADD, rMgr ) );
 
             short nRet = aMessDlg->Execute();
 
@@ -456,8 +456,8 @@ long SvxBitmapTabPage::CheckChanges_Impl()
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
 {
 
-    String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
-    String aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_BITMAP ) );
+    OUString aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
+    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_BITMAP ) );
     OUString aName;
 
     long nCount = pBitmapList->Count();
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
         if( !nError )
         {
-            String aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
+            OUString aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
             MessageDialog*    pWarnBox = NULL;
 
             // convert file URL to UI name
@@ -587,7 +587,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), String(aURL.GetName()).GetToken( 0, '.' ), aDesc );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aURL.GetName().getToken( 0, '.' ), aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             nError = 1;
 
@@ -654,7 +654,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
-        String aDesc( ResId( RID_SVXSTR_DESC_NEW_BITMAP, rMgr ) );
+        OUString aDesc( ResId( RID_SVXSTR_DESC_NEW_BITMAP, rMgr ) );
         OUString aName( pBitmapList->GetBitmap( nPos )->GetName() );
         OUString aOldName = aName;
 
@@ -716,7 +716,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-            String( CUI_RES( RID_SVXSTR_ASK_DEL_BITMAP ) ) );
+            OUString( CUI_RES( RID_SVXSTR_ASK_DEL_BITMAP ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
         {
@@ -762,7 +762,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
     if ( nReturn != RET_CANCEL )
     {
         ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-        String aStrFilterType( "*.sob" );
+        OUString aStrFilterType( "*.sob" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
 {
        ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( "*.sob" );
+    OUString aStrFilterType( "*.sob" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangePixelColorHdl_Impl)
     m_pBitmapCtl->SetPixelColor( m_pLbColor->GetSelectEntryColor() );
 
     // get bitmap and display it
-    rXFSet.Put(XFillBitmapItem(String(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+    rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 
@@ -923,7 +923,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl)
     m_pBitmapCtl->SetBackgroundColor( m_pLbBackgroundColor->GetSelectEntryColor() );
 
     // get bitmap and display it
-    rXFSet.Put(XFillBitmapItem(String(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+    rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 
@@ -941,7 +941,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
         m_pBitmapCtl->SetBmpArray( m_pCtlPixel->GetBitmapPixelPtr() );
 
         // get bitmap and display it
-        rXFSet.Put(XFillBitmapItem(String(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+        rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreview->Invalidate();
 

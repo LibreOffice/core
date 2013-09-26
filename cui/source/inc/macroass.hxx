@@ -58,7 +58,7 @@ public:
 
     virtual                     ~_SfxMacroTabPage();
 
-    void                        AddEvent( const String & rEventName, sal_uInt16 nEventId );
+    void                        AddEvent( const OUString & rEventName, sal_uInt16 nEventId );
 
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );

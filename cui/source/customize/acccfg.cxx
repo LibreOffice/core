@@ -618,7 +618,7 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
     public:
     SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
                                    sal_uInt16       nFlags,
-                             const String&      sText );
+                             const OUString&      sText );
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
@@ -629,7 +629,7 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
 //-----------------------------------------------
 SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
                                                          sal_uInt16       nFlags,
-                                                   const String&      sText )
+                                                   const OUString&      sText )
         : SvLBoxString(pEntry, nFlags, sText)
 {
 }
@@ -745,7 +745,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
 {
     FreeResource();
 
-    aFilterAllStr = String( SfxResId( STR_SFX_FILTERNAME_ALL ) );
+    aFilterAllStr = SfxResId( STR_SFX_FILTERNAME_ALL );
 
 // install handler functions
     aChangeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
@@ -870,8 +870,8 @@ void SfxAcceleratorConfigPage::InitAccCfg()
     original SvTabListBox!
   */
 void SfxAcceleratorConfigPage::CreateCustomItems(      SvTreeListEntry* pEntry,
-                                                 const String&      sCol1 ,
-                                                 const String&      sCol2 )
+                                                 const OUString&      sCol1 ,
+                                                 const OUString&      sCol2 )
 {
     SfxAccCfgLBoxString_Impl* pStringItem = new SfxAccCfgLBoxString_Impl(pEntry, 0, sCol1);
     pEntry->ReplaceItem(pStringItem, 1);
@@ -910,8 +910,8 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     for (i1=0; i1<c1; ++i1)
     {
         KeyCode aKey = KEYCODE_ARRAY[i1];
-        String  sKey = aKey.GetName();
-        if (!sKey.Len())
+        OUString  sKey = aKey.GetName();
+        if (sKey.isEmpty())
             continue;
         TAccInfo*    pEntry   = new TAccInfo(i1, nListPos, aKey);
         SvTreeListEntry* pLBEntry = aEntriesBox.InsertEntryToColumn(sKey, 0L, LIST_APPEND, 0xFFFF);
@@ -928,7 +928,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     {
         const css::awt::KeyEvent& aAWTKey  = lKeys[i2];
               OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
-              String              sLabel   = GetLabel4Command(sCommand);
+              OUString     sLabel   = GetLabel4Command(sCommand);
               KeyCode             aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
               sal_uInt16              nPos     = MapKeyCodeToPos(aKeyCode);
 
@@ -961,7 +961,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
         pEntry->m_bIsConfigurable = sal_False;
-        CreateCustomItems(pLBEntry, aEntriesBox.GetEntryText(pLBEntry, 0), String());
+        CreateCustomItems(pLBEntry, aEntriesBox.GetEntryText(pLBEntry, 0), OUString());
     }
 }
 
@@ -1046,9 +1046,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
     sal_uInt16    nPos        = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-    String    sNewCommand = pFunctionBox->GetCurCommand();
-    String    sLabel      = pFunctionBox->GetCurLabel();
-    if (!sLabel.Len())
+    OUString    sNewCommand = pFunctionBox->GetCurCommand();
+    OUString    sLabel      = pFunctionBox->GetCurLabel();
+    if (sLabel.isEmpty())
         sLabel = GetLabel4Command(sNewCommand);
 
     pEntry->m_sCommand = sNewCommand;
@@ -1068,7 +1068,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 
     // remove function name from selected entry
     sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
-    aEntriesBox.SetEntryText( String(), nPos, nCol );
+    aEntriesBox.SetEntryText( OUString(), nPos, nCol );
     pEntry->m_sCommand = OUString();
 
     ((Link &) pFunctionBox->GetSelectHdl()).Call( pFunctionBox );
@@ -1079,7 +1079,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 {
     // disable help
-    Help::ShowBalloon( this, Point(), String() );
+    Help::ShowBalloon( this, Point(), OUString() );
     if ( pListBox == &aEntriesBox )
     {
         sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
@@ -1384,7 +1384,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 }
 
 //-----------------------------------------------
-void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTitle )
+void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& rTitle )
 {
     bool bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
     short nDialogType = bSave ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION
@@ -1429,8 +1429,8 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
 
     // change te description of the radio button, which switch to the module
     // dependend accelerator configuration
-    String sButtonText = aModuleButton.GetText();
-    sButtonText.SearchAndReplace(OUString("$(MODULE)"), m_sModuleUIName);
+    OUString sButtonText = aModuleButton.GetText();
+    sButtonText = sButtonText.replaceFirst("$(MODULE)", m_sModuleUIName);
     aModuleButton.SetText(sButtonText);
 
     if (m_xModule.is())
@@ -1495,8 +1495,8 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            String sLabel = String(lProps.getUnpackedValueOrDefault(CMDPROP_UINAME, OUString()));
-            if (sLabel.Len())
+            OUString sLabel = lProps.getUnpackedValueOrDefault(CMDPROP_UINAME, OUString());
+            if (!sLabel.isEmpty())
                 return sLabel;
         }
     }
@@ -1515,7 +1515,7 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     }
     else
     {
-        String aRet(OUString("Symbols: "));
+        OUString aRet("Symbols: ");
         sal_Int32 nPos = sCommand.indexOf(".uno:InsertSymbol?Symbols:string=");
         if ( nPos == 0 )
         {
@@ -1533,7 +1533,7 @@ SfxTabPage* SfxAcceleratorConfigPage::Create( Window* pParent, const SfxItemSet&
 }
 
 //-----------------------------------------------
-css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const String& /*sName*/)
+css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const OUString& /*sName*/)
 {
     return css::uno::Reference< css::frame::XModel >();
 }

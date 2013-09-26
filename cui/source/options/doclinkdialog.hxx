@@ -64,8 +64,8 @@ namespace svx
         void    setNameValidator( const Link& _rValidator ) { m_aNameValidator = _rValidator; }
         Link    getNameValidator( ) const { return m_aNameValidator; }
 
-        void    set( const  String& _rName, const   String& _rURL );
-        void    get(        String& _rName,         String& _rURL ) const;
+        void    set( const  OUString& _rName, const   OUString& _rURL );
+        void    get(        OUString& _rName,         OUString& _rURL ) const;
 
     protected:
         DECL_LINK(OnTextModified, void *);

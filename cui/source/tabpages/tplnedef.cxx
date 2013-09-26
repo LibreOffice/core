@@ -60,8 +60,8 @@ SvxLineDefTabPage::SvxLineDefTabPage
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXLStyle            ( XLINE_DASH ),
     aXWidth             ( XOUT_WIDTH ),
-    aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
-    aXColor             ( String(), COL_BLACK ),
+    aXDash              ( OUString(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
+    aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() )
 {
@@ -217,11 +217,11 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
                                                     SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
-                                                    String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
+                                                    OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
-        aMessDlg->SetButtonText( MESS_BTN_1, String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-        aMessDlg->SetButtonText( MESS_BTN_2, String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
+        aMessDlg->SetButtonText( MESS_BTN_1, OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
+        aMessDlg->SetButtonText( MESS_BTN_2, OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
         short nRet = aMessDlg->Execute();
 
@@ -264,7 +264,7 @@ sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
         {
             FillDash_Impl();
 
-            String aString( m_pLbLineStyles->GetSelectEntry() );
+            OUString aString( m_pLbLineStyles->GetSelectEntry() );
             rAttrs.Put( XLineStyleItem( XLINE_DASH ) );
             rAttrs.Put( XLineDashItem( aString, aDash ) );
         }
@@ -343,7 +343,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 
         FillDialog_Impl();
 
-        rXLSet.Put( XLineDashItem( String(), aDash ) );
+        rXLSet.Put( XLineDashItem( OUString(), aDash ) );
 
         // #i34740#
         m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
@@ -522,8 +522,8 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
-    String aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
-    String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
+    OUString aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
+    OUString aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
     OUString aName;
     XDashEntry* pEntry;
 
@@ -617,7 +617,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
-        String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
+        OUString aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
         OUString aName( pDashList->GetDash( nPos )->GetName() );
         OUString aOldName = aName;
 
@@ -736,7 +736,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
     if ( nReturn != RET_CANCEL )
     {
         ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-        String aStrFilterType( "*.sod" );
+        OUString aStrFilterType( "*.sod" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -795,7 +795,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( "*.sod" );
+    OUString aStrFilterType( "*.sod" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -855,7 +855,7 @@ void SvxLineDefTabPage::FillDash_Impl()
     aDash.SetDashLen( m_pLbType2->GetSelectEntryPos() == 0 ? 0 : GetCoreValue( *m_pMtrLength2, ePoolUnit ) );
     aDash.SetDistance( GetCoreValue( *m_pMtrDistance, ePoolUnit ) );
 
-    rXLSet.Put( XLineDashItem( String(), aDash ) );
+    rXLSet.Put( XLineDashItem( OUString(), aDash ) );
 
     // #i34740#
     m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());

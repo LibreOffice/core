@@ -115,7 +115,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
         m_pFontHeightLB->InsertEntry(OUString::number(nHeight));
 }
 
-SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
+SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rFont2)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
@@ -208,8 +208,8 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     for (sal_Int32  i = 0; i < nCount; ++i)
     {
         const SubstitutionStruct* pSubs = pConfig->GetSubstitution(i);
-        String aTmpStr1(pSubs->sFont);
-        String aTmpStr2(pSubs->sReplaceBy);
+        OUString aTmpStr1(pSubs->sFont);
+        OUString aTmpStr2(pSubs->sReplaceBy);
         SvTreeListEntry* pEntry = CreateEntry(aTmpStr1, aTmpStr2);
         m_pCheckLB->Insert(pEntry);
         m_pCheckLB->CheckEntry(pEntry, 0, pSubs->bReplaceAlways);
@@ -259,8 +259,8 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
             else
             {
                 // new entry
-                String sFont1 = m_pFont1CB->GetText();
-                String sFont2 = m_pFont2CB->GetText();
+                OUString sFont1 = m_pFont1CB->GetText();
+                OUString sFont2 = m_pFont2CB->GetText();
 
                 pEntry = CreateEntry(sFont1, sFont2);
                 m_pCheckLB->Insert(pEntry);
@@ -318,7 +318,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 //--------------------------------------------------------------------------
 IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
 {
-    String sFontName = m_pFontNameLB->GetSelectEntry();
+    OUString sFontName = m_pFontNameLB->GetSelectEntry();
     sal_Bool bNonPropOnly = pBox->IsChecked();
     m_pFontNameLB->Clear();
     FontList aFntLst( Application::GetDefaultDevice() );
@@ -344,8 +344,8 @@ void SvxFontSubstTabPage::CheckEnable()
 
         SvTreeListEntry* pEntry = m_pCheckLB->FirstSelected();
 
-        String sEntry = m_pFont1CB->GetText();
-        sEntry += '\t';
+        OUString sEntry = m_pFont1CB->GetText();
+        sEntry += "\t";
         sEntry += m_pFont2CB->GetText();
 
         // because of OS/2 optimization error (Bug #56267) a bit more intricate:

@@ -61,14 +61,14 @@ class SvBaseLinksDlg : public ModalDialog
     PushButton aPbOpenSource;
     PushButton aPbChangeSource;
     PushButton aPbBreakLink;
-    String aStrAutolink;
-    String aStrManuallink;
-    String aStrBrokenlink;
-    String aStrGraphiclink;
-    String aStrButtonclose;
-    String aStrCloselinkmsg;
-    String aStrCloselinkmsgMulti;
-    String aStrWaitinglink;
+    OUString aStrAutolink;
+    OUString aStrManuallink;
+    OUString aStrBrokenlink;
+    OUString aStrGraphiclink;
+    OUString aStrButtonclose;
+    OUString aStrCloselinkmsg;
+    OUString aStrCloselinkmsgMulti;
+    OUString aStrWaitinglink;
     sfx2::LinkManager*  pLinkMgr;
     sal_Bool            bHtmlMode;
     Timer aUpdateTimer;
@@ -84,7 +84,7 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( UpdateWaitingHdl, Timer * );
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink* );
     sfx2::SvBaseLink* GetSelEntry( sal_uInt16* pPos );
-    String ImplGetStateStr( const sfx2::SvBaseLink& );
+    OUString ImplGetStateStr( const sfx2::SvBaseLink& );
     void SetType( sfx2::SvBaseLink& rLink, sal_uInt16 nPos, sal_uInt16 nType );
     void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uInt16 nPos = LISTBOX_APPEND, sal_Bool bSelect = sal_False);
 
@@ -101,14 +101,14 @@ class SvBaseLinksDlg : public ModalDialog
     PushButton&     ChangeSource()  { return aPbChangeSource; }
     PushButton&     BreakLink()     { return aPbBreakLink; }
 
-    String&         Autolink()      { return aStrAutolink; }
-    String&         Manuallink()    { return aStrManuallink; }
-    String&         Brokenlink()    { return aStrBrokenlink; }
-    String&         Graphiclink()   { return aStrGraphiclink; }
-    String&         Buttonclose()   { return aStrButtonclose; }
-    String&         Closelinkmsg()  { return aStrCloselinkmsg; }
-    String&         CloselinkmsgMulti() { return aStrCloselinkmsgMulti; }
-    String&         Waitinglink()   { return aStrWaitinglink; }
+    OUString&       Autolink()      { return aStrAutolink; }
+    OUString&       Manuallink()    { return aStrManuallink; }
+    OUString&       Brokenlink()    { return aStrBrokenlink; }
+    OUString&       Graphiclink()   { return aStrGraphiclink; }
+    OUString&       Buttonclose()   { return aStrButtonclose; }
+    OUString&       Closelinkmsg()  { return aStrCloselinkmsg; }
+    OUString&       CloselinkmsgMulti() { return aStrCloselinkmsgMulti; }
+    OUString&       Waitinglink()   { return aStrWaitinglink; }
     void SetManager( sfx2::LinkManager* );
 
 public:

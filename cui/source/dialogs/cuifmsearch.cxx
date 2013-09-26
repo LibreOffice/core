@@ -77,7 +77,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 
     // some initial record texts
     m_ftRecord.SetText( OUString::number(_rxCursor->getRow()) );
-    m_pbClose.SetHelpText(String());
+    m_pbClose.SetHelpText(OUString());
 }
 
 FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
@@ -260,7 +260,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
         RID_STR_SEARCH_WHOLE
     };
     for ( size_t i=0; i<SAL_N_ELEMENTS(nResIds); ++i )
-        m_lbPosition.InsertEntry( String( CUI_RES( nResIds[i] ) ) );
+        m_lbPosition.InsertEntry( OUString( CUI_RES( nResIds[i] ) ) );
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
@@ -568,7 +568,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
             m_lbField.InsertEntry(comphelper::string::getToken(fmscContext.strUsedFields, i, ';'));
     }
 
-    if (nContext < (sal_Int32)m_arrContextFields.size() && m_arrContextFields[nContext].Len())
+    if (nContext < (sal_Int32)m_arrContextFields.size() && !m_arrContextFields[nContext].isEmpty())
     {
         m_lbField.SelectEntry(m_arrContextFields[nContext]);
     }
@@ -807,7 +807,7 @@ void FmSearchDialog::LoadParams()
     // that way the data is handed on to the SearchEngine and all dependent settings are done
 
     // current field
-    sal_uInt16 nInitialField = m_lbField.GetEntryPos( String( aParams.sSingleSearchField ) );
+    sal_uInt16 nInitialField = m_lbField.GetEntryPos( OUString( aParams.sSingleSearchField ) );
     if (nInitialField == COMBOBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
     m_lbField.SelectEntryPos(nInitialField);

@@ -32,8 +32,8 @@ public:
     PushButton*                     pDeletePB;
     Image*                          pMacroImg;
     Image*                          pComponentImg;
-    String*                         pStrEvent;
-    String*                         pAssignedMacro;
+    OUString*                       pStrEvent;
+    OUString*                       pAssignedMacro;
     _HeaderTabListBox*              pEventLB;
     sal_Bool                            bReadOnly;
     sal_Bool                            bIDEDialogMode;

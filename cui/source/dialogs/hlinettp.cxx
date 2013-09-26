@@ -153,7 +153,7 @@ void SvxHyperlinkInternetTp::setAnonymousFTPUser()
     maCbAnonymous.Check();
 }
 
-void SvxHyperlinkInternetTp::setFTPUser(const String& rUser, const String& rPassword)
+void SvxHyperlinkInternetTp::setFTPUser(const OUString& rUser, const OUString& rPassword)
 {
     maEdLogin.SetText ( rUser );
     maEdPassword.SetText ( rPassword );
@@ -171,8 +171,8 @@ void SvxHyperlinkInternetTp::setFTPUser(const String& rUser, const String& rPass
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                                                 String& aStrIntName, String& aStrFrame,
+void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                                                 OUString& aStrIntName, OUString& aStrFrame,
                                                  SvxLinkInsertMode& eMode )
 {
     rStrURL = CreateAbsoluteURL();
@@ -231,8 +231,8 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
 {
-    String aScheme = GetSchemeFromURL( maCbbTarget.GetText() );
-    if(aScheme.Len()!=0)
+    OUString aScheme = GetSchemeFromURL( maCbbTarget.GetText() );
+    if( !aScheme.isEmpty() )
         SetScheme( aScheme );
 
     // start timer
@@ -320,19 +320,19 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 
 void SvxHyperlinkInternetTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
-    String aStrURL ( maCbbTarget.GetText() );
+    OUString aStrURL ( maCbbTarget.GetText() );
     if ( aStrURL != aEmptyStr )
     {
         OUString aStrScheme(GetSchemeFromURL(aStrURL));
         if ( !aStrScheme.isEmpty() && aStrScheme != aProperScheme )
         {
-            aStrURL.Erase ( 0, aStrScheme.getLength() );
+            aStrURL = aStrURL.copy( aStrScheme.getLength() );
             maCbbTarget.SetText ( aStrURL );
         }
     }
 }
 
-String SvxHyperlinkInternetTp::GetSchemeFromButtons() const
+OUString SvxHyperlinkInternetTp::GetSchemeFromButtons() const
 {
     if( maRbtLinktypFTP.IsChecked() )
         return OUString(INET_FTP_SCHEME);
@@ -448,7 +448,7 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
     if ( maRbtLinktypInternet.IsChecked() && IsMarkWndVisible() )
     {
         EnterWait();
-        String aStrURL( CreateAbsoluteURL() );
+        OUString aStrURL( CreateAbsoluteURL() );
         if ( aStrURL != aEmptyStr )
             mpMarkWnd->RefreshTree ( aStrURL );
         else
@@ -464,7 +464,7 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::SetMarkStr ( const String& aStrMark )
+void SvxHyperlinkInternetTp::SetMarkStr ( const OUString& aStrMark )
 {
     OUString aStrURL ( maCbbTarget.GetText() );
 

@@ -60,7 +60,7 @@ SvxGradientTabPage::SvxGradientTabPage
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_GRADIENT ),
-    aXGradientItem      ( String(), XGradient( COL_BLACK, COL_WHITE ) ),
+    aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
@@ -267,9 +267,9 @@ long SvxGradientTabPage::CheckChanges_Impl()
                                                         &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
             aMessDlg->SetButtonText( MESS_BTN_1,
-                                    String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
+                                    OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
             aMessDlg->SetButtonText( MESS_BTN_2,
-                                    String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
+                                    OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
             short nRet = aMessDlg->Execute();
 
@@ -313,7 +313,7 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
         // CheckChanges(); <-- duplicate inquiry ?
 
         XGradient*  pXGradient = NULL;
-        String      aString;
+        OUString      aString;
         sal_uInt16      nPos = m_pLbGradients->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
@@ -394,7 +394,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
         SetControlState_Impl( eXGS );
 
     // displaying in XOutDev
-    rXFSet.Put( XFillGradientItem( String(), aXGradient ) );
+    rXFSet.Put( XFillGradientItem( OUString(), aXGradient ) );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
     m_pCtlPreview->Invalidate();
@@ -406,8 +406,8 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 {
-    String aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
-    String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
+    OUString aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
+    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
     OUString aName;
 
     long nCount = pGradientList->Count();
@@ -513,7 +513,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
+        OUString aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
         OUString aName( pGradientList->GetGradient( nPos )->GetName() );
         OUString aOldName = aName;
 
@@ -584,7 +584,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-            String( CUI_RES( RID_SVXSTR_ASK_DEL_GRADIENT ) ) );
+            OUString( CUI_RES( RID_SVXSTR_ASK_DEL_GRADIENT ) ) );
 
         if ( aQueryBox.Execute() == RET_YES )
         {
@@ -629,7 +629,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
     if ( nReturn != RET_CANCEL )
     {
         ::sfx2::FileDialogHelper aDlg( com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-        String aStrFilterType( "*.sog" );
+        OUString aStrFilterType( "*.sog" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -710,7 +710,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( "*.sog" );
+    OUString aStrFilterType( "*.sog" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -808,7 +808,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
         if ( m_pLbColorFrom->GetSelectEntryCount() == 0 )
         {
             m_pLbColorFrom->InsertEntry( pGradient->GetStartColor(),
-                                      String() );
+                                      OUString() );
             m_pLbColorFrom->SelectEntry( pGradient->GetStartColor() );
         }
         m_pLbColorTo->SetNoSelection();
@@ -816,7 +816,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 
         if ( m_pLbColorTo->GetSelectEntryCount() == 0 )
         {
-            m_pLbColorTo->InsertEntry( pGradient->GetEndColor(), String() );
+            m_pLbColorTo->InsertEntry( pGradient->GetEndColor(), OUString() );
             m_pLbColorTo->SelectEntry( pGradient->GetEndColor() );
         }
 
@@ -831,7 +831,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
         SetControlState_Impl( eXGS );
 
         // fill ItemSet and pass it on to aCtlPreview
-        rXFSet.Put( XFillGradientItem( String(), *pGradient ) );
+        rXFSet.Put( XFillGradientItem( OUString(), *pGradient ) );
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
         m_pCtlPreview->Invalidate();

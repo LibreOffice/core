@@ -1067,12 +1067,12 @@ MenuSaveInData::GetEntries()
 
         if ( m_xMenuSettings.is() )
         {
-            LoadSubMenus( m_xMenuSettings, String(), pRootEntry );
+            LoadSubMenus( m_xMenuSettings, OUString(), pRootEntry );
         }
         else if ( GetDefaultData() != NULL )
         {
             // If the doc has no config settings use module config settings
-            LoadSubMenus( GetDefaultData()->m_xMenuSettings, String(), pRootEntry );
+            LoadSubMenus( GetDefaultData()->m_xMenuSettings, OUString(), pRootEntry );
         }
     }
 
@@ -1349,7 +1349,7 @@ MenuSaveInData::Reset()
 class PopupPainter : public SvLBoxString
 {
 public:
-    PopupPainter( SvTreeListEntry* pEntry, const String& rStr )
+    PopupPainter( SvTreeListEntry* pEntry, const OUString& rStr )
         : SvLBoxString( pEntry, 0, rStr )
     { }
 
@@ -1560,11 +1560,11 @@ SvxDescriptionEdit::SvxDescriptionEdit( Window* pParent, const ResId& _rId ) :
 
 // -----------------------------------------------------------------------
 
-void SvxDescriptionEdit::SetNewText( const String& _rText )
+void SvxDescriptionEdit::SetNewText( const OUString& _rText )
 {
-    String sTemp( _rText );
+    OUString sTemp( _rText );
     sal_Bool bShow = sal_False;
-    if ( sTemp.Len() > 0 )
+    if ( !sTemp.isEmpty() )
     {
         // detect if a scrollbar is necessary
         Rectangle aRect = GetTextRect( m_aRealRect, sTemp, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE );
@@ -1575,7 +1575,7 @@ void SvxDescriptionEdit::SetNewText( const String& _rText )
         GetVScrollBar()->Show( bShow );
 
     if ( bShow )
-        sTemp += '\n';
+        sTemp += "\n";
 
     SetText( sTemp );
 }
@@ -1615,8 +1615,8 @@ SvxConfigPage::SvxConfigPage(
     aDescriptionField.SetAutoScroll( sal_True );
     aDescriptionField.EnableCursor( sal_False );
 
-    aMoveUpButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_UP)));
-    aMoveDownButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_DOWN)));
+    aMoveUpButton.SetAccessibleName(CUI_RES(BUTTON_STR_UP));
+    aMoveDownButton.SetAccessibleName(CUI_RES(BUTTON_STR_DOWN));
     aMoveUpButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
     aMoveDownButton.SetAccessibleRelationMemberOf(&aContentsSeparator);
     aNewTopLevelButton.SetAccessibleRelationMemberOf(&aTopLevelSeparator);
@@ -2000,7 +2000,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
 }
 
 void SvxConfigPage::AddSubMenusToUI(
-    const String& rBaseTitle, SvxConfigEntry* pParentData )
+    const OUString& rBaseTitle, SvxConfigEntry* pParentData )
 {
     SvxEntries::const_iterator iter = pParentData->GetEntries()->begin();
     SvxEntries::const_iterator end = pParentData->GetEntries()->end();
@@ -2054,10 +2054,10 @@ SvxEntries* SvxConfigPage::FindParentForChild(
 SvTreeListEntry* SvxConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
-    String aDisplayName = pSelectorDlg->GetSelectedDisplayName();
-    String aURL = pSelectorDlg->GetScriptURL();
+    OUString aDisplayName = pSelectorDlg->GetSelectedDisplayName();
+    OUString aURL = pSelectorDlg->GetScriptURL();
 
-    if ( !aURL.Len() )
+    if ( aURL.isEmpty() )
     {
         return NULL;
     }
@@ -2192,7 +2192,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     return pNewEntry;
 }
 
-IMPL_LINK( SvxConfigPage, AsyncInfoMsg, String*, pMsg )
+IMPL_LINK( SvxConfigPage, AsyncInfoMsg, OUString*, pMsg )
 {
     (void)pMsg;
 
@@ -2479,10 +2479,9 @@ bool SvxMenuConfigPage::DeleteSelectedContent()
 
 short SvxMenuConfigPage::QueryReset()
 {
-    String msg =
-        String( CUI_RES( RID_SVXSTR_CONFIRM_MENU_RESET ) );
+    OUString msg = CUI_RES( RID_SVXSTR_CONFIRM_MENU_RESET );
 
-    String saveInName = aSaveInListBox.GetEntry(
+    OUString saveInName = aSaveInListBox.GetEntry(
         aSaveInListBox.GetSelectEntryPos() );
 
     OUString label = replaceSaveInName( msg, saveInName );
@@ -2536,7 +2535,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
             OUString aNewName( stripHotKey( pMenuData->GetName() ) );
-            String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+            OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
@@ -2594,7 +2593,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         case ID_ADD_SUBMENU:
         {
             OUString aNewName;
-            String aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
+            OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
@@ -2640,7 +2639,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
             OUString aNewName( stripHotKey( pEntry->GetName() ) );
-            String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+            OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
@@ -2719,8 +2718,7 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
         pSelectorDlg->SetAddHdl(
             LINK( this, SvxMenuConfigPage, AddFunctionHdl ) );
 
-        pSelectorDlg->SetDialogDescription( String(
-            CUI_RES( RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION ) ) );
+        pSelectorDlg->SetDialogDescription( CUI_RES( RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION ) );
     }
 
     // Position the Script Selector over the Add button so it is
@@ -2790,8 +2788,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     if ( bCreateMenu )
     {
         // Generate custom name for new menu
-        String prefix =
-            String( CUI_RES( RID_SVXSTR_NEW_MENU ) );
+        OUString prefix = CUI_RES( RID_SVXSTR_NEW_MENU );
 
         OUString newname = generateCustomName( prefix, entries );
         OUString newurl = generateCustomMenuURL( pEntries );
@@ -2857,8 +2854,8 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     aMoveDownButton.SetClickHdl (
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
 
-    aMoveUpButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_UP)));
-    aMoveDownButton.SetAccessibleName(String(CUI_RES(BUTTON_STR_DOWN)));
+    aMoveUpButton.SetAccessibleName(CUI_RES(BUTTON_STR_UP));
+    aMoveDownButton.SetAccessibleName(CUI_RES(BUTTON_STR_DOWN));
 }
 
 IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
@@ -3273,7 +3270,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         case ID_RENAME:
         {
             OUString aNewName( stripHotKey( pToolbar->GetName() ) );
-            String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+            OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
@@ -3364,7 +3361,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
             OUString aNewName( stripHotKey( pEntry->GetName() ) );
-            String aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+            OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
             SvxNameDialog* pNameDialog = new SvxNameDialog( this, aNewName, aDesc );
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
@@ -4539,10 +4536,9 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
 short SvxToolbarConfigPage::QueryReset()
 {
-    String msg =
-        String( CUI_RES( RID_SVXSTR_CONFIRM_TOOLBAR_RESET ) );
+    OUString msg = CUI_RES( RID_SVXSTR_CONFIRM_TOOLBAR_RESET );
 
-    String saveInName = aSaveInListBox.GetEntry(
+    OUString saveInName = aSaveInListBox.GetEntry(
         aSaveInListBox.GetSelectEntryPos() );
 
     OUString label = replaceSaveInName( msg, saveInName );
@@ -4630,8 +4626,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
 {
     (void)pButton;
 
-    String prefix =
-        String( CUI_RES( RID_SVXSTR_NEW_TOOLBAR ) );
+    OUString prefix = CUI_RES( RID_SVXSTR_NEW_TOOLBAR );
 
     OUString aNewName =
         generateCustomName( prefix, GetSaveInData()->GetEntries() );
@@ -5261,7 +5256,7 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
 {
     (void)pButton;
 
-    OUString message = String( CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM ) );
+    OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
     bool ret = WarningBox( this, WinBits(WB_OK_CANCEL), message ).Execute();
 
     if ( ret == RET_OK )
@@ -5560,14 +5555,14 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 SvxIconReplacementDialog :: SvxIconReplacementDialog(
     Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
     :
-MessBox( pWindow, WB_DEF_YES, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ) ),  String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) ) )
+MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 
 {
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ) );
     RemoveButton( 1 );
     AddButton( BUTTON_YES, 2, 0 );
-    AddButton( String( CUI_RES( RID_SVXSTR_YESTOALL ) ), 5, 0 );
+    AddButton( CUI_RES( RID_SVXSTR_YESTOALL ), 5, 0 );
     AddButton( BUTTON_NO, 3, 0 );
     AddButton( BUTTON_CANCEL, 4, 0 );
 }
@@ -5575,7 +5570,7 @@ MessBox( pWindow, WB_DEF_YES, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM )
 SvxIconReplacementDialog :: SvxIconReplacementDialog(
     Window *pWindow, const OUString& aMessage )
     :
-MessBox( pWindow, WB_YES_NO_CANCEL, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ) ),  String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) ) )
+MessBox( pWindow, WB_YES_NO_CANCEL, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ));
@@ -5584,7 +5579,7 @@ MessBox( pWindow, WB_YES_NO_CANCEL, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CON
 OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMessage )
 {
     OUString name;
-    OUString message = String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) );
+    OUString message = CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING );
     OUString placeholder("%ICONNAME" );
     sal_Int32 pos = message.indexOf( placeholder );
     if ( pos != -1 )

@@ -68,13 +68,13 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
 
 
-static String impl_getSvtResString( sal_uInt32 nId )
+static OUString impl_getSvtResString( sal_uInt32 nId )
 {
-    String aRet;
+    OUString aRet;
     ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
     if( pMgr )
     {
-        aRet = String( ResId( nId, *pMgr ) );
+        aRet = ResId( nId, *pMgr );
         delete pMgr;
     }
     return aRet;
@@ -213,13 +213,13 @@ short SvInsertOleDlg::Execute()
     DBG_ASSERT( m_xStorage.is(), "No storage!");
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {
-        String aFileName;
+        OUString aFileName;
         sal_Bool bLink = sal_False;
         sal_Bool bCreateNew = IsCreateNew();
         if ( bCreateNew )
         {
             // create and insert new embedded object
-            String aServerName = rBox.GetSelectEntry();
+            OUString aServerName = rBox.GetSelectEntry();
             const SvObjectServer* pS = m_pServers->Get( aServerName );
             if ( pS )
             {
@@ -272,20 +272,20 @@ short SvInsertOleDlg::Execute()
 
                 if ( !m_xObj.is() )
                 {
-                    if( aFileName.Len() )  // from OLE Dialog
+                    if( !aFileName.isEmpty() )  // from OLE Dialog
                     {
                         // object couldn't be created from file
                         // global Resource from svtools (former so3 resource)
-                        String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
-                        aErr.SearchAndReplace( OUString( '%' ), aFileName );
+                        OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
+                        aErr = aErr.replaceFirst( "%", aFileName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
                     }
                     else
                     {
                         // object couldn't be created
                         // global Resource from svtools (former so3 resource)
-                        String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
-                        aErr.SearchAndReplace( OUString( '%' ), aServerName );
+                        OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
+                        aErr = aErr.replaceFirst( "%", aServerName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
                     }
                 }
@@ -300,7 +300,7 @@ short SvInsertOleDlg::Execute()
             aFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
             bLink = IsLinked();
 
-            if ( aFileName.Len() )
+            if ( !aFileName.isEmpty() )
             {
                 // create MediaDescriptor for file to create object from
                 uno::Sequence < beans::PropertyValue > aMedium( 2 );
@@ -325,8 +325,8 @@ short SvInsertOleDlg::Execute()
             {
                 // object couldn't be created from file
                 // global Resource from svtools (former so3 resource)
-                String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
-                aErr.SearchAndReplace( OUString( '%' ), aFileName );
+                OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
+                aErr = aErr.replaceFirst( "%", aFileName );
                 ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
             }
         }
@@ -401,7 +401,7 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
 
 // -----------------------------------------------------------------------
 
-static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
+static void Plugin_ImplFillCommandSequence( const OUString& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
 {
     sal_Int32 nEaten;
     SvCommandList aLst;
@@ -431,11 +431,11 @@ short SvInsertPlugInDialog::Execute()
             *m_pURL = INetURLObject();
 
         m_aCommands = GetPlugInOptions();
-        String aURL = GetPlugInFile();
+        OUString aURL = GetPlugInFile();
 
         // URL can be a valid and absolute URL or a system file name
         m_pURL->SetSmartProtocol( INET_PROT_FILE );
-        if ( !aURL.Len() || m_pURL->SetSmartURL( aURL ) )
+        if ( aURL.isEmpty() || m_pURL->SetSmartURL( aURL ) )
         {
             // create a plugin object
             OUString aName;
@@ -463,8 +463,8 @@ short SvInsertPlugInDialog::Execute()
         {
             // PlugIn couldn't be created
             // global Resource from svtools (former so3 resource)
-            String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
-            aErr.SearchAndReplace( OUString('%'), aURL );
+            OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
+            aErr = aErr.replaceFirst( "%", aURL );
             ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
         }
     }
@@ -723,7 +723,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 
     // create the file dialog
     sfx2::FileDialogHelper aFileDlg(
-            ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0, String() );
+            ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0, OUString() );
 
     // set the title
     aFileDlg.SetTitle(CUI_RESSTR(RID_SVXSTR_SELECT_FILE_IFRAME));

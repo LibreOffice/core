@@ -58,7 +58,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
     {
         // #97807# URL content comparison of entries -----------
         INetURLObject aFile( aDlg.GetPath() );
-        String sInsFile = aFile.getFSysPath( INetURLObject::FSYS_DETECT );
+        OUString sInsFile = aFile.getFSysPath( INetURLObject::FSYS_DETECT );
         ::ucbhelper::Content aContent( aFile.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         Reference< XContent > xContent = aContent.get();
         OSL_ENSURE( xContent.is(), "AddHdl_Impl: invalid content interface!" );
@@ -78,8 +78,8 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
                 Reference< XContentIdentifier > xVID;
                 for( i = 0; i < nCount; i++ )
                 {
-                    String sVFile = aPathLB.GetEntry( i );
-                    std::map< String, ::ucbhelper::Content >::iterator aCur = aFileContentMap.find( sVFile );
+                    OUString sVFile = aPathLB.GetEntry( i );
+                    std::map< OUString, ::ucbhelper::Content >::iterator aCur = aFileContentMap.find( sVFile );
                     if( aCur == aFileContentMap.end() ) // look for File Content in aFileContentMap, but not find it.
                     {
                         INetURLObject aVFile( sVFile, INetURLObject::FSYS_DETECT );
@@ -110,14 +110,14 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
 
         if ( bDuplicated ) // #97807# --------------------
         {
-            String sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
-            sMsg.SearchAndReplaceAscii( "%1", sInsFile );
+            OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            sMsg = sMsg.replaceFirst( "%1", sInsFile );
             InfoBox( pBtn, sMsg ).Execute();
         }
         else
         {
             sal_uInt16 nPos = aPathLB.InsertEntry( sInsFile, LISTBOX_APPEND );
-            aPathLB.SetEntryData( nPos, (void*) new String( sInsFile ) );
+            aPathLB.SetEntryData( nPos, (void*) new OUString( sInsFile ) );
         }
 
     } // end of if ( aDlg.Execute() == ERRCODE_NONE )

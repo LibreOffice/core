@@ -80,8 +80,8 @@ class FmSearchDialog : public ModalDialog
     PushButton      m_pbSearchAgain;
     CancelButton    m_pbClose;
     HelpButton      m_pbHelp;
-    String          m_sSearch;
-    String          m_sCancel;
+    OUString        m_sSearch;
+    OUString        m_sCancel;
 
     Window*         m_pPreSearchFocus;
 
@@ -91,7 +91,7 @@ class FmSearchDialog : public ModalDialog
     Link    m_lnkContextSupplier;       ///< for search in contexts
 
     /// memorize the currently selected field for every context
-    ::std::vector<String> m_arrContextFields;
+    ::std::vector<OUString> m_arrContextFields;
 
     FmSearchEngine* m_pSearchEngine;
 
@@ -135,7 +135,7 @@ public:
     */
     void SetCanceledNotFoundHdl(const Link& lnk) { m_lnkCanceledNotFoundHdl = lnk; }
 
-    inline void SetActiveField(const String& strField);
+    inline void SetActiveField(const OUString& strField);
 
 protected:
     virtual sal_Bool Close();
@@ -186,7 +186,7 @@ private:
     void initCommon( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _rxCursor );
 };
 
-inline void FmSearchDialog::SetActiveField(const String& strField)
+inline void FmSearchDialog::SetActiveField(const OUString& strField)
 {
     sal_uInt16 nInitialField = m_lbField.GetEntryPos(strField);
     if (nInitialField == COMBOBOX_ENTRY_NOTFOUND)

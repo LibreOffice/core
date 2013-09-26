@@ -67,8 +67,8 @@ public:
     SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
     ~SvxMultiPathDialog();
 
-    String          GetPath() const;
-    void            SetPath( const String& rPath );
+    OUString        GetPath() const;
+    void            SetPath( const OUString& rPath );
     void            SetClassPathMode();
     sal_Bool        IsClassPathMode() const;
     void            EnableRadioButtonMode();

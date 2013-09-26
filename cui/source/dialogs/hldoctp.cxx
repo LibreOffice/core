@@ -61,7 +61,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maCbbPath.SetPosSizePixel ( LogicToPixel( Point( COL_2, 15 ), MAP_APPFONT ),
                                 LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
-    String aFileScheme( INET_FILE_SCHEME, RTL_TEXTENCODING_ASCII_US );
+    OUString aFileScheme( INET_FILE_SCHEME );
     maCbbPath.SetBaseURL(aFileScheme);
     maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
 
@@ -115,13 +115,13 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 |*
 |************************************************************************/
 
-String SvxHyperlinkDocTp::GetCurrentURL ()
+OUString SvxHyperlinkDocTp::GetCurrentURL ()
 {
     // get data from dialog-controls
     OUString aStrURL;
-    String aStrPath ( maCbbPath.GetText() );
-    const String aBaseURL ( maCbbPath.GetBaseURL() );
-    String aStrMark( maEdTarget.GetText() );
+    OUString aStrPath ( maCbbPath.GetText() );
+    const OUString aBaseURL ( maCbbPath.GetBaseURL() );
+    OUString aStrMark( maEdTarget.GetText() );
 
     if ( aStrPath != aEmptyStr )
     {
@@ -151,15 +151,15 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
 |*
 |************************************************************************/
 
-void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, String& aStrName,
-                                            String& aStrIntName, String& aStrFrame,
+void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
+                                            OUString& aStrIntName, OUString& aStrFrame,
                                             SvxLinkInsertMode& eMode )
 {
     // get data from standard-fields
     rStrURL = GetCurrentURL();
 
     if( rStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
-         rStrURL="";
+         rStrURL = "";
 
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
@@ -210,7 +210,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
 
     if ( ERRCODE_NONE == nError )
     {
-        String aURL( aDlg.GetPath() );
+        OUString aURL( aDlg.GetPath() );
         OUString aPath;
 
         utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath );
@@ -339,7 +339,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl)
 |*
 |************************************************************************/
 
-void SvxHyperlinkDocTp::SetMarkStr ( const String& aStrMark )
+void SvxHyperlinkDocTp::SetMarkStr ( const OUString& aStrMark )
 {
     maEdTarget.SetText ( aStrMark );
 

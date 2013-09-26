@@ -147,7 +147,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
     if ( nReturn != RET_CANCEL )
     {
         ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-        String aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
+        OUString aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -204,7 +204,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickSaveHdl_Impl)
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
 
-    String aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
+    OUString aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -307,7 +307,7 @@ SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     , pPos( NULL )
     , pbAreaTP( NULL )
     , aXFStyleItem( XFILL_SOLID )
-    , aXFillColorItem( String(), Color( COL_BLACK ) )
+    , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( (XOutdevItemPool*) rInAttrs.GetPool() )
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( CM_RGB )
@@ -450,7 +450,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                     m_pB->SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
 
                     // fill ItemSet and pass it on to XOut
-                    rXFSet.Put( XFillColorItem( String(), aAktuellColor ) );
+                    rXFSet.Put( XFillColorItem( OUString(), aAktuellColor ) );
                     m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
                     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -511,12 +511,12 @@ long SvxColorTabPage::CheckChanges_Impl()
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxMessDialog* aMessDlg = new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
-                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ) ),
+                                                        ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ),
                                                         &aWarningBoxImage );
             aMessDlg->SetButtonText( MESS_BTN_1,
-                                    String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
+                                    ResId( RID_SVXSTR_CHANGE, rMgr ) );
             aMessDlg->SetButtonText( MESS_BTN_2,
-                                    String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
+                                    ResId( RID_SVXSTR_ADD, rMgr ) );
 
             short nRet = aMessDlg->Execute();
 
@@ -561,7 +561,7 @@ sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
     if( ( *pDlgType != 0 ) ||
         ( *pPageType == PT_COLOR && *pbAreaTP == sal_False ) )
     {
-        String aString;
+        OUString aString;
         Color  aColor;
 
         sal_uInt16 nPos = m_pLbColor->GetSelectEntryPos();
@@ -607,8 +607,8 @@ void SvxColorTabPage::Reset( const SfxItemSet& rSet )
     }
 
     // set color model
-    String aStr = GetUserData();
-    m_pLbColorModel->SelectEntryPos( (sal_uInt16) aStr.ToInt32() );
+    OUString aStr = GetUserData();
+    m_pLbColorModel->SelectEntryPos( (sal_uInt16) aStr.toInt32() );
 
     ChangeColorHdl_Impl( this );
     SelectColorModelHdl_Impl( this );
@@ -653,7 +653,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
     if (eCM != CM_RGB)
         ConvertColorValues (aTmpColor, CM_RGB);
 
-    rXFSet.Put( XFillColorItem( String(), aTmpColor ) );
+    rXFSet.Put( XFillColorItem( OUString(), aTmpColor ) );
     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
     m_pCtlPreviewNew->Invalidate();
@@ -672,7 +672,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     }
 
     ResMgr& rMgr = CUI_MGR();
-    String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
+    OUString aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
     OUString aName( m_pEdtName->GetText() );
     XColorEntry* pEntry;
     long nCount = pColorList->Count();
@@ -747,7 +747,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
-        String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
+        OUString aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
         OUString aName( m_pEdtName->GetText() );
         long nCount = pColorList->Count();
         sal_Bool bDifferent = sal_True;
@@ -845,7 +845,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
         }
 
         // fill ItemSet and pass it on to XOut
-        rXFSet.Put( XFillColorItem( String(), aPreviewColor ) );
+        rXFSet.Put( XFillColorItem( OUString(), aPreviewColor ) );
         //m_pCtlPreviewOld->SetAttributes( aXFillAttr );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -865,7 +865,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
-            String( CUI_RES( RID_SVXSTR_ASK_DEL_COLOR ) ) );
+            OUString( CUI_RES( RID_SVXSTR_ASK_DEL_COLOR ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
         {
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
         m_pValSetColorList->SelectItem( nPos + 1 );
         m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
 
-        rXFSet.Put( XFillColorItem( String(),
+        rXFSet.Put( XFillColorItem( OUString(),
                                     m_pLbColor->GetSelectEntryColor() ) );
         m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
@@ -927,7 +927,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
         m_pLbColor->SelectEntryPos( nPos - 1 );
         m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
 
-        rXFSet.Put( XFillColorItem( String(),
+        rXFSet.Put( XFillColorItem( OUString(),
                                     m_pLbColor->GetSelectEntryColor() ) );
         m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
@@ -1036,7 +1036,7 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
         }
 
         // fill ItemSet and pass it on to XOut
-        rXFSet.Put( XFillColorItem( String(), pEntry->GetColor() ) );
+        rXFSet.Put( XFillColorItem( OUString(), pEntry->GetColor() ) );
         m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 

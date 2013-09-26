@@ -278,7 +278,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 
             if ( pPasswordRequest->isPassword() )
             {
-                String aNewPass = pPasswordRequest->getPassword();
+                OUString aNewPass = pPasswordRequest->getPassword();
                 uno::Sequence< OUString > aPasswd( 1 );
                 aPasswd[0] = aNewPass;
 

@@ -52,7 +52,7 @@ private:
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
-    void        ChangeCurrentEntry( const String& _rFolder );
+    void        ChangeCurrentEntry( const OUString& _rFolder );
 
     DECL_LINK(PathHdl_Impl, void *);
     DECL_LINK(StandardHdl_Impl, void *);
@@ -63,10 +63,10 @@ private:
 
     DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
-    void        GetPathList( sal_uInt16 _nPathHandle, String& _rInternalPath,
-                             String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly );
+    void        GetPathList( sal_uInt16 _nPathHandle, OUString& _rInternalPath,
+                             OUString& _rUserPath, OUString& _rWritablePath, sal_Bool& _rReadOnly );
     void        SetPathList( sal_uInt16 _nPathHandle,
-                             const String& _rUserPath, const String& _rWritablePath );
+                             const OUString& _rUserPath, const OUString& _rWritablePath );
 
 public:
     SvxPathTabPage( Window* pParent, const SfxItemSet& rSet );

@@ -425,10 +425,10 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
                     else
                     {
                         // #106224# different margins -> do not fill the edits
-                        m_pLeftMF->SetText( String() );
-                        m_pRightMF->SetText( String() );
-                        m_pTopMF->SetText( String() );
-                        m_pBottomMF->SetText( String() );
+                        m_pLeftMF->SetText( OUString() );
+                        m_pRightMF->SetText( OUString() );
+                        m_pTopMF->SetText( OUString() );
+                        m_pBottomMF->SetText( OUString() );
                     }
                 }
                 m_pLeftMF->SaveValue();

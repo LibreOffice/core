@@ -85,12 +85,12 @@ public:
 
 
 
-    SvTreeListEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
+    SvTreeListEntry * insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData,
                               OUString factoryURL );
-    SvTreeListEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
+    SvTreeListEntry * insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData );
@@ -110,8 +110,8 @@ public:
     CuiInputDialog( Window * pParent, sal_uInt16 nMode );
     ~CuiInputDialog();
 
-    String      GetObjectName() const { return aEdit.GetText(); }
-    void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
+    OUString    GetObjectName() const { return aEdit.GetText(); }
+    void        SetObjectName( const OUString& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.getLength() ) );}
 };
 
 class SFEntry
@@ -150,16 +150,16 @@ protected:
 
     OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;
-    const String m_delErrStr;
-    const String m_delErrTitleStr;
-    const String m_delQueryStr;
-    const String m_delQueryTitleStr;
-    const String m_createErrStr;
-    const String m_createDupStr;
-    const String m_createErrTitleStr;
-    const String m_renameErrStr;
-    const String m_renameDupStr;
-    const String m_renameErrTitleStr;
+    const OUString m_delErrStr;
+    const OUString m_delErrTitleStr;
+    const OUString m_delQueryStr;
+    const OUString m_delQueryTitleStr;
+    const OUString m_createErrStr;
+    const OUString m_createDupStr;
+    const OUString m_createErrTitleStr;
+    const OUString m_renameErrStr;
+    const OUString m_renameDupStr;
+    const OUString m_renameErrTitleStr;
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );

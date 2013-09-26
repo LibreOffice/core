@@ -654,10 +654,10 @@ IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
 
 IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
 {
-    String aChar( pEdit->GetText() );
+    OUString aChar( pEdit->GetText() );
 
-    if ( aChar.Len() > 0)
-        aAktTab.GetFill() = aChar.GetChar( 0 );
+    if ( !aChar.isEmpty() )
+        aAktTab.GetFill() = aChar[0];
 
     const sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit);
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
@@ -672,9 +672,9 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
 
 IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 {
-    String aChar( pEdit->GetText() );
-    if ( aChar.Len() > 0 && ( aChar.GetChar( 0 ) >= ' '))
-        aAktTab.GetDecimal() = aChar.GetChar( 0 );
+    OUString aChar( pEdit->GetText() );
+    if ( !aChar.isEmpty() && ( aChar[0] >= ' '))
+        aAktTab.GetDecimal() = aChar[0];
 
     sal_uInt16 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )

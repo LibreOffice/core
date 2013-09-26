@@ -48,7 +48,7 @@
 |*
 \************************************************************************/
 
-URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeText, const String& rDescription, const String& rTarget, const String& rName, TargetList& rTargetList )
+URLDlg::URLDlg( Window* pWindow, const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription, const OUString& rTarget, const OUString& rName, TargetList& rTargetList )
 : ModalDialog(pWindow, "IMapDialog", "cui/ui/cuiimapdlg.ui")
 {
     get(m_pEdtURL, "urlentry");
@@ -67,8 +67,8 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeT
     for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
         m_pCbbTargets->InsertEntry( rTargetList[ i ] );
 
-    if( !rTarget.Len() )
-        m_pCbbTargets->SetText( OUString("_self") );
+    if( rTarget.isEmpty() )
+        m_pCbbTargets->SetText( "_self");
     else
         m_pCbbTargets->SetText( rTarget );
 }

@@ -111,8 +111,8 @@ private:
     PushButton*              pNewReplacePB;
     PushButton*              pDeletePB;
 
-    String                  sModify;
-    String                  sNew;
+    OUString                sModify;
+    OUString                sNew;
     DecorationView          aDecoView;
 
     ::com::sun::star::uno::Sequence<
@@ -141,7 +141,7 @@ private:
                             ::com::sun::star::linguistic2::XDictionary >  &xDic );
 
     void            RemoveDictEntry(SvTreeListEntry* pEntry);
-    sal_uInt16          GetLBInsertPos(const String &rDicWord);
+    sal_uInt16          GetLBInsertPos(const OUString &rDicWord);
 
 protected:
 
@@ -149,7 +149,7 @@ protected:
 
 public:
     SvxEditDictionaryDialog( Window* pParent,
-            const String& rName,
+            const OUString& rName,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1> &xSpl );
     ~SvxEditDictionaryDialog();

@@ -74,7 +74,7 @@ class IconChoicePage : public TabPage
 
 private :
     const SfxItemSet*   pSet;
-    String              aUserString;
+    OUString            aUserString;
     sal_Bool                bHasExchangeSupport;
     IconChoiceDialog*   pDialog;
 
@@ -113,8 +113,8 @@ public :
 
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    void                SetUserData(const String& rString)  { aUserString = rString; }
-    String              GetUserData() { return aUserString; }
+    void                SetUserData(const OUString& rString)  { aUserString = rString; }
+    OUString            GetUserData() { return aUserString; }
     virtual void        FillUserData();
     virtual sal_Bool        IsReadOnly() const;
     virtual sal_Bool    QueryClose();
@@ -197,7 +197,7 @@ public :
 
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
-        sal_uInt16 nId, const String& rIconText, const Image& rChoiceIcon,
+        sal_uInt16 nId, const OUString& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
         sal_Bool bItemsOnDemand = sal_False, sal_uLong nPos = LIST_APPEND );
 

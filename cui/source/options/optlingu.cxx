@@ -158,7 +158,7 @@ static sal_uInt16 pRanges[] =
     0
 };
 
-sal_Bool KillFile_Impl( const String& rURL )
+sal_Bool KillFile_Impl( const OUString& rURL )
 {
     sal_Bool bRet = sal_True;
     try
@@ -197,10 +197,10 @@ class ModuleUserData_Impl
     sal_Bool bIsChecked;
     sal_uInt8 nType;
     sal_uInt8 nIndex;
-    String  sImplName;
+    OUString  sImplName;
 
 public:
-    ModuleUserData_Impl( String sImpName, sal_Bool bIsParent, sal_Bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
+    ModuleUserData_Impl( OUString sImpName, sal_Bool bIsParent, sal_Bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
         bParent(bIsParent),
         bIsChecked(bChecked),
         nType(nSetType),
@@ -213,7 +213,7 @@ public:
     sal_Bool IsChecked() const {return bIsChecked;}
     sal_uInt8 GetIndex() const {return nIndex;}
     void SetIndex(sal_uInt8 nSet)  {nIndex = nSet;}
-    const String& GetImplName() const {return sImplName;}
+    const OUString& GetImplName() const {return sImplName;}
 
 };
 
@@ -280,7 +280,7 @@ class BrwStringDic_Impl : public SvLBoxString
 public:
 
     BrwStringDic_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+        const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
@@ -460,7 +460,7 @@ class BrwString_Impl : public SvLBoxString
 public:
 
     BrwString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
+        const OUString& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
@@ -1113,16 +1113,16 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
     if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
-        m_pMoreDictsLink->SetURL( String(
+        m_pMoreDictsLink->SetURL( OUString(
              "http://extensions.libreoffice.org/dictionaries/"  ) );
         m_pMoreDictsLink->SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
     }
     else
         m_pMoreDictsLink->Hide();
 
-    String sAccessibleNameModuleEdit(CUI_RES(RID_SVXSTR_LINGU_MODULES_EDIT));
-    String sAccessibleNameDicsEdit  (CUI_RES(RID_SVXSTR_LINGU_DICS_EDIT_DIC));
-    String sAccessibleNameOptionEdit(CUI_RES(RID_SVXSTR_LINGU_OPTIONS_EDIT));
+    OUString sAccessibleNameModuleEdit(CUI_RES(RID_SVXSTR_LINGU_MODULES_EDIT));
+    OUString sAccessibleNameDicsEdit  (CUI_RES(RID_SVXSTR_LINGU_DICS_EDIT_DIC));
+    OUString sAccessibleNameOptionEdit(CUI_RES(RID_SVXSTR_LINGU_OPTIONS_EDIT));
 
     m_pLinguModulesEditPB->SetAccessibleName(sAccessibleNameModuleEdit);
     m_pLinguDicsEditPB->SetAccessibleName(sAccessibleNameDicsEdit);
@@ -1284,7 +1284,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
                     if (bChecked)
                     {
-                        String aDicName( xDic->getName() );
+                        OUString aDicName( xDic->getName() );
                         pActiveDic[ nActiveDics++ ] = aDicName;
                     }
                 }
@@ -1305,7 +1305,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         SvTreeListEntry *pEntry = m_pLinguOptionsCLB->GetEntry( j );
 
         OptionsUserData aData( (sal_uLong)pEntry->GetUserData() );
-        String aPropName( lcl_GetPropertyName( (EID_OPTIONS) aData.GetEntryId() ) );
+        OUString aPropName( lcl_GetPropertyName( (EID_OPTIONS) aData.GetEntryId() ) );
 
         Any aAny;
         if (aData.IsCheckable())
@@ -1382,7 +1382,7 @@ void SvxLinguTabPage::AddDicBoxEntry(
 {
     m_pLinguDicsCLB->SetUpdateMode(sal_False);
 
-    String aTxt( ::GetDicInfoStr( rxDic->getName(),
+    OUString aTxt( ::GetDicInfoStr( rxDic->getName(),
                         LanguageTag( rxDic->getLocale() ).getLanguageType(),
                         DictionaryType_NEGATIVE == rxDic->getDictionaryType() ) );
     m_pLinguDicsCLB->InsertEntry( aTxt, (sal_uInt16)LISTBOX_APPEND );  // append at end
@@ -1734,7 +1734,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                         uno::Reference< frame::XStorable > xStor( xDic, UNO_QUERY );
                         if ( xStor->hasLocation() && !xStor->isReadonly() )
                         {
-                            String sURL = xStor->getLocation();
+                            OUString sURL = xStor->getLocation();
                             INetURLObject aObj(sURL);
                             DBG_ASSERT( aObj.GetProtocol() == INET_PROT_FILE,
                                     "non-file URLs cannot be deleted" );
@@ -1840,14 +1840,14 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
 
 // -----------------------------------------------------------------------
 
-SvTreeListEntry* SvxLinguTabPage::CreateEntry( String& rTxt, sal_uInt16 nCol )
+SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData(m_pLinguOptionsCLB);
 
-    String sEmpty;
+    OUString sEmpty;
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
@@ -1917,7 +1917,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
-        aMoreDictsLink.SetURL( String(
+        aMoreDictsLink.SetURL( OUString(
              "http://extensions.libreoffice.org/dictionaries/" ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
     }
@@ -1964,7 +1964,7 @@ SvxEditModulesDlg::~SvxEditModulesDlg()
 }
 
 
-SvTreeListEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, sal_uInt16 nCol )
+SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     if( !pCheckButtonData )
@@ -1973,7 +1973,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, sal_uInt16 nCol )
         pCheckButtonData->SetLink( aModulesCLB.GetCheckButtonHdl() );
     }
 
-    String sEmpty;
+    OUString sEmpty;
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
     if (CBCOL_SECOND == nCol)
@@ -2129,7 +2129,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         //
         SvTreeListEntry* pEntry = CreateEntry( sSpell,  CBCOL_SECOND );
         ModuleUserData_Impl* pUserData = new ModuleUserData_Impl(
-                                         String(), sal_True, sal_False, TYPE_SPELL, 0 );
+                                         OUString(), sal_True, sal_False, TYPE_SPELL, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
@@ -2151,7 +2151,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
             if (!aImplName.isEmpty() && bIsSuppLang)
             {
-                String aTxt( pInfo->sDisplayName );
+                OUString aTxt( pInfo->sDisplayName );
                 SvTreeListEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
 
                 LangImplNameTable &rTable = rLinguData.GetSpellTable();
@@ -2173,7 +2173,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         // grammar checker entries
         //
         pEntry = CreateEntry( sGrammar,    CBCOL_SECOND );
-        pUserData = new ModuleUserData_Impl( String(), sal_True, sal_False, TYPE_GRAMMAR, 0 );
+        pUserData = new ModuleUserData_Impl( OUString(), sal_True, sal_False, TYPE_GRAMMAR, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
@@ -2195,7 +2195,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
             if (!aImplName.isEmpty() && bIsSuppLang)
             {
-                String aTxt( pInfo->sDisplayName );
+                OUString aTxt( pInfo->sDisplayName );
                 SvTreeListEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
 
                 LangImplNameTable &rTable = rLinguData.GetGrammarTable();
@@ -2217,7 +2217,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         // hyphenator entries
         //
         pEntry = CreateEntry( sHyph,    CBCOL_SECOND );
-        pUserData = new ModuleUserData_Impl( String(), sal_True, sal_False, TYPE_HYPH, 0 );
+        pUserData = new ModuleUserData_Impl( OUString(), sal_True, sal_False, TYPE_HYPH, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
@@ -2239,7 +2239,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
             if (!aImplName.isEmpty() && bIsSuppLang)
             {
-                String aTxt( pInfo->sDisplayName );
+                OUString aTxt( pInfo->sDisplayName );
                 SvTreeListEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
 
                 LangImplNameTable &rTable = rLinguData.GetHyphTable();
@@ -2261,7 +2261,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         // thesaurus entries
         //
         pEntry = CreateEntry( sThes,    CBCOL_SECOND );
-        pUserData = new ModuleUserData_Impl( String(), sal_True, sal_False, TYPE_THES, 0 );
+        pUserData = new ModuleUserData_Impl( OUString(), sal_True, sal_False, TYPE_THES, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
@@ -2283,7 +2283,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
             }
             if (!aImplName.isEmpty() && bIsSuppLang)
             {
-                String aTxt( pInfo->sDisplayName );
+                OUString aTxt( pInfo->sDisplayName );
                 SvTreeListEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
 
                 LangImplNameTable &rTable = rLinguData.GetThesTable();
@@ -2317,7 +2317,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
         SvTreeList *pModel = aModulesCLB.GetModel();
 
         ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
-        String aStr(aModulesCLB.GetEntryText(pEntry));
+        OUString aStr(aModulesCLB.GetEntryText(pEntry));
         SvTreeListEntry* pToInsert = CreateEntry( aStr, CBCOL_FIRST );
         pToInsert->SetUserData( (void *)pData);
         sal_Bool bIsChecked = aModulesCLB.IsChecked(nCurPos);

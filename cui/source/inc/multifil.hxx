@@ -31,7 +31,7 @@ class SvxMultiFileDialog : public SvxMultiPathDialog
 {
 private:
     // #97807# -------------------------------------
-    std::map< String, ::ucbhelper::Content >   aFileContentMap;
+    std::map< OUString, ::ucbhelper::Content >   aFileContentMap;
 
     DECL_LINK( AddHdl_Impl, PushButton * );
     DECL_LINK(DelHdl_Impl, void *);
@@ -40,8 +40,8 @@ public:
     SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
     ~SvxMultiFileDialog();
 
-    String  GetFiles() const { return SvxMultiPathDialog::GetPath(); }
-    void    SetFiles( const String& rPath ) { SvxMultiPathDialog::SetPath(rPath); aDelBtn.Enable(); }
+    OUString  GetFiles() const { return SvxMultiPathDialog::GetPath(); }
+    void      SetFiles( const OUString& rPath ) { SvxMultiPathDialog::SetPath(rPath); aDelBtn.Enable(); }
 };
 
 

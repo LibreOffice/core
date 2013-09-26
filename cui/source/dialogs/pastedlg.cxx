@@ -84,7 +84,7 @@ SvPasteObjectDialog::~SvPasteObjectDialog()
 /*************************************************************************
 |*    SvPasteObjectDialog::Insert()
 *************************************************************************/
-void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const String& rFormatName )
+void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const OUString& rFormatName )
 {
     aSupplementMap.insert( ::std::make_pair( nFormat, rFormatName ) );
 }
@@ -177,7 +177,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
             ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
             // global resource from svtools (former so3 resource)
             if( pMgr )
-                aSourceName = String( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );
+                aSourceName = OUString( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );
             delete pMgr;
         }
     }
@@ -204,7 +204,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
     return nSelFormat;
 }
 
-void SvPasteObjectDialog::SetObjName( const SvGlobalName & rClass, const String & rObjName )
+void SvPasteObjectDialog::SetObjName( const SvGlobalName & rClass, const OUString & rObjName )
 {
     aObjClassName = rClass;
     aObjName = rObjName;

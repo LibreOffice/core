@@ -307,7 +307,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
     }
     else
     {
-        m_pMtrPosX->SetText( String() );
+        m_pMtrPosX->SetText( OUString() );
     }
 
     pItem = GetItem(rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
@@ -318,7 +318,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
     }
     else
     {
-        m_pMtrPosY->SetText( String() );
+        m_pMtrPosY->SetText( OUString() );
     }
 
     pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ANGLE );
@@ -479,7 +479,7 @@ void SvxSlantTabPage::Construct()
 sal_Bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     sal_Bool  bModified = sal_False;
-    String aStr = m_pMtrRadius->GetText();
+    OUString aStr = m_pMtrRadius->GetText();
 
     if( aStr != m_pMtrRadius->GetSavedValue() )
     {
@@ -999,8 +999,8 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
         m_pTsbAutoGrowHeight->SetState( STATE_DONTKNOW );
 
     // Is matching set?
-    String aStr = GetUserData();
-    m_pCbxScale->Check( (sal_Bool)aStr.ToInt32() );
+    OUString aStr = GetUserData();
+    m_pCbxScale->Check( (sal_Bool)aStr.toInt32() );
 
     m_pTsbSizeProtect->SaveValue();
     m_pTsbAutoGrowWidth->SaveValue();

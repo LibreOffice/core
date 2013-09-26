@@ -295,7 +295,7 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
 
         if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
         {
-            String* pScriptURI = (String*)pData->pObject;
+            OUString* pScriptURI = (OUString*)pData->pObject;
             delete pScriptURI;
         }
 
@@ -313,38 +313,38 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
     Clear();
 }
 
-String SfxConfigFunctionListBox_Impl::GetSelectedScriptURI()
+OUString SfxConfigFunctionListBox_Impl::GetSelectedScriptURI()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     if ( pEntry )
     {
         SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
         if ( pData && ( pData->nKind == SFX_CFGFUNCTION_SCRIPT ) )
-            return *(String*)pData->pObject;
+            return *(OUString*)pData->pObject;
     }
-    return String();
+    return OUString();
 }
 
-String SfxConfigFunctionListBox_Impl::GetCurCommand()
+OUString SfxConfigFunctionListBox_Impl::GetCurCommand()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     if (!pEntry)
-        return String();
+        return OUString();
     SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
     if (!pData)
-        return String();
+        return OUString();
     return pData->sCommand;
 }
 
-String SfxConfigFunctionListBox_Impl::GetCurLabel()
+OUString SfxConfigFunctionListBox_Impl::GetCurLabel()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     if (!pEntry)
-        return String();
+        return OUString();
     SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
     if (!pData)
-        return String();
-    if (pData->sLabel.Len())
+        return OUString();
+    if (!pData->sLabel.isEmpty())
         return pData->sLabel;
     return pData->sCommand;
 }
@@ -370,10 +370,10 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
     Image m_docImage;
     OUString m_sMyMacros;
     OUString m_sProdMacros;
-    String m_sMacros;
-    String m_sDlgMacros;
-    String m_aHumanAppName;
-    String m_aStrGroupStyles;
+    OUString m_sMacros;
+    OUString m_sDlgMacros;
+    OUString m_aHumanAppName;
+    OUString m_aStrGroupStyles;
     Image m_collapsedImage;
     Image m_expandedImage;
 
@@ -590,7 +590,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::uno::XComp
                 new SfxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
                     static_cast<void *>(rootNode.get()));
 
-            String aTitle(pImp->m_sDlgMacros);
+            OUString aTitle(pImp->m_sDlgMacros);
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
             pNewEntry->EnableChildrenOnDemand( sal_True );
@@ -697,7 +697,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::uno::XComp
     // add styles
     if ( m_xContext.is() )
     {
-        String sStyle( pImp->m_aStrGroupStyles );
+        OUString sStyle( pImp->m_aStrGroupStyles );
         SvTreeListEntry *pEntry = InsertEntry( sStyle, 0 );
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
         aArr.push_back( pInfo );
@@ -901,7 +901,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                     xPropSet->getPropertyValue("URI");
                                 value >>= uri;
 
-                                String* pScriptURI = new String( uri );
+                                OUString* pScriptURI = new OUString( uri );
                                 SfxGroupInfo_Impl* pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGFUNCTION_SCRIPT, 0, pScriptURI );
 
                                 Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
@@ -1125,39 +1125,39 @@ void SfxConfigGroupListBox_Impl::SelectMacro( const SfxMacroInfoItem *pItem )
                  pItem->GetQualifiedName() );
 }
 
-void SfxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
-         const String& rMacro )
+void SfxConfigGroupListBox_Impl::SelectMacro( const OUString& rBasic,
+         const OUString& rMacro )
 {
-    String aBasicName( rBasic );
-    aBasicName += ' ';
+    OUString aBasicName( rBasic );
+    aBasicName += " ";
     aBasicName += pImp->m_sMacros;
-    String aLib, aModule, aMethod;
+    OUString aLib, aModule, aMethod;
     sal_uInt16 nCount = comphelper::string::getTokenCount(rMacro, '.');
-    aMethod = rMacro.GetToken( nCount-1, '.' );
+    aMethod = rMacro.getToken( nCount-1, '.' );
     if ( nCount > 2 )
     {
-        aLib = rMacro.GetToken( 0, '.' );
-        aModule = rMacro.GetToken( nCount-2, '.' );
+        aLib = rMacro.getToken( 0, '.' );
+        aModule = rMacro.getToken( nCount-2, '.' );
     }
 
     SvTreeListEntry *pEntry = FirstChild(0);
     while ( pEntry )
     {
-        String aEntryBas = GetEntryText( pEntry );
+        OUString aEntryBas = GetEntryText( pEntry );
         if ( aEntryBas == aBasicName )
         {
             Expand( pEntry );
             SvTreeListEntry *pLib = FirstChild( pEntry );
             while ( pLib )
             {
-                String aEntryLib = GetEntryText( pLib );
+                OUString aEntryLib = GetEntryText( pLib );
                 if ( aEntryLib == aLib )
                 {
                     Expand( pLib );
                     SvTreeListEntry *pMod = FirstChild( pLib );
                     while ( pMod )
                     {
-                        String aEntryMod = GetEntryText( pMod );
+                        OUString aEntryMod = GetEntryText( pMod );
                         if ( aEntryMod == aModule )
                         {
                             Expand( pMod );
@@ -1166,7 +1166,7 @@ void SfxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
                             SvTreeListEntry *pMethod = pFunctionListBox->First();
                             while ( pMethod )
                             {
-                                String aEntryMethod = GetEntryText( pMethod );
+                                OUString aEntryMethod = GetEntryText( pMethod );
                                 if ( aEntryMethod == aMethod )
                                 {
                                     pFunctionListBox->Select( pMethod );

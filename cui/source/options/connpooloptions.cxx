@@ -39,8 +39,8 @@ namespace offapp
         DriverPoolingSettings                   m_aSettings;
         DriverPoolingSettings::const_iterator   m_aSeekRow;
 
-        String                                  m_sYes;
-        String                                  m_sNo;
+        OUString                                m_sYes;
+        OUString                                m_sNo;
 
         Link                                    m_aRowChangeHandler;
 
@@ -85,7 +85,7 @@ namespace offapp
 
 
     private:
-        String implGetCellText(DriverPoolingSettings::const_iterator _rPos, sal_uInt16 _nColId) const;
+        OUString implGetCellText(DriverPoolingSettings::const_iterator _rPos, sal_uInt16 _nColId) const;
     };
 
     //--------------------------------------------------------------------
@@ -136,11 +136,11 @@ namespace offapp
         EditBrowseBox::Init();
 
         Size aColWidth = LogicToPixel(Size(160, 0), MAP_APPFONT);
-        InsertDataColumn(1, String(CUI_RES(RID_SVXSTR_DRIVER_NAME)), aColWidth.Width());
+        InsertDataColumn(1, OUString(CUI_RES(RID_SVXSTR_DRIVER_NAME)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(30, 0), MAP_APPFONT);
-        InsertDataColumn(2, String(CUI_RES(RID_SVXSTR_POOLED_FLAG)), aColWidth.Width());
+        InsertDataColumn(2, OUString(CUI_RES(RID_SVXSTR_POOLED_FLAG)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(60, 0), MAP_APPFONT);
-        InsertDataColumn(3, String(CUI_RES(RID_SVXSTR_POOL_TIMEOUT)), aColWidth.Width());
+        InsertDataColumn(3, OUString(CUI_RES(RID_SVXSTR_POOL_TIMEOUT)), aColWidth.Width());
             // Attention: the resource of the string is local to the resource of the enclosing dialog!
     }
 
@@ -209,11 +209,11 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    String DriverListControl::implGetCellText(DriverPoolingSettings::const_iterator _rPos, sal_uInt16 _nColId) const
+    OUString DriverListControl::implGetCellText(DriverPoolingSettings::const_iterator _rPos, sal_uInt16 _nColId) const
     {
         OSL_ENSURE(_rPos < m_aSettings.end(), "DriverListControl::implGetCellText: invalid position!");
 
-        String sReturn;
+        OUString sReturn;
         switch (_nColId)
         {
             case 1:
@@ -427,7 +427,7 @@ namespace offapp
 
         if (!bValidRow)
         {   // positioned on an invalid row
-            m_pDriver->SetText(String());
+            m_pDriver->SetText(OUString());
         }
         else
         {

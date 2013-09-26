@@ -484,8 +484,8 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     }
 
     // condition of the preview button is persistent due to UserData
-    String aUserData = GetUserData();
-    m_pBtnPreview->Check( aUserData.Len() && sal_Unicode('1') == aUserData.GetChar( 0 ) );
+    OUString aUserData = GetUserData();
+    m_pBtnPreview->Check( !aUserData.isEmpty() && '1' == aUserData[0] );
 
     // don't be allowed to call ShowSelector() after reset anymore
     bAllowShowSelector = sal_False;
@@ -652,8 +652,8 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     ShowSelector();
 
     // condition of the preview button is persistent due to UserData
-    String aUserData = GetUserData();
-    m_pBtnPreview->Check( aUserData.Len() && sal_Unicode('1') == aUserData.GetChar( 0 ) );
+    OUString aUserData = GetUserData();
+    m_pBtnPreview->Check( !aUserData.isEmpty() && '1' == aUserData[0] );
 
     // get and evaluate Input-BrushItem
     const SvxBrushItem* pBgdAttr = NULL;
@@ -1140,7 +1140,7 @@ void SvxBackgroundTabPage::ShowSelector()
 void SvxBackgroundTabPage::RaiseLoadError_Impl()
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
-                              String(),
+                              OUString(),
                               this,
                               RID_SVXERRCTX,
                               &CUI_MGR() );
@@ -1154,7 +1154,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 
 sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 {
-    sal_Bool bResult = ( aBgdGraphicPath.Len() > 0 ) &&
+    sal_Bool bResult = ( !aBgdGraphicPath.isEmpty() ) &&
                    ( GRFILTER_OK == GraphicFilter::LoadGraphic( aBgdGraphicPath,
                                                  aBgdGraphicFilter,
                                                  aBgdGraphic ) );
@@ -1416,7 +1416,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
         {
             m_pFtUnlinked->Hide();
             INetURLObject aObj( aBgdGraphicPath );
-            String aFilePath;
+            OUString aFilePath;
             if ( aObj.GetProtocol() == INET_PROT_FILE )
                 aFilePath = aObj.getFSysPath( INetURLObject::FSYS_DETECT );
             else
@@ -1444,7 +1444,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
             }
             else
             {
-                if ( aBgdGraphicPath.Len() > 0 ) // only for linked bitmap
+                if ( !aBgdGraphicPath.isEmpty() ) // only for linked bitmap
                     RaiseLoadError_Impl();
                 m_pPreviewWin2->NotifyChange( NULL );
             }
@@ -1552,7 +1552,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
         {
             INetURLObject aOld( aBgdGraphicPath );
             INetURLObject aNew( pImportDlg->GetPath() );
-            if ( !aBgdGraphicPath.Len() || aNew != aOld )
+            if ( aBgdGraphicPath.isEmpty() || aNew != aOld )
             {
                 // new file chosen
                 aBgdGraphicPath   = pImportDlg->GetPath();
@@ -1569,8 +1569,8 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
                     }
                     else
                     {
-                        aBgdGraphicFilter.Erase();
-                        aBgdGraphicPath.Erase();
+                        aBgdGraphicFilter = "";
+                        aBgdGraphicPath = "";
                         bIsGraphicValid = sal_False;
                     }
                 }
@@ -1703,7 +1703,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             pActItem = NULL;
             break;
         }
-        String aUserData = GetUserData();
+        OUString aUserData = GetUserData();
         if(!pActItem)
         {
             pActItem = new SvxBrushItem(nWhich);
@@ -1774,7 +1774,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
             }
             break;
         }
-        String aUserData = GetUserData();
+        OUString aUserData = GetUserData();
         FillControls_Impl(*pActItem, aUserData);
     }
     return 0;
@@ -1783,7 +1783,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
-                                              const String& rUserData )
+                                              const OUString& rUserData )
 {
     SvxGraphicPosition  ePos = rBgdAttr.GetGraphicPos();
     const Color& rColor = rBgdAttr.GetColor();
@@ -1833,10 +1833,10 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         }
         if ( m_pLbSelect->IsVisible() ) // initialize graphic part
         {
-            aBgdGraphicFilter.Erase();
-            aBgdGraphicPath.Erase();
+            aBgdGraphicFilter = "";
+            aBgdGraphicPath = "";
 
-            if ( !rUserData.Len() )
+            if ( rUserData.isEmpty() )
                 m_pBtnPreview->Check( sal_False );
             m_pBtnLink->Check( sal_False );
             m_pBtnLink->Disable();
@@ -1864,7 +1864,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         }
         else
         {
-            aBgdGraphicPath.Erase();
+            aBgdGraphicPath = "";
             m_pBtnLink->Check( sal_False );
             m_pBtnLink->Disable();
         }
@@ -1897,7 +1897,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                 aBgdGraphic = *pGraphic;
                 bIsGraphicValid = sal_True;
 
-                if ( !rUserData.Len() )
+                if ( rUserData.isEmpty() )
                     m_pBtnPreview->Check();
             }
             else
@@ -1905,7 +1905,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                 RaiseLoadError_Impl();
                 bIsGraphicValid = sal_False;
 
-                if ( !rUserData.Len() )
+                if ( rUserData.isEmpty() )
                     m_pBtnPreview->Check( sal_False );
             }
         }

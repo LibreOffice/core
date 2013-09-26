@@ -191,7 +191,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldLineDist->SetText( String() );
+        m_pMtrFldLineDist->SetText( OUString() );
     }
     m_pMtrFldLineDist->SaveValue();
 
@@ -206,7 +206,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldHelplineOverhang->SetText( String() );
+        m_pMtrFldHelplineOverhang->SetText( OUString() );
     }
     m_pMtrFldHelplineOverhang->SaveValue();
 
@@ -221,7 +221,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldHelplineDist->SetText( String() );
+        m_pMtrFldHelplineDist->SetText( OUString() );
     }
     m_pMtrFldHelplineDist->SaveValue();
 
@@ -236,7 +236,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldHelpline1Len->SetText( String() );
+        m_pMtrFldHelpline1Len->SetText( OUString() );
     }
     m_pMtrFldHelpline1Len->SaveValue();
 
@@ -251,7 +251,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldHelpline2Len->SetText( String() );
+        m_pMtrFldHelpline2Len->SetText( OUString() );
     }
     m_pMtrFldHelpline2Len->SaveValue();
 
@@ -279,7 +279,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        m_pMtrFldDecimalPlaces->SetText( String() );
+        m_pMtrFldDecimalPlaces->SetText( OUString() );
     }
     m_pMtrFldDecimalPlaces->SaveValue();
 

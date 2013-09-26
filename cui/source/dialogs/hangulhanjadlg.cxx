@@ -90,12 +90,12 @@ namespace svx
         };
 
     protected:
-        const String        m_sPrimaryText;
-        const String        m_sSecondaryText;
+        const OUString      m_sPrimaryText;
+        const OUString      m_sSecondaryText;
         const RubyPosition  m_ePosition;
 
     public:
-        PseudoRubyText( const String& _rPrimary, const String& _rSecondary, const RubyPosition _ePosition );
+        PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition );
 
     public:
         void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
@@ -104,7 +104,7 @@ namespace svx
     };
 
     //-------------------------------------------------------------------------
-    PseudoRubyText::PseudoRubyText( const String& _rPrimary, const String& _rSecondary, const RubyPosition _ePosition )
+    PseudoRubyText::PseudoRubyText( const OUString& _rPrimary, const OUString& _rSecondary, const RubyPosition _ePosition )
         :m_sPrimaryText( _rPrimary )
         ,m_sSecondaryText( _rSecondary )
         ,m_ePosition( _ePosition )
@@ -213,7 +213,7 @@ namespace svx
         RubyRadioButton(
             Window* _pParent,
             const ResId& _rId,          // the text in the resource will be taken as primary text
-            const String& _rSecondary,  // this will be the secondary text which will be printed somewhat smaller
+            const OUString& _rSecondary,  // this will be the secondary text which will be printed somewhat smaller
             const PseudoRubyText::RubyPosition _ePosition );
 
     protected:
@@ -222,7 +222,7 @@ namespace svx
 
     //-------------------------------------------------------------------------
     RubyRadioButton::RubyRadioButton( Window* _pParent, const ResId& _rId,
-        const String& _rSecondary, const PseudoRubyText::RubyPosition _ePosition )
+        const OUString& _rSecondary, const PseudoRubyText::RubyPosition _ePosition )
         :RadioButton( _pParent, _rId )
         ,PseudoRubyText( RadioButton::GetText(), _rSecondary, _ePosition )
     {
@@ -319,7 +319,7 @@ namespace svx
         Rectangle aRect = rUDEvt.GetRect();
         sal_uInt16  nItemId = rUDEvt.GetItemId();
 
-        String sText = *static_cast< String* >( GetItemData( nItemId ) );
+        OUString sText = *static_cast< OUString* >( GetItemData( nItemId ) );
         pDev->DrawText( aRect, sText, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER );
     }
 
@@ -327,7 +327,7 @@ namespace svx
     {
         sal_uInt16 i, nCount = GetItemCount();
         for ( i = 0; i < nCount; ++i )
-            delete static_cast< String* >( GetItemData(i) );
+            delete static_cast< OUString* >( GetItemData(i) );
         Clear();
     }
 
@@ -349,7 +349,7 @@ namespace svx
         m_aValueSet.SetLineCount( LINE_CNT );
         m_aValueSet.SetStyle( m_aValueSet.GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
         m_aValueSet.SetBorderStyle( WINDOW_BORDER_MONO );
-        String aOneCharacter(RTL_CONSTASCII_USTRINGPARAM("AU"));
+        OUString aOneCharacter("AU");
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
         m_aValueSet.SetItemWidth( nItemWidth );
 
@@ -468,7 +468,7 @@ namespace svx
     {
         sal_uInt16 nItemId = m_aListBox.InsertEntry( rStr ) + 1; //itemid == pos+1 (id 0 has special meaning)
         m_aValueSet.InsertItem( nItemId );
-        String* pItemData = new String(rStr);
+        OUString* pItemData = new OUString(rStr);
         m_aValueSet.SetItemData( nItemId, pItemData );
     }
     void SuggestionDisplay::SelectEntryPos( sal_uInt16 nPos )
@@ -516,8 +516,8 @@ namespace svx
         ,m_bDocumentMode( true )
     {
         // special creation of the 4 pseudo-ruby radio buttons
-        String sSecondaryHangul( CUI_RES( STR_HANGUL ) );
-        String sSecondaryHanja( CUI_RES( STR_HANJA ) );
+        OUString sSecondaryHangul( CUI_RES( STR_HANGUL ) );
+        OUString sSecondaryHanja( CUI_RES( STR_HANJA ) );
         m_pHanjaAbove.reset( new RubyRadioButton( m_pPlayground.get(), CUI_RES( RB_HANGUL_HANJA_ABOVE ), sSecondaryHanja, PseudoRubyText::eAbove ) );
         m_pHanjaBelow.reset( new RubyRadioButton( m_pPlayground.get(), CUI_RES( RB_HANGUL_HANJA_BELOW ), sSecondaryHanja, PseudoRubyText::eBelow ) );
         m_pHangulAbove.reset( new RubyRadioButton( m_pPlayground.get(), CUI_RES( RB_HANJA_HANGUL_ABOVE ), sSecondaryHangul, PseudoRubyText::eAbove ) );
@@ -623,7 +623,7 @@ namespace svx
             m_aSuggestions.InsertEntry( *pSuggestions++ );
 
         // select the first suggestion, and fill in the suggestion edit field
-        String sFirstSuggestion;
+        OUString sFirstSuggestion;
         if ( m_aSuggestions.GetEntryCount() )
         {
             sFirstSuggestion = m_aSuggestions.GetEntry( 0 );
@@ -701,7 +701,7 @@ namespace svx
     {
         m_aFind.Enable( m_pPlayground->GetWordInputControl().GetSavedValue() != m_pPlayground->GetWordInputControl().GetText() );
 
-        bool bSameLen = m_pPlayground->GetWordInputControl().GetText().getLength() == m_pPlayground->GetCurrentText().Len();
+        bool bSameLen = m_pPlayground->GetWordInputControl().GetText().getLength() == m_pPlayground->GetCurrentText().getLength();
         m_pPlayground->EnableButton( SvxCommonLinguisticControl::eChange, m_bDocumentMode && bSameLen );
         m_pPlayground->EnableButton( SvxCommonLinguisticControl::eChangeAll, m_bDocumentMode && bSameLen );
 
@@ -754,7 +754,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    String HangulHanjaConversionDialog::GetCurrentString( ) const
+    OUString HangulHanjaConversionDialog::GetCurrentString( ) const
     {
         return m_pPlayground->GetCurrentText( );
     }
@@ -777,7 +777,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversionDialog::SetCurrentString( const String& _rNewString,
+    void HangulHanjaConversionDialog::SetCurrentString( const OUString& _rNewString,
         const Sequence< OUString >& _rSuggestions, bool _bOriginatesFromDocument )
     {
         m_pPlayground->SetCurrentText( _rNewString );
@@ -822,7 +822,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    String HangulHanjaConversionDialog::GetCurrentSuggestion( ) const
+    OUString HangulHanjaConversionDialog::GetCurrentSuggestion( ) const
     {
         return m_pPlayground->GetWordInputControl().GetText();
     }
@@ -1154,10 +1154,10 @@ namespace svx
     HangulHanjaOptionsDialog::~HangulHanjaOptionsDialog()
     {
         SvTreeListEntry*    pEntry = m_aDictsLB.First();
-        String*         pDel;
+        OUString*         pDel;
         while( pEntry )
         {
-            pDel = ( String* ) pEntry->GetUserData();
+            pDel = ( OUString* ) pEntry->GetUserData();
             if( pDel )
                 delete pDel;
             pEntry = m_aDictsLB.Next( pEntry );
@@ -1167,11 +1167,11 @@ namespace svx
             delete m_pCheckButtonData;
     }
 
-    void HangulHanjaOptionsDialog::AddDict( const String& _rName, bool _bChecked )
+    void HangulHanjaOptionsDialog::AddDict( const OUString& _rName, bool _bChecked )
     {
         SvTreeListEntry*    pEntry = m_aDictsLB.SvTreeListBox::InsertEntry( _rName );
         m_aDictsLB.SetCheckButtonState( pEntry, _bChecked? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
-        pEntry->SetUserData( new String( _rName ) );
+        pEntry->SetUserData( new OUString( _rName ) );
     }
 
     //=========================================================================
@@ -1181,9 +1181,9 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
     {
-        String  aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
+        OUString  aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
 
-        m_bEntered = aName.Len() > 0;
+        m_bEntered = !aName.isEmpty();
         if( m_bEntered )
             m_aDictNameED.SetText( aName );     // do this in case of trailing chars have been deleted
 
@@ -1193,9 +1193,9 @@ namespace svx
 
     IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl)
     {
-        String aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
+        OUString aName(comphelper::string::stripEnd(m_aDictNameED.GetText(), ' '));
 
-        m_aOkBtn.Enable( aName.Len() > 0 );
+        m_aOkBtn.Enable( !aName.isEmpty() );
 
         return 0;
     }
@@ -1240,22 +1240,22 @@ namespace svx
     private:
     protected:
         sal_uInt16          m_nSize;
-        String**            m_ppElements;
+        OUString**          m_ppElements;
         sal_uInt16          m_nNumOfEntries;
         sal_uInt16          m_nAct;
 
-        const String*       _Next( void );
+        const OUString*       _Next( void );
     public:
                             SuggestionList( sal_uInt16 _nNumOfElements );
         virtual             ~SuggestionList();
 
-        bool                Set( const String& _rElement, sal_uInt16 _nNumOfElement );
+        bool                Set( const OUString& _rElement, sal_uInt16 _nNumOfElement );
         bool                Reset( sal_uInt16 _nNumOfElement );
-        const String*       Get( sal_uInt16 _nNumOfElement ) const;
+        const OUString*     Get( sal_uInt16 _nNumOfElement ) const;
         void                Clear( void );
 
-        const String*       First( void );
-        const String*       Next( void );
+        const OUString*     First( void );
+        const OUString*     Next( void );
 
         inline sal_uInt16   GetCount( void ) const;
     };
@@ -1272,10 +1272,10 @@ namespace svx
 
         m_nSize = _nNumOfElements;
 
-        m_ppElements = new String*[ m_nSize ];
+        m_ppElements = new OUString*[ m_nSize ];
         m_nAct = m_nNumOfEntries = 0;
 
-        String**    ppNull = m_ppElements;
+        OUString**    ppNull = m_ppElements;
         sal_uInt16  n = _nNumOfElements;
         while( n )
         {
@@ -1291,17 +1291,17 @@ namespace svx
         delete[] m_ppElements;
     }
 
-    bool SuggestionList::Set( const String& _rElement, sal_uInt16 _nNumOfElement )
+    bool SuggestionList::Set( const OUString& _rElement, sal_uInt16 _nNumOfElement )
     {
         bool    bRet = _nNumOfElement < m_nSize;
         if( bRet )
         {
-            String**    ppElem = m_ppElements + _nNumOfElement;
+            OUString**    ppElem = m_ppElements + _nNumOfElement;
             if( *ppElem )
                 **ppElem = _rElement;
             else
             {
-                *ppElem = new String( _rElement );
+                *ppElem = new OUString( _rElement );
                 ++m_nNumOfEntries;
             }
         }
@@ -1314,7 +1314,7 @@ namespace svx
         bool    bRet = _nNumOfElement < m_nSize;
         if( bRet )
         {
-            String**    ppElem = m_ppElements + _nNumOfElement;
+            OUString**    ppElem = m_ppElements + _nNumOfElement;
             if( *ppElem )
             {
                 delete *ppElem;
@@ -1326,9 +1326,9 @@ namespace svx
         return bRet;
     }
 
-    const String* SuggestionList::Get( sal_uInt16 _nNumOfElement ) const
+    const OUString* SuggestionList::Get( sal_uInt16 _nNumOfElement ) const
     {
-        const String*   pRet;
+        const OUString*   pRet;
 
         if( _nNumOfElement < m_nSize )
             pRet = m_ppElements[ _nNumOfElement ];
@@ -1342,7 +1342,7 @@ namespace svx
     {
         if( m_nNumOfEntries )
         {
-            String**    ppDel = m_ppElements;
+            OUString**    ppDel = m_ppElements;
             sal_uInt16  nCnt = m_nSize;
             while( nCnt )
             {
@@ -1360,9 +1360,9 @@ namespace svx
         }
     }
 
-    const String* SuggestionList::_Next( void )
+    const OUString* SuggestionList::_Next( void )
     {
-        const String*   pRet = NULL;
+        const OUString*   pRet = NULL;
         while( m_nAct < m_nSize && !pRet )
         {
             pRet = m_ppElements[ m_nAct ];
@@ -1373,15 +1373,15 @@ namespace svx
         return pRet;
     }
 
-    const String* SuggestionList::First( void )
+    const OUString* SuggestionList::First( void )
     {
         m_nAct = 0;
         return _Next();
     }
 
-    const String* SuggestionList::Next( void )
+    const OUString* SuggestionList::Next( void )
     {
-        const String*   pRet;
+        const OUString*   pRet;
 
         if( m_nAct < m_nNumOfEntries )
         {
@@ -1572,7 +1572,7 @@ namespace svx
             bool bRemovedSomething = DeleteEntryFromDictionary( m_aOriginal, xDict );
 
             OUString                aLeft( m_aOriginal );
-            const String*           pRight = m_pSuggestions->First();
+            const OUString*           pRight = m_pSuggestions->First();
             bool bAddedSomething = false;
             while( pRight )
             {
@@ -1635,7 +1635,7 @@ namespace svx
     {
         if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
         {
-            m_aOriginal.Erase();
+            m_aOriginal = "";
             m_bModifiedOriginal = true;
             InitEditDictDialog( m_nCurrentDict );
         }
@@ -1650,13 +1650,13 @@ namespace svx
         if( m_nCurrentDict != _nSelDict )
         {
             m_nCurrentDict = _nSelDict;
-            m_aOriginal.Erase();
+            m_aOriginal = "";
             m_bModifiedOriginal = true;
         }
 
         UpdateOriginalLB();
 
-        m_aOriginalLB.SetText( m_aOriginal.Len()? m_aOriginal : m_aEditHintText, Selection( 0, SELECTION_MAX ) );
+        m_aOriginalLB.SetText( !m_aOriginal.isEmpty() ? m_aOriginal : m_aEditHintText, Selection( 0, SELECTION_MAX ) );
         m_aOriginalLB.GrabFocus();
 
         UpdateSuggestions();
@@ -1688,7 +1688,7 @@ namespace svx
 
     void HangulHanjaEditDictDialog::UpdateButtonStates()
     {
-        bool bHaveValidOriginalString = m_aOriginal.Len() && m_aOriginal != m_aEditHintText;
+        bool bHaveValidOriginalString = !m_aOriginal.isEmpty() && m_aOriginal != m_aEditHintText;
         bool bNew = bHaveValidOriginalString && m_pSuggestions && m_pSuggestions->GetCount() > 0;
         bNew = bNew && (m_bModifiedSuggestions || m_bModifiedOriginal);
 
@@ -1732,10 +1732,10 @@ namespace svx
 
     void HangulHanjaEditDictDialog::SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum )
     {
-        String  aStr;
+        OUString  aStr;
         if( m_pSuggestions )
         {
-            const String*   p = m_pSuggestions->Get( _nEntryNum );
+            const OUString*   p = m_pSuggestions->Get( _nEntryNum );
             if( p )
                 aStr = *p;
         }
@@ -1747,9 +1747,9 @@ namespace svx
     {
         m_bModifiedSuggestions = true;
 
-        String  aTxt( _pEdit->GetText() );
+        OUString  aTxt( _pEdit->GetText() );
         sal_uInt16 nEntryNum = m_nTopPos + _nEntryOffset;
-        if( aTxt.Len() == 0 )
+        if( aTxt.isEmpty() )
         {
             //reset suggestion
             if( m_pSuggestions )
@@ -1821,7 +1821,7 @@ namespace svx
         for( sal_uInt32 n = 0 ; n < nDictCnt ; ++n )
         {
             Reference< XConversionDictionary >  xDic( m_rDictList[n] );
-            String aName;
+            OUString aName;
             if(xDic.is())
                 aName = xDic->getName();
             m_aBookLB.InsertEntry( aName );
