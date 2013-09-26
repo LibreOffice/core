@@ -23,7 +23,6 @@ include $(SRCDIR)/officecfg/files.mk
 $(eval $(call gb_Module_add_targets,officecfg,\
     CustomTarget_registry \
     Package_misc \
-    Package_tools \
     Configuration_officecfg \
 ))
 

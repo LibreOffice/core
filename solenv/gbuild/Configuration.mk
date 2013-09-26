@@ -62,10 +62,10 @@ endef
 
 gb_Configuration_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
-gb_XcsTarget_XSLT_SchemaVal := $(OUTDIR)/xml/processing/schema_val.xsl
-gb_XcsTarget_XSLT_Sanity := $(OUTDIR)/xml/processing/sanity.xsl
-gb_XcsTarget_XSLT_SchemaTrim := $(OUTDIR)/xml/processing/schema_trim.xsl
-gb_XcsTarget_DTD_Schema := $(OUTDIR)/xml/registry/component-schema.dtd
+gb_XcsTarget_XSLT_SchemaVal := $(SRCDIR)/officecfg/util/schema_val.xsl
+gb_XcsTarget_XSLT_Sanity := $(SRCDIR)/officecfg/util/sanity.xsl
+gb_XcsTarget_XSLT_SchemaTrim := $(SRCDIR)/officecfg/util/schema_trim.xsl
+gb_XcsTarget_DTD_Schema := $(SRCDIR)/officecfg/registry/component-schema.dtd
 
 define gb_XcsTarget__command
 $(call gb_Output_announce,$(2),$(true),XCS,1)
@@ -103,9 +103,9 @@ $(call gb_XcsTarget_get_clean_target,%) :
 
 # XcuDataTarget class
 
-gb_XcuTarget_XSLT_AllLang := $(OUTDIR)/xml/processing/alllang.xsl
-gb_XcuDataTarget_XSLT_DataVal := $(OUTDIR)/xml/processing/data_val.xsl
-gb_XcuDataTarget_DTD_ComponentUpdate := $(OUTDIR)/xml/registry/component-update.dtd
+gb_XcuTarget_XSLT_AllLang := $(SRCDIR)/officecfg/util/alllang.xsl
+gb_XcuDataTarget_XSLT_DataVal := $(SRCDIR)/officecfg/util/data_val.xsl
+gb_XcuDataTarget_DTD_ComponentUpdate := $(SRCDIR)/officecfg/registry/component-update.dtd
 
 define gb_XcuDataTarget__command
 $(call gb_Output_announce,$(2),$(true),XCU,2)
@@ -179,7 +179,7 @@ gb_XcuLangpackTarget__get_name_with_lang = $(basename $(1))-$(2)$(suffix $(1))
 gb_XcuLangpackTarget__get_target_with_lang = \
  $(call gb_XcuLangpackTarget_get_target,$(call gb_XcuLangpackTarget__get_name_with_lang,$(1),$(2)))
 
-gb_XcuLangpackTarget_SED_delcomment := $(OUTDIR)/xml/processing/delcomment.sed
+gb_XcuLangpackTarget_SED_delcomment := $(SRCDIR)/officecfg/util/delcomment.sed
 
 define gb_XcuLangpackTarget__command
 $(call gb_Output_announce,$(2),$(true),XCL,1)
