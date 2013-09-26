@@ -31,11 +31,10 @@ filter_MERGE := $(call gb_ExternalExecutable_get_command,python) \
 
 ### types
 
-filter_XcuFilterTypesTarget_get_target = $(WORKDIR)/XcuFilterTypesTarget/$(1)
 filter_XcuFilterTypesTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterTypesTarget/$(1)
 
-$(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
+$(call gb_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FIT,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -48,43 +47,32 @@ $(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 			outdir=$(dir $@) pkg=$@ xmlpackage=Types tcfg=$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
 
-# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
-
 $(call filter_XcuFilterTypesTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FIT,1)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call filter_XcuFilterTypesTarget_get_target,$*) \
-			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
+	rm -f $(call gb_XcuFilterTypesTarget_get_target,$*)
 
 # $(call filter_Configuration__add_module,configuration,module,prefix,xcufiles,target,cleantarget)
 define filter_Configuration__add_module
-$(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcuModuleTarget_get_outdir_target,$(2))
+$(call gb_Configuration_get_target,$(1)) : $(5)
 $(call gb_Configuration_get_clean_target,$(1)) : $(6)
 $(if $(4),,$(error filter_Configuration__add_module: no input files))
 $(5) : \
 	$(addprefix $(SRCDIR)/$(3)/,$(addsuffix .xcu,$(4)))
-$(call gb_XcuModuleTarget_get_outdir_target,$(2)) : $(5)
-$(call gb_XcuModuleTarget_get_outdir_target,$(2)) |: $(dir $(call gb_XcuModuleTarget_get_outdir_target,$(2))).dir
-$(call gb_Deliver_add_deliverable,\
-	$(call gb_XcuModuleTarget_get_outdir_target,$(2)),$(5),$(2))
 endef
 
 # $(call filter_Configuration_add_types,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_types
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
- $(call filter_XcuFilterTypesTarget_get_target,$(2)),\
+ $(call gb_XcuFilterTypesTarget_get_target,$(2)),\
  $(call filter_XcuFilterTypesTarget_get_clean_target,$(2))))
 endef
 
 ### filters
 
-filter_XcuFilterFiltersTarget_get_target = \
- $(WORKDIR)/XcuFilterFiltersTarget/$(1)
 filter_XcuFilterFiltersTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterFiltersTarget/$(1)
 
-$(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
+$(call gb_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FIF,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -97,28 +85,23 @@ $(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 			outdir=$(dir $@) pkg=$@ xmlpackage=Filter fcfg=$${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE})
 
-# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
-
 $(call filter_XcuFilterFiltersTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FIF,1)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call filter_XcuFilterFiltersTarget_get_target,$*) \
-			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
+	rm -f $(call gb_XcuFilterFiltersTarget_get_target,$*)
 
 # $(call filter_Configuration_add_filters,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_filters
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
- $(call filter_XcuFilterFiltersTarget_get_target,$(2)),\
+ $(call gb_XcuFilterFiltersTarget_get_target,$(2)),\
  $(call filter_XcuFilterFiltersTarget_get_clean_target,$(2))))
 endef
 
 ### others (frameloaders, contenthandlers)
 
-filter_XcuFilterOthersTarget_get_target = $(WORKDIR)/XcuFilterOthersTarget/$(1)
 filter_XcuFilterOthersTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterOthersTarget/$(1)
 
-$(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
+$(call gb_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FIO,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -137,27 +120,21 @@ $(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 
 $(call filter_XcuFilterOthersTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FIO,1)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call filter_XcuFilterOthersTarget_get_target,$*) \
-			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
-
-# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
+	rm -f $(call gb_XcuFilterOthersTarget_get_target,$*)
 
 # $(call filter_Configuration_add_others,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_others
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
- $(call filter_XcuFilterOthersTarget_get_target,$(2)),\
+ $(call gb_XcuFilterOthersTarget_get_target,$(2)),\
  $(call filter_XcuFilterOthersTarget_get_clean_target,$(2))))
 endef
 
 ### internal filters
 
-filter_XcuFilterInternalTarget_get_target = \
- $(WORKDIR)/XcuFilterInternalTarget/$(1)
 filter_XcuFilterInternalTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterInternalTarget/$(1)
 
-$(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
+$(call gb_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),FII,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -171,18 +148,14 @@ $(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 			fcfg=$${RESPONSEFILE} subdir_filters=internalgraphicfilters && \
 		rm -f $${RESPONSEFILE})
 
-# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
-
 $(call filter_XcuFilterInternalTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),FII,1)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call filter_XcuFilterInternalTarget_get_target,$*) \
-			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
+	rm -f $(call gb_XcuFilterInternalTarget_get_target,$*)
 
 # $(call filter_Configuration_add_internal_filters,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_internal_filters
 $(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
- $(call filter_XcuFilterInternalTarget_get_target,$(2)),\
+ $(call gb_XcuFilterInternalTarget_get_target,$(2)),\
  $(call filter_XcuFilterInternalTarget_get_clean_target,$(2))))
 endef
 

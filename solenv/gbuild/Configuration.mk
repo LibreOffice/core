@@ -163,13 +163,13 @@ endef
 
 $(call gb_XcuModuleTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang) \
 		| $(gb_Configuration_XSLTCOMMAND_DEPS)
+	$(if $(filter %.xcu,$^),,$(error There is no target $(call gb_XcuModuleTarget_get_target,$*)))
 	$(call gb_XcuModuleTarget__command,$@,$*,$(filter %.xcu,$^),$(filter %.xcs,$^))
 
 $(call gb_XcuModuleTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCM,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_XcuModuleTarget_get_target,$*) \
-			  $(call gb_XcuModuleTarget_get_outdir_target,$(XCUFILE)))
+		rm -f $(call gb_XcuModuleTarget_get_target,$*))
 
 
 # XcuLangpackTarget class
@@ -299,9 +299,9 @@ $(call gb_Configuration_get_preparation_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
-# $(call gb_Configuration_Configuration,configuration,repo,nodeliver)
-# cannot use target local variable for REPO because it's needed in prereq
+# $(call gb_Configuration_Configuration,configuration,nodeliver)
 # last parameter may be used to turn off delivering of files
+# FIXME: not anymore, no files are delivered now
 define gb_Configuration_Configuration
 $(eval gb_Configuration_NODELIVER_$(1) := $(2))
 
@@ -368,21 +368,8 @@ $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : \
 	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuModuleTarget,$(3))
 $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
-$(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
-ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
-$(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcuModuleTarget_get_outdir_target,$(3))
-$(call gb_XcuModuleTarget_get_outdir_target,$(3)) : \
-	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)) \
-	| $(dir $(call gb_XcuModuleTarget_get_outdir_target,$(3))).dir
-$(call gb_Deliver_add_deliverable,\
-	$(call gb_XcuModuleTarget_get_outdir_target,$(3)),\
-	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)),\
-	$(2)/$(3))
-else
 $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_target,$(2)/$(3))
-endif
 
 endef
 

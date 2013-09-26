@@ -15,7 +15,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,postprocess/registry))
 
 postprocess_XCS := $(call gb_XcsTarget_get_outdir_target,org/openoffice)
 postprocess_XCU := $(call gb_XcuDataTarget_get_target,officecfg/registry/data/org/openoffice)
-postprocess_MOD := $(call gb_XcuModuleTarget_get_outdir_target,)
+postprocess_MOD := $(call gb_XcuModuleTarget_get_target,officecfg/registry/data)
 postprocess_DRIVERS :=
 
 postprocess_XCDS := \
@@ -38,9 +38,9 @@ postprocess_XCDS := \
 
 postprocess_DEPS_base := main
 postprocess_FILES_base := \
-	$(postprocess_MOD)/fcfg_database_filters.xcu \
-	$(postprocess_MOD)/fcfg_database_others.xcu \
-	$(postprocess_MOD)/fcfg_database_types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_database_filters.xcu) \
+	$(call gb_XcuFilterOthersTarget_get_target,fcfg_database_others.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_database_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-base.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-base.xcu
 
@@ -50,15 +50,15 @@ postprocess_FILES_calc := \
 	$(postprocess_XCS)/Office/UI/CalcWindowState.xcs \
 	$(postprocess_XCU)/Office/UI/CalcCommands.xcu \
 	$(postprocess_XCU)/Office/UI/CalcWindowState.xcu \
-	$(postprocess_MOD)/fcfg_calc_filters.xcu \
-	$(postprocess_MOD)/fcfg_calc_types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_calc_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_calc_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-calc.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-calc.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-calc.xcu
 
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 postprocess_FILES_calc += \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/calc)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
 postprocess_DRIVERS += calc
 endif
 
@@ -75,20 +75,20 @@ postprocess_DEPS_draw := main
 postprocess_FILES_draw := \
 	$(postprocess_XCS)/Office/UI/DrawWindowState.xcs \
 	$(postprocess_XCU)/Office/UI/DrawWindowState.xcu \
-	$(postprocess_MOD)/fcfg_draw_filters.xcu \
-	$(postprocess_MOD)/fcfg_draw_types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_draw_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_draw_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-draw.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-draw.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-draw.xcu
 
 postprocess_DEPS_graphicfilter := main
 postprocess_FILES_graphicfilter := \
-	$(postprocess_MOD)/fcfg_drawgraphics_filters.xcu \
-	$(postprocess_MOD)/fcfg_drawgraphics_types.xcu \
-	$(postprocess_MOD)/fcfg_impressgraphics_filters.xcu \
-	$(postprocess_MOD)/fcfg_impressgraphics_types.xcu \
-	$(postprocess_MOD)/fcfg_writergraphics_filters.xcu \
-	$(postprocess_MOD)/fcfg_writergraphics_types.xcu
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_drawgraphics_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_drawgraphics_types.xcu) \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_impressgraphics_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_impressgraphics_types.xcu) \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_writergraphics_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_writergraphics_types.xcu)
 
 postprocess_DEPS_impress := main
 postprocess_FILES_impress := \
@@ -98,8 +98,8 @@ postprocess_FILES_impress := \
 	$(postprocess_XCU)/Office/PresenterScreen.xcu \
 	$(postprocess_XCU)/Office/UI/Effects.xcu \
 	$(postprocess_XCU)/Office/UI/ImpressWindowState.xcu \
-	$(postprocess_MOD)/fcfg_impress_filters.xcu \
-	$(postprocess_MOD)/fcfg_impress_types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_impress_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_impress_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-impress.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-impress.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Jobs-impress.xcu \
@@ -262,14 +262,14 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/UserProfile.xcu \
 	$(postprocess_XCU)/VCL.xcu \
 	$(postprocess_XCU)/ucb/Configuration.xcu \
-	$(postprocess_MOD)/fcfg_base_filters.xcu \
-	$(postprocess_MOD)/fcfg_base_others.xcu \
-	$(postprocess_MOD)/fcfg_base_types.xcu \
-	$(postprocess_MOD)/fcfg_chart_filters.xcu \
-	$(postprocess_MOD)/fcfg_chart_others.xcu \
-	$(postprocess_MOD)/fcfg_chart_types.xcu \
-	$(postprocess_MOD)/fcfg_internalgraphics_filters.xcu \
-	$(postprocess_MOD)/fcfg_internalgraphics_types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_base_filters.xcu) \
+	$(call gb_XcuFilterOthersTarget_get_target,fcfg_base_others.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_base_types.xcu) \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_chart_filters.xcu) \
+	$(call gb_XcuFilterOthersTarget_get_target,fcfg_chart_others.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_chart_types.xcu) \
+	$(call gb_XcuFilterInternalTarget_get_target,fcfg_internalgraphics_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_internalgraphics_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-chart.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-start.xcu \
 	$(postprocess_MOD)/org/openoffice/TypeDetection/UISort-calc.xcu \
@@ -279,26 +279,26 @@ postprocess_FILES_main := \
 	$(postprocess_MOD)/org/openoffice/TypeDetection/UISort-writer.xcu
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 postprocess_FILES_main += \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-dbase.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/dbase)/org/openoffice/Office/DataAccess/Drivers-dbase.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/flat)/org/openoffice/Office/DataAccess/Drivers-flat.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/mysql)/org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
 postprocess_DRIVERS += dbase flat mysql odbc
 ifeq (WNT,$(OS))
 ifeq ($(WITH_MOZAB4WIN),YES)
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
+postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/mozab)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
 postprocess_DRIVERS += mozab
 endif
 else ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
+postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/mork)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
 postprocess_DRIVERS += mork
 endif
 endif
 endif
 ifeq (MACOSX,$(OS))
 postprocess_FILES_main += \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-macab.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/macab)/org/openoffice/Office/DataAccess/Drivers-macab.xcu \
 	$(postprocess_MOD)/org/openoffice/Inet-macosx.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-macosx.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Common-macosx.xcu \
@@ -320,7 +320,7 @@ postprocess_FILES_main += \
 		# VCL-unixdesktop.xcu must come after VCL.xcu
 else ifeq (WNT,$(OS))
 postprocess_FILES_main += \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-ado.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/ado)/org/openoffice/Office/DataAccess/Drivers-ado.xcu \
 	$(postprocess_MOD)/org/openoffice/Inet-wnt.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Common-wnt.xcu \
@@ -333,26 +333,26 @@ ifeq ($(DISABLE_NEON),$(false))
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-neon.xcu
 endif
 ifeq ($(ENABLE_EVOAB2),TRUE)
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu
+postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/evoab2)/org/openoffice/Office/DataAccess/Drivers-evoab2.xcu
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
 postprocess_DRIVERS += evoab
 endif
 ifeq ($(ENABLE_JAVA),TRUE)
 postprocess_FILES_main += \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/hsqldb)/org/openoffice/Office/DataAccess/Drivers-hsqldb.xcu \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/jdbc)/org/openoffice/Office/DataAccess/Drivers-jdbc.xcu
 postprocess_DRIVERS += hsqldb jdbc
 endif
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 postprocess_FILES_main += \
-	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/firebird)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
 postprocess_DRIVERS += firebird_sdbc
 endif
 ifeq ($(ENABLE_TDEAB),TRUE)
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
+postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/tdeab)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 endif
 ifeq ($(ENABLE_KAB),TRUE)
-postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
+postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/kab)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
 postprocess_DRIVERS += kab
 endif
 
@@ -368,8 +368,8 @@ postprocess_FILES_math := \
 	$(postprocess_XCS)/Office/UI/MathWindowState.xcs \
 	$(postprocess_XCU)/Office/UI/MathCommands.xcu \
 	$(postprocess_XCU)/Office/UI/MathWindowState.xcu \
-	$(postprocess_MOD)/fcfg_math_filters.xcu \
-	$(postprocess_MOD)/fcfg_math_types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_math_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_math_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-math.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-math.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-math.xcu
@@ -413,25 +413,25 @@ postprocess_FILES_writer := \
 	$(postprocess_XCU)/Office/UI/WriterWebWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/WriterWindowState.xcu \
 	$(postprocess_XCU)/Office/UI/XFormsWindowState.xcu \
-	$(postprocess_MOD)/fcfg_global_filters.xcu \
-	$(postprocess_MOD)/fcfg_global_types.xcu \
-	$(postprocess_MOD)/fcfg_web_filters.xcu \
-	$(postprocess_MOD)/fcfg_web_types.xcu \
-	$(postprocess_MOD)/fcfg_writer_filters.xcu \
-	$(postprocess_MOD)/fcfg_writer_types.xcu \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_global_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_global_types.xcu) \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_web_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_web_types.xcu) \
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_writer_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_writer_types.xcu) \
 	$(postprocess_MOD)/org/openoffice/Office/Common-writer.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-writer.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-writer.xcu
 
 postprocess_DEPS_xsltfilter := main
 postprocess_FILES_xsltfilter := \
-	$(postprocess_MOD)/fcfg_xslt_filters.xcu \
-	$(postprocess_MOD)/fcfg_xslt_types.xcu
+	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_xslt_filters.xcu) \
+	$(call gb_XcuFilterTypesTarget_get_target,fcfg_xslt_types.xcu)
 
 ifeq ($(BUILD_POSTGRESQL_SDBC),YES)
 postprocess_XCDS += postgresqlsdbc.xcd
 postprocess_DEPS_postgresqlsdbc := main
-postprocess_FILES_postgresqlsdbc := $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
+postprocess_FILES_postgresqlsdbc := $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
 postprocess_DRIVERS += postgresql
 endif
 

@@ -41,7 +41,6 @@ gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Configuration_registry = $(OUTDIR)/xml/registry
 gb_XcsTarget_get_outdir_target = \
     $(gb_Configuration_registry)/schema$(if $(1),/)$(1)
-gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 
 gb_Executable_get_target = $(gb_Executable__get_linktarget_target)
 
@@ -219,6 +218,10 @@ gb_LexTarget_get_target = $(WORKDIR)/LexTarget/$(1).done
 gb_XcdTarget_get_target = $(WORKDIR)/XcdTarget/$(1)
 gb_XcsTarget_get_target = $(WORKDIR)/XcsTarget/$(1)
 gb_XcuDataTarget_get_target = $(WORKDIR)/XcuDataTarget/$(1)
+gb_XcuFilterFiltersTarget_get_target = $(WORKDIR)/XcuFilterFiltersTarget/$(1)
+gb_XcuFilterInternalTarget_get_target = $(WORKDIR)/XcuFilterInternalTarget/$(1)
+gb_XcuFilterOthersTarget_get_target = $(WORKDIR)/XcuFilterOthersTarget/$(1)
+gb_XcuFilterTypesTarget_get_target = $(WORKDIR)/XcuFilterTypesTarget/$(1)
 gb_XcuLangpackTarget_get_target = $(WORKDIR)/XcuLangpackTarget/$(1)
 gb_XcuModuleTarget_get_target = $(WORKDIR)/XcuModuleTarget/$(1)
 gb_XcuMergeTarget_get_target = $(WORKDIR)/XcuMergeTarget/$(1)
