@@ -104,9 +104,8 @@ extern void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
-static void
-lcl_SendChartEvent(::cppu::OWeakObject & rSource,
-        ::cppu::OInterfaceContainerHelper & rListeners)
+static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
+                               ::cppu::OInterfaceContainerHelper & rListeners)
 {
     //TODO: find appropriate settings of the Event
     chart::ChartDataChangeEvent event;
@@ -120,9 +119,8 @@ lcl_SendChartEvent(::cppu::OWeakObject & rSource,
             & chart::XChartDataChangeEventListener::chartDataChanged, event);
 }
 
-static void
-lcl_SendChartEvent(::cppu::OWeakObject & rSource,
-        ::cppu::OMultiTypeInterfaceContainerHelper & rListeners)
+static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
+                               ::cppu::OMultiTypeInterfaceContainerHelper & rListeners)
 {
     ::cppu::OInterfaceContainerHelper *const pContainer(rListeners.getContainer(
             chart::XChartDataChangeEventListener::static_type()));
@@ -145,7 +143,9 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
     return bRet;
 }
 
-static void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue)
+static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
+                                   const SfxItemPropertySimpleEntry* pEntry,
+                                   const uno::Any& aValue)
     throw (lang::IllegalArgumentException)
 {
     // special treatment for "non-items"
@@ -347,8 +347,8 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
  * @param [IN,OUT] rRow (0-based)
  */
 //TODO: potential for throwing proper exceptions instead of having every caller to check for errors
-void sw_GetCellPosition( const String &rCellName,
-        sal_Int32 &rColumn, sal_Int32 &rRow)
+void sw_GetCellPosition(const String &rCellName,
+                        sal_Int32 &rColumn, sal_Int32 &rRow)
 {
     rColumn = rRow = -1;    // default return values indicating failure
     xub_StrLen nLen = rCellName.Len();
@@ -1959,7 +1959,7 @@ sal_Bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMe
     return aAnyMap.FillValue( nWhichId, nMemberId, rpAny );
 }
 
-void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
+void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 {
     SfxItemSet aSet(rDoc.GetAttrPool(),
         RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
@@ -2228,7 +2228,7 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
     return xRet;
 }
 
-uno::Reference< table::XCell >  SwXTextTable::getCellByName(const OUString& CellName) throw( uno::RuntimeException )
+uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& CellName) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCell >  xRet;
@@ -2271,7 +2271,7 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
     return uno::Sequence< OUString >();
 }
 
-uno::Reference< text::XTextTableCursor >  SwXTextTable::createCursorByCellName(const OUString& CellName)
+uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(const OUString& CellName)
     throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
