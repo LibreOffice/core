@@ -201,6 +201,10 @@ protected:
                             ShapeIdMap* pShapeMap,
                             basegfx::B2DHomMatrix& aTransformation );
 
+    void                keepDiagramInteropProperties();
+
+    void                renderDiagramToGraphic( ::oox::core::XmlFilterBase& rFilterBase );
+
     virtual OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rServiceName,

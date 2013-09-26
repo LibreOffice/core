@@ -37,7 +37,10 @@
 #include "oox/helper/propertyset.hxx"
 
 #include <tools/solar.h>        // for the F_PI180 define
+#include <tools/gen.hxx>
+#include <tools/mapunit.hxx>
 #include <editeng/unoprnms.hxx>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -46,14 +49,22 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <svl/outstrm.hxx>
+#include <unotools/streamwrap.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -328,6 +339,14 @@ void Shape::addChildren(
         (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), NULL, pShapeMap );
     }
+
+    if( meFrameType == FRAMETYPE_DIAGRAM )
+    {
+        keepDiagramInteropProperties();
+#if 0
+        renderDiagramToGraphic( rFilterBase );
+#endif
+    }
 }
 
 Reference< XShape > Shape::createAndInsert(
@@ -587,27 +606,6 @@ Reference< XShape > Shape::createAndInsert(
             }
         }
 
-        // ... but for the InteropGrabBag property
-        const OUString& aGrabBagPropName = OUString::createFromAscii(UNO_NAME_MISC_OBJ_INTEROPGRABBAG);
-        if( maDiagramDoms.hasElements() && xSetInfo.is() && xSetInfo->hasPropertyByName( aGrabBagPropName ) )
-        {
-            Sequence<PropertyValue> aGrabBag;
-            xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-
-            // we keep the previous items, if present
-            if (aGrabBag.hasElements())
-            {
-                sal_Int32 length = aGrabBag.getLength();
-                aGrabBag.realloc(length+maDiagramDoms.getLength());
-
-                for(sal_Int32 i = 0; i < maDiagramDoms.getLength(); ++i)
-                    aGrabBag[length+i] = maDiagramDoms[i];
-
-                xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
-            } else
-                xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
-        }
-
         if( bIsCustomShape )
         {
             if ( mbFlipH )
@@ -652,6 +650,143 @@ Reference< XShape > Shape::createAndInsert(
         finalizeXShape( rFilterBase, rxShapes );
 
     return mxShape;
+}
+
+void Shape::keepDiagramInteropProperties()
+{
+    try
+    {
+        if( !maDiagramDoms.hasElements() )
+            return;
+
+        Reference < XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
+        if ( !xSet.is() )
+            return;
+
+        Reference < XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
+        if ( !xSetInfo.is() )
+            return;
+
+        const OUString& aGrabBagPropName = OUString( UNO_NAME_MISC_OBJ_INTEROPGRABBAG );
+        if( !xSetInfo->hasPropertyByName( aGrabBagPropName ) )
+            return;
+
+        Sequence < PropertyValue > aGrabBag;
+        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+
+        // we keep the previous items, if present
+        if ( aGrabBag.hasElements() )
+        {
+            sal_Int32 length = aGrabBag.getLength();
+            aGrabBag.realloc( length+maDiagramDoms.getLength() );
+
+            for( sal_Int32 i = 0; i < maDiagramDoms.getLength(); ++i )
+                aGrabBag[length+i] = maDiagramDoms[i];
+
+            xSet->setPropertyValue( aGrabBagPropName, Any( aGrabBag ) );
+        } else
+            xSet->setPropertyValue( aGrabBagPropName, Any( maDiagramDoms ) );
+    }
+    catch( const Exception& e )
+    {
+        SAL_WARN("oox.drawingml", OSL_THIS_FUNC << "Exception: " << e.Message);
+    }
+}
+
+void Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
+{
+    try
+    {
+        if( !maDiagramDoms.hasElements() )
+            return;
+
+        // Stream in which to place the rendered shape
+        SvMemoryStream mpTempStream;
+        Reference < io::XStream > xStream( new utl::OStreamWrapper( mpTempStream ) );
+        Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
+
+        // Rendering format
+        OUString sFormat( "PNG" );
+
+        // Size of the rendering
+        awt::Size aActualSize = mxShape->getSize();
+        Size aResolution( Application::GetDefaultDevice()->LogicToPixel( Size( 100, 100 ), MAP_CM ) );
+        double fPixelsPer100thmm = static_cast < double > ( aResolution.Width() ) / 100000.0;
+        awt::Size aSize = awt::Size( static_cast < sal_Int32 > ( ( fPixelsPer100thmm * aActualSize.Width ) + 0.5 ),
+                                     static_cast < sal_Int32 > ( ( fPixelsPer100thmm * aActualSize.Height ) + 0.5 ) );
+
+        Sequence< PropertyValue > aFilterData( 7 );
+        aFilterData[ 0 ].Name = OUString( "Compression" );
+        aFilterData[ 0 ].Value <<= static_cast < sal_Int32 > ( 9 );
+        aFilterData[ 1 ].Name = OUString( "Interlaced" );
+        aFilterData[ 1 ].Value <<= static_cast < sal_Int32 > ( 1 );
+        aFilterData[ 2 ].Name = OUString( "Translucent" );
+        aFilterData[ 2 ].Value <<= static_cast < sal_Int32 > ( 1 );
+        aFilterData[ 3 ].Name = OUString( "PixelWidth" );
+        aFilterData[ 3 ].Value <<= aSize.Width;
+        aFilterData[ 4 ].Name = OUString( "PixelHeight" );
+        aFilterData[ 4 ].Value <<= aSize.Height;
+        aFilterData[ 5 ].Name = OUString( "LogicalWidth" );
+        aFilterData[ 5 ].Value <<= aActualSize.Width;
+        aFilterData[ 6 ].Name = OUString( "LogicalHeight" );
+        aFilterData[ 6 ].Value <<= aActualSize.Height;
+
+        Sequence < PropertyValue > aDescriptor( 3 );
+        aDescriptor[ 0 ].Name = OUString( "OutputStream" );
+        aDescriptor[ 0 ].Value <<= xOutputStream;
+        aDescriptor[ 1 ].Name = OUString( "FilterName" );
+        aDescriptor[ 1 ].Value <<= sFormat;
+        aDescriptor[ 2 ].Name = OUString( "FilterData" );
+        aDescriptor[ 2 ].Value <<= aFilterData;
+
+        Reference< lang::XComponent > xSourceDoc( mxShape, UNO_QUERY_THROW );
+        if ( !xSourceDoc.is() )
+            return;
+
+        Reference < XGraphicExportFilter > xGraphicExporter = GraphicExportFilter::create( rFilterBase.getComponentContext() );
+
+        xGraphicExporter->setSourceDocument( xSourceDoc );
+        xGraphicExporter->filter( aDescriptor );
+
+        mpTempStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+        Graphic aGraphic;
+        GraphicFilter aFilter( sal_False );
+        if ( !aFilter.ImportGraphic( aGraphic, "", mpTempStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, static_cast < Sequence < PropertyValue >* > ( NULL ), NULL ) == GRFILTER_OK )
+        {
+            SAL_WARN("oox.drawingml", OSL_THIS_FUNC << "Unable to import rendered stream into graphic object");
+            return;
+        }
+
+        Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
+        Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
+        Reference < XShape > axGraphicShape( xServiceFact->createInstance( OUString( "com.sun.star.drawing.GraphicObjectShape" ) ), UNO_QUERY_THROW );
+        Reference< XPropertySet > xPropSet( axGraphicShape, UNO_QUERY_THROW );
+        xPropSet->setPropertyValue( OUString( "Graphic" ), Any( xGraphic ) );
+        xPropSet->setPropertyValue( OUString( "MoveProtect" ), Any( sal_True ) );
+        xPropSet->setPropertyValue( OUString( "SizeProtect" ), Any( sal_True ) );
+
+        // Replace existing shapes with the new Graphic Object
+        Reference < XShapes > xShapes( mxShape, UNO_QUERY_THROW );
+        if ( !xShapes.is() )
+            return;
+
+        while ( xShapes->hasElements() )
+        {
+            Reference < XShape > axShape( xShapes->getByIndex( 0 ), UNO_QUERY_THROW );
+            xShapes->remove( axShape );
+        }
+        xShapes->add( axGraphicShape );
+
+        // We don't want to allow modifying the GroupShape
+        xPropSet = Reference < XPropertySet > ( mxShape,  UNO_QUERY_THROW );
+        xPropSet->setPropertyValue( OUString( "MoveProtect" ), Any( sal_True ) );
+        xPropSet->setPropertyValue( OUString( "SizeProtect" ), Any( sal_True ) );
+    }
+    catch( uno::Exception& e )
+    {
+        SAL_WARN("oox.drawingml", OSL_THIS_FUNC << "Exception: " << e.Message);
+    }
 }
 
 void Shape::setTextBody(const TextBodyPtr & pTextBody)
