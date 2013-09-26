@@ -2,6 +2,7 @@
 <resources>
 
     <color name="background_action_bar">#e46f1f</color>
+    <color name="background_action_bar_tab_indicator">#e6821c</color>
     <color name="background_action_bar_divider">#55ffffff</color>
     <color name="background_header">@color/background_action_bar</color>
     <color name="background_slide_index">#7f000000</color>

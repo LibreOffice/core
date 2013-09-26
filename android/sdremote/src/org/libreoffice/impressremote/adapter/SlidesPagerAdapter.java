@@ -29,7 +29,7 @@ public class SlidesPagerAdapter extends PagerAdapter {
 
     public SlidesPagerAdapter(Context aContext, SlideShow aSlideShow, View.OnClickListener aSlideClickListener) {
         mLayoutInflater = LayoutInflater.from(aContext);
-        mImageLoader = new ImageLoader(aContext.getResources(), R.drawable.slide_unknown);
+        mImageLoader = new ImageLoader(aContext.getResources(), R.drawable.bg_slide_unknown);
 
         mSlideShow = aSlideShow;
 
@@ -76,7 +76,7 @@ public class SlidesPagerAdapter extends PagerAdapter {
     }
 
     private void setUpUnknownSlidePreview(ImageView aSlideView) {
-        aSlideView.setImageResource(R.drawable.slide_unknown);
+        aSlideView.setImageResource(R.drawable.bg_slide_unknown);
     }
 
     @Override

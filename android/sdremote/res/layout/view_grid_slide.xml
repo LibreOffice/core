@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/image_slide_preview"
         android:adjustViewBounds="true"
-        android:background="@drawable/background_grid_slide"
+        android:background="@drawable/bg_grid_slide"
         android:contentDescription="@string/description_grid_slide"
         android:layout_alignParentTop="true"
         android:layout_width="wrap_content"

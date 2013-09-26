@@ -28,7 +28,7 @@ public class SlidesGridAdapter extends BaseAdapter {
 
     public SlidesGridAdapter(Context aContext, SlideShow aSlideShow) {
         mLayoutInflater = LayoutInflater.from(aContext);
-        mImageLoader = new ImageLoader(aContext.getResources(), R.drawable.slide_unknown);
+        mImageLoader = new ImageLoader(aContext.getResources(), R.drawable.bg_slide_unknown);
 
         mSlideShow = aSlideShow;
     }
@@ -105,7 +105,7 @@ public class SlidesGridAdapter extends BaseAdapter {
     }
 
     private void setUpUnknownSlidePreview(ViewHolder aSlideViewHolder) {
-        aSlideViewHolder.mSlidePreview.setImageResource(R.drawable.slide_unknown);
+        aSlideViewHolder.mSlidePreview.setImageResource(R.drawable.bg_slide_unknown);
     }
 
     private String buildSlideIndex(int aPosition) {
