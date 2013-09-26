@@ -752,9 +752,6 @@ void sw_setValue( SwXCell &rCell, double nVal )
     }
 }
 
-/******************************************************************
- * SwXCell
- ******************************************************************/
 TYPEINIT1(SwXCell, SwClient);
 
 SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, size_t const nPos) :
@@ -1291,9 +1288,6 @@ uno::Sequence< OUString > SwXCell::getSupportedServiceNames(void) throw( uno::Ru
     return aRet;
 }
 
-/******************************************************************
- * SwXTextTableRow
- ******************************************************************/
 OUString SwXTextTableRow::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXTextTableRow");
@@ -1478,9 +1472,8 @@ SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine* pLine)
     return pRet;
 }
 
-/******************************************************************
- * SwXTextTableCursor
- ******************************************************************/
+// SwXTextTableCursor
+
 OUString SwXTextTableCursor::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXTextTableCursor");
@@ -1901,9 +1894,7 @@ void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
     ClientModify(this, pOld, pNew);
 }
 
-/******************************************************************
- * SwXTextTable
- ******************************************************************/
+// SwXTextTable
 
 class SwXTextTable::Impl
 {
@@ -1915,6 +1906,8 @@ public:
 
     Impl() : m_Listeners(m_Mutex) { }
 };
+
+// SwTableProperties_Impl
 
 class SwTableProperties_Impl
 {
@@ -4641,9 +4634,8 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
 }
 
-/******************************************************************
- *  SwXTableRows
- ******************************************************************/
+//  SwXTableRows
+
 OUString SwXTableRows::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXTableRows");
@@ -4857,9 +4849,8 @@ void SwXTableRows::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
 }
 
-/******************************************************************
- * SwXTableColumns
- ******************************************************************/
+// SwXTableColumns
+
 OUString SwXTableColumns::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXTableColumns");

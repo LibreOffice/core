@@ -47,9 +47,6 @@ void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 {
 }
 
-/*************************************************************************
- *                 virtual SwFlyPortion::Format()
- *************************************************************************/
 sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 {
     OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format" );
@@ -95,9 +92,6 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     return sal_False;
 }
 
-/*************************************************************************
- *                 virtual SwFlyCntPortion::Format()
- *************************************************************************/
 sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = rInf.Width() < rInf.X() + PrtWidth();
@@ -184,9 +178,6 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
     }
 }
 
-/*************************************************************************
- *                SwTxtFrm::CalcFlyPos()
- *************************************************************************/
 xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
 {
     SwpHints* pHints = GetTxtNode()->GetpSwpHints();
@@ -210,9 +201,6 @@ xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
     return *pFound->GetStart();
 }
 
-/*************************************************************************
- *                 virtual SwFlyCntPortion::Paint()
- *************************************************************************/
 void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( bDraw )
@@ -395,10 +383,6 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
     }
 }
 
-/*************************************************************************
- *              virtual SwFlyCntPortion::GetFlyCrsrOfst()
- *************************************************************************/
-
 xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
     const Point &rPoint, SwPosition *pPos, SwCrsrMoveState* pCMS ) const
 {
@@ -412,10 +396,6 @@ xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
     else
         return 0;
 }
-
-/*************************************************************************
- *              virtual SwFlyCntPortion::GetCrsrOfst()
- *************************************************************************/
 
 xub_StrLen SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
