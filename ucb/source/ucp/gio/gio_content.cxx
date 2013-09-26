@@ -363,7 +363,10 @@ GFileInfo* Content::getGFileInfo(const uno::Reference< ucb::XCommandEnvironment 
     if (ppError != 0) {
         *ppError = err;
     } else if (err != 0) {
-        SAL_WARN("ucb.ucp.gio", "ignoring GError \"" << err->message << "\"");
+        SAL_WARN(
+            "ucb.ucp.gio",
+            "ignoring GError \"" << err->message << "\" for <"
+                << m_xIdentifier->getContentIdentifier() << ">");
         g_error_free(err);
     }
     return mpInfo;
