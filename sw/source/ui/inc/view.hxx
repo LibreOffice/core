@@ -57,7 +57,6 @@ class SdrView;
 class Dialog;
 class SdrObject;
 class SdrPageView;
-class SwNaviImageButton;
 class SwHlpImageButton;
 class SwView;
 class SwEditWin;
@@ -214,7 +213,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwHlpImageButton    *m_pPageUpBtn,
                         *m_pPageDownBtn;
 
-    SwNaviImageButton   *m_pNaviBtn;
     SwGlossaryHdl       *m_pGlosHdl;          // handle text block
     SwDrawBase          *m_pDrawActual;
 

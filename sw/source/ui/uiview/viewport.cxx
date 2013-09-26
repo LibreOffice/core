@@ -828,7 +828,6 @@ void ViewResizePixel( const Window &rRef,
                     SwScrollbar& rHScrollbar,
                     ImageButton* pPageUpBtn,
                     ImageButton* pPageDownBtn,
-                    ImageButton* pNaviBtn,
                     Window& rScrollBarBox,
                     SvxRuler* pVRuler,
                     SvxRuler* pHRuler,
@@ -914,8 +913,7 @@ void ViewResizePixel( const Window &rRef,
 
         // If the space for scrollbar and page buttons gets too small,
         // the buttons will be hidden.
-        sal_uInt16 nCnt = pNaviBtn ? 3 : 2;
-        long nSubSize = (aImgSz.Width() * nCnt );
+        long nSubSize = (aImgSz.Width() * 2 );
         //
         sal_Bool bHidePageButtons = aSize.Height() < ((bWebView ? 3 : 2) * nSubSize);
         if(!bHidePageButtons)
@@ -929,11 +927,6 @@ void ViewResizePixel( const Window &rRef,
 
         aPos.Y() += aSize.Height();
         pPageUpBtn->SetPosSizePixel( aPos, aImgSz );
-        if(pNaviBtn)
-        {
-            aPos.Y() += aImgSz.Height();
-            pNaviBtn->SetPosSizePixel(aPos, aImgSz);
-        }
 
         aPos.Y() += aImgSz.Height();
         pPageDownBtn->SetPosSizePixel( aPos, aImgSz );
@@ -993,7 +986,6 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
         Size aEditSz( GetEditWin().GetOutputSizePixel() );
         ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, sal_True, *m_pVScrollbar,
                             *m_pHScrollbar, m_pPageUpBtn, m_pPageDownBtn,
-                            m_pNaviBtn,
                             *m_pScrollFill, m_pVRuler, m_pHRuler,
                             0 != PTR_CAST(SwWebView, this),
                             m_pWrtShell->GetViewOptions()->IsVRulerRight());
@@ -1092,7 +1084,6 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         const Size aEditSz( GetEditWin().GetOutputSizePixel() );
         ViewResizePixel( GetEditWin(), rOfst, rSize, aEditSz, sal_False, *m_pVScrollbar,
                                 *m_pHScrollbar, m_pPageUpBtn, m_pPageDownBtn,
-                                m_pNaviBtn,
                                 *m_pScrollFill, m_pVRuler, m_pHRuler,
                                 0 != PTR_CAST(SwWebView, this),
                                 m_pWrtShell->GetViewOptions()->IsVRulerRight() );
@@ -1151,8 +1142,6 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             m_pPageUpBtn->Show(bShowButtons);
             if(m_pPageDownBtn)
                 m_pPageDownBtn->Show(bShowButtons);
-            if(m_pNaviBtn)
-                m_pNaviBtn->Show(bShowButtons);
         }
     }
 
@@ -1208,8 +1197,6 @@ sal_Bool SwView::UpdateScrollbars()
                 m_pPageUpBtn->Show(bShowButtons);
                 if(m_pPageDownBtn)
                     m_pPageDownBtn->Show(bShowButtons);
-                if(m_pNaviBtn)
-                    m_pNaviBtn->Show(bShowButtons);
             }
 
             if ( bVScrollVisible != m_pVScrollbar->IsVisible(sal_True) )

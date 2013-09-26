@@ -172,31 +172,6 @@ public:
 };
 
 //----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
-class SwNaviImageButton : public ImageButton
-{
-        SwScrollNaviPopup*  pPopup;
-        Image               aImage;
-        OUString            sQuickText;
-        SfxPopupWindow*     pPopupWindow;
-        SfxPopupWindow*     pFloatingWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-
-    protected:
-        DECL_LINK( PopupModeEndHdl, void * );
-        DECL_LINK( ClosePopupWindow, SfxPopupWindow * );
-
-        virtual void    Click();
-        virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-        void            SetPopupWindow( SfxPopupWindow* pWindow );
-
-    public:
-        SwNaviImageButton(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-};
-
-//----------------------------------------------------------------------------
 //  ImageButtons have to set the HelpText themselves if needed
 //----------------------------------------------------------------------------
 

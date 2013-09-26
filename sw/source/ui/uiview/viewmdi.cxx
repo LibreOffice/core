@@ -332,8 +332,6 @@ void SwView::CreatePageButtons(sal_Bool bShow)
     m_pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), sal_False );
     m_pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
     Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
-    m_pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
-    m_pNaviBtn->SetHelpId(HID_SCRL_NAVI);
     Link aLk( LINK( this, SwView, BtnPage ) );
     m_pPageUpBtn->SetClickHdl( aLk );
     m_pPageDownBtn->SetClickHdl( aLk );
@@ -347,7 +345,6 @@ void SwView::CreatePageButtons(sal_Bool bShow)
     {
         m_pPageUpBtn->Show();
         m_pPageDownBtn->Show();
-        m_pNaviBtn->Show();
     }
 };
 
@@ -651,7 +648,6 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
     m_pVScrollbar->ExtendedShow(bShow);
     m_pPageUpBtn->Show(bShow);
     m_pPageDownBtn->Show(bShow);
-    m_pNaviBtn->Show(bShow);
 }
 
 sal_Bool SwView::IsVScrollbarVisible()const

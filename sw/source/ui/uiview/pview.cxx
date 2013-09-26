@@ -1332,10 +1332,8 @@ void  SwPagePreView::InnerResizePixel( const Point &rOfst, const Size &rSize )
     Rectangle aRect( rOfst, rSize );
     aRect += aBorder;
     ViewResizePixel( aViewWin, aRect.TopLeft(), aRect.GetSize(),
-                    aViewWin.GetOutputSizePixel(),
-                    sal_True,
-                    *pVScrollbar, *pHScrollbar, pPageUpBtn, pPageDownBtn, 0,
-                    *pScrollFill );
+                    aViewWin.GetOutputSizePixel(), sal_True,
+                    *pVScrollbar, *pHScrollbar, pPageUpBtn, pPageDownBtn, *pScrollFill );
 
     // Never set EditWin !
     // Never set VisArea !
@@ -1364,7 +1362,7 @@ void SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     CalcAndSetBorderPixel( aBorderNew, sal_False );
     ViewResizePixel( aViewWin, rOfst, rSize, aViewWin.GetOutputSizePixel(),
                         sal_False, *pVScrollbar,
-                        *pHScrollbar, pPageUpBtn, pPageDownBtn, 0, *pScrollFill );
+                        *pHScrollbar, pPageUpBtn, pPageDownBtn, *pScrollFill );
 }
 
 void SwPagePreView::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollbar )
