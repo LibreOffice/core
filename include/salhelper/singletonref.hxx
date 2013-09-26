@@ -85,7 +85,7 @@ class SingletonRef
         /** @short  standard ctor.
 
                     The internal wrapped object is created only,
-                    if its ref count was 0. Otherwhise this method
+                    if its ref count was 0. Otherwise this method
                     does nothing ... except increasing of the internal
                     ref count!
          */
@@ -95,7 +95,7 @@ class SingletonRef
             ::osl::MutexGuard aLock(SingletonRef::ownStaticLock());
 
             // must be increased before(!) the check is done.
-            // Otherwhise this check can fail inside the same thread ...
+            // Otherwise this check can fail inside the same thread ...
             ++m_nRef;
             if (m_nRef == 1)
                 m_pInstance = new SingletonClass();
@@ -109,7 +109,7 @@ class SingletonRef
         /** @short  standard dtor.
 
                     The internal wrapped object is removed only,
-                    if its ref count wil be 0. Otherwhise this method
+                    if its ref count wil be 0. Otherwise this method
                     does nothing ... except decreasing of the internal
                     ref count!
          */
@@ -119,7 +119,7 @@ class SingletonRef
             ::osl::MutexGuard aLock(SingletonRef::ownStaticLock());
 
             // must be decreased before(!) the check is done.
-            // Otherwhise this check can fail inside the same thread ...
+            // Otherwise this check can fail inside the same thread ...
             --m_nRef;
             if (m_nRef == 0)
             {

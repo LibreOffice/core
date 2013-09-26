@@ -471,7 +471,7 @@ class Desktop   :   // base classes
           *
           * So we uses a trick: A special listener (exactly these one here) listen for notifyTermination()
           * and shutdown the process asynchronous. But desktop has to make this special
-          * notification as realy last one ... Otherwhise it can happen that asynchronous
+          * notification as realy last one ... Otherwise it can happen that asynchronous
           * shutdown will be faster then all other code around Desktop.terminate() .-))
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;

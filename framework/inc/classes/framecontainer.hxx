@@ -20,7 +20,7 @@
 #ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
 #define __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
 
-/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
 */
 #include <vector>

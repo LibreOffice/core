@@ -182,7 +182,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
         /** @short  a callback for asynchronous started operations.
 
             @descr  As already mentione, we make internaly all operations
-                    asynchronous. Otherwhise our callis kill its own environment
+                    asynchronous. Otherwise our callis kill its own environment
                     during they call us ...
         */
         DECL_LINK( impl_asyncCallback, void* );
@@ -220,7 +220,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
                     inside this frame. Such views must be cleared
                     before (e.g. by calling implts_closeView()!
 
-                    Otherwhise e.g. the XController->suspend()
+                    Otherwise e.g. the XController->suspend()
                     call isnt made and no UI warn the user about
                     loosing document changes. Because the
                     frame is closed ....

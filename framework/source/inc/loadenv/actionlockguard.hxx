@@ -33,7 +33,7 @@ namespace framework{
             <type scope="com::sun::star::document">XActionLockable</type>.
 
     @descr  This guard should be used to be shure, that any lock will be
-            released. Otherwhise the locaked document can hinder the office on shutdown!
+            released. Otherwise the locaked document can hinder the office on shutdown!
 */
 class ActionLockGuard : private ThreadHelpBase
 {

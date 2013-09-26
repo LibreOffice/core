@@ -20,7 +20,7 @@
 #ifndef __FRAMEWORK_CLASSES_FILTERCACHEDATA_HXX_
 #define __FRAMEWORK_CLASSES_FILTERCACHEDATA_HXX_
 
-/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
 */
 #include <boost/unordered_map.hpp>

@@ -148,7 +148,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
             @descr  It must be called as first method after creation.
                     And further it can be called more then once ...
                     but at least its should be used one times only.
-                    Otherwhise nobody can say, which asynchronous
+                    Otherwise nobody can say, which asynchronous
                     executions will be used inside the old and which one
                     will be used inside the new environment.
 

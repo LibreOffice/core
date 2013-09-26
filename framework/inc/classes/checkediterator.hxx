@@ -151,7 +151,7 @@ class CheckedIterator
         /*-****************************************************************************************************//**
             @short      reset this iterator
             @descr      It must be called on an already initialized iterator.
-                        Means the member m_pContainer must be valid. Otherwhise the reaction
+                        Means the member m_pContainer must be valid. Otherwise the reaction
                         isn't defined.
 
             @param      -

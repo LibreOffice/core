@@ -768,7 +768,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
                     before the file is saved. And the old URL is removed
                     only if removing oft he old file was successfully.
                     If this method returns without an exception - everything
-                    was OK. Otherwhise the info struct can be analyzed to
+                    was OK. Otherwise the info struct can be analyzed to
                     get more information, e.g. when the problem occures.
 
             @param  sBackupPath

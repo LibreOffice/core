@@ -123,7 +123,7 @@ private:
                 or a non visible content was loaded!
                 It can be the same frame as m_xBaseFrame it describe, in case
                 the target "_self", "" or the search flag "SELF" was used.
-                Otherwhise its the new created or recycled frame, which was
+                Otherwise its the new created or recycled frame, which was
                 used for loading and contains further the new component.
 
                 Please use method getTarget() or getTargetComponent()
@@ -411,7 +411,7 @@ private:
         @attention  Not all types we know, are supported by filters. So it does not
                     indicates an error, if no suitable filter(loader etcpp will be found
                     for a type. But a type must be detected for the specified content.
-                    Otherwhise its an error and loading cant be finished successfully.
+                    Otherwise its an error and loading cant be finished successfully.
 
         @throw  A LoadEnvException if detection failed.
 
@@ -505,7 +505,7 @@ private:
 
         @descr  Because this special feature is bound to the target specifier "_default"
                 its checked inside first. If its not set => this method return an empty
-                reference. Otherwhise any currently existing frame will be analyzed, if
+                reference. Otherwise any currently existing frame will be analyzed, if
                 it can be used here. The following rules exists:
 
                 <ul>

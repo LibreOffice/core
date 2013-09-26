@@ -21,7 +21,7 @@
 #define __FRAMEWORK_UICONFIGURATION_UICONFIGMANAGER_HXX_
 
 
-/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
                with solaris headers ...
 */
 #include <vector>

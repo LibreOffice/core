@@ -53,7 +53,7 @@ class VCLStatusIndicator : private ThreadHelpBase, // must be the first real bas
         /** shows the progress.
 
             @attention  This member isnt synchronized using our own mutex!
-                        Its guarded by the solarmutex only. Otherwhise
+                        Its guarded by the solarmutex only. Otherwise
                         we have to lock two of them, which can force a deadlock ...
             */
         StatusBar* m_pStatusBar;
