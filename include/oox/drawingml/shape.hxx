@@ -201,6 +201,11 @@ protected:
                             ShapeIdMap* pShapeMap,
                             basegfx::B2DHomMatrix& aTransformation );
 
+    void                keepDiagramCompatibilityInfo( ::oox::core::XmlFilterBase& rFilterBase );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        renderDiagramToGraphic( ::oox::core::XmlFilterBase& rFilterBase );
+
     virtual OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rServiceName,
