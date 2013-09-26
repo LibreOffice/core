@@ -124,7 +124,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
 sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                            const HelpEvent& rEvt )
 {
-    sal_Bool bWeiter = sal_True;
+    sal_Bool bContinue = sal_True;
 
     if( rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
     {
@@ -198,15 +198,15 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sTxt );
                 }
-                bWeiter = sal_False;
+                bContinue = sal_False;
             }
         }
     }
 
-    if( bWeiter )
-        bWeiter = !FmFormPage::RequestHelp( pWindow, pView, rEvt );
+    if( bContinue )
+        bContinue = !FmFormPage::RequestHelp( pWindow, pView, rEvt );
 
-    return bWeiter;
+    return bContinue;
 }
 
 Reference< XInterface > SwDPage::createUnoPage()

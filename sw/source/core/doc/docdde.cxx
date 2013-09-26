@@ -296,7 +296,7 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     // but also frames (text!), tables, outlines:
     if( STRING_NOTFOUND != nPos )
     {
-        bool bWeiter = false;
+        bool bContinue = false;
         String sName( sItem.Copy( 0, nPos ) );
         OUString sCmp( sItem.Copy( nPos + 1 ));
         sItem = rCC.lowercase( sItem );
@@ -334,7 +334,7 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         else if( sCmp == "region" )
         {
             sItem = sName;              // Is being dealt with further down!
-            bWeiter = true;
+            bContinue = true;
         }
         else if( sCmp == "outline" )
         {
@@ -367,7 +367,7 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             }
         }
 
-        if( !bWeiter )
+        if( !bContinue )
             return false;
     }
 

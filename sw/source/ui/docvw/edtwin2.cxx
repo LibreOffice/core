@@ -102,7 +102,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
     if(bQuickBalloon && !rSh.GetViewOptions()->IsShowContentTips())
         return;
-    bool bWeiter = true;
+    bool bContinue = true;
     SET_CURR_SHELL(&rSh);
     OUString sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
@@ -116,11 +116,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         {
             SdrPageView* pPV = pSdrView->GetSdrPageView();
             SwDPage* pPage = pPV ? ((SwDPage*)pPV->GetPage()) : 0;
-            bWeiter = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
+            bContinue = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
         }
     }
 
-    if( bWeiter && bQuickBalloon)
+    if( bContinue && bQuickBalloon)
     {
         SwRect aFldRect;
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
@@ -375,9 +375,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
             }
 
-            bWeiter = false;
+            bContinue = false;
         }
-        if( bWeiter )
+        if( bContinue )
         {
             sal_uInt8 nTabCols = rSh.WhichMouseTabCol(aPos);
             sal_uInt16 nTabRes = 0;
@@ -414,11 +414,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 Rectangle aRect(rEvt.GetMousePosPixel(), aTxtSize);
                 Help::ShowQuickHelp(this, aRect, sTxt);
             }
-            bWeiter = false;
+            bContinue = false;
         }
     }
 
-    if( bWeiter && pSdrView && bQuickBalloon)
+    if( bContinue && pSdrView && bQuickBalloon)
     {
         SdrViewEvent aVEvt;
         SdrHitKind eHit = pSdrView->PickAnything(aPos, aVEvt);
@@ -433,10 +433,10 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 pObj = aVEvt.pObj;
                 sTxt = pField->GetURL();
 
-                bWeiter = false;
+                bContinue = false;
             }
         }
-        if (bWeiter && eHit == SDRHIT_TEXTEDIT)
+        if (bContinue && eHit == SDRHIT_TEXTEDIT)
         {
             // look for URL field in DrawText object that is opened for editing
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -458,7 +458,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 if (pField )
                 {
                     sTxt = ((const SvxURLField*) pField)->GetURL();
-                    bWeiter = false;
+                    bContinue = false;
                 }
             }
         }
@@ -478,7 +478,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
     }
 
-    if( bWeiter )
+    if( bContinue )
         Window::RequestHelp( rEvt );
 }
 

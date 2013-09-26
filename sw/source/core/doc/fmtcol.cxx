@@ -203,7 +203,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                                         this, pNewNumRuleItem );
     }
 
-    int bWeiter = sal_True;
+    int bContinue = sal_True;
 
     // Check against the own attributes
     if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, sal_False,
@@ -238,12 +238,12 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             if( bChg )
             {
                 SetFmtAttr( aNew );
-                bWeiter = 0 != pOldChgSet || bNewParent;
+                bContinue = 0 != pOldChgSet || bNewParent;
             }
             // We set it to absolute -> do not propagate it further, unless
             // we set it!
             else if( pNewChgSet )
-                bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
         }
     }
 
@@ -270,12 +270,12 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         if( bChg )
         {
             SetFmtAttr( aNew );
-            bWeiter = 0 != pOldChgSet || bNewParent;
+            bContinue = 0 != pOldChgSet || bNewParent;
         }
         // We set it to absolute -> do not propagate it further, unless
         // we set it!
         else if( pNewChgSet )
-            bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+            bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
 
     for( int nC = 0, nArrLen = sizeof(aFontSizeArr) / sizeof( aFontSizeArr[0]);
@@ -293,7 +293,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 // We set it to absolute -> do not propagate it further, unless
                 // we set it!
                 if( pNewChgSet )
-                    bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                    bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
             }
             else
             {
@@ -305,17 +305,17 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 if( nTmp != aNew.GetHeight() )
                 {
                     SetFmtAttr( aNew );
-                    bWeiter = 0 != pOldChgSet || bNewParent;
+                    bContinue = 0 != pOldChgSet || bNewParent;
                 }
                 // We set it to absolute -> do not propagate it further, unless
                 // we set it!
                 else if( pNewChgSet )
-                    bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+                    bContinue = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
             }
         }
     }
 
-    if( bWeiter )
+    if( bContinue )
         SwFmtColl::Modify( pOld, pNew );
 }
 
