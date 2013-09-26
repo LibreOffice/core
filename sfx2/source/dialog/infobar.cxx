@@ -251,6 +251,7 @@ void SfxInfoBarContainerWindow::appendInfoBar( const OUString& sId, const OUStri
     SfxInfoBarWindow* pInfoBar = new SfxInfoBarWindow( this, sId, sMessage, aButtons );
     pInfoBar->SetPosPixel( Point( 0, aSize.getHeight( ) ) );
     pInfoBar->Show( );
+    m_pInfoBars.push_back( pInfoBar );
 
     long nHeight = pInfoBar->GetSizePixel( ).getHeight( );
     aSize.setHeight( aSize.getHeight() + nHeight );
