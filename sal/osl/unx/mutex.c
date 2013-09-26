@@ -42,7 +42,7 @@ typedef struct _oslMutexImpl
 /*****************************************************************************/
 oslMutex SAL_CALL osl_createMutex()
 {
-    oslMutexImpl* pMutex = malloc(sizeof(oslMutexImpl));
+    oslMutexImpl* pMutex = (oslMutexImpl*) malloc(sizeof(oslMutexImpl));
     pthread_mutexattr_t aMutexAttr;
     int nRet=0;
 
