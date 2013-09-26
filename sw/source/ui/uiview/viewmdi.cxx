@@ -300,9 +300,6 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
 
     OSL_ENSURE( !*ppScrollbar, "check beforehand!" );
 
-    if( !bHori )
-        CreatePageButtons( !m_bShowAtResize );
-
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
     UpdateScrollbars();
     if(bHori)
@@ -322,43 +319,6 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
         (*ppScrollbar)->ExtendedShow();
 
     return 1;
-}
-
-void SwView::CreatePageButtons(sal_Bool bShow)
-{
-    Window *pMDI = &GetViewFrame()->GetWindow();
-    m_pPageUpBtn      = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), sal_True );
-    m_pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
-    m_pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), sal_False );
-    m_pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
-    Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
-    m_pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
-    m_pNaviBtn->SetHelpId(HID_SCRL_NAVI);
-    Link aLk( LINK( this, SwView, BtnPage ) );
-    m_pPageUpBtn->SetClickHdl( aLk );
-    m_pPageDownBtn->SetClickHdl( aLk );
-    if(m_nMoveType != NID_PGE)
-    {
-        Color aColor(VIEW_IMAGECOLOR);
-        SetImageButtonColor(aColor);
-    }
-
-    if(bShow)
-    {
-        m_pPageUpBtn->Show();
-        m_pPageDownBtn->Show();
-        m_pNaviBtn->Show();
-    }
-};
-
-// Button-Handler
-
-IMPL_LINK( SwView, BtnPage, Button *, pButton )
-{
-    // #i75416# move the execution of the search to an asynchronously called static link
-    bool* pbNext = new bool( (pButton == m_pPageDownBtn) );
-    Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
-    return 0;
 }
 
 IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
@@ -615,7 +575,6 @@ void SwView::SetMoveType(sal_uInt16 nSet)
         SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
         while( pView )
         {
-            pView->SetImageButtonColor(aColor);
             pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
         }
     }
@@ -624,15 +583,6 @@ void SwView::SetMoveType(sal_uInt16 nSet)
 void SwView::SetActMark(sal_Int32 nSet)
 {
     m_nActMark = nSet;
-}
-
-void SwView::SetImageButtonColor(Color& rColor)
-{
-    if(m_pPageUpBtn)
-    {
-        m_pPageUpBtn->SetControlForeground(rColor);
-        m_pPageDownBtn->SetControlForeground(rColor);
-    }
 }
 
 void SwView::ShowHScrollbar(sal_Bool bShow)
@@ -651,9 +601,6 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
 {
     OSL_ENSURE(m_pVScrollbar, "Scrollbar invalid");
     m_pVScrollbar->ExtendedShow(bShow);
-    m_pPageUpBtn->Show(bShow);
-    m_pPageDownBtn->Show(bShow);
-    m_pNaviBtn->Show(bShow);
 }
 
 sal_Bool SwView::IsVScrollbarVisible()const

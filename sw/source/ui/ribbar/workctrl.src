@@ -368,23 +368,6 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
 {
     Text [ en-US ] = "Next faulty table formula";
 };
-ImageButton BTN_NAVI
-{
-    HelpID = HID_NAVIGATION_IMGBTN ;
-    SVLOOK = TRUE ;
-    HIDE = TRUE ;
-    RectStyle = TRUE ;
-    SmallStyle = TRUE ;
-    Image IMG_BTN
-    {
-        ImageBitmap = Bitmap { File = "navigation.png" ; };
-        MaskColor = IMAGE_MASK_COLOR ;
-    };
-    String ST_QUICK
-    {
-        Text [ en-US ] = "Navigation" ;
-    };
-};
 ComboBox RID_PVIEW_ZOOM_LB
 {
     HelpId = HID_PVIEW_ZOOM_LB;

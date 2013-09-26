@@ -709,9 +709,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
                             GetViewFrame()->GetBindings(),
                             WB_VSCROLL |  WB_EXTRAFIELD | WB_BORDER )),
     m_pTogglePageBtn(0),
-    m_pPageUpBtn(0),
-    m_pPageDownBtn(0),
-    m_pNaviBtn(0),
     m_pGlosHdl(0),
     m_pDrawActual(0),
     m_pLastTableFormat(0),
@@ -1069,9 +1066,6 @@ SwView::~SwView()
     delete m_pHRuler;
     delete m_pVRuler;
     delete m_pTogglePageBtn;
-    delete m_pPageUpBtn;
-    delete m_pNaviBtn;
-    delete m_pPageDownBtn;
     delete m_pGlosHdl;
     delete m_pViewImpl;
     delete m_pEditWin;

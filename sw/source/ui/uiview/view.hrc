@@ -21,11 +21,6 @@
 
 #include "rcid.hrc"
 
-// BTN
-
-#define BTN_PAGEDOWN        (RC_VIEW_BEGIN)
-#define BTN_PAGEUP          (RC_VIEW_BEGIN + 1)
-
 // STR
 
 #define STR_NUM_LEVEL               (RC_VIEW_BEGIN + 3)
@@ -56,6 +51,7 @@
 #define STR_TEXTOPTIONS             (RC_VIEW_BEGIN + 33)
 
 #define STR_SAVEACOPY_SRC           (RC_VIEW_BEGIN + 34)
+
 // MSG
 
 #define MSG_ERR_INSERT_GLOS (RC_VIEW_BEGIN)
