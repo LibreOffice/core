@@ -53,42 +53,42 @@ protected:
 /// The dialog's content for a row, not yet parsed
 struct ScOptConditionRow
 {
-    String  aLeftStr;
+    OUString    aLeftStr;
     sal_uInt16  nOperator;
-    String  aRightStr;
+    OUString    aRightStr;
 
     ScOptConditionRow() : nOperator(0) {}
-    bool IsDefault() const { return aLeftStr.Len() == 0 && aRightStr.Len() == 0 && nOperator == 0; }
+    bool IsDefault() const { return aLeftStr.isEmpty() && aRightStr.isEmpty() && nOperator == 0; }
 };
 
 /// All settings from the dialog, saved with the DocShell for the next call
 class ScOptSolverSave
 {
-    String  maObjective;
+    OUString    maObjective;
     sal_Bool    mbMax;
     sal_Bool    mbMin;
     sal_Bool    mbValue;
-    String  maTarget;
-    String  maVariable;
+    OUString    maTarget;
+    OUString    maVariable;
     std::vector<ScOptConditionRow> maConditions;
-    String  maEngine;
+    OUString    maEngine;
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 
 public:
-            ScOptSolverSave( const String& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
-                             const String& rTarget, const String& rVariable,
+            ScOptSolverSave( const OUString& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
+                             const OUString& rTarget, const OUString& rVariable,
                              const std::vector<ScOptConditionRow>& rConditions,
-                             const String& rEngine,
+                             const OUString& rEngine,
                              const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
 
-    const String&   GetObjective() const    { return maObjective; }
-    sal_Bool            GetMax() const          { return mbMax; }
-    sal_Bool            GetMin() const          { return mbMin; }
-    sal_Bool            GetValue() const        { return mbValue; }
-    const String&   GetTarget() const       { return maTarget; }
-    const String&   GetVariable() const     { return maVariable; }
+    const OUString&   GetObjective() const    { return maObjective; }
+    sal_Bool          GetMax() const          { return mbMax; }
+    sal_Bool          GetMin() const          { return mbMin; }
+    sal_Bool          GetValue() const        { return mbValue; }
+    const OUString&   GetTarget() const       { return maTarget; }
+    const OUString&   GetVariable() const     { return maVariable; }
     const std::vector<ScOptConditionRow>& GetConditions() const { return maConditions; }
-    const String&   GetEngine() const       { return maEngine; }
+    const OUString&   GetEngine() const       { return maEngine; }
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& GetProperties() const
                                             { return maProperties; }
 };
@@ -157,8 +157,8 @@ private:
     PushButton*      m_pBtnCancel;
     PushButton*      m_pBtnSolve;
 
-    String          maInputError;
-    String          maConditionError;
+    OUString        maInputError;
+    OUString        maConditionError;
 
     ScDocShell*     mpDocShell;
     ScDocument*     mpDoc;
@@ -179,7 +179,7 @@ private:
 
     com::sun::star::uno::Sequence<OUString> maImplNames;
     com::sun::star::uno::Sequence<OUString> maDescriptions;
-    String          maEngine;
+    OUString        maEngine;
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 
     void    Init(const ScAddress& rCursorPos);
@@ -187,7 +187,7 @@ private:
     void    ReadConditions();
     void    ShowConditions();
     void    EnableButtons();
-    bool    ParseRef( ScRange& rRange, const String& rInput, bool bAllowRange );
+    bool    ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange );
     bool    FindTimeout( sal_Int32& rTimeout );
     void    ShowError( bool bCondition, formula::RefEdit* pFocus );
 
@@ -227,7 +227,7 @@ class ScSolverNoSolutionDialog : public ModalDialog
     OKButton        maBtnOk;
 
 public:
-    ScSolverNoSolutionDialog( Window* pParent, const String& rErrorText );
+    ScSolverNoSolutionDialog( Window* pParent, const OUString& rErrorText );
     ~ScSolverNoSolutionDialog();
 };
 
@@ -241,7 +241,7 @@ class ScSolverSuccessDialog : public ModalDialog
     CancelButton    maBtnCancel;
 
 public:
-    ScSolverSuccessDialog( Window* pParent, const String& rSolution );
+    ScSolverSuccessDialog( Window* pParent, const OUString& rSolution );
     ~ScSolverSuccessDialog();
 };
 

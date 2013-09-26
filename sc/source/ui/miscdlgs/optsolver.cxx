@@ -78,7 +78,7 @@ void ScSolverProgressDialog::SetTimeLimit( sal_Int32 nSeconds )
 
 //----------------------------------------------------------------------------
 
-ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( Window* pParent, const String& rErrorText )
+ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( Window* pParent, const OUString& rErrorText )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_NOSOLUTION ) ),
     maFtNoSolution  ( this, ScResId( FT_NOSOLUTION ) ),
     maFtErrorText   ( this, ScResId( FT_ERRORTEXT ) ),
@@ -95,7 +95,7 @@ ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
 
 //----------------------------------------------------------------------------
 
-ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const String& rSolution )
+ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const OUString& rSolution )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_SUCCESS ) ),
     maFtSuccess     ( this, ScResId( FT_SUCCESS ) ),
     maFtResult      ( this, ScResId( FT_RESULT ) ),
@@ -152,10 +152,10 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
 
 //----------------------------------------------------------------------------
 
-ScOptSolverSave::ScOptSolverSave( const String& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
-                             const String& rTarget, const String& rVariable,
+ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, sal_Bool bMax, sal_Bool bMin, sal_Bool bValue,
+                             const OUString& rTarget, const OUString& rVariable,
                              const std::vector<ScOptConditionRow>& rConditions,
-                             const String& rEngine,
+                             const OUString& rEngine,
                              const uno::Sequence<beans::PropertyValue>& rProperties ) :
     maObjective( rObjective ),
     mbMax( bMax ),
@@ -785,7 +785,7 @@ void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 
 //----------------------------------------------------------------------------
 
-bool ScOptSolverDlg::ParseRef( ScRange& rRange, const String& rInput, bool bAllowRange )
+bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange )
 {
     ScRangeUtil aRangeUtil;
     ScAddress::Details aDetails(mpDoc->GetAddressConvention(), 0, 0);
@@ -883,7 +883,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     for ( std::vector<ScOptConditionRow>::const_iterator aConstrIter = maConditions.begin();
           aConstrIter != maConditions.end(); ++aConstrIter )
     {
-        if ( aConstrIter->aLeftStr.Len() )
+        if ( !aConstrIter->aLeftStr.isEmpty() )
         {
             sheet::SolverConstraint aConstraint;
             // order of list box entries must match enum values

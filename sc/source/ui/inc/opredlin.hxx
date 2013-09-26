@@ -40,7 +40,7 @@ class ScRedlineOptionsTabPage : public SfxTabPage
     ColorListBox*       m_pRemoveColorLB;
     ColorListBox*       m_pInsertColorLB;
     ColorListBox*       m_pMoveColorLB;
-    String              aAuthorStr;
+    OUString            aAuthorStr;
     DECL_LINK(ColorHdl, void *);
 
 
