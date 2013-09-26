@@ -429,7 +429,7 @@ bool ScRetypePassInputDlg::IsRemovePassword() const
     return maBtnRemovePassword.IsChecked();
 }
 
-String ScRetypePassInputDlg::GetNewPassword() const
+OUString ScRetypePassInputDlg::GetNewPassword() const
 {
     return maPassword1Edit.GetText();
 }

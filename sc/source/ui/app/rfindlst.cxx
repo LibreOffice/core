@@ -29,7 +29,7 @@ static const ColorData aColNames[SC_RANGECOLORS] =
 
 //==================================================================
 
-ScRangeFindList::ScRangeFindList(const String& rName) :
+ScRangeFindList::ScRangeFindList(const OUString& rName) :
     aDocName( rName ),
     bHidden( false )
 {

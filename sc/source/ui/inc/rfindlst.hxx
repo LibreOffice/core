@@ -40,11 +40,11 @@ struct ScRangeFindData
 class ScRangeFindList
 {
     std::vector<ScRangeFindData> maEntries;
-    String      aDocName;
+    OUString    aDocName;
     bool        bHidden;
 
 public:
-            ScRangeFindList(const String& rName);
+            ScRangeFindList(const OUString& rName);
 
     sal_uLong   Count() const                       { return maEntries.size(); }
     void    Insert( const ScRangeFindData &rNew )       { maEntries.push_back(rNew); }
@@ -53,7 +53,7 @@ public:
 
     void    SetHidden( sal_Bool bSet )              { bHidden = bSet; }
 
-    const String&   GetDocName() const          { return aDocName; }
+    const OUString& GetDocName() const          { return aDocName; }
     bool            IsHidden() const            { return bHidden; }
 
     static ColorData GetColorName( size_t nIndex );

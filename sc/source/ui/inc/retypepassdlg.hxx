@@ -98,11 +98,11 @@ private:
 
     ScrollBar       maScrollBar;
 
-    String          maTextNotProtected;
-    String          maTextNotPassProtected;
-    String          maTextHashBad;
-    String          maTextHashGood;
-    String          maTextHashRegen;
+    OUString        maTextNotProtected;
+    OUString        maTextNotPassProtected;
+    OUString        maTextHashBad;
+    OUString        maTextHashGood;
+    OUString        maTextHashRegen;
 
     DECL_LINK( OKHdl, void* );
     DECL_LINK( RetypeBtnHdl, PushButton* );
@@ -131,7 +131,7 @@ public:
     virtual short Execute();
 
     bool IsRemovePassword() const;
-    String GetNewPassword() const;
+    OUString GetNewPassword() const;
 
 private:
     ScRetypePassInputDlg(); // disabled
