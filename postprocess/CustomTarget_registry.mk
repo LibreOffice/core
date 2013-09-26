@@ -117,9 +117,9 @@ postprocess_FILES_korea := \
 
 postprocess_DEPS_lingucomponent := main
 postprocess_FILES_lingucomponent := \
-	$(postprocess_XCU)/Office/Linguistic-lingucomponent-hyphenator.xcu \
-	$(postprocess_XCU)/Office/Linguistic-lingucomponent-spellchecker.xcu \
-	$(postprocess_XCU)/Office/Linguistic-lingucomponent-thesaurus.xcu \
+	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-hyphenator.xcu \
+	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-spellchecker.xcu \
+	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-thesaurus.xcu \
 
 postprocess_FILES_main := \
 	$(postprocess_XCS)/FirstStartWizard.xcs \
