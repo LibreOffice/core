@@ -408,8 +408,6 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
     if(pSet)
         pFmt->SetFmtAttr(*pSet);
 
-    //  --aEnd;     // End is inclusive in InsertSection
-
     SwSectionNode *const pNewSectionNode =
         GetNodes().InsertTextSection(aStt, *pFmt, aSectionData, &rTOX, &aEnd);
     if (!pNewSectionNode)

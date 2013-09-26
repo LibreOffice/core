@@ -283,14 +283,11 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080304
             if ( bFtnPos )
-                //pTmpRoot->RemoveFtns();
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllRemoveFtns));//swmod 080305
             else
             {
-                //pTmpRoot->UpdateFtnNums();
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 080304
                 if ( bFtnDesc )
-                    //pTmpRoot->CheckFtnPageDescs( FALSE );
                     std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));//swmod 080304
                 if ( bExtra )
                 {
@@ -357,7 +354,6 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         if ( pTmpRoot )
         {
             if ( bFtnDesc )
-                //pTmpRoot->CheckFtnPageDescs( TRUE );
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_True));//swmod 080304

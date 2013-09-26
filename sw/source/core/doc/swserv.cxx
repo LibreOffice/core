@@ -252,7 +252,6 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
                     }
                 }
         if( !pChkLnk )
-            //  *((int*)&eType) = eSave;
             ((SwServerObject*)this)->eType = eSave;
     }
 
