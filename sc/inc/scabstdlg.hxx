@@ -174,11 +174,11 @@ class AbstractScInsertTableDlg : public VclAbstractDialog
 public:
     virtual sal_Bool            GetTablesFromFile() = 0;
     virtual sal_Bool            GetTablesAsLink()   = 0;
-    virtual const String*   GetFirstTable( sal_uInt16* pN = NULL ) = 0;
+    virtual const OUString* GetFirstTable( sal_uInt16* pN = NULL ) = 0;
     virtual ScDocShell*     GetDocShellTables() = 0;
     virtual sal_Bool            IsTableBefore() = 0;
     virtual sal_uInt16          GetTableCount() = 0;
-    virtual const String*   GetNextTable( sal_uInt16* pN = NULL ) = 0;
+    virtual const OUString* GetNextTable( sal_uInt16* pN = NULL ) = 0;
 
 };
 

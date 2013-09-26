@@ -225,11 +225,11 @@ class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
     DECL_ABSTDLG_BASE( AbstractScInsertTableDlg_Impl, ScInsertTableDlg)
     virtual sal_Bool            GetTablesFromFile();
     virtual sal_Bool            GetTablesAsLink();
-    virtual const String*   GetFirstTable( sal_uInt16* pN = NULL );
+    virtual const OUString* GetFirstTable( sal_uInt16* pN = NULL );
     virtual ScDocShell*     GetDocShellTables();
     virtual sal_Bool            IsTableBefore();
     virtual sal_uInt16          GetTableCount();
-    virtual const String*   GetNextTable( sal_uInt16* pN = NULL );
+    virtual const OUString* GetNextTable( sal_uInt16* pN = NULL );
 
 };
 

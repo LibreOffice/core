@@ -984,7 +984,7 @@ void ScInputHandler::ShowTipCursor()
     }
 }
 
-void ScInputHandler::ShowTip( const String& rText )
+void ScInputHandler::ShowTip( const OUString& rText )
 {
     //  aManualTip muss hinterher von aussen gesetzt werden
     HideTip();
@@ -1006,7 +1006,7 @@ void ScInputHandler::ShowTip( const String& rText )
     }
 }
 
-void ScInputHandler::ShowTipBelow( const String& rText )
+void ScInputHandler::ShowTipBelow( const OUString& rText )
 {
     HideTipBelow();
 
@@ -3005,7 +3005,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
     bSelIsRef = true;
 }
 
-void ScInputHandler::InsertFunction( const String& rFuncName, bool bAddPar )
+void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
 {
     if ( eMode == SC_INPUT_NONE )
     {
@@ -3905,7 +3905,7 @@ void ScInputHandler::InputReplaceSelection( const OUString& rStr )
 ScInputHdlState::ScInputHdlState( const ScAddress& rCurPos,
                                   const ScAddress& rStartPos,
                                   const ScAddress& rEndPos,
-                                  const String& rString,
+                                  const OUString& rString,
                                   const EditTextObject* pData )
     :   aCursorPos  ( rCurPos ),
         aStartPos   ( rStartPos ),

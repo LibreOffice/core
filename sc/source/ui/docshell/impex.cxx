@@ -132,7 +132,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 // Falls eine View existiert, wird die TabNo der View entnommen!
 
 
-ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
+ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
     : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
@@ -263,14 +263,14 @@ void ScImportExport::EndPaste()
 
 /////////////////////////////////////////////////////////////////////////////
 
-bool ScImportExport::ImportData( const String& /* rMimeType */,
+bool ScImportExport::ImportData( const OUString& /* rMimeType */,
                      const ::com::sun::star::uno::Any & /* rValue */ )
 {
     OSL_ENSURE( !this, "Implementation is missing" );
     return false;
 }
 
-bool ScImportExport::ExportData( const String& rMimeType,
+bool ScImportExport::ExportData( const OUString& rMimeType,
                                  ::com::sun::star::uno::Any & rValue )
 {
     SvMemoryStream aStrm;
@@ -374,7 +374,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
 }
 
 
-bool ScImportExport::ImportStream( SvStream& rStrm, const String& rBaseURL, sal_uLong nFmt )
+bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, sal_uLong nFmt )
 {
     if( nFmt == FORMAT_STRING )
     {
@@ -415,7 +415,7 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const String& rBaseURL, sal_
 }
 
 
-bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_uLong nFmt )
+bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sal_uLong nFmt )
 {
     if( nFmt == FORMAT_STRING )
     {
@@ -619,21 +619,17 @@ static QuoteType lcl_isEscapedOrFieldEndQuote( sal_Int32 nQuotes, const sal_Unic
 
     @returns TRUE if ok; FALSE if data overflow, truncated
  */
-static bool lcl_appendLineData( String& rField, const sal_Unicode* p1, const sal_Unicode* p2 )
+static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const sal_Unicode* p2 )
 {
-    OSL_ENSURE( rField.Len() + (p2 - p1) <= STRING_MAXLEN, "lcl_appendLineData: data overflow");
-    if (rField.Len() + (p2 - p1) <= STRING_MAXLEN)
+    OSL_ENSURE( rField.getLength() + (p2 - p1) <= STRING_MAXLEN, "lcl_appendLineData: data overflow");
+    if (rField.getLength() + (p2 - p1) <= STRING_MAXLEN)
     {
-        rField.Append( p1, sal::static_int_cast<xub_StrLen>( p2 - p1 ) );
+        rField += OUString( p1, sal::static_int_cast<xub_StrLen>( p2 - p1 ) );
         return true;
     }
     else
     {
-        // If STRING_MAXLEN is passed as length, then String attempts to
-        // determine the length of the string and comes up with an overflow
-        // casted to xub_StrLen again ... so pass max-1, data will be truncated
-        // anyway.
-        rField.Append( p1, (rField.Len() ? STRING_MAXLEN - rField.Len() : STRING_MAXLEN - 1) );
+        rField += OUString( p1, STRING_MAXLEN - rField.getLength() );
         return false;
     }
 }
@@ -648,7 +644,7 @@ enum DoubledQuoteMode
     DQM_SEPARATE    // end one string and begin next
 };
 
-static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
+static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rString,
             const sal_Unicode* pSeps, sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
 {
     if (eMode != DQM_KEEP_ALL)
@@ -888,7 +884,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     while( bOk )
     {
         OUString aLine;
-        String aCell;
+        OUString aCell;
         SCROW nRow = nStartRow;
         rStrm.Seek( nOldPos );
         for( ;; )
@@ -900,7 +896,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
             const sal_Unicode* p = aLine.getStr();
             while( *p )
             {
-                aCell.Erase();
+                aCell = "";
                 const sal_Unicode* q = p;
                 while (*p && *p != cSep)
                 {
@@ -1307,7 +1303,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     }
 
     OUString aLine;
-    String aCell;
+    OUString aCell;
     sal_uInt16 i;
     SCROW nRow = nStartRow;
 
@@ -1496,11 +1492,11 @@ void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
 
 
 const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p,
-        String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted,
+        OUString& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted,
         bool& rbOverflowCell )
 {
     rbIsQuoted = false;
-    rField.Erase();
+    rField = "";
     const sal_Unicode cBlank = ' ';
     if (!ScGlobal::UnicodeStrChr( pSeps, cBlank))
     {
@@ -2088,7 +2084,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 }
 
 
-bool ScImportExport::Doc2HTML( SvStream& rStrm, const String& rBaseURL )
+bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 {
     // CharSet is ignored in ScExportHTML, read from Load/Save HTML options
     ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
@@ -2146,7 +2142,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
 }
 
 
-bool ScImportExport::RTF2Doc( SvStream& rStrm, const String& rBaseURL )
+bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
     ScEEAbsImport *pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, aRange );
     if (!pImp)
@@ -2167,7 +2163,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const String& rBaseURL )
 }
 
 
-bool ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
+bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
 {
     ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange, true);
     if (!pImp)

@@ -39,9 +39,9 @@ public:
             eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(false),
             bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
         {}
-        ScImportOptions( const String& rStr );
+        ScImportOptions( const OUString& rStr );
 
-        ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const String& rStr )
+        ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const OUString& rStr )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep), aStrFont(rStr),
             bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
         { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
@@ -87,13 +87,13 @@ public:
                                 && bQuoteAllText    == rCmp.bQuoteAllText
                                 && bSaveFormulas    == rCmp.bSaveFormulas;
                         }
-    String  BuildString() const;
+    OUString  BuildString() const;
 
     void    SetTextEncoding( rtl_TextEncoding nEnc );
 
     sal_Unicode nFieldSepCode;
     sal_Unicode nTextSepCode;
-    String      aStrFont;
+    OUString    aStrFont;
     CharSet     eCharSet;
     sal_Bool    bFixedWidth;
     sal_Bool    bSaveAsShown;

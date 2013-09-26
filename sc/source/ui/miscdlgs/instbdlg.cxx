@@ -211,9 +211,9 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 
 //------------------------------------------------------------------------
 
-const String* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
+const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 {
-    const String* pStr = NULL;
+    const OUString* pStr = NULL;
 
     if ( m_pBtnNew->IsChecked() )
     {
@@ -234,9 +234,9 @@ const String* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 
 //------------------------------------------------------------------------
 
-const String* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
+const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
-    const String* pStr = NULL;
+    const OUString* pStr = NULL;
 
     if ( !m_pBtnNew->IsChecked() && nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
     {

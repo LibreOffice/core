@@ -575,7 +575,7 @@ void ScInputWindow::Resize()
     }
 }
 
-void ScInputWindow::SetFuncString( const String& rString, sal_Bool bDoEdit )
+void ScInputWindow::SetFuncString( const OUString& rString, sal_Bool bDoEdit )
 {
     //! new method at ScModule to query if function autopilot is open
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
@@ -591,7 +591,7 @@ void ScInputWindow::SetFuncString( const String& rString, sal_Bool bDoEdit )
         EditView* pView = aTextWindow.GetEditView();
         if (pView)
         {
-            xub_StrLen nLen = rString.Len();
+            sal_Int32 nLen = rString.getLength();
 
             if ( nLen > 0 )
             {
@@ -608,14 +608,14 @@ void ScInputWindow::SetFuncString( const String& rString, sal_Bool bDoEdit )
     }
 }
 
-void ScInputWindow::SetPosString( const String& rStr )
+void ScInputWindow::SetPosString( const OUString& rStr )
 {
     aWndPos.SetPos( rStr );
 }
 
-void ScInputWindow::SetTextString( const String& rString )
+void ScInputWindow::SetTextString( const OUString& rString )
 {
-    if (rString.Len() <= 32767)
+    if (rString.getLength() <= 32767)
         aTextWindow.SetTextString(rString);
     else
     {
@@ -924,13 +924,13 @@ ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextDa
     aMultiTextWnd.RemoveAccessibleTextData( rTextData );
 }
 
-const String&
+const OUString&
 ScInputBarGroup::GetTextString() const
 {
     return aMultiTextWnd.GetTextString();
 }
 
-void ScInputBarGroup::SetTextString( const String& rString )
+void ScInputBarGroup::SetTextString( const OUString& rString )
 {
     aMultiTextWnd.SetTextString(rString);
 }
@@ -1416,7 +1416,7 @@ void ScMultiTextWnd::StopEditEngine( sal_Bool bAll )
     ScTextWnd::StopEditEngine( bAll );
 }
 
-void ScMultiTextWnd::SetTextString( const String& rNewString )
+void ScMultiTextWnd::SetTextString( const OUString& rNewString )
 {
     // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
     // the initialisation scenario where a cell is first clicked on we end up with the text in the
@@ -1843,7 +1843,26 @@ void ScTextWnd::StopEditEngine( sal_Bool bAll )
     }
 }
 
-void ScTextWnd::SetTextString( const String& rNewString )
+static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString rStr2)
+{
+    // Search the string for unmatching chars
+    const sal_Unicode*  pStr1 = rStr1.getStr();
+    const sal_Unicode*  pStr2 = rStr2.getStr();
+    sal_Int32      i = 0;
+    while ( i < rStr1.getLength() )
+    {
+        // Abort on the first unmatching char
+        if ( *pStr1 != *pStr2 )
+            return i;
+        ++pStr1,
+        ++pStr2,
+        ++i;
+    }
+
+    return i;
+}
+
+void ScTextWnd::SetTextString( const OUString& rNewString )
 {
     if ( rNewString != aString )
     {
@@ -1880,11 +1899,11 @@ void ScTextWnd::SetTextString( const String& rNewString )
             else
             {
                 long nTextSize = 0;
-                xub_StrLen nDifPos;
-                if (rNewString.Len() > aString.Len())
-                    nDifPos = rNewString.Match(aString);
+                sal_Int32 nDifPos;
+                if (rNewString.getLength() > aString.getLength())
+                    nDifPos = findFirstNonMatchingChar(rNewString, aString);
                 else
-                    nDifPos = aString.Match(rNewString);
+                    nDifPos = findFirstNonMatchingChar(aString, rNewString);
 
                 long nSize1 = GetTextWidth(aString);
                 long nSize2 = GetTextWidth(rNewString);
@@ -1893,10 +1912,6 @@ void ScTextWnd::SetTextString( const String& rNewString )
                 else
                     nTextSize = GetOutputSize().Width();        // Ueberlauf
 
-                if (nDifPos == STRING_MATCH)
-                    nDifPos = 0;
-
-                                                // -1 wegen Rundung und "A"
                 Point aLogicStart = PixelToLogic(Point(0,0));
                 long nStartPos = aLogicStart.X();
                 long nInvPos = nStartPos;
@@ -1904,7 +1919,7 @@ void ScTextWnd::SetTextString( const String& rNewString )
                     nInvPos += GetTextWidth(aString,0,nDifPos);
 
                 sal_uInt16 nFlags = 0;
-                if ( nDifPos == aString.Len() )         // only new characters appended
+                if ( nDifPos == aString.getLength() )         // only new characters appended
                     nFlags = INVALIDATE_NOERASE;        // then background is already clear
                 Invalidate( Rectangle( nInvPos, 0,
                                         nStartPos+nTextSize, GetOutputSize().Height()-1 ),
@@ -1925,7 +1940,7 @@ void ScTextWnd::SetTextString( const String& rNewString )
     }
 }
 
-const String& ScTextWnd::GetTextString() const
+const OUString& ScTextWnd::GetTextString() const
 {
     return aString;
 }
@@ -2082,7 +2097,7 @@ void ScPosWnd::SetFormulaMode( sal_Bool bSet )
     }
 }
 
-void ScPosWnd::SetPos( const String& rPosStr )
+void ScPosWnd::SetPos( const OUString& rPosStr )
 {
     if ( aPosStr != rPosStr )
     {

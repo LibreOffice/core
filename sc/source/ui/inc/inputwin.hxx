@@ -47,8 +47,8 @@ public:
     ScTextWndBase( Window* pParent,  WinBits nStyle );
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
-    virtual void            SetTextString( const String& rString ) = 0;
-    virtual const String&   GetTextString() const = 0;
+    virtual void            SetTextString( const OUString& rString ) = 0;
+    virtual const OUString& GetTextString() const = 0;
     virtual void            StartEditEngine() = 0;
     virtual void            StopEditEngine( sal_Bool bAll ) = 0;
     virtual EditView*       GetEditView() = 0;
@@ -64,8 +64,8 @@ public:
                     ScTextWnd( Window* pParent, ScTabViewShell* pViewSh );
     virtual         ~ScTextWnd();
 
-    virtual void            SetTextString( const String& rString );
-    virtual const String&   GetTextString() const;
+    virtual void            SetTextString( const OUString& rString );
+    virtual const OUString& GetTextString() const;
 
     sal_Bool            IsInputActive();
     virtual EditView*       GetEditView();
@@ -112,7 +112,7 @@ protected:
 
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
-    String      aString;
+    OUString    aString;
     Font        aTextFont;
     ScEditEngineDefaulter*  pEditEngine;            // only created when needed
     EditView*   pEditView;
@@ -134,7 +134,7 @@ private:
 class ScPosWnd : public ComboBox, public SfxListener        // Display position
 {
 private:
-    String          aPosStr;
+    OUString        aPosStr;
     Accelerator*    pAccel;
     sal_uLong           nTipVisible;
     sal_Bool            bFormulaMode;
@@ -143,7 +143,7 @@ public:
                     ScPosWnd( Window* pParent );
     virtual         ~ScPosWnd();
 
-    void            SetPos( const String& rPosStr );        // Displayed Text
+    void            SetPos( const OUString& rPosStr );        // Displayed Text
     void            SetFormulaMode( sal_Bool bSet );
 
 protected:
@@ -179,7 +179,7 @@ public:
     long GetEditEngTxtHeight();
 
     void DoScroll();
-    virtual void SetTextString( const String& rString );
+    virtual void SetTextString( const OUString& rString );
     void SetNumLines( long nLines );
     long GetNumLines() { return mnLines; }
     long GetLastNumExpandedLines() { return mnLastExpandedLines; }
@@ -208,12 +208,12 @@ public:
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
 //    virtual void    Paint(const Rectangle& rRect );
-    void            SetTextString( const String& rString );
+    void            SetTextString( const OUString& rString );
     void            StartEditEngine();
     EditView*       GetEditView();
     void            SetSize(Size aSize);
     virtual void    Resize();
-    virtual const String&   GetTextString() const;
+    virtual const OUString&   GetTextString() const;
     virtual void            StopEditEngine( sal_Bool bAll );
     virtual void            TextGrabFocus();
     void            InitEditEngine(SfxObjectShell* pObjSh);
@@ -248,9 +248,9 @@ public:
     virtual void    Resize();
     virtual void    Select();
 
-    void            SetFuncString( const String& rString, sal_Bool bDoEdit = sal_True );
-    void            SetPosString( const String& rStr );
-    void            SetTextString( const String& rString );
+    void            SetFuncString( const OUString& rString, sal_Bool bDoEdit = sal_True );
+    void            SetPosString( const OUString& rStr );
+    void            SetTextString( const OUString& rString );
 
     void            SetOkCancelMode();
     void            SetSumAssignMode();
@@ -293,10 +293,10 @@ private:
     std::auto_ptr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
-    String          aTextOk;
-    String          aTextCancel;
-    String          aTextSum;
-    String          aTextEqual;
+    OUString        aTextOk;
+    OUString        aTextCancel;
+    OUString        aTextSum;
+    OUString        aTextEqual;
     long            mnMaxY;
     sal_Bool            bIsOkCancelMode;
     bool            bInResize;

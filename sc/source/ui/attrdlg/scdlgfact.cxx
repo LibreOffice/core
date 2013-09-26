@@ -360,7 +360,7 @@ sal_Bool AbstractScInsertTableDlg_Impl::GetTablesAsLink()
     return pDlg->GetTablesAsLink();
 }
 
-const String*  AbstractScInsertTableDlg_Impl::GetFirstTable( sal_uInt16* pN )
+const OUString*  AbstractScInsertTableDlg_Impl::GetFirstTable( sal_uInt16* pN )
 {
     return pDlg->GetFirstTable( pN );
 }
@@ -380,7 +380,7 @@ sal_uInt16 AbstractScInsertTableDlg_Impl::GetTableCount()
     return pDlg->GetTableCount();
 }
 
-const String* AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
+const OUString* AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
 {
     return pDlg->GetNextTable( pN );
 }

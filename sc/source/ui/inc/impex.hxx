@@ -51,7 +51,7 @@ class ScImportExport
     ScDocument* pDoc;
     ScDocument* pUndoDoc;
     ScRange     aRange;
-    String      aStreamPath;
+    OUString    aStreamPath;
     OUString    aNonConvertibleChars;
     sal_uLong   nSizeLimit;
     sal_Unicode cSep;                   // Separator
@@ -75,17 +75,17 @@ class ScImportExport
     bool Text2Doc( SvStream& );
     bool Doc2Sylk( SvStream& );
     bool Sylk2Doc( SvStream& );
-    bool Doc2HTML( SvStream&, const String& );
+    bool Doc2HTML( SvStream&, const OUString& );
     bool Doc2RTF( SvStream& );
     bool Doc2Dif( SvStream& );
     bool Dif2Doc( SvStream& );
     bool ExtText2Doc( SvStream& );      // with pExtOptions
-    bool RTF2Doc( SvStream&, const String& rBaseURL );
-    bool HTML2Doc( SvStream&, const String& rBaseURL );
+    bool RTF2Doc( SvStream&, const OUString& rBaseURL );
+    bool HTML2Doc( SvStream&, const OUString& rBaseURL );
 
 public:
     ScImportExport( ScDocument* );                  // the whole document
-    ScImportExport( ScDocument*, const String& );   // Range/cell input
+    ScImportExport( ScDocument*, const OUString& );   // Range/cell input
     ScImportExport( ScDocument*, const ScAddress& );
     ScImportExport( ScDocument*, const ScRange& );
    ~ScImportExport();
@@ -106,7 +106,7 @@ public:
 
     static bool  IsFormatSupported( sal_uLong nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
-            String& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
+            OUString& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
             bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell );
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
@@ -126,19 +126,19 @@ public:
 
     void SetSizeLimit( sal_uLong nNew ) { nSizeLimit = nNew; }  // for the moment only for Ascii
 
-    void            SetStreamPath( const String& rPath ) { aStreamPath = rPath; }
-    const String&   GetStreamPath() const { return aStreamPath; }
+    void            SetStreamPath( const OUString& rPath ) { aStreamPath = rPath; }
+    const OUString& GetStreamPath() const { return aStreamPath; }
 
     bool ImportString( const OUString&, sal_uLong=FORMAT_STRING );
     bool ExportString( OUString&, sal_uLong=FORMAT_STRING );
     bool ExportByteString( OString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
 
-    bool ImportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
-    bool ExportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
+    bool ImportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
+    bool ExportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
 
-    bool ImportData( const String& rMimeType,
+    bool ImportData( const OUString& rMimeType,
                      const ::com::sun::star::uno::Any & rValue );
-    bool ExportData( const String& rMimeType,
+    bool ExportData( const OUString& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
 
     // after import

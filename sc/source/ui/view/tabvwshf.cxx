@@ -209,7 +209,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             std::vector<SCTAB> nTabs;
                             sal_uInt16 n = 0;
-                            const String* pStr = pDlg->GetFirstTable( &n );
+                            const OUString* pStr = pDlg->GetFirstTable( &n );
                             while ( pStr )
                             {
                                 nTabs.push_back( static_cast<SCTAB>(n) );
@@ -246,7 +246,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             SCTAB nCount=pDlg->GetTableCount();
                             if(pDlg->IsTableBefore())
                             {
-                                if(nCount==1 && pDlg->GetFirstTable()->Len()>0)
+                                if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
                                 {
                                     rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
                                     rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabNr) + 1 ) );        // 1-based
@@ -276,7 +276,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                         nTabAfter = j + 1;
                                 }
 
-                                if(nCount==1 && pDlg->GetFirstTable()->Len()>0)
+                                if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
                                 {
                                     rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
                                     rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabAfter) + 1 ) );     // 1-based

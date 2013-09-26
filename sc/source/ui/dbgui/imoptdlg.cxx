@@ -31,7 +31,7 @@ static const sal_Char pStrFix[] = "FIX";
 //  darum ab Version 336 Komma stattdessen
 
 
-ScImportOptions::ScImportOptions( const String& rStr )
+ScImportOptions::ScImportOptions( const OUString& rStr )
 {
     // Use the same string format as ScAsciiOptions,
     // because the import options string is passed here when a CSV file is loaded and saved again.
@@ -48,37 +48,37 @@ ScImportOptions::ScImportOptions( const String& rStr )
     if ( nTokenCount >= 3 )
     {
         // first 3 tokens: common
-        OUString aToken( rStr.GetToken( 0, ',' ) );
+        OUString aToken( rStr.getToken( 0, ',' ) );
         if( aToken.equalsIgnoreAsciiCase( pStrFix ) )
             bFixedWidth = sal_True;
         else
             nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
-        nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();
-        aStrFont      = rStr.GetToken(2,',');
+        nTextSepCode  = (sal_Unicode) rStr.getToken(1,',').toInt32();
+        aStrFont      = rStr.getToken(2,',');
         eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
 
         if ( nTokenCount == 4 )
         {
             // compatibility with old options string: "Save as shown" as 4th token, numeric
-            bSaveAsShown = (rStr.GetToken( 3, ',' ).ToInt32() ? sal_True : false);
+            bSaveAsShown = (rStr.getToken( 3, ',' ).toInt32() ? sal_True : false);
             bQuoteAllText = sal_True;   // use old default then
         }
         else
         {
             // look at the same positions as in ScAsciiOptions
             if ( nTokenCount >= 7 )
-                bQuoteAllText = rStr.GetToken(6, ',').EqualsAscii("true");
+                bQuoteAllText = rStr.getToken(6, ',').equalsAscii("true");
             if ( nTokenCount >= 9 )
-                bSaveAsShown = rStr.GetToken(8, ',').EqualsAscii("true");
+                bSaveAsShown = rStr.getToken(8, ',').equalsAscii("true");
             if ( nTokenCount >= 10 )
-                bSaveFormulas = rStr.GetToken(9, ',').EqualsAscii("true");
+                bSaveFormulas = rStr.getToken(9, ',').equalsAscii("true");
         }
     }
 }
 
 //------------------------------------------------------------------------
 
-String ScImportOptions::BuildString() const
+OUString ScImportOptions::BuildString() const
 {
     OUString aResult;
 

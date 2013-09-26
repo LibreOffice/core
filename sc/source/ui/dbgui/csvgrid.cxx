@@ -729,7 +729,7 @@ void ScCsvGrid::ImplSetTextLineSep(
     rStrVec.clear();
 
     // scan for separators
-    String aCellText;
+    OUString aCellText;
     const sal_Unicode* pSepChars = rSepChars.getStr();
     const sal_Unicode* pChar = rTextLine.getStr();
     sal_uInt32 nColIx = 0;
@@ -744,7 +744,7 @@ void ScCsvGrid::ImplSetTextLineSep(
         /* TODO: signal overflow somewhere in UI */
 
         // update column width
-        sal_Int32 nWidth = std::max( CSV_MINCOLWIDTH, aCellText.Len() + sal_Int32( 1 ) );
+        sal_Int32 nWidth = std::max( CSV_MINCOLWIDTH, aCellText.getLength() + 1 );
         if( IsValidColumn( nColIx ) )
         {
             // expand existing column
@@ -768,10 +768,10 @@ void ScCsvGrid::ImplSetTextLineSep(
             ImplInsertSplit( nLastPos );
         }
 
-        if( aCellText.Len() <= CSV_MAXSTRLEN )
+        if( aCellText.getLength() <= CSV_MAXSTRLEN )
             rStrVec.push_back( aCellText );
         else
-            rStrVec.push_back( aCellText.Copy( 0, CSV_MAXSTRLEN ) );
+            rStrVec.push_back( aCellText.copy( 0, CSV_MAXSTRLEN ) );
         ++nColIx;
     }
     InvalidateGfx();

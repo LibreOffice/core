@@ -53,8 +53,8 @@ public:
     sal_Bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
     sal_Bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }
 
-    const String*   GetFirstTable( sal_uInt16* pN = NULL );
-    const String*   GetNextTable( sal_uInt16* pN = NULL );
+    const OUString* GetFirstTable( sal_uInt16* pN = NULL );
+    const OUString* GetNextTable( sal_uInt16* pN = NULL );
     ScDocShell*     GetDocShellTables() { return pDocShTables; }
     sal_Bool        IsTableBefore() const { return m_pBtnBefore->IsChecked(); }
     SCTAB           GetTableCount() const { return nTableCount;}
@@ -83,7 +83,7 @@ private:
 
     bool                bMustClose;
     sal_uInt16          nSelTabIndex;   // for GetFirstTable() / GetNextTable()
-    String              aStrCurSelTable;
+    OUString            aStrCurSelTable;
     SCTAB               nTableCount;
     OUString            m_sSheetDotDotDot;
 

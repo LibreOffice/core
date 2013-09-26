@@ -184,7 +184,7 @@ public:
 
     bool            InputCommand( const CommandEvent& rCEvt, bool bForce );
 
-    void            InsertFunction( const String& rFuncName, bool bAddPar = true );
+    void            InsertFunction( const OUString& rFuncName, bool bAddPar = true );
     void            ClearText();
 
     void            InputSelection( EditView* pView );
@@ -203,8 +203,8 @@ public:
     void            HideTip();
     void            HideTipBelow();
     void            ShowTipCursor();
-    void            ShowTip( const String& rText );     // at Cursor
-    void            ShowTipBelow( const String& rText );
+    void            ShowTip( const OUString& rText );     // at Cursor
+    void            ShowTipBelow( const OUString& rText );
 
     void            SetRefScale( const Fraction& rX, const Fraction& rY );
     void            UpdateRefDevice();
@@ -269,7 +269,7 @@ public:
         ScInputHdlState( const ScAddress& rCurPos,
                          const ScAddress& rStartPos,
                          const ScAddress& rEndPos,
-                         const String& rString,
+                         const OUString& rString,
                          const EditTextObject* pData );
         ScInputHdlState( const ScInputHdlState& rCpy );
         ~ScInputHdlState();
@@ -282,14 +282,14 @@ public:
     const ScAddress&        GetPos() const          { return aCursorPos; }
     const ScAddress&        GetStartPos() const     { return aStartPos; }
     const ScAddress&        GetEndPos() const       { return aEndPos; }
-    const String&           GetString() const       { return aString; }
+    const OUString&         GetString() const       { return aString; }
     const EditTextObject*   GetEditData() const     { return pEditData; }
 
 private:
     ScAddress       aCursorPos;
     ScAddress       aStartPos;
     ScAddress       aEndPos;
-    String          aString;
+    OUString        aString;
     EditTextObject* pEditData;
 };
 
