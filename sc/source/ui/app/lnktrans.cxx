@@ -34,7 +34,7 @@ ScLinkTransferObj::~ScLinkTransferObj()
 {
 }
 
-void ScLinkTransferObj::SetLinkURL( const String& rURL, const String& rText )
+void ScLinkTransferObj::SetLinkURL( const OUString& rURL, const OUString& rText )
 {
     aLinkURL = rURL;
     aLinkText = rText;
@@ -42,7 +42,7 @@ void ScLinkTransferObj::SetLinkURL( const String& rURL, const String& rText )
 
 void ScLinkTransferObj::AddSupportedFormats()
 {
-    if ( aLinkURL.Len() )
+    if ( !aLinkURL.isEmpty() )
     {
         //  TransferableHelper::SetINetBookmark formats
 
@@ -58,7 +58,7 @@ void ScLinkTransferObj::AddSupportedFormats()
 sal_Bool ScLinkTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     sal_Bool bOK = false;
-    if ( aLinkURL.Len() )
+    if ( !aLinkURL.isEmpty() )
     {
         INetBookmark aBmk( aLinkURL, aLinkText );
         bOK = SetINetBookmark( aBmk, rFlavor );

@@ -26,14 +26,14 @@
 class ScLinkTransferObj : public TransferableHelper
 {
 private:
-    String  aLinkURL;
-    String  aLinkText;
+    OUString  aLinkURL;
+    OUString  aLinkText;
 
 public:
             ScLinkTransferObj();
     virtual ~ScLinkTransferObj();
 
-    void                SetLinkURL( const String& rURL, const String& rText );
+    void                SetLinkURL( const OUString& rURL, const OUString& rText );
 
     virtual void        AddSupportedFormats();
     virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );

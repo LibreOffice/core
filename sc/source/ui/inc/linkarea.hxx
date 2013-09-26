@@ -62,15 +62,15 @@ private:
 
     void                UpdateSourceRanges();
     void                UpdateEnable();
-    void                LoadDocument( const OUString& rFile, const String& rFilter,
-                                        const String& rOptions );
+    void                LoadDocument( const OUString& rFile, const OUString& rFilter,
+                                        const OUString& rOptions );
 
 public:
             ScLinkedAreaDlg( Window* pParent );
             ~ScLinkedAreaDlg();
 
-    void            InitFromOldLink( const String& rFile, const String& rFilter,
-                                        const String& rOptions, const String& rSource,
+    void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
+                                        const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh );
 
     virtual short   Execute();          // overwritten to set dialog parent

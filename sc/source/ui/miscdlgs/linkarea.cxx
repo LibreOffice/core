@@ -127,7 +127,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
     return 0;
 }
 
-void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const String& rFilter, const String& rOptions )
+void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilter, const OUString& rOptions )
 {
     if ( pSourceShell )
     {
@@ -160,8 +160,8 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const String& rFilter
     }
 }
 
-void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilter,
-                                        const String& rOptions, const String& rSource,
+void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rFilter,
+                                        const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh )
 {
     LoadDocument( rFile, rFilter, rOptions );
@@ -178,7 +178,7 @@ void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilte
     xub_StrLen nRangeCount = comphelper::string::getTokenCount(rSource, ';');
     for ( xub_StrLen i=0; i<nRangeCount; i++ )
     {
-        String aRange = rSource.GetToken(i);
+        String aRange = rSource.getToken(i,';');
         m_pLbRanges->SelectEntry( aRange );
     }
 
