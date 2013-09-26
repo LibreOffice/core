@@ -407,7 +407,7 @@ std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( const OUSt
 {
     std::vector<OUString> tempVector;
 
-    int index = 0;
+    sal_Int32 index = 0;
     do
     {
         OUString word = rCommaSepString.getToken(0, static_cast<sal_Unicode> (','), index);
