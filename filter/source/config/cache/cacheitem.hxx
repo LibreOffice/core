@@ -157,7 +157,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 
             @descr  Normaly the converter routines of the base class
                     SequenceAsHashMap do this job already.
-                    But it doesnt provide a "pack" mechanism to
+                    But it doesn't provide a "pack" mechanism to
                     ignore properties with empty (means "void") values.
 
             @return css::uno::Sequence< css::beans::PropertyValue >

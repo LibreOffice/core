@@ -331,14 +331,14 @@ public class AutoSave
                     }
                     else
                     {
-                        m_aLog.log(Protocol.TYPE_ERROR, "closeDoc() = ERROR. Doc doesnt provide needed interface!");
+                        m_aLog.log(Protocol.TYPE_ERROR, "closeDoc() = ERROR. Doc doesn't provide needed interface!");
                     }
                 }
                 catch(com.sun.star.util.CloseVetoException exVeto)
                 {
                     m_aLog.log(Protocol.TYPE_WARNING     , "got CloseVetoException on calling doc.close()."                                    );
                     m_aLog.log(Protocol.TYPE_WARNING_INFO, "Please check the reason for that more in detail."                                  );
-                    m_aLog.log(Protocol.TYPE_WARNING_INFO, "A message like \"Cant close while saving.\" was intended and doesnt show an error!");
+                    m_aLog.log(Protocol.TYPE_WARNING_INFO, "A message like \"Cant close while saving.\" was intended and doesn't show an error!");
                     m_aLog.log(Protocol.TYPE_WARNING_INFO, exVeto.getMessage());
                 }
 

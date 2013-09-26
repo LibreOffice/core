@@ -118,7 +118,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
         }
     }
     else
-    {   // its a new property
+    {   // it's a new property
         sal_uInt32 nIndex = aPropSeq.getLength();
         aPropSeq.realloc( nIndex + 1 );
         aPropSeq[ nIndex ] = rPropVal ;

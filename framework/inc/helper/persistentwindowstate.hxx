@@ -143,7 +143,7 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
 
             @param  xWindow
                     must point to the container window of the frame.
-                    We use it VCL part here - because the toolkit doesnt
+                    We use it VCL part here - because the toolkit doesn't
                     provide the right functionality!
 
             @return [string]
@@ -173,7 +173,7 @@ class PersistentWindowState :   // baseclasses (order necessary for right initia
 
             @param  xWindow
                     must point to the container window of the frame.
-                    We use it VCL part here - because the toolkit doesnt
+                    We use it VCL part here - because the toolkit doesn't
                     provide the right functionality!
 
             @param  sWindowState

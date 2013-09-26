@@ -169,7 +169,7 @@ ScTabView::~ScTabView()
 
     delete pSelEngine;
 
-    // Delete this before the grid windows, since its a child window of one of them.
+    // Delete this before the grid windows, since it's a child window of one of them.
     mpInputHintWindow.reset();
     for (i=0; i<4; i++)
         delete pGridWin[i];

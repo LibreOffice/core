@@ -143,7 +143,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
             @note   Those method cant be called within a multithreaded environment ..
                     Because such number wont be "reserved" for the calli of these method
                     it can happen that two calls returns the same number (reasoned by the fact that first calli
-                    doesnt used the returned number already.
+                    doesn't used the returned number already.
 
                     So the outside code has to make sure that retrieving and using of those number
                     will be an atomic operation.

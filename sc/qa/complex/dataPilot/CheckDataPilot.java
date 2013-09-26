@@ -190,7 +190,7 @@ public class CheckDataPilot {
             System.out.println( "Creating a Spreadsheet document" );
             xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace();
             throw new StatusException( "Couldn't create document", e );
         }

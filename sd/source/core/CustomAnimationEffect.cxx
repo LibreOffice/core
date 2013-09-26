@@ -3138,14 +3138,14 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
                 // find out what kind of after effect this is
                 if( xNode->getType() == AnimationNodeType::ANIMATECOLOR )
                 {
-                    // its a dim
+                    // it's a dim
                     Reference< XAnimate > xAnimate( xNode, UNO_QUERY_THROW );
                     pMasterEffect->setDimColor( xAnimate->getTo() );
                     pMasterEffect->setAfterEffectOnNext( true );
                 }
                 else
                 {
-                    // its a hide
+                    // it's a hide
                     pMasterEffect->setAfterEffectOnNext( xNode->getParent() != xMaster->getParent() );
                 }
             }

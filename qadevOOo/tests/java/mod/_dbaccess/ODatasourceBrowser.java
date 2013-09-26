@@ -197,7 +197,7 @@ public class ODatasourceBrowser extends TestCase {
             log.println("creating a text document");
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }
@@ -256,7 +256,7 @@ public class ODatasourceBrowser extends TestCase {
                                             XInitialization.class, oObj);
             xInit.initialize(params);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't initialize document", e);
         }
@@ -278,7 +278,7 @@ public class ODatasourceBrowser extends TestCase {
         try {
             xCtrl = xCtrlAccess.getControl(shapeModel);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace(log);
         }
 

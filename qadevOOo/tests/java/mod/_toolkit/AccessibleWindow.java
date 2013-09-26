@@ -145,7 +145,7 @@ public class AccessibleWindow extends TestCase {
             toolkit = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
                               "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }

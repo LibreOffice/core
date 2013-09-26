@@ -50,7 +50,7 @@ import com.sun.star.uno.UnoRuntime;
  * because another interceptor (registered at a later time then this one!)
  * will be called before this one.
  * Implementation is executed inside a new thread to prevent application
- * against possible deadlocks. This deadlocks can occure if
+ * against possible deadlocks. This deadlocks can occur if
  * synchronous/asynchronous ... normal ones and oneway calls are mixed.
  * Notifications of listener will be oneway mostly - her reactions can
  * be synchronous then. => deadlocks are possible
@@ -350,7 +350,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * connected in both ways.
      * Searching for a right interceptor is made by forwarding any request
      * from toppest master to lowest slave of this hierarchy.
-     * If an interceptor whish to handle the request he can break that
+     * If an interceptor wish to handle the request he can break that
      * and return himself as a dispatcher.
      */
     public com.sun.star.frame.XDispatchProvider getSlaveDispatchProvider()
@@ -467,7 +467,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                 return null;
         }
         // Resolve any request separately by using own "dispatch()" method.
-        // Note: Don't pack return list if "null" objects occure!
+        // Note: Don't pack return list if "null" objects occur!
         int                            nCount      = lDescriptor.length;
         com.sun.star.frame.XDispatch[] lDispatcher = new com.sun.star.frame.XDispatch[nCount];
         for(int i=0; i<nCount; ++i)
@@ -560,8 +560,8 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * call this interceptor directly without calling his masters before, IF(!)
      * following rules will be true:
      *      (1) every master supports this optional interface too
-     *      (2) nobody of these masters whish to intercept same URL then this one
-     * This interceptor whish to intercept creation of new documents.
+     *      (2) nobody of these masters wish to intercept same URL then this one
+     * This interceptor wish to intercept creation of new documents.
      */
     public String[] getInterceptedURLs()
     {

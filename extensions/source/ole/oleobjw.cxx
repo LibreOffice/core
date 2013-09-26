@@ -1900,7 +1900,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             // Make sure that there is a UNO parameter for every
             // expected parameter. If there is no UNO parameter where the
             // called function expects one, then it must be optional. Otherwise
-            // its a UNO programming error.
+            // it's a UNO programming error.
             if (i  >= nUnoArgs && !(paramFlags & PARAMFLAG_FOPT))
             {
                 OUStringBuffer buf(256);

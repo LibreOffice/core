@@ -1081,7 +1081,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                     eDir = FRMDIR_VERT_TOP_RIGHT;
                     break;
                 default:
-                    OSL_FAIL( "unknown direction code, maybe its a bitfield");
+                    OSL_FAIL( "unknown direction code, maybe it's a bitfield");
             }
             SvxFrameDirectionItem aItem( eDir, RES_FRAMEDIR);
             pBox->GetFrmFmt()->SetFmtAttr(aItem);

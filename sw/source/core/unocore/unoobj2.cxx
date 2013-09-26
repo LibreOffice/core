@@ -977,7 +977,7 @@ SwXTextRange::getStart() throw (uno::RuntimeException)
     }
     else if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
-        // start and end are this, if its a table
+        // start and end are this, if it's a table
         xRet = this;
     }
     else
@@ -1005,7 +1005,7 @@ SwXTextRange::getEnd() throw (uno::RuntimeException)
     }
     else if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
     {
-        // start and end are this, if its a table
+        // start and end are this, if it's a table
         xRet = this;
     }
     else

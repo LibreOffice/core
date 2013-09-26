@@ -859,7 +859,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     sal_uLong nDataStt = m_rWW8Export.pDataStrm->Tell();
     m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() );
 
-    // WinWord 2000 doesn't write this - so its a temp solution by W97 ?
+    // WinWord 2000 doesn't write this - so it's a temp solution by W97 ?
     m_rWW8Export.WriteChar( 0x01 );
 
     static sal_uInt8 aArr1[] = {
@@ -1064,7 +1064,7 @@ void WW8AttributeOutput::FieldVanish( const String& rTxt, ww::eField /*eType*/ )
 
 void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAttr )
 {
-    // its a field; so get the Text form the Node and build the field
+    // it's a field; so get the Text form the Node and build the field
     OUString sTxt;
     ww::eField eType = ww::eNONE;
 

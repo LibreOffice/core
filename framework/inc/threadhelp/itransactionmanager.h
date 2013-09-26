@@ -28,9 +28,9 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @descr          Describe different states of a feature of following implementation.
-                    During live time of an object different working states occure:
+                    During lifetime of an object different working states occur:
                         initialization - working - closing - closed
-                    If you whish to implement thread safe classes you should use these feature to protect
+                    If you wish to implement thread safe classes you should use this feature to protect
                     your code against calls at wrong time. e.g. you are not full initialized but somewhere
                     call an interface method (initialize phase means startup time from creating object till
                     calling specified first method e.g. XInitialization::initialze()!) then you should refuse

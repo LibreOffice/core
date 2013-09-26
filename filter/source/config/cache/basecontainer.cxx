@@ -469,7 +469,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     catch(const css::uno::Exception&)
     {
         // invalid cache, internal failure, wrong conversion ...!?
-        // doesnt matter
+        // doesn't matter
         lKeys.clear();
     }
 
@@ -520,7 +520,7 @@ void SAL_CALL BaseContainer::flush()
     catch(const css::uno::Exception& ex)
     {
         // Dont remove the clone. May be the outside
-        // user whish to repair it now and calls flush()
+        // user wish to repair it now and calls flush()
         // later again ...
 
         throw css::lang::WrappedTargetRuntimeException( "Flush rejected by internal container.",

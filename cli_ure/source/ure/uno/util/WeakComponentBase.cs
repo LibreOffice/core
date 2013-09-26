@@ -112,7 +112,7 @@ public class WeakComponentBase : WeakBase, XComponent
                 doDispose = true;
             }
         }
-        // The notification occures in an unsynchronized block in order to avoid
+        // The notification occurs in an unsynchronized block in order to avoid
         // deadlocks if one of the listeners calls back in a different thread on
         // a synchronized method which uses the same object.
         if (doDispose)

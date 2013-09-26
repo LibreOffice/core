@@ -189,7 +189,7 @@ typedef sal_uIntPtr SbError;
 #define ERRCODE_BASIC_GETPROP_FAILED        ((LAST_SBX_ERROR_ID+62UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_RUNTIME)              // Unable to get property
 
-// Compiler Errors (do not occure at runtime)
+// Compiler Errors (do not occur at runtime)
 // These IDs can shift at any time
 
 #define ERRCODE_BASIC_UNEXPECTED            ((LAST_SBX_ERROR_ID+63UL) | ERRCODE_AREA_SBX | \

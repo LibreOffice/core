@@ -1363,7 +1363,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
                 pShape = new SvxShapeText( pObj );
                 if( GetPage()->GetPageKind() == PK_NOTES && GetPage()->IsMasterPage() )
                 {
-                    // fake a empty PageShape if its a title shape on the master page
+                    // fake a empty PageShape if it's a title shape on the master page
                     pShape->SetShapeType("com.sun.star.presentation.PageShape");
                 }
                 else

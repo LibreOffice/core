@@ -4959,8 +4959,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if (!bTextFrame)
             {
                 //Either
-                //a) its a simple text object or
-                //b) its a rectangle with text and square wrapping.
+                //a) it's a simple text object or
+                //b) it's a rectangle with text and square wrapping.
                 bTextFrame =
                 (
                     (pImpRec->eShapeType == mso_sptTextSimple) ||

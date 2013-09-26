@@ -271,7 +271,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase,              
         configuration service.
 
         @param  bWriteAccessRequested
-        if the outside code whish to change the container
+        if the outside code wish to change the container
         it must call this method with "sal_True". So the internal
         cache can be prepared for that (means copy-on-write ...).
 

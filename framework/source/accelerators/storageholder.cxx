@@ -494,7 +494,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
         throw exResult;
 
     // c) try it readonly
-    //    dont catch exception here! Outside code whish to know, if operation failed or not.
+    //    dont catch exception here! Outside code wish to know, if operation failed or not.
     //    Otherwhise they work on NULL references ...
     sal_Int32 eNewMode = (eOpenMode & ~css::embed::ElementModes::WRITE);
     css::uno::Reference< css::embed::XStorage > xSubStorage = xBaseStorage->openStorageElement(sSubStorage, eNewMode);
@@ -534,7 +534,7 @@ css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback
         throw exResult;
 
     // c) try it readonly
-    //    dont catch exception here! Outside code whish to know, if operation failed or not.
+    //    dont catch exception here! Outside code wish to know, if operation failed or not.
     //    Otherwhise they work on NULL references ...
     sal_Int32 eNewMode = (eOpenMode & ~css::embed::ElementModes::WRITE);
     css::uno::Reference< css::io::XStream > xSubStream = xBaseStorage->openStreamElement(sSubStream, eNewMode);

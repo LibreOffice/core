@@ -79,7 +79,7 @@ public class HangulHanjaConversion {
 
         boolean bList = checkXConversionDictionaryList(
                                 ConversionDictionaryList);
-        assertTrue("XConversionDictionaryList doesnt work as expected", bList);
+        assertTrue("XConversionDictionaryList doesn't work as expected", bList);
     }
 
     private boolean checkXConversionDictionaryList(Object list) {

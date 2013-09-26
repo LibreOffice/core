@@ -81,7 +81,7 @@ public class FormTools {
             oCShape.setSize(size);
             oCShape.setPosition(position);
         } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             System.out.println( "Couldn't create instance "+ e );
         }
 
@@ -117,7 +117,7 @@ public class FormTools {
 
 
            } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             System.out.println( "Couldn't create instance "+ e );
         }
 
@@ -152,7 +152,7 @@ public class FormTools {
 
 
            } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             System.out.println( "Couldn't create instance "+ e );
         }
 
@@ -171,7 +171,7 @@ public class FormTools {
             oControl = (XInterface) oDocMSF.createInstance(
                                         "com.sun.star.form.component."+kind);
            } catch ( Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             System.out.println( "Couldn't create instance "+ kind + ": "+ e );
         }
         return oControl;

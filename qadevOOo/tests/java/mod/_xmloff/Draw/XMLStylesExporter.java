@@ -79,7 +79,7 @@ public class XMLStylesExporter extends TestCase {
             log.println( "creating a drawdocument" );
             xDrawDoc = SOF.createDrawDoc(null);
         } catch ( Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

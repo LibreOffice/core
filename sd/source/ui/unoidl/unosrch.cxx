@@ -156,7 +156,7 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
         }
         // done with xShape -> get next shape
 
-        // test if its a group
+        // test if it's a group
         uno::Reference< drawing::XShapes > xGroupShape( xShape, uno::UNO_QUERY );
         if( xGroupShape.is() && ( xGroupShape->getCount() > 0 ) )
         {
@@ -265,7 +265,7 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
         }
         // done with shape -> get next shape
 
-        // test if its a group
+        // test if it's a group
         uno::Reference< drawing::XShapes >  xGroupShape;
         xGroupShape.set( xShape, uno::UNO_QUERY );
 

@@ -380,7 +380,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // BUT ..!
     // We need a Hack for our applications: They get her progress from the frame directly
     // on saving documents. Because there is no progress set on the MediaDescriptor.
-    // But that's wrong. In case the document was opened hidden, they shouldnt use any progress .-(
+    // But that's wrong. In case the document was opened hidden, they should not use any progress .-(
     // They only possible workaround: dont show the parent window here, if the document was opened hidden.
     sal_Bool bHiddenDoc = sal_False;
     if (xFrame.is())

@@ -1977,7 +1977,7 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
                 break;
         }
         //The default is to stick the focus into the first widget
-        //that accepts it, and if that happens and its a button
+        //that accepts it, and if that happens and it's a button
         //then that becomes the new default button, so explicitly
         //put the focus into the default button
         if (pChild->GetStyle() & WB_DEFBUTTON)

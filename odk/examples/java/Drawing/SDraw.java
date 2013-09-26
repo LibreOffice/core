@@ -229,7 +229,7 @@ public class SDraw  {
                 xShape.setPosition(position);
 
             } catch ( Exception e ) {
-                // Some exception occures.FAILED
+                // Some exception occurs.FAILED
                 System.err.println( "Couldn't get Shape "+ e );
                 e.printStackTrace(System.err);
             }

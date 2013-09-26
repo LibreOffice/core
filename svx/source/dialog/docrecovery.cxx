@@ -407,7 +407,7 @@ ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
     ERecoveryState eRecState = E_NOT_RECOVERED_YET;
 
     /* Attention:
-        Some of the following states can occure at the
+        Some of the following states can occur at the
         same time. So we have to check for the "worst case" first!
 
         DAMAGED -> INCOMPLETE -> HANDLED
@@ -551,7 +551,7 @@ void RecoveryCore::impl_startListening()
 //===============================================
 void RecoveryCore::impl_stopListening()
 {
-    // Ignore it, if this instance doesnt listen currently
+    // Ignore it, if this instance doesn't listen currently
     if (!m_xRealCore.is())
         return;
 
@@ -1228,7 +1228,7 @@ short RecoveryDialog::execute()
                      Application::Yield();
 
                  // TODO: show BrokenRecoveryDialog again, ift he user
-                 // doesnt accepted it last time.
+                 // doesn't accepted it last time.
 
                  if (m_bUserDecideNext)
                      return DLG_RET_OK;

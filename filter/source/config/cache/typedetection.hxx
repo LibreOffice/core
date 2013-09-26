@@ -93,7 +93,7 @@ private:
                     detection service), a "sugested" type name will be returned as "rLastChance".
                     It can be used after e.g. all well known deep detection services
                     was used without getting any result. Then this "last-chance-type"
-                    should be returned. Of course using of it can fail too ... but its a try :-)
+                    should be returned. Of course using of it can fail too ... but it's a try :-)
 
                     As an optimization - this method collects the names of all used deep
                     detection services. This information can be useful inside the may be
@@ -137,7 +137,7 @@ private:
     /** @short      seek a might existing stream to position 0.
 
         @descr      This is an optinal action to be more robust
-                    in case any detect service doesnt make this seek ...
+                    in case any detect service doesn't make this seek ...
                     Normaly it's part of any called detect service or filter ...
                     but sometimes it's not done there.
 

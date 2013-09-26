@@ -280,7 +280,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
             catch ( com.sun.star.uno.Exception e )
             {
-                // Some exception occures.FAILED
+                // Some exception occurs.FAILED
                 GlobalLogWriter.println("UNO Exception caught.");
                 GlobalLogWriter.println("Message: " + e.getMessage());
                 e.printStackTrace();
@@ -522,7 +522,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
             catch ( com.sun.star.uno.Exception e )
             {
-                // Some exception occures.FAILED
+                // Some exception occurs.FAILED
                 GlobalLogWriter.println("UNO Exception caught.");
                 GlobalLogWriter.println("Message: " + e.getMessage());
 
@@ -680,7 +680,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
             catch ( com.sun.star.uno.Exception e )
             {
-                // Some exception occures.FAILED
+                // Some exception occurs.FAILED
                 GlobalLogWriter.println("UNO Exception caught.");
                 GlobalLogWriter.println("Message: " + e.getMessage());
 

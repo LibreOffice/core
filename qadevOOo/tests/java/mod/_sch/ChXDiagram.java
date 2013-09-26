@@ -146,7 +146,7 @@ public class ChXDiagram extends TestCase {
             log.println( "creating a sheetdocument" );
             xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

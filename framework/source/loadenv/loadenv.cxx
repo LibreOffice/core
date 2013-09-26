@@ -1509,12 +1509,12 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (!xTask.is())
         return css::uno::Reference< css::frame::XFrame >();
 
-    // not a real error - may its a view only
+    // not a real error - may it's a view only
     css::uno::Reference< css::frame::XController > xController = xTask->getController();
     if (!xController.is())
         return css::uno::Reference< css::frame::XFrame >();
 
-    // not a real error - may its a db component instead of a full featured office document
+    // not a real error - may it's a db component instead of a full featured office document
     css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
     if (!xModel.is())
         return css::uno::Reference< css::frame::XFrame >();

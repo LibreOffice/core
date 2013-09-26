@@ -188,7 +188,7 @@ public class OGridControlModel extends GenericModelTest {
             aControl4 = columns.createColumn("TextField");
             aControl5 = columns.createColumn("TextField");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             log.println("!!! Couldn't create instance : " + e);
             throw new StatusException("Can't create column instances.", e);
         }
@@ -344,7 +344,7 @@ class OGridControlModelold extends TestCase {
             aControl4 = columns.createColumn("TextField");
             columns.createColumn("TextField");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             log.println("!!! Couldn't create instance : " + e);
             throw new StatusException("Can't create column instances.", e);
         }

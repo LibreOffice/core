@@ -28,7 +28,7 @@ namespace salhelper
         {
         }
 
-        /** Resolve a file url if its a symbolic link, to a maximum depth of
+        /** Resolve a file url if it's a symbolic link, to a maximum depth of
          *  nDepth and fill in m_aStatus with the requested ctor flags
          *
          *  @return osl::FileBase::E_None on success

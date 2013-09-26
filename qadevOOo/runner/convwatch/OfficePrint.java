@@ -233,7 +233,7 @@ public class OfficePrint {
             }
             catch ( com.sun.star.uno.Exception e )
             {
-                // Some exception occures.FAILED
+                // Some exception occurs.FAILED
                 GlobalLogWriter.get().println("UNO Exception caught.");
                 GlobalLogWriter.get().println("Message: " + e.getMessage());
                 e.printStackTrace();
@@ -554,7 +554,7 @@ public class OfficePrint {
             }
             catch ( com.sun.star.uno.Exception e )
             {
-                // Some exception occures.FAILED
+                // Some exception occurs.FAILED
                 GlobalLogWriter.get().println("UNO Exception caught.");
                 GlobalLogWriter.get().println("Message: " + e.getMessage());
 
@@ -707,7 +707,7 @@ public class OfficePrint {
             }
             catch ( com.sun.star.uno.Exception e )
             {
-                // Some exception occures.FAILED
+                // Some exception occurs.FAILED
                 GlobalLogWriter.get().println("UNO Exception caught.");
                 GlobalLogWriter.get().println("Message: " + e.getMessage());
 

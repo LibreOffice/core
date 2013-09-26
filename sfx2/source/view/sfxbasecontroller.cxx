@@ -610,7 +610,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
 {
     SolarMutexGuard aGuard;
 
-    // ignore dublicate calls, which doesnt change anything real
+    // ignore dublicate calls, which doesn't change anything real
     if (bSuspend == m_pData->m_bSuspendState)
        return sal_True;
 

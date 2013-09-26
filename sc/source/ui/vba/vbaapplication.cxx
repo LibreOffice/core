@@ -899,7 +899,7 @@ OUString ScVbaApplication::getOfficePath( const OUString& _sPathType ) throw ( u
         OUString sUrl;
          xProps->getPropertyValue( _sPathType ) >>= sUrl;
 
-        // if its a list of paths then use the last one
+        // if it's a list of paths then use the last one
         sal_Int32 nIndex =  sUrl.lastIndexOf( ';' ) ;
         if ( nIndex > 0 )
             sUrl = sUrl.copy( nIndex + 1 );

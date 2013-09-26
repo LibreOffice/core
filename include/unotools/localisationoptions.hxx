@@ -74,7 +74,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             @param      "bState", new value to set it in configuration.
             @return     The value which represent current state of internal variable.
 
-            @onerror    No error should occurre!
+            @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
         sal_Bool    IsAutoMnemonic  (                   ) const ;
@@ -94,7 +94,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
             @param      "nScale" new value to set it in configuration.
             @return     The value which represent current state of internal variable.
 
-            @onerror    No error should occurre!
+            @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
         sal_Int32   GetDialogScale(                     ) const ;

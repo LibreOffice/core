@@ -205,7 +205,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // Do it asynchronous everytimes!
 
     // But dont forget to hold usself alive.
-    // We are called back from an environment, which doesnt know an uno reference.
+    // We are called back from an environment, which doesn't know an uno reference.
     // They call us back by using our c++ interface.
 
     m_xResultListener = xListener;
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
         bCloseFrame = sal_True;
 
     // b) The help window cant disagree with any request.
-    //    Because it doesnt implement a controller - it uses a window only.
+    //    Because it doesn't implement a controller - it uses a window only.
     //    Further t cant be the last open frame - if we do all other things
     //    right inside this CloseDispatcher implementation.
     //    => close it!
@@ -308,7 +308,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
 
     // c) If we are already in "backing mode", we have to terminate
     //    the application, if this special frame is closed.
-    //    It doesnt matter, how many other frames (can be the help or hidden frames only)
+    //    It doesn't matter, how many other frames (can be the help or hidden frames only)
     //    are open then.
     //    => terminate the application!
     else if (aCheck1.m_bReferenceIsBacking)
@@ -481,7 +481,7 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
 
     // dont remove the component realy by e.g. calling setComponent(null, null).
     // It's enough to suspend the controller.
-    // If we close the frame later this controller doesnt show the same dialog again.
+    // If we close the frame later this controller doesn't show the same dialog again.
     return sal_True;
 }
 

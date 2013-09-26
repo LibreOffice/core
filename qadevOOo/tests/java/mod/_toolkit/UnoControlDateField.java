@@ -60,7 +60,7 @@ public class UnoControlDateField extends TestCase {
             xTD2 = WriterTools.createTextDoc(
                            (XMultiServiceFactory) Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }

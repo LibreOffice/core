@@ -762,7 +762,7 @@ throw ( NoSuchElementException, RuntimeException )
     // Use vector with strings to detect endless recursions!
     std::vector< OUString > aEndlessRecursiveDetector;
 
-    // Search for first occure of "$(...".
+    // Search for first occurrence of "$(...".
     sal_Int32   nDepth = 0;
     bool        bSubstitutionCompleted = false;
     sal_Int32   nPosition       = aWorkText.indexOf( m_aVarStart );     // = first position of "$(" in string

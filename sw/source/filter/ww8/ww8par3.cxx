@@ -2009,7 +2009,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             and remove its numbering, then the indentation appears to get
             reset, but not back to the base style, instead its goes to a blank
             setting.
-            Unless its a broken ww6 list in 97 in which case more hackery is
+            Unless it's a broken ww6 list in 97 in which case more hackery is
             required, some more details about broken ww6 list in
             ww8par6.cxx#SwWW8ImplReader::Read_LR
             */

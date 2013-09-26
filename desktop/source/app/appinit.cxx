@@ -77,7 +77,7 @@ static void configureUcb()
 #if ENABLE_GNOME_VFS
     try {
         // Instantiate GNOME-VFS UCP in the thread that initialized GNOME in order
-        // to avoid a deadlock that may occure in case the UCP gets initialized from
+        // to avoid a deadlock that may occur in case the UCP gets initialized from
         // a different thread (which may happen when calling remotely via UNO); this
         // is not a fix, just a workaround:
         Reference< XCurrentContext > xCurrentContext(getCurrentContext());

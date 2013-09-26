@@ -113,7 +113,7 @@ struct DispatchParams
 /**
     implements the functionality of AutoSave and AutoRecovery
     of documents - including features of an EmergencySave in
-    case a GPF occures.
+    case a GPF occurs.
  */
 typedef ::cppu::WeakImplHelper5<
             css::lang::XServiceInfo,
@@ -185,7 +185,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
         // TODO document me
         enum ETimerType
         {
-            /** the timer shouldnt be used next time */
+            /** the timer should not be used next time */
             E_DONT_START_TIMER,
             /** timer (was/must be) started with normal AutoSaveTimeIntervall */
             E_NORMAL_AUTOSAVE_INTERVALL,
@@ -641,7 +641,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
 
             @descr  This method should be called only, if its clear that a new
                     document was opened/created during office runtime.
-                    This method checks, if its a top level document (means not an embedded one).
+                    This method checks, if it's a top level document (means not an embedded one).
                     Only such top level documents can be recognized by this auto save mechanism.
 
             @param  xDocument
@@ -769,7 +769,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
                     only if removing oft he old file was successfully.
                     If this method returns without an exception - everything
                     was OK. Otherwise the info struct can be analyzed to
-                    get more information, e.g. when the problem occures.
+                    get more information, e.g. when the problem occurs.
 
             @param  sBackupPath
                     the base path for saving such temp files.
@@ -1017,7 +1017,7 @@ class AutoRecovery  : // attention! Must be the first base class to guarentee ri
         /** try to remove the specified file from disc.
 
             Every URL supported by our UCB component can be used here.
-            Further it doesnt matter if the file realy exists or not.
+            Further it doesn't matter if the file realy exists or not.
             Because removing a non exsistent file will have the same
             result at the end ... a non existing file .-)
 

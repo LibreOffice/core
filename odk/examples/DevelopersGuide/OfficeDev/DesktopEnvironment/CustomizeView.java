@@ -122,15 +122,15 @@ public class CustomizeView extends    JPanel
     /**
      * set new frame for this view
      * We start listening for frame action/status and click events instandly.
-     * If an event occure we use it to synchronize our controls
-     * with states of a (my be) new document view of this frame.
+     * If an event occurs, we use it to synchronize our controls
+     * with states of a (maybe) new document view of this frame.
      *
      * @param xFrame
      *          the reference to the frame, which provides the
      *          possibility to get the required status information
      *
      *          Attention: We don't accept new frames here.
-     *          We get one after startup and work with him.
+     *          We get one after startup and work with it.
      *          That's it!
      */
     public void setFrame(com.sun.star.frame.XFrame xFrame)
@@ -205,13 +205,13 @@ public class CustomizeView extends    JPanel
 
         /**
          * callback for action events
-         * Such events occure if somehwere click the
-         * JCheckBox control on which we are registered.
-         * Such events doesn't occure if we set it programmaticly
+         * Such events occur, if someone clicked the
+         * JCheckBox control, on which we are registered.
+         * Such events do not occur, if we set it programmatically
          * (e.g. if we get status events to -> see class StatusListener too)
          *
          * @param aEvent
-         *          describes the check box and his state
+         *          describes the check box and its state
          *          we can use to toogle the requested office
          *          resource.
          */

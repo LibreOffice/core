@@ -4226,7 +4226,7 @@ uno::Reference< excel::XRange >
 ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException)
 {
     // Althought the documentation seems clear that Range without a
-    // qualifier then its a shortcut for ActiveSheet.Range
+    // qualifier then it's a shortcut for ActiveSheet.Range
     // however, similarly Application.Range is apparently also a
     // shortcut for ActiveSheet.Range
     // The is however a subtle behavioural difference I've come across
@@ -4553,7 +4553,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
         // e.g. can you have a Operator without a Criteria ? in openoffice it
         if ( Operator.hasValue()  && ( Operator >>= nOperator ) )
         {
-            // if its a bottom/top Ten(Percent/Value) and there
+            // if it's a bottom/top Ten(Percent/Value) and there
             // is no value specified for criteria1 set it to 10
             if ( !bCritHasNumericValue && sCriteria1.isEmpty() && ( nOperator != excel::XlAutoFilterOperator::xlOr ) && ( nOperator != excel::XlAutoFilterOperator::xlAnd ) )
             {

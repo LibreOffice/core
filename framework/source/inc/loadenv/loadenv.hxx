@@ -406,7 +406,7 @@ private:
                 so it contains the right type, a corresponding filter, may a
                 valid frame loader etc. In case detection failed, this descriptor
                 is corrected first, before a suitable exception will be thrown.
-                (Excepting a RuntimeException occure!)
+                (Excepting a RuntimeException occurrence!)
 
         @attention  Not all types we know, are supported by filters. So it does not
                     indicates an error, if no suitable filter(loader etcpp will be found
@@ -443,7 +443,7 @@ private:
                 supressed here.
                 In case handle failed all new created resources will be
                 removed before a suitable exception is thrown.
-                (Excepting a RuntimeException occure!)
+                (Excepting a RuntimeException occurrence!)
 
         @return TODO
 
@@ -462,7 +462,7 @@ private:
                 used to load the content into this frame.
                 In case loading failed all new created resources will be
                 removed before a suitable exception is thrown.
-                (Excepting a RuntimeException occure!)
+                (Excepting a RuntimeException occurrence!)
 
         @return TODO
 

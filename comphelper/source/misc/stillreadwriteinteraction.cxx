@@ -74,7 +74,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
     // we are used!
     m_bUsed = sal_True;
 
-    // check if its a real interception - might some parameters are not the right ones ...
+    // check if it's a real interception - might some parameters are not the right ones ...
     sal_Bool bAbort = sal_False;
     switch(aRequest.Handle)
     {

@@ -174,7 +174,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *          or which should be created with default values.
      *
      *  @return A reference to the found (or new created) set node.
-     *          Cant be NULL .. in such case an exception occure !
+     *          Can't be NULL .. in such case an exception occurs!
      *
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. css::uno::Exception if the provided configuration

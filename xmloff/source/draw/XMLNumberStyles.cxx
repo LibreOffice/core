@@ -685,7 +685,7 @@ void SdXMLNumberFormatImportContext::EndElement()
             }
             else if( mnElements[nIndex] == DATA_STYLE_NUMBER_TEXT_SPACE )
             {
-                // if its a valid date ending with a space, see if a time style follows
+                // if it's a valid date ending with a space, see if a time style follows
                 for( sal_Int16 nTimeFormat = 0; nTimeFormat < SdXMLTimeFormatCount; nTimeFormat++ )
                 {
                     sal_Int16 nIndex2 = nIndex + 1;

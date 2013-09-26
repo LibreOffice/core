@@ -101,7 +101,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 
             @throw  An com::sun::star::beans::IllegalTypeException
                     is thrown, if the given any does not contain a suitable sequence ...
-                    but not if its a VOID Any!
+                    but not if it's a VOID Any!
          */
         void operator<<(const ::com::sun::star::uno::Any& aSource);
 

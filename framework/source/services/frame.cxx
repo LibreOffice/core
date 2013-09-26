@@ -743,7 +743,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     //    We doesn't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
     //    in following code again and again. If we do not so -wrong
-    //    search results can occure!
+    //    search results can occur!
     //-----------------------------------------------------------------------------------------------------
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
@@ -873,7 +873,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
         //-------------------------------------------------------------------------------------------------
         // II.II) CHILDREN
         //  Search on all children for the given target name.
-        //  An empty name value can't occure here - because it must be already handled as "_self"
+        //  An empty name value can't occur here - because it must be already handled as "_self"
         //  before. Used helper function of container doesn't create any frame.
         //  It makes a deep search only.
         //-------------------------------------------------------------------------------------------------
@@ -952,7 +952,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
             //-------------------------------------------------------------------------------------------------
             // II.III.II) PARENT
             //  Forward search to our parent (if he exists.)
-            //  To prevent us against recursive and superflous calls (which can occure if we allow him
+            //  To prevent us against recursive and superflous calls (which can occur if we allow him
             //  to search on his children too) we must change used search flags.
             //-------------------------------------------------------------------------------------------------
             if (
@@ -1005,7 +1005,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     @param      -
     @return     true, if is it a top frame ... false otherwise.
 
-    @onerror    No error should occure!
+    @onerror    No error should occur!
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException )
 {
@@ -1221,7 +1221,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     @param      -
     @return     true if active, false otherwise.
 
-    @onerror    No error should occure.
+    @onerror    No error should occur.
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException )
 {
@@ -2104,7 +2104,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Fram
 
 /*-****************************************************************************************************//**
     @short      register/unregister interceptor for dispatch calls
-    @descr      If you whish to handle some dispatches by himself ... you should be
+    @descr      If you wish to handle some dispatches by himself ... you should be
                 an interceptor for it. Please see class OInterceptionHelper for further information.
 
     @seealso    class OInterceptionHelper

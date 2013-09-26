@@ -326,7 +326,7 @@ public class _XCalendar extends MultiMethodTest {
                 short get = oObj.getValue(fields[k]);
                 if (get != set) {
                     if (debug)
-                        log.println("ERROR occure: tried to set " + names[k] + " to value " + set);
+                        log.println("ERROR occurred: tried to set " + names[k] + " to value " + set);
                         log.println("list of values BEFORE set " + names[k] + " to value " + set + ":");
                         for (int n=0; n < oldValues.length; n++){
                             log.println(names[n] + ":" + oldValues[n]);

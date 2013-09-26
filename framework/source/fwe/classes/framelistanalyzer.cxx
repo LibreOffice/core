@@ -258,7 +258,7 @@ void FrameListAnalyzer::impl_analyze()
     {
         // stop copying if index seams to be wrong.
         // This interface can't realy guarantee its count for multithreaded
-        // environments. So it can occure!
+        // environments. So it can occur!
     }
 
     // Pack both lists by using the actual step positions.

@@ -2529,7 +2529,7 @@ void SwTabFrm::MakeAll()
                                 if ( pNxt )
                                 {
                                     // OD 26.08.2003 #i18103# - no formatting
-                                    // of found next frame, if its a follow
+                                    // of found next frame, if it's a follow
                                     // section of the 'ColLocked' section,
                                     // the follow table is in.
                                     bool bCalcNxt = true;

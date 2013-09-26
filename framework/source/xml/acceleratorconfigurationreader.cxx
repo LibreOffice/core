@@ -103,7 +103,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
     // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
-    // Because an item occures very often ... a list should occure one times only!
+    // Because an item occurs very often ... a list should occur one times only!
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorList)
@@ -194,7 +194,7 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElemen
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
     // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
-    // Because an item occures very often ... a list should occure one times only!
+    // Because an item occurs very often ... a list should occur one times only!
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorItem)

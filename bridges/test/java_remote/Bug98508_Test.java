@@ -28,7 +28,7 @@ import test.lib.TestBed;
 /**
  * Test case for bug #98508#.
  *
- * <p>Bug #98508# "JAVA UNO bridge is not disposed when Exception occures during
+ * <p>Bug #98508# "JAVA UNO bridge is not disposed when Exception occurs during
  * sendReply()" states that the server returning <code>null</code> instead of a
  * valid <code>String</code> from <code>XServiceName.getServiceName</code>
  * causes an exception when sending the reply, but this exception did not cause

@@ -322,16 +322,16 @@ class FilterCache : public BaseLock
 
         /** @short      force special fill state of this cache.
 
-            @descr      This method check if all requested items/properties already
-                        exists. Only missing information will be readed.
+            @descr      This method checks, if all requested items/properties already
+                        exist. Only missing information will be readed.
                         Otherwise this method does nothing!
 
                         This method must be called from every user of this cache
-                        every time it need a filled cache. Normaly we load
+                        every time it needs a filled cache. Normally we load
                         only standard information into this cache on startup.
                         After a few seconds we start a special thread, which
-                        may fill this cache completely. But if somehwere outside
-                        need a filled cache before ... it can run into trouble,
+                        may fill this cache completely. But if someone outside
+                        needs a filled cache before ... it can run into trouble,
                         if this "load-on-demand" thread does not finished its work before.
                         This method "load(xxx)" synchronize such load-on-demand requests.
 
@@ -872,7 +872,7 @@ class FilterCache : public BaseLock
 
             @descr  The outside code has to be shure, that the item does not already exists
                     inside this cachse. Otherwise it will be loaded twice. This method
-                    doesnt check such constellations!
+                    doesn't check such constellations!
 
             @param  eType
                     specify the type of config item, which must be interpreted.

@@ -198,7 +198,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     catch( const css::uno::Exception& )
     {}
 
-    // Special feature: If the events "OnNew" or "OnLoad" occures - we generate our own event "onDocumentOpened".
+    // Special feature: If the events "OnNew" or "OnLoad" occurs - we generate our own event "onDocumentOpened".
     if (
         (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_NEW))) ||
         (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_LOAD)))
@@ -208,7 +208,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
             JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_OPENED, lJobs);
     }
 
-    // Special feature: If the events "OnCreate" or "OnLoadFinished" occures - we generate our own event "onDocumentAdded".
+    // Special feature: If the events "OnCreate" or "OnLoadFinished" occurs - we generate our own event "onDocumentAdded".
     if (
         (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_CREATE))) ||
         (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_LOAD_FINISHED)))

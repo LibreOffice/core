@@ -181,7 +181,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
             ones we do it later inside our callback method. But we use the same impl method
             doing that to share the code. (see impl_finishJob())
 
-            If a job is already running, (it can only occure for asynchronous jobs)
+            If a job is already running, (it can only occur for asynchronous jobs)
             don't start the same job a second time. Queue in the given dispatch parameter
             and return immediately. If the current running job call us back, we will start this
             new dispatch request.

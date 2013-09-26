@@ -344,8 +344,8 @@ ShapeSharedPtr ShapeImporter::createShape(
         {
             // no animation - simply utilize plain draw shape import
 
-            // import shape as bitmap - either its a bitmap
-            // anyway, or its a metafile, which currently the
+            // import shape as bitmap - either it's a bitmap
+            // anyway, or it's a metafile, which currently the
             // metafile renderer might not display correctly.
             return DrawShape::create( xCurrShape,
                                       mxPage,

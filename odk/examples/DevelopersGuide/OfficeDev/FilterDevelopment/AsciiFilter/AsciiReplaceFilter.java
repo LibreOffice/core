@@ -397,7 +397,7 @@ public class AsciiReplaceFilter
          *
          * Note: It's not alloed for a filter to seek inside the stream.
          * Because the outside frameloader has to set the stream position
-         * right and a filter must read till EOF occures only.
+         * right and a filter must read till EOF occurs only.
          *
          * @param xTarget
          *          the target text model to put the data in
@@ -529,7 +529,7 @@ public class AsciiReplaceFilter
          *
          * Note: It's not alloed for a filter to seek inside the stream.
          * Because the outside frameloader has to set the stream position
-         * right and a filter must read till EOF occures only.
+         * right and a filter must read till EOF occurs only.
          *
          * @param xSource
          *          the source text model to get the data from

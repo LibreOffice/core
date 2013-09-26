@@ -286,7 +286,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         }
         catch(java.lang.Throwable exIgnore)
         {
-            // ignore any problem, which can occure here.
+            // ignore any problem, which can occur here.
             // It's not realy a bug for this example job, if
             // it's message could not be printed out!
         }

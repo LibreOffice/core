@@ -226,7 +226,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
                         return value as [in/]out parameter for
                         direct function calls!
                         Of course it can be casted to non const
-                        ... but then its a problem of the outside
+                        ... but then it's a problem of the outside
                         code :-)
 
             @return     A (const!) sequence, which contains all items of

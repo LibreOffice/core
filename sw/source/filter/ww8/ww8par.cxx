@@ -475,8 +475,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if (!bIsSimpleDrawingTextBox)
             {
                 // Either
-                // a) its a simple text object or
-                // b) its a rectangle with text and square wrapping.
+                // a) it's a simple text object or
+                // b) it's a rectangle with text and square wrapping.
                 bIsSimpleDrawingTextBox =
                 (
                     (pImpRec->eShapeType == mso_sptTextSimple) ||
@@ -582,7 +582,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             aNewRect.Bottom() -= nTextTop + nTextBottom;
             aNewRect.Right() -= nTextLeft + nTextRight;
 
-            // Only if its a simple Textbox, Writer can replace the Object
+            // Only if it's a simple Textbox, Writer can replace the Object
             // with a Frame, else
             if( bIsSimpleDrawingTextBox )
             {
@@ -3088,7 +3088,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         bPgSecBreak = true;
         pCtrlStck->KillUnlockedAttrs(*pPaM->GetPoint());
         /*
-        If its a 0x0c without a paragraph end before it, act like a
+        If it's a 0x0c without a paragraph end before it, act like a
         paragraph end, but nevertheless, numbering (and perhaps other
         similar constructs) do not exist on the para.
         */
@@ -3902,7 +3902,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
     SwDoc &rDoc)
 {
     /*
-    If its a table here, apply the pagebreak to the table
+    If it's a table here, apply the pagebreak to the table
     properties, otherwise we add it to the para at this
     position
     */

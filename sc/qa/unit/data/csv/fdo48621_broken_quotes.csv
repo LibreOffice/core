@@ -14,7 +14,7 @@ i78926_input.csv
 
 i78926_inconsistent_double_quote_behavior.csv
 Description,Description
-"The following text breaks everything",OpenOffice.org calc doesnt " like quotes embedded in fields.
+"The following text breaks everything",OpenOffice.org calc doesn't " like quotes embedded in fields.
 Here is some data,Here is some data
 Here is some data,Here is some data
 Here is some data,Here is some data

@@ -87,7 +87,7 @@ public class ChXDataRow extends TestCase {
                              utils.getFullTestURL("TransparencyChart.sxs"));
             xChartDoc = UnoRuntime.queryInterface(XChartDocument.class,xComp);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }
@@ -132,7 +132,7 @@ public class ChXDataRow extends TestCase {
             oDiagram = xChartDoc.getDiagram();
             oObj = oDiagram.getDataRowProperties(1);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get ChXDataRowPoint_Row", e );
         }

@@ -328,7 +328,7 @@ lcl_ExportFieldMark(
 {
     uno::Reference<text::XTextRange> xRef;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    //flr: maybe its a good idea to add a special hint to the hints array and rely on the hint segmentation....
+    //flr: maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation....
     const xub_StrLen start = pUnoCrsr->Start()->nContent.GetIndex();
     OSL_ENSURE(pUnoCrsr->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");

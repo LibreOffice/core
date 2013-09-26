@@ -162,7 +162,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
             @seealso    -
 
-            @onerror    No error should occure.
+            @onerror    No error should occur.
         *//*-*****************************************************************************************************/
 
         sal_Bool Exists() const;

@@ -63,7 +63,7 @@ public class UnoControlContainer extends TestCase {
             xTextDoc = WriterTools.createTextDoc(
                                (XMultiServiceFactory) param.getMSF());
         } catch (Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }

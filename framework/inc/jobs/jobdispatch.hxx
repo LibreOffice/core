@@ -55,7 +55,7 @@ namespace framework{
 /**
     @short  implements a dispatch object for jobs
     @descr  Such dispatch object will be used by the generic dispatch mechanism if
-            an URL "vnd.sun.star.job:alias=<name>" occures.
+            an URL "vnd.sun.star.job:alias=<name>" occurs.
             Then an instance of this class will be created and used.
             This new instance will be called within his method
             dispatch() or dispatchWithNotification() for executing the

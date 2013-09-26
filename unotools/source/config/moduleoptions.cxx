@@ -199,7 +199,7 @@ struct FactoryInfo
 
         //---------------------------------------------------------------------------------------------------------
         // If you call set-methods - we check for changes of valkues and mark it.
-        // But if you whish to set it without that ... you must initialize it!
+        // But if you wish to set it without that ... you must initialize it!
         void initInstalled        ( sal_Bool               bNewInstalled        ) { bInstalled        = bNewInstalled        ; }
         void initFactory          ( const OUString& sNewFactory          ) { sFactory          = sNewFactory          ; }
         void initShortName        ( const OUString& sNewShortName        ) { sShortName        = sNewShortName        ; }

@@ -287,7 +287,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
     sal_Bool bScreenUpdating = !xApplication.is() || xApplication->getScreenUpdating();
     sal_Bool bInteractive = !xApplication.is() || xApplication->getInteractive();
 
-    // we need to detect if this is a URL, if not then assume its a file path
+    // we need to detect if this is a URL, if not then assume it's a file path
         OUString aURL;
         INetURLObject aObj;
     aObj.SetURL( rFileName );

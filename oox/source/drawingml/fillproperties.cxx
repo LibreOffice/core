@@ -344,7 +344,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     {
                         /*  Try to detect a VML axial gradient. This type of
                             gradient is simulated by a 3-point linear gradient.
-                            Even if its a multi-color linear gradient, its probably better to assume
+                            Even if it's a multi-color linear gradient, its probably better to assume
                             axial gradient, when there are 3 or more points.
                          */
                         bool bAxial = (nColorCount >= 3);

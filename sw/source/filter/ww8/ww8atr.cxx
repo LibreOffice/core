@@ -4844,7 +4844,7 @@ void SwWW8WrTabu::Del(const SvxTabStop &rTS, long nAdjustment)
 //  PutAll( WW8Export& rWW8Wrt ) schreibt das Attribut nach rWrt.pO
 void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 {
-    if (!nAdd && !nDel) //It its a no-op
+    if (!nAdd && !nDel) //It it's a no-op
         return;
     OSL_ENSURE(nAdd <= 255, "more than 255 added tabstops ?");
     OSL_ENSURE(nDel <= 255, "more than 244 removed tabstops ?");

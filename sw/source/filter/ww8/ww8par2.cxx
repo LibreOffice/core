@@ -2562,7 +2562,7 @@ void WW8TabDesc::MergeCells()
                             bMerge = true;
                         else
                         {
-                        //If its a hori merge only, and the only things in
+                        //If it's a hori merge only, and the only things in
                         //it are invalid cells then its already taken care
                         //of, so don't merge.
                             for (sal_uInt16 i2 = i+1; i2 < pActBand->nWwCols; i2++ )
@@ -3027,7 +3027,7 @@ SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
     switch (nCode)
     {
         default:
-            OSL_ENSURE(eDir == 4, "unknown direction code, maybe its a bitfield");
+            OSL_ENSURE(eDir == 4, "unknown direction code, maybe it's a bitfield");
         case 3:
             eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; // #i38158# - Consider RTL tables
             break;

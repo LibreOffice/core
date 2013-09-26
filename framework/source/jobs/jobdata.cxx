@@ -697,7 +697,7 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
 //________________________________
 /**
     @short      reset all internal structures
-    @descr      If somehwere recycle this instance, he can switch from one
+    @descr      If someone recycles this instance, he can switch from one
                 using mode to another one. But then we have to reset all currently
                 used information. Otherwhise we mix it and they can make trouble.
 

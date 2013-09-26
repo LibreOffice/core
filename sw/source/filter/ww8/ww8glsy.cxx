@@ -250,7 +250,7 @@ sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
                                              const WW8Fib &rFib)
 {
     sal_uInt32 nGlossaryFibOffset = 0;
-    if ( rFib.fDot ) // its a template
+    if ( rFib.fDot ) // it's a template
     {
         if ( rFib.pnNext  )
             nGlossaryFibOffset = ( rFib.pnNext * 512 );

@@ -53,7 +53,7 @@ namespace framework{
     @descr          These URLs implements a special functionality to close a document or the whole frame ...
                     and handle the state, it was the last frame or document. Then we create the
                     default backing document which can be used to open new ones using the file open dialog
-                    or some other menu entries. Or we terminate the whole application in case this backing mode shouldnt
+                    or some other menu entries. Or we terminate the whole application in case this backing mode should not
                     be used.
  */
 class CloseDispatcher : // baseclasses ... order is necessary for right initialization!

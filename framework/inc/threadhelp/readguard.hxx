@@ -143,7 +143,7 @@ class ReadGuard : private INonCopyable
 
         /*-****************************************************************************************************//**
             @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @descr      It's not allowed to use this methods. Different problem can occur otherwise.
                         Thats why we disable it by make it private.
 
             @seealso    other ctor

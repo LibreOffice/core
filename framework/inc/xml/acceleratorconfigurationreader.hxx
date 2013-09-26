@@ -88,20 +88,20 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
 
         //---------------------------------------
         /** @short  used to detect if an accelerator list
-                    occures recursive inside xml. */
+                    occurs recursive inside xml. */
         sal_Bool m_bInsideAcceleratorList;
 
         //---------------------------------------
         /** @short  used to detect if an accelerator item
-                    occures recursive inside xml. */
+                    occurs recursive inside xml. */
         sal_Bool m_bInsideAcceleratorItem;
 
         //---------------------------------------
         /** @short  is used to map key codes to its
                     string representation.
 
-            @descr  To perform this operatio is
-                    created only one times and holded
+            @descr  To perform this operation is
+                    created only one time and kept
                     alive forever ...*/
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
@@ -109,7 +109,7 @@ class AcceleratorConfigurationReader : private ThreadHelpBase
         /** @short  provide information about the parsing state.
 
             @descr  We use it to find out the line and column, where
-                    an error occure.
+                    an error occurred.
           */
         css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
 

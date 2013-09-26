@@ -27,7 +27,7 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @short          implement a guard to support non breakable transactions
-    @descr          If you whish to support non breakable method calls without lockingf any mutex, rw-lock or
+    @descr          If you wish to support non breakable method calls without lockingf any mutex, rw-lock or
                     something like that - you should use this guard implementation.
                     Initialize it at first in your method and don't release it till end of your function!
                     Your "transaction" is registered in ctor and automaticly released in dtor.
@@ -52,7 +52,7 @@ class TransactionGuard : private INonCopyable
         /*-****************************************************************************************************//**
             @short      ctors
             @descr      Use these ctor methods to initialize the guard right.
-                        Given reference must be valid - otherwise crashes could occure!
+                        Given reference must be valid - otherwise crashes could occur!
 
             @attention  It's not neccessary to lock any mutex here! Because a ctor should not be called
                         from different threads at the same time ... this class use no refcount mechanism!
@@ -130,7 +130,7 @@ class TransactionGuard : private INonCopyable
 
         /*-****************************************************************************************************//**
             @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+            @descr      It's not allowed to use this methods. Different problem can occur otherwise.
                         Thats why we disable it by make it private.
 
             @seealso    other ctor

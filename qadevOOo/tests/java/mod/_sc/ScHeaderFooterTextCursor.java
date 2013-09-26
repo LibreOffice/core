@@ -103,7 +103,7 @@ public class ScHeaderFooterTextCursor extends TestCase {
             log.println( "creating a Spreadsheet document" );
             xSpreadsheetDoc = SOF.createCalcDoc(null);
         } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

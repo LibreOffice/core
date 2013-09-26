@@ -490,15 +490,15 @@ SfxSaveGuard::~SfxSaveGuard()
 
     m_pData->m_bSaving = sal_False;
 
-    // m_bSuicide was set e.g. in case somewhere tried to close a document, while it was used for
+    // m_bSuicide was set e.g. in case someone tried to close a document, while it was used for
     // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
-    // So the owner ship was delegated to the place where a veto exception was thrown.
-    // Now we have to call close() again and delegate the owner ship to the next one, which
-    // cant accept that. Close(sal_False) cant work in this case. Because then the document will may be never closed ...
+    // So the ownership was delegated to the place where a veto exception was thrown.
+    // Now we have to call close() again and delegate the ownership to the next one, which
+    // cant accept that. Close(sal_False) can't work in this case. Because then the document will may be never closed ...
 
     if ( m_pData->m_bSuicide )
     {
-        // Reset this state. In case the new close() request is not accepted by somehwere else ...
+        // Reset this state. In case the new close() request is not accepted by someone else ...
         // it's not a good idea to have two "owners" for close .-)
         m_pData->m_bSuicide = sal_False;
         try

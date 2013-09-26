@@ -43,16 +43,16 @@ import java.lang.String;
 /**
  * Implement a view to show status information
  * of currently loaded document of a document view.
- * It use separate listener threads to get this information
- * and actualize it automaticly if frame broadcast changes of
+ * It uses separate listener threads to get this information
+ * and actualize it automatically, if frame broadcast changes of
  * his contained document.
  * Threads are neccessary to prevent this view against deadlocks.
- * These deadlocks can occure if a listener will be notified
+ * These deadlocks can occur if a listener will be notified
  * by the office in an "oneway" method and try to call back
  * to the office by using a synchronous method.
  * UNO must guarantee order of all these calls ... and if
  * the source of arrived event holds a mutex and our synchronous
- * call needs this mutex too => a deadlock occure.
+ * call needs this mutex too => a deadlock occurs.
  * Why? UNO had created a new thread for our synchronous call
  * inside the office process and so exist different threads
  * for this constallation.
@@ -205,7 +205,7 @@ public class StatusView extends    JPanel
 
     /**
      * Set new frame for this view and start listening for events imedatly.
-     * We create one status listener for every control we whish to update.
+     * We create one status listener for every control we wish to update.
      * And because the environment of the frame can be changed - these
      * listener refresh himself internaly for frame action events too.
      * So we register it as such frame action listener only here.

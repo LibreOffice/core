@@ -48,7 +48,7 @@ import com.sun.star.uno.UnoRuntime;
 
   @attention    This class mustn't be threadsafe - because instances of it
                 are used temp. only - not as members. So no concurrent access
-                should occure.
+                should occur.
                 Another reason: It wuold be very difficult to safe every
                 access on our internal member. To do so - we must implement
                 special methods instead of allowing pure member access.
@@ -154,7 +154,7 @@ public class FilterOptions
                         if (lFilterProps[p].Name.equals("LowerCase"))
                         {
                             m_bLower      = AnyConverter.toBoolean(lFilterProps[p].Value);
-                            m_bCaseChange = true; // Set it after m_bLower - because an exception can occure and we must use default values then!
+                            m_bCaseChange = true; // Set it after m_bLower - because an exception can occur and we must use default values then!
                         }
                     }
                 }
@@ -164,7 +164,7 @@ public class FilterOptions
                 // ONE argument has the wrong type
                 // But I think we mustn't react here - because we setted
                 // default values for every necessary item we need.
-                // In case this exception occures - this default exist
+                // In case this exception occurs - this default exist
                 // and we can live with it.
             }
         }

@@ -76,7 +76,7 @@ JobResult::JobResult()
                     <li>
                         "Deactivate" [boolean]
                         <br>
-                        The job whish to be disabled. But note: There is no way, to enable it later
+                        The job wish to be disabled. But note: There is no way, to enable it later
                         again by using this implementation. It can be done by using the configuration
                         only. (Means to register this job again.)
                         If a job knows, that there exist some status or result listener, it must use

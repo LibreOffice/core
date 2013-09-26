@@ -392,8 +392,8 @@ class LoginDialog   :   public css::lang::XTypeProvider     ,
 
         /*-****************************************************************************************************//**
             @short      write changed values to configuration
-            @descr      Normaly the dialog returns with an OK or ERROR value. If OK occure - we flush data
-                        auomaticly. But otherwise we do nothing. If user of this service wish to use property set
+            @descr      Normaly the dialog returns with an OK or ERROR value. If OK occurs - we flush data
+                        automaticly. But otherwise we do nothing. If user of this service wishes to use property set
                         only without any UI(!) - he must call "flush()" explicitly to write data!
 
             @seealso    -

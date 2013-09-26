@@ -58,7 +58,7 @@ class QueryTokenizer : public ::boost::unordered_map< OUString                  
         /** @short  Because the given query can contain errors,
                     it should be checked outside.
 
-            TODO    May its a good idea to describe the real problem
+            TODO    May it's a good idea to describe the real problem
                     more detailed ...
          */
         sal_Bool m_bValid;

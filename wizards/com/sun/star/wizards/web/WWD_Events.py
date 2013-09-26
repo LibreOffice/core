@@ -530,7 +530,7 @@ class WWD_Events(WWD_Startup):
             path = fileAccess.getPath(p.url, None)
             # target exists?
             if fileAccess.exists(p.url, False):
-                #if its a directory
+                #if it's a directory
                 if fileAccess.isDirectory(p.url):
                     #check if its empty
                     files = fileAccess.listFiles(p.url, True)
@@ -592,7 +592,7 @@ class WWD_Events(WWD_Startup):
             path = fileAccess.getPath(p.cp_URL, None)
             # target exists?
             if fileAccess.exists(p.cp_URL, False):
-                #if its a directory
+                #if it's a directory
                 if fileAccess.isDirectory(p.cp_URL):
                     message = self.resources.resZipTargetIsDir.replace(
                         "%FILENAME", path)
@@ -618,7 +618,7 @@ class WWD_Events(WWD_Startup):
             path = fileAccess.getPath(p.cp_URL, None)
             # target exists?
             if fileAccess.exists(p.url, False):
-                #if its a directory
+                #if it's a directory
                 if fileAccess.isDirectory(p.url):
                     #check if its empty
                     files = fileAccess.listFiles(p.url, True)

@@ -554,7 +554,7 @@ public:
      * Note: An exception thrown to indicate an error must always be thrown
      * by the thread that created the data supplier. If the supplier collects
      * data asynchronously ( i.e. in a separate thread ) and an error
-     * occures, throwing of the appropriate exception must be deferred
+     * occurs, throwing of the appropriate exception must be deferred
      * until validate() is called by the ResultSet implementation from
      * inside the main thread.
      * In case data are obtained synchronously, the ResultSetException can

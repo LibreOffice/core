@@ -923,8 +923,8 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
     // At least it depends from the feature using this path, if an empty path list is allowed.
 
     // first we should try to store the changed (copied!) path ...
-    // In case an error occure on saving time an exception is thrown ...
-    // If no exception occures we can update our internal cache (means
+    // In case an error occurs on saving time an exception is thrown ...
+    // If no exception occurs we can update our internal cache (means
     // we can overwrite pOrgPath !
     impl_storePath(aChangePath);
     pOrgPath->takeOver(aChangePath);

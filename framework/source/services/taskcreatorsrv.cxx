@@ -124,7 +124,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
     // #i53630#
     // Mark all document windows as "special ones", so VCL can bind
-    // special features to it. Because VCL doesnt know anything about documents ...
+    // special features to it. Because VCL doesn't know anything about documents ...
     // Note: Doing so it's no longer supported, that e.g. our wizards can use findFrame(_blank)
     // to create it's previes frames. They must do it manually by using WindowDescriptor+Toolkit!
     css::uno::Reference< css::frame::XDesktop > xDesktop(xParentFrame, css::uno::UNO_QUERY);

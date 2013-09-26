@@ -306,7 +306,7 @@ static bool isTime( const OUString& rValue )
     }
 
     // return true if this is a double (if someone forgot the 's' we silently ignore it)
-    // or if its a double that ends with a 's' or 'S'
+    // or if it's a double that ends with a 's' or 'S'
     return (nLength == 0) || ((*pStr == 's' || *pStr == 'S') && (nLength == 1));
 }
 

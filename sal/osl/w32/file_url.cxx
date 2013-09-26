@@ -1006,7 +1006,7 @@ oslFileError SAL_CALL osl_searchFileURL(
             dwResult = SearchPath( lpszSearchPath, lpszSearchFile, NULL, nBufferLength, lpBuffer, &lpszFilePart );
         } while ( dwResult && dwResult >= nBufferLength );
 
-        /*  ... until an error occures or buffer is large enough.
+        /*  ... until an error occurs or buffer is large enough.
             dwResult == nBufferLength can not happen according to documentation but lets be robust ;-) */
 
         if ( dwResult )

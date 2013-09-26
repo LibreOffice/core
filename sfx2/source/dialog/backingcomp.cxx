@@ -568,12 +568,12 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
 
 /** ask controller for it's current working state.
 
-    If somehwere whish to close this component, it must suspend the controller before.
+    If someone wishes to close this component, it must suspend the controller before.
     That will be a chance for it to disagree with that AND show any UI for a possible
     UI user.
 
     @param  bSuspend
-                If its set to sal_True this controller should be suspended.
+                If it's set to sal_True this controller should be suspended.
                 sal_False will resuspend it.
 
     @return sal_True if the request could be finished successfully; sal_False otherwise.

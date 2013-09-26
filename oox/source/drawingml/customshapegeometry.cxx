@@ -232,7 +232,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
         sal_Int32   nConstant = -1;
         sal_Int32   nIntVal = 0;
 
-        // first check if its a constant value
+        // first check if it's a constant value
         switch( AttributeConversion::decodeToken( rValue ) )
         {
             case XML_3cd4 : nConstant = 270 * 60000; break;

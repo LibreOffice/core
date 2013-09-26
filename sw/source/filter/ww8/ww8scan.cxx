@@ -6308,7 +6308,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 }
                 else
                 {
-                    //#i18369# if its a symbol font set Symbol as fallback
+                    //#i18369# if it's a symbol font set Symbol as fallback
                     if (
                          RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->chs)
                          && p->sFontname!="Symbol"

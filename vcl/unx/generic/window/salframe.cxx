@@ -3303,7 +3303,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         {
             if ( ! CallCallback(SALEVENT_KEYINPUT, &aKeyEvt) )
             {
-                // independent layer doesnt want to handle key-event, so check
+                // independent layer doesn't want to handle key-event, so check
                 // whether the keycode may have an alternate meaning
                 KeyAlternate aAlternate = GetAlternateKeyCode( nKeyCode );
                 if ( aAlternate.nKeyCode != 0 )
@@ -3784,7 +3784,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     }
 
     // limit width and height if we are too large: #47757
-    // olwm and fvwm need this, it doesnt harm the rest
+    // olwm and fvwm need this, it doesn't harm the rest
 
     // #i81311# do this only for sizable frames
     if( (nStyle_ & SAL_FRAME_STYLE_SIZEABLE) != 0 )

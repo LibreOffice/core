@@ -761,7 +761,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             setPagebreakDefinition(new PageBreakDefinition(isResetPageNumber()));
         }
 
-        // its a table. This means, it is a root-level element
+        // it's a table. This means, it is a root-level element
         final PageBreakDefinition breakDefinition;
         String masterPageName = null;
         final int currentRole = getCurrentRole();

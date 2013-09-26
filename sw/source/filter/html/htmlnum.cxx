@@ -724,7 +724,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 ->Get( rInfo.GetDepth()-1 ).GetNumberingType();
             if( SVX_NUM_CHAR_SPECIAL != eType && SVX_NUM_BITMAP != eType )
             {
-                // If its a numbering rule, the current number should be
+                // If it's a numbering rule, the current number should be
                 // exported as start value, but only if there are no nodes
                 // within the numbering that have a lower level
                 bStartValue = sal_True;

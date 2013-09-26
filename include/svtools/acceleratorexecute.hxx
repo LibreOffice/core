@@ -62,7 +62,7 @@ struct TMutexInit
             Because exceution of an accelerator command can be dangerous
             (in case it force an office shutdown for key "ALT+F4"!)
             all internal dispatches are done asynchronous.
-            Menas that the trigger call doesnt wait till the dispatch
+            Menas that the trigger call doesn't wait till the dispatch
             is finished. You can call very often. All requests will be
             queued internal and dispatched ASAP.
 

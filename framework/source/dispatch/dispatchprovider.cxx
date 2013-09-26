@@ -290,7 +290,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
         if (xParent.is())
-            xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // its a special target - ignore search flags
+            xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // it's a special target - ignore search flags
     }
 
     //-----------------------------------------------------------------------------------------------------

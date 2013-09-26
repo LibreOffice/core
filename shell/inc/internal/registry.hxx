@@ -45,7 +45,7 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
 bool DeleteRegistryKey(HKEY RootKey, const char* KeyName);
 
 /** May be used to determine if the specified registry key has subkeys
-    The function returns true on success else if an error occures false
+    The function returns true on success else if an error occurs false
 */
 bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, bool& bResult);
 

@@ -390,9 +390,9 @@ class Desktop   :   // base classes
          *
          *  Iterates over all child frames and try to close them.
          *  Given parameter bAllowUI enable/disable showing any UI
-         *  (which mostly occure on calling XController->suspend()).
+         *  (which mostly occur on calling XController->suspend()).
          *
-         *  These method doesnt stop if one frame could not be closed.
+         *  This method doesn't stop if one frame could not be closed.
          *  It will ignore such frames and try all other ones.
          *  But it returns false in such case - true otherwise.
          *

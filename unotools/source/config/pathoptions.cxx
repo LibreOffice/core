@@ -336,7 +336,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     // Convert the returned path to system path!
     bool bConvertLocal = false;
 
-    // Search for first occure of "$(...".
+    // Search for first occurrence of "$(...".
     sal_Int32 nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE );  // = first position of "$(" in string
     sal_Int32 nLength   = 0;                                        // = count of letters from "$(" to ")" in string
 

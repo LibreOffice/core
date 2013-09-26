@@ -134,7 +134,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         };
 
         //---------------------------------------
-        /** @short  represent the different states, which can occure
+        /** @short  represent the different states, which can occur
                     as result of an interception.
 
             @see    impl_interceptRequest()
@@ -315,7 +315,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     searched and selected.
 
                     The method return the state of that operation.
-                    But it doesnt call the intercepted and here set
+                    But it doesn't call the intercepted and here set
                     interaction handler. That has to be done in the outside method.
 
             @param  xRequest

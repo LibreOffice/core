@@ -181,7 +181,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         if ( pathToParcel.indexOf(UNO_USER_PACKAGES1) > -1 ||
              pathToParcel.indexOf(UNO_USER_PACKAGES2) > -1 )
         {
-            // its a package
+            // it's a package
             placeHolder = "user:uno_packages";
             String unoPkg = parent.parent.getName();
             if ( unoPkg != null )

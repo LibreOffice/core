@@ -57,7 +57,7 @@ void SmWordExportBase::HandleNode( const SmNode* pNode, int nLevel )
         {
             const SmTextNode* pText= static_cast< const SmTextNode* >( pNode );
             //if the token str and the result text are the same then this
-            //is to be seen as text, else assume its a mathchar
+            //is to be seen as text, else assume it's a mathchar
             if (pText->GetText() == OUString(pText->GetToken().aText))
                 HandleText(pText,nLevel);
             else

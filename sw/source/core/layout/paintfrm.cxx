@@ -4435,7 +4435,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         // OD 30.09.2002 #103636# - no SwAlign of shadow rectangle
         // no alignment necessary, because (1) <rRect> is already aligned
         // and because (2) paint of border and background will occur later.
-        // Thus, (1) assures that no conflicts with neighbour object will occure
+        // Thus, (1) assures that no conflicts with neighbour object will occur
         // and (2) assures that border and background is not affected by the
         // shadow paint.
         /*

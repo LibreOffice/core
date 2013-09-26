@@ -66,10 +66,10 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         enum EOption
         {
             E_SECUREURLS,
-            E_BASICMODE,                    // xmlsec05 depricated
-            E_EXECUTEPLUGINS,               // xmlsec05 depricated
-            E_WARNING,                      // xmlsec05 depricated
-            E_CONFIRMATION,                 // xmlsec05 depricated
+            E_BASICMODE,                    // xmlsec05 deprecated
+            E_EXECUTEPLUGINS,               // xmlsec05 deprecated
+            E_WARNING,                      // xmlsec05 deprecated
+            E_CONFIRMATION,                 // xmlsec05 deprecated
             E_DOCWARN_SAVEORSEND,
             E_DOCWARN_SIGNING,
             E_DOCWARN_PRINT,
@@ -129,7 +129,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @param      "eOption", specify, which item is queried
             @return     <TRUE/> if item is readonly; <FALSE/> otherwise
 
-            @onerror    No error should occurre!
+            @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
         sal_Bool IsReadOnly( EOption eOption ) const ;
@@ -149,7 +149,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @param      "seqURLList", new values to set it in configuration.
             @return     The values which represent current state of internal variable.
 
-            @onerror    No error should occurre!
+            @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
         ::com::sun::star::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const ;
@@ -173,7 +173,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @param      "eMode" to set new mode ... Value must defined as an enum of type EBasicSecurityMode!
             @return     An enum value, which present current mode.
 
-            @onerror    No error should occurre!
+            @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
         sal_Int32           GetMacroSecurityLevel       (                   ) const ;
@@ -188,10 +188,10 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @seealso    -
 
             @param      "sURL" reference to URL for checking
-            @param      "sReferer" reference to referer which whish to run script by given URL
+            @param      "sReferer" reference to referer which wish to run script by given URL
             @return     sal_True if URL is secure or security is obsolete(!) or sal_False otherwise.
 
-            @onerror    No error should occurre!
+            @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
         sal_Bool IsSecureURL(   const   OUString&    sURL        ,
@@ -205,7 +205,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         bool        SetOption       ( EOption eOption, bool bValue      )       ;
         bool        IsOptionEnabled ( EOption eOption                   ) const ;
 
-        // xmlsec05 depricated methods
+        // xmlsec05 deprecated methods
         sal_Bool    IsExecutePlugins() const;
         void        SetExecutePlugins( sal_Bool bSet );
         EBasicSecurityMode  GetBasicMode(                           ) const ;

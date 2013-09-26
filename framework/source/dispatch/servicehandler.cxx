@@ -229,7 +229,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     if (sServiceName.isEmpty())
         return css::uno::Reference< css::uno::XInterface >();
 
-    // If a service doesnt support an optional job executor interface - he can't get
+    // If a service doesn't support an optional job executor interface - he can't get
     // any given parameters!
     // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
 

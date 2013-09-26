@@ -227,7 +227,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
                 implGetByName(const OUString& _rName, sal_Bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
 
-    /** quickly checks if there already is an element with a given name. No access to the configuration occures, i.e.
+    /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
         @param      _rName      the object name to check
         @return                 sal_True if there already exists such an object
@@ -305,7 +305,7 @@ private:
             if the object already exists in the container, or another object with the same name
             already exists
         @throws WrappedTargetException
-            if another error occures which prevents insertion of the object into the container
+            if another error occurs which prevents insertion of the object into the container
     */
     void approveNewObject(
             const OUString& _sName,

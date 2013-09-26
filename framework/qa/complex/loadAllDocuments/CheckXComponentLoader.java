@@ -178,7 +178,7 @@ public class CheckXComponentLoader
         // define default loader for testing
         // TODO think about using of bot loader instances!
         m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, m_xDesktop);
-        assertNotNull("Desktop service doesnt support needed component loader interface.", m_xLoader);
+        assertNotNull("Desktop service doesn't support needed component loader interface.", m_xLoader);
 
         // get temp path for this environment
         final String tempDirURL = util.utils.getOfficeTemp/*Dir*/(getMSF());

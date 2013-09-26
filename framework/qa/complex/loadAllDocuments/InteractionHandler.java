@@ -63,7 +63,7 @@ public class InteractionHandler implements XInteractionHandler
     }
 
     /**
-     * Called to start the interaction, because the outside code whish to solve
+     * Called to start the interaction, because the outside code wish to solve
      * a detected problem or to inform the user about something.
      * We save the information here and can handle two well known continuations
      * only.

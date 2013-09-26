@@ -20,7 +20,7 @@
 /*TODO
     - change "singleton" behaviour by using new helper ::comhelper::SingletonRef
     - rename method exist() to existHandlerForURL() or similar one
-    - may its a good idea to replace struct ProtocolHandler by css::beans::NamedValue type?!
+    - may it's a good idea to replace struct ProtocolHandler by css::beans::NamedValue type?!
 */
 
 #include <classes/protocolhandlercache.hxx>

@@ -34,7 +34,7 @@ import java.util.HashMap;
  * <li>Write a subclass which implements the needed Listener(s).</li>
  * in the even methods, use invoke(...).
  * <li>When instanciating the component, register the subclass as the event listener.</li>
- * <li>Write the methods which should be performed when the event occures.</li>
+ * <li>Write the methods which should be performed when the event occurs.</li>
  * <li>call the "add" method, to define a component-event-action mapping.</li>
  * </list>
  */

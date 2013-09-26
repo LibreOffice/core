@@ -616,7 +616,7 @@ sal_Bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMo
         EndTracking(ENDTRACK_CANCEL | ENDTRACK_END);
 
         // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag
-        // occures earlier (while the mouse button is down)
+        // occurs earlier (while the mouse button is down)
         // so for optical reasons we select the column before really starting the drag operation.
         notifyColumnSelect(nId);
 

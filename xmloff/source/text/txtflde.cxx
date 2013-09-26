@@ -387,7 +387,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
         ++pNames;
     }
 
-    // if this is not a normal text field, check if its a presentation text field
+    // if this is not a normal text field, check if it's a presentation text field
     if( sFieldName.isEmpty() )
     {
         const OUString* pNames2 = aServices.getConstArray();

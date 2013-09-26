@@ -121,7 +121,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     @descr      We show the dialog and if user finish it with "OK" - we try to find selected item in internal saved
                 name list (which you must set in "ChangeFilters()"!). If we return sal_True as result, you can use out
                 parameter "pSelectedItem" as pointer into your FilterNameList to get selected item realy ...
-                but if we return sal_False ... user has cancel the dialog ... you shouldnt do that. pSelectedItem isnt
+                but if we return sal_False ... user has cancel the dialog ... you should not do that. pSelectedItem isnt
                 set to any valid value then. We don't change them ...
 
     @seealso    method ChangeFilters()
@@ -210,7 +210,7 @@ String FilterDialog::impl_buildUIFileName( const String& sName )
 
     if( ::utl::LocalFileHelper::ConvertURLToSystemPath( sName, sShortName ) == sal_True )
     {
-        // its a system file ... build short name by using osl functionality
+        // it's a system file ... build short name by using osl functionality
     }
     else
     {

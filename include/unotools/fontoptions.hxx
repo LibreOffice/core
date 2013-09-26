@@ -85,7 +85,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
             @param      -
             @return     -
 
-            @onerror    No error should occurre!
+            @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
         sal_Bool    IsFontHistoryEnabled        (                   ) const ;

@@ -244,7 +244,7 @@ uno::Any SAL_CALL
 SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( uno::RuntimeException )
 {
     // FIXME: need to detect whether it is a relative file path
-    // we need to detect if this is a URL, if not then assume its a file path
+    // we need to detect if this is a URL, if not then assume it's a file path
     OUString sFileUrl;
     if( !rFilename.isEmpty() )
     {

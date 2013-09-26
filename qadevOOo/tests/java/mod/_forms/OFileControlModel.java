@@ -173,7 +173,7 @@ public class OFileControlModel extends TestCase {
             aShape.setSize(size);
             aShape.setPosition(position);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             log.println("Couldn't create a component " + e);
             throw new StatusException(Status.failed("Can't create component"));
         }

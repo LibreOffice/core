@@ -30,7 +30,7 @@ published struct TextColumn
     /** contains the relative width of the column, including both margins.
 
 
-        Width isn't a metric value, its a relative value to the sum of the width of all columns.
+        Width isn't a metric value, it's a relative value to the sum of the width of all columns.
      */
     long Width;
 

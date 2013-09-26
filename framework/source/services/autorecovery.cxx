@@ -208,7 +208,7 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
 
 #define MIN_TIME_FOR_USER_IDLE 10000 // 10s user idle
 
-// enable the following defines in case you whish to simulate a full disc for debug purposes .-)
+// enable the following defines in case you wish to simulate a full disc for debug purposes .-)
 
 // this define throws everytime a document is stored or a configuration change
 // should be flushed an exception ... so the special error handler for this scenario is triggered
@@ -911,7 +911,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     // <- SAFE ----------------------------------
 
     OUString sCFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM(CFG_PACKAGE_RECOVERY));
-    // throws a RuntimeException if an error occure!
+    // throws a RuntimeException if an error occurs!
     css::uno::Reference< css::container::XNameAccess > xCFG(
         ::comphelper::ConfigurationHelper::openConfig(xContext, sCFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
         css::uno::UNO_QUERY);
@@ -1681,7 +1681,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     AutoRecovery::TDocumentInfo aNew;
     aNew.Document = xDocument;
 
-    // TODO replace getLocation() with getURL() ... its a workaround currently only!
+    // TODO replace getLocation() with getURL() ... it's a workaround currently only!
     css::uno::Reference< css::frame::XStorable > xDoc(aNew.Document, css::uno::UNO_QUERY_THROW);
     aNew.OrgURL = xDoc->getLocation();
 
@@ -1698,7 +1698,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     implts_specifyAppModuleAndFactory(aNew);
 
     // Hack! Check for "illegal office documents" ... as e.g. the Basic IDE
-    // Its not realy a full featured office document. It doesnt provide an URL, any filter, a factory URL etcpp.
+    // Its not realy a full featured office document. It doesn't provide an URL, any filter, a factory URL etcpp.
     // TODO file bug to Basci IDE developers. They must remove the office document API from its service.
     if (
         (aNew.OrgURL.isEmpty()) &&
@@ -1894,7 +1894,7 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     AutoRecovery::TDocumentInfo& rInfo = *pIt;
 
     rInfo.DocumentState = AutoRecovery::E_UNKNOWN;
-    // TODO replace getLocation() with getURL() ... its a workaround currently only!
+    // TODO replace getLocation() with getURL() ... it's a workaround currently only!
     css::uno::Reference< css::frame::XStorable > xDoc(rInfo.Document, css::uno::UNO_QUERY);
     rInfo.OrgURL = xDoc->getLocation();
 
@@ -2201,7 +2201,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
         //      On the other side it's not necessary for documents, which are not modified.
         //      They can be handled normaly - means we patch the corresponding configuration entry only.
         // iii) For a SessionSave ... ignore it! There is no time to wait for this save operation.
-        //      Because the WindowManager will kill the process if it doesnt react immediately.
+        //      Because the WindowManager will kill the process if it doesn't react immediately.
         //      On the other side we cant risk a concurrent save request ... because we know
         //      that it will produce a crash.
 
@@ -2292,7 +2292,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
                                            AutoRecovery::TDocumentInfo&                        rInfo            ,
                                      const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
 {
-    // no document? => can occure if we loaded our configuration with files,
+    // no document? => can occur if we loaded our configuration with files,
     // which couldnt be recovered successfully. In such case we have all needed information
     // excepting the real document instance!
 
@@ -2330,7 +2330,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
 
     // safe the state about "trying to save"
-    // ... we need it for recovery if e.g. a crash occures inside next line!
+    // ... we need it for recovery if e.g. a crash occurs inside next line!
     rInfo.DocumentState |= AutoRecovery::E_TRY_SAVE;
     implts_flushConfigItem(rInfo);
 
@@ -2597,7 +2597,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         /* Normaly we listen as XModifyListener on a document to know if a document was changed
            since our last AutoSave. And we deregister us in case we know this state.
            But directly after one document as recovered ... we must start listening.
-           Otherwhise the first "modify" doesnt reach us. Because we ourself called setModified()
+           Otherwhise the first "modify" doesn't reach us. Because we ourself called setModified()
            on the document via API. And currently we dont listen for any events (not at the GlobalEventBroadcaster
            nor at any document!).
         */
@@ -3424,7 +3424,7 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 #ifdef SIMULATE_FULL_DISC
     return sal_False;
 #else  // SIMULATE_FULL_DISC
-    // In case an error occures and we are not able to retrieve the needed information
+    // In case an error occurs and we are not able to retrieve the needed information
     // it's better to "disable" the feature ShowErrorOnFullDisc !
     // Otherwhise we start a confusing process of error handling ...
 
@@ -3476,7 +3476,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     // for loading documents into this frame)!
     // But if no frame exists ... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
-    // point. But this state shouldnt occure. In such case xNewFrame should be valid ... hopefully .-)
+    // point. But this state should not occur. In such case xNewFrame should be valid ... hopefully .-)
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&
@@ -3515,7 +3515,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     // So we use a two step mechanism:
     // 1) we set the progress inside the MediaDescriptor, which will be provided to the filter
     // 2) and we set a special Frame property, which overwrites the normal behaviour of Frame::createStatusIndicator .-)
-    // But we supress 2) in case we uses an internal progress. Because then it doesnt matter
+    // But we supress 2) in case we uses an internal progress. Because then it doesn't matter
     // if our applications make it wrong. In such case the internal progress resists at the same frame
     // and there is no need to forward progress activities to e.g. an outside dialog .-)
     if (
@@ -3542,7 +3542,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     // for loading documents into this frame)!
     // But if no frame exists ... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
-    // point. But this state shouldnt occure. In such case xNewFrame should be valid ... hopefully .-)
+    // point. But this state should not occur. In such case xNewFrame should be valid ... hopefully .-)
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&

@@ -302,7 +302,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
 
         try
         {
-            // now get type, and determine whether its a standard type. If
+            // now get type, and determine whether it's a standard type. If
             // so, export the XSD name
             Reference<com::sun::star::xforms::XModel> xModel(
                 xBinding->getPropertyValue( "Model" ),

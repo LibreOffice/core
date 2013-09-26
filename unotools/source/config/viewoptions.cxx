@@ -88,7 +88,7 @@ sal_Int32                    SvtViewOptions::m_nRefCount_Windows         =   0  
 /*-************************************************************************************************************//**
     @descr  declare one configuration item
             These struct hold information about one view item. But not all member are used for all entries!
-            User must decide which information are useful and which not. We are a container iztem only and doesnt
+            User must decide which information are useful and which not. We are a container iztem only and doesn't
             know anything about the context.
             But; we support a feature:
                 decision between items with default values (should not realy exist in configuration!)
@@ -358,7 +358,7 @@ SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
     // dont flush configuration changes here to m_xRoot.
     // That must be done inside every SetXXX() method already !
-    // Here its to late - DisposedExceptions from used configuration access can occure otherwise.
+    // Here its to late - DisposedExceptions from used configuration access can occur otherwise.
 
     m_xRoot.clear();
     m_xSet.clear();

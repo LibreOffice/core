@@ -1353,7 +1353,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 
 void Menu::InsertSeparator(const OString &rIdent, sal_uInt16 nPos)
 {
-    // do nothing if its a menu bar
+    // do nothing if it's a menu bar
     if ( bIsMenuBar )
         return;
 
@@ -6045,7 +6045,7 @@ Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
             aRect = pMenu->mpSalMenu->GetMenuBarButtonRectPixel( nId, ImplGetWindowImpl()->mpFrame );
             if( aRect == Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) )
             {
-                // system menu button is somehwere but location cannot be determined
+                // system menu button is somewhere but location cannot be determined
                 return Rectangle();
             }
         }

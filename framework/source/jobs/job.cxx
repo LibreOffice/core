@@ -288,7 +288,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
             from outside. We release our internal structures and stop
             avary activity. After doing so - this instance will not be
             useable any longer! Of course we try to handle further requests
-            carefully. May somehwere else hold a reference to us ...
+            carefully. Maybe someone else holds a reference to us ...
 */
 void Job::die()
 {
@@ -497,11 +497,11 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
 //________________________________
 /**
     @short  starts listening for office shutdown and closing of our
-            given target frame (if its a valid reference)
+            given target frame (if it's a valid reference)
     @descr  We will reghister ourself as terminate listener
             at the global desktop instance. That will hold us
             alive and additional we get the information, if the
-            office whish to shutdown. If then an internal job
+            office wish to shutdown. If then an internal job
             is running we will have the chance to supress that
             by throwing a veto exception. If our internal wrapped
             job finished his work, we can release this listener
@@ -733,7 +733,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
     @short  inform us about office termination
     @descr  Instead of the method queryTermination(), here is no chance to disagree with that.
             We have to accept it and cancel all current processes inside.
-            It can occure only, if job was not already started if queryTermination() was called here ..
+            It can occur only, if job was not already started if queryTermination() was called here ..
             Then we had not throwed a veto exception. But now we must agree with this situation and break
             all our internal processes. Its not a good idea to mark this instance as non startable any longer
             inside queryTermination() if no job was unning too. Because that would disable this job and may

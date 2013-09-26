@@ -59,7 +59,7 @@ public class SvxShapeControl extends TestCase {
             log.println( "creating a drawdoc" );
             xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

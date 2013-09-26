@@ -315,7 +315,7 @@ public:
     virtual void            SetTextColor( SalColor nSalColor );
     // set the font
     virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel );
-    // get the current font's etrics
+    // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)

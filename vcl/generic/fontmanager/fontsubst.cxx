@@ -156,7 +156,7 @@ namespace
 
 bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
 {
-    // We dont' actually want to talk to Fontconfig at all for symbol fonts
+    // We don't actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
@@ -224,7 +224,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
 bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData,
     OUString& rMissingCodes ) const
 {
-    // We dont' actually want to talk to Fontconfig at all for symbol fonts
+    // We don't actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag

@@ -711,7 +711,7 @@ bool TypeDetection::impl_getPreselectionForType(
         }
     }
 
-    // if its a valid type - set it on all return values!
+    // if it's a valid type - set it on all return values!
     if (!sType.isEmpty())
     {
         FlatDetection::iterator it = std::find_if(rFlatTypes.begin(), rFlatTypes.end(), FindByType(sType));

@@ -123,7 +123,7 @@ public class SvxShapeCircle extends TestCase {
             xDrawDoc = SOF.loadDocument(
                              utils.getFullTestURL("SvxShape.sxd"));
         } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

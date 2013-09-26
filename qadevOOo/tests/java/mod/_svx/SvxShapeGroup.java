@@ -68,7 +68,7 @@ public class SvxShapeGroup extends TestCase {
         log.println( "creating a draw document" );
         xDrawDoc = SOF.createDrawDoc(null);
      } catch ( Exception e ) {
-        // Some exception occures.FAILED
+        // Some exception occurs.FAILED
         e.printStackTrace( log );
         throw new StatusException( "Couldn't create document", e );
      }
@@ -110,7 +110,7 @@ public class SvxShapeGroup extends TestCase {
             oObj = (XDrawPage) AnyConverter.toObject(
                 new Type(XDrawPage.class),oDPi.getByIndex(0));
         } catch ( Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get DrawPage", e );
         }

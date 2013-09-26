@@ -178,7 +178,7 @@ class BaseContainer : public BaseLock
                     of the global instance m_rCache, and will be used to change the
                     configuration.
 
-            @descr  If no exception occures, its guaranteed, that the member m_rFlushCache
+            @descr  If no exception occurs, its guaranteed, that the member m_rFlushCache
                     was initialized right and can be used further.
          */
         void impl_initFlushMode()

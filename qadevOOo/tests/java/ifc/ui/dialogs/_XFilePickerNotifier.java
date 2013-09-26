@@ -99,9 +99,9 @@ public class _XFilePickerNotifier extends MultiMethodTest {
                 (XFilePicker.class, oObj) ;
 
         if (fps == null) {
-            log.println("The object doesnt implement XFilePicker") ;
+            log.println("The object doesn't implement XFilePicker") ;
             throw new StatusException(Status.failed
-                    ("The object doesnt implement XFilePicker"));
+                    ("The object doesn't implement XFilePicker"));
         }
 
         XExecutableDialog exD = UnoRuntime.queryInterface(

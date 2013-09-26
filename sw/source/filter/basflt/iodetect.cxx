@@ -413,7 +413,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
     bool bSwap = false;
     CharSet eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bool bLE = true;
-    /*See if its a known unicode type*/
+    /*See if it's a known unicode type*/
     if (rLen >= 2)
     {
         sal_uLong nHead=0;

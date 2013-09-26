@@ -412,7 +412,7 @@ CacheItem FilterCache::getItem(      EItemType        eType,
         if ( !bIsHelpFilter && !impl_isModuleInstalled(sDocService) )
         {
             OUString sMsg("The requested filter '" + sItem +
-                          "' exists ... but it shouldnt; because the corresponding LibreOffice module was not installed.");
+                          "' exists ... but it should not; because the corresponding LibreOffice module was not installed.");
             throw css::container::NoSuchElementException(sMsg, css::uno::Reference< css::uno::XInterface >());
         }
     }
@@ -1053,7 +1053,7 @@ void FilterCache::impl_validateAndOptimize()
             impl_resolveItem4TypeRegistration(&m_lDetectServices, sDetectService, sType);
 
         // get its registration for file Extensions AND(!) URLPattern ...
-        // It doesnt matter if these items exists or if our
+        // It doesn't matter if these items exists or if our
         // used index access create some default ones ...
         // only in case there is no filled set of Extensions AND
         // no filled set of URLPattern -> we must try to remove this invalid item
@@ -1083,7 +1083,7 @@ void FilterCache::impl_validateAndOptimize()
 #endif
 
         // create an optimized registration for this type to
-        // its set list of extensions/url pattern. If its a "normal" type
+        // its set list of extensions/url pattern. If it's a "normal" type
         // set it at the end of this optimized list. But if its
         // a "Preferred" one - set it to the front of this list.
         // Of course multiple "Preferred" registrations can occur
@@ -1128,7 +1128,7 @@ void FilterCache::impl_validateAndOptimize()
         // Dont check cross references between types and filters, if
         // not all filters read from disk!
         // OK - this cache can read single filters on demand too ...
-        // but then the fill state of this cache shouldnt be set to E_CONTAINS_FILTERS!
+        // but then the fill state of this cache should not be set to E_CONTAINS_FILTERS!
         if (!bAllFiltersShouldExist)
             continue;
 
@@ -1341,7 +1341,7 @@ void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList
     throw(css::uno::Exception)
 {
     CacheItem& rItem = (*pList)[sItem];
-    // In case its a new created entry (automaticly done by the boost::unordered_map index operator!)
+    // In case it's a new created entry (automaticly done by the boost::unordered_map index operator!)
     // we must be shure, that this entry has its own name as property available.
     // Its needed later at our container interface!
     rItem[PROPNAME_NAME] <<= sItem;
@@ -1450,7 +1450,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         }
     }
 
-    // update fill state. Note: its a bit field, which combines different parts.
+    // update fill state. Note: it's a bit field, which combines different parts.
     m_eFillState = (EFillState) ((sal_Int32)m_eFillState | (sal_Int32)eRequiredState);
 
     // any data readed?
@@ -2237,7 +2237,7 @@ void FilterCache::impl_readOldFormat()
     throw(css::uno::Exception)
 {
     // Attention: Opening/Reading of this old configuration format has to be handled gracefully.
-    // Its optional and shouldnt disturb our normal work!
+    // Its optional and should not disturb our normal work!
     // E.g. we must check, if the package exists ...
 
     css::uno::Reference< css::container::XNameAccess > xCfg;

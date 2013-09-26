@@ -271,7 +271,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
           )
         {
             // Attention: URL must be parsed full. Otherwise some detections on it will fail!
-            // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
+            // It doesn't matter, if parser isn't available. Because; We try loading of URL then ...
             URL             aURL ;
             aURL.Complete = aName;
 

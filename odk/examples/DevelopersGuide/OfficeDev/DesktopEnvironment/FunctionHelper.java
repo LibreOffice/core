@@ -393,7 +393,7 @@ public class FunctionHelper
                 // It's possible to do that here - because frame has no component inside yet.
                 // So nobody can disagree with that.
                 // After the dispose() call forget all references to this frame and let him die.
-                // If a new exception will occure ... no generell solution exist then.
+                // If a new exception will occur ... no generell solution exist then.
                 // Nobody can guarantee if next call will work or not.
                 com.sun.star.lang.XComponent xComponent = UnoRuntime.queryInterface(
                     com.sun.star.lang.XComponent.class,
@@ -428,7 +428,7 @@ public class FunctionHelper
     /**
      * Dispatch an URL to given frame.
      * Caller can register himself for following status events for dispatched
-     * URL too. But nobody guarantee that such notifications will occure.
+     * URL too. But nobody guarantee that such notifications will occur.
      * (see dispatchWithNotification() if you interest on that)
      * The returned dispatch object should be hold alive by caller
      * till he deosn't need it any longer. Otherwise the dispatcher can(!)

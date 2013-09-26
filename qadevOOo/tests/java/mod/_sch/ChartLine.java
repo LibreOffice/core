@@ -60,7 +60,7 @@ public class ChartLine extends TestCase {
             log.println( "creating a chartdocument" );
             xChartDoc = SOF.createChartDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }
@@ -107,24 +107,24 @@ public class ChartLine extends TestCase {
                 new Type(XPropertySet.class),
                     RowProps.getPropertyValue("DataMeanValueProperties"));
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get Line", e );
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get Line", e );
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get Line", e );
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occures.FAILED
+            // Some exception occurs.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get Line", e );
         }
         catch(com.sun.star.beans.PropertyVetoException e) {
-             // Some exception occures.FAILED
+             // Some exception occurs.FAILED
              e.printStackTrace( log );
              throw new StatusException( "Couldn't get Line", e );
          }

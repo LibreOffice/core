@@ -983,7 +983,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     //    We doesn't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
     //    in following code again and again. If we do not so -wrong
-    //    search results can occure!
+    //    search results can occur!
     //-----------------------------------------------------------------------------------------------------
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
@@ -1078,7 +1078,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  a special feature: We use it to start search on our direct children only. That means we supress
         //  search on ALL child frames. May that can be useful to get access on opened document tasks
         //  only without filter out all non realy required sub frames ...
-        //  Used helper method on our container doesn't create any frame - its a search only.
+        //  Used helper method on our container doesn't create any frame - it's a search only.
         //-------------------------------------------------------------------------------------------------
         if (
             ( ! xTarget.is()                                  ) &&
@@ -1091,7 +1091,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //-------------------------------------------------------------------------------------------------
         // II.III) CHILDREN
         //  Search on all children for the given target name.
-        //  An empty name value can't occure here - because it must be already handled as "_self"
+        //  An empty name value can't occur here - because it must be already handled as "_self"
         //  before. Used helper function of container doesn't create any frame.
         //  It makes a deep search only.
         //-------------------------------------------------------------------------------------------------
@@ -1195,7 +1195,7 @@ void SAL_CALL Desktop::dispose()
 /*-************************************************************************************************************//**
     @interface  XComponent
     @short      add/remove listener for dispose events
-    @descr      Add an event listener to this object, if you whish to get information
+    @descr      Add an event listener to this object, if you wish to get information
                 about our dieing!
                 You must releas ethis listener reference during your own disposing() method.
 
@@ -1899,7 +1899,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
                     // Reactivate controller.
                     // It can happen that XController.suspend() returned true ... but a registered close listener
                     // throwed these veto exception. Then the controller has to be reactivated. Otherwise
-                    // these document doesnt work any more.
+                    // these document doesn't work any more.
                     if (
                         (bSuspended      ) &&
                         (xController.is())

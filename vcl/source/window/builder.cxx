@@ -1823,7 +1823,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                     if (!sInternalChild.isEmpty())
                         pCurrentChild->Show();
 
-                    //Select the first page if its a notebook
+                    //Select the first page if it's a notebook
                     if (pCurrentChild->GetType() == WINDOW_TABCONTROL)
                     {
                         TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);

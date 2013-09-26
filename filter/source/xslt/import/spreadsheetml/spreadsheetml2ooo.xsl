@@ -7401,7 +7401,7 @@
 					<xsl:with-param name="current-pos" select="$current-pos + 1 + $font-size-length"/>
 				</xsl:call-template>
 			</xsl:when>
-			<!-- dont' consider tangled or adjoined '&X' and '&Y', '&U' & '&E', processing-check is necessary, too complex. :( -->
+			<!-- don't consider tangled or adjoined '&X' and '&Y', '&U' & '&E', processing-check is necessary, too complex. :( -->
 			<xsl:when test="starts-with($current-style-data,'&amp;X')">
 				<xsl:variable name="superscript-count-before">
 					<xsl:call-template name="get-substyle-count-in-data">

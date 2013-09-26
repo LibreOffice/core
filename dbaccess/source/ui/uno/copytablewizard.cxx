@@ -604,7 +604,7 @@ namespace
         with it. This doocument may have an InteractionHandler used while loading it.
 
         @throws RuntimeException
-            if it occures during invoking any of the data source's methods, or if any of the involved
+            if it occurs during invoking any of the data source's methods, or if any of the involved
             components violates its contract by not providing the required interfaces
     */
     Reference< XInteractionHandler > lcl_getInteractionHandler_throw( const Reference< XDataSource >& _rxDataSource, const Reference< XInteractionHandler >& _rFallback )
@@ -632,7 +632,7 @@ namespace
         is examined for an interaction handler. Else, <NULL/> is returned.
 
         @throws RuntimeException
-            if it occures during invoking any of the data source's methods, or if any of the involved
+            if it occurs during invoking any of the data source's methods, or if any of the involved
             components violates its contract by not providing the required interfaces
     */
     Reference< XInteractionHandler > lcl_getInteractionHandler_throw( const Reference< XConnection >& _rxConnection, const Reference< XInteractionHandler >& _rFallback )
