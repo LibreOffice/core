@@ -266,11 +266,11 @@ void SvtSysLocaleOptions_Impl::MakeRealLocale()
     if (m_aLocaleString.isEmpty())
     {
         LanguageType nLang = MsLangId::getSystemLanguage();
-        m_aRealLocale.reset( nLang);
+        m_aRealLocale.reset( nLang).makeFallback();
     }
     else
     {
-        m_aRealLocale.reset( m_aLocaleString);
+        m_aRealLocale.reset( m_aLocaleString).makeFallback();
     }
 }
 
@@ -279,11 +279,11 @@ void SvtSysLocaleOptions_Impl::MakeRealUILocale()
     if (m_aUILocaleString.isEmpty())
     {
         LanguageType nLang = MsLangId::getSystemUILanguage();
-        m_aRealUILocale.reset( nLang);
+        m_aRealUILocale.reset( nLang).makeFallback();
     }
     else
     {
-        m_aRealUILocale.reset( m_aUILocaleString);
+        m_aRealUILocale.reset( m_aUILocaleString).makeFallback();
     }
 }
 
