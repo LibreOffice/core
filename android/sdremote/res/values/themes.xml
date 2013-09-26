@@ -10,8 +10,8 @@
     </style>
 
     <style name="Theme.ImpressRemote.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/background_action_bar</item>
-        <item name="background">@color/background_action_bar</item>
+        <item name="android:background">@drawable/action_bar_background</item>
+        <item name="background">@drawable/action_bar_background</item>
 
         <item name="android:displayOptions">showTitle|showHome|homeAsUp|useLogo</item>
         <item name="displayOptions">showTitle|showHome|homeAsUp|useLogo</item>
