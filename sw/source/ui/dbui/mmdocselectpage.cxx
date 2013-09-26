@@ -33,7 +33,6 @@
 #include <mmconfigitem.hxx>
 
 #include <dbui.hrc>
-#include <mmdocselectpage.hrc>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -44,54 +43,50 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace svt;
 
-SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent ) :
-    svt::OWizardPage(_pParent, SW_RES(DLG_MM_DOCSELECT_PAGE)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aHeaderFI(this,          SW_RES(  FI_HEADER           ) ),
-    m_aHowToFT          (this, SW_RES( FT_HOWTO )),
-    m_aCurrentDocRB     (this, SW_RES( RB_CURRENTDOC )),
-    m_aNewDocRB         (this, SW_RES( RB_NEWDOC )),
-    m_aLoadDocRB        (this, SW_RES( RB_LOADDOC )),
-    m_aLoadTemplateRB   (this, SW_RES( RB_LOADTEMPLATE )),
-    m_aRecentDocRB      (this, SW_RES( RB_RECENTDOC )),
-    m_aBrowseDocPB      (this, SW_RES( PB_LOADDOC )),
-    m_aBrowseTemplatePB (this, SW_RES( PB_BROWSETEMPLATE )),
-    m_aRecentDocLB      (this, SW_RES( LB_RECENTDOC )),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-    m_pWizard(_pParent)
+SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
+    : svt::OWizardPage(pParent, "MMSelectPage",
+        "modules/swriter/ui/mmselectpage.ui")
+    , m_pWizard(pParent)
 {
-    FreeResource();
+    get(m_pCurrentDocRB, "currentdoc");
+    get(m_pNewDocRB, "newdoc");
+    get(m_pLoadDocRB, "loaddoc");
+    get(m_pLoadTemplateRB, "template");
+    get(m_pRecentDocRB, "recentdoc");
+    get(m_pBrowseDocPB, "browsedoc");
+    get(m_pBrowseTemplatePB, "browsetemplate");
+    get(m_pRecentDocLB, "recentdoclb");
 
-    m_aCurrentDocRB.Check();
-    DocSelectHdl(&m_aNewDocRB);
+    m_pCurrentDocRB->Check();
+    DocSelectHdl(m_pNewDocRB);
 
     Link aDocSelectLink = LINK(this, SwMailMergeDocSelectPage, DocSelectHdl);
-    m_aCurrentDocRB.SetClickHdl(aDocSelectLink);
-    m_aNewDocRB.SetClickHdl(aDocSelectLink);
-    m_aLoadDocRB.SetClickHdl(aDocSelectLink);
-    m_aLoadTemplateRB.SetClickHdl(aDocSelectLink);
-    m_aRecentDocRB.SetClickHdl(aDocSelectLink);
+    m_pCurrentDocRB->SetClickHdl(aDocSelectLink);
+    m_pNewDocRB->SetClickHdl(aDocSelectLink);
+    m_pLoadDocRB->SetClickHdl(aDocSelectLink);
+    m_pLoadTemplateRB->SetClickHdl(aDocSelectLink);
+    m_pRecentDocRB->SetClickHdl(aDocSelectLink);
 
     Link aFileSelectHdl = LINK(this, SwMailMergeDocSelectPage, FileSelectHdl);
-    m_aBrowseDocPB.SetClickHdl(aFileSelectHdl);
-    m_aBrowseTemplatePB.SetClickHdl(aFileSelectHdl);
+    m_pBrowseDocPB->SetClickHdl(aFileSelectHdl);
+    m_pBrowseTemplatePB->SetClickHdl(aFileSelectHdl);
 
     const uno::Sequence< OUString >& rDocs =
                             m_pWizard->GetConfigItem().GetSavedDocuments();
     for(sal_Int32 nDoc = 0; nDoc < rDocs.getLength(); ++nDoc)
     {
         //insert in reverse order
-        m_aRecentDocLB.InsertEntry(rDocs[nDoc], 0);
+        m_pRecentDocLB->InsertEntry(rDocs[nDoc], 0);
     }
-    m_aRecentDocLB.SelectEntryPos(0);
+    m_pRecentDocLB->SelectEntryPos(0);
     if(!rDocs.getLength())
     {
-        m_aRecentDocRB.Enable(sal_False);
+        m_pRecentDocRB->Enable(sal_False);
     }
+
+    //Temp hack until all pages are converted to .ui and wizard
+    //base class adapted
+    SetSizePixel(LogicToPixel(Size(260 , 250), MapMode(MAP_APPFONT)));
 }
 
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
@@ -100,7 +95,7 @@ SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 
 IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
 {
-    m_aRecentDocLB.Enable(&m_aRecentDocRB == pButton);
+    m_pRecentDocLB->Enable(m_pRecentDocRB == pButton);
 
     m_pWizard->UpdateRoadmap();
     m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
@@ -110,11 +105,11 @@ IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
 
 IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
 {
-    bool bTemplate = &m_aBrowseTemplatePB == pButton;
+    bool bTemplate = m_pBrowseTemplatePB == pButton;
 
     if(bTemplate)
     {
-        m_aLoadTemplateRB.Check();
+        m_pLoadTemplateRB->Check();
         SfxNewFileDialog* pNewFileDlg = new SfxNewFileDialog(this, 0);
         sal_uInt16 nRet = pNewFileDlg->Execute();
         if(RET_TEMPLATE_LOAD == nRet)
@@ -124,7 +119,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
         delete pNewFileDlg;
     }
     else
-        m_aLoadDocRB.Check();
+        m_pLoadDocRB->Check();
 
     if(!bTemplate)
     {
@@ -172,15 +167,15 @@ sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageRea
     if(bNext || _eReason == ::svt::WizardTypes::eValidate )
     {
         OUString sReloadDocument;
-        bReturn = m_aCurrentDocRB.IsChecked() ||
-                m_aNewDocRB.IsChecked() ||
-                (!(sReloadDocument = m_sLoadFileName).isEmpty() && m_aLoadDocRB.IsChecked() )||
-                (!(sReloadDocument = m_sLoadTemplateName).isEmpty() && m_aLoadTemplateRB.IsChecked())||
-                (m_aRecentDocRB.IsChecked() && !(sReloadDocument = m_aRecentDocLB.GetSelectEntry()).isEmpty());
+        bReturn = m_pCurrentDocRB->IsChecked() ||
+                m_pNewDocRB->IsChecked() ||
+                (!(sReloadDocument = m_sLoadFileName).isEmpty() && m_pLoadDocRB->IsChecked() )||
+                (!(sReloadDocument = m_sLoadTemplateName).isEmpty() && m_pLoadTemplateRB->IsChecked())||
+                (m_pRecentDocRB->IsChecked() && !(sReloadDocument = m_pRecentDocLB->GetSelectEntry()).isEmpty());
         if( _eReason == ::svt::WizardTypes::eValidate )
-            m_pWizard->SetDocumentLoad(!m_aCurrentDocRB.IsChecked());
+            m_pWizard->SetDocumentLoad(!m_pCurrentDocRB->IsChecked());
 
-        if(bNext && !m_aCurrentDocRB.IsChecked())
+        if(bNext && !m_pCurrentDocRB->IsChecked())
         {
             if(!sReloadDocument.isEmpty())
                 m_pWizard->SetReloadDocument( sReloadDocument );

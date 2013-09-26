@@ -49,6 +49,13 @@ namespace svt
     {
     }
 
+    OWizardPage::OWizardPage(Window *pParent, const OString& rID,
+        const OUString& rUIXMLDescription)
+        : TabPage(pParent, rID, rUIXMLDescription)
+        , m_pImpl(new WizardPageImplData)
+    {
+    }
+
     //---------------------------------------------------------------------
     OWizardPage::~OWizardPage()
     {

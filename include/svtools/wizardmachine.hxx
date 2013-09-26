@@ -99,7 +99,8 @@ namespace svt
                 if the OWizardPage is used in an OWizardMachine, this parameter
                 must be the OWizardMachine (which is derived from Window)
          */
-        OWizardPage( Window* _pParent, const ResId& _rResId );
+        OWizardPage(Window* _pParent, const ResId& _rResId);
+        OWizardPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         ~OWizardPage();
 
         // IWizardPageController overridables

@@ -28,21 +28,19 @@ class SwMailMergeWizard;
 
 class SwMailMergeDocSelectPage : public svt::OWizardPage
 {
-    SwBoldFixedInfo     m_aHeaderFI;
-    FixedInfo           m_aHowToFT;
-    RadioButton         m_aCurrentDocRB;
-    RadioButton         m_aNewDocRB;
-    RadioButton         m_aLoadDocRB;
-    RadioButton         m_aLoadTemplateRB;
-    RadioButton         m_aRecentDocRB;
+    RadioButton*        m_pCurrentDocRB;
+    RadioButton*        m_pNewDocRB;
+    RadioButton*        m_pLoadDocRB;
+    RadioButton*        m_pLoadTemplateRB;
+    RadioButton*        m_pRecentDocRB;
 
-    PushButton          m_aBrowseDocPB;
-    PushButton          m_aBrowseTemplatePB;
+    PushButton*         m_pBrowseDocPB;
+    PushButton*         m_pBrowseTemplatePB;
 
-    ListBox             m_aRecentDocLB;
+    ListBox*            m_pRecentDocLB;
 
-    String              m_sLoadFileName;
-    String              m_sLoadTemplateName;
+    OUString            m_sLoadFileName;
+    OUString            m_sLoadTemplateName;
 
     SwMailMergeWizard*  m_pWizard;
 
