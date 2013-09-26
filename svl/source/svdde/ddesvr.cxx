@@ -24,6 +24,7 @@
 #include <comphelper/string.hxx>
 #include <svl/svdde.hxx>
 #include <tools/debug.hxx>
+#include <tools/string.hxx>
 #include <osl/thread.h>
 #include <o3tl/sorted_vector.hxx>
 
