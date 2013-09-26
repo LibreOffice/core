@@ -679,69 +679,6 @@ WW8Value::Pointer_t WW8FOPTE::get_stringValue()
 
 <xsl:template match="UML:Model" mode="createdffrecord">
 <xsl:text>
-DffRecord * createDffRecord
-(WW8StructBase * pParent, sal_uInt32 nOffset, sal_uInt32 * pCount)
-{
-    DffRecord * pResult = NULL;
-    DffRecord aTmpRec(pParent, nOffset, 8);
-    sal_uInt32 nSize = aTmpRec.calcSize();
-
-    if (pCount != NULL)
-        *pCount = nSize;
-
-    switch (aTmpRec.getRecordType())
-    {&#xa;</xsl:text>
-    <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffrecord"]'>
-      <xsl:text>        case </xsl:text>
-      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='dffid']//UML:TaggedValue.dataValue"/>
-      <xsl:text>:
-             pResult = new Dff</xsl:text>
-                 <xsl:value-of select="@name"/>
-                 <xsl:text>(pParent, nOffset, nSize);
-                 
-             break;&#xa;</xsl:text>
-    </xsl:for-each>
-    <xsl:text>
-         default:
-             pResult = new DffRecord(pParent, nOffset, nSize);
-
-             break;
-    }
-
-    return pResult;
-}
-
-DffRecord * createDffRecord
-(WW8Stream &amp; rStream, sal_uInt32 nOffset, sal_uInt32 * pCount)
-{
-    DffRecord * pResult = NULL;
-    DffRecord aTmpRec(rStream, nOffset, 8);
-    sal_uInt32 nSize = aTmpRec.calcSize();
-
-    if (pCount != NULL)
-        *pCount = nSize;
-
-    switch (aTmpRec.getRecordType())
-    {&#xa;</xsl:text>
-    <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="dffrecord"]'>
-      <xsl:text>        case </xsl:text>
-      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='dffid']//UML:TaggedValue.dataValue"/>
-      <xsl:text>:
-             pResult = new Dff</xsl:text>
-                 <xsl:value-of select="@name"/>
-                 <xsl:text>(rStream, nOffset, nSize);
-                 
-             break;&#xa;</xsl:text>
-    </xsl:for-each>
-    <xsl:text>
-         default:
-             pResult = new DffRecord(rStream, nOffset, nSize);
-
-             break;
-    }
-
-    return pResult;
-}
     </xsl:text>
 </xsl:template>
 

@@ -133,13 +133,6 @@ public:
     virtual string getType() const;
 };
 
-DffRecord *
-createDffRecord(WW8StructBase * pParent, sal_uInt32 nOffset,
-                sal_uInt32 * nSize = NULL);
-DffRecord *
-createDffRecord(WW8Stream & rStream, sal_uInt32 nOffset,
-                sal_uInt32 * nSize = NULL);
-
 }}
 
 #endif

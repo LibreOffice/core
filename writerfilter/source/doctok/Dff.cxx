@@ -107,27 +107,6 @@ sal_uInt32 DffRecord::getRecordType() const
 
 void DffRecord::initChildren()
 {
-    if (isContainer())
-    {
-        sal_uInt32 nOffset = 8;
-        sal_uInt32 nCount = calcSize();
-
-        while (nCount - nOffset >= 8)
-        {
-            sal_uInt32 nSize = 0;
-            boost::shared_ptr<DffRecord> pRec
-                (createDffRecord(this, nOffset, &nSize));
-
-            if (nSize == 0)
-                break;
-
-            mRecords.push_back(pRec);
-
-            nOffset += nSize;
-        }
-    }
-
-    bInitialized = true;
 }
 
 Records_t DffRecord::findRecords(sal_uInt32 nType, bool bRecursive, bool bAny)
@@ -376,24 +355,6 @@ DffBlock::DffBlock(const DffBlock & rSrc)
 
 void DffBlock::initChildren()
 {
-    sal_uInt32 nOffset = 0;
-    sal_uInt32 nCount = getCount();
-
-    while (nOffset < nCount)
-    {
-        sal_uInt32 nSize = 0;
-        DffRecord::Pointer_t pDffRecord
-            (createDffRecord(this, nOffset, &nSize));
-
-        if (nSize == 0)
-            break;
-
-        mRecords.push_back(pDffRecord);
-
-        nOffset +=  nSize + mnPadding;
-    }
-
-    bInitialized = true;
 }
 
 Records_t DffBlock::findRecords(sal_uInt32 nType, bool bRecursive, bool bAny)
