@@ -987,7 +987,6 @@ void SwDoc::UpdateLinks( bool bUI )
             }
         }
     }
-
 }
 
 ::sfx2::IXmlIdRegistry&
@@ -1156,7 +1155,6 @@ void SwDoc::Paste( const SwDoc& rSource )
     SwPaM aCpyPam( aSourceIdx ); //DocStart
     SwNodeIndex aTargetIdx( GetNodes().GetEndOfExtras(), 2 );
     SwPaM aInsertPam( aTargetIdx ); //replaces PCURCRSR from SwFEShell::Paste()
-
 
     aCpyPam.SetMark();
     aCpyPam.Move( fnMoveForward, fnGoDoc );

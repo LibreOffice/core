@@ -226,7 +226,6 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, bool bNewFrms
     if( nOld == nNew )
         return DONTMAKEFRMS;
 
-
     Point aOldAnchorPos( ::lcl_FindAnchorLayPos( *this, rOldAnch, &rFmt ));
     Point aNewAnchorPos( ::lcl_FindAnchorLayPos( *this, aNewAnch, 0 ));
 
@@ -799,7 +798,6 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( 0L ))
                                         ->AdjustPositioningAttr( pNewAnchorFrm,
                                                                  &aNewObjRect );
-
                     }
                     else
                     {

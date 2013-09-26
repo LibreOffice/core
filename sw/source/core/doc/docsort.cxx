@@ -760,7 +760,6 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
         _FndBox** ppTmp = (_FndBox**)pArr;
         memset( ppTmp, 0, sizeof(const _FndBox*) * nRows * nCols );
 
-
         FillFlat( rBoxRef );
     }
 }

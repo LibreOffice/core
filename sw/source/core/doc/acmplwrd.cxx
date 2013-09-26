@@ -148,7 +148,6 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
             ((SwModify*)GetRegisteredIn())->Remove(this);
         pAutoCompleteWord->DocumentDying(*pDoc);
         break;
-
     }
 }
 

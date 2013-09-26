@@ -566,7 +566,6 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 
     pFmt->SetFmtAttr( SwFmtCntnt( rNode.StartOfSectionNode() ));
 
-
     const SwFmtAnchor* pAnchor = 0;
     if( pFlySet )
     {
@@ -1266,7 +1265,6 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     // and then size calculations could not be correct anymore.
                     pNewSet->Put( SvxBoxItem(RES_BOX) );
                     pNewSet->Put( SvxShadowItem(RES_SHADOW) );
-
                 }
 
                 // Always transfer the anchor, which is a hard attribute anyways.
@@ -1307,7 +1305,6 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                     const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt(
                             pNewFmt );
                 }
-
 
                 // The old one should not have a flow and it should be adjusted to above and
                 // middle.
@@ -2144,7 +2141,6 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
             return false;
         }
     }
-
 
     const SwNode* pFlyNd = pNd->FindFlyStartNode();
     while( pFlyNd )

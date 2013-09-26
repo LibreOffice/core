@@ -483,7 +483,6 @@ static void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
             if( eCompare == POS_OVERLAP_BEFORE  ||
                 eCompare == POS_OUTSIDE )
             {
-
                 SwRedline* pNewRedline = new SwRedline( *pCurrent );
                 *pNewRedline->End() = *pStart;
                 *pCurrent->Start() = *pStart;

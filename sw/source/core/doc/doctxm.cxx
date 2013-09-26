@@ -871,7 +871,6 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         DelFlyInRange( SwNodeIndex(aSttIdx, -1), aEndIdx );
 
         pDoc->GetNodes().Delete( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() );
-
     }
 
     // insert title of TOX

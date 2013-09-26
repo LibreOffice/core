@@ -491,7 +491,6 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                 rFtnArr.UpdateAllFtn();
         }
         else if( pTmpRoot )
-            //
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
