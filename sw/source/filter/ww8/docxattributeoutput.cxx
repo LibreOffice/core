@@ -326,7 +326,7 @@ bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* p
 
     SwTxtAttr* pTxtAttr = pTxtNode->GetSwpHints().GetStart(0);
 
-    if (!pTxtAttr)
+    if (!pTxtAttr || pTxtAttr->Which() != RES_TXTATR_AUTOFMT)
         return false;
 
     boost::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
