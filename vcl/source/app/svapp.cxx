@@ -1614,14 +1614,13 @@ void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
 
 bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
 {
-    bool bRet = true;
-
 // Disable Java bridge on UNIX
 #if defined UNX
     (void) bShowCancel; // unused
     (void) rCancelled; // unused
+    return true;
 #else
-    bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
+    bool bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
 
     if( !bRet && bShowCancel && !rCancelled )
     {
@@ -1632,9 +1631,8 @@ bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
         aSettings.SetMiscSettings( aMisc );
         Application::SetSettings( aSettings );
     }
-#endif // !UNX
-
     return bRet;
+#endif // !UNX
 }
 
 // MT: AppEvent was in oldsv.cxx, but is still needed...
