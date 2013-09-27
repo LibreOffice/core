@@ -3761,11 +3761,11 @@ void SwTxtNode::UpdateOutlineState()
     m_bLastOutlineState = IsOutline();
 }
 
-//#outline level, zhaojianwei
 int SwTxtNode::GetAttrOutlineLevel() const
 {
     return ((const SfxUInt16Item &)GetAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
 }
+
 void SwTxtNode::SetAttrOutlineLevel(int nLevel)
 {
     assert(0 <= nLevel && nLevel <= MAXLEVEL); // Level Out Of Range
@@ -3775,7 +3775,6 @@ void SwTxtNode::SetAttrOutlineLevel(int nLevel)
                                 static_cast<sal_uInt16>(nLevel) ) );
     }
 }
-//<-end
 
 // #i70748#
 bool SwTxtNode::IsEmptyListStyleDueToSetOutlineLevelAttr()

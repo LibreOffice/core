@@ -342,7 +342,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
 //              UpdateAttr();
         pDoc->InsertItemSet( rPam, rSet, nFlags );
     }
-    //#outline level,add by zhaojianwei
+
     if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_AVAILABLE )
     {
         SwTxtNode * pTmpNode = rPam.GetNode()->GetTxtNode();
@@ -351,7 +351,6 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
             rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
         }
     }
-    //<-end,zhaojianwei
 }
 
 // #i63870#

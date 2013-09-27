@@ -517,7 +517,7 @@ public:
 
 
     /// Get Outline level of current paragraph.
-    int GetCurrentParaOutlineLevel( ) const;// #outlinelevel add by zhaojianwei
+    int GetCurrentParaOutlineLevel( ) const;
 
     // i29560
     sal_Bool HasNumber() const;

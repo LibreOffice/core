@@ -549,12 +549,12 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
 sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
-    if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle()) //<-end,zhaojianwei
+    if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle())
         return sal_True;
 
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
-        ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())   //<-end,zhaojianwei
+        ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())
         return sal_True;
 
     return sal_False;

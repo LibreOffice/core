@@ -75,7 +75,7 @@
 
 #include <list.hxx>
 
-#include <paratr.hxx>   //#outline level,add by zhaojianwei
+#include <paratr.hxx>
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
@@ -637,7 +637,6 @@ sal_uInt16 SwDocShell::Edit(
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     pDStyle->PresetParent( rParent );
 
-                    //#outline level,add by zhaojianwei
                      /*When a new paragraph style is created based on a "to outline style
                         assigned" paragraph style, the outline level attribute and the list
                         style attribute of the new paragraph style have to be set to 0
@@ -648,8 +647,6 @@ sal_uInt16 SwDocShell::Edit(
                         pDStyle->GetCollection()->SetFmtAttr( aItem );
                         pDStyle->GetCollection()->SetAttrOutlineLevel( 0 );
                     }
-                    //<-end,zhaojianwei
-
                 }
                 else
                 {

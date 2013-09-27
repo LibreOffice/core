@@ -704,7 +704,6 @@ const SwPropNameTab aPropNameTab = {
 /* 0673 UNO_NAME_TRANSFORMATION_IN_HORI_L2R */         {MAP_CHAR_LEN("TransformationInHoriL2R")},
 /* 0674 UNO_NAME_POSITION_LAYOUT_DIR*/                 {MAP_CHAR_LEN("PositionLayoutDir")},
 /* 0675 UNO_NAME_NUMBERING_IS_OUTLINE*/                {MAP_CHAR_LEN("NumberingIsOutline")},
-///* 0676 UNO_NAME_DEFAULT_OUTLINE_LEVEL */              {MAP_CHAR_LEN("DefaultOutlineLevel")},   //#outline level,removed by zhaojianwei
 /* 0677 UNO_NAME_STARTPOSITION_IN_HORI_L2R */          {MAP_CHAR_LEN("StartPositionInHoriL2R")},
 /* 0678 UNO_NAME_ENDPOSITION_IN_HORI_L2R */            {MAP_CHAR_LEN("EndPositionInHoriL2R")},
 /* 0679 UNO_NAME_SUBJECT             */                {MAP_CHAR_LEN("Subject")},
@@ -764,7 +763,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0732 CHAR_OVERLINE */                               {MAP_CHAR_LEN("CharOverline")},
 /* 0733 CHAR_OVERLINE_COLOR */                         {MAP_CHAR_LEN("CharOverlineColor")},
 /* 0734 CHAR_OVERLINE_HAS_COLOR */                     {MAP_CHAR_LEN("CharOverlineHasColor")},
-/* 0735 UNO_NAME_OUTLINE_LEVEL */                      {MAP_CHAR_LEN("OutlineLevel")},//#outline level,add<-zhaojianwei Outlinelevel
+/* 0735 UNO_NAME_OUTLINE_LEVEL */                      {MAP_CHAR_LEN("OutlineLevel")},
 /* 0736 UNO_NAME_DESCRIPTION */                        {MAP_CHAR_LEN("Description")},
 /* 0737 UNO_NAME_META */                               {MAP_CHAR_LEN("InContentMetadata")},
 /* 0738 UNO_NAME_IS_TEMPLATE */                        {MAP_CHAR_LEN("IsTemplate")},
