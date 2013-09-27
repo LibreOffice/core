@@ -106,8 +106,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_annotationsobj,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_annotationsobj))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sc_annotationsobj))
-
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sc_annotationsobj))
 
 # vim: set noet sw=4 ts=4:

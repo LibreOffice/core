@@ -109,8 +109,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_chart_regression_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_chart_regression_test))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sc_chart_regression_test))
-
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sc_chart_regression_test))
 
 $(eval $(call gb_CppunitTest_use_external,sc_chart_regression_test,libxml2))

@@ -283,28 +283,14 @@ endef
 
 # Use standard configuration.
 define gb_CppunitTest_use_configuration
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Configuration_get_target,registry)
-$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(gb_Configuration_registry))
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,postprocess_registry)
+$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(INSTDIR)/$(LIBO_SHARE_FOLDER)/registry)
 
 endef
 
 define gb_CppunitTest_unset_headless
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS=
 
-endef
-
-# Use configuration for filters.
-#
-# Okay, this is not exactly true, because there may be configuration
-# for more things than just filters in spool, but it is good enough.
-define gb_CppunitTest_use_filter_configuration
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Configuration_get_target,fcfg_langpack)
-$(call gb_CppunitTest__use_configuration,$(1),module,$(gb_Configuration_registry)/spool)
-
-endef
-
-define gb_CppunitTest_use_extra_configuration
-$$(call gb_Output_error,gb_CppunitTest_use_extra_configuration: use gb_CppunitTest_use_unittest_configuration instead.))
 endef
 
 # Use configuration in $(OUTDIR)/unittest/registry.
