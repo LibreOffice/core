@@ -67,7 +67,7 @@ DialogSaveTest::DialogSaveTest()
 void DialogSaveTest::test()
 {
     OUString aFileName;
-    aFileName = "file://" + getPathFromWorkdir("/CppunitTest/testDialogSave.odb");
+    aFileName = getURLFromWorkdir("/CppunitTest/testDialogSave.odb");
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
         CPPUNIT_ASSERT(xComponent.is());
