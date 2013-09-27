@@ -76,7 +76,7 @@ private:
     PushButton*      pBtnAdd;
     PushButton*      pBtnRemove;
 
-    String          aStrUndefined;
+    OUString        aStrUndefined;
 
     ScConsolidateParam  theConsData;
     ScViewData*         pViewData;

@@ -51,7 +51,7 @@ class ScContentTree : public SvTreeListBox
     sal_uInt16              nRootType;          // set as Root
     OUString            aManualDoc;         // Switched in Navigator (Title)
     sal_Bool                bHiddenDoc;         // Hidden active?
-    String              aHiddenName;        // URL to load
+    OUString            aHiddenName;        // URL to load
     OUString            aHiddenTitle;       // for display
     ScDocument*         pHiddenDocument;    // temporary
 
@@ -64,7 +64,7 @@ class ScContentTree : public SvTreeListBox
     void    InitRoot(sal_uInt16 nType);
     void    ClearType(sal_uInt16 nType);
     void    ClearAll();
-    void    InsertContent( sal_uInt16 nType, const String& rValue );
+    void    InsertContent( sal_uInt16 nType, const OUString& rValue );
     void    GetDrawNames( sal_uInt16 nType );
 
     void    GetTableNames();
@@ -133,9 +133,9 @@ public:
 
     void    ActiveDocChanged();
     void    ResetManualDoc();
-    void    SetManualDoc(const String& rName);
-    sal_Bool    LoadFile(const String& rUrl);
-    void    SelectDoc(const String& rName);
+    void    SetManualDoc(const OUString& rName);
+    sal_Bool    LoadFile(const OUString& rUrl);
+    void    SelectDoc(const OUString& rName);
 
     const OUString& GetHiddenTitle() const    { return aHiddenTitle; }
 

@@ -190,7 +190,7 @@ void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
 // cell contents --------------------------------------------------------------
 
 void ScCsvTableBox::SetUniStrings(
-        const OUString* pTextLines, const String& rSepChars,
+        const OUString* pTextLines, const OUString& rSepChars,
         sal_Unicode cTextSep, bool bMergeSep )
 {
     // assuming that pTextLines is a string array with size CSV_PREVIEW_LINES

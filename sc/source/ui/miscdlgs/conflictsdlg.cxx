@@ -462,7 +462,7 @@ ScConflictsDlg::~ScConflictsDlg()
 {
 }
 
-String ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictEntry )
+OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictEntry )
 {
     OUString aString;
     if ( mpOwnTrack )
@@ -477,7 +477,7 @@ String ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictE
     return aString;
 }
 
-String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocument* pDoc )
+OUString ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocument* pDoc )
 {
     String aString;
 

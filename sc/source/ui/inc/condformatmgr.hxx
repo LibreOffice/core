@@ -25,7 +25,7 @@ class ScCondFormatManagerWindow : public SvTabListBox
 {
 private:
     void Init();
-    String createEntryString(const ScConditionalFormat& rFormat);
+    OUString createEntryString(const ScConditionalFormat& rFormat);
 
     HeaderBar maHeaderBar;
     ScDocument* mpDoc;

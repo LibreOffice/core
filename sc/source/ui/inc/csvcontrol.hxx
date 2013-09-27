@@ -249,7 +249,7 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 class SC_DLLPUBLIC ScCsvControl : public Control
 {
 protected:
-    typedef ::std::vector< String >     StringVec;
+    typedef ::std::vector< OUString >   StringVec;
     typedef ::std::vector< StringVec >  StringVecVec;
 
     typedef ::com::sun::star::uno::Reference<

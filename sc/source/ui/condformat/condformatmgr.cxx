@@ -52,7 +52,7 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument
     SetSelectionMode(MULTIPLE_SELECTION);
 }
 
-String ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat& rFormat)
+OUString ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat& rFormat)
 {
     ScRangeList aRange = rFormat.GetRange();
     String aStr;

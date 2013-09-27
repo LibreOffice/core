@@ -211,7 +211,7 @@ public:
     /** Sets new UI data type names. */
     void                        SetTypeNames( const StringVec& rTypeNames );
     /** Returns the UI type name of the specified column. */
-    const String&               GetColumnTypeName( sal_uInt32 nColIndex ) const;
+    const OUString&             GetColumnTypeName( sal_uInt32 nColIndex ) const;
 
     /** Fills the options object with column data for separators mode. */
     void                        FillColumnDataSep( ScAsciiOptions& rOptions ) const;
@@ -274,7 +274,7 @@ public:
     void                        ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine );
 
     /** Returns the text of the specified cell. */
-    const String&               GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const;
+    const OUString&             GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const;
 
     // event handling ---------------------------------------------------------
 protected:
@@ -313,7 +313,7 @@ private:
     SC_DLLPRIVATE void                        ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColIndex, Color aFillColor );
 
     /** Draws the text at the specified position to maBackgrDev. */
-    SC_DLLPRIVATE void                        ImplDrawCellText( const Point& rPos, const String& rText );
+    SC_DLLPRIVATE void                        ImplDrawCellText( const Point& rPos, const OUString& rText );
     /** Draws the "first imported line" separator to maBackgrDev (or erases, if bSet is false). */
     SC_DLLPRIVATE void                        ImplDrawFirstLineSep( bool bSet );
     /** Draws the column with index nColIndex to maBackgrDev. */

@@ -54,8 +54,8 @@ private:
 
     void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
     void        ExecuteExternalSource(
-                    const String& _rFile, const String& _rFilter, const String& _rOptions,
-                    const String& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );
+                    const OUString& _rFile, const OUString& _rFilter, const OUString& _rOptions,
+                    const OUString& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );
 
     void ExecuteDataPilotDialog();
     void ExecuteXMLSourceDialog();

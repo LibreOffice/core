@@ -183,7 +183,7 @@ void ScContentTree::ClearType(sal_uInt16 nType)
     }
 }
 
-void ScContentTree::InsertContent( sal_uInt16 nType, const String& rValue )
+void ScContentTree::InsertContent( sal_uInt16 nType, const OUString& rValue )
 {
     if (nType >= SC_CONTENT_COUNT)
     {
@@ -1260,7 +1260,7 @@ IMPL_STATIC_LINK(ScContentTree, ExecDragHdl, void*, EMPTYARG)
     return 0;
 }
 
-sal_Bool ScContentTree::LoadFile( const String& rUrl )
+sal_Bool ScContentTree::LoadFile( const OUString& rUrl )
 {
     String aDocName = rUrl;
     xub_StrLen nPos = aDocName.Search('#');
@@ -1367,7 +1367,7 @@ void ScContentTree::ActiveDocChanged()
     pParentWindow->GetDocNames( &aCurrent );        // selektieren
 }
 
-void ScContentTree::SetManualDoc(const String& rName)
+void ScContentTree::SetManualDoc(const OUString& rName)
 {
     aManualDoc = rName;
     if (!bHiddenDoc)
@@ -1377,7 +1377,7 @@ void ScContentTree::SetManualDoc(const String& rName)
     }
 }
 
-void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Listbox angezeigt
+void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/Listbox angezeigt
 {
     if ( rName == pParentWindow->aStrActiveWin )
     {
@@ -1388,13 +1388,13 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
     //  "aktiv" oder "inaktiv" weglassen
 
     String aRealName = rName;
-    xub_StrLen nLen = rName.Len();
+    xub_StrLen nLen = rName.getLength();
     xub_StrLen nActiveStart = nLen - pParentWindow->aStrActive.getLength();
-    if ( rName.Copy( nActiveStart ) == pParentWindow->aStrActive )
-        aRealName = rName.Copy( 0, nActiveStart );
+    if ( rName.copy( nActiveStart ) == pParentWindow->aStrActive )
+        aRealName = rName.copy( 0, nActiveStart );
     xub_StrLen nNotActiveStart = nLen - pParentWindow->aStrNotActive.getLength();
-    if ( rName.Copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
-        aRealName = rName.Copy( 0, nNotActiveStart );
+    if ( rName.copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
+        aRealName = rName.copy( 0, nNotActiveStart );
 
     bool bLoaded = false;
 

@@ -148,10 +148,10 @@ private:
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
 
-    String              maStrTitleConflict;
-    String              maStrTitleAuthor;
-    String              maStrTitleDate;
-    String              maStrUnknownUser;
+    OUString            maStrTitleConflict;
+    OUString            maStrTitleAuthor;
+    OUString            maStrTitleDate;
+    OUString            maStrUnknownUser;
 
     ScViewData*         mpViewData;
     ScDocument*         mpOwnDoc;
@@ -165,8 +165,8 @@ private:
     bool                mbInSelectHdl;
     bool                mbInDeselectHdl;
 
-    String              GetConflictString( const ScConflictsListEntry& rConflictEntry );
-    String              GetActionString( const ScChangeAction* pAction, ScDocument* pDoc );
+    OUString            GetConflictString( const ScConflictsListEntry& rConflictEntry );
+    OUString            GetActionString( const ScChangeAction* pAction, ScDocument* pDoc );
     void                HandleListBoxSelection( bool bSelectHandle );
 
     void                SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction );

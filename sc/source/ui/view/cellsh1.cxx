@@ -2437,10 +2437,10 @@ void ScCellShell::ExecuteRotateTrans( SfxRequest& rReq )
 }
 
 void ScCellShell::ExecuteExternalSource(
-    const String& _rFile, const String& _rFilter, const String& _rOptions,
-    const String& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest )
+    const OUString& _rFile, const OUString& _rFilter, const OUString& _rOptions,
+    const OUString& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest )
 {
-    if ( _rFile.Len() && _rSource.Len() )         // filter may be empty
+    if ( !_rFile.isEmpty() && !_rSource.isEmpty() )         // filter may be empty
     {
         ScRange aLinkRange;
         sal_Bool bMove = false;

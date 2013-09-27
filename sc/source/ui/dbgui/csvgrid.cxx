@@ -501,10 +501,10 @@ void ScCsvGrid::SetTypeNames( const StringVec& rTypeNames )
     ::std::for_each( maColStates.begin(), maColStates.end(), Func_SetType( CSV_TYPE_DEFAULT ) );
 }
 
-const String& ScCsvGrid::GetColumnTypeName( sal_uInt32 nColIndex ) const
+const OUString& ScCsvGrid::GetColumnTypeName( sal_uInt32 nColIndex ) const
 {
     sal_uInt32 nTypeIx = static_cast< sal_uInt32 >( GetColumnType( nColIndex ) );
-    return (nTypeIx < maTypeNames.size()) ? maTypeNames[ nTypeIx ] : EMPTY_STRING;
+    return (nTypeIx < maTypeNames.size()) ? maTypeNames[ nTypeIx ] : EMPTY_OUSTRING;
 }
 
 static sal_uInt8 lcl_GetExtColumnType( sal_Int32 nIntType )
@@ -804,15 +804,15 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
     InvalidateGfx();
 }
 
-const String& ScCsvGrid::GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const
+const OUString& ScCsvGrid::GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const
 {
-    if( nLine < GetFirstVisLine() ) return EMPTY_STRING;
+    if( nLine < GetFirstVisLine() ) return EMPTY_OUSTRING;
 
     sal_uInt32 nLineIx = nLine - GetFirstVisLine();
-    if( nLineIx >= maTexts.size() ) return EMPTY_STRING;
+    if( nLineIx >= maTexts.size() ) return EMPTY_OUSTRING;
 
     const StringVec& rStrVec = maTexts[ nLineIx ];
-    if( nColIndex >= rStrVec.size() ) return EMPTY_STRING;
+    if( nColIndex >= rStrVec.size() ) return EMPTY_OUSTRING;
 
     return rStrVec[ nColIndex ];
 }
@@ -1061,7 +1061,7 @@ void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColInde
     rOutDev.DrawLine( Point( nX2, 0 ), Point( nX2, nHdrHt ) );
 }
 
-void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
+void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
 {
     String aPlainText( rText );
     aPlainText.SearchAndReplaceAll( '\t', ' ' );
@@ -1085,8 +1085,8 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
         }
     }
 
-    xub_StrLen nCharIx = 0;
-    while( (nCharIx = rText.Search( '\t', nCharIx )) != STRING_NOTFOUND )
+    sal_Int32 nCharIx = 0;
+    while( (nCharIx = rText.indexOf( '\t', nCharIx )) != -1 )
     {
         sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
         sal_Int32 nX2 = nX1 + GetCharWidth() - 2;
@@ -1099,7 +1099,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
         ++nCharIx;
     }
     nCharIx = 0;
-    while( (nCharIx = rText.Search( '\n', nCharIx )) != STRING_NOTFOUND )
+    while( (nCharIx = rText.indexOf( '\n', nCharIx )) != -1 )
     {
         sal_Int32 nX1 = rPos.X() + GetCharWidth() * nCharIx;
         sal_Int32 nX2 = nX1 + GetCharWidth() - 2;
@@ -1158,7 +1158,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     for( size_t nLine = 0; nLine < nLineCount; ++nLine )
     {
         StringVec& rStrVec = maTexts[ nLine ];
-        if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].Len() > nStrPos) )
+        if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].getLength() > nStrPos) )
         {
             String aText( rStrVec[ nColIndex ], nStrPos, nStrLen );
             ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
