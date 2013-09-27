@@ -218,6 +218,7 @@ gb_YaccTarget_get_target = $(WORKDIR)/YaccTarget/$(1).done
 gb_LexTarget_get_scanner_target = $(WORKDIR)/LexTarget/$(1).cxx
 gb_LexTarget_get_target = $(WORKDIR)/LexTarget/$(1).done
 
+gb_XcdTarget_get_target = $(WORKDIR)/XcdTarget/$(1)
 gb_XcsTarget_get_target = $(WORKDIR)/XcsTarget/$(1)
 gb_XcuDataTarget_get_target = $(WORKDIR)/XcuDataTarget/$(1)
 gb_XcuLangpackTarget_get_target = $(WORKDIR)/XcuLangpackTarget/$(1)

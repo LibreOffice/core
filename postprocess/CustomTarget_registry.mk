@@ -490,21 +490,21 @@ postprocess_DRIVERS := $(foreach driver,$(postprocess_DRIVERS),driver_$(driver))
 # Targets
 #
 
-$(eval $(call gb_CustomTarget_register_targets,postprocess/registry,\
-	$(postprocess_XCDS) \
-	$(foreach lang,$(gb_Configuration_LANGS), \
-		Langpack-$(lang).xcd \
-		fcfg_langpack_$(lang).xcd \
-		registry_$(lang).xcd \
-	) \
-))
+$(call gb_CustomTarget_get_target,postprocess/registry) : \
+	$(foreach target,$(postprocess_XCDS) \
+		$(foreach lang,$(gb_Configuration_LANGS), \
+			Langpack-$(lang).xcd \
+			fcfg_langpack_$(lang).xcd \
+			registry_$(lang).xcd \
+		) \
+	,$(call gb_XcdTarget_get_target,$(target)))
 
 #
 # Dependencies
 #
 
 define postprocess_xcd_deps
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).xcd : \
+$(call gb_XcdTarget_get_target,$(1)).xcd : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).list : \
@@ -517,19 +517,19 @@ endef
 $(foreach xcd,$(postprocess_XCDS),$(eval $(call postprocess_xcd_deps,$(basename $(xcd)))))
 
 define postprocess_lang_deps
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).xcd : \
+$(call gb_XcdTarget_get_target,Langpack-$(1).xcd) : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list : \
 	$(call gb_XcuLangpackTarget_get_outdir_target,Langpack-$(1).xcu)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).xcd : \
+$(call gb_XcdTarget_get_target,fcfg_langpack_$(1).xcd) : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list : \
 	$(call gb_Configuration_get_target,fcfg_langpack)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).xcd : \
+$(call gb_XcdTarget_get_target,registry_$(1).xcd) : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_$(1).list : \
@@ -559,21 +559,23 @@ postprocess_main_SED := \
 	-e 's,$${STARTCENTER_HIDE_EXTERNAL_LINKS},0,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/main.xcd : \
+$(call gb_XcdTarget_get_target,main.xcd) : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
+	$(call gb_Output_announce,main,$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
+		mkdir -p $(dir $@) && \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 			$(SOLARENV)/bin/packregistry.xslt $< \
 		|  sed $(postprocess_main_SED) > $@ \
 	)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/%.xcd : \
+$(call gb_XcdTarget_get_target,%.xcd) : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
+	$(call gb_Output_announce,$*,$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-		-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
+		mkdir -p $(dir $@) && \
+		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
+			-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :

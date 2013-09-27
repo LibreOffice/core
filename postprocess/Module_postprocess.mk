@@ -17,7 +17,6 @@ $(eval $(call gb_Module_add_targets,postprocess,\
 	CustomTarget_registry \
 	Package_images \
 	Package_registry \
-	Package_registry_install \
 	Rdb_services \
 ))
 

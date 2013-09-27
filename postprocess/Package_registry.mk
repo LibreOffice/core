@@ -7,12 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,postprocess_registry,$(call gb_CustomTarget_get_workdir,postprocess/registry)))
+$(eval $(call gb_Package_Package,postprocess_registry,$(patsubst %/,%,$(call gb_XcdTarget_get_target,))))
 
-$(eval $(call gb_Package_add_files,postprocess_registry,xml,\
+$(eval $(call gb_Package_set_outdir,postprocess_registry,$(INSTROOT)))
+
+$(eval $(call gb_Package_add_files,postprocess_registry,$(LIBO_SHARE_FOLDER)/registry,\
 	$(postprocess_XCDS) \
 	$(foreach lang,$(gb_Configuration_LANGS), \
 		Langpack-$(lang).xcd \
+	) \
+))
+
+$(eval $(call gb_Package_add_files,postprocess_registry,$(LIBO_SHARE_FOLDER)/registry/res,\
+	$(foreach lang,$(gb_Configuration_LANGS), \
 		fcfg_langpack_$(lang).xcd \
 		registry_$(lang).xcd \
 	) \

@@ -2941,7 +2941,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 		$(call gb_Library_get_target,vclplug_svp) \
 	)) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
-	$(call gb_Package_get_target_for_build,postprocess_registry_install) \
+	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,offapi) \

@@ -61,6 +61,7 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 #
 # Copy "registry" files
 #
+# FIXME This can be removed ? registry is copied below
 	mkdir -p $(appdir)/registry/modules $(appdir)/registry/res
 	cp $(OUTDIR)/xml/*.xcd $(appdir)/registry
 	mv $(appdir)/registry/fcfg_langpack_en-US.xcd $(appdir)/registry/res
@@ -85,10 +86,7 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 #
 # "registry"
 #
-	mkdir -p $(appdir)/share/registry/res
-	cp $(OUTDIR)/xml/*.xcd $(appdir)/share/registry
-	mv $(appdir)/share/registry/fcfg_langpack_en-US.xcd $(appdir)/share/registry/res
-	cp -R $(OUTDIR)/xml/registry/* $(appdir)/share/registry
+	cp -R $(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry $(appdir)/share
 #
 # Set up rc, the "inifile". See getIniFileName_Impl().
 #
