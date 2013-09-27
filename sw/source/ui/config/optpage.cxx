@@ -49,6 +49,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/svxenum.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
@@ -1492,7 +1493,7 @@ SwMarkPreview::SwMarkPreview( Window *pParent, WinBits nWinBits ) :
     nMarkPos(0)
 
 {
-    m_aInitialSize = LogicToPixel(Size(70 , 27), MapMode(MAP_APPFONT));
+    m_aInitialSize = getPreviewOptionsSize(this);
     InitColors();
     SetMapMode(MAP_PIXEL);
 }
@@ -1665,9 +1666,12 @@ namespace
 
 SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "OptRedLinePage", "modules/swriter/ui/optredlinepage.ui" , rSet)
+    : SfxTabPage(pParent, "OptRedLinePage",
+        "modules/swriter/ui/optredlinepage.ui" , rSet)
     , sNone(SW_RESSTR(SW_STR_NONE))
 {
+    Size aPreviewSize(getPreviewOptionsSize(this));
+
     get(pInsertLB,"insert");
     get(pInsertColorLB,"insertcolor");
     get(pInsertedPreviewWN,"insertedpreview");
@@ -1683,6 +1687,16 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     get(pMarkPosLB,"markpos");
     get(pMarkColorLB,"markcolor");
     get(pMarkPreviewWN,"markpreview");
+
+    pInsertedPreviewWN->set_height_request(aPreviewSize.Height());
+    pDeletedPreviewWN->set_height_request(aPreviewSize.Height());
+    pChangedPreviewWN->set_height_request(aPreviewSize.Height());
+    pMarkPreviewWN->set_height_request(aPreviewSize.Height());
+
+    pInsertedPreviewWN->set_width_request(aPreviewSize.Width());
+    pDeletedPreviewWN->set_width_request(aPreviewSize.Width());
+    pChangedPreviewWN->set_width_request(aPreviewSize.Width());
+    pMarkPreviewWN->set_width_request(aPreviewSize.Width());
 
     sAuthor = get<Window>("byauthor")->GetText();
 
