@@ -136,6 +136,7 @@ public:
     void testGroupshapeSdt();
     void testDefaultSectBreakCols();
     void testFdo69636();
+    void testChartProp();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -236,6 +237,7 @@ void Test::run()
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
         {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
         {"fdo69636.docx", &Test::testFdo69636},
+        {"chart-prop.docx", &Test::testChartProp},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1568,6 +1570,18 @@ void Test::testFdo69636()
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(900), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xFrame->getText()), 1), "CharRotation"));
+}
+
+void Test::testChartProp()
+{
+    // The problem was that chart was not getting parsed in writer module.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15236), getProperty<sal_Int32>(xPropertySet, "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8886), getProperty<sal_Int32>(xPropertySet, "Height"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

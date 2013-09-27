@@ -48,6 +48,8 @@ $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
 	basic/util/sb \
+    chart2/source/controller/chartcontroller \
+    chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     embeddedobj/util/embobj \
