@@ -185,7 +185,7 @@ class ScXMLChangeTrackingImportHelper
     bool            bChangeTrack;
 
 private:
-    void ConvertInfo(const ScMyActionInfo& aInfo, String& rUser, DateTime& aDateTime);
+    void ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime);
     ScChangeAction* CreateInsertAction(ScMyInsAction* pAction);
     ScChangeAction* CreateDeleteAction(ScMyDelAction* pAction);
     ScChangeAction* CreateMoveAction(ScMyMoveAction* pAction);

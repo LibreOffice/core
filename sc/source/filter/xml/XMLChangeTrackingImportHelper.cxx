@@ -425,7 +425,7 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
     pCurrentAction = NULL;
 }
 
-void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, String& rUser, DateTime& aDateTime)
+void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime)
 {
     Date aDate(aInfo.aDateTime.Day, aInfo.aDateTime.Month, aInfo.aDateTime.Year);
     Time aTime(aInfo.aDateTime.Hours, aInfo.aDateTime.Minutes, aInfo.aDateTime.Seconds, aInfo.aDateTime.NanoSeconds);
@@ -450,7 +450,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
-    String aUser;
+    OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);
@@ -463,7 +463,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsActio
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
-    String aUser;
+    OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);
@@ -479,7 +479,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
     if (pAction->pMoveRanges)
     {
         DateTime aDateTime( Date(0), Time(0) );
-        String aUser;
+        OUString aUser;
         ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
         String sComment (pAction->aInfo.sComment);
@@ -494,7 +494,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
 ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
 {
     DateTime aDateTime( Date(0), Time(0) );
-    String aUser;
+    OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);
@@ -511,7 +511,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
          aCell = pAction->pCellInfo->CreateCell(pDoc);
 
     DateTime aDateTime( Date(0), Time(0) );
-    String aUser;
+    OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
     String sComment (pAction->aInfo.sComment);

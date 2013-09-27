@@ -28,7 +28,7 @@ class ScXMLImport;
 
 struct ScXMLExternalTabData
 {
-    String maFileUrl;
+    OUString maFileUrl;
     ScExternalRefCache::TableTypeRef mpCacheTable;
     sal_Int32 mnRow;
     sal_Int32 mnCol;
