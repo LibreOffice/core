@@ -943,7 +943,6 @@ sal_Bool SvxLinguData_Impl::AddRemove(
     {
         rConfigured.realloc( ++nEntries );
         OUString *pConfigured = rConfigured.getArray();
-        pConfigured = rConfigured.getArray();
         pConfigured[nEntries - 1] = rImplName;
         bRet = sal_True;
     }
