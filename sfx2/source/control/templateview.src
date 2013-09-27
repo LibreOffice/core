@@ -19,7 +19,7 @@ PushButton BTN_ALL_TEMPLATES
 
 FixedText FT_NAME
 {
-    Pos = MAP_APPFONT( 52, 3 );
+    Pos = MAP_APPFONT( 52, 4 );
     Size = MAP_APPFONT( 238, 12 );
 };
 
