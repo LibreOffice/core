@@ -187,9 +187,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
 
     get(mpPBMoveUp, "move_up");
     get(mpPBMoveDown, "move_down");
-    get(mpFTChangeOrder, "change_order");
     get(mpPBPlay, "play");
-    get(mpPBSlideShow, "slideshow");
     get(mpCBAutoPreview,"auto_preview");
 
     maStrProperty = mpFTProperty->GetText();
@@ -207,7 +205,6 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     mpPBMoveUp->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-    mpPBSlideShow->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
 
     maStrModify = mpFTEffect->GetText();
@@ -466,11 +463,9 @@ void CustomAnimationPane::updateControls()
     mpFTSpeed->Enable( mxView.is() );
     mpCBSpeed->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
-    mpFTChangeOrder->Enable( mxView.is() );
     mpPBMoveUp->Enable( mxView.is() );
     mpPBMoveDown->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
-    mpPBSlideShow->Enable( mxView.is() );
     mpCBAutoPreview->Enable( mxView.is() );
 
     if( !mxView.is() )
@@ -600,8 +595,6 @@ void CustomAnimationPane::updateControls()
         }
 
         mpPBPropertyMore->Enable( sal_True );
-
-        mpFTChangeOrder->Enable( sal_True );
     }
     else
     {
@@ -611,7 +604,6 @@ void CustomAnimationPane::updateControls()
         mpPBPropertyMore->Enable( sal_False );
         mpFTSpeed->Enable(sal_False);
         mpCBSpeed->Enable(sal_False);
-        mpFTChangeOrder->Enable( sal_False );
         mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
         mpFTEffect->SetText( maStrModify );
@@ -838,8 +830,6 @@ void CustomAnimationPane::UpdateLook (void)
         mpFTProperty->SetBackground(aBackground);
     if (mpFTSpeed != NULL)
         mpFTSpeed->SetBackground(aBackground);
-    if (mpFTChangeOrder != NULL)
-        mpFTChangeOrder->SetBackground(aBackground);
 }
 
 
@@ -2047,10 +2037,6 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
         moveSelection( false );
     else if( pControl == mpPBPlay )
         onPreview( true );
-    else if( pControl == mpPBSlideShow )
-    {
-        mrBase.StartPresentation();
-    }
     else if( pControl == mpCBAutoPreview )
     {
         SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
