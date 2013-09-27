@@ -174,12 +174,12 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
         return 1;
 
     m_pJoinControl->aLB_JoinType.SaveValue();
-    aML_HelpText.SetText(String());
+    aML_HelpText.SetText(OUString());
 
     m_pTableControl->enableRelation(true);
 
-    String sFirstWinName    = m_pConnData->getReferencingTable()->GetWinName();
-    String sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
+    OUString sFirstWinName    = m_pConnData->getReferencingTable()->GetWinName();
+    OUString sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
     sal_uInt16 nResId = 0;
     const sal_uInt16 nPos = m_pJoinControl->aLB_JoinType.GetSelectEntryPos();
@@ -201,7 +201,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
             {
                 nResId = STR_QUERY_LEFTRIGHT_JOIN;
                 eJoinType = RIGHT_JOIN;
-                String sTemp = sFirstWinName;
+                OUString sTemp = sFirstWinName;
                 sFirstWinName = sSecondWinName;
                 sSecondWinName = sTemp;
             }
@@ -240,16 +240,16 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 
     m_pTableControl->Invalidate();
 
-    String sHelpText = String( ModuleRes( nResId ) );
+    OUString sHelpText = ModuleRes( nResId );
     if( nPos )
     {
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%1" ) ), sFirstWinName );
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%2" ) ), sSecondWinName );
+        sHelpText = sHelpText.replaceFirst( "%1", sFirstWinName );
+        sHelpText = sHelpText.replaceFirst( "%2", sSecondWinName );
     }
     if ( bAddHint )
     {
-        sHelpText += String( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
-        sHelpText += String( ModuleRes( STR_JOIN_TYPE_HINT ) );
+        sHelpText += "\n";
+        sHelpText += ModuleRes( STR_JOIN_TYPE_HINT );
     }
 
     aML_HelpText.SetText( sHelpText );

@@ -186,8 +186,8 @@ namespace dbaui
         DECL_LINK( InvalidateFieldType, void* );
 
         void InitCellController();
-        sal_Int32 HasFieldName( const String& rFieldName );
-        String GenerateName( const String& rName );
+        sal_Int32 HasFieldName( const OUString& rFieldName );
+        OUString GenerateName( const OUString& rName );
         sal_Bool SetDataPtr( long nRow );
 
         sal_Bool SaveData(long nRow, sal_uInt16 nColumnId);

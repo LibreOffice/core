@@ -93,7 +93,7 @@ void OQueryTextView::clear()
     pUndoAct->SetOriginalText( m_pEdit->GetText() );
     getContainerWindow()->getDesignView()->getController().addUndoActionAndInvalidate( pUndoAct );
 
-    m_pEdit->SetText(String());
+    m_pEdit->SetText(OUString());
 }
 
 void OQueryTextView::setStatement(const OUString& _rsStatement)

@@ -51,7 +51,7 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     DBG_CTOR(OTableFieldDescWin,NULL);
     // Header
     m_pHeader = new FixedText( this, WB_CENTER | WB_INFO ); //  | WB_3DLOOK
-    m_pHeader->SetText( String(ModuleRes(STR_TAB_PROPERTIES)) );
+    m_pHeader->SetText( OUString(ModuleRes(STR_TAB_PROPERTIES)) );
     m_pHeader->Show();
 
     // HelpBar

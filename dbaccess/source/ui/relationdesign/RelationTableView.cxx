@@ -345,9 +345,9 @@ void ORelationTableView::lookForUiActivities()
 {
     if(m_pExistingConnection)
     {
-        String sTitle(ModuleRes(STR_RELATIONDESIGN));
-        sTitle.Erase(0,3);
-        OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),String(),0);
+        OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
+        sTitle = sTitle.copy(3);
+        OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
         aDlg.SetText(sTitle);
         aDlg.RemoveButton(aDlg.GetButtonId(0));
         aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);

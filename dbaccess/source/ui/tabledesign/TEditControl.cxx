@@ -63,7 +63,7 @@ using namespace ::com::sun::star::sdb;
 
 namespace dbaui
 {
-    extern String GetTypeString( sal_uInt16 nType );
+    extern OUString GetTypeString( sal_uInt16 nType );
 }
 
 //  TYPEINIT1(OTableEditorCtrl, DBView);
@@ -116,20 +116,20 @@ void OTableEditorCtrl::Init()
     SetReadOnly( bRead );
 
     // Insert the columns
-    String aColumnName( ModuleRes(STR_TAB_FIELD_COLUMN_NAME) );
+    OUString aColumnName( ModuleRes(STR_TAB_FIELD_COLUMN_NAME) );
     InsertDataColumn( FIELD_NAME, aColumnName, FIELDNAME_WIDTH );
 
-    aColumnName = String( ModuleRes(STR_TAB_FIELD_COLUMN_DATATYPE) );
+    aColumnName = ModuleRes(STR_TAB_FIELD_COLUMN_DATATYPE);
     InsertDataColumn( FIELD_TYPE, aColumnName, FIELDTYPE_WIDTH );
 
     ::dbaccess::ODsnTypeCollection aDsnTypes(GetView()->getController().getORB());
     sal_Bool bShowColumnDescription = aDsnTypes.supportsColumnDescription(::comphelper::getString(GetView()->getController().getDataSource()->getPropertyValue(PROPERTY_URL)));
-    aColumnName = String( ModuleRes(STR_TAB_HELP_TEXT) );
+    aColumnName = ModuleRes(STR_TAB_HELP_TEXT);
     InsertDataColumn( HELP_TEXT, aColumnName, bShowColumnDescription ? FIELDTYPE_WIDTH : FIELDDESCR_WIDTH );
 
     if ( bShowColumnDescription )
     {
-        aColumnName = String( ModuleRes(STR_COLUMN_DESCRIPTION) );
+        aColumnName = ModuleRes(STR_COLUMN_DESCRIPTION);
         InsertDataColumn( COLUMN_DESCRIPTION, aColumnName, FIELDTYPE_WIDTH );
     }
 
@@ -333,7 +333,7 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
                                    sal_uInt16 nColumnId ) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    const String aText( GetCellText( m_nCurrentPos, nColumnId ));
+    const OUString aText( GetCellText( m_nCurrentPos, nColumnId ));
 
     rDev.Push( PUSH_CLIPREGION );
     rDev.SetClipRegion(Region(rRect));
@@ -385,7 +385,7 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     SeekRow( nRow == -1 ? GetCurRow() : nRow);
     OFieldDescription* pActFieldDescr = pActRow->GetActFieldDescr();
-    String aInitString;
+    OUString aInitString;
 
     switch (nColumnId)
     {
@@ -508,7 +508,7 @@ void OTableEditorCtrl::CursorMoved()
     OTableRowView::CursorMoved();
 }
 
-sal_Int32 OTableEditorCtrl::HasFieldName( const String& rFieldName )
+sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
@@ -543,9 +543,9 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
         case FIELD_NAME:
         {
             // If there is no name, do nothing
-            String aName(pNameCell->GetText());
+            OUString aName(pNameCell->GetText());
 
-            if( !aName.Len() )
+            if( aName.isEmpty() )
             {
                 // If FieldDescr exists, the field is deleted and the old content restored
                 if (pActFieldDescr)
@@ -574,7 +574,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
             // Wenn aktuelle Feldbeschreibung NULL, Default setzen
             if( !pActFieldDescr )
             {
-                pHelpTextCell->SetText(String());
+                pHelpTextCell->SetText(OUString());
                 pHelpTextCell->ClearModifyFlag();
             }
             else
@@ -586,7 +586,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
             // Set the default if the field description is null
             if( !pActFieldDescr )
             {
-                pDescrCell->SetText(String());
+                pDescrCell->SetText(OUString());
                 pDescrCell->ClearModifyFlag();
             }
             else
@@ -681,17 +681,17 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     SetDataPtr( nRow );
     OFieldDescription* pActFieldDescr = pActRow->GetActFieldDescr();
 
-    String sActionDescription;
+    OUString sActionDescription;
     switch ( nColId )
     {
-    case FIELD_NAME:    sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_NAME ) ); break;
-    case FIELD_TYPE:    sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_TYPE ) ); break;
+    case FIELD_NAME:    sActionDescription = ModuleRes( STR_CHANGE_COLUMN_NAME ); break;
+    case FIELD_TYPE:    sActionDescription = ModuleRes( STR_CHANGE_COLUMN_TYPE ); break;
     case HELP_TEXT:
-    case COLUMN_DESCRIPTION:   sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_DESCRIPTION ) ); break;
-    default:            sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_ATTRIBUTE ) ); break;
+    case COLUMN_DESCRIPTION:   sActionDescription = ModuleRes( STR_CHANGE_COLUMN_DESCRIPTION ); break;
+    default:            sActionDescription = ModuleRes( STR_CHANGE_COLUMN_ATTRIBUTE ); break;
     }
 
-    GetUndoManager().EnterListAction( sActionDescription, String() );
+    GetUndoManager().EnterListAction( sActionDescription, OUString() );
     if (!pActFieldDescr)
     {
         const OTypeInfoMap* pTypeInfoMap = GetView()->getController().getTypeInfo();
@@ -798,23 +798,23 @@ void OTableEditorCtrl::CopyRows()
     }
 }
 
-String OTableEditorCtrl::GenerateName( const String& rName )
+OUString OTableEditorCtrl::GenerateName( const OUString& rName )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     // Create a base name for appending numbers to
-    String aBaseName;
+    OUString aBaseName;
     Reference<XConnection> xCon = GetView()->getController().getConnection();
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     xub_StrLen nMaxTextLen((xub_StrLen)( xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0));
 
-    if( (rName.Len()+2) >nMaxTextLen )
-        aBaseName = rName.Copy( 0, nMaxTextLen-2 );
+    if( (rName.getLength()+2) >nMaxTextLen )
+        aBaseName = rName.copy( 0, nMaxTextLen-2 );
     else
         aBaseName = rName;
 
     // append a sequential number to the base name (up to 99)
-    String aFieldName( rName);
+    OUString aFieldName( rName);
     sal_Int32 i=1;
     while( HasFieldName(aFieldName) )
     {
@@ -841,7 +841,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
             aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
             aStreamRef->ResetError();
             long nInsertRow = nRow;
-            String aFieldName;
+            OUString aFieldName;
              ::boost::shared_ptr<OTableRow>  pRow;
             sal_Int32 nSize = 0;
             (*aStreamRef) >> nSize;
@@ -1006,7 +1006,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
     if( !pFieldDescr && nColId != FIELD_TYPE)
         return;
 
-    String sValue;
+    OUString sValue;
     // Set indvidual fields
     switch( nColId )
     {
@@ -1031,7 +1031,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
         case FIELD_PROPERTY_REQUIRED:
             {
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetIsNullable( sValue.ToInt32() );
+                pFieldDescr->SetIsNullable( sValue.toInt32() );
             }
             break;
 
@@ -1039,7 +1039,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
         case FIELD_PROPERTY_LENGTH:
             {
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetPrecision( sValue.ToInt32() );
+                pFieldDescr->SetPrecision( sValue.toInt32() );
             }
             break;
 
@@ -1049,15 +1049,15 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
 
         case FIELD_PROPERTY_AUTOINC:
             {
-                String strYes(ModuleRes(STR_VALUE_YES));
+                OUString strYes(ModuleRes(STR_VALUE_YES));
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetAutoIncrement(sValue.Equals(strYes));
+                pFieldDescr->SetAutoIncrement(sValue == strYes);
             }
             break;
         case FIELD_PROPERTY_SCALE:
             {
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetScale(sValue.ToInt32());
+                pFieldDescr->SetScale(sValue.toInt32());
             }
             break;
 
@@ -1069,7 +1069,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
         case FIELD_PROPERTY_FORMAT:
             {
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetFormatKey(sValue.ToInt32());
+                pFieldDescr->SetFormatKey(sValue.toInt32());
             }
             break;
     }
@@ -1089,8 +1089,8 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
         nRow = GetCurRow();
     SetDataPtr( nRow );
 
-    static const String strYes(ModuleRes(STR_VALUE_YES));
-    static const String strNo(ModuleRes(STR_VALUE_NO));
+    static const OUString strYes(ModuleRes(STR_VALUE_YES));
+    static const OUString strNo(ModuleRes(STR_VALUE_NO));
     OUString sValue;
     // Read out the fields
     switch( nColId )

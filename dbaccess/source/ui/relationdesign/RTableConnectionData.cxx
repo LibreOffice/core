@@ -97,7 +97,7 @@ sal_Bool ORelationTableConnectionData::DropRelation()
             {
                 OUString sName;
                 xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
-                if(String(sName) == m_aConnName)
+                if(sName == m_aConnName)
                 {
                     Reference< XDrop> xDrop(xKeys,UNO_QUERY);
                     OSL_ENSURE(xDrop.is(),"can't drop key because we haven't a drop interface!");
@@ -392,7 +392,7 @@ xKey.clear();
     if ( bDropRelation )
     {
         DropRelation();
-        String sError(ModuleRes(STR_QUERY_REL_COULD_NOT_CREATE));
+        OUString sError(ModuleRes(STR_QUERY_REL_COULD_NOT_CREATE));
         ::dbtools::throwGenericSQLException(sError,NULL);
     }
 

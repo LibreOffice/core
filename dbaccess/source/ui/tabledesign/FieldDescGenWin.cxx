@@ -65,13 +65,13 @@ void OFieldDescGenWin::SetReadOnly( sal_Bool bReadOnly )
     m_pFieldControl->SetReadOnly(bReadOnly);
 }
 
-String OFieldDescGenWin::GetControlText( sal_uInt16 nControlId )
+OUString OFieldDescGenWin::GetControlText( sal_uInt16 nControlId )
 {
     DBG_CHKTHIS(OFieldDescGenWin,NULL);
     return m_pFieldControl->GetControlText(nControlId);
 }
 
-void OFieldDescGenWin::SetControlText( sal_uInt16 nControlId, const String& rText )
+void OFieldDescGenWin::SetControlText( sal_uInt16 nControlId, const OUString& rText )
 {
     DBG_CHKTHIS(OFieldDescGenWin,NULL);
     // Texte der Controls setzen
@@ -117,12 +117,12 @@ void OFieldDescGenWin::LoseFocus()
     TabPage::LoseFocus();
 }
 
-String OFieldDescGenWin::BoolStringPersistent(const String& rUIString) const
+OUString OFieldDescGenWin::BoolStringPersistent(const OUString& rUIString) const
 {
     return m_pFieldControl->BoolStringPersistent(rUIString);
 }
 
-String OFieldDescGenWin::BoolStringUI(const String& rPersistentString) const
+OUString OFieldDescGenWin::BoolStringUI(const OUString& rPersistentString) const
 {
     return m_pFieldControl->BoolStringUI(rPersistentString);
 }

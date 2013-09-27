@@ -83,7 +83,7 @@ void OTabFieldCellModifiedUndoAct::Undo()
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
         sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPostion);
-        String strNext = pOwner->GetCellContents(m_nCellIndex, nColumnId);
+        OUString strNext = pOwner->GetCellContents(m_nCellIndex, nColumnId);
         pOwner->SetCellContents(m_nCellIndex, nColumnId, m_strNextCellContents);
         m_strNextCellContents = strNext;
     }

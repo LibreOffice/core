@@ -154,7 +154,7 @@ namespace dbaui
         {
             OFieldDescription* pFieldDesc = new OFieldDescription();
             _rRow.m_pActFieldDescr = pFieldDesc;
-            String sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
+            OUString sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
             pFieldDesc->SetName(sValue);
 
             sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());

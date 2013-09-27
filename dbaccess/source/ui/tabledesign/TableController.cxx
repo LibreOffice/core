@@ -297,7 +297,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 
     if (!xTablesSup.is())
     {
-        String aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
+        OUString aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
         OSQLWarningBox( getView(), aMessage ).Execute();
         return sal_False;
     }
@@ -320,13 +320,13 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         // first we need a name for our query so ask the user
         if(bNew)
         {
-            String aDefaultName;
+            OUString aDefaultName;
             if (_bSaveAs && !bNew)
-                 aDefaultName = String(m_sName);
+                 aDefaultName = m_sName;
             else
             {
-                String aName = String(ModuleRes(STR_TBL_TITLE));
-                aDefaultName = aName.GetToken(0,' ');
+                OUString aName = ModuleRes(STR_TBL_TITLE);
+                aDefaultName = aName.getToken(0,' ');
                 aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
             }
 
@@ -426,9 +426,9 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
     catch(const ElementExistException& )
     {
-        String sText( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
-        sText.SearchAndReplaceAscii( "#" , m_sName);
-        OSQLMessageBox aDlg( getView(), String( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
+        OUString sText( ModuleRes( STR_NAME_ALREADY_EXISTS ) );
+        sText = sText.replaceFirst( "#" , m_sName);
+        OSQLMessageBox aDlg( getView(), OUString( ModuleRes( STR_ERROR_DURING_CREATION ) ), sText, WB_OK, OSQLMessageBox::Error );
 
         aDlg.Execute();
         bError = sal_True;
@@ -440,7 +440,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
 
     if ( aInfo.isValid() )
-        aInfo.prepend( String( ModuleRes( STR_TABLEDESIGN_SAVE_ERROR ) ) );
+        aInfo.prepend( OUString( ModuleRes( STR_TABLEDESIGN_SAVE_ERROR ) ) );
     showError(aInfo);
 
     if (aInfo.isValid() || bError)
@@ -955,8 +955,8 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                 OFieldDescription* pCompareDesc = (*aIter2)->GetActFieldDescr();
                 if (pCompareDesc && bCase(pCompareDesc->GetName(),pFieldDesc->GetName()))
                 {
-                    String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
-                    strMessage.SearchAndReplaceAscii("$column$", pFieldDesc->GetName());
+                    OUString strMessage = ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME);
+                    strMessage = strMessage.replaceFirst("$column$", pFieldDesc->GetName());
                     OSQLWarningBox( getView(), strMessage ).Execute();
                     return sal_False;
                 }
@@ -965,8 +965,8 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
     }
     if ( _bNew && !bFoundPKey && aMetaData.supportsPrimaryKeys() )
     {
-        String sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
-        String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
+        OUString sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
+        OUString sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
         OSQLMessageBox aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
 
         switch ( aBox.Execute() )
@@ -1092,8 +1092,8 @@ void OTableController::alterColumns()
                 {
                     if(xDrop.is() && xAppend.is())
                     {
-                        String aMessage( ModuleRes( STR_TABLEDESIGN_ALTER_ERROR ) );
-                        aMessage.SearchAndReplaceAscii( "$column$", pField->GetName() );
+                        OUString aMessage( ModuleRes( STR_TABLEDESIGN_ALTER_ERROR ) );
+                        aMessage = aMessage.replaceFirst( "$column$", pField->GetName() );
 
                         SQLExceptionInfo aError( ::cppu::getCaughtException() );
                         OSQLWarningBox aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError );
@@ -1150,8 +1150,8 @@ void OTableController::alterColumns()
                 bReload = sal_True;
                 if(xDrop.is() && xAppend.is())
                 {
-                    String aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
-                    aMessage.SearchAndReplaceAscii("$column$",pField->GetName());
+                    OUString aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
+                    aMessage = aMessage.replaceFirst("$column$",pField->GetName());
                     OSQLWarningBox aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
                     if ( aMsg.Execute() != RET_YES )
                     {
@@ -1216,9 +1216,9 @@ void OTableController::alterColumns()
             {
                 if(xKeyColumns.is() && xKeyColumns->hasByName(*pIter)) // check if this column is a member of the primary key
                 {
-                    String aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
-                    aMsgT.SearchAndReplaceAscii("$column$",*pIter);
-                    String aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
+                    OUString aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
+                    aMsgT = aMsgT.replaceFirst("$column$",*pIter);
+                    OUString aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
                     OSQLMessageBox aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
                     if(aMsg.Execute() == RET_YES)
                     {
@@ -1237,8 +1237,8 @@ void OTableController::alterColumns()
                 }
                 catch (const SQLException&)
                 {
-                    String sError( ModuleRes( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
-                    sError.SearchAndReplaceAscii( "$column$", *pIter );
+                    OUString sError( ModuleRes( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
+                    sError = sError.replaceFirst( "$column$", *pIter );
 
                     SQLException aNewException;
                     aNewException.Message = sError;
@@ -1514,8 +1514,8 @@ OUString OTableController::getPrivateTitle() const
         }
         if ( sTitle.isEmpty() )
         {
-            String aName = String(ModuleRes(STR_TBL_TITLE));
-            sTitle = aName.GetToken(0,' ');
+            OUString aName = ModuleRes(STR_TBL_TITLE);
+            sTitle = aName.getToken(0,' ');
             sTitle += OUString::number(getCurrentStartNumber());
         }
     }

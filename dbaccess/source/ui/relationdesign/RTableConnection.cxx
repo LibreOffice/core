@@ -94,24 +94,24 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     Rectangle aSourcePos = pTopLine->GetSourceTextPos();
     Rectangle aDestPos = pTopLine->GetDestTextPos();
 
-    String aSourceText;
-    String aDestText;
+    OUString aSourceText;
+    OUString aDestText;
 
     switch( pData->GetCardinality() )
     {
     case CARDINAL_ONE_MANY:
-        aSourceText  ='1';
-        aDestText  ='n';
+        aSourceText = "1";
+        aDestText   = "n";
         break;
 
     case CARDINAL_MANY_ONE:
-        aSourceText  ='n';
-        aDestText  ='1';
+        aSourceText = "n";
+        aDestText   = "1";
         break;
 
     case CARDINAL_ONE_ONE:
-        aSourceText  ='1';
-        aDestText  ='1';
+        aSourceText = "1";
+        aDestText   = "1";
         break;
     }
 

@@ -260,7 +260,7 @@ void OQueryTableView::ReSync()
         "before calling OQueryTableView::ReSync() please call ClearAll !");
 
     // I need a collection of all window names that cannot be created so that I do not initialize connections for them.
-    ::std::vector<String> arrInvalidTables;
+    ::std::vector<OUString> arrInvalidTables;
 
     TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
     // Create the window and add it
@@ -302,7 +302,7 @@ void OQueryTableView::ReSync()
         OQueryTableConnectionData* pTabConnData =  static_cast<OQueryTableConnectionData*>(aConIter->get());
 
         // do both tables for the connection exist ?
-        String strTabExistenceTest = pTabConnData->getReferencingTable()->GetWinName();
+        OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetWinName();
         sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
         strTabExistenceTest = pTabConnData->getReferencedTable()->GetWinName();
         bInvalid = bInvalid && ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
@@ -601,7 +601,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
     OQueryTableWindow* pSourceWin = static_cast< OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
     OQueryTableWindow* pDestWin = static_cast< OQueryTableWindow*>(jxdDest.pListBox->GetTabWin());
 
-    String aSourceFieldName, aDestFieldName;
+    OUString aSourceFieldName, aDestFieldName;
     aSourceFieldName    = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
     aDestFieldName      = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
 
@@ -644,7 +644,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
         // the connection could point on the other side
         if(pConn->GetSourceWin() == pDestWin)
         {
-            String aTmp(aSourceFieldName);
+            OUString aTmp(aSourceFieldName);
             aSourceFieldName = aDestFieldName;
             aDestFieldName = aTmp;
         }
@@ -771,7 +771,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
         OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
         SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
-        rUndoMgr.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+        rUndoMgr.EnterListAction( OUString( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), OUString() );
 
         // add the Undo-Action
         OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
@@ -1001,7 +1001,7 @@ sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) con
 
 void OQueryTableView::onNoColumns_throw()
 {
-    String sError( ModuleRes( STR_STATEMENT_WITHOUT_RESULT_SET ) );
+    OUString sError( ModuleRes( STR_STATEMENT_WITHOUT_RESULT_SET ) );
     ::dbtools::throwSQLException( sError, ::dbtools::SQL_GENERAL_ERROR, NULL );
 }
 

@@ -158,7 +158,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                 OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
                 if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)), getORB()))
                 {
-                    String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
+                    OUString aMessage(ModuleRes(STR_DATASOURCE_DELETED));
                     OSQLWarningBox( getView(), aMessage ).Execute();
                 }
                 else
@@ -202,8 +202,8 @@ void ORelationController::impl_initialize()
         setEditable(sal_False);
         m_bRelationsPossible    = sal_False;
         {
-            String sTitle(ModuleRes(STR_RELATIONDESIGN));
-            sTitle.Erase(0,3);
+            OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
+            sTitle = sTitle.copy(3);
             OSQLMessageBox aDlg(NULL,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
             aDlg.Execute();
         }

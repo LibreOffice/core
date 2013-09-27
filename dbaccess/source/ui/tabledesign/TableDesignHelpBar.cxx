@@ -69,7 +69,7 @@ void OTableDesignHelpBar::Resize()
 long OTableDesignHelpBar::PreNotify( NotifyEvent& rNEvt )
 {
     if (rNEvt.GetType() == EVENT_LOSEFOCUS)
-        SetHelpText(String());
+        SetHelpText(OUString());
     return TabPage::PreNotify(rNEvt);
 }
 

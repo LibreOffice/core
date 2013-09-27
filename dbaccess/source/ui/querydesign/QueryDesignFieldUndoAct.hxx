@@ -53,7 +53,7 @@ namespace dbaui
     class OTabFieldCellModifiedUndoAct : public OQueryDesignFieldUndoAct
     {
     protected:
-        String      m_strNextCellContents;
+        OUString    m_strNextCellContents;
         sal_Int32   m_nCellIndex;
 
     public:
@@ -61,7 +61,7 @@ namespace dbaui
             : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_MODIFY_CELL)
             ,m_nCellIndex(BROWSER_INVALIDID){ }
 
-        inline void SetCellContents(const String& str)  { m_strNextCellContents = str; }
+        inline void SetCellContents(const OUString& str)  { m_strNextCellContents = str; }
         inline void SetCellIndex(sal_Int32 nIndex)      { m_nCellIndex = nIndex; }
 
         virtual void Undo();

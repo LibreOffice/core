@@ -48,8 +48,8 @@ namespace dbaui
     public:
         OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
 
-        String BoolStringPersistent(const String& rUIString) const { return OFieldDescControl::BoolStringPersistent(rUIString); }
-        String BoolStringUI(const String& rPersistentString) const { return OFieldDescControl::BoolStringUI(rPersistentString); }
+        OUString BoolStringPersistent(const OUString& rUIString) const { return OFieldDescControl::BoolStringPersistent(rUIString); }
+        OUString BoolStringUI(const OUString& rPersistentString) const { return OFieldDescControl::BoolStringUI(rPersistentString); }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection();

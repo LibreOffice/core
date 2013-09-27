@@ -67,16 +67,16 @@ namespace dbaui
         virtual void GetFocus();
         virtual void LoseFocus();
 
-        void SetControlText( sal_uInt16 nControlId, const String& rText )
+        void SetControlText( sal_uInt16 nControlId, const OUString& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
-        String GetControlText( sal_uInt16 nControlId )
+        OUString GetControlText( sal_uInt16 nControlId )
                 { return m_pGenPage->GetControlText(nControlId); }
 
         //  short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
             // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
 
-        String  BoolStringPersistent(const String& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
-        String  BoolStringUI(const String& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
+        OUString  BoolStringPersistent(const OUString& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
+        OUString  BoolStringUI(const OUString& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();

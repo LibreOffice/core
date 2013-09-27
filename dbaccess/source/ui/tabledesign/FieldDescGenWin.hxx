@@ -46,8 +46,8 @@ namespace dbaui
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );
-        void SetControlText( sal_uInt16 nControlId, const String& rText );
-        String GetControlText( sal_uInt16 nControlId );
+        void SetControlText( sal_uInt16 nControlId, const OUString& rText );
+        OUString GetControlText( sal_uInt16 nControlId );
         void SetReadOnly( sal_Bool bReadOnly );
 #if OSL_DEBUG_LEVEL > 0
         OTableEditorCtrl* GetEditorCtrl();
@@ -55,8 +55,8 @@ namespace dbaui
         //  short GetFormatCategory(OFieldDescription* pFieldDescr);
             // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
 
-        String BoolStringPersistent(const String& rUIString) const;
-        String BoolStringUI(const String& rPersistentString) const;
+        OUString BoolStringPersistent(const OUString& rUIString) const;
+        OUString BoolStringUI(const OUString& rPersistentString) const;
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();

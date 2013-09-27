@@ -75,8 +75,8 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
 {
     if(m_pTabWin)
     {
-        String aHelpText = m_pTabWin->GetComposedName();
-        if( aHelpText.Len())
+        OUString aHelpText = m_pTabWin->GetComposedName();
+        if( !aHelpText.isEmpty())
         {
             // show help
             Rectangle aItemRect(Point(0,0),GetSizePixel());
