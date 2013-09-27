@@ -185,20 +185,20 @@ public:
 class AbstractScSelEntryDlg : public VclAbstractDialog
 {
 public:
-    virtual String GetSelectEntry() const = 0;
+    virtual OUString GetSelectEntry() const = 0;
 };
 
 class AbstractScLinkedAreaDlg : public VclAbstractDialog2
 {
 public:
-    virtual void            InitFromOldLink( const String& rFile, const String& rFilter,
-                                        const String& rOptions, const String& rSource,
+    virtual void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
+                                        const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh ) = 0;
-    virtual String          GetURL() = 0;
-    virtual String          GetFilter() = 0;        // may be empty
-    virtual String          GetOptions() = 0;       // filter options
-    virtual String          GetSource() = 0;        // separated by ";"
-    virtual sal_uLong           GetRefresh() = 0;       // 0 if disabled
+    virtual OUString        GetURL() = 0;
+    virtual OUString        GetFilter() = 0;        // may be empty
+    virtual OUString        GetOptions() = 0;       // filter options
+    virtual OUString        GetSource() = 0;        // separated by ";"
+    virtual sal_uLong       GetRefresh() = 0;       // 0 if disabled
 };
 
 class AbstractScMetricInputDlg : public VclAbstractDialog
@@ -269,7 +269,7 @@ public:
 class AbstractScDPShowDetailDlg : public VclAbstractDialog
 {
 public:
-    virtual String  GetDimensionName() const = 0;
+    virtual OUString  GetDimensionName() const = 0;
 };
 
 class AbstractScNewScenarioDlg : public VclAbstractDialog
@@ -286,10 +286,10 @@ public:
 class AbstractScShowTabDlg : public VclAbstractDialog
 {
 public:
-    virtual void    Insert( const String& rString, sal_Bool bSelected ) = 0;
+    virtual void    Insert( const OUString& rString, sal_Bool bSelected ) = 0;
     virtual sal_uInt16  GetSelectEntryCount() const = 0;
-    virtual void SetDescription(const String& rTitle, const String& rFixedText, const OString& nDlgHelpId, const OString& nLbHelpId ) = 0;
-    virtual String  GetSelectEntry(sal_uInt16 nPos) const = 0;
+    virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& nDlgHelpId, const OString& nLbHelpId ) = 0;
+    virtual OUString  GetSelectEntry(sal_uInt16 nPos) const = 0;
     virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const = 0;
 };
 
@@ -327,7 +327,7 @@ class ScAbstractDialogFactory
 public:
     SC_DLLPUBLIC static ScAbstractDialogFactory*    Create();
 
-    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName,
+    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, OUString aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) = 0;
 
@@ -344,12 +344,12 @@ public:
                                                                 sal_Bool bRow = false) = 0;
 
     virtual VclAbstractDialog * CreateScColOrRowDlg( Window*            pParent,
-                                                    const String&   rStrTitle,
-                                                    const String&   rStrLabel,
+                                                    const OUString&   rStrTitle,
+                                                    const OUString&   rStrLabel,
                                                     int nId,
                                                     sal_Bool                bColDefault = sal_True ) = 0;
 
-    virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(Window* pParent, const String& rExtendText, const String& rCurrentText ) = 0;
+    virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) = 0;
 
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId ) = 0;
@@ -376,7 +376,7 @@ public:
                                                             FillDir     eFillDir,
                                                             FillCmd     eFillCmd,
                                                             FillDateCmd eFillDateCmd,
-                                                            String          aStartStr,
+                                                            OUString        aStartStr,
                                                             double          fStep,
                                                             double          fMax,
                                                             sal_uInt16          nPossDir) = 0;
@@ -414,7 +414,7 @@ public:
                                                                 long          nLast     = 100 ) = 0;
 
     virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(Window * pParent,
-        const String& rDefault) = 0;
+        const OUString& rDefault) = 0;
 
     virtual AbstractScNameCreateDlg * CreateScNameCreateDlg(Window * pParent,
         sal_uInt16 nFlags) = 0;
@@ -450,21 +450,21 @@ public:
                                                                 ScDPObject& rDPObj,
                                                                 sal_uInt16 nOrient ) = 0;
 
-    virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const String& rName,
+    virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const OUString& rName,
                                                                 int nId,
                                                                 sal_Bool bEdit = false, sal_Bool bSheetProtected = false ) = 0;
     virtual AbstractScShowTabDlg * CreateScShowTabDlg ( Window* pParent, int nId ) = 0;
 
     virtual AbstractScStringInputDlg * CreateScStringInputDlg (  Window* pParent,
-                                                                const String& rTitle,
-                                                                const String& rEditTitle,
-                                                                const String& rDefault,
+                                                                const OUString& rTitle,
+                                                                const OUString& rEditTitle,
+                                                                const OUString& rDefault,
                                                                 const OString& sHelpId, const OString& sEditHelpId,
                                                                 int nId ) = 0;
 
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent,
-                                                                const String& rTitle, //Dialog Title
-                                                                const String& rTabBgColorNoColorText, //Label for no tab color
+                                                                const OUString& rTitle, //Dialog Title
+                                                                const OUString& rTabBgColorNoColorText, //Label for no tab color
                                                                 const Color& rDefaultColor, //Currently selected Color
                                                                 const OString& ,
                                                                 int nId ) = 0;

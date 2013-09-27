@@ -236,21 +236,21 @@ class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg
 class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg
 {
     DECL_ABSTDLG_BASE( AbstractScSelEntryDlg_Impl, ScSelEntryDlg )
-    virtual String GetSelectEntry() const;
+    virtual OUString GetSelectEntry() const;
 };
 
 class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg
 {
     DECL_ABSTDLG2_BASE( AbstractScLinkedAreaDlg_Impl, ScLinkedAreaDlg)
 
-    virtual void            InitFromOldLink( const String& rFile, const String& rFilter,
-                                        const String& rOptions, const String& rSource,
+    virtual void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
+                                        const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh );
-    virtual String          GetURL();
-    virtual String          GetFilter();        // may be empty
-    virtual String          GetOptions();       // filter options
-    virtual String          GetSource();        // separated by ";"
-    virtual sal_uLong           GetRefresh();       // 0 if disabled
+    virtual OUString        GetURL();
+    virtual OUString        GetFilter();        // may be empty
+    virtual OUString        GetOptions();       // filter options
+    virtual OUString        GetSource();        // separated by ";"
+    virtual sal_uLong       GetRefresh();       // 0 if disabled
 };
 
 class AbstractScMetricInputDlg_Impl : public AbstractScMetricInputDlg
@@ -321,7 +321,7 @@ class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
 class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 {
     DECL_ABSTDLG_BASE( AbstractScDPShowDetailDlg_Impl, ScDPShowDetailDlg)
-    virtual String GetDimensionName() const;
+    virtual OUString GetDimensionName() const;
 };
 
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg
@@ -337,10 +337,10 @@ class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg
 class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
 {
     DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
-    virtual void    Insert( const String& rString, sal_Bool bSelected );
+    virtual void    Insert( const OUString& rString, sal_Bool bSelected );
     virtual sal_uInt16  GetSelectEntryCount() const;
-    virtual void SetDescription(const String& rTitle, const String& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId );
-    virtual String  GetSelectEntry(sal_uInt16 nPos) const;
+    virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId );
+    virtual OUString  GetSelectEntry(sal_uInt16 nPos) const;
     virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const;
 };
 
@@ -395,7 +395,7 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 public:
     virtual ~ScAbstractDialogFactory_Impl() {}
 
-    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName,
+    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, OUString aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall);
 
@@ -412,12 +412,12 @@ public:
                                                                 sal_Bool bRow = false);
 
     virtual VclAbstractDialog * CreateScColOrRowDlg( Window*            pParent,
-                                                    const String&   rStrTitle,
-                                                    const String&   rStrLabel,
+                                                    const OUString&   rStrTitle,
+                                                    const OUString&   rStrLabel,
                                                     int nId,
                                                     sal_Bool                bColDefault = sal_True );
 
-    virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(Window* pParent, const String& rExtendText, const String& rCurrentText );
+    virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(Window* pParent, const OUString& rExtendText, const OUString& rCurrentText );
 
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId );
@@ -444,7 +444,7 @@ public:
                                                             FillDir     eFillDir,
                                                             FillCmd     eFillCmd,
                                                             FillDateCmd eFillDateCmd,
-                                                            String          aStartStr,
+                                                            OUString        aStartStr,
                                                             double          fStep,
                                                             double          fMax,
                                                             sal_uInt16          nPossDir);
@@ -482,7 +482,7 @@ public:
                                                                 long          nLast     = 100 );
 
     virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(Window * pParent,
-        const String& rDefault);
+        const OUString& rDefault);
 
     virtual AbstractScNameCreateDlg * CreateScNameCreateDlg(Window * pParent,
         sal_uInt16 nFlags);
@@ -518,21 +518,21 @@ public:
                                                                 ScDPObject& rDPObj,
                                                                 sal_uInt16 nOrient );
 
-    virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const String& rName,
+    virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const OUString& rName,
                                                                 int nId,
                                                                 sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
     virtual AbstractScShowTabDlg * CreateScShowTabDlg ( Window* pParent, int nId );
 
     virtual AbstractScStringInputDlg * CreateScStringInputDlg (  Window* pParent,
-                                                                const String& rTitle,
-                                                                const String& rEditTitle,
-                                                                const String& rDefault,
+                                                                const OUString& rTitle,
+                                                                const OUString& rEditTitle,
+                                                                const OUString& rDefault,
                                                                 const OString& sHelpId, const OString& sEditHelpId,
                                                                 int nId );
 
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent,
-                                                                const String& rTitle, //Dialog Title
-                                                                const String& rTabBgColorNoColorText, //Label for no tab color
+                                                                const OUString& rTitle, //Dialog Title
+                                                                const OUString& rTabBgColorNoColorText, //Label for no tab color
                                                                 const Color& rDefaultColor, //Currently selected Color
                                                                 const OString& sHelpId ,
                                                                 int nId );

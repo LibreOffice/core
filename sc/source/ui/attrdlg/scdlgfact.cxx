@@ -385,34 +385,34 @@ const OUString* AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
     return pDlg->GetNextTable( pN );
 }
 
-String AbstractScSelEntryDlg_Impl::GetSelectEntry() const
+OUString AbstractScSelEntryDlg_Impl::GetSelectEntry() const
 {
     return pDlg->GetSelectEntry();
 }
 
-void AbstractScLinkedAreaDlg_Impl::InitFromOldLink( const String& rFile, const String& rFilter,
-                                        const String& rOptions, const String& rSource,
+void AbstractScLinkedAreaDlg_Impl::InitFromOldLink( const OUString& rFile, const OUString& rFilter,
+                                        const OUString& rOptions, const OUString& rSource,
                                         sal_uLong nRefresh )
 {
     pDlg->InitFromOldLink( rFile, rFilter, rOptions, rSource, nRefresh);
 }
 
-String  AbstractScLinkedAreaDlg_Impl::GetURL()
+OUString  AbstractScLinkedAreaDlg_Impl::GetURL()
 {
     return pDlg->GetURL();
 }
 
-String  AbstractScLinkedAreaDlg_Impl::GetFilter()
+OUString  AbstractScLinkedAreaDlg_Impl::GetFilter()
 {
     return pDlg->GetFilter();
 }
 
-String  AbstractScLinkedAreaDlg_Impl::GetOptions()
+OUString  AbstractScLinkedAreaDlg_Impl::GetOptions()
 {
     return pDlg->GetOptions();
 }
 
-String  AbstractScLinkedAreaDlg_Impl::GetSource()
+OUString  AbstractScLinkedAreaDlg_Impl::GetSource()
 {
     return pDlg->GetSource();
 }
@@ -533,7 +533,7 @@ sal_Int32 AbstractScDPDateGroupDlg_Impl::GetDatePart() const
     return pDlg->GetDatePart();
 }
 
-String AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
+OUString AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
 {
      return pDlg->GetDimensionName();
 }
@@ -550,7 +550,7 @@ void AbstractScNewScenarioDlg_Impl::GetScenarioData(
     pDlg->GetScenarioData(rName, rComment, rColor, rFlags);
 }
 
-void AbstractScShowTabDlg_Impl::Insert( const String& rString, sal_Bool bSelected )
+void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, sal_Bool bSelected )
 {
     pDlg->Insert( rString, bSelected);
 }
@@ -561,7 +561,7 @@ sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
 }
 
 void    AbstractScShowTabDlg_Impl::SetDescription(
-                const String& rTitle, const String& rFixedText,
+                const OUString& rTitle, const OUString& rFixedText,
                 const OString& sDlgHelpId, const OString& sLbHelpId )
 {
     pDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
@@ -572,7 +572,7 @@ sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryPos(sal_uInt16 nPos) const
     return pDlg->GetSelectEntryPos( nPos);
 }
 
-String   AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
+OUString   AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
 {
         return pDlg->GetSelectEntry(nPos);
 }
@@ -603,7 +603,7 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 }
 
 // =========================Factories  for createdialog ===================
-AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, String aDatName,
+AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, OUString aDatName,
                                                     SvStream* pInStream, ScImportAsciiCall eCall )
 {
     ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( pParent, aDatName,pInStream, eCall );
@@ -658,8 +658,8 @@ AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg
 }
 
 VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*          pParent,
-                                                    const String&   rStrTitle,
-                                                    const String&   rStrLabel,
+                                                    const OUString&   rStrTitle,
+                                                    const OUString&   rStrLabel,
                                                     int nId,
                                                     sal_Bool                bColDefault)
 {
@@ -678,7 +678,7 @@ VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*  
     return 0;
 }
 
-AbstractScSortWarningDlg* ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText )
+AbstractScSortWarningDlg* ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const OUString& rExtendText, const OUString& rCurrentText )
 {
     ScSortWarningDlg* pDlg = new ScSortWarningDlg(pParent, rExtendText, rCurrentText );
     return new AbstractScSortWarningDlg_Impl( pDlg );
@@ -772,10 +772,10 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
                                                             FillDir     eFillDir,
                                                             FillCmd     eFillCmd,
                                                             FillDateCmd eFillDateCmd,
-                                                            String          aStartStr,
+                                                            OUString        aStartStr,
                                                             double          fStep,
                                                             double          fMax,
-                                                            sal_uInt16          nPossDir)
+                                                            sal_uInt16      nPossDir)
 {
     ScFillSeriesDlg * pDlg = new ScFillSeriesDlg( pParent, rDocument,eFillDir, eFillCmd,eFillDateCmd, aStartStr,fStep,fMax,nPossDir);
         return new AbstractScFillSeriesDlg_Impl( pDlg );
@@ -880,7 +880,7 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
 }
 
 AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(Window* pParent,
-    const String& rDefault)
+    const OUString& rDefault)
 {
     ScMoveTableDlg * pDlg = new ScMoveTableDlg( pParent, rDefault );
     return new AbstractScMoveTableDlg_Impl( pDlg );
@@ -985,7 +985,7 @@ AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDl
     return 0;
 }
 
-AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg ( Window* pParent, const String& rName,
+AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg ( Window* pParent, const OUString& rName,
                                                                 int nId,
                                                                 sal_Bool bEdit , sal_Bool bSheetProtected )
 {
@@ -1022,9 +1022,9 @@ AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window
 }
 
 AbstractScStringInputDlg * ScAbstractDialogFactory_Impl::CreateScStringInputDlg (  Window* pParent,
-                                                                const String& rTitle,
-                                                                const String& rEditTitle,
-                                                                const String& rDefault,
+                                                                const OUString& rTitle,
+                                                                const OUString& rEditTitle,
+                                                                const OUString& rDefault,
                                                                 const OString& sHelpId, const OString& sEditHelpId,
                                                                 int nId )
 {
@@ -1045,8 +1045,8 @@ AbstractScStringInputDlg * ScAbstractDialogFactory_Impl::CreateScStringInputDlg 
 
 AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg (
                                                             Window* pParent,
-                                                            const String& rTitle,
-                                                            const String& rTabBgColorNoColorText,
+                                                            const OUString& rTitle,
+                                                            const OUString& rTabBgColorNoColorText,
                                                             const Color& rDefaultColor,
                                                             const OString& sHelpId ,
                                                             int nId )
