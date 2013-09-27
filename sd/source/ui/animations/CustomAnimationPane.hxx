@@ -140,11 +140,9 @@ private:
     FixedText*  mpFTSpeed;
     ListBox*   mpCBSpeed;
     CustomAnimationList*    mpCustomAnimationList;
-    FixedText*  mpFTChangeOrder;
     PushButton* mpPBMoveUp;
     PushButton* mpPBMoveDown;
     PushButton* mpPBPlay;
-    PushButton* mpPBSlideShow;
     CheckBox*   mpCBAutoPreview;
 
     OUString    maStrModify;
