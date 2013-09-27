@@ -1826,8 +1826,6 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
     aNewDBData.sCommand = rNewName.GetToken(1, DB_DELIM);
     aNewDBData.nCommandType = (short)rNewName.GetToken(2, DB_DELIM).ToInt32();
 
-    String sFormel;
-
     SwSectionFmts& rArr = GetSections();
     for (sal_uInt16 n = rArr.size(); n; )
     {
@@ -1835,7 +1833,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
 
         if( pSect )
         {
-            sFormel = pSect->GetCondition();
+            OUString sFormel = pSect->GetCondition();
             ReplaceUsedDBs( rOldNames, rNewName, sFormel);
             pSect->SetCondition(sFormel);
         }
@@ -1898,20 +1896,24 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                 // no break;
             case RES_HIDDENTXTFLD:
             case RES_HIDDENPARAFLD:
-                sFormel = pFld->GetPar1();
+            {
+                OUString sFormel = pFld->GetPar1();
                 ReplaceUsedDBs( rOldNames, rNewName, sFormel);
                 pFld->SetPar1( sFormel );
                 bExpand = true;
                 break;
+            }
 
             case RES_SETEXPFLD:
             case RES_GETEXPFLD:
             case RES_TABLEFLD:
-                sFormel = pFld->GetFormula();
+            {
+                OUString sFormel = pFld->GetFormula();
                 ReplaceUsedDBs( rOldNames, rNewName, sFormel);
                 pFld->SetPar2( sFormel );
                 bExpand = true;
                 break;
+            }
         }
 
         if (bExpand)
@@ -1921,7 +1923,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
 }
 
 void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
-                            const String& rNewName, String& rFormel )
+                            const String& rNewName, OUString& rFormel )
 {
     const CharClass& rCC = GetAppCharClass();
     String  sFormel(rFormel);
@@ -1947,8 +1949,7 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                 if( sFormel.GetChar( nPos + sDBName.Len() ) == '.' &&
                     (!nPos || !rCC.isLetterNumeric( sFormel, nPos - 1 )))
                 {
-                    rFormel.Erase( nPos, sDBName.Len() );
-                    rFormel.Insert( sNewName, nPos );
+                    rFormel = rFormel.replaceAt(nPos, sDBName.Len(), sNewName);
                     //prevent re-searching - this is useless and provokes
                     //endless loops when names containing each other and numbers are exchanged
                     //e.g.: old ?12345.12345  new: i12345.12345
