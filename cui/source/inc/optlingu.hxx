@@ -97,19 +97,17 @@ public:
 class SvxLinguTabPage : public SfxTabPage
 {
 private:
-    FixedLine           aLinguisticFL;
-    FixedText           aLinguModulesFT;
-    SvxCheckListBox     aLinguModulesCLB;
-    PushButton          aLinguModulesEditPB;
-    FixedText           aLinguDicsFT;
-    SvxCheckListBox     aLinguDicsCLB;
-    PushButton          aLinguDicsNewPB;
-    PushButton          aLinguDicsEditPB;
-    PushButton          aLinguDicsDelPB;
-    FixedText           aLinguOptionsFT;
-    SvxCheckListBox     aLinguOptionsCLB;
-    PushButton          aLinguOptionsEditPB;
-    FixedHyperlink      aMoreDictsLink;
+    FixedText*          m_pLinguModulesFT;
+    SvxCheckListBox*    m_pLinguModulesCLB;
+    PushButton*         m_pLinguModulesEditPB;
+    FixedText*          m_pLinguDicsFT;
+    SvxCheckListBox*    m_pLinguDicsCLB;
+    PushButton*         m_pLinguDicsNewPB;
+    PushButton*         m_pLinguDicsEditPB;
+    PushButton*         m_pLinguDicsDelPB;
+    SvxCheckListBox*    m_pLinguOptionsCLB;
+    PushButton*         m_pLinguOptionsEditPB;
+    FixedHyperlink*     m_pMoreDictsLink;
 
     String              sCapitalWords;
     String              sWordsWithDigits;

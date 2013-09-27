@@ -75,6 +75,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/opthtmlpage \
 	cui/uiconfig/ui/optjsearchpage \
 	cui/uiconfig/ui/optlanguagespage \
+	cui/uiconfig/ui/optlingupage \
 	cui/uiconfig/ui/optmemorypage \
 	cui/uiconfig/ui/optnewdictionarydialog \
 	cui/uiconfig/ui/optonlineupdatepage \
