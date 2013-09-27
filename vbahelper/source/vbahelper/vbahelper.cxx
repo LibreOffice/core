@@ -557,8 +557,8 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
 }
 bool NeedEsc(sal_Unicode cCode)
 {
-    String sEsc(".^$+\\|{}()");
-    return (STRING_NOTFOUND != sEsc.Search(cCode));
+    OUString sEsc(".^$+\\|{}()");
+    return -1 != sEsc.indexOf(cCode);
 }
 
 OUString VBAToRegexp(const OUString &rIn, bool bForLike )
@@ -1137,7 +1137,7 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
     return xIf;
 }
 
-uno::Reference< XHelperInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell )
+uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell* pShell )
 {
     uno::Reference< XHelperInterface > xIf;
     if ( pShell )

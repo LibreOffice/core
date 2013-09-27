@@ -59,7 +59,7 @@ namespace ooo
 
         /** Returns the VBA document implementation object representing the passed UNO document model. */
         VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getVBADocument( const css::uno::Reference< css::frame::XModel >& xModel );
-        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell* pShell );
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException);
 
         css::uno::Reference< css::frame::XModel > getCurrentDoc( const OUString& sKey ) throw (css::uno::RuntimeException);
