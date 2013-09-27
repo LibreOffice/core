@@ -1303,10 +1303,7 @@ bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*
             pResData->sId = OString::number(nLIndex);
 
         MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
-        if( pEntrys )
-        {
-           o_vMergeEntrys.push_back(pEntrys);
-        }
+        o_vMergeEntrys.push_back(pEntrys);
     }
     return true;
  }
@@ -1470,7 +1467,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 }
                             }
 
-                            if( bTranslateList && nLIndex < vMergeEntryVector.size() )
+                            if( bTranslateList && nLIndex < vMergeEntryVector.size() && vMergeEntryVector[nLIndex] )
                             {
                                 OString sText;
                                 sal_Bool bText;
