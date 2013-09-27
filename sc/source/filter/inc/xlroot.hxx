@@ -83,9 +83,9 @@ struct XclRootData
     SotStorageRef       mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
     OUString            maDocUrl;           /// Document URL of imported/exported file.
-    String              maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
-    String              maUserName;         /// Current user name.
-    const String        maDefPassword;      /// The default password used for stream encryption.
+    OUString            maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
+    OUString            maUserName;         /// Current user name.
+    const OUString      maDefPassword;      /// The default password used for stream encryption.
     rtl_TextEncoding    meTextEnc;          /// Text encoding to import/export byte strings.
     LanguageType        meSysLang;          /// System language.
     LanguageType        meDocLang;          /// Document language (import: from file, export: from system).
@@ -180,12 +180,12 @@ public:
     /** Returns the document URL of the imported/exported file. */
     inline const OUString& GetDocUrl() const { return mrData.maDocUrl; }
     /** Returns the base path of the imported/exported file. */
-    inline const String& GetBasePath() const { return mrData.maBasePath; }
+    inline const OUString& GetBasePath() const { return mrData.maBasePath; }
     /** Returns the current user name. */
-    inline const String& GetUserName() const { return mrData.maUserName; }
+    inline const OUString& GetUserName() const { return mrData.maUserName; }
 
     /** Returns the default password used for stream encryption. */
-    inline const String& GetDefaultPassword() const { return mrData.maDefPassword; }
+    inline const OUString& GetDefaultPassword() const { return mrData.maDefPassword; }
     /** Requests and verifies a password from the medium or the user. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
         RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
@@ -197,13 +197,13 @@ public:
     bool                HasVbaStorage() const;
 
     /** Tries to open a storage as child of the specified storage for reading or writing. */
-    SotStorageRef       OpenStorage( SotStorageRef xStrg, const String& rStrgName ) const;
+    SotStorageRef       OpenStorage( SotStorageRef xStrg, const OUString& rStrgName ) const;
     /** Tries to open a storage as child of the root storage for reading or writing. */
-    SotStorageRef       OpenStorage( const String& rStrgName ) const;
+    SotStorageRef       OpenStorage( const OUString& rStrgName ) const;
     /** Tries to open a new stream in the specified storage for reading or writing. */
-    SotStorageStreamRef OpenStream( SotStorageRef xStrg, const String& rStrmName ) const;
+    SotStorageStreamRef OpenStream( SotStorageRef xStrg, const OUString& rStrmName ) const;
     /** Tries to open a new stream in the root storage for reading or writing. */
-    SotStorageStreamRef OpenStream( const String& rStrmName ) const;
+    SotStorageStreamRef OpenStream( const OUString& rStrmName ) const;
 
     /** Returns the destination document (import) or source document (export). */
     inline ScDocument&  GetDoc() const { return mrData.mrDoc; }

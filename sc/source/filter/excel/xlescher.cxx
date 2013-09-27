@@ -318,9 +318,9 @@ spTbxListenerData[] =
 } // namespace
 
 bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
-        XclTbxEventType eEventType, const String& rXclMacroName, SfxObjectShell* pDocShell )
+        XclTbxEventType eEventType, const OUString& rXclMacroName, SfxObjectShell* pDocShell )
 {
-    if( rXclMacroName.Len() > 0 )
+    if( !rXclMacroName.isEmpty() )
     {
         rDescriptor.ListenerType = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcListenerType );
         rDescriptor.EventMethod = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcEventMethod );
@@ -331,7 +331,7 @@ bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
     return false;
 }
 
-String XclControlHelper::ExtractFromMacroDescriptor(
+OUString XclControlHelper::ExtractFromMacroDescriptor(
         const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType, SfxObjectShell* /*pShell*/ )
 {
     if( (!rDescriptor.ScriptCode.isEmpty()) &&

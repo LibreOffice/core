@@ -33,11 +33,11 @@ using namespace ::formula;
 
 // Function data ==============================================================
 
-String XclFunctionInfo::GetMacroFuncName() const
+OUString XclFunctionInfo::GetMacroFuncName() const
 {
     if( IsMacroFunc() )
         return String( mpcMacroName, RTL_TEXTENCODING_UTF8 );
-    return EMPTY_STRING;
+    return OUString();
 }
 
 // abbreviations for function return token class
@@ -517,7 +517,7 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 n
     return (aIt == maXclFuncMap.end()) ? 0 : aIt->second;
 }
 
-const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const String& rXclMacroName ) const
+const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const OUString& rXclMacroName ) const
 {
     // only in import filter allowed, but do not test maXclMacroNameMap, it may be empty for old BIFF versions
     OSL_ENSURE( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclMacroName - wrong filter" );
@@ -703,24 +703,24 @@ void XclTokenArrayIterator::SkipSpaces()
 
 // strings and string lists ---------------------------------------------------
 
-bool XclTokenArrayHelper::GetTokenString( String& rString, const FormulaToken& rScToken )
+bool XclTokenArrayHelper::GetTokenString( OUString& rString, const FormulaToken& rScToken )
 {
     bool bIsStr = (rScToken.GetType() == svString) && (rScToken.GetOpCode() == ocPush);
     if( bIsStr ) rString = rScToken.GetString();
     return bIsStr;
 }
 
-bool XclTokenArrayHelper::GetString( String& rString, const ScTokenArray& rScTokArr )
+bool XclTokenArrayHelper::GetString( OUString& rString, const ScTokenArray& rScTokArr )
 {
     XclTokenArrayIterator aIt( rScTokArr, true );
     // something is following the string token -> error
     return aIt.Is() && GetTokenString( rString, *aIt ) && !++aIt;
 }
 
-bool XclTokenArrayHelper::GetStringList( String& rStringList, const ScTokenArray& rScTokArr, sal_Unicode cSep )
+bool XclTokenArrayHelper::GetStringList( OUString& rStringList, const ScTokenArray& rScTokArr, sal_Unicode cSep )
 {
     bool bRet = true;
-    String aString;
+    OUString aString;
     XclTokenArrayIterator aIt( rScTokArr, true );
     enum { STATE_START, STATE_STR, STATE_SEP, STATE_END } eState = STATE_START;
     while( eState != STATE_END ) switch( eState )
@@ -730,12 +730,12 @@ bool XclTokenArrayHelper::GetStringList( String& rStringList, const ScTokenArray
         break;
         case STATE_STR:
             bRet = GetTokenString( aString, *aIt );
-            if( bRet ) rStringList.Append( aString );
+            if( bRet ) rStringList += aString ;
             eState = (bRet && (++aIt).Is()) ? STATE_SEP : STATE_END;
         break;
         case STATE_SEP:
             bRet = aIt->GetOpCode() == ocSep;
-            if( bRet ) rStringList.Append( cSep );
+            if( bRet ) rStringList += OUString(cSep);
             eState = (bRet && (++aIt).Is()) ? STATE_STR : STATE_END;
         break;
         default:;
@@ -745,7 +745,7 @@ bool XclTokenArrayHelper::GetStringList( String& rStringList, const ScTokenArray
 
 void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep, bool bTrimLeadingSpaces )
 {
-    String aString;
+    OUString aString;
     if( GetString( aString, rScTokArr ) )
     {
         rScTokArr.Clear();
@@ -753,7 +753,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
         sal_Int32 nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
-            String aToken( aString.GetToken( 0, cStringSep, nStringIx ) );
+            String aToken( aString.getToken( 0, cStringSep, nStringIx ) );
             if( bTrimLeadingSpaces )
                 aToken = comphelper::string::stripStart(aToken, ' ');
             if( nToken > 0 )

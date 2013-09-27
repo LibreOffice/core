@@ -191,7 +191,7 @@ void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
 {
     maData = rFontData;
     mbHasCharSet = bHasCharSet;
-    if( maData.maStyle.Len() )
+    if( !maData.maStyle.isEmpty() )
     {
         if( SfxObjectShell* pDocShell = GetDocShell() )
         {
@@ -206,7 +206,7 @@ void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
                 }
             }
         }
-        maData.maStyle.Erase();
+        maData.maStyle = "";
     }
     GuessScriptType();
     SetAllUsedFlags( true );
@@ -663,7 +663,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
         sal_Int32 nCheckPos;
         short nType = NUMBERFORMAT_DEFINED;
         sal_uInt32 nKey;
-        if( rNumFmt.maFormat.Len() )
+        if( !rNumFmt.maFormat.isEmpty() )
         {
             OUString aFormat( rNumFmt.maFormat );
             rFormatter.PutandConvertEntry( aFormat, nCheckPos,

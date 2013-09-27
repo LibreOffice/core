@@ -322,7 +322,7 @@ struct XclFunctionInfo
     /** Returns true, if the function is simulated by a macro call. */
     inline bool         IsMacroFunc() const { return mpcMacroName != 0; }
     /** Returns the name of the external function as string. */
-    String              GetMacroFuncName() const;
+    OUString            GetMacroFuncName() const;
 };
 
 // ----------------------------------------------------------------------------
@@ -338,7 +338,7 @@ public:
     /** Returns the function data for an Excel function index, or 0 on error. */
     const XclFunctionInfo* GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const;
     /** Returns the function data for an Excel function simulated by a macro call, or 0 on error. */
-    const XclFunctionInfo* GetFuncInfoFromXclMacroName( const String& rXclMacroName ) const;
+    const XclFunctionInfo* GetFuncInfoFromXclMacroName( const OUString& rXclMacroName ) const;
     /** Returns the function data for a Calc opcode, or 0 on error. */
     const XclFunctionInfo* GetFuncInfoFromOpCode( OpCode eOpCode ) const;
 
@@ -348,7 +348,7 @@ private:
 
 private:
     typedef ::std::map< sal_uInt16, const XclFunctionInfo* >    XclFuncMap;
-    typedef ::std::map< String, const XclFunctionInfo* >        XclMacroNameMap;
+    typedef ::std::map< OUString, const XclFunctionInfo* >      XclMacroNameMap;
     typedef ::std::map< OpCode, const XclFunctionInfo* >        ScFuncMap;
 
     XclFuncMap          maXclFuncMap;       /// Maps Excel function indexes to function data.
@@ -499,12 +499,12 @@ public:
     /** Tries to extract a string from the passed token.
         @param rString  (out-parameter) The string contained in the token.
         @return  true = Passed token is a string token, rString parameter is valid. */
-    static bool         GetTokenString( String& rString, const ::formula::FormulaToken& rScToken );
+    static bool         GetTokenString( OUString& rString, const ::formula::FormulaToken& rScToken );
 
     /** Parses the passed formula and tries to find a single string token, i.e. "abc".
         @param rString  (out-parameter) The string contained in the formula.
         @return  true = String token found, rString parameter is valid. */
-    static bool         GetString( String& rString, const ScTokenArray& rScTokArr );
+    static bool         GetString( OUString& rString, const ScTokenArray& rScTokArr );
 
     /** Parses the passed formula and tries to find a string token list, i.e. "abc";"def";"ghi".
         @descr  Returns the unquoted (!) strings in a single string, separated with the
@@ -513,7 +513,7 @@ public:
         @param rStringList  (out-parameter) All strings contained in the formula as list.
         @param cSep  List separator character.
         @return  true = String token list found, rString parameter is valid. */
-    static bool         GetStringList( String& rStringList, const ScTokenArray& rScTokArr, sal_Unicode cSep );
+    static bool         GetStringList( OUString& rStringList, const ScTokenArray& rScTokArr, sal_Unicode cSep );
 
     /** Tries to convert a formula that consists of a single string token to a list of strings.
         @descr  Example: The formula ="abc\ndef\nghi" will be converted to the formula

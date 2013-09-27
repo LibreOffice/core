@@ -101,7 +101,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mbExport( bExport )
 {
  maUserName = SvtUserOptions().GetLastName();
-    if( maUserName.Len() == 0 )
+    if( maUserName.isEmpty() )
         maUserName = "Calc";
 
     switch( ScGlobal::GetDefaultScriptType() )
@@ -243,26 +243,26 @@ bool XclRoot::HasVbaStorage() const
     return xRootStrg.Is() && xRootStrg->IsContained( EXC_STORAGE_VBA_PROJECT );
 }
 
-SotStorageRef XclRoot::OpenStorage( SotStorageRef xStrg, const String& rStrgName ) const
+SotStorageRef XclRoot::OpenStorage( SotStorageRef xStrg, const OUString& rStrgName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageWrite( xStrg, rStrgName ) :
         ScfTools::OpenStorageRead( xStrg, rStrgName );
 }
 
-SotStorageRef XclRoot::OpenStorage( const String& rStrgName ) const
+SotStorageRef XclRoot::OpenStorage( const OUString& rStrgName ) const
 {
     return OpenStorage( GetRootStorage(), rStrgName );
 }
 
-SotStorageStreamRef XclRoot::OpenStream( SotStorageRef xStrg, const String& rStrmName ) const
+SotStorageStreamRef XclRoot::OpenStream( SotStorageRef xStrg, const OUString& rStrmName ) const
 {
     return mrData.mbExport ?
         ScfTools::OpenStorageStreamWrite( xStrg, rStrmName ) :
         ScfTools::OpenStorageStreamRead( xStrg, rStrmName );
 }
 
-SotStorageStreamRef XclRoot::OpenStream( const String& rStrmName ) const
+SotStorageStreamRef XclRoot::OpenStream( const OUString& rStrmName ) const
 {
     return OpenStream( GetRootStorage(), rStrmName );
 }

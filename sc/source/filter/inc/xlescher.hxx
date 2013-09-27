@@ -419,10 +419,10 @@ public:
     static bool         FillMacroDescriptor(
                             ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType,
-                            const String& rXclMacroName,
+                            const OUString& rXclMacroName,
                             SfxObjectShell* pDocShell = 0 );
     /** Tries to extract an Excel macro name from the passed macro descriptor. */
-    static String       ExtractFromMacroDescriptor(
+    static OUString     ExtractFromMacroDescriptor(
                             const ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType, SfxObjectShell* pShell = NULL );
 };

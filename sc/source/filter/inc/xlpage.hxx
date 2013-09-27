@@ -98,8 +98,8 @@ struct XclPageData : private boost::noncopyable
     ScfUInt16Vec        maHorPageBreaks;    /// Horizontal page breaks.
     ScfUInt16Vec        maVerPageBreaks;    /// Vertical page breaks.
     SvxBrushItemPtr     mxBrushItem;        /// Background bitmap.
-    String              maHeader;           /// Excel header string (empty = off).
-    String              maFooter;           /// Excel footer string (empty = off).
+    OUString            maHeader;           /// Excel header string (empty = off).
+    OUString            maFooter;           /// Excel footer string (empty = off).
     double              mfLeftMargin;       /// Left margin in inches.
     double              mfRightMargin;      /// Right margin in inches.
     double              mfTopMargin;        /// Top margin in inches.

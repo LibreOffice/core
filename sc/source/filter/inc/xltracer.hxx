@@ -78,7 +78,7 @@ struct XclTracerDetails
 class XclTracer
 {
 public:
-    explicit                    XclTracer( const String& rDocUrl );
+    explicit                    XclTracer( const OUString& rDocUrl );
     virtual                     ~XclTracer();
 
     /** Returns true, if tracing is enabled. */

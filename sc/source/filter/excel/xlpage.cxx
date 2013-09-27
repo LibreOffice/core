@@ -175,8 +175,8 @@ void XclPageData::SetDefaults()
     maHorPageBreaks.clear();
     maVerPageBreaks.clear();
     mxBrushItem.reset();
-    maHeader.Erase();
-    maFooter.Erase();
+    maHeader = "";
+    maFooter = "";
     mfLeftMargin    = mfRightMargin    = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_LR );
     mfTopMargin     = mfBottomMargin   = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_TB );
     mfHeaderMargin  = mfFooterMargin   = XclTools::GetInchFromHmm( EXC_MARGIN_DEFAULT_HF );

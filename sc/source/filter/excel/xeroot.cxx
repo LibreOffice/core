@@ -351,7 +351,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
 uno::Sequence< beans::NamedValue > XclExpRoot::GenerateDefaultEncryptionData() const
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    if ( GetDefaultPassword().Len() > 0 )
+    if ( !GetDefaultPassword().isEmpty() )
         aEncryptionData = GenerateEncryptionData( GetDefaultPassword() );
 
     return aEncryptionData;

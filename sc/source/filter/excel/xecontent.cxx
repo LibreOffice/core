@@ -1556,7 +1556,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         {
             if( pValData->GetDataMode() == SC_VALID_LIST )
             {
-                String aString;
+                OUString aString;
                 if( XclTokenArrayHelper::GetStringList( aString, *xScTokArr, '\n' ) )
                 {
                     OUStringBuffer sFormulaBuf;
@@ -1569,7 +1569,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                     sal_Int32 nStringIx = 0;
                     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
                     {
-                        String aToken( aString.GetToken( 0, '\n', nStringIx ) );
+                        String aToken( aString.getToken( 0, '\n', nStringIx ) );
                         if( nToken > 0 )
                         {
                             mxString1->Append(OUString(static_cast<sal_Unicode>('\0')));

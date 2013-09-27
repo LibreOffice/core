@@ -750,8 +750,8 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                             (aNewData.mnWeight > EXC_FONTWGHT_NORMAL) ? WEIGHT_BOLD : WEIGHT_NORMAL,
                             aNewData.mbItalic ? ITALIC_NORMAL : ITALIC_NONE ) );
                         aNewData.maStyle = pFontList->GetStyleName( aFontInfo );
-                        if( aNewData.maStyle.Len() )
-                            aParaText += "," + OUString(aNewData.maStyle);
+                        if( !aNewData.maStyle.isEmpty() )
+                            aParaText += "," + aNewData.maStyle;
                     }
                     aParaText += "\"";
                 }

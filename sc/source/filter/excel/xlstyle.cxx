@@ -189,7 +189,7 @@ XclFontData::XclFontData( const SvxFont& rFont )
 void XclFontData::Clear()
 {
     maName = "";
-    maStyle.Erase();
+    maStyle = "";
     maColor.SetColor( COL_AUTO );
     mnHeight = 0;
     mnWeight = EXC_FONTWGHT_DONTKNOW;
@@ -203,7 +203,7 @@ void XclFontData::Clear()
 void XclFontData::FillFromVclFont( const Font& rFont )
 {
     maName = XclTools::GetXclFontName( rFont.GetName() );   // substitute with MS fonts
-    maStyle.Erase();
+    maStyle = "";
     maColor = rFont.GetColor();
     SetScUnderline( rFont.GetUnderline() );
     mnEscapem = EXC_FONTESC_NONE;
@@ -1491,7 +1491,7 @@ void XclNumFmtBuffer::InitializeImport()
     maFmtMap.clear();
 }
 
-void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat )
+void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const OUString& rFormat )
 {
     XclNumFmt& rNumFmt = maFmtMap[ nXclNumFmt ];
     rNumFmt.maFormat = rFormat;

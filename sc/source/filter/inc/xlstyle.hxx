@@ -288,7 +288,7 @@ class SvxFont;
 struct XclFontData
 {
     OUString            maName;         /// Font name.
-    String              maStyle;        /// String with styles (bold, italic).
+    OUString            maStyle;        /// String with styles (bold, italic).
     Color               maColor;        /// Font color.
     sal_uInt16          mnHeight;       /// Font height in twips (1/20 of a point).
     sal_uInt16          mnWeight;       /// Boldness: 400=normal, 700=bold.
@@ -444,7 +444,7 @@ private:
 
 struct XclNumFmt
 {
-    String              maFormat;       /// Format string, may be empty (meOffset used then).
+    OUString            maFormat;       /// Format string, may be empty (meOffset used then).
     NfIndexTableOffset  meOffset;       /// SvNumberFormatter format index, if maFormat is empty.
     LanguageType        meLanguage;     /// Language type to be set with the number format.
 };
@@ -469,7 +469,7 @@ protected:
     inline const XclNumFmtMap& GetFormatMap() const { return maFmtMap; }
 
     /** Inserts a new number format for the specified Excel format index. */
-    void                InsertFormat( sal_uInt16 nXclNumFmt, const String& rFormat );
+    void                InsertFormat( sal_uInt16 nXclNumFmt, const OUString& rFormat );
 
 private:
     /** Inserts built-in number formats for the current system language. */
