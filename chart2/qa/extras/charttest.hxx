@@ -66,8 +66,7 @@ void ChartTest::reload(const OUString& rFilterName)
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-    uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
-    xComponent->dispose();
+    mxComponent->dispose();
     mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
     std::cout << aTempFile.GetURL();
     CPPUNIT_ASSERT(mxComponent.is());
