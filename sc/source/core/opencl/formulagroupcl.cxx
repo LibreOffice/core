@@ -821,7 +821,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
                     const formula::SingleVectorRefToken* pSvr = static_cast<const formula::SingleVectorRefToken*>( p );
                     dpBinaryData = pSvr->GetArray().mpNumericArray;
                     uint nArrayLen = pSvr->GetArrayLength();
-                    SingleVectorFormula *SignleTemp = new SingleVectorFormula() ;
+                    SingleVectorFormula *SignleTemp = 0;
                     if(isSingle)
                     {
                         SignleTemp = mSingleArray[--mnSingleCount];
@@ -942,7 +942,11 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
         return true;
     } // getOpenclState() End
     else
+    {
+        if (pResult)
+            free(pResult);
         return false;
+    }
 }
 
 #if USE_GROUNDWATER_INTERPRETER
