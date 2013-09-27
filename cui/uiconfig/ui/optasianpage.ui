@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="OptAsianPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -73,7 +74,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Kerning</property>
-            <property name="use_markup">False</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -174,7 +174,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Character spacing</property>
-            <property name="use_markup">False</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -268,6 +267,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Language</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">language</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -283,6 +283,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Not _at start of line:</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">start</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -298,6 +299,7 @@
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Not at _end of line:</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">end</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -363,7 +365,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">First and last characters</property>
-            <property name="use_markup">False</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
