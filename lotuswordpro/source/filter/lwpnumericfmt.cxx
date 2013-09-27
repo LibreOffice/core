@@ -74,7 +74,7 @@ LwpCurrencyPool  LwpNumericFormat::m_aCurrencyInfo;
 *   @param
 *   @return
 */
-String LwpCurrencyPool::GetCurrencySymbol(sal_uInt16 nFormat)
+OUString LwpCurrencyPool::GetCurrencySymbol(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].sSymbol;
 }
@@ -291,27 +291,27 @@ LwpNumericFormat::GetDecimalPlaces(void)
 *   @param
 *   @return
 */
-void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, String& aPrefix, String& aSuffix, sal_Bool bNegtive)
+void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, sal_Bool bNegtive)
 {
     aPrefix = aNumber.GetPrefix();
     aSuffix = aNumber.GetSuffix();
 
     //Make the default prefix and suffix
-    String aSymbol = m_aCurrencyInfo.GetCurrencySymbol(cFormat);
+    OUString aSymbol = m_aCurrencyInfo.GetCurrencySymbol(cFormat);
     sal_Bool bPost = m_aCurrencyInfo.IsSymbolPost(cFormat);
     sal_Bool bShowSpace = m_aCurrencyInfo.IsShowSpace(cFormat);
     if ( aNumber.IsDefaultPrefix())
     {
         if (bNegtive)
         {
-            aPrefix = OUString("(");
+            aPrefix = "(";
         }
         if (!bPost)
         {
             aPrefix += aSymbol;
             if (bShowSpace)
             {
-                aPrefix += OUString(" ");
+                aPrefix += " ";
             }
         }
     }
@@ -322,14 +322,14 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, String& aP
             aSuffix = aSymbol;
             if (bShowSpace)
             {
-                aSuffix.Insert(OUString(" "),0);
+                aSuffix = " " + aSuffix;
             }
 
         }
 
         if (bNegtive)
         {
-            aSuffix += OUString(")");
+            aSuffix += ")";
         }
     }
 }
@@ -384,7 +384,7 @@ void LwpNumericFormat::SetNumberType(XFNumberStyle* pStyle)
 XFStyle* LwpNumericFormat::Convert()
 {
     XFNumberStyle* pStyle = new XFNumberStyle;
-    String aPrefix, aSuffix,aNegPrefix,aNegSuffix;
+    OUString aPrefix, aSuffix,aNegPrefix,aNegSuffix;
     LwpColor aColor, aNegativeColor;
 
     if (IsCurrencyFormat(cFormat))
@@ -419,13 +419,13 @@ XFStyle* LwpNumericFormat::Convert()
         }
         if (FMT_COMMA==cFormat)
         {
-            if (cNegative.IsDefaultPrefix() && aNegPrefix.Len() == 0)
+            if (cNegative.IsDefaultPrefix() && aNegPrefix.isEmpty())
             {
-                aNegPrefix = OUString("(");
+                aNegPrefix = "(";
             }
-            if (cNegative.IsDefaultSuffix() && aNegSuffix.Len() == 0)
+            if (cNegative.IsDefaultSuffix() && aNegSuffix.isEmpty())
             {
-                aNegSuffix = OUString(")");
+                aNegSuffix = ")";
             }
         }
 

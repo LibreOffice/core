@@ -111,14 +111,14 @@ class LwpFormulaArg
 public:
     virtual ~LwpFormulaArg() = 0;
     virtual OUString ToString(LwpTableLayout* pCellsMap)=0;
-    virtual String ToArgString(LwpTableLayout* pCellsMap){ return ToString(pCellsMap);}
+    virtual OUString ToArgString(LwpTableLayout* pCellsMap){ return ToString(pCellsMap);}
 };
 
 class LwpFormulaTools
 {
 public:
-    static String GetName(sal_uInt16 nTokenType);
-    static String GetCellAddr(sal_Int16 nRow, sal_Int16 nCol, LwpTableLayout* pCellsMap);
+    static OUString GetName(sal_uInt16 nTokenType);
+    static OUString GetCellAddr(sal_Int16 nRow, sal_Int16 nCol, LwpTableLayout* pCellsMap);
 };
 
 class LwpFormulaConst:public LwpFormulaArg
@@ -133,10 +133,10 @@ private:
 class LwpFormulaText:public LwpFormulaArg
 {
 public:
-    LwpFormulaText( String aText);
+    LwpFormulaText( OUString aText);
     virtual OUString ToString(LwpTableLayout* /*pCellsMap*/){return m_aText;}
 private:
-    String m_aText;
+    OUString m_aText;
 };
 
 class LwpFormulaCellAddr:public LwpFormulaArg
@@ -175,7 +175,7 @@ public:
     void AddArg(LwpFormulaArg* pArg);
 
     virtual OUString ToString(LwpTableLayout* pCellsMap);
-    String ToArgString(LwpTableLayout* pCellsMap);
+    OUString ToArgString(LwpTableLayout* pCellsMap);
 
 protected:
     vector<LwpFormulaArg*> m_aArgs;
@@ -204,7 +204,7 @@ public:
     ~LwpFormulaInfo();
     sal_Bool IsFormula(){return sal_True;}
     void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
-    String Convert(LwpTableLayout* pCellsMap);
+    OUString Convert(LwpTableLayout* pCellsMap);
     void Convert(XFCell * pCell, LwpTableLayout* pCellsMap);
 protected:
     void Read();

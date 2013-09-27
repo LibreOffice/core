@@ -127,10 +127,10 @@ sal_Bool LwpFormulaInfo::ReadText()
     boost::scoped_array<char> pBuf(new char[nStrLen+1]);
     m_pObjStrm->QuickRead( pBuf.get(), nStrLen );
     *(pBuf.get()+nStrLen)='\0';
-    String aText;
-    aText += OUString("\"");
-    aText.Append(String(pBuf.get(),nStrLen,osl_getThreadTextEncoding()));
-    aText += OUString("\"");
+    OUString aText;
+    aText += "\"";
+    aText += OUString(pBuf.get(), nStrLen, osl_getThreadTextEncoding());
+    aText += "\"";
 
     m_aStack.push_back(new LwpFormulaText(aText));
     return sal_True;
@@ -396,9 +396,9 @@ void LwpFormulaInfo::Read()
 *   @param
 *   @return sal_Bool.
 */
-String  LwpFormulaInfo::Convert(LwpTableLayout* pCellsMap)
+OUString  LwpFormulaInfo::Convert(LwpTableLayout* pCellsMap)
 {
-    String aFormula;
+    OUString aFormula;
     if (m_bSupported)
     {
         if(1==m_aStack.size())
@@ -423,9 +423,9 @@ String  LwpFormulaInfo::Convert(LwpTableLayout* pCellsMap)
 */
 void LwpFormulaInfo::Convert(XFCell * pCell,LwpTableLayout* pCellsMap)
 {
-    String aFormula;
+    OUString aFormula;
     aFormula = Convert(pCellsMap);
-    if (aFormula.Len())
+    if (!aFormula.isEmpty())
     {
         pCell->SetFormula(aFormula);
     }
@@ -458,7 +458,7 @@ OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 *   @param
 *   @return
 */
-LwpFormulaText::LwpFormulaText( String aText)
+LwpFormulaText::LwpFormulaText( OUString aText)
 {
     m_aText = aText;
 }
@@ -575,7 +575,7 @@ void LwpFormulaFunc::AddArg(LwpFormulaArg* pArg)
 *   @param
 *   @return  String.
 */
-String LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
+OUString LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 {
     OUStringBuffer aFormula;
     aFormula.append(static_cast<sal_Unicode>('('));
@@ -657,14 +657,14 @@ OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 */
 OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
 {
-    String aFormula;
+    OUString aFormula;
     if (1==m_aArgs.size())
     {
-        String aFuncName = LwpFormulaTools::GetName(m_nTokenType);
-        aFormula.Append(aFuncName);
+        OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
+        aFormula += aFuncName;
 
         vector<LwpFormulaArg*>::iterator aItr = m_aArgs.begin();
-        aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
+        aFormula += (*aItr)->ToArgString(pCellsMap);
     }
     else
     {
@@ -679,70 +679,70 @@ OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
 *   @param
 *   @return String.
 */
-String LwpFormulaTools::GetName(sal_uInt16 nTokenType)
+OUString LwpFormulaTools::GetName(sal_uInt16 nTokenType)
 {
-    String aName;
+    OUString aName;
     switch(nTokenType)
     {
     case TK_SUM:
-        aName = OUString("SUM");
+        aName = "SUM";
         break;
     case TK_IF:
-        aName = OUString("IF");//Not supported by SODC
+        aName = "IF";//Not supported by SODC
         break;
     case TK_COUNT:
-        aName = OUString("COUNT");//Not supported by SODC
+        aName = "COUNT";//Not supported by SODC
         break;
     case TK_MINIMUM:
-        aName = OUString("MIN");
+        aName = "MIN";
         break;
     case TK_MAXIMUM:
-        aName = OUString("MAX");
+        aName = "MAX";
         break;
     case TK_AVERAGE:
-        aName = OUString("MEAN");
+        aName = "MEAN";
         break;
     case TK_ADD:
-        aName = OUString("+");
+        aName = "+";
         break;
     case TK_SUBTRACT:
-        aName = OUString("-");
+        aName = "-";
         break;
     case TK_MULTIPLY:
-        aName = OUString("*");
+        aName = "*";
         break;
     case TK_DIVIDE:
-        aName = OUString("/");
+        aName = "/";
         break;
     case TK_UNARY_MINUS:
-        aName = OUString("-");
+        aName = "-";
         break;
     case TK_LESS:
-        aName = OUString("L");
+        aName = "L";
         break;
     case TK_LESS_OR_EQUAL:
-        aName = OUString("LEQ");
+        aName = "LEQ";
         break;
     case TK_GREATER:
-        aName = OUString("G");
+        aName = "G";
         break;
     case TK_GREATER_OR_EQUAL:
-        aName = OUString("GEQ");
+        aName = "GEQ";
         break;
     case TK_EQUAL:
-        aName = OUString("EQ");
+        aName = "EQ";
         break;
     case TK_NOT_EQUAL:
-        aName = OUString("NEQ");
+        aName = "NEQ";
         break;
     case TK_NOT:
-        aName = OUString("NOT");
+        aName = "NOT";
         break;
     case TK_AND:
-        aName = OUString("AND");
+        aName = "AND";
         break;
     case TK_OR:
-        aName = OUString("OR");
+        aName = "OR";
         break;
     default:
         assert(false);
@@ -758,9 +758,9 @@ String LwpFormulaTools::GetName(sal_uInt16 nTokenType)
 *   @param
 *   @return String.
 */
-String LwpFormulaTools::GetCellAddr(sal_Int16 nRow, sal_Int16 nCol, LwpTableLayout* pCellsMap)
+OUString LwpFormulaTools::GetCellAddr(sal_Int16 nRow, sal_Int16 nCol, LwpTableLayout* pCellsMap)
 {
-    String aCellAddr;
+    OUString aCellAddr;
     XFCell* pCell = pCellsMap->GetCellsMap(nRow,(sal_uInt8)nCol);
     if (pCell)
     {

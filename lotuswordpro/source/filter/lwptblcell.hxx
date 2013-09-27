@@ -313,7 +313,7 @@ public:
     ~LwpRowSpecifier(){}
 
     void QuickRead(LwpObjectStream *pStrm);
-    String ToString(sal_uInt16 nFormulaRow);
+    OUString ToString(sal_uInt16 nFormulaRow);
 
     sal_uInt16 RowID(sal_uInt16 FormulaRow);
     sal_uInt16 &Row(void);
@@ -415,7 +415,7 @@ public:
 
     void QuickRead(LwpObjectStream *pStrm);
     sal_uInt8 Column(){return cColumn;}
-    String ToString(sal_uInt8 nFormulaCol);
+    OUString ToString(sal_uInt8 nFormulaCol);
 
     sal_uInt8 ColumnID(sal_uInt8 FormulaColumn);
     void SetAbsolute(void);
