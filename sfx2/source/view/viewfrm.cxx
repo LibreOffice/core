@@ -3085,9 +3085,8 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             return;
         Reference < XFrame > xFrame = GetFrame().GetTopFrame().GetFrameInterface();
         Reference < XFrame > xBeamer( xFrame->findFrame( "_beamer", FrameSearchFlag::CHILDREN ) );
-        sal_Bool bShow = sal_False;
         sal_Bool bHasChild = xBeamer.is();
-        bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
+        sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
         if ( pShowItem )
         {
             if( bShow == bHasChild )
@@ -3127,9 +3126,8 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         return;
     }
 
-    sal_Bool bShow = sal_False;
     sal_Bool bHasChild = HasChildWindow(nSID);
-    bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
+    sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
 
     // Perform action.
     if ( !pShowItem || bShow != bHasChild )
