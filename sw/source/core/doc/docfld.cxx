@@ -1926,7 +1926,6 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                             const String& rNewName, OUString& rFormel )
 {
     const CharClass& rCC = GetAppCharClass();
-    String  sFormel(rFormel);
     String  sNewName( rNewName );
     sNewName.SearchAndReplace( DB_DELIM, '.');
     //the command type is not part of the condition
@@ -1942,19 +1941,17 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
         sDBName = sDBName.GetToken(0, DB_DELIM);
         if( !sDBName.Equals( sUpperNewNm ))
         {
-            xub_StrLen nPos = 0;
-
-            while ((nPos = sFormel.Search(sDBName, nPos)) != STRING_NOTFOUND)
+            sal_Int32 nPos = 0;
+            while ((nPos = rFormel.indexOf(sDBName, nPos))>=0)
             {
-                if( sFormel.GetChar( nPos + sDBName.Len() ) == '.' &&
-                    (!nPos || !rCC.isLetterNumeric( sFormel, nPos - 1 )))
+                if( rFormel[nPos + sDBName.Len()] == '.' &&
+                    (!nPos || !rCC.isLetterNumeric( rFormel, nPos - 1 )))
                 {
                     rFormel = rFormel.replaceAt(nPos, sDBName.Len(), sNewName);
                     //prevent re-searching - this is useless and provokes
                     //endless loops when names containing each other and numbers are exchanged
                     //e.g.: old ?12345.12345  new: i12345.12345
                     nPos = nPos + sNewName.Len();
-                    sFormel = rFormel;
                 }
             }
         }
