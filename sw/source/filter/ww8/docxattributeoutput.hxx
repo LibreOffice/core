@@ -725,6 +725,8 @@ private:
 
     /// Is fake rotation detected, so rotation with 90 degrees should be ignored in this cell?
     bool m_bBtLr;
+    /// Same, but for textframe rotation.
+    bool m_bFrameBtLr;
 
     PageMargins m_pageMargins;
 

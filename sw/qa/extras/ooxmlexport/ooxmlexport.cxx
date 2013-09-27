@@ -120,6 +120,7 @@ public:
     void testCharacterBorder();
     void testStyleInheritance();
     void testSmartart();
+    void testFdo69636();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -154,6 +155,11 @@ private:
      * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
      */
     void assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes);
+
+    /**
+     * Same as the assertXPath(), but don't assert: return the string instead.
+     */
+    OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
 };
 
 void Test::run()
@@ -232,6 +238,7 @@ void Test::run()
         {"charborder.odt", &Test::testCharacterBorder},
         {"style-inheritance.docx", &Test::testStyleInheritance},
         {"smartart.docx", &Test::testSmartart},
+        {"fdo69636.docx", &Test::testFdo69636},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -289,12 +296,7 @@ xmlNodeSetPtr Test::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
 
 void Test::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
 {
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
-    if (rAttribute.isEmpty())
-        return;
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString aValue = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
     CPPUNIT_ASSERT_EQUAL(rExpectedValue, aValue);
 }
 
@@ -302,6 +304,16 @@ void Test::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNo
 {
     xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
     CPPUNIT_ASSERT_EQUAL(nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
+}
+
+OUString Test::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
+{
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    if (rAttribute.isEmpty())
+        return OUString();
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
 }
 
 void Test::testZoom()
@@ -1467,6 +1479,17 @@ void Test::testSmartart()
     xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xPropertySet->getPropertyValue("ParaAdjust") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
+}
+
+void Test::testFdo69636()
+{
+    /*
+     * The problem was that the exporter didn't mirror the workaround of the
+     * importer, regarding the btLr text frame direction: the
+     * mso-layout-flow-alt property was completely missing in the output.
+     */
+    xmlDocPtr pXmlDoc = parseExport();
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:pict/v:rect/v:textbox", "style").match("mso-layout-flow-alt:bottom-to-top"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

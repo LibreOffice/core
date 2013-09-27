@@ -100,6 +100,7 @@
 #include <swtable.hxx>
 #include <txtftn.hxx>
 #include <txtinet.hxx>
+#include <fmtautofmt.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/tencinfo.h>
@@ -313,6 +314,35 @@ public:
     }
 };
 
+// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
+bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList)
+{
+    if (!pStartNode->IsTxtNode())
+        return false;
+
+    SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(pStartNode);
+    if (!pTxtNode->HasHints())
+        return false;
+
+    SwTxtAttr* pTxtAttr = pTxtNode->GetSwpHints().GetStart(0);
+
+    if (!pTxtAttr)
+        return false;
+
+    boost::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
+    const SfxPoolItem* pItem;
+    if (pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET)
+    {
+        const SvxCharRotateItem& rCharRotate = static_cast<const SvxCharRotateItem&>(*pItem);
+        if (rCharRotate.GetValue() == 900)
+        {
+            pTextboxAttrList->add(XML_style, "mso-layout-flow-alt:bottom-to-top");
+            return true;
+        }
+    }
+    return false;
+}
+
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
@@ -349,6 +379,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pFlyAttrList->add(XML_style, m_aTextFrameStyle.makeStringAndClear());
         XFastAttributeListRef xFlyAttrList( m_pFlyAttrList );
         m_pFlyAttrList = NULL;
+        m_bFrameBtLr = lcl_checkFrameBtlr(m_rExport.pDoc->GetNodes()[nStt], m_pTextboxAttrList);
         XFastAttributeListRef xTextboxAttrList(m_pTextboxAttrList);
         m_pTextboxAttrList = NULL;
         m_bTextFrameSyntax = false;
@@ -381,6 +412,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         m_pSerializer->endElementNS( XML_v, XML_rect );
         m_pSerializer->endElementNS( XML_w, XML_pict );
         m_pSerializer->endElementNS( XML_w, XML_r );
+        m_bFrameBtLr = false;
     }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
@@ -4264,7 +4296,7 @@ void DocxAttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
 void DocxAttributeOutput::CharRotate( const SvxCharRotateItem& rRotate)
 {
     // Not rorated or we the rotation already handled?
-    if ( !rRotate.GetValue() || m_bBtLr)
+    if ( !rRotate.GetValue() || m_bBtLr || m_bFrameBtLr)
         return;
 
     if (!m_pEastAsianLayoutAttrList)
@@ -5691,7 +5723,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 0 ),
       m_nextFontId( 1 ),
-      m_bBtLr(false)
+      m_bBtLr(false),
+      m_bFrameBtLr(false)
 {
 }
 
