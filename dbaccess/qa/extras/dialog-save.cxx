@@ -62,12 +62,10 @@ DialogSaveTest::DialogSaveTest()
 {
 }
 
-// TODO: use temporary copy; see example in chart2/qa/extras/charttest.hxx:65 (function reload)
-
 void DialogSaveTest::test()
 {
     OUString aFileName;
-    aFileName = getURLFromWorkdir("/CppunitTest/testDialogSave.odb");
+    aFileName = "file://" + getURLFromWorkdir("/CppunitTest/testDialogSave.odb");
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
         CPPUNIT_ASSERT(xComponent.is());
