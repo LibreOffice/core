@@ -2694,7 +2694,7 @@ int MathType::HandleMatrix(int nLevel,sal_uInt8 nSelector,
     int nRet = HandleRecords(nLevel+1,nSelector,nVariation,nRows,nCols);
 
     sal_Int32 nI = rRet.lastIndexOf('#');
-    if ((nI != -1) && (nI > 0))
+    if (nI > 0)
         if (rRet[nI-1] != '#')  //missing column
             rRet += "{}";
 
