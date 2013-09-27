@@ -17,6 +17,7 @@
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkBox" id="box1">
@@ -28,11 +29,9 @@
                 <child>
                   <object class="GtkRadioButton" id="charkerning">
                     <property name="label" translatable="yes">_Western characters only</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -48,11 +47,9 @@
                 <child>
                   <object class="GtkRadioButton" id="charpunctkerning">
                     <property name="label" translatable="yes">Western _text and Asian punctuation</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -97,6 +94,7 @@
           <object class="GtkAlignment" id="alignment2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkBox" id="box2">
@@ -108,11 +106,9 @@
                 <child>
                   <object class="GtkRadioButton" id="nocompression">
                     <property name="label" translatable="yes">_No compression</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -128,11 +124,9 @@
                 <child>
                   <object class="GtkRadioButton" id="punctcompression">
                     <property name="label" translatable="yes">_Compress punctuation only</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -148,11 +142,9 @@
                 <child>
                   <object class="GtkRadioButton" id="punctkanacompression">
                     <property name="label" translatable="yes">Compress punctuation and Japanese Kana</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -200,6 +192,7 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="border_width">6</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkBox" id="box3">
@@ -237,11 +230,9 @@
                         <child>
                           <object class="GtkCheckButton" id="standard">
                             <property name="label" translatable="yes">_Default</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
