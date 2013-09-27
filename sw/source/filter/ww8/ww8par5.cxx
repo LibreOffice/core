@@ -2077,7 +2077,6 @@ bool ConvertMacroSymbol( const String& rName, OUString& rReference )
     }
     return bConverted;
 }
-//end
 
 // "MACROSCHALTFL"ACHE"
 eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
@@ -2635,7 +2634,7 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
             sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
             sal_uInt16 nMaxLevel = rBase.GetLevel();
             if (
-                 nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&  //<-end,zhaojianwei
+                 nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&
                  nStyleLevel < nMaxLevel
                )
             {

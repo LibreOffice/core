@@ -418,7 +418,7 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
         SwTxtFmtColl* pColl = rColls[ n ];
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
+            aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;
         }
 
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
@@ -445,7 +445,7 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
              ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
         {
             // apply outline level at created default outline style
-            aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);//#outline level added by zhaojianwei
+            aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);
 
             // apply outline numbering rule, if none is set.
             const SfxPoolItem& rItem =

@@ -149,7 +149,7 @@ void SwDoc::PropagateOutlineRule()
     {
         SwTxtFmtColl *pColl = (*mpTxtFmtCollTbl)[n];
 
-        if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
+        if(pColl->IsAssignedToListLevelOfOutlineStyle())
         {
             // Check only the list style, which is set at the paragraph style
             const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( sal_False );
@@ -206,7 +206,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         {
             const int nLevel = (*mpTxtFmtCollTbl)[ n ]->GetAssignedOutlineStyleLevel();
             aCollArr[ nLevel ] = (*mpTxtFmtCollTbl)[ n ];
-        }//<-end,zhaojianwei
+        }
     }
 
     /* Find the last occupied level (backward). */
@@ -230,7 +230,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
                 GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
-                aTmpColl->GetAssignedOutlineStyleLevel() == n )//<-end,zhaojianwei
+                aTmpColl->GetAssignedOutlineStyleLevel() == n )
             {
                 aCollArr[n] = aTmpColl;
                 break;
@@ -258,9 +258,8 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             SwTxtFmtColl *aTmpColl =
                 GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
-            //if (aTmpColl->GetOutlineLevel() == n)//#outline level,zhaojianwei
             if( aTmpColl->IsAssignedToListLevelOfOutlineStyle() &&
-                aTmpColl->GetAssignedOutlineStyleLevel() == n )//<-end,zhaojianwei
+                aTmpColl->GetAssignedOutlineStyleLevel() == n )
             {
                 aCollArr[n] = aTmpColl;
                 break;
@@ -341,7 +340,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             const int nLevel = pColl->GetAssignedOutlineStyleLevel();
             if (aMoveArr[nLevel] == -1)
                 bMoveApplicable = false;
-        }//<-end,zhaojianwei
+        }
 
         // Check on outline level attribute of text node, if text node is
         // not an outline via a to outline style assigned paragraph style.
@@ -375,7 +374,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            const int nLevel = pColl->GetAssignedOutlineStyleLevel();//#outline level,add by zhaojianwei
+            const int nLevel = pColl->GetAssignedOutlineStyleLevel();
 
             OSL_ENSURE(aMoveArr[nLevel] >= 0,
                 "move table: current TxtColl not found when building table!");
@@ -390,13 +389,13 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             }
 
         }
-        else if( pTxtNd->GetAttrOutlineLevel() > 0) //#outline level,add by zhaojianwei
+        else if( pTxtNd->GetAttrOutlineLevel() > 0)
         {
             int nLevel = pTxtNd->GetAttrOutlineLevel() + nOffset;
             if( 0 <= nLevel && nLevel <= MAXLEVEL)
                 pTxtNd->SetAttrOutlineLevel( nLevel );
 
-        }//<-end,zhaojianwei
+        }
 
         n++;
         // Undo ???
@@ -429,11 +428,11 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     sal_uInt16 nAktPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
 
-    int nOutLineLevel = MAXLEVEL;           //<-end,zhaojianwei
+    int nOutLineLevel = MAXLEVEL;
     SwNode* pSrch = &aSttRg.GetNode();
 
    if( pSrch->IsTxtNode())
-        nOutLineLevel = static_cast<sal_uInt8>(((SwTxtNode*)pSrch)->GetAttrOutlineLevel()-1);//<-end,zhaojianwei
+        nOutLineLevel = static_cast<sal_uInt8>(((SwTxtNode*)pSrch)->GetAttrOutlineLevel()-1);
     SwNode* pEndSrch = &aEndRg.GetNode();
     if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
     {
@@ -455,7 +454,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
     {
         if( !pEndSrch->IsTxtNode() || pEndSrch == pSrch ||
-            nOutLineLevel < ((SwTxtNode*)pEndSrch)->GetAttrOutlineLevel()-1 )//<-end,zhaojianwei
+            nOutLineLevel < ((SwTxtNode*)pEndSrch)->GetAttrOutlineLevel()-1 )
             ++nTmpPos; // For sub outlines only!
     }
 
@@ -643,7 +642,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     for( ; nPos < (sal_Int32) rOutlNds.size(); ++nPos )
     {
         pNd = rOutlNds[ nPos ]->GetTxtNode();
-        const int nLvl = pNd->GetAttrOutlineLevel()-1;   //<-end,zhaojianwei
+        const int nLvl = pNd->GetAttrOutlineLevel()-1;
         if( nLvl == nLevel - 1)
         {
             // #i51089#, #i68289#
@@ -1358,7 +1357,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
                 pTNd->ChkCondColl();
             }
             else if( !pOutlNd &&
-                     static_cast<SwTxtFmtColl*>(pTNd->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle() )//<-end,zhaojianwei
+                     static_cast<SwTxtFmtColl*>(pTNd->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle() )
             {
                 pOutlNd = pTNd;
             }
@@ -2422,8 +2421,7 @@ sal_Int32 SwDoc::getOutlineNodesCount() const
 int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const
 {
     return GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
-                                           // GetTxtNode()->GetOutlineLevel();              //#outline level,zhaojianwei
-                                GetTxtNode()->GetAttrOutlineLevel()-1;  //<-end,zhaojianwei
+                                GetTxtNode()->GetAttrOutlineLevel()-1;
 }
 
 String SwDoc::getOutlineText( const sal_Int32 nIdx,

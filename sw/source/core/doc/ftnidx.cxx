@@ -64,13 +64,11 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             for( n = 0; n < rOutlNds.size(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
                     break;      // found it!
-                //else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )  //#outline level,zhaojianwei
-                else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )   //<-end,zhaojianwei
+                else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
                     pCapStt = rOutlNds[ n ];    // Beginning of a new Chapter
             // now find the end of the range
             for( ; n < rOutlNds.size(); ++n )
-                //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
-                if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
+                if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
                 {
                     nCapEnd = rOutlNds[ n ]->GetIndex();    // End of the found Chapter
                     break;
@@ -179,7 +177,7 @@ void SwFtnIdxs::UpdateAllFtn()
                nFtnIdx = 0;     // Index into theFtnIdx array
         for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
         {
-            if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
+            if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
             {
                 sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start of a new chapter
                 for( ; nFtnIdx < size(); ++nFtnIdx )

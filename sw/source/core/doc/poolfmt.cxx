@@ -206,7 +206,7 @@ static void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
     {
         if( !( nOutLvlBits & ( 1 << nLevel )) )
         {
-            pColl->AssignToListLevelOfOutlineStyle(nLevel);//<-end,zhaojianwei
+            pColl->AssignToListLevelOfOutlineStyle(nLevel);
             if( !bHTMLMode )
             {
                 SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
@@ -310,7 +310,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
 
         if( pNewColl->IsAssignedToListLevelOfOutlineStyle())
-            nOutLvlBits |= ( 1 << pNewColl->GetAssignedOutlineStyleLevel() );//<-end,zhaojianwei
+            nOutLvlBits |= ( 1 << pNewColl->GetAssignedOutlineStyleLevel() );
     }
 
     // Didn't find it until here -> create anew

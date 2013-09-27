@@ -247,8 +247,6 @@ public:
     /// Array of all OutlineNodes.
     const SwOutlineNodes& GetOutLineNds() const;
 
-    //void UpdateOutlineNode( const SwNode&, sal_uInt8 nOldLevel, sal_uInt8 nNewLevel );//#outline level,removed by zhaojianwei
-
     /// Update all Nodes - Rule/Format-Change.
     void UpdateOutlineNode(SwNode & rNd);
 

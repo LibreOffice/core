@@ -139,7 +139,7 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 
 const char sStatusDelim[] = " : ";
-const char sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
+const char sStatusComma[] = " , ";
 
 using namespace sfx2;
 using namespace ::com::sun::star;
@@ -1458,7 +1458,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         }
                     }
                 }
-                //-->#outline level,added by zhaojianwei
+
                 const SwNumRule* pNumRule = rShell.GetCurNumRule();
                 const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
 
@@ -1508,7 +1508,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         sStr += SW_RESSTR(STR_NUM_OUTLINE);
                     sStr += OUString::number( nOutlineLevel);
                 }
-                //<-end ,zhaojianwei
 
                 if( rShell.HasReadonlySel() )
                 {

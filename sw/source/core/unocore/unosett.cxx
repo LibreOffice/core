@@ -1556,10 +1556,9 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             if(rTxtColl.IsDefault())
                 continue;
 
-            //sal_Int8 nOutLevel = rTxtColl.GetOutlineLevel();      //#outline level,zhaojianwei
             const sal_Int16 nOutLevel = rTxtColl.IsAssignedToListLevelOfOutlineStyle()
                                         ? static_cast<sal_Int16>(rTxtColl.GetAssignedOutlineStyleLevel())
-                                        : MAXLEVEL;                 //<-end,zhaojianwei
+                                        : MAXLEVEL;
             if ( nOutLevel == nIndex )
             {
                 sValue = rTxtColl.GetName();

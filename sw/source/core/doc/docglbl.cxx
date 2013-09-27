@@ -163,7 +163,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     if( pSplitColl )
     {
         // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
-        if( pSplitColl->GetAttrOutlineLevel() == 0 )//<-end,zhaojianwei, 0814
+        if( pSplitColl->GetAttrOutlineLevel() == 0 )
         {
             pOutlNds = new SwOutlineNodes;
             SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
@@ -183,7 +183,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
         // Look for the 1st level OutlineTemplate
         const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
         for( sal_uInt16 n = rFmtColls.size(); n; )
-            if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
+            if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )
             {
                 pSplitColl = rFmtColls[ n ];
                 break;

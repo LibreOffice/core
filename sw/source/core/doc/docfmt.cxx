@@ -183,7 +183,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         SfxItemSet aSet( pDoc->GetAttrPool(),
                          RES_PAGEDESC, RES_BREAK,
                          RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
-                         RES_PARATR_OUTLINELEVEL,RES_PARATR_OUTLINELEVEL,//#outline level,removed by zhaojianwei
+                         RES_PARATR_OUTLINELEVEL,RES_PARATR_OUTLINELEVEL,
                          RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
                          0 );
         const SfxItemSet* pSet = pNode->GetpSwAttrSet();
@@ -208,10 +208,10 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         const SfxPoolItem* pItem;
 
-        sal_uInt16 const aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,  //->add by zhaojianwei
+        sal_uInt16 const aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,
                                                 RES_PARATR_NUMRULE,
                                                 RES_PARATR_OUTLINELEVEL };
-        for( sal_uInt16 n = 0; n < 4; ++n )                                     //<-end,zhaojianwei
+        for( sal_uInt16 n = 0; n < 4; ++n )
         {
             if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[ n ], sal_False, &pItem ))
             {
@@ -229,11 +229,11 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                         bSave = !((SwNumRuleItem*)pItem)->GetValue().isEmpty();
                     }
                     break;
-                    case RES_PARATR_OUTLINELEVEL:               //#outline level,add by zhaojianwei
+                    case RES_PARATR_OUTLINELEVEL:
                     {
                         bSave = pPara && pPara->bKeepOutlineLevelAttr;
                     }
-                    break;                                      //<-end,zhaojianwei
+                    break;
                 }
                 if( bSave )
                 {
@@ -1865,7 +1865,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     pNewColl->CopyAttrs( rColl, sal_True );
 
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
-        pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
+        pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());
     pNewColl->SetPoolFmtId( rColl.GetPoolFmtId() );
     pNewColl->SetPoolHelpId( rColl.GetPoolHelpId() );
 
@@ -2589,7 +2589,7 @@ namespace docfunc
                 SwTxtFmtColl* pTxtFmtColl = (*pTxtFmtColls)[i];
 
                 if ( pTxtFmtColl->IsDefault() ||
-                    ! pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )  //<-end,zhaojianwei
+                    ! pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
                 {
                     continue;
                 }

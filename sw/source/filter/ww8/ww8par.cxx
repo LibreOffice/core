@@ -5323,7 +5323,7 @@ public:
     outlineeq(sal_uInt8 nNum) : mnNum(nNum) {}
     bool operator()(const SwTxtFmtColl *pTest) const
     {
-        return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;  //<-end,zhaojianwei
+        return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;
     }
 };
 

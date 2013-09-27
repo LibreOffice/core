@@ -633,7 +633,7 @@ static String lcl_dbg_out(const SwNode & rNode)
 
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += OUString::number
-                (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
+                (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>
