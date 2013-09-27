@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="DrawPageDialog">
+  <object class="GtkDialog" id="DrawCharDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Page Setup</property>
+    <property name="title" translatable="yes">Character</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -91,10 +91,10 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="RID_SVXPAGE_PAGE">
+              <object class="GtkLabel" id="RID_SVXPAGE_CHAR_NAME">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Page</property>
+                <property name="label" translatable="yes">Fonts</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -104,13 +104,27 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="RID_SVXPAGE_AREA">
+              <object class="GtkLabel" id="RID_SVXPAGE_CHAR_EFFECTS">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Background</property>
+                <property name="label" translatable="yes">Font Effects</property>
               </object>
               <packing>
                 <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_CHAR_POSITION">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Position</property>
+              </object>
+              <packing>
+                <property name="position">2</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
