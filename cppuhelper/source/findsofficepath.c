@@ -154,7 +154,7 @@ static char* platformSpecific()
 
     if ( !access( MACDEFAULTSOFFICE, F_OK ) )
     {
-        path = (char*) malloc( MACDEFAULTOFFICEPATH + 1 );
+        path = (char*) malloc( strlen(MACDEFAULTOFFICEPATH) + 1 );
         strcpy( path, MACDEFAULTOFFICEPATH);
     }
     return path;
