@@ -22,7 +22,6 @@
 #define _SD_DLGPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include "dlgpage.hrc"
 
 class SfxObjectShell;
 
@@ -40,6 +39,9 @@ private:
     XGradientListRef      mpGradientList;
     XHatchListRef         mpHatchingList;
     XBitmapListRef        mpBitmapList;
+    sal_uInt16            mnArea;
+    sal_uInt16            mnPage;
+
 public:
 
     SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage = sal_True );
