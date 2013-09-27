@@ -804,7 +804,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 mpListView->Hide();
 
                 mpPreview->Hide();
-                mpPreview->SetGraphic( Graphic() );
+                mpPreview->ClearGraphic();
                 mpPreview->PreviewMedia( INetURLObject() );
 
                 mpIconView->Show();
@@ -822,7 +822,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 mpIconView->Hide();
 
                 mpPreview->Hide();
-                mpPreview->SetGraphic( Graphic() );
+                mpPreview->ClearGraphic();
                 mpPreview->PreviewMedia( INetURLObject() );
 
                 mpListView->Show();
@@ -852,7 +852,7 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                         mpCurTheme->GetGraphic( nPos, aGraphic );
 
                     mpPreview->SetGraphic( aGraphic );
-                     mpPreview->Show();
+                    mpPreview->Show();
 
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
                         mpPreview->PreviewMedia( mpCurTheme->GetObjectURL( nPos ) );

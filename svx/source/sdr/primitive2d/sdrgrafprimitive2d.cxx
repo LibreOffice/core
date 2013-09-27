@@ -146,9 +146,9 @@ namespace drawinglayer
                 const SdrGrafPrimitive2D& rCompare = (SdrGrafPrimitive2D&)rPrimitive;
 
                 return (getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
-                    && getGraphicObject() == rCompare.getGraphicObject()
-                    && getGraphicAttr() == rCompare.getGraphicAttr());
+                        && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
+                        && getGraphicObject() == rCompare.getGraphicObject()
+                        && getGraphicAttr() == rCompare.getGraphicAttr());
             }
 
             return false;
@@ -157,7 +157,7 @@ namespace drawinglayer
         bool SdrGrafPrimitive2D::isTransparent() const
         {
             return ((0L != getGraphicAttr().GetTransparency())
-                || (getGraphicObject()->IsTransparent()));
+                    || (getGraphicObject().is() && getGraphicObject()->IsTransparent()));
         }
 
         // provide unique ID

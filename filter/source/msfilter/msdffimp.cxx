@@ -6132,8 +6132,8 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             {
                 /* if this entry is available, then it should be possible
                 to get the Graphic via GraphicObject */
-                GraphicObject aGraphicObject( iter->second );
-                rData = aGraphicObject.GetGraphic();
+                rtl::Reference <GraphicObject> xGraphicObject = GraphicObject::Create( iter->second );
+                rData = xGraphicObject->GetGraphic();
                 if ( rData.GetType() != GRAPHIC_NONE )
                     bOk = sal_True;
                 else
@@ -6190,8 +6190,8 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             if ( bOk )
             {
                 // create new BlipCacheEntry for this graphic
-                GraphicObject aGraphicObject( rData );
-                aEscherBlipCache.insert(std::make_pair(nIdx_,aGraphicObject.GetUniqueID()));
+                rtl::Reference<GraphicObject> xGraphicObject = GraphicObject::Create( rData );
+                aEscherBlipCache.insert(std::make_pair(nIdx_, xGraphicObject->GetUniqueID()));
             }
         }
     }

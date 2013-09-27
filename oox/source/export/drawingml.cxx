@@ -419,10 +419,13 @@ OUString DrawingML::WriteImage( const OUString& rURL )
     if ( index != -1 )
     {
         DBG(printf ("begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
-        Graphic aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) ).GetTransformedGraphic ();
+        rtl::Reference<GraphicObject> xGraphicObj = GraphicObject::Create(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)));
+        Graphic aGraphic = xGraphicObj->GetTransformedGraphic();
 
         return WriteImage( aGraphic );
-    } else {
+    }
+    else
+    {
         // add link to relations
     }
 
@@ -433,9 +436,9 @@ const char* DrawingML::GetComponentDir()
 {
     switch ( meDocumentType )
     {
-        case DOCUMENT_DOCX: return "word";
-        case DOCUMENT_PPTX: return "ppt";
-        case DOCUMENT_XLSX: return "xl";
+    case DOCUMENT_DOCX: return "word";
+    case DOCUMENT_PPTX: return "ppt";
+    case DOCUMENT_XLSX: return "xl";
     }
 
     return "unknown";
@@ -445,9 +448,9 @@ const char* DrawingML::GetRelationCompPrefix()
 {
     switch ( meDocumentType )
     {
-        case DOCUMENT_DOCX: return "";
-        case DOCUMENT_PPTX:
-        case DOCUMENT_XLSX: return "../";
+    case DOCUMENT_DOCX: return "";
+    case DOCUMENT_PPTX:
+    case DOCUMENT_XLSX: return "../";
     }
 
     return "unknown";
@@ -459,59 +462,64 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
     OUString sMediaType;
     const char* pExtension = "";
     OUString sRelId;
-
+    GraphicType aType;
     SvMemoryStream aStream;
     const void* aData = aLink.GetData();
     sal_Size nDataSize = aLink.GetDataSize();
 
-    switch ( aLink.GetType() ) {
-        case GFX_LINK_TYPE_NATIVE_GIF:
-            sMediaType = "image/gif";
-            pExtension = ".gif";
-            break;
-        case GFX_LINK_TYPE_NATIVE_JPG:
-            sMediaType = "image/jpeg";
-            pExtension = ".jpeg";
-            break;
-        case GFX_LINK_TYPE_NATIVE_PNG:
+    switch ( aLink.GetType() )
+    {
+    case GFX_LINK_TYPE_NATIVE_GIF:
+        sMediaType = "image/gif";
+        pExtension = ".gif";
+        break;
+    case GFX_LINK_TYPE_NATIVE_JPG:
+        sMediaType = "image/jpeg";
+        pExtension = ".jpeg";
+        break;
+    case GFX_LINK_TYPE_NATIVE_PNG:
+        sMediaType = "image/png";
+        pExtension = ".png";
+        break;
+    case GFX_LINK_TYPE_NATIVE_TIF:
+        sMediaType = "image/tiff";
+        pExtension = ".tiff";
+        break;
+    case GFX_LINK_TYPE_NATIVE_WMF:
+        sMediaType = "image/x-wmf";
+        pExtension = ".wmf";
+        break;
+    case GFX_LINK_TYPE_NATIVE_MET:
+        sMediaType = "image/x-met";
+        pExtension = ".met";
+        break;
+    case GFX_LINK_TYPE_NATIVE_PCT:
+        sMediaType = "image/x-pict";
+        pExtension = ".pct";
+        break;
+    default:
+        aType = rGraphic.GetType();
+        if ( aType == GRAPHIC_BITMAP )
+        {
+            GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
             sMediaType = "image/png";
             pExtension = ".png";
+        }
+        else if( aType == GRAPHIC_GDIMETAFILE )
+        {
+            GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
+            sMediaType = "image/x-emf";
+            pExtension = ".emf";
+        }
+        else
+        {
+            OSL_TRACE( "unhandled graphic type" );
             break;
-        case GFX_LINK_TYPE_NATIVE_TIF:
-            sMediaType = "image/tiff";
-            pExtension = ".tiff";
-            break;
-        case GFX_LINK_TYPE_NATIVE_WMF:
-            sMediaType = "image/x-wmf";
-            pExtension = ".wmf";
-            break;
-        case GFX_LINK_TYPE_NATIVE_MET:
-            sMediaType = "image/x-met";
-            pExtension = ".met";
-            break;
-        case GFX_LINK_TYPE_NATIVE_PCT:
-            sMediaType = "image/x-pict";
-            pExtension = ".pct";
-            break;
-        default: {
-            GraphicType aType = rGraphic.GetType();
-            if ( aType == GRAPHIC_BITMAP ) {
-                GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
-                sMediaType = "image/png";
-                pExtension = ".png";
-            } else if ( aType == GRAPHIC_GDIMETAFILE ) {
-                GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
-                sMediaType = "image/x-emf";
-                pExtension = ".emf";
-            } else {
-                OSL_TRACE( "unhandled graphic type" );
-                break;
-            }
+        }
 
-            aData = aStream.GetData();
-            nDataSize = aStream.GetEndOfData();
-            break;
-            }
+        aData = aStream.GetData();
+        nDataSize = aStream.GetEndOfData();
+        break;
     }
 
     Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
@@ -617,7 +625,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
 
 void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUString& rURL )
 {
-    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL ).GetPrefSize() );
+    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL )->GetPrefSize() );
 
     if ( GetProperty( rXPropSet, "GraphicCrop" ) )
     {

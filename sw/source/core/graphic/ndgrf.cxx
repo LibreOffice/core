@@ -62,33 +62,33 @@ SwGrfNode::SwGrfNode(
         SwGrfFmtColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    maGrfObj(),
-    mpReplacementGraphic(0),
+    mxGrfObj(),
+    mxReplacementGraphic(),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
 
     bGrafikArrived = sal_True;
-    ReRead(rGrfName,rFltName, pGraphic, 0, sal_False);
+    ReRead(rGrfName,rFltName, pGraphic, mxGrfObj.is() ? mxGrfObj.get() : NULL, sal_False);
+    mxGrfObj->SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
-                          const GraphicObject& rGrfObj,
+                      const rtl::Reference<GraphicObject> xGrfObj,
                       SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    maGrfObj(rGrfObj),
-    mpReplacementGraphic(0),
+    mxGrfObj(xGrfObj),
+    mxReplacementGraphic(),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
-    if( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
-        maGrfObj.SetSwapState();
+    mxGrfObj->SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    if( xGrfObj->HasUserData() && xGrfObj->IsSwappedOut() )
+        mxGrfObj->SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel= bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
     bGrafikArrived = sal_True;
@@ -105,16 +105,17 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwGrfFmtColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    maGrfObj(),
-    mpReplacementGraphic(0),
+    mxGrfObj(),
+    mxReplacementGraphic(),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
 
     Graphic aGrf; aGrf.SetDefaultType();
-    maGrfObj.SetGraphic( aGrf, rGrfName );
+    mxGrfObj = GraphicObject::Create( aGrf );
+    mxGrfObj->SetLink(rGrfName );
+    mxGrfObj->SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
 
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
         bFrameInPaint = bScaleImageMap = sal_False;
@@ -139,10 +140,9 @@ sal_Bool SwGrfNode::ReRead(
     sal_Bool bNewGrf )
 {
     sal_Bool bReadGrf = sal_False, bSetTwipSize = sal_True;
-    delete mpReplacementGraphic;
-    mpReplacementGraphic = 0;
+    mxReplacementGraphic.clear();
 
-    OSL_ENSURE( pGraphic || pGrfObj || rGrfName.Len(),
+    OSL_ENSURE( pGraphic || rGrfName.Len(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
     // with name
@@ -182,16 +182,17 @@ sal_Bool SwGrfNode::ReRead(
 
         if( pGraphic )
         {
-            maGrfObj.SetGraphic( *pGraphic, rGrfName );
+            mxGrfObj = GraphicObject::Create( *pGraphic );
+            mxGrfObj->SetLink(rGrfName );
             onGraphicChanged();
             bReadGrf = sal_True;
         }
-        else if( pGrfObj )
+        else if( pGrfObj)
         {
-            maGrfObj = *pGrfObj;
+            mxGrfObj = GraphicObject::Create(*pGrfObj);
             if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
-                maGrfObj.SetSwapState();
-            maGrfObj.SetLink( rGrfName );
+                mxGrfObj->SetSwapState();
+            mxGrfObj->SetLink( rGrfName );
             onGraphicChanged();
             bReadGrf = sal_True;
         }
@@ -200,7 +201,8 @@ sal_Bool SwGrfNode::ReRead(
             // reset data of the old graphic so that the correct placeholder is
             // shown in case the new link could not be loaded
             Graphic aGrf; aGrf.SetDefaultType();
-            maGrfObj.SetGraphic( aGrf, rGrfName );
+            mxGrfObj = GraphicObject::Create( aGrf );
+            mxGrfObj->SetLink(rGrfName );
 
             if( refLink.Is() )
             {
@@ -226,7 +228,7 @@ sal_Bool SwGrfNode::ReRead(
         if( HasStreamName() )
             DelStreamName();
 
-        maGrfObj.SetGraphic( *pGraphic );
+        mxGrfObj = GraphicObject::Create( *pGraphic );
         onGraphicChanged();
         bReadGrf = sal_True;
     }
@@ -236,14 +238,14 @@ sal_Bool SwGrfNode::ReRead(
         if( HasStreamName() )
             DelStreamName();
 
-        maGrfObj = *pGrfObj;
+        mxGrfObj = GraphicObject::Create(*pGrfObj);
         onGraphicChanged();
         if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
-            maGrfObj.SetSwapState();
+            mxGrfObj->SetSwapState();
         bReadGrf = sal_True;
     }
     // Was the graphic already loaded?
-    else if( !bNewGrf && GRAPHIC_NONE != maGrfObj.GetType() )
+    else if( !bNewGrf && mxGrfObj.is() && GRAPHIC_NONE != mxGrfObj->GetType() )
         return sal_True;
     else
     {
@@ -257,7 +259,8 @@ sal_Bool SwGrfNode::ReRead(
         {
             if( pGraphic )
             {
-                maGrfObj.SetGraphic( *pGraphic, rGrfName );
+                mxGrfObj = GraphicObject::Create( *pGraphic );
+                mxGrfObj->SetLink(rGrfName );
                 onGraphicChanged();
                 bReadGrf = sal_True;
                 // create connection without update, as we have the graphic
@@ -265,8 +268,8 @@ sal_Bool SwGrfNode::ReRead(
             }
             else if( pGrfObj )
             {
-                maGrfObj = *pGrfObj;
-                maGrfObj.SetLink( rGrfName );
+                mxGrfObj = GraphicObject::Create(*pGrfObj);
+                mxGrfObj->SetLink( rGrfName );
                 onGraphicChanged();
                 bReadGrf = sal_True;
                 // create connection without update, as we have the graphic
@@ -277,7 +280,8 @@ sal_Bool SwGrfNode::ReRead(
                 // reset data of the old graphic so that the correct placeholder is
                 // shown in case the new link could not be loaded
                 Graphic aGrf; aGrf.SetDefaultType();
-                maGrfObj.SetGraphic( aGrf, rGrfName );
+                mxGrfObj = GraphicObject::Create( aGrf );
+                mxGrfObj->SetLink(rGrfName );
                 onGraphicChanged();
                 // #i59688# - do not load linked graphic, if it isn't a new linked graphic.
                 if ( bNewGrf )
@@ -291,7 +295,7 @@ sal_Bool SwGrfNode::ReRead(
     // Bug 39281: Do not delete Size immediately - Events on ImageMaps should have
     // something to work with when swapping
     if( bSetTwipSize )
-        SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
+        SetTwipSize( ::GetGraphicSizeTwip( mxGrfObj->GetGraphic(), 0 ) );
 
     // create an updates for the frames
     if( bReadGrf && bNewGrf )
@@ -305,8 +309,7 @@ sal_Bool SwGrfNode::ReRead(
 
 SwGrfNode::~SwGrfNode()
 {
-    delete mpReplacementGraphic;
-    mpReplacementGraphic = 0;
+    mxReplacementGraphic.clear();
 
     // #i73788#
     mpThreadConsumer.reset();
@@ -386,23 +389,24 @@ void SwGrfNode::onGraphicChanged()
 
 void SwGrfNode::SetGraphic(const Graphic& rGraphic, const String& rLink)
 {
-    maGrfObj.SetGraphic(rGraphic, rLink);
+    mxGrfObj = GraphicObject::Create( rGraphic );
+    mxGrfObj->SetLink(rLink );
     onGraphicChanged();
 }
 
 const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
 {
-    if(!mpReplacementGraphic)
+    if(!mxReplacementGraphic.is())
     {
-        const SvgDataPtr& rSvgDataPtr = GetGrfObj().GetGraphic().getSvgData();
+        const SvgDataPtr& rSvgDataPtr = GetGrfObj()->GetGraphic().getSvgData();
 
         if(rSvgDataPtr.get())
         {
-            const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
+            const_cast< SwGrfNode* >(this)->mxReplacementGraphic =  GraphicObject::Create(rSvgDataPtr->getReplacement());
         }
     }
 
-    return mpReplacementGraphic;
+    return mxReplacementGraphic.get();
 }
 
 SwCntntNode *SwGrfNode::SplitCntntNode( const SwPosition & )
@@ -431,12 +435,12 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
 }
 
 SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
-                                const GraphicObject& rGrfObj,
-                                SwGrfFmtColl* pGrfColl,
-                                SwAttrSet* pAutoAttr )
+                                  rtl::Reference<GraphicObject> rxGrfObj,
+                                  SwGrfFmtColl* pGrfColl,
+                                  SwAttrSet* pAutoAttr )
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
-    return new SwGrfNode( rWhere, rGrfObj, pGrfColl, pAutoAttr );
+    return new SwGrfNode( rWhere, rxGrfObj, pGrfColl, pAutoAttr );
 }
 
 Size SwGrfNode::GetTwipSize() const
@@ -447,15 +451,17 @@ Size SwGrfNode::GetTwipSize() const
 sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
-    const String aURL(maGrfObj.GetUserData());
-
+    String aURL;
+    if(mxGrfObj.is())
+    {
+        aURL = mxGrfObj->GetUserData();
+    }
     if(!GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, rStrm))
     {
-        delete mpReplacementGraphic;
-        mpReplacementGraphic = 0;
+        mxReplacementGraphic.clear();
 
-        maGrfObj.SetGraphic( aGraphic );
-        maGrfObj.SetUserData( aURL );
+        mxGrfObj = GraphicObject::Create( aGraphic );
+        mxGrfObj->SetUserData( aURL );
         onGraphicChanged();
         return sal_True;
     }
@@ -470,8 +476,9 @@ sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
  */
 short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 {
+#if 0  /* FIXME FIXME FIXME */
     if( bInSwapIn ) // not recursively!
-        return !maGrfObj.IsSwappedOut();
+        return !mxGrfObj->IsSwappedOut();
 
     short nRet = 0;
     bInSwapIn = sal_True;
@@ -479,36 +486,46 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 
     if( pLink )
     {
-        if( GRAPHIC_NONE == maGrfObj.GetType() ||
-            GRAPHIC_DEFAULT == maGrfObj.GetType() )
+        if(mxGrfObj.is())
         {
-            // link was not loaded yet
-            if( pLink->SwapIn( bWaitForData ) )
-                nRet = -1;
-            else if( GRAPHIC_DEFAULT == maGrfObj.GetType() )
+            if( GRAPHIC_NONE == mxGrfObj->GetType() ||
+                GRAPHIC_DEFAULT == mxGrfObj->GetType() )
             {
-                // no default bitmap anymore, thus re-paint
-                delete mpReplacementGraphic;
-                mpReplacementGraphic = 0;
+                // link was not loaded yet
+                if( pLink->SwapIn( bWaitForData ) )
+                {
+                    nRet = -1;
+                }
+                else if( GRAPHIC_DEFAULT == mxGrfObj->GetType() )
+                {
+                    // no default bitmap anymore, thus re-paint
+                    mxReplacementGraphic.clear();
 
-                maGrfObj.SetGraphic( Graphic() );
-                onGraphicChanged();
-                SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-                ModifyNotification( &aMsgHint, &aMsgHint );
+                    mxGrfObj = rtl::Reference<GraphicObject>();
+                    onGraphicChanged();
+                    SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
+                    ModifyNotification( &aMsgHint, &aMsgHint );
+                }
+            }
+            else if( mxGrfObj->IsSwappedOut() ) {
+                // link to download
+                nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
+            }
+            else
+            {
+                nRet = 1;
             }
         }
-        else if( maGrfObj.IsSwappedOut() ) {
-            // link to download
-            nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
-        }
         else
+        {
             nRet = 1;
+        }
     }
-    else if( maGrfObj.IsSwappedOut() )
+    else if( mxGrfObj.is() && mxGrfObj->IsSwappedOut() )
     {
         // graphic is in storage or in a temp file
         if( !HasStreamName() )
-            nRet = (short)maGrfObj.SwapIn();
+            nRet = (short)mxGrfObj->SwapIn();
         else
         {
             try
@@ -543,18 +560,23 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 
     if( nRet )
     {
+        /* FIXME: what if mxGrfObj is empty ref ? */
         if( !nGrfSize.Width() && !nGrfSize.Height() )
-            SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
+            SetTwipSize( ::GetGraphicSizeTwip( mxGrfObj->GetGraphic(), 0 ) );
     }
     bInSwapIn = sal_False;
     return nRet;
+#else
+    return 0;
+#endif
 }
 
 short SwGrfNode::SwapOut()
 {
-    if( maGrfObj.GetType() != GRAPHIC_DEFAULT &&
-        maGrfObj.GetType() != GRAPHIC_NONE &&
-        !maGrfObj.IsSwappedOut() && !bInSwapIn )
+#if 0 /* FIXME FIXME */
+    if( mxGrfObj->GetType() != GRAPHIC_DEFAULT &&
+        mxGrfObj->GetType() != GRAPHIC_NONE &&
+        !mxGrfObj->IsSwappedOut() && !bInSwapIn )
     {
         if( !refLink.Is() )
         {
@@ -562,13 +584,16 @@ short SwGrfNode::SwapOut()
             // The graphic will be written into a temp file if it is new, i.e.
             // if there is no stream name in the storage yet
             if( !HasStreamName() )
-                if( !maGrfObj.SwapOut() )
+                if( !mxGrfObj->SwapOut() )
                     return 0;
         }
         // written graphics and links are removed here
-        return (short) maGrfObj.SwapOut( NULL );
+        return (short) mxGrfObj->SwapOut( NULL );
     }
     return 1;
+#else
+    return 0;
+#endif
 }
 
 bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
@@ -671,7 +696,7 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
                                 (!bSync && rFltName.Len() ? &rFltName : 0) );
         }
     }
-    maGrfObj.SetLink( rGrfName );
+    mxGrfObj->SetLink( rGrfName );
 }
 
 void SwGrfNode::ReleaseLink()
@@ -686,7 +711,7 @@ void SwGrfNode::ReleaseLink()
         }
         getIDocumentLinksAdministration()->GetLinkManager().Remove( refLink );
         refLink.Clear();
-        maGrfObj.SetLink();
+        mxGrfObj->SetLink();
     }
 }
 
@@ -790,7 +815,7 @@ void SwGrfNode::DelStreamName()
             }
         }
 
-        maGrfObj.SetUserData();
+        mxGrfObj->SetUserData();
     }
 }
 
@@ -844,9 +869,9 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         {
             xub_StrLen nExtPos = _aStrmName.Search( '.' );
             String aExtStr = _aStrmName.Copy( nExtPos );
-            if ( GetGrfObj().GetType() != GRAPHIC_NONE )
+            if ( GetGrfObj()->GetType() != GRAPHIC_NONE )
             {
-                _aStrmName = OStringToOUString(GetGrfObj().GetUniqueID(),
+                _aStrmName = OStringToOUString(GetGrfObj()->GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
                 _aStrmName += aExtStr;
             }
@@ -874,7 +899,7 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
     rStorName.Erase();
     rStrmName.Erase();
 
-    String aUserData( maGrfObj.GetUserData() );
+    String aUserData( mxGrfObj->GetUserData() );
     if( !aUserData.Len() )
         return;
 
@@ -925,7 +950,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
             if ( pStrm )
             {
-                const OUString aURL(maGrfObj.GetUserData());
+                const OUString aURL(mxGrfObj->GetUserData());
                 GraphicFilter::GetGraphicFilter().ImportGraphic(aTmpGrf, aURL, *pStrm);
                 delete pStrm;
             }
@@ -938,9 +963,9 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
     else
     {
-        if( maGrfObj.IsSwappedOut() )
+        if( mxGrfObj->IsSwappedOut() )
             const_cast<SwGrfNode*>(this)->SwapIn();
-        aTmpGrf = maGrfObj.GetGraphic();
+        aTmpGrf = mxGrfObj->GetGraphic();
     }
 
     const sfx2::LinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
@@ -964,7 +989,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     return pGrfNd;
 }
 
-IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
+IMPL_LINK( SwGrfNode, SwapGraphic, const GraphicObject*, pGrfObj )
 {
     SvStream* pRet;
 
@@ -1110,7 +1135,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 
 sal_Bool SwGrfNode::IsTransparent() const
 {
-    sal_Bool bRet = maGrfObj.IsTransparent();
+    sal_Bool bRet = mxGrfObj->IsTransparent();
     if( !bRet ) // ask the attribut
         bRet = 0 != GetSwAttrSet().GetTransparencyGrf().GetValue();
 

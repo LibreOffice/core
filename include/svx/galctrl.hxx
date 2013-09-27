@@ -74,8 +74,9 @@ public:
                         GalleryPreview( Window* pParent, const ResId& rResId  );
                         ~GalleryPreview();
 
-    void                SetGraphic( const Graphic& rGraphic ) { mxGraphicObj->SetGraphic( rGraphic ); }
+                        void                ClearGraphic();
     bool                SetGraphic( const INetURLObject& );
+    bool                SetGraphic( Graphic& rGraphic );
     void                PreviewMedia( const INetURLObject& rURL );
 };
 

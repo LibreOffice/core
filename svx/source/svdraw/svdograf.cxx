@@ -331,7 +331,7 @@ SdrGrafObj::SdrGrafObj()
     pGraphicLink    ( NULL ),
     bMirrored       ( false )
 {
-    mxGraphic = GraphicObject::Create();
+    mxGraphic = rtl::Reference<GraphicObject>();
     mxGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     onGraphicChanged();
 
@@ -437,7 +437,7 @@ rtl::Reference< GraphicObject > SdrGrafObj::GetReplacementGraphicObject() const
 
 void SdrGrafObj::NbcSetGraphic( const Graphic& rGrf )
 {
-    mxGraphic->SetGraphic( rGrf );
+    mxGraphic = GraphicObject::Create( rGrf );
     mxReplacementGraphic.clear();
     mxGraphic->SetUserData();
     mbIsPreview = false;
@@ -551,30 +551,27 @@ String SdrGrafObj::GetGrafStreamURL() const
 
 void SdrGrafObj::ForceSwapIn() const
 {
-    if( mbIsPreview )
+    if(mxGraphic.is())
     {
-        // removing preview graphic
-        const String aUserData( mxGraphic->GetUserData() );
+        if( mbIsPreview )
+        {
+            // removing preview graphic
+            mxGraphic->SetSwapState();
+            const_cast< SdrGrafObj* >( this )->mbIsPreview = false;
+        }
+        if ( pGraphicLink && mxGraphic->IsSwappedOut() )
+            ImpUpdateGraphicLink( false );
+        else
+            mxGraphic->FireSwapInRequest();
 
-        Graphic aEmpty;
-        mxGraphic->SetGraphic( aEmpty );
-        mxGraphic->SetUserData( aUserData );
-        mxGraphic->SetSwapState();
-
-        const_cast< SdrGrafObj* >( this )->mbIsPreview = false;
-    }
-    if ( pGraphicLink && mxGraphic->IsSwappedOut() )
-        ImpUpdateGraphicLink( false );
-    else
-        mxGraphic->FireSwapInRequest();
-
-    if( mxGraphic->IsSwappedOut() ||
-        ( mxGraphic->GetType() == GRAPHIC_NONE ) ||
-        ( mxGraphic->GetType() == GRAPHIC_DEFAULT ) )
-    {
-        Graphic aDefaultGraphic;
-        aDefaultGraphic.SetDefaultType();
-        mxGraphic->SetGraphic( aDefaultGraphic );
+        if( mxGraphic->IsSwappedOut() ||
+            ( mxGraphic->GetType() == GRAPHIC_NONE ) ||
+            ( mxGraphic->GetType() == GRAPHIC_DEFAULT ) )
+        {
+            Graphic aDefaultGraphic;
+            aDefaultGraphic.SetDefaultType();
+            mxGraphic = GraphicObject::Create(aDefaultGraphic);
+        }
     }
 }
 
@@ -838,7 +835,7 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
         return *this;
     SdrRectObj::operator=( rObj );
 
-    mxGraphic->SetGraphic( rObj.GetGraphic(), rObj.GetGraphicObject() );
+    mxGraphic = GraphicObject::Create(rObj.GetGraphic());
     aFileName = rObj.aFileName;
     aFilterName = rObj.aFilterName;
     bMirrored = rObj.bMirrored;
@@ -1170,7 +1167,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText ) cons
                 SfxItemSet aSet(GetObjectItemSet());
 
                 aSet.Put(XFillStyleItem(XFILL_BITMAP));
-                aSet.Put(XFillBitmapItem(GetTransformedGraphic().GetBitmapEx());
+                aSet.Put(XFillBitmapItem(GetTransformedGraphic().GetBitmapEx()));
                 aSet.Put(XFillBmpTileItem(false));
 
                 pRetval->SetMergedItemSet(aSet);
@@ -1356,7 +1353,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     {
                         const String aNewUserData( mxGraphic->GetUserData() );
 
-                        mxGraphic->SetGraphic( aGraphic );
+                        mxGraphic = GraphicObject::Create(aGraphic);
                         mxGraphic->SetUserData( aNewUserData );
 
                         // Graphic successfully swapped in.

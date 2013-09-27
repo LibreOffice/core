@@ -49,7 +49,7 @@ namespace dbaui
 
     class OPreviewWindow : public Window
     {
-        GraphicObject       m_aGraphicObj;
+        rtl::Reference<GraphicObject>       m_xGraphicObj;
         Rectangle           m_aPreviewRect;
 
         /** gets the graphic cnter rect
@@ -71,7 +71,7 @@ namespace dbaui
         // window overloads
         virtual void Paint(const Rectangle& rRect);
 
-        void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
+        void setGraphic(const Graphic& _rGraphic ) { m_xGraphicObj = GraphicObject::Create(_rGraphic); }
     };
     //==================================================================
     // A helper class for the controls in the detail page.

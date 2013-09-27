@@ -52,7 +52,7 @@ class SVX_DLLPUBLIC SvxGraphicFilter
 {
 public:
 
-    static sal_uLong    ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject );
+    static sal_uLong    ExecuteGrfFilterSlot( SfxRequest& rReq, Graphic** pFilterObject );
     static void     DisableGraphicFilterSlots( SfxItemSet& rSet );
 };
 

@@ -48,7 +48,7 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;
 
-GraphicManager* GraphicObject::mpGlobalMgr = NULL;
+GraphicManager* GraphicManager::mpGlobalManager = NULL;
 
 struct GrfSimpleCacheObj
 {
@@ -81,7 +81,6 @@ GraphicObject::GraphicObject( const Graphic& rGraphic ) :
 }
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj ) :
-    SvDataCopyStream(),
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
     mpLink      ( rGraphicObj.mpLink ? ( new String( *rGraphicObj.mpLink ) ) : NULL ),
@@ -192,25 +191,24 @@ void GraphicObject::ImplAssignGraphicData()
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
+void GraphicManager::InitGlobal()
+{
+    GraphicManager* pMgr = new GraphicManager(
+            (officecfg::Office::Common::Cache::GraphicManager::
+             TotalCacheSize::get()),
+            (officecfg::Office::Common::Cache::GraphicManager::
+             ObjectCacheSize::get()));
+    pMgr->SetCacheTimeout(
+            officecfg::Office::Common::Cache::GraphicManager::
+            ObjectReleaseTime::get());
+    GraphicManager::SetGlobalManager(pMgr);
+}
+
 void GraphicObject::ImplSetup( const OString* pID )
 {
-    GraphicManager *pGlobalMgr;
-
-    if ( ! ( pGlobalMgr = GraphicManager::pGlobalManager ) )
-    {
-        pGlobalMgr = new GraphicManager(
-                        (officecfg::Office::Common::Cache::GraphicManager::
-                         TotalCacheSize::get()),
-                        (officecfg::Office::Common::Cache::GraphicManager::
-                         ObjectCacheSize::get()));
-        pGlobalMgr->SetCacheTimeout(
-                        officecfg::Office::Common::Cache::GraphicManager::
-                        ObjectReleaseTime::get());
-        GraphicManager::pGlobalManager = pGlobalMgr;
-    }
 
     // FIXME: remove this member in favour of the global eventually
-    mpMgr = pGlobalMgr;
+    mpMgr = GraphicManager::GetGlobalManager();
 
     mpMgr->ImplRegisterObj( *this, maGraphic, pID );
 }
@@ -353,20 +351,10 @@ sal_Bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
             ( rGraphicObj.GetLink() == GetLink() ) );
 }
 
-void GraphicObject::Load( SvStream& rIStm )
-{
-    rIStm >> *this;
-}
-
-void GraphicObject::Save( SvStream& rOStm )
-{
-    rOStm << *this;
-}
-
-void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
-{
-    *this = (const GraphicObject& ) rCopyStream;
-}
+//void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
+//{
+//    *this = (const GraphicObject& ) rCopyStream;
+//}
 
 OString GraphicObject::GetUniqueID() const
 {
@@ -1106,10 +1094,11 @@ GraphicObject::GraphicObject( SvStream& rIStm ) :
     else
         SetLink();
 
-    SetSwapStreamHdl();
+//    SetSwapStreamHdl();
 }
 
 // FIXME: should we match the above create with a save method ?
+/*
 SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 1 );
@@ -1122,6 +1111,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 
     return rOStm;
 }
+*/
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
@@ -1148,8 +1138,8 @@ rtl::Reference< GraphicObject > GraphicObject::CreateGraphicObjectFromURL( const
     }
 }
 
-void
-GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< OUString >& rvEmbedImgUrls )
+void GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,
+                                                     std::vector< OUString >& rvEmbedImgUrls )
 {
     static OUString sImageURL( "ImageURL" );
     Reference< XPropertySet > xProps( xIf, UNO_QUERY );

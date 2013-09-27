@@ -214,7 +214,7 @@ void SvxBulletItem::SetDefaultFont_Impl()
 
 void SvxBulletItem::SetDefaults_Impl()
 {
-    mxGraphicObject  = rtl::Reference< GraphicObject >();
+    mxGraphicObject  = GraphicObject::Create(Graphic());
     nWidth          = 1200;  // 1.2cm
     nStart          = 1;
     nStyle          = BS_123;
@@ -287,12 +287,7 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
     if( nStyle == BS_BMP )
     {
-        if( ( mxGraphicObject.is() && !rBullet.mxGraphicObject.is() ) ||
-            ( !mxGraphicObject.is() && rBullet.mxGraphicObject.is() ) )
-            return 0;
-
-        if( ( mxGraphicObject.is() && rBullet.mxGraphicObject.is() ) &&
-            ( ( mxGraphicObject.get() != rBullet.mxGraphicObject.get() ) ||
+        if( ( ( mxGraphicObject.get() != rBullet.mxGraphicObject.get() ) ||
               ( mxGraphicObject->GetPrefSize() != rBullet.mxGraphicObject->GetPrefSize() ) ) )
         {
             return 0;
@@ -308,10 +303,9 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 {
     // Correction for empty bitmap
     if( ( nStyle == BS_BMP ) &&
-        ( !mxGraphicObject.is() || ( GRAPHIC_NONE == mxGraphicObject->GetType() ) || ( GRAPHIC_DEFAULT == mxGraphicObject->GetType() ) ) )
+        ( GRAPHIC_NONE == mxGraphicObject->GetType() || GRAPHIC_DEFAULT == mxGraphicObject->GetType() ) )
     {
-        if( mxGraphicObject.is() )
-            const_cast< SvxBulletItem* >( this )->mxGraphicObject.clear();
+        const_cast< SvxBulletItem* >( this )->mxGraphicObject.clear();
 
         const_cast< SvxBulletItem* >( this )->nStyle = BS_NONE;
     }
@@ -403,13 +397,7 @@ SfxItemPresentation SvxBulletItem::GetPresentation
 
 rtl::Reference< GraphicObject > SvxBulletItem::GetGraphicObject() const
 {
-    if( mxGraphicObject.is() )
-        return mxGraphicObject;
-    else
-    {
-        static const rtl::Reference< GraphicObject > xDefaultObject = GraphicObject::Create();
-        return xDefaultObject;
-    }
+    return mxGraphicObject;
 }
 
 //------------------------------------------------------------------------

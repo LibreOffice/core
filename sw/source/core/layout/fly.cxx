@@ -2614,20 +2614,18 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
         // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
         // in order to avoid load of graphic, if <SwNoTxtNode> contains a graphic
         // node and method is called for paint.
-        const GraphicObject* pGrfObj = NULL;
-        bool bGrfObjCreated = false;
+        rtl::Reference<GraphicObject> xGrfObj;
         const SwGrfNode* pGrfNd = pNd->GetGrfNode();
         if ( pGrfNd && _bForPaint )
         {
-            pGrfObj = &(pGrfNd->GetGrfObj());
+            xGrfObj = pGrfNd->GetGrfObj();
         }
         else
         {
-            pGrfObj = new GraphicObject( pNd->GetGraphic() );
-            bGrfObjCreated = true;
+            xGrfObj = GraphicObject::Create( pNd->GetGraphic() );
         }
-        OSL_ENSURE( pGrfObj, "SwFlyFrm::GetContour() - No Graphic/GraphicObject found at <SwNoTxtNode>." );
-        if ( pGrfObj && pGrfObj->GetType() != GRAPHIC_NONE )
+        OSL_ENSURE( xGrfObj.is(), "SwFlyFrm::GetContour() - No Graphic/GraphicObject found at <SwNoTxtNode>." );
+        if ( xGrfObj.is() && xGrfObj->GetType() != GRAPHIC_NONE )
         {
             if( !pNd->HasContour() )
             {
@@ -2653,8 +2651,8 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
             {
                 OutputDevice*   pOutDev = Application::GetDefaultDevice();
                 const MapMode   aDispMap( MAP_TWIP );
-                const MapMode   aGrfMap( pGrfObj->GetPrefMapMode() );
-                const Size      aGrfSize( pGrfObj->GetPrefSize() );
+                const MapMode   aGrfMap( xGrfObj->GetPrefMapMode() );
+                const Size      aGrfSize( xGrfObj->GetPrefSize() );
                 Size            aOrgSize;
                 Point           aNewPoint;
                 bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
@@ -2685,11 +2683,7 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
                     }
                 }
             }
-            // OD 17.04.2003 #i13147# - destroy created <GraphicObject>.
-            if ( bGrfObjCreated )
-            {
-                delete pGrfObj;
-            }
+
             rContour.Move( aOrig.Left(), aOrig.Top() );
             if( !aClip.Width() )
                 aClip.Width( 1 );

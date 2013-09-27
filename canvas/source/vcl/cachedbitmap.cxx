@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    CachedBitmap::CachedBitmap( const GraphicObjectSharedPtr&               rGraphicObject,
+    CachedBitmap::CachedBitmap( const rtl::Reference< GraphicObject>&       xGraphicObject,
                                 const ::Point&                              rPoint,
                                 const ::Size&                               rSize,
                                 const GraphicAttr&                          rAttr,
@@ -43,7 +43,7 @@ namespace vclcanvas
                                 const rendering::RenderState&               rUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
         CachedPrimitiveBase( rUsedViewState, rTarget, true ),
-        mpGraphicObject( rGraphicObject ),
+        mpGraphicObject( xGraphicObject ),
         maRenderState(rUsedRenderState),
         maPoint( rPoint ),
         maSize( rSize ),
@@ -55,7 +55,7 @@ namespace vclcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        mpGraphicObject.reset();
+        mpGraphicObject.clear();
 
         CachedPrimitiveBase::disposing();
     }

@@ -1052,7 +1052,7 @@ public:
 
                     EscherBlibEntry(
                         sal_uInt32 nPictureOffset,
-                        const GraphicObject& rObj,
+                        const rtl::Reference<GraphicObject>& rObj,
                         const OString& rId,
                         const GraphicAttr* pAttr = NULL
                     );
@@ -1233,7 +1233,7 @@ public:
                 );
     sal_Bool    CreateGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
-                    const GraphicObject& rGraphicObj
+                    const rtl::Reference<GraphicObject>& rGraphicObj
                 );
     sal_Bool    CreateMediaGraphicProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXMediaObject

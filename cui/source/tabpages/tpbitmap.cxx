@@ -65,7 +65,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  Window* pParent, const SfxItemSet& rInAttrs
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_BITMAP ),
-    aXBitmapItem        ( String(), Graphic() ),
+    aXBitmapItem        (),
     aXFillAttr          ( pXPool ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
@@ -241,7 +241,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
             }
             else
             {
-                _rOutAttrs.Put(XFillBitmapItem(m_pBitmapCtl->GetBitmapEx());
+                _rOutAttrs.Put(XFillBitmapItem(m_pBitmapCtl->GetBitmapEx()));
             }
         }
     }
@@ -296,12 +296,12 @@ SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
-    GraphicObject* pGraphicObject = 0;
+    rtl::Reference<GraphicObject> xGraphicObject;
     int nPos(m_pLbBitmaps->GetSelectEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+        xGraphicObject = GraphicObject::Create(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
     }
     else
     {
@@ -313,27 +313,27 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
             if((XFILL_BITMAP == eXFS) && (SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
             {
-                pGraphicObject = new GraphicObject(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject());
+                xGraphicObject = GraphicObject::Create(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject());
             }
         }
 
-        if(!pGraphicObject)
+        if(!xGraphicObject.is())
         {
             m_pLbBitmaps->SelectEntryPos(0);
             nPos = m_pLbBitmaps->GetSelectEntryPos();
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
-                pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+                xGraphicObject = GraphicObject::Create(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
             }
         }
     }
 
-    if(pGraphicObject)
+    if(xGraphicObject.is())
     {
         BitmapColor aBack;
         BitmapColor aFront;
-        bool bIs8x8(isHistorical8x8(pGraphicObject->GetGraphic().GetBitmap(), aBack, aFront));
+        bool bIs8x8(isHistorical8x8(xGraphicObject->GetGraphic().GetBitmap(), aBack, aFront));
 
         m_pLbColor->SetNoSelection();
         m_pLbBackgroundColor->SetNoSelection();
@@ -347,7 +347,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
             // setting the pixel control
 
-            m_pCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
+            m_pCtlPixel->SetXBitmap(xGraphicObject->GetGraphic().GetBitmapEx());
 
             Color aPixelColor = aFront;
             Color aBackColor = aBack;
@@ -388,14 +388,13 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
         m_pCtlPixel->Invalidate();
 
         // display bitmap
-        const XFillBitmapItem aXBmpItem(*pGraphicObject);
+        const XFillBitmapItem aXBmpItem(xGraphicObject);
         rXFSet.Put( aXBmpItem );
 
         m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreview->Invalidate();
 
         bBmpChanged = sal_False;
-        delete pGraphicObject;
     }
 
     return 0;
@@ -518,7 +517,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
         {
             const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
 
-            pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
+            pEntry = new XBitmapEntry(GraphicObject::Create(Graphic(aBitmapEx)), aName);
         }
         else // it must be a not existing imported bitmap
         {
@@ -625,7 +624,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 
             if( !nError )
             {
-                XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
+                XBitmapEntry* pEntry = new XBitmapEntry( GraphicObject::Create(aGraphic), aName );
                 pBitmapList->Insert( pEntry );
 
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -687,7 +686,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
                 bLoop = sal_False;
 
                 const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
-                const XBitmapEntry aEntry(Graphic(aBitmapEx), aName);
+                const XBitmapEntry aEntry(GraphicObject::Create(Graphic(aBitmapEx)), aName);
 
                 m_pLbBitmaps->Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), aEntry, nPos );
                 m_pLbBitmaps->SelectEntryPos( nPos );

@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
- #define IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
+#ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
+#define IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
 
- #include <sal/types.h>
+#include <sal/types.h>
+#include <rtl/ref.hxx>
 
  class SwPaM;
  struct SwPosition;
@@ -115,7 +116,7 @@
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
-    virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
+     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, rtl::Reference< GraphicObject> xGrfObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /** Transpose graphic (with undo)

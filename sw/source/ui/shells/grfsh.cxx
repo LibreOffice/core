@@ -266,7 +266,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 const GraphicObject* pGrfObj = rSh.GetGraphicObj();
                 if ( pGrfObj )
                 {
-                    aSet.Put( SvxBrushItem( *pGrfObj, GPOS_LT,
+                    aSet.Put( SvxBrushItem( GraphicObject::Create(*pGrfObj), GPOS_LT,
                                             SID_ATTR_GRAF_GRAPHIC ) );
                 }
             }
@@ -551,11 +551,12 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                 const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
                 if ( pFilterObj )
                 {
-                    GraphicObject aFilterObj( *pFilterObj );
+                    Graphic* pGraphObj = new Graphic(pFilterObj->GetGraphic());
                     if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
-                        SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
+                        SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, &pGraphObj ))
                         GetShell().ReRead( aEmptyStr, aEmptyStr,
-                                           &aFilterObj.GetGraphic() );
+                                           &(*pGraphObj) );
+                    delete pGraphObj;
                 }
             }
             break;

@@ -121,8 +121,8 @@ SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
     {
         if( !xBase64Stream.is() && !pItem->GetGraphicLink() )
         {
-            const GraphicObject *pGrObj = pItem->GetGraphicObject();
-            if( !pGrObj || GRAPHIC_NONE == pGrObj->GetType() )
+            rtl::Reference< GraphicObject > xGrObj = pItem->GetGraphicObject();
+            if( GRAPHIC_NONE == xGrObj->GetType() )
             {
                 xBase64Stream =
                     GetImport().GetStreamForGraphicObjectURLFromBase64();

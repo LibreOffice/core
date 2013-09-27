@@ -1874,9 +1874,9 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if(bGraphTransparency)
         {
-            const GraphicObject* pObject = rBgdAttr.GetGraphicObject();
-            if(pObject)
-                m_pGraphTransMF->SetValue(lcl_TransparencyToPercent(pObject->GetAttr().GetTransparency()));
+            const rtl::Reference<GraphicObject> xGraphObj = rBgdAttr.GetGraphicObject();
+            if(xGraphObj.is())
+                m_pGraphTransMF->SetValue(lcl_TransparencyToPercent(xGraphObj->GetAttr().GetTransparency()));
             else
                 m_pGraphTransMF->SetValue(0);
             m_pGraphTransMF->SaveValue();

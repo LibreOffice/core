@@ -80,7 +80,7 @@ private:
 
     OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
     OUString aFilterName;
-    rtl::Reference< GraphicObject> mxGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
+    mutable rtl::Reference< GraphicObject> mxGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
     rtl::Reference< GraphicObject> mxReplacementGraphic;
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
     bool                    bMirrored:1;        // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.

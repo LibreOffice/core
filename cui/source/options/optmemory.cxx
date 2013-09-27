@@ -180,13 +180,11 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::set(
         objectReleaseTime, batch);
 
-    // create a dummy graphic object to get access to the common GraphicManager
-    GraphicObject       aDummyObject;
-    GraphicManager&     rGrfMgr = aDummyObject.GetGraphicManager();
+    GraphicManager*  pGrfMgr = GraphicManager::GetGlobalManager();
 
-    rGrfMgr.SetMaxCacheSize(totalCacheSize);
-    rGrfMgr.SetMaxObjCacheSize(objectCacheSize, true);
-    rGrfMgr.SetCacheTimeout(objectReleaseTime);
+    pGrfMgr->SetMaxCacheSize(totalCacheSize);
+    pGrfMgr->SetMaxObjCacheSize(objectCacheSize, true);
+    pGrfMgr->SetCacheTimeout(objectReleaseTime);
 
     // OLECache
     officecfg::Office::Common::Cache::Writer::OLE_Objects::set(

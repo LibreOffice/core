@@ -144,10 +144,10 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aFilterObj( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            Graphic* pFilterObj = new Graphic( ( (SdrGrafObj*) pObj )->GetGraphicObject()->GetGraphic() );
 
             if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
-                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
+                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, &pFilterObj ) )
             {
                 SdrPageView* pPageView = mpView->GetSdrPageView();
 
@@ -159,13 +159,14 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_GRAFFILTER ) ) );
                     mpView->BegUndo( aStr );
-                    pFilteredObj->SetGraphicObject( aFilterObj );
+                    pFilteredObj->SetGraphicObject( GraphicObject::Create(*pFilterObj ));
                     ::sd::View* const pView = mpView;
                     pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
                     pView->EndUndo();
                     return;
                 }
             }
+            delete pFilterObj;
         }
     }
 

@@ -1410,14 +1410,14 @@ namespace vclcanvas
         return true;
     }
 
-    bool CanvasHelper::repaint( const GraphicObjectSharedPtr&   rGrf,
+    bool CanvasHelper::repaint( const rtl::Reference< GraphicObject>& rGrf,
                                 const rendering::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
     {
-        ENSURE_OR_RETURN_FALSE( rGrf,
+        ENSURE_OR_RETURN_FALSE( rGrf.is(),
                           "Invalid Graphic" );
 
         if( !mpOutDev )

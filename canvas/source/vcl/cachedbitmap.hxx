@@ -31,7 +31,6 @@
 
 namespace vclcanvas
 {
-    typedef ::boost::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
     class CachedBitmap : public ::canvas::CachedPrimitiveBase
     {
@@ -59,7 +58,7 @@ namespace vclcanvas
                                      bool                                           bSameViewTransform );
 
 
-        GraphicObjectSharedPtr                                                      mpGraphicObject;
+        rtl::Reference< GraphicObject>                                              mpGraphicObject;
         const ::com::sun::star::rendering::RenderState                              maRenderState;
         const ::Point                                                               maPoint;
         const ::Size                                                                maSize;

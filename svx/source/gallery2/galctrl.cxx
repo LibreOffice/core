@@ -49,7 +49,7 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
 
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
-    mxGraphicObj = GraphicObject::Create();
+    mxGraphicObj = rtl::Reference< GraphicObject >();
 }
 
 GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
@@ -62,7 +62,7 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 
     SetHelpId( HID_GALLERY_PREVIEW );
     InitSettings();
-    mxGraphicObj = GraphicObject::Create();
+    mxGraphicObj = rtl::Reference< GraphicObject >();
 }
 
 GalleryPreview::~GalleryPreview()
@@ -70,6 +70,11 @@ GalleryPreview::~GalleryPreview()
     DBG_DTOR(GalleryPreview,NULL);
 }
 
+bool  GalleryPreview::SetGraphic( Graphic& rGraphic )
+{
+    mxGraphicObj = GraphicObject::Create(rGraphic);
+    return true;
+};
 
 bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
 {
@@ -86,10 +91,14 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
         if( rFilter.ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
             bRet = false;
     }
-
-    SetGraphic( aGraphic );
+    mxGraphicObj = GraphicObject::Create(aGraphic);
     Invalidate();
     return bRet;
+}
+
+void GalleryPreview::ClearGraphic()
+{
+    mxGraphicObj.clear();
 }
 
 void GalleryPreview::InitSettings()
@@ -143,16 +152,18 @@ sal_Bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rect
 void GalleryPreview::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
-
-    if( ImplGetGraphicCenterRect( mxGraphicObj->GetGraphic(), maPreviewRect ) )
+    if(mxGraphicObj.is())
     {
-        const Point aPos( maPreviewRect.TopLeft() );
-        const Size  aSize( maPreviewRect.GetSize() );
+        if( ImplGetGraphicCenterRect( mxGraphicObj->GetGraphic(), maPreviewRect ) )
+        {
+            const Point aPos( maPreviewRect.TopLeft() );
+            const Size  aSize( maPreviewRect.GetSize() );
 
-        if( mxGraphicObj->IsAnimated() )
-            mxGraphicObj->StartAnimation( this, aPos, aSize );
-        else
-            mxGraphicObj->Draw( this, aPos, aSize );
+            if( mxGraphicObj->IsAnimated() )
+                mxGraphicObj->StartAnimation( this, aPos, aSize );
+            else
+                mxGraphicObj->Draw( this, aPos, aSize );
+        }
     }
 }
 

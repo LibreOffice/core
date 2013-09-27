@@ -379,16 +379,16 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                     {
                         if(aBitmapEx.IsAlpha())
                         {
-                            xGraphicObject->SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
+                            xGraphicObject = GraphicObject::Create(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
                         }
                         else
                         {
-                            xGraphicObject->SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
+                            xGraphicObject = GraphicObject::Create(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
                         }
                     }
                     else
                     {
-                        xGraphicObject->SetGraphic(Graphic(aDestBitmap));
+                        xGraphicObject = GraphicObject::Create(Graphic(aDestBitmap));
                     }
                 }
             }

@@ -1287,10 +1287,10 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
     return bRetValue;
 }
 
-sal_Bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, const GraphicObject& rGraphicObj )
+sal_Bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, const rtl::Reference<GraphicObject>& rGraphicObj )
 {
     sal_Bool    bRetValue = sal_False;
-    OString aUniqueId( rGraphicObj.GetUniqueID() );
+    OString aUniqueId( rGraphicObj->GetUniqueID() );
     if ( !aUniqueId.isEmpty() )
     {
         AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
@@ -4238,7 +4238,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
         sal_Bool            bUseNativeGraphic( sal_False );
 
-        Graphic             aGraphic( mxGraphicObject->GetTransformedGraphic( pGraphicAttr ) );
+        Graphic             aGraphic( xGraphicObject->GetTransformedGraphic( pGraphicAttr ) );
         GfxLink             aGraphicLink;
         SvMemoryStream      aStream;
 

@@ -153,13 +153,13 @@ public:
                                 mnGPercent != 0 || mnBPercent != 0 || mfGamma != 1.0 || mbInvert );
                     }
 
-    friend SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr );
-    friend SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr );
+   friend SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr );
+   friend SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr );
 };
 
 typedef ::cppu::WeakImplHelper1< css::graphic::XGraphicObject > GraphicObject_BASE;
 
-class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream, public GraphicObject_BASE
+class SVT_DLLPUBLIC GraphicObject : public GraphicObject_BASE
 {
     friend class GraphicManager;
     sal_uInt32 nRefCount;
@@ -196,10 +196,8 @@ public: // only for internal access:
     }
     static rtl::Reference< GraphicObject > Create( const rtl::Reference< GraphicObject > &xCacheObj )
     {
-        if( xCacheObj.is() )
-            return rtl::Reference< GraphicObject >( new GraphicObject( *xCacheObj.get() ) );
-        else
-            return rtl::Reference< GraphicObject >();
+        assert(xCacheObj.is());
+        return rtl::Reference< GraphicObject >( new GraphicObject( *xCacheObj.get() ) );
     }
     static rtl::Reference< GraphicObject > Create( const OString& rUniqueID )
     {
@@ -351,9 +349,9 @@ protected:
     virtual void            GraphicManagerDestroyed();
     virtual SvStream*       GetSwapStream() const;
 
-    virtual void            Load( SvStream& );
-    virtual void            Save( SvStream& );
-    virtual void            Assign( const SvDataCopyStream& );
+//    virtual void            Load( SvStream& );
+//    virtual void            Save( SvStream& );
+//    virtual void            Assign( const SvDataCopyStream& );
 
 public:
                             TYPEINFO();
@@ -522,9 +520,8 @@ public:
 
     void                    StopAnimation( OutputDevice* pOut = NULL, long nExtraData = 0L );
 
-    friend SvStream&        operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj );
-    friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
-
+//    friend SvStream&        operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj );
+//    friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
     static rtl::Reference< GraphicObject > CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
     // properties and return these in a vector. Note: this implementation
@@ -553,7 +550,8 @@ class SVT_DLLPUBLIC GraphicManager
 
 private:
     /// GraphicManager is a singleton
-    static GraphicManager  *pGlobalManager;
+    /// FIXME: make sure it is initialized as such, thread-safely
+    static GraphicManager*  mpGlobalManager;
 
     GraphicObjectList_impl  maObjList;
     GraphicCache*           mpCache;
@@ -667,6 +665,17 @@ public:
                             const sal_uLong nFlags,
                             sal_Bool& rCached
                         );
+    static void InitGlobal();
+    static GraphicManager * GetGlobalManager()
+    {
+        /* FIXME: this is racy */
+        if(!GraphicManager::mpGlobalManager)
+        {
+            GraphicManager::InitGlobal();
+        };
+        return GraphicManager::mpGlobalManager;
+    }
+    static void SetGlobalManager(GraphicManager* pMgr) { GraphicManager::mpGlobalManager = pMgr; }
 };
 
 #endif // _GRFMGR_HXX

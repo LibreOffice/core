@@ -3602,8 +3602,10 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             OUString sLink;
             if ( pStrLink )
+            {
                 sLink = *pStrLink;
-            else if( pImpl->mxGraphicObject.is() )
+            }
+            else
             {
                 OUString sPrefix(
                     UNO_NAME_GRAPHOBJ_URLPREFIX);
@@ -3741,8 +3743,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(nTmp >= 0 && nTmp <= 100)
             {
                 pImpl->nGraphicTransparency = sal_Int8(nTmp);
-                if(pImpl->mxGraphicObject.is())
-                    ApplyGraphicTransparency_Impl();
+                ApplyGraphicTransparency_Impl();
             }
         }
         break;
@@ -3819,8 +3820,11 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
             pStrLink = new String( *rItem.pStrLink );
         if ( rItem.pStrFilter )
             pStrFilter = new String( *rItem.pStrFilter );
-        if ( rItem.pImpl->mxGraphicObject.is() )
-            pImpl->mxGraphicObject = GraphicObject::Create( rItem.pImpl->mxGraphicObject );
+        pImpl->mxGraphicObject = GraphicObject::Create( rItem.pImpl->mxGraphicObject );
+    }
+    else
+    {
+        pImpl->mxGraphicObject = GraphicObject::Create( Graphic() );
     }
 
     nShadingValue = rItem.nShadingValue;
@@ -3858,11 +3862,7 @@ int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
 
             if ( bEqual && !rCmp.pStrLink )
             {
-                if ( !rCmp.pImpl->mxGraphicObject.is() )
-                    bEqual = !pImpl->mxGraphicObject.is();
-                else
-                    bEqual = pImpl->mxGraphicObject.is() &&
-                             ( *pImpl->mxGraphicObject.get() == *rCmp.pImpl->mxGraphicObject.get() );
+                bEqual = *pImpl->mxGraphicObject.get() == *rCmp.pImpl->mxGraphicObject.get();
             }
         }
 
@@ -3900,17 +3900,25 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
 
     sal_uInt16 nDoLoad = 0;
 
-    if ( pImpl->mxGraphicObject.is() && !pStrLink )
+    if ( !pStrLink )
+    {
         nDoLoad |= LOAD_GRAPHIC;
-    if ( pStrLink )
+    }
+    else
+    {
         nDoLoad |= LOAD_LINK;
+    }
     if ( pStrFilter )
+    {
         nDoLoad |= LOAD_FILTER;
+    }
     rStream << nDoLoad;
 
-    if ( pImpl->mxGraphicObject.is() && !pStrLink )
+    if ( !pStrLink )
+    {
         rStream << pImpl->mxGraphicObject->GetGraphic();
-    if ( pStrLink )
+    }
+    else
     {
         OSL_FAIL("No BaseURL!");
         // TODO/MBA: how to get a BaseURL?!
@@ -3937,7 +3945,7 @@ void SvxBrushItem::PurgeMedium() const
 // -----------------------------------------------------------------------
 rtl::Reference< GraphicObject > SvxBrushItem::GetGraphicObject() const
 {
-    if ( bLoadAgain && pStrLink && !pImpl->mxGraphicObject.is() )
+    if ( bLoadAgain && pStrLink )
     // when graphics already loaded, use as a cache
     {
         // only with "valid" names - empty names now allowed
@@ -3978,7 +3986,7 @@ rtl::Reference< GraphicObject > SvxBrushItem::GetGraphicObject() const
 const Graphic* SvxBrushItem::GetGraphic() const
 {
     rtl::Reference< GraphicObject > xGrafObj = GetGraphicObject();
-    return xGrafObj.is() ? &( xGrafObj->GetGraphic() ) : NULL;
+    return &( xGrafObj->GetGraphic());
 }
 
 // -----------------------------------------------------------------------
@@ -3992,11 +4000,12 @@ void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
         pImpl->mxGraphicObject.clear();
         DELETEZ( pStrLink );
         DELETEZ( pStrFilter );
+        pImpl->mxGraphicObject = GraphicObject::Create(Graphic()); // Creating a dummy
     }
     else
     {
         if ( !pImpl->mxGraphicObject.is() && !pStrLink )
-            pImpl->mxGraphicObject = GraphicObject::Create(); // Creating a dummy
+            pImpl->mxGraphicObject = GraphicObject::Create(Graphic()); // Creating a dummy
     }
 }
 

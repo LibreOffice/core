@@ -1082,7 +1082,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
         if( !aCbxPreview.IsChecked() )
         {
             xMediaPlayer.clear();
-            aWndPreview.SetGraphic( Graphic() );
+            aWndPreview.ClearGraphic();
             aWndPreview.Invalidate();
         }
         else

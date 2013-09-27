@@ -7355,7 +7355,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     const XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
                     OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
                     aURL += OStringToOUString(
-                        aXFillBitmapItem.GetGraphicObject().GetUniqueID(),
+                        aXFillBitmapItem.GetGraphicObject()->GetUniqueID(),
                         RTL_TEXTENCODING_ASCII_US);
 
                     xPropSet->setPropertyValue("FillBitmapURL", Any( aURL ) );

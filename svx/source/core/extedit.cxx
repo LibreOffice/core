@@ -77,11 +77,12 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
     xSystemShellExecute->execute( pData->m_aFileName, OUString(), SystemShellExecuteFlags::URIS_ONLY );
 }
 
-void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
+void ExternalToolEdit::Edit( rtl::Reference<GraphicObject> xGraphicObject )
 {
+    assert(xGraphicObject.is());
     //Get the graphic from the GraphicObject
-    m_pGraphicObject = pGraphicObject;
-    const Graphic aGraphic = pGraphicObject->GetGraphic();
+    m_xGraphicObject = xGraphicObject;
+    const Graphic aGraphic = xGraphicObject->GetGraphic();
 
     //get the Preferred File Extension for this graphic
     OUString fExtension;

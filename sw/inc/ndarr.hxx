@@ -23,7 +23,7 @@
 #include <vector>
 
 #include <boost/utility.hpp>
-
+#include <rtl/ref.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svtools/embedhlp.hxx>
@@ -231,7 +231,7 @@ public:
                             sal_Bool bDelayed = sal_False );    ///< in ndgrf.cxx
 
     SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
-                            const GraphicObject& rGrfObj,
+                            rtl::Reference<GraphicObject> xGrfObj,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); ///< in ndgrf.cxx
 
