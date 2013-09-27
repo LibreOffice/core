@@ -68,6 +68,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/sdraw,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/dlgsnap \
 	sd/uiconfig/sdraw/ui/copydlg \
+	sd/uiconfig/sdraw/ui/drawchardialog \
 	sd/uiconfig/sdraw/ui/drawparadialog \
 	sd/uiconfig/sdraw/ui/drawpagedialog \
 	sd/uiconfig/sdraw/ui/insertlayer \

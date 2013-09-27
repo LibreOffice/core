@@ -23,8 +23,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include "dlg_char.hrc"
-
 class SfxItemSet;
 class SfxObjectShell;
 
@@ -35,6 +33,10 @@ class SfxObjectShell;
 class SdCharDlg : public SfxTabDialog
 {
 private:
+    sal_uInt16 mnCharName;
+    sal_uInt16 mnCharEffects;
+    sal_uInt16 mnCharPosition;
+
     const SfxObjectShell&   rDocShell;
 
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );

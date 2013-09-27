@@ -21,6 +21,7 @@
 #include <editeng/flstitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/objsh.hxx>
+#include <svx/svxdlg.hxx>
 
 #include "sdresid.hxx"
 #include "dlg_char.hxx"
@@ -32,14 +33,19 @@
  */
 SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
-        SfxTabDialog        ( pParent, SdResId( TAB_CHAR ), pAttr ),
+        SfxTabDialog        ( pParent
+                             ,"DrawCharDialog"
+                             ,"modules/sdraw/ui/drawchardialog.ui"
+                             , pAttr ),
         rDocShell           ( *pDocShell )
 {
-    FreeResource();
 
-    AddTabPage( RID_SVXPAGE_CHAR_NAME );
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
-    AddTabPage( RID_SVXPAGE_CHAR_POSITION );
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
+
+    mnCharName = AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
+    mnCharEffects =  AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
+    mnCharPosition =  AddTabPage( "RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
 }
 
 // -----------------------------------------------------------------------
@@ -47,25 +53,17 @@ SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
 void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    switch( nId )
+    if (nId == mnCharName)
     {
-        case RID_SVXPAGE_CHAR_NAME:
-        {
-            SvxFontListItem aItem(*( (const SvxFontListItem*)
-                ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
+        SvxFontListItem aItem(*( (const SvxFontListItem*) ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-            rPage.PageCreated(aSet);
-        }
-        break;
-
-        case RID_SVXPAGE_CHAR_EFFECTS:
-            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
-            rPage.PageCreated(aSet);
-            break;
-
-        default:
-        break;
+        aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+        rPage.PageCreated(aSet);
+    }
+    else if (nId == mnCharEffects)
+    {
+        aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
+        rPage.PageCreated(aSet);
     }
 }
 
