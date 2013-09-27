@@ -136,7 +136,6 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
     {
         AcceptDropEvent  aAcceptEvent;
         ExecuteDropEvent aExecuteEvt( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
-        sal_Int8         nRet = DNDConstants::ACTION_NONE;
 
         aExecuteEvt.mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
 
@@ -152,7 +151,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
         aAcceptEvent.mbLeaving = sal_False;
         aAcceptEvent.mbDefault = aExecuteEvt.mbDefault;
 
-        nRet = mrParent.AcceptDrop( aAcceptEvent );
+        sal_Int8 nRet = mrParent.AcceptDrop( aAcceptEvent );
 
         if( DNDConstants::ACTION_NONE != nRet )
         {
