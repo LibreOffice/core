@@ -930,11 +930,10 @@ sal_uInt16 LineListBox::GetEntryStyle( sal_uInt16 nPos ) const
 
 sal_Bool LineListBox::UpdatePaintLineColor( void )
 {
-    sal_Bool                    bRet = sal_True;
     const StyleSettings&    rSettings = GetSettings().GetStyleSettings();
     Color                   aNewCol( rSettings.GetWindowColor().IsDark()? rSettings.GetLabelTextColor() : aColor );
 
-    bRet = aNewCol != maPaintCol;
+    sal_Bool bRet = aNewCol != maPaintCol;
 
     if( bRet )
         maPaintCol = aNewCol;
