@@ -947,17 +947,22 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {
                         // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-                        bool bFoundCheckedout = false;
+                        bool bIsGoogleFile = false;
                         sal_Bool bCheckedOut = sal_False;
-                        for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+                        for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
                         {
-                            if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                            if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
                             {
-                                bFoundCheckedout = true;
-                                aCmisProperties[i].Value >>= bCheckedOut;
+                                uno::Sequence< sal_Bool > bTmp;
+                                aCmisProperties[i].Value >>= bTmp;
+                                bCheckedOut = bTmp[0];
                             }
+                            // using title to know if it's a Google Drive file
+                            // maybe there's a safer way.
+                            if ( aCmisProperties[i].Name == "title" )
+                                bIsGoogleFile = true;
                         }
-                        bShow = !bCheckedOut;
+                        bShow = !bCheckedOut && !bIsGoogleFile;
                     }
 
                     if ( !bShow )
@@ -982,10 +987,13 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         sal_Bool bCheckedOut = sal_False;
                         for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
                         {
-                            if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                            if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
                             {
                                 bFoundCheckedout = true;
-                                aCmisProperties[i].Value >>= bCheckedOut;
+                                uno::Sequence< sal_Bool > bTmp;
+                                aCmisProperties[i].Value >>= bTmp;
+                                bCheckedOut = bTmp[0];
+
                             }
                         }
                         bShow = bCheckedOut;

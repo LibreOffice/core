@@ -1434,18 +1434,23 @@ void SfxBaseController::ShowInfoBars( )
             if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
             {
                 // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-                bool bFoundCheckedout = false;
+                // and find if it is a Google Drive file.
+                bool bIsGoogleFile = false;
                 sal_Bool bCheckedOut = sal_False;
-                for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+                for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
                 {
-                    if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
-                    {
-                        bFoundCheckedout = true;
-                        aCmisProperties[i].Value >>= bCheckedOut;
+                    if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" ) {
+                        uno::Sequence< sal_Bool > bTmp;
+                        aCmisProperties[i].Value >>= bTmp;
+                        bCheckedOut = bTmp[0];
                     }
+                    // if it is a Google Drive file, we don't need the checkout bar,
+                    // still need the checkout feature for the version dialog.
+                    if ( aCmisProperties[i].Name == "title" )
+                        bIsGoogleFile = true;
                 }
 
-                if ( !bCheckedOut )
+                if ( !bCheckedOut && !bIsGoogleFile )
                 {
                     // Get the Frame and show the InfoBar if not checked out
                     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
