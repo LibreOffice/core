@@ -268,7 +268,7 @@ XclImpTabViewSettings& XclImpRoot::GetTabViewSettings() const
     return *mrImpData.mxTabViewSett;
 }
 
-String XclImpRoot::GetScAddInName( const String& rXclName ) const
+OUString XclImpRoot::GetScAddInName( const OUString& rXclName ) const
 {
     OUString aScName;
     if( ScGlobal::GetAddInCollection()->GetCalcName( rXclName, aScName ) )

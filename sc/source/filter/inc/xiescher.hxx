@@ -1252,7 +1252,7 @@ private:
 
     // ------------------------------------------------------------------------
 private:
-    typedef ::std::map< sal_uInt16, String >            DefObjNameMap;
+    typedef ::std::map< sal_uInt16, OUString >          DefObjNameMap;
     typedef boost::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
     typedef ::std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
 

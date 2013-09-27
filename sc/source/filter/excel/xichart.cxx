@@ -769,7 +769,7 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
     }
 }
 
-void XclImpChSourceLink::SetString( const String& rString )
+void XclImpChSourceLink::SetString( const OUString& rString )
 {
     if( !mxString )
         mxString.reset( new XclImpString );
@@ -851,7 +851,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
 //            OSL_FAIL( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
         }
     }
-    else if( rRole == EXC_CHPROP_ROLE_LABEL && mxString && mxString->GetText().Len() )
+    else if( rRole == EXC_CHPROP_ROLE_LABEL && mxString && !mxString->GetText().isEmpty() )
     {
         try
         {
@@ -1022,7 +1022,7 @@ sal_uInt16 XclImpChText::GetRotation() const
     return maData.mnRotation;
 }
 
-void XclImpChText::SetString( const String& rString )
+void XclImpChText::SetString( const OUString& rString )
 {
     if( !mxSrcLink )
         mxSrcLink.reset( new XclImpChSourceLink( GetChRoot() ) );

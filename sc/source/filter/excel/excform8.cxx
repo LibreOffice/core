@@ -695,7 +695,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                         case xlExtDDE:
                         {
-                            String aApplic, aTopic;
+                            OUString aApplic, aTopic;
                             if( rLinkMan.GetLinkData( aApplic, aTopic, nXtiIndex ) )
                             {
                                 TokenId nPar1 = aPool.Store( aApplic );

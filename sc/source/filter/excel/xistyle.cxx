@@ -1452,7 +1452,7 @@ void XclImpStyle::ReadStyle( XclImpStream& rStrm )
 ScStyleSheet* XclImpStyle::CreateStyleSheet()
 {
     // #i1624# #i1768# ignore unnamed user styles
-    if( !mpStyleSheet && (maFinalName.Len() > 0) )
+    if( !mpStyleSheet && (!maFinalName.isEmpty()) )
     {
         bool bCreatePattern = false;
         XclImpXF* pXF = GetXFBuffer().GetXF( mnXfId );
@@ -1488,7 +1488,7 @@ ScStyleSheet* XclImpStyle::CreateStyleSheet()
     return mpStyleSheet;
 }
 
-void XclImpStyle::CreateUserStyle( const String& rFinalName )
+void XclImpStyle::CreateUserStyle( const OUString& rFinalName )
 {
     maFinalName = rFinalName;
     if( !IsBuiltin() || mbCustom )
@@ -1591,7 +1591,7 @@ void XclImpXFBuffer::CreateUserStyles()
     for( XclImpStyleList::iterator itStyle = maUserStyles.begin(); itStyle != maUserStyles.end(); ++itStyle )
     {
         // #i1624# #i1768# ignore unnamed user styles
-        if( itStyle->GetName().Len() > 0 )
+        if( !itStyle->GetName().isEmpty() )
         {
             if( aCellStyles.count( itStyle->GetName() ) > 0 )
                 aConflictNameStyles.push_back( &(*itStyle) );
@@ -1921,7 +1921,7 @@ void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, sa
     rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, aNewItem );
 }
 
-void XclImpXFRangeBuffer::SetHyperlink( const XclRange& rXclRange, const String& rUrl )
+void XclImpXFRangeBuffer::SetHyperlink( const XclRange& rXclRange, const OUString& rUrl )
 {
     maHyperlinks.push_back( XclImpHyperlinkRange( rXclRange, rUrl ) );
 }

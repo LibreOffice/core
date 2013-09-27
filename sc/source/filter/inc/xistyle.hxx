@@ -458,7 +458,7 @@ public:
     /** Reads a STYLE record. */
     void                ReadStyle( XclImpStream& rStrm );
 
-    inline const String& GetName() const { return maName; }
+    inline const OUString& GetName() const { return maName; }
     inline sal_uInt16   GetXfId() const { return mnXfId; }
     inline bool         IsBuiltin() const { return mbBuiltin && (mnBuiltinId != EXC_STYLE_USERDEF); }
     inline sal_uInt8    GetBuiltinId() const { return mnBuiltinId; }
@@ -468,10 +468,10 @@ public:
         @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
     ScStyleSheet*       CreateStyleSheet();
     /** Creates the Calc style sheet, if this is a user-defined style. */
-    void                CreateUserStyle( const String& rFinalName );
+    void                CreateUserStyle( const OUString& rFinalName );
 
 private:
-    String              maName;             /// Cell style name.
+    OUString            maName;             /// Cell style name.
     sal_uInt16          mnXfId;             /// Formatting for this cell style.
     sal_uInt8           mnBuiltinId;        /// Identifier for builtin styles.
     sal_uInt8           mnLevel;            /// Level for builtin column/row styles.
@@ -479,7 +479,7 @@ private:
     bool                mbCustom;           /// True = customized builtin style.
     bool                mbHidden;           /// True = style not visible in GUI.
 
-    String              maFinalName;        /// Final name used in the Calc document.
+    OUString            maFinalName;        /// Final name used in the Calc document.
     ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
 };
 
@@ -635,7 +635,7 @@ public:
     void                SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex );
 
     /** Inserts a range of hyperlink cells. */
-    void                SetHyperlink( const XclRange& rXclRange, const String& rUrl );
+    void                SetHyperlink( const XclRange& rXclRange, const OUString& rUrl );
 
     /** Inserts the first cell of a merged cell range. */
     void                SetMerge( SCCOL nScCol, SCROW nScRow );
@@ -669,7 +669,7 @@ private:
 private:
     typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
     typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
-    typedef ::std::pair< XclRange, String >          XclImpHyperlinkRange;
+    typedef ::std::pair< XclRange, OUString >        XclImpHyperlinkRange;
     typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.

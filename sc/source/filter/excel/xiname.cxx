@@ -100,10 +100,10 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     bool bBuiltIn = ::get_flag( nFlags, EXC_NAME_BUILTIN );
 
     // special case for BIFF5 filter range - name appears as plain text without built-in flag
-    if( (GetBiff() == EXC_BIFF5) && (maXclName.Equals(XclTools::GetXclBuiltInDefName(EXC_BUILTIN_FILTERDATABASE))) )
+    if( (GetBiff() == EXC_BIFF5) && (maXclName == XclTools::GetXclBuiltInDefName(EXC_BUILTIN_FILTERDATABASE)) )
     {
         bBuiltIn = true;
-        maXclName.Assign( EXC_BUILTIN_FILTERDATABASE );
+        maXclName = OUString(EXC_BUILTIN_FILTERDATABASE);
     }
 
     // convert Excel name to Calc name
@@ -115,8 +115,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     else if( bBuiltIn )
     {
         // built-in name
-        if( maXclName.Len() )
-            mcBuiltIn = maXclName.GetChar( 0 );
+        if( !maXclName.isEmpty() )
+            mcBuiltIn = maXclName[0];
         if( mcBuiltIn == '?' )      // NUL character is imported as '?'
             mcBuiltIn = '\0';
         maScName = XclTools::GetBuiltInDefName( mcBuiltIn );
@@ -281,7 +281,7 @@ void XclImpNameManager::ReadName( XclImpStream& rStrm )
         maNameList.push_back( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
 
-const XclImpName* XclImpNameManager::FindName( const String& rXclName, SCTAB nScTab ) const
+const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB nScTab ) const
 {
     const XclImpName* pGlobalName = 0;   // a found global name
     const XclImpName* pLocalName = 0;    // a found local name

@@ -408,14 +408,14 @@ public:
     inline void         SetNulSubstChar( sal_Unicode cNulSubst = '?' ) { mcNulSubst = cNulSubst; }
 
     /** Reads nChars characters and returns the string. */
-    String              ReadRawUniString( sal_uInt16 nChars, bool b16Bit );
+    OUString            ReadRawUniString( sal_uInt16 nChars, bool b16Bit );
     /** Reads ext. header, nChar characters, ext. data and returns the string. */
-    String              ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags );
+    OUString            ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags );
     /** Reads 8 bit flags, ext. header, nChar characters, ext. data and returns the string. */
-    String              ReadUniString( sal_uInt16 nChars );
+    OUString            ReadUniString( sal_uInt16 nChars );
     /** Reads 16 bit character count, 8 bit flags, ext. header, character array,
         ext. data and returns the string. */
-    String              ReadUniString();
+    OUString            ReadUniString();
 
     /** Ignores nChars characters. */
     void                IgnoreRawUniString( sal_uInt16 nChars, bool b16Bit );
@@ -427,9 +427,9 @@ public:
     // *** read/ignore 8-bit-strings, store in String *** ---------------------
 
     /** Reads nChar byte characters and returns the string. */
-    String              ReadRawByteString( sal_uInt16 nChars );
+    OUString            ReadRawByteString( sal_uInt16 nChars );
     /** Reads 8/16 bit string length, character array and returns the string. */
-    String              ReadByteString( bool b16BitLen );
+    OUString            ReadByteString( bool b16BitLen );
 
     // *** SvStream functions *** ---------------------------------------------
 

@@ -51,8 +51,8 @@ class XclImpName : protected XclImpRoot, public boost::noncopyable
 public:
     explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx );
 
-    inline const String& GetXclName() const { return maXclName; }
-    inline const String& GetScName() const { return maScName; }
+    inline const OUString& GetXclName() const { return maXclName; }
+    inline const OUString& GetScName() const { return maScName; }
     inline SCTAB        GetScTab() const { return mnScTab; }
     inline const ScRangeData* GetScRangeData() const { return mpScData; }
     inline bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
@@ -63,8 +63,8 @@ public:
 private:
     void InsertName(const ScTokenArray* pArray);
 
-    String              maXclName;      /// Original name read from the file.
-    String              maScName;       /// Name inserted into the Calc document.
+    OUString            maXclName;      /// Original name read from the file.
+    OUString            maScName;       /// Name inserted into the Calc document.
     const ScRangeData*  mpScData;       /// Pointer to Calc defined name (no ownership).
     sal_Unicode         mcBuiltIn;      /// Excel built-in name index.
     SCTAB               mnScTab;        /// Calc sheet index of local names.
@@ -96,7 +96,7 @@ public:
         @param nScTab  The sheet index for local names or SCTAB_MAX for global names.
         If no local name is found, tries to find a matching global name.
         @return  Pointer to the defined name or 0 on error. */
-    const XclImpName*   FindName( const String& rXclName, SCTAB nScTab = SCTAB_MAX ) const;
+    const XclImpName*   FindName( const OUString& rXclName, SCTAB nScTab = SCTAB_MAX ) const;
 
     /** Returns the defined name specified by its Excel index.
         @param nXclNameIdx  The index of the internal defined name.

@@ -66,10 +66,10 @@ class XclImpSupbookTab
 public:
     /** Stores the sheet name and marks the sheet index as invalid.
         The sheet index is set while creating the Calc sheet with CreateTable(). */
-    explicit            XclImpSupbookTab( const String& rTabName );
+    explicit            XclImpSupbookTab( const OUString& rTabName );
                         ~XclImpSupbookTab();
 
-    inline const String& GetTabName() const { return maTabName; }
+    inline const OUString& GetTabName() const { return maTabName; }
 
     /** Reads a CRN record (external referenced cell) at the specified address. */
     void                ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos );
@@ -81,7 +81,7 @@ private:
     typedef std::vector< XclImpCrnRef > XclImpCrnList;
 
     XclImpCrnList       maCrnList;      /// List of CRN records (cached cell values).
-    String              maTabName;      /// Name of the external sheet.
+    OUString            maTabName;      /// Name of the external sheet.
 };
 
 // External document (SUPBOOK) ================================================
@@ -113,11 +113,11 @@ public:
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
-    bool                GetLinkData( String& rApplic, String& rDoc ) const;
+    bool                GetLinkData( OUString& rApplic, OUString& rDoc ) const;
     /** Returns the specified macro name (1-based) or an empty string on error. */
-    const String&       GetMacroName( sal_uInt16 nXclNameIdx ) const;
+    const OUString&     GetMacroName( sal_uInt16 nXclNameIdx ) const;
 
-    const String&       GetTabName( sal_uInt16 nXtiTab ) const;
+    const OUString&     GetTabName( sal_uInt16 nXtiTab ) const;
 
     sal_uInt16          GetTabCount() const;
 
@@ -187,15 +187,15 @@ public:
         the index. */
     const OUString*       GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
 
-    const String&       GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
+    const OUString&       GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
 
     /** Tries to decode the URL of the specified XTI entry to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
-    bool                GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
+    bool                GetLinkData( OUString& rApplic, OUString& rTopic, sal_uInt16 nXtiIndex ) const;
     /** Returns the specified macro name or an empty string on error. */
-    const String&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
+    const OUString&     GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
 private:
     /** Returns the specified XTI (link entry from BIFF8 EXTERNSHEET record). */
@@ -221,7 +221,7 @@ private:
 
 // original Excel sheet names -------------------------------------------------
 
-void XclImpTabInfo::AppendXclTabName( const String& rXclTabName, SCTAB nScTab )
+void XclImpTabInfo::AppendXclTabName( const OUString& rXclTabName, SCTAB nScTab )
 {
     maTabNames[ rXclTabName ] = nScTab;
 }
@@ -233,7 +233,7 @@ void XclImpTabInfo::InsertScTab( SCTAB nScTab )
             ++aIt->second;
 }
 
-SCTAB XclImpTabInfo::GetScTabFromXclName( const String& rXclTabName ) const
+SCTAB XclImpTabInfo::GetScTabFromXclName( const OUString& rXclTabName ) const
 {
     XclTabNameMap::const_iterator aIt = maTabNames.find( rXclTabName );
     return (aIt != maTabNames.end()) ? aIt->second : SCTAB_INVALID;
@@ -396,7 +396,7 @@ XclImpExtName::~XclImpExtName()
     delete mpMOper;
 }
 
-void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic, const String& rTopic ) const
+void XclImpExtName::CreateDdeData( ScDocument& rDoc, const OUString& rApplic, const OUString& rTopic ) const
 {
     ScMatrixRef xResults;
     if( mxDdeMatrix.get() )
@@ -551,7 +551,7 @@ const XclAddress& XclImpCrn::GetAddress() const
 
 // Sheet in an external document ==============================================
 
-XclImpSupbookTab::XclImpSupbookTab( const String& rTabName ) :
+XclImpSupbookTab::XclImpSupbookTab( const OUString& rTabName ) :
     maTabName( rTabName )
 {
 }
@@ -690,22 +690,22 @@ const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
     return &maExtNameList[nXclIndex-1];
 }
 
-bool XclImpSupbook::GetLinkData( String& rApplic, String& rTopic ) const
+bool XclImpSupbook::GetLinkData( OUString& rApplic, OUString& rTopic ) const
 {
     return (meType == EXC_SBTYPE_SPECIAL) && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maXclUrl );
 }
 
-const String& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
+const OUString& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
 {
     OSL_ENSURE( nXclNameIdx > 0, "XclImpSupbook::GetMacroName - index must be >0" );
     const XclImpName* pName = (meType == EXC_SBTYPE_SELF) ? GetNameManager().GetName( nXclNameIdx ) : 0;
-    return (pName && pName->IsVBName()) ? pName->GetScName() : EMPTY_STRING;
+    return (pName && pName->IsVBName()) ? pName->GetScName() : EMPTY_OUSTRING;
 }
 
-const String& XclImpSupbook::GetTabName( sal_uInt16 nXtiTab ) const
+const OUString& XclImpSupbook::GetTabName( sal_uInt16 nXtiTab ) const
 {
     if (nXtiTab >= maSupbTabList.size())
-        return EMPTY_STRING;
+        return EMPTY_OUSTRING;
     return maSupbTabList[nXtiTab].GetTabName();
 }
 
@@ -817,22 +817,22 @@ const OUString* XclImpLinkManagerImpl::GetSupbookUrl( sal_uInt16 nXtiIndex ) con
     return &p->GetXclUrl();
 }
 
-const String& XclImpLinkManagerImpl::GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const
+const OUString& XclImpLinkManagerImpl::GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const
 {
     const XclImpSupbook* p = GetSupbook(nXti);
-    return p ? p->GetTabName(nXtiTab) : EMPTY_STRING;
+    return p ? p->GetTabName(nXtiTab) : EMPTY_OUSTRING;
 }
 
-bool XclImpLinkManagerImpl::GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const
+bool XclImpLinkManagerImpl::GetLinkData( OUString& rApplic, OUString& rTopic, sal_uInt16 nXtiIndex ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( nXtiIndex );
     return pSupbook && pSupbook->GetLinkData( rApplic, rTopic );
 }
 
-const String& XclImpLinkManagerImpl::GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const
+const OUString& XclImpLinkManagerImpl::GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( nExtSheet );
-    return pSupbook ? pSupbook->GetMacroName( nExtName ) : EMPTY_STRING;
+    return pSupbook ? pSupbook->GetMacroName( nExtName ) : EMPTY_OUSTRING;
 }
 
 const XclImpXti* XclImpLinkManagerImpl::GetXti( sal_uInt16 nXtiIndex ) const
@@ -916,17 +916,17 @@ const OUString* XclImpLinkManager::GetSupbookUrl( sal_uInt16 nXtiIndex ) const
     return mxImpl->GetSupbookUrl(nXtiIndex);
 }
 
-const String& XclImpLinkManager::GetSupbookTabName( sal_uInt16 nXti,  sal_uInt16 nXtiTab ) const
+const OUString& XclImpLinkManager::GetSupbookTabName( sal_uInt16 nXti,  sal_uInt16 nXtiTab ) const
 {
     return mxImpl->GetSupbookTabName(nXti, nXtiTab);
 }
 
-bool XclImpLinkManager::GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const
+bool XclImpLinkManager::GetLinkData( OUString& rApplic, OUString& rTopic, sal_uInt16 nXtiIndex ) const
 {
     return mxImpl->GetLinkData( rApplic, rTopic, nXtiIndex );
 }
 
-const String& XclImpLinkManager::GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const
+const OUString& XclImpLinkManager::GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const
 {
     return mxImpl->GetMacroName( nExtSheet, nExtName );
 }

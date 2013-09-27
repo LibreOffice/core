@@ -33,7 +33,7 @@ public:
     /** Constructs an empty string. */
     explicit            XclImpString();
     /** Constructs an unformatted string. */
-    explicit            XclImpString( const String& rString );
+    explicit            XclImpString( const OUString& rString );
 
                         ~XclImpString();
 
@@ -41,7 +41,7 @@ public:
     void                Read( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Sets the passed string data. */
-    inline void         SetText( const String& rText ) { maString = rText; }
+    inline void         SetText( const OUString& rText ) { maString = rText; }
     /** Sets the passed formatting buffer. */
     inline void         SetFormats( const XclFormatRunVec& rFormats ) { maFormats = rFormats; }
     /** Insert a formatting run to the format buffer. */
@@ -54,9 +54,9 @@ public:
     inline void         ReadObjFormats( XclImpStream& rStrm, sal_uInt16 nFormatSize ) { ReadObjFormats( rStrm, maFormats, nFormatSize ); }
 
     /** Returns true, if the string is empty. */
-    inline bool         IsEmpty() const { return maString.Len() == 0; }
+    inline bool         IsEmpty() const { return maString.isEmpty(); }
     /** Returns the pure text data of the string. */
-    inline const String& GetText() const { return maString; }
+    inline const OUString& GetText() const { return maString; }
 
     /** Returns true, if the string contains formatting information. */
     inline bool         IsRich() const { return !maFormats.empty(); }
@@ -73,7 +73,7 @@ public:
     static void         ReadObjFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, sal_uInt16 nFormatSize );
 
 private:
-    String              maString;       /// The text data of the string.
+    OUString            maString;       /// The text data of the string.
     XclFormatRunVec     maFormats;      /// All formatting runs.
 };
 
@@ -86,11 +86,11 @@ public:
     explicit            XclImpStringIterator( const XclImpString& rString );
 
     /** Returns true, if the iterator references a valid text portion. */
-    inline bool         Is() const { return mnTextBeg < mrText.Len(); }
+    inline bool         Is() const { return mnTextBeg < mrText.getLength(); }
     /** Returns the index of the current text portion. */
     inline size_t       GetPortionIndex() const { return mnPortion; }
     /** Returns the string of the current text portion. */
-    String              GetPortionText() const;
+    OUString            GetPortionText() const;
     /** Returns the font index of the current text portion. */
     sal_uInt16          GetPortionFont() const;
 
@@ -98,7 +98,7 @@ public:
     XclImpStringIterator& operator++();
 
 private:
-    const String&       mrText;         /// The processed string.
+    const OUString&     mrText;         /// The processed string.
     const XclFormatRunVec& mrFormats;   /// The vector of formatting runs.
     size_t              mnPortion;      /// Current text portion.
     xub_StrLen          mnTextBeg;      /// First character of current portion.

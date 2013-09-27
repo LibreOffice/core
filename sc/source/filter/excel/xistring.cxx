@@ -33,7 +33,7 @@ XclImpString::XclImpString()
 {
 }
 
-XclImpString::XclImpString( const String& rString ) :
+XclImpString::XclImpString( const OUString& rString ) :
     maString( rString )
 {
 }
@@ -165,12 +165,12 @@ XclImpStringIterator::XclImpStringIterator( const XclImpString& rString ) :
         ++mnFormatsEnd;
     // find end position of the first portion
     mnTextEnd = static_cast< xub_StrLen >( (mnFormatsEnd < mrFormats.size()) ?
-        mrFormats[ mnFormatsEnd ].mnChar : mrText.Len() );
+        mrFormats[ mnFormatsEnd ].mnChar : mrText.getLength() );
 }
 
-String XclImpStringIterator::GetPortionText() const
+OUString XclImpStringIterator::GetPortionText() const
 {
-    return String( mrText, mnTextBeg, mnTextEnd - mnTextBeg );
+    return mrText.copy( mnTextBeg, mnTextEnd - mnTextBeg );
 }
 
 sal_uInt16 XclImpStringIterator::GetPortionFont() const
@@ -193,7 +193,7 @@ XclImpStringIterator& XclImpStringIterator::operator++()
             // character positions of next portion
             mnTextBeg = mnTextEnd;
             mnTextEnd = static_cast< xub_StrLen >( (mnFormatsEnd < mrFormats.size()) ?
-                mrFormats[ mnFormatsEnd ].mnChar : mrText.Len() );
+                mrFormats[ mnFormatsEnd ].mnChar : mrText.getLength() );
         }
         while( Is() && (mnTextBeg == mnTextEnd) );
     }

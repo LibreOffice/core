@@ -397,7 +397,7 @@ void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
     rUrl = aNewUrl;
 }
 
-void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl )
+void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, const OUString& rUrl )
 {
     String aUrl(rUrl);
     ConvertToValidTabName(aUrl);
@@ -955,7 +955,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
 
 void XclImpWebQuery::Apply( ScDocument& rDoc, const OUString& rFilterName )
 {
-    if( maURL.Len() && (meMode != xlWQUnknown) && rDoc.GetDocumentShell() )
+    if( !maURL.isEmpty() && (meMode != xlWQUnknown) && rDoc.GetDocumentShell() )
     {
         ScAreaLink* pLink = new ScAreaLink( rDoc.GetDocumentShell(),
             maURL, rFilterName, EMPTY_STRING, maTables, maDestRange, mnRefresh * 60UL );

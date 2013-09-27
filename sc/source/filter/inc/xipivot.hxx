@@ -323,7 +323,7 @@ public:
     sal_uInt16          GetFieldCount() const;
     const XclImpPTField* GetField( sal_uInt16 nFieldIdx ) const;
     XclImpPTField*      GetFieldAcc( sal_uInt16 nFieldIdx );
-    const String&       GetFieldName( sal_uInt16 nFieldIdx ) const;
+    const OUString&     GetFieldName( sal_uInt16 nFieldIdx ) const;
 
     const XclImpPTField* GetDataField( sal_uInt16 nDataFieldIdx ) const;
     OUString GetDataFieldName( sal_uInt16 nDataFieldIdx ) const;

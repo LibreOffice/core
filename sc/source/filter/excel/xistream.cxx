@@ -898,7 +898,7 @@ sal_Size XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags )
 
 // ----------------------------------------------------------------------------
 
-String XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
+OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
     String aRet;
     sal_uInt16 nCharsLeft = nChars;
@@ -951,7 +951,7 @@ String XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
     return aRet;
 }
 
-String XclImpStream::ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
+OUString XclImpStream::ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
 {
     bool b16Bit;
     sal_Size nExtSize = ReadUniStringExtHeader( b16Bit, nFlags );
@@ -960,12 +960,12 @@ String XclImpStream::ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
     return aRet;
 }
 
-String XclImpStream::ReadUniString( sal_uInt16 nChars )
+OUString XclImpStream::ReadUniString( sal_uInt16 nChars )
 {
     return ReadUniString( nChars, ReaduInt8() );
 }
 
-String XclImpStream::ReadUniString()
+OUString XclImpStream::ReadUniString()
 {
     return ReadUniString( ReaduInt16() );
 }
@@ -1011,17 +1011,17 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 
 // ----------------------------------------------------------------------------
 
-String XclImpStream::ReadRawByteString( sal_uInt16 nChars )
+OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
     sal_Char* pcBuffer = new sal_Char[ nChars + 1 ];
     sal_uInt16 nCharsRead = ReadRawData( pcBuffer, nChars );
     pcBuffer[ nCharsRead ] = '\0';
-    String aRet( pcBuffer, mrRoot.GetTextEncoding() );
+    OUString aRet( pcBuffer, strlen(pcBuffer), mrRoot.GetTextEncoding() );
     delete[] pcBuffer;
     return aRet;
 }
 
-String XclImpStream::ReadByteString( bool b16BitLen )
+OUString XclImpStream::ReadByteString( bool b16BitLen )
 {
     return ReadRawByteString( ReadByteStrLen( b16BitLen ) );
 }

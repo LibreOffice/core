@@ -203,7 +203,7 @@ public:
     XclImpTabViewSettings& GetTabViewSettings() const;
 
     /** Returns the Calc add-in function name for an Excel function name. */
-    String              GetScAddInName( const String& rXclName ) const;
+    OUString            GetScAddInName( const OUString& rXclName ) const;
 
     /** Returns true, if the document contains a VB project. */
     inline bool         HasBasic() const { return mrImpData.mbHasBasic; }

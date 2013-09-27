@@ -402,7 +402,7 @@ public:
     /** Reads the CHSOURCELINK record (link to source data). */
     void                ReadChSourceLink( XclImpStream& rStrm );
     /** Sets explicit string data for this text object. */
-    void                SetString( const String& rString );
+    void                SetString( const OUString& rString );
     /** Sets formatting runs read from a CHFORMATRUNS record. */
     void                SetTextFormats( const XclFormatRunVec& rFormats );
 
@@ -505,7 +505,7 @@ public:
     virtual sal_uInt16  GetRotation() const;
 
     /** Sets explicit string data for this text object. */
-    void                SetString( const String& rString );
+    void                SetString( const OUString& rString );
     /** Updates missing parts of this text object from the passed object. */
     void                UpdateText( const XclImpChText* pParentText );
     /** Updates display type of this data point label text object. */

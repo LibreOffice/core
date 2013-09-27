@@ -231,7 +231,7 @@ private:
 private:
     EditEngine&         mrEE;               /// The header/footer edit engine.
     XclImpHFPortionInfoVec maInfos;         /// Edit engine text objects for all portions.
-    String              maCurrText;         /// Current text to insert into edit engine.
+    OUString            maCurrText;         /// Current text to insert into edit engine.
     XclFontDataPtr      mxFontData;         /// Font data of current text.
     XclImpHFPortion     meCurrObj;          /// The current portion.
 };
@@ -271,7 +271,7 @@ public:
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
-    static bool         DecodeLink( String& rApplic, String& rTopic, const String rEncUrl );
+    static bool         DecodeLink( OUString& rApplic, OUString& rTopic, const OUString rEncUrl );
 
 private:
     /** We don't want anybody to instantiate this class, since it is just a

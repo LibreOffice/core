@@ -34,7 +34,8 @@
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
 globals for the document).
-- Shared string tables
+- Shared
+ tables
 - Hyperlinks
 - Label ranges
 - Conditional formatting
@@ -81,7 +82,7 @@ public:
     static OUString     ReadEmbeddedData( XclImpStream& rStrm );
 
     /** Inserts the URL into a range of cells. Does not modify value or formula cells. */
-    static void InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl );
+    static void InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, const OUString& rUrl );
 
     /** Convert the sheet name with invalid character(s) in URL when the URL is
         to a location within the same document (e.g. #'Sheet&Name'.A1). */
@@ -218,7 +219,7 @@ private:
         xlWQSpecTables              /// Specific tables.
     };
 
-    String              maURL;          /// Source document URL.
+    OUString            maURL;          /// Source document URL.
     OUString            maTables;       /// List of source range names.
     ScRange             maDestRange;    /// Destination range.
     XclImpWebQueryMode  meMode;         /// Current mode of the web query.

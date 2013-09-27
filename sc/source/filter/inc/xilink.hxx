@@ -56,12 +56,12 @@ public:
     // original Excel sheet names ---------------------------------------------
 
     /** Appends an original Excel sheet name with corresponding Calc sheet index. */
-    void                AppendXclTabName( const String& rXclTabName, SCTAB nScTab );
+    void                AppendXclTabName( const OUString& rXclTabName, SCTAB nScTab );
     /** Inserts a Calc sheet index (increases all following sheet indexes). */
     void                InsertScTab( SCTAB nScTab );
 
     /** Returns the Calc sheet index from the passed original Excel sheet name. */
-    SCTAB               GetScTabFromXclName( const String& rXclTabName ) const;
+    SCTAB               GetScTabFromXclName( const OUString& rXclTabName ) const;
 
     // record creation order - TABID record -----------------------------------
 
@@ -77,7 +77,7 @@ public:
     sal_uInt16          GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId = 0xFFFF ) const;
 
 private:
-    typedef ::std::map< String, SCTAB > XclTabNameMap;
+    typedef ::std::map< OUString, SCTAB > XclTabNameMap;
 
     XclTabNameMap       maTabNames;     /// All Excel sheet names with Calc sheet index.
     ScfUInt16Vec        maTabIdVec;     /// The vector with sheet indexes.
@@ -126,7 +126,7 @@ public:
 
     /** Create and apply the cached list of this DDE Link to the document. */
     void                CreateDdeData( ScDocument& rDoc,
-                            const String& rApplc, const String& rExtDoc ) const;
+                            const OUString& rApplc, const OUString& rExtDoc ) const;
 
     void                CreateExtNameData( ScDocument& rDoc, sal_uInt16 nFileId ) const;
 
@@ -204,15 +204,15 @@ public:
 
     const OUString* GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
 
-    const String& GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
+    const OUString& GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
 
     /** Tries to decode the URL of the specified XTI entry to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
-    bool                GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
+    bool                GetLinkData( OUString& rApplic, OUString& rTopic, sal_uInt16 nXtiIndex ) const;
     /** Returns the specified macro name or an empty string on error. */
-    const String&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
+    const OUString&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
 private:
     typedef ::std::auto_ptr< XclImpLinkManagerImpl > XclImpLinkMgrImplPtr;

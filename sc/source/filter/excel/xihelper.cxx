@@ -170,7 +170,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
         else
             aNextRun.mnChar = 0xFFFF;
 
-        xub_StrLen nLen = rString.GetText().Len();
+        sal_Int32 nLen = rString.GetText().getLength();
         for( sal_uInt16 nChar = 0; nChar < nLen; ++nChar )
         {
             // reached new different formatted text portion
@@ -195,7 +195,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
             }
 
             // set end of selection to current position
-            if( rString.GetText().GetChar( nChar ) == '\n' )
+            if( rString.GetText()[ nChar ] == '\n' )
             {
                 ++aSelection.nEndPara;
                 aSelection.nEndPos = 0;
@@ -225,7 +225,7 @@ void XclImpStringHelper::SetToDocument(
         ScDocumentImport& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
         const XclImpString& rString, sal_uInt16 nXFIndex )
 {
-    if (!rString.GetText().Len())
+    if (rString.GetText().isEmpty())
         return;
 
     ::std::auto_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
@@ -285,7 +285,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
     meCurrObj = EXC_HF_CENTER;
 
     // parser temporaries
-    maCurrText.Erase();
+    maCurrText = "";
     String aReadFont;           // current font name
     String aReadStyle;          // current font style
     sal_uInt16 nReadHeight = 0; // current font height
@@ -323,7 +323,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         InsertLineBreak();
                     break;
                     default:
-                        maCurrText += *pChar;
+                        maCurrText += OUString(*pChar);
                 }
             }
             break;
@@ -335,7 +335,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                 eState = xlPSText;
                 switch( *pChar )
                 {
-                    case '&':   maCurrText += '&';  break;  // the '&' character
+                    case '&':   maCurrText += "&";  break;  // the '&' character
 
                     case 'L':   SetNewPortion( EXC_HF_LEFT );   break;  // Left portion
                     case 'C':   SetNewPortion( EXC_HF_CENTER ); break;  // Center portion
@@ -542,12 +542,12 @@ void XclImpHFConverter::ResetFontData()
 
 void XclImpHFConverter::InsertText()
 {
-    if( maCurrText.Len() )
+    if( !maCurrText.isEmpty() )
     {
         ESelection& rSel = GetCurrSel();
         mrEE.QuickInsertText( maCurrText, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
-        rSel.nEndPos = rSel.nEndPos + maCurrText.Len();
-        maCurrText.Erase();
+        rSel.nEndPos = rSel.nEndPos + maCurrText.getLength();
+        maCurrText = "";
         UpdateCurrMaxLineHeight();
     }
 }
@@ -762,13 +762,13 @@ void XclImpUrlHelper::DecodeUrl(
     OSL_ENSURE( aTabName.isEmpty(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }
 
-bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String rEncUrl )
+bool XclImpUrlHelper::DecodeLink( OUString& rApplic, OUString& rTopic, const OUString rEncUrl )
 {
-    xub_StrLen nPos = rEncUrl.Search( EXC_DDE_DELIM );
-    if( (nPos != STRING_NOTFOUND) && (0 < nPos) && (nPos + 1 < rEncUrl.Len()) )
+    sal_Int32 nPos = rEncUrl.indexOf( EXC_DDE_DELIM );
+    if( (nPos != -1) && (0 < nPos) && (nPos + 1 < rEncUrl.getLength()) )
     {
-        rApplic = rEncUrl.Copy( 0, nPos );
-        rTopic = rEncUrl.Copy( nPos + 1 );
+        rApplic = rEncUrl.copy( 0, nPos );
+        rTopic = rEncUrl.copy( nPos + 1 );
         return true;
     }
     return false;
