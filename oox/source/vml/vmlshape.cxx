@@ -567,7 +567,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             {
                 sal_Int32 nLength = aGrabBag.getLength();
                 aGrabBag.realloc(nLength + 1);
-                aGrabBag[nLength + 1] = aPair;
+                aGrabBag[nLength] = aPair;
             }
             else
             {
