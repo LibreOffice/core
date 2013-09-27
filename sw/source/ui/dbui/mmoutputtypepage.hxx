@@ -27,29 +27,19 @@ class SwMailMergeWizard;
 
 class SwMailMergeOutputTypePage : public svt::OWizardPage
 {
-    SwBoldFixedInfo m_aHeaderFI;
-    FixedInfo       m_aTypeFT;
-    RadioButton     m_aLetterRB;
-    RadioButton     m_aMailRB;
+    RadioButton*    m_pLetterRB;
+    RadioButton*    m_pMailRB;
 
-    SwBoldFixedInfo m_aHintHeaderFI;
-    FixedInfo       m_aHintFI;
-
-    String          m_sLetterHintHeader;
-    String          m_sMailHintHeader;
-    String          m_sLetterHint;
-    String          m_sMailHint;
+    FixedText*      m_pLetterHint;
+    FixedText*      m_pMailHint;
 
     SwMailMergeWizard*  m_pWizard;
 
     DECL_LINK(TypeHdl_Impl, void *);
 
 public:
-        SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);
-        ~SwMailMergeOutputTypePage();
-
+    SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);
 };
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -80,7 +80,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dbui/mmlayoutpage.src \
     sw/source/ui/dbui/mmmergepage.src \
     sw/source/ui/dbui/mmoutputpage.src \
-    sw/source/ui/dbui/mmoutputtypepage.src \
     sw/source/ui/dbui/mmpreparemergepage.src \
     sw/source/ui/dbui/selectdbtabledialog.src \
     sw/source/ui/dialog/dialog.src \

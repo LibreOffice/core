@@ -23,51 +23,35 @@
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 #include <swtypes.hxx>
-#include <mmoutputtypepage.hrc>
 
-SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent) :
-    svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUTTYPE_PAGE)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
-    m_aHeaderFI(    this, SW_RES( FI_HEADER    )),
-    m_aTypeFT(      this, SW_RES( FT_TYPE    )),
-    m_aLetterRB(    this, SW_RES( RB_LETTER  )),
-    m_aMailRB(      this, SW_RES( RB_MAIL    )),
-    m_aHintHeaderFI(this, SW_RES( FI_HINTHEADER)),
-    m_aHintFI(      this, SW_RES( FI_HINT)),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
-    m_sLetterHintHeader(  SW_RES( ST_LETTERHINTHEADER)),
-    m_sMailHintHeader(      SW_RES( ST_MAILHINTHEADER)),
-    m_sLetterHint(          SW_RES( ST_LETTERHINT)),
-    m_sMailHint(            SW_RES( ST_MAILHINT)),
-    m_pWizard(_pParent)
+SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pParent)
+    : svt::OWizardPage(pParent, "MMOutputTypePage",
+        "modules/swriter/ui/mmoutputtypepage.ui")
+    , m_pWizard(pParent)
 {
-    FreeResource();
+    get(m_pLetterRB, "letter");
+    get(m_pMailRB, "email");
+    get(m_pLetterHint, "letterft");
+    get(m_pMailHint, "emailft");
+
     Link aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
-    m_aLetterRB.SetClickHdl(aLink);
-    m_aMailRB.SetClickHdl(aLink);
+    m_pLetterRB->SetClickHdl(aLink);
+    m_pMailRB->SetClickHdl(aLink);
 
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if(rConfigItem.IsOutputToLetter())
-        m_aLetterRB.Check();
+        m_pLetterRB->Check();
     else
-        m_aMailRB.Check();
-    TypeHdl_Impl(&m_aLetterRB);
+        m_pMailRB->Check();
+    TypeHdl_Impl(m_pLetterRB);
 
-}
-
-SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
-{
 }
 
 IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
 {
-    bool bLetter = m_aLetterRB.IsChecked();
-        m_aHintHeaderFI.SetText(bLetter ? m_sLetterHintHeader : m_sMailHintHeader);
-        m_aHintFI.SetText(bLetter ? m_sLetterHint : m_sMailHint);
+    bool bLetter = m_pLetterRB->IsChecked();
+    m_pLetterHint->Show(bLetter);
+    m_pMailHint->Show(!bLetter);
     m_pWizard->GetConfigItem().SetOutputToLetter(bLetter);
     m_pWizard->updateRoadmapItemLabel( MM_ADDRESSBLOCKPAGE );
     m_pWizard->UpdateRoadmap();
