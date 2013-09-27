@@ -110,7 +110,7 @@
             <objects>
                 <viewController id="UPe-3R-KdQ" customClass="PinValidationViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UGV-xw-Sxo">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504.00000000000006"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="3128" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f2u-bG-5ak">
@@ -445,7 +445,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalCompressionResistancePriority="1000" id="bZq-z2-OKU">
-                                        <rect key="frame" x="3" y="8" width="220" height="167"/>
+                                        <rect key="frame" x="3.0000000000000031" y="8" width="220" height="167"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </imageView>
@@ -606,6 +606,7 @@
         <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
         <image name="buttonBackground.png" width="45" height="45"/>
+        <image name="buttonBackground.png" width="45" height="45"/>
         <image name="ic_launcher.png" width="16" height="16"/>
         <image name="more_icon.png" width="30" height="30"/>
         <image name="pointer.png" width="143" height="147"/>
@@ -615,7 +616,9 @@
         <image name="released_next_button.png" width="315" height="220"/>
         <image name="released_previous_button.png" width="315" height="220"/>
         <image name="timer_clear_btn.png" width="60" height="60"/>
+        <image name="timer_clear_btn.png" width="60" height="60"/>
         <image name="timer_settime_btn.png" width="60" height="60"/>
+        <image name="timer_start_btn.png" width="60" height="60"/>
         <image name="timer_start_btn.png" width="60" height="60"/>
     </resources>
     <color key="tintColor" red="1" green="0.50196078430000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
