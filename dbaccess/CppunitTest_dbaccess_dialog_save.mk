@@ -13,6 +13,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_dialog_save, \
     dbaccess/qa/extras/dialog-save \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,dbaccess_dialog_save,\
+    boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_dialog_save, \
     avmedia \
     basegfx \
