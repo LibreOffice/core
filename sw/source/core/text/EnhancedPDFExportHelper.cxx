@@ -1150,8 +1150,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 if ( pTxtNd->IsOutline() )
                 {
-                    //int nRealLevel = pTxtNd->GetOutlineLevel();   //#outline level,zhaojianwei
-                    int nRealLevel = pTxtNd->GetAttrOutlineLevel()-1;       //<-end,zhaojianwei
+                    int nRealLevel = pTxtNd->GetAttrOutlineLevel()-1;
                    nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
                     nPDFType =  static_cast<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);

@@ -188,13 +188,11 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent, const SfxItemSet* pSwIte
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if(!rTxtColl.IsDefault())
         {
-            //->added by zhaojianwei
             if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
             {
                 int nOutLevel = rTxtColl.GetAssignedOutlineStyleLevel();
                 aCollNames[ nOutLevel ] = rTxtColl.GetName();
             }
-            //<-end
         }
     }
 }
@@ -322,8 +320,7 @@ sal_uInt16  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
         if(aCollNames[i] == rFmtName)
             return i;
     }
-    return MAXLEVEL;//NO_NUMBERING; //#outline level,zhaojianwei
-
+    return MAXLEVEL;
 }
 
 short SwOutlineTabDialog::Ok()
@@ -345,11 +342,10 @@ short SwOutlineTabDialog::Ok()
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if( !rTxtColl.IsDefault() )
         {
-
             const SfxPoolItem & rItem =
                 rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, sal_False);
 
-           if ((sal_uInt8)GetLevel(rTxtColl.GetName()) == MAXLEVEL) //add by zhaojianwei
+           if ((sal_uInt8)GetLevel(rTxtColl.GetName()) == MAXLEVEL)
             {
                 if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
                 {
@@ -371,7 +367,7 @@ short SwOutlineTabDialog::Ok()
                     SwNumRuleItem aItem(pOutlineRule->GetName());
                     rTxtColl.SetFmtAttr(aItem);
                 }
-            }                           //<-end,zhaojianwei
+            }
         }
     }
 
@@ -799,7 +795,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     {
         nTmp = static_cast<sal_uInt16>(pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos));
     }
-    m_pLevelLB->SelectEntryPos(nTmp-1);//nTmp);//#outline level,zhaojianwei
+    m_pLevelLB->SelectEntryPos(nTmp-1);
 
     // collect char styles
     m_pCharFmtLB->Clear();

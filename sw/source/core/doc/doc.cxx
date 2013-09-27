@@ -2085,7 +2085,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             ::SetProgressState( i, GetDocShell() );
             const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
 
-            const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
+            const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;
             if( nLvl > nLevel )
                 continue;
             sal_uInt16 nEndOfs = 1;
@@ -2125,7 +2125,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
                     SwTxtFmtColl* pMyColl = pNd->GetTxtColl();
 
                     const sal_uInt16 nHeadLine = static_cast<sal_uInt16>(
-                                !pMyColl->IsAssignedToListLevelOfOutlineStyle() //<-end,zhaojianwei
+                                !pMyColl->IsAssignedToListLevelOfOutlineStyle()
                                 ? RES_POOLCOLL_HEADLINE2
                                 : RES_POOLCOLL_HEADLINE1 );
                     pMyColl = pExtDoc->GetTxtCollFromPool( nHeadLine );

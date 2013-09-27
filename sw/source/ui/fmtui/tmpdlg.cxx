@@ -406,7 +406,6 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nOutlineId)
     {
-        //-->#outlinelevel added by zhaojianwei
         //  handle if the current paragraph style is assigned to a list level of outline style,
         SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
         if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )

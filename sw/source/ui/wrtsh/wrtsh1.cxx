@@ -1051,7 +1051,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     // activate outline numbering, because from the precondition
                     // it's known, that <SwEdit::HasNumber()> == sal_False
                     bActivateOutlineRule = true;
-                    nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
+                    nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
                 }
             }
             else if ( !pNumRule )
@@ -1059,7 +1059,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 // #i101234#
                 // Check, if corresponding list level of the outline numbering
                 // has already a numbering format set.
-                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei,need further consideration
+                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
                 if ( pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                                 == SVX_NUM_NUMBER_NONE )
                 {

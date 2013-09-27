@@ -112,7 +112,7 @@
 #include "dialog.hrc"
 #include "swabstdlg.hxx"
 
-#include <ndtxt.hxx>    //#outline level,add by zhaojianwei
+#include <ndtxt.hxx>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
@@ -849,8 +849,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 bDone = sal_False;
                 bool bCreateHtml = FN_NEW_HTML_DOC == nWhich;
 
-                bool bCreateByOutlineLevel = false;     //#outline level,add by zhaojianwei
-                sal_Int32  nTemplateOutlineLevel = 0 ;      //#outline level,add by zhaojianwei
+                bool bCreateByOutlineLevel = false;
+                sal_Int32  nTemplateOutlineLevel = 0;
 
                 String aFileName, aTemplateName;
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, sal_False, &pItem ) )
@@ -1435,7 +1435,6 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
         }
     }
     if ( bImport )
-    // <--
     {
         SwRead pRead =  ReadXML;
         SwReader* pReader = 0;

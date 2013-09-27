@@ -3348,7 +3348,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                 {
                     const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
                     if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
-                        nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() ); //<-end,zhaojianwei
+                        nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() );
                 }
             }
         }

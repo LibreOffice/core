@@ -285,7 +285,7 @@ OUString SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
         (*pIdx)--;
         pTNd = pIdx->GetNode().GetTxtNode();
     }
-    if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
+    if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )
         aStr = pTNd->GetTxt();
 
     if( bUndoIdInitialized )

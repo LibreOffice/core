@@ -105,7 +105,6 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     mutable bool m_bLastOutlineState : 1;
     bool m_bNotifiable;
 
-    /// sal_uInt8 nOutlineLevel; //#outline level, removed by zhaojianwei.
     bool mbEmptyListStyleSetDueToSetOutlineLevelAttr;
 
     /** boolean, indicating that a <SetAttr(..)> or <ResetAttr(..)> or
@@ -588,7 +587,7 @@ public:
 
        @return outline level or NO_NUMBERING if there is no outline level
      */
-    int GetAttrOutlineLevel() const;//#OutlineLevel,added by zhaojianwei
+    int GetAttrOutlineLevel() const;
 
     /**
        Sets the out line level *at* a text node.
@@ -603,7 +602,7 @@ public:
 
        NOTE: This is subject to change, see GetOutlineLevel.
      */
-    void SetAttrOutlineLevel(int nLevel);//#OutlineLevel,added by zhaojianwei
+    void SetAttrOutlineLevel(int nLevel);
 
     bool IsEmptyListStyleDueToSetOutlineLevelAttr();
     void SetEmptyListStyleDueToSetOutlineLevelAttr();
