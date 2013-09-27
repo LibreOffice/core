@@ -11,47 +11,17 @@
 
 # Handles creation of image galleries.
 
-gb_Gallery__UNO_COMPONENTS := \
-	comphelper/util/comphelp \
-	configmgr/source/configmgr \
-	drawinglayer/drawinglayer \
-	fileaccess/source/fileacc \
-	framework/util/fwk \
-	i18npool/util/i18npool \
-	package/source/xstor/xstor \
-	package/util/package2 \
-	sax/source/expatwrap/expwrap \
-	sfx2/util/sfx \
-	svgio/svgio \
-	svx/util/svx \
-	svx/util/svxcore \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-	unoxml/source/service/unoxml
-
-gb_Gallery__UNO_TYPES := \
-	offapi \
-	udkapi
-
 gb_Gallery_TRANSLATE := $(SOLARENV)/bin/desktop-translate.pl
-
-# TODO: this should be in RepositoryExternal.mk, but it would lead to
-# duplication. Fix.
-gb_Gallery_EXTRA_DEPENCENCIES := \
-	$(foreach component,$(gb_Gallery__UNO_COMPONENTS),$(call gb_ComponentTarget_get_target_for_build,$(component))) \
-	$(foreach api,$(gb_Gallery__UNO_TYPES),$(call gb_UnoApi_get_target,$(api)))
-
 gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 
 # BRAND_BASE_DIR is for resource files
 define gb_Gallery__make_env_args
 "-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR_FOR_BUILD)/unittest/install)" \
-"-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_Helper_make_url,$(gb_Configuration_registry)) \
-	module:$(call gb_Helper_make_url,$(gb_Configuration_registry)/spool)" \
+"-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_Helper_make_url,$(INSTDIR)/$(LIBO_SHARE_FOLDER)/registry)" \
 "-env:UNO_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,ure/services)) \
 	$(foreach item,$(gb_Gallery__UNO_COMPONENTS),\
 		$(call gb_Helper_make_url,$(call gb_ComponentTarget_get_target_for_build,$(item))))" \
-"-env:UNO_TYPES=$(foreach item,$(gb_Gallery__UNO_TYPES),\
+"-env:UNO_TYPES=$(foreach item,offapi udkapi,\
 	$(call gb_Helper_make_url,$(call gb_UnoApi_get_target,$(item))))" \
 -env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
 -env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_LIB_FOLDER))
@@ -96,8 +66,7 @@ $(dir $(call gb_Gallery_get_target,$(1)))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_Gallery_get_target,%) : \
-		$(call gb_Executable_get_runtime_dependencies,gengal) \
-		$(gb_Gallery_EXTRA_DEPENCENCIES)
+		$(call gb_Executable_get_runtime_dependencies,gengal)
 	$(call gb_Gallery__command,$@,$*)
 
 $(call gb_Gallery__get_final_target,%) :

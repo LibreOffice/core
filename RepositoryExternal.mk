@@ -2912,33 +2912,36 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 )
 endef
 
-# Better duplication with gb_Gallery__UNO_COMPONENTS than nothing.
+gb_Gallery__UNO_COMPONENTS := \
+	comphelper/util/comphelp \
+	configmgr/source/configmgr \
+	drawinglayer/drawinglayer \
+	fileaccess/source/fileacc \
+	framework/util/fwk \
+	i18npool/util/i18npool \
+	package/source/xstor/xstor \
+	package/util/package2 \
+	sax/source/expatwrap/expwrap \
+	sfx2/util/sfx \
+	svgio/svgio \
+	svx/util/svx \
+	svx/util/svxcore \
+	ucb/source/core/ucb1 \
+	ucb/source/ucp/file/ucpfile1 \
+	unoxml/source/service/unoxml
+
 # This is used to determine what we need for 'build' platform.
 define gb_Executable__register_gengal
 $(call gb_Executable_add_runtime_dependencies,gengal,\
-	$(foreach component, \
-		comphelper/util/comphelp \
-		configmgr/source/configmgr \
-		fileaccess/source/fileacc \
-		framework/util/fwk \
-		i18npool/util/i18npool \
-		package/source/xstor/xstor \
-		package/util/package2 \
-		sfx2/util/sfx \
-		svx/util/svx \
-		svx/util/svxcore \
-		ucb/source/core/ucb1 \
-		ucb/source/ucp/file/ucpfile1 \
-		unoxml/source/service/unoxml \
+	$(foreach component,$(gb_Gallery__UNO_COMPONENTS) \
 	,$(call gb_ComponentTarget_get_target_for_build,$(component))) \
 	$(call gb_AllLangResTarget_get_target,ofa) \
-	$(call gb_Configuration_get_target,registry) \
-	$(call gb_Configuration_get_target,fcfg_langpack) \
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
 		$(call gb_Library_get_target,vclplug_svp) \
 	)) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
+	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
 	$(call gb_UnoApi_get_target,offapi) \
