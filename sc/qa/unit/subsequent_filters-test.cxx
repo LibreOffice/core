@@ -110,6 +110,7 @@ public:
     void testMergedCellsODS();
     void testRepeatedColumnsODS();
     void testDataValidityODS();
+    void testDataTableXLS();
 
     void testDataBarODS();
     void testDataBarXLSX();
@@ -171,6 +172,7 @@ public:
     CPPUNIT_TEST(testMergedCellsODS);
     CPPUNIT_TEST(testRepeatedColumnsODS);
     CPPUNIT_TEST(testDataValidityODS);
+    CPPUNIT_TEST(testDataTableXLS);
     CPPUNIT_TEST(testBrokenQuotesCSV);
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
@@ -1167,6 +1169,57 @@ void ScFiltersTest::testDataValidityODS()
     OUString aCSVFileName2;
     createCSVPath(OUString("dataValidity2."), aCSVFileName2);
     testFile(aCSVFileName2, pDoc, 1);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDataTableXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("data-table.", XLS);
+    ScFormulaOptions aOptions;
+    aOptions.SetFormulaSepArg(",");
+    aOptions.SetFormulaSepArrayCol(",");
+    aOptions.SetFormulaSepArrayRow(";");
+    xDocSh->SetFormulaOptions(aOptions);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // One-variable table
+
+    if (!checkFormula(*pDoc, ScAddress(3,1,0), "PMT(B3/12,B4,-B5)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(3,2,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(3,3,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C4)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(3,4,0), "MULTIPLE.OPERATIONS(D$2,$B$3,$C5)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Two-variable table
+
+    if (!checkFormula(*pDoc, ScAddress(2,7,0), "PMT(B9/12,B10,-B11)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(3,8,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,D$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(3,9,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,D$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(3,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,D$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(4,8,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C9,$B$10,E$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(4,9,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C10,$B$10,E$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    if (!checkFormula(*pDoc, ScAddress(4,10,0), "MULTIPLE.OPERATIONS($C$8,$B$9,$C11,$B$10,E$8)"))
+        CPPUNIT_FAIL("Wrong formula!");
 
     xDocSh->DoClose();
 }
