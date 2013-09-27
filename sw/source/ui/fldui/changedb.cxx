@@ -205,20 +205,22 @@ void SwChangeDBDlg::UpdateFlds()
     }
 
     pSh->StartAllAction();
-    String sTableName, sColumnName;
+    OUString sTableName;
+    OUString sColumnName;
     sal_Bool bIsTable = sal_False;
-    String sTemp(m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable));
-    sTemp += DB_DELIM;
-    sTemp += sTableName;
-    sTemp += DB_DELIM;
-    sTemp += bIsTable ? '0' : '1';
+    const OUString sTemp = m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable)
+        + OUString(DB_DELIM)
+        + sTableName
+        + OUString(DB_DELIM)
+        + OUString(static_cast<sal_Unicode>(bIsTable ? '0' : '1'));
     pSh->ChangeDBFields( aDBNames, sTemp);
     pSh->EndAllAction();
 }
 
 IMPL_LINK_NOARG(SwChangeDBDlg, ButtonHdl)
 {
-    String sTableName, sColumnName;
+    OUString sTableName;
+    OUString sColumnName;
     SwDBData aData;
     sal_Bool bIsTable = sal_False;
     aData.sDataSource = m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable);

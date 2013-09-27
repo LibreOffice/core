@@ -129,7 +129,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         if (nOldPos != LISTBOX_ENTRY_NOTFOUND)
             m_pTypeLB->SelectEntryPos(nOldPos);
 
-        if (sOldDBName.Len())
+        if (!sOldDBName.isEmpty())
         {
             m_pDatabaseTLB->Select(sOldDBName, sOldTableName, sOldColumnName);
         }
@@ -182,7 +182,8 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 
 sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
 {
-    String sTableName, sColumnName;
+    OUString sTableName;
+    OUString sColumnName;
     SwDBData aData;
     sal_Bool bIsTable;
     aData.sDataSource = m_pDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
@@ -198,23 +199,20 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
-        String aVal(m_pValueED->GetText());
-        String aName(m_pConditionED->GetText());
         sal_uLong nFormat = 0;
         sal_uInt16 nSubType = 0;
 
-        String sDBName = aData.sDataSource;
-        sDBName += DB_DELIM;
-        sDBName += (String)aData.sCommand;
-        sDBName += DB_DELIM;
-        sDBName += OUString::number(aData.nCommandType);
-        sDBName += DB_DELIM;
-        if(sColumnName.Len())
+        OUString sDBName = aData.sDataSource
+            + OUString(DB_DELIM)
+            + aData.sCommand
+            + OUString(DB_DELIM)
+            + OUString::number(aData.nCommandType)
+            + OUString(DB_DELIM);
+        if (!sColumnName.isEmpty())
         {
-            sDBName += sColumnName;
-            sDBName += DB_DELIM;
+            sDBName += sColumnName + OUString(DB_DELIM);
         }
-        aName.Insert(sDBName, 0);
+        OUString aName = sDBName + m_pConditionED->GetText();
 
         switch (nTypeId)
         {
@@ -231,9 +229,10 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
             break;
         }
 
-
-        String sTempDBName, sTempTableName, sTempColumnName;
-        sTempDBName = m_pDatabaseTLB->GetDBName(sTempTableName, sTempColumnName);
+        const OUString aVal(m_pValueED->GetText());
+        OUString sTempTableName;
+        OUString sTempColumnName;
+        OUString sTempDBName = m_pDatabaseTLB->GetDBName(sTempTableName, sTempColumnName);
         sal_Bool bDBListBoxChanged = sOldDBName != sTempDBName ||
             sOldTableName != sTempTableName || sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
@@ -440,10 +439,10 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 
             if (pEntry != 0)
             {
-                String sTableName;
-                String sColumnName;
+                OUString sTableName;
+                OUString sColumnName;
                 sal_Bool bIsTable;
-                String sDBName = m_pDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
+                OUString sDBName = m_pDatabaseTLB->GetDBName(sTableName, sColumnName, &bIsTable);
                 bNumFormat = GetFldMgr().IsDBNumeric(sDBName,
                             sTableName,
                             bIsTable,

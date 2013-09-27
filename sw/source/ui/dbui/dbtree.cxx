@@ -245,8 +245,9 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
     if (bShowCol != bShowColumns)
     {
         bShowColumns = bShowCol;
-        String sTableName, sColumnName;
-        String  sDBName(GetDBName(sTableName, sColumnName));
+        OUString sTableName;
+        OUString sColumnName;
+        const OUString sDBName(GetDBName(sTableName, sColumnName));
 
         SetUpdateMode(sal_False);
 
@@ -264,7 +265,7 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
             pEntry = Next(pEntry);
         }
 
-        if (sDBName.Len())
+        if (!sDBName.isEmpty())
         {
             Select(sDBName, sTableName, sColumnName);   // force RequestingChildren
         }
@@ -408,9 +409,9 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
     return DefaultCompare(pData);   // otherwise call base class
 }
 
-String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, sal_Bool* pbIsTable)
+OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable)
 {
-    String sDBName;
+    OUString sDBName;
     SvTreeListEntry* pEntry = FirstSelected();
 
     if (pEntry && GetParent(pEntry))
@@ -477,13 +478,14 @@ void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const
 
 void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
-    String sTableName, sColumnName;
-    String  sDBName( GetDBName( sTableName, sColumnName ));
-    if( sDBName.Len() )
+    OUString sTableName;
+    OUString sColumnName;
+    OUString sDBName( GetDBName( sTableName, sColumnName ));
+    if (!sDBName.isEmpty())
     {
         TransferDataContainer* pContainer = new TransferDataContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xRef( pContainer );
-        if( sColumnName.Len() )
+        if( !sColumnName.isEmpty() )
         {
             // drag database field
             svx::OColumnTransferable aColTransfer(
@@ -496,12 +498,10 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
             aColTransfer.addDataToContainer( pContainer );
         }
 
-        sDBName += '.';
-        sDBName += sTableName;
-        if( sColumnName.Len() )
+        sDBName += "." + sTableName;
+        if (!sColumnName.isEmpty())
         {
-            sDBName += '.';
-            sDBName += sColumnName;
+            sDBName += "." + sColumnName;
         }
 
         pContainer->CopyString( FORMAT_STRING, sDBName );

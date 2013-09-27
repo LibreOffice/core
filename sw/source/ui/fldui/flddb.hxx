@@ -47,9 +47,9 @@ class SwFldDBPage : public SwFldPage
     ListBox*            m_pFormatLB;
     VclContainer*       m_pFormat;
 
-    String              sOldDBName;
-    String              sOldTableName;
-    String              sOldColumnName;
+    OUString            sOldDBName;
+    OUString            sOldTableName;
+    OUString            sOldColumnName;
     sal_uLong               nOldFormat;
     sal_uInt16              nOldSubType;
     Link                aOldNumSelectHdl;

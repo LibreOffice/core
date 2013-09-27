@@ -56,7 +56,7 @@ public:
     virtual ~SwDBTreeList();
     virtual Size GetOptimalSize() const;
 
-    String  GetDBName( String& rTableName, String& rColumnName, sal_Bool* pbIsTable = 0);
+    OUString GetDBName( OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = 0);
 
     void    Select( const String& rDBName, const String& rTableName,
                     const String& rColumnName );
