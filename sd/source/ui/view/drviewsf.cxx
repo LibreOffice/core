@@ -564,16 +564,13 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 aNewAttr.Put( aEditAttr, sal_False );
 
 
-                sal_uInt16 nActNumLvl = (sal_uInt16)0xFFFF;
                 SvxNumRule* pNumRule = NULL;
                 const SfxPoolItem* pTmpItem=NULL;
                 sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
 
-                //if(SFX_ITEM_SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, sal_False, &pTmpItem))
-                //  nActNumLvl = ((const SfxUInt16Item*)pTmpItem)->GetValue();
                 rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,DEFAULT_NONE));
                 rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,DEFAULT_NONE));
-                nActNumLvl = mpDrawView->GetSelectionLevel();
+                sal_uInt16 nActNumLvl = mpDrawView->GetSelectionLevel();
                 pTmpItem=GetNumBulletItem(aNewAttr, nNumItemId);
 
                 if (pTmpItem)
