@@ -62,7 +62,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCuiCustomMultilineEdit(Wind
 
 void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
 {
-    bool bValid;
+    bool bValid = false;
     bool bNonSpace = rKeyEvent.GetKeyCode().GetCode() != KEY_SPACE;
     if( bNumericOnly && bNonSpace )
     {
