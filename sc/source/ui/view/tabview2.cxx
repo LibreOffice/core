@@ -79,18 +79,38 @@ void moveCursorByProtRule(
     {
         for (SCCOL i = 0; i < nMovX && rCol < MAXCOL; ++i)
         {
-            if (!isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+            SCCOL nNewUnhiddenCol = rCol + 1;
+            SCCOL nEndCol = 0;
+            while(pDoc->ColHidden(nNewUnhiddenCol, nTab, NULL, &nEndCol))
+            {
+                if(nNewUnhiddenCol >= MAXCOL)
+                    return;
+
+                nNewUnhiddenCol = nEndCol +1;
+            }
+
+            if (!isCellQualified(pDoc, nNewUnhiddenCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 break;
-            ++rCol;
+            rCol = nNewUnhiddenCol;
         }
     }
     else if (nMovX < 0)
     {
         for (SCCOL i = 0; i > nMovX && rCol > 0; --i)
         {
-            if (!isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+            SCCOL nNewUnhiddenCol = rCol - 1;
+            SCCOL nStartCol = 0;
+            while(pDoc->ColHidden(nNewUnhiddenCol, nTab, &nStartCol))
+            {
+                if(nNewUnhiddenCol <= 0)
+                    return;
+
+                nNewUnhiddenCol = nStartCol - 1;
+            }
+
+            if (!isCellQualified(pDoc, nNewUnhiddenCol, rRow, nTab, bSelectLocked, bSelectUnlocked))
                 break;
-            --rCol;
+            rCol = nNewUnhiddenCol;
         }
     }
 
@@ -98,18 +118,38 @@ void moveCursorByProtRule(
     {
         for (SCROW i = 0; i < nMovY && rRow < MAXROW; ++i)
         {
-            if (!isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
+            SCROW nNewUnhiddenRow = rRow + 1;
+            SCROW nEndRow = 0;
+            while(pDoc->RowHidden(nNewUnhiddenRow, nTab, NULL, &nEndRow))
+            {
+                if(nNewUnhiddenRow >= MAXROW)
+                    return;
+
+                nNewUnhiddenRow = nEndRow + 1;
+            }
+
+            if (!isCellQualified(pDoc, rCol, nNewUnhiddenRow, nTab, bSelectLocked, bSelectUnlocked))
                 break;
-            ++rRow;
+            rRow = nNewUnhiddenRow;
         }
     }
     else if (nMovY < 0)
     {
         for (SCROW i = 0; i > nMovY && rRow > 0; --i)
         {
-            if (!isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
+            SCROW nNewUnhiddenRow = rRow - 1;
+            SCROW nStartRow = 0;
+            while(pDoc->RowHidden(nNewUnhiddenRow, nTab, &nStartRow))
+            {
+                if(nNewUnhiddenRow <= 0)
+                    return;
+
+                nNewUnhiddenRow = nStartRow - 1;
+            }
+
+            if (!isCellQualified(pDoc, rCol, nNewUnhiddenRow, nTab, bSelectLocked, bSelectUnlocked))
                 break;
-            --rRow;
+            rRow = nNewUnhiddenRow;
         }
     }
 }
