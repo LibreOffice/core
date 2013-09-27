@@ -371,11 +371,10 @@ void CGM::ImplDoClass4()
 
                 double fG = 2.0 * ( fA * ( aEndingPoint.Y - aIntermediatePoint.Y ) - fB * ( aEndingPoint.X - aIntermediatePoint.X ) );
 
-                aCenterPoint.X = ( fD * fE - fB * fF ) / fG;
-                aCenterPoint.Y = ( fA * fF - fC * fE ) / fG;
-
                 if ( fG != 0 )
                 {
+                    aCenterPoint.X = ( fD * fE - fB * fF ) / fG;
+                    aCenterPoint.Y = ( fA * fF - fC * fE ) / fG;
                     double fStartAngle = ImplGetOrientation( aCenterPoint, aStartingPoint );
                     double fInterAngle = ImplGetOrientation( aCenterPoint, aIntermediatePoint );
                     double fEndAngle = ImplGetOrientation( aCenterPoint, aEndingPoint );
@@ -445,11 +444,10 @@ void CGM::ImplDoClass4()
 
                 double fG = 2.0 * ( fA * ( aEndingPoint.Y - aIntermediatePoint.Y ) - fB * ( aEndingPoint.X - aIntermediatePoint.X ) );
 
-                aCenterPoint.X = ( fD * fE - fB * fF ) / fG;
-                aCenterPoint.Y = ( fA * fF - fC * fE ) / fG;
-
                 if ( fG != 0 )
                 {
+                    aCenterPoint.X = ( fD * fE - fB * fF ) / fG;
+                    aCenterPoint.Y = ( fA * fF - fC * fE ) / fG;
                     double fStartAngle = ImplGetOrientation( aCenterPoint, aStartingPoint );
                     double fInterAngle = ImplGetOrientation( aCenterPoint, aIntermediatePoint );
                     double fEndAngle = ImplGetOrientation( aCenterPoint, aEndingPoint );
