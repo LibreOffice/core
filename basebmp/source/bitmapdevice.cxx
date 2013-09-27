@@ -740,8 +740,8 @@ namespace
         {
             sal_Int32 nSrcX = rSrcRect.getMinX();
             sal_Int32 nSrcY = rSrcRect.getMinY();
-            sal_Int32 nSrcWidth = rSrcRect.getMaxX() - nSrcX + 1;
-            sal_Int32 nSrcHeight = rSrcRect.getMaxY() - nSrcY + 1;
+            sal_Int32 nSrcWidth = rSrcRect.getWidth();
+            sal_Int32 nSrcHeight = rSrcRect.getHeight();
             sal_Int32 nDestX = rDstRect.getMinX();
             sal_Int32 nDestY = rDstRect.getMinY();
 
