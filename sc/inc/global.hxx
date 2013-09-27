@@ -187,7 +187,7 @@ const sal_uInt16 IDF_OUTLINE    = 0x0800;   /// Sheet / outlining (grouping) inf
 const sal_uInt16 IDF_NOCAPTIONS = 0x0200;   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
 const sal_uInt16 IDF_ADDNOTES   = 0x0400;   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
 const sal_uInt16 IDF_SPECIAL_BOOLEAN = 0x1000;
-const sal_uInt16 IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES | IDF_OUTLINE;
+const sal_uInt16 IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const sal_uInt16 IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA | IDF_OUTLINE;
 const sal_uInt16 IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
 

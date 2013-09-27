@@ -503,6 +503,11 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCopyAttributes()
+{
+    CPPUNIT_ASSERT_MESSAGE ("mashed up attributes", !(IDF_ATTRIB & IDF_CONTENTS));
+}
+
 void Test::testCopyToDocument()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "src"));

@@ -105,6 +105,7 @@ public:
     void testFuncINDIRECT();
     void testFuncIFERROR();
     void testFuncGETPIVOTDATA();
+    void testCopyAttributes();
 
     void testCopyToDocument();
     /**
