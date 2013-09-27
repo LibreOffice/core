@@ -785,15 +785,14 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
                     uint rArraysSize = rArrays.size();
                     int nMoreColSize = 0;
                     DoubleVectorFormula *SvDoubleTemp = new DoubleVectorFormula();
+                    nSrcDataSize = pDvr->GetArrayLength();
                     if( rArraysSize > 1 )
                     {
-                        double *dpMoreColData = NULL;
+                        double *dpMoreColData = (double *) malloc(nSrcDataSize * rArraysSize * sizeof(double));
                         for ( uint loop=0; loop < rArraysSize; loop++ )
                         {
                             dpOclSrcData = rArrays[loop].mpNumericArray;
-                            nSrcDataSize = pDvr->GetArrayLength();
                             nMoreColSize += nSrcDataSize;
-                            dpMoreColData = (double *) realloc(dpMoreColData,nMoreColSize * sizeof(double));
                             for ( uint j = nMoreColSize - nSrcDataSize, i = 0; i < nSrcDataSize; i++, j++ )
                             {
                                 dpMoreColData[j] = dpOclSrcData[i];
@@ -805,7 +804,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
                     else
                     {
                         dpOclSrcData = rArrays[0].mpNumericArray;
-                        nSrcDataSize = pDvr->GetArrayLength();
                         SvDoubleTemp->mdpInputData = dpOclSrcData;
                         SvDoubleTemp->mnInputDataSize = nSrcDataSize;
                         SvDoubleTemp->mnInputStartPosition = mnpOclStartPos[nCountNum*mnRowSize];
@@ -876,15 +874,14 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
                     const std::vector<formula::VectorRefArray>& rArrays = pDvr->GetArrays();
                     unsigned int rArraysSize = rArrays.size();
                     int nMoreColSize = 0;
+                    nSrcDataSize = pDvr->GetArrayLength();
                     if(rArraysSize > 1)
                     {
-                        double *dpMoreColData = NULL;
+                        double *dpMoreColData = (double *) malloc(nSrcDataSize * rArraysSize * sizeof(double));
                         for( uint loop=0; loop < rArraysSize; loop++ )
                         {
                             dpOclSrcData = rArrays[loop].mpNumericArray;
-                            nSrcDataSize = pDvr->GetArrayLength();
                             nMoreColSize += nSrcDataSize;
-                            dpMoreColData = (double *) realloc(dpMoreColData,nMoreColSize * sizeof(double));
                             for(uint j=nMoreColSize-nSrcDataSize,i=0;i<nSrcDataSize;i++,j++)
                             {
                                 dpMoreColData[j] = dpOclSrcData[i];
@@ -897,7 +894,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
                     else
                     {
                         dpOclSrcData = rArrays[0].mpNumericArray;
-                        nSrcDataSize = pDvr->GetArrayLength();
                     }
                     srdDataPush( new SourceData( dpOclSrcData,nSrcDataSize,rArraysSize ) );
                 }
