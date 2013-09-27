@@ -970,10 +970,13 @@ void SdrGrafObj::AddToHdlList(SdrHdlList& rHdlList) const
 
 void SdrGrafObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    // call parent
-    SdrRectObj::setSdrObjectTransformation(rTransformation);
+    if(rTransformation != getSdrObjectTransformation())
+    {
+        // call parent
+        SdrRectObj::setSdrObjectTransformation(rTransformation);
 
-    // TTTT: extract mirror flags and trigger bMirrored (if needed in the future at all)
+        // TTTT: extract mirror flags and trigger bMirrored (if needed in the future at all)
+    }
 }
 
 // -----------------------------------------------------------------------------

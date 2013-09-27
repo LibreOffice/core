@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef _SVDGLUE_HXX
 #define _SVDGLUE_HXX
 
@@ -29,6 +27,91 @@
 #include "svx/svxdllapi.h"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace glue
+    {
+        class SVX_DLLPUBLIC Point
+        {
+        public:
+            enum Alignment
+            {
+                Alignment_None,
+                Alignment_Minimum,
+                Alignment_Center,
+                Alignment_Maximum
+            };
+
+        private:
+            // position in unit coordinates [0.0 .. 1.0] in X,Y
+            basegfx::B2DPoint               maUnitPosition;
+
+            // escape direction vector. If zero, escape direction is smart. Else
+            // it will be normalized
+            basegfx::B2DVector              maEscapeVector;
+
+            // horizontal and vertical alignments. If != Alignment_None the
+            // position will change as distance from the defined anchor position.
+            // If == Alignment_None position is relative
+            Alignment                       meHorizontalAlignment;
+            Alignment                       meVerticalAlignment;
+
+            // unique identifier ID. All Points in one list need unique identifiers
+            // and will be sorted by these. This is administrated by the List class
+            sal_uInt32                      maID;
+
+            /// bitfield
+
+            // needed to separate user-defined points from the ones from CustomShapes
+            bool                            mbUserDefined : 1;
+
+            // write access to ID is limited to list class only
+            void setID(sal_uInt32 nNew) { maID = nNew; }
+
+        protected:
+        public:
+            Point(
+                const basegfx::B2DPoint& rUnitPosition = basegfx::B2DPoint(0.5, 0.5),
+                const basegfx::B2DVector& rEscapeVector = basegfx::B2DVector(0.0, 0.0),
+                Alignment eHorizontalAlignment = Alignment_None,
+                Alignment eVerticalAlignment = Alignment_None,
+                bool bUserDefined = true)
+            :   maUnitPosition(rUnitPosition),
+                maEscapeVector(rEscapeVector),
+                meHorizontalAlignment(eHorizontalAlignment),
+                meVerticalAlignment(eVerticalAlignment),
+                maID(0),
+                mbUserDefined(bUserDefined)
+            {
+            }
+
+            // get/set UnitPosition. Always in [0.0 .. 1.0] in Y and Y, will be truncated at set
+            const basegfx::B2DPoint& getUnitPosition() const { return maUnitPosition; }
+            void setUnitPosition(const basegfx::B2DPoint& rNew);
+
+            // get/set EscapeVector. Set willl normalize the vector
+            const basegfx::B2DVector& getEscapeVector() const { return maEscapeVector; }
+            void setEscapeVector(const basegfx::B2DVector& rNew);
+
+            // get/set HorizontalAlignment
+            Alignment getHorizontalAlignment() const { return meHorizontalAlignment; }
+            void setHorizontalAlignment(Alignment eNew) { meHorizontalAlignment = eNew; }
+
+            // get/set VerticalAlignment
+            Alignment getVerticalAlignment() const { return meVerticalAlignment; }
+            void setVerticalAlignment(Alignment eNew) { meVerticalAlignment = eNew; }
+
+            // read access to ID (write is private and limitied to list class)
+            sal_uInt32 getID() const { return maID; }
+        };
+
+
+
+    } // end of namespace glue
+} // end of namespace sdr
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

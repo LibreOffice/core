@@ -114,6 +114,8 @@ SdrTextObj::SdrTextObj(
 
     // #111096#
     mbTextAnimationAllowed = sal_True;
+    mbAdaptingTextMinSize = false;
+    mbAdjustingTextFrameWidthAndHeight = false;
 }
 
 SdrTextObj::~SdrTextObj()
@@ -500,50 +502,60 @@ void SdrTextObj::SetEdgeRadius(sal_Int32 nRad)
     }
 }
 
-bool SdrTextObj::SetMinTextFrameHeight(sal_Int32 nHgt)
+// #115391# This implementation is based on the absolute object size (getSdrObjectScale()) and the
+// states of IsAutoGrowWidth/Height to correctly set TextMinFrameWidth/Height
+void SdrTextObj::AdaptTextMinSize()
 {
-    if( bTextFrame )
+    if(mbAdaptingTextMinSize)
     {
-        if( !getSdrModelFromSdrObject().isLocked()  )
-        {
-            SetObjectItem(SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, nHgt));
+        return;
+    }
 
-            // #84974# use bDisableAutoWidthOnDragging as
-            // bDisableAutoHeightOnDragging if vertical.
-            if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+    mbAdaptingTextMinSize = true;
+
+    if(bTextFrame && !IsPasteResize())
+    {
+        const bool bW(IsAutoGrowWidth());
+        const bool bH(IsAutoGrowHeight());
+
+        if(bW || bH)
+        {
+            SfxItemSet aSet(GetObjectItemSet());
+
+            if(bW)
             {
+                const sal_Int32 nDist(GetTextLeftDistance() + GetTextRightDistance());
+                const double fW(std::max(0.0, fabs(getSdrObjectScale().getX()) - double(nDist)));
+
+                aSet.Put(SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, basegfx::fround(fW)));
+
+                if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
+                {
+                    bDisableAutoWidthOnDragging = true;
+                    aSet.Put(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false));
+                }
+            }
+
+            if(bH)
+            {
+                const sal_Int32 nDist(GetTextUpperDistance() + GetTextLowerDistance());
+                const double fH(std::max(0.0, fabs(getSdrObjectScale().getY()) - double(nDist)));
+
+                aSet.Put(SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, basegfx::fround(fH)));
+
+                if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+                {
                     bDisableAutoWidthOnDragging = false;
                     SetObjectItem(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false));
+                }
             }
 
-            return true;
+            SetObjectItemSet(aSet);
+            AdjustTextFrameWidthAndHeight();
         }
     }
 
-    return false;
-}
-
-bool SdrTextObj::SetMinTextFrameWidth(sal_Int32 nWdt)
-{
-    if(bTextFrame)
-    {
-        if( !getSdrModelFromSdrObject().isLocked() )
-        {
-            SetObjectItem(SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, nWdt));
-
-            // #84974# use bDisableAutoWidthOnDragging only
-            // when not vertical.
-            if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
-            {
-                bDisableAutoWidthOnDragging = false;
-                SetObjectItem(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH, false));
-            }
-
-            return true;
-        }
-    }
-
-    return false;
+    mbAdaptingTextMinSize = false;
 }
 
 basegfx::B2DRange SdrTextObj::getUnifiedTextRange() const

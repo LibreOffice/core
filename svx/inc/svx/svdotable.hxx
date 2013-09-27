@@ -116,6 +116,8 @@ protected:
     /// method to copy all data from given source
     virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
+    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange) const;
+
 public:
     /// create a copy, evtl. with a different target model (if given)
     virtual SdrObject* CloneSdrObject(SdrModel* pTargetModel = 0) const;
@@ -227,8 +229,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void SetChanged();
 
-    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt = true, bool bWdt = true) const;
-    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
+    virtual void AdjustTextFrameWidthAndHeight();
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;

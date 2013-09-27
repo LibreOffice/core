@@ -456,8 +456,9 @@ void PosSizePropertyPanel::HandleContextChange(
     {
         case 0:
         {
-            mpMtrWidth->SetMin( 2 );
-            mpMtrHeight->SetMin( 2 );
+            // TTTT: Minimum is 0, added to ressources
+            // mpMtrWidth->SetMin( 2 );
+            // mpMtrHeight->SetMin( 2 );
             mpFtPosX->Hide();
             mpMtrPosX->Hide();
             mpFtPosY->Hide();
@@ -494,8 +495,9 @@ void PosSizePropertyPanel::HandleContextChange(
 
         case 1:
         {
-            mpMtrWidth->SetMin( 2 );
-            mpMtrHeight->SetMin( 2 );
+            // TTTT: Minimum is 0, added to ressources
+            // mpMtrWidth->SetMin( 2 );
+            // mpMtrHeight->SetMin( 2 );
             mpFtPosX->Hide();
             mpMtrPosX->Hide();
             mpFtPosY->Hide();
@@ -524,8 +526,9 @@ void PosSizePropertyPanel::HandleContextChange(
 
         case 2:
         {
-            mpMtrWidth->SetMin( 1 );
-            mpMtrHeight->SetMin( 1 );
+            // TTTT: Minimum is 0, added to ressources
+            // mpMtrWidth->SetMin( 1 );
+            // mpMtrHeight->SetMin( 1 );
             mpFtPosX->Show();
             mpMtrPosX->Show();
             mpFtPosY->Show();
@@ -556,8 +559,9 @@ void PosSizePropertyPanel::HandleContextChange(
 
         case 3:
         {
-            mpMtrWidth->SetMin( 1 );
-            mpMtrHeight->SetMin( 1 );
+            // TTTT: Minimum is 0, added to ressources
+            // mpMtrWidth->SetMin( 1 );
+            // mpMtrHeight->SetMin( 1 );
             mpFtPosX->Show();
             mpMtrPosX->Show();
             mpFtPosY->Show();

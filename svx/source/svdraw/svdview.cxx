@@ -2179,5 +2179,69 @@ void SdrView::SetMasterPagePaintCaching(bool bOn)
     }
 }
 
+// TTTT:HANDLE
+void SdrView::MoveHandleByVector(const SdrHdl& rHdl, const basegfx::B2DVector& rDistance, Window* pMakeVisibleWindow, SdrDragMethod* pOwnDragMethod)
+{
+    if(!rDistance.equalZero())
+    {
+        const basegfx::B2DPoint aStartPoint(rHdl.getPosition());
+        const basegfx::B2DPoint aEndPoint(aStartPoint + rDistance);
+        const SdrDragStat& rDragStat = GetDragStat();
+
+        if(rHdl.IsFocusHdl())
+        {
+            // take evtl. happening mirrorings into account to allow continued keyboard manipulations; e.g.
+            // when the upper handle is selected and moved down there will be the case where the object gets
+            // mirrored vertically. To smoothly continue that movement the focus has to change from the upper
+            // handle to the lower one (and logically similar for all other of the eight handles). This is
+            // done in the called method, it only changes the focus handle for the next handle recreation
+            AdaptFocusHandleOnMove(rDistance);
+        }
+
+        // start dragging
+        BegDragObj(aStartPoint, &rHdl, 0.0, pOwnDragMethod);
+
+        if(IsDragObj())
+        {
+            const bool bWasNoSnap(rDragStat.IsNoSnap());
+            const bool bWasSnapEnabled(IsSnapEnabled());
+
+            // switch snapping off
+            if(!bWasNoSnap)
+            {
+                const_cast< SdrDragStat& >(rDragStat).SetNoSnap(true);
+            }
+
+            if(bWasSnapEnabled)
+            {
+                SetSnapEnabled(false);
+            }
+
+            MovAction(aEndPoint);
+            EndDragObj();
+
+            // restore snap
+            if(!bWasNoSnap)
+            {
+                const_cast< SdrDragStat& >(rDragStat).SetNoSnap(bWasNoSnap);
+            }
+
+            if(bWasSnapEnabled)
+            {
+                SetSnapEnabled(bWasSnapEnabled);
+            }
+        }
+
+        if(pMakeVisibleWindow)
+        {
+            const basegfx::B2DRange aVisRange(
+                aEndPoint - basegfx::B2DPoint(100.0, 100.0),
+                aEndPoint + basegfx::B2DPoint(100.0, 100.0));
+
+            MakeVisibleAtView(aVisRange, *pMakeVisibleWindow);
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof

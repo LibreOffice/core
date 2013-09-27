@@ -283,6 +283,9 @@ public:
     SvtAccessibilityOptions& getAccessibilityOptions();
 
     virtual void onAccessibilityOptionsChanged();
+
+    // TTTT:HANDLE
+    void MoveHandleByVector(const SdrHdl& rHdl, const basegfx::B2DVector& rDistance, Window* pMakeVisibleWindow, SdrDragMethod* pOwnDragMethod);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -476,6 +476,41 @@ namespace basegfx
             return aRetval;
         }
 
+        /// adapt given transformation to absolute scale given by the B2DRange. This
+        /// means that rRange.getRange() is used as scale and rRange.getMinimum() is
+        /// used as translation; mirrorings, shear and rotation will be preserved from
+        /// the given transformation
+        B2DHomMatrix adaptB2DHomMatrixToB2DRange(
+            const B2DHomMatrix& rSource,
+            const B2DRange& rRange)
+        {
+            // prepare decomposition
+            const B2DHomMatrixBufferedOnDemandDecompose aSource(rSource);
+
+            // build source range (rRange is relative to this range)
+            const basegfx::B2DRange aSourceRange(
+                aSource.getTranslate(),
+                aSource.getTranslate() + absolute(aSource.getScale()));
+
+            // create a back-transform from source range to unit coordinates
+            // and apply it
+            B2DHomMatrix aNew;
+            B2DPoint aPos(rRange.getMinimum());
+            B2DVector aSize(rRange.getRange());
+
+            aNew.translate(-aSourceRange.getMinimum());
+            aNew.scale(
+                1.0 / aSourceRange.getWidth(),
+                1.0 / aSourceRange.getHeight());
+            aPos = aNew * aPos;
+            aSize = aNew * aSize;
+
+            // aPos/aSize are the relative coordinates in unit coordinates for the
+            // target coordinate system. pre-multiply target transform to go from
+            // aPos/aSize to unit coordinates.
+            return rSource * createScaleTranslateB2DHomMatrix(aSize, aPos);
+        }
+
         /* tooling methods for converting API matrices (drawing::HomogenMatrix3)
            to B2DHomMatrix
          */

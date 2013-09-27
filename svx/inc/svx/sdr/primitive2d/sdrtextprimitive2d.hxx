@@ -64,11 +64,11 @@ namespace drawinglayer
 
             // remember last PageNumber for which a decomposition was made. This is only used
             // when mbContainsPageField is true, else it is 0
-            sal_Int16                               mnLastPageNumber;
+            sal_uInt32                              mnLastPageNumber;
 
             // remember last PageCount for which a decomposition was made. This is only used
             // when mbContainsPageCountField is true, else it is 0
-            sal_Int16                               mnLastPageCount;
+            sal_uInt32                              mnLastPageCount;
 
             // #i101443# remember last TextBackgroundColor to decide if a new decomposition is
             // needed because of background color change

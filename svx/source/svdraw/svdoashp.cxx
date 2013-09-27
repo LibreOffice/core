@@ -1710,12 +1710,67 @@ sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
     return sal_uInt16(OBJ_CUSTOMSHAPE);
 }
 
+// #115391# This implementation is based on the relative TextFrame size of the CustomShape and the
+// state of the ResizeShapeToFitText flag to correctly set TextMinFrameWidth/Height
+void SdrObjCustomShape::AdaptTextMinSize()
+{
+    if(mbAdaptingTextMinSize)
+    {
+        // already adapting
+        return;
+    }
+
+    mbAdaptingTextMinSize = true;
+
+    if(!IsPasteResize())
+    {
+        const bool bResizeShapeToFitText(0 != static_cast< const SdrOnOffItem& >(GetObjectItem(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue());
+        SfxItemSet aSet(GetObjectItemSet());
+        bool bChanged(false);
+
+        if(bResizeShapeToFitText)
+        {
+            // always reset MinWidthHeight to zero to only rely on text size and frame size
+            // to allow resizing being completely dependent on text size only
+            aSet.Put(SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, 0));
+            aSet.Put(SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, 0));
+            bChanged = true;
+        }
+        else
+        {
+            // recreate from CustomShape-specific TextBounds. getUnifiedTextRange
+            // is relative to the object (in unit coordinates) and already without
+            // GetText...Distance values
+            const basegfx::B2DRange aUnifiedTextRange(getUnifiedTextRange());
+            const basegfx::B2DVector aAbsoluteObjectScale(basegfx::absolute(getSdrObjectScale()));
+
+            aSet.Put(SdrMetricItem(SDRATTR_TEXT_MINFRAMEWIDTH, basegfx::fround(aUnifiedTextRange.getWidth() * aAbsoluteObjectScale.getX())));
+            aSet.Put(SdrMetricItem(SDRATTR_TEXT_MINFRAMEHEIGHT, basegfx::fround(aUnifiedTextRange.getHeight() * aAbsoluteObjectScale.getY())));
+            bChanged = true;
+        }
+
+        if(bChanged)
+        {
+            SetObjectItemSet(aSet);
+            AdjustTextFrameWidthAndHeight();
+        }
+    }
+
+    mbAdaptingTextMinSize = false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrObjCustomShape::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    // call parent
-    SdrTextObj::setSdrObjectTransformation(rTransformation);
+    if(rTransformation != getSdrObjectTransformation())
+    {
+        // call parent
+        SdrTextObj::setSdrObjectTransformation(rTransformation);
+
+        // #115391#
+        AdaptTextMinSize();
+    }
 
     // TTTT: extract mirror flags and trigger SetMirroredX/SetMirroredY
     //      const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
@@ -2059,29 +2114,10 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 {
     DragCreateObject( rStat );
 
-    if ( bTextFrame )
-    {
-        const Rectangle aOldObjRect(sdr::legacy::GetLogicRect(*this));
+    // #115391# TTTT: Calls setSdrObjectTransformation and thus AdaptTextMinSize automatically
+    // AdaptTextMinSize();
+    // ActionChanged();
 
-        if ( IsAutoGrowHeight() )
-        {
-            // MinTextHeight
-            long nHgt=aOldObjRect.GetHeight()-1;
-            if (nHgt==1) nHgt=0;
-            SetMinTextFrameHeight( nHgt );
-        }
-        if ( IsAutoGrowWidth() )
-        {
-            // MinTextWidth
-            long nWdt=aOldObjRect.GetWidth()-1;
-            if (nWdt==1) nWdt=0;
-            SetMinTextFrameWidth( nWdt );
-        }
-
-        // Textrahmen neu berechnen
-        AdjustTextFrameWidthAndHeight();
-    }
-    ActionChanged();
     return ( eCmd == SDRCREATE_FORCEEND || rStat.GetPointAnz() >= 2 );
 }
 
@@ -2174,17 +2210,19 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
     }
 }
 
-basegfx::B2DRange SdrObjCustomShape::AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt, bool bWdt) const
+basegfx::B2DRange SdrObjCustomShape::AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange) const
 {
-     if(HasText() && !rRange.isEmpty())
+    basegfx::B2DRange aRetval(rRange);
+
+    if(HasText() && !rRange.isEmpty())
     {
-        return ImpAdjustTextFrameWidthAndHeight(rRange, bHgt, bWdt, false);
+        aRetval = ImpAdjustTextFrameWidthAndHeight(rRange, false);
     }
 
-    return rRange;
+    return aRetval;
 }
 
-basegfx::B2DRange SdrObjCustomShape::ImpCalculateTextFrame(const bool bHgt, const bool bWdt)
+basegfx::B2DRange SdrObjCustomShape::ImpCalculateTextFrame()
 {
     basegfx::B2DRange aReturnValue;
     const basegfx::B2DRange aOldObjRange(
@@ -2205,7 +2243,7 @@ basegfx::B2DRange SdrObjCustomShape::ImpCalculateTextFrame(const bool bHgt, cons
 
     // new text rectangle is being tested by AdjustTextFrameWidthAndHeight to ensure
     // that the new text rectangle is matching the current text size from the outliner
-    const basegfx::B2DRange aAdjustedTextRange(AdjustTextFrameWidthAndHeight(aNewTextRange, bHgt, bWdt));
+    const basegfx::B2DRange aAdjustedTextRange(AdjustTextFrameWidthAndHeight(aNewTextRange));
 
     if((aAdjustedTextRange != aNewTextRange) && (aOldTextRange != aAdjustedTextRange))
     {
@@ -2214,24 +2252,41 @@ basegfx::B2DRange SdrObjCustomShape::ImpCalculateTextFrame(const bool bHgt, cons
         const basegfx::B2DVector aBottomRightDiff((aAdjustedTextRange.getMaximum() - aNewTextRange.getMaximum()) * aScale);
 
         aReturnValue = basegfx::B2DRange(
-            aReturnValue.getMinimum() + aTopLeftDiff,
-            aReturnValue.getMaximum() + aBottomRightDiff);
+            aOldObjRange.getMinimum() + aTopLeftDiff,
+            aOldObjRange.getMaximum() + aBottomRightDiff);
     }
 
     return aReturnValue;
 }
 
-bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
+void SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
 {
-    const basegfx::B2DRange aNewTextRange(ImpCalculateTextFrame(bHgt, bWdt));
-    const basegfx::B2DRange aOldObjRange(getSdrObjectTranslate(), getSdrObjectTranslate() + basegfx::absolute(getSdrObjectScale()));
+    if(mbAdjustingTextFrameWidthAndHeight)
+    {
+        return;
+    }
+
+    mbAdjustingTextFrameWidthAndHeight = true;
+
+    const basegfx::B2DRange aNewTextRange(
+        ImpCalculateTextFrame());
+    const basegfx::B2DRange aOldObjRange(
+        getSdrObjectTranslate(),
+        getSdrObjectTranslate() + basegfx::absolute(getSdrObjectScale()));
 
     if(!aNewTextRange.isEmpty() && !aNewTextRange.equal(aOldObjRange))
     {
         // taking care of handles that should not been changed
         const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
         std::vector< SdrCustomShapeInteraction > aInteractionHandles(GetInteractionHandles(this));
-        sdr::legacy::SetLogicRange(*this, aNewTextRange);
+
+        // adapt transformation to new range and apply to object
+        setSdrObjectTransformation(
+            basegfx::tools::adaptB2DHomMatrixToB2DRange(
+                getSdrObjectTransformation(),
+                aNewTextRange));
+
+        // corrections to InteractionHandles
         std::vector< SdrCustomShapeInteraction >::iterator aIter(aInteractionHandles.begin());
 
         while(aIter != aInteractionHandles.end())
@@ -2252,11 +2307,9 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 
         InvalidateRenderGeometry();
         SetChanged();
-
-        return true;
     }
 
-    return false;
+    mbAdjustingTextFrameWidthAndHeight = false;
 }
 
 bool SdrObjCustomShape::BegTextEdit( SdrOutliner& rOutl )

@@ -2721,7 +2721,7 @@ void SdrPathObj::impDeleteDAC() const
 
 void SdrPathObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    if(rTransformation != maSdrObjectTransformation.getB2DHomMatrix())
+    if(rTransformation != getSdrObjectTransformation())
     {
         if(isLine())
         {
@@ -2745,10 +2745,10 @@ void SdrPathObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransf
                 maPathPolyPolygon.transform(aCombined);
             }
         }
-    }
 
-    // call parent
-    SdrTextObj::setSdrObjectTransformation(rTransformation);
+        // call parent
+        SdrTextObj::setSdrObjectTransformation(rTransformation);
+    }
 }
 
 bool SdrPathObj::isClosed() const

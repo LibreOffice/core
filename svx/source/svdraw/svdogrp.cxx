@@ -420,9 +420,7 @@ const basegfx::B2DHomMatrix& SdrObjGroup::getSdrObjectTransformation() const
 
 void SdrObjGroup::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    const basegfx::B2DHomMatrix& rCurrent = getSdrObjectTransformation();
-
-    if(rTransformation != rCurrent)
+    if(rTransformation != getSdrObjectTransformation())
     {
         const sal_uInt32 nCount(GetObjCount());
 
@@ -431,7 +429,7 @@ void SdrObjGroup::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTrans
             // to apply the transformation to sub-objects, remove current transformation
             // by using it's inverse, then transform by the new transformation. Prepare
             // inverse combined with transformation
-            basegfx::B2DHomMatrix aTransform(rCurrent);
+            basegfx::B2DHomMatrix aTransform(getSdrObjectTransformation());
 
             aTransform.invert();
             aTransform = rTransformation * aTransform;

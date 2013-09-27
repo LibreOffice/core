@@ -448,7 +448,7 @@ protected:
     virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
 public:
-    bool IsPasteResize() const { return mbPasteResize; }
+    bool IsPasteResize() const { return mbPasteResize; } // #51139# TTTT: Probably not needed anymore
     void SetPasteResize(bool bOn) { if(mbPasteResize != bOn) mbPasteResize = bOn; }
 
     /// create a copy, evtl. with a different target model (if given)

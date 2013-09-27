@@ -49,67 +49,53 @@
 
 void SdrTextObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    // Adapt Width and Height only when text frame (not object with text).
-    // Also do not do it in edit mode, let the object get as small as the
-    // minimum frame width/height without changing these.
-    const bool bTextAdaption(bTextFrame && !IsPasteResize() && !IsInEditMode());
-    basegfx::B2DVector aOldSize;
-
-    if(bTextAdaption)
+    if(rTransformation != getSdrObjectTransformation())
     {
-        aOldSize = basegfx::absolute(getSdrObjectScale());
-    }
+        // Adapt Width and Height only when text frame (not object with text).
+        // Also do not do it in edit mode, let the object get as small as the
+        // minimum frame width/height without changing these.
+        // TTTT: SDRTEXTFIT_RESIZEATTR Is defined, but seems not to be used
+        const bool bTextAdaption(bTextFrame && !IsPasteResize() && !IsInEditMode() && SDRTEXTFIT_RESIZEATTR == GetFitToSize());
+        basegfx::B2DVector aOldSize;
 
-    // call parent
-    SdrAttrObj::setSdrObjectTransformation(rTransformation);
-
-    // TTTT: check if the rebuild works
-    //
-    //sal_Int32 nHDist=GetTextLeftDistance()+GetTextRightDistance();
-    //sal_Int32 nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-    //sal_Int32 nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
-    //sal_Int32 nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-    //sal_Int32 nTWdt1=rRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
-    //sal_Int32 nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
-    //  if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) SetMinTextFrameWidth(nTWdt1);
-    //  if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) SetMinTextFrameHeight(nTHgt1);
-    //  if (GetFitToSize()==SDRTEXTFIT_RESIZEATTR) {
-    //      ResizeTextAttributes(Fraction(nTWdt1,nTWdt0),Fraction(nTHgt1,nTHgt0));
-    //  }
-    //  AdjustTextFrameWidthAndHeight();
-
-    if(bTextAdaption)
-    {
-        basegfx::B2DVector aNewSize(basegfx::absolute(getSdrObjectScale()));
-
-        if(!aNewSize.equal(aOldSize))
+        if(bTextAdaption)
         {
-            const basegfx::B2DVector aBorders(
-                GetTextLeftDistance() + GetTextRightDistance(),
-                GetTextUpperDistance() + GetTextLowerDistance());
+            aOldSize = basegfx::absolute(getSdrObjectScale());
+        }
 
-            aNewSize -= aBorders;
-            aOldSize -= aBorders;
+        // call parent
+        SdrAttrObj::setSdrObjectTransformation(rTransformation);
 
-            if(IsAutoGrowWidth() && !basegfx::fTools::equal(aOldSize.getX(), aNewSize.getX()))
-            {
-                SetMinTextFrameWidth(aNewSize.getX());
-            }
+        // TTTT: check if the rebuild works
+        //
+        //sal_Int32 nHDist=GetTextLeftDistance()+GetTextRightDistance();
+        //sal_Int32 nVDist=GetTextUpperDistance()+GetTextLowerDistance();
+        //sal_Int32 nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
+        //sal_Int32 nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
+        //sal_Int32 nTWdt1=rRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
+        //sal_Int32 nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
+        //  if (nTWdt0!=nTWdt1 && IsAutoGrowWidth() ) SetMinTextFrameWidth(nTWdt1);
+        //  if (nTHgt0!=nTHgt1 && IsAutoGrowHeight()) SetMinTextFrameHeight(nTHgt1);
+        //  if (GetFitToSize()==SDRTEXTFIT_RESIZEATTR) {
+        //      ResizeTextAttributes(Fraction(nTWdt1,nTWdt0),Fraction(nTHgt1,nTHgt0));
+        //  }
+        //  AdjustTextFrameWidthAndHeight();
 
-            if(IsAutoGrowHeight() && !basegfx::fTools::equal(aOldSize.getY(), aNewSize.getY()))
-            {
-                SetMinTextFrameHeight(aNewSize.getY());
-            }
+        // #115391#
+        AdaptTextMinSize();
 
-            if(SDRTEXTFIT_RESIZEATTR == GetFitToSize())
+        if(bTextAdaption)
+        {
+            basegfx::B2DVector aNewSize(basegfx::absolute(getSdrObjectScale()));
+
+            if(!aNewSize.equal(aOldSize))
             {
                 const double fFactorX(aNewSize.getX() / (basegfx::fTools::equalZero(aOldSize.getX()) ? 1.0 : aOldSize.getX()));
                 const double fFactorY(aNewSize.getY() / (basegfx::fTools::equalZero(aOldSize.getY()) ? 1.0 : aOldSize.getY()));
 
                 ResizeTextAttributes(fFactorX, fFactorY);
+                AdjustTextFrameWidthAndHeight();
             }
-
-            AdjustTextFrameWidthAndHeight();
         }
     }
 }

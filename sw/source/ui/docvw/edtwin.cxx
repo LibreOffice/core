@@ -1260,35 +1260,39 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
                 //now resize if size is protected
                 else if(0 == (nProtect&FLYPROTECT_SIZE))
                 {
-                    // now move the Handle (nX, nY)
-                    const basegfx::B2DPoint aStartPoint(pHdl->getPosition());
-                    const basegfx::B2DPoint aEndPoint(aStartPoint + basegfx::B2DPoint(nX, nY));
-                    const SdrDragStat& rDragStat = pSdrView->GetDragStat();
+                    // move handle with index nHandleIndex
+                    pSdrView->MoveHandleByVector(*pHdl, basegfx::B2DVector(nX, nY), 0, 0);
 
-                    // start dragging
-                    pSdrView->BegDragObj(aStartPoint, pHdl, 0.0);
-
-                    if(pSdrView->IsDragObj())
-                    {
-                        const bool bWasNoSnap(rDragStat.IsNoSnap());
-                        const bool bWasSnapEnabled(pSdrView->IsSnapEnabled());
-
-                        // switch snapping off
-                        if(!bWasNoSnap)
-                            ((SdrDragStat&)rDragStat).SetNoSnap(true);
-                        if(bWasSnapEnabled)
-                            pSdrView->SetSnapEnabled(false);
-
-                        pSdrView->MovAction(aEndPoint);
-                        pSdrView->EndDragObj();
+                    // TTTT:HANDLE
+                    //// now move the Handle (nX, nY)
+                    //const basegfx::B2DPoint aStartPoint(pHdl->getPosition());
+                    //const basegfx::B2DPoint aEndPoint(aStartPoint + basegfx::B2DPoint(nX, nY));
+                    //const SdrDragStat& rDragStat = pSdrView->GetDragStat();
+                    //
+                    //// start dragging
+                    //pSdrView->BegDragObj(aStartPoint, pHdl, 0.0);
+                    //
+                    //if(pSdrView->IsDragObj())
+                    //{
+                    //    const bool bWasNoSnap(rDragStat.IsNoSnap());
+                    //    const bool bWasSnapEnabled(pSdrView->IsSnapEnabled());
+                    //
+                    //    // switch snapping off
+                    //    if(!bWasNoSnap)
+                    //        ((SdrDragStat&)rDragStat).SetNoSnap(true);
+                    //    if(bWasSnapEnabled)
+                    //        pSdrView->SetSnapEnabled(false);
+                    //
+                    //    pSdrView->MovAction(aEndPoint);
+                    //    pSdrView->EndDragObj();
                         rSh.SetModified();
 
-                        // restore snap
-                        if(!bWasNoSnap)
-                            ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
-                        if(bWasSnapEnabled)
-                            pSdrView->SetSnapEnabled(bWasSnapEnabled);
-                    }
+                    //    // restore snap
+                    //    if(!bWasNoSnap)
+                    //        ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                    //    if(bWasSnapEnabled)
+                    //        pSdrView->SetSnapEnabled(bWasSnapEnabled);
+                    //}
                 }
             }
         }

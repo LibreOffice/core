@@ -168,6 +168,7 @@ protected:
     void SaveMarkHandleFocus(const SdrHdlList& rTarget);
     virtual void CreateMarkHandles(SdrHdlList& rTarget);
     void RestoreMarkHandleFocus(SdrHdlList& rTarget);
+    void AdaptFocusHandleOnMove(const basegfx::B2DVector& rDistance);
 
 public:
     // completely recreate all SdrHdl based controller objects for all views

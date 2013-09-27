@@ -1792,35 +1792,39 @@ Size SdrOle2Obj::GetOrigObjSize( MapMode* pTargetMapMode ) const
 
 void SdrOle2Obj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    SdrRectObj::setSdrObjectTransformation(rTransformation);
-
-    if(!getSdrModelFromSdrObject().isLocked())
+    if(rTransformation != getSdrObjectTransformation())
     {
-        ImpSetVisAreaSize();
+        // call parent
+        SdrRectObj::setSdrObjectTransformation(rTransformation);
 
-        // TTTT:
-        //GetObjRef();
-        //if ( xObjRef.is() && ( xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
-        //{
-        //    // if the object needs recompose on resize
-        //    // the client site should be created before the resize will take place
-        //    // check whether there is no client site and create it if necessary
-        //    if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(getSdrModelFromSdrObject().GetPersist()), xObjRef.GetObject() )
-        //      && !( mpImpl->pLightClient && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) ) )
-        //    {
-        //        AddOwnLightClient();
-        //    }
-        //}
+        if(!getSdrModelFromSdrObject().isLocked())
+        {
+            ImpSetVisAreaSize();
 
-    }
+            // TTTT:
+            //GetObjRef();
+            //if ( xObjRef.is() && ( xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
+            //{
+            //    // if the object needs recompose on resize
+            //    // the client site should be created before the resize will take place
+            //    // check whether there is no client site and create it if necessary
+            //    if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(getSdrModelFromSdrObject().GetPersist()), xObjRef.GetObject() )
+            //      && !( mpImpl->pLightClient && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) ) )
+            //    {
+            //        AddOwnLightClient();
+            //    }
+            //}
 
-    if ( xObjRef.is() && IsChart() )
-    {
-        //#i103460# charts do not necessaryly have an own size within ODF files,
-        //for this case they need to use the size settings from the surrounding frame,
-        //which is made available with this method as there is no other way
-        // TTTT:
-        // xObjRef.SetDefaultSizeForChart( Size( rRect.GetWidth(), rRect.GetHeight() ) );
+        }
+
+        if ( xObjRef.is() && IsChart() )
+        {
+            //#i103460# charts do not necessaryly have an own size within ODF files,
+            //for this case they need to use the size settings from the surrounding frame,
+            //which is made available with this method as there is no other way
+            // TTTT:
+            // xObjRef.SetDefaultSizeForChart( Size( rRect.GetWidth(), rRect.GetHeight() ) );
+        }
     }
 }
 

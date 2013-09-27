@@ -56,32 +56,8 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     bool bRetval(SdrAttrObj::EndCreate(rStat, eCmd));
 
-    if(bTextFrame)
-    {
-        const bool bAutoGrowHeight(IsAutoGrowHeight());
-        const bool bAutoGrowWidth(IsAutoGrowWidth());
-
-        if(bAutoGrowHeight || bAutoGrowWidth)
-        {
-            const basegfx::B2DVector aAbsScale(basegfx::absolute(getSdrObjectScale()));
-
-            if(bAutoGrowHeight)
-            {
-                // MinTextHeight
-                SetMinTextFrameHeight(basegfx::fround(aAbsScale.getY()));
-            }
-
-            if(bAutoGrowWidth)
-            {
-                // MinTextWidth
-                SetMinTextFrameWidth(basegfx::fround(aAbsScale.getX()));
-            }
-
-            // Textrahmen neu berechnen
-            AdjustTextFrameWidthAndHeight();
-            ActionChanged();
-        }
-    }
+    // #115391# TTTT: Calls setSdrObjectTransformation and thus AdaptTextMinSize automatically
+    // AdaptTextMinSize();
 
     return bRetval;
 }

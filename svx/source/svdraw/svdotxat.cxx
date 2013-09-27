@@ -59,7 +59,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-basegfx::B2DRange SdrTextObj::AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt, bool bWdt) const
+basegfx::B2DRange SdrTextObj::AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange) const
 {
     if(IsTextFrame() && !rRange.isEmpty())
     {
@@ -68,17 +68,17 @@ basegfx::B2DRange SdrTextObj::AdjustTextFrameWidthAndHeight(const basegfx::B2DRa
 
         if(!bFitToSize)
         {
-            return ImpAdjustTextFrameWidthAndHeight(rRange, bHgt, bWdt, true);
+            return ImpAdjustTextFrameWidthAndHeight(rRange, true);
         }
     }
 
     return rRange;
 }
 
-basegfx::B2DRange SdrTextObj::ImpAdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt, bool bWdt, bool bCheckAnimation) const
+basegfx::B2DRange SdrTextObj::ImpAdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bCheckAnimation) const
 {
-    bool bWdtGrow(bWdt && IsAutoGrowWidth());
-    bool bHgtGrow(bHgt && IsAutoGrowHeight());
+    bool bWdtGrow(IsAutoGrowWidth());
+    bool bHgtGrow(IsAutoGrowHeight());
     basegfx::B2DRange aRetval(rRange);
 
     if(bWdtGrow || bHgtGrow)
@@ -220,11 +220,11 @@ basegfx::B2DRange SdrTextObj::ImpAdjustTextFrameWidthAndHeight(const basegfx::B2
 
         // fMinWidth < fWidth < fMaxWidth
         fWidth = std::min(fMaxWidth, std::max(fWidth, fMinWidth));
-        fWidth = std::max(1.0, fWidth += aBorders.getX()); // aBorders.getX() may be negative
+        fWidth = std::max(1.0, fWidth + aBorders.getX()); // aBorders.getX() may be negative
 
         // fMinHeight < fHeight < fMaxHeight
         fHeight = std::min(fMaxHeight, std::max(fHeight, fMinHeight));
-        fHeight = std::max(1.0, fHeight += aBorders.getY()); // aBorders.getY() may be negative
+        fHeight = std::max(1.0, fHeight + aBorders.getY()); // aBorders.getY() may be negative
 
         // get grow sizes
         const double fWidthGrow(fWidth - aRetval.getWidth());
@@ -248,15 +248,29 @@ basegfx::B2DRange SdrTextObj::ImpAdjustTextFrameWidthAndHeight(const basegfx::B2
 
                 if(SDRTEXTHORZADJUST_LEFT == eHAdj)
                 {
-                    aRetval = basegfx::B2DRange(aRetval.getMinX(), aRetval.getMinY(), aRetval.getMaxX() + fWidthGrow, aRetval.getMaxY());
+                    aRetval = basegfx::B2DRange(
+                        aRetval.getMinX(),
+                        aRetval.getMinY(),
+                        aRetval.getMaxX() + fWidthGrow,
+                        aRetval.getMaxY());
                 }
                 else if(SDRTEXTHORZADJUST_RIGHT == eHAdj)
                 {
-                    aRetval = basegfx::B2DRange(aRetval.getMinX() - fWidthGrow, aRetval.getMinY(), aRetval.getMaxX(), aRetval.getMaxY());
+                    aRetval = basegfx::B2DRange(
+                        aRetval.getMinX() - fWidthGrow,
+                        aRetval.getMinY(),
+                        aRetval.getMaxX(),
+                        aRetval.getMaxY());
                 }
                 else
                 {
-                    aRetval = basegfx::B2DRange(aRetval.getMinX() - (fWidthGrow * 0.5), aRetval.getMinY(), aRetval.getMaxX() + (fWidthGrow * 0.5), aRetval.getMaxY());
+                    const double fNewMinX(aRetval.getMinX() - (fWidthGrow * 0.5));
+
+                    aRetval = basegfx::B2DRange(
+                        fNewMinX,
+                        aRetval.getMinY(),
+                        fNewMinX + fWidth,
+                        aRetval.getMaxY());
                 }
             }
 
@@ -266,77 +280,108 @@ basegfx::B2DRange SdrTextObj::ImpAdjustTextFrameWidthAndHeight(const basegfx::B2
 
                 if(SDRTEXTVERTADJUST_TOP == eVAdj)
                 {
-                    aRetval = basegfx::B2DRange(aRetval.getMinX(), aRetval.getMinY(), aRetval.getMaxX(), aRetval.getMaxY() + fHeightGrow);
+                    aRetval = basegfx::B2DRange(
+                        aRetval.getMinX(),
+                        aRetval.getMinY(),
+                        aRetval.getMaxX(),
+                        aRetval.getMaxY() + fHeightGrow);
                 }
                 else if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
                 {
-                    aRetval = basegfx::B2DRange(aRetval.getMinX(), aRetval.getMinY() - fHeightGrow, aRetval.getMaxX(), aRetval.getMaxY());
+                    aRetval = basegfx::B2DRange(
+                        aRetval.getMinX(),
+                        aRetval.getMinY() - fHeightGrow,
+                        aRetval.getMaxX(),
+                        aRetval.getMaxY());
                 }
                 else
                 {
-                    aRetval = basegfx::B2DRange(aRetval.getMinX(), aRetval.getMinY() - (fHeightGrow * 0.5), aRetval.getMaxX(), aRetval.getMaxY() + (fHeightGrow * 0.5));
+                    const double fNewMinY(aRetval.getMinY() - (fHeightGrow * 0.5));
+
+                    aRetval = basegfx::B2DRange(
+                        aRetval.getMinX(),
+                        fNewMinY,
+                        aRetval.getMaxX(),
+                        fNewMinY + fHeight);
                 }
             }
 
-            if(!aOriginalMinimum.equal(aRetval.getMinimum()) && isRotatedOrSheared())
-            {
-                basegfx::B2DHomMatrix aCorrector(
-                    basegfx::tools::createScaleTranslateB2DHomMatrix(
-                        getSdrObjectScale(),
-                        basegfx::absolute(getSdrObjectTranslate())));
-
-                aCorrector.invert();
-                aCorrector = getSdrObjectTransformation() * aCorrector;
-
-                const basegfx::B2DPoint aCorrectedTopLeft(aCorrector * aRetval.getMinimum());
-
-                aCorrector.identity();
-                aCorrector.translate(aCorrectedTopLeft - aRetval.getMinimum());
-
-                aRetval.transform(aCorrector);
-
-                // TTTT: Check if the above solution works
-                //
-                //const sal_Int32 aOldRotation(sdr::legacy::GetRotateAngle(*this));
-                //
-                //if (aOldRotation)
-                //{
-                //    Point aD1(rR.TopLeft());
-                //    aD1-=aOriginalMinimum;
-                //    Point aD2(aD1);
-                //    RotatePoint(aD2,Point(),sin(aOldRotation*nPi180), cos(aOldRotation*nPi180));
-                //    aD2-=aD1;
-                //    rR.Move(aD2.X(),aD2.Y());
-                //}
-            }
+            // TTTT: This is in the way when working with the adapted range and leads to errors.
+            // Probably no longer needed at all since it formally corrected some strange effects
+            // which happened because of the way rotations were applied in former versions
+            //
+            //if(!aOriginalMinimum.equal(aRetval.getMinimum()) && isRotatedOrSheared())
+            //{
+            //    basegfx::B2DHomMatrix aCorrector(
+            //        basegfx::tools::createScaleTranslateB2DHomMatrix(
+            //            getSdrObjectScale(),
+            //            basegfx::absolute(getSdrObjectTranslate())));
+            //
+            //    aCorrector.invert();
+            //    aCorrector = getSdrObjectTransformation() * aCorrector;
+            //
+            //    const basegfx::B2DPoint aCorrectedTopLeft(aCorrector * aRetval.getMinimum());
+            //
+            //    aCorrector.identity();
+            //    aCorrector.translate(aCorrectedTopLeft - aRetval.getMinimum());
+            //
+            //    aRetval.transform(aCorrector);
+            //
+            //    // TTTT: Check if the above solution works
+            //    //
+            //    //const sal_Int32 aOldRotation(sdr::legacy::GetRotateAngle(*this));
+            //  //
+            //    //if (aOldRotation)
+            //    //{
+            //  //    Point aD1(rR.TopLeft());
+            //  //    aD1-=aOriginalMinimum;
+            //  //    Point aD2(aD1);
+            //  //    RotatePoint(aD2,Point(),sin(aOldRotation*nPi180), cos(aOldRotation*nPi180));
+            //  //    aD2-=aD1;
+            //  //    rR.Move(aD2.X(),aD2.Y());
+            //    //}
+            //}
         }
     }
 
     return aRetval;
 }
 
-bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
+void SdrTextObj::AdjustTextFrameWidthAndHeight()
 {
-    const basegfx::B2DRange aOldRange(getSdrObjectTranslate(), getSdrObjectTranslate() + basegfx::absolute(getSdrObjectScale()));
-    const basegfx::B2DRange aNewRange(AdjustTextFrameWidthAndHeight(aOldRange, bHgt, bWdt));
+    if(mbAdjustingTextFrameWidthAndHeight)
+    {
+        return;
+    }
 
-    if(!aNewRange.equal(aOldRange))
+    mbAdjustingTextFrameWidthAndHeight = true;
+
+    const basegfx::B2DRange aOldRange(
+        getSdrObjectTranslate(),
+        getSdrObjectTranslate() + basegfx::absolute(getSdrObjectScale()));
+    const basegfx::B2DRange aNewTextRange(AdjustTextFrameWidthAndHeight(aOldRange));
+
+    if(!aNewTextRange.equal(aOldRange))
     {
         const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
-        sdr::legacy::SetLogicRange(*this, aNewRange);
+        SdrCaptionObj* pSdrCaptionObj = dynamic_cast< SdrCaptionObj* >(this);
 
-        if(dynamic_cast< SdrCaptionObj* >(this))
+        // adapt transformation to new range and apply to object
+        setSdrObjectTransformation(
+            basegfx::tools::adaptB2DHomMatrixToB2DRange(
+                getSdrObjectTransformation(),
+                aNewTextRange));
+
+        if(pSdrCaptionObj)
         {
             // mal wieder 'nen Hack
-            ((SdrCaptionObj*)this)->ImpRecalcTail();
+            pSdrCaptionObj->ImpRecalcTail();
         }
 
         SetChanged();
-
-        return true;
     }
 
-    return false;
+    mbAdjustingTextFrameWidthAndHeight = false;
 }
 
 void SdrTextObj::ImpSetTextStyleSheetListeners()

@@ -650,11 +650,14 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag
 
 void SdrCaptionObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    SdrRectObj::setSdrObjectTransformation(rTransformation);
-
-    if(mbFixedTail)
+    if(rTransformation != getSdrObjectTransformation())
     {
-        SetTailPos(GetFixedTailPos());
+        SdrRectObj::setSdrObjectTransformation(rTransformation);
+
+        if(mbFixedTail)
+        {
+            SetTailPos(GetFixedTailPos());
+        }
     }
 }
 

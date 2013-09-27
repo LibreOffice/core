@@ -1490,8 +1490,13 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                     pOutliner->Clear();
                 }
             }
-            // Broadcast the object change event.
-            if (!pTextObj->AdjustTextFrameWidthAndHeight())
+
+            // broadcast if no change from AdjustTextFrameWidthAndHeight
+            const basegfx::B2DHomMatrix aOld(pTextObj->getSdrObjectTransformation());
+
+            pTextObj->AdjustTextFrameWidthAndHeight();
+
+            if(aOld == pTextObj->getSdrObjectTransformation())
             {
                 pTextObj->SetChanged();
                 const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*pTextObj);

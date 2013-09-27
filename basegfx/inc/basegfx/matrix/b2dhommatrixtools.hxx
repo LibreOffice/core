@@ -166,6 +166,14 @@ namespace basegfx
             const B2DRange& rSourceRange,
             const B2DRange& rTargetRange);
 
+        /// adapt given transformation to absolute scale given by the B2DRange. This
+        /// means that rRange.getRange() is used as scale and rRange.getMinimum() is
+        /// used as translation; mirrorings, shear and rotation will be preserved from
+        /// the given transformation
+        B2DHomMatrix adaptB2DHomMatrixToB2DRange(
+            const B2DHomMatrix& rSource,
+            const B2DRange& rRange);
+
         /* tooling methods for converting API matrices (drawing::HomogenMatrix3)
            to B2DHomMatrix
          */

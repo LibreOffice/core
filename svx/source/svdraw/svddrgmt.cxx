@@ -599,7 +599,23 @@ SdrObject* SdrDragMethod::GetDragObj() const
 void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
     // use get/setSdrObjectTransformation now. This will also work when object has a path
-    rTarget.setSdrObjectTransformation(getCurrentTransformation() * rTarget.getSdrObjectTransformation());
+    basegfx::B2DHomMatrix aObjectMatrix(rTarget.getSdrObjectTransformation());
+
+    // check for zero-width/height objects
+    if(basegfx::fTools::equalZero(aObjectMatrix.get(0, 0)))
+    {
+        // no width
+        aObjectMatrix.set(0, 0, 1.0);
+    }
+
+    if(basegfx::fTools::equalZero(aObjectMatrix.get(1, 1)))
+    {
+        // no height
+        aObjectMatrix.set(1, 1, 1.0);
+    }
+
+    aObjectMatrix = getCurrentTransformation() * aObjectMatrix;
+    rTarget.setSdrObjectTransformation(aObjectMatrix);
 }
 
 void SdrDragMethod::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget)

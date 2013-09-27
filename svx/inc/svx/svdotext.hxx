@@ -252,6 +252,14 @@ protected:
     // Flag for allowing text animation. Default is sal_true.
     bool                        mbTextAnimationAllowed : 1;
 
+    /// flag value used in AdaptTextMinSize() to not trigger another adaption
+    /// when already one is initiated
+    bool                        mbAdaptingTextMinSize : 1;
+
+    /// flag value used in AdjustTextFrameWidthAndHeight() to not trigger another adjust
+    /// when already one is initiated
+    bool                        mbAdjustingTextFrameWidthAndHeight : 1;
+
     SdrOutliner& ImpGetDrawOutliner() const;
 
 private:
@@ -279,8 +287,11 @@ protected:
     void SetTextSizeDirty() { bTextSizeDirty=true; }
 
     void SetEdgeRadius(sal_Int32 nRad);
-    bool SetMinTextFrameHeight(sal_Int32 nHgt);
-    bool SetMinTextFrameWidth(sal_Int32 nWdt);
+
+    // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
+    // SDRATTR_TEXT_MINFRAMEWIDTH and SDRATTR_TEXT_MINFRAMEHEIGHT based on all settings, necessities
+    // and object sizes
+    virtual void AdaptTextMinSize();
 
     // protected consructor: only a tooling class, do not incarnate
     SdrTextObj(
@@ -294,7 +305,9 @@ protected:
     virtual void copyDataFromSdrObject(const SdrObject& rSource);
 
     // helper for AdjustTextFrameWidthAndHeight which contains the common parts to avoid useless code copying
-    basegfx::B2DRange ImpAdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt, bool bWdt, bool bCheckAnimation) const;
+    basegfx::B2DRange ImpAdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bCheckAnimation) const;
+
+    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange) const;
 
 public:
     /// create a copy, evtl. with a different target model (if given)
@@ -322,8 +335,7 @@ public:
     bool ReloadLinkedText(bool bForceLoad=false);
     bool LoadText(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
 
-    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt = true, bool bWdt = true) const;
-    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
+    virtual void AdjustTextFrameWidthAndHeight();
     void ResizeTextAttributes(const Fraction& xFact, const Fraction& yFact);
     bool IsTextFrame() const { return bTextFrame; }
     bool IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }

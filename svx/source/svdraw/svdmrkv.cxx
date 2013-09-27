@@ -641,6 +641,7 @@ const SdrHdlList& SdrMarkView::GetHdlList() const
 {
     if(IsActive())
     {
+        // if a pending refresh of SdrHdl is scheduled, execute it now directly
         const_cast< SdrMarkView* >(this)->Timeout();
     }
 
@@ -649,29 +650,50 @@ const SdrHdlList& SdrMarkView::GetHdlList() const
 
 void SdrMarkView::Timeout()
 {
+    // stop timer
     Stop();
+
+    // reset old focus data to invalid (always)
+    mbSaveOldFocus = false;
 
     if(maViewSdrHandleList.GetHdlCount())
     {
+        // save focus if it exists (for SdrPathObj point selections)
         SaveMarkHandleFocus(maViewSdrHandleList);
+
+        // clear all handles (delete them and their associated data)
         maViewSdrHandleList.Clear();
     }
 
     if(!maViewSdrHandleList.GetHdlCount())
     {
+        // re-create all handles
         CreateMarkHandles(maViewSdrHandleList);
+
+        // try to restore focus data (for SdrPathObj point selections)
         RestoreMarkHandleFocus(maViewSdrHandleList);
 
         if(maViewSdrHandleList.GetHdlCount())
         {
-            // create overlay objects
+            // create visualization (all overlay objects based on handles)
             maViewSdrHandleList.CreateVisualizations();
         }
+    }
+
+    if(!maViewSdrHandleList.GetHdlCount())
+    {
+        // reset old focus data when no handles were created for new situation
+        maViewSdrHandleList.ResetFocusHdl();
     }
 }
 
 void SdrMarkView::RecreateAllMarkHandles()
 {
+    // schedule a reset of all SdrHdl; do not do this directly every time, but
+    // setup the timer to ensure this is done when there will be time. When this would
+    // be done always directly, too many create/delete cycles of SdrHdl would happen
+    // in some loops/actions the views perform. The recreation is also triggered
+    // when someone accesses the SdrHdl list using GetHdlList() (see there)
     if(!IsActive())
     {
         SetTimeout(1);
@@ -681,8 +703,6 @@ void SdrMarkView::RecreateAllMarkHandles()
 
 void SdrMarkView::SaveMarkHandleFocus(const SdrHdlList& rTarget)
 {
-    mbSaveOldFocus = false;
-
     if(rTarget.GetHdlCount())
     {
         // #105722# remember old focus handle values to search for it again
@@ -718,6 +738,100 @@ void SdrMarkView::RestoreMarkHandleFocus(SdrHdlList& rTarget)
             {
                 rTarget.SetFocusHdl(pCandidate);
                 break;
+            }
+        }
+    }
+}
+
+void SdrMarkView::AdaptFocusHandleOnMove(const basegfx::B2DVector& rDistance)
+{
+    if(!rDistance.equalZero())
+    {
+        SdrHdl* pFocusHdl = GetHdlList().GetFocusHdl();
+
+        if(pFocusHdl)
+        {
+            if(pFocusHdl->IsFocusHdl() && (pFocusHdl->IsCornerHdl() || pFocusHdl->IsVertexHdl()))
+            {
+                const sal_uInt32 aCount(GetHdlList().GetHdlCount());
+
+                if(aCount)
+                {
+                    basegfx::B2DRange aCurrent;
+
+                    for(sal_uInt32 a(0); a < aCount; a++)
+                    {
+                        SdrHdl* pCandidate = GetHdlList().GetHdlByIndex(a);
+
+                        if(pCandidate->IsCornerHdl() || pCandidate->IsVertexHdl())
+                        {
+                            aCurrent.expand(pCandidate->getPosition());
+                        }
+                    }
+
+                    if(!aCurrent.isEmpty())
+                    {
+                        SdrHdlKind aNewKind(pFocusHdl->GetKind());
+                        const basegfx::B2DPoint aEndPoint(pFocusHdl->getPosition() + rDistance);
+                        const bool bStartLeft(HDL_UPLFT == aNewKind || HDL_LEFT == aNewKind || HDL_LWLFT == aNewKind);
+                        const bool bStartRight(HDL_UPRGT == aNewKind || HDL_RIGHT == aNewKind || HDL_LWRGT == aNewKind);
+                        const bool bMirrorLTR(bStartLeft && basegfx::fTools::more(aEndPoint.getX(), aCurrent.getMaxX()));
+                        const bool bMirrorRTL(bStartRight && basegfx::fTools::less(aEndPoint.getX(), aCurrent.getMinX()));
+
+                        if(bMirrorLTR)
+                        {
+                            if(HDL_UPLFT == aNewKind)
+                                aNewKind = HDL_UPRGT;
+                            else if(HDL_LEFT == aNewKind)
+                                aNewKind = HDL_RIGHT;
+                            else
+                                aNewKind = HDL_LWRGT;
+                        }
+                        else if(bMirrorRTL)
+                        {
+                            if(HDL_UPRGT == aNewKind)
+                                aNewKind = HDL_UPLFT;
+                            else if(HDL_RIGHT == aNewKind)
+                                aNewKind = HDL_LEFT;
+                            else
+                                aNewKind = HDL_LWLFT;
+                        }
+
+                        const bool bStartTop(HDL_UPLFT == aNewKind || HDL_UPPER == aNewKind || HDL_UPRGT == aNewKind);
+                        const bool bStartBottom(HDL_LWLFT == aNewKind || HDL_LOWER == aNewKind || HDL_LWRGT == aNewKind);
+                        const bool bMirrorTTB(bStartTop && basegfx::fTools::more(aEndPoint.getY(), aCurrent.getMaxY()));
+                        const bool bMirrorBTT(bStartBottom && basegfx::fTools::less(aEndPoint.getY(), aCurrent.getMinY()));
+
+                        if(bMirrorTTB)
+                        {
+                            if(HDL_UPLFT == aNewKind)
+                                aNewKind = HDL_LWLFT;
+                            else if(HDL_UPPER == aNewKind)
+                                aNewKind = HDL_LOWER;
+                            else
+                                aNewKind = HDL_LWRGT;
+                        }
+                        else if(bMirrorBTT)
+                        {
+                            if(HDL_LWLFT == aNewKind)
+                                aNewKind = HDL_UPLFT;
+                            else if(HDL_LOWER == aNewKind)
+                                aNewKind = HDL_UPPER;
+                            else
+                                aNewKind = HDL_UPRGT;
+                        }
+
+                        if(aNewKind != pFocusHdl->GetKind())
+                        {
+                            SdrHdl* pNewFocus = GetHdlList().GetHdlByKind(aNewKind);
+
+                            if(pNewFocus)
+                            {
+                                maViewSdrHandleList.SetFocusHdl(pNewFocus);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -837,62 +951,77 @@ void SdrMarkView::CreateMarkHandles(SdrHdlList& rTarget)
             }
             else
             {
-                const bool bNoWidth(basegfx::fTools::equalZero(rSnapRange.getWidth()));
-                const bool bNoHeight(basegfx::fTools::equalZero(rSnapRange.getHeight()));
+                // TTTT: See below, not needed
+                //const bool bNoWidth(basegfx::fTools::equalZero(rSnapRange.getWidth()));
+                //const bool bNoHeight(basegfx::fTools::equalZero(rSnapRange.getHeight()));
+                //
+                //if (bNoWidth && bNoHeight)
+                //{
+                //    new SdrHdl(rTarget, pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum(), true);
+                //}
+                //else if (!bStdDrag && (bNoWidth || bNoHeight))
+                //{
+                //    new SdrHdl(rTarget, pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum(), true);
+                //    new SdrHdl(rTarget, pSingleSelected, HDL_LWRGT, rSnapRange.getMaximum(), true);
+                //}
+                //else
+                //{
+                //    const basegfx::B2DPoint aCenter(rSnapRange.getCenter());
+                //
+                //    if(!bNoWidth && !bNoHeight)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum(), true);
+                //    }
+                //
+                //    if(!bNoHeight)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_UPPER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMinY()), true);
+                //    }
+                //
+                //    if(!bNoWidth && !bNoHeight)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_UPRGT, basegfx::B2DTuple(rSnapRange.getMaxX(), rSnapRange.getMinY()), true);
+                //    }
+                //
+                //    if(!bNoWidth)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_LEFT, basegfx::B2DTuple(rSnapRange.getMinX(), aCenter.getY()), true);
+                //    }
+                //
+                //    if(!bNoWidth)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_RIGHT, basegfx::B2DTuple(rSnapRange.getMaxX(), aCenter.getY()), true);
+                //    }
+                //
+                //    if(!bNoWidth && !bNoHeight)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_LWLFT, basegfx::B2DTuple(rSnapRange.getMinX(), rSnapRange.getMaxY()), true);
+                //    }
+                //
+                //    if(!bNoHeight)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_LOWER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMaxY()), true);
+                //    }
+                //
+                //    if(!bNoWidth && !bNoHeight)
+                //    {
+                //        new SdrHdl(rTarget, pSingleSelected, HDL_LWRGT, rSnapRange.getMaximum(), true);
+                //    }
+                //}
 
-                if (bNoWidth && bNoHeight)
-                {
-                    new SdrHdl(rTarget, pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum(), true);
-                }
-                else if (!bStdDrag && (bNoWidth || bNoHeight))
-                {
-                    new SdrHdl(rTarget, pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum(), true);
-                    new SdrHdl(rTarget, pSingleSelected, HDL_LWRGT, rSnapRange.getMaximum(), true);
-                }
-                else
-                {
-                    const basegfx::B2DPoint aCenter(rSnapRange.getCenter());
+                // always create all handles to allow focus restauration over keyboard moves; prefer
+                // bottom-right ones to make mouse hits preferred to bottom-right assuming the next
+                // resize will be dragged to bottom-right
+                const basegfx::B2DPoint aCenter(rSnapRange.getCenter());
 
-                    if(!bNoWidth && !bNoHeight)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum(), true);
-                    }
-
-                    if(!bNoHeight)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_UPPER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMinY()), true);
-                    }
-
-                    if(!bNoWidth && !bNoHeight)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_UPRGT, basegfx::B2DTuple(rSnapRange.getMaxX(), rSnapRange.getMinY()), true);
-                    }
-
-                    if(!bNoWidth)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_LEFT, basegfx::B2DTuple(rSnapRange.getMinX(), aCenter.getY()), true);
-                    }
-
-                    if(!bNoWidth)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_RIGHT, basegfx::B2DTuple(rSnapRange.getMaxX(), aCenter.getY()), true);
-                    }
-
-                    if(!bNoWidth && !bNoHeight)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_LWLFT, basegfx::B2DTuple(rSnapRange.getMinX(), rSnapRange.getMaxY()), true);
-                    }
-
-                    if(!bNoHeight)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_LOWER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMaxY()), true);
-                    }
-
-                    if(!bNoWidth && !bNoHeight)
-                    {
-                        new SdrHdl(rTarget, pSingleSelected, HDL_LWRGT, rSnapRange.getMaximum(), true);
-                    }
-                }
+                new SdrHdl(rTarget, pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum(), true);
+                new SdrHdl(rTarget, pSingleSelected, HDL_UPPER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMinY()), true);
+                new SdrHdl(rTarget, pSingleSelected, HDL_UPRGT, basegfx::B2DTuple(rSnapRange.getMaxX(), rSnapRange.getMinY()), true);
+                new SdrHdl(rTarget, pSingleSelected, HDL_LEFT, basegfx::B2DTuple(rSnapRange.getMinX(), aCenter.getY()), true);
+                new SdrHdl(rTarget, pSingleSelected, HDL_RIGHT, basegfx::B2DTuple(rSnapRange.getMaxX(), aCenter.getY()), true);
+                new SdrHdl(rTarget, pSingleSelected, HDL_LWLFT, basegfx::B2DTuple(rSnapRange.getMinX(), rSnapRange.getMaxY()), true);
+                new SdrHdl(rTarget, pSingleSelected, HDL_LOWER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMaxY()), true);
+                new SdrHdl(rTarget, pSingleSelected, HDL_LWRGT, rSnapRange.getMaximum(), true);
             }
         }
     }

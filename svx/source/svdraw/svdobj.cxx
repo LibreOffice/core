@@ -2608,7 +2608,7 @@ void SdrObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransfo
     //  pGPL->SetReallyAbsolute(false,*this);
     //}
 
-    if(rTransformation != maSdrObjectTransformation.getB2DHomMatrix())
+    if(rTransformation != getSdrObjectTransformation())
     {
         if(GetGluePointList())
         {

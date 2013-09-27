@@ -116,7 +116,7 @@ public:
     void ImpCheckCustomGluePointsAreAdded();
 
     // returns the new text range that corresponds to the current logic range. The return value can be empty if nothing changed.
-    basegfx::B2DRange ImpCalculateTextFrame(const bool bHgt, const bool bWdt);
+    basegfx::B2DRange ImpCalculateTextFrame();
 
 public:
     // #i37011#
@@ -127,13 +127,19 @@ public:
     static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const bool bBezierAllowed );
 
 protected:
-
     String      aName;
 
     virtual ~SdrObjCustomShape();
 
     /// method to copy all data from given source
     virtual void copyDataFromSdrObject(const SdrObject& rSource);
+
+    // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
+    // SDRATTR_TEXT_MINFRAMEWIDTH and SDRATTR_TEXT_MINFRAMEHEIGHT based on all settings, necessities
+    // and object sizes
+    virtual void AdaptTextMinSize();
+
+    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange) const;
 
 public:
     /// create a copy, evtl. with a different target model (if given)
@@ -187,8 +193,7 @@ public:
     virtual bool MovCreate(SdrDragStat& rStat); // #i37448#
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
-    virtual basegfx::B2DRange AdjustTextFrameWidthAndHeight(const basegfx::B2DRange& rRange, bool bHgt = true, bool bWdt = true) const;
-    virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
+    virtual void AdjustTextFrameWidthAndHeight();
     virtual bool IsAutoGrowHeight() const;
     virtual bool IsAutoGrowWidth() const;
     virtual void SetVerticalWriting( bool bVertical );

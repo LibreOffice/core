@@ -1597,7 +1597,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
             const SdrHdlList& rHdlList = rView.GetHdlList();
             SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
-            if ( pHdl == 0 )
+            if(!pHdl)
             {
                 // no handle selected
                 if ( rView.IsMoveAllowed() )
@@ -1710,82 +1710,120 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
             }
             else
             {
-                // move the handle
-                if ( pHdl && !aMove.equalZero() )
+                basegfx::B2DRange aNewRange;
+                bool bCheck(false);
+                const SdrObjectVector aSelection(rView.getSelectedSdrObjectVectorFromSdrMarkView());
+
+                for (sal_uInt32 i(0); !bCheck && i < aSelection.size(); ++i )
                 {
-                    const basegfx::B2DPoint aStartPoint( pHdl->getPosition() );
-                    const basegfx::B2DPoint aEndPoint( pHdl->getPosition() + aMove );
-                    const SdrDragStat& rDragStat = rView.GetDragStat();
-
-                    // start dragging
-                    rView.BegDragObj( aStartPoint, pHdl, 0.0 );
-
-                    if ( rView.IsDragObj() )
-                    {
-                        const bool bWasNoSnap = rDragStat.IsNoSnap();
-                        const bool bWasSnapEnabled = rView.IsSnapEnabled();
-
-                        // switch snapping off
-                        if ( !bWasNoSnap )
-                            ((SdrDragStat&)rDragStat).SetNoSnap( true );
-                        if ( bWasSnapEnabled )
-                            rView.SetSnapEnabled( false );
-
-                        basegfx::B2DRange aNewRange;
-                        bool bCheck = false;
-                        const SdrObjectVector aSelection(rView.getSelectedSdrObjectVectorFromSdrMarkView());
-
-                        for (sal_uInt32 i(0); !bCheck && i < aSelection.size(); ++i )
-                        {
-                            bCheck = dynamic_cast< OUnoObject* >(aSelection[i]) != NULL
-                                || dynamic_cast< OOle2Obj* >(aSelection[i]) != NULL;
-                            if ( bCheck )
-                                aNewRange.expand(aSelection[i]->getObjectRange(&rView));
-                        }
-
-                        switch(pHdl->GetKind())
-                        {
-                            case HDL_LEFT:
-                            case HDL_UPLFT:
-                            case HDL_LWLFT:
-                            case HDL_UPPER:
-                                aNewRange = basegfx::B2DRange(
-                                    aNewRange.getMinimum() + aMove,
-                                    aNewRange.getMaximum());
-                                break;
-                            case HDL_UPRGT:
-                            case HDL_RIGHT:
-                            case HDL_LWRGT:
-                            case HDL_LOWER:
-                                aNewRange = basegfx::B2DRange(
-                                    aNewRange.getMinimum(),
-                                    aNewRange.getMinimum() + aMove);
-                                break;
-                            default:
-                                break;
-                        }
-
-                        if ( !(bCheck && isOver(aNewRange,*rReportSection.getPage(),rView)) )
-                        {
-                            rView.MovAction(aEndPoint);
-                        }
-
-                        rView.EndDragObj();
-
-                        // restore snap
-                        if ( !bWasNoSnap )
-                            ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
-                        if ( bWasSnapEnabled )
-                            rView.SetSnapEnabled( bWasSnapEnabled );
-                    }
-
-                    // make moved handle visible
-                    const basegfx::B2DRange aRange(
-                        aEndPoint - basegfx::B2DPoint(DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE),
-                        aEndPoint + basegfx::B2DPoint(DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE));
-
-                    rView.MakeVisibleAtView( aRange, rReportSection);
+                    bCheck = dynamic_cast< OUnoObject* >(aSelection[i]) || dynamic_cast< OOle2Obj* >(aSelection[i]);
+                    if ( bCheck )
+                        aNewRange.expand(aSelection[i]->getObjectRange(&rView));
                 }
+
+                switch(pHdl->GetKind())
+                {
+                    case HDL_LEFT:
+                    case HDL_UPLFT:
+                    case HDL_LWLFT:
+                    case HDL_UPPER:
+                        aNewRange = basegfx::B2DRange(
+                            aNewRange.getMinimum() + aMove,
+                            aNewRange.getMaximum());
+                        break;
+                    case HDL_UPRGT:
+                    case HDL_RIGHT:
+                    case HDL_LWRGT:
+                    case HDL_LOWER:
+                        aNewRange = basegfx::B2DRange(
+                            aNewRange.getMinimum(),
+                            aNewRange.getMaximum() + aMove);
+                        break;
+                    default:
+                        break;
+                }
+
+                if(!(bCheck && isOver(aNewRange, *rReportSection.getPage(), rView)))
+                {
+                    // move the handle
+                    rView.MoveHandleByVector(*pHdl, aMove, &rReportSection, 0);
+                }
+
+                // TTTT:HANDLE
+                //if ( pHdl && !aMove.equalZero() )
+                //{
+                //    const basegfx::B2DPoint aStartPoint( pHdl->getPosition() );
+                //    const basegfx::B2DPoint aEndPoint( pHdl->getPosition() + aMove );
+                //    const SdrDragStat& rDragStat = rView.GetDragStat();
+                //
+                //    // start dragging
+                //    rView.BegDragObj( aStartPoint, pHdl, 0.0 );
+                //
+                //    if ( rView.IsDragObj() )
+                //    {
+                //      const bool bWasNoSnap = rDragStat.IsNoSnap();
+                //      const bool bWasSnapEnabled = rView.IsSnapEnabled();
+                //
+                //      // switch snapping off
+                //      if ( !bWasNoSnap )
+                //          ((SdrDragStat&)rDragStat).SetNoSnap( true );
+                //      if ( bWasSnapEnabled )
+                //          rView.SetSnapEnabled( false );
+                //
+                //        basegfx::B2DRange aNewRange;
+                //        bool bCheck = false;
+                //        const SdrObjectVector aSelection(rView.getSelectedSdrObjectVectorFromSdrMarkView());
+                //
+                //        for (sal_uInt32 i(0); !bCheck && i < aSelection.size(); ++i )
+                //        {
+                //            bCheck = dynamic_cast< OUnoObject* >(aSelection[i]) || dynamic_cast< OOle2Obj* >(aSelection[i]);
+                //            if ( bCheck )
+                //                aNewRange.expand(aSelection[i]->getObjectRange(&rView));
+                //        }
+                //
+                //        switch(pHdl->GetKind())
+                //        {
+                //            case HDL_LEFT:
+                //            case HDL_UPLFT:
+                //            case HDL_LWLFT:
+                //            case HDL_UPPER:
+                //                aNewRange = basegfx::B2DRange(
+                //                    aNewRange.getMinimum() + aMove,
+                //                    aNewRange.getMaximum());
+                //                break;
+                //            case HDL_UPRGT:
+                //            case HDL_RIGHT:
+                //            case HDL_LWRGT:
+                //            case HDL_LOWER:
+                //                aNewRange = basegfx::B2DRange(
+                //                    aNewRange.getMinimum(),
+                //                    aNewRange.getMaximum() + aMove);
+                //                break;
+                //            default:
+                //                break;
+                //        }
+                //
+                //        if ( !(bCheck && isOver(aNewRange,*rReportSection.getPage(),rView)) )
+                //        {
+                //            rView.MovAction(aEndPoint);
+                //        }
+                //
+                //      rView.EndDragObj();
+                //
+                //      // restore snap
+                //      if ( !bWasNoSnap )
+                //          ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
+                //      if ( bWasSnapEnabled )
+                //          rView.SetSnapEnabled( bWasSnapEnabled );
+                //    }
+                //
+                //    // make moved handle visible
+                //  const basegfx::B2DRange aRange(
+                //      aEndPoint - basegfx::B2DPoint(DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE),
+                //      aEndPoint + basegfx::B2DPoint(DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE));
+                //
+                //    rView.MakeVisibleAtView( aRange, rReportSection);
+                //}
             }
 
             rView.RecreateAllMarkHandles();

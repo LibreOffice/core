@@ -569,10 +569,9 @@ namespace sdr
                         }
                         rObj.SetTextSizeDirty();
 
-                        if(rObj.IsTextFrame() && rObj.AdjustTextFrameWidthAndHeight())
+                        if(rObj.IsTextFrame())
                         {
-                            // here only repaint wanted
-                            rObj.ActionChanged();
+                            rObj.AdjustTextFrameWidthAndHeight();
                         }
 
                         // #i101556# content of StyleSheet has changed -> new version

@@ -32,6 +32,40 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+namespace sdr
+{
+    namespace glue
+    {
+        void Point::setUnitPosition(const basegfx::B2DPoint& rNew)
+        {
+            const aClampedNew(basegfx::clamp(rNew, 0.0, 1.0));
+
+            if(aClampedNew != maUnitPosition)
+            {
+                maUnitPosition = aClampedNew;
+            }
+        }
+
+        void Point::setEscapeVector(const basegfx::B2DVector& rNew)
+        {
+            const basegfx::B2DVector aNormalizedNew(rNew.normalize());
+
+            if(aNormalizedNew != maEscapeVector)
+            {
+                maEscapeVector = aNormalizedNew;
+            }
+        }
+
+
+
+
+
+
+    } // end of namespace glue
+} // end of namespace sdr
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 SdrGluePoint::SdrGluePoint()
 :   mnEscDir(SDRESC_SMART),
     mnId(0),

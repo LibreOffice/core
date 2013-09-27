@@ -52,6 +52,7 @@ Control RID_SIDEBAR_POSSIZE_PANEL
         QuickHelpText [ en-US ] = "Enter a width for the selected object.";
         Repeat = TRUE ;
         Spin = TRUE ;
+        Minimum = 0;
         Maximum = 9999 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_INCH;
@@ -73,6 +74,7 @@ Control RID_SIDEBAR_POSSIZE_PANEL
         QuickHelpText [ en-US ] = "Enter a height for the selected object.";
         Repeat = TRUE ;
         Spin = TRUE ;
+        Minimum = 0;
         Maximum = 9999 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_INCH;

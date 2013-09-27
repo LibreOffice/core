@@ -2430,55 +2430,65 @@ const basegfx::B2DHomMatrix& SdrEdgeObj::getSdrObjectTransformation() const
 
 void SdrEdgeObj::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation)
 {
-    // #54102# handle start and end point if not connected
-    const bool bCon1(maCon1.mpConnectedSdrObject && maCon1.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject());
-    const bool bCon2(maCon2.mpConnectedSdrObject && maCon2.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject());
-    const sal_uInt32 nCount(maEdgeTrack.count());
-    const bool bApplyTransform(nCount && (!bCon1 || !bCon2 || mbEdgeTrackUserDefined));
-    basegfx::B2DHomMatrix aCompleteTransform;
-
-    if(bApplyTransform)
+    if(rTransformation != getSdrObjectTransformation())
     {
-        // get old transform and invert
-        aCompleteTransform = getSdrObjectTransformation();
-        aCompleteTransform.invert();
-    }
+        // #54102# handle start and end point if not connected
+        const bool bCon1(maCon1.mpConnectedSdrObject && maCon1.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject());
+        const bool bCon2(maCon2.mpConnectedSdrObject && maCon2.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject());
+        const sal_uInt32 nCount(maEdgeTrack.count());
+        const bool bApplyTransform(nCount && (!bCon1 || !bCon2 || mbEdgeTrackUserDefined));
+        basegfx::B2DHomMatrix aCompleteTransform;
 
-    // call parent, set new transform
-    SdrTextObj::setSdrObjectTransformation(rTransformation);
-
-    if(bApplyTransform)
-    {
-        // multiply current transform (after change) to get full change
-        aCompleteTransform = getSdrObjectTransformation() * aCompleteTransform;
-
-        if(mbEdgeTrackUserDefined)
+        if(bApplyTransform)
         {
-            // #120437# special handling when track is user defined
-            maEdgeTrack.transform(aCompleteTransform);
+            // get old transform and invert
+            aCompleteTransform = getSdrObjectTransformation();
+            aCompleteTransform.invert();
         }
-        else
+
+        // call parent, set new transform
+        SdrTextObj::setSdrObjectTransformation(rTransformation);
+
+        if(bApplyTransform)
         {
-            if(!bCon1)
-            {
-                // transform first point
-                maEdgeTrack.setB2DPoint(0, aCompleteTransform * maEdgeTrack.getB2DPoint(0));
-                ImpDirtyEdgeTrack();
-            }
+            // multiply current transform (after change) to get full change
+            aCompleteTransform = getSdrObjectTransformation() * aCompleteTransform;
 
-            if(!bCon2)
+            if(mbEdgeTrackUserDefined)
             {
-                // transform last point
-                maEdgeTrack.setB2DPoint(nCount - 1, aCompleteTransform * maEdgeTrack.getB2DPoint(nCount - 1));
-                ImpDirtyEdgeTrack();
+                // #120437# special handling when track is user defined
+                maEdgeTrack.transform(aCompleteTransform);
+            }
+            else
+            {
+                bool bDirtyEdgeTrack(false);
+
+                if(!bCon1)
+                {
+                    // transform first point
+                    maEdgeTrack.setB2DPoint(0, aCompleteTransform * maEdgeTrack.getB2DPoint(0));
+                    bDirtyEdgeTrack = true;
+                }
+
+                if(!bCon2)
+                {
+                    // transform last point
+                    maEdgeTrack.setB2DPoint(nCount - 1, aCompleteTransform * maEdgeTrack.getB2DPoint(nCount - 1));
+                    bDirtyEdgeTrack = true;
+                }
+
+                if(bDirtyEdgeTrack)
+                {
+                    ImpDirtyEdgeTrack();
+                }
             }
         }
-    }
 
-    // if resize is not from paste, forget user distances
-    if(!IsPasteResize())
-    {
-        maEdgeInfo.aObj1Line2 = maEdgeInfo.aObj1Line3 = maEdgeInfo.aObj2Line2 = maEdgeInfo.aObj2Line3 = maEdgeInfo.aMiddleLine = basegfx::B2DPoint();
+        // if resize is not from paste, forget user distances
+        if(!IsPasteResize())
+        {
+            maEdgeInfo.aObj1Line2 = maEdgeInfo.aObj1Line3 = maEdgeInfo.aObj2Line2 = maEdgeInfo.aObj2Line3 = maEdgeInfo.aMiddleLine = basegfx::B2DPoint();
+        }
     }
 }
 
