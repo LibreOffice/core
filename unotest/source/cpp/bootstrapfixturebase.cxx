@@ -23,7 +23,8 @@ using namespace ::com::sun::star;
 // heavy lifting is deferred until setUp. setUp and tearDown are interleaved
 // between the tests as you might expect.
 test::BootstrapFixtureBase::BootstrapFixtureBase()
-    : m_aSrcRootURL("file://"), m_aSolverRootURL( m_aSrcRootURL )
+    : m_aSrcRootURL("file://"), m_aSolverRootURL( m_aSrcRootURL ),
+      m_aWorkdirRootURL(m_aSrcRootURL)
 {
 #ifndef ANDROID
     const char* pSrcRoot = getenv( "SRC_ROOT" );
