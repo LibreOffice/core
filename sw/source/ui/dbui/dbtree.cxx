@@ -489,12 +489,12 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         {
             // drag database field
             svx::OColumnTransferable aColTransfer(
-                            sDBName
-                            ,OUString()
-                            , sdb::CommandType::TABLE
-                            ,sTableName
-                            , sColumnName
-                            ,(CTF_FIELD_DESCRIPTOR |CTF_COLUMN_DESCRIPTOR ));
+                            sDBName,
+                            OUString(),
+                            sdb::CommandType::TABLE,
+                            sTableName,
+                            sColumnName,
+                            (CTF_FIELD_DESCRIPTOR|CTF_COLUMN_DESCRIPTOR) );
             aColTransfer.addDataToContainer( pContainer );
         }
 
