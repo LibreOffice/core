@@ -25,7 +25,7 @@ $(eval $(call gb_Extension_add_files,presentation-minimizer,bitmaps,\
     $(SRCDIR)/icon-themes/galaxy/minimizer/opt_26.png \
 ))
 
-$(eval $(call gb_Extension_add_file,presentation-minimizer,registry/schema/org/openoffice/Office/extension/SunPresentationMinimizer.xcs,$(call gb_XcsTarget_get_target,sdext/source/minimizer/registry/schema/org/openoffice/Office/extension/SunPresentationMinimizer.xcs)))
+$(eval $(call gb_Extension_add_file,presentation-minimizer,registry/schema/org/openoffice/Office/extension/SunPresentationMinimizer.xcs,$(call gb_XcsTarget_get_target,org/openoffice/Office/extension/SunPresentationMinimizer.xcs)))
 
 $(eval $(call gb_Extension_add_files,presentation-minimizer,registry/data/org/openoffice/Office,\
     $(call gb_XcuFile_for_extension,sdext/source/minimizer/registry/data/org/openoffice/Office/Addons.xcu) \

@@ -279,8 +279,6 @@ $(eval $(call gb_Deliver_init))
 #	with $(OUTDIR)/bin/%.res for resources on unix
 # $(OUTDIR)/lib/%.lib collides
 #	on windows (static and dynamic libs)
-# $(OUTDIR)/xml/% for packageparts collides
-#	with $(OUTDIR)/xml/component/%.component for components
 # This is less of an issue with GNU Make versions > 3.82 which matches for
 # shortest stem instead of first match. However, upon intoduction this version
 # is not available everywhere by default.

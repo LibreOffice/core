@@ -13,7 +13,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,postprocess/registry))
 # Variables
 #
 
-postprocess_XCS := $(call gb_XcsTarget_get_outdir_target,org/openoffice)
+postprocess_XCS := $(call gb_XcsTarget_get_target,org/openoffice)
 postprocess_XCU := $(call gb_XcuDataTarget_get_target,officecfg/registry/data/org/openoffice)
 postprocess_MOD := $(call gb_XcuModuleTarget_get_target,officecfg/registry/data)
 postprocess_DRIVERS :=

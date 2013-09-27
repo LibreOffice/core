@@ -48,7 +48,7 @@ gb_Configuration_PRIMARY_REGISTRY_SCHEMA_ROOT = \
 gb_Configuration__stringparam_schemaRoot = --stringparam schemaRoot \
     $(if $(PRIMARY_REGISTRY), \
         $(gb_Configuration_PRIMARY_REGISTRY_SCHEMA_ROOT), \
-        $(call gb_XcsTarget_get_outdir_target,))
+        $(call gb_XcsTarget_get_target,))
 
 gb_Configuration_XSLTCOMMAND = $(call gb_ExternalExecutable_get_command,xsltproc)
 gb_Configuration_XSLTCOMMAND_DEPS = $(call gb_ExternalExecutable_get_dependencies,xsltproc)
@@ -57,7 +57,7 @@ gb_Configuration_XSLTCOMMAND_DEPS = $(call gb_ExternalExecutable_get_dependencie
 
 # need to locate a schema file corresponding to some XCU file in the outdir
 define gb_XcsTarget_for_XcuTarget
-$(call gb_XcsTarget_get_outdir_target,$(basename $(1)).xcs)
+$(call gb_XcsTarget_get_target,$(basename $(1)).xcs)
 endef
 
 gb_Configuration_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
@@ -73,8 +73,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		--noout \
-		--stringparam componentName $(subst /,.,$(basename $(XCSFILE))) \
-		--stringparam root $(subst $(XCSFILE),,$(3)) \
+		--stringparam componentName $(subst /,.,$(basename $(2))) \
+		--stringparam root $(subst $(2),,$(3)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
 		$(gb_XcsTarget_XSLT_SchemaVal) \
 		$(3) && \
@@ -96,9 +96,7 @@ $(call gb_XcsTarget_get_target,%) : \
 
 $(call gb_XcsTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCS,1)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_XcsTarget_get_target,$*) \
-			  $(call gb_XcsTarget_get_outdir_target,$(XCSFILE)))
+	rm -f $(call gb_XcsTarget_get_target,$*)
 
 
 # XcuDataTarget class
@@ -115,14 +113,12 @@ $(call gb_Helper_abbreviate_dirs,\
 		--noout \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
-		--path $(gb_Configuration_registry) \
 		$(gb_XcuDataTarget_XSLT_DataVal) \
 		$(3) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
-		--path $(gb_Configuration_registry) \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
 endef
@@ -145,7 +141,7 @@ $(SRCDIR)/$(basename $(subst -,.,$(basename $(1)))).xcu
 endef
 
 define gb_XcsTarget_for_XcuModuleTarget
-$(call gb_XcsTarget_get_outdir_target,$(basename $(subst -,.,$(basename $(1)))).xcs)
+$(call gb_XcsTarget_get_target,$(basename $(subst -,.,$(basename $(1)))).xcs)
 endef
 
 define gb_XcuModuleTarget__command
@@ -253,7 +249,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
 		--stringparam locale $(word 2,$(subst /, ,$(2))) \
-		--path $(gb_Configuration_registry) \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
 endef
@@ -311,24 +306,16 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Configuration)
 endef
 
 # $(call gb_Configuration_add_schema,configuration,prefix,xcsfile)
-# FIXME this is always delivered because commands depend on it...
 # hopefully extensions do not need to add schemas with same name as officecfg
 define gb_Configuration_add_schema
 $(call gb_Configuration_get_clean_target,$(1)) : \
-	$(call gb_XcsTarget_get_clean_target,$(2)/$(3))
-$(call gb_XcsTarget_get_target,$(2)/$(3)) : \
+	$(call gb_XcsTarget_get_clean_target,$(3))
+$(call gb_XcsTarget_get_target,$(3)) : \
 	$(SRCDIR)/$(2)/$(3) \
 	$(call gb_Configuration_get_preparation_target,$(1))
-$(call gb_XcsTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
-$(call gb_XcsTarget_get_target,$(2)/$(3)) : XCSFILE := $(3)
-$(call gb_XcsTarget_get_clean_target,$(2)/$(3)) : XCSFILE := $(3)
+$(call gb_XcsTarget_get_target,$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
 $(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcsTarget_get_outdir_target,$(3))
-$(call gb_XcsTarget_get_outdir_target,$(3)) : \
-	$(call gb_XcsTarget_get_target,$(2)/$(3)) \
-	| $(dir $(call gb_XcsTarget_get_outdir_target,$(3))).dir
-$(call gb_Deliver_add_deliverable,$(call gb_XcsTarget_get_outdir_target,$(3)),\
-	$(call gb_XcsTarget_get_target,$(2)/$(3)),$(2)/$(3))
+	$(call gb_XcsTarget_get_target,$(3))
 
 endef
 
