@@ -60,7 +60,7 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet)
     m_pTypeLB->set_width_request(nWidth);
     m_pDatabaseTLB->set_width_request(nWidth*2);
 
-    aOldNumSelectHdl = m_pNumFormatLB->GetSelectHdl();
+    m_aOldNumSelectHdl = m_pNumFormatLB->GetSelectHdl();
 
     m_pNumFormatLB->SetSelectHdl(LINK(this, SwFldDBPage, NumSelectHdl));
     m_pDatabaseTLB->SetSelectHdl(LINK(this, SwFldDBPage, TreeSelectHdl));
@@ -83,7 +83,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 
     m_pTypeLB->SetUpdateMode(sal_False);
     sal_uInt16 nOldPos = m_pTypeLB->GetSelectEntryPos();
-    sOldDBName = m_pDatabaseTLB->GetDBName(sOldTableName, sOldColumnName);
+    m_sOldDBName = m_pDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
 
     m_pTypeLB->Clear();
 
@@ -129,9 +129,9 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         if (nOldPos != LISTBOX_ENTRY_NOTFOUND)
             m_pTypeLB->SelectEntryPos(nOldPos);
 
-        if (!sOldDBName.isEmpty())
+        if (!m_sOldDBName.isEmpty())
         {
-            m_pDatabaseTLB->Select(sOldDBName, sOldTableName, sOldColumnName);
+            m_pDatabaseTLB->Select(m_sOldDBName, m_sOldTableName, m_sOldColumnName);
         }
         else
         {
@@ -174,9 +174,9 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     {
         m_pConditionED->SaveValue();
         m_pValueED->SaveValue();
-        sOldDBName = m_pDatabaseTLB->GetDBName(sOldTableName, sOldColumnName);
-        nOldFormat = GetCurField()->GetFormat();
-        nOldSubType = GetCurField()->GetSubType();
+        m_sOldDBName = m_pDatabaseTLB->GetDBName(m_sOldTableName, m_sOldColumnName);
+        m_nOldFormat = GetCurField()->GetFormat();
+        m_nOldSubType = GetCurField()->GetSubType();
     }
 }
 
@@ -233,13 +233,13 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
         OUString sTempTableName;
         OUString sTempColumnName;
         OUString sTempDBName = m_pDatabaseTLB->GetDBName(sTempTableName, sTempColumnName);
-        sal_Bool bDBListBoxChanged = sOldDBName != sTempDBName ||
-            sOldTableName != sTempTableName || sOldColumnName != sTempColumnName;
+        sal_Bool bDBListBoxChanged = m_sOldDBName != sTempDBName ||
+            m_sOldTableName != sTempTableName || m_sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
             m_pConditionED->GetSavedValue() != m_pConditionED->GetText() ||
             m_pValueED->GetSavedValue() != m_pValueED->GetText() ||
              bDBListBoxChanged ||
-             nOldFormat != nFormat || nOldSubType != nSubType)
+             m_nOldFormat != nFormat || m_nOldSubType != nSubType)
         {
             InsertFld( nTypeId, nSubType, aName, aVal, nFormat);
         }
@@ -384,7 +384,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 {
     m_pNewFormatRB->Check();
-    aOldNumSelectHdl.Call(pLB);
+    m_aOldNumSelectHdl.Call(pLB);
 
     return 0;
 }

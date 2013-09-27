@@ -47,12 +47,12 @@ class SwFldDBPage : public SwFldPage
     ListBox*            m_pFormatLB;
     VclContainer*       m_pFormat;
 
-    OUString            sOldDBName;
-    OUString            sOldTableName;
-    OUString            sOldColumnName;
-    sal_uLong               nOldFormat;
-    sal_uInt16              nOldSubType;
-    Link                aOldNumSelectHdl;
+    OUString            m_sOldDBName;
+    OUString            m_sOldTableName;
+    OUString            m_sOldColumnName;
+    sal_uLong           m_nOldFormat;
+    sal_uInt16          m_nOldSubType;
+    Link                m_aOldNumSelectHdl;
 
     DECL_LINK( TypeHdl, ListBox* );
     DECL_LINK( NumSelectHdl, NumFormatListBox* pLB = 0);
