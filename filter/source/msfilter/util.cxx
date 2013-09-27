@@ -629,7 +629,7 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
 {
     EquationResult aResult;
 
-    String sCombinedCharacters;
+    OUString sCombinedCharacters;
     WW8ReadFieldParams aOriFldParam = rReadParam;
     const sal_Int32 cGetChar = rReadParam.SkipToNextToken();
     switch( cGetChar )
@@ -659,43 +659,42 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                         {
                             if (-2 == rReadParam.SkipToNextToken())
                             {
-                                String sPart = rReadParam.GetResult();
-                                xub_StrLen nBegin = sPart.Search('(');
+                                OUString sPart = rReadParam.GetResult();
+                                sal_Int32 nBegin = sPart.indexOf('(');
 
                                 //Word disallows brackets in this field, which
                                 //aids figuring out the case of an end of )) vs )
-                                xub_StrLen nEnd = sPart.Search(')');
+                                sal_Int32 nEnd = sPart.indexOf(')');
 
-                                if ((nBegin != STRING_NOTFOUND) &&
-                                    (nEnd != STRING_NOTFOUND))
+                                if (nBegin != -1 && nEnd != -1)
                                 {
                                     sCombinedCharacters +=
-                                        sPart.Copy(nBegin+1,nEnd-nBegin-1);
+                                        sPart.copy(nBegin+1,nEnd-nBegin-1);
                                 }
                             }
                         }
                     }
                 }
-                if (sCombinedCharacters.Len())
+                if (!sCombinedCharacters.isEmpty())
                 {
                     aResult.sType = "CombinedCharacters";
                     aResult.sResult = sCombinedCharacters;
                 }
                 else
                 {
-                    const String sPart = aOriFldParam.GetResult();
-                    xub_StrLen nBegin = sPart.Search('(');
-                    xub_StrLen nEnd = sPart.Search(',');
-                    if ( nEnd == STRING_NOTFOUND )
+                    const OUString sPart = aOriFldParam.GetResult();
+                    sal_Int32 nBegin = sPart.indexOf('(');
+                    sal_Int32 nEnd = sPart.indexOf(',');
+                    if ( nEnd == -1 )
                     {
-                        nEnd = sPart.Search(')');
+                        nEnd = sPart.indexOf(')');
                     }
-                    if ( (nBegin != STRING_NOTFOUND) && (nEnd != STRING_NOTFOUND) )
+                    if ( nBegin != -1 && nEnd != -1 )
                     {
                         // skip certain leading characters
                         for (int i = nBegin;i < nEnd-1;i++)
                         {
-                            const sal_Unicode cC = sPart.GetChar(nBegin+1);
+                            const sal_Unicode cC = sPart[nBegin+1];
                             if ( cC < 32 )
                             {
                                 nBegin++;
@@ -703,8 +702,8 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                             else
                                 break;
                         }
-                        sCombinedCharacters = sPart.Copy( nBegin+1, nEnd-nBegin-1 );
-                        if ( sCombinedCharacters.Len() )
+                        sCombinedCharacters = sPart.copy( nBegin+1, nEnd-nBegin-1 );
+                        if ( !sCombinedCharacters.isEmpty() )
                         {
                             aResult.sType = "Input";
                             aResult.sResult = sCombinedCharacters;
