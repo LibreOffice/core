@@ -6,7 +6,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#include "sal/config.h"
+
+#include <cassert>
+
 #include <unotest/bootstrapfixturebase.hxx>
+#include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -18,13 +24,25 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+
+OUString getFileURLFromSystemPath(OUString const & path) {
+    OUString url;
+    osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(path, url);
+    assert(e == osl::FileBase::E_None);
+    if (!url.endsWith("/")) {
+        url += "/";
+    }
+    return url;
+}
+
+}
+
 // NB. this constructor is called before any tests are run, once for each
 // test function in a rather non-intuitive way. This is why all the 'real'
 // heavy lifting is deferred until setUp. setUp and tearDown are interleaved
 // between the tests as you might expect.
 test::BootstrapFixtureBase::BootstrapFixtureBase()
-    : m_aSrcRootURL("file://"), m_aSolverRootURL( m_aSrcRootURL ),
-      m_aWorkdirRootURL(m_aSrcRootURL)
 {
 #ifndef ANDROID
     const char* pSrcRoot = getenv( "SRC_ROOT" );
@@ -33,33 +51,19 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
     CPPUNIT_ASSERT_MESSAGE("$OUTDIR_FOR_BUILD env variable not set", pSolverRoot != NULL && pSolverRoot[0] != 0);
     const char* pWorkdirRoot = getenv( "WORKDIR_FOR_BUILD" );
     CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot != NULL && pWorkdirRoot[0] != 0);
-#ifdef WNT
-    if (pSrcRoot[1] == ':')
-    {
-        m_aSrcRootURL += "/";
-    }
-    if (pSolverRoot[1] == ':')
-    {
-        m_aSolverRootURL += "/";
-    }
-    if (pWorkdirRoot[1] == ':')
-    {
-        m_aWorkdirRootURL += "/";
-    }
-#endif
 #else
     const char* pSrcRoot = "/assets";
     const char* pSolverRoot = "/assets";
     const char* pWorkdirRoot = "/assets";
 #endif
     m_aSrcRootPath = OUString::createFromAscii( pSrcRoot );
-    m_aSrcRootURL += m_aSrcRootPath;
+    m_aSrcRootURL = getFileURLFromSystemPath(m_aSrcRootPath);
 
     m_aSolverRootPath = OUString::createFromAscii( pSolverRoot );
-    m_aSolverRootURL += m_aSolverRootPath;
+    m_aSolverRootURL = getFileURLFromSystemPath(m_aSolverRootPath);
 
     m_aWorkdirRootPath = OUString::createFromAscii( pWorkdirRoot );
-    m_aWorkdirRootURL += m_aWorkdirRootPath;
+    m_aWorkdirRootURL = getFileURLFromSystemPath(m_aWorkdirRootPath);
 
 }
 
