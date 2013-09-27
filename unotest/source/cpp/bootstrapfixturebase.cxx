@@ -9,8 +9,6 @@
 
 #include "sal/config.h"
 
-#include <cassert>
-
 #include <unotest/bootstrapfixturebase.hxx>
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
@@ -29,7 +27,7 @@ namespace {
 OUString getFileURLFromSystemPath(OUString const & path) {
     OUString url;
     osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(path, url);
-    assert(e == osl::FileBase::E_None);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
     if (!url.endsWith("/")) {
         url += "/";
     }
