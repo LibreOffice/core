@@ -141,7 +141,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
     }
 }
 // -----------------------------------------------------------------------------
-bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc )
+bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc )
 {
     bool bError = false;
     rRanges.RemoveAll();
@@ -152,7 +152,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const Strin
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
     {
         ScRange aRange;
-        String aRangeStr( rStr.GetToken( nToken ) );
+        String aRangeStr( rStr.getToken( nToken, ';' ) );
 
         sal_uInt16 nFlags = aRange.ParseAny( aRangeStr, pDoc, aDetails );
         if ( nFlags & SCA_VALID )
@@ -898,7 +898,7 @@ sal_Bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh ma
         aCmpName = pDocSh->GetTitle();
 
     //  if aDocName isn't initialized, allow
-    return ( aDocName.Len() == 0 || aDocName == aCmpName );
+    return ( aDocName.isEmpty() || aDocName == aCmpName );
 }
 
 //----------------------------------------------------------------------------
@@ -1004,7 +1004,7 @@ IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl)
     return 0;
 }
 // -----------------------------------------------------------------------------
-bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc )
+bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc )
 {
     return m_aHelper.ParseWithNames( rRanges, rStr, pDoc );
 }

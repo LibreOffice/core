@@ -55,7 +55,7 @@ class ScFormulaReferenceHelper
     sal_Int32           m_nOldBorderWidth;      // border width for expanded dialog
     SCTAB               nRefTab;                // used for ShowReference
 
-    String              sOldDialogText;         // Original title of the dialog window
+    OUString            sOldDialogText;         // Original title of the dialog window
     Size                aOldDialogSize;         // Original size of the dialog window
     Point               aOldEditPos;            // Original position of the input field
     Size                aOldEditSize;           // Original size of the input field
@@ -77,7 +77,7 @@ public:
 
     void                ShowSimpleReference(const OUString& rStr);
     void                ShowFormulaReference(const OUString& rStr);
-    bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
+    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
     void                Init();
 
     void                ShowReference(const OUString& rStr);
@@ -124,7 +124,7 @@ private:
 
     Window*             pActiveWin;
     Timer               aTimer;
-    String              aDocName;               // document on which the dialog was opened
+    OUString            aDocName;               // document on which the dialog was opened
 
     DECL_LINK( UpdateFocusHdl, void* );
 
@@ -139,7 +139,7 @@ protected:
     void                ShowSimpleReference(const OUString& rStr);
     void                ShowFormulaReference(const OUString& rStr);
 
-    bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
+    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
 
     void preNotify(const NotifyEvent& rEvent, const bool bBindRef);
     void stateChanged(const StateChangedType nStateChange, const bool bBindRef);

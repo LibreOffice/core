@@ -40,7 +40,7 @@ class ScAsciiOptions
 {
 private:
     bool        bFixedLen;
-    String      aFieldSeps;
+    OUString    aFieldSeps;
     bool        bMergeFieldSeps;
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
@@ -64,14 +64,14 @@ public:
 
     bool            operator==( const ScAsciiOptions& rCmp ) const;
 
-    void            ReadFromString( const String& rString );
-    String          WriteToString() const;
+    void            ReadFromString( const OUString& rString );
+    OUString        WriteToString() const;
 
-    void            InterpretColumnList( const String& rString );
+    void            InterpretColumnList( const OUString& rString );
 
     CharSet             GetCharSet() const      { return eCharSet; }
     bool                GetCharSetSystem() const    { return bCharSetSystem; }
-    const String&       GetFieldSeps() const    { return aFieldSeps; }
+    const OUString&     GetFieldSeps() const    { return aFieldSeps; }
     bool                IsMergeSeps() const     { return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
@@ -86,7 +86,7 @@ public:
     void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
     void    SetCharSetSystem( bool bSet )       { bCharSetSystem = bSet; }
     void    SetFixedLen( bool bSet )            { bFixedLen = bSet; }
-    void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
+    void    SetFieldSeps( const OUString& rStr )  { aFieldSeps = rStr; }
     void    SetMergeSeps( bool bSet )           { bMergeFieldSeps = bSet; }
     void    SetQuotedAsText(bool bSet)          { bQuotedFieldAsText = bSet; }
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
@@ -108,7 +108,7 @@ public:
                 If FALSE, the string is taken as is and each character is
                 expected to be one separator.
      */
-    static sal_Unicode  GetWeightedFieldSep( const String & rFieldSeps, bool bDecodeNumbers );
+    static sal_Unicode  GetWeightedFieldSep( const OUString & rFieldSeps, bool bDecodeNumbers );
 };
 
 /// How ScImportAsciiDlg is called

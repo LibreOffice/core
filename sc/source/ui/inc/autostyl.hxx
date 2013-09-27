@@ -52,9 +52,9 @@ public:
             ScAutoStyleList(ScDocShell* pShell);
             ~ScAutoStyleList();
 
-    void    AddInitial( const ScRange& rRange, const String& rStyle1,
-                        sal_uLong nTimeout, const String& rStyle2 );
-    void    AddEntry( sal_uLong nTimeout, const ScRange& rRange, const String& rStyle );
+    void    AddInitial( const ScRange& rRange, const OUString& rStyle1,
+                        sal_uLong nTimeout, const OUString& rStyle2 );
+    void    AddEntry( sal_uLong nTimeout, const ScRange& rRange, const OUString& rStyle );
 
     void    ExecuteAllNow();
 };

@@ -48,27 +48,27 @@ class ScDocument;
 class ScViewEntryPtr
 {
 private:
-    String*         pAction;
-    String*         pPos;
-    String*         pAuthor;
-    String*         pDate;
-    String*         pComment;
+    OUString*       pAction;
+    OUString*       pPos;
+    OUString*       pAuthor;
+    OUString*       pDate;
+    OUString*       pComment;
     void*           pData;
 
 public:
 
-    String*         GetpAction()    {return pAction; }
-    String*         GetpPos()       {return pPos;    }
-    String*         GetpAuthor()    {return pAuthor; }
-    String*         GetpDate()      {return pDate;   }
-    String*         GetpComment()   {return pComment;}
+    OUString*       GetpAction()    {return pAction; }
+    OUString*       GetpPos()       {return pPos;    }
+    OUString*       GetpAuthor()    {return pAuthor; }
+    OUString*       GetpDate()      {return pDate;   }
+    OUString*       GetpComment()   {return pComment;}
     void*           GetpData()      {return pData;   }
 
-    void        SetpAction (String* pString)    {pAction= pString;}
-    void        SetpPos    (String* pString)    {pPos   = pString;}
-    void        SetpAuthor (String* pString)    {pAuthor= pString;}
-    void        SetpDate   (String* pString)    {pDate  = pString;}
-    void        SetpComment(String* pString)    {pComment=pString;}
+    void        SetpAction (OUString* pString)    {pAction= pString;}
+    void        SetpPos    (OUString* pString)    {pPos   = pString;}
+    void        SetpAuthor (OUString* pString)    {pAuthor= pString;}
+    void        SetpDate   (OUString* pString)    {pDate  = pString;}
+    void        SetpComment(OUString* pString)    {pComment=pString;}
     void        SetpData   (void*   pdata)      {pData   =pdata;}
 };
 
@@ -148,7 +148,7 @@ private:
     DECL_LINK( AcceptAllHandle, void*);
     DECL_LINK( ExpandingHandle, SvxRedlinTable*);
     DECL_LINK( SelectHandle, void*);
-    DECL_LINK( RefInfoHandle, String*);
+    DECL_LINK( RefInfoHandle, OUString*);
 
     DECL_LINK( UpdateSelectionHdl, void*);
     DECL_LINK( ChgTrackModHdl, ScChangeTrack*);

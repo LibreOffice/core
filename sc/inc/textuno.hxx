@@ -379,7 +379,7 @@ protected:
     sal_Bool                    bDoUpdate;
 
 protected:
-    virtual void            GetCellText(const ScAddress& rCellPos, String& rText);
+    virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText);
 
 public:
                             ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP);

@@ -1413,7 +1413,7 @@ sal_Int32 ScAccessibleCsvGrid::implGetSelColumn( sal_Int32 nSelColumn ) const
     return 0;
 }
 
-String ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const
+OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const
 {
     ScCsvGrid& rGrid = implGetGrid();
     sal_Int32 nLine = nRow + rGrid.GetFirstVisLine() - 1;
@@ -1440,7 +1440,7 @@ DBG_NAME( ScAccessibleCsvCell )
 
 ScAccessibleCsvCell::ScAccessibleCsvCell(
         ScCsvGrid& rGrid,
-        const String& rCellText,
+        const OUString& rCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
     ScAccessibleCsvControl( rGrid.GetAccessible(), rGrid, nCellRole ),
     AccessibleStaticTextBase( SvxEditSourcePtr( NULL ) ),

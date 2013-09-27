@@ -69,13 +69,13 @@ private:
     long                    mnDataColWidth1;
     long                    mnDataColWidth2;
     long                    mnRowHeight;
-    const String            aStrJan;
-    const String            aStrFeb;
-    const String            aStrMar;
-    const String            aStrNorth;
-    const String            aStrMid;
-    const String            aStrSouth;
-    const String            aStrSum;
+    const OUString          aStrJan;
+    const OUString          aStrFeb;
+    const OUString          aStrMar;
+    const OUString          aStrNorth;
+    const OUString          aStrMid;
+    const OUString          aStrSouth;
+    const OUString          aStrSum;
     SvNumberFormatter*      pNumFmt;
     //-------------------------------------------
     SC_DLLPRIVATE void  Init            ();
@@ -101,7 +101,7 @@ private:
                               Font& rCJKFont,
                               Font& rCTLFont );
 
-    SC_DLLPRIVATE String    MakeNumberString( String cellString, sal_Bool bAddDec );
+    SC_DLLPRIVATE OUString MakeNumberString( OUString cellString, sal_Bool bAddDec );
     SC_DLLPRIVATE void  DrawFrameLine   ( const ::editeng::SvxBorderLine&   rLineD,
                               Point                 from,
                               Point                 to,

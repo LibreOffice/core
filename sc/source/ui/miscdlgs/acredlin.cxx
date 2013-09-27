@@ -888,7 +888,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, String*, pResult)
+IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
 {
     sal_uInt16 nId;
 

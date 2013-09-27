@@ -106,7 +106,7 @@ public:
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
-    virtual void            GetCellText(const ScAddress& rCellPos, String& rText);
+    virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText);
 private:
     ScViewForwarder* mpViewForwarder;
     ScEditViewForwarder* mpEditViewForwarder;
@@ -212,7 +212,7 @@ class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextDat
 {
 public:
                         ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-                            const String& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader);
+                            const OUString& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader);
     virtual             ~ScAccessiblePreviewHeaderCellTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -226,7 +226,7 @@ public:
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
-    String          maText;
+    OUString        maText;
     sal_Bool        mbColHeader;
     sal_Bool        mbRowHeader;
 
@@ -277,7 +277,7 @@ class ScAccessibleNoteTextData : public ScAccessibleTextData
 {
 public:
                         ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
-                            const String& sText, const ScAddress& aCellPos, sal_Bool bMarkNote);
+                            const OUString& sText, const ScAddress& aCellPos, sal_Bool bMarkNote);
     virtual             ~ScAccessibleNoteTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -297,7 +297,7 @@ private:
     ScEditEngineDefaulter*  mpEditEngine;
     SvxEditEngineForwarder* mpForwarder;
     ScDocShell*             mpDocSh;
-    String                  msText;
+    OUString                msText;
     ScAddress               maCellPos;
     sal_Bool                mbMarkNote;
     sal_Bool                mbDataValid;
@@ -316,7 +316,7 @@ private:
     EditEngine*                 mpEditEngine;
     TextForwarderPtr            mpTextForwarder;
     ViewForwarderPtr            mpViewForwarder;
-    String                      maCellText;
+    OUString                    maCellText;
     Rectangle                   maBoundBox;
     Size                        maCellSize;
 
@@ -324,7 +324,7 @@ public:
     explicit                    ScAccessibleCsvTextData(
                                     Window* pWindow,
                                     EditEngine* pEditEngine,
-                                    const String& rCellText,
+                                    const OUString& rCellText,
                                     const Rectangle& rBoundBox,
                                     const Size& rCellSize );
     virtual                     ~ScAccessibleCsvTextData();

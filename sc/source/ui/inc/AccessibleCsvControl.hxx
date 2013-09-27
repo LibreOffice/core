@@ -539,7 +539,7 @@ private:
     inline sal_Int32 implGetIndex( sal_Int32 nRow, sal_Int32 nColumn ) const { return nRow * implGetColumnCount() + nColumn; }
 
     /** Returns the contents of the specified cell (including header). Indexes must be valid. */
-    String implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
+    OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
     /** Creates a new accessible object of the specified cell. Indexes must be valid. */
     ScAccessibleCsvControl* implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const;
 };
@@ -556,7 +556,7 @@ protected:
     typedef ::std::auto_ptr< SvxEditSource >        SvxEditSourcePtr;
 
 private:
-    String                      maCellText; /// The text contents of this cell.
+    OUString                    maCellText; /// The text contents of this cell.
     sal_Int32                   mnLine;     /// The grid line index (core index).
     sal_uInt32                  mnColumn;   /// The grid column index (core index).
     sal_Int32                   mnIndex;    /// The index of the cell in the table.
@@ -564,7 +564,7 @@ private:
 public:
     explicit                    ScAccessibleCsvCell(
                                     ScCsvGrid& rGrid,
-                                    const String& rCellText,
+                                    const OUString& rCellText,
                                     sal_Int32 nRow, sal_Int32 nColumn );
     virtual                     ~ScAccessibleCsvCell();
 

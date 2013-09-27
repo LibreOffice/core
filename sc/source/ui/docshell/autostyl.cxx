@@ -93,8 +93,8 @@ ScAutoStyleList::~ScAutoStyleList()
 
 //  initial short delay (asynchronous call)
 
-void ScAutoStyleList::AddInitial( const ScRange& rRange, const String& rStyle1,
-                                    sal_uLong nTimeout, const String& rStyle2 )
+void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1,
+                                    sal_uLong nTimeout, const OUString& rStyle2 )
 {
     aInitials.push_back(new ScAutoStyleInitData( rRange, rStyle1, nTimeout, rStyle2 ));
     aInitTimer.Start();
@@ -118,7 +118,7 @@ IMPL_LINK_NOARG(ScAutoStyleList, InitHdl)
     return 0;
 }
 
-void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const String& rStyle )
+void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const OUString& rStyle )
 {
     aTimer.Stop();
     sal_uLong nNow = TimeNow();

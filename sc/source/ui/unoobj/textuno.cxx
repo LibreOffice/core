@@ -952,7 +952,7 @@ ScCellEditSource* ScCellTextData::GetOriginalSource()
     return pOriginalSource;
 }
 
-void ScCellTextData::GetCellText(const ScAddress& rCellPos, String& rText)
+void ScCellTextData::GetCellText(const ScAddress& rCellPos, OUString& rText)
 {
     if (pDocShell)
     {
@@ -990,7 +990,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
     if (bDataValid)
         return pForwarder;
 
-    String aText;
+    OUString aText;
 
     if (pDocShell)
     {
@@ -1013,7 +1013,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         else
         {
             GetCellText(aCellPos, aText);
-            if (aText.Len())
+            if (!aText.isEmpty())
                 pEditEngine->SetTextNewDefaults(aText, aDefaults);
             else
                 pEditEngine->SetDefaults(aDefaults);

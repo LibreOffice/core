@@ -760,7 +760,7 @@ ScAccessibleTextData* ScAccessibleCellTextData::Clone() const
     return new ScAccessibleCellTextData( mpViewShell, aCellPos, meSplitPos, mpAccessibleCell );
 }
 
-void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, String& rText)
+void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, OUString& rText)
 {
 //  #104893#; don't use the input string
 //    ScCellTextData::GetCellText(rCellPos, rText);
@@ -781,7 +781,7 @@ void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, String& rT
             else if (!aOptions.GetOption( VOPT_NULLVALS ))
             {
                 if ((aCellType == CELLTYPE_VALUE || aCellType == CELLTYPE_FORMULA) && pDoc->GetValue(rCellPos) == 0.0)
-                    rText.Erase();
+                    rText = "";
             }
         }
     }
@@ -1323,7 +1323,7 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 //  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
 
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-            const String& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader)
+            const OUString& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
     mpViewForwarder(NULL),
     mpViewShell(pViewShell),
@@ -1387,7 +1387,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
     if (bDataValid)
         return pForwarder;
 
-    if (maText.Len() && pEditEngine)
+    if (!maText.isEmpty() && pEditEngine)
     {
 
         if ( mpViewShell  )
@@ -1544,7 +1544,7 @@ SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
 }
 
 ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
-                            const String& sText, const ScAddress& aCellPos, sal_Bool bMarkNote)
+                            const OUString& sText, const ScAddress& aCellPos, sal_Bool bMarkNote)
     :
     mpViewForwarder(NULL),
     mpViewShell(pViewShell),
@@ -1620,7 +1620,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
     if (mbDataValid)
         return mpForwarder;
 
-    if (msText.Len() && mpEditEngine)
+    if (!msText.isEmpty() && mpEditEngine)
     {
 
         if ( mpViewShell  )
@@ -1708,7 +1708,7 @@ void ScCsvViewForwarder::SetInvalid()
 
 ScAccessibleCsvTextData::ScAccessibleCsvTextData(
         Window* pWindow, EditEngine* pEditEngine,
-        const String& rCellText, const Rectangle& rBoundBox, const Size& rCellSize ) :
+        const OUString& rCellText, const Rectangle& rBoundBox, const Size& rCellSize ) :
     mpWindow( pWindow ),
     mpEditEngine( pEditEngine ),
     maCellText( rCellText ),
