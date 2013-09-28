@@ -1833,9 +1833,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
 
         if( pSect )
         {
-            OUString sFormel = pSect->GetCondition();
-            ReplaceUsedDBs( rOldNames, rNewName, sFormel);
-            pSect->SetCondition(sFormel);
+            pSect->SetCondition(ReplaceUsedDBs(rOldNames, rNewName, pSect->GetCondition()));
         }
     }
 
@@ -1896,24 +1894,16 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                 // no break;
             case RES_HIDDENTXTFLD:
             case RES_HIDDENPARAFLD:
-            {
-                OUString sFormel = pFld->GetPar1();
-                ReplaceUsedDBs( rOldNames, rNewName, sFormel);
-                pFld->SetPar1( sFormel );
+                pFld->SetPar1( ReplaceUsedDBs(rOldNames, rNewName, pFld->GetPar1()) );
                 bExpand = true;
                 break;
-            }
 
             case RES_SETEXPFLD:
             case RES_GETEXPFLD:
             case RES_TABLEFLD:
-            {
-                OUString sFormel = pFld->GetFormula();
-                ReplaceUsedDBs( rOldNames, rNewName, sFormel);
-                pFld->SetPar2( sFormel );
+                pFld->SetPar2( ReplaceUsedDBs(rOldNames, rNewName, pFld->GetFormula()) );
                 bExpand = true;
                 break;
-            }
         }
 
         if (bExpand)
@@ -1932,11 +1922,12 @@ inline OUString lcl_CutOffDBCommandType(const OUString& rName)
 
 }
 
-void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
-                            const String& rNewName, OUString& rFormel )
+OUString SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
+                                const OUString& rNewName, const OUString& rFormel )
 {
     const CharClass& rCC = GetAppCharClass();
     const OUString sNewName( lcl_CutOffDBCommandType(rNewName) );
+    OUString sFormula(rFormel);
 
     for( sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i )
     {
@@ -1945,12 +1936,12 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
         if (sDBName!=sNewName)
         {
             sal_Int32 nPos = 0;
-            while ((nPos = rFormel.indexOf(sDBName, nPos))>=0)
+            while ((nPos = sFormula.indexOf(sDBName, nPos))>=0)
             {
-                if( rFormel[nPos + sDBName.getLength()] == '.' &&
-                    (!nPos || !rCC.isLetterNumeric( rFormel, nPos - 1 )))
+                if( sFormula[nPos + sDBName.getLength()] == '.' &&
+                    (!nPos || !rCC.isLetterNumeric( sFormula, nPos - 1 )))
                 {
-                    rFormel = rFormel.replaceAt(nPos, sDBName.getLength(), sNewName);
+                    sFormula = sFormula.replaceAt(nPos, sDBName.getLength(), sNewName);
                     //prevent re-searching - this is useless and provokes
                     //endless loops when names containing each other and numbers are exchanged
                     //e.g.: old ?12345.12345  new: i12345.12345
@@ -1959,6 +1950,7 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
             }
         }
     }
+    return sFormula;
 }
 
 bool SwDoc::IsNameInArray( const std::vector<String>& rArr, const String& rName )

@@ -655,8 +655,8 @@ private:
     void AddUsedDBToList( std::vector<String>& rDBNameList, const String& rDBName );
     bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
     void GetAllDBNames( std::vector<String>& rAllDBNames );
-    void ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
-                        const String& rNewName, OUString& rFormel );
+    OUString ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
+                             const OUString& rNewName, const OUString& rFormel );
     std::vector<String>& FindUsedDBs( const std::vector<String>& rAllDBNames,
                                 const String& rFormel,
                                 std::vector<String>& rUsedDBNames );
