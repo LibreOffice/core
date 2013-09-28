@@ -502,6 +502,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
 {
+    if (bOne)
+    {
+        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+        m_pShowText->SetText(OUString(&cChar, 1));
+    }
     EndDialog( sal_True );
     return 0;
 }
