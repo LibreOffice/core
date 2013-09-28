@@ -1139,7 +1139,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
     }
 
     // Search for a previous numbering/bullet rule to continue it.
-    String sContinuedListId;
+    OUString sContinuedListId;
     if ( !pNumRule )
     {
         pNumRule = GetDoc()->SearchNumRule( *GetCrsr()->GetPoint(),

@@ -1205,7 +1205,7 @@ namespace
     {
         SwNumRule* pReplaceNumRule;
         bool bCreateNewList;
-        String sListId;
+        OUString sListId;
 
         ListStyleData()
             : pReplaceNumRule( 0 ),
@@ -1539,7 +1539,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         const bool bNum,
                                         const bool bOutline,
                                         int nNonEmptyAllowed,
-                                        String& sListId,
+                                        OUString& sListId,
                                         const bool bInvestigateStartNode)
 {
     const SwNumRule * pResult = NULL;

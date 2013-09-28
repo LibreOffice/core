@@ -920,7 +920,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // First search for non-outline numbering list. Then search for non-outline
     // bullet list.
     // Keep also the <ListId> value for possible propagation.
-    String aListIdToPropagate;
+    OUString aListIdToPropagate;
     const SwNumRule* pNumRuleToPropagate =
         pDoc->SearchNumRule( rPos, false, true, false, 0, aListIdToPropagate, true );
     if ( !pNumRuleToPropagate )

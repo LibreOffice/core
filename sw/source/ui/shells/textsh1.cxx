@@ -1066,7 +1066,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_NUM_CONTINUE:
         {
-            String sContinuedListId;
+            OUString sContinuedListId;
             const SwNumRule* pRule =
                 rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
             // #i86492#
@@ -1680,7 +1680,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     // #i86492#
                     // Search also for bullet list
-                    String aDummy;
+                    OUString aDummy;
                     const SwNumRule* pRule =
                             rSh.SearchNumRule( false, true, false, -1, aDummy );
                     if ( !pRule )

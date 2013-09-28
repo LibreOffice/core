@@ -1565,7 +1565,7 @@ public:
                                     const bool bNum,
                                     const bool bOutline,
                                     int nNonEmptyAllowed,
-                                    String& sListId,
+                                    OUString& sListId,
                                     const bool bInvestigateStartNode = false );
 
     /// Paragraphs without numbering but with indents.

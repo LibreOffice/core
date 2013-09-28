@@ -545,7 +545,7 @@ public:
                                     const bool bNum,
                                     const bool bOutline,
                                     int nNonEmptyAllowed,
-                                    String& sListId );
+                                    OUString& sListId );
 
     /** Undo.
      Maintain UndoHistory in Document.

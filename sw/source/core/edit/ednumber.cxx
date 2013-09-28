@@ -830,7 +830,7 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                               const bool bNum,
                                               const bool bOutline,
                                               int nNonEmptyAllowed,
-                                              String& sListId )
+                                              OUString& sListId )
 {
     return GetDoc()->SearchNumRule( *(bForward ? GetCrsr()->End() : GetCrsr()->Start()),
                                     bForward, bNum, bOutline, nNonEmptyAllowed,
