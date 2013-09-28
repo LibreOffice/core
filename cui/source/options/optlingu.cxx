@@ -1081,10 +1081,13 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
     get(m_pLinguOptionsEditPB, "linguoptionsedit");
     get(m_pMoreDictsLink, "moredictslink");
 
+    m_pLinguModulesCLB->set_height_request(m_pLinguModulesCLB->GetTextHeight() * 3);
+    m_pLinguDicsCLB->set_height_request(m_pLinguDicsCLB->GetTextHeight() * 5);
+    m_pLinguOptionsCLB->set_height_request(m_pLinguOptionsCLB->GetTextHeight() * 5);
+
     pCheckButtonData = NULL;
 
     m_pLinguModulesCLB->SetStyle( m_pLinguModulesCLB->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-    m_pLinguModulesCLB->SetHelpId(HID_CLB_LINGU_MODULES );
     m_pLinguModulesCLB->SetHighlightRange();
     m_pLinguModulesCLB->SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_pLinguModulesCLB->SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
@@ -1094,7 +1097,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
     m_pLinguOptionsEditPB->SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
     m_pLinguDicsCLB->SetStyle( m_pLinguDicsCLB->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-    m_pLinguDicsCLB->SetHelpId(HID_CLB_EDIT_MODULES_DICS );
     m_pLinguDicsCLB->SetHighlightRange();
     m_pLinguDicsCLB->SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_pLinguDicsCLB->SetCheckButtonHdl(LINK(this, SvxLinguTabPage, BoxCheckButtonHdl_Impl));
@@ -1104,7 +1106,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
     m_pLinguDicsDelPB->SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
     m_pLinguOptionsCLB->SetStyle( m_pLinguOptionsCLB->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-    m_pLinguOptionsCLB->SetHelpId(HID_CLB_LINGU_OPTIONS );
     m_pLinguOptionsCLB->SetHighlightRange();
     m_pLinguOptionsCLB->SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_pLinguOptionsCLB->SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
