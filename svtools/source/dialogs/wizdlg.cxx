@@ -61,6 +61,9 @@ void WizardDialog::ImplInitData()
     meViewAlign     = WINDOWALIGN_LEFT;
     mbEmptyViewMargin =  false;
     mnLeftAlignCount = 0;
+
+    maWizardLayoutTimer.SetTimeout(50);
+    maWizardLayoutTimer.SetTimeoutHdl( LINK( this, WizardDialog, ImplHandleWizardLayoutTimerHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -111,7 +114,26 @@ void WizardDialog::ImplCalcSize( Size& rSize )
     }
 }
 
-// -----------------------------------------------------------------------
+bool WizardDialog::hasWizardPendingLayout() const
+{
+    return maWizardLayoutTimer.IsActive();
+}
+
+void WizardDialog::queue_layout()
+{
+    if (hasWizardPendingLayout())
+        return;
+    if (IsInClose())
+        return;
+    maWizardLayoutTimer.Start();
+}
+
+IMPL_LINK( WizardDialog, ImplHandleWizardLayoutTimerHdl, void*, EMPTYARG )
+{
+    ImplPosCtrls();
+    ImplPosTabPage();
+    return 0;
+}
 
 void WizardDialog::ImplPosCtrls()
 {
@@ -357,8 +379,9 @@ WizardDialog::WizardDialog( Window* pParent, const ResId& rResId ) :
 
 WizardDialog::~WizardDialog()
 {
-    if ( mpFixedLine )
-        delete mpFixedLine;
+    maWizardLayoutTimer.Stop();
+
+    delete mpFixedLine;
 
     // Remove all buttons
     while ( mpFirstBtn )

@@ -210,6 +210,7 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
 class SVT_DLLPUBLIC WizardDialog : public ModalDialog
 {
 private:
+    Timer               maWizardLayoutTimer;
     Size                maPageSize;
     ImplWizPageData*    mpFirstPage;
     ImplWizButtonData*  mpFirstBtn;
@@ -224,6 +225,9 @@ private:
     Link                maDeactivateHdl;
     sal_Int16           mnLeftAlignCount;
     bool                mbEmptyViewMargin;
+
+    DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, void* );
+    bool hasWizardPendingLayout() const;
 
 protected:
     long                LogicalCoordinateToPixel(int iCoordinate);
@@ -248,9 +252,9 @@ private:
     SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
 
 public:
-                        WizardDialog( Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
-                        WizardDialog( Window* pParent, const ResId& rResId );
-                        ~WizardDialog();
+    WizardDialog( Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
+    WizardDialog( Window* pParent, const ResId& rResId );
+    ~WizardDialog();
 
     virtual void        Resize();
     virtual void        StateChanged( StateChangedType nStateChange );
@@ -259,11 +263,13 @@ public:
     virtual void        ActivatePage();
     virtual long        DeactivatePage();
 
-    sal_Bool                ShowPrevPage();
-    sal_Bool                ShowNextPage();
-    sal_Bool                ShowPage( sal_uInt16 nLevel );
-    sal_Bool                Finnish( long nResult = 0 );
-    sal_uInt16              GetCurLevel() const { return mnCurLevel; }
+    virtual void queue_layout();
+
+    sal_Bool            ShowPrevPage();
+    sal_Bool            ShowNextPage();
+    sal_Bool            ShowPage( sal_uInt16 nLevel );
+    sal_Bool            Finnish( long nResult = 0 );
+    sal_uInt16          GetCurLevel() const { return mnCurLevel; }
 
     void                AddPage( TabPage* pPage );
     void                RemovePage( TabPage* pPage );
