@@ -313,8 +313,6 @@ private:
     SAL_DLLPRIVATE  ServerFontLayout( const ServerFontLayout& );
     SAL_DLLPRIVATE  ServerFontLayout& operator=( const ServerFontLayout& );
 
-    bool            bUseHarfBuzz;
-
 public:
                     ServerFontLayout( ServerFont& );
     virtual bool    LayoutText( ImplLayoutArgs& );
