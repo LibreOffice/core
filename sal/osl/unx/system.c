@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unistd.h>
+#include <string.h>
+
 #include <config_features.h>
 
 #include "system.h"
@@ -284,5 +287,147 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
 }
 
 #endif
+
+#if defined (SPARC)
+
+#if defined (SOLARIS) && !defined(__sparcv8plus) && !defined(__sparcv9)
+#include <sys/types.h>
+#include <sys/processor.h>
+
+void osl_InterlockedCountSetV9(sal_Bool bV9);
+
+/*
+ * osl_InitSparcV9() should be executed as early as possible. We place it in the
+ * .init section of sal
+ */
+#if defined ( __SUNPRO_C ) || defined ( __SUNPRO_CC )
+void osl_InitSparcV9(void);
+#pragma init (osl_InitSparcV9)
+#elif defined ( __GNUC__ )
+void osl_InitSparcV9(void)  __attribute__((constructor));
+#endif
+
+void osl_InitSparcV9(void)
+{
+    /* processor_info() identifies SPARCV8 (ie sun4c machines) simply as "sparc"
+     * and SPARCV9 (ie ultra sparcs, sun4u) as "sparcv9". Since we know that we
+     * run at least on a SPARCV8 architecture or better, any processor type != "sparc"
+     * and != "i386" is considered to be SPARCV9 or better
+     *
+     * This way we are certain that this will still work if someone names SPARCV10
+     * "foobar"
+     */
+    processor_info_t aInfo;
+    int rc;
+
+    rc = processor_info(0, &aInfo);
+
+    if ( rc != -1 ) {
+        if ( !strcmp( "sparc", aInfo.pi_processor_type )    /* SPARCV8 */
+            || !strcmp( "i386", aInfo.pi_processor_type ) ) /* can't happen, but ... */
+            return;
+        /* we are reasonably certain to be on sparcv9/sparcv8plus or better */
+        osl_InterlockedCountSetV9(sal_True);
+    }
+}
+
+#endif /* SOLARIS */
+
+#if defined(NETBSD) && defined(__GNUC__) && !defined(__sparcv9) && !defined(__sparc_v9__)
+
+#include <sys/param.h>
+#include <sys/sysctl.h>
+void osl_InitSparcV9(void)  __attribute__((constructor));
+void osl_InterlockedCountSetV9(sal_Bool bV9);
+
+/* Determine which processor we are running on (sparc v8 or v9)
+ * The approach is very similar to Solaris.
+ */
+
+void osl_InitSparcV9(void)
+{
+    int mib[2]={CTL_HW,HW_MACHINE};
+    char processorname[256];
+    size_t len=256;
+
+    /* get the machine name */
+    sysctl(mib, 2, processorname, &len, NULL, 0);
+    if (!strncmp("sparc64",processorname, len)) {
+        osl_InterlockedCountSetV9(sal_True);
+    }
+}
+
+#endif /* NETBSD */
+
+#endif /* SPARC */
+
+#if defined ( LINUX ) && defined ( SPARC )
+#include <sys/utsname.h>
+void osl_InitSparcV9(void)  __attribute__((constructor));
+void osl_InterlockedCountSetV9(sal_Bool bV9);
+/* Determine which processor we are running on (sparc v8 or v9)
+ * The approach is very similar to Solaris.
+ */
+void osl_InitSparcV9(void)
+{
+    struct utsname name;
+    int rc;
+    rc = uname(&name);
+    if ( rc != -1 ) {
+        if ( !strcmp( "sparc", name.machine ))
+        return;
+    osl_InterlockedCountSetV9(sal_True);
+    }
+}
+#endif
+
+#if    ( defined(__GNUC__) && (defined(X86) || defined(X86_64)) )\
+    || ( defined(SOLARIS) && defined(__i386) )
+
+/* Safe default */
+int osl_isSingleCPU = 0;
+
+/* Determine if we are on a multiprocessor/multicore/HT x86/x64 system
+ *
+ * The lock prefix for atomic operations in osl_[inc|de]crementInterlockedCount()
+ * comes with a cost and is especially expensive on pre HT x86 single processor
+ * systems, where it isn't needed at all.
+ *
+ * This should be run as early as possible, thus it's placed in the init section
+ */
+#if defined(_SC_NPROCESSORS_CONF) /* i.e. MACOSX for Intel doesn't have this */
+#if defined(__GNUC__)
+void osl_interlockedCountCheckForSingleCPU(void)  __attribute__((constructor));
+#elif defined(__SUNPRO_C)
+void osl_interlockedCountCheckForSingleCPU(void);
+#pragma init (osl_interlockedCountCheckForSingleCPU)
+#endif
+
+void osl_interlockedCountCheckForSingleCPU(void)
+{
+    /* In case sysconfig fails be on the safe side,
+     * consider it a multiprocessor/multicore/HT system */
+    if ( sysconf(_SC_NPROCESSORS_CONF) == 1 ) {
+        osl_isSingleCPU = 1;
+    }
+}
+#endif /* defined(_SC_NPROCESSORS_CONF) */
+#endif
+
+//might be useful on other platforms, but doesn't compiler under MACOSX anyway
+#if defined(__GNUC__) && defined(LINUX)
+//force the __data_start symbol to exist in any executables that link against
+//libuno_sal so that dlopening of the libgcj provided libjvm.so on some
+//platforms where it needs that symbol will succeed. e.g. Debian mips/lenny
+//with gcc 4.3. With this in place the smoketest succeeds with libgcj provided
+//java. Quite possibly also required/helpful for s390x/s390 and maybe some
+//others. Without it the dlopen of libjvm.so will fail with __data_start
+//not found
+extern int __data_start[] __attribute__((weak));
+extern int data_start[] __attribute__((weak));
+extern int _end[] __attribute__((weak));
+static void *dummy[] __attribute__((used)) = {__data_start, data_start, _end};
+#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,6 +31,10 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_destroySemaphore(void *) {
     std::abort();
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_getEthernetAddress(sal_uInt8 *) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_releaseSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
