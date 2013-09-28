@@ -118,7 +118,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	osl/thread.h \
 	osl/thread.hxx \
 	osl/time.h \
-	osl/util.h \
 	rtl/alloc.h \
 	rtl/allocator.hxx \
 	rtl/bootstrap.h \

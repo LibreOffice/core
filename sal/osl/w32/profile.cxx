@@ -27,7 +27,6 @@
 #include <osl/profile.h>
 #include <osl/process.h>
 #include <osl/file.h>
-#include <osl/util.h>
 #include <rtl/alloc.h>
 #include <sal/macros.h>
 #include <algorithm>
