@@ -20,6 +20,7 @@
 #include <editeng/outliner.hxx>
 
 #include <svx/dialogs.hrc>
+#include <svx/svxdlg.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svl/style.hxx>
@@ -53,7 +54,9 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,
                                 SfxStyleSheetBasePool* pSSPool ) :
-        SfxTabDialog        ( pParent, DlgId ),
+        SfxTabDialog        ( pParent
+                            , "DrawPRTLDialog"
+                            , "modules/sdraw/ui/drawprtldialog.ui"),
         mpDocShell          ( pDocSh ),
         ePO                 ( _ePO ),
         aInputSet           ( *rStyleBase.GetItemSet().GetPool(), SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL ),
@@ -112,20 +115,12 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     else
         SetInputSet( pOrgSet );
 
-    FreeResource();
-
-    SvxColorListItem aColorListItem(*( (const SvxColorListItem*)
-        ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
-    SvxGradientListItem aGradientListItem(*( (const SvxGradientListItem*)
-        ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
-    SvxBitmapListItem aBitmapListItem(*( (const SvxBitmapListItem*)
-        ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
-    SvxHatchListItem aHatchListItem(*( (const SvxHatchListItem*)
-        ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
-    SvxDashListItem aDashListItem(*( (const SvxDashListItem*)
-        ( mpDocShell->GetItem( SID_DASH_LIST ) ) ) );
-    SvxLineEndListItem aLineEndListItem(*( (const SvxLineEndListItem*)
-        ( mpDocShell->GetItem( SID_LINEEND_LIST ) ) ) );
+    SvxColorListItem aColorListItem(*( (const SvxColorListItem*) ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
+    SvxGradientListItem aGradientListItem(*( (const SvxGradientListItem*) ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
+    SvxBitmapListItem aBitmapListItem(*( (const SvxBitmapListItem*) ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
+    SvxHatchListItem aHatchListItem(*( (const SvxHatchListItem*) ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
+    SvxDashListItem aDashListItem(*( (const SvxDashListItem*) ( mpDocShell->GetItem( SID_DASH_LIST ) ) ) );
+    SvxLineEndListItem aLineEndListItem(*( (const SvxLineEndListItem*)  ( mpDocShell->GetItem( SID_LINEEND_LIST ) ) ) );
 
     pColorTab = aColorListItem.GetColorList();
     pDashList = aDashListItem.GetDashList();
@@ -134,42 +129,46 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     pHatchingList = aHatchListItem.GetHatchList();
     pBitmapList = aBitmapListItem.GetBitmapList();
 
-    switch( DlgId.GetId() )
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
+
+    mnLine = AddTabPage( "RID_SVXPAGE_LINE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), 0 );
+    mnArea = AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), 0 );
+    mnShadow = AddTabPage( "RID_SVXPAGE_SHADOW", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_SHADOW ), 0 );
+    mnTransparency = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), 0 );
+    mnFont = AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
+    mnEffects = AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
+    mnParagr = AddTabPage( "RID_SVXPAGE_STD_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_STD_PARAGRAPH ), 0 );
+    mnTextAtt = AddTabPage( "RID_SVXPAGE_TEXTATTR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TEXTATTR ), 0 );
+    mnBullet = AddTabPage( "RID_SVXPAGE_PICK_BULLET", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BULLET ), 0 );
+    mnNum = AddTabPage( "RID_SVXPAGE_PICK_SINGLE_NUM", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_SINGLE_NUM ), 0 );
+    mnBitmap = AddTabPage( "RID_SVXPAGE_PICK_BMP", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BMP ), 0 );
+    mnOptions = AddTabPage( "RID_SVXPAGE_NUM_OPTIONS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUM_OPTIONS ), 0 );
+    mnTab =  AddTabPage( "RID_SVXPAGE_TABULATOR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TABULATOR ), 0 );
+    mnAsian = AddTabPage( "RID_SVXPAGE_PARA_ASIAN", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PARA_ASIAN ), 0 );
+    mnAlign = AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), 0 );
+
+    SvtCJKOptions aCJKOptions;
+    if( !aCJKOptions.IsAsianTypographyEnabled() )
+        RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
+
+    if (DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND)
     {
-        case TAB_PRES_LAYOUT_TEMPLATE:
-        {
-            AddTabPage( RID_SVXPAGE_LINE);
-            AddTabPage( RID_SVXPAGE_AREA);
-            AddTabPage( RID_SVXPAGE_SHADOW);
-            AddTabPage( RID_SVXPAGE_TRANSPARENCE);
-            AddTabPage( RID_SVXPAGE_CHAR_NAME );
-            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
-            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
-            AddTabPage( RID_SVXPAGE_TEXTATTR );
-            AddTabPage( RID_SVXPAGE_PICK_BULLET );
-            AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
-            AddTabPage( RID_SVXPAGE_PICK_BMP );
-            AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
-            AddTabPage( RID_SVXPAGE_TABULATOR );
-        }
-        break;
+        RemoveTabPage( "RID_SVXPAGE_LINE");
 
-        case TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND:        // background
-            AddTabPage( RID_SVXPAGE_AREA);
-        break;
-    }
-
-    // the tabpages Alignment, Tabs and Asian Typography are very
-    // useful, except for the background style
-    if( DlgId.GetId() != TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND )
-    {
-        SvtCJKOptions aCJKOptions;
-        if( aCJKOptions.IsAsianTypographyEnabled() )
-            AddTabPage( RID_SVXPAGE_PARA_ASIAN );
-        else
-            RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
-
-        AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
+        RemoveTabPage( "RID_SVXPAGE_SHADOW");
+        RemoveTabPage( "RID_SVXPAGE_TRANSPARENCE");
+        RemoveTabPage( "RID_SVXPAGE_CHAR_NAME");
+        RemoveTabPage( "RID_SVXPAGE_CHAR_EFFECTS");
+        RemoveTabPage( "RID_SVXPAGE_STD_PARAGRAPH");
+        RemoveTabPage( "RID_SVXPAGE_TEXTATTR");
+        RemoveTabPage( "RID_SVXPAGE_PICK_BULLET");
+        RemoveTabPage( "RID_SVXPAGE_PICK_SINGLE_NUM");
+        RemoveTabPage( "RID_SVXPAGE_PICK_BMP");
+        RemoveTabPage( "RID_SVXPAGE_NUM_OPTIONS");
+        RemoveTabPage( "RID_SVXPAGE_TABULATOR");
+        RemoveTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH");
+        RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
     }
 
     // set title and add corresponding pages to dialog
@@ -232,21 +231,19 @@ SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 // -----------------------------------------------------------------------
 
 void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
-{   SfxAllItemSet aSet(*(aInputSet.GetPool()));
-    switch( nId )
-    {
-        case RID_SVXPAGE_LINE:
+{
+    SfxAllItemSet aSet(*(aInputSet.GetPool()));
+
+    if (nId == mnLine)
         {
             aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
             aSet.Put (SvxLineEndListItem(pLineEndList,SID_LINEEND_LIST));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
-
-            rPage.PageCreated(aSet);
+        rPage.PageCreated(aSet);
         }
-        break;
 
-        case RID_SVXPAGE_AREA:
+    else if (nId == mnArea)
         {
             aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
@@ -256,41 +253,35 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
             rPage.PageCreated(aSet);
-
         }
-        break;
 
-        case RID_SVXPAGE_SHADOW:
-                aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
-                aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-                aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
-                rPage.PageCreated(aSet);
-            break;
-
-        case RID_SVXPAGE_TRANSPARENCE:
+    else if (nId == mnShadow)
+        {
+            aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
-        break;
+        }
 
-        case RID_SVXPAGE_CHAR_NAME:
+    else if (nId == mnTransparency)
         {
-            SvxFontListItem aItem(*( (const SvxFontListItem*)
-                ( mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
+            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+            rPage.PageCreated(aSet);
+        }
 
+    else if (nId == mnFont)
+        {
+            SvxFontListItem aItem(*( (const SvxFontListItem*)( mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
             aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rPage.PageCreated(aSet);
         }
-        break;
 
-        case RID_SVXPAGE_CHAR_EFFECTS:
+    else if (nId == mnEffects)
+        {
             aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
             rPage.PageCreated(aSet);
-        break;
-
-        case RID_SVXPAGE_STD_PARAGRAPH:
-        break;
-    }
+        }
 }
 
 const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
