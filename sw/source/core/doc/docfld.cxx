@@ -1930,7 +1930,6 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
     sNewName.SearchAndReplace( DB_DELIM, '.');
     //the command type is not part of the condition
     sNewName = sNewName.GetToken(0, DB_DELIM);
-    String sUpperNewNm( sNewName );
 
     for( sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i )
     {
@@ -1939,7 +1938,7 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
         sDBName.SearchAndReplace( DB_DELIM, '.');
         //cut off command type
         sDBName = sDBName.GetToken(0, DB_DELIM);
-        if( !sDBName.Equals( sUpperNewNm ))
+        if( !sDBName.Equals( sNewName ))
         {
             sal_Int32 nPos = 0;
             while ((nPos = rFormel.indexOf(sDBName, nPos))>=0)
