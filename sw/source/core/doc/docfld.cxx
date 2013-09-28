@@ -1922,35 +1922,39 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
     SetModified();
 }
 
+namespace
+{
+
+inline OUString lcl_CutOffDBCommandType(const OUString& rName)
+{
+    return rName.replaceFirst(OUString(DB_DELIM), ".").getToken(0, DB_DELIM);
+}
+
+}
+
 void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                             const String& rNewName, OUString& rFormel )
 {
     const CharClass& rCC = GetAppCharClass();
-    String  sNewName( rNewName );
-    sNewName.SearchAndReplace( DB_DELIM, '.');
-    //the command type is not part of the condition
-    sNewName = sNewName.GetToken(0, DB_DELIM);
+    const OUString sNewName( lcl_CutOffDBCommandType(rNewName) );
 
     for( sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i )
     {
-        String  sDBName( rUsedDBNames[i] );
+        const OUString sDBName( lcl_CutOffDBCommandType(rUsedDBNames[i]) );
 
-        sDBName.SearchAndReplace( DB_DELIM, '.');
-        //cut off command type
-        sDBName = sDBName.GetToken(0, DB_DELIM);
-        if( !sDBName.Equals( sNewName ))
+        if (sDBName!=sNewName)
         {
             sal_Int32 nPos = 0;
             while ((nPos = rFormel.indexOf(sDBName, nPos))>=0)
             {
-                if( rFormel[nPos + sDBName.Len()] == '.' &&
+                if( rFormel[nPos + sDBName.getLength()] == '.' &&
                     (!nPos || !rCC.isLetterNumeric( rFormel, nPos - 1 )))
                 {
-                    rFormel = rFormel.replaceAt(nPos, sDBName.Len(), sNewName);
+                    rFormel = rFormel.replaceAt(nPos, sDBName.getLength(), sNewName);
                     //prevent re-searching - this is useless and provokes
                     //endless loops when names containing each other and numbers are exchanged
                     //e.g.: old ?12345.12345  new: i12345.12345
-                    nPos = nPos + sNewName.Len();
+                    nPos = nPos + sNewName.getLength();
                 }
             }
         }
