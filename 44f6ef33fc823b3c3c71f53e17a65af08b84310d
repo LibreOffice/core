@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///ow\u003d",
+        "filename": "include/tools/inetmime.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-28T07:46:12Z",
+      "side": 1,
+      "message": "would be better to directly get rid of these functions, instead of merely deprecating them",
+      "revId": "44f6ef33fc823b3c3c71f53e17a65af08b84310d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
