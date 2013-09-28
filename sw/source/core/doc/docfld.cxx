@@ -1755,13 +1755,13 @@ void SwDoc::GetAllDBNames( std::vector<String>& rAllDBNames )
 }
 
 std::vector<String>& SwDoc::FindUsedDBs( const std::vector<String>& rAllDBNames,
-                                    const String& rFormel,
+                                    const String& rFormula,
                                    std::vector<String>& rUsedDBNames )
 {
     const CharClass& rCC = GetAppCharClass();
-    String  sFormel( rFormel);
+    String  sFormula(rFormula);
 #ifndef UNX
-    sFormel = rCC.uppercase( sFormel );
+    sFormula = rCC.uppercase( sFormula );
 #endif
 
     xub_StrLen nPos;
@@ -1769,17 +1769,17 @@ std::vector<String>& SwDoc::FindUsedDBs( const std::vector<String>& rAllDBNames,
     {
         String pStr(rAllDBNames[i]);
 
-        if( STRING_NOTFOUND != (nPos = sFormel.Search( pStr )) &&
-            sFormel.GetChar( nPos + pStr.Len() ) == '.' &&
-            (!nPos || !rCC.isLetterNumeric( sFormel, nPos - 1 )))
+        if( STRING_NOTFOUND != (nPos = sFormula.Search( pStr )) &&
+            sFormula.GetChar( nPos + pStr.Len() ) == '.' &&
+            (!nPos || !rCC.isLetterNumeric( sFormula, nPos - 1 )))
         {
             // Look up table name
             xub_StrLen nEndPos;
             nPos += pStr.Len() + 1;
-            if( STRING_NOTFOUND != (nEndPos = sFormel.Search('.', nPos)) )
+            if( STRING_NOTFOUND != (nEndPos = sFormula.Search('.', nPos)) )
             {
                 pStr.Append( DB_DELIM );
-                pStr.Append( sFormel.Copy( nPos, nEndPos - nPos ));
+                pStr.Append( sFormula.Copy( nPos, nEndPos - nPos ));
                 rUsedDBNames.push_back(pStr);
             }
         }
@@ -1923,11 +1923,11 @@ inline OUString lcl_CutOffDBCommandType(const OUString& rName)
 }
 
 OUString SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
-                                const OUString& rNewName, const OUString& rFormel )
+                                const OUString& rNewName, const OUString& rFormula )
 {
     const CharClass& rCC = GetAppCharClass();
     const OUString sNewName( lcl_CutOffDBCommandType(rNewName) );
-    OUString sFormula(rFormel);
+    OUString sFormula(rFormula);
 
     for( size_t i = 0; i < rUsedDBNames.size(); ++i )
     {
@@ -2274,41 +2274,41 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
 
-        OUString sFormel;
+        OUString sFormula;
         const SwField* pFld = pFmtFld->GetFld();
         switch( nWhich = pFld->GetTyp()->Which() )
         {
             case RES_DBSETNUMBERFLD:
             case RES_GETEXPFLD:
                 if( GETFLD_ALL == eGetMode )
-                    sFormel = sTrue;
+                    sFormula = sTrue;
                 break;
 
             case RES_DBFLD:
                 if( GETFLD_EXPAND & eGetMode )
-                    sFormel = sTrue;
+                    sFormula = sTrue;
                 break;
 
             case RES_SETEXPFLD:
                 if ( !(eGetMode == GETFLD_EXPAND) ||
                      (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
                 {
-                    sFormel = sTrue;
+                    sFormula = sTrue;
                 }
                 break;
 
             case RES_HIDDENPARAFLD:
                 if( GETFLD_ALL == eGetMode )
                 {
-                    sFormel = pFld->GetPar1();
-                    if (sFormel.isEmpty() || sFormel==sFalse)
+                    sFormula = pFld->GetPar1();
+                    if (sFormula.isEmpty() || sFormula==sFalse)
                         ((SwHiddenParaField*)pFld)->SetHidden( sal_False );
-                    else if (sFormel==sTrue)
+                    else if (sFormula==sTrue)
                         ((SwHiddenParaField*)pFld)->SetHidden( sal_True );
                     else
                         break;
 
-                    sFormel = OUString();
+                    sFormula = OUString();
                     // trigger formatting
                     ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
@@ -2317,15 +2317,15 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             case RES_HIDDENTXTFLD:
                 if( GETFLD_ALL == eGetMode )
                 {
-                    sFormel = pFld->GetPar1();
-                    if (sFormel.isEmpty() || sFormel==sFalse)
+                    sFormula = pFld->GetPar1();
+                    if (sFormula.isEmpty() || sFormula==sFalse)
                         ((SwHiddenTxtField*)pFld)->SetValue( sal_True );
-                    else if (sFormel==sTrue)
+                    else if (sFormula==sTrue)
                         ((SwHiddenTxtField*)pFld)->SetValue( sal_False );
                     else
                         break;
 
-                    sFormel = OUString();
+                    sFormula = OUString();
 
                     // evaluate field
                     ((SwHiddenTxtField*)pFld)->Evaluate(&rDoc);
@@ -2343,7 +2343,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                      (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNumSetField*)pFld)->IsCondValid()))
                    )
                 {
-                    sFormel = pFld->GetPar1();
+                    sFormula = pFld->GetPar1();
                 }
             }
             break;
@@ -2356,13 +2356,13 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                      (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNextSetField*)pFld)->IsCondValid()))
                    )
                 {
-                    sFormel = pFld->GetPar1();
+                    sFormula = pFld->GetPar1();
                 }
             }
             break;
         }
 
-        if (!sFormel.isEmpty())
+        if (!sFormula.isEmpty())
         {
             GetBodyNode( *pTxtFld, nWhich );
         }

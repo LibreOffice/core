@@ -656,9 +656,9 @@ private:
     bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
     void GetAllDBNames( std::vector<String>& rAllDBNames );
     OUString ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
-                             const OUString& rNewName, const OUString& rFormel );
+                             const OUString& rNewName, const OUString& rFormula );
     std::vector<String>& FindUsedDBs( const std::vector<String>& rAllDBNames,
-                                const String& rFormel,
+                                const String& rFormula,
                                 std::vector<String>& rUsedDBNames );
 
     void InitDrawModel();
