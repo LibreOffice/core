@@ -182,13 +182,11 @@ void ScUndoDeleteContents::Undo()
     DoChange( sal_True );
     EndUndo();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+    if (aHelperNotifyChanges.getMustPropagateChanges())
     {
-        ScRangeList aChangeRanges;
-        aChangeRanges.Append( aRange );
-        pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
+        aChangeRanges.Append(aRange);
     }
 }
 
@@ -198,13 +196,11 @@ void ScUndoDeleteContents::Redo()
     DoChange( false );
     EndRedo();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+    if (aHelperNotifyChanges.getMustPropagateChanges())
     {
-        ScRangeList aChangeRanges;
-        aChangeRanges.Append( aRange );
-        pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
+        aChangeRanges.Append(aRange);
     }
 }
 
