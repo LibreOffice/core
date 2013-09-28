@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///o4\u003d",
+        "filename": "sw/source/ui/app/docst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-09-28T07:41:12Z",
+      "side": 1,
+      "message": "Please always use log areas (i.e., \"sw.ui.app\" in this case) that are listed in include/sal/log-areas.dox (we have a Clang plugin that checks this, so builds that use that plugin would fail now).  So please either add sw.ui.app to include/sal/log-areas.dox or use the already existing \"sw.ui\" instead.",
+      "revId": "687eb15fdb241d62f42175a8897c452928f5c96c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
