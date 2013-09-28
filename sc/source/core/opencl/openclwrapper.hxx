@@ -21,7 +21,15 @@
 
 #include <rtl/string.hxx>
 
+#ifdef MACOSX
+
+#include <OpenCL/cl.h>
+
+#else
+
 #include "clcc/clew.h"
+
+#endif
 
 // CL_MAP_WRITE_INVALIDATE_REGION is new in OpenCL 1.2.
 

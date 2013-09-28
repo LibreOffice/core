@@ -36,12 +36,19 @@ $(eval $(call gb_Library_use_libraries,scopencl,\
 $(eval $(call gb_Library_add_exception_objects,scopencl,\
         sc/source/core/opencl/formulagroupcl \
         sc/source/core/opencl/openclwrapper \
-        sc/source/core/opencl/clcc/clew \
+        $(if $(filter-out MACOSX,$(OS)), \
+            sc/source/core/opencl/clcc/clew) \
 ))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,scopencl,\
         -ldl \
+))
+endif
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_libs,scopencl,\
+        -framework OpenCL \
 ))
 endif
 

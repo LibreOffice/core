@@ -41,7 +41,7 @@
         fprintf(stderr,"[OCL_ERROR] %s\n",str);
 
 #define OPENCL_DLL_NAME "OpenCL.dll"
-#else
+#elif !defined(MACOSX)
 #define OPENCL_DLL_NAME "libOpenCL.so"
 #endif
 
@@ -2609,9 +2609,11 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatfor
 
 size_t getOpenCLPlatformCount()
 {
+#ifndef MACOSX
     int status = clewInit(OPENCL_DLL_NAME);
     if (status < 0)
         return 0;
+#endif
 
     cl_uint nPlatforms;
     cl_int nState = clGetPlatformIDs(0, NULL, &nPlatforms);
@@ -2628,9 +2630,11 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo()
     if(!aPlatforms.empty())
         return aPlatforms;
 
+#ifndef MACOSX
     int status = clewInit(OPENCL_DLL_NAME);
     if (status < 0)
         return aPlatforms;
+#endif
 
     cl_uint nPlatforms;
     cl_int nState = clGetPlatformIDs(0, NULL, &nPlatforms);
