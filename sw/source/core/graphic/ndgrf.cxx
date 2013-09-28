@@ -62,7 +62,7 @@ SwGrfNode::SwGrfNode(
         SwGrfFmtColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    mxGrfObj(),
+    mxGrfObj(GraphicObject::Create(Graphic())),
     mxReplacementGraphic(),
     // #i73788#
     mbLinkedInputStreamReady( false ),
@@ -72,7 +72,7 @@ SwGrfNode::SwGrfNode(
         bFrameInPaint = bScaleImageMap = sal_False;
 
     bGrafikArrived = sal_True;
-    ReRead(rGrfName,rFltName, pGraphic, mxGrfObj.is() ? mxGrfObj.get() : NULL, sal_False);
+    ReRead(rGrfName,rFltName, pGraphic, mxGrfObj.get(), sal_False);
     mxGrfObj->SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
 }
 
@@ -105,7 +105,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwGrfFmtColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
-    mxGrfObj(),
+    mxGrfObj(GraphicObject::Create(Graphic())),
     mxReplacementGraphic(),
     // #i73788#
     mbLinkedInputStreamReady( false ),
@@ -245,8 +245,10 @@ sal_Bool SwGrfNode::ReRead(
         bReadGrf = sal_True;
     }
     // Was the graphic already loaded?
-    else if( !bNewGrf && mxGrfObj.is() && GRAPHIC_NONE != mxGrfObj->GetType() )
+    else if( !bNewGrf && GRAPHIC_NONE != mxGrfObj->GetType() )
+    {
         return sal_True;
+    }
     else
     {
         if( HasStreamName() )
@@ -501,7 +503,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
                     // no default bitmap anymore, thus re-paint
                     mxReplacementGraphic.clear();
 
-                    mxGrfObj = rtl::Reference<GraphicObject>();
+                    mxGrfObj = GraphicObject::Create(Graphic());
                     onGraphicChanged();
                     SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
                     ModifyNotification( &aMsgHint, &aMsgHint );

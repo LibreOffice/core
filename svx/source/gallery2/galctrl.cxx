@@ -49,7 +49,7 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
 
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
-    mxGraphicObj = rtl::Reference< GraphicObject >();
+    mxGraphicObj = GraphicObject::Create(Graphic());
 }
 
 GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
@@ -62,7 +62,7 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 
     SetHelpId( HID_GALLERY_PREVIEW );
     InitSettings();
-    mxGraphicObj = rtl::Reference< GraphicObject >();
+    mxGraphicObj = GraphicObject::Create(Graphic());
 }
 
 GalleryPreview::~GalleryPreview()
@@ -98,7 +98,7 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
 
 void GalleryPreview::ClearGraphic()
 {
-    mxGraphicObj.clear();
+    mxGraphicObj = GraphicObject::Create(Graphic());
 }
 
 void GalleryPreview::InitSettings()
@@ -152,18 +152,15 @@ sal_Bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rect
 void GalleryPreview::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
-    if(mxGraphicObj.is())
+    if( ImplGetGraphicCenterRect( mxGraphicObj->GetGraphic(), maPreviewRect ) )
     {
-        if( ImplGetGraphicCenterRect( mxGraphicObj->GetGraphic(), maPreviewRect ) )
-        {
-            const Point aPos( maPreviewRect.TopLeft() );
-            const Size  aSize( maPreviewRect.GetSize() );
+        const Point aPos( maPreviewRect.TopLeft() );
+        const Size  aSize( maPreviewRect.GetSize() );
 
-            if( mxGraphicObj->IsAnimated() )
-                mxGraphicObj->StartAnimation( this, aPos, aSize );
-            else
-                mxGraphicObj->Draw( this, aPos, aSize );
-        }
+        if( mxGraphicObj->IsAnimated() )
+            mxGraphicObj->StartAnimation( this, aPos, aSize );
+        else
+            mxGraphicObj->Draw( this, aPos, aSize );
     }
 }
 

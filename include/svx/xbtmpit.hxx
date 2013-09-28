@@ -43,7 +43,7 @@ private:
 
 public:
             TYPEINFO();
-            XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) { mxGraphicObject = rtl::Reference< GraphicObject >(); }
+            XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) { mxGraphicObject = GraphicObject::Create(Graphic()); }
             explicit XFillBitmapItem(const Graphic & rGraphic);
             explicit XFillBitmapItem(const BitmapEx & rBitmapEx);
             explicit XFillBitmapItem(const rtl::Reference< GraphicObject > & xGraphicObject);

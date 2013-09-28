@@ -87,7 +87,7 @@ namespace sdr
             const GraphicAttr& rLocalGrafInfo) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            rtl::Reference< GraphicObject > xEmptyGraphicObject= rtl::Reference< GraphicObject >();
+            rtl::Reference< GraphicObject > xEmptyGraphicObject= GraphicObject::Create(Graphic());
             GraphicAttr aEmptyGraphicAttr;
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
@@ -150,7 +150,7 @@ namespace sdr
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            rtl::Reference< GraphicObject > xEmptyGraphicObject = rtl::Reference< GraphicObject >();
+            rtl::Reference< GraphicObject > xEmptyGraphicObject = GraphicObject::Create(Graphic());
             GraphicAttr aEmptyGraphicAttr;
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts

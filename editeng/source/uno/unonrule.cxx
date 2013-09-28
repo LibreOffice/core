@@ -225,7 +225,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
 
     {
         const SvxBrushItem* pBrush = rFmt.GetBrush();
-        if(pBrush && pBrush->GetGraphicObject().is())
+        if(pBrush)
         {
             const rtl::Reference<GraphicObject> xGrafObj = pBrush->GetGraphicObject();
             OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
@@ -463,8 +463,8 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
     {
         if( NULL == aFmt.GetBrush() )
         {
-            rtl::Reference< GraphicObject > xGrafObj = rtl::Reference< GraphicObject >();
-            SvxBrushItem aBrushItem( rtl::Reference< GraphicObject >(), GPOS_AREA, SID_ATTR_BRUSH );
+            rtl::Reference< GraphicObject > xGrafObj = GraphicObject::Create(Graphic());
+            SvxBrushItem aBrushItem( xGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
             aFmt.SetGraphicBrush( &aBrushItem );
         }
     }

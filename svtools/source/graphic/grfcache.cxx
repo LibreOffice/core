@@ -185,7 +185,7 @@ GraphicCacheEntry::GraphicCacheEntry( const rtl::Reference< GraphicObject >& xOb
     mbSwappedAll    ( true )
 {
     mbSwappedAll = !ImplInit( xObj );
-    maGraphicObjectList.push_back( (GraphicObject*)&xObj );
+    maGraphicObjectList.push_back( xObj );
 }
 
 GraphicCacheEntry::~GraphicCacheEntry()
@@ -318,14 +318,14 @@ void GraphicCacheEntry::AddGraphicObjectReference( const rtl::Reference< Graphic
         mbSwappedAll = !ImplInit( xObj );
 
     ImplFillSubstitute( rSubstitute );
-    maGraphicObjectList.push_back( (GraphicObject*) &xObj );
+    maGraphicObjectList.push_back( xObj );
 }
 
 bool GraphicCacheEntry::ReleaseGraphicObjectReference( const rtl::Reference< GraphicObject >& xObj )
 {
     for( GraphicObjectList_impl::iterator it = maGraphicObjectList.begin();
          it != maGraphicObjectList.end(); ++it ) {
-        if( *xObj.get() == *it->get() )
+        if( xObj.get() == (*it).get() )
         {
             maGraphicObjectList.erase( it );
             return true;

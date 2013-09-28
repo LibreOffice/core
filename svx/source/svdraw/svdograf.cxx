@@ -331,7 +331,7 @@ SdrGrafObj::SdrGrafObj()
     pGraphicLink    ( NULL ),
     bMirrored       ( false )
 {
-    mxGraphic = rtl::Reference<GraphicObject>();
+    mxGraphic = GraphicObject::Create(Graphic());
     mxGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     onGraphicChanged();
 
@@ -1273,11 +1273,11 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
     }
 }
 
-IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
+IMPL_LINK( SdrGrafObj, ImpSwapHdl, rtl::Reference<GraphicObject>*, pO )
 {
     SvStream* pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
 
-    if( pO->IsInSwapOut() )
+    if( (*pO)->IsInSwapOut() )
     {
         if( pModel && !mbIsPreview && pModel->IsSwapGraphics() && mxGraphic->GetSizeBytes() > 20480 )
         {
@@ -1308,7 +1308,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             }
         }
     }
-    else if( pO->IsInSwapIn() )
+    else if( (*pO)->IsInSwapIn() )
     {
         // can be loaded from the original document stream later
         if( pModel != NULL )
