@@ -260,16 +260,14 @@ void ScUndoEnterData::Undo()
     DoChange();
     EndUndo();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+    if (aHelperNotifyChanges.getMustPropagateChanges())
     {
-        ScRangeList aChangeRanges;
         for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
         {
             aChangeRanges.Append( ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
         }
-        pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
     }
 }
 
@@ -299,16 +297,14 @@ void ScUndoEnterData::Redo()
     DoChange();
     EndRedo();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+    if (aHelperNotifyChanges.getMustPropagateChanges())
     {
-        ScRangeList aChangeRanges;
         for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
         {
             aChangeRanges.Append(ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
         }
-        pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
     }
 }
 

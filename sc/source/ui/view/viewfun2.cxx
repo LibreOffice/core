@@ -1284,13 +1284,11 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
             pDocSh->UpdateOle(GetViewData());
             UpdateScrollBars();
 
-            // #i97876# Spreadsheet data changes are not notified
-            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-            if ( pModelObj && pModelObj->HasChangesListeners() )
+            ScRangeList aChangeRanges;
+            HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+            if (aHelperNotifyChanges.getMustPropagateChanges())
             {
-                ScRangeList aChangeRanges;
-                aChangeRanges.Append( aRange );
-                pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
+                aChangeRanges.Append(aRange);
             }
         }
     }
@@ -1316,11 +1314,10 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
         pDocSh->UpdateOle(GetViewData());
         UpdateScrollBars();
 
-        // #i97876# Spreadsheet data changes are not notified
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        ScRangeList aChangeRanges;
+        HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+        if (aHelperNotifyChanges.getMustPropagateChanges())
         {
-            ScRangeList aChangeRanges;
             ScRange aChangeRange( aRange );
             switch ( eDir )
             {
@@ -1350,8 +1347,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                     }
                     break;
             }
-            aChangeRanges.Append( aChangeRange );
-            pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
+            aChangeRanges.Append(aChangeRange);
         }
     }
 }

@@ -35,6 +35,7 @@
 #include "shellids.hxx"
 #include "refreshtimer.hxx"
 #include "optutil.hxx"
+#include "docuno.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -62,6 +63,7 @@ class ScDocShellModificator;
 class ScOptSolverSave;
 class ScSheetSaveData;
 class ScFlatBoolRowSegments;
+class HelperModelObj;
 struct ScColWidthParam;
 #if ENABLE_TELEPATHY
 class ScCollaboration;
@@ -473,6 +475,34 @@ public:
             void            SetDocumentModified();
 };
 
+class HelperNotifyChanges
+{
+    private:
+    ScModelObj* pModelObj;
+    bool mbMustPropagateChanges;
+    ScRangeList* mpChangeRanges;
+    OUString mpOperation;
+
+    public:
+    HelperNotifyChanges(ScRangeList* pChangeRanges, const OUString& pOperation)
+    {
+        mpChangeRanges = pChangeRanges;
+        mpOperation = pOperation;
+        if ( pModelObj && pModelObj->HasChangesListeners() )
+            mbMustPropagateChanges = true;
+    }
+    ~HelperNotifyChanges()
+    {
+        if (mbMustPropagateChanges && mpChangeRanges)
+        {
+            pModelObj->NotifyChanges(mpOperation, *mpChangeRanges);
+        }
+    }
+    bool getMustPropagateChanges()
+    {
+        return mbMustPropagateChanges;
+    }
+};
 
 
 #endif

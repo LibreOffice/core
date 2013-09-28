@@ -1703,25 +1703,23 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 
     SelectionChanged();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-    if (!pModelObj || !pModelObj->HasChangesListeners())
-        return;
-
     ScRangeList aChangeRanges;
-    for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
+    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+    if (aHelperNotifyChanges.getMustPropagateChanges())
     {
-        const ScRange& r = *rPasteRanges[i];
-        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-        for (; itr != itrEnd; ++itr)
+        for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
         {
-            ScRange aChangeRange(r);
-            aChangeRange.aStart.SetTab(*itr);
-            aChangeRange.aEnd.SetTab(*itr);
-            aChangeRanges.Append(aChangeRange);
+            const ScRange& r = *rPasteRanges[i];
+            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+            for (; itr != itrEnd; ++itr)
+            {
+                ScRange aChangeRange(r);
+                aChangeRange.aStart.SetTab(*itr);
+                aChangeRange.aEnd.SetTab(*itr);
+                aChangeRanges.Append(aChangeRange);
+            }
         }
     }
-    pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
 }
 
 

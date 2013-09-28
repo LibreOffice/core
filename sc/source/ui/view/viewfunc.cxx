@@ -551,16 +551,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         pDocSh->UpdateOle(GetViewData());
 
-        // #i97876# Spreadsheet data changes are not notified
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        ScRangeList aChangeRanges;
+        HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+        if (aHelperNotifyChanges.getMustPropagateChanges())
         {
-            ScRangeList aChangeRanges;
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd; ++itr)
                 aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
-
-            pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
         }
 
         if ( bRecord )
@@ -728,19 +725,16 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             pDocSh->UpdateOle(GetViewData());
 
-            // #i97876# Spreadsheet data changes are not notified
-            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-            if ( pModelObj && pModelObj->HasChangesListeners() )
+            ScRangeList aChangeRanges;
+            HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+            if (aHelperNotifyChanges.getMustPropagateChanges())
             {
-                ScRangeList aChangeRanges;
                 itr = rMark.begin();
                 for (; itr != itrEnd; ++itr)
                 {
                     aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
                 }
-                pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
             }
-
             aModificator.SetDocumentModified();
         }
         lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
@@ -1246,9 +1240,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         CellContentChanged();
     }
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "attribute");
+    if (aHelperNotifyChanges.getMustPropagateChanges())
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
         sal_Int32 nCount = 0;
@@ -1275,9 +1268,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
                 }
             }
         }
-        pModelObj->NotifyChanges( OUString( "attribute" ), aChangeRanges, aProperties );
     }
-
     StartFormatArea();
 }
 
@@ -1490,18 +1481,16 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
             CellContentChanged();
             ResetAutoSpell();
 
-            // #i97876# Spreadsheet data changes are not notified
-            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-            if ( pModelObj && pModelObj->HasChangesListeners() )
+            ScRangeList aChangeRanges;
+            if ( eCmd == INS_INSROWS || eCmd == INS_INSCOLS )
             {
-                if ( eCmd == INS_INSROWS || eCmd == INS_INSCOLS )
+                OUString aOperation = ( eCmd == INS_INSROWS) ?
+                    OUString("insert-rows"):
+                    OUString("insert-columns");
+                HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, aOperation);
+                if (aHelperNotifyChanges.getMustPropagateChanges())
                 {
-                    ScRangeList aChangeRanges;
                     aChangeRanges.Append( aRange );
-                    OUString aOperation = ( eCmd == INS_INSROWS ?
-                        OUString( "insert-rows" ) :
-                        OUString( "insert-columns" ) );
-                    pModelObj->NotifyChanges( aOperation, aChangeRanges );
                 }
             }
         }
@@ -1554,18 +1543,16 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, bool bRecord )
         CellContentChanged();
         ResetAutoSpell();
 
-        // #i97876# Spreadsheet data changes are not notified
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        if ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS )
         {
-            if ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS )
+            ScRangeList aChangeRanges;
+            OUString aOperation = ( eCmd == DEL_DELROWS) ?
+              OUString("delete-rows"):
+              OUString("delete-columns");
+            HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, aOperation);
+            if (aHelperNotifyChanges.getMustPropagateChanges())
             {
-                ScRangeList aChangeRanges;
-                aChangeRanges.Append( aRange );
-                OUString aOperation = ( eCmd == DEL_DELROWS ?
-                    OUString( "delete-rows" ) :
-                    OUString( "delete-columns" ) );
-                pModelObj->NotifyChanges( aOperation, aChangeRanges );
+                aChangeRanges.Append(aRange);
             }
         }
 
@@ -1924,11 +1911,10 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
 
     pDocSh->UpdateOle(GetViewData());
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
+    if (aHelperNotifyChanges.getMustPropagateChanges())
     {
-        ScRangeList aChangeRanges;
         if ( bSimple )
         {
             aChangeRanges.Append( aMarkRange );
@@ -1937,7 +1923,6 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
         {
             aFuncMark.FillRangeListWithMarks( &aChangeRanges, false );
         }
-        pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
     }
 
     aModificator.SetDocumentModified();
@@ -2222,10 +2207,10 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
     // #i97876# Spreadsheet data changes are not notified
     if ( bWidth )
     {
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        ScRangeList aChangeRanges;
+        HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "column-resize");
+        if (aHelperNotifyChanges.getMustPropagateChanges())
         {
-            ScRangeList aChangeRanges;
             itr = pMarkData->begin();
             for (; itr != itrEnd; ++itr)
             {
@@ -2241,7 +2226,6 @@ void ScViewFunc::SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                     }
                 }
             }
-            pModelObj->NotifyChanges( OUString( "column-resize" ), aChangeRanges );
         }
     }
 }
