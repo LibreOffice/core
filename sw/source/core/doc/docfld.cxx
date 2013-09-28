@@ -1929,15 +1929,21 @@ OUString SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
     const OUString sNewName( lcl_CutOffDBCommandType(rNewName) );
     OUString sFormula(rFormel);
 
-    for( sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i )
+    for( size_t i = 0; i < rUsedDBNames.size(); ++i )
     {
         const OUString sDBName( lcl_CutOffDBCommandType(rUsedDBNames[i]) );
 
         if (sDBName!=sNewName)
         {
             sal_Int32 nPos = 0;
-            while ((nPos = sFormula.indexOf(sDBName, nPos))>=0)
+            for (;;)
             {
+                nPos = sFormula.indexOf(sDBName, nPos);
+                if (nPos<0)
+                {
+                    break;
+                }
+
                 if( sFormula[nPos + sDBName.getLength()] == '.' &&
                     (!nPos || !rCC.isLetterNumeric( sFormula, nPos - 1 )))
                 {
@@ -1945,7 +1951,7 @@ OUString SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                     //prevent re-searching - this is useless and provokes
                     //endless loops when names containing each other and numbers are exchanged
                     //e.g.: old ?12345.12345  new: i12345.12345
-                    nPos = nPos + sNewName.getLength();
+                    nPos += sNewName.getLength();
                 }
             }
         }
