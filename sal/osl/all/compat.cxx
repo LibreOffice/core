@@ -94,6 +94,10 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
     std::abort();
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_getEthernetAddress(sal_uInt8 *) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
