@@ -14,6 +14,9 @@
 #include "switerator.hxx"
 #include "fmtfld.hxx"
 #include "docufld.hxx"
+#include "txatbase.hxx"
+#include "fmtautofmt.hxx"
+#include <svl/itemiter.hxx>
 
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
@@ -269,6 +272,63 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
         txt = txt.replace( i, '*' );
     OString txt8 = OUStringToOString( txt, RTL_TEXTENCODING_UTF8 );
     xmlTextWriterWriteString( writer, BAD_CAST( txt8.getStr()));
+
+    if (HasHints())
+    {
+        writer.startElement("hints");
+        SwpHints& rHints = GetSwpHints();
+        for (sal_uInt16 i = 0; i < rHints.Count(); ++i)
+        {
+            writer.startElement("hint");
+            SwTxtAttr* pHint = rHints.GetTextHint(i);
+
+            writer.writeFormatAttribute("start", TMP_FORMAT, *pHint->GetStart());
+            writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->GetEnd());
+
+            const char* pWhich = "???";
+            switch (pHint->Which())
+            {
+                case RES_TXTATR_AUTOFMT:
+                    pWhich = "autofmt";
+                    break;
+                default:
+                    break;
+            }
+            writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
+
+            if (pHint->Which() == RES_TXTATR_AUTOFMT)
+            {
+                boost::shared_ptr<SfxItemSet> const pSet(pHint->GetAutoFmt().GetStyleHandle());
+                writer.startElement("autofmt");
+                SfxItemIter aIter(*pSet);
+                const SfxPoolItem* pItem = aIter.FirstItem();
+                while (pItem)
+                {
+                    writer.startElement("item");
+                    writer.writeFormatAttribute("whichId", TMP_FORMAT, pItem->Which());
+                    pWhich = 0;
+                    switch (pItem->Which())
+                    {
+                        case RES_CHRATR_POSTURE: pWhich = "posture"; break;
+                        case RES_CHRATR_WEIGHT: pWhich = "weight"; break;
+                        case RES_CHRATR_CJK_POSTURE: pWhich = "cjk posture"; break;
+                        case RES_CHRATR_CJK_WEIGHT: pWhich = "cjk weight"; break;
+                        case RES_CHRATR_CTL_POSTURE: pWhich = "ctl posture"; break;
+                        case RES_CHRATR_CTL_WEIGHT: pWhich = "ctl weight"; break;
+                    }
+                    if (pWhich)
+                        writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
+                    pItem = aIter.NextItem();
+                    writer.endElement();
+                }
+                writer.endElement();
+            }
+
+            writer.endElement();
+        }
+        writer.endElement();
+    }
+
     writer.endElement();
 }
 
