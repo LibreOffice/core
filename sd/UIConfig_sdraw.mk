@@ -71,6 +71,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/drawchardialog \
 	sd/uiconfig/sdraw/ui/drawparadialog \
 	sd/uiconfig/sdraw/ui/drawpagedialog \
+	sd/uiconfig/sdraw/ui/drawprtldialog \
 	sd/uiconfig/sdraw/ui/insertlayer \
 	sd/uiconfig/sdraw/ui/paranumberingtab \
 	sd/uiconfig/sdraw/ui/printeroptions \

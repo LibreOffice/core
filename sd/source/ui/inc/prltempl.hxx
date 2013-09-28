@@ -51,6 +51,22 @@ private:
     sal_uInt16              nDlgType;
     sal_uInt16              nPos;
 
+    sal_uInt16            mnLine;
+    sal_uInt16            mnArea;
+    sal_uInt16            mnShadow;
+    sal_uInt16            mnTransparency;
+    sal_uInt16            mnFont;
+    sal_uInt16            mnEffects;
+    sal_uInt16            mnParagr;
+    sal_uInt16            mnTextAtt;
+    sal_uInt16            mnBullet;
+    sal_uInt16            mnNum;
+    sal_uInt16            mnBitmap;
+    sal_uInt16            mnOptions;
+    sal_uInt16            mnTab;
+    sal_uInt16            mnAsian;
+    sal_uInt16            mnAlign;
+
     ChangeType          nColorTableState;
     ChangeType          nBitmapListState;
     ChangeType          nGradientListState;

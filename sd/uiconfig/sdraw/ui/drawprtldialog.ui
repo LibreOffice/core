@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="AreaDialog">
+  <object class="GtkDialog" id="DrawPRTLDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Area</property>
+    <property name="title" translatable="yes">Presentation Layout</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -91,12 +91,26 @@
               <placeholder/>
             </child>
             <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_LINE">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Line</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
               <object class="GtkLabel" id="RID_SVXPAGE_AREA">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Area</property>
               </object>
               <packing>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -110,7 +124,7 @@
                 <property name="label" translatable="yes">Shadow</property>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -124,20 +138,6 @@
                 <property name="label" translatable="yes">Transparency</property>
               </object>
               <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="RID_SVXPAGE_COLOR">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Colors</property>
-              </object>
-              <packing>
                 <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
@@ -146,10 +146,10 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="RID_SVXPAGE_GRADIENT">
+              <object class="GtkLabel" id="RID_SVXPAGE_CHAR_NAME">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Gradients</property>
+                <property name="label" translatable="yes">Font</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -160,10 +160,10 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="RID_SVXPAGE_HATCH">
+              <object class="GtkLabel" id="RID_SVXPAGE_CHAR_EFFECTS">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Hatching</property>
+                <property name="label" translatable="yes">Font Effects</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -174,13 +174,125 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="RID_SVXPAGE_BITMAP">
+              <object class="GtkLabel" id="RID_SVXPAGE_STD_PARAGRAPH">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Bitmaps</property>
+                <property name="label" translatable="yes">Indents &amp; Spacing</property>
               </object>
               <packing>
                 <property name="position">6</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_TEXTATTR">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Text</property>
+              </object>
+              <packing>
+                <property name="position">7</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_PICK_BULLET">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Bullets</property>
+              </object>
+              <packing>
+                <property name="position">8</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_PICK_SINGLE_NUM">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Numbering type</property>
+              </object>
+              <packing>
+                <property name="position">9</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_PICK_BMP">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Graphics</property>
+              </object>
+              <packing>
+                <property name="position">10</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_NUM_OPTIONS">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Customize</property>
+              </object>
+              <packing>
+                <property name="position">11</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_ALIGN_PARAGRAPH">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Alignment</property>
+              </object>
+              <packing>
+                <property name="position">12</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_PARA_ASIAN">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Asian Typography</property>
+              </object>
+              <packing>
+                <property name="position">13</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="RID_SVXPAGE_TABULATOR">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Tabs</property>
+              </object>
+              <packing>
+                <property name="position">14</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
