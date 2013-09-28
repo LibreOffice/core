@@ -25,7 +25,6 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
-#include <osl/util.h>
 
 #define LINES_INI       32
 #define LINES_ADD       10

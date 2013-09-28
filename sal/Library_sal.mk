@@ -179,7 +179,6 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \
-	sal/osl/unx/util \
 ))
 $(eval $(call gb_Library_add_cobject,sal,sal/osl/unx/signal, \
 	$(if $(filter $(ENABLE_CRASHDUMP),YES)$(filter $(ENABLE_DBGUTIL),TRUE), \
@@ -256,7 +255,6 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/w32/security \
 	sal/osl/w32/thread \
 	sal/osl/w32/time \
-	sal/osl/w32/util \
 ))
 
 endif # ifneq ($(OS),WNT)
