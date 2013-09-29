@@ -847,7 +847,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         }
     }
 
-    // Check the Boxes' for Numbers
+    // Check the boxes for numbers
     if( IsInsTblFormatNum() )
     {
         for (size_t nBoxes = pNdTbl->GetTabSortBoxes().size(); nBoxes; )
@@ -1983,7 +1983,7 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             }
         }
 
-        // No Fly? Thus Header or Footer: always leave a TextNode
+        // No Fly? Then it is a Header or Footer, so keep always a TextNode
         ++aIdx;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
