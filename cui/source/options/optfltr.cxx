@@ -154,7 +154,6 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSe
     m_pCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                     HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED );
 
-    m_pCheckLB->SetHelpId( HID_OFAPAGE_MSFLTR2_CLB );
     m_pCheckLB->SetStyle( m_pCheckLB->GetStyle()|WB_HSCROLL| WB_VSCROLL );
 }
 
