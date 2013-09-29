@@ -35,7 +35,7 @@
 
 using namespace com::sun::star;
 
-sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
+sal_Bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();

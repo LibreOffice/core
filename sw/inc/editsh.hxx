@@ -390,7 +390,7 @@ public:
     sal_Bool IsAnyDatabaseFieldInDoc()const;
 
     /// Check whether DB fields point to an available data source and returns it.
-    sal_Bool IsFieldDataSourceAvailable(String& rUsedDataSource) const;
+    sal_Bool IsFieldDataSourceAvailable(OUString& rUsedDataSource) const;
     void UpdateExpFlds(sal_Bool bCloseDB = sal_False);///< only every expression fields update
     void LockExpFlds();
     void UnlockExpFlds();
