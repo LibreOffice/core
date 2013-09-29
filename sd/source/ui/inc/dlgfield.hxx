@@ -36,16 +36,10 @@ class SvxFieldData;
 class SdModifyFieldDlg : public ModalDialog
 {
 private:
-    FixedLine           aGrpType;
-    RadioButton         aRbtFix;
-    RadioButton         aRbtVar;
-    FixedText           maFtLanguage;
-    SvxLanguageBox      maLbLanguage;
-    FixedText           aFtFormat;
-    ListBox             aLbFormat;
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
+    RadioButton* m_pRbtFix;
+    RadioButton* m_pRbtVar;
+    SvxLanguageBox* m_pLbLanguage;
+    ListBox* m_pLbFormat;
     SfxItemSet          maInputSet;
 
     const SvxFieldData* pField;
