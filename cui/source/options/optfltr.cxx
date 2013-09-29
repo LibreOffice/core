@@ -20,7 +20,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include "optfltr.hxx"
-#include "optfltr.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <dialmgr.hxx>
@@ -129,38 +128,40 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
     aPBasicStgCB->SaveValue();
 }
 
-OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
-                                        const SfxItemSet& rSet )
-    : SfxTabPage( pParent, CUI_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
-    m_aCheckLBContainer(this, CUI_RES( CLB_SETTINGS)),
-    aCheckLB(m_aCheckLBContainer),
-    aHeader1FT          ( this, CUI_RES( FT_HEADER1_EXPLANATION )),
-    aHeader2FT          ( this, CUI_RES( FT_HEADER2_EXPLANATION )),
-    sHeader1            ( CUI_RES( ST_HEADER1 )),
-    sHeader2            ( CUI_RES( ST_HEADER2 )),
-    sChgToFromMath      ( CUI_RES( ST_CHG_MATH  )),
-    sChgToFromWriter    ( CUI_RES( ST_CHG_WRITER )),
-    sChgToFromCalc      ( CUI_RES( ST_CHG_CALC )),
-    sChgToFromImpress   ( CUI_RES( ST_CHG_IMPRESS )),
+OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSet ) :
+    SfxTabPage( pParent, "OptFilterPage", "cui/ui/optfltrembedpage.ui", rSet ),
+    sHeader1(CUI_RES(RID_SVXSTR_HEADER1)),
+    sHeader2(CUI_RES(RID_SVXSTR_HEADER2)),
+    sChgToFromMath(CUI_RES(RID_SVXSTR_CHG_MATH)),
+    sChgToFromWriter(CUI_RES(RID_SVXSTR_CHG_WRITER)),
+    sChgToFromCalc(CUI_RES(RID_SVXSTR_CHG_CALC)),
+    sChgToFromImpress(CUI_RES(RID_SVXSTR_CHG_IMPRESS)),
     pCheckButtonData(0)
 {
-    FreeResource();
+    get(m_pCheckLBContainer, "checklbcontainer");
+    Size aControlSize(248, 55);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    m_pCheckLBContainer->set_width_request(aControlSize.Width());
+    m_pCheckLBContainer->set_height_request(aControlSize.Height());
+
+    m_pCheckLB = new MSFltrSimpleTable(*m_pCheckLBContainer);
 
     static long aStaticTabs[] = { 3, 0, 20, 40 };
-    aCheckLB.SvSimpleTable::SetTabs( aStaticTabs );
+    m_pCheckLB->SvSimpleTable::SetTabs( aStaticTabs );
 
     String sHeader( sHeader1 );
     (( sHeader += '\t' ) += sHeader2 ) += '\t';
-    aCheckLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
+    m_pCheckLB->InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                     HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED );
 
-    aCheckLB.SetHelpId( HID_OFAPAGE_MSFLTR2_CLB );
-    aCheckLB.SetStyle( aCheckLB.GetStyle()|WB_HSCROLL| WB_VSCROLL );
+    m_pCheckLB->SetHelpId( HID_OFAPAGE_MSFLTR2_CLB );
+    m_pCheckLB->SetStyle( m_pCheckLB->GetStyle()|WB_HSCROLL| WB_VSCROLL );
 }
 
 OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 {
     delete pCheckButtonData;
+    delete m_pCheckLB;
 }
 
 SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
@@ -225,8 +226,8 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
-    aCheckLB.SetUpdateMode(sal_False);
-    aCheckLB.Clear();
+    m_pCheckLB->SetUpdateMode(sal_False);
+    m_pCheckLB->Clear();
 
     SvtModuleOptions aModuleOpt;
 
@@ -270,11 +271,11 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
                     pItem->SetStateChecked();
                 else
                     pItem->SetStateUnchecked();
-                aCheckLB.InvalidateEntry( pEntry );
+                m_pCheckLB->InvalidateEntry( pEntry );
             }
         }
     }
-    aCheckLB.SetUpdateMode( sal_True );
+    m_pCheckLB->SetUpdateMode( sal_True );
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType )
@@ -282,7 +283,7 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if( !pCheckButtonData )
-        pCheckButtonData = new SvLBoxButtonData( &aCheckLB );
+        pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
     pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
@@ -292,17 +293,17 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType 
     pEntry->AddItem( new SvLBoxString( pEntry, 0, _rTxt ) );
 
     pEntry->SetUserData( (void*)_nType );
-    aCheckLB.Insert( pEntry );
+    m_pCheckLB->Insert( pEntry );
 }
 
 SvTreeListEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
 {
-    SvTreeListEntry* pEntry = aCheckLB.First();
+    SvTreeListEntry* pEntry = m_pCheckLB->First();
     while ( pEntry )
     {
         if ( _nType == sal_IntPtr( pEntry->GetUserData() ) )
             return pEntry;
-        pEntry = aCheckLB.Next( pEntry );
+        pEntry = m_pCheckLB->Next( pEntry );
     }
     return NULL;
 }

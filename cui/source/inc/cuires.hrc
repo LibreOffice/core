@@ -438,6 +438,13 @@
 #define RID_SVXSTR_LINGU_DICS_EDIT_DIC                      (RID_SVX_START + 1236)
 #define RID_SVXSTR_LINGU_OPTIONS_EDIT                       (RID_SVX_START + 1237)
 
+#define RID_SVXSTR_CHG_MATH                                 (RID_SVX_START + 1238)
+#define RID_SVXSTR_CHG_WRITER                               (RID_SVX_START + 1239)
+#define RID_SVXSTR_CHG_CALC                                 (RID_SVX_START + 1240)
+#define RID_SVXSTR_CHG_IMPRESS                              (RID_SVX_START + 1241)
+#define RID_SVXSTR_HEADER1                                  (RID_SVX_START + 1242)
+#define RID_SVXSTR_HEADER2                                  (RID_SVX_START + 1243)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

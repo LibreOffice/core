@@ -73,9 +73,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         }
     };
 
-    SvSimpleTableContainer m_aCheckLBContainer;
-    MSFltrSimpleTable aCheckLB;
-    FixedText aHeader1FT, aHeader2FT;
+    SvSimpleTableContainer* m_pCheckLBContainer;
+    MSFltrSimpleTable* m_pCheckLB;
     String sHeader1, sHeader2;
     String sChgToFromMath,
            sChgToFromWriter,

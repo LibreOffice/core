@@ -17,63 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "optfltr.hrc"
 #include <cuires.hrc>
 
-// RID_OFAPAGE_MSFILTEROPT2 -----------------------------------------------------
-TabPage RID_OFAPAGE_MSFILTEROPT2
+String RID_SVXSTR_HEADER1
 {
-    HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT2";
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-
-    Control CLB_SETTINGS
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 147 ) ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-    };
-    String ST_HEADER1
-    {
-        Text [ en-US ] = "[L]";
-    };
-    String ST_HEADER2
-    {
-        Text [ en-US ] = "[S]";
-    };
-    FixedText FT_HEADER1_EXPLANATION
-    {
-        Pos = MAP_APPFONT ( 6 , 160 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "[L]: Load and convert the object";
-    };
-    FixedText FT_HEADER2_EXPLANATION
-    {
-        Pos = MAP_APPFONT ( 6 , 171 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "[S]: Convert and save the object";
-    };
-    String ST_CHG_MATH
-    {
-        Text [ en-US ] = "MathType to %PRODUCTNAME Math or reverse";
-    };
-    String ST_CHG_WRITER
-    {
-        Text [ en-US ] = "WinWord to %PRODUCTNAME Writer or reverse";
-    };
-    String ST_CHG_CALC
-    {
-        Text [ en-US ] = "Excel to %PRODUCTNAME Calc or reverse";
-    };
-    String ST_CHG_IMPRESS
-    {
-        Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse";
-    };
+    Text [ en-US ] = "[L]";
 };
-
- // ******************************************************************* EOF
+String RID_SVXSTR_HEADER2
+{
+    Text [ en-US ] = "[S]";
+};
+String RID_SVXSTR_CHG_MATH
+{
+    Text [ en-US ] = "MathType to %PRODUCTNAME Math or reverse";
+};
+String RID_SVXSTR_CHG_WRITER
+{
+    Text [ en-US ] = "WinWord to %PRODUCTNAME Writer or reverse";
+};
+String RID_SVXSTR_CHG_CALC
+{
+    Text [ en-US ] = "Excel to %PRODUCTNAME Calc or reverse";
+};
+String RID_SVXSTR_CHG_IMPRESS
+{
+    Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
