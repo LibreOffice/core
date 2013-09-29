@@ -63,7 +63,7 @@ TabDialog RID_SVXDLG_CUSTOMIZE
     Text [ en-US ] = "Menu" ;\
 
 #define TEXT_BEGIN_GROUP \
-    Text [ en-US ] = "Begin a Group" ;\
+    Text [ en-US ] = "Add Separator" ;\
 
 #define TEXT_RENAME \
     Text [ en-US ] = "Rename..." ;\
