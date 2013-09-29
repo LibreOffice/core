@@ -121,7 +121,7 @@ void ChartController::executeDispatch_InsertAxes()
 
             InsertAxisOrGridDialogData aDialogOutput;
             aDlg.getResult( aDialogOutput );
-            ::std::auto_ptr< ReferenceSizeProvider > mpRefSizeProvider(
+            boost::scoped_ptr< ReferenceSizeProvider > mpRefSizeProvider(
                 impl_createReferenceSizeProvider());
             bool bChanged = AxisHelper::changeVisibilityOfAxes( xDiagram
                 , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC
@@ -188,7 +188,7 @@ void ChartController::executeDispatch_InsertTitles()
         {
             // lock controllers till end of block
             ControllerLockGuard aCLGuard( getModel() );
-            TitleDialogData aDialogOutput( impl_createReferenceSizeProvider());
+            TitleDialogData aDialogOutput( impl_createReferenceSizeProvider().release());
             aDlg.getResult( aDialogOutput );
             bool bChanged = aDialogOutput.writeDifferenceToModel( getModel(), m_xCC, &aDialogInput );
             if( bChanged )
@@ -730,7 +730,7 @@ void ChartController::executeDispatch_InsertAxisTitle()
             else
                 eTitleType = TitleHelper::Z_AXIS_TITLE;
 
-            ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProvider( impl_createReferenceSizeProvider());
+            boost::scoped_ptr< ReferenceSizeProvider > apRefSizeProvider( impl_createReferenceSizeProvider());
             xTitle = TitleHelper::createTitle( eTitleType, ObjectNameProvider::getTitleNameByType(eTitleType), getModel(), m_xCC, apRefSizeProvider.get() );
             aUndoGuard.commit();
         }

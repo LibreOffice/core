@@ -25,6 +25,8 @@
 #include <memory>
 #include <vector>
 
+#include <boost/scoped_ptr.hpp>
+
 namespace com { namespace sun { namespace star { namespace chart2 {
     class XDataSeries;
     class XChartType;
@@ -155,7 +157,7 @@ private:
             ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::std::auto_ptr< DialogModel > m_apDialogModel;
+    boost::scoped_ptr< DialogModel > m_apDialogModel;
 
     struct tDataColumn;
     struct implColumnLess;

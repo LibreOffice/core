@@ -28,6 +28,7 @@
 #include <vector>
 #include <memory>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 {
@@ -152,7 +153,7 @@ public:
 private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDoc;
-    ::std::auto_ptr< DataBrowserModel > m_apDataBrowserModel;
+    boost::scoped_ptr< DataBrowserModel > m_apDataBrowserModel;
 
     typedef ::std::vector< ::boost::shared_ptr< impl::SeriesHeader > > tSeriesHeaderContainer;
     tSeriesHeaderContainer m_aSeriesHeaders;

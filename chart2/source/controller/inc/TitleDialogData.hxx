@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -36,14 +37,9 @@ struct TitleDialogData
     ::com::sun::star::uno::Sequence< sal_Bool > aPossibilityList;
     ::com::sun::star::uno::Sequence< sal_Bool > aExistenceList;
     ::com::sun::star::uno::Sequence< OUString > aTextList;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< ReferenceSizeProvider >    apReferenceSizeProvider;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    boost::scoped_ptr< ReferenceSizeProvider > apReferenceSizeProvider;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    TitleDialogData( ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProvider =
-                     ::std::auto_ptr< ReferenceSizeProvider >( 0 ));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    TitleDialogData(ReferenceSizeProvider* pReferenzeSizeProvider = NULL);
 
     void readFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
     /* return true if anything has changed;

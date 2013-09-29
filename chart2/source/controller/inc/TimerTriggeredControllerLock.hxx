@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -39,8 +40,8 @@ public:
 
 private:
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel >   m_xModel;
-    std::auto_ptr< ControllerLockGuard >        m_apControllerLockGuard;
+            ::com::sun::star::frame::XModel > m_xModel;
+    boost::scoped_ptr< ControllerLockGuard > m_apControllerLockGuard;
     AutoTimer       m_aTimer;
 
     DECL_LINK( TimerTimeout, void* );
