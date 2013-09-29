@@ -1527,7 +1527,7 @@ public:
     OUString GetUniqueNumRuleName( const OUString* pChkStr = 0, bool bAutoNum = true ) const;
 
     void UpdateNumRule();   /// Update all invalids.
-    void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
+    void ChgNumRuleFmts( const SwNumRule& rRule );
     bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
 

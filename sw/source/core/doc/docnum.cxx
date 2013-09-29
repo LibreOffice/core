@@ -1061,9 +1061,9 @@ bool SwDoc::DelNumRule( const String& rName, bool bBroadcast )
     return false;
 }
 
-void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
+void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule )
 {
-    SwNumRule* pRule = FindNumRulePtr( pName ? *pName : String(rRule.GetName()) );
+    SwNumRule* pRule = FindNumRulePtr( rRule.GetName() );
     if( pRule )
     {
         SwUndoInsNum* pUndo = 0;
