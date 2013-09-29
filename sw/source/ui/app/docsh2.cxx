@@ -1408,7 +1408,6 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
         aWebMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     }
     // --> OD #i117339# - trigger import only for own formats
-//    if( aMed.IsStorage() )
     bool bImport( false );
     {
         if ( aMed.IsStorage() )

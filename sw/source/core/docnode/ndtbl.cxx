@@ -1139,7 +1139,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     const SwPosition *pStt = aOriginal.GetMark();
     const SwPosition *pEnd = aOriginal.GetPoint();
 
-//    SwUndoTxtToTbl* pUndo = 0;
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
     {
@@ -3519,13 +3518,6 @@ sal_Bool SwNodes::MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rTbl );
     aFndBox.DelFrms( rTbl );
-
-    // TL_CHART2: since chart currently does not want to get informed about
-    // additional rows/cols there is no need for a modified event in the
-    // remaining first table. Also, if it is required it  should be done
-    // after the merging and not here...
-    // pDoc->UpdateCharts( rTbl.GetFrmFmt()->GetName() );
-
 
     // TL_CHART2:
     // tell the charts about the table to be deleted and have them use their own data
