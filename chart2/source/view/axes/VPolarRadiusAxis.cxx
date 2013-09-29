@@ -41,7 +41,7 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
     m_aAxisProperties.m_aLabelAlignment=LABEL_ALIGN_RIGHT;
     m_aAxisProperties.init();
 
-    m_apAxisWithLabels = std::auto_ptr<VCartesianAxis>( new VCartesianAxis(
+    m_apAxisWithLabels.reset( new VCartesianAxis(
         m_aAxisProperties,xNumberFormatsSupplier,1/*nDimensionIndex*/,nDimensionCount
         ,new PolarPlottingPositionHelper() ) );
 }

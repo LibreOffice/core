@@ -28,7 +28,7 @@
 #include <vcl/lstbox.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -100,7 +100,7 @@ private:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
-    ::std::auto_ptr< SelectorListBox > m_apSelectorListBox;
+    boost::scoped_ptr< SelectorListBox > m_apSelectorListBox;
 };
 
 } //namespace chart

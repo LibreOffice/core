@@ -66,8 +66,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svtools/grfmgr.hxx>
 
-// for auto_ptr
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class SvNumberFormatter;
 
@@ -149,7 +148,7 @@ private:
                                 m_xOwnNumberFormatsSupplier;
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
                                 m_xNumberFormatsSupplier;
-    std::auto_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
+    boost::scoped_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
         m_xChartTypeManager;

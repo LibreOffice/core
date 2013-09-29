@@ -32,9 +32,6 @@
 #include "ModifyListenerHelper.hxx"
 #include "ServiceMacros.hxx"
 
-//for auto_ptr
-#include <memory>
-
 namespace chart
 {
 
