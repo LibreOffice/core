@@ -39,7 +39,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_SYMBOL_IMAGE_END = XML_TOK_UNKNOWN
 };
 
-static SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
+static const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF    },
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE    },

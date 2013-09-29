@@ -32,7 +32,7 @@ struct SvXMLSignedEnumMapEntry
     sal_Int32                       nValue;
 };
 
-SvXMLSignedEnumMapEntry aXMLChartSymbolTypeEnumMap[] =
+const SvXMLSignedEnumMapEntry aXMLChartSymbolTypeEnumMap[] =
 {
     { XML_NONE,                -3 },
     { XML_AUTOMATIC,           -2 },
@@ -40,7 +40,7 @@ SvXMLSignedEnumMapEntry aXMLChartSymbolTypeEnumMap[] =
     { XML_TOKEN_INVALID,        0 }
 };
 
-SvXMLSignedEnumMapEntry aXMLChartSymbolNameMap[] =
+const SvXMLSignedEnumMapEntry aXMLChartSymbolNameMap[] =
 {
     { XML_GRADIENTSTYLE_SQUARE, 0 },  // "square"
     { XML_DIAMOND,              1 },

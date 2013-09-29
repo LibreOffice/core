@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star;
 
-const sal_Int32 nDefaultProgressBarRange = 1000000;
+static const sal_Int32 nDefaultProgressBarRange = 1000000;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
                                     const sal_Bool bTempStrict)

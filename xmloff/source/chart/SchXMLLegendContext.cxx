@@ -52,7 +52,7 @@ enum LegendAttributeTokens
     XML_TOK_LEGEND_HEIGHT_EXT
 };
 
-SvXMLTokenMapEntry aLegendAttributeTokenMap[] =
+const SvXMLTokenMapEntry aLegendAttributeTokenMap[] =
 {
     { XML_NAMESPACE_CHART,      XML_LEGEND_POSITION,    XML_TOK_LEGEND_POSITION     },
     { XML_NAMESPACE_SVG,        XML_X,                  XML_TOK_LEGEND_X            },

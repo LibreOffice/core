@@ -245,7 +245,7 @@ enum AxisAttributeTokens
     XML_TOK_AXIS_TYPE_EXT
 };
 
-SvXMLTokenMapEntry aAxisAttributeTokenMap[] =
+const SvXMLTokenMapEntry aAxisAttributeTokenMap[] =
 {
     { XML_NAMESPACE_CHART,      XML_DIMENSION,  XML_TOK_AXIS_DIMENSION      },
     { XML_NAMESPACE_CHART,      XML_NAME,       XML_TOK_AXIS_NAME           },
@@ -602,7 +602,7 @@ enum AxisChildTokens
     XML_TOK_AXIS_DATE_SCALE_EXT
 };
 
-SvXMLTokenMapEntry aAxisChildTokenMap[] =
+const SvXMLTokenMapEntry aAxisChildTokenMap[] =
 {
     { XML_NAMESPACE_CHART,      XML_TITLE,              XML_TOK_AXIS_TITLE          },
     { XML_NAMESPACE_CHART,      XML_CATEGORIES,         XML_TOK_AXIS_CATEGORIES     },
@@ -906,7 +906,7 @@ enum DateScaleAttributeTokens
     XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT
 };
 
-SvXMLTokenMapEntry aDateScaleAttributeTokenMap[] =
+const SvXMLTokenMapEntry aDateScaleAttributeTokenMap[] =
 {
     { XML_NAMESPACE_CHART,  XML_BASE_TIME_UNIT,         XML_TOK_DATESCALE_BASE_TIME_UNIT  },
     { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE  },

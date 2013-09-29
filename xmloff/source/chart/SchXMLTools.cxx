@@ -130,7 +130,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
 namespace SchXMLTools
 {
 
-static SvXMLEnumMapEntry aXMLChartClassMap[] =
+static const SvXMLEnumMapEntry aXMLChartClassMap[] =
 {
     { XML_LINE,         XML_CHART_CLASS_LINE    },
     { XML_AREA,         XML_CHART_CLASS_AREA    },
@@ -161,7 +161,7 @@ typedef ::comphelper::MakeMap< OUString, OUString > tMakeStringStringMap;
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     //shape property -- chart model object property
-    static tMakeStringStringMap g_aChartTypeNameMap =
+    static const tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
         ( OUString( "com.sun.star.chart.LineDiagram" )
         , OUString( "com.sun.star.chart2.LineChartType" ) )

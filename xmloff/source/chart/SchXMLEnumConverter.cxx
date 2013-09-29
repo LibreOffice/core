@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-SvXMLEnumMapEntry aXMLLegendPositionEnumMap[] =
+const SvXMLEnumMapEntry aXMLLegendPositionEnumMap[] =
 {
     { XML_START,    chart::ChartLegendPosition_LEFT     },
     { XML_TOP,      chart::ChartLegendPosition_TOP      },
@@ -53,7 +53,7 @@ struct TheLegendPositionPropertyHdl : public rtl::Static< XMLLegendPositionPrope
 {
 };
 
-SvXMLEnumMapEntry aXMLLegendExpansionEnumMap[] =
+const SvXMLEnumMapEntry aXMLLegendExpansionEnumMap[] =
 {
     { XML_WIDE,        chart::ChartLegendExpansion_WIDE },
     { XML_HIGH,        chart::ChartLegendExpansion_HIGH },
