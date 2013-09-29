@@ -2337,7 +2337,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         else
         {
             // check whether the
-            String sSource;
+            OUString sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
                 SwMergeSourceWarningBox_Impl aWarning( &GetViewFrame()->GetWindow());
