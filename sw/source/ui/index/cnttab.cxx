@@ -167,7 +167,7 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     bool    bModified;
 
 
-    void                        SetModified() {bModified = true;}
+    void                            SetModified() {bModified = true;}
 
 protected:
     virtual sal_Bool                SeekRow( long nRow );
@@ -180,14 +180,14 @@ protected:
 
 public:
     SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilder);
-    void    ReadEntries(SvStream& rInStr);
-    void    WriteEntries(SvStream& rOutStr);
+    void                            ReadEntries(SvStream& rInStr);
+    void                            WriteEntries(SvStream& rOutStr);
 
     sal_Bool                        IsModified()const;
 
     virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const;
-    virtual void Resize();
-    virtual Size GetOptimalSize() const;
+    virtual void                    Resize();
+    virtual Size                    GetOptimalSize() const;
 };
 
 class SwAutoMarkDlg_Impl : public ModalDialog
@@ -349,7 +349,7 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
     delete pExampleFrame;
 }
 
-void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nBackGroundId)
     {
@@ -373,7 +373,7 @@ void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-short   SwMultiTOXTabDialog::Ok()
+short SwMultiTOXTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
     SwTOXDescription& rDesc = GetTOXDescription(eCurrentTOXType);
@@ -412,7 +412,7 @@ SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
     return pFormArr[nIndex];
 }
 
-SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
+SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
 {
     sal_uInt16 nIndex = eType.GetFlatIndex();
     if(!pDescArr[nIndex])
@@ -1001,7 +1001,7 @@ static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
     return eRet;
 }
 
-void    SwTOXSelectTabPage::ApplyTOXDescription()
+void SwTOXSelectTabPage::ApplyTOXDescription()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
@@ -1147,7 +1147,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
                 nContentOptions |= nsSwTOXElement::TOX_GRAPHIC;
         }
         break;
-        case  TOX_INDEX:
+        case TOX_INDEX:
         {
             nContentOptions = nsSwTOXElement::TOX_MARK;
 
@@ -1256,7 +1256,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
         m_pTypeLB->Enable(sal_False);
     }
 
-    if (!m_bWaitingInitialSettings)
+    if(!m_bWaitingInitialSettings)
     {
         // save current values into the proper TOXDescription
         FillTOXDescription();
@@ -1528,13 +1528,13 @@ public:
     void    AdjustSize();
 };
 
-void    SwTOXEdit::RequestHelp( const HelpEvent& rHEvt )
+void SwTOXEdit::RequestHelp( const HelpEvent& rHEvt )
 {
     if(!m_pParent->CreateQuickHelp(this, aFormToken, rHEvt))
         Edit::RequestHelp(rHEvt);
 }
 
-void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
+void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
     sal_Int32 nTextLen = GetText().getLength();
@@ -1586,8 +1586,8 @@ public:
     {
     }
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    RequestHelp( const HelpEvent& rHEvt );
+    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void RequestHelp( const HelpEvent& rHEvt );
 
     bool IsNextControl() const          {return bNextControl;}
     void SetPrevNextLink(const Link& rLink) {aPrevNextControlLink = rLink;}
@@ -1662,7 +1662,7 @@ public:
         }
 };
 
-void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
+void SwTOXButton::KeyInput( const KeyEvent& rKEvt )
 {
     bool bCall = false;
     KeyCode aCode = rKEvt.GetKeyCode();
@@ -1688,7 +1688,7 @@ void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
         PushButton::KeyInput(rKEvt);
 }
 
-void    SwTOXButton::RequestHelp( const HelpEvent& rHEvt )
+void SwTOXButton::RequestHelp( const HelpEvent& rHEvt )
 {
     if(!m_pParent->CreateQuickHelp(this, aFormToken, rHEvt))
         Button::RequestHelp(rHEvt);
@@ -1709,7 +1709,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwIdxTreeListBox(Window *pP
     return new SwIdxTreeListBox(pParent, nWinStyle);
 }
 
-void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
+void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
@@ -1922,7 +1922,7 @@ SwTOXEntryTabPage::~SwTOXEntryTabPage()
 {
 }
 
-sal_Bool    SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
 {
     // nothing to do
     return sal_True;
@@ -2643,7 +2643,7 @@ SwTokenWindow::~SwTokenWindow()
     }
 }
 
-void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
+void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 {
     SetActiveControl(0);
     bValid = sal_True;
@@ -2808,9 +2808,7 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     return pRet;
 }
 
-void    SwTokenWindow::InsertAtSelection(
-            const String& rText,
-            const SwFormToken& rToken)
+void SwTokenWindow::InsertAtSelection(const String& rText, const SwFormToken& rToken)
 {
     OSL_ENSURE(pActiveCtrl, "no active control!");
 
@@ -3543,7 +3541,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     EnableSelectHdl(m_pParaLayLB);
 }
 
-int     SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
+int SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
 {
     GetForm() = *m_pCurrentForm;
     return LEAVE_PAGE;
@@ -3781,7 +3779,7 @@ Size SwEntryBrowseBox::GetOptimalSize() const
     return aSize;
 }
 
-sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
+sal_Bool SwEntryBrowseBox::SeekRow( long nRow )
 {
     nCurrentRow = nRow;
     return sal_True;
@@ -3807,7 +3805,7 @@ OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
     return *pRet;
 }
 
-void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
+void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
                                 const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     String sPaint = GetCellText( nCurrentRow, nColumnId );
@@ -3864,7 +3862,7 @@ sal_Bool SwEntryBrowseBox::SaveModified()
     return sal_True;
 }
 
-void    SwEntryBrowseBox::InitController(
+void SwEntryBrowseBox::InitController(
                 ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
 {
     String rTxt = GetCellText( nRow, nCol );
@@ -3883,7 +3881,7 @@ void    SwEntryBrowseBox::InitController(
      }
 }
 
-void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
+void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = 0;
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
@@ -3935,7 +3933,7 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
     RowInserted(0, aEntryArr.size() + 1, sal_True);
 }
 
-void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
+void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 {
     //check if the current controller is modified
     sal_uInt16 nCol = GetCurColumnId();

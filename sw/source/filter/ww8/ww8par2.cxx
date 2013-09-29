@@ -2039,7 +2039,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
 
         nStartCp = aRes.nEndPos;
     }
-    while( 1 );
+    while(true);
 
     if( bOk )
     {
@@ -2562,9 +2562,9 @@ void WW8TabDesc::MergeCells()
                             bMerge = true;
                         else
                         {
-                        //If its a hori merge only, and the only things in
-                        //it are invalid cells then its already taken care
-                        //of, so don't merge.
+                            //If its a hori merge only, and the only things in
+                            //it are invalid cells then its already taken care
+                            //of, so don't merge.
                             for (sal_uInt16 i2 = i+1; i2 < pActBand->nWwCols; i2++ )
                                 if (pActBand->pTCs[ i2 ].bMerged &&
                                     !pActBand->pTCs[ i2 ].bFirstMerged  )
@@ -4087,7 +4087,7 @@ Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize)
 
     sal_uInt8 nCount=0;
 
-    while (1)
+    while (true)
     {
         sal_uInt8 nFlags8;
         rSt >> nFlags8;

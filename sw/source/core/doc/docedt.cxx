@@ -1726,7 +1726,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
 
                     if( !pEndTxtNode->Len() )
                     {
-                // METADATA: remove reference if empty (consider node deleted)
+                        // METADATA: remove reference if empty (consider node deleted)
                         pEndTxtNode->RemoveMetadataReference();
                     }
                 }

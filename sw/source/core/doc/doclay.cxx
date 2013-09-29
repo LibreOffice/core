@@ -554,7 +554,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         {
         case ND_GRFNODE:        sName = GetUniqueGrfName();     break;
         case ND_OLENODE:        sName = GetUniqueOLEName();     break;
-        default:                sName = GetUniqueFrameName();       break;
+        default:                sName = GetUniqueFrameName();   break;
         }
     SwFlyFrmFmt* pFmt = MakeFlyFrmFmt( sName, pFrmFmt );
 

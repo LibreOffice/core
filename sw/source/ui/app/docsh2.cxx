@@ -146,7 +146,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
 
 // Disable "multiple layout"
 
-void    SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
+void SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
 {
     GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
     UpdateFontList();
