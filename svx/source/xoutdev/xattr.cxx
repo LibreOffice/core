@@ -220,9 +220,13 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     }
                     else
                     {
-                        sal_Int32 nThisIndex = pEntry->GetName().copy( aUser.getLength() ).toInt32();
-                        if( nThisIndex >= nUserIndex )
-                            nUserIndex = nThisIndex + 1;
+                        OUString aEntryName = pEntry->GetName();
+                        if(aEntryName.getLength() >= aUser.getLength())
+                        {
+                            sal_Int32 nThisIndex = aEntryName.copy( aUser.getLength() ).toInt32();
+                            if( nThisIndex >= nUserIndex )
+                                nUserIndex = nThisIndex + 1;
+                        }
                     }
                 }
             }
