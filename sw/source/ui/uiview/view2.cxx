@@ -2336,7 +2336,6 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         }
         else
         {
-            // check whether the
             String sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
@@ -2393,7 +2392,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
     }
     else
     {
-        //call documents and template dialog
+        // call documents and template dialog
         SfxApplication* pSfxApp = SFX_APP();
         Window* pTopWin = pSfxApp->GetTopWindow();
         SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( pTopWin );
