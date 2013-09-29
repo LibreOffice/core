@@ -49,7 +49,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/connpooloptions.src \
     cui/source/options/dbregister.src \
     cui/source/options/doclinkdialog.src \
-    cui/source/options/internationaloptions.src \
     cui/source/options/optchart.src \
     cui/source/options/optcolor.src \
     cui/source/options/optdict.src \

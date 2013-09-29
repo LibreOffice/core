@@ -398,7 +398,6 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "Calc",               NULL,                   SID_SC_EDITOPTIONS },
     { "Calc",               "General",              SID_SC_TP_LAYOUT },
     { "Calc",               "View",                 SID_SC_TP_CONTENT },
-    { "Calc",               "International",        RID_OFA_TP_INTERNATIONAL },
     { "Calc",               "Calculate",            SID_SC_TP_CALC },
     { "Calc",               "Formula",              SID_SC_TP_FORMULA },
     { "Calc",               "SortLists",            SID_SC_TP_USERLISTS },
@@ -1679,10 +1678,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     nPageId = (sal_uInt16)rCalcArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
-//                  if( bCTL || nId != RID_OFA_TP_INTERNATIONAL )
-//                  #103755# if an international tabpage is need one day, this should be used again... ;-)
-                    if ( nPageId != RID_OFA_TP_INTERNATIONAL )
-                        AddTabPage( nPageId, rCalcArray.GetString( i ), nGroup );
+
+                    AddTabPage( nPageId, rCalcArray.GetString( i ), nGroup );
                 }
             }
         }
@@ -1699,15 +1696,14 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
                 setGroupName( "Impress", rImpressArray.GetString(0) );
                 nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
-                const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rImpressArray.Count() );
                 for ( i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rImpressArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
-                    if ( bCTL || nPageId != RID_OFA_TP_INTERNATIONAL_IMPR )
-                        AddTabPage( nPageId, rImpressArray.GetString(i), nGroup );
+
+                    AddTabPage( nPageId, rImpressArray.GetString(i), nGroup );
                 }
             }
         }
@@ -1723,15 +1719,14 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
                 setGroupName( "Draw", rDrawArray.GetString(0) );
                 nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
-                const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rDrawArray.Count() );
                 for ( i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rDrawArray.GetValue(i);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
-                    if ( bCTL || nPageId != RID_OFA_TP_INTERNATIONAL_SD )
-                        AddTabPage( nPageId, rDrawArray.GetString(i), nGroup );
+
+                    AddTabPage( nPageId, rDrawArray.GetString(i), nGroup );
                 }
             }
         }

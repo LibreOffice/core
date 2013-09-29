@@ -146,9 +146,6 @@
 #define SID_SD_TP_CONTENTS              (RID_OFA_START + 225)
 #define SID_SD_TP_SNAP                  (RID_OFA_START + 227)
 #define SID_SD_TP_MISC                  (RID_OFA_START + 231)
-#define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)
-#define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)
-#define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252) // calc
 #define RID_SC_TP_DEFAULTS              (RID_OFA_START + 253)
 
 //---------------------------------------------------------------------

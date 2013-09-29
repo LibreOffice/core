@@ -2206,17 +2206,6 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
                     pRet = (*ScTpDefaultsOptionsCreate)( pParent, rSet);
             }
             break;
-
-        case RID_OFA_TP_INTERNATIONAL:
-        {
-            SfxAbstractDialogFactory* pSfxFact = SfxAbstractDialogFactory::Create();
-            if ( pSfxFact )
-            {
-                ::CreateTabPage fnCreatePage = pSfxFact->GetTabPageCreatorFunc( nId );
-                if ( fnCreatePage )
-                    pRet = (*fnCreatePage)( pParent, rSet );
-            }
-        }
     }
 
     OSL_ENSURE( pRet, "ScModule::CreateTabPage(): no valid ID for TabPage!" );

@@ -36,7 +36,6 @@
 #include "textanim.hxx"
 #include "autocdlg.hxx"
 #include "treeopt.hxx"
-#include "internationaloptions.hxx"
 #include "labdlg.hxx"
 #include "hangulhanjadlg.hxx"
 #include "showcols.hxx"
@@ -1706,11 +1705,6 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
 {
     switch ( nId )
     {
-        case RID_OFA_TP_INTERNATIONAL:
-            return ::offapp::InternationalOptionsPage::CreateSc;
-        case RID_OFA_TP_INTERNATIONAL_SD:
-        case RID_OFA_TP_INTERNATIONAL_IMPR:
-            return offapp::InternationalOptionsPage::CreateSd;
         case RID_SVXPAGE_TEXTANIMATION :
             return SvxTextAnimationPage::Create;
         case RID_SVXTABPAGE_GALLERY_GENERAL :

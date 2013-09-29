@@ -765,8 +765,6 @@ SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
                 }
             }
             break;
-            case RID_OFA_TP_INTERNATIONAL_SD:
-            case RID_OFA_TP_INTERNATIONAL_IMPR:
             case RID_SVXPAGE_TEXTANIMATION :
             {
                 SfxAbstractDialogFactory* pSfxFact = SfxAbstractDialogFactory::Create();

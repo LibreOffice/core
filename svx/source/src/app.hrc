@@ -110,9 +110,6 @@
 #define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
 #define OFA_TP_MEMORY                   (RID_OFA_START + 250)
 #define RID_SW_TP_STD_FONT_CTL          (RID_OFA_START + 251)
-#define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252)       // 4 SC & ID 4 resource
-#define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)       // 4 SD
-#define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
 #define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
 #define SID_SC_TP_FORMULA               (RID_OFA_START + 257)
