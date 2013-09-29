@@ -1157,7 +1157,6 @@ void ThreeDHelper::setCameraDistance(
 
 double ThreeDHelper::CameraDistanceToPerspective( double fCameraDistance )
 {
-    double fRet = fCameraDistance;
     double fMin, fMax;
     ThreeDHelper::getCameraDistanceRange( fMin, fMax );
     //fMax <-> 0; fMin <->100
@@ -1165,14 +1164,13 @@ double ThreeDHelper::CameraDistanceToPerspective( double fCameraDistance )
     double a = 100.0*fMax*fMin/(fMax-fMin);
     double b = -a/fMax;
 
-    fRet = a/fCameraDistance + b;
+    double fRet = a/fCameraDistance + b;
 
     return fRet;
 }
 
 double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
 {
-    double fRet = fPerspective;
     double fMin, fMax;
     ThreeDHelper::getCameraDistanceRange( fMin, fMax );
     //fMax <-> 0; fMin <->100
@@ -1180,7 +1178,7 @@ double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
     double a = 100.0*fMax*fMin/(fMax-fMin);
     double b = -a/fMax;
 
-    fRet = a/(fPerspective - b);
+    double fRet = a/(fPerspective - b);
 
     return fRet;
 }

@@ -399,7 +399,6 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
     CAutoComInit comAutoInit;
 
     LPSTREAM lpStream;
-    HRESULT  hr = E_FAIL;
 
     *ppIDataObject = NULL;
 
@@ -411,7 +410,7 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 
     aMsgCtx.aCondition.wait( /* infinite */ );
 
-    hr = aMsgCtx.hr;
+    HRESULT hr = aMsgCtx.hr;
 
     if ( SUCCEEDED( hr ) )
     {

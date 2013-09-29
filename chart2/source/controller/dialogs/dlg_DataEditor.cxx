@@ -93,8 +93,7 @@ DataEditor::DataEditor(
     sal_Int32 nMaxWidth = GetDesktopRectPixel().getWidth() -
         (aWinSizeWithBorder.getWidth() - aWinSize.getWidth() + aWinPos.getX()) - 10; // leave some space
     sal_Int32 nBrowserWidth = m_apBrwData->GetTotalWidth() + 12 + 16; // plus padding + 16?
-    sal_Int32 nWindowWidth = ::std::max( nMinWidth, nBrowserWidth );
-    nWindowWidth = ::std::min( nMaxWidth, nBrowserWidth );
+    sal_Int32 nWindowWidth = ::std::min( nMaxWidth, nBrowserWidth );
     aWinSize.setWidth( nWindowWidth );
     SetOutputSizePixel( aWinSize );
     AdaptBrowseBoxSize();
