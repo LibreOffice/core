@@ -949,7 +949,7 @@ namespace svgio
                         basegfx::B2DRange aClipRange;
                         const SvgMarkerNode* pPrepared = 0;
 
-                        if(pStart)
+                        if(pStart && a==0)
                         {
                             if(prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pStart))
                             {
@@ -971,7 +971,7 @@ namespace svgio
                             }
                         }
 
-                        if(pEnd)
+                        if(pEnd && a==nCount-1)
                         {
                             if(pEnd == pPrepared || prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pEnd))
                             {
