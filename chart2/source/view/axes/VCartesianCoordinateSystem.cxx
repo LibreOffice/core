@@ -25,9 +25,6 @@
 #include "AxisHelper.hxx"
 #include "ChartTypeHelper.hxx"
 
-//for auto_ptr
-#include <memory>
-
 namespace chart
 {
 using namespace ::com::sun::star;
