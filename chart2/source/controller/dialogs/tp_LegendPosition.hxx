@@ -23,8 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 // header for FixedText
 #include <vcl/fixed.hxx>
-//for auto_ptr
-#include <memory>
+
 #include "TextDirectionListBox.hxx"
 
 namespace chart
@@ -36,7 +35,7 @@ class SchLegendPosTabPage : public SfxTabPage
 private:
     FixedLine   aGrpLegend;
 
-    ::std::auto_ptr< LegendPositionResources >   m_apLegendPositionResources;
+    boost::scoped_ptr< LegendPositionResources >   m_apLegendPositionResources;
 
     FixedLine           m_aFlTextOrient;
     FixedText               m_aFtTextDirection;

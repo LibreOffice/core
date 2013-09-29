@@ -33,9 +33,6 @@
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 
-//for auto_ptr
-#include <memory>
-
 namespace chart
 {
 using namespace ::com::sun::star;
@@ -605,15 +602,14 @@ private:
     FixedText   m_aFT_LineType;
     ListBox     m_aLB_LineType;
     PushButton  m_aPB_DetailsDialog;
-    ::std::auto_ptr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
-    ::std::auto_ptr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
+    boost::scoped_ptr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
+    boost::scoped_ptr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
 };
 SplineResourceGroup::SplineResourceGroup( Window* pWindow )
         : ChangingResource()
         , m_aFT_LineType( pWindow, SchResId( FT_LINETYPE ) )
         , m_aLB_LineType( pWindow, SchResId( LB_LINETYPE ) )
         , m_aPB_DetailsDialog( pWindow, SchResId( PB_SPLINE_DIALOG ) )
-        , m_pSplinePropertiesDialog()
 {
     m_aLB_LineType.InsertEntry(SCH_RESSTR(STR_LINETYPE_STRAIGHT));
     m_aLB_LineType.InsertEntry(SCH_RESSTR(STR_LINETYPE_SMOOTH));
@@ -640,14 +636,14 @@ SplineResourceGroup::~SplineResourceGroup()
 SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
 {
     if( !m_pSplinePropertiesDialog.get() )
-        m_pSplinePropertiesDialog = ::std::auto_ptr< SplinePropertiesDialog >( new SplinePropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
+        m_pSplinePropertiesDialog.reset( new SplinePropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
     return *m_pSplinePropertiesDialog;
 }
 SteppedPropertiesDialog& SplineResourceGroup::getSteppedPropertiesDialog()
 {
     if( !m_pSteppedPropertiesDialog.get() )
     {
-        m_pSteppedPropertiesDialog = ::std::auto_ptr< SteppedPropertiesDialog >( new SteppedPropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
+        m_pSteppedPropertiesDialog.reset( new SteppedPropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
     }
     return *m_pSteppedPropertiesDialog;
 }

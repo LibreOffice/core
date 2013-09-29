@@ -26,9 +26,9 @@
 #include <svtools/wizardmachine.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-//for auto_ptr
-#include <memory>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -59,8 +59,8 @@ protected:
     FixedText           m_aFT_TitleDescription;
     FixedLine           m_aFL_Vertical;
 
-    ::std::auto_ptr< TitleResources >            m_apTitleResources;
-    ::std::auto_ptr< LegendPositionResources >   m_apLegendPositionResources;
+    boost::scoped_ptr< TitleResources >            m_apTitleResources;
+    boost::scoped_ptr< LegendPositionResources >   m_apLegendPositionResources;
 
     FixedLine           m_aFL_Grids;
     CheckBox            m_aCB_Grid_X;
