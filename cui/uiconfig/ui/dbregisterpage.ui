@@ -43,19 +43,17 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="box2">
+                  <object class="GtkButtonBox" id="buttonbox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="spacing">12</property>
+                    <property name="layout_style">end</property>
                     <child>
                       <object class="GtkButton" id="new">
                         <property name="label" translatable="yes">_New...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -67,11 +65,9 @@
                     <child>
                       <object class="GtkButton" id="delete">
                         <property name="label" translatable="yes">_Delete</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -83,11 +79,9 @@
                     <child>
                       <object class="GtkButton" id="edit">
                         <property name="label" translatable="yes">_Edit...</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
