@@ -37,6 +37,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/formatnumberdialog \
 	cui/uiconfig/ui/gradientpage \
 	cui/uiconfig/ui/colorconfigwin \
+	cui/uiconfig/ui/connpooloptions \
 	cui/uiconfig/ui/dbregisterpage \
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/hatchpage \

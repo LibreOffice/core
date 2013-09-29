@@ -17,111 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connpooloptions.hrc"
 #include <cuires.hrc>
 
-#define PAGE_SIZE_X     TP_WIDTH
-#define PAGE_SIZE_Y     TP_HEIGHT
-
-#define LIST_SIZE_Y     100
-
-TabPage RID_OFAPAGE_CONNPOOLOPTIONS
+String RID_SVXSTR_DRIVER_NAME
 {
-    HelpID = "cui:TabPage:RID_OFAPAGE_CONNPOOLOPTIONS";
-    OutputSize = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( PAGE_SIZE_X, PAGE_SIZE_Y ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-
-    FixedLine FL_POOLING
-    {
-        Pos = MAP_APPFONT( 4, 3 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - 8, 8 );
-        Text [ en-US ] = "Connection pool";
-    };
-    CheckBox CB_POOL_CONNS
-    {
-        HelpID = "cui:CheckBox:RID_OFAPAGE_CONNPOOLOPTIONS:CB_POOL_CONNS";
-        Pos = MAP_APPFONT( 7, 15 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - 14, 10 );
-        Text [ en-US ] = "Connection pooling enabled";
-    };
-    FixedText FT_DRIVERS
-    {
-        Pos = MAP_APPFONT( 17, 28 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - 14 - 8, 8 );
-        Text [ en-US ] = "Drivers known in %PRODUCTNAME";
-    };
-    Control CTRL_DRIVER_LIST
-    {
-        Pos = MAP_APPFONT( 17, 39 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - 14 - 8, LIST_SIZE_Y );
-        TabStop = TRUE;
-        Border = TRUE;
-        SVLook = TRUE;
-    };
-    FixedText FT_DRIVERLABEL
-    {
-        Pos = MAP_APPFONT( 17, 39 + LIST_SIZE_Y + 4 );
-        Size = MAP_APPFONT( 70, 8 );
-        Text [ en-US ] = "Current driver:";
-    };
-    FixedText FT_DRIVER
-    {
-        Pos = MAP_APPFONT( 17 + 70 + 3, 39 + LIST_SIZE_Y + 4 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - ( 15 + 70 + 3 ) - 7, 8 );
-    };
-    CheckBox CB_DRIVERPOOLING
-    {
-        HelpID = "cui:CheckBox:RID_OFAPAGE_CONNPOOLOPTIONS:CB_DRIVERPOOLING";
-        Pos = MAP_APPFONT( 17, 39 + LIST_SIZE_Y + 4 + 8 + 3 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - 23, 10 );
-        Text [ en-US ] = "Enable pooling for this driver";
-    };
-    FixedText FT_TIMEOUT
-    {
-        Pos = MAP_APPFONT( 27, 39 + LIST_SIZE_Y + 4 + 8 + 3 + 10 + 3 + 2 );
-        Size = MAP_APPFONT( 100, 8 );
-        Text [ en-US ] = "Timeout (seconds)";
-    };
-    NumericField NF_TIMEOUT
-    {
-        HelpID = "cui:NumericField:RID_OFAPAGE_CONNPOOLOPTIONS:NF_TIMEOUT";
-        Pos = MAP_APPFONT( 27 + 100 + 3, 39 + LIST_SIZE_Y + 4 + 8 + 3 + 10 + 3 );
-        Size = MAP_APPFONT( 40, 12 );
-        SvLook = TRUE;
-        Border = TRUE;
-        Right = TRUE;
-        Spin = TRUE;
-        Repeat = TRUE;
-        Minimum = 30;
-        Maximum = 600;
-        StrictFormat = TRUE;
-        DecimalDigits = 0;
-        SpinSize = 1;
-    };
-
-    String STR_DRIVER_NAME
-    {
-        Text [ en-US ] = "Driver name";
-    };
-    String STR_POOLED_FLAG
-    {
-        Text [ en-US ] = "Pool";
-    };
-    String STR_POOL_TIMEOUT
-    {
-        Text [ en-US ] = "Timeout";
-    };
-    String STR_YES
-    {
-        Text [ en-US ] = "Yes";
-    };
-    String STR_NO
-    {
-        Text [ en-US ] = "No";
-    };
+    Text [ en-US ] = "Driver name";
+};
+String RID_SVXSTR_POOLED_FLAG
+{
+    Text [ en-US ] = "Pool";
+};
+String RID_SVXSTR_POOL_TIMEOUT
+{
+    Text [ en-US ] = "Timeout";
+};
+String RID_SVXSTR_YES
+{
+    Text [ en-US ] = "Yes";
+};
+String RID_SVXSTR_NO
+{
+    Text [ en-US ] = "No";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

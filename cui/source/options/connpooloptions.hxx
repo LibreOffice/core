@@ -27,11 +27,8 @@
 #include <vcl/field.hxx>
 #include <svx/databaseregistrationui.hxx>
 
-//........................................................................
 namespace offapp
 {
-//........................................................................
-
     //====================================================================
     //= ConnectionPoolOptionsPage
     //====================================================================
@@ -41,15 +38,14 @@ namespace offapp
         using TabPage::ActivatePage;
 
     protected:
-        FixedLine               m_aFrame;
-        CheckBox                m_aEnablePooling;
-        FixedText               m_aDriversLabel;
+        CheckBox*               m_pEnablePooling;
+        FixedText*              m_pDriversLabel;
         DriverListControl*      m_pDriverList;
-        FixedText               m_aDriverLabel;
-        FixedText               m_aDriver;
-        CheckBox                m_aDriverPoolingEnabled;
-        FixedText               m_aTimeoutLabel;
-        NumericField            m_aTimeout;
+        FixedText*              m_pDriverLabel;
+        FixedText*              m_pDriver;
+        CheckBox*               m_pDriverPoolingEnabled;
+        FixedText*              m_pTimeoutLabel;
+        NumericField*           m_pTimeout;
 
     protected:
         ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet);
@@ -57,12 +53,10 @@ namespace offapp
     public:
         static SfxTabPage*  Create(Window* _pParent, const SfxItemSet& _rAttrSet);
 
-        ~ConnectionPoolOptionsPage();
-
     protected:
         virtual long        Notify( NotifyEvent& _rNEvt );
 
-        virtual sal_Bool        FillItemSet(SfxItemSet& _rSet);
+        virtual sal_Bool    FillItemSet(SfxItemSet& _rSet);
         virtual void        Reset(const SfxItemSet& _rSet);
         virtual void        ActivatePage( const SfxItemSet& _rSet);
 
@@ -75,11 +69,8 @@ namespace offapp
         void commitTimeoutField();
     };
 
-//........................................................................
-}   // namespace offapp
-//........................................................................
+} // namespace offapp
 
 #endif // _OFFAPP_CONNPOOLOPTIONS_HXX_
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

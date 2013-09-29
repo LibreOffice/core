@@ -448,6 +448,12 @@
 #define RID_SVXSTR_TYPE                                     (RID_SVX_START + 1244)
 #define RID_SVXSTR_PATH                                     (RID_SVX_START + 1245)
 
+#define RID_SVXSTR_DRIVER_NAME                              (RID_SVX_START + 1246)
+#define RID_SVXSTR_POOLED_FLAG                              (RID_SVX_START + 1247)
+#define RID_SVXSTR_POOL_TIMEOUT                             (RID_SVX_START + 1248)
+#define RID_SVXSTR_YES                                      (RID_SVX_START + 1249)
+#define RID_SVXSTR_NO                                       (RID_SVX_START + 1250)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
