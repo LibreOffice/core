@@ -497,8 +497,6 @@ public:
 
         Needed for text formatting
         Method considers new list level attributes, which also can provide a left margin value
-
-        @author OD
     */
     long GetLeftMarginForTabCalculation() const;
 
@@ -640,16 +638,12 @@ public:
           style hierarchy from the paragraph to the paragraph style with the
           list style no indent attributes are found.
 
-        @author OD
-
         @return boolean
     */
     bool AreListLevelIndentsApplicable() const;
 
     /** Retrieves the list tab stop position, if the paragraph's list level defines
         one and this list tab stop has to merged into the tap stops of the paragraph
-
-        @author OD
 
         @param nListTabStopPosition
         output parameter - containing the list tab stop position
@@ -660,8 +654,6 @@ public:
 
     /** Retrieves the character following the list label, if the paragraph's
         list level defines one.
-
-        @author OD
 
         @return the list tab stop position as string
     */

@@ -4088,8 +4088,6 @@ OUString SwTxtNode::GetListId() const
       style hierarchy from the paragraph to the paragraph style with the
       list style no indent attributes are found.
 
-    @author OD
-
     @return boolean
 */
 bool SwTxtNode::AreListLevelIndentsApplicable() const
@@ -4149,8 +4147,6 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
 
 /** Retrieves the list tab stop position, if the paragraph's list level defines
     one and this list tab stop has to merged into the tap stops of the paragraph
-
-    @author OD
 
     @param nListTabStopPosition
     output parameter - containing the list tab stop position
