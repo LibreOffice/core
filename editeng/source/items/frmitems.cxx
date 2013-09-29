@@ -3327,7 +3327,7 @@ SvxBrushItem::SvxBrushItem( sal_uInt16 _nWhich ) :
 
     aColor           ( COL_TRANSPARENT ),
     nShadingValue    ( ShadingPattern::CLEAR ),
-    pImpl            ( new SvxBrushItem_Impl( 0 ) ),
+    pImpl            ( new SvxBrushItem_Impl( GraphicObject::Create( Graphic() ) )),
     pStrLink         ( NULL ),
     pStrFilter       ( NULL ),
     eGraphicPos      ( GPOS_NONE ),
@@ -3344,7 +3344,7 @@ SvxBrushItem::SvxBrushItem( const Color& rColor, sal_uInt16 _nWhich) :
 
     aColor            ( rColor ),
     nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( 0 ) ),
+    pImpl             ( new SvxBrushItem_Impl( GraphicObject::Create( Graphic() ) )),
     pStrLink          ( NULL ),
     pStrFilter        ( NULL ),
     eGraphicPos       ( GPOS_NONE ),
@@ -3401,7 +3401,7 @@ SvxBrushItem::SvxBrushItem(
 
     aColor            ( COL_TRANSPARENT ),
     nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( NULL ) ),
+    pImpl             ( new SvxBrushItem_Impl( GraphicObject::Create( Graphic() ) )),
     pStrLink          ( new String( rLink ) ),
     pStrFilter        ( new String( rFilter ) ),
     eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
@@ -3420,7 +3420,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
 
     aColor            ( COL_TRANSPARENT ),
     nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( NULL ) ),
+    pImpl             ( new SvxBrushItem_Impl( GraphicObject::Create( Graphic() ) )),
     pStrLink          ( NULL ),
     pStrFilter        ( NULL ),
     eGraphicPos       ( GPOS_NONE )
@@ -3535,7 +3535,7 @@ SvxBrushItem::SvxBrushItem( const SvxBrushItem& rItem ) :
 
     SfxPoolItem( rItem.Which() ),
     nShadingValue     ( ShadingPattern::CLEAR ),
-    pImpl             ( new SvxBrushItem_Impl( NULL ) ),
+    pImpl             ( new SvxBrushItem_Impl( GraphicObject::Create( Graphic() ) )),
     pStrLink          ( NULL ),
     pStrFilter        ( NULL ),
     eGraphicPos       ( GPOS_NONE ),
@@ -3810,7 +3810,6 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
     aColor = rItem.aColor;
     eGraphicPos = rItem.eGraphicPos;
 
-    pImpl->mxGraphicObject.clear();
     DELETEZ( pStrLink );
     DELETEZ( pStrFilter );
 
@@ -3997,7 +3996,6 @@ void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
 
     if ( GPOS_NONE == eGraphicPos )
     {
-        pImpl->mxGraphicObject.clear();
         DELETEZ( pStrLink );
         DELETEZ( pStrFilter );
         pImpl->mxGraphicObject = GraphicObject::Create(Graphic()); // Creating a dummy
@@ -4059,7 +4057,7 @@ void SvxBrushItem::SetGraphicLink( const String& rNew )
         else
             pStrLink = new String( rNew );
 
-        pImpl->mxGraphicObject.clear();
+        pImpl->mxGraphicObject = GraphicObject::Create(Graphic());
     }
 }
 

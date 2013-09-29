@@ -478,7 +478,6 @@ sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
  */
 short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 {
-#if 0  /* FIXME FIXME FIXME */
     if( bInSwapIn ) // not recursively!
         return !mxGrfObj->IsSwappedOut();
 
@@ -488,42 +487,35 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 
     if( pLink )
     {
-        if(mxGrfObj.is())
+        if( GRAPHIC_NONE == mxGrfObj->GetType() ||
+            GRAPHIC_DEFAULT == mxGrfObj->GetType() )
         {
-            if( GRAPHIC_NONE == mxGrfObj->GetType() ||
-                GRAPHIC_DEFAULT == mxGrfObj->GetType() )
+            // link was not loaded yet
+            if( pLink->SwapIn( bWaitForData ) )
             {
-                // link was not loaded yet
-                if( pLink->SwapIn( bWaitForData ) )
-                {
-                    nRet = -1;
-                }
-                else if( GRAPHIC_DEFAULT == mxGrfObj->GetType() )
-                {
-                    // no default bitmap anymore, thus re-paint
-                    mxReplacementGraphic.clear();
+                nRet = -1;
+            }
+            else if( GRAPHIC_DEFAULT == mxGrfObj->GetType() )
+            {
+                // no default bitmap anymore, thus re-paint
+                mxReplacementGraphic = GraphicObject::Create(Graphic());
 
-                    mxGrfObj = GraphicObject::Create(Graphic());
-                    onGraphicChanged();
-                    SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-                    ModifyNotification( &aMsgHint, &aMsgHint );
-                }
+                mxGrfObj = GraphicObject::Create(Graphic());
+                onGraphicChanged();
+                SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
+                ModifyNotification( &aMsgHint, &aMsgHint );
             }
-            else if( mxGrfObj->IsSwappedOut() ) {
-                // link to download
-                nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
-            }
-            else
-            {
-                nRet = 1;
-            }
+        }
+        else if( mxGrfObj->IsSwappedOut() ) {
+            // link to download
+            nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
         }
         else
         {
             nRet = 1;
         }
     }
-    else if( mxGrfObj.is() && mxGrfObj->IsSwappedOut() )
+    else if( mxGrfObj->IsSwappedOut() )
     {
         // graphic is in storage or in a temp file
         if( !HasStreamName() )
@@ -568,14 +560,11 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
     }
     bInSwapIn = sal_False;
     return nRet;
-#else
-    return 0;
-#endif
 }
 
 short SwGrfNode::SwapOut()
 {
-#if 0 /* FIXME FIXME */
+
     if( mxGrfObj->GetType() != GRAPHIC_DEFAULT &&
         mxGrfObj->GetType() != GRAPHIC_NONE &&
         !mxGrfObj->IsSwappedOut() && !bInSwapIn )
@@ -593,9 +582,6 @@ short SwGrfNode::SwapOut()
         return (short) mxGrfObj->SwapOut( NULL );
     }
     return 1;
-#else
-    return 0;
-#endif
 }
 
 bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
