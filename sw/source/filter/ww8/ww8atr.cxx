@@ -5152,6 +5152,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_CHRATR_BOX:
             FormatCharBorder( static_cast< const SvxBoxItem& >( rHt ) );
             break;
+        case RES_CHRATR_HIGHLIGHT:
+            CharHighLight( static_cast< const SvxBrushItem& >( rHt ) );
+            break;
 
         case RES_TXTATR_INETFMT:
             TextINetFormat( static_cast< const SwFmtINetFmt& >( rHt ) );

@@ -296,6 +296,9 @@ protected:
     /// Sfx item RES_CHRATR_BOX
     virtual void CharBorder( const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow );
 
+    /// Sfx item RES_CHRATR_HIGHLIGHT
+    virtual void CharHighLight( const SvxBrushItem& ){};
+
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFmtINetFmt& );
 

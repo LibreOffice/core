@@ -2011,8 +2011,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_CHighlight:
         {
             sal_Int32 nColor = 0;
-            if(true ==( mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)))
-                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
+            if( (mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)) )
+                rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nColor ));
             else if (mnBackgroundColor)
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
         }

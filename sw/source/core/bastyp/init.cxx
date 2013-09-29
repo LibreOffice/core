@@ -496,9 +496,9 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_OVERLINE- POOLATTR_BEGIN ] =       new SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE );
     aAttrTab[ RES_CHRATR_BOX - POOLATTR_BEGIN ] =           new SvxBoxItem( RES_CHRATR_BOX );
     aAttrTab[ RES_CHRATR_SHADOW - POOLATTR_BEGIN ] =        new SvxShadowItem( RES_CHRATR_SHADOW );
+    aAttrTab[ RES_CHRATR_HIGHLIGHT - POOLATTR_BEGIN ] =     new SvxBrushItem( RES_CHRATR_HIGHLIGHT );
 
 // CharakterAttr - Dummies
-    aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY1 );
     aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY2 );
     aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_CHRATR_DUMMY3 );
 

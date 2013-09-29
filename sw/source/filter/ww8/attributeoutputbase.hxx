@@ -443,6 +443,9 @@ protected:
     void FormatCharBorder( const SvxBoxItem& rBox );
     virtual void CharBorder( const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow ) = 0;
 
+    /// Sfx item RES_CHRATR_HIGHLIGHT
+    virtual void CharHighLight( const SvxBrushItem& ) = 0;
+
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFmtINetFmt& ) = 0;
 

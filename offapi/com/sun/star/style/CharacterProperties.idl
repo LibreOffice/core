@@ -435,6 +435,12 @@ published service CharacterProperties
     **/
     [optional, property] com::sun::star::table::ShadowFormat CharShadowFormat;
 
+    /** Determines the color of the highlight.
+     *
+     *  @since LibreOffice 4.2
+    **/
+    [optional, property] com::sun::star::util::Color CharHighLight;
+
 };
 
 }; }; }; };

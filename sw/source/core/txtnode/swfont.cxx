@@ -665,6 +665,9 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
             sal_True, &pItem ))
             pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
+            sal_True, &pItem ))
+            SetHighLightColor(((SvxBrushItem*)pItem)->GetColor());
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
             sal_True, &pItem ))
         {
@@ -712,6 +715,7 @@ SwFont::SwFont( const SwFont &rFont )
     aSub[SW_CTL] = rFont.aSub[SW_CTL];
     nActual = rFont.nActual;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
+    m_aHighLightColor = rFont.m_aHighLightColor;
     m_aTopBorder = rFont.m_aTopBorder;
     m_aBottomBorder = rFont.m_aBottomBorder;
     m_aRightBorder = rFont.m_aRightBorder;
@@ -843,7 +847,11 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
     else
         pBackColor = NULL;
-
+    if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
+        sal_True, &pItem ))
+        SetHighLightColor(((SvxBrushItem*)pItem)->GetColor());
+    else
+        SetHighLightColor(COL_TRANSPARENT);
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BOX,
         sal_True, &pItem ))
     {
@@ -923,6 +931,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     nActual = rFont.nActual;
     delete pBackColor;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
+    m_aHighLightColor = rFont.m_aHighLightColor;
     m_aTopBorder = rFont.m_aTopBorder;
     m_aBottomBorder = rFont.m_aBottomBorder;
     m_aRightBorder = rFont.m_aRightBorder;

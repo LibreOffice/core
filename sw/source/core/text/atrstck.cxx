@@ -115,17 +115,17 @@ const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
      0, // RES_CHRATR_RSID,                      // 39
     36, // RES_CHRATR_BOX,                       // 40
     37, // RES_CHRATR_SHADOW,                    // 41
-     0, // RES_CHRATR_DUMMY1,                    // 42
+    38, // RES_CHRATR_HIGHLIGHT,                 // 42
      0, // RES_CHRATR_DUMMY2,                    // 43
      0, // RES_CHRATR_DUMMY3,                    // 44
-    38, // RES_TXTATR_REFMARK,                   // 45
-    39, // RES_TXTATR_TOXMARK,                   // 46
-    40, // RES_TXTATR_META,                      // 47
-    40, // RES_TXTATR_METAFIELD,                 // 48
+    39, // RES_TXTATR_REFMARK,                   // 45
+    40, // RES_TXTATR_TOXMARK,                   // 46
+    41, // RES_TXTATR_META,                      // 47
+    41, // RES_TXTATR_METAFIELD,                 // 48
      0, // RES_TXTATR_AUTOFMT,                   // 49
      0, // RES_TXTATR_INETFMT                    // 50
      0, // RES_TXTATR_CHARFMT,                   // 51
-    41, // RES_TXTATR_CJK_RUBY,                  // 52
+    42, // RES_TXTATR_CJK_RUBY,                  // 52
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 53
      0, // RES_TXTATR_DUMMY5                     // 54
 };
@@ -796,6 +796,9 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             break;
         case RES_CHRATR_BACKGROUND :
             rFnt.SetBackColor(new Color( ((SvxBrushItem&)rItem).GetColor() ) );
+            break;
+        case RES_CHRATR_HIGHLIGHT :
+            rFnt.SetHighLightColor( ((SvxBrushItem&)rItem).GetColor() );
             break;
         case RES_CHRATR_CJK_FONT :
             rFnt.SetName( ((SvxFontItem&)rItem).GetFamilyName(), SW_CJK );

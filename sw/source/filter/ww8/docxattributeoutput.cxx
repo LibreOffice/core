@@ -3804,6 +3804,30 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         FSEND );
 }
 
+OString DocxAttributeOutput::TransHighLightColor( const Color& rColor )
+{
+    switch (rColor.GetColor())
+    {
+        case 0x000000: return OString("black"); break;
+        case 0x0000ff: return OString("blue"); break;
+        case 0x00ffff: return OString("cyan"); break;
+        case 0x00ff00: return OString("green"); break;
+        case 0xff00ff: return OString("magenta"); break;
+        case 0xff0000: return OString("red"); break;
+        case 0xffff00: return OString("yellow"); break;
+        case 0xffffff: return OString("white"); break;
+        case 0x000080: return OString("darkBlue"); break;
+        case 0x008080: return OString("darkCyan"); break;
+        case 0x008000: return OString("darkGreen"); break;
+        case 0x800080: return OString("darkMagenta"); break;
+        case 0x800000: return OString("darkRed"); break;
+        case 0x808000: return OString("darkYellow"); break;
+        case 0x808080: return OString("darkGray"); break;
+        case 0xC0C0C0: return OString("lightGray"); break;
+        default: return OString(); break;
+    }
+}
+
 void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule )
 {
     // nId is the same both for abstract numbering definition as well as the
@@ -4387,6 +4411,16 @@ void DocxAttributeOutput::CharBorder(
     const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow )
 {
     impl_borderLine( m_pSerializer, XML_bdr, pAllBorder, nDist, bShadow );
+}
+
+void DocxAttributeOutput::CharHighLight( const SvxBrushItem& rHighLight )
+{
+    const OString sColor = TransHighLightColor( rHighLight.GetColor() );
+    if ( !sColor.isEmpty() )
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_highlight,
+            FSNS( XML_w, XML_val ), sColor.getStr(), FSEND );
+    }
 }
 
 void DocxAttributeOutput::TextINetFormat( const SwFmtINetFmt& rLink )

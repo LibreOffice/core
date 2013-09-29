@@ -3651,7 +3651,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_RSID */               0,
 /* RES_CHRATR_BOX */                OutCSS1_SvxBox,
 /* RES_CHRATR_SHADOW */             0,
-/* RES_CHRATR_DUMMY1 */             0,
+/* RES_CHRATR_HIGHLIGHT */          0,
 /* RES_CHRATR_DUMMY2 */             0,
 /* RES_CHRATR_DUMMY3 */             0,
 

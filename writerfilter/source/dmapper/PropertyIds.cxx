@@ -114,6 +114,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_TOP_BORDER_DISTANCE: sName = "CharTopBorderDistance";break;
             case PROP_CHAR_BOTTOM_BORDER_DISTANCE: sName = "CharBottomBorderDistance"; break;
             case PROP_CHAR_SHADOW_FORMAT: sName = "CharShadowFormat"; break;
+            case PROP_CHAR_HIGHLIGHT: sName = "CharHighLight"; break;
 
             case PROP_PARA_STYLE_NAME:      sName = "ParaStyleName"; break;
             case PROP_PARA_ADJUST:     sName = "ParaAdjust"; break;

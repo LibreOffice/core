@@ -376,6 +376,14 @@ private:
     void EmbedFontStyle( const OUString& name, int tag, FontFamily family, FontItalic italic, FontWeight weight,
         FontPitch pitch, rtl_TextEncoding encoding );
 
+    /**
+     * Translate a color object to the corresponding HighLightColorValues enumaration item
+     *
+     * @param[in]   rColor      a color object to translate
+     * @return      color name (e.g. "red"), if color is inside the enumeration's range
+     *              empty string, otherwise
+    **/
+    OString TransHighLightColor( const Color& rColor );
 protected:
 
     /// Output frames - the implementation.
@@ -479,6 +487,9 @@ protected:
 
     /// Sfx item RES_CHRATR_BOX
     virtual void CharBorder( const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow );
+
+    /// Sfx item RES_CHRATR_HIGHLIGHT
+    virtual void CharHighLight( const SvxBrushItem& rHighLight );
 
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFmtINetFmt& );

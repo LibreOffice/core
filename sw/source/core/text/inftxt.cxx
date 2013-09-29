@@ -1171,9 +1171,6 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
             }
         }
     }
-    if( !m_pFnt->GetBackColor() ) return;
-
-    OSL_ENSURE( m_pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect, true );
@@ -1187,7 +1184,15 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 
         pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
-        pTmpOut->SetFillColor( *m_pFnt->GetBackColor() );
+        if( m_pFnt->GetHighLightColor() != COL_TRANSPARENT )
+        {
+            pTmpOut->SetFillColor( m_pFnt->GetHighLightColor() );
+        }
+        else
+        {
+            if( !m_pFnt->GetBackColor() ) return;
+            pTmpOut->SetFillColor( *m_pFnt->GetBackColor() );
+        }
         pTmpOut->SetLineColor();
 
         DrawRect( aIntersect, sal_True, sal_False );
