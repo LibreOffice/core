@@ -461,7 +461,6 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     pDesc->SetAutoMarkURL(rSh.GetTOIAutoMarkURL());
     pDesc->SetTitle(pCurTOX->GetTitle());
 
-
     pDesc->SetContentOptions(pCurTOX->GetCreateType());
     if(pDesc->GetTOXType() == TOX_INDEX)
         pDesc->SetIndexOptions(pCurTOX->GetOptions());
@@ -2089,7 +2088,6 @@ void SwTOXEntryTabPage::UpdateDescriptor()
                                 m_pThirdKeyLB->GetSelectEntryPos());
         aKey3.bSortAscending = m_pThirdSortUpRB->IsChecked();
 
-
         rDesc.SetSortKeys(aKey1, aKey2, aKey3);
     }
     SwForm* pCurrentForm = pTOXDlg->GetForm(aLastTOXType);
@@ -2376,7 +2374,6 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     m_pEntryOutlineLevelNF->Show( bIsChapterInfo || bIsEntryNumber );
     m_pNumberFormatFT->Show( bIsEntryNumber );
     m_pNumberFormatLB->Show( bIsEntryNumber );
-
 
     //now enable the visible buttons
     //- inserting the same type of control is not allowed
@@ -3246,6 +3243,7 @@ String  SwTokenWindow::GetPattern() const
     Description: Check if a control of the specified
                     TokenType is already contained in the list
  --------------------------------------------------*/
+
 sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
@@ -3571,6 +3569,7 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
     }
     return 0;
 }
+
 /*--------------------------------------------------------------------
      Description: allocate templates
  --------------------------------------------------------------------*/
@@ -3664,7 +3663,6 @@ void SwTOXStylesTabPage::Modify()
 #define ITEM_CASE           6
 #define ITEM_WORDONLY       7
 
-
 SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilder)
     : SwEntryBrowseBox_Base( pParent, EBBF_NONE, WB_TABSTOP | WB_BORDER,
                            BROWSER_KEEPSELECTION |
@@ -3704,6 +3702,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilde
         aStyle &= ~WB_CLIPCHILDREN;
         SetStyle( aStyle );
     }
+
     const String* aTitles[7] =
     {
         &sSearch,
@@ -3721,7 +3720,6 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilde
     for(sal_uInt16 i = 1; i < 8; i++)
         InsertDataColumn( i, *aTitles[i - 1], nWidth,
                           HIB_STDSTYLE, HEADERBAR_APPEND );
-
 }
 
 void SwEntryBrowseBox::Resize()

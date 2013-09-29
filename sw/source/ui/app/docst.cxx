@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -487,7 +486,6 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet !=0));
         else
             rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
-
 }
 
 class ApplyStyle
@@ -1245,7 +1243,6 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrent
     else
         SfxObjectShell::LoadStyles( rSource );
 }
-
 
 void SwDocShell::FormatPage(
     const String& rPage,

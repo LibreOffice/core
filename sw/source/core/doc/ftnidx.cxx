@@ -211,7 +211,6 @@ void SwFtnIdxs::UpdateAllFtn()
                 pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++, rFtn.GetNumStr() );
             }
         }
-
     }
 
     // We use bool here, so that we also iterate through the Endnotes with a chapter setting.

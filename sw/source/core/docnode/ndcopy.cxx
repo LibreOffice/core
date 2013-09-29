@@ -837,7 +837,6 @@ static bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
         } while ( pTxtNd && pTxtNd != pEndTxtNd );
     }
 
-
     return bRet;
 }
 

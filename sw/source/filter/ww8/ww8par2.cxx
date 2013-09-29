@@ -69,7 +69,6 @@
 
 using namespace ::com::sun::star;
 
-
 class WW8SelBoxInfo
     : public std::vector<SwTableBox*>
 {
@@ -216,7 +215,6 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
         }
     }
 }
-
 
 void wwSectionManager::SetCurrentSectionHasFootnote()
 {
@@ -555,6 +553,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 
     return aRet;
 }
+
 //---------------------------------------------------------------------
 // helper methods for outline, numbering and bullets
 //---------------------------------------------------------------------
@@ -785,7 +784,6 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         return;
     }
 
-
     if( nSwNumLevel <= MAXLEVEL         // Value range mapping WW:1..9 -> SW:0..8
         && nSwNumLevel <= 9 ){          // No Bullets or Numbering
 
@@ -885,7 +883,6 @@ void ANLDRuleMap::SetNumRule(SwNumRule *pRule, sal_uInt8 nNumType)
     else
         mpOutlineNumRule = pRule;
 }
-
 
 // StartAnl is called at the beginning of a row area that contains
 // outline / numbering / bullets
@@ -1202,8 +1199,6 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
                 }
             }
         }
-
-
     }
 }
 
@@ -3294,7 +3289,6 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
     return pResult;
 }
 
-
 sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDICATED within WW6 UI status line -1
 {
     sal_uInt16 nCol = 0;
@@ -4446,7 +4440,6 @@ void WW8RStyle::Import()
         pIo->pDfltTxtFmtColl = (SwTxtFmtColl*)pIo->vColl[0].pFmt;
     else
         pIo->pDfltTxtFmtColl = pIo->rDoc.GetDfltTxtFmtColl();
-
 
     // set Hyphenation flag on BASIC para-style
     if (pIo->mbNewDoc && pIo->pStandardFmtColl)

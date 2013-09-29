@@ -155,7 +155,6 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 aFrmFmtSz =
                     Application::GetDefaultDevice()->PixelToLogic(
                         aGrf.GetSizePixel(), aMapTwip );
-
             }
             else
             {

@@ -20,7 +20,6 @@
 #include <svl/itemprop.hxx>
 #include <unoprnms.hxx>
 
-
 //#define MAP_CHAR_LEN(cchar) cchar, sizeof(cchar) - 1
 
 const SwPropNameTab aPropNameTab = {
@@ -805,7 +804,6 @@ const SwPropNameTab aPropNameTab = {
 /* 0772 UNO_NAME_CHAR_SHADOW_FORMAT */                 {MAP_CHAR_LEN("CharShadowFormat")},
 /* 0773 UNO_NAME_SHADOW_TRANSPARENCE */                {MAP_CHAR_LEN("ShadowTransparence")},
 /* 0774 UNO_NAME_DOC_INTEROP_GRAB_BAG */               {MAP_CHAR_LEN("InteropGrabBag")},
-
 
 // new items in this array must match enum SwPropNameIds
 };

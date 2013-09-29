@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
@@ -80,7 +79,6 @@
 #include <swtable.hxx>          // class SwTableLines, ...
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
-
 
 #include <comphelper/extract.hxx>
 #include <fltini.hxx>
@@ -186,7 +184,6 @@ OUString BasicProjImportHelper::getProjectName()
     return sProjName;
 }
 
-
 class Sttb : TBBase
 {
 struct SBBItem
@@ -250,7 +247,6 @@ void Sttb::Print( FILE* fp )
         for ( sal_Int32 index = 0; index < cData; ++index )
             fprintf(fp,"   string dataItem[ %d(0x%x) ] has name %s\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-
 }
 
 OUString
@@ -373,7 +369,6 @@ void SwWW8ImplReader::SetToggleBiDiAttrFlags(sal_uInt16 nFlags)
     if (pCtrlStck)
         pCtrlStck->SetToggleBiDiAttrFlags(nFlags);
 }
-
 
 SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                        DffObjData& rObjData,
@@ -1944,7 +1939,6 @@ void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
 
     *pPaM->GetPoint() = aTmpPos;
 }
-
 
 bool SwWW8ImplReader::isValid_HdFt_CP(WW8_CP nHeaderCP) const
 {
@@ -4010,7 +4004,6 @@ void wwSectionManager::InsertSegments()
             mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );
         }
 
-
         if (bInsertPageDesc)
         {
             /*
@@ -4636,7 +4629,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         const sal_uLong nNd = pPos->nNode.GetIndex();
         bReadNoTbl = ( nNd < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
                        rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
-
     }
 
     ::SetProgressState(nProgress, mpDocShell); // Update
@@ -4709,7 +4701,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         mbOnLoadingMain = true;
         ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
         mbOnLoadingMain = false;
-
     }
 
     ::SetProgressState(nProgress, mpDocShell); // Update
@@ -4772,9 +4763,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                     pFlyFmt->SetFmtAttr( aChain );
                 }
             }
-
         }
-
     }
 
     if (mbNewDoc)
@@ -5697,7 +5686,6 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
 {
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !bInsertMode; // New Doc (no inserting)
-
 
     SvStorageStreamRef refStrm; // So that no one else can steal the Stream
     SvStream* pIn = pStrm;

@@ -81,9 +81,7 @@
 #include <switerator.hxx>
 #include <attrhint.hxx>
 
-
 using namespace ::com::sun::star;
-
 
 typedef std::vector<SwTxtAttr*> SwpHts;
 
@@ -3799,7 +3797,6 @@ void SwTxtNode::ResetEmptyListStyleDueToResetOutlineLevelAttr()
         mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
     }
 }
-
 
 void SwTxtNode::SetAttrListLevel( int nLevel )
 {

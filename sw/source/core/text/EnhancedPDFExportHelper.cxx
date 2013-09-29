@@ -298,7 +298,6 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
     }
 }
 
-
 /*
  * SwTaggedPDFHelper::~SwTaggedPDFHelper()
  */
@@ -393,7 +392,6 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     return bRet && !bContinue;
 }
 
-
 /*
  * SwTaggedPDFHelper::CheckRestoreTag()
  */
@@ -415,7 +413,6 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
 
     return bRet;
 }
-
 
 /*
  * SwTaggedPDFHelper::BeginTag()
@@ -478,7 +475,6 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     SetAttributes( eType );
 }
 
-
 /*
  * SwTaggedPDFHelper::EndTag()
  */
@@ -490,7 +486,6 @@ void SwTaggedPDFHelper::EndTag()
     aStructStack.pop_back();
 #endif
 }
-
 
 /*
  * SwTaggedPDFHelper::SetAttributes()
@@ -1335,7 +1330,6 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
     }
 }
 
-
 /*
  * SwTaggedPDFHelper::EndStructureElements()
  */
@@ -1349,7 +1343,6 @@ void SwTaggedPDFHelper::EndStructureElements()
 
     CheckRestoreTag();
 }
-
 
 /*
  * SwTaggedPDFHelper::BeginInlineStructureElements()

@@ -282,7 +282,6 @@ public:
                                 SwTxtFmtColl* pTxtColl
                                 /*, SwUndo... pUndo*/ );
 
-
     /// Create regular text from what was table.
     sal_Bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                         SwUndoTblToTxt* = 0 );

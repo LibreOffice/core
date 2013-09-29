@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -287,7 +286,6 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
             bSetGrfSize = false;
 
         pFrmMgr->SetHeightSizeType(ATT_FIX_SIZE);
-
     }
 
     // Insert the graphic
@@ -838,8 +836,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     pCli->SetObjAreaAndScale( aArea.SVRect(), aScaleWidth, aScaleHeight );
 }
-
-
 
 void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
                             const SwRect &rFrm )
@@ -1591,7 +1587,6 @@ void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
     EndAction();
 }
 
-
 void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
 {
     ResetCursorStack();
@@ -1635,7 +1630,6 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *_pWin, SwView &rShell )
         GotoFieldmark(pBM);
     }
 }
-
 
 SwWrtShell::SwWrtShell( SwDoc& rDoc, Window *_pWin, SwView &rShell,
                         const SwViewOption *pViewOpt )
@@ -1725,7 +1719,6 @@ void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
     //#i115062# invalidate meta character slot
     GetView().GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
 }
-
 
 void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
 {
