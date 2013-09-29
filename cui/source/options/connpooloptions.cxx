@@ -90,7 +90,7 @@ namespace offapp
 
     //--------------------------------------------------------------------
     DriverListControl::DriverListControl(Window* _pParent)
-        :EditBrowseBox(_pParent, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL)
+        :EditBrowseBox(_pParent, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL | WB_BORDER)
         ,m_aSeekRow(m_aSettings.end())
         ,m_sYes(CUI_RES(RID_SVXSTR_YES))
         ,m_sNo(CUI_RES(RID_SVXSTR_NO))
@@ -98,7 +98,6 @@ namespace offapp
         SetStyle((GetStyle() & ~WB_HSCROLL) | WB_AUTOHSCROLL);
 
         SetUniqueId(UID_OFA_CONNPOOL_DRIVERLIST_BACK);
-        GetDataWindow().SetHelpId(HID_OFA_CONNPOOL_DRIVERLIST);
     }
 
     extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDriverListControl(Window *pParent, VclBuilder::stringmap &)
