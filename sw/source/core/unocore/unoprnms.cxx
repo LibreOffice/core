@@ -20,7 +20,6 @@
 #include <svl/itemprop.hxx>
 #include <unoprnms.hxx>
 
-
 //#define MAP_CHAR_LEN(cchar) cchar, sizeof(cchar) - 1
 
 const SwPropNameTab aPropNameTab = {

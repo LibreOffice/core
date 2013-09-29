@@ -97,7 +97,6 @@ class SwAuthEntry;
 class SwRewriter;
 struct SwConversionArgs;
 
-
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
@@ -118,7 +117,6 @@ namespace sw {
 #define GETSELTXT_PARABRK_TO_BLANK      0
 #define GETSELTXT_PARABRK_KEEP          1
 #define GETSELTXT_PARABRK_TO_ONLYCR     2
-
 
  /// For querying the INet-attributes for Navigator.
 struct SwGetINetAttr
@@ -298,7 +296,6 @@ public:
     void FillByEx(SwCharFmt*, sal_Bool bReset = sal_False);
     SwCharFmt* MakeCharFmt( const String& rName, SwCharFmt* pDerivedFrom = 0 );
     SwCharFmt* FindCharFmtByName( const String& rName ) const;
-
 
     /* FormatCollections (new) - Explaining the general naming pattern:
      * GetXXXCount() returns the count of xxx in the document.
@@ -976,7 +973,6 @@ public:
     SwMvContext(SwEditShell *pShell);
     ~SwMvContext();
 };
-
 
 #endif
 

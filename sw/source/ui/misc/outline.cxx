@@ -291,7 +291,6 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
         }
         delete pDlg;
         return 0;
-
     }
 
     if( nLevelNo-- )
@@ -887,7 +886,6 @@ static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, sa
         }
     }
     return nRet;
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumberingPreview(Window *pParent, VclBuilder::stringmap &)
@@ -1058,7 +1056,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     nXStart = static_cast<sal_uInt16>( rFmt.GetIndentAt() / nWidthRelation );
                 }
 
-
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
                 pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() ); // Color( COL_BLACK ) );
                 pVDev->DrawRect( aRect1 );
@@ -1134,7 +1131,6 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 Point(0,0), aSize,
                         *pVDev );
     delete pVDev;
-
 }
 
 NumberingPreview::~NumberingPreview()

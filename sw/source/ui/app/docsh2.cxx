@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
@@ -1341,7 +1340,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     pDoc->set(IDocumentSettingAccess::BROWSE_MODE, bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
-
     const String& rMedname = GetMedium()->GetName();
 
     // The HTML template still has to be set
@@ -1372,7 +1370,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
         if( rWrtSh.GetLayout())
             rWrtSh.CheckBrowseView( sal_True );
     }
-
 
     // Take HTTP-Header-Attibutes over into the DokInfo again.
     // The Base-URL doesn't matter here because TLX uses the one from the document
@@ -1491,7 +1488,6 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
 
     return pResult;
 }
-
 
 int SwFindDocShell( SfxObjectShellRef& xDocSh,
                     SfxObjectShellLock& xLockRef,

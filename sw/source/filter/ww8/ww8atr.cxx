@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 /*
  * This file contains methods for the WW8 output
  * (nodes, attributes, formats und chars).
@@ -301,7 +300,9 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
         pISet = 0;                      // fuer Doppel-Attribute
     }
 }
+
 #include "switerator.hxx"
+
 void MSWordExportBase::GatherChapterFields()
 {
     //If the header/footer contains a chapter field
@@ -1810,7 +1811,6 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
                 ( eFldType == ww::ePAGEREF || eFldType == ww::eREF ||
                   eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ))
                 bHandleBookmark = true;
-
         }
 
         if ( bHandleBookmark )
@@ -3073,9 +3073,7 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
     m_rWW8Export.InsUInt16( nVal );
 }
 
-
 // NoHyphen: ich habe keine Entsprechung in der SW-UI und WW-UI gefunden
-
 
 // RefMark, NoLineBreakHere  fehlen noch
 
@@ -3188,7 +3186,6 @@ static bool lcl_IsAtTxtEnd(const SwFmtFtn& rFtn)
     }
     return bRet;
 }
-
 
 void AttributeOutputBase::TextFootnote( const SwFmtFtn& rFtn )
 {
@@ -3956,7 +3953,6 @@ void WW8AttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert 
         m_rWW8Export.InsUInt16( nPos );
     }
 }
-
 
 void WW8AttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori )
 {
@@ -4871,7 +4867,6 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
     rWrt.OutSprmBytes(pAddPos, 2 * nAdd);         // AddPosArray
     rWrt.OutSprmBytes(pAddTyp, nAdd);             // AddTypArray
 }
-
 
 static void ParaTabStopAdd( WW8Export& rWrt,
                             const SvxTabStopItem& rTStops,
