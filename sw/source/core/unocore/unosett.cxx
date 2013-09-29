@@ -259,7 +259,7 @@ static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     return pRet;
 }
 
-// Numerierung
+// Numbering
 const unsigned short aSvxToUnoAdjust[] =
 {
     text::HoriOrientation::LEFT,    //3
@@ -1160,8 +1160,8 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
 {
     sal_uInt16 i;
 
-    //erstmal das Doc organisieren; es haengt an den gesetzten Zeichenvorlagen - wenn
-    // keine gesetzt sind, muss es auch ohne gehen
+    // first organize the document - it is dependent on the set character formats
+    // if no format is set, it should work as well
     for( i = 0; i < MAXLEVEL; i++)
     {
         SwNumFmt rFmt(pNumRule->Get(i));
@@ -1242,7 +1242,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         SwNumRule aNumRule( *(pDocShell->GetDoc()->GetOutlineNumRule()) );
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             rProperties, nIndex);
-        //hier noch die Zeichenformate bei Bedarf setzen
+        // set character format if needed
         const SwCharFmts* pFmts = pDocShell->GetDoc()->GetCharFmts();
         sal_uInt16 nChCount = pFmts->size();
         for(sal_uInt16 i = 0; i < MAXLEVEL;i++)
@@ -1539,7 +1539,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     }
     else
     {
-        //Vorlagenname
+        // template name
         OUString sValue(SW_RES(STR_POOLCOLL_HEADLINE1 + nIndex));
         const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
         const sal_uInt16 nCount = pColls->size();

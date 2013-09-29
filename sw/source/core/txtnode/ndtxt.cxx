@@ -52,16 +52,16 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <pam.hxx>                  // fuer SwPosition
+#include <pam.hxx>        // for SwPosition
 #include <fldbas.hxx>
 #include <paratr.hxx>
 #include <txtfrm.hxx>
 #include <ftnfrm.hxx>
 #include <ftnboss.hxx>
 #include <rootfrm.hxx>
-#include <pagedesc.hxx>             // fuer SwPageDesc
-#include <expfld.hxx>               // fuer SwTblField
-#include <section.hxx>              // fuer SwSection
+#include <pagedesc.hxx>   // for SwPageDesc
+#include <expfld.hxx>     // for SwTblField
+#include <section.hxx>    // for SwSection
 #include <mvsave.hxx>
 #include <swcache.hxx>
 #include <SwGrammarMarkUp.hxx>
@@ -87,9 +87,7 @@ typedef std::vector<SwTxtAttr*> SwpHts;
 
 TYPEINIT1( SwTxtNode, SwCntntNode )
 
-// Leider ist das SwpHints nicht ganz wasserdicht:
-// Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
-// und Verkettung sicherstellen zu muessen.
+// unfortunately everyone can change Hints without ensuring order or the linking between them
 #ifdef DBG_UTIL
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
@@ -102,7 +100,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                                  SwTxtFmtColl *pColl,
                                  SwAttrSet* pAutoAttr )
 {
-    OSL_ENSURE( pColl, "Collectionpointer ist 0." );
+    OSL_ENSURE( pColl, "Collection pointer is 0." );
 
     SwTxtNode *pNode = new SwTxtNode( rWhere, pColl, pAutoAttr );
 
@@ -113,8 +111,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     if ( IsDocNodes() )
         UpdateOutlineNode(*pNode);
 
-    //Wenn es noch kein Layout gibt oder in einer versteckten Section
-    // stehen, brauchen wir uns um das MakeFrms nicht bemuehen.
+    // if there is no layout or it is in a hidden section, MakeFrms is not needed
     const SwSectionNode* pSectNd;
     if( !GetDoc()->GetCurrentViewShell() || //swmod 071108//swmod 071225
         ( 0 != (pSectNd = pNode->FindSectionNode()) &&
@@ -123,9 +120,9 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
 
     SwNodeIndex aTmp( rWhere );
     do {
-        // max. 2 Durchlaeufe:
-        // 1. den Nachfolger nehmen
-        // 2. den Vorgaenger
+        // max. 2 loops:
+        // 1. take the successor
+        // 2. take the predecessor
 
         SwNode * pNd = & aTmp.GetNode();
         switch (pNd->GetNodeType())
@@ -172,11 +169,11 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
             else if( pNd->StartOfSectionNode()->IsTableNode() &&
                     aTmp.GetIndex() < rWhere.GetIndex() )
             {
-                // wir stehen hinter einem TabellenNode
+                // after a table node
                 aTmp = *pNd->StartOfSectionNode();
                 break;
             }
-            // kein break !!!
+            // no break !!!
         default:
             if( rWhere == aTmp )
                 aTmp -= 2;
@@ -206,7 +203,6 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
 {
     InitSwParaStatistics( true );
 
-    // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
         SetAttr( *pAutoAttr );
 
@@ -232,17 +228,16 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
 
 SwTxtNode::~SwTxtNode()
 {
-    // delete loescht nur die Pointer, nicht die Arrayelemente!
+    // delete only removes the pointer not the array elements!
     if ( m_pSwpHints )
     {
-        // damit Attribute die ihren Inhalt entfernen nicht doppelt
-        // geloescht werden.
+        // do not delete attributes twice when those delte their content
         SwpHints* pTmpHints = m_pSwpHints;
         m_pSwpHints = 0;
 
         for( sal_uInt16 j = pTmpHints->Count(); j; )
-            // erst muss das Attribut aus dem Array entfernt werden,
-            // denn sonst wuerde es sich selbst loeschen (Felder) !!!!
+            // first remove the attribute from the array otherwise
+            // if would delete itself
             DestroyAttr( pTmpHints->GetTextHint( --j ) );
 
         delete pTmpHints;
@@ -361,7 +356,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 {
     bool parentIsOutline = IsOutline();
 
-    // lege den Node "vor" mir an
+    // create a node "in front" of me
     const xub_StrLen nSplitPos = rPos.nContent.GetIndex();
     const xub_StrLen nTxtLen = m_Text.getLength();
     SwTxtNode* const pNode =
@@ -390,12 +385,11 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
     if ( GetDepends() && !m_Text.isEmpty() && (nTxtLen / 2) < nSplitPos )
     {
-// JP 25.04.95: Optimierung fuer SplitNode:
-//              Wird am Ende vom Node gesplittet, dann verschiebe die
-//              Frames vom akt. auf den neuen und erzeuge fuer den akt.
-//              neue. Dadurch entfaellt das neu aufbauen vom Layout.
+        // optimization for SplitNode: If a split is at the end of a node then
+        // move the frames from the current to the new one and create new ones
+        // for the current one. As a result, no need for recreating the layout.
 
-        LockModify();   // Benachrichtigungen abschalten
+        LockModify();   // disable notifications
 
         // werden FlyFrames mit verschoben, so muessen diese nicht ihre
         // Frames zerstoeren. Im SwTxtFly::SetAnchor wird es abgefragt!

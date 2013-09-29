@@ -97,17 +97,17 @@ using namespace nsSwDocInfoSubType;
 
 long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 {
-    // muesste auch ueber pRes.nCo2OrIdx gehen
+    // should also work via pRes.nCo2OrIdx
     WW8PLCFx_Book* pB = pPlcxMan->GetBook();
     if( !pB )
     {
-        OSL_ENSURE( pB, "WW8PLCFx_Book - Pointer nicht da" );
+        OSL_ENSURE( pB, "WW8PLCFx_Book - Pointer does not exist" );
         return 0;
     }
 
     eBookStatus eB = pB->GetStatus();
     if (eB & BOOK_IGNORE)
-        return 0;                               // Bookmark zu ignorieren
+        return 0;         // ignore bookmark
 
     if (pB->GetIsEnd())
     {
@@ -124,12 +124,12 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         return 0;
 #endif
 
-    //ToUpper darf auf keinen Fall gemacht werden, weil der Bookmark- name ein Hyperlink-Ziel sein kann!
+    // do NOT call ToUpper as the bookmark name can also be a hyperlink target!
 
     OUString aVal;
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::BOOK_TO_VAR_REF ) )
     {
-        // Fuer UEbersetzung Bookmark -> Variable setzen
+        // set variable for translation bookmark
         long nLen = pB->GetLen();
         if( nLen > MAX_FIELDLEN )
             nLen = MAX_FIELDLEN;
@@ -207,19 +207,18 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 }
 
 //----------------------------------------------------------------------
-//    allgemeine Hilfsroutinen zum Auseinanderdroeseln der Parameter
+//    general help methods to separate parameters
 //----------------------------------------------------------------------
 
-// ConvertFFileName uebersetzt FeldParameter-Namen u. ae. in den
-// System-Zeichensatz.
-// Gleichzeitig werden doppelte Backslashes in einzelne uebersetzt.
+/// translate FieldParameter names into the system character set and
+/// at the same time, douple backslashes are converted into single ones
 OUString SwWW8ImplReader::ConvertFFileName(const OUString& rOrg)
 {
     OUString aName = rOrg;
     aName = aName.replaceAll("\\\\", OUString('\\'));
     aName = aName.replaceAll("%20", OUString(' '));
 
-    // ggfs. anhaengende Anfuehrungszeichen entfernen
+    // remove attached quotation marks
     if (!aName.isEmpty() &&  '"' == aName[aName.getLength()-1])
         aName = aName.copy(0, aName.getLength()-1);
 
@@ -231,10 +230,10 @@ OUString SwWW8ImplReader::ConvertFFileName(const OUString& rOrg)
     return aName;
 }
 
-// ConvertUFNneme uebersetzt FeldParameter-Namen u. ae. in den
-// System-Zeichensatz und Upcased sie ( z.B. fuer Ref-Felder )
 namespace
 {
+    /// translate FieldParameter names into the
+    /// system character set and makes them uppercase
     void ConvertUFName( String& rName )
     {
         rName = GetAppCharClass().uppercase( rName );
@@ -252,7 +251,7 @@ static void lcl_ConvertSequenceName(String& rSequenceName)
 // and returns start of this parameter or STRING_NOT_FOUND.
 xub_StrLen FindParaStart( const String& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
-    bool bStr = false;          // innerhalb String ignorieren
+    bool bStr = false; // ignore inside a string
 
     for( xub_StrLen nBuf=0; nBuf+1 < rStr.Len(); nBuf++ )
     {
@@ -281,8 +280,8 @@ xub_StrLen FindParaStart( const String& rStr, sal_Unicode cToken, sal_Unicode cT
 // und alles, was zum Parameter gehoert, wird in ihm zurueckgeliefert.
 String FindPara( const String& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
-    xub_StrLen n2;                                          // Ende
-    xub_StrLen n = FindParaStart( rStr, cToken, cToken2 );  // Anfang
+    xub_StrLen n2;                                          // end
+    xub_StrLen n = FindParaStart( rStr, cToken, cToken2 );  // start
     if( STRING_NOTFOUND == n )
         return aEmptyStr;
 
@@ -1054,7 +1053,7 @@ long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
 }
 
 //-----------------------------------------
-//        normale Felder
+//        normal fields
 //-----------------------------------------
 
 eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
@@ -1098,14 +1097,14 @@ String SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
 {
     long nOldPos = pStrm->Tell();
 
-    WW8_CP nStart = pF->nSRes;              // Start Resultat
-    long nL = pF->nLRes;                    // Laenge Resultat
+    WW8_CP nStart = pF->nSRes;              // result start
+    long nL = pF->nLRes;                    // result length
     if( !nL )
-        return aEmptyStr;                           // kein Resultat
+        return aEmptyStr;                   // no result
 
     if( nL > MAX_FIELDLEN )
-        nL = MAX_FIELDLEN;                  // MaxLaenge, durch Quoten
-                                            // max. 4* so gross
+        nL = MAX_FIELDLEN;                  // MaxLength, by quoting
+                                            // max. 4* as big
 
     OUString sRes;
     nL = pSBase->WW8ReadString( *pStrm, sRes, pPlcxMan->GetCpOfs() + nStart,
@@ -1729,11 +1728,11 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, OUString &rStr)
 }
 
 eF_ResT SwWW8ImplReader::Read_F_Anz( WW8FieldDesc* pF, OUString& rStr )
-{                                               // SeitenZahl - Feld
-    sal_uInt16 nSub = DS_PAGE;
+{
+    sal_uInt16 nSub = DS_PAGE;                  // page number
     switch ( pF->nId ){
-    case 27: nSub = DS_WORD; break;             // Wordzahl
-    case 28: nSub = DS_CHAR; break;             // Zeichenzahl
+        case 27: nSub = DS_WORD; break;         // number of words
+        case 28: nSub = DS_CHAR; break;         // number of characters
     }
     SwDocStatField aFld( (SwDocStatFieldType*)
                          rDoc.GetSysFldType( RES_DOCSTATFLD ), nSub,
@@ -1744,7 +1743,7 @@ eF_ResT SwWW8ImplReader::Read_F_Anz( WW8FieldDesc* pF, OUString& rStr )
 
 eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, OUString& rStr )
 {
-    // Seitennummer
+    // page number
     SwPageNumberField aFld( (SwPageNumberFieldType*)
         rDoc.GetSysFldType( RES_PAGENUMBERFLD ), PG_RANDOM,
         GetNumberPara(rStr, true));
@@ -1788,7 +1787,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
         }
     }
     if( !aQ.Len() )
-        return FLD_TAGIGN;                      // -> kein 0-Zeichen in Text
+        return FLD_TAGIGN;                      // -> no 0-char in text
 
     if (sal_Unicode cChar = static_cast<sal_Unicode>(aQ.ToInt32()))
     {
@@ -2220,7 +2219,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
             break;
 
         case 'd':
-            bEmbedded = false;          // Embedded-Flag deaktivieren
+            bEmbedded = false;
             break;
 
         case 'c':// den Converter-Namen ueberlesen
@@ -2593,7 +2592,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
 }
 
 //-----------------------------------------
-//        Verzeichnis-Felder
+//        "table of ..." fields
 //-----------------------------------------
 
 static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
@@ -2785,7 +2784,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     if (pF->nLRes < 3)
         return FLD_TEXT;      // ignore (#i25440#)
 
-    TOXTypes eTox;                              // Baue ToxBase zusammen
+    TOXTypes eTox;            // create a ToxBase
     switch( pF->nId )
     {
         case  8:

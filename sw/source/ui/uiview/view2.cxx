@@ -267,7 +267,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     sal_Bool bReturn = sal_False;
     SwDocShell* pDocShell = GetDocShell();
     sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
-    // im HTML-Mode nur verknuepft einfuegen
+    // when in HTML mode insert only as a link
     FileDialogHelper* pFileDlg = new FileDialogHelper(
         ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
         SFXWB_GRAPHIC );
@@ -429,7 +429,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         int nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
 
-        // Format ist ungleich Current Filter, jetzt mit auto. detection
+        // format not equal to current filter (with autodetection)
         if( nError == GRFILTER_FORMATERROR )
             nError = InsertGraphic( aFileName, aEmptyStr, bAsLink, &GraphicFilter::GetGraphicFilter() );
         if ( rSh.IsFrmSelected() )
@@ -734,12 +734,12 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     rReq.SetReturnValue( SfxInt32Item( nSlot, nFound ));
 
-                    if (nFound > 0) // Redline-Browser anzeigen
+                    if (nFound > 0) // show Redline browser
                     {
                         SfxViewFrame* pVFrame = GetViewFrame();
                         pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
 
-                        // RedlineDlg neu initialisieren
+                        // re-initialize the Redline dialog
                         sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
                         SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)
                                                 pVFrame->GetChildWindow(nId);
@@ -765,7 +765,7 @@ void SwView::Execute(SfxRequest &rReq)
             else if ( m_pWrtShell->IsDrawCreate() )
             {
                 GetDrawFuncPtr()->BreakCreate();
-                AttrChangedNotify(m_pWrtShell); // ggf Shellwechsel...
+                AttrChangedNotify(m_pWrtShell); // shell change if needed
             }
             else if ( m_pWrtShell->HasSelection() || IsDrawMode() )
             {
@@ -787,7 +787,7 @@ void SwView::Execute(SfxRequest &rReq)
                         rBind.Invalidate( SID_ATTR_SIZE );
                     }
                     m_pWrtShell->EnterStdMode();
-                    AttrChangedNotify(m_pWrtShell); // ggf Shellwechsel...
+                    AttrChangedNotify(m_pWrtShell); // shell change if necessary
                 }
             }
             else if ( GetEditWin().GetApplyTemplate() )
@@ -838,7 +838,7 @@ void SwView::Execute(SfxRequest &rReq)
                 const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
                 SwPageDesc aPageDesc( m_pWrtShell->GetPageDesc( nCurIdx ) );
                 ::ItemSetToPageDesc( *pArgs, aPageDesc );
-                // Den Descriptor der Core veraendern.
+                // change the descriptor of the core
                 m_pWrtShell->ChgPageDesc( nCurIdx, aPageDesc );
             }
         }
@@ -889,10 +889,9 @@ void SwView::Execute(SfxRequest &rReq)
                     ++i;
 
                 while( m_pWrtShell->GotoPrevTOXBase() )
-                    ;   // aufs erste Verzeichnis springen
+                    ;   // jump to the first "table of ..."
 
-                // falls wir nicht mehr in einem stehen, dann zum naechsten
-                // springen.
+                // if we are not in one, jump to next
                 const SwTOXBase* pBase = m_pWrtShell->GetCurTOX();
                 if( !pBase )
                 {
@@ -908,8 +907,7 @@ void SwView::Execute(SfxRequest &rReq)
                         m_pWrtShell->ApplyAutoMark();
                         bAutoMarkApplied = sal_True;
                     }
-                    // das pBase wird nur fuer die Schnittstelle
-                    // benoetigt. Muss mal umgetstellt werden!!!
+                    // pBase is needed only for the interface. Should be changed in future! (JP 1996)
                     m_pWrtShell->UpdateTableOf( *pBase );
 
                     if( m_pWrtShell->GotoNextTOXBase() )
@@ -1056,8 +1054,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     SwDBData aData;
                     aData = rSh.GetDBData();
-                    rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
-                                        // das Mischen von DB-Feldern notwendig.
+                    rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
                     AttrChangedNotify( &rSh );
                     pNewDBMgr->SetMergeType( DBMGR_MERGE );
 
@@ -1208,9 +1205,7 @@ void SwView::Execute(SfxRequest &rReq)
         rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   SeitenNr-Feld invalidieren
- --------------------------------------------------------------------*/
+/// invalidate page numbering field
 void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr)
 {
     String sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
@@ -1232,9 +1227,7 @@ void SwView::SetAnnotationMode(bool bMode)
     m_bAnnotationMode = bMode;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Status der Stauszeile
- --------------------------------------------------------------------*/
+/// get status of the status line
 void SwView::StateStatusLine(SfxItemSet &rSet)
 {
     SwWrtShell& rShell = GetWrtShell();
@@ -1248,7 +1241,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
         switch( nWhich )
         {
             case FN_STAT_PAGE: {
-                // Anzahl der Seiten, log. SeitenNr. SeitenNr ermitteln
+                // number of pages, log. page number
                 sal_uInt16 nPage, nLogPage;
                 String sDisplay;
                 rShell.GetPageNumber( -1, rShell.IsCrsrVisible(), nPage, nLogPage, sDisplay );
@@ -1256,7 +1249,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             GetPageStr( nPage, nLogPage, sDisplay) ));
 
                 sal_uInt16 nCnt = GetWrtShell().GetPageCnt();
-                if (m_nPageCnt != nCnt)   // Basic benachrichtigen
+                if (m_nPageCnt != nCnt)   // notify Basic
                 {
                     m_nPageCnt = nCnt;
                     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_PAGE_COUNT, SwDocShell::GetEventName(STR_SW_EVENT_PAGE_COUNT), GetViewFrame()->GetObjectShell()), sal_False);
@@ -1447,7 +1440,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 else
                                 {
                                     OSL_ENSURE( !this,
-                                        "was ist das fuer ein Verzeichnis?" );
+                                        "Unknown kind of section" );
                                     sStr = pCurrSect->GetSectionName();
                                 }
                             }
@@ -1462,7 +1455,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 const SwNumRule* pNumRule = rShell.GetCurNumRule();
                 const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
 
-                if (pNumRule && !bOutlineNum )  // Cursor in Numerierung
+                if (pNumRule && !bOutlineNum )  // cursor in numbering
                 {
                     sal_uInt8 nNumLevel = rShell.GetNumLevel();
                     if ( nNumLevel < MAXLEVEL )
@@ -1544,9 +1537,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Execute fuer die Stauszeile
- --------------------------------------------------------------------*/
+/** excecute method for the status line
+ *
+ * @param rReq ???
+ */
 void SwView::ExecuteStatusLine(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetWrtShell();
@@ -1632,7 +1626,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
-                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Zooming fail!");
                         if (pDlg)
                         {
                             pDlg->SetLimits( MINZOOM, MAXZOOM );
@@ -1716,13 +1710,13 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             else
             {
                 const SwNumRule* pNumRule = rSh.GetCurNumRule();
-                if( pNumRule )  // Cursor in Numerierung
+                if( pNumRule )  // cursor in numbering
                 {
                     if( pNumRule->IsAutoRule() )
                         nId = FN_NUMBER_BULLETS;
                     else
                     {
-                        // Dialog vom Gestalter starten ;-)
+                        // start dialog of the painter
                         nId = 0;
                     }
                 }
@@ -1832,9 +1826,7 @@ void SwView::InsFrmMode(sal_uInt16 nCols)
         GetEditWin().InsFrm(nCols);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Links bearbeiten
- --------------------------------------------------------------------*/
+/// show "edit link" dialog
 void SwView::EditLinkDlg()
 {
     sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
@@ -1852,13 +1844,12 @@ bool SwView::JumpToSwMark( const String& rMark )
     bool bRet = false;
     if( rMark.Len() )
     {
-        // wir wollen den Bookmark aber am oberen Rand haben
+        // place bookmark at top-center
         sal_Bool bSaveCC = IsCrsrAtCenter();
         sal_Bool bSaveCT = IsCrsrAtTop();
         SetCrsrAtTop( sal_True );
 
-        // Damit in FrameSet auch gescrollt werden kann, muss die
-        // entsprechende Shell auch das Focus-Flag gesetzt haben!
+        // For scrolling the FrameSet, the corresponding shell needs to have the focus.
         sal_Bool bHasShFocus = m_pWrtShell->HasShFcs();
         if( !bHasShFocus )
             m_pWrtShell->ShGetFcs( sal_False );
@@ -1920,7 +1911,7 @@ bool SwView::JumpToSwMark( const String& rMark )
             }
             else if( sCmp == "text" )
             {
-                // Normale Textsuche
+                // normal text search
                 m_pWrtShell->EnterStdMode();
 
                 SearchOptions aSearchOpt(
@@ -1934,7 +1925,7 @@ bool SwView::JumpToSwMark( const String& rMark )
                 sal_Bool bSearchInNotes = sal_False;
                 if( m_pWrtShell->SearchPattern( aSearchOpt, bSearchInNotes, DOCPOS_START, DOCPOS_END ))
                 {
-                    m_pWrtShell->EnterStdMode();      // Selektion wieder aufheben
+                    m_pWrtShell->EnterStdMode(); // remove the selection
                     bRet = true;
                 }
             }
@@ -1945,13 +1936,13 @@ bool SwView::JumpToSwMark( const String& rMark )
                 bRet = m_pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
             }
 
-            // fuer alle Arten von Flys
+            // for all types of Flys
             if( FLYCNTTYPE_ALL != eFlyType && m_pWrtShell->GotoFly( sName, eFlyType ))
             {
                 bRet = true;
                 if( FLYCNTTYPE_FRM == eFlyType )
                 {
-                    // TextFrames: Cursor in den Frame setzen
+                    // TextFrames: set Cursor in the frame
                     m_pWrtShell->UnSelectFrm();
                     m_pWrtShell->LeaveSelFrmMode();
                 }
@@ -1971,7 +1962,7 @@ bool SwView::JumpToSwMark( const String& rMark )
         if ( m_aVisArea.IsEmpty() )
             m_bMakeSelectionVisible = sal_True;
 
-        // ViewStatus wieder zurueck setzen
+        // reset ViewStatus
         SetCrsrAtTop( bSaveCT, bSaveCC );
 
         if( !bHasShFocus )
@@ -2002,9 +1993,6 @@ static sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
     return nRet; // number of page styles with active header/footer
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Links bearbeiten
- --------------------------------------------------------------------*/
 void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 {
     m_pViewImpl->InitRequest( rRequest );
@@ -2112,8 +2100,8 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             return -1;
         }
 
-        pMedium->DownLoad();    // ggfs. den DownLoad anstossen
-        if( aRef.Is() && 1 < aRef->GetRefCount() )  // noch gueltige Ref?
+        pMedium->DownLoad();    // start download if needed
+        if( aRef.Is() && 1 < aRef->GetRefCount() )  // still a valid ref?
         {
             SwReader* pRdr;
             Reader *pRead = pDocSh->StartConvertFrom( *pMedium, &pRdr, m_pWrtShell );
@@ -2130,10 +2118,10 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                     SwWait aWait( *GetDocShell(), sal_True );
                     m_pWrtShell->StartAllAction();
                     if ( m_pWrtShell->HasSelection() )
-                        m_pWrtShell->DelRight();      // Selektionen loeschen
+                        m_pWrtShell->DelRight();      // delete selections
                     if( pRead )
                     {
-                        nErrno = pRdr->Read( *pRead );  // und Dokument einfuegen
+                        nErrno = pRdr->Read( *pRead );  // and insert document
                         delete pRdr;
                     }
                     else
@@ -2144,12 +2132,12 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
 
                 }
 
-                // ggfs. alle Verzeichnisse updaten:
+                // update all "table of ..." sections if needed
                 if( m_pWrtShell->IsUpdateTOX() )
                 {
                     SfxRequest aReq( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
                     Execute( aReq );
-                    m_pWrtShell->SetUpdateTOX( sal_False );       // wieder zurueck setzen
+                    m_pWrtShell->SetUpdateTOX( sal_False ); // reset
                 }
 
                 if( pDoc )
@@ -2185,7 +2173,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             SwWait aWait( *GetDocShell(), sal_True );
             m_pWrtShell->StartAllAction();
 
-            m_pWrtShell->EnterStdMode();          // Selektionen loeschen
+            m_pWrtShell->EnterStdMode(); // delete selections
 
             if( bCompare )
                 nFound = m_pWrtShell->CompareDoc( *((SwDocShell*)&xDocSh)->GetDoc() );
@@ -2371,8 +2359,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             aData.sCommand = sDBName.GetToken(1, DB_DELIM);
             aData.nCommandType = sDBName.GetToken(2, DB_DELIM ).ToInt32();
         }
-        rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
-                            // das Mischen von DB-Feldern notwendig.
+        rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
         AttrChangedNotify( &rSh );
 
         if (pNewDBMgr)
@@ -2445,12 +2432,12 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
             {
                 m_pViewImpl->GetRequest()->SetReturnValue( SfxInt32Item( nSlot, nFound ) );
 
-                if ( nFound > 0 ) // Redline-Browser anzeigen
+                if ( nFound > 0 ) // show Redline browser
                 {
                     SfxViewFrame* pVFrame = GetViewFrame();
                     pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
 
-                    // RedlineDlg neu initialisieren
+                    // re-initialize Redline dialog
                     sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
                     SwRedlineAcceptChild* pRed = (SwRedlineAcceptChild*)pVFrame->GetChildWindow( nId );
                     if ( pRed )

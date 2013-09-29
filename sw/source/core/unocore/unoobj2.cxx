@@ -181,8 +181,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     // <sal_True>: at-character anchored objects are collected
     // <sal_False>: at-paragraph anchored objects are collected
 
-    // alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
-    // gebunden sind
+    // search all borders, images, and OLEs that are connected to the paragraph
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
     sal_uInt16 nChkType = static_cast< sal_uInt16 >((_bAtCharAnchoredObjs)
@@ -302,7 +301,7 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
         break;
 
     case RES_FMT_CHG:
-        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        // Is the move to the new one finished and will the old one be deleted?
         if( ((SwFmtChg*)pNew)->pChangedFmt == pClient->GetRegisteredIn() &&
             ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
             ((SwModify*)pClient->GetRegisteredIn())->Remove(pClient);
@@ -1625,9 +1624,8 @@ throw (uno::RuntimeException)
 
 /****************************************************************************
  *  Text positions
- *  Bis zum ersten Zugriff auf eine TextPosition wird ein SwCursor gehalten,
- * danach wird ein Array mit uno::Reference< XTextPosition >  angelegt
- *
+ * Up to the first access to a text position, only a SwCursor is stored.
+ * Afterwards, an array with uno::Reference<XTextPosition> will be created.
 ****************************************************************************/
 OUString SAL_CALL
 SwXTextRanges::getImplementationName() throw (uno::RuntimeException)

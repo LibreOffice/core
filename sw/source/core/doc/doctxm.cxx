@@ -156,7 +156,6 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
 /// Delete table of contents Mark
 void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 {
-    // hole den TextNode und
     const SwTxtTOXMark* pTxtTOXMark = pTOXMark->GetTxtTOXMark();
     OSL_ENSURE( pTxtTOXMark, "No TxtTOXMark, cannot be deleted" );
 
