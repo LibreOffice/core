@@ -74,9 +74,7 @@ public:
     sal_uInt16 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
 
-/*------------------------------------------------------------------------
- Description:  remember selected entry
-------------------------------------------------------------------------*/
+// remember selected entry
 IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 {
     m_pFormEdit->SetText(pBox->GetSelectEntry());
@@ -85,11 +83,10 @@ IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 
-/*------------------------------------------------------------------------
- Description:  set user defined names
- Parameter:    list of user defined names;
-               unknown positions for the user are 0.
-------------------------------------------------------------------------*/
+/** set user defined names
+ *
+ * @param pList list of user defined names; unknown positions for the user are 0.
+ */
 void SwNumNamesDlg::SetUserNames(const String *pList[])
 {
     sal_uInt16 nSelect = 0;
@@ -107,9 +104,7 @@ void SwNumNamesDlg::SetUserNames(const String *pList[])
     SelectHdl(m_pFormBox);
 }
 
-/*------------------------------------------------------------------------
- Description:  unlock OK-Button when text is in Edit
-------------------------------------------------------------------------*/
+// unlock OK-Button when text is in Edit
 IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 {
     m_pOKBtn->Enable(!pBox->GetText().isEmpty());
@@ -117,9 +112,7 @@ IMPL_LINK_INLINE_START( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 }
 IMPL_LINK_INLINE_END( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 
-/*------------------------------------------------------------------------
- Description:  DoubleClickHdl
-------------------------------------------------------------------------*/
+// DoubleClickHdl
 IMPL_LINK_NOARG_INLINE_START(SwNumNamesDlg, DoubleClickHdl)
 {
     EndDialog(RET_OK);
@@ -893,9 +886,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumberingPreview(Window *pP
     return new NumberingPreview(pParent);
 }
 
-/*--------------------------------------------------
-    paint numbering's preview
---------------------------------------------------*/
+// paint numbering's preview
 void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));

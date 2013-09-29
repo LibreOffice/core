@@ -1898,9 +1898,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pSecondKeyLB->SelectEntryPos(0);
     m_pThirdKeyLB->SelectEntryPos(0);
 }
-/* --------------------------------------------------
-    pVoid is used as signal to change all levels of the example
- --------------------------------------------------*/
+// pVoid is used as signal to change all levels of the example
 IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
 {
     UpdateDescriptor();
@@ -2163,11 +2161,9 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTemp);
     m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
 }
-/*-----------------------------------------------------------------------
 
-This function inizializes the default value in the Token
-put here the UI dependent initializations
-  -----------------------------------------------------------------------*/
+// This function inizializes the default value in the Token
+// put here the UI dependent initializations
 IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
 {
     String sText;
@@ -3234,11 +3230,8 @@ String  SwTokenWindow::GetPattern() const
 
     return sRet;
 }
-/* --------------------------------------------------
-    Description: Check if a control of the specified
-                    TokenType is already contained in the list
- --------------------------------------------------*/
 
+// Check if a control of the specified TokenType is already contained in the list
 sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
@@ -3565,9 +3558,7 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: allocate templates
- --------------------------------------------------------------------*/
+// allocate templates
 IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 {
     sal_uInt16 nLevPos   = m_pLevelLB->GetSelectEntryPos();
@@ -3624,9 +3615,7 @@ IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwTOXStylesTabPage, DoubleClickHdl)
 
-/*--------------------------------------------------------------------
-     Description: enable only when selected
- --------------------------------------------------------------------*/
+// enable only when selected
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
 {
     m_pStdBT->Enable(m_pLevelLB->GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
@@ -3687,7 +3676,6 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilde
     xController = new ::svt::EditCellController(&aCellEdit);
     xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
 
-    //////////////////////////////////////////////////////////////////////
     // HACK: BrowseBox doesn't invalidate its children, how it should be.
     // That's why WB_CLIPCHILDREN is reset in order to enforce the
     // children' invalidation

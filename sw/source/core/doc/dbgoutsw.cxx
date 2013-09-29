@@ -826,6 +826,7 @@ SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
+//FIXME: this method seems to do nothing at all
 static String lcl_dbg_out(const SwRewriter & rRewriter)
 {
     (void) rRewriter;
