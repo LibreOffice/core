@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxids.hrc>
 #include <editeng/memberids.hrc>
 #include <swtypes.hxx>
@@ -616,12 +615,10 @@ SwXEndnoteProperties::SwXEndnoteProperties(SwDoc* pDc) :
     pDoc(pDc),
     m_pPropertySet(GetEndnoteSet())
 {
-
 }
 
 SwXEndnoteProperties::~SwXEndnoteProperties()
 {
-
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXEndnoteProperties::getPropertySetInfo(void) throw( uno::RuntimeException )
@@ -847,12 +844,10 @@ SwXLineNumberingProperties::SwXLineNumberingProperties(SwDoc* pDc) :
     pDoc(pDc),
     m_pPropertySet(GetLineNumberingSet())
 {
-
 }
 
 SwXLineNumberingProperties::~SwXLineNumberingProperties()
 {
-
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXLineNumberingProperties::getPropertySetInfo(void) throw( uno::RuntimeException )
@@ -1293,7 +1288,6 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     }
     else
         throw uno::RuntimeException();
-
 }
 
 sal_Int32 SwXNumberingRules::getCount(void) throw( uno::RuntimeException )
@@ -1542,7 +1536,6 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 aPropertyValues.push_back(pData);
             }
         }
-
     }
     else
     {
@@ -2137,7 +2130,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     else if(bExcept)
         throw uno::RuntimeException();
     rNumRule.Set( (sal_uInt16)nIndex, aFmt );
-
 }
 
 uno::Reference< XPropertySetInfo > SwXNumberingRules::getPropertySetInfo()
@@ -2167,7 +2159,6 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     if(!pNumRule && !pDocRule && !pCreatedRule)
         throw RuntimeException();
-
 
     if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
     {
@@ -2439,7 +2430,6 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
 
 SwXTextColumns::~SwXTextColumns()
 {
-
 }
 
 sal_Int32 SwXTextColumns::getReferenceValue(void) throw( uno::RuntimeException )

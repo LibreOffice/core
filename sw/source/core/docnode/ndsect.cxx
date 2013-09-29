@@ -849,7 +849,6 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             if( pTemp->GetIndex() >= aInsPos.GetIndex() )
                 aInsPos = pTemp->GetIndex()+1; // ...I have to correct my end position
         }
-
     }
     else
     {
@@ -1177,7 +1176,6 @@ void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
         if( !pEndIdx )
             delete pEnd;
     }
-
 }
 
 void SwSectionNode::DelFrms()

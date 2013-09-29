@@ -1933,7 +1933,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 
             pNewRule->Set( 2, aFmt );
 
-
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );

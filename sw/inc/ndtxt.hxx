@@ -159,7 +159,6 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
             LanguageType nLang, sal_uInt16 nLangWhichId,
             const Font *pFont,  sal_uInt16 nFontWhichId );
 
-
     /// Start: Data collected during idle time
 
     SW_DLLPRIVATE void SetParaNumberOfWords( sal_uLong nTmpWords ) const;
@@ -202,7 +201,6 @@ public:
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
     bool TryCharSetExpandToNum(const SfxItemSet& pCharSet);
-
 
     /// End: Data collected during idle time
 
@@ -725,7 +723,6 @@ public:
     inline bool HasHiddenParaField() const
         { return m_pSwpHints ? m_pSwpHints->HasHiddenParaField()  : false; }
 
-
     /// Hidden Paragraph Field:
 
     inline bool HasHiddenCharAttribute( bool bWholePara ) const
@@ -737,7 +734,6 @@ public:
 
     inline void SetCalcHiddenCharFlags() const
         { m_bRecalcHiddenCharFlags = true; }
-
 
     /** @return if the node is hidden due to
        1. HiddenParaField

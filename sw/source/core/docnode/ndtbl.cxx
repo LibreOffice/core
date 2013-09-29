@@ -3715,7 +3715,6 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
     if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
 
-
     // Disable Undo, but first store parameters
     SwUndoTblAutoFmt* pUndo = 0;
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());

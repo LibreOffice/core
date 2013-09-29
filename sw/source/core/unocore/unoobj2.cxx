@@ -393,6 +393,7 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
                         *pSet, nStart, nEnd, bOnlyTxtAttr, bGetFromChrFmt);
                 }
                 break;
+
                 case ND_GRFNODE:
                 case ND_OLENODE:
                     static_cast<SwCntntNode*>(pNd)->GetAttr( *pSet );
@@ -426,9 +427,7 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
 class SwXParagraphEnumeration::Impl
     : public SwClient
 {
-
 public:
-
     uno::Reference< text::XText > const     m_xParentText;
     const CursorType        m_eCursorType;
     /// Start node of the cell _or_ table the enumeration belongs to.
@@ -496,7 +495,6 @@ public:
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
-
 };
 
 void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -727,9 +725,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 class SwXTextRange::Impl
     : public SwClient
 {
-
 public:
-
     const SfxItemPropertySet &  m_rPropSet;
     const enum RangePosition    m_eRangePosition;
     SwDoc &                     m_rDoc;
@@ -766,10 +762,10 @@ public:
     }
 
     const ::sw::mark::IMark * GetBookmark() const { return m_pMark; }
+
 protected:
     // SwClient
     virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
-
 };
 
 void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -1538,9 +1534,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 class SwXTextRanges::Impl
     : public SwClient
 {
-
 public:
-
     ::std::vector< uno::Reference< text::XTextRange > > m_Ranges;
 
     Impl(SwPaM *const pPaM)
@@ -1566,10 +1560,10 @@ public:
     }
 
     void MakeRanges();
+
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
-
 };
 
 void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
@@ -1727,9 +1721,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
 class SwXParaFrameEnumeration::Impl
     : public SwClient
 {
-
 public:
-
     // created by hasMoreElements
     uno::Reference< text::XTextContent > m_xNextObject;
     FrameDependList_t m_Frames;
@@ -1753,10 +1745,10 @@ public:
         return static_cast<SwUnoCrsr*>(
                 const_cast<SwModify*>(GetRegisteredIn()));
     }
+
 protected:
     // SwClient
     virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
-
 };
 
 struct InvalidFrameDepend {

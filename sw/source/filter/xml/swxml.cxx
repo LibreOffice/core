@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <rsc/rscsfx.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -74,14 +73,12 @@
 
 #include <sfx2/DocumentMetadataAccess.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
-
 
 static void lcl_EnsureValidPam( SwPaM& rPam )
 {
@@ -161,7 +158,6 @@ sal_Int32 ReadThroughComponent(
     // connect model and filter
     uno::Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
-
 
 #ifdef TIMELOG
     // if we do profiling, we want to know the stream
@@ -457,7 +453,6 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
             }
         }
     }
-
 }
 
 static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
@@ -547,7 +542,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
             "XMLReader::Read: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_READ_ERROR;
-
 
     // create and prepare the XPropertySet that gets passed through
     // the components, and the XStatusIndicator that shows progress to
@@ -671,7 +665,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
             }
         }
     }
-
 
     // set progress range and start status indicator
     sal_Int32 nProgressRange(1000000);
@@ -815,7 +808,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     xInfoSet->setPropertyValue( sRecordChanges, aAny );
     aAny <<= rDoc.GetRedlinePassword();
     xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
-
 
     // force redline mode to "none"
     rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
@@ -1031,7 +1023,6 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
     {
         try
         {
-
             xml::sax::InputSource aParserInput;
             OUString sDocName( "content.xml" );
             aParserInput.sSystemId = sDocName;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <comphelper/processfactory.hxx>
@@ -580,7 +579,6 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                                     std::pair< OUString, uno::Any >(
                                         ODF_OLE_PARAM, uno::makeAny( OUString( sOleId ) ) ) );
                         }
-
                     }
                 }
 
@@ -664,7 +662,6 @@ void WW8FieldEntry::SetBookmarkCode(OUString bookmarkCode)
 ::sw::mark::IFieldmark::parameter_map_t& WW8FieldEntry::getParameters() {
     return maParams;
 }
-
 
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
 // wird 0 zurueckgegeben, so dass das Feld vom Aufrufer textuell gelesen wird.
@@ -1054,7 +1051,6 @@ long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
     pStrm->Seek( nOldPos );
     return pF->nLen;
 }
-
 
 //-----------------------------------------
 //        normale Felder
@@ -1852,7 +1848,6 @@ eF_ResT SwWW8ImplReader::Read_F_Embedd( WW8FieldDesc*, OUString& rStr )
     return FLD_TEXT;
 }
 
-
 // "SET"
 eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
 {
@@ -2052,6 +2047,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
     rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
+
 //helper function
 //For MS MacroButton field, the symbol in plain text is always "(" (0x28),
 //which should be mapped according to the macro type
@@ -2263,7 +2259,6 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
     }
     return FLD_READ_FSPA;
 }
-
 
 String wwSectionNamer::UniqueName()
 {
