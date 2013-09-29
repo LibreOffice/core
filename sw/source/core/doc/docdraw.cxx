@@ -499,10 +499,10 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     }
     else if( RES_DRAWFRMFMT == pFmt->Which() )
     {
-            // See if there is an SdrObject for it
-            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFrmFmt );
-            if( pContact )
-                nOrdNum = pContact->GetMaster()->GetOrdNum();
+        // See if there is an SdrObject for it
+        SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFrmFmt );
+        if( pContact )
+            nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
     else {
         OSL_ENSURE( !this, "what is that for a format?" );

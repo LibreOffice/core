@@ -1859,7 +1859,6 @@ SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnly
  */
 const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return GetDoc(); }
 const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return GetDoc(); }
-const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }
 const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return GetDoc(); }
 const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }
 const IDocumentLineNumberAccess* SwNode::getIDocumentLineNumberAccess() const { return GetDoc(); }
@@ -1871,12 +1870,10 @@ IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return
 const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return GetDoc(); }
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
+IDocumentListItems& SwNode::getIDocumentListItems() { return *GetDoc(); } // #i83479#
+
+const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }
 IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
-// #i83479#
-IDocumentListItems& SwNode::getIDocumentListItems()
-{
-    return *GetDoc();
-}
 
 sal_Bool SwNode::IsInRedlines() const
 {

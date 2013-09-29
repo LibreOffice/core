@@ -2645,7 +2645,7 @@ bool SwRedlineTbl::InsertWithValidRanges( SwRedline* p, sal_uInt16* pInsPos )
                     if( pC )
                         pNew->GetPoint()->nContent.Assign( pC, 0 );
                     pTab = pNew->GetPoint()->nNode.GetNode().StartOfSectionNode()->FindTableNode();
-                }while( pTab ); // If there is another table we have to repeat our step backwards
+                } while( pTab ); // If there is another table we have to repeat our step backwards
             }
 
             if( *pNew->GetPoint() > *pEnd )
