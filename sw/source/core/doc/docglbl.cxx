@@ -160,38 +160,38 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
     SwNodePtr pStartNd;
 
     if ( !bOutline) {
-    if( pSplitColl )
-    {
-        // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
-        if( pSplitColl->GetAttrOutlineLevel() == 0 )
+        if( pSplitColl )
         {
-            pOutlNds = new SwOutlineNodes;
-            SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
-            for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
-                if( pTNd->GetNodes().IsDocNodes() )
-                    pOutlNds->insert( pTNd );
-
-            if( pOutlNds->empty() )
+            // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
+            if( pSplitColl->GetAttrOutlineLevel() == 0 )
             {
-                delete pOutlNds;
-                return false;
+                pOutlNds = new SwOutlineNodes;
+                SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
+                for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
+                    if( pTNd->GetNodes().IsDocNodes() )
+                        pOutlNds->insert( pTNd );
+
+                if( pOutlNds->empty() )
+                {
+                    delete pOutlNds;
+                    return false;
+                }
             }
         }
-    }
-    else
-    {
-        // Look for the 1st level OutlineTemplate
-        const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
-        for( sal_uInt16 n = rFmtColls.size(); n; )
-            if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )
-            {
-                pSplitColl = rFmtColls[ n ];
-                break;
-            }
+        else
+        {
+            // Look for the 1st level OutlineTemplate
+            const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
+            for( sal_uInt16 n = rFmtColls.size(); n; )
+                if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )
+                {
+                    pSplitColl = rFmtColls[ n ];
+                    break;
+                }
 
-        if( !pSplitColl )
-            return false;
-    }
+            if( !pSplitColl )
+                return false;
+        }
     }
 
     const SfxFilter* pFilter;

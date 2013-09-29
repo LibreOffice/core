@@ -659,7 +659,8 @@ void WW8FieldEntry::SetBookmarkCode(OUString bookmarkCode)
 }
 
 
-::sw::mark::IFieldmark::parameter_map_t& WW8FieldEntry::getParameters() {
+::sw::mark::IFieldmark::parameter_map_t& WW8FieldEntry::getParameters()
+{
     return maParams;
 }
 

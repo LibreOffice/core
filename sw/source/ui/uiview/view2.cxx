@@ -2078,9 +2078,9 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
 
     switch( nSlotId )
     {
-        case SID_DOCUMENT_MERGE:                            break;
-        case SID_DOCUMENT_COMPARE:      bCompare = sal_True;    break;
-        case SID_INSERTDOC:             bInsert = sal_True;     break;
+        case SID_DOCUMENT_MERGE:                        break;
+        case SID_DOCUMENT_COMPARE: bCompare = sal_True; break;
+        case SID_INSERTDOC:        bInsert = sal_True;  break;
 
         default:
             OSL_ENSURE( !this, "unknown SlotId!" );

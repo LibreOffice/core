@@ -806,7 +806,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     Update();
 }
 
-void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
+void SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
 {
     nActLevel = SwOutlineTabDialog::GetActNumLevel();
     if(nActLevel != USHRT_MAX)
@@ -816,18 +816,18 @@ void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
     LevelHdl(m_pLevelLB);
 }
 
-int     SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
+int SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
 {
     SwOutlineTabDialog::SetActNumLevel(nActLevel);
     return LEAVE_PAGE;
 }
 
-sal_Bool    SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
+sal_Bool SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
 {
     return sal_True;
 }
 
-void    SwOutlineSettingsTabPage::Reset( const SfxItemSet& rSet )
+void SwOutlineSettingsTabPage::Reset( const SfxItemSet& rSet )
 {
     ActivatePage(rSet);
 }
@@ -896,7 +896,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumberingPreview(Window *pP
 /*--------------------------------------------------
     paint numbering's preview
 --------------------------------------------------*/
-void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
+void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));
     Rectangle aRect(Point(0,0), aSize);
