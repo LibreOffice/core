@@ -36,18 +36,39 @@ namespace configmgr {
 
 namespace {
 // This is not a generic registry reader. We assume the following structure:
-// Last element of Key becomes prop, first part is the path.
+// Last element of Key becomes prop, first part is the path and optionally nodes,
+// when the node has oor:op attribute.
 // Values can be the following: Value (string) and Final (dword, optional)
+//
 // For example the following registry setting:
 // [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.UserProfile\Data\o]
 // "Value"="Example Corp."
 // "Final"=dword:00000001
 // becomes the following in configuration:
+// <!-- set the Company name -->
 // <item oor:path="/org.openoffice.UserProfile/Data">
 //     <prop oor:name="o" oor:finalized="true">
 //         <value>Example Corp.</value>
 //     </prop>
 // </item>
+//
+// Another example:
+// [HKEY_LOCAL_MACHINE\Policies\LibreOffice\org.openoffice.Office.OptionsDialog\OptionsDialogGroups\ProductName/#fuse\Pages\AboutConfig/#fuse\Hide]
+// "Value"="true"
+// becomes the following in configuration:
+// <!-- Hide Tools - Options - LibreOffice - Expert Config panel -->
+// <item oor:path="/org.openoffice.Office.OptionsDialog/OptionsDialogGroups">
+//     <node oor:name="ProductName" oor:op="fuse">
+//         <node oor:name="Pages">
+//             <node oor:name="AboutConfig" oor:op="fuse">
+//                 <prop oor:name="Hide">
+//                     <value>true</value>
+//                 </prop>
+//             </node>
+//         </node>
+//     </node>
+// </item>
+
 void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, oslFileHandle aFileHandle)
 {
     HKEY hCurKey;
@@ -107,19 +128,59 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, oslFileHandle aFileHan
                         bFinal = true;
                 }
                 sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
-                OUString aPath = aKeyName.replaceAll("\\","/").copy(0, aLastSeparator);
+                OUString aPathAndNodes = aKeyName.copy(0, aLastSeparator);
                 OUString aProp = aKeyName.copy(aLastSeparator + 1);
+                bool bHasNode = false;
+                sal_Int32 nCloseNode = 0;
 
-                writeData(aFileHandle, "<item oor:path=\"/");
-                writeAttributeValue(aFileHandle, aPath);
-                writeData(aFileHandle, "\"><prop oor:name=\"");
+                writeData(aFileHandle, "<item oor:path=\"");
+                for(sal_Int32 nIndex = 0;; ++nIndex)
+                {
+                    OUString aNextPathPart = aPathAndNodes.getToken(nIndex, '\\');
+
+                    if(!aNextPathPart.isEmpty())
+                    {
+                        if((aNextPathPart.lastIndexOf("/#") != -1) || bHasNode)
+                        {
+                            bHasNode = true;
+                            nCloseNode++;
+                            writeData(aFileHandle, "\"><node oor:name=\"");
+                            sal_Int32 nCommandSeparator = aNextPathPart.lastIndexOf('#');
+                            if(nCommandSeparator != -1)
+                            {
+                                OUString aNodeOp = aNextPathPart.copy(nCommandSeparator + 1);
+                                writeAttributeValue(aFileHandle, aNextPathPart.copy(0, nCommandSeparator - 1));
+                                writeData(aFileHandle, "\" oor:op=\"");
+                                writeAttributeValue(aFileHandle, aNodeOp);
+                            }
+                            else
+                            {
+                                writeAttributeValue(aFileHandle, aNextPathPart);
+                            }
+                        }
+                        else
+                        {
+                            writeAttributeValue(aFileHandle, "/" + aNextPathPart);
+                        }
+                    }
+                    else
+                    {
+                        writeData(aFileHandle, "\">");
+                        break;
+                    }
+                }
+
+                writeData(aFileHandle, "<prop oor:name=\"");
                 writeAttributeValue(aFileHandle, aProp);
                 writeData(aFileHandle, "\"");
                 if(bFinal)
                     writeData(aFileHandle, " oor:finalized=\"true\"");
                 writeData(aFileHandle, "><value>");
                 writeValueContent(aFileHandle, aValue);
-                writeData(aFileHandle, "</value></prop></item>\n");
+                writeData(aFileHandle, "</value></prop>");
+                for(; nCloseNode > 0; nCloseNode--)
+                    writeData(aFileHandle, "</node>");
+                writeData(aFileHandle, "</item>\n");
                 delete[] pValueName;
                 delete[] pValue;
             }
