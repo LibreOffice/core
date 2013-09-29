@@ -376,7 +376,6 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     // #i96644#
-    // SwDataChanged aTmp( *pPam );
     std::auto_ptr< SwDataChanged > pDataChanged;
     if ( bSendDataChangedEvents )
     {
@@ -696,8 +695,6 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             {
                 // Set auto flag. Only in the template it's without auto!
                 SwFmtPageDesc aNew( *pDesc );
-                // 38479: AutoFlag is now being set in the WrtShell
-                // aNew.SetAuto();
 
                 // Tables now also know line breaks
                 if( 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
@@ -1874,7 +1871,6 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
 
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
         pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
-    //<-end
     pNewColl->SetPoolFmtId( rColl.GetPoolFmtId() );
     pNewColl->SetPoolHelpId( rColl.GetPoolHelpId() );
 

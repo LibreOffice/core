@@ -338,8 +338,6 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     }
     else
     {
-//          if( !HasSelection() )
-//              UpdateAttr();
         pDoc->InsertItemSet( rPam, rSet, nFlags );
     }
     //#outline level,add by zhaojianwei

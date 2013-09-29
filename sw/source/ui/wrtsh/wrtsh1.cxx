@@ -761,31 +761,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                _aVisArea.Height()- nY <= aObjArea.Height()&&
                _aVisArea.Height()+ nY >= aObjArea.Height() ))
         {
-            // TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
-            /*
-            if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & nMisc )
-            {
-                //This type of objects should never be resized.
-                //If this request comes from the Writer core (inaktive Object
-                //ist resized), the Object should be resized too.
-                //If this request comes from the Object itself, the Frame
-                //in the Writer core should be resized.
-                if ( pFlyPrtRect )      //Request from core?
-                {
-                    xObj->SetVisArea( OutputDevice::LogicToLogic(
-                        pFlyPrtRect->SVRect(), MAP_TWIP, xObj->GetMapUnit() ));
-                }
-                else
-                {
-                    SwRect aTmp( Point( LONG_MIN, LONG_MIN ), _aVisArea );
-                    RequestObjectResize( aTmp, xObj );
-                }
-                // The rest will be done, because we need to come back anyway,
-                // possibly even recursively.
-                return;
-            }
-            else*/
-
             if ( nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE )
             {
                 // the object must not be scaled,

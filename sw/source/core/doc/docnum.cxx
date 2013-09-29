@@ -2075,7 +2075,7 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
     {
         if ( !pTxtNd->IsCountedInList() == !bDel)
         {
-            sal_Bool bOldNum = bDel; // == pTxtNd->IsCounted();
+            sal_Bool bOldNum = bDel;
             sal_Bool bNewNum = bDel ? sal_False : sal_True;
             pTxtNd->SetCountedInList(bNewNum ? true : false);
 

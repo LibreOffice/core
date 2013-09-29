@@ -1984,7 +1984,6 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         }
         if(bToxIsAuthorities)
         {
-            //
             SwWrtShell& rSh = pTOXDlg->GetWrtShell();
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                     rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
@@ -2118,14 +2117,12 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_CHAR);
-        // TODO: WrtShell?
-//      SwPtrItem aShell(FN_PARAM_WRTSHELL, pWrtShell);
         Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell().
         GetView().GetViewFrame()->GetDispatcher()->Execute(
         SID_STYLE_EDIT, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_MODAL,
-            &aStyle, &aFamily/*, &aShell*/, 0L);
+            &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }
     return 0;

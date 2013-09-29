@@ -3839,7 +3839,6 @@ int SwTxtNode::GetActualListLevel() const
 
 void SwTxtNode::SetListRestart( bool bRestart )
 {
-//    CreateNum()->SetRestart(bRestart);
     if ( !bRestart )
     {
         // attribute not contained in paragraph style's attribute set. Thus,
@@ -3856,7 +3855,6 @@ void SwTxtNode::SetListRestart( bool bRestart )
 
 bool SwTxtNode::IsListRestart() const
 {
-//    return GetNum() ? GetNum()->IsRestart() : false;
     const SfxBoolItem& aIsRestartItem =
         dynamic_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISRESTART ));
 
@@ -3885,7 +3883,6 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
 
 void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber )
 {
-//    CreateNum()->SetStart(nNumber);
     const bool bChanged( HasAttrListRestartValue()
                          ? GetAttrListRestartValue() != nNumber
                          : nNumber != USHRT_MAX );
@@ -3922,7 +3919,6 @@ SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
 
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetActualListStartValue() const
 {
-//    return GetNum() ? GetNum()->GetStart() : 1;
     SwNumberTree::tSwNumTreeNumber nListRestartValue = 1;
 
     if ( IsListRestart() && HasAttrListRestartValue() )
