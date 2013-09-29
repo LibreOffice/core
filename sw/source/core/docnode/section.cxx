@@ -903,7 +903,7 @@ static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
     return pFSect->GetSectionName() < pSSect->GetSectionName();
 }
 
-// Alle Sections which have been derived from this one
+// get all Sections that have been derived from this one
 sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
                                         SectionSort eSort,
                                         sal_Bool bAllSections ) const

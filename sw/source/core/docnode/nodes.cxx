@@ -347,7 +347,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     if( bNewFrms )
     {
-        // Frames besorgen:
+        // get the frames:
         SwNodeIndex aIdx( *pPrevInsNd, 1 );
         SwNodeIndex aFrmNdIdx( aIdx );
         SwNode* pFrmNd = rNds.FindPrvNxtFrmNode( aFrmNdIdx,
