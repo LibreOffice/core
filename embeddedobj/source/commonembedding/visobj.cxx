@@ -35,8 +35,6 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
                 uno::Exception,
                 uno::RuntimeException )
 {
-    SAL_WARN( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::setVisualAreaSize" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -77,8 +75,6 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    SAL_WARN( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::getVisualAreaSize" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -160,8 +156,6 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
                 uno::Exception,
                 uno::RuntimeException )
 {
-    SAL_WARN( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::getPrefferedVisualRepresentation" );
-
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
