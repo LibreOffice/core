@@ -1191,6 +1191,36 @@ sub create_msp_patch
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting msimsp.exe");
     my $msimsplogfile = execute_msimsp($fullpcpfilename, $mspfilename, $localmspdir);
 
+    # Sign .msp file
+    if ( defined($ENV{'WINDOWS_BUILD_SIGNING'}) && ($ENV{'WINDOWS_BUILD_SIGNING'} eq 'TRUE') )
+    {
+        my $systemcall = "signtool.exe sign ";
+        if ( defined($ENV{'PFXFILE'}) ) { $systemcall .= "-f $ENV{'PFXFILE'} "; }
+        if ( defined($ENV{'PFXPASSWORD'}) ) { $systemcall .= "-p $ENV{'PFXPASSWORD'} "; }
+        if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.globalsign.com/scripts/timestamp.dll "; }
+        $systemcall .= "-d \"" . $allvariables->{'PRODUCTNAME'} . " " . $allvariables->{'PRODUCTVERSION'} . " Patch " . $allvariables->{'WINDOWSPATCHLEVEL'} . "\" ";
+        $systemcall .= $mspfilename;
+        installer::logger::print_message( "... code signing and timestamping with signtool.exe ...\n" );
+
+        my $returnvalue = system($systemcall);
+
+        # do not print password to log
+        if ( defined($ENV{'PFXPASSWORD'}) ) { $systemcall =~ s/$ENV{'PFXPASSWORD'}/********/; }
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+
     # Copy final installation set next to msp file
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: Copying installation set");
     installer::logger::print_message( "... copying installation set ...\n" );
