@@ -3455,6 +3455,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
 
             SvTreeListEntry* pNewLBEntry = InsertEntry( pNewEntryData );
 
+            aContentsListBox->SetCheckButtonInvisible( pNewLBEntry );
             aContentsListBox->SetCheckButtonState(
                 pNewLBEntry, SV_BUTTON_TRISTATE );
 
