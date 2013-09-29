@@ -44,13 +44,13 @@ namespace svx
     class DbRegistrationOptionsPage : public SfxTabPage
     {
     private:
-        FixedLine           aStdBox;
-        FixedText           aTypeText;
-        FixedText           aPathText;
-        SvSimpleTableContainer aPathCtrl;
-        PushButton          m_aNew;
-        PushButton          m_aEdit;
-        PushButton          m_aDelete;
+        OUString            aTypeText;
+        OUString            aPathText;
+
+        SvSimpleTableContainer* m_pPathCtrl;
+        PushButton*         m_pNew;
+        PushButton*         m_pEdit;
+        PushButton*         m_pDelete;
 
         ::svx::OptHeaderTabListBox* pPathBox;
         SvTreeListEntry*        m_pCurEntry;

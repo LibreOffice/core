@@ -18,7 +18,6 @@
  */
 
 #include "dbregister.hxx"
-#include "dbregister.hrc"
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
@@ -104,29 +103,33 @@ short DatabaseRegistrationDialog::Execute()
 
 DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_DBREGISTER), rSet ),
+    SfxTabPage( pParent, "DbRegisterPage", "cui/ui/dbregisterpage.ui", rSet ),
 
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
-    aTypeText       ( this, CUI_RES( FT_TYPE ) ),
-    aPathText       ( this, CUI_RES( FT_PATH ) ),
-    aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
-    m_aNew          ( this, CUI_RES( BTN_NEW ) ),
-    m_aEdit         ( this, CUI_RES( BTN_EDIT ) ),
-    m_aDelete       ( this, CUI_RES( BTN_DELETE ) ),
+    aTypeText       ( CUI_RES( RID_SVXSTR_TYPE ) ),
+    aPathText       ( CUI_RES( RID_SVXSTR_PATH ) ),
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),
     m_nOldCount     ( 0 ),
     m_bModified     ( sal_False )
 {
-    m_aNew.SetClickHdl( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
-    m_aEdit.SetClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
-    m_aDelete.SetClickHdl( LINK( this, DbRegistrationOptionsPage, DeleteHdl ) );
+    get(m_pPathCtrl, "pathctrl");
+    Size aControlSize(248, 147);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    m_pPathCtrl->set_width_request(aControlSize.Width());
+    m_pPathCtrl->set_height_request(aControlSize.Height());
 
-    Size aBoxSize = aPathCtrl.GetOutputSizePixel();
+    get(m_pNew, "new");
+    get(m_pEdit, "edit");
+    get(m_pDelete, "delete");
 
+    m_pNew->SetClickHdl( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
+    m_pEdit->SetClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
+    m_pDelete->SetClickHdl( LINK( this, DbRegistrationOptionsPage, DeleteHdl ) );
+
+    Size aBoxSize = m_pPathCtrl->GetOutputSizePixel();
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
-    pPathBox = new ::svx::OptHeaderTabListBox( aPathCtrl, nBits );
+    pPathBox = new ::svx::OptHeaderTabListBox( *m_pPathCtrl, nBits );
 
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
 
@@ -134,11 +137,11 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     rBar.SetEndDragHdl( LINK( this, DbRegistrationOptionsPage, HeaderEndDrag_Impl ) );
     Size aSz;
     aSz.Width() = TAB_WIDTH1;
-    rBar.InsertItem( ITEMID_TYPE, aTypeText.GetText(),
+    rBar.InsertItem( ITEMID_TYPE, aTypeText,
                             LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
                             HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_UPARROW );
     aSz.Width() = TAB_WIDTH2;
-    rBar.InsertItem( ITEMID_PATH, aPathText.GetText(),
+    rBar.InsertItem( ITEMID_PATH, aPathText,
                             LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
                             HIB_LEFT | HIB_VCENTER );
 
@@ -158,8 +161,6 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     rBar.SetHelpId( HID_DBPATH_HEADERBAR );
 
     pPathBox->ShowTable();
-
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
@@ -384,8 +385,8 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
         bReadOnly = pRegistration->bReadOnly;
     }
 
-    m_aEdit.Enable( !bReadOnly );
-    m_aDelete.Enable( !bReadOnly );
+    m_pEdit->Enable( !bReadOnly );
+    m_pDelete->Enable( !bReadOnly );
     return 0;
 }
 // -----------------------------------------------------------------------------

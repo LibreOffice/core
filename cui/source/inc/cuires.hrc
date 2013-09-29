@@ -445,6 +445,9 @@
 #define RID_SVXSTR_HEADER1                                  (RID_SVX_START + 1242)
 #define RID_SVXSTR_HEADER2                                  (RID_SVX_START + 1243)
 
+#define RID_SVXSTR_TYPE                                     (RID_SVX_START + 1244)
+#define RID_SVXSTR_PATH                                     (RID_SVX_START + 1245)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
