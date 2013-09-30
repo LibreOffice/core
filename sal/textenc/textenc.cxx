@@ -86,8 +86,6 @@ static sal_uChar const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END
         0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, /* 0x00F0 */
         0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF };
 
-static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
-
 /* ======================================================================= */
 
 /* MS-1252 */
