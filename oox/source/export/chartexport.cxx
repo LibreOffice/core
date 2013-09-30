@@ -1537,6 +1537,11 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     // export data labels
                     // Excel does not like our current data label export
                     // for scatter charts
+
+                    // For Line chart:
+                    // According to ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference,
+                    // Page no. 4612. CT_LineChart. Data labels are present in Line chart, but it is optional child
+                    // But MSO gives corruption error if we write Data label, MSO does not provide option for data label.
                     if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BAR )
                         exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
@@ -2275,6 +2280,11 @@ void ChartExport::exportDataLabels(
         pFS->startElement( FSNS( XML_c, XML_dLbls ),
                     FSEND );
 
+        bool showLegendSymbol = false;
+        bool showNumber = false;
+        bool showCategoryName = false;
+        bool showNumberInPercent = false;
+
         sal_Int32 nElem;
         for( nElem = 0; nElem < nSeriesLength; ++nElem)
         {
@@ -2319,33 +2329,74 @@ void ChartExport::exportDataLabels(
                        case csscd::AVOID_OVERLAP: aPlacement = "bestFit";  break;
                    }
 
-                   pFS->startElement( FSNS( XML_c, XML_dLbl ), FSEND);
-                   pFS->singleElement( FSNS( XML_c, XML_idx), XML_val, I32S(nElem), FSEND);
-                   pFS->singleElement( FSNS( XML_c, XML_dLblPos), XML_val, aPlacement, FSEND);
-
-                   pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val,
-                                       aLabel.ShowLegendSymbol ? "1" : "0", FSEND);
-                   pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,
-                                       aLabel.ShowNumber ? "1" : "0", FSEND);
-                   pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val,
-                                       aLabel.ShowCategoryName ? "1" : "0", FSEND);
-                   // MSO somehow assumes series name to be on (=displayed) by default.
-                   // Let's put false here and switch it off then, since we have no UI means
-                   // in LibO to toggle it on anyway
-                   pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
-                   pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,
-                                       aLabel.ShowNumberInPercent ? "1" : "0", FSEND);
-
-                   if (GetProperty( xPropSet, "LabelSeparator"))
+                   if(aLabel.ShowLegendSymbol || aLabel.ShowNumber || aLabel.ShowCategoryName || aLabel.ShowNumberInPercent)
                    {
-                       mAny >>= aSep;
-                       pFS->startElement( FSNS( XML_c, XML_separator), FSEND);
-                       pFS->writeEscaped(aSep);
-                       pFS->endElement( FSNS( XML_c, XML_separator) );
+                       pFS->startElement( FSNS( XML_c, XML_dLbl ), FSEND);
+                       pFS->singleElement( FSNS( XML_c, XML_idx), XML_val, I32S(nElem), FSEND);
+                       pFS->singleElement( FSNS( XML_c, XML_dLblPos), XML_val, aPlacement, FSEND);
+
+                       if (aLabel.ShowLegendSymbol)
+                       {
+                           pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val, "1", FSEND);
+                           showLegendSymbol = true;
+                       }
+
+                       if(aLabel.ShowNumber)
+                       {
+                           pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,"1", FSEND);
+                           showNumber = true;
+                       }
+
+                       if(aLabel.ShowCategoryName)
+                       {
+                           pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val,"1", FSEND);
+                           showCategoryName =  true;
+                       }
+
+                       // MSO somehow assumes series name to be on (=displayed) by default.
+                       // Let's put false here and switch it off then, since we have no UI means
+                       // in LibO to toggle it on anyway
+                       pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
+
+                       if(aLabel.ShowNumberInPercent)
+                       {
+                           pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val, "1", FSEND);
+                           showNumberInPercent = true;
+                       }
+
+                       if (GetProperty( xPropSet, "LabelSeparator"))
+                       {
+                           mAny >>= aSep;
+                           pFS->startElement( FSNS( XML_c, XML_separator), FSEND);
+                           pFS->writeEscaped(aSep);
+                           pFS->endElement( FSNS( XML_c, XML_separator) );
+                       }
+                       pFS->endElement( FSNS( XML_c, XML_dLbl ));
                    }
-                   pFS->endElement( FSNS( XML_c, XML_dLbl ));
+
                }
             }
+        }
+        if (showLegendSymbol)
+        {
+            pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val,"1", FSEND);
+        }
+
+        if (showNumber)
+        {
+            pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val, "1", FSEND);
+        }
+
+        if (showCategoryName)
+        {
+            pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val, "1", FSEND);
+        }
+
+        pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
+
+        if (showNumberInPercent)
+        {
+            pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val, "1", FSEND);
         }
         pFS->endElement( FSNS( XML_c, XML_dLbls ) );
     }
