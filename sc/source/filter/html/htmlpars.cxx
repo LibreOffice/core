@@ -279,7 +279,7 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
 }
 
 
-sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
+sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
@@ -2932,7 +2932,7 @@ ScHTMLQueryParser::~ScHTMLQueryParser()
 {
 }
 
-sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
+sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
 {
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = 0;

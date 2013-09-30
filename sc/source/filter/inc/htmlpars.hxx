@@ -88,7 +88,7 @@ public:
     explicit                    ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc );
     virtual                     ~ScHTMLParser();
 
-    virtual sal_uLong               Read( SvStream& rStrm, const String& rBaseURL  ) = 0;
+    virtual sal_uLong           Read( SvStream& rStrm, const OUString& rBaseURL  ) = 0;
 
     ScHTMLStyles&               GetStyles();
     ScDocument&                 GetDoc();
@@ -226,7 +226,7 @@ private:
 public:
                         ScHTMLLayoutParser( EditEngine*, const String& rBaseURL, const Size& aPageSize, ScDocument* );
     virtual             ~ScHTMLLayoutParser();
-    virtual sal_uLong       Read( SvStream&, const String& rBaseURL  );
+    virtual sal_uLong   Read( SvStream&, const OUString& rBaseURL  );
     virtual const ScHTMLTable*  GetGlobalTable() const;
 };
 
@@ -621,7 +621,7 @@ public:
     explicit            ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc );
     virtual             ~ScHTMLQueryParser();
 
-    virtual sal_uLong       Read( SvStream& rStrm, const String& rBaseURL  );
+    virtual sal_uLong   Read( SvStream& rStrm, const OUString& rBaseURL  );
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable* GetGlobalTable() const;

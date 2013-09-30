@@ -76,7 +76,7 @@ private:
 public:
                         ScRTFParser( EditEngine* );
     virtual             ~ScRTFParser();
-    virtual sal_uLong       Read( SvStream&, const String& rBaseURL );
+    virtual sal_uLong       Read( SvStream&, const OUString& rBaseURL );
 };
 
 

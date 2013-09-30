@@ -64,7 +64,7 @@ ScRTFParser::~ScRTFParser()
 }
 
 
-sal_uLong ScRTFParser::Read( SvStream& rStream, const String& rBaseURL )
+sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
