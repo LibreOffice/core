@@ -1,3 +1,5 @@
+// -*- Mode: Asm; tab-width: 4; tab-stop-list: (4 12 32); comment-column: 30; comment-start: "// "; indent-tabs-mode: nil -*-
+//
 // This file is part of the LibreOffice project.
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
@@ -25,20 +27,20 @@
 // Fixed by Michael Casadevall <mcasadevall@kubuntu.org>
 // Modified for iOS by Tor Lillqvist <tml@iki.fi>
 
-	.text
-	.align	4
+    .text
+    .align 4
 
 _privateSnippetExecutor:
-	stmfd sp!, {r0-r3}    // follow other parameters on stack
-	mov   r0, ip          // r0 points to functionoffset/vtable
-	mov   r1, sp          // r1 points to this and params
-	                      // (see cpp2uno.cxx:codeSnippet())
-	stmfd sp!, {r4,lr}    // save return address 
-	                      // (r4 pushed to preserve stack alignment)
-	bl    _cpp_vtable_call
+    stmfd   sp!, {r0-r3}    // follow other parameters on stack
+    mov     r0, ip          // r0 points to functionoffset/vtable
+    mov     r1, sp          // r1 points to this and params
+                            // (see cpp2uno.cxx:codeSnippet())
+    stmfd   sp!, {r4,lr}    // save return address 
+                            // (r4 pushed to preserve stack alignment)
+    bl      _cpp_vtable_call
 
-	add   sp, sp, #4      // no need to restore r4 (we didn't touch it)
-	ldr   pc, [sp], #20   // return, discarding function arguments
+    add     sp, sp, #4      // no need to restore r4 (we didn't touch it)
+    ldr     pc, [sp], #20   // return, discarding function arguments
 
 #else
     .text
@@ -330,3 +332,5 @@ L___gxx_personality_v0$non_lazy_ptr:
     .destructor
     .align 1
 #endif
+
+// vim:set shiftwidth=4 softtabstop=4 expandtab:

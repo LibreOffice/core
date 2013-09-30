@@ -14,19 +14,19 @@ sub gen_arm ($$)
 {
     my ($funIndex, $vtableOffset) = @_;
     printf ("codeSnippet_%08x_%d:\n", $funIndex, $vtableOffset);
-    printf ("\tmov ip, pc\n");
-    printf ("\tb _privateSnippetExecutor\n");
-    printf ("\t.long %#08x\n", $funIndex);
-    printf ("\t.long %d\n", $vtableOffset);
+    printf ("    mov ip, pc\n");
+    printf ("    b _privateSnippetExecutor\n");
+    printf ("    .long %#08x\n", $funIndex);
+    printf ("    .long %d\n", $vtableOffset);
 }
 
 sub gen_x86 ($$$)
 {
     my ($funIndex, $vtableOffset, $executor) = @_;
     printf ("codeSnippet_%08x_%d_%s:\n", $funIndex, $vtableOffset, $executor);
-    printf ("\tmovl \$%#08x, %%eax\n", $funIndex);
-    printf ("\tmovl \$%d, %%edx\n", $vtableOffset);
-    printf ("\tjmp _privateSnippetExecutor%s\n", $executor);
+    printf ("    movl \$%#08x, %%eax\n", $funIndex);
+    printf ("    movl \$%d, %%edx\n", $vtableOffset);
+    printf ("    jmp _privateSnippetExecutor%s\n", $executor);
 }
 
 printf (".text\n");
@@ -41,7 +41,7 @@ printf ("//   (to indicate a hidden parameter for returning large values)\n");
 printf ("// - the vtable offset\n");
 printf ("\n");
 
-printf ("\t.align 4\n");
+printf ("    .align 4\n");
 printf ("\n");
 
 foreach my $funIndex (0 .. $nFunIndexes-1)
@@ -54,7 +54,7 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
 }
 
 printf ("#else\n");
-printf ("\t.align 1, 0x90\n");
+printf ("    .align 1, 0x90\n");
 
 foreach my $funIndex (0 .. $nFunIndexes-1)
 {
@@ -70,15 +70,15 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
 
 printf ("#endif\n");
 
-printf ("\t.globl _nFunIndexes\n");
+printf ("    .globl _nFunIndexes\n");
 printf ("_nFunIndexes:\n");
-printf ("\t.long %d\n", $nFunIndexes);
+printf ("    .long %d\n", $nFunIndexes);
 
-printf ("\t.globl _nVtableOffsets\n");
+printf ("    .globl _nVtableOffsets\n");
 printf ("_nVtableOffsets:\n");
-printf ("\t.long %d\n", $nVtableOffsets);
+printf ("    .long %d\n", $nVtableOffsets);
 
-printf ("\t.globl _codeSnippets\n");
+printf ("    .globl _codeSnippets\n");
 printf ("_codeSnippets:\n");
 
 foreach my $funIndex (0 .. $nFunIndexes-1)
@@ -86,13 +86,13 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
     foreach my $vtableOffset (0 .. $nVtableOffsets-1)
     {
 	printf ("#ifdef __arm\n");
-        printf ("\t.long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex, $vtableOffset);
-        printf ("\t.long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset);
+        printf ("    .long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex, $vtableOffset);
+        printf ("    .long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset);
 	printf ("#else\n");
 	foreach my $executor ('General', 'Void', 'Hyper', 'Float', 'Double', 'Class')
 	{
-            printf ("\t.long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex, $vtableOffset, $executor);
-            printf ("\t.long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset, $executor);
+            printf ("    .long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex, $vtableOffset, $executor);
+            printf ("    .long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset, $executor);
 	}
 	printf ("#endif\n");
     }
