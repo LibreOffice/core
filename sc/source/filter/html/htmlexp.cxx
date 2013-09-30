@@ -208,9 +208,9 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 
 //////////////////////////////////////////////////////////////////////////////
 
-ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument* pDocP,
+ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
                             const ScRange& rRangeP,
-                            sal_Bool bAllP, const String& rStreamPathP ) :
+                            sal_Bool bAllP, const OUString& rStreamPathP ) :
     ScExportBase( rStrmP, pDocP, rRangeP ),
     aBaseURL( rBaseURL ),
     aStreamPath( rStreamPathP ),
@@ -1260,7 +1260,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         if( pFileNameMap )
         {
             // Did we already move the file?
-            std::map<String, String>::iterator it = pFileNameMap->find( rFileNm );
+            std::map<OUString, OUString>::iterator it = pFileNameMap->find( rFileNm );
             if( it != pFileNameMap->end() )
             {
                 rFileNm = it->second;
@@ -1269,7 +1269,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         }
         else
         {
-            pFileNameMap.reset( new std::map<String, String>() );
+            pFileNameMap.reset( new std::map<OUString, OUString>() );
         }
 
         SvFileStream aTmp( aFileUrl.PathToFileName(), STREAM_READ );

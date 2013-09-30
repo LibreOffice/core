@@ -224,7 +224,7 @@ private:
     void                FontOn( ImportInfo* );
 
 public:
-                        ScHTMLLayoutParser( EditEngine*, const String& rBaseURL, const Size& aPageSize, ScDocument* );
+                        ScHTMLLayoutParser( EditEngine*, const OUString& rBaseURL, const Size& aPageSize, ScDocument* );
     virtual             ~ScHTMLLayoutParser();
     virtual sal_uLong   Read( SvStream&, const OUString& rBaseURL  );
     virtual const ScHTMLTable*  GetGlobalTable() const;

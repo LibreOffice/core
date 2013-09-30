@@ -27,17 +27,17 @@ class ScHTMLParser;
 class ScHTMLImport : public ScEEImport
 {
 private:
-    static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
+    static void         InsertRangeName( ScDocument* pDoc, const OUString& rName, const ScRange& rRange );
 
 public:
-    ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
+    ScHTMLImport( ScDocument* pDoc, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
     virtual ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
 
     virtual void        WriteToDocument( bool bSizeColsRows = false, double nOutputFactor = 1.0,
                                          SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
-    static String       GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+    static OUString     GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName );
 };
 
 

@@ -62,7 +62,7 @@ ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, co
     return new ScHTMLImport( pDocP, rBaseURL, rRange, bCalcWidthHeight );
 }
 
-ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) :
+ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) :
     ScEEImport( pDocP, rRange )
 {
     Size aPageSize;
@@ -110,7 +110,7 @@ ScHTMLImport::~ScHTMLImport()
 }
 
 
-void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange )
+void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const OUString& rName, const ScRange& rRange )
 {
     ScComplexRefData aRefData;
     aRefData.InitRange( rRange );
@@ -204,7 +204,7 @@ String ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const S
     return ScHTMLImport::GetHTMLRangeNameList( pDoc, rOrigName );
 }
 
-String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )
+OUString ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName )
 {
     OSL_ENSURE( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
 
@@ -215,7 +215,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
     sal_Int32 nStringIx = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
     {
-        String aToken( rOrigName.GetToken( 0, ';', nStringIx ) );
+        String aToken( rOrigName.getToken( 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
             sal_uLong nIndex = 1;

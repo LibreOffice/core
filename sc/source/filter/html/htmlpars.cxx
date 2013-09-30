@@ -215,7 +215,7 @@ ScDocument& ScHTMLParser::GetDoc()
 // ============================================================================
 
 ScHTMLLayoutParser::ScHTMLLayoutParser(
-    EditEngine* pEditP, const String& rBaseURL, const Size& aPageSizeP,
+    EditEngine* pEditP, const OUString& rBaseURL, const Size& aPageSizeP,
     ScDocument* pDocP ) :
         ScHTMLParser( pEditP, pDocP ),
         aPageSize( aPageSizeP ),

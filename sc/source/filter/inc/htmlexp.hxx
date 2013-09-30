@@ -44,7 +44,7 @@ namespace editeng { class SvxBorderLine; }
 struct ScHTMLStyle
 {   // Defaults aus StyleSheet
     Color               aBackgroundColor;
-    String              aFontFamilyName;
+    OUString            aFontFamilyName;
     sal_uInt32              nFontHeight;        // Item-Value
     sal_uInt16              nFontSizeNumber;    // HTML value 1-7
     sal_uInt8                nDefaultScriptType; // Font values are valid for the default script type
@@ -100,7 +100,7 @@ class ScHTMLExport : public ScExportBase
     OUString            aStreamPath;
     OUString            aCId;           // Content-Id fuer Mail-Export
     OutputDevice*       pAppWin;        // fuer Pixelei
-    boost::scoped_ptr< std::map<String, String> >  pFileNameMap;        // fuer CopyLocalFileToINet
+    boost::scoped_ptr< std::map<OUString, OUString> >  pFileNameMap;        // fuer CopyLocalFileToINet
     OUString            aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding    eDestEnc;
     SCTAB               nUsedTables;
@@ -154,8 +154,8 @@ class ScHTMLExport : public ScExportBase
     const sal_Char*         GetIndentStr() { return sIndent; }
 
 public:
-                        ScHTMLExport( SvStream&, const String&, ScDocument*, const ScRange&,
-                                        sal_Bool bAll, const String& aStreamPath );
+                        ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
+                                        sal_Bool bAll, const OUString& aStreamPath );
     virtual             ~ScHTMLExport();
     sal_uLong               Write();
     const OUString&     GetNonConvertibleChars() const
