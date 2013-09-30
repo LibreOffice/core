@@ -103,9 +103,6 @@ using namespace ::xmloff::token;
 sal_Char const sXML_1_1[] = "1.1";
 sal_Char const sXML_1_2[] = "1.2";
 
-// #i115030#: the XSLT is not finished, and not available via HTTP
-const sal_Char s_grddl_xsl[] = "http://FIXME";
-
 #define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
 #define XML_MODEL_SERVICE_CALC      "com.sun.star.sheet.SpreadsheetDocument"
 #define XML_MODEL_SERVICE_DRAW      "com.sun.star.drawing.DrawingDocument"
@@ -1291,12 +1288,12 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 /*nExportMode*/)
         default: break;
     }
 
-    // #i115030#: disabled
+    // #i115030#: disabled, the XSLT is not finished, and not available via HTTP
 #if 0
     if (EXPORT_SETTINGS != nExportMode) // meta, content, styles
     {
         rExport.AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
-            OUString(s_grddl_xsl) );
+            OUString("http://FIXME") );
     }
 #endif
 }
