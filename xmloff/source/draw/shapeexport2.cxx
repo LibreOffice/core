@@ -277,7 +277,6 @@ const sal_Int32 FOUND_SPEED             = 0x00000040;
 const sal_Int32 FOUND_CLICKEVENTTYPE    = 0x00000080;
 const sal_Int32 FOUND_MACRO             = 0x00000100;
 const sal_Int32 FOUND_LIBRARY           = 0x00000200;
-const sal_Int32 FOUND_ACTIONEVENTTYPE   = 0x00000400;
 
 } // namespace
 
