@@ -1033,10 +1033,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
         if( nLevel == FORM_ALPHA_DELIMITTER )
             continue;
 
-        String sMyString, sMyStringReading;
-        aSortArr[i]->GetTxt( sMyString, sMyStringReading );
-
-        sDeli = rIntl.GetIndexKey( sMyString, sMyStringReading,
+        sDeli = rIntl.GetIndexKey( aSortArr[i]->GetTxt(),
                                    aSortArr[i]->GetLocale() );
 
         // Do we already have a Delimitter?
@@ -1045,7 +1042,8 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
             // We skip all that are less than a small Blank (these are special characters)
             if( ' ' <= sDeli.GetChar( 0 ) )
             {
-                SwTOXCustom* pCst = new SwTOXCustom( sDeli, aEmptyStr, FORM_ALPHA_DELIMITTER,
+                SwTOXCustom* pCst = new SwTOXCustom( TextAndReading(sDeli, OUString()),
+                                                     FORM_ALPHA_DELIMITTER,
                                                      rIntl, aSortArr[i]->GetLocale() );
                 aSortArr.insert( aSortArr.begin() + i, pCst);
                 i++;
@@ -2235,13 +2233,12 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
                                     sal_uInt16 nLevel, const Range& rRange )
 {
     const SwTOXInternational& rIntl = *rNew.pTOXIntl;
-    String sToCompare(rStr);
-    String sToCompareReading(rStrReading);
+    TextAndReading aToCompare(rStr, rStrReading);
 
     if( 0 != (nsSwTOIOptions::TOI_INITIAL_CAPS & GetOptions()) )
     {
-        String sUpper( rIntl.ToUpper( sToCompare, 0 ));
-        sToCompare.Erase( 0, 1 ).Insert( sUpper, 0 );
+        aToCompare.sText = rIntl.ToUpper( aToCompare.sText, 0 )
+                         + aToCompare.sText.copy(1);
     }
 
     OSL_ENSURE(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");
@@ -2255,17 +2252,14 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     {
         SwTOXSortTabBase* pBase = aSortArr[i];
 
-        String sMyString, sMyStringReading;
-        pBase->GetTxt( sMyString, sMyStringReading );
-
-        if( rIntl.IsEqual( sMyString, sMyStringReading, pBase->GetLocale(),
-                           sToCompare, sToCompareReading, rNew.GetLocale() )  &&
+        if( rIntl.IsEqual( pBase->GetTxt(), pBase->GetLocale(),
+                           aToCompare, rNew.GetLocale() )  &&
                     pBase->GetLevel() == nLevel )
             break;
     }
     if(i == nMax)
     {   // If not already present, create and insert
-        SwTOXCustom* pKey = new SwTOXCustom( sToCompare, sToCompareReading, nLevel, rIntl,
+        SwTOXCustom* pKey = new SwTOXCustom( aToCompare, nLevel, rIntl,
                                              rNew.GetLocale() );
         for(i = nMin; i < nMax; ++i)
         {

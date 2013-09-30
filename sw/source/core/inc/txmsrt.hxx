@@ -57,6 +57,21 @@ struct SwTOXSource
 
 typedef std::vector<SwTOXSource> SwTOXSources;
 
+
+struct TextAndReading
+{
+    OUString sText;
+    OUString sReading;
+
+    TextAndReading() {}
+
+    TextAndReading(OUString sTxt, OUString sRdng)
+    : sText(sTxt)
+    , sReading(sRdng)
+    {}
+};
+
+
 class SwTOXInternational
 {
     IndexEntrySupplierWrapper* pIndexWrapper;
@@ -73,30 +88,28 @@ public:
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
 
-    sal_Int32 Compare( const String& rTxt1, const String& rTxtReading1,
+    sal_Int32 Compare( const TextAndReading& rTaR1,
                        const ::com::sun::star::lang::Locale& rLocale1,
-                       const String& rTxt2, const String& rTxtReading2,
+                       const TextAndReading& rTaR2,
                        const ::com::sun::star::lang::Locale& rLocale2 ) const;
 
-    inline bool IsEqual( const String& rTxt1, const String& rTxtReading1,
+    inline bool IsEqual( const TextAndReading& rTaR1,
                          const ::com::sun::star::lang::Locale& rLocale1,
-                         const String& rTxt2, const String& rTxtReading2,
+                         const TextAndReading& rTaR2,
                          const ::com::sun::star::lang::Locale& rLocale2 ) const
     {
-        return 0 == Compare( rTxt1, rTxtReading1, rLocale1,
-                             rTxt2, rTxtReading2, rLocale2 );
+        return 0 == Compare( rTaR1, rLocale1, rTaR2, rLocale2 );
     }
 
-    inline bool IsLess( const String& rTxt1, const String& rTxtReading1,
+    inline bool IsLess( const TextAndReading& rTaR1,
                         const ::com::sun::star::lang::Locale& rLocale1,
-                        const String& rTxt2, const String& rTxtReading2,
+                        const TextAndReading& rTaR2,
                         const ::com::sun::star::lang::Locale& rLocale2 ) const
     {
-        return -1 == Compare( rTxt1, rTxtReading1, rLocale1,
-                              rTxt2, rTxtReading2, rLocale2 );
+        return -1 == Compare( rTaR1, rLocale1, rTaR2, rLocale2 );
     }
 
-    String GetIndexKey( const String& rTxt, const String& rTxtReading,
+    String GetIndexKey( const TextAndReading& rTaR,
                         const ::com::sun::star::lang::Locale& rLcl ) const;
 
     String GetFollowingText( sal_Bool bMorePages ) const;
@@ -138,29 +151,25 @@ struct SwTOXSortTabBase
 
     virtual String  GetURL() const;
 
-    inline void GetTxt( String&, String& ) const;
+    inline TextAndReading GetTxt() const;
     inline const ::com::sun::star::lang::Locale& GetLocale() const;
 
 private:
     sal_Bool bValidTxt;
-    String sSortTxt;
-    String sSortTxtReading;
+    TextAndReading m_aSort;
 
-    virtual void GetText_Impl( String&, String& ) const = 0;
+    virtual TextAndReading GetText_Impl() const = 0;
 };
 
-inline void SwTOXSortTabBase::GetTxt( String& rSortTxt,
-                                      String& rSortTxtReading ) const
+inline TextAndReading SwTOXSortTabBase::GetTxt() const
 {
     if( !bValidTxt )
     {
         SwTOXSortTabBase* pThis = (SwTOXSortTabBase*)this;
-        pThis->GetText_Impl( pThis->sSortTxt, pThis->sSortTxtReading );
+        pThis->m_aSort = pThis->GetText_Impl();
         pThis->bValidTxt = sal_True;
     }
-
-    rSortTxt = sSortTxt;
-    rSortTxtReading = sSortTxtReading;
+    return m_aSort;
 }
 
 inline const ::com::sun::star::lang::Locale& SwTOXSortTabBase::GetLocale() const
@@ -186,14 +195,14 @@ struct SwTOXIndex : public SwTOXSortTabBase
     virtual bool    operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void GetText_Impl( String&, String& ) const;
+    virtual TextAndReading GetText_Impl() const;
 
     sal_uInt8   nKeyLevel;
 };
 
 struct SwTOXCustom : public SwTOXSortTabBase
 {
-    SwTOXCustom( const String& rKey, const String& rReading, sal_uInt16 nLevel,
+    SwTOXCustom( const TextAndReading& rKey, sal_uInt16 nLevel,
                  const SwTOXInternational& rIntl,
                  const ::com::sun::star::lang::Locale& rLocale );
     virtual ~SwTOXCustom() {}
@@ -203,10 +212,9 @@ struct SwTOXCustom : public SwTOXSortTabBase
     virtual bool   operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void GetText_Impl( String&, String& ) const;
+    virtual TextAndReading GetText_Impl() const;
 
-    String  aKey;
-    String  sReading;
+    TextAndReading m_aKey;
     sal_uInt16  nLev;
 };
 
@@ -223,7 +231,7 @@ struct SwTOXContent : public SwTOXSortTabBase
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
     virtual sal_uInt16  GetLevel() const;
 private:
-    virtual void GetText_Impl( String&, String& ) const;
+    virtual TextAndReading GetText_Impl() const;
 
 };
 
@@ -240,7 +248,7 @@ struct SwTOXPara : public SwTOXSortTabBase
 
     virtual String  GetURL() const;
 private:
-    virtual void GetText_Impl( String&, String& ) const;
+    virtual TextAndReading GetText_Impl() const;
 
     SwTOXElement eType;
     sal_uInt16 m_nLevel;
@@ -260,7 +268,7 @@ struct SwTOXTable : public SwTOXSortTabBase
 
     virtual String  GetURL() const;
 private:
-    virtual void GetText_Impl( String&, String& ) const;
+    virtual TextAndReading GetText_Impl() const;
 
     sal_uInt16 nLevel;
 };
@@ -270,7 +278,7 @@ struct SwTOXAuthority : public SwTOXSortTabBase
 private:
     SwFmtFld& m_rField;
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
-    virtual void GetText_Impl( String&, String& ) const;
+    virtual TextAndReading GetText_Impl() const;
 
 public:
     SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const SwTOXInternational& rIntl );
