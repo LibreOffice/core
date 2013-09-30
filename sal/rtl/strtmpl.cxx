@@ -172,24 +172,19 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_ST
                                                                const IMPL_RTL_STRCODE* pStr2 )
     SAL_THROW_EXTERN_C()
 {
-    sal_Int32   nRet;
-    sal_Int32   c1;
-    sal_Int32   c2;
+    sal_uInt32 c1;
     do
     {
-        /* If character between 'A' and 'Z', than convert it to lowercase */
-        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-        c1 = rtl::toAsciiLowerCase( c1 );
-        c2 = rtl::toAsciiLowerCase( c2 );
-        nRet = c1-c2;
+        c1 = IMPL_RTL_USTRCODE(*pStr1);
+        sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
+            c1, IMPL_RTL_USTRCODE(*pStr2));
         if ( nRet != 0 )
             return nRet;
 
         pStr1++;
         pStr2++;
     }
-    while ( c2 );
+    while (c1);
 
     return 0;
 }
@@ -204,12 +199,10 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const 
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32    nRet;
     while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
     {
-        sal_uInt32 c1 = IMPL_RTL_USTRCODE( *pStr1 );
-        sal_uInt32 c2 = IMPL_RTL_USTRCODE( *pStr2 );
-        nRet = rtl::compareAsciiIgnoreCase(c1, c2);
+        sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
+            IMPL_RTL_USTRCODE(*pStr1), IMPL_RTL_USTRCODE(*pStr2));
         if ( nRet != 0 )
             return nRet;
 
@@ -231,13 +224,11 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompareIgnoreAsciiCase_WithLength 
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32    nRet;
     while ( (nShortenedLength > 0) &&
             (pStr1 < pStr1End) && (pStr2 < pStr2End) )
     {
-        sal_uInt32 c1 = IMPL_RTL_USTRCODE( *pStr1 );
-        sal_uInt32 c2 = IMPL_RTL_USTRCODE( *pStr2 );
-        nRet = rtl::compareAsciiIgnoreCase(c1, c2);
+        sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
+            IMPL_RTL_USTRCODE(*pStr1), IMPL_RTL_USTRCODE(*pStr2));
         if ( nRet != 0 )
             return nRet;
 
@@ -562,7 +553,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase )( IMPL_RTL_STRCODE* pStr )
 {
     while ( *pStr )
     {
-        *pStr = rtl::toAsciiLowerCase( *pStr );
+        *pStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pStr));
 
         pStr++;
     }
@@ -576,7 +567,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiLowerCase_WithLength )( IMPL_RTL_STRCODE*
 {
     while ( nLen > 0 )
     {
-        *pStr = rtl::toAsciiLowerCase( *pStr );
+        *pStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pStr));
 
         pStr++;
         nLen--;
@@ -590,7 +581,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase )( IMPL_RTL_STRCODE* pStr )
 {
     while ( *pStr )
     {
-        *pStr = rtl::toAsciiUpperCase( *pStr );
+        *pStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pStr));
 
         pStr++;
     }
@@ -604,7 +595,7 @@ void SAL_CALL IMPL_RTL_STRNAME( toAsciiUpperCase_WithLength )( IMPL_RTL_STRCODE*
 {
     while ( nLen > 0 )
     {
-        *pStr = rtl::toAsciiUpperCase( *pStr );
+        *pStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pStr));
 
         pStr++;
         nLen--;
@@ -1568,8 +1559,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
 
     while ( nLen > 0 )
     {
-        /* Between A-Z (65-90), than to lowercase (+32) */
-        if ( rtl::isAsciiUpperCase(*pCharStr) )
+        if ( rtl::isAsciiUpperCase(IMPL_RTL_USTRCODE(*pCharStr)) )
         {
             /* Copy String */
             IMPL_RTL_STRCODE* pNewCharStr = IMPL_RTL_STRINGNAME( ImplNewCopy )( ppThis, pStr, pCharStr-pStr->buffer );
@@ -1577,15 +1567,14 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
             /* replace/copy rest of the string */
             if ( pNewCharStr )
             {
-                /* to lowercase (+32) */
-                *pNewCharStr = *pCharStr+32;
+                *pNewCharStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pCharStr));
                 pNewCharStr++;
                 pCharStr++;
                 nLen--;
 
                 while ( nLen > 0 )
                 {
-                   *pNewCharStr = rtl::toAsciiLowerCase( *pCharStr );
+                    *pNewCharStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pCharStr));
 
                     pNewCharStr++;
                     pCharStr++;
@@ -1626,8 +1615,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
 
     while ( nLen > 0 )
     {
-        /* Between a-z (97-122), than to uppercase (-32) */
-        if ( rtl::isAsciiLowerCase(*pCharStr) )
+        if ( rtl::isAsciiLowerCase(IMPL_RTL_USTRCODE(*pCharStr)) )
         {
             /* Copy String */
             IMPL_RTL_STRCODE* pNewCharStr = IMPL_RTL_STRINGNAME( ImplNewCopy )( ppThis, pStr, pCharStr-pStr->buffer );
@@ -1635,15 +1623,14 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
             /* replace/copy rest of the string */
             if ( pNewCharStr )
             {
-                /* to uppercase (-32) */
-                *pNewCharStr = *pCharStr-32;
+                *pNewCharStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pCharStr));
                 pNewCharStr++;
                 pCharStr++;
                 nLen--;
 
                 while ( nLen > 0 )
                 {
-                   *pNewCharStr = rtl::toAsciiUpperCase( *pCharStr );
+                    *pNewCharStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pCharStr));
 
                     pNewCharStr++;
                     pCharStr++;

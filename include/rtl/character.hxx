@@ -21,179 +21,182 @@
 #define INCLUDED_RTL_CHARACTER_HXX
 
 #include "sal/config.h"
-#include "sal/types.h"
-#include "sal/log.hxx"
 
-#include <assert.h>
+#include <cassert>
+
+#include "sal/types.h"
 
 namespace rtl
 {
+
 /** Check for ASCII character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nChar is a ASCII character (0x00--0x7F).
+    @return  True if code is an ASCII character (0x00--0x7F).
 
     @since LibreOffice 4.1
  */
-inline bool isAscii(sal_uInt32 nUtf32)
+inline bool isAscii(sal_uInt32 code)
 {
-    return nUtf32 <= 0x7F;
+    assert(code <= 0x10FFFF);
+    return code <= 0x7F;
 }
 
 /** Check for ASCII lower case character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nChar is a US-ASCII lower case alphabetic character
-    (ASCII 'a'--'z').
+    @return  True if code is an ASCII lower case alphabetic character (ASCII
+    'a'--'z').
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiLowerCase(sal_uInt32 nUtf32)
+inline bool isAsciiLowerCase(sal_uInt32 code)
 {
-    return nUtf32 >= 'a' && nUtf32 <= 'z';
+    assert(code <= 0x10FFFF);
+    return code >= 'a' && code <= 'z';
 }
 
-/** Check for US-ASCII upper case character.
+/** Check for ASCII upper case character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nChar is a US-ASCII upper case alphabetic character
-    (US-ASCII 'A'--'Z').
+    @return  True if code is an ASCII upper case alphabetic character (ASCII
+    'A'--'Z').
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiUpperCase(sal_uInt32 nUtf32)
+inline bool isAsciiUpperCase(sal_uInt32 code)
 {
-    return nUtf32 >= 'A' && nUtf32 <= 'Z';
+    assert(code <= 0x10FFFF);
+    return code >= 'A' && code <= 'Z';
 }
 
-/** Check for ASCII alphanumeric character.
+/** Check for ASCII alphabetic character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nUtf32 is a US-ASCII alphanumeric character
-    (ASCII '0'--'9', 'A'--'Z' or 'a'--'z').
+    @return  True if code is an ASCII alphabetic character (ASCII 'A'--'Z' or
+    'a'--'z').
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiAlpha(sal_uInt32 nUtf32)
+inline bool isAsciiAlpha(sal_uInt32 code)
 {
-    return isAsciiLowerCase(nUtf32) || isAsciiUpperCase(nUtf32);
+    assert(code <= 0x10FFFF);
+    return isAsciiLowerCase(code) || isAsciiUpperCase(code);
 }
 
 /** Check for ASCII digit character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nChar is a ASCII (decimal) digit character
-    (ASCII '0'--'9').
+    @return  True if code is an ASCII (decimal) digit character (ASCII
+    '0'--'9').
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiDigit(sal_uInt32 nUtf32)
+inline bool isAsciiDigit(sal_uInt32 code)
 {
-    return nUtf32 >= '0' && nUtf32 <= '9';
+    assert(code <= 0x10FFFF);
+    return code >= '0' && code <= '9';
 }
 
-/** Check for US-ASCII alphanumeric character.
+/** Check for ASCII alphanumeric character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nChar is a US-ASCII alphanumeric character (US-ASCII
-    '0'--'9', 'A'--'Z' or 'a'--'z').
+    @return  True if code is an ASCII alphanumeric character (ASCII '0'--'9',
+    'A'--'Z', or 'a'--'z').
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiAlphanumeric(sal_uInt32 nUtf32)
+inline bool isAsciiAlphanumeric(sal_uInt32 code)
 {
-    return isAsciiDigit(nUtf32) || isAsciiAlpha(nUtf32);
+    assert(code <= 0x10FFFF);
+    return isAsciiDigit(code) || isAsciiAlpha(code);
 }
 
-/** Check for US-ASCII canonic hexadecimal digit character.
+/** Check for ASCII canonic hexadecimal digit character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nChar is a US-ASCII canonic (i.e., upper case)
-    hexadecimal digit character (US-ASCII '0'--'9' or 'A'--'F').
+    @return  True if code is an ASCII canonic (i.e., upper case) hexadecimal
+    digit character (ASCII '0'--'9' or 'A'--'F').
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiCanonicHexDigit(sal_uInt32 nUtf32)
+inline bool isAsciiCanonicHexDigit(sal_uInt32 code)
 {
-    return isAsciiDigit(nUtf32) || (nUtf32 >= 'A' && nUtf32 <= 'F');
+    assert(code <= 0x10FFFF);
+    return isAsciiDigit(code) || (code >= 'A' && code <= 'F');
 }
 
-/** Check for US-ASCII hexadecimal digit character.
+/** Check for ASCII hexadecimal digit character.
 
-    @param nUtf32  A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return  True if nChar is a US-ASCII hexadecimal digit character (US-
-    ASCII '0'--'9', 'A'--'F', 'a'--'f').
+    @return  True if code is an ASCII hexadecimal digit character (ASCII
+    '0'--'9', 'A'--'F', or 'a'--'f').
 
     @since LibreOffice 4.1
  */
-inline bool isAsciiHexDigit(sal_uInt32 nUtf32)
+inline bool isAsciiHexDigit(sal_uInt32 code)
 {
-    return isAsciiCanonicHexDigit(nUtf32) || (nUtf32 >= 'a' && nUtf32 <= 'f');
+    assert(code <= 0x10FFFF);
+    return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
 }
 
 /** Convert a character, if ASCII, to upper case.
 
-    @param nChar A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return
-        nChar converted to ASCII upper case
+    @return  code converted to ASCII upper case.
 
     @since LibreOffice 4.2
 */
-inline sal_uInt32 toAsciiUpperCase(sal_uInt32 nChar)
+inline sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 {
-    if( isAsciiLowerCase(nChar) )
-        nChar -= 32;
-
-    return nChar;
+    assert(code <= 0x10FFFF);
+    return isAsciiLowerCase(code) ? code - 32 : code;
 }
 
 /** Convert a character, if ASCII, to lower case.
 
-    @param nChar A Unicode scalar value (represented as a UTF-32 code unit).
+    @param code  A Unicode code point.
 
-    @return
-        nChar converted to ASCII lower case
+    @return  code converted to ASCII lower case.
 
     @since LibreOffice 4.2
 */
-inline sal_uInt32 toAsciiLowerCase(sal_uInt32 nChar)
+inline sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
 {
-    if( isAsciiUpperCase(nChar) )
-        nChar += 32;
-
-    return nChar;
+    assert(code <= 0x10FFFF);
+    return isAsciiUpperCase(code) ? code + 32 : code;
 }
 
-/** Compare two US-ASCII characters.
+/** Compare two characters ignoring ASCII case.
 
-    @param nChar1 A Unicode scalar value (represented as a UTF-32 code unit).
-    @param nChar2 A unicode scalar value (represented as a UTF-32 code unit).
+    @param code1  A Unicode code point.
 
-    @return
-        0 if both strings are equal
-        < 0 - if this nChar1 is less than nChar2 argument
-        > 0 - if this nChar1 is greater than the nChar2 argument
+    @param code2  A unicode code point.
+
+    @return  0 if both code points are equal,
+             < 0 if code1 is less than code2,
+             > 0 if code1 is greater than code2.
 
     @since LibreOffice 4.2
  */
-inline sal_Int32 compareAsciiIgnoreCase(sal_uInt32 nChar1, sal_uInt32 nChar2)
+inline sal_Int32 compareIgnoreAsciiCase(sal_uInt32 code1, sal_uInt32 code2)
 {
-    nChar1 = toAsciiLowerCase(nChar1);
-    nChar2 = toAsciiLowerCase(nChar2);
-
-    return ((sal_Int32) nChar1) - ((sal_Int32) nChar2);
+    assert(code1 <= 0x10FFFF);
+    assert(code2 <= 0x10FFFF);
+    return static_cast<sal_Int32>(toAsciiLowerCase(code1))
+        - static_cast<sal_Int32>(toAsciiLowerCase(code2));
 }
 
-}//rtl namespace
+}
 
 #endif
 

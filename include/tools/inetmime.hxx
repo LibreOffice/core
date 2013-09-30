@@ -222,28 +222,6 @@ public:
      */
     static bool isIMAPAtomChar(sal_uInt32 nChar);
 
-    /** Translate an US-ASCII character to upper case.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  If nChar is a US-ASCII upper case character (US-ASCII
-        'A'--'Z'), return the corresponding US-ASCII lower case character (US-
-        ASCII 'a'--'z'); otherwise, return nChar unchanged.
-     */
-    SAL_DEPRECATED("Use rtl::toAsciiUpperCase instead")
-    static inline sal_uInt32 toUpperCase(sal_uInt32 nChar);
-
-    /** Translate an US-ASCII character to lower case.
-
-        @param nChar  Some UCS-4 character.
-
-        @return  If nChar is a US-ASCII lower case character (US-ASCII
-        'a'--'z'), return the corresponding US-ASCII upper case character (US-
-        ASCII 'A'--'Z'); otherwise, return nChar unchanged.
-     */
-    SAL_DEPRECATED("Use rtl::toAsciiLowerCase instead")
-    static inline sal_uInt32 toLowerCase(sal_uInt32 nChar);
-
     /** Get the digit weight of a US-ASCII character.
 
         @param nChar  Some UCS-4 character.
@@ -495,18 +473,6 @@ inline bool INetMIME::isBase64Digit(sal_uInt32 nChar)
 {
     return rtl::isAsciiUpperCase(nChar) || rtl::isAsciiLowerCase(nChar) || rtl::isAsciiDigit(nChar)
            || nChar == '+' || nChar == '/';
-}
-
-// static
-inline sal_uInt32 INetMIME::toUpperCase(sal_uInt32 nChar)
-{
-    return rtl::toAsciiUpperCase(nChar);
-}
-
-// static
-inline sal_uInt32 INetMIME::toLowerCase(sal_uInt32 nChar)
-{
-    return rtl::toAsciiLowerCase(nChar);
 }
 
 // static
