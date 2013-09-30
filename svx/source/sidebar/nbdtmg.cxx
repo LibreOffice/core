@@ -103,7 +103,6 @@ static const sal_Unicode aDefaultRTLBulletTypes[] =
 };
 
 static const sal_Char sNumberingType[] = "NumberingType";
-static const sal_Char sValue[] = "Value";
 static const sal_Char sParentNumbering[] = "ParentNumbering";
 static const sal_Char sPrefix[] = "Prefix";
 static const sal_Char sSuffix[] = "Suffix";
