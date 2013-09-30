@@ -54,8 +54,6 @@ namespace
     const char s_sIsAutomaticFontColor[] = "IsAutomaticFontColor";
     const char s_sIsSystemFont[] = "IsSystemFont";
     const char s_sIsSelectionInReadonly[] = "IsSelectionInReadonly";
-    const char s_sColorValueSetMaximumRowCount[] = "ColorValueSetMaximumRowCount";
-    const char s_sColorValueSetEntryEdgeLength[] = "ColorValueSetEntryEdgeLength";
     const char s_sColorValueSetColumnCount[] = "ColorValueSetColumnCount";
     const char s_sEdgeBlending[] = "EdgeBlending";
     const char s_sListBoxMaximumLineCount[] = "ListBoxMaximumLineCount";
