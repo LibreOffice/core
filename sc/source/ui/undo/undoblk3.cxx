@@ -397,11 +397,23 @@ ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
 
 void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
 {
+
+    //ranges are extended by one in each direction to have undo functionality for the new method of border setting: see ScTable::ApplyBlockFrame() for more info
+    ScRange aRangeExt(aRange);
+    aRangeExt.ExtendByOneEachDirection();
+    ScMarkData aMarkDataExt( aMarkData );
+    ScRangeList aRangeList = aMarkDataExt.GetMarkedRanges();
+    for (int i=0;i<aRangeList.size();i++) {
+        ScRange* pCurrRange = aRangeList[i];
+        pCurrRange->ExtendByOneEachDirection();
+    }
+    aMarkDataExt.MarkFromRangeList( aRangeList, true );
+
     ScDocument* pDoc = pDocShell->GetDocument();
 
     SetViewMarkData( aMarkData );
 
-    ScRange aEffRange( aRange );
+    ScRange aEffRange( aRangeExt );
     if ( pDoc->HasAttrib( aEffRange, HASATTR_MERGED ) )         // merged cells?
         pDoc->ExtendMerge( aEffRange );
 
@@ -412,11 +424,11 @@ void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
 
     if (bUndo)  // only for Undo
     {
-        ScRange aCopyRange = aRange;
+        ScRange aCopyRange = aRangeExt;
         SCTAB nTabCount = pDoc->GetTableCount();
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pDoc, &aMarkData );
+        pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pDoc, &aMarkDataExt );
     }
     else        // only for Redo
     {
@@ -432,7 +444,7 @@ void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aEffRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
 
-    ShowTable( aRange );
+    ShowTable( aRangeExt );
 }
 
 void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
@@ -1411,7 +1423,7 @@ void ScUndoRefreshLink::Undo()
                                    pDoc->GetLinkOpt(nTab),
                                    pDoc->GetLinkTab(nTab),
                                    pDoc->GetLinkRefreshDelay(nTab) );
-				pRedoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+                pRedoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
             }
 
             pDoc->DeleteAreaTab( aRange,IDF_ALL );
@@ -1420,11 +1432,11 @@ void ScUndoRefreshLink::Undo()
                                  pUndoDoc->GetLinkFlt(nTab),  pUndoDoc->GetLinkOpt(nTab),
                                  pUndoDoc->GetLinkTab(nTab),
                                  pUndoDoc->GetLinkRefreshDelay(nTab) );
-			pDoc->SetTabBgColor( nTab, pUndoDoc->GetTabBgColor(nTab) );
+            pDoc->SetTabBgColor( nTab, pUndoDoc->GetTabBgColor(nTab) );
         }
 
     pDocShell->PostPaintGridAll();
-	pDocShell->PostPaintExtras();
+    pDocShell->PostPaintExtras();
 
     EndUndo();
 }
@@ -1455,7 +1467,7 @@ void ScUndoRefreshLink::Redo()
         }
 
     pDocShell->PostPaintGridAll();
-	pDocShell->PostPaintExtras();
+    pDocShell->PostPaintExtras();
 
     EndUndo();
 }

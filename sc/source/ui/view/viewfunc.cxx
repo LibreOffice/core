@@ -1067,21 +1067,32 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 
     ScDocShellModificator aModificator( *pDocSh );
 
+    //ranges are extended by one in each direction to have undo functionality for the new method of border setting: see ScTable::ApplyBlockFrame() for more info
+    ScRange aMarkRangeExt(aMarkRange);
+    aMarkRangeExt.ExtendByOneEachDirection();
+    ScMarkData aFuncMarkExt( aFuncMark );
+    ScRangeList aRangeList = aFuncMarkExt.GetMarkedRanges();
+    for (int i=0;i<aRangeList.size();i++) {
+        ScRange* pCurrRange = aRangeList[i];
+        pCurrRange->ExtendByOneEachDirection();
+    }
+    aFuncMarkExt.MarkFromRangeList( aRangeList, true );
+
     if (bRecord)
     {
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        SCTAB nStartTab = aMarkRange.aStart.Tab();
+        SCTAB nStartTab = aMarkRangeExt.aStart.Tab();
         SCTAB nTabCount = pDoc->GetTableCount();
         pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
-        ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
+        ScMarkData::iterator itr = aFuncMarkExt.begin(), itrEnd = aFuncMarkExt.end();
         for (; itr != itrEnd; ++itr)
             if (*itr != nStartTab)
                 pUndoDoc->AddUndoTab( *itr, *itr );
 
-        ScRange aCopyRange = aMarkRange;
+        ScRange aCopyRange = aMarkRangeExt;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &aFuncMark );
+        pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &aFuncMarkExt );
 
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoSelectionAttr(

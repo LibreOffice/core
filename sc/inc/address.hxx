@@ -508,6 +508,12 @@ public:
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& ) const;    // do two ranges intersect?
     void PutInOrder();
+    void ExtendByOneEachDirection() {
+        aStart.SetCol(SanitizeCol(aStart.Col()-1));
+        aStart.SetRow(SanitizeRow(aStart.Row()-1));
+        aEnd.SetCol(SanitizeCol(aEnd.Col()+1));
+        aEnd.SetRow(SanitizeRow(aEnd.Row()+1));
+    }
     inline bool operator==( const ScRange& r ) const;
     inline bool operator!=( const ScRange& r ) const;
     inline bool operator<( const ScRange& r ) const;
@@ -603,7 +609,6 @@ inline size_t ScRange::hashStartColumn() const
         (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
         static_cast<size_t>(aEnd.Row());
 }
-
 
 struct ScRangeHashAreaFunctor
 {
