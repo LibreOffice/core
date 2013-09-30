@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w # -*- tab-width: 4; indent-tabs-mode: nil; cperl-indent-level: 4 -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -51,11 +51,11 @@ printf ("\n");
 
 foreach my $funIndex (0 .. $nFunIndexes-1)
 {
-    foreach my $vtableOffset (0 .. $nVtableOffsets-1)
-    {
-	gen_arm ($funIndex, $vtableOffset);
-	gen_arm ($funIndex|0x80000000, $vtableOffset);
-    }
+   foreach my $vtableOffset (0 .. $nVtableOffsets-1)
+   {
+       gen_arm ($funIndex, $vtableOffset);
+       gen_arm ($funIndex|0x80000000, $vtableOffset);
+   }
 }
 
 printf ("#else\n");
@@ -65,13 +65,13 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
 {
     foreach my $vtableOffset (0 .. $nVtableOffsets-1)
     {
-	foreach my $executor ('General', 'Void', 'Hyper', 'Float', 'Double', 'Class')
-	{
-	    gen_x86 ($funIndex, $vtableOffset, $executor);
-	    gen_x86 ($funIndex|0x80000000, $vtableOffset, $executor);
-	}
+        foreach my $executor ('General', 'Void', 'Hyper', 'Float', 'Double', 'Class')
+        {
+            gen_x86 ($funIndex, $vtableOffset, $executor);
+            gen_x86 ($funIndex|0x80000000, $vtableOffset, $executor);
+        }
     }
-}
+  }
 
 printf ("#endif\n");
 
@@ -90,15 +90,17 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
 {
     foreach my $vtableOffset (0 .. $nVtableOffsets-1)
     {
-	printf ("#if defined(__arm) || defined(__arm64)\n");
+        printf ("#if defined(__arm) || defined(__arm64)\n");
         printf ("    .long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex, $vtableOffset);
         printf ("    .long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset);
-	printf ("#else\n");
-	foreach my $executor ('General', 'Void', 'Hyper', 'Float', 'Double', 'Class')
-	{
+        printf ("#else\n");
+        foreach my $executor ('General', 'Void', 'Hyper', 'Float', 'Double', 'Class')
+        {
             printf ("    .long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex, $vtableOffset, $executor);
             printf ("    .long codeSnippet_%08x_%d_%s - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset, $executor);
-	}
-	printf ("#endif\n");
+        }
+        printf ("#endif\n");
     }
 }
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
