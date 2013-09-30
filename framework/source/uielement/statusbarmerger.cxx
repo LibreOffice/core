@@ -36,7 +36,6 @@ static const char MERGE_STATUSBAR_AUTOSIZE[]    = "AutoSize";
 static const char MERGE_STATUSBAR_OWNERDRAW[]   = "OwnerDraw";
 static const char MERGE_STATUSBAR_WIDTH[]       = "Width";
 
-static const char STATUSBAR_ALIGN_LEFT[]        = "left";
 static const char STATUSBAR_ALIGN_CENTER[]      = "center";
 static const char STATUSBAR_ALIGN_RIGHT[]       = "right";
 
