@@ -326,10 +326,6 @@ def loadFromURL(xContext, url, t, component):
             xGEB.removeDocumentEventListener(xListener)
 
 def exportToODF(xContext, xDoc, baseName, t, component):
-    try:
-        os.makedirs(outdir)
-    except OSError:
-        pass
     exportFileName = outdir + "/" + os.path.splitext(baseName)[0] + flatODFTypes[component][0]
     print("exportToODF " + baseName + " => " + exportFileName)
     props = [("FilterName", flatODFTypes[component][1]),
