@@ -12,6 +12,8 @@ $(eval $(call gb_Library_Library,ucpgio1))
 
 $(eval $(call gb_Library_set_componentfile,ucpgio1,ucb/source/ucp/gio/ucpgio))
 
+$(eval $(call gb_Library_use_external,ucpgio1,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,ucpgio1))
 
 $(eval $(call gb_Library_use_libraries,ucpgio1,\
