@@ -38,7 +38,7 @@ class ScQProStyle
     sal_uInt8  maFont[ maxsize ];
     sal_uInt16 maFontRecord[ maxsize ];
     sal_uInt16 maFontHeight[ maxsize ];
-    String     maFontType[ maxsize ];
+    OUString   maFontType[ maxsize ];
 
     public:
     ScQProStyle();
@@ -51,7 +51,7 @@ class ScQProStyle
             maFontHeight[ nIndex ] = nPtSize;
         }
     }
-    void setFontType( sal_uInt16 nIndex, String &aLabel )
+    void setFontType( sal_uInt16 nIndex, OUString &aLabel )
         { if (nIndex < maxsize) maFontType[ nIndex ] = aLabel; }
     void setAlign( sal_uInt16 nIndex, sal_uInt8 nData )
         { if (nIndex < maxsize) maAlign[ nIndex ] = nData; }

@@ -53,7 +53,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
         switch( getId() )
         {
             case 0x000f:{ // Label cell
-                String aLabel;
+                OUString aLabel;
                 *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nDummy;
                 sal_uInt16 nLen = getLength();
                 if (nLen >= 7)
@@ -190,7 +190,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
 
             case 0x00cf:{ // Font description
                 sal_uInt16 nPtSize, nFontAttr;
-                String aLabel;
+                OUString aLabel;
                 *mpStream >> nPtSize >> nFontAttr;
                 pStyleElement->setFontRecord( j, nFontAttr, nPtSize );
                 sal_uInt16 nLen = getLength();
@@ -221,12 +221,12 @@ bool ScQProReader::nextRecord()
     return bValue;
 }
 
-void ScQProReader::readString( String &rString, sal_uInt16 nLength )
+void ScQProReader::readString( OUString &rString, sal_uInt16 nLength )
 {
     sal_Char* pText = new sal_Char[ nLength + 1 ];
     mpStream->Read( pText, nLength );
     pText[ nLength ] = 0;
-    rString = String( pText, mpStream->GetStreamCharSet() );
+    rString = OUString( pText, nLength, mpStream->GetStreamCharSet() );
     delete [] pText;
 }
 

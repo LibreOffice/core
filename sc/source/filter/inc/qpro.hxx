@@ -40,7 +40,7 @@ class ScQProReader : public ScBiffReader
     bool nextRecord();
     sal_uInt16 getId() { return mnId; }
     sal_uInt16 getLength() { return mnLength; }
-    void readString( String &rString, sal_uInt16 nLength );
+    void readString( OUString &rString, sal_uInt16 nLength );
     ScQProReader( SfxMedium &rMedium );
     ~ScQProReader(){ };
     FltError import( ScDocument *pDoc );
