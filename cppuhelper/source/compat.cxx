@@ -21,9 +21,11 @@
 
 #include <cstdlib>
 
+#include "com/sun/star/loader/CannotActivateFactoryException.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "osl/module.h"
 #include "sal/types.h"
 
 namespace com { namespace sun { namespace star {
@@ -32,8 +34,14 @@ namespace com { namespace sun { namespace star {
         class XMultiServiceFactory;
     }
     namespace reflection { class XIdlClass; }
-    namespace registry { class XSimpleRegistry; }
-    namespace uno { class XComponentContext; }
+    namespace registry {
+        class XRegistryKey;
+        class XSimpleRegistry;
+    }
+    namespace uno {
+        class XComponentContext;
+        class XInterface;
+    }
 } } }
 namespace rtl { class OUString; }
 
@@ -80,6 +88,17 @@ createStandardClassWithSequence(
     rtl::OUString const &,
     css::uno::Reference< css::reflection::XIdlClass > const &,
     css::uno::Sequence< rtl::OUString > const &) SAL_THROW(())
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT css::uno::Reference<css::uno::XInterface> SAL_CALL
+invokeStaticComponentFactory(
+    oslGenericFunction, rtl::OUString const &,
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &,
+    css::uno::Reference<css::registry::XRegistryKey> const &,
+    rtl::OUString const &)
+    SAL_THROW((css::loader::CannotActivateFactoryException))
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }

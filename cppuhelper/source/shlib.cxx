@@ -456,33 +456,6 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     return xRet;
 }
 
-Reference< XInterface > SAL_CALL invokeStaticComponentFactory(
-    oslGenericFunction pGetter,
-    OUString const & rImplName,
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
-    OUString const & rPrefix )
-    SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) )
-{
-    Reference< XInterface > xRet;
-    oslModule pExe;
-    OUString aExePath("MAIN");
-    osl_getModuleHandle( NULL, &pExe );
-    OUString aExcMsg;
-
-    xRet = invokeComponentFactory( pGetter, pExe, aExePath, rImplName, xMgr, xKey, rPrefix, aExcMsg );
-
-    if (! xRet.is())
-    {
-        SAL_WARN("cppuhelper", "### cannot activate factory: " << aExcMsg);
-        throw loader::CannotActivateFactoryException(
-            aExcMsg,
-            Reference< XInterface >() );
-    }
-
-    return xRet;
-}
-
 #ifndef DISABLE_DYNLOADING
 
 //==============================================================================
