@@ -1,0 +1,91 @@
+--- boost/ptr_container/ptr_map.hpp
++++ boost/ptr_container/ptr_map.hpp
+@@ -16,6 +16,10 @@
+ # pragma once
+ #endif
+ 
++#if defined __GNUC__
++#pragma GCC system_header
++#endif
++
+ #include <map>
+ #include <boost/ptr_container/ptr_map_adapter.hpp>
+ 
+--- boost/ptr_container/ptr_map_adapter.hpp
++++ boost/ptr_container/ptr_map_adapter.hpp
+@@ -16,6 +16,10 @@
+ # pragma once
+ #endif
+ 
++#if defined __GNUC__
++#pragma GCC system_header
++#endif
++
+ #include <boost/ptr_container/detail/map_iterator.hpp>
+ #include <boost/ptr_container/detail/associative_ptr_container.hpp>
+ #include <boost/ptr_container/detail/meta_functions.hpp>
+--- boost/ptr_container/ptr_set_adapter.hpp
++++ boost/ptr_container/ptr_set_adapter.hpp
+@@ -16,6 +16,10 @@
+ # pragma once
+ #endif
+ 
++#if defined __GNUC__
++#pragma GCC system_header
++#endif
++
+ #include <boost/ptr_container/detail/associative_ptr_container.hpp>
+ #include <boost/ptr_container/detail/meta_functions.hpp>
+ #include <boost/ptr_container/detail/void_ptr_iterator.hpp>
+--- boost/ptr_container/ptr_vector.hpp
++++ boost/ptr_container/ptr_vector.hpp
+@@ -16,6 +16,10 @@
+ # pragma once
+ #endif
+ 
++#if defined __GNUC__
++#pragma GCC system_header
++#endif
++
+ #include <vector>
+ #include <boost/ptr_container/ptr_sequence_adapter.hpp>
+ 
+--- boost/smart_ptr/detail/shared_count.hpp
++++ boost/smart_ptr/detail/shared_count.hpp
+@@ -18,6 +18,10 @@
+ // http://www.boost.org/LICENSE_1_0.txt)
+ //
+ 
++#if defined __GNUC__
++#pragma GCC system_header
++#endif
++
+ #ifdef __BORLANDC__
+ # pragma warn -8027     // Functions containing try are not expanded inline
+ #endif
+--- boost/smart_ptr/scoped_ptr.hpp
++++ boost/smart_ptr/scoped_ptr.hpp
+@@ -11,6 +11,10 @@
+ //  http://www.boost.org/libs/smart_ptr/scoped_ptr.htm
+ //
+ 
++#if defined __GNUC__
++#pragma GCC system_header
++#endif
++
+ #include <boost/config.hpp>
+ #include <boost/assert.hpp>
+ #include <boost/checked_delete.hpp>
+--- boost/smart_ptr/shared_ptr.hpp
++++ boost/smart_ptr/shared_ptr.hpp
+@@ -14,6 +14,10 @@
+ //  See http://www.boost.org/libs/smart_ptr/shared_ptr.htm for documentation.
+ //
+ 
++#if defined __GNUC__
++#pragma GCC system_header
++#endif
++
+ #include <boost/config.hpp>   // for broken compiler workarounds
+ 
+ #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)

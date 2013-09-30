@@ -46,6 +46,7 @@ boost_patches += boost.wunused.patch
 boost_patches += boost.wshadow.patch
 boost_patches += boost.wdeprecated-register.patch.0
 boost_patches += boost.wuninitialized.patch
+boost_patches += boost.wdeprecated-auto_ptr.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
