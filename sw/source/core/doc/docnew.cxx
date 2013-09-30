@@ -407,12 +407,21 @@ SwDoc::SwDoc()
         mpStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
 
-    // Initialize the session id of the current document to a random number
-    // smaller than 2^21.
-    static rtlRandomPool aPool = rtl_random_createPool();
-    rtl_random_getBytes( aPool, &mnRsid, sizeof ( mnRsid ) );
-    mnRsid &= ( 1<<21 ) - 1;
-    mnRsid++;
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+
+    if (bHack)
+    {
+        mnRsid = 0;
+    }
+    else
+    {
+        // Initialize the session id of the current document to a random number
+        // smaller than 2^21.
+        static rtlRandomPool aPool = rtl_random_createPool();
+        rtl_random_getBytes( aPool, &mnRsid, sizeof ( mnRsid ) );
+        mnRsid &= ( 1<<21 ) - 1;
+        mnRsid++;
+    }
     mnRsidRoot = mnRsid;
 
     ResetModified();

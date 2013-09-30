@@ -228,13 +228,23 @@ const OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() const
 
 OUString XMLTextListsHelper::GenerateNewListId() const
 {
-    // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    OUString sTmpStr( "list"  );
-    sal_Int64 n = Time( Time::SYSTEM ).GetTime();
-    n += Date( Date::SYSTEM ).GetDate();
-    n += rand();
-    // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    sTmpStr += OUString::number( n );
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    OUString sTmpStr( "list" );
+
+    if (bHack)
+    {
+        static sal_Int64 nIdCounter = SAL_CONST_INT64(5000000000);
+        sTmpStr += OUString::number(nIdCounter++);
+    }
+    else
+    {
+        // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
+        sal_Int64 n = Time( Time::SYSTEM ).GetTime();
+        n += Date( Date::SYSTEM ).GetDate();
+        n += rand();
+        // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
+        sTmpStr += OUString::number( n );
+    }
 
     OUString sNewListId( sTmpStr );
     if ( mpProcessedLists != 0 )

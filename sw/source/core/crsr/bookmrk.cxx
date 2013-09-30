@@ -172,19 +172,29 @@ namespace sw { namespace mark
 
     OUString MarkBase::GenerateNewName(const OUString& rPrefix)
     {
-        static rtlRandomPool aPool = rtl_random_createPool();
-        static OUString sUniquePostfix;
-        static sal_Int32 nCount = SAL_MAX_INT32;
-        OUStringBuffer aResult(rPrefix);
-        if(nCount == SAL_MAX_INT32)
+        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+
+        if (bHack)
         {
-            sal_Int32 nRandom;
-            rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
-            sUniquePostfix = OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
-            nCount = 0;
+            static sal_Int64 nIdCounter = SAL_CONST_INT64(6000000000);
+            return rPrefix + OUString::number(nIdCounter++);
         }
-        // putting the counter in front of the random parts will speed up string comparisons
-        return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
+        else
+        {
+            static rtlRandomPool aPool = rtl_random_createPool();
+            static OUString sUniquePostfix;
+            static sal_Int32 nCount = SAL_MAX_INT32;
+            OUStringBuffer aResult(rPrefix);
+            if(nCount == SAL_MAX_INT32)
+            {
+                sal_Int32 nRandom;
+                rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
+                sUniquePostfix = OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
+                nCount = 0;
+            }
+            // putting the counter in front of the random parts will speed up string comparisons
+            return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
+        }
     }
 
     void MarkBase::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )

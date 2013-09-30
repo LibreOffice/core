@@ -2596,15 +2596,25 @@ namespace listfunc
     }
     const String CreateUniqueListId( const SwDoc& rDoc )
     {
-        // #i92478#
-        OUString aNewListId( "list" );
-        // #o12311627#
-        static rtlRandomPool s_RandomPool( rtl_random_createPool() );
-        sal_Int64 n;
-        rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
-        aNewListId += OUString::number( (n < 0 ? -n : n) );
+        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
 
-        return MakeListIdUnique( rDoc, aNewListId );
+        if (bHack)
+        {
+            static sal_Int64 nIdCounter = SAL_CONST_INT64(7000000000);
+            return MakeListIdUnique( rDoc, OUString( "list" + OUString::number(nIdCounter++) ) );
+        }
+        else
+        {
+            // #i92478#
+            OUString aNewListId( "list" );
+            // #o12311627#
+            static rtlRandomPool s_RandomPool( rtl_random_createPool() );
+            sal_Int64 n;
+            rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
+            aNewListId += OUString::number( (n < 0 ? -n : n) );
+
+            return MakeListIdUnique( rDoc, aNewListId );
+        }
     }
 }
 

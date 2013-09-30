@@ -60,24 +60,190 @@ void XMLAutoStyleFamily::ClearEntries()
     maParentSet.clear();
 }
 
+static OUString
+data2string(void *data,
+            const typelib_TypeDescriptionReference *type);
+
+static OUString
+struct2string(void *data,
+              const typelib_TypeDescription *type)
+{
+    assert(type->eTypeClass == typelib_TypeClass_STRUCT);
+
+    OUStringBuffer result;
+
+    result.append("{");
+
+    const typelib_CompoundTypeDescription *compoundType =
+        &((const typelib_StructTypeDescription*) type)->aBase;
+
+    for (int i = 0; i < compoundType->nMembers; i++)
+    {
+        if (i > 0)
+            result.append(":");
+        result.append(compoundType->ppMemberNames[i]);
+        result.append("=");
+        result.append(data2string(((char *)data)+compoundType->pMemberOffsets[i],
+                                  compoundType->ppTypeRefs[i]));
+    }
+
+    result.append("}");
+
+    return result.makeStringAndClear();
+}
+
+static OUString
+data2string(void *data,
+            const typelib_TypeDescriptionReference *type)
+{
+    OUStringBuffer result;
+
+    switch (type->eTypeClass)
+    {
+    case typelib_TypeClass_VOID:
+        break;
+    case typelib_TypeClass_BOOLEAN:
+        result.append((*reinterpret_cast<const sal_Bool*>(data) == sal_False ) ? OUString("false") : OUString("true"));
+        break;
+    case typelib_TypeClass_BYTE:
+        result.append(OUString::number((*reinterpret_cast<const sal_Int8*>(data))));
+        break;
+    case typelib_TypeClass_SHORT:
+        result.append(OUString::number((*reinterpret_cast<const sal_Int16*>(data))));
+        break;
+    case typelib_TypeClass_LONG:
+        result.append(OUString::number((*reinterpret_cast<const sal_Int32*>(data))));
+        break;
+    case typelib_TypeClass_HYPER:
+        result.append(OUString::number((*reinterpret_cast<const sal_Int64*>(data))));
+        break;
+    case typelib_TypeClass_UNSIGNED_SHORT:
+        result.append(OUString::number((*reinterpret_cast<const sal_uInt16*>(data))));
+        break;
+    case typelib_TypeClass_UNSIGNED_LONG:
+        result.append(OUString::number((*reinterpret_cast<const sal_uInt32*>(data)), 16));
+        break;
+    case typelib_TypeClass_UNSIGNED_HYPER:
+        result.append(OUString::number((*reinterpret_cast<const sal_uInt64*>(data)), 16));
+        break;
+    case typelib_TypeClass_FLOAT:
+        result.append(OUString::number((*reinterpret_cast<const float*>(data))));
+        break;
+    case typelib_TypeClass_DOUBLE:
+        result.append(OUString::number((*reinterpret_cast<const double*>(data))));
+        break;
+    case typelib_TypeClass_CHAR:
+        result.append("U+");
+        result.append(OUString::number((*reinterpret_cast<const sal_uInt16*>(data))));
+        break;
+    case typelib_TypeClass_STRING:
+        result.append(*reinterpret_cast<OUString*>(data));
+        break;
+    case typelib_TypeClass_TYPE:
+    case typelib_TypeClass_SEQUENCE:
+    case typelib_TypeClass_EXCEPTION:
+    case typelib_TypeClass_INTERFACE:
+        result.append("wtf");
+        break;
+    case typelib_TypeClass_STRUCT:
+        result.append(struct2string(data, type->pType));
+        break;
+    case typelib_TypeClass_ENUM:
+        result.append(OUString::number((*reinterpret_cast<const sal_Int32*>(data))));
+        break;
+    default:
+        assert(false); // this cannot happen I hope
+        break;
+    }
+
+    return result.makeStringAndClear();
+}
+
+static OUString
+any2string(uno::Any any)
+{
+    return data2string((void*)any.getValue(), any.pType);
+}
+
 // Class SvXMLAutoStylePoolProperties_Impl
 // ctor class SvXMLAutoStylePoolProperties_Impl
 
-XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties )
+XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rParentName )
 : maProperties( rProperties ),
   mnPos       ( rFamilyData.mnCount )
 {
-    // create a name that hasn't been used before. The created name has not
-    // to be added to the array, because it will never tried again
-    OUStringBuffer sBuffer( 7 );
-    do
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+
+    if (bHack)
     {
-        rFamilyData.mnName++;
-        sBuffer.append( rFamilyData.maStrPrefix );
-        sBuffer.append( OUString::number( rFamilyData.mnName ) );
-        msName = sBuffer.makeStringAndClear();
+        OUStringBuffer aStemBuffer(32);
+        aStemBuffer.append( rFamilyData.maStrPrefix );
+
+        if (rParentName != "")
+            {
+                aStemBuffer.append("-");
+                aStemBuffer.append(rParentName);
+            }
+
+        // Create a name based on the properties used
+        for( size_t i = 0, n = maProperties.size(); i < n; ++i )
+            {
+                XMLPropertyState& rState = maProperties[i];
+                if (rState.mnIndex == -1)
+                    continue;
+                OUString sXMLName(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryXMLName(rState.mnIndex));
+                if (sXMLName == "")
+                    continue;
+                aStemBuffer.append("-");
+                aStemBuffer.append(OUString::number(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
+                aStemBuffer.append(":");
+                aStemBuffer.append(sXMLName);
+                aStemBuffer.append("=");
+                aStemBuffer.append(any2string(rState.maValue));
+            }
+
+#if 0
+        // Finally append an incremental counter in an attempt to make identical
+        // styles always come out in the same order. Will see if this works.
+        aStemBuffer.append("-z");
+        static sal_Int32 nCounter = 0;
+        aStemBuffer.append(OUString::number(nCounter++));
+#endif
+
+        // create a name that hasn't been used before. The created name has not
+        // to be added to the array, because it will never tried again
+        OUStringBuffer aTry( aStemBuffer );
+
+        msName = aTry.makeStringAndClear();
+        bool bWarned = false;
+        while (rFamilyData.maNameSet.find(msName) !=
+               rFamilyData.maNameSet.end())
+        {
+            if (!bWarned)
+                SAL_WARN("xmloff", "Overlapping style name for " << msName);
+            bWarned = true;
+            rFamilyData.mnName++;
+            aTry.append( aStemBuffer );
+            aTry.append( "-" );
+            aTry.append( OUString::number( rFamilyData.mnName ) );
+            msName = aTry.makeStringAndClear();
+        }
+        rFamilyData.maNameSet.insert(msName);
     }
-    while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end());
+    else
+    {
+        // create a name that hasn't been used before. The created name has not
+        // to be added to the array, because it will never tried again
+        OUStringBuffer sBuffer( 7 );
+        do
+        {
+            rFamilyData.mnName++;
+            sBuffer.append( rFamilyData.maStrPrefix );
+            sBuffer.append( OUString::number( rFamilyData.mnName ) );
+            msName = sBuffer.makeStringAndClear();
+        }
+        while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end());
+    }
 }
 
 bool operator<( const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2)
@@ -119,7 +285,7 @@ sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vec
 
     if( !pProperties )
     {
-        pProperties = new XMLAutoStylePoolProperties( rFamilyData, rProperties );
+        pProperties = new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
         PropertiesListType::iterator it = maPropertiesList.begin();
         ::std::advance( it, i );
         maPropertiesList.insert( it, pProperties );
@@ -158,7 +324,7 @@ sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, cons
     if (rFamilyData.maNameSet.find(rName) == rFamilyData.maNameSet.end())
     {
         XMLAutoStylePoolProperties* pProperties =
-                new XMLAutoStylePoolProperties( rFamilyData, rProperties );
+                new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
         // ignore the generated name
         pProperties->SetName( rName );
         PropertiesListType::iterator it = maPropertiesList.begin();
@@ -274,7 +440,10 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
     DBG_ASSERT( aFind != maFamilySet.end(),
                 "SvXMLAutoStylePool_Impl::RegisterName: unknown family" );
     if (aFind != maFamilySet.end())
+    {
+        // SAL_DEBUG("SvXMLAutoStylePoolP_Impl::RegisterName: " << nFamily << ", '" << rName << "'");
         aFind->maNameSet.insert(rName);
+    }
 }
 
 //
@@ -418,7 +587,7 @@ namespace {
 struct AutoStylePoolExport
 {
     const OUString* mpParent;
-    const XMLAutoStylePoolProperties* mpProperties;
+    XMLAutoStylePoolProperties* mpProperties;
 
     AutoStylePoolExport() : mpParent(NULL), mpProperties(NULL) {}
 };
@@ -450,21 +619,20 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     // which contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
     std::vector<AutoStylePoolExport> aExpStyles(nCount);
 
-    sal_uInt32 i;
-    for( i=0; i < nCount; i++ )
+    for( size_t i=0; i < nCount; i++ )
     {
         aExpStyles[i].mpParent = 0;
         aExpStyles[i].mpProperties = 0;
     }
 
-    XMLAutoStyleFamily::ParentSetType::const_iterator it = rFamily.maParentSet.begin(), itEnd = rFamily.maParentSet.end();
+    XMLAutoStyleFamily::ParentSetType::iterator it = rFamily.maParentSet.begin(), itEnd = rFamily.maParentSet.end();
     for (; it != itEnd; ++it)
     {
-        const XMLAutoStylePoolParent& rParent = *it;
+        XMLAutoStylePoolParent& rParent = *it;
         size_t nProperties = rParent.GetPropertiesList().size();
         for( size_t j = 0; j < nProperties; j++ )
         {
-            const XMLAutoStylePoolProperties* pProperties =
+            XMLAutoStylePoolProperties* pProperties =
                 &rParent.GetPropertiesList()[j];
             sal_uLong nPos = pProperties->GetPos();
             DBG_ASSERT( nPos < nCount,
@@ -479,12 +647,36 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         }
     }
 
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+
+    if (bHack)
+    {
+        struct {
+            bool operator() (AutoStylePoolExport a, AutoStylePoolExport b)
+            {
+                return (a.mpProperties->GetName() < b.mpProperties->GetName() ||
+                        (a.mpProperties->GetName() == b.mpProperties->GetName() && *a.mpParent < *b.mpParent));
+            }
+        } aComparator;
+
+        std::sort(aExpStyles.begin(), aExpStyles.end(), aComparator);
+
+        for (size_t i = 0; i < nCount; i++)
+        {
+            OUString oldName = aExpStyles[i].mpProperties->GetName();
+            sal_Int32 dashIx = oldName.indexOf('-');
+            OUString newName = (dashIx > 0 ? oldName.copy(0, dashIx) : oldName) + OUString::number(i);
+            // SAL_DEBUG("renaming '" << oldName << "' -> '" << newName << "'");
+            aExpStyles[i].mpProperties->SetName(newName);
+        }
+    }
+
     //
     // create string to export for each XML-style. That means for each property-list
     //
     OUString aStrFamilyName = rFamily.maStrFamilyName;
 
-    for( i=0; i<nCount; i++ )
+    for( size_t i = 0; i < nCount; i++ )
     {
         DBG_ASSERT( aExpStyles[i].mpProperties,
                     "SvXMLAutoStylePool_Impl::exportXML: empty position" );

@@ -394,19 +394,34 @@ template< typename T >
 /*static*/ OUString create_id(const
     ::boost::unordered_map< OUString, T, OUStringHash > & i_rXmlIdMap)
 {
-    static rtlRandomPool s_Pool( rtl_random_createPool() );
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
     const OUString prefix(s_prefix);
     typename ::boost::unordered_map< OUString, T, OUStringHash >
         ::const_iterator iter;
     OUString id;
-    do
+
+    if (bHack)
     {
-        sal_Int32 n;
-        rtl_random_getBytes(s_Pool, & n, sizeof(n));
-        id = prefix + OUString::number(abs(n));
-        iter = i_rXmlIdMap.find(id);
+        static sal_Int64 nIdCounter = SAL_CONST_INT64(4000000000);
+        do
+        {
+            id = prefix + OUString::number(nIdCounter++);
+            iter = i_rXmlIdMap.find(id);
+        }
+        while (iter != i_rXmlIdMap.end());
     }
-    while (iter != i_rXmlIdMap.end());
+    else
+    {
+        static rtlRandomPool s_Pool( rtl_random_createPool() );
+        do
+        {
+            sal_Int32 n;
+            rtl_random_getBytes(s_Pool, & n, sizeof(n));
+            id = prefix + OUString::number(abs(n));
+            iter = i_rXmlIdMap.find(id);
+        }
+        while (iter != i_rXmlIdMap.end());
+    }
     return id;
 }
 

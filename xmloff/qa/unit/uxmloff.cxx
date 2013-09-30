@@ -75,7 +75,11 @@ void Test::testAutoStylePool()
     OUString aName = xPool->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
 
     // not that interesting but worth checking
-    CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob1" );
+    bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+    if (bHack)
+        CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob" );
+    else
+        CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob1" );
 
     // find ourselves again:
     OUString aSameName = xPool->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );

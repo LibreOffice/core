@@ -80,7 +80,7 @@ class XMLAutoStylePoolProperties
 
 public:
 
-    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties );
+    XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rParentname );
 
     ~XMLAutoStylePoolProperties()
     {
@@ -120,7 +120,7 @@ public:
 
     const OUString& GetParent() const { return msParent; }
 
-    const PropertiesListType& GetPropertiesList() const
+    PropertiesListType& GetPropertiesList()
     {
         return maPropertiesList;
     }

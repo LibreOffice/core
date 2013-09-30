@@ -476,13 +476,18 @@ sal_uInt32 SwDoc::getRsid() const
 
 void SwDoc::setRsid( sal_uInt32 nVal )
 {
-    // Increase the rsid with a random number smaller than 2^17. This way we
-    // expect to be able to edit a document 2^12 times before rsid overflows.
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+
     sal_uInt32 nIncrease = 0;
-    static rtlRandomPool aPool = rtl_random_createPool();
-    rtl_random_getBytes( aPool, &nIncrease, sizeof ( nIncrease ) );
-    nIncrease &= ( 1<<17 ) - 1;
-    nIncrease++; // make sure the new rsid is not the same
+    if (!bHack)
+    {
+        // Increase the rsid with a random number smaller than 2^17. This way we
+        // expect to be able to edit a document 2^12 times before rsid overflows.
+        static rtlRandomPool aPool = rtl_random_createPool();
+        rtl_random_getBytes( aPool, &nIncrease, sizeof ( nIncrease ) );
+        nIncrease &= ( 1<<17 ) - 1;
+        nIncrease++; // make sure the new rsid is not the same
+    }
     mnRsid = nVal + nIncrease;
 }
 
