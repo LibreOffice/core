@@ -504,7 +504,7 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 }
 
 
-void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rCRD )
+void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& rCRD )
 {
     String aScName = ScfTools::ConvertToScDefinedName(rOrgName);
 
@@ -538,7 +538,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
 }
 
 
-sal_Bool RangeNameBufferWK3::FindRel( const String& rRef, sal_uInt16& rIndex )
+sal_Bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
 {
     StringHashEntry     aRef( rRef );
 
@@ -556,7 +556,7 @@ sal_Bool RangeNameBufferWK3::FindRel( const String& rRef, sal_uInt16& rIndex )
 }
 
 
-sal_Bool RangeNameBufferWK3::FindAbs( const String& rRef, sal_uInt16& rIndex )
+sal_Bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 {
     String              aTmp( rRef );
     StringHashEntry     aRef( aTmp.Erase( 0, 1 ) ); // ohne '$' suchen!

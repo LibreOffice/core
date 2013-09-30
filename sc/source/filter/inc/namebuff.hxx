@@ -175,17 +175,17 @@ private:
         {
         StringHashEntry     aStrHashEntry;
         ScComplexRefData        aScComplexRefDataRel;
-        String              aScAbsName;
+        OUString            aScAbsName;
         sal_uInt16              nAbsInd;        // == 0 -> noch keine Abs-Name!
         sal_uInt16              nRelInd;
         sal_Bool                bSingleRef;
-                            Entry( const String& rName, const String& rScName, const ScComplexRefData& rCRD ) :
+                            Entry( const OUString& rName, const OUString& rScName, const ScComplexRefData& rCRD ) :
                                 aStrHashEntry( rName ),
                                 aScComplexRefDataRel( rCRD ),
                                 aScAbsName( rScName )
                             {
                                 nAbsInd = 0;
-                                aScAbsName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_ABS" ) );
+                                aScAbsName = "_ABS";
                             }
         };
 
@@ -196,14 +196,14 @@ private:
 public:
                             RangeNameBufferWK3( void );
     virtual                 ~RangeNameBufferWK3();
-    void                    Add( const String& rName, const ScComplexRefData& rCRD );
-    inline void             Add( const String& rName, const ScRange& aScRange );
-    sal_Bool                    FindRel( const String& rRef, sal_uInt16& rIndex );
-    sal_Bool                    FindAbs( const String& rRef, sal_uInt16& rIndex );
+    void                    Add( const OUString& rName, const ScComplexRefData& rCRD );
+    inline void             Add( const OUString& rName, const ScRange& aScRange );
+    sal_Bool                    FindRel( const OUString& rRef, sal_uInt16& rIndex );
+    sal_Bool                    FindAbs( const OUString& rRef, sal_uInt16& rIndex );
 };
 
 
-inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRange )
+inline void RangeNameBufferWK3::Add( const OUString& rName, const ScRange& aScRange )
 {
     ScComplexRefData        aCRD;
     ScSingleRefData*        pSRD;
@@ -227,21 +227,21 @@ class ExtSheetBuffer : public ExcRoot
 private:
     struct Cont
         {
-        String      aFile;
-        String      aTab;
-        sal_uInt16      nTabNum;    // 0xFFFF -> noch nicht angelegt
+        OUString      aFile;
+        OUString      aTab;
+        sal_uInt16    nTabNum;    // 0xFFFF -> noch nicht angelegt
                                 // 0xFFFE -> versucht anzulegen, ging aber schief
                                 // 0xFFFD -> soll im selben Workbook sein, findet's aber nicht
         sal_Bool        bSWB;
         sal_Bool        bLink;
-                    Cont( const String& rFilePathAndName, const String& rTabName ) :
+                    Cont( const OUString& rFilePathAndName, const OUString& rTabName ) :
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
                     {
                         nTabNum = 0xFFFF;   // -> Tabelle noch nicht erzeugt
                         bSWB = bLink = false;
                     }
-                    Cont( const String& rFilePathAndName, const String& rTabName,
+                    Cont( const OUString& rFilePathAndName, const OUString& rTabName,
                         const sal_Bool bSameWB ) :
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
@@ -257,12 +257,12 @@ private:
 public:
     inline          ExtSheetBuffer( RootData* );
 
-    sal_Int16       Add( const String& rFilePathAndName,
-                        const String& rTabName, const sal_Bool bSameWorkbook = false );
+    sal_Int16       Add( const OUString& rFilePathAndName,
+                        const OUString& rTabName, const sal_Bool bSameWorkbook = false );
 
     sal_Bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
     sal_Bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
-    sal_Bool            GetLink( const sal_uInt16 nExcSheetIndex, String &rAppl, String &rDoc ) const;
+    sal_Bool            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
 
     void            Reset( void );
 };
@@ -277,11 +277,11 @@ inline ExtSheetBuffer::ExtSheetBuffer( RootData* p ) : ExcRoot( p )
 
 struct ExtName
 {
-    String          aName;
-    sal_uInt32          nStorageId;
-    sal_uInt16          nFlags;
+    OUString          aName;
+    sal_uInt32        nStorageId;
+    sal_uInt16        nFlags;
 
-    inline          ExtName( const String& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
+    inline          ExtName( const OUString& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
 
     sal_Bool            IsDDE( void ) const;
     sal_Bool            IsOLE( void ) const;
@@ -295,9 +295,9 @@ class ExtNameBuff : protected XclImpRoot
 public:
     explicit        ExtNameBuff( const XclImpRoot& rRoot );
 
-    void            AddDDE( const String& rName, sal_Int16 nRefIdx );
-    void            AddOLE( const String& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId );
-    void            AddName( const String& rName, sal_Int16 nRefIdx );
+    void            AddDDE( const OUString& rName, sal_Int16 nRefIdx );
+    void            AddOLE( const OUString& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId );
+    void            AddName( const OUString& rName, sal_Int16 nRefIdx );
 
     const ExtName*  GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameIdx ) const;
 

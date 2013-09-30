@@ -712,7 +712,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     if( pExtName && pExtName->IsDDE() &&
                         rR.pExtSheetBuff->IsLink( ( sal_uInt16 ) nINT16 ) )
                     {
-                        String          aAppl, aExtDoc;
+                        OUString        aAppl, aExtDoc;
                         TokenId         nPar1, nPar2;
 
                         rR.pExtSheetBuff->GetLink( ( sal_uInt16 ) nINT16 , aAppl, aExtDoc );

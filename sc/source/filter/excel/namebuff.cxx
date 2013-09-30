@@ -102,7 +102,7 @@ ScFormulaCellGroupRef SharedFormulaBuffer::Find( const ScAddress& rRefPos ) cons
     return it->second;
 }
 
-sal_Int16 ExtSheetBuffer::Add( const String& rFPAN, const String& rTN, const sal_Bool bSWB )
+sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const sal_Bool bSWB )
 {
     maEntries.push_back( Cont( rFPAN, rTN, bSWB ) );
     // return 1-based index of EXTERNSHEET
@@ -177,7 +177,7 @@ sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 }
 
 
-sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, String& rAppl, String& rDoc ) const
+sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUString& rDoc ) const
 {
     OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index has to be >0!" );
 
@@ -219,14 +219,14 @@ ExtNameBuff::ExtNameBuff( const XclImpRoot& rRoot ) :
 }
 
 
-void ExtNameBuff::AddDDE( const String& rName, sal_Int16 nRefIdx )
+void ExtNameBuff::AddDDE( const OUString& rName, sal_Int16 nRefIdx )
 {
     ExtName aNew( rName, 0x0001 );
     maExtNames[ nRefIdx ].push_back( aNew );
 }
 
 
-void ExtNameBuff::AddOLE( const String& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId )
+void ExtNameBuff::AddOLE( const OUString& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId )
 {
     ExtName aNew( rName, 0x0002 );
     aNew.nStorageId = nStorageId;
@@ -234,7 +234,7 @@ void ExtNameBuff::AddOLE( const String& rName, sal_Int16 nRefIdx, sal_uInt32 nSt
 }
 
 
-void ExtNameBuff::AddName( const String& rName, sal_Int16 nRefIdx )
+void ExtNameBuff::AddName( const OUString& rName, sal_Int16 nRefIdx )
 {
     ExtName aNew( GetScAddInName( rName ), 0x0004 );
     maExtNames[ nRefIdx ].push_back( aNew );
