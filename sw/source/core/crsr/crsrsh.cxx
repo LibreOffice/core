@@ -239,7 +239,7 @@ void SwCrsrShell::StartAction()
 void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 {
     sal_Bool bVis = bSVCrsrVis;
-    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false));
 
     // Idle-formatting?
     if( bIdleEnd && Imp()->GetRegion() )
@@ -535,11 +535,11 @@ sal_Bool SwCrsrShell::SttEndDoc( sal_Bool bStt )
     return bRet;
 }
 
-void SwCrsrShell::ExtendedSelectAll()
+void SwCrsrShell::ExtendedSelectAll(bool bFootnotes)
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
     SwPosition* pPos = pCurCrsr->GetPoint();
-    pPos->nNode = rNodes.GetEndOfPostIts();
+    pPos->nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfInserts();
     pPos->nContent.Assign( rNodes.GoNext( &pPos->nNode ), 0 );
     pPos = pCurCrsr->GetMark();
     pPos->nNode = rNodes.GetEndOfContent();
@@ -547,10 +547,10 @@ void SwCrsrShell::ExtendedSelectAll()
     pPos->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
 }
 
-bool SwCrsrShell::ExtendedSelectedAll()
+bool SwCrsrShell::ExtendedSelectedAll(bool bFootnotes)
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
-    SwNodeIndex nNode = rNodes.GetEndOfPostIts();
+    SwNodeIndex nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfInserts();
     SwCntntNode* pStart = rNodes.GoNext(&nNode);
 
     nNode = rNodes.GetEndOfContent();
@@ -1158,7 +1158,7 @@ sal_Bool SwCrsrShell::GoPrevCrsr()
 
 void SwCrsrShell::Paint( const Rectangle &rRect)
 {
-    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
+    comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false));
     SET_CURR_SHELL( this );
 
     // always switch off all cursors when painting
