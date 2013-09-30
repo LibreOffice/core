@@ -259,11 +259,12 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
 
 std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const char * clFileName, cl_context context )
 {
-    cl_uint numDevices=0;
+    size_t numDevices=0;
 
     std::vector<boost::shared_ptr<osl::File> > aGeneratedFiles;
-    cl_int clStatus = clGetContextInfo( context, CL_CONTEXT_NUM_DEVICES,
-            sizeof(numDevices), &numDevices, NULL );
+    cl_int clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
+            0, NULL, &numDevices );
+    numDevices /= sizeof(numDevices);
 
     if(clStatus != CL_SUCCESS)
         return aGeneratedFiles;
@@ -465,9 +466,10 @@ int OpenclDevice::compileKernelFile( GPUEnv *gpuInfo, const char *buildOption )
 
     idx = gpuInfo->mnFileCount;
 
-    cl_uint numDevices;
-    clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_NUM_DEVICES,
-            sizeof(numDevices), &numDevices, NULL );
+    size_t numDevices;
+    clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
+            0, NULL, &numDevices );
+    numDevices /= sizeof(numDevices);
     CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
     std::vector<boost::shared_ptr<osl::File> > aGeneratedFiles = binaryGenerated(
