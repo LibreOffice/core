@@ -27,7 +27,7 @@ using namespace connectivity;
 //**************************************************************
 //************ Class: java.sql.Date
 //**************************************************************
-const double fMilliSecondsPerDay = 86400000.0;
+
 jclass java_sql_Date::theClass = 0;
 java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java_util_Date( NULL, (jobject)NULL )
 {
