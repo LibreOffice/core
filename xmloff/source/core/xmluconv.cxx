@@ -55,7 +55,6 @@ using namespace ::xmloff::token;
 
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
-const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 #define XML_NULLDATE "NullDate"
 
 struct SvXMLUnitConverter::Impl
