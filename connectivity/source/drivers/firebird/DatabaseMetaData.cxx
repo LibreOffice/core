@@ -43,17 +43,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-namespace connectivity
-{
-    namespace firebird
-    {
-        static sal_Int32    const s_nCOLUMN_SIZE = 256;
-        static sal_Int32    const s_nDECIMAL_DIGITS = 0;
-        static sal_Int32    const s_nNULLABLE = 1;
-        static sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
-    }
-}
-
 ODatabaseMetaData::ODatabaseMetaData(Connection* _pCon)
 : m_pConnection(_pCon)
 {
