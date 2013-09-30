@@ -129,13 +129,13 @@ public class ScAccessibleSpreadsheet extends TestCase {
             xCell = oSheet.getCellByPosition(5, 5) ;
             xCell.setFormula(text);
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating accessible text :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating accessible text :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating accessible text :");
             e.printStackTrace(log);
         }
 

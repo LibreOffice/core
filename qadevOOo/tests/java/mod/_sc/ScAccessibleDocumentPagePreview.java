@@ -120,10 +120,10 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessibleDocumentPagePreview");
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating document page preview :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating document page preview :");
             e.printStackTrace(log);
         }
 

@@ -136,19 +136,19 @@ public class ScAccessibleCell extends TestCase {
                                 XPropertySet.class,oIndexAccess.getByIndex(1));
             column.setPropertyValue("OptimalWidth", new Boolean(true));
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating relation :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating relation :");
             e.printStackTrace(log);
         } catch(com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating relation :");
             e.printStackTrace(log);
         } catch(com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating relation :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating relation :");
             e.printStackTrace(log);
         }
 

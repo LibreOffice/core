@@ -99,13 +99,13 @@ public class ScAccessiblePageHeaderArea extends TestCase {
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessiblePageHeaderArea");
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating page header area :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating page header area :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating page header area :");
             e.printStackTrace(log);
         }
 

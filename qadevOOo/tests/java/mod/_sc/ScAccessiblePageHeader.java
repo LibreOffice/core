@@ -105,10 +105,10 @@ public class ScAccessiblePageHeader extends TestCase {
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessiblePageHeader");
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating page header :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception ceating relation :");
+            log.println("Exception creating page header :");
             e.printStackTrace(log);
         }
 
