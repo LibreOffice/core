@@ -19,11 +19,7 @@
 
 #include "sal/config.h"
 
-#include "osl/diagnose.h"
-#include "osl/file.hxx"
-#include "osl/mutex.hxx"
 #include "osl/module.hxx"
-#include "rtl/ustrbuf.hxx"
 #include "uno/environment.h"
 #include "uno/mapping.hxx"
 #include "cppuhelper/factory.hxx"
@@ -47,67 +43,12 @@ using namespace ::com::sun::star::uno;
 
 using rtl::OString;
 using rtl::OUString;
-using rtl::OUStringBuffer;
 
 namespace cppu
 {
 
 #ifndef DISABLE_DYNLOADING
 
-static OUString makeComponentPath(
-    const OUString & rLibName, const OUString & rPath )
-{
-#if OSL_DEBUG_LEVEL > 0
-    // No system path allowed here !
-    {
-        OUString aComp;
-        OSL_ASSERT( FileBase::E_None ==
-                    FileBase::getSystemPathFromFileURL( rLibName, aComp ) );
-        OSL_ASSERT(
-            rPath.isEmpty() ||
-            FileBase::E_None ==
-              FileBase::getSystemPathFromFileURL( rPath, aComp ) );
-    }
-#endif
-
-    OUStringBuffer buf( rPath.getLength() + rLibName.getLength() + 12 );
-
-    if (!rPath.isEmpty())
-    {
-        buf.append( rPath );
-        if (rPath[ rPath.getLength() -1 ] != '/')
-            buf.append( (sal_Unicode) '/' );
-    }
-    if (!rLibName.endsWithIgnoreAsciiCase( SAL_DLLEXTENSION )
-#if defined MACOSX
-        && !rLibName.endsWithIgnoreAsciiCase(".jnilib")
-#endif
-        )
-    {
-#if defined SAL_DLLPREFIX
-        if (! rLibName.endsWithIgnoreAsciiCase( ".uno" ))
-        {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
-        }
-#endif
-        buf.append( rLibName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) );
-    }
-    else // name is completely pre/postfixed
-    {
-        buf.append( rLibName );
-    }
-
-    OUString out( buf.makeStringAndClear() );
-#if OSL_DEBUG_LEVEL > 1
-    OString str( OUStringToOString( out, RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE(OSL_LOG_PREFIX "component path=%s", str.getStr());
-#endif
-
-    return out;
-}
-
-//==============================================================================
 static void getLibEnv(oslModule                lib,
                       uno::Environment       * pEnv,
                       OUString               * pSourceEnv_name,
@@ -176,13 +117,12 @@ extern "C" {static void s_getFactory(va_list * pParam)
 
 /* For backwards compatibility */
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
-    OUString const & rLibName, OUString const & rPath,
-    OUString const & rImplName,
+    OUString const & uri, OUString const & rPath, OUString const & rImplName,
     Reference< lang::XMultiServiceFactory > const & xMgr,
     Reference< registry::XRegistryKey > const & xKey )
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
-    return loadSharedLibComponentFactory( rLibName, rPath, rImplName, xMgr, xKey, rtl::OUString() );
+    return loadSharedLibComponentFactory( uri, rPath, rImplName, xMgr, xKey, rtl::OUString() );
 }
 
 namespace
@@ -194,7 +134,6 @@ Reference< XInterface > invokeComponentFactory(
     OUString const & rModulePath,
     OUString const & rImplName,
     Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
     OUString const & rPrefix,
     OUString &rExcMsg )
 {
@@ -244,18 +183,11 @@ Reference< XInterface > invokeComponentFactory(
         {
             void * pSMgr = aCurrent2Env.mapInterface(
                 xMgr.get(), ::getCppuType( &xMgr ) );
-            void * pKey = aCurrent2Env.mapInterface(
-                xKey.get(), ::getCppuType( &xKey ) );
 
             void * pSSF = NULL;
 
-            env.invoke(s_getFactory, pGetter, &aImplName, pSMgr, pKey, &pSSF);
+            env.invoke(s_getFactory, pGetter, &aImplName, pSMgr, 0, &pSSF);
 
-            if (pKey)
-            {
-                (env.get()->pExtEnv->releaseInterface)(
-                    env.get()->pExtEnv, pKey );
-            }
             if (pSMgr)
             {
                 (*env.get()->pExtEnv->releaseInterface)(
@@ -325,35 +257,34 @@ extern "C"
 #endif
 
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
-    OUString const & rLibName, OUString const & rPath,
-    OUString const & rImplName,
+    OUString const & uri, OUString const & rPath, OUString const & rImplName,
     Reference< lang::XMultiServiceFactory > const & xMgr,
     Reference< registry::XRegistryKey > const & xKey,
     OUString const & rPrefix )
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
+    assert(rPath.isEmpty());
+    assert(!xKey.is());
 #ifndef DISABLE_DYNLOADING
-    OUString sLibName(rLibName);
+    OUString moduleUri(uri);
 
 #ifdef ANDROID
-    if ( rLibName.equals( "bootstrap.uno" SAL_DLLEXTENSION ) )
-        sLibName = "libbootstrap.uno" SAL_DLLEXTENSION;
+    if ( uri == "bootstrap.uno" SAL_DLLEXTENSION )
+        moduleUri = "libbootstrap.uno" SAL_DLLEXTENSION;
 #endif
 
-    OUString aModulePath( makeComponentPath( sLibName, rPath ) );
     oslModule lib = osl_loadModule(
-        aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+        moduleUri.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
     {
-        OUString const msg("loading component library failed: " + aModulePath);
+        OUString const msg("loading component library failed: " + moduleUri);
         SAL_WARN("cppuhelper", msg);
         throw loader::CannotActivateFactoryException(msg,
             Reference< XInterface >() );
     }
 #else
-    (void) rPath;
     oslModule lib;
-    OUString aModulePath("MAIN");
+    OUString moduleUri("MAIN");
     if (! osl_getModuleHandle( NULL, &lib))
     {
         throw loader::CannotActivateFactoryException(
@@ -407,7 +338,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     };
     for (int i = 0; pSym == NULL && non_app_specific_map[i].lib != NULL; ++i)
     {
-        if ( rLibName.equalsAscii( non_app_specific_map[i].lib ) )
+        if ( uri.equalsAscii( non_app_specific_map[i].lib ) )
             pSym = (oslGenericFunction) non_app_specific_map[i].component_getFactory_function;
     }
 
@@ -417,12 +348,12 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         const lib_to_component_mapping *map = lo_get_libmap();
         for (int i = 0; pSym == NULL && map[i].lib != NULL; ++i)
         {
-            if ( rLibName.equalsAscii( map[i].lib ) )
+            if ( uri.equalsAscii( map[i].lib ) )
                 pSym = (oslGenericFunction) map[i].component_getFactory_function;
         }
         if ( pSym == NULL )
         {
-            fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( uri, RTL_TEXTENCODING_ASCII_US ).getStr() );
             assert( !"Attempt to load unknown library" );
         }
     }
@@ -434,11 +365,11 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     if (pSym != 0)
     {
-        xRet = invokeComponentFactory( pSym, lib, aModulePath, rImplName, xMgr, xKey, rPrefix, aExcMsg );
+        xRet = invokeComponentFactory( pSym, lib, moduleUri, rImplName, xMgr, rPrefix, aExcMsg );
     }
     else
     {
-        aExcMsg = aModulePath;
+        aExcMsg = moduleUri;
         aExcMsg += ": cannot get symbol: ";
         aExcMsg += aGetFactoryName;
     }
@@ -471,17 +402,17 @@ extern "C" { static void s_writeInfo(va_list * pParam)
 }}
 
 void SAL_CALL writeSharedLibComponentInfo(
-    OUString const & rLibName, OUString const & rPath,
+    OUString const & uri, OUString const & rPath,
     Reference< lang::XMultiServiceFactory > const & xMgr,
     Reference< registry::XRegistryKey > const & xKey )
     SAL_THROW( (registry::CannotRegisterImplementationException) )
 {
-    OUString aModulePath( makeComponentPath( rLibName, rPath ) );
+    assert(rPath.isEmpty());
     oslModule lib = osl_loadModule(
-        aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+        uri.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
     {
-        OUString const msg("loading component library failed: " + aModulePath);
+        OUString const msg("loading component library failed: " + uri);
         SAL_WARN("cppuhelper", msg);
         throw registry::CannotRegisterImplementationException(msg,
             Reference< XInterface >() );
@@ -522,7 +453,7 @@ void SAL_CALL writeSharedLibComponentInfo(
                         env.get()->pExtEnv, pKey );
                     if (! bRet)
                     {
-                        aExcMsg = aModulePath;
+                        aExcMsg = uri;
                         aExcMsg += ": component_writeInfo() "
                                    "returned false!";
                     }
@@ -530,7 +461,7 @@ void SAL_CALL writeSharedLibComponentInfo(
                 else
                 {
                     // key is mandatory
-                    aExcMsg = aModulePath;
+                    aExcMsg = uri;
                     aExcMsg += ": registry is mandatory to invoke"
                                " component_writeInfo()!";
                 }
@@ -553,7 +484,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     }
     else
     {
-        aExcMsg = aModulePath;
+        aExcMsg = uri;
         aExcMsg += ": cannot get symbol: ";
         aExcMsg += aWriteInfoName;
     }

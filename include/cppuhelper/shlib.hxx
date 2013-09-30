@@ -31,21 +31,20 @@ namespace cppu
 
 /** Loads a shared library component and gets the factory out of it.  You can give either a
     fully qualified libname or single lib name.  The libname need not be pre/postfixed
-    (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
-    directory.
+    (e.g. xxx.dll).
 
-    @param rLibName name of the library
-    @param rPath optional path
+    @param uri URI of the library
+    @param rPath deprecated, must be empty
     @param rImplName implementation to be retrieved from the library
     @param xMgr service manager to be provided to the component
-    @param xKey registry key to be provided to the component
+    @param xKey deprecated, must be null
     @return
     factory instance (com::sun::star::lang::XSingleComponentFactory or legacy
     com::sun::star::lang::XSingleServiceFactory)
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
-    ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
+    ::rtl::OUString const & uri, ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
@@ -53,15 +52,14 @@ SAL_CALL loadSharedLibComponentFactory(
 
 /** Loads a shared library component and gets the factory out of it.  You can give either a
     fully qualified libname or single lib name.  The libname need not be pre/postfixed
-    (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
-    directory.  An optional 'prefix' parameter is used to determine the symbol
+    (e.g. xxx.dll).  An optional 'prefix' parameter is used to determine the symbol
     name of the entry point in the library.
 
-    @param rLibName name of the library
-    @param rPath optional path
+    @param uri URI of the library
+    @param rPath deprecated, must be empty
     @param rImplName implementation to be retrieved from the library
     @param xMgr service manager to be provided to the component
-    @param xKey registry key to be provided to the component
+    @param xKey deprecated, must be null
     @param rPrefix optional component prefix
     @return
     factory instance (com::sun::star::lang::XSingleComponentFactory or legacy
@@ -69,7 +67,7 @@ SAL_CALL loadSharedLibComponentFactory(
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
-    ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
+    ::rtl::OUString const & uri, ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
@@ -78,19 +76,18 @@ SAL_CALL loadSharedLibComponentFactory(
 
 /** Invokes component_writeInfo() function of specified component library.  You can give either
     a fully qualified libname or single lib name. The libname need not be pre/postfixed
-    (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
-    directory.
+    (e.g. xxx.dll).
 
     @deprecated component_writeInfo should no longer be used in new components
 
-    @param rLibName name of the library
-    @param rPath optional path
+    @param uri URI of the library
+    @param rPath deprecated, must be empty
     @param xMgr service manager to be provided to the component
     @param xKey registry key to be provided to the component
 */
 CPPUHELPER_DLLPUBLIC void
 SAL_CALL writeSharedLibComponentInfo(
-    ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
+    ::rtl::OUString const & uri, ::rtl::OUString const & rPath,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
     SAL_THROW( (::com::sun::star::registry::CannotRegisterImplementationException) );

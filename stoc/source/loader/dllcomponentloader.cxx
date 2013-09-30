@@ -185,7 +185,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 
     return loadSharedLibComponentFactory(
         cppu::bootstrap_expandUri(rLibName), OUString(), rImplName, m_xSMgr,
-        xKey, aPrefix );
+        css::uno::Reference<css::registry::XRegistryKey>(), aPrefix );
 }
 
 
