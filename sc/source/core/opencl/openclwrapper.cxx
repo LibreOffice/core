@@ -28,18 +28,6 @@
 
 #ifdef WIN32
 #include <Windows.h>
-
-#define TRUE 1
-#define FALSE 0
-
-#define OCL_INFO(str) \
-    printf("[OCL_INFO] %s\n",str);
-#define OCL_ERROR(str) \
-    fprintf(stderr,"[OCL_ERROR] %s\n",str);
-#define OCL_CHECK(value1,value2,str) \
-    if(value1!=value2) \
-        fprintf(stderr,"[OCL_ERROR] %s\n",str);
-
 #define OPENCL_DLL_NAME "OpenCL.dll"
 #elif defined(MACOSX)
 #define OPENCL_DLL_NAME NULL
