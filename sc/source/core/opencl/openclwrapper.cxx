@@ -92,6 +92,36 @@ OString getCacheFolder()
     return rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
 }
 
+void clearCache()
+{
+    OUString aCacheDirURL(rtl::OStringToOUString(OpenclDevice::maCacheFolder, RTL_TEXTENCODING_UTF8));
+    osl::Directory aCacheDir(aCacheDirURL);
+    osl::FileBase::RC status = aCacheDir.open();
+    if(status != osl::FileBase::E_None)
+        return;
+
+    osl::DirectoryItem aItem;
+    OUString aSourceString = rtl::OStringToOUString(OpenclDevice::maSourceHash + ".bin", RTL_TEXTENCODING_UTF8);
+    while(osl::FileBase::E_None == aCacheDir.getNextItem(aItem))
+    {
+        osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileName|osl_FileStatus_Mask_FileURL);
+        status = aItem.getFileStatus(aFileStatus);
+        if(status != osl::FileBase::E_None)
+            continue;
+
+        OUString aFileName = aFileStatus.getFileName();
+        if(aFileName.endsWith(".bin"))
+        {
+            if(!aFileName.endsWith(aSourceString))
+            {
+                // delete the file
+                OUString aFileUrl = aFileStatus.getFileURL();
+                osl::File::remove(aFileUrl);
+            }
+        }
+    }
+}
+
 }
 
 OString OpenclDevice::maSourceHash = generateHashForSource();
@@ -259,6 +289,7 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
 
 int OpenclDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
+    clearCache();
     osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     osl::FileBase::RC status = file.open(
             osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
