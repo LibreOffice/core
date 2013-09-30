@@ -26,6 +26,8 @@ using namespace ::com::sun::star;
 
 // Stubs for removed functionality, to be killed when we bump sal SONAME
 
+namespace cppu {
+
 SAL_DLLPUBLIC_EXPORT
 reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
 	const uno::Reference < lang::XMultiServiceFactory > &, const rtl::OUString &,
@@ -33,6 +35,8 @@ reflection::XIdlClass * SAL_CALL createStandardClassWithSequence(
 	SAL_THROW( () )
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
