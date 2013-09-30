@@ -19,8 +19,6 @@
 
 
 #include "sal/config.h"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/compbase6.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/document/XDocumentProperties.hpp"
@@ -2372,13 +2370,5 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
 }
 
 } // closing component helper namespace
-
-static ::cppu::ImplementationEntry const entries[] = {
-    { &comp_SfxDocumentMetaData::_create,
-      &comp_SfxDocumentMetaData::_getImplementationName,
-      &comp_SfxDocumentMetaData::_getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
