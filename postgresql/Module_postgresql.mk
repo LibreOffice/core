@@ -13,7 +13,6 @@ ifeq ($(SYSTEM_POSTGRESQL),NO)
 
 $(eval $(call gb_Module_add_targets,postgresql,\
 	ExternalProject_postgresql \
-	ExternalPackage_postgresql \
 	UnpackedTarball_postgresql \
 ))
 
