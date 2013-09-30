@@ -36,6 +36,8 @@
 #endif
 
 #define DEVICE_NAME_LENGTH 1024
+#define DRIVER_VERSION_LENGTH 1024
+#define PLATFORM_VERSION_LENGTH 1024
 
 using namespace std;
 
@@ -48,16 +50,12 @@ int OpenclDevice::isInited =0;
 
 namespace {
 
-OString generateHashForSource()
+OString generateMD5(const void* pData, size_t length)
 {
     sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_MD5];
-
-#ifndef NDEBUG
-    size_t nLength = strlen(kernel_src);
-    rtlDigestError aError = rtl_digest_MD5(kernel_src, nLength,
+    rtlDigestError aError = rtl_digest_MD5(pData, length,
             pBuffer, RTL_DIGEST_LENGTH_MD5);
-    assert(aError == rtl_Digest_E_None);
-#endif
+    SAL_WARN_IF(aError != rtl_Digest_E_None, "sc", "md5 generation failed");
 
     OStringBuffer aBuffer;
     const char* pString = "0123456789ABCDEF";
@@ -68,6 +66,12 @@ OString generateHashForSource()
         aBuffer.append(pString[val%16]);
     }
     return aBuffer.makeStringAndClear();
+}
+
+OString generateHashForSource()
+{
+    size_t nLength = strlen(kernel_src);
+    return generateMD5(kernel_src, nLength);
 }
 
 OString getCacheFolder()
@@ -230,8 +234,25 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
     char deviceName[DEVICE_NAME_LENGTH] = {0};
     clGetDeviceInfo(deviceId, CL_DEVICE_NAME,
             sizeof(deviceName), deviceName, NULL);
+
+    char driverVersion[DRIVER_VERSION_LENGTH] = {0};
+    clGetDeviceInfo(deviceId, CL_DRIVER_VERSION,
+            sizeof(driverVersion), driverVersion, NULL);
+
+    cl_platform_id platformId;
+    clGetDeviceInfo(deviceId, CL_DEVICE_PLATFORM,
+            sizeof(platformId), &platformId, NULL);
+
+    char platformVersion[PLATFORM_VERSION_LENGTH] = {0};
+    clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, sizeof(platformVersion),
+            platformVersion, NULL);
+
+    // create hash for deviceName + driver version + platform version
+    OString aString = OString(deviceName) + driverVersion + platformVersion;
+    OString aHash = generateMD5(aString.getStr(), aString.getLength());
+
     return OpenclDevice::maCacheFolder + fileName + "-" +
-        deviceName + "-" + OpenclDevice::maSourceHash + ".bin";
+        aHash + "-" + OpenclDevice::maSourceHash + ".bin";
 }
 
 }
