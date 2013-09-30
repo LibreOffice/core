@@ -310,14 +310,6 @@ static OUString & getIniFileName_Impl()
 }
 
 //----------------------------------------------------------------------------
-
-static inline bool path_exists( OUString const & path )
-{
-    DirectoryItem dirItem;
-    return (DirectoryItem::E_None == DirectoryItem::get( path, dirItem ));
-}
-
-//----------------------------------------------------------------------------
 // #111772#
 // ensure the given file url has no final slash
 
