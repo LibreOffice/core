@@ -1558,7 +1558,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
     {
         TokenId             n = eParam[ nAnz - 1 ];
 //##### GRUETZE FUER BASIC-FUNCS RICHTEN!
-        if( const String* pExt = aPool.GetExternal( n ) )
+        if( const OUString* pExt = aPool.GetExternal( n ) )
         {
             if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclMacroName( *pExt ) )
                 aPool << pFuncInfo->meOpCode;

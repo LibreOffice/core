@@ -70,7 +70,7 @@ TokenPool::TokenPool( void )
 
     // Sammelstelle fuer Strings
     nP_Str = 4;
-    ppP_Str = new String *[ nP_Str ];
+    ppP_Str = new OUString *[ nP_Str ];
     for( nLauf = 0 ; nLauf < nP_Str ; nLauf++ )
         ppP_Str[ nLauf ] = NULL;
 
@@ -169,7 +169,7 @@ bool TokenPool::GrowString( void )
 
     sal_uInt16      nL;
 
-    String** ppP_StrNew = new (::std::nothrow) String *[ nP_StrNew ];
+    OUString** ppP_StrNew = new (::std::nothrow) OUString *[ nP_StrNew ];
     if (!ppP_StrNew)
         return false;
 
@@ -392,7 +392,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
             case T_Str:
                 {
                     sal_uInt16 n = pElement[ nId ];
-                    String* p = ( n < nP_Str )? ppP_Str[ n ] : NULL;
+                    OUString* p = ( n < nP_Str )? ppP_Str[ n ] : NULL;
                     if (p)
                         pScToken->AddString( *p );
                     else
@@ -658,7 +658,7 @@ const TokenId TokenPool::Store( const sal_uInt16 nIndex )
 }
 
 
-const TokenId TokenPool::Store( const String& rString )
+const TokenId TokenPool::Store( const OUString& rString )
 {
     // weitgehend nach Store( const sal_Char* ) kopiert, zur Vermeidung
     //  eines temporaeren Strings in "
@@ -678,7 +678,7 @@ const TokenId TokenPool::Store( const String& rString )
     // String anlegen
     if( !ppP_Str[ nP_StrAkt ] )
         //...aber nur, wenn noch nicht vorhanden
-        ppP_Str[ nP_StrAkt ] = new (::std::nothrow) String( rString );
+        ppP_Str[ nP_StrAkt ] = new (::std::nothrow) OUString( rString );
     else
         //...ansonsten nur kopieren
         *ppP_Str[ nP_StrAkt ] = rString;
@@ -686,7 +686,7 @@ const TokenId TokenPool::Store( const String& rString )
     if (ppP_Str[ nP_StrAkt ])
     {
         DBG_ASSERT( sizeof( xub_StrLen ) <= 2, "*TokenPool::Store(): StrLen doesn't match!" );
-        pSize[ nElementAkt ] = ( sal_uInt16 ) ppP_Str[ nP_StrAkt ]->Len();
+        pSize[ nElementAkt ] = ( sal_uInt16 ) ppP_Str[ nP_StrAkt ]->getLength();
     }
 
     nElementAkt++;
@@ -752,7 +752,7 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 }
 
 
-const TokenId TokenPool::Store( const DefTokenId e, const String& r )
+const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
 {
     if( nElementAkt >= nElement )
         if (!GrowElement())
@@ -850,7 +850,7 @@ const TokenId TokenPool::StoreName( sal_uInt16 nIndex, bool bGlobal )
     return static_cast<const TokenId>(nElementAkt);
 }
 
-const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )
+const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const OUString& rName )
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
@@ -869,7 +869,7 @@ const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )
     return static_cast<const TokenId>(nElementAkt);
 }
 
-const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
@@ -889,7 +889,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName
     return static_cast<const TokenId>(nElementAkt);
 }
 
-const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
@@ -945,9 +945,9 @@ sal_Bool TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
     return false;
 }
 
-const String* TokenPool::GetExternal( const TokenId& rId ) const
+const OUString* TokenPool::GetExternal( const TokenId& rId ) const
 {
-    const String*   p = NULL;
+    const OUString*   p = NULL;
     sal_uInt16 n = (sal_uInt16) rId;
     if( n && n <= nElementAkt )
     {

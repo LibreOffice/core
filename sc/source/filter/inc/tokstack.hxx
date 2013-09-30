@@ -81,7 +81,7 @@ class TokenPool
     // !ACHTUNG!: externe Id-Basis ist 1, interne 0!
     // Ausgabe Id = 0 -> Fehlerfall
     private:
-        String**                    ppP_Str;    // Pool fuer Strings
+        OUString**                      ppP_Str;    // Pool fuer Strings
         sal_uInt16                      nP_Str;     // ...mit Groesse
         sal_uInt16                      nP_StrAkt;  // ...und Schreibmarke
 
@@ -105,8 +105,8 @@ class TokenPool
         struct  EXTCONT
         {
             DefTokenId              eId;
-            String                  aText;
-                                    EXTCONT( const DefTokenId e, const String& r ) :
+            OUString                aText;
+                                    EXTCONT( const DefTokenId e, const OUString& r ) :
                                         eId( e ), aText( r ){}
         };
         EXTCONT**                   ppP_Ext;
@@ -138,7 +138,7 @@ class TokenPool
         struct ExtName
         {
             sal_uInt16  mnFileId;
-            String      maName;
+            OUString    maName;
         };
         ::std::vector<ExtName>      maExtNames;
 
@@ -146,7 +146,7 @@ class TokenPool
         struct ExtCellRef
         {
             sal_uInt16      mnFileId;
-            String          maTabName;
+            OUString        maTabName;
             ScSingleRefData   maRef;
         };
         ::std::vector<ExtCellRef>   maExtCellRefs;
@@ -155,7 +155,7 @@ class TokenPool
         struct ExtAreaRef
         {
             sal_uInt16      mnFileId;
-            String          maTabName;
+            OUString        maTabName;
             ScComplexRefData    maRef;
         };
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
@@ -200,25 +200,25 @@ class TokenPool
                                     // nur fuer Range-Names
         const TokenId               Store( const sal_uInt16 nIndex );
         inline const TokenId        Store( const sal_Int16 nWert );
-        const TokenId               Store( const String& rString );
+        const TokenId               Store( const OUString& rString );
         const TokenId               Store( const ScSingleRefData& rTr );
         const TokenId               Store( const ScComplexRefData& rTr );
 
-        const TokenId               Store( const DefTokenId eId, const String& rName );
+        const TokenId               Store( const DefTokenId eId, const OUString& rName );
                                         // 4 externals (e.g. AddIns, Makros...)
         const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix();
         const TokenId               StoreName( sal_uInt16 nIndex, bool bGlobal );
-        const TokenId               StoreExtName( sal_uInt16 nFileId, const String& rName );
-        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
-        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
+        const TokenId               StoreExtName( sal_uInt16 nFileId, const OUString& rName );
+        const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
+        const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
 
         inline const TokenId        LastId( void ) const;
         inline const ScTokenArray*  operator []( const TokenId nId );
         void                        Reset( void );
         inline E_TYPE               GetType( const TokenId& nId ) const;
         sal_Bool                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
-        const String*               GetExternal( const TokenId& nId ) const;
+        const OUString*             GetExternal( const TokenId& nId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 
