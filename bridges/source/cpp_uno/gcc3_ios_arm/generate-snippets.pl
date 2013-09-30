@@ -14,7 +14,12 @@ sub gen_arm ($$)
 {
     my ($funIndex, $vtableOffset) = @_;
     printf ("codeSnippet_%08x_%d:\n", $funIndex, $vtableOffset);
+    printf ("#ifdef __arm\n");
+    # Note: pc is the address of instruction being executed plus 8
     printf ("    mov ip, pc\n");
+    printf ("#else\n");
+    printf ("    adr x15, .+8\n");
+    printf ("#endif\n");
     printf ("    b _privateSnippetExecutor\n");
     printf ("    .long %#08x\n", $funIndex);
     printf ("    .long %d\n", $vtableOffset);
@@ -31,11 +36,11 @@ sub gen_x86 ($$$)
 
 printf (".text\n");
 
-printf ("#ifdef __arm\n");
+printf ("#if defined(__arm) || defined(__arm64)\n");
 
 printf ("\n");
-printf ("// Each codeSnippetX function stores pc into ip and branches to _privateSnippetExecutor\n");
-printf ("// The branch instruction is followed by two longs (that ip thus points to):\n");
+printf ("// Each codeSnippetX function stores into ip/x15 an address and branches to _privateSnippetExecutor\n");
+printf ("// The branch instruction is followed by two longs that ip/x15 points to:\n");
 printf ("// - the function index, as such and with the 0x80000000 bit set\n");
 printf ("//   (to indicate a hidden parameter for returning large values)\n");
 printf ("// - the vtable offset\n");
@@ -85,7 +90,7 @@ foreach my $funIndex (0 .. $nFunIndexes-1)
 {
     foreach my $vtableOffset (0 .. $nVtableOffsets-1)
     {
-	printf ("#ifdef __arm\n");
+	printf ("#if defined(__arm) || defined(__arm64)\n");
         printf ("    .long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex, $vtableOffset);
         printf ("    .long codeSnippet_%08x_%d - _codeSnippets\n", $funIndex|0x80000000, $vtableOffset);
 	printf ("#else\n");

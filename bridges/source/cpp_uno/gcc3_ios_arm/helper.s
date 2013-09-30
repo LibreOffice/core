@@ -19,7 +19,7 @@
 
 #include "codesnippets.S"
 
-#ifdef __arm
+#if defined(__arm)
 // ARM support code for LibreOffice C++/UNO bridging
 //
 // Written by Peter Naulls <peter@chocky.org>
@@ -41,6 +41,17 @@ _privateSnippetExecutor:
 
     add     sp, sp, #4      // no need to restore r4 (we didn't touch it)
     ldr     pc, [sp], #20   // return, discarding function arguments
+
+#elif defined(__arm64)
+
+    .text
+    .align 4
+
+_privateSnippetExecutor:
+
+	// Not done yet, intentionally crash for now...
+    mov     x15, #0
+    ldr     x15, [x15]
 
 #else
     .text
