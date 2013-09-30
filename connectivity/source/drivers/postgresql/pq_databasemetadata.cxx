@@ -125,20 +125,6 @@ std::vector
 #define DEFERRABILITY_INITIALLY_IMMEDIATE 6
 #define DEFERRABILITY_NONE                7
 
-// alphabetically ordered !
-static const int PRIVILEGE_CREATE     = 0x1;
-static const int PRIVILEGE_DELETE     = 0x2;
-static const int PRIVILEGE_EXECUTE    = 0x4;
-static const int PRIVILEGE_INSERT     = 0x8;
-static const int PRIVILEGE_REFERENCES = 0x10;
-static const int PRIVILEGE_RULE       = 0x20;
-static const int PRIVILEGE_SELECT     = 0x40;
-static const int PRIVILEGE_TEMPORARY  = 0x80;
-static const int PRIVILEGE_TRIGGER    = 0x100;
-static const int PRIVILEGE_UPDATE     = 0x200;
-static const int PRIVILEGE_USAGE      = 0x400;
-static const int PRIVILEGE_MAX = PRIVILEGE_USAGE;
-
 void DatabaseMetaData::checkClosed()
         throw (SQLException, RuntimeException)
 {
