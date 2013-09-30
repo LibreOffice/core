@@ -91,12 +91,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
 
-
-// ATTENTION!
-// This value is directly copied from the sfx2 project.
-// You have to change BOTH values, see sfx2/inc/sfx2/sfxsids.hrc (SID_DOCKWIN_START)
-static const sal_Int32 DOCKWIN_ID_BASE = 9800;
-
 static const char STATUS_BAR_ALIAS[] = "private:resource/statusbar/statusbar";
 static const char PROGRESS_BAR_ALIAS[] = "private:resource/progressbar/progressbar";
 
