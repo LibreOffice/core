@@ -14,19 +14,28 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/timer.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
 /// This class is the base for the Widget Layout-based sidebar panels.
 class SVX_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
 {
+private:
+    Timer m_aPanelLayoutTimer;
+    bool m_bInClose;
+    bool hasPanelPendingLayout() const;
+
+    DECL_DLLPRIVATE_LINK( ImplHandlePanelLayoutTimerHdl, void* );
+
 public:
     PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame);
-    virtual ~PanelLayout() {}
+    virtual ~PanelLayout();
 
     virtual Size GetOptimalSize() const;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL);
+    virtual void queue_resize();
 };
 
 #endif

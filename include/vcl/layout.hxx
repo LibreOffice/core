@@ -39,6 +39,8 @@ public:
     {
         m_bLayoutDirty = true;
     }
+
+    virtual void queue_resize();
 protected:
     //these are the two that need to be implemented by
     //containers, figure out how much space you want...

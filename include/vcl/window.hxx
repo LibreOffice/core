@@ -1074,7 +1074,7 @@ public:
      *
      * akin to gtk_widget_queue_resize
      */
-    void queue_resize();
+    virtual void queue_resize();
 
     /*
      * Sets the "width-request" property

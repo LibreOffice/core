@@ -1732,34 +1732,20 @@ namespace
     {
         bool bSomeoneCares = false;
 
-        Dialog *pDialog = NULL;
-
-        Window *pWindow = pOrigWindow;
-
-        while (pWindow)
+        Window *pWindow = pOrigWindow->GetParent();
+        if (pWindow)
         {
             if (isContainerWindow(*pWindow))
             {
-                VclContainer *pContainer = static_cast<VclContainer*>(pWindow);
-                pContainer->markLayoutDirty();
                 bSomeoneCares = true;
             }
             else if (pWindow->GetType() == WINDOW_TABCONTROL)
             {
-                TabControl *pTabControl = static_cast<TabControl*>(pWindow);
-                pTabControl->markLayoutDirty();
                 bSomeoneCares = true;
             }
-            else if (pWindow->IsDialog())
-            {
-                pDialog = dynamic_cast<Dialog*>(pWindow);
-                break;
-            }
-            pWindow = pWindow->GetParent();
+            pWindow->queue_resize();
         }
 
-        if (pDialog && pDialog != pOrigWindow)
-            pDialog->queue_layout();
         return bSomeoneCares;
     }
 }

@@ -930,7 +930,7 @@ bool OfaTreeOptionsDialog::hasTreePendingLayout() const
     return maTreeLayoutTimer.IsActive();
 }
 
-void OfaTreeOptionsDialog::queue_layout()
+void OfaTreeOptionsDialog::queue_resize()
 {
     if (hasTreePendingLayout())
         return;

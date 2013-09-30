@@ -1254,7 +1254,7 @@ IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
     return 0;
 }
 
-void Dialog::queue_layout()
+void Dialog::queue_resize()
 {
     if (hasPendingLayout() || isCalculatingInitialLayoutSize())
         return;
@@ -1267,7 +1267,7 @@ void Dialog::queue_layout()
 
 void Dialog::Resize()
 {
-    queue_layout();
+    queue_resize();
 }
 
 bool Dialog::set_property(const OString &rKey, const OString &rValue)

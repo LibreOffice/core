@@ -12,9 +12,18 @@
 
 PanelLayout::PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame)
     : Control(pParent)
+    , m_bInClose(false)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
+    m_aPanelLayoutTimer.SetTimeout(50);
+    m_aPanelLayoutTimer.SetTimeoutHdl( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
+}
+
+PanelLayout::~PanelLayout()
+{
+    m_bInClose = true;
+    m_aPanelLayoutTimer.Stop();
 }
 
 Size PanelLayout::GetOptimalSize() const
@@ -23,6 +32,30 @@ Size PanelLayout::GetOptimalSize() const
         return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
 
     return Control::GetOptimalSize();
+}
+
+bool PanelLayout::hasPanelPendingLayout() const
+{
+    return m_aPanelLayoutTimer.IsActive();
+}
+
+void PanelLayout::queue_resize()
+{
+    if (m_bInClose)
+        return;
+    if (hasPanelPendingLayout())
+        return;
+    if (!isLayoutEnabled(this))
+        return;
+    m_aPanelLayoutTimer.Start();
+}
+
+IMPL_LINK( PanelLayout, ImplHandlePanelLayoutTimerHdl, void*, EMPTYARG )
+{
+    Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
+    assert(pChild);
+    VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
+    return 0;
 }
 
 void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)

@@ -156,6 +156,12 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
     }
 }
 
+void VclContainer::queue_resize()
+{
+    markLayoutDirty();
+    Window::queue_resize();
+}
+
 void VclBox::accumulateMaxes(const Size &rChildSize, Size &rSize) const
 {
     long nSecondaryChildDimension = getSecondaryDimension(rChildSize);

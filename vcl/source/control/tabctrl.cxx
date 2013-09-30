@@ -2361,4 +2361,10 @@ Size TabControl::GetOptimalSize() const
     return calculateRequisition();
 }
 
+void TabControl::queue_resize()
+{
+    markLayoutDirty();
+    Window::queue_resize();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

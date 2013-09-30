@@ -186,7 +186,7 @@ private:
     VectorOfNodes   LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
-    virtual void queue_layout();
+    virtual void queue_resize();
     void SetPaneSize(Window *pPane);
 
 protected:

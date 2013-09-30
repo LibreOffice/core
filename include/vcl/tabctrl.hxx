@@ -201,6 +201,8 @@ public:
     {
         mbLayoutDirty = true;
     }
+
+    virtual void queue_resize();
 };
 
 #endif  // _SV_TABCTRL_HXX

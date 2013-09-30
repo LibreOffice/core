@@ -104,7 +104,7 @@ public:
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize();
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
-    virtual void queue_layout();
+    virtual void queue_resize();
     virtual bool set_property(const OString &rKey, const OString &rValue);
     VclButtonBox* get_action_area();
     VclBox* get_content_area();

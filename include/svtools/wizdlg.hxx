@@ -263,7 +263,7 @@ public:
     virtual void        ActivatePage();
     virtual long        DeactivatePage();
 
-    virtual void queue_layout();
+    virtual void        queue_resize();
 
     sal_Bool            ShowPrevPage();
     sal_Bool            ShowNextPage();
