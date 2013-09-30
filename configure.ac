@@ -6360,9 +6360,9 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
         CPPFLAGS="-isysroot $MACOSX_SDK_PATH $CPPFLAGS"
     fi
 
-    # Assume visibility is not broken with libc++ even if libc++ headers. The below test is very much
-    # designed for libstdc++ only.
-    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a \( "$COM_GCC_IS_CLANG" != TRUE -o "$CPP_LIBRARY" != LIBCPP \); then
+    # Assume visibility is not broken with libc++. The below test is very much designed for libstdc++
+    # only.
+    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a "$CPP_LIBRARY" = GLIBCXX; then
         dnl gcc#19664, gcc#22482, rhbz#162935
         AC_MSG_CHECKING([if STL headers are visibility safe (GCC bug 22482)])
         AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
