@@ -171,19 +171,4 @@ sal_Char* createName( sal_Char* dst, const sal_Char* meth, sal_uInt32 cnt )
     return( pdst );
 }
 
-//------------------------------------------------------------------------
-
-static inline sal_Int32 ACharToUCharCompare( const sal_Unicode *pUStr,
-                                             const sal_Char    *pAStr
-                                           )
-{
-    sal_Int32  nCmp   = 0;
-    sal_Int32  nUChar = (sal_Int32)*pUStr;
-    sal_Int32  nChar  = (sal_Int32)((unsigned char)*pAStr);
-
-    nCmp = nUChar - nChar;
-
-    return  nCmp;
-} // ACharToUCharCompare
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
