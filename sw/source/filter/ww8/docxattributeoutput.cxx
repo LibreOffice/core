@@ -324,7 +324,7 @@ bool lcl_checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* p
     if (!pTxtNode->HasHints())
         return false;
 
-    SwTxtAttr* pTxtAttr = pTxtNode->GetSwpHints().GetStart(0);
+    SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrAt(0, RES_TXTATR_AUTOFMT);
 
     if (!pTxtAttr || pTxtAttr->Which() != RES_TXTATR_AUTOFMT)
         return false;
