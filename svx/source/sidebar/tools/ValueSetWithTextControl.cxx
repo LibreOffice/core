@@ -49,7 +49,6 @@ using namespace com::sun::star::style;
 using rtl::OUString;
 
 namespace svx { namespace sidebar {
-static const sal_Char cValue[] = "Value";
 
 static Font& lcl_GetDefaultBulletFont()
 {
