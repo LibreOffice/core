@@ -430,10 +430,6 @@ DLLPOST=".so"
 
 LINKFLAGSNOUNDEFS="-Wl,-z,defs"
 
-# Most platforms use GNU libstdc++
-CPP_LIBRARY="GLIBCXX"
-AC_SUBST(CPP_LIBRARY)
-
 INSTROOTSUFFIX=
 SDKDIRNAME=sdk
 
@@ -2781,7 +2777,6 @@ if test $_os = Darwin; then
                 fi
                 # Use libc++ instead of libstdc++ when possible
                 stdlib=-stdlib=libc++
-                CPP_LIBRARY="LIBCPP"
             fi
             if test "$ENABLE_LTO" = TRUE; then
                 lto=-flto
@@ -2797,14 +2792,6 @@ if test $_os = Darwin; then
             ;;
         esac
         AC_MSG_RESULT([$CC and $CXX])
-    else
-        # In case somebody insists on passing in CXX, and perhaps CFLAGS or CXXFLAGS to choose
-        # compiler. Not really something we encourage or support.
-        case "$CXX $CFLAGS $CXXFLAGS" in
-        *-stdlib=libc++*)
-            CPP_LIBRARY="LIBCPP"
-            ;;
-        esac
     fi
 
     case "$with_macosx_version_max_allowed" in
@@ -3858,7 +3845,6 @@ cygwin*)
     OS=WNT
     RTL_OS=Windows
     P_SEP=";"
-    CPP_LIBRARY="MSVCRT"
 
     case "$host_cpu" in
     i*86|x86_64)
@@ -6148,6 +6134,40 @@ if test "$HAVE_CXX11" = TRUE; then
     CXXFLAGS=$save_CXXFLAGS
 fi
 
+AC_MSG_CHECKING([What the C++ library is])
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <utility>
+#ifndef __GLIBCXX__
+foo bar
+#endif
+]])],
+    [CPP_LIBRARY=GLIBCXX
+     cpp_library_name="GNU libstdc++"
+    ],
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <utility>
+#ifndef _LIBCPP_VERSION
+foo bar
+#endif
+]])],
+    [CPP_LIBRARY=LIBCPP
+     cpp_library_name="LLVM libc++"
+    ],
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <utility>
+#ifndef _MSC_VER
+foo bar
+#endif
+]])],
+    [CPP_LIBRARY=MSVCRT
+     cpp_library_name="Microsoft"
+    ],
+    AC_MSG_ERROR([Could not figure out what C++ library this is]))))
+AC_MSG_RESULT([$cpp_library_name])
+AC_LANG_POP([C++])
+AC_SUBST(CPP_LIBRARY)
+
 if test "$HAVE_CXX11" = "TRUE"; then
     AC_DEFINE(HAVE_CXX11)
 elif test -n "$CXXFLAGS_CXX11"; then
@@ -6340,14 +6360,16 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
         CPPFLAGS="-isysroot $MACOSX_SDK_PATH $CPPFLAGS"
     fi
 
-    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
+    # Assume visibility is not broken with libc++ even if libc++ headers. The below test is very much
+    # designed for libstdc++ only.
+    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a \( "$COM_GCC_IS_CLANG" != TRUE -o "$CPP_LIBRARY" != LIBCPP \); then
         dnl gcc#19664, gcc#22482, rhbz#162935
         AC_MSG_CHECKING([if STL headers are visibility safe (GCC bug 22482)])
         AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
         AC_MSG_RESULT([$stlvisok])
         if test "$stlvisok" = "no"; then
-            AC_MSG_WARN([Your gcc STL headers are not visibility safe. Disabling visibility])
-            add_warning "Your gcc STL headers are not visibility safe. Disabling visibility"
+            AC_MSG_WARN([Your libstdc++ headers are not visibility safe. Disabling visibility])
+            add_warning "Your libstdc++ headers are not visibility safe. Disabling visibility"
             unset HAVE_GCC_VISIBILITY_FEATURE
         fi
     fi
