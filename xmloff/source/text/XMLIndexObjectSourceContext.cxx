@@ -49,7 +49,6 @@ using ::xmloff::token::XML_TOKEN_INVALID;
 const sal_Char sAPI_CreateFromStarCalc[] = "CreateFromStarCalc";
 const sal_Char sAPI_CreateFromStarChart[] = "CreateFromStarChart";
 const sal_Char sAPI_CreateFromStarDraw[] = "CreateFromStarDraw";
-const sal_Char sAPI_CreateFromStarImage[] = "CreateFromStarImage";
 const sal_Char sAPI_CreateFromStarMath[] = "CreateFromStarMath";
 const sal_Char sAPI_CreateFromOtherEmbeddedObjects[] = "CreateFromOtherEmbeddedObjects";
 
