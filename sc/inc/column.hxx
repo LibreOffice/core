@@ -356,6 +356,8 @@ public:
     void        MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                             ScLineFlags& rFlags,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight ) const;
+    void        ApplyBorderLineFromDirection( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
+                            SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDirection );
     void        ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight );
 

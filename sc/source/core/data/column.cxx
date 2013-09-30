@@ -46,6 +46,7 @@
 #include <svl/zforlist.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include "editeng/fieldupdater.hxx"
+#include <editeng/boxitem.hxx>
 
 #include <cstring>
 #include <map>
@@ -363,6 +364,37 @@ void ScColumn::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInn
     pAttrArray->MergeBlockFrame( pLineOuter, pLineInner, rFlags, nStartRow, nEndRow, bLeft, nDistRight );
 }
 
+
+void ScColumn::ApplyBorderLineFromDirection( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
+                            SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDirection )
+{
+    // nDirection: which line of the cell to replace with the line object from pLineOuter
+    SvxBoxInfoItem aInnerBorder(*pLineInner);
+    const sal_uInt8 ALL_BORDERFLAGS = 0xff;
+    aInnerBorder.SetValid((sal_uInt8)(ALL_BORDERFLAGS-VALID_DISTANCE), false);
+    const SvxBoxItem* pBorderToModifyOrig = (const SvxBoxItem*)(GetAttr(nStartRow, ATTR_BORDER ));
+    SvxBoxItem aBorderToModify(*pBorderToModifyOrig);
+    switch (nDirection)
+    {
+        case BOX_LINE_TOP:
+            aInnerBorder.SetValid(VALID_TOP, true);
+            aBorderToModify.SetLine(pLineOuter->GetBottom(), BOX_LINE_TOP);
+            break;
+        case BOX_LINE_BOTTOM:
+            aInnerBorder.SetValid(VALID_BOTTOM, true);
+            aBorderToModify.SetLine(pLineOuter->GetTop(), BOX_LINE_BOTTOM);
+            break;
+        case BOX_LINE_LEFT:
+            aInnerBorder.SetValid(VALID_LEFT, true);
+            aBorderToModify.SetLine(pLineOuter->GetRight(), BOX_LINE_LEFT);
+            break;
+        case BOX_LINE_RIGHT:
+            aInnerBorder.SetValid(VALID_RIGHT, true);
+            aBorderToModify.SetLine(pLineOuter->GetLeft(), BOX_LINE_RIGHT);
+            break;
+    }
+    ApplyBlockFrame( &aBorderToModify, &aInnerBorder, nStartRow, nEndRow, true, 0 );
+}
 
 void ScColumn::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight )

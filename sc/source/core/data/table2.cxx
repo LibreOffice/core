@@ -2397,20 +2397,70 @@ void ScTable::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInne
     }
 }
 
-
 void ScTable::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
                     SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
-    if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
+    PutInOrder(nStartCol, nEndCol);
+    PutInOrder(nStartRow, nEndRow);
+    SCCOL nStartColOrig = nStartCol;
+    SCCOL nEndColOrig = nEndCol;
+    SCROW nStartRowOrig = nStartRow;
+    SCROW nEndRowOrig = nEndRow;
+
+    // modifying start/end col/row if selected area is merged
+    const ScMergeAttr& rMergeInfo = (const ScMergeAttr&)(GetPattern(nStartCol,nStartRow)->GetItem(ATTR_MERGE));
+    if (rMergeInfo.IsMerged())
     {
-        PutInOrder(nStartCol, nEndCol);
-        PutInOrder(nStartRow, nEndRow);
-        for (SCCOL i=nStartCol; i<=nEndCol; i++)
+        SCCOL nMergedCols = rMergeInfo.GetColMerge();
+        SCROW nMergedRows = rMergeInfo.GetRowMerge();
+        if (nEndCol < nStartCol + nMergedCols - 1)
+        {
+            nEndCol = nStartCol + nMergedCols - 1;
+        }
+        if (nEndRow < nStartRow + nMergedRows - 1)
+        {
+            nEndRow = nStartRow + nMergedRows - 1;
+        }
+    }
+    // when setting a border of an area, this procedure sets also the borders
+    // of the neighboring area, for example if we set the left border of cell
+    // A1, then the right border of cell B1 will be set to the same value automatically;
+    // so we have the illusion of having a single common border for adjacent cells
+
+    SCROW nCurrStartRow = SanitizeRow(nStartRow);
+    SCROW nCurrEndRow = SanitizeRow(nEndRow);
+    SCCOL nCurrStartCol = SanitizeCol(nStartCol);
+    SCCOL nCurrEndCol = SanitizeCol(nEndCol);
+    if (pLineInner->IsValid(VALID_TOP) && ValidRow(nStartRow-1))
+    {
+        for (SCCOL j=nCurrStartCol;j<=nCurrEndCol;++j)
+        {
+            aCol[j].ApplyBorderLineFromDirection( pLineOuter, pLineInner, nStartRow-1, nStartRow-1, BOX_LINE_BOTTOM);
+        }
+    }
+    if (pLineInner->IsValid(VALID_BOTTOM) && ValidRow(nEndRow+1))
+    {
+        for (SCCOL j=nCurrStartCol;j<=nCurrEndCol;++j)
+        {
+            aCol[j].ApplyBorderLineFromDirection( pLineOuter, pLineInner, nEndRow+1, nEndRow+1, BOX_LINE_TOP);
+        }
+    }
+    if (pLineInner->IsValid(VALID_LEFT) && ValidCol(nStartCol-1))
+    {
+        aCol[nStartCol-1].ApplyBorderLineFromDirection( pLineOuter, pLineInner, nCurrStartRow, nCurrEndRow, BOX_LINE_RIGHT);
+    }
+    if (pLineInner->IsValid(VALID_RIGHT) && ValidCol(nEndCol+1))
+    {
+        aCol[nEndCol+1].ApplyBorderLineFromDirection( pLineOuter, pLineInner, nCurrStartRow, nCurrEndRow, BOX_LINE_LEFT);
+    }
+
+    if (ValidColRow(nStartColOrig, nStartRowOrig) && ValidColRow(nEndColOrig, nEndRowOrig))
+    {
+        for (SCCOL i=nStartColOrig; i<=nEndColOrig; i++)
             aCol[i].ApplyBlockFrame( pLineOuter, pLineInner,
-                                    nStartRow, nEndRow, (i==nStartCol), nEndCol-i );
+                                    nStartRowOrig, nEndRowOrig, (i==nStartColOrig), nEndColOrig-i );
     }
 }
-
 
 void ScTable::ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
 {
