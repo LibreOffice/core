@@ -21,20 +21,6 @@
 
 // defines ------------------------------------------------------------------
 
-#define FT_OLD_PASSWD           10
-#define ED_OLD_PASSWD           11
-#define FL_OLD_PASSWD           12
-
-#define FT_NEW_PASSWD           20
-#define ED_NEW_PASSWD           21
-#define FT_REPEAT_PASSWD        22
-#define ED_REPEAT_PASSWD        23
-#define FL_NEW_PASSWD           24
-
-#define BTN_PASSWD_OK           30
-#define BTN_PASSWD_ESC          31
-#define BTN_PASSWD_HELP         32
-
 #define STR_ERR_OLD_PASSWD      40
 #define STR_ERR_REPEAT_PASSWD   41
 

@@ -33,17 +33,12 @@
 class SVX_DLLPUBLIC SvxPasswordDialog : public SfxModalDialog
 {
 private:
-    FixedLine       aOldFL;
-    FixedText       aOldPasswdFT;
-    Edit            aOldPasswdED;
-    FixedLine       aNewFL;
-    FixedText       aNewPasswdFT;
-    Edit            aNewPasswdED;
-    FixedText       aRepeatPasswdFT;
-    Edit            aRepeatPasswdED;
-    OKButton        aOKBtn;
-    CancelButton    aEscBtn;
-    HelpButton      aHelpBtn;
+    FixedText* m_pOldFL;
+    FixedText* m_pOldPasswdFT;
+    Edit* m_pOldPasswdED;
+    Edit* m_pNewPasswdED;
+    Edit* m_pRepeatPasswdED;
+    OKButton* m_pOKBtn;
 
     OUString        aOldPasswdErrStr;
     OUString        aRepeatPasswdErrStr;
@@ -59,8 +54,8 @@ public:
                     SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords = sal_False, sal_Bool bDisableOldPassword = sal_False );
                     ~SvxPasswordDialog();
 
-    OUString        GetOldPassword() const { return aOldPasswdED.GetText(); }
-    OUString        GetNewPassword() const { return aNewPasswdED.GetText(); }
+    OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }
+    OUString        GetNewPassword() const { return m_pNewPasswdED->GetText(); }
 
     void            SetCheckPasswordHdl( const Link& rLink ) { aCheckPasswordHdl = rLink; }
 };
