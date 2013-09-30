@@ -46,8 +46,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::document;
 
-const char RECENT_FILE_LIST[] =   ".uno:RecentFileList";
-
 const char WRITER_URL[] =         "private:factory/swriter";
 const char CALC_URL[] =           "private:factory/scalc";
 const char IMPRESS_WIZARD_URL[] = "private:factory/simpress?slot=6686";
@@ -57,10 +55,6 @@ const char MATH_URL[] =           "private:factory/smath";
 const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
-
-const int nItemId_Extensions = 1;
-const int nItemId_Info = 3;
-const int nItemId_TplRep = 4;
 
 const int nTemplateItemMaxWidth = 160;
 const int nTemplateItemMaxHeight = 148;
