@@ -10,6 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,fontconfig))
 
 $(eval $(call gb_ExternalProject_use_packages,fontconfig,\
+	expat \
 	freetype \
 ))
 
@@ -24,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			--disable-shared \
 			--with-arch=arm \
 			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
-			--with-expat-lib=$(OUTDIR)/lib \
+			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
 			--with-freetype-config=$(OUTDIR)/bin/freetype-config \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		&& $(MAKE) \
