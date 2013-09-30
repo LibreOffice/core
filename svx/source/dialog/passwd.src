@@ -18,98 +18,15 @@
  */
 
 #include <svx/dialogs.hrc>
-#include "helpid.hrc"
-#include "passwd.hrc"
 
- // RID_SVXDLG_PASSWORD ---------------------------------------------------
-ModalDialog RID_SVXDLG_PASSWORD
+String RID_SVXSTR_ERR_OLD_PASSWD
 {
-    HelpId = HID_PASSWORD ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 210 , 77 ) ;
-    Moveable = TRUE ;
-    FixedText FT_OLD_PASSWD
-    {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ en-US ] = "~Password" ;
-    };
-    Edit ED_OLD_PASSWD
-    {
-        HelpID = "svx:Edit:RID_SVXDLG_PASSWORD:ED_OLD_PASSWD";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 71 , 14 ) ;
-        Size = MAP_APPFONT ( 71 , 12 ) ;
-        PassWord = TRUE ;
-    };
-    FixedLine FL_OLD_PASSWD
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 142 , 8 ) ;
-        Text [ en-US ] = "Old password" ;
-    };
-    FixedText FT_NEW_PASSWD
-    {
-        Pos = MAP_APPFONT ( 12 , 45 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ en-US ] = "Pa~ssword" ;
-    };
-    Edit ED_NEW_PASSWD
-    {
-        HelpID = "svx:Edit:RID_SVXDLG_PASSWORD:ED_NEW_PASSWD";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 71 , 43 ) ;
-        Size = MAP_APPFONT ( 71 , 12 ) ;
-        PassWord = TRUE ;
-    };
-    FixedText FT_REPEAT_PASSWD
-    {
-        Pos = MAP_APPFONT ( 12 , 61 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ en-US ] = "Confi~rm";
-    };
-    Edit ED_REPEAT_PASSWD
-    {
-        HelpID = "svx:Edit:RID_SVXDLG_PASSWORD:ED_REPEAT_PASSWD";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 71 , 59 ) ;
-        Size = MAP_APPFONT ( 71 , 12 ) ;
-        PassWord = TRUE ;
-    };
-    FixedLine FL_NEW_PASSWD
-    {
-        Pos = MAP_APPFONT ( 6 , 32 ) ;
-        Size = MAP_APPFONT ( 142 , 8 ) ;
-        Text [ en-US ] = "New password" ;
-    };
-    OKButton BTN_PASSWD_OK
-    {
-        Pos = MAP_APPFONT ( 154 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-        Disable = TRUE ;
-    };
-    CancelButton BTN_PASSWD_ESC
-    {
-        Pos = MAP_APPFONT ( 154 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_PASSWD_HELP
-    {
-        Pos = MAP_APPFONT ( 154 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String STR_ERR_OLD_PASSWD
-    {
-        Text [ en-US ] = "Invalid password" ;
-    };
-    String STR_ERR_REPEAT_PASSWD
-    {
-        Text [ en-US ] = "Passwords do not match" ;
-    };
-    Text [ en-US ] = "Change Password" ;
+    Text [ en-US ] = "Invalid password" ;
 };
- // ********************************************************************** EOF
+
+String RID_SVXSTR_ERR_REPEAT_PASSWD
+{
+    Text [ en-US ] = "Passwords do not match" ;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
