@@ -40,12 +40,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
-
-namespace {
-    static const sal_Int32 MinimalPanelHeight (25);
-}
-
-
 Deck::Deck (
     const DeckDescriptor& rDeckDescriptor,
     Window* pParentWindow,
