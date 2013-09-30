@@ -50,13 +50,9 @@ inline static void SwapUShort( sal_uInt16& r )
     {   r = OSL_SWAPWORD(r);   }
 inline static void SwapShort( short& r )
     {   r = OSL_SWAPWORD(r);   }
-inline static void SwapLong( long& r )
-    {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapULong( sal_uInt32& r )
     {   r = OSL_SWAPDWORD(r);   }
 inline static void SwapLongInt( sal_Int32& r )
-    {   r = OSL_SWAPDWORD(r);   }
-inline static void SwapLongUInt( unsigned int& r )
     {   r = OSL_SWAPDWORD(r);   }
 
 inline static void SwapUInt64( sal_uInt64& r )
