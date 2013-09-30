@@ -206,7 +206,7 @@ class SdrTextObj;
 class XclTxo : public ExcRecord
 {
 public:
-                                XclTxo( const String& rString, sal_uInt16 nFontIx = EXC_FONT_APP );
+                                XclTxo( const OUString& rString, sal_uInt16 nFontIx = EXC_FONT_APP );
                                 XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rEditObj );
                                 XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption );
 
@@ -318,14 +318,14 @@ public:
 class ExcBundlesheet8 : public ExcBundlesheetBase
 {
 private:
-    String                      sUnicodeName;
+    OUString                    sUnicodeName;
     XclExpString                GetName() const;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
-                                ExcBundlesheet8( const String& rString );
+                                ExcBundlesheet8( const OUString& rString );
 
     virtual sal_Size            GetLen() const;
 
@@ -351,7 +351,7 @@ private:
     XclExpString                aName;
     virtual void                SaveCont( XclExpStream& rStrm );
 public:
-                                XclCodename( const String& );
+                                XclCodename( const OUString& );
 
     virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
@@ -372,7 +372,7 @@ private:
 
 protected:
 public:
-                                ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const String& rTxt );
+                                ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const OUString& rTxt );
 
     inline sal_Size             GetStringBytes() const
                                     { return sText.GetSize(); }
@@ -396,7 +396,7 @@ private:
 
     std::vector<ExcEScenarioCell> aCells;
 
-    sal_Bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const String& rTxt );
+    sal_Bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt );
 
     virtual void                SaveCont( XclExpStream& rStrm );
 

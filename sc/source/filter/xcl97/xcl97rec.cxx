@@ -697,7 +697,7 @@ static sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
     return nVerAlign;
 }
 
-XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
+XclTxo::XclTxo( const OUString& rString, sal_uInt16 nFontIx ) :
     mpString( new XclExpString( rString ) ),
     mnRotation( EXC_OBJ_ORIENT_NONE ),
     mnHorAlign( EXC_OBJ_HOR_LEFT ),
@@ -1077,7 +1077,7 @@ ExcBundlesheet8::ExcBundlesheet8( RootData& rRootData, SCTAB _nTab ) :
 }
 
 
-ExcBundlesheet8::ExcBundlesheet8( const String& rString ) :
+ExcBundlesheet8::ExcBundlesheet8( const OUString& rString ) :
     ExcBundlesheetBase(),
     sUnicodeName( rString )
 {
@@ -1144,7 +1144,7 @@ sal_Size XclObproj::GetLen() const
 
 // ---- class XclCodename --------------------------------------------
 
-XclCodename::XclCodename( const String& r ) : aName( r )
+XclCodename::XclCodename( const OUString& r ) : aName( r )
 {
 }
 
@@ -1170,7 +1170,7 @@ sal_Size XclCodename::GetLen() const
 
 // ---- Scenarios ----------------------------------------------------
 
-ExcEScenarioCell::ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const String& rTxt ) :
+ExcEScenarioCell::ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const OUString& rTxt ) :
         nCol( nC ),
         nRow( nR ),
         sText( rTxt, EXC_STR_DEFAULT, 255 )
@@ -1262,7 +1262,7 @@ ExcEScenario::~ExcEScenario()
 {
 }
 
-sal_Bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const String& rTxt )
+sal_Bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const OUString& rTxt )
 {
     if( aCells.size() == EXC_SCEN_MAXCELL )
         return false;
