@@ -267,8 +267,12 @@ public:
             refmarks, toxmarks, and metas will be ignored unless this is true
         ATTENTION: setting bInclRefToxMark is only allowed from UNDO!
      */
-    void    RstAttr( const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich = 0,
-                    const SfxItemSet* pSet = 0, sal_Bool bInclRefToxMark = sal_False );
+    void RstAttr(
+        const SwIndex &rIdx,
+        const xub_StrLen nLen,
+        const sal_uInt16 nWhich = 0,
+        const SfxItemSet* pSet = 0,
+        const sal_Bool bInclRefToxMark = sal_False );
     void    GCAttr();
 
     // Delete text attribute (needs to be deregistered at Pool!)
