@@ -227,7 +227,11 @@ static OUString makeComponentPath(
         if (rPath[ rPath.getLength() -1 ] != '/')
             buf.append( (sal_Unicode) '/' );
     }
-    if (! rLibName.endsWithIgnoreAsciiCase( SAL_DLLEXTENSION ))
+    if (!rLibName.endsWithIgnoreAsciiCase( SAL_DLLEXTENSION )
+#if defined MACOSX
+        && !rLibName.endsWithIgnoreAsciiCase(".jnilib")
+#endif
+        )
     {
 #if defined SAL_DLLPREFIX
         if (! rLibName.endsWithIgnoreAsciiCase( ".uno" ))
