@@ -62,7 +62,7 @@ private:
     EPathType GetPathType ( const OUString& rStrPath );
 
 protected:
-    void FillDlgFields     ( String& aStrURL );
+    void FillDlgFields(const OUString& rStrURL);
     void GetCurentItemData ( OUString& rStrURL, String& aStrName,
                              String& aStrIntName, String& aStrFrame,
                              SvxLinkInsertMode& eMode );

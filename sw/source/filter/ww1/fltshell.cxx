@@ -1127,9 +1127,9 @@ SwFltShell& SwFltShell::operator << ( const String& rStr )
     return *this;
 }
 
-void SwFltShell::ConvertUStr( String& rInOut )
+OUString SwFltShell::ConvertUStr(const OUString& rInOut)
 {
-    rInOut = GetAppCharClass().uppercase( rInOut );
+    return GetAppCharClass().uppercase(rInOut);
 }
 
 // QuoteString() wandelt CRs abhaengig von nFieldIniFlags in '\n' oder "\0x0d"
@@ -1255,7 +1255,7 @@ SwFltShell& SwFltShell::SetStyle( sal_uInt16 nStyle )
 
 SwFltShell& SwFltShell::operator << (SwFltBookmark& aBook)
 {
-    ConvertUStr( aBook.aName );
+    aBook.aName = ConvertUStr(aBook.aName);
     aBook.aVal = QuoteStr(aBook.aVal);
     aEndStack.NewAttr(*pPaM->GetPoint(), aBook);
     return *this;

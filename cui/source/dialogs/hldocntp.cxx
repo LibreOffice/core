@@ -151,7 +151,7 @@ SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 |************************************************************************/
 
 
-void SvxHyperlinkNewDocTp::FillDlgFields ( String& /*aStrURL*/ )
+void SvxHyperlinkNewDocTp::FillDlgFields(const OUString& /*rStrURL*/)
 {
 }
 

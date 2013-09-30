@@ -104,7 +104,7 @@ protected:
 
     void InitStdControls ();
     virtual void FillStandardDlgFields ( SvxHyperlinkItem* pHyperlinkItem );
-    virtual void FillDlgFields         ( String& aStrURL ) = 0;
+    virtual void FillDlgFields(const OUString& rStrURL) = 0;
     virtual void GetCurentItemData     ( OUString& rStrURL, String& aStrName,
                                          String& aStrIntName, String& aStrFrame,
                                          SvxLinkInsertMode& eMode ) = 0;

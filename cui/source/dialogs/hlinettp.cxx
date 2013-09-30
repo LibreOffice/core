@@ -112,13 +112,13 @@ SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
+void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 {
-    INetURLObject aURL( aStrURL );
-    String aStrScheme = GetSchemeFromURL( aStrURL );
+    INetURLObject aURL(rStrURL);
+    OUString aStrScheme(GetSchemeFromURL(rStrURL));
 
     // set additional controls for FTP: Username / Password
-    if ( aStrScheme.SearchAscii( sFTPScheme ) == 0 )
+    if (aStrScheme.startsWith(sFTPScheme))
     {
         if ( aURL.GetUser().toAsciiLowerCase().startsWith( sAnonymous ) )
             setAnonymousFTPUser();
@@ -135,9 +135,9 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
     else
-        maCbbTarget.SetText( aStrURL ); // #77696#
+        maCbbTarget.SetText(rStrURL); // #77696#
 
-    SetScheme( aStrScheme );
+    SetScheme(aStrScheme);
 }
 
 void SvxHyperlinkInternetTp::setAnonymousFTPUser()
@@ -179,9 +179,9 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, String& aStr
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }
 
-String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
+OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 {
-    String aStrURL = maCbbTarget.GetText();
+    OUString aStrURL(maCbbTarget.GetText());
 
     INetURLObject aURL(aStrURL);
 
@@ -275,11 +275,10 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
 /*************************************************************************
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
+void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 {
-    //if  aScheme is empty or unknown the default beaviour is like it where HTTP
-
-    sal_Bool bFTP = aScheme.SearchAscii( sFTPScheme ) == 0;
+    //if rScheme is empty or unknown the default beaviour is like it where HTTP
+    sal_Bool bFTP = rScheme.startsWith(sFTPScheme);
     sal_Bool bInternet = !(bFTP);
 
     //update protocol button selection:
@@ -287,7 +286,7 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
     maRbtLinktypInternet.Check(bInternet);
 
     //update target:
-    RemoveImproperProtocol(aScheme);
+    RemoveImproperProtocol(rScheme);
     maCbbTarget.SetSmartProtocol( GetSmartProtocolFromButtons() );
 
     //show/hide  special fields for FTP:
@@ -298,7 +297,7 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
     maCbAnonymous.Show( bFTP );
 
     //update 'link target in document'-window and opening-button
-    if( aScheme.SearchAscii( sHTTPScheme ) == 0 || aScheme.Len() == 0 )
+    if (rScheme.startsWith(sHTTPScheme) || rScheme.isEmpty())
     {
         maBtTarget.Enable();
         if ( mbMarkWndOpen )
@@ -319,15 +318,15 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::RemoveImproperProtocol(const String& aProperScheme)
+void SvxHyperlinkInternetTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
     String aStrURL ( maCbbTarget.GetText() );
     if ( aStrURL != aEmptyStr )
     {
-        String aStrScheme = GetSchemeFromURL( aStrURL );
-        if ( aStrScheme != aEmptyStr && aStrScheme != aProperScheme )
+        OUString aStrScheme(GetSchemeFromURL(aStrURL));
+        if ( !aStrScheme.isEmpty() && aStrScheme != aProperScheme )
         {
-            aStrURL.Erase ( 0, aStrScheme.Len() );
+            aStrURL.Erase ( 0, aStrScheme.getLength() );
             maCbbTarget.SetText ( aStrURL );
         }
     }
@@ -357,8 +356,8 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl)
 {
-    String aScheme = GetSchemeFromButtons();
-    SetScheme( aScheme );
+    OUString aScheme = GetSchemeFromButtons();
+    SetScheme(aScheme);
     return( 0L );
 }
 

@@ -43,7 +43,7 @@ private:
     DECL_LINK (ClickAdrBookHdl_Impl  , void * ); ///< Button : Address book
     DECL_LINK (ModifiedReceiverHdl_Impl, void * ); ///< Combobox "receiver" modified
 
-    void    SetScheme( const String& aScheme );
+    void    SetScheme(const OUString& rScheme);
     void    RemoveImproperProtocol(const String& aProperScheme);
     String  GetSchemeFromButtons() const;
     INetProtocol GetSmartProtocolFromButtons() const;
@@ -51,7 +51,7 @@ private:
     String  CreateAbsoluteURL() const;
 
 protected:
-    virtual void FillDlgFields     ( String& aStrURL );
+    virtual void FillDlgFields(const OUString& rStrURL);
     virtual void GetCurentItemData ( OUString& rStrURL, String& aStrName,
                                      String& aStrIntName, String& aStrFrame,
                                      SvxLinkInsertMode& eMode );

@@ -164,7 +164,7 @@ public:
     }
     sal_Bool GetError()                     { return !bOK; }
     sal_Unicode Out( Ww1Shell&, sal_uLong& );
-    sal_Unicode Out( String&, sal_uLong=0xffffffff);
+    sal_Unicode Out( OUString&, sal_uLong=0xffffffff);
     sal_Unicode Out( sal_Unicode& );
     friend std::ostream& operator <<(std::ostream&, Ww1PlainText&);
     String& Fill( String&, sal_uLong=0, sal_uLong=0xffffffff );
@@ -1209,7 +1209,7 @@ public:
 class Ww1Fields : public Ww1PlcFields
 {
     sal_uInt16 nPlcIndex;
-    String sErgebnis; // das von word errechnete ergebniss
+    OUString sErgebnis; // das von word errechnete ergebniss
     SwField* pField;
     sal_uLong Where(sal_uInt16 nIndex)  // innerhalb des textes
         { return Ww1PlcFields::Where(nIndex) - rFib.GetFIB().fcMinGet(); }
@@ -1545,7 +1545,7 @@ public:
     // innerhalb des textes
     sal_uLong Where()                       { return pDoc->Where(); }
     void Fill( sal_Unicode& rChr )      { pDoc->Out( rChr ); }
-    sal_uInt8 Fill( String& rStr, sal_uLong ulLen)
+    sal_uInt8 Fill( OUString& rStr, sal_uLong ulLen)
     {
         ulLen += pDoc->Where();
         return sal::static_int_cast< sal_uInt8 >(pDoc->Out(rStr, ulLen));

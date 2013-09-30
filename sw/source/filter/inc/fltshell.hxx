@@ -664,7 +664,7 @@ public:
 
     bool IsFlagSet(SwFltControlStack::Flags no) const
         { return aStack.IsFlagSet(no); }
-    void ConvertUStr( String& rInOut );
+    OUString ConvertUStr(const OUString& rInOut);
     OUString QuoteStr( const OUString& rIn );
 
     // folgende status kann die shell verwalten:

@@ -448,31 +448,34 @@ XclExpHyperlink::~XclExpHyperlink()
 String XclExpHyperlink::BuildFileName(
         sal_uInt16& rnLevel, bool& rbRel, const String& rUrl, const XclExpRoot& rRoot ) const
 {
-    String aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
+    OUString aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
     rnLevel = 0;
     rbRel = rRoot.IsRelUrl();
 
     if( rbRel )
     {
         // try to convert to relative file name
-        String aTmpName( aDosName );
+        OUString aTmpName( aDosName );
         aDosName = INetURLObject::GetRelURL( rRoot.GetBasePath(), rUrl,
             INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
 
-        if( aDosName.SearchAscii( INET_FILE_SCHEME ) == 0 )
+        if (aDosName.startsWith(INET_FILE_SCHEME))
         {
             // not converted to rel -> back to old, return absolute flag
             aDosName = aTmpName;
             rbRel = false;
         }
-        else if( aDosName.SearchAscii( "./" ) == 0 )
+        else if (aDosName.startsWith("./"))
         {
-            aDosName.Erase( 0, 2 );
+            aDosName = aDosName.copy(2);
         }
         else
         {
-            while( aDosName.SearchAndReplaceAscii( "../", EMPTY_STRING ) == 0 )
+            while (aDosName.startsWith("../"))
+            {
+                aDosName = aDosName.copy(3);
                 ++rnLevel;
+            }
         }
     }
     return aDosName;

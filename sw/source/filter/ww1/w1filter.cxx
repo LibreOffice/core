@@ -426,7 +426,7 @@ void Ww1Fields::Stop( Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)
             // gelten auch wirklich eingelesen werden und dem feld
             // zugeordnet werden.
             }
-            if (sErgebnis.Len())
+            if (!sErgebnis.isEmpty())
                 rOut << sErgebnis;
         }
     }
@@ -434,17 +434,17 @@ void Ww1Fields::Stop( Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)
 
 enum WWDateTime{ WW_DONTKNOW = 0x0, WW_DATE = 0x1, WW_TIME = 0x2, WW_BOTH = 0x3 };
 
-static WWDateTime GetTimeDatePara( const String& rForm,
+static WWDateTime GetTimeDatePara( const OUString& rForm,
                                     SwTimeFormat* pTime = 0,
                                      SwDateFormat* pDate = 0 )
 {
     WWDateTime eDT = WW_BOTH;
-    if( STRING_NOTFOUND == rForm.Search( 'H' ))         // H    -> 24h
+    if (rForm.indexOf('H') != -1)         // H    -> 24h
     {
         if( pTime )
             *pTime = TF_SSMM_24;
     }
-    else if( STRING_NOTFOUND == rForm.Search( 'H' ))    // h    -> 24h
+    else if (rForm.indexOf('H') != -1)    // h    -> 24h
     {
         if( pTime )
             *pTime = TF_SSMM_12;
@@ -454,13 +454,13 @@ static WWDateTime GetTimeDatePara( const String& rForm,
         eDT = (WWDateTime)( eDT & ~(sal_uInt16)WW_TIME );
     }
 
-    xub_StrLen nDPos = 0;
-    while( STRING_NOTFOUND != nDPos )
+    sal_Int32 nDPos = 0;
+    while (1)
     {
-        nDPos = rForm.Search( 'M', nDPos );     // M    -> Datum
-        if( !nDPos )
+        nDPos = rForm.indexOf('M', nDPos);     // M    -> Datum
+        if (nDPos == 0 || nDPos == -1)
             break;
-        sal_Unicode cPrev = rForm.GetChar( nDPos - 1 );
+        sal_Unicode cPrev = rForm[nDPos - 1];
         // ignoriere dabei "AM", "aM", "PM", "pM"
         if( 'a' != cPrev && 'A' != cPrev && 'p' != cPrev && 'P' != cPrev )
             break;
@@ -468,7 +468,7 @@ static WWDateTime GetTimeDatePara( const String& rForm,
         ++nDPos;
     }
 
-    if( STRING_NOTFOUND != nDPos )                  // Monat -> Datum ?
+    if (nDPos != -1)                  // Monat -> Datum ?
     {
         static SwDateFormat const aDateA[32] =
         {
@@ -482,32 +482,32 @@ static WWDateTime GetTimeDatePara( const String& rForm,
             DFF_DDDMMMY, DFF_DDDMMMY, DFF_DDDMMMYY, DFF_DDDMMMYY
         };
 
-        bool bHasDay = STRING_NOTFOUND != rForm.Search( 't' ) ||
-                       STRING_NOTFOUND != rForm.Search( 'T' ) ||
-                       STRING_NOTFOUND != rForm.Search( 'd' ) ||
-                       STRING_NOTFOUND != rForm.Search( 'D' );
+        bool bHasDay = rForm.indexOf('t') != -1 ||
+                       rForm.indexOf('T') != -1 ||
+                       rForm.indexOf('d') != -1 ||
+                       rForm.indexOf('D') != -1;
 
-        sal_Bool bLongDayOfWeek= STRING_NOTFOUND != rForm.SearchAscii( "tttt" ) ||
-                               STRING_NOTFOUND != rForm.SearchAscii( "TTTT" ) ||
-                               STRING_NOTFOUND != rForm.SearchAscii( "dddd" ) ||
-                               STRING_NOTFOUND != rForm.SearchAscii( "DDDD" );
+        sal_Bool bLongDayOfWeek = rForm.indexOf("tttt") != -1 ||
+                                  rForm.indexOf("TTTT") != -1 ||
+                                  rForm.indexOf("dddd") != -1 ||
+                                  rForm.indexOf("DDDD") != -1;
 
-        sal_Bool bDayOfWeek = STRING_NOTFOUND != rForm.SearchAscii( "ttt" ) ||
-                          STRING_NOTFOUND != rForm.SearchAscii( "TTT" ) ||
-                          STRING_NOTFOUND != rForm.SearchAscii( "ddd" ) ||
-                          STRING_NOTFOUND != rForm.SearchAscii( "DDD" );
+        sal_Bool bDayOfWeek = rForm.indexOf("ttt") != -1 ||
+                              rForm.indexOf("TTT") != -1 ||
+                              rForm.indexOf("ddd") != -1 ||
+                              rForm.indexOf("DDD") != -1;
 
                     //  M, MM -> numeric month
                     //  MMM, MMMM -> text. month
-        sal_Bool bLitMonth = STRING_NOTFOUND != rForm.SearchAscii( "MMM" );
+        sal_Bool bLitMonth = rForm.indexOf("MMM") != -1;
                     //  MMMM -> full month
-        sal_Bool bFullMonth = STRING_NOTFOUND != rForm.SearchAscii( "MMMM" );
+        sal_Bool bFullMonth = rForm.indexOf("MMMM") != -1;
                     //  jj, JJ -> 2-col-year
                     //  jjjj, JJJJ -> 4-col-year
-        sal_Bool bFullYear = STRING_NOTFOUND != rForm.SearchAscii( "jjj" ) ||
-                         STRING_NOTFOUND != rForm.SearchAscii( "JJJ" ) ||
-                         STRING_NOTFOUND != rForm.SearchAscii( "yyy" ) ||
-                         STRING_NOTFOUND != rForm.SearchAscii( "YYY" );
+        sal_Bool bFullYear = rForm.indexOf("jjj") != -1 ||
+                             rForm.indexOf("JJJ") != -1 ||
+                             rForm.indexOf("yyy") != -1 ||
+                             rForm.indexOf("YYY") != -1;
 
         sal_uInt16 i = ( bLitMonth & 1 )
                    | ( ( bFullYear & 1 ) << 1 )
@@ -537,7 +537,7 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
 void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
 {
     String sType; // der typ als string
-    String sFormel; // die formel
+    OUString sFormel; // die formel
     String sFormat;
     String sDTFormat;   // Datum / Zeit-Format
     W1_FLD* pData = GetData(); // die an den plc gebunden daten
@@ -548,15 +548,21 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
     OSL_ENSURE(c==19, "Ww1Fields"); // sollte auch beginn sein
     if (pData->chGet()==19 && c == 19)
     {
-        String aStr;
+        OUString aStr;
         c = rMan.Fill( aStr, GetLength() );
         OSL_ENSURE(Ww1PlainText::IsChar(c), "Ww1Fields");
-        xub_StrLen pos = aStr.Search(' ');
+        sal_Int32 pos = aStr.indexOf(' ');
         // get type out of text
-        sType = aStr.Copy( 0, pos );
-        aStr.Erase( 0, pos );
-        if ( pos != STRING_NOTFOUND )
-            aStr.Erase(0, 1);
+        if ( pos != -1 )
+        {
+            sType = aStr.copy(0, pos);
+            aStr = aStr.copy(pos+1);
+        }
+        else
+        {
+            sType = aStr;
+            aStr = "";
+        }
         sFormel += aStr;
         sal_uInt8 rbType = pData->fltGet();
         do {
@@ -571,8 +577,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
                 Out(rOut, rMan, nDepth+1);
                 rMan.Fill(c);
                 OSL_ENSURE(c==21, "Ww1PlainText");
-                sFormel.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "Ww" ));
-                sFormel += OUString::number( nPlcIndex );
+                sFormel += "Ww" + OUString::number(nPlcIndex);
                 c = rMan.Fill(aStr, GetLength());
                 OSL_ENSURE(Ww1PlainText::IsChar(c), "Ww1PlainText");
                 sFormel += aStr;
@@ -581,13 +586,19 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
         while (pData->chGet()==19);
 
         // get format out of text
-        pos = sFormel.SearchAscii( "\\*" );
-        sFormat = sFormel.Copy( pos );
-        sFormel.Erase( pos );
+        pos = sFormel.indexOf("\\*");
+        if (pos != -1)
+        {
+            sFormat = sFormel.copy(pos);
+            sFormel = sFormel.copy(0, pos);
+        }
 
-        pos = sFormel.SearchAscii( "\\@" );
-        sDTFormat = sFormel.Copy( pos );
-        sFormel.Erase( pos );
+        pos = sFormel.indexOf( "\\@" );
+        if (pos != -1)
+        {
+            sDTFormat = sFormel.copy(pos);
+            sFormel = sFormel.copy(0, pos);
+        }
 
         // der formelteil ist zuende, kommt ein ergebnisteil?
         if( pData->chGet() == 20 )
@@ -596,7 +607,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             OSL_ENSURE(c==20, "Ww1PlainText");
             c = rMan.Fill(sErgebnis, GetLength());
             if (!Ww1PlainText::IsChar(c))
-                sErgebnis += c; //~ mdt: sonderzeichenbenhandlung
+                sErgebnis += OUString(c); //~ mdt: sonderzeichenbenhandlung
             ++(*this);
             pData = GetData();
         }
@@ -614,7 +625,7 @@ oncemore:
         switch (rbType)
         {
         case 3: // bookmark reference
-            rOut.ConvertUStr( sFormel );
+            sFormel = rOut.ConvertUStr(sFormel);
             pField = new SwGetRefField( (SwGetRefFieldType*)
                 rOut.GetSysFldType( RES_GETREFFLD ),
                 sFormel,
@@ -625,13 +636,21 @@ oncemore:
         break;
         case 6: // set command
         {
-            pos = aStr.Search(' ');
-            String aName( aStr.Copy( 0, pos ));
-            aStr.Erase(0, pos );
-            aStr.Erase(0, 1);
-            if( !aName.Len() )
+            pos = aStr.indexOf(' ');
+            OUString aName;
+            if (pos != -1)
+            {
+                aName = aStr.copy(0, pos);
+                aStr = aStr.copy(pos+1);
+            }
+            else
+            {
+                aName = aStr;
+                aStr = "";
+            }
+            if (aName.isEmpty())
                 break;
-            rOut.ConvertUStr( aName );
+            aName = rOut.ConvertUStr(aName);
             SwFieldType* pFT = rOut.GetDoc().InsertFldType(
                 SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr);
@@ -643,11 +662,20 @@ oncemore:
         break;
         case 14: // info var
         {
-            pos = aStr.Search(' ');
-            String aSubType( aStr.Copy( 0, pos ));
-            aStr.Erase(0, pos );
-            aStr.Erase(0, 1);
-            rOut.ConvertUStr( aSubType );
+            OUString aSubType;
+            pos = aStr.indexOf(' ');
+            if (pos != -1)
+            {
+                aSubType = aStr.copy(0, pos);
+                aStr = aStr.copy(pos+1);
+            }
+            else
+            {
+                aSubType = aStr;
+                aStr = "";
+            }
+
+            aSubType = rOut.ConvertUStr(aSubType);
 
 
             // ganz grosze schiete: der typ 'info' kann einem der
@@ -655,7 +683,7 @@ oncemore:
             // das eingentliche feld der doc-info.
             // kein ';' benutzen mit folgendem macro:
 #define IS(sd, se, t) \
-    if (aSubType.EqualsAscii( sd ) || aSubType.EqualsAscii( se)) \
+    if (aSubType == sd || aSubType == se) \
         rbType = t; \
     else
 
@@ -827,13 +855,22 @@ oncemore:
         break;
         case 36: // print command, Einfuegendatei
         {
-            pos = aStr.Search(' ');
-            String aFName( aStr.Copy( 0, pos ));
-            aStr.Erase(0, pos );
-            aStr.Erase(0, 1);
-            if( !aFName.Len() )
+            OUString aFName;
+            pos = aStr.indexOf(' ');
+            if (pos != -1)
+            {
+                aFName = aStr.copy(0, pos);
+                aStr = aStr.copy(pos+1);
+            }
+            else
+            {
+                aFName = aStr;
+                aStr = "";
+            }
+
+            if(aFName.isEmpty())
                 break;
-            aFName.SearchAndReplaceAscii( "\\\\", OUString('\\') );
+            aFName = aFName.replaceFirst("\\\\", "\\");
 
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );
@@ -854,11 +891,20 @@ oncemore:
         break;
         case 38: // ask command
         {
-            pos = aStr.Search(' ');
-            String aName( aStr.Copy( 0, pos ));
-            aStr.Erase(0, pos );
-            aStr.Erase(0, 1);
-            if( !aName.Len() )
+            OUString aName;
+            pos = aStr.indexOf(' ');
+            if (pos != -1)
+            {
+                aName = aStr.copy(0, pos);
+                aStr = aStr.copy(pos+1);
+            }
+            else
+            {
+                aName = aStr;
+                aStr = "";
+            }
+
+            if (aName.isEmpty())
                 break;
 
             SwFieldType* pFT = rOut.GetDoc().InsertFldType(
@@ -875,11 +921,20 @@ oncemore:
         break;
         case 51: // macro button
         {
-            pos = aStr.Search(' ');
-            OUString aName( aStr.Copy( 0, pos ));
-            aStr.Erase(0, pos );
-            aStr.Erase(0, 1);
-            if( aName.isEmpty() || !aStr.Len() )
+            OUString aName;
+            pos = aStr.indexOf(' ');
+            if (pos != -1)
+            {
+                aName = aStr.copy(0, pos);
+                aStr = aStr.copy(pos+1);
+            }
+            else
+            {
+                aName = aStr;
+                aStr = "";
+            }
+
+            if (aName.isEmpty() || aStr.isEmpty())
                 break;
 
             pField = new SwMacroField( (SwMacroFieldType*)
@@ -889,7 +944,7 @@ oncemore:
         break;
         case 55: // read tiff / or better: import anything
         {
-            const sal_Unicode* pFormel = sFormel.GetBuffer();
+            const sal_Unicode* pFormel = sFormel.getStr();
             const sal_Unicode* pDot = 0;
             String sName;
             while (*pFormel != '\0' && *pFormel != ' ')
@@ -966,8 +1021,8 @@ oncemore:
             bKnown = false;
         break;
         }
-        if( bKnown || sErgebnis.EqualsAscii( "\270" ))
-            this->sErgebnis.Erase();
+        if( bKnown || sErgebnis == "\270" )
+            this->sErgebnis = "";
         else
             this->sErgebnis = sErgebnis;
     }
@@ -1244,10 +1299,10 @@ sal_Unicode Ww1PlainText::Out( Ww1Shell& rOut, sal_uLong& ulEnd )
     return Ww1PlainText::MinChar;
 }
 
-sal_Unicode Ww1PlainText::Out( String& rStr, sal_uLong ulEnd )
+sal_Unicode Ww1PlainText::Out(OUString& rStr, sal_uLong ulEnd)
 {
 // wie Out(Shell..., jedoch ausgabe auf einen string
-    rStr.Erase();
+    rStr = "";
     if (ulEnd > Count())
         ulEnd = Count();
     while (ulSeek < ulEnd)
@@ -1255,7 +1310,7 @@ sal_Unicode Ww1PlainText::Out( String& rStr, sal_uLong ulEnd )
         sal_Unicode c = (*this)[ulSeek];
         ++(*this);
         if( Ww1PlainText::IsChar(c) )
-            rStr += c;
+            rStr += OUString(c);
         else
             return c;
     }

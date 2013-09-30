@@ -2575,11 +2575,11 @@ bool ScCompiler::IsString()
     return false;
 }
 
-bool ScCompiler::IsPredetectedReference( const String& rName )
+bool ScCompiler::IsPredetectedReference(const OUString& rName)
 {
     // Speedup documents with lots of broken references, e.g. sheet deleted.
-    xub_StrLen nPos = rName.SearchAscii( "#REF!");
-    if (nPos != STRING_NOTFOUND)
+    sal_Int32 nPos = rName.indexOf("#REF!");
+    if (nPos != -1)
     {
         /* TODO: this may be enhanced by reusing scan information from
          * NextSymbol(), the positions of quotes and special characters found
@@ -2592,18 +2592,18 @@ bool ScCompiler::IsPredetectedReference( const String& rName )
         {
             // Per ODFF the correct string for a reference error is just #REF!,
             // so pass it on.
-            if (rName.Len() == 5)
+            if (rName.getLength() == 5)
                 return IsErrorConstant( rName);
             return false;           // #REF!.AB42 or #REF!42 or #REF!#REF!
         }
-        sal_Unicode c = rName.GetChar(nPos-1);      // before #REF!
+        sal_Unicode c = rName[nPos-1];      // before #REF!
         if ('$' == c)
         {
             if (nPos == 1)
                 return false;       // $#REF!.AB42 or $#REF!42 or $#REF!#REF!
-            c = rName.GetChar(nPos-2);              // before $#REF!
+            c = rName[nPos-2];              // before $#REF!
         }
-        sal_Unicode c2 = rName.GetChar(nPos+5);     // after #REF!
+        sal_Unicode c2 = rName[nPos+5];     // after #REF!
         switch (c)
         {
             case '.':
@@ -3285,14 +3285,14 @@ void ScCompiler::AutoCorrectParsedSymbol()
         }
         else
         {
-            String aSymbol( aCorrectedSymbol );
+            OUString aSymbol( aCorrectedSymbol );
             String aDoc;
-            xub_StrLen nPosition;
-            if ( aSymbol.GetChar(0) == '\''
-              && ((nPosition = aSymbol.SearchAscii( "'#" )) != STRING_NOTFOUND) )
+            sal_Int32 nPosition;
+            if ( aSymbol[0] == '\''
+              && ((nPosition = aSymbol.indexOf( "'#" )) != -1) )
             {   // Split off 'Doc'#, may be d:\... or whatever
-                aDoc = aSymbol.Copy( 0, nPosition + 2 );
-                aSymbol.Erase( 0, nPosition + 2 );
+                aDoc = aSymbol.copy(0, nPosition + 2);
+                aSymbol = aSymbol.copy(nPosition + 2);
             }
             xub_StrLen nRefs = comphelper::string::getTokenCount(aSymbol, ':');
             bool bColons;
@@ -3300,7 +3300,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
             {   // duplicated or too many ':'? B:2::C10 => B2:C10
                 bColons = true;
                 sal_Int32 nIndex = 0;
-                String aTmp1( aSymbol.GetToken( 0, ':', nIndex ) );
+                String aTmp1( aSymbol.getToken( 0, ':', nIndex ) );
                 xub_StrLen nLen1 = aTmp1.Len();
                 String aSym, aTmp2;
                 bool bLastAlp, bNextNum;
@@ -3309,7 +3309,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 xub_StrLen nCount = nRefs;
                 for ( xub_StrLen j=1; j<nCount; j++ )
                 {
-                    aTmp2 = aSymbol.GetToken( 0, ':', nIndex );
+                    aTmp2 = aSymbol.getToken( 0, ':', nIndex );
                     xub_StrLen nLen2 = aTmp2.Len();
                     if ( nLen1 || nLen2 )
                     {
@@ -3365,8 +3365,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 const ScAddress::Details aDetails( pConv->meConv, aPos );
                 if ( nRefs == 2 )
                 {
-                    aRef[0] = aSymbol.GetToken( 0, ':' );
-                    aRef[1] = aSymbol.GetToken( 1, ':' );
+                    aRef[0] = aSymbol.getToken( 0, ':' );
+                    aRef[1] = aSymbol.getToken( 1, ':' );
                 }
                 else
                     aRef[0] = aSymbol;

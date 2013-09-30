@@ -100,7 +100,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProp
     {
         OUString sDBURL;
         xSourceProperties->getPropertyValue("URL") >>= sDBURL;
-        if(String(sDBURL).SearchAscii("sdbc:flat:") == 0)
+        if (sDBURL.startsWith("sdbc:flat:"))
         {
             uno::Sequence<OUString> aFilters;
             xSourceProperties->getPropertyValue("TableFilter") >>= aFilters;
@@ -125,7 +125,7 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProp
                 }
                 if(!sCharSet.compareToAscii( cUTF8 ))
                 {
-                    sURL = String(sDBURL).Copy( 10 );
+                    sURL = sDBURL.copy(10);
                     //#i97577# at this point the 'URL' can also be a file name!
                     sURL = URIHelper::SmartRel2Abs( INetURLObject(), sURL );
                     sURL += "/";

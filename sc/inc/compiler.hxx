@@ -337,7 +337,7 @@ private:
     bool IsString();
     bool IsReference( const String& );
     bool IsSingleReference( const String& );
-    bool IsPredetectedReference( const String& );
+    bool IsPredetectedReference(const OUString&);
     bool IsDoubleReference( const String& );
     bool IsMacro( const String& );
     bool IsNamedRange( const String& );

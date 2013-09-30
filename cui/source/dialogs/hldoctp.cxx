@@ -92,18 +92,18 @@ SvxHyperlinkDocTp::~SvxHyperlinkDocTp ()
 |*
 |************************************************************************/
 
-void SvxHyperlinkDocTp::FillDlgFields ( String& aStrURL )
+void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 {
-    INetURLObject aURL ( aStrURL );
+    INetURLObject aURL(rStrURL);
 
-    String aStrMark;
-    xub_StrLen nPos = aStrURL.SearchAscii( sHash );
+    sal_Int32 nPos = rStrURL.indexOf(sHash);
     // path
-    maCbbPath.SetText ( aStrURL.Copy( 0, ( nPos == STRING_NOTFOUND ? aStrURL.Len() : nPos ) ) );
+    maCbbPath.SetText ( rStrURL.copy( 0, ( nPos == -1 ? rStrURL.getLength() : nPos ) ) );
 
     // set target in document at editfield
-    if ( nPos != STRING_NOTFOUND && nPos<aStrURL.Len()-1 )
-        aStrMark = aStrURL.Copy( nPos+1, aStrURL.Len() );
+    OUString aStrMark;
+    if ( nPos != -1 && nPos < rStrURL.getLength()-1 )
+        aStrMark = rStrURL.copy( nPos+1, rStrURL.getLength() );
      maEdTarget.SetText ( aStrMark );
 
     ModifiedPathHdl_Impl ( NULL );

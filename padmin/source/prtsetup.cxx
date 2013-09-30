@@ -735,9 +735,10 @@ IMPL_LINK( RTSFontSubstPage, ClickBtnHdl, Button*, pButton )
     {
         for( int i = 0; i < m_aSubstitutionsBox.GetSelectEntryCount(); i++ )
         {
-            String aEntry( m_aSubstitutionsBox.GetSelectEntry( i ) );
-            sal_uInt16 nPos = aEntry.SearchAscii( " -> " );
-            aEntry.Erase( nPos );
+            OUString aEntry( m_aSubstitutionsBox.GetSelectEntry( i ) );
+            sal_Int32 nPos = aEntry.indexOf(" -> ");
+            if (nPos != -1)
+                aEntry = aEntry.copy(0, nPos);
             m_pParent->m_aJobData.m_aFontSubstitutes.erase( aEntry );
         }
         update();

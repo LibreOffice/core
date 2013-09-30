@@ -47,7 +47,7 @@ private:
     Image GetImage( sal_uInt16 nId );
 
 protected:
-    void FillDlgFields     ( String& aStrURL );
+    void FillDlgFields(const OUString& rStrURL);
     void GetCurentItemData ( OUString& rStrURL, String& aStrName,
                              String& aStrIntName, String& aStrFrame,
                              SvxLinkInsertMode& eMode );

@@ -1485,7 +1485,7 @@ sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 }
 
 //-----------------------------------------------
-String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
+OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
 {
     try
     {
@@ -1516,10 +1516,10 @@ String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
     else
     {
         String aRet(OUString("Symbols: "));
-        xub_StrLen nPos = sCommand.SearchAscii(".uno:InsertSymbol?Symbols:string=");
+        sal_Int32 nPos = sCommand.indexOf(".uno:InsertSymbol?Symbols:string=");
         if ( nPos == 0 )
         {
-            aRet += String( sCommand, 34, sCommand.Len()-34 );
+            aRet += sCommand.copy(34, sCommand.getLength()-34);
             return aRet;
         }
     }

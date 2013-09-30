@@ -73,9 +73,8 @@ void SwVisitingCardPage::InitFrameControl()
                 uno::Any aTitle = xPrSet->getPropertyValue( uTitleName );
                 OUString uTitle;
                 aTitle >>= uTitle;
-                String sGroup(pGroups[i]);
                 sal_uInt16 nEntry = m_pAutoTextGroupLB->InsertEntry(uTitle);
-                m_pAutoTextGroupLB->SetEntryData(nEntry, new String(sGroup));
+                m_pAutoTextGroupLB->SetEntryData(nEntry, new OUString(pGroups[i]));
             }
         }
         catch (const Exception&)
@@ -86,11 +85,11 @@ void SwVisitingCardPage::InitFrameControl()
     {
         if(LISTBOX_ENTRY_NOTFOUND == m_pAutoTextGroupLB->GetSelectEntryPos())
             m_pAutoTextGroupLB->SelectEntryPos(0);
-        String sCurGroupName(
-            *(String*)m_pAutoTextGroupLB->GetEntryData(m_pAutoTextGroupLB->GetSelectEntryPos()));
-        if(m_xAutoText->hasByName(sCurGroupName))
+        const OUString *pCurGroupName(
+            (const OUString*)m_pAutoTextGroupLB->GetEntryData(m_pAutoTextGroupLB->GetSelectEntryPos()));
+        if(m_xAutoText->hasByName(*pCurGroupName))
         {
-            uno::Any aGroup = m_xAutoText->getByName(sCurGroupName);
+            uno::Any aGroup = m_xAutoText->getByName(*pCurGroupName);
             try
             {
                 uno::Reference< text::XAutoTextGroup >  xGroup;
@@ -120,9 +119,9 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
 
     if(LISTBOX_ENTRY_NOTFOUND != m_pAutoTextGroupLB->GetSelectEntryPos())
     {
-        String sGroup( *(String*)m_pAutoTextGroupLB->GetEntryData(
+        const OUString *pGroup( (const OUString*)m_pAutoTextGroupLB->GetEntryData(
                                     m_pAutoTextGroupLB->GetSelectEntryPos() ) );
-        uno::Any aGroup = m_xAutoText->getByName(sGroup);
+        uno::Any aGroup = m_xAutoText->getByName(*pGroup);
         uno::Reference< text::XAutoTextGroup >  xGroup;
         aGroup >>= xGroup;
 
@@ -148,9 +147,9 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
     {
         if (m_pAutoTextGroupLB == pBox)
         {
-            String sGroup( *(String*)m_pAutoTextGroupLB->GetEntryData(
+            const OUString *pGroup( (const OUString*)m_pAutoTextGroupLB->GetEntryData(
                                     m_pAutoTextGroupLB->GetSelectEntryPos()));
-            uno::Any aGroup = m_xAutoText->getByName(sGroup);
+            uno::Any aGroup = m_xAutoText->getByName(*pGroup);
             uno::Reference< text::XAutoTextGroup >  xGroup;
             aGroup >>= xGroup;
 

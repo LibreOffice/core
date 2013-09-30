@@ -272,8 +272,8 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 {
     sal_uInt16 nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
 
-    String aStrURL ( pItem->GetURL() );
-    INetURLObject aURL ( aStrURL );
+    OUString aStrURL(pItem->GetURL());
+    INetURLObject aURL(aStrURL);
     INetProtocol eProtocolTyp = aURL.GetProtocol();
 
     switch ( eProtocolTyp )
@@ -295,12 +295,12 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
             sal_Char const sNewsSrvScheme[] = "news://";
                 // TODO news:// is nonsense
 
-            if ( aStrURL.SearchAscii( sNewsSrvScheme ) == 0 )
+            if (aStrURL.startsWith(sNewsSrvScheme))
                 nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
             else
             {
                 sal_Char const sHash[] = "#";
-                if( aStrURL.SearchAscii( sHash ) == 0 )
+                if (aStrURL.startsWith(sHash))
                     nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
                 else
                 {

@@ -596,7 +596,7 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet)
 SwVisitingCardPage::~SwVisitingCardPage()
 {
     for(sal_uInt16 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); i++)
-        delete (String*)m_pAutoTextGroupLB->GetEntryData( i );
+        delete (OUString*)m_pAutoTextGroupLB->GetEntryData( i );
     m_xAutoText = 0;
 
     ClearUserData();
@@ -623,11 +623,11 @@ int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 
 sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 {
-    String* pGroup = (String*)m_pAutoTextGroupLB->GetEntryData(
+    const OUString* pGroup = (const OUString*)m_pAutoTextGroupLB->GetEntryData(
                                     m_pAutoTextGroupLB->GetSelectEntryPos());
     OSL_ENSURE(pGroup, "no group selected?");
 
-    if(pGroup)
+    if (pGroup)
         aLabItem.sGlossaryGroup = *pGroup;
 
     SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
@@ -674,8 +674,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     bool bFound = false;
     sal_uInt16 i;
     for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
-        if( String(aLabItem.sGlossaryGroup) ==
-            *(String*)m_pAutoTextGroupLB->GetEntryData( i ))
+        if( aLabItem.sGlossaryGroup == *(const OUString*)m_pAutoTextGroupLB->GetEntryData( i ))
         {
             bFound = true;
             break;
@@ -686,7 +685,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
         // initially search for a group starting with "crd" which is the name of the
         // business card AutoTexts
         for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
-            if(0 == (*(String*)m_pAutoTextGroupLB->GetEntryData( i )).SearchAscii( "crd") )
+            if (((const OUString*)m_pAutoTextGroupLB->GetEntryData(i))->startsWith("crd"))
             {
                 bFound = true;
                 break;

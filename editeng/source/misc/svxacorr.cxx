@@ -590,10 +590,10 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
     bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
     if( ((cEmDash && !bEnDash) || (cEnDash && bEnDash)) && 4 <= nEndPos - nSttPos )
     {
-        String sTmp( rTxt.copy( nSttPos, nEndPos - nSttPos ) );
-        xub_StrLen nFndPos = sTmp.SearchAscii( "--" );
-        if( STRING_NOTFOUND != nFndPos && nFndPos &&
-            nFndPos + 2 < sTmp.Len() &&
+        OUString sTmp( rTxt.copy( nSttPos, nEndPos - nSttPos ) );
+        sal_Int32 nFndPos = sTmp.indexOf("--");
+        if( nFndPos != -1 && nFndPos &&
+            nFndPos + 2 < sTmp.getLength() &&
             ( rCC.isLetterNumeric( sTmp, nFndPos - 1 ) ||
               lcl_IsInAsciiArr( sImplEndSkipChars, rTxt[ nFndPos - 1 ] )) &&
             ( rCC.isLetterNumeric( sTmp, nFndPos + 2 ) ||

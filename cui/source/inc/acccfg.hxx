@@ -160,9 +160,9 @@ private:
     DECL_LINK(LoadHdl, void *);
     DECL_LINK(SaveHdl, void *);
 
-    String                      GetLabel4Command(const String& sCommand);
+    OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();
-    sal_uInt16                      MapKeyCodeToPos( const KeyCode &rCode ) const;
+    sal_uInt16                  MapKeyCodeToPos( const KeyCode &rCode ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
     void                        StartFileDialog( WinBits nBits, const String& rTitle );
 

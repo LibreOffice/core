@@ -92,13 +92,13 @@ SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
 |*
 |************************************************************************/
 
-void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
+void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
 {
-    INetURLObject aURL( aStrURL );
-    OUString aStrScheme = GetSchemeFromURL( aStrURL );
+    INetURLObject aURL(rStrURL);
+    OUString aStrScheme = GetSchemeFromURL(rStrURL);
 
     // set URL-field and additional controls
-    OUString aStrURLc ( aStrURL );
+    OUString aStrURLc (rStrURL);
     // set additional controls for EMail:
     if ( aStrScheme.startsWith( INET_MAILTO_SCHEME ) )
     {
@@ -197,19 +197,19 @@ void SvxHyperlinkMailTp::SetInitFocus()
 /*************************************************************************
 |************************************************************************/
 
-void SvxHyperlinkMailTp::SetScheme( const String& aScheme )
+void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 {
-    //if  aScheme is empty or unknown the default beaviour is like it where MAIL
+    //if rScheme is empty or unknown the default beaviour is like it where MAIL
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
-    sal_Bool bMail = aScheme.SearchAscii( sNewsScheme ) != 0;
+    bool bMail = rScheme.startsWith(sNewsScheme);
 
     //update protocol button selection:
     maRbtMail.Check(bMail);
     maRbtNews.Check(!bMail);
 
     //update target:
-    RemoveImproperProtocol(aScheme);
+    RemoveImproperProtocol(rScheme);
     maCbbReceiver.SetSmartProtocol( GetSmartProtocolFromButtons() );
 
     //show/hide  special fields for MAIL:
