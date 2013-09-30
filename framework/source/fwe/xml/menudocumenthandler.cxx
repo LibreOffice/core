@@ -82,8 +82,6 @@ static const sal_Int32 CMD_PROTOCOL_SIZE        = 5;
 static const char CMD_PROTOCOL[]                = ".uno:";
 static const char ADDDIRECT_CMD[]               = ".uno:AddDirect" ;
 static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu" ;
-static const char FILEMENU_CMD[]                = ".uno:Picklist" ;
-static const char WINDOWMENU_CMD[]              = ".uno:WindowList" ;
 
 //_________________________________________________________________________________________________________________
 //  using namespaces
