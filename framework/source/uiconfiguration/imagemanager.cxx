@@ -27,14 +27,11 @@
 
 #include "properties.h"
 
-#include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -62,13 +59,6 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::ui;
-
-// Image sizes for our toolbars/menus
-const sal_Int32 IMAGE_SIZE_NORMAL         = 16;
-const sal_Int32 IMAGE_SIZE_LARGE          = 26;
-const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
-                                            ::com::sun::star::ui::ImageType::SIZE_LARGE;
 
 namespace framework
 {
