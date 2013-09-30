@@ -483,7 +483,6 @@ void doTestCode()
 static const sal_Int32 nLog10Divisor = 1;
 static const double fDivisor = 10.0;
 
-static inline double pixelToPoint( sal_Int32 px ) { return double(px)/fDivisor; }
 static inline double pixelToPoint( double px ) { return px/fDivisor; }
 static inline sal_Int32 pointToPixel( double pt ) { return sal_Int32(pt*fDivisor); }
 
