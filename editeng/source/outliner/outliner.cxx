@@ -56,12 +56,6 @@
 #include <cassert>
 using ::std::advance;
 
-static const sal_uInt16 nDefStyles = 3; // Special treatment for the first 3 levels
-static const sal_uInt16 nDefBulletIndent = 800;
-static const sal_uInt16 nDefBulletWidth = 700;
-static const sal_uInt16 pDefBulletIndents[nDefStyles]=  { 1400, 800, 800 };
-static const sal_uInt16 pDefBulletWidths[nDefStyles] =  { 1000, 850, 700 };
-
 // ----------------------------------------------------------------------
 // Outliner
 // ----------------------------------------------------------------------
