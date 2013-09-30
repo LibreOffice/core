@@ -258,16 +258,6 @@ void* data;
 }
 
 
-static inline void pool_free(struct pool* pool, void* data)
-{
-    assert(pool && data);
-
-    /* stack on top of the free list */
-    *(void**)data = pool->head_free;
-    pool->head_free = data;
-}
-
-
 /* ===============================================
  * Hash implementation custumized to be just tracking
  * a unique list of string (i.e no data associated
