@@ -217,8 +217,6 @@ sal_Bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentCo
     return bRet;
 }
 
-const sal_Int32 n_ConstBufferSize = 32000;
-
 OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xContext )
 {
     OUString aTempURL;
