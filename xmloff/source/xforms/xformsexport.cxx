@@ -213,12 +213,6 @@ void exportXFormsModel( SvXMLExport& rExport,
 // the instance
 //
 
-static const ExportTable aXFormsInstanceTable[] =
-{
-    TABLE_ENTRY( "InstanceURL", NONE, SRC, xforms_string ),
-    TABLE_END
-};
-
 void exportXFormsInstance( SvXMLExport& rExport,
                            const Sequence<PropertyValue>& xInstance )
 {
