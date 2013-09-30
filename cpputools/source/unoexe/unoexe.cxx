@@ -30,7 +30,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/lang/XMain.hpp>
@@ -38,9 +37,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/connection/Acceptor.hpp>
@@ -172,46 +169,6 @@ void createInstance(
 {
     Reference< XMultiComponentFactory > xMgr( xContext->getServiceManager() );
     Reference< XInterface > x( xMgr->createInstanceWithContext( rServiceName, xContext ) );
-
-    if (! x.is())
-    {
-        static sal_Bool s_bSet = sal_False;
-        if (! s_bSet)
-        {
-            MutexGuard aGuard( Mutex::getGlobalMutex() );
-            if (! s_bSet)
-            {
-                Reference< XSet > xSet( xMgr, UNO_QUERY );
-                if (xSet.is())
-                {
-                    Reference< XMultiServiceFactory > xSF( xMgr, UNO_QUERY );
-                    // acceptor
-                    xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( "acceptor.uno" SAL_DLLEXTENSION ),
-                        OUString(),
-                        OUString( "com.sun.star.comp.io.Acceptor" ),
-                        xSF, Reference< XRegistryKey >(),
-                        "acceptor_" ) ) );
-                    // connector
-                    xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( "connector.uno" SAL_DLLEXTENSION ),
-                        OUString(),
-                        OUString( "com.sun.star.comp.io.Connector" ),
-                        xSF, Reference< XRegistryKey >(),
-                        "connector_" ) ) );
-                    // bridge factory
-                    xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( "binaryurp.uno" SAL_DLLEXTENSION ),
-                        OUString(),
-                        OUString( "com.sun.star.comp.bridge.BridgeFactory" ),
-                        xSF, Reference< XRegistryKey >(),
-                        "binaryurp_" ) ) );
-                }
-                s_bSet = sal_True;
-            }
-        }
-        x = xMgr->createInstanceWithContext( rServiceName, xContext );
-    }
 
     if (! x.is())
     {
