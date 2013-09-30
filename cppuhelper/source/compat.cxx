@@ -48,8 +48,6 @@ css::uno::Reference< css::lang::XMultiComponentFactory > bootstrapInitialSF(
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
-}
-
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::uno::XComponentContext > SAL_CALL
 bootstrap_InitialComponentContext(
     css::uno::Reference< css::registry::XSimpleRegistry > const &,
@@ -84,6 +82,8 @@ createStandardClassWithSequence(
     css::uno::Sequence< rtl::OUString > const &) SAL_THROW(())
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
