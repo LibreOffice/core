@@ -51,18 +51,6 @@ using namespace ::com::sun::star::uno;
 
 namespace stoc_sec
 {
-//--------------------------------------------------------------------------------------------------
-static inline void dispose( Reference< XInterface > const & x )
-    SAL_THROW( (RuntimeException) )
-{
-    Reference< lang::XComponent > xComp( x, UNO_QUERY );
-    if (xComp.is())
-    {
-        xComp->dispose();
-    }
-}
-
-//##################################################################################################
 
 struct MutexHolder
 {

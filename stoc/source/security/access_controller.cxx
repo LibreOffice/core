@@ -310,17 +310,6 @@ Any acc_CurrentContext::getValueByName( OUString const & name )
 
 //##################################################################################################
 
-//--------------------------------------------------------------------------------------------------
-static inline void dispose( Reference< XInterface > const & x )
-    SAL_THROW( (RuntimeException) )
-{
-    Reference< lang::XComponent > xComp( x, UNO_QUERY );
-    if (xComp.is())
-    {
-        xComp->dispose();
-    }
-}
-//--------------------------------------------------------------------------------------------------
 static inline Reference< security::XAccessControlContext > getDynamicRestriction(
     Reference< XCurrentContext > const & xContext )
     SAL_THROW( (RuntimeException) )
