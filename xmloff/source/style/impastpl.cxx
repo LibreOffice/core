@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/PageMasterStyleMap.hxx>
