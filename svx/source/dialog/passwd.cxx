@@ -23,7 +23,6 @@
 #include "svx/passwd.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "passwd.hrc"
 
 // class SvxPasswordDialog -----------------------------------------------
 
@@ -33,20 +32,20 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
     short nRet = RET_OK;
     OUString aEmpty;
 
-    if ( aNewPasswdED.GetText() != aRepeatPasswdED.GetText() )
+    if ( m_pNewPasswdED->GetText() != m_pRepeatPasswdED->GetText() )
     {
         ErrorBox( this, WB_OK, aRepeatPasswdErrStr ).Execute();
-        aNewPasswdED.SetText( aEmpty );
-        aRepeatPasswdED.SetText( aEmpty );
-        aNewPasswdED.GrabFocus();
+        m_pNewPasswdED->SetText( aEmpty );
+        m_pRepeatPasswdED->SetText( aEmpty );
+        m_pNewPasswdED->GrabFocus();
         bOK = false;
     }
 
     if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
     {
         ErrorBox( this, WB_OK, aOldPasswdErrStr ).Execute();
-        aOldPasswdED.SetText( aEmpty );
-        aOldPasswdED.GrabFocus();
+        m_pOldPasswdED->SetText( aEmpty );
+        m_pOldPasswdED->GrabFocus();
         bOK = false;
     }
 
@@ -62,48 +61,42 @@ IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl)
 {
     if ( !bEmpty )
     {
-        OUString aPasswd = comphelper::string::strip(aRepeatPasswdED.GetText(), ' ');
-        if ( aPasswd.isEmpty() && aOKBtn.IsEnabled() )
-            aOKBtn.Disable();
-        else if ( !aPasswd.isEmpty() && !aOKBtn.IsEnabled() )
-            aOKBtn.Enable();
+        OUString aPasswd = comphelper::string::strip(m_pRepeatPasswdED->GetText(), ' ');
+        if ( aPasswd.isEmpty() && m_pOKBtn->IsEnabled() )
+            m_pOKBtn->Disable();
+        else if ( !aPasswd.isEmpty() && !m_pOKBtn->IsEnabled() )
+            m_pOKBtn->Enable();
     }
-    else if ( !aOKBtn.IsEnabled() )
-        aOKBtn.Enable();
+    else if ( !m_pOKBtn->IsEnabled() )
+        m_pOKBtn->Enable();
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-SvxPasswordDialog::SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords, sal_Bool bDisableOldPassword ) :
-    SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_PASSWORD ) ),
-    aOldFL          ( this, SVX_RES( FL_OLD_PASSWD ) ),
-    aOldPasswdFT    ( this, SVX_RES( FT_OLD_PASSWD ) ),
-    aOldPasswdED    ( this, SVX_RES( ED_OLD_PASSWD ) ),
-    aNewFL          ( this, SVX_RES( FL_NEW_PASSWD ) ),
-    aNewPasswdFT    ( this, SVX_RES( FT_NEW_PASSWD ) ),
-    aNewPasswdED    ( this, SVX_RES( ED_NEW_PASSWD ) ),
-    aRepeatPasswdFT ( this, SVX_RES( FT_REPEAT_PASSWD ) ),
-    aRepeatPasswdED ( this, SVX_RES( ED_REPEAT_PASSWD ) ),
-    aOKBtn          ( this, SVX_RES( BTN_PASSWD_OK ) ),
-    aEscBtn         ( this, SVX_RES( BTN_PASSWD_ESC ) ),
-    aHelpBtn        ( this, SVX_RES( BTN_PASSWD_HELP ) ),
-    aOldPasswdErrStr    ( SVX_RESSTR( STR_ERR_OLD_PASSWD ) ),
-    aRepeatPasswdErrStr ( SVX_RESSTR( STR_ERR_REPEAT_PASSWD ) ),
-    bEmpty  ( bAllowEmptyPasswords )
+SvxPasswordDialog::SvxPasswordDialog(Window* pParent, sal_Bool bAllowEmptyPasswords, sal_Bool bDisableOldPassword)
+    : SfxModalDialog(pParent, "PasswordDialog", "svx/ui/passwd.ui")
+    , aOldPasswdErrStr(SVX_RESSTR(RID_SVXSTR_ERR_OLD_PASSWD))
+    , aRepeatPasswdErrStr(SVX_RESSTR(RID_SVXSTR_ERR_REPEAT_PASSWD ))
+    , bEmpty(bAllowEmptyPasswords)
 {
-    FreeResource();
+    get(m_pOldFL, "oldpass");
+    get(m_pOldPasswdFT, "oldpassL");
+    get(m_pOldPasswdED, "oldpassEntry");
+    get(m_pNewPasswdED, "newpassEntry");
+    get(m_pRepeatPasswdED, "confirmpassEntry");
+    get(m_pOKBtn, "ok");
 
-    aOKBtn.SetClickHdl( LINK( this, SvxPasswordDialog, ButtonHdl ) );
-    aRepeatPasswdED.SetModifyHdl( LINK( this, SvxPasswordDialog, EditModifyHdl ) );
+    m_pOKBtn->SetClickHdl( LINK( this, SvxPasswordDialog, ButtonHdl ) );
+    m_pRepeatPasswdED->SetModifyHdl( LINK( this, SvxPasswordDialog, EditModifyHdl ) );
     EditModifyHdl( 0 );
 
     if ( bDisableOldPassword )
     {
-        aOldFL.Disable();
-         aOldPasswdFT.Disable();
-        aOldPasswdED.Disable();
-        aNewPasswdED.GrabFocus();
+        m_pOldFL->Disable();
+         m_pOldPasswdFT->Disable();
+        m_pOldPasswdED->Disable();
+        m_pNewPasswdED->GrabFocus();
     }
 }
 

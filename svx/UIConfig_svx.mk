@@ -19,6 +19,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/headfootformatpage \
 	svx/uiconfig/ui/findreplacedialog \
 	svx/uiconfig/ui/optgridpage \
+	svx/uiconfig/ui/passwd \
 	svx/uiconfig/ui/redlinecontrol \
 	svx/uiconfig/ui/redlinefilterpage \
 	svx/uiconfig/ui/redlineviewpage \
