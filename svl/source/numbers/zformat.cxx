@@ -64,7 +64,6 @@ const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this 
 } // namespace
 
 const double _D_MAX_U_LONG_ = (double) 0xffffffff;      // 4294967295.0
-const double _D_MAX_LONG_   = (double) 0x7fffffff;      // 2147483647.0
 const sal_uInt16 _MAX_FRACTION_PREC = 3;
 const double D_EPS = 1.0E-2;
 
