@@ -1041,6 +1041,8 @@ $(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
 
 endef
 
+gb_ExternalProject__use_freetype :=
+
 else ifeq ($(OS),ANDROID)
 
 define gb_LinkTarget__use_freetype_headers
@@ -1053,6 +1055,11 @@ endef
 
 define gb_LinkTarget__use_freetype
 $(call gb_LinkTarget_use_external,$(1),freetype_headers)
+
+endef
+
+define gb_ExternalProject__use_freetype
+$(call gb_ExternalProject_use_package,$(1),freetype)
 
 endef
 

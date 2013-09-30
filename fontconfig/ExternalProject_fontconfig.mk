@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,fontconfig))
 
-$(eval $(call gb_ExternalProject_use_packages,fontconfig,\
+$(eval $(call gb_ExternalProject_use_externals,fontconfig,\
 	expat \
 	freetype \
 ))
