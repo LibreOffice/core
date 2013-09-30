@@ -81,15 +81,6 @@ const char * const aSource2[ ] =
     0,0
 };
 
-const char * const aSource3[ ] =
-{
-    ".." , "/a",
-    "../a" , "/a/a",
-    "e/f" , "/c/e/f",
-    "../..", "",
-    0,0
-};
-
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
