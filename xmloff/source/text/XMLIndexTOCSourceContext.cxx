@@ -41,7 +41,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
 const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
 const sal_Char sAPI_Level[] = "Level";
