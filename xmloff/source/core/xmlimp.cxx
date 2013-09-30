@@ -97,7 +97,6 @@ sal_Char const sXML_np__math[] = "_math";
 sal_Char const sXML_np__form[] = "_form";
 sal_Char const sXML_np__script[] = "_script";
 sal_Char const sXML_np__config[] = "_config";
-sal_Char const sXML_np__db[] = "_db";
 sal_Char const sXML_np__xforms[] = "_xforms";
 sal_Char const sXML_np__formx[] = "_formx";
 sal_Char const sXML_np__xsd[] = "_xsd";
@@ -105,14 +104,6 @@ sal_Char const sXML_np__xsi[] = "_xsi";
 sal_Char const sXML_np__field[] = "_field";
 sal_Char const sXML_np__xhtml[] = "_xhtml";
 sal_Char const sXML_np__css3text[] = "_css3text";
-
-sal_Char const sXML_np__fo_old[] = "__fo";
-sal_Char const sXML_np__xlink_old[] = "__xlink";
-sal_Char const sXML_np__office_old[] = "__office";
-sal_Char const sXML_np__style_old[] = "__style";
-sal_Char const sXML_np__text_old[] = "__text";
-sal_Char const sXML_np__table_old[] = "__table";
-sal_Char const sXML_np__meta_old[] = "__meta";
 
 class SvXMLImportEventListener : public cppu::WeakImplHelper1<
                             com::sun::star::lang::XEventListener >
