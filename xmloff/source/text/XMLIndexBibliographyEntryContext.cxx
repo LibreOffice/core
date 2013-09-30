@@ -39,10 +39,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-
-const sal_Char sAPI_TokenType[] = "TokenType";
-const sal_Char sAPI_CharacterStyleName[] = "CharacterStyleName";
-
 TYPEINIT1( XMLIndexBibliographyEntryContext, XMLIndexSimpleEntryContext);
 
 XMLIndexBibliographyEntryContext::XMLIndexBibliographyEntryContext(
