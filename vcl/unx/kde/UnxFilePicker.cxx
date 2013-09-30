@@ -64,10 +64,6 @@ using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
 namespace
 {
-    // controlling event notifications
-    const bool STARTUP_SUSPENDED = true;
-    const bool STARTUP_ALIVE     = false;
-
     uno::Sequence<OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<OUString> aRet(3);
