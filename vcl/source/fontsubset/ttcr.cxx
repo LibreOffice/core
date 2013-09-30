@@ -75,10 +75,6 @@ typedef struct {
 #define _inline static
 #endif
 
-_inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
-    return (a << 24) | (b << 16) | (c << 8) | d;
-}
-
 /*- Data access macros for data stored in big-endian or little-endian format */
 _inline sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
 {
@@ -108,40 +104,6 @@ _inline sal_uInt16 GetUInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigen
     return t;
 }
 
-_inline sal_Int32 GetInt32( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
-{
-    sal_Int32 t;
-    assert(ptr != 0);
-
-    if (bigendian) {
-        t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
-            (ptr+offset)[2] << 8  | (ptr+offset)[3];
-    } else {
-        t = (ptr+offset)[3] << 24 | (ptr+offset)[2] << 16 |
-            (ptr+offset)[1] << 8  | (ptr+offset)[0];
-    }
-
-    return t;
-}
-
-_inline sal_uInt32 GetUInt32( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
-{
-    sal_uInt32 t;
-    assert(ptr != 0);
-
-
-    if (bigendian) {
-        t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
-            (ptr+offset)[2] << 8  | (ptr+offset)[3];
-    } else {
-        t = (ptr+offset)[3] << 24 | (ptr+offset)[2] << 16 |
-            (ptr+offset)[1] << 8  | (ptr+offset)[0];
-    }
-
-    return t;
-}
-
-
 _inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
 {
     assert(ptr != 0);
@@ -169,25 +131,6 @@ _inline void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bi
 }
 
 _inline void PutUInt32(sal_uInt32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
-{
-    assert(ptr != 0);
-
-    if (bigendian) {
-        ptr[offset]   = (sal_uInt8)((val >> 24) & 0xFF);
-        ptr[offset+1] = (sal_uInt8)((val >> 16) & 0xFF);
-        ptr[offset+2] = (sal_uInt8)((val >> 8) & 0xFF);
-        ptr[offset+3] = (sal_uInt8)(val & 0xFF);
-    } else {
-        ptr[offset+3] = (sal_uInt8)((val >> 24) & 0xFF);
-        ptr[offset+2] = (sal_uInt8)((val >> 16) & 0xFF);
-        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
-        ptr[offset]   = (sal_uInt8)(val & 0xFF);
-    }
-
-}
-
-
-_inline void PutInt32(sal_Int32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
 {
     assert(ptr != 0);
 
@@ -1607,6 +1550,10 @@ extern "C"
 
 
 #ifdef TEST_TTCR
+_inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
+    return (a << 24) | (b << 16) | (c << 8) | d;
+}
+
 int main(void)
 {
     TrueTypeCreator *ttcr;

@@ -235,10 +235,6 @@ _inline void *scalloc(size_t n, size_t size)
     return res;
 }
 
-_inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
-    return (a << 24) | (b << 16) | (c << 8) | d;
-}
-
 /*- Data access macros for data stored in big-endian or little-endian format */
 _inline sal_Int16 GetInt16(const sal_uInt8 *ptr, size_t offset, int bigendian)
 {
@@ -299,20 +295,6 @@ _inline sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset, int bigendian)
     }
 
     return t;
-}
-
-_inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, size_t offset, int bigendian)
-{
-    assert(ptr != 0);
-
-    if (bigendian) {
-        ptr[offset] = (sal_uInt8)((val >> 8) & 0xFF);
-        ptr[offset+1] = (sal_uInt8)(val & 0xFF);
-    } else {
-        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
-        ptr[offset] = (sal_uInt8)(val & 0xFF);
-    }
-
 }
 
 #if defined(OSL_BIGENDIAN)
@@ -393,13 +375,6 @@ _inline F16Dot16 fixedMulDiv(F16Dot16 a, F16Dot16 b, F16Dot16 c)
 _inline int XUnits(int unitsPerEm, int n)
 {
     return (n * 1000) / unitsPerEm;
-}
-
-_inline const char *UnicodeRangeName(sal_uInt16 bit)
-{
-  if (bit > LAST_URANGE_BIT) bit = LAST_URANGE_BIT+1;
-
-  return ulcodes[bit];
 }
 
 _inline const sal_uInt8* getTable( TrueTypeFont *ttf, sal_uInt32 ord)
