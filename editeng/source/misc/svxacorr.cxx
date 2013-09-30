@@ -75,7 +75,6 @@ static const int C_QUESTION_MARK    = 0x04;
 static const int C_ASTERISK         = 0x2A;
 static const sal_Unicode cNonBreakingSpace = 0xA0;
 
-static const sal_Char pImplAutocorr_ListStr[]      = "DocumentList";
 static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
 static const sal_Char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
 static const sal_Char pXMLImplAutocorr_ListStr[]   = "DocumentList.xml";
