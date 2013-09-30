@@ -27,10 +27,6 @@
 
 static const sal_Int32 MIN_INT32 = std::numeric_limits<sal_Int32>::min();
 
-static const sal_Int32 mso_sptDefault0[] =
-{
-    1, 0
-};
 static const sal_Int32 mso_sptDefault1400[] =
 {
     1, 1400
@@ -3108,10 +3104,6 @@ static const SvxMSDffCalculationData mso_sptSmileyFaceCalc[] =
     { 0x4000, { 15510, 0x400, 0 } }
 };
 
-static const SvxMSDffTextRectangles mso_sptSmileyFaceTextRect[] =
-{
-    { { 0, 1 MSO_I }, { 4 MSO_I, 21600 } }
-};
 static const sal_Int32 mso_sptSmileyFaceDefault[] =
 {
     1, 17520
@@ -6269,30 +6261,9 @@ sal_Bool SortFilledObjectsToBackByDefault( MSO_SPT eSpType )
     return bSortFilledObjectsToBackByDefault;
 }
 
-static const SvxMSDffVertPair mso_sptFontWorkVert[] =
-{
-    { 0, 0 }, { 21600, 0 }, { 0, 21600 }, { 21600, 21600 }
-};
-static const sal_uInt16 mso_sptFontWorkSegm[] =
-{
-    0x4000, 0x0001, 0x8000,
-    0x4000, 0x0001, 0x8000
-};
 static const SvxMSDffTextRectangles mso_sptFontWorkTextRect[] =
 {
     { { 0, 0 }, { 21600, 21600 } }
-};
-static const mso_CustomShape msoFontWork =
-{
-    (SvxMSDffVertPair*)mso_sptFontWorkVert, SAL_N_ELEMENTS( mso_sptFontWorkVert ),
-    (sal_uInt16*)mso_sptFontWorkSegm, sizeof( mso_sptFontWorkSegm ) >> 1,
-    NULL, 0,
-    NULL,
-    (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, SAL_N_ELEMENTS( mso_sptFontWorkTextRect ),
-    21600, 21600,
-    MIN_INT32, MIN_INT32,
-    NULL, 0,
-    NULL, 0 // Handles
 };
 
 static const SvxMSDffVertPair mso_sptTextPlainTextVert[] =
