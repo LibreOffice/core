@@ -20,11 +20,9 @@ package com.sun.star.comp.loader;
 
 import com.sun.star.lib.unoloader.UnoClassLoader;
 import com.sun.star.lib.util.WeakMap;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.StringTokenizer;
 import java.util.jar.Attributes;
 
 final class RegistrationClassFinder {
@@ -38,7 +36,6 @@ final class RegistrationClassFinder {
             }
         }
         URL url = new URL(locationUrl);
-        checkAccess(url);
         Attributes attr = UnoClassLoader.getJarMainAttributes(url);
         String name = attr == null
             ? null : attr.getValue("RegistrationClassName");
@@ -65,60 +62,5 @@ final class RegistrationClassFinder {
 
     private RegistrationClassFinder() {} // do not instantiate
 
-    private static void checkAccess(URL url) throws ClassNotFoundException {
-        // The system property com.sun.star.comp.loader.CPLD_ACCESSPATH was
-        // introduced as a hack to restrict which UNO components can be
-        // instantiated.  It seems to be unused nowadays, and should probably be
-        // replaced by the native Java security features, anyway.
-        if (accessPath != null) {
-            if (!url.getProtocol().equals("file")) {
-                throw new ClassNotFoundException(
-                    "Access restriction: <" + url + "> is not a file URL");
-            }
-            String p;
-            try {
-                p = new File(url.getFile()).getCanonicalPath();
-            } catch (IOException e) {
-                throw new ClassNotFoundException(
-                    "Access restriction: <" + url + "> is bad: " + e);
-            }
-            for (int i = 0; i < accessPath.length; ++i) {
-                String p2 = accessPath[i];
-                if (p.startsWith(p2) && p.length() > p2.length()
-                    && (p2.charAt(p2.length() - 1) == File.separatorChar
-                        || p.charAt(p2.length()) == File.separatorChar))
-                {
-                    return;
-                }
-            }
-            throw new ClassNotFoundException(
-                "Access restriction: <" + url + "> is restricted");
-        }
-    }
-
     private static final WeakMap map = new WeakMap();
-
-    private static final String[] accessPath;
-    static {
-        String[] ap = null;
-        String p = System.getProperty(
-            "com.sun.star.comp.loader.CPLD_ACCESSPATH");
-        if (p != null) {
-            StringTokenizer t = new StringTokenizer(p, ";");
-            ap = new String[t.countTokens()];
-            int i = 0;
-            while (t.hasMoreTokens()) {
-                try {
-                    ap[i] = new File(t.nextToken()).getCanonicalPath();
-                    ++i;
-                } catch (IOException e) {}
-            }
-            if (i != ap.length) {
-                String[] ap2 = new String[i];
-                System.arraycopy(ap, 0, ap2, 0, i);
-                ap = ap2;
-            }
-        }
-        accessPath = ap;
-    }
 }

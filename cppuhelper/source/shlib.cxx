@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
+#include "sal/config.h"
 
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
 #include "osl/module.hxx"
 #include "rtl/ustrbuf.hxx"
-#include "rtl/instance.hxx"
 #include "uno/environment.h"
 #include "uno/mapping.hxx"
 #include "cppuhelper/factory.hxx"
@@ -33,7 +32,6 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 
 #include <stdio.h>
-#include <vector>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -54,155 +52,8 @@ using rtl::OUStringBuffer;
 namespace cppu
 {
 
-#if OSL_DEBUG_LEVEL > 1
-//------------------------------------------------------------------------------
-static inline void out( const char * p ) SAL_THROW(())
-{
-    printf( "%s\n", p );
-}
-static inline void out( const OUString & r ) throw ()
-{
-    OString s( OUStringToOString( r, RTL_TEXTENCODING_ASCII_US ) );
-    out( s.getStr() );
-}
-#endif
-
-namespace
-{
-    class buildAccessDPath
-    {
-    private:
-        ::std::vector< OUString > m_aAccessDPath;
-        bool m_bCPLD_ACCESSPATHSet;
-    public:
-        buildAccessDPath() : m_bCPLD_ACCESSPATHSet(false)
-        {
-            const char * pEnv = ::getenv( "CPLD_ACCESSPATH" );
-            if (pEnv)
-            {
-                m_bCPLD_ACCESSPATHSet = true;
-
-                OString aEnv( pEnv );
-                sal_Int32 nIndex = 0;
-                do
-                {
-                    OUString aStr( OStringToOUString(
-                        aEnv.getToken( 0, ';', nIndex ),
-                        RTL_TEXTENCODING_ASCII_US ) );
-                    OUString aFileUrl;
-                    if (FileBase::getFileURLFromSystemPath(aStr, aFileUrl)
-                        != FileBase::E_None)
-                    {
-                        OSL_ASSERT(false);
-                    }
-                    m_aAccessDPath.push_back( aFileUrl );
-                } while( nIndex != -1 );
-    #if OSL_DEBUG_LEVEL > 1
-                out( "> cpld: acknowledged following access path(s): \"" );
-                ::std::vector< OUString >::const_iterator iPos( m_aAccessDPath.begin() );
-                while (iPos != m_aAccessDPath.end())
-                {
-                    out( *iPos );
-                    ++iPos;
-                    if (iPos != m_aAccessDPath.end())
-                        out( ";" );
-                }
-                out( "\"\n" );
-    #endif
-            }
-            else
-            {
-                // no access path env set
-    #if OSL_DEBUG_LEVEL > 1
-                out( "=> no CPLD_ACCESSPATH set.\n" );
-    #endif
-            }
-        }
-        ::std::vector< OUString >* getAccessDPath() { return m_bCPLD_ACCESSPATHSet ? &m_aAccessDPath : NULL; }
-    };
-
-    class theAccessDPath : public rtl::Static<buildAccessDPath, theAccessDPath> {};
-}
-
 #ifndef DISABLE_DYNLOADING
 
-static const ::std::vector< OUString > * getAccessDPath() SAL_THROW(())
-{
-    return theAccessDPath::get().getAccessDPath();
-}
-
-//------------------------------------------------------------------------------
-static bool checkAccessPath( OUString * pComp ) throw ()
-{
-    const ::std::vector< OUString > * pPath = getAccessDPath();
-
-    if (pPath)
-    {
-        sal_Bool bAbsolute = pComp->startsWith( "file://" );
-        for ( ::std::vector< OUString >::const_iterator iPos( pPath->begin() );
-              iPos != pPath->end(); ++iPos )
-        {
-            OUString aBaseDir( *iPos );
-            OUString aAbs;
-
-            if ( bAbsolute )
-            {
-                aAbs = *pComp;
-#if OSL_DEBUG_LEVEL > 1
-                out( "> taking path: \"" );
-                out( aAbs );
-#endif
-            }
-            else
-            {
-                if (osl_File_E_None !=
-                    ::osl_getAbsoluteFileURL(
-                        aBaseDir.pData, pComp->pData, &aAbs.pData ))
-                {
-                    continue;
-                }
-#if OSL_DEBUG_LEVEL > 1
-                out( "> found path: \"" );
-                out( aBaseDir );
-                out( "\" + \"" );
-                out( *pComp );
-                out( "\" => \"" );
-                out( aAbs );
-#endif
-            }
-
-            if (0 == aAbs.indexOf( aBaseDir ) && // still part of it?
-                aBaseDir.getLength() < aAbs.getLength() &&
-                (aBaseDir[ aBaseDir.getLength() -1 ] == (sal_Unicode)'/' ||
-                 // dir boundary
-                 aAbs[ aBaseDir.getLength() ] == (sal_Unicode)'/'))
-            {
-#if OSL_DEBUG_LEVEL > 1
-                out( ": ok.\n" );
-#endif
-                // load from absolute path
-                *pComp = aAbs;
-                return true;
-            }
-#if OSL_DEBUG_LEVEL > 1
-            else
-            {
-                out( "\" ...does not match given path \"" );
-                out( aBaseDir );
-                out( "\".\n" );
-            }
-#endif
-        }
-        return false;
-    }
-    else
-    {
-        // no access path env set
-        return true;
-    }
-}
-
-//------------------------------------------------------------------------------
 static OUString makeComponentPath(
     const OUString & rLibName, const OUString & rPath )
 {
@@ -490,15 +341,6 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 #endif
 
     OUString aModulePath( makeComponentPath( sLibName, rPath ) );
-    if (! checkAccessPath( &aModulePath ))
-    {
-        OUString const msg(
-                "permission denied to load component library: " + aModulePath);
-        SAL_WARN("cppuhelper", msg);
-        throw loader::CannotActivateFactoryException(msg,
-            Reference< XInterface >() );
-    }
-
     oslModule lib = osl_loadModule(
         aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
@@ -662,16 +504,6 @@ void SAL_CALL writeSharedLibComponentInfo(
     SAL_THROW( (registry::CannotRegisterImplementationException) )
 {
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
-
-    if (! checkAccessPath( &aModulePath ))
-    {
-        OUString const msg(
-                "permission denied to load component library: " + aModulePath);
-        SAL_WARN("cppuhelper", msg);
-        throw registry::CannotRegisterImplementationException(msg,
-            Reference< XInterface >() );
-    }
-
     oslModule lib = osl_loadModule(
         aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)

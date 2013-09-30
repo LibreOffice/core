@@ -40,8 +40,7 @@ namespace cppu
 /** Loads a shared library component and gets the factory out of it.  You can give either a
     fully qualified libname or single lib name.  The libname need not be pre/postfixed
     (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
-    directory.  The resulting path of the library will be checked against environment variable
-    CPLD_ACCESSPATH if set.
+    directory.
 
     @param rLibName name of the library
     @param rPath optional path
@@ -63,8 +62,7 @@ SAL_CALL loadSharedLibComponentFactory(
 /** Loads a shared library component and gets the factory out of it.  You can give either a
     fully qualified libname or single lib name.  The libname need not be pre/postfixed
     (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
-    directory.  The resulting path of the library will be checked against environment variable
-    CPLD_ACCESSPATH if set. An optional 'prefix' parameter is used to determine the symbol
+    directory.  An optional 'prefix' parameter is used to determine the symbol
     name of the entry point in the library.
 
     @param rLibName name of the library
@@ -109,8 +107,7 @@ SAL_CALL invokeStaticComponentFactory(
 /** Invokes component_writeInfo() function of specified component library.  You can give either
     a fully qualified libname or single lib name. The libname need not be pre/postfixed
     (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
-    directory.  The resulting path of the library will be checked against environment variable
-    CPLD_ACCESSPATH if set.
+    directory.
 
     @deprecated component_writeInfo should no longer be used in new components
 
