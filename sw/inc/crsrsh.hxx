@@ -326,9 +326,9 @@ public:
     // SelAll() selects the document body content
     // if ExtendedSelect() is called afterwards, the whole nodes array is selected
     // only for usage in special cases allowed!
-    void ExtendedSelectAll();
+    void ExtendedSelectAll(bool bFootnotes = true);
     /// If ExtendedSelectAll() was called and selection didn't change since then.
-    bool ExtendedSelectedAll();
+    bool ExtendedSelectedAll(bool bFootnotes = true);
     /// If document body starts with a table.
     bool StartsWithTable();
 

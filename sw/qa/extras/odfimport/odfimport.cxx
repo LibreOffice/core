@@ -36,6 +36,7 @@ public:
     void testFdo68839();
     void testFdo37606();
     void testFdo37606Copy();
+    void testFdo69862();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -62,6 +63,7 @@ void Test::run()
         {"fdo68839.odt", &Test::testFdo68839},
         {"fdo37606.odt", &Test::testFdo37606},
         {"fdo37606.odt", &Test::testFdo37606Copy},
+        {"fdo69862.odt", &Test::testFdo69862},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -424,6 +426,23 @@ void Test::testFdo37606Copy()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+}
+
+void Test::testFdo69862()
+{
+    // The test doc is special in that it starts with a table and it also has a footnote.
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+
+    pWrtShell->SelAll();
+    SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
+    // This was "Footnote.", as Ctrl-A also selected footnotes, but it should not.
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
+
+    SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+    CPPUNIT_ASSERT_EQUAL(OUString("H" "\x01" "ello."), rEnd.GetTxt());
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
