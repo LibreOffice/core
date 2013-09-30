@@ -867,23 +867,6 @@ static inline sal_Int32 getFirstLineBreak( const OUString & str ) throw ()
     return -1;
 }
 
-/** returns position of last ascii 10 within sequence, -1 when no 10 in string.
- */
-static inline sal_Int32 getLastLineBreak( const Sequence<sal_Int8>  & seq) throw ()
-{
-    const sal_Int8 *pSource = seq.getConstArray();
-    sal_Int32 nLen  = seq.getLength();
-
-    for( int n = nLen-1; n >= 0 ; n -- )
-    {
-        if( LINEFEED == pSource[n] ) {
-            return n;
-        }
-    }
-    return -1;
-}
-
-
 class SAXWriter :
     public WeakImplHelper2<
             XWriter,
