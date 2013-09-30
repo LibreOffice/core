@@ -222,7 +222,7 @@ public:
 
     /** Sets the name of a macro
         @return  true = The passed macro name has been found. */
-    bool                SetMacroLink( const String& rMacro );
+    bool                SetMacroLink( const OUString& rMacro );
 };
 
 class XclExpShapeObj : public XclObjAny, public XclMacroHelper
@@ -247,7 +247,7 @@ public:
                             XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
                             const Rectangle* pChildAnchor,
-                            const String& rClassName,
+                            const OUString& rClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
 
 private:
@@ -355,7 +355,7 @@ public:
                             const XclExpRoot& rRoot,
                             const ScAddress& rScPos,
                             const ScPostIt* pScNote,
-                            const String& rAddText );
+                            const OUString& rAddText );
 
     /** Writes the NOTE record, if the respective Escher object is present. */
     virtual void        Save( XclExpStream& rStrm );
@@ -369,8 +369,8 @@ private:
 
 private:
     XclExpString        maAuthor;       /// Name of the author.
-    String              maOrigNoteText; /// Original main text of the note.
-    OString        maNoteText;     /// Main text of the note (<=BIFF7).
+    OUString            maOrigNoteText; /// Original main text of the note.
+    OString             maNoteText;     /// Main text of the note (<=BIFF7).
     XclExpStringRef     mpNoteContents; /// Text and formatting data (OOXML)
     ScAddress           maScPos;        /// Calc cell address of the note.
     sal_uInt16          mnObjId;        /// Escher object ID (BIFF8).

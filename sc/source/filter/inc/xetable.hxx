@@ -50,7 +50,7 @@ Export of cell tables including row and column description.
 class XclExpStringRec : public XclExpRecord
 {
 public:
-    explicit            XclExpStringRec( const XclExpRoot& rRoot, const String& rResult );
+    explicit            XclExpStringRec( const XclExpRoot& rRoot, const OUString& rResult );
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );

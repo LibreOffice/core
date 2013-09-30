@@ -194,12 +194,12 @@ public:
     /** Returns true, if multiple URLs have been processed. */
     inline bool         HasMultipleUrls() const { return mbMultipleUrls; }
     /** Returns a string containing all processed URLs. */
-    inline const String& GetUrlList() { return maUrlList; }
+    inline const OUString& GetUrlList() { return maUrlList; }
 
 private:
     XclExpHyperlinkRef  mxLinkRec;          /// Created HLINK record.
     ScAddress           maScPos;            /// Cell position to set at the HLINK record.
-    String              maUrlList;          /// List with all processed URLs.
+    OUString            maUrlList;          /// List with all processed URLs.
     bool                mbMultipleUrls;     /// true = Multiple URL fields processed.
 };
 
@@ -225,7 +225,7 @@ public:
         @return  The new string object (shared pointer). */
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
-                            const String& rString,
+                            const OUString& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
@@ -250,7 +250,7 @@ public:
     static void         AppendString(
                             XclExpString& rXclString,
                             const XclExpRoot& rRoot,
-                            const String& rString );
+                            const OUString& rString );
 
     /** Appends a character to an Excel string object.
         @descr  Selects the correct Append() function depending on the current
@@ -322,7 +322,7 @@ public:
 
     /** Returns the script type first text portion different to WEAK, or the system
         default script type, if there is only weak script in the passed string. */
-    static sal_Int16    GetLeadingScriptType( const XclExpRoot& rRoot, const String& rString );
+    static sal_Int16    GetLeadingScriptType( const XclExpRoot& rRoot, const OUString& rString );
 
 private:
     /** We don't want anybody to instantiate this class, since it is just a
@@ -376,7 +376,7 @@ public:
                             const EditTextObject* pRightObj );
 
     /** Returns the last generated header/footer string. */
-    inline const String& GetHFString() const { return maHFString; }
+    inline const OUString& GetHFString() const { return maHFString; }
     /** Returns the total height of the last generated header/footer in twips. */
     inline sal_Int32    GetTotalHeight() const { return mnTotalHeight; }
 
@@ -388,7 +388,7 @@ private:
 
 private:
     EditEngine&         mrEE;           /// The header/footer edit engine.
-    String              maHFString;     /// The last generated header/footer string.
+    OUString            maHFString;     /// The last generated header/footer string.
     sal_Int32           mnTotalHeight;  /// Total height of the last header/footer (twips).
 };
 

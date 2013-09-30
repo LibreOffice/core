@@ -104,7 +104,7 @@ public:
     virtual             ~XclExpHyperlink();
 
     /** Returns the cell representation text or 0, if not available. */
-    inline const String* GetRepr() const { return mxRepr.get(); }
+    inline const OUString* GetRepr() const { return mxRepr.get(); }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
@@ -113,15 +113,15 @@ private:
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
         @param rbRel  (out-param) true = path is relative. */
-    String              BuildFileName(
+    OUString            BuildFileName(
                             sal_uInt16& rnLevel, bool& rbRel,
-                            const String& rUrl, const XclExpRoot& rRoot ) const;
+                            const OUString& rUrl, const XclExpRoot& rRoot ) const;
 
     /** Writes the body of the HLINK record. */
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef boost::scoped_ptr< String >   StringPtr;
+    typedef boost::scoped_ptr< OUString > StringPtr;
     typedef boost::scoped_ptr< SvStream > SvStreamPtr;
 
     ScAddress           maScPos;            /// Position of the hyperlink.
@@ -247,7 +247,7 @@ private:
 
     XclExpCFList        maCFList;       /// List of CF records.
     XclRangeList        maXclRanges;    /// Cell ranges for this conditional format.
-    String              msSeqRef;       /// OOXML Sequence of References
+    OUString            msSeqRef;       /// OOXML Sequence of References
 };
 
 class XclExpColorScale: public XclExpRecord, protected XclExpRoot
@@ -398,9 +398,9 @@ class XclExpWebQuery : public XclExpRecordBase
 public:
     /** Constructs a web query record container with settings from Calc. */
     explicit            XclExpWebQuery(
-                            const String& rRangeName,
-                            const String& rUrl,
-                            const String& rSource,
+                            const OUString& rRangeName,
+                            const OUString& rUrl,
+                            const OUString& rSource,
                             sal_Int32 nRefrSecs );
     virtual             ~XclExpWebQuery();
 

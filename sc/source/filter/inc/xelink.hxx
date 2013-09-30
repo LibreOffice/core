@@ -161,7 +161,7 @@ public:
     /** Searches for a special EXTERNSHEET index for the own document. */
     sal_uInt16          FindExtSheet( sal_Unicode cCode );
 
-    void                FindExtSheet( sal_uInt16 nFileId, const String& rTabName, sal_uInt16 nXclTabSpan,
+    void                FindExtSheet( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
                                       sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
                                       XclExpRefLogEntry* pRefLogEntry = NULL );
 
@@ -170,9 +170,9 @@ public:
     /** Stores all cells in the given range in a CRN record list. */
     void StoreCellRange( const ScComplexRefData& rRef, const ScAddress& rPos );
 
-    void StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos );
+    void StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos );
 
-    void StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange );
+    void StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange );
 
     /** Finds or inserts an EXTERNNAME record for an add-in function name.
         @param rnExtSheet  (out-param) Returns the index of the EXTSHEET structure for the add-in function name.
@@ -180,22 +180,22 @@ public:
         @return  true = add-in function inserted; false = error (i.e. not supported in current BIFF). */
     bool                InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const String& rName );
+                            const OUString& rName );
     /** InsertEuroTool */
     bool                InsertEuroTool(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const String& rName );
+                            const OUString& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @param rnExtSheet  (out-param) Returns the index of the EXTSHEET structure for the DDE link.
         @param rnExtName  (out-param) Returns the 1-based EXTERNNAME record index.
         @return  true = DDE link inserted; false = error (i.e. not supported in current BIFF). */
     bool                InsertDde(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-                            const String& rApplic, const String& rTopic, const String& rItem );
+                            const OUString& rApplic, const OUString& rTopic, const OUString& rItem );
 
     bool                InsertExtName(
-                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rUrl,
-                            const String& rName, const ScExternalRefCache::TokenArrayRef pArray );
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
 
     /** Writes the entire Link table. */
     virtual void        Save( XclExpStream& rStrm );

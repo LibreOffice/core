@@ -307,7 +307,7 @@ OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 
         mxLinkRec.reset( new XclExpHyperlink( GetRoot(), rUrlField, maScPos ) );
 
-        if( const String* pRepr = mxLinkRec->GetRepr() )
+        if( const OUString* pRepr = mxLinkRec->GetRepr() )
             aUrlRepr = *pRepr;
 
         // add URL to note text
@@ -526,7 +526,7 @@ XclExpStringRef lclCreateFormattedString(
 // ----------------------------------------------------------------------------
 
 XclExpStringRef XclExpStringHelper::CreateString(
-        const XclExpRoot& rRoot, const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+        const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     XclExpStringRef xString( new XclExpString );
     if( rRoot.GetBiff() == EXC_BIFF8 )
@@ -544,7 +544,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     return xString;
 }
 
-void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoot& rRoot, const String& rString )
+void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoot& rRoot, const OUString& rString )
 {
     if( rRoot.GetBiff() == EXC_BIFF8 )
         rXclString.Append( rString );
@@ -642,7 +642,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     return xString;
 }
 
-sal_Int16 XclExpStringHelper::GetLeadingScriptType( const XclExpRoot& rRoot, const String& rString )
+sal_Int16 XclExpStringHelper::GetLeadingScriptType( const XclExpRoot& rRoot, const OUString& rString )
 {
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
@@ -672,7 +672,7 @@ void XclExpHFConverter::GenerateString(
         const EditTextObject* pCenterObj,
         const EditTextObject* pRightObj )
 {
-    maHFString.Erase();
+    maHFString = "";
     mnTotalHeight = 0;
     AppendPortion( pLeftObj, 'L' );
     AppendPortion( pCenterObj, 'C' );
@@ -874,7 +874,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
     if( aText.Len() )
     {
-        maHFString.Append( '&' ).Append( cPortionCode ).Append( aText );
+        maHFString += "&" + OUString(cPortionCode) + aText;
         mnTotalHeight = ::std::max( mnTotalHeight, nHeight );
     }
 }

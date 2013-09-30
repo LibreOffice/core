@@ -509,7 +509,7 @@ void XclExpControlHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nS
 //#if EXC_EXP_OCX_CTRL
 
 XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Reference< XShape > xShape,
-        const Rectangle* pChildAnchor, const String& rClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
+        const Rectangle* pChildAnchor, const OUString& rClassName, sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rObjMgr, EXC_OBJTYPE_PICTURE, true ),
     XclExpControlHelper( rObjMgr.GetRoot() ),
     maClassName( rClassName ),
@@ -1207,7 +1207,7 @@ void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, 
 // ============================================================================
 
 XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
-        const ScPostIt* pScNote, const String& rAddText ) :
+        const ScPostIt* pScNote, const OUString& rAddText ) :
     XclExpRecord( EXC_ID_NOTE ),
     maScPos( rScPos ),
     mnObjId( EXC_OBJ_INVALID_ID ),
@@ -1413,10 +1413,10 @@ XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxE
 }
 
 bool
-XclMacroHelper::SetMacroLink( const String& rMacroName )
+XclMacroHelper::SetMacroLink( const OUString& rMacroName )
 {
     OSL_TRACE("SetMacroLink( macroname:=%s )", OUStringToOString( rMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
-    if( rMacroName.Len() )
+    if( !rMacroName.isEmpty() )
     {
         sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
         sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( rMacroName, true, false );

@@ -350,7 +350,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aXclStrm << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_DESCR;
-        mxRepr.reset( new String( rRepr ) );
+        mxRepr.reset( new OUString( rRepr ) );
     }
 
     // file link or URL
@@ -388,7 +388,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aLink.WriteBuffer( aXclStrm );                          // NO flags
 
         if( !mxRepr.get() )
-            mxRepr.reset( new String( aFileName ) );
+            mxRepr.reset( new OUString( aFileName ) );
 
         msTarget = XclXmlUtils::ToOUString( aLink );
         // ooxml expects the file:/// part appended ( or at least
@@ -405,7 +405,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
         mnFlags |= EXC_HLINK_BODY | EXC_HLINK_ABS;
         if( !mxRepr.get() )
-            mxRepr.reset( new String( rUrl ) );
+            mxRepr.reset( new OUString( rUrl ) );
 
         msTarget = XclXmlUtils::ToOUString( aUrl );
     }
@@ -445,8 +445,8 @@ XclExpHyperlink::~XclExpHyperlink()
 {
 }
 
-String XclExpHyperlink::BuildFileName(
-        sal_uInt16& rnLevel, bool& rbRel, const String& rUrl, const XclExpRoot& rRoot ) const
+OUString XclExpHyperlink::BuildFileName(
+        sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot ) const
 {
     OUString aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
     rnLevel = 0;
@@ -1569,7 +1569,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                     sal_Int32 nStringIx = 0;
                     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
                     {
-                        String aToken( aString.getToken( 0, '\n', nStringIx ) );
+                        OUString aToken( aString.getToken( 0, '\n', nStringIx ) );
                         if( nToken > 0 )
                         {
                             mxString1->Append(OUString(static_cast<sal_Unicode>('\0')));
@@ -1793,9 +1793,9 @@ void XclExpDval::WriteBody( XclExpStream& rStrm )
 // Web Queries ================================================================
 
 XclExpWebQuery::XclExpWebQuery(
-        const String& rRangeName,
-        const String& rUrl,
-        const String& rSource,
+        const OUString& rRangeName,
+        const OUString& rUrl,
+        const OUString& rSource,
         sal_Int32 nRefrSecs ) :
     maDestRange( rRangeName ),
     maUrl( rUrl ),
@@ -1811,7 +1811,7 @@ XclExpWebQuery::XclExpWebQuery(
     bool bExitLoop = false;
     for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bExitLoop; ++nToken )
     {
-        OUString aToken( rSource.GetToken( 0, ';', nStringIx ) );
+        OUString aToken( rSource.getToken( 0, ';', nStringIx ) );
         mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
         bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
         if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )

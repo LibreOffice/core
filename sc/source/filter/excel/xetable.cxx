@@ -44,7 +44,7 @@ namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 // Helper records for cell records
 // ============================================================================
 
-XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const String& rResult ) :
+XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const OUString& rResult ) :
     XclExpRecord( EXC_ID3_STRING ),
     mxResult( XclExpStringHelper::CreateString( rRoot, rResult ) )
 {

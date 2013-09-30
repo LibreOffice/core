@@ -41,7 +41,7 @@ struct ScDPNumGroupInfo;
 class XclExpPCItem : public XclExpRecord, public XclPCItem
 {
 public:
-    explicit            XclExpPCItem( const String& rText );
+    explicit            XclExpPCItem( const OUString& rText );
     explicit            XclExpPCItem( double fValue );
     explicit            XclExpPCItem( const DateTime& rDateTime );
     explicit            XclExpPCItem( sal_Int16 nValue );
@@ -124,7 +124,7 @@ private:
     /** Inserts an original source item. Updates item index array. */
     void                InsertOrigItem( XclExpPCItem* pNewItem );
     /** Inserts an original text item, if it is not contained already. */
-    void                InsertOrigTextItem( const String& rText );
+    void                InsertOrigTextItem( const OUString& rText );
     /** Inserts an original value item, if it is not contained already. */
     void                InsertOrigDoubleItem( double fValue );
     /** Inserts an original date/time item, if it is not contained already. */

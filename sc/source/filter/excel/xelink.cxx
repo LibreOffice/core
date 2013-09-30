@@ -2290,7 +2290,7 @@ sal_uInt16 XclExpLinkManager::FindExtSheet( sal_Unicode cCode )
     return mxImpl->FindExtSheet( cCode );
 }
 
-void XclExpLinkManager::FindExtSheet( sal_uInt16 nFileId, const String& rTabName, sal_uInt16 nXclTabSpan,
+void XclExpLinkManager::FindExtSheet( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
                                       sal_uInt16& rnExtSheet, sal_uInt16& rnFirstSBTab, sal_uInt16& rnLastSBTab,
                                       XclExpRefLogEntry* pRefLogEntry )
 {
@@ -2307,37 +2307,37 @@ void XclExpLinkManager::StoreCellRange( const ScComplexRefData& rRef, const ScAd
     mxImpl->StoreCellRange(rRef.Ref1, rRef.Ref2, rPos);
 }
 
-void XclExpLinkManager::StoreCell( sal_uInt16 nFileId, const String& rTabName, const ScAddress& rPos )
+void XclExpLinkManager::StoreCell( sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rPos )
 {
     mxImpl->StoreCell(nFileId, rTabName, rPos);
 }
 
-void XclExpLinkManager::StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange )
+void XclExpLinkManager::StoreCellRange( sal_uInt16 nFileId, const OUString& rTabName, const ScRange& rRange )
 {
     mxImpl->StoreCellRange(nFileId, rTabName, rRange);
 }
 
 bool XclExpLinkManager::InsertAddIn(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName )
 {
     return mxImpl->InsertAddIn( rnExtSheet, rnExtName, rName );
 }
 
 bool XclExpLinkManager::InsertEuroTool(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName )
 {
     return mxImpl->InsertEuroTool( rnExtSheet, rnExtName, rName );
 }
 
 bool XclExpLinkManager::InsertDde(
         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-        const String& rApplic, const String& rTopic, const String& rItem )
+        const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
 {
     return mxImpl->InsertDde( rnExtSheet, rnExtName, rApplic, rTopic, rItem );
 }
 
 bool XclExpLinkManager::InsertExtName(
-    sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName, const String& rUrl,
+    sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName, const OUString& rUrl,
     const ScExternalRefCache::TokenArrayRef pArray )
 {
     return mxImpl->InsertExtName( rnExtSheet, rnExtName, rUrl, rName, pArray );

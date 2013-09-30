@@ -47,7 +47,7 @@ using ::std::numeric_limits;
 
 // Header/footer --------------------------------------------------------------
 
-XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, const String& rHdrString ) :
+XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, const OUString& rHdrString ) :
     XclExpRecord( nRecId ),
     maHdrString( rHdrString )
 {
@@ -64,7 +64,7 @@ void XclExpHeaderFooter::SaveXml( XclExpXmlStream& rStrm )
 
 void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
 {
-    if( maHdrString.Len() )
+    if( !maHdrString.isEmpty() )
     {
         XclExpString aExString;
         if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )

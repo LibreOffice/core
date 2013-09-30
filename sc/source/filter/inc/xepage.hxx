@@ -32,7 +32,7 @@
 class XclExpHeaderFooter : public XclExpRecord
 {
 public:
-    explicit            XclExpHeaderFooter( sal_uInt16 nRecId, const String& rHdrString );
+    explicit            XclExpHeaderFooter( sal_uInt16 nRecId, const OUString& rHdrString );
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
@@ -40,7 +40,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    String              maHdrString;        /// Header or footer contents.
+    OUString            maHdrString;        /// Header or footer contents.
 };
 
 // General page settings ------------------------------------------------------

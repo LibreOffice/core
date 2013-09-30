@@ -1288,7 +1288,7 @@ void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_numFmts );
 }
 
-void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclNumFmt, const String& rFormatStr )
+void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclNumFmt, const OUString& rFormatStr )
 {
     XclExpString aExpStr;
     if( GetBiff() <= EXC_BIFF5 )
@@ -1354,7 +1354,7 @@ OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumbe
 
 }
 
-String XclExpNumFmtBuffer::GetFormatCode( sal_uInt16 nScNumFmt )
+OUString XclExpNumFmtBuffer::GetFormatCode( sal_uInt16 nScNumFmt )
 {
     return GetNumberFormatCode( *this, nScNumFmt, mxFormatter.get(), mpKeywordTable.get() );
 }
@@ -2158,14 +2158,14 @@ void XclExpDefaultXF::SetNumFmt( sal_uInt16 nXclNumFmt )
 
 // ----------------------------------------------------------------------------
 
-XclExpStyle::XclExpStyle( sal_uInt32 nXFId, const String& rStyleName ) :
+XclExpStyle::XclExpStyle( sal_uInt32 nXFId, const OUString& rStyleName ) :
     XclExpRecord( EXC_ID_STYLE, 4 ),
     maName( rStyleName ),
     maXFId( nXFId ),
     mnStyleId( EXC_STYLE_USERDEF ),
     mnLevel( EXC_STYLE_NOLEVEL )
 {
-    OSL_ENSURE( maName.Len(), "XclExpStyle::XclExpStyle - empty style name" );
+    OSL_ENSURE( !maName.isEmpty(), "XclExpStyle::XclExpStyle - empty style name" );
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt8 nStyleId, nLevel; // do not use members for debug tests
     OSL_ENSURE( !XclTools::GetBuiltInStyleId( nStyleId, nLevel, maName ),

@@ -64,12 +64,12 @@ public:
 
     /** Sets the name's symbol value
         @param sValue   the name's symbolic value */
-    void                SetSymbol( String sValue );
+    void                SetSymbol( const OUString& rValue );
     /** Returns the name's symbol value */
-    inline const String& GetSymbol() const { return msSymbol; }
+    inline const OUString& GetSymbol() const { return msSymbol; }
 
     /** Returns the original name (title) of this defined name. */
-    inline const String& GetOrigName() const { return maOrigName; }
+    inline const OUString& GetOrigName() const { return maOrigName; }
     /** Returns the Excel built-in name index of this defined name.
         @return  The built-in name index or EXC_BUILTIN_UNKNOWN for user-defined names. */
     inline sal_Unicode  GetBuiltInName() const { return mcBuiltIn; }
@@ -98,8 +98,8 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    String              maOrigName;     /// The original user-defined name.
-    String              msSymbol;       /// The value of the symbol
+    OUString            maOrigName;     /// The original user-defined name.
+    OUString            msSymbol;       /// The value of the symbol
     XclExpStringRef     mxName;         /// The name as Excel string object.
     XclTokenArrayRef    mxTokArr;       /// The definition of the defined name.
     sal_Unicode         mcBuiltIn;      /// The built-in index for built-in names.
@@ -283,9 +283,9 @@ void XclExpName::SetMacroCall( bool bVBasic, bool bFunc )
     ::set_flag( mnFlags, EXC_NAME_FUNC, bFunc );
 }
 
-void XclExpName::SetSymbol( String sSymbol )
+void XclExpName::SetSymbol( const OUString& rSymbol )
 {
-    msSymbol = sSymbol;
+    msSymbol = rSymbol;
 }
 
 bool XclExpName::IsVolatile() const
@@ -715,25 +715,25 @@ sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScR
 }
 
 sal_uInt16 XclExpNameManager::InsertUniqueName(
-        const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
+        const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
 {
     return mxImpl->InsertUniqueName( rName, xTokArr, nScTab );
 }
 
-sal_uInt16 XclExpNameManager::InsertRawName( const String& rName )
+sal_uInt16 XclExpNameManager::InsertRawName( const OUString& rName )
 {
     return mxImpl->InsertRawName( rName );
 }
 
-sal_uInt16 XclExpNameManager::InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden )
+sal_uInt16 XclExpNameManager::InsertMacroCall( const OUString& rMacroName, bool bVBasic, bool bFunc, bool bHidden )
 {
     return mxImpl->InsertMacroCall( rMacroName, bVBasic, bFunc, bHidden );
 }
 
-const String& XclExpNameManager::GetOrigName( sal_uInt16 nNameIdx ) const
+const OUString& XclExpNameManager::GetOrigName( sal_uInt16 nNameIdx ) const
 {
     const XclExpName* pName = mxImpl->GetName( nNameIdx );
-    return pName ? pName->GetOrigName() : EMPTY_STRING;
+    return pName ? pName->GetOrigName() : EMPTY_OUSTRING;
 }
 
 SCTAB XclExpNameManager::GetScTab( sal_uInt16 nNameIdx ) const

@@ -52,16 +52,16 @@ public:
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const ScRangeList& rRangeList );
 
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
-    sal_uInt16          InsertUniqueName( const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertUniqueName( const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Returns index of an existing name, or creates a name without definition. */
-    sal_uInt16          InsertRawName( const String& rName );
+    sal_uInt16          InsertRawName( const OUString& rName );
     /** Searches or inserts a defined name describing a macro name.
         @param bVBasic  true = Visual Basic macro, false = Sheet macro.
         @param bFunc  true = Macro function; false = Macro procedure. */
-    sal_uInt16          InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden = false );
+    sal_uInt16          InsertMacroCall( const OUString& rMacroName, bool bVBasic, bool bFunc, bool bHidden = false );
 
     /** Returns the Calc sheet of a local defined name, or SCTAB_GLOBAL for global defined names. */
-    const String&       GetOrigName( sal_uInt16 nNameIdx ) const;
+    const OUString&     GetOrigName( sal_uInt16 nNameIdx ) const;
     /** Returns the Calc sheet of a local defined name, or SCTAB_GLOBAL for global defined names. */
     SCTAB               GetScTab( sal_uInt16 nNameIdx ) const;
     /** Returns true, if the specified defined name is volatile. */

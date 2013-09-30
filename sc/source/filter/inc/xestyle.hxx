@@ -268,7 +268,7 @@ struct XclExpNumFmt
 {
     sal_uLong           mnScNumFmt;     /// Core index of the number format.
     sal_uInt16          mnXclNumFmt;    /// Resulting Excel format index.
-    OUString       maNumFmtString; /// format string
+    OUString            maNumFmtString; /// format string
 
     inline explicit     XclExpNumFmt( sal_uLong nScNumFmt, sal_uInt16 nXclNumFmt, const OUString& rFrmt ) :
                             mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString( rFrmt ) {}
@@ -302,11 +302,11 @@ public:
 
 private:
     /** Writes the FORMAT record with index nXclIx and format string rFormatStr. */
-    void                WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclNumFmt, const String& rFormatStr );
+    void                WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclNumFmt, const OUString& rFormatStr );
     /** Writes the FORMAT record represented by rFormat. */
     void                WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
 
-    String              GetFormatCode ( sal_uInt16 nScNumFmt );
+    OUString            GetFormatCode ( sal_uInt16 nScNumFmt );
 
 private:
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
@@ -560,13 +560,13 @@ public:
 class XclExpStyle : public XclExpRecord
 {
 public:
-    explicit            XclExpStyle( sal_uInt32 nXFId, const String& rStyleName );
+    explicit            XclExpStyle( sal_uInt32 nXFId, const OUString& rStyleName );
     explicit            XclExpStyle( sal_uInt32 nXFId, sal_uInt8 nStyleId, sal_uInt8 nLevel = EXC_STYLE_NOLEVEL );
 
     /** Returns true, if this record represents an Excel built-in style. */
     inline bool         IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }
 
-    inline const String&    GetName() const { return maName; }
+    inline const OUString&    GetName() const { return maName; }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
@@ -575,7 +575,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    String              maName;         /// Name of the cell style.
+    OUString            maName;         /// Name of the cell style.
     XclExpXFId          maXFId;         /// XF identifier for style formatting.
     sal_uInt8           mnStyleId;      /// Built-in style identifier.
     sal_uInt8           mnLevel;        /// Outline level for RowLevel and ColLevel styles.

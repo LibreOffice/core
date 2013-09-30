@@ -1061,7 +1061,7 @@ void XclExpChSourceLink::ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPe
     }
 }
 
-void XclExpChSourceLink::AppendString( const String& rStr )
+void XclExpChSourceLink::AppendString( const OUString& rStr )
 {
     if (!mxString)
         return;
@@ -1197,7 +1197,7 @@ void XclExpChText::SetRotation( sal_uInt16 nRotation )
     ::insert_value( maData.mnFlags, XclTools::GetXclOrientFromRot( nRotation ), 8, 3 );
 }
 
-void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget, const String* pSubTitle )
+void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget, const OUString* pSubTitle )
 {
     switch( nTarget )
     {
@@ -1436,7 +1436,7 @@ namespace {
 
 /** Creates and returns an Excel text object from the passed title. */
 XclExpChTextRef lclCreateTitle( const XclExpChRoot& rRoot, Reference< XTitled > xTitled, sal_uInt16 nTarget,
-                                const String* pSubTitle = NULL )
+                                const OUString* pSubTitle = NULL )
 {
     Reference< XTitle > xTitle;
     if( xTitled.is() )
@@ -3337,7 +3337,7 @@ void XclExpChAxesSet::WriteBody( XclExpStream& rStrm )
 // The chart object ===========================================================
 
 static void lcl_getChartSubTitle(const Reference<XChartDocument>& xChartDoc,
-                                 String& rSubTitle)
+                                 OUString& rSubTitle)
 {
     Reference< ::com::sun::star::chart::XChartDocument > xChartDoc1(xChartDoc, UNO_QUERY);
     if (!xChartDoc1.is())
@@ -3390,10 +3390,10 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
 
         // chart title
         Reference< XTitled > xTitled( xChartDoc, UNO_QUERY );
-        String aSubTitle;
+        OUString aSubTitle;
         lcl_getChartSubTitle(xChartDoc, aSubTitle);
         mxTitle = lclCreateTitle( GetChRoot(), xTitled, EXC_CHOBJLINK_TITLE,
-                                  aSubTitle.Len() ? &aSubTitle : NULL );
+                                  !aSubTitle.isEmpty() ? &aSubTitle : NULL );
 
         // diagrams (axes sets)
         sal_uInt16 nFreeGroupIdx = mxPrimAxesSet->Convert( xDiagram, 0 );
