@@ -477,15 +477,21 @@ public class _XAccessibleComponent extends MultiMethodTest {
     public void _getSize() {
         requiredMethod("getBounds()");
 
-        boolean result = true;
+        boolean result = false;
         Size size = oObj.getSize();
 
-        result &= (size.Width == bounds.Width);
-        result &= (size.Height == bounds.Height);
-        if (!result) {
-            log.println(
-                "bounds " + bounds.Width + "x" + bounds.Height + " vs. size "
-                + size.Width + "x" + size.Height);
+	for (int i = 0; i < 2 && !result; i++)
+	{
+	    result = true;
+	    result &= (size.Width == bounds.Width);
+	    result &= (size.Height == bounds.Height);
+	    if (!result) {
+		log.println( "potential race bounds " + bounds.Width + "x" + bounds.Height +
+			     " vs. size " + size.Width + "x" + size.Height);
+		// Possibily we hit a race condition and it re-sized (?) ...
+		bounds = oObj.getBounds();
+		size = oObj.getSize();
+	    }
         }
 
         tRes.tested("getSize()", result);
