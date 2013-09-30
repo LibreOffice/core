@@ -162,7 +162,7 @@ long SwWrtShell::SelAll()
 
         bool bStartsWithTable = StartsWithTable();
         if (bStartsWithTable)
-            ExtendedSelectAll();
+            ExtendedSelectAll(/*bFootnotes =*/ false);
 
         if( pStartPos )
         {
