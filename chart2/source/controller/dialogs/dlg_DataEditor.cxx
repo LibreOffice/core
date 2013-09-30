@@ -89,7 +89,6 @@ DataEditor::DataEditor(
     Size aWinSize( GetOutputSizePixel());
     Size aWinSizeWithBorder( GetSizePixel());
     Point aWinPos( OutputToAbsoluteScreenPixel( GetPosPixel()));
-    sal_Int32 nMinWidth = aWinSize.getWidth();
     sal_Int32 nMaxWidth = GetDesktopRectPixel().getWidth() -
         (aWinSizeWithBorder.getWidth() - aWinSize.getWidth() + aWinPos.getX()) - 10; // leave some space
     sal_Int32 nBrowserWidth = m_apBrwData->GetTotalWidth() + 12 + 16; // plus padding + 16?
