@@ -36,7 +36,6 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -96,9 +95,6 @@ public:
     virtual sal_Bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) throw(CannotRegisterImplementationException, RuntimeException);
 
 private:
-    OUString expand_url( OUString const & url )
-        SAL_THROW( (RuntimeException) );
-
     Reference<XMultiServiceFactory> m_xSMgr;
 };
 
@@ -162,20 +158,6 @@ void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::co
 //      m_xSMgr = rServiceManager;
 }
 
-//==================================================================================================
-OUString DllComponentLoader::expand_url( OUString const & url )
-    SAL_THROW( (RuntimeException) )
-{
-    try
-    {
-        return cppu::bootstrap_expandUri( url );
-    }
-    catch ( const IllegalArgumentException & e )
-    {
-        throw RuntimeException( e.Message, e.Context );
-    }
-}
-
 //*************************************************************************
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
@@ -202,7 +184,8 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     }
 
     return loadSharedLibComponentFactory(
-        expand_url( rLibName ), OUString(), rImplName, m_xSMgr, xKey, aPrefix );
+        cppu::bootstrap_expandUri(rLibName), OUString(), rImplName, m_xSMgr,
+        xKey, aPrefix );
 }
 
 
@@ -219,7 +202,7 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
     return sal_False;
 #else
     writeSharedLibComponentInfo(
-        expand_url( rLibName ), OUString(), m_xSMgr, xKey );
+        cppu::bootstrap_expandUri(rLibName), OUString(), m_xSMgr, xKey );
     return sal_True;
 #endif
 }
