@@ -108,9 +108,6 @@ struct GroupIDToCommandGroup
     sal_Int16   nCommandGroup;
 };
 
-// Please update when a new command group is added
-const sal_Int16 MAX_COMMANDGROUP = frame::CommandGroup::CONTROLS;
-
 static bool                 bGroupIDMapInitialized = false;
 static const GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
 {
