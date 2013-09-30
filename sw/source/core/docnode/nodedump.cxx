@@ -282,8 +282,10 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
             writer.startElement("hint");
             SwTxtAttr* pHint = rHints.GetTextHint(i);
 
-            writer.writeFormatAttribute("start", TMP_FORMAT, *pHint->GetStart());
-            writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->GetEnd());
+            if (pHint->GetStart())
+                writer.writeFormatAttribute("start", TMP_FORMAT, *pHint->GetStart());
+            if (pHint->GetEnd())
+                writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->GetEnd());
 
             const char* pWhich = "???";
             switch (pHint->Which())
