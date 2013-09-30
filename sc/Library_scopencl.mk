@@ -36,8 +36,7 @@ $(eval $(call gb_Library_use_libraries,scopencl,\
 $(eval $(call gb_Library_add_exception_objects,scopencl,\
         sc/source/core/opencl/formulagroupcl \
         sc/source/core/opencl/openclwrapper \
-        $(if $(filter-out MACOSX,$(OS)), \
-            sc/source/core/opencl/clcc/clew) \
+        sc/source/core/opencl/clcc/clew \
 ))
 
 ifeq ($(OS),LINUX)
