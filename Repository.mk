@@ -652,11 +652,14 @@ $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	xmlsec1 \
-	xmlsec1-nss \
 ))
-ifneq ($(CROSS_COMPILING),YES)
+ifeq ($(COM),MSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	xmlsec1-mscrypto \
+))
+else
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	xmlsec1-nss \
 ))
 endif
 endif
