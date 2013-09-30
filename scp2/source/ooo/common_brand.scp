@@ -489,7 +489,7 @@ File gid_Brand_File_Html_Thirdpartylicensereadme
     TXT_FILE_BODY;
 End
 
-#if defined UNX && !defined ENABLE_MACOSX_SANDBOX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined UNX && !defined MACOSX
 
 File gid_Brand_File_Gdb_Trace
     TXT_FILE_BODY;
