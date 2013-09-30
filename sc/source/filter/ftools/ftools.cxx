@@ -276,7 +276,7 @@ OString ScfTools::read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int3
     return aRet;
 }
 
-void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
+void ScfTools::AppendCString( SvStream& rStrm, OUString& rString, rtl_TextEncoding eTextEnc )
 {
     rString += ::read_zeroTerminated_uInt8s_ToOUString(rStrm, eTextEnc);
 }

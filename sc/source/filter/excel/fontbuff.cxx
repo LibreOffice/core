@@ -81,7 +81,7 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 }
 
 
-void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const String& rName )
+void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const OUString& rName )
 {
     OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetName(): Array too small!" );
     if( nIndex < nSize )

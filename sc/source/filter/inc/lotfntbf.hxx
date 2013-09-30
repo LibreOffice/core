@@ -36,7 +36,7 @@ class LotusFontBuffer
 private:
     struct ENTRY
     {
-        String*             pTmpName;
+        OUString*           pTmpName;
         SvxFontItem*        pFont;
         SvxFontHeightItem*  pHeight;
         SvxColorItem*       pColor;
@@ -60,12 +60,12 @@ private:
                                 if( pColor )
                                     delete pColor;
                             }
-        inline void         TmpName( const String &rNew )
+        inline void         TmpName( const OUString &rNew )
                             {
                                 if( pTmpName )
                                     *pTmpName = rNew;
                                 else
-                                    pTmpName = new String( rNew );
+                                    pTmpName = new OUString( rNew );
                             }
         inline void         Font( SvxFontItem& rNew )
                             {
@@ -92,7 +92,7 @@ private:
 public:
 	const static sal_uInt16	nSize = 8;
     void                    Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet );
-    void                    SetName( const sal_uInt16 nIndex, const String& rName );
+    void                    SetName( const sal_uInt16 nIndex, const OUString& rName );
     void                    SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight );
     void                    SetType( const sal_uInt16 nIndex, const sal_uInt16 nType );
 private:

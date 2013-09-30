@@ -232,7 +232,7 @@ void ImportLotus::Nacell( void )
 void ImportLotus::Labelcell( void )
 {
     ScAddress   aA;
-    String      aLabel;
+    OUString    aLabel;
     sal_Char    cAlign;
 
     Read( aA );
@@ -299,7 +299,7 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
 }
 
 
-void ImportLotus::Read( String &r )
+void ImportLotus::Read( OUString &r )
 {
     ScfTools::AppendCString( *pIn, r, eQuellChar );
 }
@@ -343,7 +343,7 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 void ImportLotus::NamedSheet( void )
 {
     sal_uInt16  nLTab;
-    String  aName;
+    OUString    aName;
 
     Read( nLTab );
     Read( aName );
@@ -358,7 +358,7 @@ void ImportLotus::NamedSheet( void )
 void ImportLotus::Font_Face( void )
 {
     sal_uInt8   nNum;
-    String  aName;
+    OUString    aName;
 
     Read( nNum );
 

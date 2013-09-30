@@ -74,7 +74,7 @@ private:
     inline void         Read( sal_uInt32& );
     inline void         Read( double& );                    // 10-Byte-IEEE lesen
     inline void         Read( LotAttrWK3& );
-    void                Read( String& );                    // 0-terminierten String einlesen
+    void                Read( OUString& );                  // 0-terminierten String einlesen
     inline void         Skip( const sal_uInt16 nNumBytes );
     // -------------------------------------------------------------------
 public:

@@ -229,7 +229,7 @@ public:
     }
 
     /** Appends a zero terminated byte string. */
-    static void         AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc );
+    static void         AppendCString( SvStream& rStrm, OUString& rString, rtl_TextEncoding eTextEnc );
 
 // *** HTML table names <-> named range names *** -----------------------------
 

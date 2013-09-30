@@ -456,7 +456,7 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
 }
 
 
-void LotusRangeList::Append( LotusRange* pLR, const String& rName )
+void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
 {
     OSL_ENSURE( pLR, "*LotusRangeList::Append(): das wird nichts!" );
     maRanges.push_back(pLR);
