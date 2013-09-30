@@ -1537,7 +1537,12 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     // export data labels
                     // Excel does not like our current data label export
                     // for scatter charts
-                    if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BAR )
+
+                    // For Line chart:
+                    // According to ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference,
+                    // Page no. 4612. CT_LineChart. Data labels are present in Line chart, but it is optional child
+                    // But MSO gives corruption error if we write Data label, MSO does not provide option for data label.
+                    if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BAR && eChartType != chart::TYPEID_LINE )
                         exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
                     if( eChartType == chart::TYPEID_SCATTER )
