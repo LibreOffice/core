@@ -156,6 +156,7 @@ class OfficeConnection:
         if "--valgrind" in self.args:
             argv.append("--valgrind")
         os.putenv("SAL_LOG", "-INFO-WARN")
+        os.putenv("LIBO_ONEWAY_STABLE_ODF_EXPORT", "YES")
         self.pro = subprocess.Popen(argv)
 #        print(self.pro.pid)
 
