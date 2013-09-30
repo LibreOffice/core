@@ -457,10 +457,6 @@ static const sal_Char hex2pr[16] = {
     'A', 'B', 'C', 'D', 'E', 'F'
 };
 
-static const sal_Char ebcdic[] = {
-    '!', '"', '#', '$', '@', '[', '\\', ']', '^', '`', '{', '|', '}', '~'
-};
-
 INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl( sal_uIntPtr nMsgBufferSize)
     : INetMessageIStream (),
       pMsgStrm   (NULL),
