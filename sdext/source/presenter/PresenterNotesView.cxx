@@ -48,10 +48,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 static const sal_Int32 gnSpaceBelowSeparator (10);
 static const sal_Int32 gnSpaceAboveSeparator (10);
-static const sal_Int32 gnPartHeight (128);
-/** Maximal size of memory used for bitmaps which show the notes text.
-*/
-static const sal_Int32 gnMaximalCacheSize (8*1024*1024);
 static const double gnLineScrollFactor (1.2);
 
 namespace sdext { namespace presenter {
