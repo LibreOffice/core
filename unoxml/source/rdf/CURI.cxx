@@ -94,7 +94,6 @@ css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames() throw (
     return comp_CURI::_getSupportedServiceNames();
 }
 
-const char s_nsXS       [] = "http://www.w3.org/2001/XMLSchema#";
 const char s_nsXSD      [] = "http://www.w3.org/2001/XMLSchema-datatypes#";
 const char s_nsRDF      [] = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 const char s_nsRDFs     [] = "http://www.w3.org/2000/01/rdf-schema#";
