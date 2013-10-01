@@ -113,11 +113,6 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet
     for (sal_uInt16 nId = COPT_USE_PRINTERDEVICE; nId <= COPT_EXPAND_WORDSPACE; ++nId)
     {
         OUString sEntry = m_pFormattingLB->GetEntry(nId);
-        if ( COPT_USE_OUR_TABSTOPS == nId ||
-             COPT_USE_LINESPACING == nId ||
-             COPT_USE_OBJECTPOSITIONING == nId ||
-             COPT_USE_OUR_TEXTWRAPPING == nId )
-            ReplaceFormatName( sEntry );
         SvTreeListEntry* pEntry = m_pOptionsLB->SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )
         {
@@ -141,20 +136,6 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
     delete m_pImpl;
-}
-
-void SwCompatibilityOptPage::ReplaceFormatName( OUString& rEntry )
-{
-    OUString sFormatName(utl::ConfigManager::getProductName());
-    const bool bOpenOffice = ( sFormatName == "OpenOffice.org" );
-    const OUString sFormatVersion = bOpenOffice
-        ? OUString("1.1")
-        : OUString("6.0/7");
-    if ( !bOpenOffice && ( sFormatName != "StarSuite" ) )
-        sFormatName = "StarOffice";
-
-    rEntry = rEntry.replaceFirst( "%FORMATNAME", sFormatName )
-                   .replaceFirst( "%FORMATVERSION", sFormatVersion );
 }
 
 sal_uLong convertBools2Ulong_Impl

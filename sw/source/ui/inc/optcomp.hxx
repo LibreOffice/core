@@ -56,7 +56,6 @@ private:
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );
-    void                    ReplaceFormatName( OUString& rEntry );
     void                    SetCurrentOptions( sal_uLong nOptions );
     sal_uLong                   GetDocumentOptions() const;
     void                    WriteOptions();
