@@ -28,7 +28,6 @@
 
 sal_Char const sHash[]          = "#";
 sal_Char const sFileScheme[]    = INET_FILE_SCHEME;
-sal_Char const sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 /*************************************************************************
 |*
