@@ -50,10 +50,6 @@ public:
 
     static OUString getProductName();
 
-    static OUString getProductXmlFileFormat();
-
-    static OUString getProductXmlFileFormatVersion();
-
     static OUString getProductVersion();
 
     static OUString getVendor();

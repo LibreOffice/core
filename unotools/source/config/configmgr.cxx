@@ -129,18 +129,6 @@ OUString utl::ConfigManager::getProductVersion() {
         OUString("Product/ooSetupVersion"));
 }
 
-OUString utl::ConfigManager::getProductXmlFileFormat() {
-    return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooXMLFileFormatName"));
-}
-
-OUString utl::ConfigManager::getProductXmlFileFormatVersion() {
-    return getConfigurationString(
-        OUString("/org.openoffice.Setup"),
-        OUString("Product/ooXMLFileFormatVersion"));
-}
-
 OUString utl::ConfigManager::getVendor() {
     return getConfigurationString(
         OUString("/org.openoffice.Setup"),

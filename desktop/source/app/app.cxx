@@ -468,10 +468,6 @@ namespace
         : public rtl::Static< OUString, OOOVendor > {};
     struct Extension
         : public rtl::Static< OUString, Extension > {};
-    struct XMLFileFormatName
-        : public rtl::Static< OUString, XMLFileFormatName > {};
-    struct XMLFileFormatVersion
-        : public rtl::Static< OUString, XMLFileFormatVersion > {};
 }
 
 OUString ReplaceStringHookProc( const OUString& rStr )
@@ -486,15 +482,10 @@ OUString ReplaceStringHookProc( const OUString& rStr )
         OUString sAboutBoxVersion = AboutBoxVersion::get();
         OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
         OUString sExtension = Extension::get();
-        OUString sXMLFileFormatName = XMLFileFormatName::get();
-        OUString sXMLFileFormatVersion = XMLFileFormatVersion::get();
 
         if ( sBrandName.isEmpty() )
         {
             sBrandName = utl::ConfigManager::getProductName();
-            sXMLFileFormatName = utl::ConfigManager::getProductXmlFileFormat();
-            sXMLFileFormatVersion =
-                utl::ConfigManager::getProductXmlFileFormatVersion();
             sVersion = utl::ConfigManager::getProductVersion();
             sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
             sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
@@ -510,8 +501,6 @@ OUString ReplaceStringHookProc( const OUString& rStr )
         sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSIONSUFFIX", sAboutBoxVersionSuffix );
         sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSION", sAboutBoxVersion );
         sRet = sRet.replaceAll( "%PRODUCTEXTENSION", sExtension );
-        sRet = sRet.replaceAll( "%PRODUCTXMLFILEFORMATNAME", sXMLFileFormatName );
-        sRet = sRet.replaceAll( "%PRODUCTXMLFILEFORMATVERSION", sXMLFileFormatVersion );
     }
 
     if ( sRet.indexOf( "%OOOVENDOR" ) != -1 )

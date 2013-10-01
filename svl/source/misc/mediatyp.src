@@ -356,42 +356,42 @@ String STR_SVT_MIMETYPE_INET_MULTI_MIXED
 
 String STR_SVT_MIMETYPE_APP_SXCALC
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Spreadsheet" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXCHART
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Chart" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXDRAW
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Drawing" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXMATH
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Formula" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXWRITER
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Text Document" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXIMPRESS
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Presentation" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXGLOBAL
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Master Document" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXIPACKED
 {
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation (packed)" ;
+    Text [ en-US ] = "OpenOffice.org 1.0 Presentation (packed)" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

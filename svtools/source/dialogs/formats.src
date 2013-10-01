@@ -225,35 +225,35 @@ String STR_FORMAT_ID_GRAPHOBJ
 };
 String STR_FORMAT_ID_STARWRITER_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Writer object";
 };
 String STR_FORMAT_ID_STARWRITERWEB_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Web object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Writer/Web object";
 };
 String STR_FORMAT_ID_STARWRITERGLOB_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Master object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Writer/Master object";
 };
 String STR_FORMAT_ID_STARDRAW_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Draw object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Draw object";
 };
 String STR_FORMAT_ID_STARIMPRESS_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Impress object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Impress object";
 };
 String STR_FORMAT_ID_STARCALC_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Calc object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Calc object";
 };
 String STR_FORMAT_ID_STARCHART_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Chart object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Chart object";
 };
 String STR_FORMAT_ID_STARMATH_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Math object";
+    Text [ en-US ] = "OpenOffice.org 1.0 Math object";
 };
 String STR_FORMAT_ID_WMF
 {
@@ -273,7 +273,7 @@ String STR_FORMAT_ID_DBACCESS_COMMAND
 };
 String STR_FORMAT_ID_DIALOG_60
 {
-    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION dialog";
+    Text [ en-US ] = "OpenOffice.org 1.0 dialog";
 };
 String STR_FORMAT_ID_FILEGRPDESCRIPTOR
 {
