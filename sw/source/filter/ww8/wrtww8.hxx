@@ -871,8 +871,8 @@ public:
 public:
     static void InsUInt16(ww::bytes &rO, sal_uInt16 n);
     static void InsUInt32(ww::bytes &rO, sal_uInt32 n);
-    static void InsAsString16(ww::bytes &rO, const String& rStr);
-    static void InsAsString8(ww::bytes & O, const String& rStr,
+    static void InsAsString16(ww::bytes &rO, const OUString& rStr);
+    static void InsAsString8(ww::bytes & O, const OUString& rStr,
         rtl_TextEncoding eCodeSet);
 
     static sal_uLong FillUntil( SvStream& rStrm, sal_uLong nEndPos = 0 );
@@ -884,12 +884,12 @@ public:
     static void WriteLong( SvStream& rStrm, sal_Int32 nVal ) { rStrm << nVal; }
     static void WriteLong( SvStream& rStrm, sal_uLong nPos, sal_Int32 nVal );
 
-    static void WriteString16(SvStream& rStrm, const String& rStr,
+    static void WriteString16(SvStream& rStrm, const OUString& rStr,
         bool bAddZero);
-    static void WriteString8(SvStream& rStrm, const String& rStr,
+    static void WriteString8(SvStream& rStrm, const OUString& rStr,
         bool bAddZero, rtl_TextEncoding eCodeSet);
 
-    static void WriteString_xstz(SvStream& rStrm, const String& rStr, bool bAddZero);
+    static void WriteString_xstz(SvStream& rStrm, const OUString& rStr, bool bAddZero);
 
     bool InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec );
 

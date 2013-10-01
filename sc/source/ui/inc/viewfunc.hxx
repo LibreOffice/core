@@ -281,7 +281,7 @@ public:
     void            ExtendScenario();
     void            UseScenario( const String& rName );
 
-    void            InsertSpecialChar( const String& rStr, const Font& rFont );
+    void            InsertSpecialChar( const OUString& rStr, const Font& rFont );
 
     void            InsertDummyObject();
     void            InsertOleObject();

@@ -149,7 +149,7 @@ SfxProgress::SfxProgress
     pImp->nCreate = Get10ThSec();
     pImp->nNextReschedule = pImp->nCreate;
     DBG( DbgOutf( "SfxProgress: created for '%s' at %luds",
-                  rText.GetBuffer(), pImp->nCreate ) );
+                  rText.getStr(), pImp->nCreate ) );
     pImp->bAllDocs = bAll;
     pImp->pWorkWin = 0;
     pImp->pView = 0;

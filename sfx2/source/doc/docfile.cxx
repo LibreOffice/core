@@ -1049,7 +1049,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 
                     OUString aPhysPath;
                     if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
-                        bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
+                        bContentReadonly = IsReadonlyAccordingACL( aPhysPath.getStr() );
                 }
 #endif
 

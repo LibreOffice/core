@@ -616,7 +616,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             }
             if ( !aName.isEmpty() )
             {
-                pInfo->aUIName = aName.getStr();
+                pInfo->aUIName = aName;
                 pInfo->aUIName += aB1;
             }
             pInfo->aUIName += pInfo->aTypeName;

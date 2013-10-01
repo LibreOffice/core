@@ -2915,7 +2915,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::InsertSpecialChar( const String& rStr, const Font& rFont )
+void ScViewFunc::InsertSpecialChar( const OUString& rStr, const Font& rFont )
 {
     ScEditableTester aTester( this );
     if (!aTester.IsEditable())
@@ -2924,7 +2924,7 @@ void ScViewFunc::InsertSpecialChar( const String& rStr, const Font& rFont )
         return;
     }
 
-    const sal_Unicode* pChar    = rStr.GetBuffer();
+    const sal_Unicode* pChar    = rStr.getStr();
     ScTabViewShell* pViewShell  = GetViewData()->GetViewShell();
     SvxFontItem     aFontItem( rFont.GetFamily(),
                                rFont.GetName(),

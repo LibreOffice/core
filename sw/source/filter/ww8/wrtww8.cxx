@@ -1649,14 +1649,14 @@ void SwWW8Writer::InsUInt32(ww::bytes &rO, sal_uInt32 n)
     rO.push_back(nL[3]);
 }
 
-void SwWW8Writer::InsAsString16(ww::bytes &rO, const String& rStr)
+void SwWW8Writer::InsAsString16(ww::bytes &rO, const OUString& rStr)
 {
-    const sal_Unicode* pStr = rStr.GetBuffer();
-    for( xub_StrLen n = 0, nLen = rStr.Len(); n < nLen; ++n, ++pStr )
+    const sal_Unicode* pStr = rStr.getStr();
+    for (sal_Int32 n = 0, nLen = rStr.getLength(); n < nLen; ++n, ++pStr)
         SwWW8Writer::InsUInt16( rO, *pStr );
 }
 
-void SwWW8Writer::InsAsString8(ww::bytes &rO, const String& rStr,
+void SwWW8Writer::InsAsString8(ww::bytes &rO, const OUString& rStr,
         rtl_TextEncoding eCodeSet)
 {
     OString sTmp(OUStringToOString(rStr, eCodeSet));
@@ -1667,7 +1667,7 @@ void SwWW8Writer::InsAsString8(ww::bytes &rO, const String& rStr,
     std::copy(pStart, pEnd, std::inserter(rO, rO.end()));
 }
 
-void SwWW8Writer::WriteString16(SvStream& rStrm, const String& rStr,
+void SwWW8Writer::WriteString16(SvStream& rStrm, const OUString& rStr,
     bool bAddZero)
 {
     ww::bytes aBytes;
@@ -1680,10 +1680,10 @@ void SwWW8Writer::WriteString16(SvStream& rStrm, const String& rStr,
         rStrm.Write(&aBytes[0], aBytes.size());
 }
 
-void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const String& rStr, bool bAddZero)
+void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const OUString& rStr, bool bAddZero)
 {
     ww::bytes aBytes;
-    SwWW8Writer::InsUInt16(aBytes, rStr.Len());
+    SwWW8Writer::InsUInt16(aBytes, rStr.getLength());
     SwWW8Writer::InsAsString16(aBytes, rStr);
     if (bAddZero)
         SwWW8Writer::InsUInt16(aBytes, 0);
@@ -1691,7 +1691,7 @@ void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const String& rStr, bool bAd
 }
 
 
-void SwWW8Writer::WriteString8(SvStream& rStrm, const String& rStr,
+void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
     bool bAddZero, rtl_TextEncoding eCodeSet)
 {
     ww::bytes aBytes;

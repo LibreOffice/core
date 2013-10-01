@@ -569,8 +569,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         {
             OUString aUStr;
             rArg >>= aUStr;
-            String aStr( aUStr );
-            aTokenArr.AddString( aStr.GetBuffer() );
+            aTokenArr.AddString( aUStr );
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<sal_Int16> > *)0 ) ) )
         {

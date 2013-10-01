@@ -3134,17 +3134,17 @@ void ScInterpreter::ScN()
 void ScInterpreter::ScTrim()
 {
     // Doesn't only trim but also removes duplicated blanks within!
-    String aVal = comphelper::string::strip(GetString(), ' ');
-    String aStr;
-    const sal_Unicode* p = aVal.GetBuffer();
-    const sal_Unicode* const pEnd = p + aVal.Len();
+    OUString aVal = comphelper::string::strip(GetString(), ' ');
+    OUStringBuffer aStr;
+    const sal_Unicode* p = aVal.getStr();
+    const sal_Unicode* const pEnd = p + aVal.getLength();
     while ( p < pEnd )
     {
         if ( *p != ' ' || p[-1] != ' ' )    // first can't be ' ', so -1 is fine
-            aStr += *p;
+            aStr.append(*p);
         p++;
     }
-    PushString( aStr );
+    PushString(aStr.makeStringAndClear());
 }
 
 
