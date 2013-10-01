@@ -63,7 +63,6 @@ const long FOURYEAR_SEC = 4 * YEAR_SEC + DAY_SEC;
 #ifndef LONG_MAX
 const long LONG_MAX=2147483647;
 #endif
-const long TIMEZONE = -28800;
 //01-01-70 was a Thursday
 const long BASE_DOW = 4;
 
