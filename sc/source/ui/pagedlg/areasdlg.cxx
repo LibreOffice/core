@@ -43,11 +43,9 @@
 // STATIC DATA ---------------------------------------------------------------
 
 // List box positions for print range (PR)
-const sal_uInt16 SC_AREASDLG_PR_NONE    = 0;
 const sal_uInt16 SC_AREASDLG_PR_ENTIRE  = 1;
 const sal_uInt16 SC_AREASDLG_PR_USER    = 2;
 const sal_uInt16 SC_AREASDLG_PR_SELECT  = 3;
-const sal_uInt16 SC_AREASDLG_PR_OFFSET  = 4;
 
 // List box positions for repeat ranges (RR)
 const sal_uInt16 SC_AREASDLG_RR_NONE    = 0;
