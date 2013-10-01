@@ -24,7 +24,7 @@ include $(SOLARENV)/gbuild/gbuild.mk
 
 findunusedcode:
 	$(GNUMAKE) BUILDDIR=callcatcher -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild
-	ooinstall -l $(DEVINSTALLDIR)/opt
+	ooinstall -l $(TESTINSTALLDIR)/opt
 	$(GNUMAKE) BUILDDIR=callcatcher -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild subsequentcheck
 	callanalyse $(WORKDIR)/LinkTarget/*/* $(WORKDIR)/LinkTarget/*/*/* \
 	  $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs/libcppunit.so* \

@@ -145,7 +145,7 @@ $(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules
 clean: clean-host clean-build
 
 clean-host:
-	rm -fr $(DEVINSTALLDIR)
+	rm -fr $(TESTINSTALLDIR)
 	rm -fr $(INSTDIR)
 	rm -fr $(OUTDIR)
 	rm -fr $(WORKDIR)
@@ -282,14 +282,14 @@ endif
 	@false
 
 test-install: build
-	@rm -rf $(DEVINSTALLDIR)
-	@mkdir $(DEVINSTALLDIR)
+	@rm -rf $(TESTINSTALLDIR)
+	@mkdir $(TESTINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
-	@ooinstall $(DEVINSTALLDIR)/opt
+	@ooinstall $(TESTINSTALLDIR)/opt
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-	@macosx-codesign-app-bundle $(DEVINSTALLDIR)/opt/LibreOffice.app
+	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/opt/LibreOffice.app
 endif
 ifneq ($(OS),MACOSX)
 	@install-gdb-printers -L
@@ -303,26 +303,26 @@ ifeq ($(OS),LINUX)
 	@echo
 	@echo "Test installation finished, you can now execute:"
 	@echo
-	@echo "$(DEVINSTALLDIR)/program/soffice"
+	@echo "$(TESTINSTALLDIR)/program/soffice"
 else ifeq ($(OS),MACOSX)
 	@echo
 	@echo "Developer installation finished, you can now run:"
 	@echo
-	@echo "  open $(DEVINSTALLDIR)/LibreOffice.app"
+	@echo "  open $(TESTINSTALLDIR)/LibreOffice.app"
 	@echo
-	@echo "To debug: gdb $(DEVINSTALLDIR)/LibreOffice.app/Contents/MacOS/soffice"
+	@echo "To debug: gdb $(TESTINSTALLDIR)/LibreOffice.app/Contents/MacOS/soffice"
 endif
 
 install-tb:
-	@rm -rf $(DEVINSTALLDIR)
-	@mkdir $(DEVINSTALLDIR)
+	@rm -rf $(TESTINSTALLDIR)
+	@mkdir $(TESTINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
-	@ooinstall $(DEVINSTALLDIR)/opt
+	@ooinstall $(TESTINSTALLDIR)/opt
 	@install-gdb-printers
 endif
-	@rm -f $(BUILDDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(BUILDDIR)/install
+	@rm -f $(BUILDDIR)/install && ln -s $(TESTINSTALLDIR)/opt/ $(BUILDDIR)/install
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up

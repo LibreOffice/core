@@ -12263,8 +12263,8 @@ AC_SUBST(DOCDIR)
 INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
 AC_SUBST(INSTALLDIR)
 
-DEVINSTALLDIR="$OUTDIR/installation"
-AC_SUBST(DEVINSTALLDIR)
+TESTINSTALLDIR="${BUILDDIR}/test-install/${INPATH}"
+AC_SUBST(TESTINSTALLDIR)
 
 # ===================================================================
 # De- or increase default verbosity of build process
