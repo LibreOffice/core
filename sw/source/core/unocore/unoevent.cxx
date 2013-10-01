@@ -89,13 +89,6 @@ const struct SvEventDescription aHyperlinkEvents[] =
     { 0, NULL }
 };
 
-const struct SvEventDescription aAutotextEvents[] =
-{
-    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
-    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
-    { 0, NULL }
-};
-
 const struct SvEventDescription aFrameStyleEvents[] =
 {
     { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
