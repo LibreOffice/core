@@ -630,12 +630,6 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     // which contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
     std::vector<AutoStylePoolExport> aExpStyles(nCount);
 
-    for( size_t i=0; i < nCount; i++ )
-    {
-        aExpStyles[i].mpParent = 0;
-        aExpStyles[i].mpProperties = 0;
-    }
-
     XMLAutoStyleFamily::ParentSetType::iterator it = rFamily.maParentSet.begin(), itEnd = rFamily.maParentSet.end();
     for (; it != itEnd; ++it)
     {
