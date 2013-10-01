@@ -79,7 +79,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     OUString sChgToFromMath,
            sChgToFromWriter,
            sChgToFromCalc,
-           sChgToFromImpress;
+           sChgToFromImpress,
+           sChgToFromSmartArt;
     SvLBoxButtonData*   pCheckButtonData;
 
     OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSet );
