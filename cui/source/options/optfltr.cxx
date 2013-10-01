@@ -32,6 +32,7 @@ enum MSFltrPg2_CheckBoxEntries {
     Writer,
     Calc,
     Impress,
+    SmartArt,
     InvalidCBEntry
 };
 
@@ -134,6 +135,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSe
     sHeader2(CUI_RES(RID_SVXSTR_HEADER2)),
     sChgToFromMath(CUI_RES(RID_SVXSTR_CHG_MATH)),
     sChgToFromWriter(CUI_RES(RID_SVXSTR_CHG_WRITER)),
+    sChgToFromSmartArt(CUI_RES(RID_SVXSTR_CHG_SMARTART)),
     sChgToFromCalc(CUI_RES(RID_SVXSTR_CHG_CALC)),
     sChgToFromImpress(CUI_RES(RID_SVXSTR_CHG_IMPRESS)),
     pCheckButtonData(0)
@@ -193,6 +195,8 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
                         &SvtFilterOptions::SetPowerPoint2Impress },
         { Impress,  &SvtFilterOptions::IsImpress2PowerPoint,
                         &SvtFilterOptions::SetImpress2PowerPoint },
+        { SmartArt,  &SvtFilterOptions::IsSmartArt2Shape,
+                        &SvtFilterOptions::SetSmartArt2Shape },
         { InvalidCBEntry, 0, 0 }
     };
 
@@ -238,6 +242,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
         InsertEntry( sChgToFromCalc, static_cast< sal_IntPtr >( Calc ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
         InsertEntry( sChgToFromImpress, static_cast< sal_IntPtr >( Impress ) );
+    InsertEntry( sChgToFromSmartArt, static_cast< sal_IntPtr >( SmartArt ), true, false );
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -251,6 +256,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
         { Calc,     &SvtFilterOptions::IsCalc2Excel },
         { Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
         { Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
+        { SmartArt, &SvtFilterOptions::IsSmartArt2Shape },
         { InvalidCBEntry, NULL }
     };
 

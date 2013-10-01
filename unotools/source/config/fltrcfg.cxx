@@ -48,6 +48,7 @@ using namespace com::sun::star::uno;
 #define FILTERCFG_ENABLE_WORD_PREVIEW   0x80000
 #define FILTERCFG_USE_ENHANCED_FIELDS   0x100000
 #define FILTERCFG_WORD_WBCTBL           0x200000
+#define FILTERCFG_SMARTART_SHAPE_LOAD   0x400000
 
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
@@ -594,6 +595,19 @@ sal_Bool SvtFilterOptions::IsImpress2PowerPoint() const
 void SvtFilterOptions::SetImpress2PowerPoint( sal_Bool bFlag )
 {
     pImp->SetFlag( FILTERCFG_IMPRESS_SAVE, bFlag );
+    SetModified();
+}
+
+
+// -----------------------------------------------------------------------
+sal_Bool SvtFilterOptions::IsSmartArt2Shape() const
+{
+    return pImp->IsFlag( FILTERCFG_SMARTART_SHAPE_LOAD );
+}
+
+void SvtFilterOptions::SetSmartArt2Shape( sal_Bool bFlag )
+{
+    pImp->SetFlag( FILTERCFG_SMARTART_SHAPE_LOAD, bFlag );
     SetModified();
 }
 
