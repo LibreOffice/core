@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+<id type="desktop">libreoffice-draw.desktop</id>
+<licence>CC0</licence>
+<description>
+<p>
+LibreOffice Draw is an easy-to-use graphics editor, which empowers you to create
+anything from quick sketches to complex diagrams.
+It provides a powerful set of tools and shapes for producing technical drawings,
+charts, and much else.
+</p>
+<p>
+Draw allows you to create, manipulate and arrange different objects - it offers
+a number of tools for editing, resizing, rotating, grouping and styling them!
+It also provides smart connectors that make it easy for you to build charts and
+diagrams, and make beautiful drawings composed of different objects.
+</p>
+<p>
+LibreOffice supports opening and saving into a wide variety of formats, so you
+can easily share drawings with users of other popular office suites without
+worrying about compatibility.
+</p>
+</description>
+<url type="homepage">http://www.libreoffice.org/features/draw/</url>
+<screenshots>
+<screenshot type="default">http://www.libreoffice.org/assets/Uploads/EN-Project_images/800x600/Draw/Screenshot-68.png</screenshot>
+</screenshots>
+<updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
+</application>

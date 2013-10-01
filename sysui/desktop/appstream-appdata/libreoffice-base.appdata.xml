@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+<id type="desktop">libreoffice-base.desktop</id>
+<licence>CC0</licence>
+<description>
+<p>
+Base is a powerful database manager, part of the LibreOffice productivity suite.
+It allows you to store, manage and maintain different collections of data.
+Base makes it easy to keep track of your finances, customers, invoices, or even
+just the contacts in your address book!
+</p>
+<p>
+For users that are new to databases, Base offeres helpful wizards to create tables,
+queries, forms and reports.
+It's a solution for people requiring an easy-to-understand, simple-to-use system.
+</p>
+<p>
+For power users and enterprise requirements, it provides native-support drivers
+for some of the most-widely employed multi-user database engines:
+MySQL, Adabas D, MS Access and PostgreSQL.
+In addition, the built-in support for JDBC- and ODBC-standard drivers allows you
+to connect to virtually any other existing database engine as well.
+</p>
+</description>
+<url type="homepage">http://www.libreoffice.org/features/base/</url>
+<screenshots>
+<screenshot type="default">http://www.libreoffice.org/assets/Uploads/EN-Project_images/800x600/Base/Screenshot-87.png</screenshot>
+</screenshots>
+<updatecontact>libreoffice_at_lists.freedesktop.org</updatecontact>
+</application>
