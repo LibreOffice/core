@@ -181,6 +181,7 @@ $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh $(share_
 	echo "PREFIX=$(UNIXFILENAME.$*)" >> $@
 	echo "ICON_PREFIX=$(UNIXFILENAME.$*)" >> $@
 	echo "ICON_SOURCE_DIR=$(SRCDIR)/sysui/desktop/icons" >> $@
+	echo "APPDATA_SOURCE_DIR=$(SRCDIR)/sysui/desktop/appstream-appdata" >> $@
 	echo "PRODUCTVERSION=$(PRODUCTVERSION)" >> $@
 	cat $< >> $@
 	chmod 774 $@

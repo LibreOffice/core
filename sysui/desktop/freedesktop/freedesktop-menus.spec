@@ -413,3 +413,4 @@ done
 /usr/share/icons/locolor/*/apps/*png
 /usr/share/icons/locolor/*/mimetypes/*png
 /usr/share/mime/packages/*
+/usr/share/appdata/*

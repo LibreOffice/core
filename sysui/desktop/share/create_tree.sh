@@ -86,3 +86,8 @@ for i in `cat launcherlist`; do
   ln -sf "${office_root}/share/xdg/${i}" "${DESTDIR}/usr/share/applications/${PREFIX}-${i}"
 done
 
+mkdir -p "${DESTDIR}/usr/share/appdata"
+for i in base calc draw impress writer; do
+    cp "${APPDATA_SOURCE_DIR}/libreoffice-${i}.appdata.xml" "${DESTDIR}/usr/share/appdata/${PREFIX}-${i}.appdata.xml"
+done
+
