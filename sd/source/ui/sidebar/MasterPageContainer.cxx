@@ -184,10 +184,6 @@ private:
 
 ::boost::weak_ptr<MasterPageContainer::Implementation>
     MasterPageContainer::Implementation::mpInstance;
-static const MasterPageContainer::Token NIL_TOKEN (-1);
-
-
-
 
 ::boost::shared_ptr<MasterPageContainer::Implementation>
     MasterPageContainer::Implementation::Instance (void)
