@@ -861,6 +861,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     {
         const SmNode *pLine = pNode->GetSubNode(nSize-1);
         if (pLine->GetType() == NLINE && pLine->GetNumSubNodes() == 1 &&
+            pLine->GetSubNode(0) != NULL &&
             pLine->GetSubNode(0)->GetToken().eType == TNEWLINE)
             --nSize;
     }
