@@ -75,11 +75,8 @@ static const sal_uInt32 MOUSE_DRAG               (0x00000800);
 // key codes.
 static const sal_uInt32 OVER_SELECTED_PAGE       (0x00010000);
 static const sal_uInt32 OVER_UNSELECTED_PAGE     (0x00020000);
-static const sal_uInt32 OVER_FADE_INDICATOR      (0x00040000);
 static const sal_uInt32 SHIFT_MODIFIER           (0x00200000);
 static const sal_uInt32 CONTROL_MODIFIER         (0x00400000);
-
-static const sal_uInt32 KEY_EVENT                (0x10000000);
 
 // Some absent events are defined so they can be expressed explicitly.
 static const sal_uInt32 NO_MODIFIER              (0x00000000);
@@ -87,7 +84,6 @@ static const sal_uInt32 NOT_OVER_PAGE            (0x00000000);
 
 // Masks
 static const sal_uInt32 MODIFIER_MASK            (SHIFT_MODIFIER | CONTROL_MODIFIER);
-static const sal_uInt32 BUTTON_MASK              (LEFT_BUTTON | RIGHT_BUTTON | MIDDLE_BUTTON);
 
 } // end of anonymous namespace
 
