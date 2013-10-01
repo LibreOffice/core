@@ -283,13 +283,13 @@ endif
 
 test-install: build
 	@rm -rf $(TESTINSTALLDIR)
-	@mkdir $(TESTINSTALLDIR)
+	@mkdir -p $(TESTINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
-	@ooinstall $(TESTINSTALLDIR)/opt
+	@ooinstall $(TESTINSTALLDIR)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/opt/LibreOffice.app
+	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice.app
 endif
 ifneq ($(OS),MACOSX)
 	@install-gdb-printers -L
@@ -298,7 +298,7 @@ endif
 	@echo
 	@echo "If you want to edit the .ui files with glade first execute:"
 	@echo
-	@echo "export GLADE_CATALOG_SEARCH_PATH=$(SRCDIR)/install/share/glade"
+	@echo "export GLADE_CATALOG_SEARCH_PATH=$(TESTINSTALLDIR)/share/glade"
 ifeq ($(OS),LINUX)
 	@echo
 	@echo "Test installation finished, you can now execute:"
