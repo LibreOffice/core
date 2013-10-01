@@ -179,6 +179,8 @@ public:
     static int writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
     static std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context);
     static int compileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
+    static bool buildProgramFromSource(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
+    static bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
 
     static int initOpenclAttr( OpenCLEnv * env );
     static int setKernelEnv( KernelEnv *envInfo );
