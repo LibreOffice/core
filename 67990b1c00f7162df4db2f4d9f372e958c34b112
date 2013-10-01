@@ -1,0 +1,429 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///cE\u003d",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Very minor nitpick: it increases readability if the comment starts with a blank instead of immediately following the //",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///cA\u003d",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "What is that 0xbf for? Please use named constants instead.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aM\u003d",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "const as const can.. this should be\n\n const SvxBoxItem*",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///ao\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Why not move the nMergedCols and nMergedRows assignments into the following conditional block? They are not used anywhere else.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bw\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2414,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Please follow the style of the source you are changing, in Calc we place the block opening brace on a separate line to increase readability.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///a0\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2423,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Why?",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bY\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2429,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "nCurrStartCol is not changed, why assign it?",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bc\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "nCurrEndCol is not changed, why assign it?",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bk\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2431,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "What if nStartRow\u003c\u003d0 or nStartRow\u003eMAXROW+1? The entire loop wouldn\u0027t need to be executed then.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bU\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2432,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "nCurrEndRow is not changed, why assign it?",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bg\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "This looks rather odd, we certainly don\u0027t need to determine the first and last valid ColRow combinations in the loop (and nCurrStartRow doesn\u0027t change anyway), but could do it before the loop and loop just over a valid range?",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bQ\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2440,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Basically all comments about unchanged variables and using ValidColRow() in the loop of the above block apply here as well.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///bM\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2443,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "What if nEndRow\u003e\u003dMAXROW or nEndRow\u003c-1? The entire loop wouldn\u0027t need to be executed then.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aw\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2459,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "This ensures 0\u003c\u003dnCurrStartRow\u003c\u003dMAXROW",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///as\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2462,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "This ensures 0\u003c\u003dnCurrEndRow\u003c\u003dMAXROW",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///ak\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2464,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "So this could actually draw a right border even if the initial nStartRow and nEndRow were not valid, for which the entire aCol[i].ApplyBlockFrame() loop below is not executed, leaving fragments of borders of this call here.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///ag\u003d",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2467,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Comments of the above block apply also here.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aY\u003d",
+        "filename": "sc/source/ui/undo/undoblk3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "What if neighboring cells were protected?\n\nAnd please limit comment line length to ~80 characters for readability.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///ac\u003d",
+        "filename": "sc/source/ui/undo/undoblk3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "size() returns size_t instead of int, with --enable-werror this leads to\n\n error: comparison between signed and unsigned integer expressions [-Werror\u003dsign-compare]\n\nAnd, it would be good to get the habit of using pre-increment (++i) instead of post-increment (i++) if there is no need for post-increment. It doesn\u0027t matter with POD types such as int or size_t, but does matter with object instances such as iterators.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///Z8\u003d",
+        "filename": "sc/source/ui/undo/undoblk3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "This entire change is probably moot if the corresponding aFunkMarkExt was passed to the ctor, see comment in viewfunc.cxx",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aA\u003d",
+        "filename": "sc/source/ui/undo/undoblk3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "What about Redo? I didn\u0027t check, but why doesn\u0027t it need to take the extended range into account?",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aI\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "What if neighboring cells were protected? This would change them nevertheless.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aQ\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Use size_t instead of int [-Werror\u003dsign-compare]",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aU\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "The entire new code needs only to be executed in the if(bRecord) condition.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///aE\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-01T13:35:43Z",
+      "side": 1,
+      "message": "Instead of aFuncMark this probably should pass aFuncMarkExt as well, the change in undoblk3.cxx then would be moot.\n\nHowever, this unconditionally (for all attribute changes) copies more cells than needed to the Undo document.",
+      "revId": "67990b1c00f7162df4db2f4d9f372e958c34b112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
