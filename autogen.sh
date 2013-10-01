@@ -103,7 +103,7 @@ sub invalid_distro($$)
 
 # Handle help arguments first, so we don't clobber autogen.lastrun
 for my $arg (@ARGV) {
-    if ($arg =~ /^(--help|-h|-\?)$/) {
+    if ($arg =~ /^(-\-help|-h|-\?)$/) {
         system ("./configure --help");
         exit;
     }
