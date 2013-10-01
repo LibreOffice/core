@@ -1261,7 +1261,7 @@ namespace svx
     };
 
     SuggestionList::SuggestionList() :
-        m_vElements(MAXNUM_SUGGESTIONS, NULL)
+        m_vElements(MAXNUM_SUGGESTIONS, static_cast<OUString*>(NULL))
     {
         m_nAct = m_nNumOfEntries = 0;
     }
