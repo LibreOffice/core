@@ -49,18 +49,25 @@ namespace {
 
 bool isBootstrapType(OUString const & name) {
     static char const * const names[] = {
+        "com.sun.star.beans.Property",
         "com.sun.star.beans.PropertyAttribute",
+        "com.sun.star.beans.PropertyChangeEvent",
         "com.sun.star.beans.PropertyState",
         "com.sun.star.beans.PropertyValue",
         "com.sun.star.beans.XFastPropertySet",
         "com.sun.star.beans.XMultiPropertySet",
+        "com.sun.star.beans.XPropertiesChangeListener",
         "com.sun.star.beans.XPropertyAccess",
+        "com.sun.star.beans.XPropertyChangeListener",
         "com.sun.star.beans.XPropertySet",
+        "com.sun.star.beans.XPropertySetInfo",
         "com.sun.star.beans.XPropertySetOption",
+        "com.sun.star.beans.XVetoableChangeListener",
         "com.sun.star.bridge.UnoUrlResolver",
         "com.sun.star.bridge.XUnoUrlResolver",
         "com.sun.star.connection.SocketPermission",
         "com.sun.star.container.XElementAccess",
+        "com.sun.star.container.XEnumeration",
         "com.sun.star.container.XEnumerationAccess",
         "com.sun.star.container.XHierarchicalNameAccess",
         "com.sun.star.container.XNameAccess",
@@ -70,6 +77,7 @@ bool isBootstrapType(OUString const & name) {
         "com.sun.star.io.FilePermission",
         "com.sun.star.io.IOException",
         "com.sun.star.lang.DisposedException",
+        "com.sun.star.lang.EventObject",
         "com.sun.star.lang.WrappedTargetRuntimeException",
         "com.sun.star.lang.XComponent",
         "com.sun.star.lang.XEventListener",
@@ -81,11 +89,19 @@ bool isBootstrapType(OUString const & name) {
         "com.sun.star.lang.XSingleServiceFactory",
         "com.sun.star.lang.XTypeProvider",
         "com.sun.star.loader.XImplementationLoader",
+        "com.sun.star.reflection.FieldAccessMode",
+        "com.sun.star.reflection.MethodMode",
+        "com.sun.star.reflection.ParamInfo",
+        "com.sun.star.reflection.ParamMode",
+        "com.sun.star.reflection.TypeDescriptionSearchDepth",
         "com.sun.star.reflection.XArrayTypeDescription",
         "com.sun.star.reflection.XCompoundTypeDescription",
         "com.sun.star.reflection.XEnumTypeDescription",
+        "com.sun.star.reflection.XIdlArray",
         "com.sun.star.reflection.XIdlClass",
+        "com.sun.star.reflection.XIdlField",
         "com.sun.star.reflection.XIdlField2",
+        "com.sun.star.reflection.XIdlMethod",
         "com.sun.star.reflection.XIdlReflection",
         "com.sun.star.reflection.XIndirectTypeDescription",
         "com.sun.star.reflection.XInterfaceAttributeTypeDescription",
@@ -97,18 +113,28 @@ bool isBootstrapType(OUString const & name) {
         "com.sun.star.reflection.XMethodParameter",
         "com.sun.star.reflection.XStructTypeDescription",
         "com.sun.star.reflection.XTypeDescription",
+        "com.sun.star.reflection.XTypeDescriptionEnumeration",
         "com.sun.star.reflection.XTypeDescriptionEnumerationAccess",
         "com.sun.star.reflection.XUnionTypeDescription",
+        "com.sun.star.registry.RegistryKeyType",
+        "com.sun.star.registry.RegistryValueType",
         "com.sun.star.registry.XImplementationRegistration",
         "com.sun.star.registry.XRegistryKey",
         "com.sun.star.registry.XSimpleRegistry",
         "com.sun.star.security.RuntimePermission",
+        "com.sun.star.security.XAccessControlContext",
         "com.sun.star.security.XAccessController",
+        "com.sun.star.security.XAction",
         "com.sun.star.uno.DeploymentException",
         "com.sun.star.uno.RuntimeException",
+        "com.sun.star.uno.TypeClass",
+        "com.sun.star.uno.Uik",
+        "com.sun.star.uno.XAdapter",
         "com.sun.star.uno.XAggregation",
         "com.sun.star.uno.XComponentContext",
         "com.sun.star.uno.XCurrentContext",
+        "com.sun.star.uno.XInterface",
+        "com.sun.star.uno.XReference",
         "com.sun.star.uno.XUnloadingPreference",
         "com.sun.star.uno.XWeak",
         "com.sun.star.util.XMacroExpander" };
@@ -1521,17 +1547,6 @@ void InterfaceType::dumpMethodsCppuDecl(
              entity_->getDirectMethods().begin());
          i != entity_->getDirectMethods().end(); ++i)
     {
-        if (seen->insert(i->returnType).second) {
-            dumpCppuGetType(out, i->returnType);
-        }
-        for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
-                 const_iterator j(i->parameters.begin());
-             j != i->parameters.end(); ++j)
-        {
-            if (seen->insert(j->type).second) {
-                dumpCppuGetType(out, j->type);
-            }
-        }
         for (std::vector< OUString >::const_iterator j(i->exceptions.begin());
              j != i->exceptions.end(); ++j)
         {
