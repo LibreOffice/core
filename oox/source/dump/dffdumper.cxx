@@ -43,7 +43,6 @@ const sal_uInt16 DFF_ID_SPGR                = 0xF009;   /// Shape group.
 const sal_uInt16 DFF_ID_SPLITMENUCOLORS     = 0xF11E;   /// Current toolbar colors.
 
 const sal_uInt16 DFF_OPT_IDMASK             = 0x3FFF;
-const sal_uInt16 DFF_OPT_PICTURE            = 0x4000;
 const sal_uInt16 DFF_OPT_COMPLEX            = 0x8000;
 const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
