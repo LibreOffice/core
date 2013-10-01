@@ -52,13 +52,7 @@ const sal_uInt8 BIFF12_TOP10FILTER_PERCENT          = 0x02;
 const sal_uInt16 BIFF12_FILTERCOLUMN_HIDDENBUTTON   = 0x0001;
 const sal_uInt16 BIFF12_FILTERCOLUMN_SHOWBUTTON     = 0x0002;
 
-const sal_uInt16 BIFF_FILTERCOLUMN_OR               = 0x0001;
-const sal_uInt16 BIFF_FILTERCOLUMN_TOP10FILTER      = 0x0010;
-const sal_uInt16 BIFF_FILTERCOLUMN_TOP              = 0x0020;
-const sal_uInt16 BIFF_FILTERCOLUMN_PERCENT          = 0x0040;
-
 const sal_uInt8 BIFF_FILTER_DATATYPE_NONE           = 0;
-const sal_uInt8 BIFF_FILTER_DATATYPE_RK             = 2;
 const sal_uInt8 BIFF_FILTER_DATATYPE_DOUBLE         = 4;
 const sal_uInt8 BIFF_FILTER_DATATYPE_STRING         = 6;
 const sal_uInt8 BIFF_FILTER_DATATYPE_BOOLEAN        = 8;
