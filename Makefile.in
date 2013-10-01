@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip install-tb subsequentcheck tags
+.PHONY : all bootstrap build check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip install-tb subsequentcheck tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -266,7 +266,22 @@ install-strip:
 
 endif # !MACOSX
 
-dev-install: build
+dev-install:
+	@echo
+	@echo "dev-install is obsolete! Just build with \"make check\" and run"
+ifeq ($(OS),MACOSX)
+	@echo "  open instdir/*/$(PRODUCTNAME).app"
+	@echo
+	@echo "To debug: gdb instdir/*/$(PRODUCTNAME).app/Contents/MacOS/soffice"
+else
+	@echo "  instdir/*/program/soffice"
+endif
+	@echo
+	@echo "(only if you have good reason to test an actual installation: make test-install)"
+	@echo
+	@false
+
+test-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
@@ -280,27 +295,23 @@ ifneq ($(OS),MACOSX)
 	@install-gdb-printers -L
 endif
 endif
-	@rm -f $(BUILDDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(BUILDDIR)/install
 	@echo
 	@echo "If you want to edit the .ui files with glade first execute:"
 	@echo
 	@echo "export GLADE_CATALOG_SEARCH_PATH=$(SRCDIR)/install/share/glade"
 ifeq ($(OS),LINUX)
 	@echo
-	@echo "Developer installation finished, you can now execute:"
+	@echo "Test installation finished, you can now execute:"
 	@echo
-	@echo "$(BUILDDIR)/install/program/soffice"
+	@echo "$(DEVINSTALLDIR)/program/soffice"
 else ifeq ($(OS),MACOSX)
 	@echo
 	@echo "Developer installation finished, you can now run:"
 	@echo
-	@echo "  open $(BUILDDIR)/install/LibreOffice.app"
+	@echo "  open $(DEVINSTALLDIR)/LibreOffice.app"
 	@echo
-	@echo "To debug: gdb install/LibreOffice.app/Contents/MacOS/soffice"
+	@echo "To debug: gdb $(DEVINSTALLDIR)/LibreOffice.app/Contents/MacOS/soffice"
 endif
-
-dev-install-nocheck: build-nocheck
-	$(MAKE) dev-install -o build
 
 install-tb:
 	@rm -rf $(DEVINSTALLDIR)
