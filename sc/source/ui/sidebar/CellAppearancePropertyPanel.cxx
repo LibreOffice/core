@@ -50,7 +50,6 @@ const char UNO_BACKGROUNDCOLOR[] = ".uno:BackgroundColor";
 const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
 const char UNO_LINESTYLE[] = ".uno:LineStyle";
 const char UNO_FRAMELINECOLOR[] = ".uno:FrameLineColor";
-const char UNO_TOGGLESHEETGRID[] = ".uno:ToggleSheetGrid";
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
