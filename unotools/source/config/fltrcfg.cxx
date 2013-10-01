@@ -48,6 +48,7 @@ using namespace com::sun::star::uno;
 #define FILTERCFG_ENABLE_WORD_PREVIEW   0x80000
 #define FILTERCFG_USE_ENHANCED_FIELDS   0x100000
 #define FILTERCFG_WORD_WBCTBL           0x200000
+#define FILTERCFG_SMARTART_SHAPE_LOAD   0x400000
 
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
@@ -240,7 +241,8 @@ struct SvtFilterOptions_Impl
             FILTERCFG_CALC_SAVE |
             FILTERCFG_IMPRESS_LOAD |
             FILTERCFG_IMPRESS_SAVE |
-            FILTERCFG_USE_ENHANCED_FIELDS;
+            FILTERCFG_USE_ENHANCED_FIELDS |
+            FILTERCFG_SMARTART_SHAPE_LOAD;
         Load();
     }
 
@@ -314,7 +316,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        int nCount = 12;
+        int nCount = 13;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
@@ -329,7 +331,8 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
             "Export/EnablePowerPointPreview",   //  8
             "Export/EnableExcelPreview",        //  9
             "Export/EnableWordPreview",         // 10
-            "Import/ImportWWFieldsAsEnhancedFields" // 11
+            "Import/ImportWWFieldsAsEnhancedFields", // 11
+            "Import/SmartArtToShapes"           // 12
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -355,6 +358,7 @@ static sal_uLong lcl_GetFlag(sal_Int32 nProp)
         case  9: nFlag = FILTERCFG_ENABLE_EXCEL_PREVIEW; break;
         case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
         case 11: nFlag = FILTERCFG_USE_ENHANCED_FIELDS; break;
+        case 12: nFlag = FILTERCFG_SMARTART_SHAPE_LOAD; break;
 
         default: OSL_FAIL("illegal value");
     }
@@ -594,6 +598,19 @@ sal_Bool SvtFilterOptions::IsImpress2PowerPoint() const
 void SvtFilterOptions::SetImpress2PowerPoint( sal_Bool bFlag )
 {
     pImp->SetFlag( FILTERCFG_IMPRESS_SAVE, bFlag );
+    SetModified();
+}
+
+
+// -----------------------------------------------------------------------
+sal_Bool SvtFilterOptions::IsSmartArt2Shape() const
+{
+    return pImp->IsFlag( FILTERCFG_SMARTART_SHAPE_LOAD );
+}
+
+void SvtFilterOptions::SetSmartArt2Shape( sal_Bool bFlag )
+{
+    pImp->SetFlag( FILTERCFG_SMARTART_SHAPE_LOAD, bFlag );
     SetModified();
 }
 

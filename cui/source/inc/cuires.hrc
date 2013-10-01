@@ -454,6 +454,8 @@
 #define RID_SVXSTR_YES                                      (RID_SVX_START + 1249)
 #define RID_SVXSTR_NO                                       (RID_SVX_START + 1250)
 
+#define RID_SVXSTR_CHG_SMARTART                             (RID_SVX_START + 1251)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
