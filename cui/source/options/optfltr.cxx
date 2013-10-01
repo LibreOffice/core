@@ -278,15 +278,23 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType )
 {
+    InsertEntry( _rTxt, _nType, true, true );
+}
+
+void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
+                                       sal_Bool loadEnabled, sal_Bool saveEnabled )
+{
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
-    pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
+    pEntry->AddItem( new SvLBoxButton( pEntry, loadEnabled? SvLBoxButtonKind_enabledCheckbox :
+                                                            SvLBoxButtonKind_disabledCheckbox,
                                        0, pCheckButtonData ) );
-    pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
+    pEntry->AddItem( new SvLBoxButton( pEntry, saveEnabled? SvLBoxButtonKind_enabledCheckbox :
+                                                            SvLBoxButtonKind_disabledCheckbox,
                                        0, pCheckButtonData ) );
     pEntry->AddItem( new SvLBoxString( pEntry, 0, _rTxt ) );
 
