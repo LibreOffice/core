@@ -43,5 +43,9 @@ String RID_SVXSTR_CHG_IMPRESS
 {
     Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse";
 };
+String RID_SVXSTR_CHG_SMARTART
+{
+    Text [ en-US ] = "SmartArt to %PRODUCTNAME shapes or reverse";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3977,6 +3977,12 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="SmartArtToShapes" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if OOXML SmartArt objects are converted into LO shapes.</desc>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="ImportWWFieldsAsEnhancedFields" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Flag to control use of enhanced fields.</desc>
