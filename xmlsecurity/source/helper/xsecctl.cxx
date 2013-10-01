@@ -38,9 +38,6 @@ namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 namespace cssxw = com::sun::star::xml::wrapper;
 
-const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
-const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
-
 /* bridge component names */
 #define XMLSIGNATURE_COMPONENT "com.sun.star.xml.crypto.XMLSignature"
 #define XMLDOCUMENTWRAPPER_COMPONENT "com.sun.star.xml.wrapper.XMLDocumentWrapper"
