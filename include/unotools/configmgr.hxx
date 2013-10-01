@@ -58,8 +58,6 @@ public:
 
     static OUString getVendor();
 
-    static OUString getWriterCompatibilityVersionOOo_1_1();
-
     static void storeConfigItems();
 
     SAL_DLLPRIVATE static ConfigManager & getConfigManager();

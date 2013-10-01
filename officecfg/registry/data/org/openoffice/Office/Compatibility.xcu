@@ -20,7 +20,7 @@
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Compatibility" oor:package="org.openoffice.Office">
   <node oor:name="WriterCompatibilityVersion">
     <prop oor:name="OOo11" oor:type="xs:string">
-      <value>${WRITERCOMPATIBILITYVERSIONOOO11}</value>
+      <value>OpenOffice.org 1.1</value>
     </prop>
   </node>
   <node oor:name="AllFileFormats">

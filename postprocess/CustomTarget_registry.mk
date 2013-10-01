@@ -558,7 +558,6 @@ postprocess_main_SED := \
 	-e 's,$${STARTCENTER_INFO_URL},http://www.libreoffice.org/,g' \
 	-e 's,$${STARTCENTER_HIDE_EXTERNAL_LINKS},0,g' \
 	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
-	-e 's,$${WRITERCOMPATIBILITYVERSIONOOO11},OpenOffice.org 1.1,g' \
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/main.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)

@@ -56,12 +56,12 @@
                       <item translatable="yes">Use printer metrics for document formatting</item>
                       <item translatable="yes">Add spacing between paragraphs and tables (in current document)</item>
                       <item translatable="yes">Add paragraph and table spacing at tops of pages (in current document)</item>
-                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 tabstop formatting</item>
+                      <item translatable="yes">Use OpenOffice.org 1.1 tabstop formatting</item>
                       <item translatable="yes">Do not add leading (extra space) between lines of text</item>
-                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 line spacing</item>
+                      <item translatable="yes">Use OpenOffice.org 1.1 line spacing</item>
                       <item translatable="yes">Add paragraph and table spacing at bottom of table cells</item>
-                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 object positioning</item>
-                      <item translatable="yes">Use %WRITERCOMPATIBILITYVERSIONOOO11 text wrapping around objects</item>
+                      <item translatable="yes">Use OpenOffice.org 1.1 object positioning</item>
+                      <item translatable="yes">Use OpenOffice.org 1.1 text wrapping around objects</item>
                       <item translatable="yes">Consider wrapping style when positioning objects</item>
                       <item translatable="yes">Expand word space on lines with manual line breaks in justified paragraphs</item>
                       <item translatable="yes">&lt;User settings&gt;</item>

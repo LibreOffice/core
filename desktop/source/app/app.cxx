@@ -472,8 +472,6 @@ namespace
         : public rtl::Static< OUString, XMLFileFormatName > {};
     struct XMLFileFormatVersion
         : public rtl::Static< OUString, XMLFileFormatVersion > {};
-    struct WriterCompatibilityVersionOOo11
-        : public rtl::Static< OUString, WriterCompatibilityVersionOOo11 > {};
 }
 
 OUString ReplaceStringHookProc( const OUString& rStr )
@@ -526,19 +524,6 @@ OUString ReplaceStringHookProc( const OUString& rStr )
         }
 
         sRet = sRet.replaceAll( "%OOOVENDOR", sOOOVendor );
-    }
-
-    if ( sRet.indexOf( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != -1 )
-    {
-        OUString sWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
-        if ( sWriterCompatibilityVersionOOo11.isEmpty() )
-        {
-            sWriterCompatibilityVersionOOo11 =
-                utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1();
-        }
-
-        sRet = sRet.replaceAll( "%WRITERCOMPATIBILITYVERSIONOOO11",
-                                        sWriterCompatibilityVersionOOo11 );
     }
 
     return sRet;

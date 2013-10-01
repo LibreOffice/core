@@ -147,12 +147,6 @@ OUString utl::ConfigManager::getVendor() {
         OUString("Product/ooVendor"));
 }
 
-OUString utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1() {
-    return getConfigurationString(
-        OUString("/org.openoffice.Office.Compatibility"),
-        OUString("WriterCompatibilityVersion/OOo11"));
-}
-
 void utl::ConfigManager::storeConfigItems() {
     getConfigManager().doStoreConfigItems();
 }
