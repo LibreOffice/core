@@ -182,8 +182,8 @@ public:
                             { SetAnyProperty( rPropName, ::comphelper::makeBoolAny( bValue ) ); }
 
     /** Puts the passed string into the property set. */
-    inline void         SetStringProperty( const OUString& rPropName, const String& rValue )
-                            { SetProperty( rPropName, OUString( rValue ) ); }
+    inline void         SetStringProperty( const OUString& rPropName, const OUString& rValue )
+                            { SetProperty( rPropName, rValue ); }
 
     /** Puts the passed color into the property set. */
     inline void         SetColorProperty( const OUString& rPropName, const Color& rColor )
@@ -232,8 +232,6 @@ public:
     bool                ReadValue( Type& rValue );
     /** Reads an Any from the value sequence. */
     bool                ReadValue( css::uno::Any& rAny );
-    /** Reads a tools string from the value sequence. */
-    bool                ReadValue( String& rString );
     /** Reads a color value from the value sequence. */
     bool                ReadValue( Color& rColor );
     /** Reads a C++ boolean value from the value sequence. */
@@ -249,9 +247,6 @@ public:
     void                WriteValue( const Type& rValue );
     /** Writes an Any to the value sequence. */
     void                WriteValue( const css::uno::Any& rAny );
-    /** Writes a tools string to the value sequence. */
-    inline void         WriteValue( const String& rString )
-                            { WriteValue( OUString( rString ) ); }
     /** Writes a color value to the value sequence. */
     inline void         WriteValue( const Color& rColor )
                             { WriteValue( ScfApiHelper::ConvertToApiColor( rColor ) ); }

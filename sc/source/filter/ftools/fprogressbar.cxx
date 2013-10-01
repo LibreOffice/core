@@ -36,7 +36,7 @@ ScfProgressBar::ScfProgressSegment::~ScfProgressSegment()
 
 // ============================================================================
 
-ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const String& rText ) :
+ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText ) :
     maText( rText )
 {
     Init( pDocShell );
@@ -196,7 +196,7 @@ void ScfProgressBar::Progress( sal_Size nDelta )
 
 // ============================================================================
 
-ScfSimpleProgressBar::ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const String& rText ) :
+ScfSimpleProgressBar::ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const OUString& rText ) :
     maProgress( pDocShell, rText )
 {
     Init( nSize );
@@ -226,7 +226,7 @@ void ScfStreamProgressBar::Progress()
     mxProgress->ProgressAbs( mrStrm.Tell() );
 }
 
-void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const String& rText )
+void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const OUString& rText )
 {
     sal_Size nPos = mrStrm.Tell();
     mrStrm.Seek( STREAM_SEEK_TO_END );

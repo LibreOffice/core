@@ -331,14 +331,6 @@ bool ScfPropSetHelper::ReadValue( Any& rAny )
     return pAny != 0;
 }
 
-bool ScfPropSetHelper::ReadValue( String& rString )
-{
-    OUString aOUString;
-    bool bRet = ReadValue( aOUString );
-    rString = aOUString;
-    return bRet;
-}
-
 bool ScfPropSetHelper::ReadValue( Color& rColor )
 {
     sal_Int32 nApiColor(0);

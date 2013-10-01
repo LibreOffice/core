@@ -295,16 +295,16 @@ const OUString& ScfTools::GetHTMLTablesName()
     return saHTMLTables;
 }
 
-const String& ScfTools::GetHTMLIndexPrefix()
+const OUString& ScfTools::GetHTMLIndexPrefix()
 {
-    static const String saHTMLIndexPrefix( "HTML_" );
+    static const OUString saHTMLIndexPrefix( "HTML_" );
     return saHTMLIndexPrefix;
 
 }
 
-const String& ScfTools::GetHTMLNamePrefix()
+const OUString& ScfTools::GetHTMLNamePrefix()
 {
-    static const String saHTMLNamePrefix( "HTML__" );
+    static const OUString saHTMLNamePrefix( "HTML__" );
     return saHTMLNamePrefix;
 }
 
@@ -315,9 +315,9 @@ OUString ScfTools::GetNameFromHTMLIndex( sal_uInt32 nIndex )
     return aName;
 }
 
-String ScfTools::GetNameFromHTMLName( const String& rTabName )
+OUString ScfTools::GetNameFromHTMLName( const OUString& rTabName )
 {
-    String aName( GetHTMLNamePrefix() );
+    OUString aName( GetHTMLNamePrefix() );
     aName += rTabName;
     return aName;
 }
@@ -337,12 +337,12 @@ bool ScfTools::GetHTMLNameFromName( const OUString& rSource, OUString& rName )
     rName = "";
     if( rSource.startsWithIgnoreAsciiCase( GetHTMLNamePrefix() ) )
     {
-        rName = rSource.copy( GetHTMLNamePrefix().Len() );
+        rName = rSource.copy( GetHTMLNamePrefix().getLength() );
         ScGlobal::AddQuotes( rName, '"', false );
     }
     else if( rSource.startsWithIgnoreAsciiCase( GetHTMLIndexPrefix() ) )
     {
-        OUString aIndex( rSource.copy( GetHTMLIndexPrefix().Len() ) );
+        OUString aIndex( rSource.copy( GetHTMLIndexPrefix().getLength() ) );
         if( CharClass::isAsciiNumeric( aIndex ) && (aIndex.toInt32() > 0) )
             rName = aIndex;
     }

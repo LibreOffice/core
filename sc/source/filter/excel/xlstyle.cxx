@@ -635,7 +635,7 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
     {
         case EXC_FONTPROPSET_CHART:
         {
-            String aApiFontName;
+            OUString aApiFontName;
             float fApiHeight, fApiWeight;
             sal_Int16 nApiUnderl = 0, nApiStrikeout = 0;
             Awt::FontSlant eApiPosture;
@@ -669,7 +669,7 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
 
         case EXC_FONTPROPSET_CONTROL:
         {
-            String aApiFontName;
+            OUString aApiFontName;
             float fApiHeight, fApiWeight;
             sal_Int16 nApiFamily, nApiCharSet, nApiPosture, nApiUnderl, nApiStrikeout;
 

@@ -94,14 +94,14 @@ class ScFormatFilterPlugin {
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
-    virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
+    virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
+    virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
                                    bool bCalcWidthHeight = true, SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 
     // various import helpers
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) = 0;
-    virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName ) = 0;
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) = 0;
+    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) = 0;
 
     // various export filters
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest ) = 0;
@@ -109,8 +109,8 @@ class ScFormatFilterPlugin {
                                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
-    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, bool bAll,
-                  const String& rStreamPath, OUString& rNonConvertibleChars ) = 0;
+    virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, bool bAll,
+                  const OUString& rStreamPath, OUString& rNonConvertibleChars ) = 0;
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest ) = 0;
 
     virtual ScOrcusFilters* GetOrcusFilters() = 0;

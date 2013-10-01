@@ -240,7 +240,7 @@ public:
     /** Returns the built-in range name for an HTML table, specified by table index. */
     static OUString       GetNameFromHTMLIndex( sal_uInt32 nIndex );
     /** Returns the built-in range name for an HTML table, specified by table name. */
-    static String       GetNameFromHTMLName( const String& rTabName );
+    static OUString       GetNameFromHTMLName( const OUString& rTabName );
 
     /** Returns true, if rSource is the built-in range name for an HTML document. */
     static bool         IsHTMLDocName( const OUString& rSource );
@@ -254,9 +254,9 @@ public:
 
 private:
     /** Returns the prefix for table index names. */
-    static const String& GetHTMLIndexPrefix();
+    static const OUString& GetHTMLIndexPrefix();
     /** Returns the prefix for table names. */
-    static const String& GetHTMLNamePrefix();
+    static const OUString& GetHTMLNamePrefix();
     /** We don't want anybody to instantiate this class, since it is just a
         collection of static items. To enforce this, the default constructor
         is made private */
@@ -290,14 +290,14 @@ public:
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* );
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
-    virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
+    virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange );
+    virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
                                    double nOutputFactor = 1.0, bool bCalcWidthHeight = true,
                                    SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
-    virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
+    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName );
 
     // various export filters
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest );
@@ -305,8 +305,8 @@ public:
                                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
-    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, bool bAll,
-                  const String& rStreamPath, OUString& rNonConvertibleChars );
+    virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, bool bAll,
+                  const OUString& rStreamPath, OUString& rNonConvertibleChars );
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest );
 
     virtual ScOrcusFilters* GetOrcusFilters();

@@ -45,7 +45,7 @@
 
 //------------------------------------------------------------------------
 
-FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
+FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
         bool bConvertDate )
 {
@@ -57,7 +57,7 @@ FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const String
     return nErr;
 }
 
-ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight )
+ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight )
 {
     return new ScHTMLImport( pDocP, rBaseURL, rRange, bCalcWidthHeight );
 }
@@ -199,7 +199,7 @@ void ScHTMLImport::WriteToDocument(
     }
 }
 
-String ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )
+OUString ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName )
 {
     return ScHTMLImport::GetHTMLRangeNameList( pDoc, rOrigName );
 }

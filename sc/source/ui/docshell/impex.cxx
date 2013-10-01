@@ -2216,18 +2216,18 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) RETURN_ERROR
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
                  const CharSet, sal_uInt32 ) RETURN_ERROR
-    virtual FltError ScImportRTF( SvStream&, const String&, ScDocument*, ScRange& ) RETURN_ERROR
-    virtual FltError ScImportHTML( SvStream&, const String&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) RETURN_ERROR
+    virtual FltError ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) RETURN_ERROR
+    virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) RETURN_ERROR
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) { return NULL; }
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const String&, const ScRange&, bool ) { return NULL; }
-    virtual String         GetHTMLRangeNameList( ScDocument*, const String& ) { return String(); }
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange&, bool ) { return NULL; }
+    virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) { return OUString(); }
 
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, CharSet ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const CharSet, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const CharSet, sal_uInt32 ) RETURN_ERROR
-    virtual FltError ScExportHTML( SvStream&, const String&, ScDocument*, const ScRange&, const CharSet, bool,
-                  const String&, OUString& ) RETURN_ERROR
+    virtual FltError ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const CharSet, bool,
+                  const OUString&, OUString& ) RETURN_ERROR
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const CharSet ) RETURN_ERROR
 
     virtual ScOrcusFilters* GetOrcusFilters() { return NULL; }

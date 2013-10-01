@@ -107,7 +107,7 @@ const sal_Int32 SCF_INV_SEGMENT = -1;
 class ScfProgressBar : private boost::noncopyable
 {
 public:
-    explicit            ScfProgressBar( SfxObjectShell* pDocShell, const String& rText );
+    explicit            ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText );
     explicit            ScfProgressBar( SfxObjectShell* pDocShell, sal_uInt16 nResId );
     virtual             ~ScfProgressBar();
 
@@ -170,7 +170,7 @@ private:
     typedef boost::ptr_vector< ScfProgressSegment > ScfSegmentList;
 
     ScfSegmentList      maSegments;         /// List of progress segments.
-    String              maText;             /// UI string for system progress.
+    OUString            maText;             /// UI string for system progress.
 
     ScProgressPtr       mxSysProgress;      /// System progress bar.
     SfxObjectShell*     mpDocShell;         /// The document shell for the progress bar.
@@ -192,7 +192,7 @@ private:
 class ScfSimpleProgressBar
 {
 public:
-    explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const String& rText );
+    explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const OUString& rText );
     explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, sal_uInt16 nResId );
 
     /** Set progress bar to the specified position. */
@@ -221,7 +221,7 @@ public:
 
 private:
     /** Initializes and starts the progress bar. */
-    void                Init( SfxObjectShell* pDocShell, const String& rText );
+    void                Init( SfxObjectShell* pDocShell, const OUString& rText );
 
 private:
     typedef ::std::auto_ptr< ScfSimpleProgressBar > ScfSimpleProgressBarPtr;
