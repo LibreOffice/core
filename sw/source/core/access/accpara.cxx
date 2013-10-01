@@ -93,7 +93,7 @@ namespace com { namespace sun { namespace star {
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
-const xub_StrLen MAX_DESC_TEXT_LEN = 40;
+
 const SwTxtNode* SwAccessibleParagraph::GetTxtNode() const
 {
     const SwFrm* pFrm = GetFrm();
