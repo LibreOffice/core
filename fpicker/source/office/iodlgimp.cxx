@@ -43,24 +43,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::utl;
 
-// some stuff for easier changes for SvtViewOptions
-static const sal_Char*      pViewOptDataName = "dialog data";
-#define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
-
-static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
-{
-    rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( OUString( rData ) ) );
-}
-
-static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
-{
-    Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
-    OUString aUserData;
-    aAny >>= aUserData;
-
-    return aUserData;
-}
-
 //*****************************************************************************
 // ResMgrHolder / SvtSimpleResId
 //*****************************************************************************
