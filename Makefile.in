@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-.PHONY : all bootstrap build check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip install-tb subsequentcheck tags
+.PHONY : all bootstrap build check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip subsequentcheck tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -312,17 +312,6 @@ else ifeq ($(OS),MACOSX)
 	@echo
 	@echo "To debug: gdb $(TESTINSTALLDIR)/LibreOffice.app/Contents/MacOS/soffice"
 endif
-
-install-tb:
-	@rm -rf $(TESTINSTALLDIR)
-	@mkdir $(TESTINSTALLDIR)
-ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
-else
-	@ooinstall $(TESTINSTALLDIR)/opt
-	@install-gdb-printers
-endif
-	@rm -f $(BUILDDIR)/install && ln -s $(TESTINSTALLDIR)/opt/ $(BUILDDIR)/install
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up
