@@ -13,6 +13,8 @@
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/recentdocsviewitem.hxx>
 
+#include "recentthumbnailtimer.hxx"
+
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -36,15 +38,18 @@ enum ApplicationType
     TYPE_OTHER    = 1 << 6
 };
 
-
 class SFX2_DLLPUBLIC RecentDocsView :   protected ::comphelper::OBaseMutex,
                                         public ThumbnailView
 {
 public:
+    RecentThumbnailTimer maFooTimer;
+    std::vector<RecentThumbnailInfo> maThumbStack;
+
     RecentDocsView( Window* pParent );
     virtual ~RecentDocsView();
 
-    void insertItem(const OUString &rURL, const OUString &rTitle, sal_uInt16 nId);
+    void insertItem(const RecentThumbnailInfo& rThumbinfo);
+    void insertItemAsync(const RecentThumbnailInfo& rThumbinfo);
     void loadRecentDocs();
 
     void SetThumbnailSize(long thumbnailSize);

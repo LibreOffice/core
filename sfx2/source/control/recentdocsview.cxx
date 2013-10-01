@@ -41,6 +41,7 @@ static const char SFX_REFERER_USER[] = "private:user";
 
 RecentDocsView::RecentDocsView( Window* pParent )
     : ThumbnailView(pParent)
+    , maRecentThumbnailTimer (this, 35.0)
     , mnFileTypes(TYPE_NONE)
     , mnItemMaxSize(100)
     , mnTextHeight(30)
@@ -136,9 +137,16 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     return aImg;
 }
 
-void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, sal_uInt16 nId)
+void RecentDocsView::insertItemAsync(const RecentThumbnailInfo& rThumbinfo)
 {
-    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rURL, rTitle, nId);
+    maThumbStack.push_back(rThumbinfo);
+    RecentThumbnailTimer.Start();
+}
+
+
+void RecentDocsView::insertItem(const RecentThumbnailInfo& rThumbinfo)
+{
+    RecentDocsViewItem *pChild = new RecentDocsViewItem(*this, rThumbinfo);
 
     AppendItem(pChild);
 }
@@ -167,7 +175,7 @@ void RecentDocsView::loadRecentDocs()
 
         if( isAcceptedFile(aURL) )
         {
-            insertItem(aURL, aTitle, i+1);
+            insertItem(RecentThumbnailInfo(aURL, aTitle, i+1));
         }
     }
 

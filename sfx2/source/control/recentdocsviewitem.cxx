@@ -13,29 +13,28 @@
 #include <sfx2/recentdocsview.hxx>
 #include <tools/urlobj.hxx>
 
-RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
-    const OUString &rTitle, sal_uInt16 nId)
-    : ThumbnailViewItem(rView, nId)
+RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const RecentThumbnailInfo &rInfo )
+    : ThumbnailViewItem(rView, rInfo.nId)
 {
     RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
     long nThumbnailSize = rRecentView.GetThumbnailSize();
-    OUString aTitle = rTitle;
+    OUString aTitle = rInfo.sTitle;
 
     if( !aTitle.getLength() )
     {
         // If we have no title, get filename from the URL
-        INetURLObject aURLObj(rURL);
+        INetURLObject aURLObj(rInfo.sURL);
         aTitle = aURLObj.GetName(INetURLObject::DECODE_WITH_CHARSET);
     }
 
-    BitmapEx aThumbnail = ThumbnailView::readThumbnail(rURL);
+    BitmapEx aThumbnail = ThumbnailView::readThumbnail(rInfo.sURL);
     if( aThumbnail.IsEmpty() )
     {
         // Use the default thumbnail if we have nothing else
-        aThumbnail = RecentDocsView::getDefaultThumbnail(rURL);
+        aThumbnail = RecentDocsView::getDefaultThumbnail(rInfo.sURL);
     }
 
-    maURL = rURL;
+    maURL = rInfo.sURL;
     maTitle = aTitle;
     maPreview1 = TemplateAbstractView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 }

@@ -12,11 +12,19 @@
 
 #include <sfx2/thumbnailview.hxx>
 
+struct RecentThumbnailInfo
+{
+    RecentThumbnailInfo(const OUString &rURL, const OUString &rTitle, sal_uInt16 nId_)
+        :sURL(rURL), sTitle(rTitle), nId(nId_){}
+    OUString    sURL;
+    OUString    sTitle;
+    sal_uInt16  nId;
+};
+
 class RecentDocsViewItem : public ThumbnailViewItem
 {
 public:
-    RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
-        const OUString &rTitle, sal_uInt16 nId);
+    RecentDocsViewItem(ThumbnailView &rView, const RecentThumbnailInfo&);
     virtual void setEditTitle (bool edit, bool bChangeFocus = true);
 
     OUString maURL;
