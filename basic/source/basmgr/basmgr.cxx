@@ -874,7 +874,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
         {
             INetURLObject aObj( aRealStorageName, INET_PROT_FILE );
             aObj.removeSegment();
-            bool bWasAbsolute = sal_False;
+            bool bWasAbsolute = false;
             aObj = aObj.smartRel2Abs( pInfo->GetRelStorageName(), bWasAbsolute );
 
             //*** TODO: Replace if still necessary
@@ -960,7 +960,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 
             INetURLObject aLibRelStorage( aStorName );
             aLibRelStorage.removeSegment();
-            bool bWasAbsolute = sal_False;
+            bool bWasAbsolute = false;
             aLibRelStorage = aLibRelStorage.smartRel2Abs( aLibRelStorageName, bWasAbsolute);
             DBG_ASSERT(!bWasAbsolute, "RelStorageName was absolute!" );
 
@@ -971,11 +971,11 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             }
             else
             {
-                xStorageRef = new SotStorage( sal_False, aLibAbsStorage.GetMainURL
-                    ( INetURLObject::NO_DECODE ), eStorageReadMode, sal_True );
+                xStorageRef = new SotStorage( false, aLibAbsStorage.GetMainURL
+                    ( INetURLObject::NO_DECODE ), eStorageReadMode, true );
                 if ( xStorageRef->GetError() != ERRCODE_NONE )
-                    xStorageRef = new SotStorage( sal_False, aLibRelStorage.
-                    GetMainURL( INetURLObject::NO_DECODE ), eStorageReadMode, sal_True );
+                    xStorageRef = new SotStorage( false, aLibRelStorage.
+                    GetMainURL( INetURLObject::NO_DECODE ), eStorageReadMode, true );
             }
             if ( xStorageRef.Is() )
             {
@@ -1077,7 +1077,7 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
 
     if ( !xStorage.Is() )
     {
-        xStorage = new SotStorage( sal_False, aStorageName, eStorageReadMode );
+        xStorage = new SotStorage( false, aStorageName, eStorageReadMode );
     }
     SotStorageRef xBasicStorage = xStorage->OpenSotStorage( OUString(szBasicStorage), eStorageReadMode, sal_False );
 
@@ -1328,11 +1328,11 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
         SotStorageRef xStorage;
         if ( !pLibInfo->IsExtern() )
         {
-            xStorage = new SotStorage( sal_False, GetStorageName() );
+            xStorage = new SotStorage( false, GetStorageName() );
         }
         else
         {
-            xStorage = new SotStorage( sal_False, pLibInfo->GetStorageName() );
+            xStorage = new SotStorage( false, pLibInfo->GetStorageName() );
         }
 
         if ( xStorage->IsStorage( OUString(szBasicStorage) ) )
@@ -1551,7 +1551,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
     {
         if( !LinkTargetURL.isEmpty())
         {
-            SotStorageRef xStorage = new SotStorage( sal_False, LinkTargetURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
+            SotStorageRef xStorage = new SotStorage( false, LinkTargetURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
             if( !xStorage->GetError() )
             {
                 pLib = AddLib( *xStorage, rLibName, sal_True );

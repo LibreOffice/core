@@ -442,7 +442,7 @@ namespace basic
             SotStorageRef xDummyStor = new SotStorage( OUString() );
             _out_rpBasicManager = new BasicManager( *xDummyStor, OUString() /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
-                                                                &aAppBasicDir, sal_True );
+                                                                &aAppBasicDir, true );
             if ( !_out_rpBasicManager->GetErrors().empty() )
             {
                 // handle errors
@@ -467,7 +467,7 @@ namespace basic
             // create new BASIC-manager
             StarBASIC* pBasic = new StarBASIC( pAppBasic );
             pBasic->SetFlag( SBX_EXTSEARCH );
-            _out_rpBasicManager = new BasicManager( pBasic, NULL, sal_True );
+            _out_rpBasicManager = new BasicManager( pBasic, NULL, true );
         }
 
         // knit the containers with the BasicManager

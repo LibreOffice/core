@@ -32,12 +32,12 @@ struct SbiParseStack {              // "Stack" for statement-blocks
 struct SbiStatement {
     SbiToken eTok;
     void( SbiParser::*Func )();
-    sal_Bool  bMain;                    // sal_True: OK outside the SUB
-    sal_Bool  bSubr;                    // sal_True: OK inside the SUB
+    bool  bMain;                    // true: OK outside the SUB
+    bool  bSubr;                    // true: OK inside the SUB
 };
 
-#define Y   sal_True
-#define N   sal_False
+#define Y   true
+#define N   false
 
 static const SbiStatement StmntTable [] = {
 { ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE

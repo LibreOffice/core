@@ -311,11 +311,11 @@ void SbiExprNode::FoldConstants()
                    || eTok == IDIV || eTok == MOD )
                 {
                     // Integer operations
-                    sal_Bool err = sal_False;
-                    if( nl > SbxMAXLNG ) err = sal_True, nl = SbxMAXLNG;
-                    else if( nl < SbxMINLNG ) err = sal_True, nl = SbxMINLNG;
-                    if( nr > SbxMAXLNG ) err = sal_True, nr = SbxMAXLNG;
-                    else if( nr < SbxMINLNG ) err = sal_True, nr = SbxMINLNG;
+                    bool err = false;
+                    if( nl > SbxMAXLNG ) err = true, nl = SbxMAXLNG;
+                    else if( nl < SbxMINLNG ) err = true, nl = SbxMINLNG;
+                    if( nr > SbxMAXLNG ) err = true, nr = SbxMAXLNG;
+                    else if( nr < SbxMINLNG ) err = true, nr = SbxMINLNG;
                     ll = (long) nl; lr = (long) nr;
                     llMod = (long) (nl < 0 ? nl - 0.5 : nl + 0.5);
                     lrMod = (long) (nr < 0 ? nr - 0.5 : nr + 0.5);
@@ -325,20 +325,20 @@ void SbiExprNode::FoldConstants()
                         bError = true;
                     }
                 }
-                sal_Bool bBothInt = sal_Bool( pLeft->eType < SbxSINGLE
+                bool bBothInt = ( pLeft->eType < SbxSINGLE
                                    && pRight->eType < SbxSINGLE );
                 delete pLeft; pLeft = NULL;
                 delete pRight; pRight = NULL;
                 nVal = 0;
                 eType = SbxDOUBLE;
                 eNodeType = SbxNUMVAL;
-                sal_Bool bCheckType = sal_False;
+                bool bCheckType = false;
                 switch( eTok )
                 {
                     case EXPON:
                         nVal = pow( nl, nr ); break;
                     case MUL:
-                        bCheckType = sal_True;
+                        bCheckType = true;
                         nVal = nl * nr; break;
                     case DIV:
                         if( !nr )
@@ -348,10 +348,10 @@ void SbiExprNode::FoldConstants()
                         } else nVal = nl / nr;
                         break;
                     case PLUS:
-                        bCheckType = sal_True;
+                        bCheckType = true;
                         nVal = nl + nr; break;
                     case MINUS:
-                        bCheckType = sal_True;
+                        bCheckType = true;
                         nVal = nl - nr; break;
                     case EQ:
                         nVal = ( nl == nr ) ? SbxTRUE : SbxFALSE;
@@ -427,9 +427,9 @@ void SbiExprNode::FoldConstants()
                 nVal = -nVal; break;
             case NOT: {
                 // Integer operation!
-                sal_Bool err = sal_False;
-                if( nVal > SbxMAXLNG ) err = sal_True, nVal = SbxMAXLNG;
-                else if( nVal < SbxMINLNG ) err = sal_True, nVal = SbxMINLNG;
+                bool err = false;
+                if( nVal > SbxMAXLNG ) err = true, nVal = SbxMAXLNG;
+                else if( nVal < SbxMINLNG ) err = true, nVal = SbxMINLNG;
                 if( err )
                 {
                     pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );

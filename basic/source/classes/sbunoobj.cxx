@@ -1483,15 +1483,15 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
         case TypeClass_BYTE:
         {
             sal_Int16 nVal = pVar->GetInteger();
-            sal_Bool bOverflow = sal_False;
+            bool bOverflow = false;
             if( nVal < -128 )
             {
-                bOverflow = sal_True;
+                bOverflow = true;
                 nVal = -128;
             }
             else if( nVal > 127 )
             {
-                bOverflow = sal_True;
+                bOverflow = true;
                 nVal = 127;
             }
             if( bOverflow )
@@ -1936,7 +1936,7 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
             // Is it in Uno a sequence?
             SbxDataType eType = pVar->GetFullType();
 
-            sal_Bool bMaybeVoid = sal_False;
+            bool bMaybeVoid = false;
             if( i < nUnoPropCount )
             {
                 const Property& rProp = pUnoProps[ i ];
@@ -1946,7 +1946,7 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
                 if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
                 {
                     eType = unoToSbxType( rProp.Type.getTypeClass() );
-                    bMaybeVoid = sal_True;
+                    bMaybeVoid = true;
                 }
                 if( eType == SbxOBJECT )
                 {

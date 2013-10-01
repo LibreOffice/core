@@ -85,21 +85,21 @@ SbiExpression::~SbiExpression()
 // Are there parameters without brackets following? This may be a number,
 // a string, a symbol or also a comma (if the 1st parameter is missing)
 
-static sal_Bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTok )
+static bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTok )
 {
     if( eTok == LPAREN )
     {
-        return sal_True;
+        return true;
     }
     // but only if similar to CALL!
     if( !p->WhiteSpace() || eCurExpr != SbSYMBOL )
     {
-        return sal_False;
+        return false;
     }
     if ( eTok == NUMBER || eTok == MINUS || eTok == FIXSTRING ||
          eTok == SYMBOL || eTok == COMMA  || eTok == DOT || eTok == NOT || eTok == BYVAL )
     {
-        return sal_True;
+        return true;
     }
     else // check for default params with reserved names ( e.g. names of tokens )
     {
@@ -108,10 +108,10 @@ static sal_Bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken
         tokens.Next();
         if ( tokens.Peek() == ASSIGN )
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 // definition of a new symbol
@@ -121,7 +121,7 @@ static SbiSymDef* AddSym ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExp
 {
     SbiSymDef* pDef;
     // A= is not a procedure
-    sal_Bool bHasType = sal_Bool( eTok == EQ || eTok == DOT );
+    bool bHasType = ( eTok == EQ || eTok == DOT );
     if( ( !bHasType && eCurExpr == SbSYMBOL ) || pPar )
     {
         // so this is a procedure
@@ -137,7 +137,7 @@ static SbiSymDef* AddSym ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExp
         // special treatment for Colls like Documents(1)
         if( eCurExpr == SbSTDEXPR )
         {
-            bHasType = sal_True;
+            bHasType = true;
         }
         pDef = pProc;
         pDef->SetType( bHasType ? eType : SbxEMPTY );
@@ -249,7 +249,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     // It might be an object part, if . or ! is following.
     // In case of . the variable must already be defined;
     // it's an object, if pDef is NULL after the search.
-    sal_Bool bObj = sal_Bool( ( eTok == DOT || eTok == EXCLAM )
+    bool bObj = ( ( eTok == DOT || eTok == EXCLAM )
                     && !pParser->WhiteSpace() );
     if( bObj )
     {
@@ -444,7 +444,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             eTok = pParser->Peek();
         }
     }
-    sal_Bool bObj = sal_Bool( ( eTok == DOT || eTok == EXCLAM ) && !pParser->WhiteSpace() );
+    bool bObj = ( ( eTok == DOT || eTok == EXCLAM ) && !pParser->WhiteSpace() );
     if( bObj )
     {
         if( eType == SbxVARIANT )
@@ -846,22 +846,22 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
     else
     {
         // #40204 special treatment for sal_Bool-constants
-        sal_Bool bIsBool = sal_False;
+        bool bIsBool = false;
         if( pExpr->eNodeType == SbxVARVAL )
         {
             SbiSymDef* pVarDef = pExpr->GetVar();
 
-            sal_Bool bBoolVal = sal_False;
+            bool bBoolVal = false;
             if( pVarDef->GetName().equalsIgnoreAsciiCase( "true" ) )
             {
-                bIsBool = sal_True;
-                bBoolVal = sal_True;
+                bIsBool = true;
+                bBoolVal = true;
             }
             else if( pVarDef->GetName().equalsIgnoreAsciiCase( "false" ) )
             //else if( pVarDef->GetName().ICompare( "false" ) == COMPARE_EQUAL )
             {
-                bIsBool = sal_True;
-                bBoolVal = sal_False;
+                bIsBool = true;
+                bBoolVal = false;
             }
 
             if( bIsBool )

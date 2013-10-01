@@ -358,7 +358,7 @@ void SbiParser::Select()
     TestEoln();
     sal_uInt32 nNextTarget = 0;
     sal_uInt32 nDoneTarget = 0;
-    sal_Bool bElse = sal_False;
+    bool bElse = false;
 
     while( !bAbort )
     {
@@ -369,13 +369,13 @@ void SbiParser::Select()
                 aGen.BackChain( nNextTarget ), nNextTarget = 0;
             aGen.Statement();
 
-            sal_Bool bDone = sal_False;
+            bool bDone = false;
             sal_uInt32 nTrueTarget = 0;
             if( Peek() == ELSE )
             {
                 // CASE ELSE
                 Next();
-                bElse = sal_True;
+                bElse = true;
             }
             else while( !bDone )
             {
@@ -415,7 +415,7 @@ void SbiParser::Select()
 
                 }
                 if( Peek() == COMMA ) Next();
-                else TestEoln(), bDone = sal_True;
+                else TestEoln(), bDone = true;
             }
 
             if( !bElse )

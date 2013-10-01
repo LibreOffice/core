@@ -1125,7 +1125,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 
         // Launcher problem
         // i80726 The Find below will genarate an error in Testtool so we reset it unless there was one before already
-        sal_Bool bWasError = SbxBase::GetError() != 0;
+        bool bWasError = SbxBase::GetError() != 0;
         SbxVariable* pMSOMacroRuntimeLibVar = Find( "Launcher", SbxCLASS_OBJECT );
         if ( !bWasError && (SbxBase::GetError() == SbxERR_PROC_UNDEFINED) )
             SbxBase::ResetError();
@@ -2277,9 +2277,9 @@ class FormObjEventListenerImpl : public FormObjEventListener_BASE
     uno::Reference< lang::XComponent > mxComponent;
     uno::Reference< frame::XModel > mxModel;
     bool mbDisposed;
-    sal_Bool mbOpened;
-    sal_Bool mbActivated;
-    sal_Bool mbShowing;
+    bool mbOpened;
+    bool mbActivated;
+    bool mbShowing;
 
     FormObjEventListenerImpl(const FormObjEventListenerImpl&); // not defined
     FormObjEventListenerImpl& operator=(const FormObjEventListenerImpl&); // not defined
@@ -2287,7 +2287,7 @@ class FormObjEventListenerImpl : public FormObjEventListener_BASE
 public:
     FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent, const uno::Reference< frame::XModel >& xModel ) :
         mpUserForm( pUserForm ), mxComponent( xComponent), mxModel( xModel ),
-        mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
+        mbDisposed( false ), mbOpened( false ), mbActivated( false ), mbShowing( false )
     {
         if ( mxComponent.is() )
         {
@@ -2319,7 +2319,7 @@ public:
         removeListener();
     }
 
-    sal_Bool isShowing() const { return mbShowing; }
+    bool isShowing() const { return mbShowing; }
 
     void removeListener()
     {
@@ -2354,11 +2354,11 @@ public:
     {
         if ( mpUserForm )
         {
-            mbOpened = sal_True;
-            mbShowing = sal_True;
+            mbOpened = true;
+            mbShowing = true;
             if ( mbActivated )
             {
-                mbOpened = mbActivated = sal_False;
+                mbOpened = mbActivated = false;
                 mpUserForm->triggerActivateEvent();
             }
         }
@@ -2399,8 +2399,8 @@ public:
 
     virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
-        mbOpened = sal_False;
-        mbShowing = sal_False;
+        mbOpened = false;
+        mbShowing = false;
     }
 
     virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
@@ -2415,10 +2415,10 @@ public:
     {
         if ( mpUserForm )
         {
-            mbActivated = sal_True;
+            mbActivated = true;
             if ( mbOpened )
             {
-                mbOpened = mbActivated = sal_False;
+                mbOpened = mbActivated = false;
                 mpUserForm->triggerActivateEvent();
             }
         }
