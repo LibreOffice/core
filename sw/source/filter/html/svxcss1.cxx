@@ -75,16 +75,6 @@ static CSS1PropertyEnum const aFontSizeTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum const aFontFamilyTable[] =
-{
-    { "serif",       FAMILY_ROMAN        },
-    { "sans-serif",  FAMILY_SWISS        },
-    { "cursive",     FAMILY_SCRIPT       },
-    { "fantasy",     FAMILY_DECORATIVE   },
-    { "monospace",   FAMILY_MODERN       },
-    { 0,                    0                   }
-};
-
 static CSS1PropertyEnum const aFontWeightTable[] =
 {
     { "extra-light", WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
