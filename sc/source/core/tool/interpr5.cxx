@@ -43,8 +43,6 @@ using namespace formula;
 
 namespace {
 
-const double fInvEpsilon = 1.0E-7;
-
 struct MatrixAdd : public ::std::binary_function<double,double,double>
 {
     inline double operator() (const double& lhs, const double& rhs) const
@@ -910,6 +908,7 @@ void ScInterpreter::ScMatInv()
                      *
                      * The following is #3.
                      */
+                    const double fInvEpsilon = 1.0E-7;
                     ScMatrixRef xR = GetNewMat( nR, nR);
                     if (xR)
                     {
