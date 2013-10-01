@@ -65,11 +65,6 @@
 
 namespace sd {
 
-static const int TABCONTROL_INITIAL_SIZE = 350;
-static const int PAPER_SHADOW_EXT_PIXEL = 2;
-
-
-
 void DrawViewShell::ModelHasChanged()
 {
     Invalidate();
