@@ -98,7 +98,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
 ifeq (TRUE,$(LIBO_TEST_INSTALL))
 	$(call instsetoo_native_install_command,openoffice,en-US,,,archive)
 	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,_Dev)/archive/install/en-US/LibreOffice*_archive.zip
-	mv $(TESTINSTALLDIR)/LibreOffice*_archive/* $(TESTINSTALLDIR)/
+	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
+	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,archive)

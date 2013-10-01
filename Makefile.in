@@ -299,14 +299,14 @@ endif
 	@echo "If you want to edit the .ui files with glade first execute:"
 	@echo
 	@echo "export GLADE_CATALOG_SEARCH_PATH=$(TESTINSTALLDIR)/share/glade"
-ifeq ($(OS),LINUX)
+ifneq ($(OS),MACOSX)
 	@echo
 	@echo "Test installation finished, you can now execute:"
 	@echo
-	@echo "$(TESTINSTALLDIR)/program/soffice"
-else ifeq ($(OS),MACOSX)
+	@echo "  $(TESTINSTALLDIR)/program/soffice"
+else
 	@echo
-	@echo "Developer installation finished, you can now run:"
+	@echo "Test installation finished, you can now run:"
 	@echo
 	@echo "  open $(TESTINSTALLDIR)/LibreOffice.app"
 	@echo
