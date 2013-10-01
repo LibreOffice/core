@@ -94,7 +94,6 @@ extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 XML_STRING( sXML_metaStreamName, "meta.xml");
 XML_STRING( sXML_styleStreamName, "styles.xml" );
 XML_STRING( sXML_contentStreamName, "content.xml" );
-XML_STRING( sXML_oldContentStreamName, "Content.xml" );
 XML_STRING( sXML_settingsStreamName, "settings.xml" );
 
 XML_STRING( sXML_export_impress_oasis_service, "com.sun.star.comp.Impress.XMLOasisExporter" );
