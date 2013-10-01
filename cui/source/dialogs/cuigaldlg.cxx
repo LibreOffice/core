@@ -965,7 +965,7 @@ void TPGalleryThemeProperties::FillFilterList()
      }
 
 #if defined(WNT)
-    if ( aExtensions.Len() > 240 )
+    if (aExtensions.getLength() > 240)
         aExtensions = "*.*";
 #endif
 
