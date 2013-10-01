@@ -72,6 +72,10 @@ TabPage RID_OFAPAGE_MSFILTEROPT2
     {
         Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse";
     };
+    String ST_CHG_SMARTART
+    {
+        Text [ en-US ] = "SmartArt to LibreOffice shapes or reverse";
+    };
 };
 
  // ******************************************************************* EOF

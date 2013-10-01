@@ -79,6 +79,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     String sHeader1, sHeader2;
     String sChgToFromMath,
            sChgToFromWriter,
+           sChgToFromSmartArt,
            sChgToFromCalc,
            sChgToFromImpress;
     SvLBoxButtonData*   pCheckButtonData;

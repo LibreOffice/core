@@ -79,6 +79,9 @@ public:
     sal_Bool IsImpress2PowerPoint() const;
     void SetImpress2PowerPoint( sal_Bool bFlag );
 
+    sal_Bool IsSmartArt2Shape() const;
+    void SetSmartArt2Shape( sal_Bool bFlag );
+
     sal_Bool IsEnablePPTPreview() const;
     sal_Bool IsEnableCalcPreview() const;
     sal_Bool IsEnableWordPreview() const;

@@ -28,6 +28,7 @@
 #define ST_CHG_IMPRESS  4
 #define ST_HEADER1      5
 #define ST_HEADER2      6
+#define ST_CHG_SMARTART 7
 #define FT_HEADER1_EXPLANATION  1
 #define FT_HEADER2_EXPLANATION  2
 
