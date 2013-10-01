@@ -311,12 +311,14 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             }
             else
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 pLibRootEntry = AddEntry(
                     aLibName,
                     Image( IDEResId( nId ) ),
                     pDocumentRootEntry, true,
                     std::auto_ptr<Entry>(new Entry(OBJ_TYPE_LIBRARY))
                 );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
             }
         }
     }
@@ -347,12 +349,16 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                         OUString aModName = pModNames[ i ];
                         SvTreeListEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
                         if ( !pModuleEntry )
+                        {
+                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
                             pModuleEntry = AddEntry(
                                 aModName,
                                 Image( IDEResId( RID_IMG_MODULE ) ),
                                 pLibRootEntry, false,
                                 std::auto_ptr<Entry>(new Entry(OBJ_TYPE_MODULE))
                             );
+                            SAL_WNODEPRECATED_DECLARATIONS_POP
+                        }
 
                         // methods
                         if ( nMode & BROWSEMODE_SUBS )
@@ -366,12 +372,16 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                                 OUString aName = pNames[ j ];
                                 SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                                 if ( !pEntry )
+                                {
+                                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                     pEntry = AddEntry(
                                         aName,
                                         Image( IDEResId( RID_IMG_MACRO ) ),
                                         pModuleEntry, false,
                                         std::auto_ptr<Entry>(new Entry(OBJ_TYPE_METHOD))
                                     );
+                                    SAL_WNODEPRECATED_DECLARATIONS_POP
+                                }
                             }
                         }
                     }
@@ -403,12 +413,16 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                     OUString aDlgName = pDlgNames[ i ];
                     SvTreeListEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJ_TYPE_DIALOG );
                     if ( !pDialogEntry )
+                    {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         pDialogEntry = AddEntry(
                             aDlgName,
                             Image( IDEResId( RID_IMG_DIALOG ) ),
                             pLibRootEntry, false,
                             std::auto_ptr<Entry>(new Entry(OBJ_TYPE_DIALOG))
                         );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                    }
                 }
             }
             catch (const container::NoSuchElementException& )
@@ -442,12 +456,14 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntr
         }
         else
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             pLibSubRootEntry = AddEntry(
                 aEntryName,
                 Image( IDEResId( RID_IMG_MODLIB ) ),
                 pLibRootEntry, true,
                 std::auto_ptr<Entry>(new Entry(eType))
             );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
         }
     }
 }
@@ -504,12 +520,16 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             }
             SvTreeListEntry* pModuleEntry = FindEntry( pLibSubRootEntry, aEntryName, OBJ_TYPE_MODULE );
             if ( !pModuleEntry )
+            {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 pModuleEntry = AddEntry(
                     aEntryName,
                     Image( IDEResId( RID_IMG_MODULE ) ),
                     pLibSubRootEntry, false,
                     std::auto_ptr<Entry>(new Entry(OBJ_TYPE_MODULE))
                 );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
+            }
 
             // methods
             if ( nMode & BROWSEMODE_SUBS )
@@ -523,12 +543,16 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
                     OUString aName = pNames[ j ];
                     SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                     if ( !pEntry )
+                    {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         pEntry = AddEntry(
                             aName,
                             Image( IDEResId( RID_IMG_MACRO ) ),
                             pModuleEntry, false,
                             std::auto_ptr<Entry>(new Entry(OBJ_TYPE_METHOD))
                         );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
+                    }
                 }
             }
         }
