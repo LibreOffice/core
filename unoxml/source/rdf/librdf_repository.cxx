@@ -89,8 +89,6 @@ typedef std::map< OUString, ::rtl::Reference<librdf_NamedGraph> >
     NamedGraphMap_t;
 
 const char s_sparql [] = "sparql";
-const char s_nsRDFs [] = "http://www.w3.org/2000/01/rdf-schema#";
-const char s_label  [] = "label";
 const char s_nsOOo  [] = "http://openoffice.org/2004/office/rdfa/";
 
 ////////////////////////////////////////////////////////////////////////////
