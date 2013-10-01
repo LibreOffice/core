@@ -140,16 +140,6 @@ static const sal_Unicode aBulletTypes[] =
     0x2714
 };
 
-static sal_Char const aNumChar[] =
-{
-    'A', //CHARS_UPPER_LETTER
-    'a', //CHARS_LOWER_LETTER
-    'I', //ROMAN_UPPER
-    'i', //ROMAN_LOWER
-    '1', //ARABIC
-    ' '
-};
-
 // Is one of the masked formats set?
 static sal_Bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
 {
