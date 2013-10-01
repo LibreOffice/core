@@ -596,11 +596,22 @@ void SalDisplay::Init()
     }
     if( mbExactResolution == false )
     {
-        aResolution_     =
-            Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
-                       DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() ) ),
-                  DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
-                       DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() ) ) );
+        int nDisplayWidth = DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() );
+        int nDisplayHeight = DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() );
+
+        if (nDisplayHeight == 0 || nDisplayWidth == 0)
+        {
+            aResolution_ = Pair( 96, 96 );
+            SAL_WARN("vcl", "screen width/height reported as 0!, using fallback 96dpi");
+        }
+        else
+        {
+            aResolution_     =
+                Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
+                           nDisplayWidth ),
+                      DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
+                           nDisplayHeight ) );
+        }
     }
 
     nMaxRequestSize_    = XExtendedMaxRequestSize( pDisp_ ) * 4;
