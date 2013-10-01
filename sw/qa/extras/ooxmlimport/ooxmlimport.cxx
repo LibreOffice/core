@@ -134,6 +134,7 @@ public:
     void testFdo68607();
     void testVmlTextVerticalAdjust();
     void testGroupshapeSdt();
+    void testBnc779620();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -233,6 +234,7 @@ void Test::run()
         {"fdo68607.docx", &Test::testFdo68607},
         {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
         {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
+        {"bnc779620.docx", &Test::testBnc779620},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1640,6 +1642,14 @@ void Test::testGroupshapeSdt()
     CPPUNIT_ASSERT_EQUAL(OUString("placeholder text"), xShape->getString());
     // w:spacing was ignored in oox, this was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), "CharKerning"));
+}
+
+void Test::testBnc779620()
+{
+    // The problem was that the floating table was imported as a non-floating one.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
