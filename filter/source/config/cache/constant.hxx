@@ -170,7 +170,7 @@
 /** @short  some default values.
  */
 #define  DEFAULT_OFFICELOCALE       _FILTER_CONFIG_FROM_ASCII_("en-US")
-#define  DEFAULT_FORMATNAME         _FILTER_CONFIG_FROM_ASCII_("LibreOffice")
+#define  DEFAULT_FORMATNAME         _FILTER_CONFIG_FROM_ASCII_("OpenOffice.org")
 #define  DEFAULT_FORMATVERSION      _FILTER_CONFIG_FROM_ASCII_("1.0")
 
 /** @short  used for the queries of the FilterFactory service.
