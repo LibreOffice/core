@@ -61,9 +61,7 @@ namespace {
     const static double gnMinimalHorizontalPreviewGap(15);
     const static double gnPreferredHorizontalPreviewGap(25);
     const static double gnMaximalHorizontalPreviewGap(50);
-    const static double gnMinimalVerticalPreviewGap(15);
     const static double gnPreferredVerticalPreviewGap(25);
-    const static double gnMaximalVerticalPreviewGap(50);
 
     const static sal_Int32 gnHorizontalLabelBorder (3);
     const static sal_Int32 gnHorizontalLabelPadding (5);
