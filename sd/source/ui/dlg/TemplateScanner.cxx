@@ -49,8 +49,6 @@ const char TARGET_DIR_URL[] = "TargetDirURL";
 const char DESCRIPTION[] = "TypeDescription";
 const char TARGET_URL[] = "TargetURL";
 
-const char DOCTEMPLATES[] = "com.sun.star.frame.DocumentTemplates";
-
 //  These strings are used to find impress templates in the tree of
 //  template files.  Should probably be determined dynamically.
 const char IMPRESS_BIN_TEMPLATE[] = "application/vnd.stardivision.impress";
