@@ -40,8 +40,7 @@ AutoReqProv: no
 %description
 %productname desktop integration for desktop-environments that implement
 the menu- and mime-related specifications from http://www.freedesktop.org
-Install this package if you're using a distribution not covered by any of
-the other %pkgprefix-<distribution>-menus packages.
+These specifications are implemented by all current distributions.
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -52,9 +51,6 @@ rm -rf $RPM_BUILD_ROOT
 export NO_BRP_STALE_LINK_ERROR=yes
 
 mkdir -p $RPM_BUILD_ROOT
-
-# FIXME: remove - only purpose is to create packages identical to OOF680 m8
-umask 0000
 
 # set parameters for the create_tree script
 export DESTDIR=$RPM_BUILD_ROOT
