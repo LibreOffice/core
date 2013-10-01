@@ -1451,8 +1451,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 else
                     pTxtNd->SwCntntNode::GetAttr( aSet );
 
-                rCntntAtPos.sStr.AssignAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "Pos: (" ));
+                rCntntAtPos.sStr = "Pos: (";
                 rCntntAtPos.sStr += OUString::number( aPos.nNode.GetIndex());
                 rCntntAtPos.sStr += ':';
                 rCntntAtPos.sStr += OUString::number( aPos.nContent.GetIndex());

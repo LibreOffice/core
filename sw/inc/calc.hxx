@@ -138,9 +138,9 @@ public:
  ******************************************************************************/
 struct SwHash
 {
-            SwHash( const String& rStr );
+    SwHash( const OUString& rStr );
     virtual ~SwHash();
-    String  aStr;
+    OUString aStr;
     SwHash *pNext;
 };
 
@@ -149,18 +149,18 @@ struct SwCalcExp : public SwHash
     SwSbxValue  nValue;
     const SwFieldType* pFldType;
 
-    SwCalcExp( const String& rStr, const SwSbxValue& rVal,
+    SwCalcExp( const OUString& rStr, const SwSbxValue& rVal,
                 const SwFieldType* pFldType = 0 );
 };
 
-SwHash* Find( const String& rSrch, SwHash** ppTable,
+SwHash* Find( const OUString& rSrch, SwHash** ppTable,
                 sal_uInt16 nTblSize, sal_uInt16* pPos = 0 );
 
 void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTblSize );
 
 // if _CalcOp != 0, this is a valid operator
 struct _CalcOp;
-_CalcOp* FindOperator( const String& rSearch );
+_CalcOp* FindOperator( const OUString& rSearch );
 
 /******************************************************************************
  *                               class SwCalc

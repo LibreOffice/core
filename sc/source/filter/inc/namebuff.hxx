@@ -20,7 +20,7 @@
 #ifndef SC_NAMEBUFF_HXX
 #define SC_NAMEBUFF_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "compiler.hxx"
 #include "root.hxx"
 #include "xiroot.hxx"
@@ -41,15 +41,15 @@ class StringHashEntry
 {
 private:
     friend class NameBuffer;
-    String          aString;
-    sal_uInt32          nHash;
+    OUString          aString;
+    sal_uInt32        nHash;
 
-    static sal_uInt32   MakeHashCode( const String& );
+    static sal_uInt32   MakeHashCode( const OUString& );
 public:
-    inline          StringHashEntry( const String& );
+    inline          StringHashEntry( const OUString& );
     inline          StringHashEntry( void );
     inline void     operator =( const sal_Char* );
-    inline void     operator =( const String& );
+    inline void     operator =( const OUString& );
     inline void     operator =( const StringHashEntry& );
     inline sal_Bool     operator ==( const StringHashEntry& ) const;
 };
@@ -60,7 +60,7 @@ inline StringHashEntry::StringHashEntry( void )
 }
 
 
-inline StringHashEntry::StringHashEntry( const String& r ) : aString( r )
+inline StringHashEntry::StringHashEntry( const OUString& r ) : aString( r )
 {
     nHash = MakeHashCode( r );
 }
@@ -68,12 +68,12 @@ inline StringHashEntry::StringHashEntry( const String& r ) : aString( r )
 
 inline void StringHashEntry::operator =( const sal_Char* p )
 {
-    aString.AssignAscii( p );
+    aString = OUString(p, strlen(p), RTL_TEXTENCODING_ASCII_US);
     nHash = MakeHashCode( aString );
 }
 
 
-inline void StringHashEntry::operator =( const String& r )
+inline void StringHashEntry::operator =( const OUString& r )
 {
     aString = r;
     nHash = MakeHashCode( r );
@@ -106,10 +106,10 @@ public:
     inline                  NameBuffer( RootData*, sal_uInt16 nNewBase );
 
     virtual                 ~NameBuffer();
-    inline const String*    Get( sal_uInt16 nIndex ) const;
+    inline const OUString*  Get( sal_uInt16 nIndex ) const;
     inline sal_uInt16       GetLastIndex() const;
     inline void             SetBase( sal_uInt16 nNewBase = 0 );
-    void                    operator <<( const String& rNewString );
+    void                    operator <<( const OUString& rNewString );
 };
 
 inline NameBuffer::NameBuffer( RootData* p ) : ExcRoot( p )
@@ -124,7 +124,7 @@ inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
 }
 
 
-inline const String* NameBuffer::Get ( sal_uInt16 n ) const
+inline const OUString* NameBuffer::Get ( sal_uInt16 n ) const
 {
     if( n < nBase || n >= maHashes.size() )
         return NULL;

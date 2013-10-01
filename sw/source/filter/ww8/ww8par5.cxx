@@ -3309,7 +3309,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     }
 #endif
 
-    String sURL, sTarget, sMark;
+    String sURL, sMark;
+    OUString sTarget;
     bool bDataImport = false;
     //HYPERLINK "filename" [switches]
 
@@ -3332,7 +3333,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                     break;
 
                 case 'n':
-                    sTarget.AssignAscii( "_blank" );
+                    sTarget = "_blank";
                     bOptions = true;
                     break;
 

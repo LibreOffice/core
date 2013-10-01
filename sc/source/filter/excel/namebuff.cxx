@@ -31,10 +31,10 @@
 
 #include <string.h>
 
-sal_uInt32 StringHashEntry::MakeHashCode( const String& r )
+sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
 {
-    sal_uInt32                 n = 0;
-    const sal_Unicode*              pAkt = r.GetBuffer();
+    sal_uInt32             n = 0;
+    const sal_Unicode*     pAkt = r.getStr();
     sal_Unicode            cAkt = *pAkt;
 
     while( cAkt )
@@ -60,7 +60,7 @@ NameBuffer::~NameBuffer()
 
 
 //void NameBuffer::operator <<( const SpString &rNewString )
-void NameBuffer::operator <<( const String &rNewString )
+void NameBuffer::operator <<( const OUString &rNewString )
 {
     OSL_ENSURE( maHashes.size() + nBase < 0xFFFF,
         "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );

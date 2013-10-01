@@ -1961,7 +1961,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     {
         for (nCol = nStartCol; nCol <= nEndCol; nCol++)
         {
-            String aBufStr;
+            OUString aBufStr;
             double nVal;
             bool bForm = false;
             SCROW r = nRow - nStartRow + 1;
@@ -1986,11 +1986,11 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', true );
 
-                    aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
+                    aBufStr = "C;X";
                     aBufStr += OUString::number( c );
-                    aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Y" ));
+                    aBufStr += ";Y";
                     aBufStr += OUString::number( r );
-                    aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";K" ));
+                    aBufStr += ";K";
                     aBufStr += aValStr;
                     lcl_WriteSimpleString( rStrm, aBufStr );
                     goto checkformula;
@@ -2001,11 +2001,11 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                     aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
                     aCellStr.SearchAndReplaceAll( OUString('\n'), OUString(SYLK_LF) );
 
-                    aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
+                    aBufStr = "C;X";
                     aBufStr += OUString::number( c );
-                    aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";Y" ));
+                    aBufStr += ";Y";
                     aBufStr += OUString::number( r );
-                    aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";K" ));
+                    aBufStr += ";K";
                     lcl_WriteSimpleString( rStrm, aBufStr );
                     lcl_WriteString( rStrm, aCellStr, '"', ';' );
 
@@ -2047,9 +2047,9 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 pFCell->GetMatColsRows( nC, nR );
                                 nC += c - 1;
                                 nR += r - 1;
-                                aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";R" ) );
+                                aPrefix = ";R";
                                 aPrefix += OUString::number( nR );
-                                aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";C" ) );
+                                aPrefix += ";C";
                                 aPrefix += OUString::number( nC );
                                 aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";M" ) );
                             }
@@ -2058,15 +2058,15 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                             {   // diff expression with 'I' M$-extension
                                 ScAddress aPos;
                                 pFCell->GetMatrixOrigin( aPos );
-                                aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";I;R" ) );
+                                aPrefix = ";I;R";
                                 aPrefix += OUString::number( aPos.Row() - nStartRow + 1 );
-                                aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";C" ) );
+                                aPrefix += ";C";
                                 aPrefix += OUString::number( aPos.Col() - nStartCol + 1 );
                             }
                             break;
                             default:
                                 // formula Expression
-                                aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( ";E" ) );
+                                aPrefix = ";E";
                         }
                         lcl_WriteSimpleString( rStrm, aPrefix );
                         if ( aCellStr.Len() )

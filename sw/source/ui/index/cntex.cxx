@@ -196,9 +196,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
          uno::Reference< lang::XMultiServiceFactory >  xFact(xModel, uno::UNO_QUERY);
 
-            String sIndexTypeName;
-            sIndexTypeName.AssignAscii( IndexServiceNames[
-                    nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] );
+         OUString sIndexTypeName(OUString::createFromAscii( IndexServiceNames[
+                    nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] ));
             pxIndexSectionsArr[nTOXIndex]->xDocumentIndex = uno::Reference< text::XDocumentIndex > (xFact->createInstance(
                                                     sIndexTypeName), uno::UNO_QUERY);
          uno::Reference< text::XTextContent >  xContent(pxIndexSectionsArr[nTOXIndex]->xDocumentIndex, uno::UNO_QUERY);
@@ -311,7 +310,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             {
                 for(sal_uInt16 nCurrLevel = nStartLevel; nCurrLevel <= nEndLevel; nCurrLevel++)
                 {
-                    String sTokenType;
+                    OUString sTokenType;
                     uno::Sequence< beans::PropertyValues> aSequPropVals(10);
                     long nTokenIndex = 0;
                     long nParamCount = 2;
@@ -329,45 +328,36 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         switch(aToken.eTokenType)
                         {
                             case TOKEN_ENTRY_NO     :
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenEntryNumber"));
+                                sTokenType = "TokenEntryNumber";
                                 // numbering for content index
                             break;
                             case TOKEN_ENTRY_TEXT   :
                             case TOKEN_ENTRY        :
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenEntryText"));
+                                sTokenType = "TokenEntryText";
                             break;
                             case TOKEN_TAB_STOP     :
                                 nParamCount += 3;
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenTabStop"));
+                                sTokenType = "TokenTabStop";
                             break;
                             case TOKEN_TEXT         :
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenText"));
+                                sTokenType = "TokenText";
                                 nParamCount += 1;
                             break;
                             case TOKEN_PAGE_NUMS    :
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenPageNumber"));
+                                sTokenType = "TokenPageNumber";
                             break;
                             case TOKEN_CHAPTER_INFO :
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenChapterInfo"));
+                                sTokenType = "TokenChapterInfo";
                             break;
                             case TOKEN_LINK_START   :
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenHyperlinkStart"));
+                                sTokenType = "TokenHyperlinkStart";
                             break;
                             case TOKEN_LINK_END     :
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                        "TokenHyperlinkEnd"));
+                                sTokenType = "TokenHyperlinkEnd";
                             break;
                             case TOKEN_AUTHORITY :
                             {
-                                sTokenType.AssignAscii(RTL_CONSTASCII_STRINGPARAM(
-                                                    "TokenBibliographyDataField"));
+                                sTokenType = "TokenBibliographyDataField";
                             }
                             break;
                             default:; //prevent warning
@@ -375,7 +365,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         beans::PropertyValues aPropVals(nParamCount);
                         beans::PropertyValue* pPropValArr = aPropVals.getArray();
                         pPropValArr[0].Name = "TokenType";
-                        pPropValArr[0].Value <<= OUString(sTokenType);
+                        pPropValArr[0].Value <<= sTokenType;
                         pPropValArr[1].Name = "CharacterStyleName";
                         pPropValArr[1].Value <<= OUString(aToken.sCharStyleName);
                         if(TOKEN_TAB_STOP == aToken.eTokenType)

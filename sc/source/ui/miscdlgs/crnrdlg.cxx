@@ -493,7 +493,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     SCROW nRow2;
     SCTAB nTab2;
     String rString;
-    String strShow;
+    OUString strShow;
     const ScAddress::Details aDetails(pDoc->GetAddressConvention());
 
     String aString;
@@ -518,23 +518,23 @@ void ScColRowNameRangesDlg::UpdateNames()
             SCCOL q=nCol1+3;
             if(q>nCol2) q=nCol2;
             //@008 Baue String zusammen
-            strShow.AssignAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
+            strShow = " [";
             if(pDoc!=NULL)
             {
                 rString = pDoc->GetString(nCol1, nRow1, nTab1);
-                strShow +=rString;
+                strShow += rString;
                 for(SCCOL i=nCol1+1;i<=q;i++)
                 {
-                    strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+                    strShow += ", ";
                     rString = pDoc->GetString(i, nRow1, nTab1);
                     strShow += rString;
                 }
             }
             if(q<nCol2) // Zu lang? Ergaenzen um ",..."
             {
-                strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", ..."));
+                strShow += ", ...";
             }
-            strShow += ']';
+            strShow += "]";
 
             //@008 String einfuegen in Listbox
             String aInsStr = aString;
@@ -564,23 +564,23 @@ void ScColRowNameRangesDlg::UpdateNames()
                                             nCol2, nRow2, nTab2 );
             SCROW q=nRow1+3;
             if(q>nRow2) q=nRow2;
-            strShow.AssignAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
+            strShow = " [";
             if(pDoc!=NULL)
             {
                 rString = pDoc->GetString(nCol1, nRow1, nTab1);
                 strShow += rString;
                 for(SCROW i=nRow1+1;i<=q;i++)
                 {
-                    strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+                    strShow += ", ";
                     rString = pDoc->GetString(nCol1, i, nTab1);
                     strShow += rString;
                 }
             }
             if(q<nRow2)
             {
-                strShow.AppendAscii(RTL_CONSTASCII_STRINGPARAM(", ..."));
+                strShow += ", ...";
             }
-            strShow += ']';
+            strShow += "]";
 
             String aInsStr = aString;
             aInsStr += strShow;

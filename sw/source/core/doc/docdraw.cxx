@@ -556,25 +556,25 @@ void SwDoc::InitDrawModel()
 
     mpDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
 
-    String sLayerNm;
-    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Hell" ));
+    OUString sLayerNm;
+    sLayerNm = "Hell";
     mnHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Heaven" ));
+    sLayerNm = "Heaven";
     mnHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
+    sLayerNm = "Controls";
     mnControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
     // add invisible layers corresponding to the visible ones.
     {
-        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
+        sLayerNm = "InvisibleHell";
         mnInvisibleHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHeaven" ));
+        sLayerNm = "InvisibleHeaven";
         mnInvisibleHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleControls" ));
+        sLayerNm = "InvisibleControls";
         mnInvisibleControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
@@ -625,14 +625,14 @@ void SwDoc::InitDrawModel()
 /** method to notify drawing page view about the invisible layers */
 void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 {
-    String sLayerNm;
-    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
+    OUString sLayerNm;
+    sLayerNm = "InvisibleHell";
     _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
 
-    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHeaven" ));
+    sLayerNm = "InvisibleHeaven";
     _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
 
-    sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleControls" ));
+    sLayerNm = "InvisibleControls";
     _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
 }
 

@@ -92,7 +92,7 @@ SwQueuedPaint *SwPaintQueue::pQueue = 0;
 // saves some settings from the draw view
 class SwDrawViewSave
 {
-    String sLayerNm;
+    OUString sLayerNm;
     SdrView* pDV;
     sal_Bool bPrintControls;
 public:
@@ -586,7 +586,7 @@ SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
 {
     if ( pDV )
     {
-        sLayerNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM("Controls" ) );
+        sLayerNm = "Controls";
         bPrintControls = pDV->IsLayerPrintable( sLayerNm );
     }
 }
@@ -612,8 +612,8 @@ void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
     if ( HasDrawView() )
     {
         SdrView *pDrawView = GetDrawView();
-        String sLayerNm;
-        sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
+        OUString sLayerNm;
+        sLayerNm = "Controls";
         // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
         if ( !IsPreView() )
         {

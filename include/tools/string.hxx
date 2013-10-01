@@ -180,8 +180,7 @@ public:
     UniString&          Assign( sal_Unicode c );
     inline UniString & Assign(char c) // ...but allow "Assign('a')"
         { return Assign(static_cast< sal_Unicode >(c)); }
-    UniString&          AssignAscii( const sal_Char* pAsciiStr );
-    UniString&          AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen );
+
     UniString&          operator =( const UniString& rStr )
                             { return Assign( rStr ); }
     UniString&          operator =( const OUString& rStr )

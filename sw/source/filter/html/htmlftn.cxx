@@ -336,18 +336,18 @@ void SwHTMLWriter::OutFootEndNotes()
         SwTxtFtn *pTxtFtn = (*pFootEndNotes)[i];
         pFmtFtn = &pTxtFtn->GetFtn();
 
-        String sFtnName, sClass;
+        OUString sFtnName, sClass;
         if( pFmtFtn->IsEndNote() )
         {
-            sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
-            sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
-            sFtnName.Append( OUString::number((sal_Int32)(++nEndNote)) );
+            sClass = OOO_STRING_SVTOOLS_HTML_sdendnote;
+            sFtnName = OOO_STRING_SVTOOLS_HTML_sdendnote;
+            sFtnName += OUString::number((sal_Int32)(++nEndNote));
         }
         else
         {
-            sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
-            sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
-            sFtnName.Append( OUString::number((sal_Int32)(++nFootNote)));
+            sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote;
+            sFtnName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
+            sFtnName += OUString::number((sal_Int32)(++nFootNote));
         }
 
         if( bLFPossible )
@@ -427,19 +427,19 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
 {
     const SwEndNoteInfo *pInfo;
 
-    String sFtnName, sClass;
+    OUString sFtnName, sClass;
     if( rFmtFtn.IsEndNote() )
     {
-        sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym );
-        sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
-        sFtnName.Append( OUString::number((sal_Int32)nEndNote) );
+        sClass = OOO_STRING_SVTOOLS_HTML_sdendnote_sym;
+        sFtnName = OOO_STRING_SVTOOLS_HTML_sdendnote;
+        sFtnName += OUString::number((sal_Int32)nEndNote);
         pInfo = &pDoc->GetEndNoteInfo();
     }
     else
     {
-        sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym );
-        sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote );
-        sFtnName.Append( OUString::number((sal_Int32)nFootNote));
+        sClass = OOO_STRING_SVTOOLS_HTML_sdfootnote_sym;
+        sFtnName = OOO_STRING_SVTOOLS_HTML_sdfootnote;
+        sFtnName += OUString::number((sal_Int32)nFootNote);
         pInfo = &pDoc->GetFtnInfo();
     }
 
@@ -449,13 +449,13 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
         switch( nScript )
         {
         case CSS1_OUTMODE_WESTERN:
-            sClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-western") );
+            sClass += "-western";
             break;
         case CSS1_OUTMODE_CJK:
-            sClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-cjk") );
+            sClass += "-cjk";
             break;
         case CSS1_OUTMODE_CTL:
-            sClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-ctl") );
+            sClass += "-ctl";
             break;
         }
     }

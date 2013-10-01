@@ -143,7 +143,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     sal_uInt8                   nOp, nLen, nByte;
     sal_uInt16                  nUINT16;
     double                  fDouble;
-    String                  aString;
+    OUString                aString;
     sal_Bool                    bError = false;
     sal_Bool                    bArrayFormula = false;
     TokenId                 nMerk0;
@@ -634,7 +634,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x58:
             case 0x78:
             case 0x38: // Command-Equivalent Function           [333    ]
-                aString.AssignAscii( "COMM_EQU_FUNC" );
+                aString = "COMM_EQU_FUNC";
                 aIn >> nByte;
                 aString += OUString::number( nByte );
                 aIn >> nByte;

@@ -231,7 +231,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     sal_uInt16          nUINT16;
     sal_Int16           nINT16;
     double          fDouble;
-    String          aString;
+    OUString        aString;
     sal_Bool            bError = false;
     sal_Bool            bArrayFormula = false;
     TokenId         nMerk0;
@@ -693,7 +693,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x58:
             case 0x78:
             case 0x38: // Command-Equivalent Function           [333    ]
-                aString.AssignAscii( "COMM_EQU_FUNC" );
+                aString = "COMM_EQU_FUNC";
                 aIn >> nByte;
                 aString += OUString::number( nByte );
                 aIn >> nByte;
@@ -1779,7 +1779,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
     sal_uInt8        nByte;
     sal_uInt16      nUINT16;
     double      fDouble;
-    String      aString;
+    OUString    aString;
     ScMatrix*   pMatrix;
 
     aIn >> nByte >> nUINT16;

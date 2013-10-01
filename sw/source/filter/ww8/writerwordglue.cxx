@@ -48,8 +48,6 @@
 #include <breakit.hxx>
 #include <i18nlangtag/mslangid.hxx>
 
-#define ASSIGN_CONST_ASC(s) AssignAscii(s)
-
 using namespace css;
 
 namespace myImplHelpers
@@ -314,14 +312,11 @@ namespace myImplHelpers
         return pColl ? 0 : maHelper.MakeStyle(aName);
     }
 
-    String FindBestMSSubstituteFont(const String &rFont)
+    OUString FindBestMSSubstituteFont(const OUString &rFont)
     {
-        String sRet;
-        if ( IsStarSymbol(rFont) )
-            sRet.ASSIGN_CONST_ASC("Arial Unicode MS");
-        else
-            sRet = GetSubsFontName(rFont, SUBSFONT_ONLYONE | SUBSFONT_MS);
-        return sRet;
+        if (IsStarSymbol(rFont))
+            return OUString("Arial Unicode MS");
+        return GetSubsFontName(rFont, SUBSFONT_ONLYONE | SUBSFONT_MS);
     }
 
     //Utility to remove entries before a given starting position

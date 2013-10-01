@@ -768,7 +768,6 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     m_pStartEdit->SetValue( rNumFmt.GetStart() );
 
     // create pool formats for headlines
-    String sStr;
     sal_uInt16 i;
     for( i = 0; i < MAXLEVEL; ++i )
     {
@@ -776,7 +775,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
                                     static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), aEmptyStr ));
         m_pLevelLB->InsertEntry( OUString::number(i + 1) );
     }
-    sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "1 - " ));
+    OUString sStr("1 - ");
     sStr += OUString::number(MAXLEVEL);
     m_pLevelLB->InsertEntry( sStr );
 

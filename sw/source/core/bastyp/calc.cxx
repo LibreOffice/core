@@ -91,7 +91,7 @@ struct _CalcOp
 {
     union{
         const sal_Char* pName;
-        const String* pUName;
+        const OUString* pUName;
     };
     SwCalcOper eOp;
 };
@@ -157,16 +157,16 @@ static int SAL_CALL OperatorCompare( const void *pFirst, const void *pSecond)
     if( CALC_NAME == ((_CalcOp*)pFirst)->eOp )
     {
         if( CALC_NAME == ((_CalcOp*)pSecond)->eOp )
-            nRet = ((_CalcOp*)pFirst)->pUName->CompareTo(
+            nRet = ((_CalcOp*)pFirst)->pUName->compareTo(
                    *((_CalcOp*)pSecond)->pUName );
         else
-            nRet = ((_CalcOp*)pFirst)->pUName->CompareToAscii(
+            nRet = ((_CalcOp*)pFirst)->pUName->compareToAscii(
                    ((_CalcOp*)pSecond)->pName );
     }
     else
     {
         if( CALC_NAME == ((_CalcOp*)pSecond)->eOp )
-            nRet = -1 * ((_CalcOp*)pSecond)->pUName->CompareToAscii(
+            nRet = -1 * ((_CalcOp*)pSecond)->pUName->compareToAscii(
                         ((_CalcOp*)pFirst)->pName );
         else
             nRet = strcmp( ((_CalcOp*)pFirst)->pName,
@@ -176,7 +176,7 @@ static int SAL_CALL OperatorCompare( const void *pFirst, const void *pSecond)
 }
 }// extern "C"
 
-_CalcOp* FindOperator( const String& rSrch )
+_CalcOp* FindOperator( const OUString& rSrch )
 {
     _CalcOp aSrch;
     aSrch.pUName = &rSrch;
@@ -189,13 +189,13 @@ _CalcOp* FindOperator( const String& rSrch )
                               OperatorCompare );
 }
 
-SwHash* Find( const String& rStr, SwHash** ppTable,
+SwHash* Find( const OUString& rStr, SwHash** ppTable,
               sal_uInt16 nTblSize, sal_uInt16* pPos )
 {
     sal_uLong ii = 0;
-    for( xub_StrLen n = 0; n < rStr.Len(); ++n )
+    for( sal_Int32 n = 0; n < rStr.getLength(); ++n )
     {
-        ii = ii << 1 ^ rStr.GetChar( n );
+        ii = ii << 1 ^ rStr[n];
     }
     ii %= nTblSize;
 
@@ -241,7 +241,7 @@ SwCalc::SwCalc( SwDoc& rD )
     nListPor( 0 ),
     eError( CALC_NOERR )
 {
-    aErrExpr.aStr.AssignAscii( "~C_ERR~" );
+    aErrExpr.aStr = "~C_ERR~";
     memset( VarTable, 0, sizeof(VarTable) );
     LanguageType eLang = GetDocAppScriptLang( rDoc );
 
@@ -333,7 +333,7 @@ SwCalc::SwCalc( SwDoc& rD )
 
     for( n = 0; n < 25; ++n )
     {
-        sTmpStr.AssignAscii( sNTypeTab[ n ] );
+        sTmpStr = OUString::createFromAscii(sNTypeTab[n]);
         VarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, 0 );
     }
 
@@ -358,7 +358,7 @@ SwCalc::SwCalc( SwDoc& rD )
                                         (String)rUserOptions.GetToken( aAdrToken[ n ] ));
 
     nVal.PutString( (String)rUserOptions.GetToken( aAdrToken[ 11 ] ));
-    sTmpStr.AssignAscii( sNTypeTab[ 25 ] );
+    sTmpStr = OUString::createFromAscii(sNTypeTab[25]);
     VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, 0 );
 
 } // SwCalc::SwCalc
@@ -443,7 +443,7 @@ String SwCalc::GetStrResult( double nValue, sal_Bool )
 
 SwCalcExp* SwCalc::VarInsert( const String &rStr )
 {
-    String aStr = pCharClass->lowercase( rStr );
+    OUString aStr = pCharClass->lowercase( rStr );
     return VarLook( aStr, 1 );
 }
 
@@ -452,7 +452,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
     aErrExpr.nValue.SetVoidValue(false);
 
     sal_uInt16 ii = 0;
-    String aStr = pCharClass->lowercase( rStr );
+    OUString aStr = pCharClass->lowercase( rStr );
 
     SwHash* pFnd = Find( aStr, VarTable, TBLSZ, &ii );
 
@@ -608,7 +608,7 @@ void SwCalc::VarChange( const String& rStr, double nValue )
 
 void SwCalc::VarChange( const String& rStr, const SwSbxValue& rValue )
 {
-    String aStr = pCharClass->lowercase( rStr );
+    OUString aStr = pCharClass->lowercase( rStr );
 
     sal_uInt16 nPos = 0;
     SwCalcExp* pFnd = (SwCalcExp*)Find( aStr, VarTable, TBLSZ, &nPos );
@@ -1566,9 +1566,9 @@ sal_Bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
     return bRet;
 }
 
-SwHash::SwHash( const String& rStr ) :
-    aStr( rStr ),
-    pNext( 0 )
+SwHash::SwHash(const OUString& rStr)
+    : aStr(rStr)
+    , pNext(0)
 {
 }
 
@@ -1584,11 +1584,11 @@ void DeleteHashTable( SwHash **ppHashTable, sal_uInt16 nCount )
     delete [] ppHashTable;
 }
 
-SwCalcExp::SwCalcExp( const String& rStr, const SwSbxValue& rVal,
-                      const SwFieldType* pType )
-    : SwHash( rStr ),
-    nValue( rVal ),
-    pFldType( pType )
+SwCalcExp::SwCalcExp(const OUString& rStr, const SwSbxValue& rVal,
+                      const SwFieldType* pType)
+    : SwHash(rStr)
+    , nValue(rVal)
+    , pFldType(pType)
 {
 }
 

@@ -1461,8 +1461,8 @@ void SwHTMLParser::InsertInput()
     if( !pFormImpl || !pFormImpl->GetFormComps().is() )
         return;
 
-    String sImgSrc, aId, aClass, aStyle, sText;
-    String sName;
+    String sImgSrc, aId, aClass, aStyle, sName;
+    OUString sText;
     SvxMacroTableDtor aMacroTbl;
     std::vector<OUString> aUnoMacroTbl;
     std::vector<OUString> aUnoMacroParamTbl;
@@ -1705,7 +1705,7 @@ void SwHTMLParser::InsertInput()
         }
     }
 
-    aTmp <<= OUString(sText);
+    aTmp <<= sText;
 
     Size aSz( 0, 0 );       // defaults
     Size aTextSz( 0, 0 );   // Text-Size
@@ -1780,18 +1780,18 @@ void SwHTMLParser::InsertInput()
                 break;
             case HTML_IT_SUBMIT:
                 eButtonType = FormButtonType_SUBMIT;
-                if( !sText.Len() )
-                    sText.AssignAscii( OOO_STRING_SVTOOLS_HTML_IT_submit );
+                if (sText.isEmpty())
+                    sText = OOO_STRING_SVTOOLS_HTML_IT_submit;
                 break;
             case HTML_IT_RESET:
                 eButtonType = FormButtonType_RESET;
-                if( !sText.Len() )
-                    sText.AssignAscii( OOO_STRING_SVTOOLS_HTML_IT_reset );
+                if (sText.isEmpty())
+                    sText = OOO_STRING_SVTOOLS_HTML_IT_reset;
                 break;
             default:
                 ;
             }
-            aTmp <<= OUString(sText);
+            aTmp <<= sText;
             xPropSet->setPropertyValue("Label",
                                         aTmp );
 
