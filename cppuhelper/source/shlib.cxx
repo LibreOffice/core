@@ -409,6 +409,7 @@ void SAL_CALL writeSharedLibComponentInfo(
     Reference< registry::XRegistryKey > const & xKey )
     SAL_THROW( (registry::CannotRegisterImplementationException) )
 {
+    (void) rPath;
     assert(rPath.isEmpty());
     oslModule lib = osl_loadModule(
         uri.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
