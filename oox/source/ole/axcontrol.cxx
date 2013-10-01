@@ -80,7 +80,6 @@ const sal_uInt32 COMCTL_ID_COMMONDATA       = 0xABCDEF01;
 const sal_uInt32 COMCTL_COMMON_FLATBORDER   = 0x00000001;
 const sal_uInt32 COMCTL_COMMON_ENABLED      = 0x00000002;
 const sal_uInt32 COMCTL_COMMON_3DBORDER     = 0x00000004;
-const sal_uInt32 COMCTL_COMMON_OLEDROPMAN   = 0x00002000;
 
 const sal_uInt32 COMCTL_ID_COMPLEXDATA      = 0xBDECDE1F;
 const sal_uInt32 COMCTL_COMPLEX_FONT        = 0x00000001;
@@ -88,9 +87,6 @@ const sal_uInt32 COMCTL_COMPLEX_MOUSEICON   = 0x00000002;
 
 const sal_uInt32 COMCTL_ID_SCROLLBAR_60     = 0x99470A83;
 const sal_uInt32 COMCTL_SCROLLBAR_HOR       = 0x00000010;
-const sal_Int32 COMCTL_SCROLLBAR_3D         = 0;
-const sal_Int32 COMCTL_SCROLLBAR_FLAT       = 1;
-const sal_Int32 COMCTL_SCROLLBAR_TRACK3D    = 2;
 
 const sal_uInt32 COMCTL_ID_PROGRESSBAR_50   = 0xE6E17E84;
 const sal_uInt32 COMCTL_ID_PROGRESSBAR_60   = 0x97AB8A01;
@@ -103,7 +99,6 @@ const sal_uInt32 AX_IMAGE_DEFFLAGS          = 0x0000001B;
 const sal_uInt32 AX_MORPHDATA_DEFFLAGS      = 0x2C80081B;
 const sal_uInt32 AX_SPINBUTTON_DEFFLAGS     = 0x0000001B;
 const sal_uInt32 AX_SCROLLBAR_DEFFLAGS      = 0x0000001B;
-const sal_uInt32 AX_TABSTRIP_DEFFLAGS       = 0x0000001B;
 
 const sal_uInt16 AX_POS_TOPLEFT             = 0;
 const sal_uInt16 AX_POS_TOP                 = 1;
@@ -140,14 +135,11 @@ const sal_Int32 AX_ORIENTATION_VERTICAL     = 0;
 const sal_Int32 AX_ORIENTATION_HORIZONTAL   = 1;
 
 const sal_Int32 AX_PROPTHUMB_ON             = -1;
-const sal_Int32 AX_PROPTHUMB_OFF            = 0;
 
 const sal_uInt32 AX_TABSTRIP_TABS           = 0;
-const sal_uInt32 AX_TABSTRIP_BUTTONS        = 1;
 const sal_uInt32 AX_TABSTRIP_NONE           = 2;
 
 const sal_uInt32 AX_CONTAINER_ENABLED       = 0x00000004;
-const sal_uInt32 AX_CONTAINER_HASDESIGNEXT  = 0x00004000;
 const sal_uInt32 AX_CONTAINER_NOCLASSTABLE  = 0x00008000;
 
 const sal_uInt32 AX_CONTAINER_DEFFLAGS      = 0x00000004;
@@ -156,14 +148,8 @@ const sal_Int32 AX_CONTAINER_DEFWIDTH       = 4000;
 const sal_Int32 AX_CONTAINER_DEFHEIGHT      = 3000;
 
 const sal_Int32 AX_CONTAINER_CYCLEALL       = 0;
-const sal_Int32 AX_CONTAINER_CYCLECURRENT   = 2;
 
 const sal_Int32 AX_CONTAINER_SCR_NONE       = 0x00;
-const sal_Int32 AX_CONTAINER_SCR_HOR        = 0x01;
-const sal_Int32 AX_CONTAINER_SCR_VER        = 0x02;
-const sal_Int32 AX_CONTAINER_SCR_KEEP_HOR   = 0x04;
-const sal_Int32 AX_CONTAINER_SCR_KEEP_VER   = 0x08;
-const sal_Int32 AX_CONTAINER_SCR_SHOW_LEFT  = 0x10;
 
 // ----------------------------------------------------------------------------
 
