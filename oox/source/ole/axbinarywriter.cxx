@@ -17,7 +17,6 @@ namespace ole {
 
 namespace {
 
-const sal_uInt32 AX_STRING_SIZEMASK         = 0x7FFFFFFF;
 const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 
 } // namespace
