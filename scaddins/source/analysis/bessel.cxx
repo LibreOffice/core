@@ -31,14 +31,9 @@ namespace analysis {
 // ============================================================================
 
 const double f_PI       = 3.1415926535897932385;
-const double f_2_PI     = 2.0 * f_PI;
 const double f_PI_DIV_2 = f_PI / 2.0;
 const double f_PI_DIV_4 = f_PI / 4.0;
 const double f_2_DIV_PI = 2.0 / f_PI;
-
-const double THRESHOLD  = 30.0;     // Threshold for usage of approximation formula.
-const double MAXEPSILON = 1e-10;    // Maximum epsilon for end of iteration.
-const sal_Int32 MAXITER = 100;      // Maximum number of iterations.
 
 // ============================================================================
 // BESSEL J
