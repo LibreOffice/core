@@ -39,16 +39,6 @@ const sal_Int32 BIFF_RK_100FLAG             = 0x00000001;
 const sal_Int32 BIFF_RK_INTFLAG             = 0x00000002;
 const sal_Int32 BIFF_RK_VALUEMASK           = 0xFFFFFFFC;
 
-const sal_Int32 BITMAPFILEHEADER_SIZE       = 14;
-const sal_Int32 BITMAPCOREHEADER_SIZE       = 12;
-const sal_Int32 BITMAPINFOHEADER_SIZE       = 40;
-
-const sal_uInt16 BIFF_IMGDATA_WMF           = 2;
-const sal_uInt16 BIFF_IMGDATA_DIB           = 9;
-const sal_uInt16 BIFF_IMGDATA_NATIVE        = 14;
-
-// ----------------------------------------------------------------------------
-
 union DecodedDouble
 {
     double              mfValue;
