@@ -134,11 +134,6 @@ double const nRoundVal[] = {
     0.5e-15,0.5e-16
 };
 
-double const nKorrVal[] = {
-    9, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, 9e-8,
-    9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14
-};
-
 // First character may be any alphabetic or underscore.
 const sal_Int32 coStartFlags =
         i18n::KParseTokens::ANY_LETTER_OR_NUMBER |
