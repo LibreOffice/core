@@ -133,32 +133,9 @@ enum
     GRP_WEB_VAR_END     =  GRP_WEB_VAR_BEGIN + 1
 };
 
-/*--------------------------------------------------------------------
-    Description: formats in the correct order
- --------------------------------------------------------------------*/
-
-static const sal_uInt16 aGetFmt[] =
-{
-// at first the order has to match the ResourceIds for FMT_GETVAR_???
-    0
-};
-
-static const sal_uInt16 aUsrFmt[] =
-{
-// at first the order has to match the ResourceIds for FMT_SETVAR_???
-    0,
-    nsSwExtendedSubType::SUB_CMD
-};
-
-static const sal_uInt16 aDBFmt[] =
-{
-// at first the order has to match the ResourceIds for FMT_DBFLD_???
-    nsSwExtendedSubType::SUB_OWN_FMT
-};
-
-static const sal_uInt16 VF_COUNT        = sizeof(aGetFmt) / sizeof(sal_uInt16);
-static const sal_uInt16 VF_USR_COUNT    = sizeof(aUsrFmt) / sizeof(sal_uInt16);
-static const sal_uInt16 VF_DB_COUNT     = sizeof(aDBFmt)  / sizeof(sal_uInt16);
+static const sal_uInt16 VF_COUNT = 1; // { 0 }
+static const sal_uInt16 VF_USR_COUNT = 2; // { 0, nsSwExtendedSubType::SUB_CMD }
+static const sal_uInt16 VF_DB_COUNT = 1; // { nsSwExtendedSubType::SUB_OWN_FMT }
 
 /*--------------------------------------------------------------------
     Description: field types and subtypes
