@@ -59,11 +59,9 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_X   = 9502;
 const sal_uInt16 AUTOFORMAT_ID_504      = 9801;
 const sal_uInt16 AUTOFORMAT_DATA_ID_504 = 9802;
 
-const sal_uInt16 AUTOFORMAT_ID_552      = 9901;
 const sal_uInt16 AUTOFORMAT_DATA_ID_552 = 9902;
 
 // --- from 641 on: CJK and CTL font settings
-const sal_uInt16 AUTOFORMAT_ID_641      = 10001;
 const sal_uInt16 AUTOFORMAT_DATA_ID_641 = 10002;
 
 // --- from 680/dr14 on: diagonal frame lines
@@ -72,7 +70,6 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
 // --- from 680/dr25 on: store strings as UTF-8
 const sal_uInt16 AUTOFORMAT_ID_680DR25      = 10021;
-const sal_uInt16 AUTOFORMAT_DATA_ID_680DR25 = 10022;
 
 // --- from DEV300/overline2 on: overline
 const sal_uInt16 AUTOFORMAT_ID_300OVRLN      = 10031;
