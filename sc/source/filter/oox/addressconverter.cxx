@@ -70,20 +70,6 @@ const sal_Int32 BIFF8_MAXCOL        = BIFF5_MAXCOL;
 const sal_Int32 BIFF8_MAXROW        = 65535;
 const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
-const sal_Unicode BIFF_URL_DRIVE    = '\x01';       /// DOS drive letter or UNC path.
-const sal_Unicode BIFF_URL_ROOT     = '\x02';       /// Root directory of current drive.
-const sal_Unicode BIFF_URL_SUBDIR   = '\x03';       /// Subdirectory delimiter.
-const sal_Unicode BIFF_URL_PARENT   = '\x04';       /// Parent directory.
-const sal_Unicode BIFF_URL_RAW      = '\x05';       /// Unencoded URL.
-const sal_Unicode BIFF_URL_INSTALL  = '\x06';       /// Application installation directory.
-const sal_Unicode BIFF_URL_INSTALL2 = '\x07';       /// Alternative application installation directory.
-const sal_Unicode BIFF_URL_LIBRARY  = '\x08';       /// Library directory in application installation.
-const sal_Unicode BIFF4_URL_SHEET   = '\x09';       /// BIFF4 internal sheet.
-const sal_Unicode BIFF_URL_UNC      = '@';          /// UNC path root.
-
-const sal_Unicode BIFF_DCON_ENCODED = '\x01';       /// First character of an encoded path from DCON* records.
-const sal_Unicode BIFF_DCON_INTERN  = '\x02';       /// First character of an encoded sheet name from DCON* records.
-
 } // namespace
 
 // ============================================================================
