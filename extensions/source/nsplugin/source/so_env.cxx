@@ -434,14 +434,11 @@ char* NSP_getProductName()
             strcpy(productName, pStart);
     }
     fclose(fp);
-    if ((*productName == 0) ||
-        (0 != STRNICMP(productName, "StarOffice", sizeof("StarOffice"))))
+    if (*productName == 0)
     {
         strcpy(productName, PLUGIN_NAME);
         return productName;
     }
-    memset(productName, 0, sizeof(productName));
-    strcat(productName, "StarOffice/StarSuite");
     return productName;
 }
 
