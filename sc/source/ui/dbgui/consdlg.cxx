@@ -82,9 +82,7 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         pRangeUtil      ( new ScRangeUtil ),
         pAreaData       ( NULL ),
         nAreaDataCount  ( 0 ),
-        nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
-
-        pRefInputEdit   ( pEdDataArea )
+        nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) )
 {
     get(pLbFunc,"func");
     get(pLbConsAreas,"consareas");
@@ -92,6 +90,8 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
     get(pLbDataArea,"lbdataarea");
     get(pEdDataArea,"eddataarea");
     get(pRbDataArea,"rbdataarea");
+
+    pRefInputEdit = pEdDataArea;
 
     get(pLbDestArea,"lbdestarea");
     get(pEdDestArea,"eddestarea");
