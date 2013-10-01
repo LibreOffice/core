@@ -36,10 +36,6 @@ namespace writerfilter {
 namespace dmapper{
 namespace ConversionHelper{
 
-const sal_Int16  API_LINE_SOLID    = 0;
-const sal_Int16  API_LINE_DOTTED   = 1;
-const sal_Int16  API_LINE_DASHED   = 2;
-
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
 sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine2& rToFill )
