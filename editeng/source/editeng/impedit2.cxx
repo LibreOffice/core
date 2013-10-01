@@ -4162,10 +4162,13 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex
                         ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
     sal_uInt16 nCurIndex = 0;
-    OSL_ENSURE( pPortion->GetLines().Count(), "Empty ParaPortion in GetEditCursor!" );
+    size_t nLineCount = pPortion->GetLines().Count();
+    OSL_ENSURE( nLineCount, "Empty ParaPortion in GetEditCursor!" );
+    if (nLineCount == 0)
+        return Rectangle();
     const EditLine* pLine = NULL;
     sal_Bool bEOL = ( nFlags & GETCRSR_ENDOFLINE ) ? sal_True : sal_False;
-    for ( sal_uInt16 nLine = 0; nLine < pPortion->GetLines().Count(); nLine++ )
+    for (size_t nLine = 0; nLine < nLineCount; ++nLine)
     {
         const EditLine* pTmpLine = pPortion->GetLines()[nLine];
         if ( ( pTmpLine->GetStart() == nIndex ) || ( pTmpLine->IsIn( nIndex, bEOL ) ) )
@@ -4184,7 +4187,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_uInt16 nIndex
         // Cursor at the End of the paragraph.
         OSL_ENSURE( nIndex == nCurIndex, "Index dead wrong in GetEditCursor!" );
 
-        pLine = pPortion->GetLines()[pPortion->GetLines().Count()-1];
+        pLine = pPortion->GetLines()[nLineCount-1];
         nY -= pLine->GetHeight();
         if ( !aStatus.IsOutliner() )
             nY -= nSBL;
