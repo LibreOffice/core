@@ -136,12 +136,6 @@ enum
 /*--------------------------------------------------------------------
     Description: formats in the correct order
  --------------------------------------------------------------------*/
-static const sal_uInt16 aSetFmt[] =
-{
-// at first the order has to match the ResourceIds for FMT_SETVAR_???
-    0,
-    0
-};
 
 static const sal_uInt16 aGetFmt[] =
 {
