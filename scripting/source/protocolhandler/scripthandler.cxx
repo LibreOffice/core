@@ -66,8 +66,6 @@ namespace scripting_protocolhandler
 
 const sal_Char * const MYSERVICENAME = "com.sun.star.frame.ProtocolHandler";
 const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
-const sal_Char * MYSCHEME = "vnd.sun.star.script";
-const sal_Int32 MYSCHEME_LEN = 20;
 
 void SAL_CALL ScriptProtocolHandler::initialize(
     const css::uno::Sequence < css::uno::Any >& aArguments )
@@ -106,7 +104,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
         xFac->parse( aURL.Complete ), UNO_QUERY );
     if ( uriRef.is() )
     {
-        if ( uriRef->getScheme().equals( OUString::createFromAscii( ::scripting_protocolhandler::MYSCHEME ) ) )
+        if ( uriRef->getScheme() == "vnd.sun.star.script" )
         {
             xDispatcher = this;
         }
