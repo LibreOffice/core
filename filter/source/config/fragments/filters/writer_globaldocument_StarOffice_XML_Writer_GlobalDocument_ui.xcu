@@ -17,6 +17,6 @@
 -->
     <node oor:name="writer_globaldocument_StarOffice_XML_Writer_GlobalDocument">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Master Document</value>
+            <value xml:lang="en-US">OpenOffice.org 1.0 Master Document</value>
         </prop>
     </node>

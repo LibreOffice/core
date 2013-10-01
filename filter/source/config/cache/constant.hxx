@@ -94,8 +94,6 @@
 #define  CFGDIRECTKEY_OFFICELOCALE          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/L10N/ooLocale"                           )
 #define  CFGDIRECTKEY_DEFAULTFRAMELOADER    _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader")
 #define  CFGDIRECTKEY_OFFICELOCALE          _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/L10N/ooLocale"                           )
-#define  CFGDIRECTKEY_FORMATNAME            _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooXMLFileFormatName"             )
-#define  CFGDIRECTKEY_FORMATVERSION         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooXMLFileFormatVersion"          )
 #define  CFGDIRECTKEY_PRODUCTNAME           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooName"                          )
 
 // Note that these flag bits have parallel names in
@@ -170,8 +168,6 @@
 /** @short  some default values.
  */
 #define  DEFAULT_OFFICELOCALE       _FILTER_CONFIG_FROM_ASCII_("en-US")
-#define  DEFAULT_FORMATNAME         _FILTER_CONFIG_FROM_ASCII_("OpenOffice.org")
-#define  DEFAULT_FORMATVERSION      _FILTER_CONFIG_FROM_ASCII_("1.0")
 
 /** @short  used for the queries of the FilterFactory service.
  */

@@ -223,14 +223,6 @@ class FilterCache : public BaseLock
         OUString m_sActLocale;
 
         //---------------------------------------
-        /** TODO */
-        OUString m_sFormatName;
-
-        //---------------------------------------
-        /** TODO */
-        OUString m_sFormatVersion;
-
-        //---------------------------------------
         /** @short  contains status, which cache items/properties
                     was already loaded from the underlying configuration.
 

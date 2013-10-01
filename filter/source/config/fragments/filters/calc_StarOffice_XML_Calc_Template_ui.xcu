@@ -17,6 +17,6 @@
 -->
     <node oor:name="calc_StarOffice_XML_Calc_Template">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Spreadsheet Template</value>
+            <value xml:lang="en-US">OpenOffice.org 1.0 Spreadsheet Template</value>
         </prop>
     </node>

@@ -95,8 +95,6 @@ FilterCache* FilterCache::clone() const
     pClone->m_lURLPattern2Types          = m_lURLPattern2Types;
 
     pClone->m_sActLocale                 = m_sActLocale;
-    pClone->m_sFormatName                = m_sFormatName;
-    pClone->m_sFormatVersion             = m_sFormatVersion;
 
     pClone->m_eFillState                 = m_eFillState;
 
@@ -152,8 +150,6 @@ void FilterCache::takeOver(const FilterCache& rClone)
     m_lChangedContentHandlers.clear();
 
     m_sActLocale     = rClone.m_sActLocale;
-    m_sFormatName    = rClone.m_sFormatName;
-    m_sFormatVersion = rClone.m_sFormatVersion;
 
     m_eFillState     = rClone.m_eFillState;
 
@@ -207,23 +203,6 @@ void FilterCache::load(EFillState eRequired,
         {
             _FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify office locale => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_OFFICELOCALE));
             m_sActLocale = DEFAULT_OFFICELOCALE;
-        }
-
-        impl_getDirectCFGValue(CFGDIRECTKEY_FORMATNAME) >>= m_sFormatName;
-        if (m_sFormatName.isEmpty())
-            impl_getDirectCFGValue(CFGDIRECTKEY_PRODUCTNAME) >>= m_sFormatName;
-
-        if (m_sFormatName.isEmpty())
-        {
-            _FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify format name => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_FORMATNAME));
-            m_sFormatName = DEFAULT_FORMATNAME;
-        }
-
-        impl_getDirectCFGValue(CFGDIRECTKEY_FORMATVERSION) >>= m_sFormatVersion;
-        if (m_sFormatVersion.isEmpty())
-        {
-            _FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify format version => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_FORMATVERSION));
-            m_sFormatVersion = DEFAULT_FORMATVERSION;
         }
 
         // Support the old configuration support. Read it only one times during office runtime!
@@ -1580,8 +1559,6 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
 
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    OUString sFormatName    = m_sFormatName   ;
-    OUString sFormatVersion = m_sFormatVersion;
     OUString sActLocale     = m_sActLocale    ;
     aLock.clear();
     // <- SAFE ----------------------------------
@@ -1595,9 +1572,6 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
           ::comphelper::SequenceAsVector< OUString >::const_iterator pLocale ;
           ::comphelper::SequenceAsHashMap                                   lUINames;
 
-    const char FORMATNAME_VAR[] = "%productname%";
-    const char FORMATVERSION_VAR[] = "%formatversion%";
-    // patch %PRODUCTNAME and %FORMATNAME
     for (  pLocale  = lLocales.begin();
            pLocale != lLocales.end()  ;
          ++pLocale                    )
@@ -1606,21 +1580,6 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
 
         OUString sValue;
         xUIName->getByName(sLocale) >>= sValue;
-
-        // replace %productname%
-        sal_Int32 nIndex = sValue.indexOf(FORMATNAME_VAR);
-        while(nIndex != -1)
-        {
-            sValue = sValue.replaceAt(nIndex, RTL_CONSTASCII_LENGTH(FORMATNAME_VAR), sFormatName);
-            nIndex = sValue.indexOf(FORMATNAME_VAR, nIndex);
-        }
-        // replace %formatversion%
-        nIndex = sValue.indexOf(FORMATVERSION_VAR);
-        while(nIndex != -1)
-        {
-            sValue = sValue.replaceAt(nIndex, RTL_CONSTASCII_LENGTH(FORMATVERSION_VAR), sFormatVersion);
-            nIndex = sValue.indexOf(FORMATVERSION_VAR, nIndex);
-        }
 
         lUINames[sLocale] <<= sValue;
     }

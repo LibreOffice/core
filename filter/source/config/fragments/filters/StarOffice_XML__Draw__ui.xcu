@@ -17,6 +17,6 @@
 -->
     <node oor:name="StarOffice XML (Draw)">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Drawing</value>
+            <value xml:lang="en-US">OpenOffice.org 1.0 Drawing</value>
         </prop>
     </node>

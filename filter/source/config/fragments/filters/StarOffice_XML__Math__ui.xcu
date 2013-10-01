@@ -17,6 +17,6 @@
 -->
     <node oor:name="StarOffice XML (Math)">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Formula</value>
+            <value xml:lang="en-US">OpenOffice.org 1.0 Formula</value>
         </prop>
     </node>

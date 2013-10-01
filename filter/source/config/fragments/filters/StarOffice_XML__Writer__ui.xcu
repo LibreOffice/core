@@ -17,6 +17,6 @@
 -->
     <node oor:name="StarOffice XML (Writer)">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">%productname% %formatversion% Text Document</value>
+            <value xml:lang="en-US">OpenOffice.org 1.0 Text Document</value>
         </prop>
     </node>
