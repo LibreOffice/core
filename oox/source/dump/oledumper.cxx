@@ -114,21 +114,6 @@ void StdPicObject::implDump()
 }
 
 // ============================================================================
-
-namespace {
-
-const sal_uInt32 STDHLINK_HASTARGET         = 0x00000001;   /// Has hyperlink moniker.
-const sal_uInt32 STDHLINK_ABSOLUTE          = 0x00000002;   /// Absolute path.
-const sal_uInt32 STDHLINK_HASLOCATION       = 0x00000008;   /// Has target location.
-const sal_uInt32 STDHLINK_HASDISPLAY        = 0x00000010;   /// Has display string.
-const sal_uInt32 STDHLINK_HASGUID           = 0x00000020;   /// Has identification GUID.
-const sal_uInt32 STDHLINK_HASTIME           = 0x00000040;   /// Has creation time.
-const sal_uInt32 STDHLINK_HASFRAME          = 0x00000080;   /// Has frame.
-const sal_uInt32 STDHLINK_ASSTRING          = 0x00000100;   /// Hyperlink as simple string.
-
-} // namespace
-
-// ============================================================================
 // ============================================================================
 
 OleStreamObject::OleStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
