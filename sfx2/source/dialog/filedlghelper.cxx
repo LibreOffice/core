@@ -1902,7 +1902,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 #define GRF_CONFIG_STR      "   "
 #define STD_CONFIG_STR      "1 "
 
-static void SetToken( OUString rOrigStr, sal_Int32 nToken, sal_Unicode cTok, const OUString& rStr)
+static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, const OUString& rStr)
 {
     const sal_Unicode*  pStr        = rOrigStr.getStr();
     sal_Int32     nLen              = rOrigStr.getLength();
