@@ -265,6 +265,8 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 {
     assert(rPath.isEmpty());
     assert(!xKey.is());
+    (void) rPath;
+    (void) xKey;
 #ifndef DISABLE_DYNLOADING
     OUString moduleUri(uri);
 
