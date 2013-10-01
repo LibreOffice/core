@@ -55,7 +55,6 @@ namespace cui
 {
 const sal_uInt16 COLORMODE_RGB =  0x10;
 const sal_uInt16 COLORMODE_HSV =  0x20;
-const sal_uInt16 COLORMODE_CMYK = 0x40;
 
 const sal_uInt16 COLORCOMP_RED   = 0x10;
 const sal_uInt16 COLORCOMP_GREEN = 0x11;
