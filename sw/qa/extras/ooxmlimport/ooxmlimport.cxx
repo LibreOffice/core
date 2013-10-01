@@ -137,6 +137,7 @@ public:
     void testDefaultSectBreakCols();
     void testFdo69636();
     void testChartProp();
+    void testBnc779620();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -238,6 +239,7 @@ void Test::run()
         {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
         {"fdo69636.docx", &Test::testFdo69636},
         {"chart-prop.docx", &Test::testChartProp},
+        {"bnc779620.docx", &Test::testBnc779620},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1582,6 +1584,14 @@ void Test::testChartProp()
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(15236), getProperty<sal_Int32>(xPropertySet, "Width"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8886), getProperty<sal_Int32>(xPropertySet, "Height"));
+}
+
+void Test::testBnc779620()
+{
+    // The problem was that the floating table was imported as a non-floating one.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

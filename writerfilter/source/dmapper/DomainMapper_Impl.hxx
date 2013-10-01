@@ -281,6 +281,22 @@ struct LineNumberSettings
 
 };
 
+/// Contains information about a table that will be potentially converted to a floating one at the section end.
+struct FloatingTableInfo
+{
+    uno::Reference<text::XTextRange> m_xStart;
+    uno::Reference<text::XTextRange> m_xEnd;
+    uno::Sequence<beans::PropertyValue> m_aFrameProperties;
+    sal_Int32 m_nTableWidth;
+
+    FloatingTableInfo(uno::Reference<text::XTextRange> xStart, uno::Reference<text::XTextRange> xEnd, uno::Sequence<beans::PropertyValue> aFrameProperties, sal_Int32 nTableWidth)
+        : m_xStart(xStart),
+        m_xEnd(xEnd),
+        m_aFrameProperties(aFrameProperties),
+        m_nTableWidth(nTableWidth)
+    {
+    }
+};
 
 class DomainMapper;
 class WRITERFILTER_DLLPRIVATE DomainMapper_Impl
@@ -710,6 +726,8 @@ public:
     /// If the next newline should be ignored, used by the special footnote separator paragraph.
     bool m_bIgnoreNextPara;
     bool m_bFrameBtLr; ///< Bottom to top, left to right text frame direction is requested for the current text frame.
+    /// Pending floating tables: they may be converted to text frames at the section end.
+    std::vector<FloatingTableInfo> m_aPendingFloatingTables;
 };
 } //namespace dmapper
 } //namespace writerfilter

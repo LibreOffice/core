@@ -824,19 +824,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
 
-        bool bNoFly = false;
-        if (SectionPropertyMap* pSectionContext = m_rDMapper_Impl.GetSectionContext())
-        {
-            sal_Int32 nTextAreaWidth = pSectionContext->GetPageWidth() - pSectionContext->GetLeftMargin() - pSectionContext->GetRightMargin();
-            sal_Int32 nTableWidth = 0;
-            m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
-            // If the table is wider than the text area, then don't create a fly
-            // for the table: no wrapping will be performed anyway, but multi-page
-            // tables will be broken.
-            bNoFly = nTableWidth >= nTextAreaWidth;
-        }
-
-        bool bFloating = aFrameProperties.hasElements() && !bNoFly;
+        bool bFloating = aFrameProperties.hasElements();
         // Additional checks: if we can do this.
         if (bFloating && (*m_pTableSeq)[0].getLength() > 0 && (*m_pTableSeq)[0][0].getLength() > 0)
         {
@@ -923,7 +911,16 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
             xTableProperties->setPropertyValue("LeftMargin", uno::makeAny(sal_Int32(0)));
 
-            uno::Reference< text::XTextContent > xFrame = m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties);
+            // In case the document ends with a table, we're called after
+            // SectionPropertyMap::CloseSectionGroup(), so we'll have no idea
+            // about the text area width, nor can fix this by delaying the text
+            // frame conversion: just do it here.
+            sal_Int32 nTableWidth = 0;
+            m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
+            if (m_rDMapper_Impl.GetSectionContext())
+                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, aFrameProperties, nTableWidth));
+            else
+                m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties);
         }
     }
 

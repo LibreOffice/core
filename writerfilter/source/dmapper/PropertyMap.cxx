@@ -877,6 +877,21 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
 
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
+    // Text area width is known at the end of a section: decide if tables should be converted or not.
+    std::vector<FloatingTableInfo>& rPendingFloatingTables = rDM_Impl.m_aPendingFloatingTables;
+    sal_Int32 nTextAreaWidth = GetPageWidth() - GetLeftMargin() - GetRightMargin();
+    uno::Reference<text::XTextAppendAndConvert> xBodyText( rDM_Impl.GetBodyText(), uno::UNO_QUERY );
+    for (size_t i = 0; i < rPendingFloatingTables.size(); ++i)
+    {
+        FloatingTableInfo& rInfo = rPendingFloatingTables[i];
+        // If the table is wider than the text area, then don't create a fly
+        // for the table: no wrapping will be performed anyway, but multi-page
+        // tables will be broken.
+        if (rInfo.m_nTableWidth < nTextAreaWidth)
+            xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
+    }
+    rPendingFloatingTables.clear();
+
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     if( m_nLnnMod )
     {
