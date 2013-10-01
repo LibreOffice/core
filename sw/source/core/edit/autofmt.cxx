@@ -72,7 +72,7 @@ using namespace ::com::sun::star;
 //      all other chars are changed to the user configuration
 
 const sal_Unicode pBulletChar[6] = { '+', '*', '-', 0x2013, 0x2014, 0 };
-const int cnPosEnDash = 2, cnPosEmDash = 4, cnPosEnd = 5;
+const int cnPosEnDash = 2, cnPosEmDash = 4;
 
 const sal_Unicode cStarSymbolEnDash = 0x2013;
 const sal_Unicode cStarSymbolEmDash = 0x2014;
