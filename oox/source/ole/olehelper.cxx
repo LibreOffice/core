@@ -81,7 +81,6 @@ const sal_uInt32 OLE_COLORTYPE_BGR          = 0x02000000;
 const sal_uInt32 OLE_COLORTYPE_SYSCOLOR     = 0x80000000;
 
 const sal_uInt32 OLE_PALETTECOLOR_MASK      = 0x0000FFFF;
-const sal_uInt32 OLE_BGRCOLOR_MASK          = 0x00FFFFFF;
 const sal_uInt32 OLE_SYSTEMCOLOR_MASK       = 0x0000FFFF;
 
 
@@ -99,20 +98,7 @@ inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
 
 // ----------------------------------------------------------------------------
 
-const sal_Char OLE_GUID_URLMONIKER[] = "{79EAC9E0-BAF9-11CE-8C82-00AA004BA90B}";
-const sal_Char OLE_GUID_FILEMONIKER[] = "{00000303-0000-0000-C000-000000000046}";
-
 const sal_uInt32 OLE_STDPIC_ID              = 0x0000746C;
-
-const sal_uInt32 OLE_STDHLINK_VERSION       = 2;
-const sal_uInt32 OLE_STDHLINK_HASTARGET     = 0x00000001;   /// Has hyperlink moniker.
-const sal_uInt32 OLE_STDHLINK_ABSOLUTE      = 0x00000002;   /// Absolute path.
-const sal_uInt32 OLE_STDHLINK_HASLOCATION   = 0x00000008;   /// Has target location.
-const sal_uInt32 OLE_STDHLINK_HASDISPLAY    = 0x00000010;   /// Has display string.
-const sal_uInt32 OLE_STDHLINK_HASGUID       = 0x00000020;   /// Has identification GUID.
-const sal_uInt32 OLE_STDHLINK_HASTIME       = 0x00000040;   /// Has creation time.
-const sal_uInt32 OLE_STDHLINK_HASFRAME      = 0x00000080;   /// Has frame.
-const sal_uInt32 OLE_STDHLINK_ASSTRING      = 0x00000100;   /// Hyperlink as simple string.
 
 struct GUIDCNamePair
 {
