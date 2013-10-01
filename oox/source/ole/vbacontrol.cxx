@@ -71,8 +71,6 @@ const sal_uInt16 VBA_SITE_UNKNOWN               = 0x7FFF;
 
 const sal_uInt32 VBA_SITE_TABSTOP               = 0x00000001;
 const sal_uInt32 VBA_SITE_VISIBLE               = 0x00000002;
-const sal_uInt32 VBA_SITE_DEFAULTBUTTON         = 0x00000004;
-const sal_uInt32 VBA_SITE_CANCELBUTTON          = 0x00000008;
 const sal_uInt32 VBA_SITE_OSTREAM               = 0x00000010;
 const sal_uInt32 VBA_SITE_DEFFLAGS              = 0x00000033;
 
