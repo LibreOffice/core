@@ -657,9 +657,9 @@ namespace pcr
             nVal >>= 4;
             if (c<=9) c += '0';
             else c += 'A' - 10;
-            aStr.insert(c,0);
+            aStr.insert(0, c);
         }
-        while (aStr.getLength() < nLength) aStr.insert('0',0);
+        while (aStr.getLength() < nLength) aStr.insert(0, '0');
         return aStr.makeStringAndClear();
     }
 
