@@ -594,6 +594,15 @@ struct AutoStylePoolExport
     AutoStylePoolExport() : mpParent(NULL), mpProperties(NULL) {}
 };
 
+struct StyleComparator
+{
+    bool operator() (const AutoStylePoolExport& a, const AutoStylePoolExport& b)
+    {
+        return (a.mpProperties->GetName() < b.mpProperties->GetName() ||
+                (a.mpProperties->GetName() == b.mpProperties->GetName() && *a.mpParent < *b.mpParent));
+    }
+};
+
 }
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
@@ -653,15 +662,8 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
     if (bHack)
     {
-        struct {
-            bool operator() (AutoStylePoolExport a, AutoStylePoolExport b)
-            {
-                return (a.mpProperties->GetName() < b.mpProperties->GetName() ||
-                        (a.mpProperties->GetName() == b.mpProperties->GetName() && *a.mpParent < *b.mpParent));
-            }
-        } aComparator;
 
-        std::sort(aExpStyles.begin(), aExpStyles.end(), aComparator);
+        std::sort(aExpStyles.begin(), aExpStyles.end(), StyleComparator());
 
         for (size_t i = 0; i < nCount; i++)
         {
