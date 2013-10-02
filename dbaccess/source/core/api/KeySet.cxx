@@ -487,8 +487,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     static OUString aOr(" OR ");
     static OUString aEqual(" = ?");
 
-    // use keys and indexes for exact postioning
-    // first the keys
+    // use keys for exact positioning
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
     OUStringBuffer aCondition("( ");
@@ -500,11 +499,14 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
         aCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aEqual + aAnd);
     }
     aCondition.setLength(aCondition.getLength() - aAnd.getLength());
+    // sCon is (parenthesised) the condition to locate ONE row
+    // e.g. ( colName1 = ? AND colName2 = ? AND colName3 = ? )
     const OUString sCon( aCondition.makeStringAndClear() );
 
-    const Any* pBegin   = rows.getConstArray();
-    const Any* pEnd     = pBegin + rows.getLength();
-
+    // since we need to delete all rows in "rows",
+    // we need to OR as many row locators.
+    const Any* pBegin     = rows.getConstArray();
+    const Any* const pEnd = pBegin + rows.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
         aSql.append(sCon + aOr);
@@ -516,11 +518,17 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
+    // now, fill in the parameters in the row locators
     pBegin  = rows.getConstArray();
     sal_Int32 i=1;
     for(;pBegin != pEnd;++pBegin)
     {
         m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(*pBegin));
+        // LEM FIXME: what happens if m_aKeyIter == m_aKeyMap.end() ?
+        //            the whole operation fails because there are unfilled parameters
+        //            the remaining rows *are* deleted?
+        //            check what happens vs what is supposed to happen
+        //            (cf documentation of ::com::sun::star::sdbcx::XDeleteRows)
         if(m_aKeyIter != m_aKeyMap.end())
         {
             connectivity::ORowVector< ORowSetValue >::Vector::iterator aKeyIter = m_aKeyIter->second.first->get().begin();
@@ -539,7 +547,6 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     if(bOk)
     {
         pBegin  = rows.getConstArray();
-        pEnd    = pBegin + rows.getLength();
 
         for(;pBegin != pEnd;++pBegin)
         {
