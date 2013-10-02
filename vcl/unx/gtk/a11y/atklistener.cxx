@@ -33,6 +33,7 @@
 
 #include "atklistener.hxx"
 #include "atkwrapper.hxx"
+#include "vcl/svapp.hxx"
 
 #include <rtl/ref.hxx>
 #include <stdio.h>
@@ -66,6 +67,23 @@ AtkStateType mapState( const uno::Any &rAny )
 
 /*****************************************************************************/
 
+extern "C" {
+    // rhbz#1001768 - down to horrific problems releasing the solar mutex
+    // while destroying a Window - which occurs inside these notifications.
+    static gint
+    idle_defunc_state_change( AtkObject *atk_obj )
+    {
+        SolarMutexGuard aGuard;
+
+        // This is an equivalent to a state change to DEFUNC(T).
+        atk_object_notify_state_change( atk_obj, ATK_STATE_DEFUNCT, TRUE );
+        if( atk_get_focus_object() == atk_obj )
+            atk_focus_tracker_notify( NULL );
+        g_object_unref( G_OBJECT( atk_obj ) );
+        return FALSE;
+    }
+}
+
 // XEventListener implementation
 void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeException)
 {
@@ -77,11 +95,8 @@ void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeExcep
         // global mutex
         atk_object_wrapper_dispose( mpWrapper );
 
-        // This is an equivalent to a state change to DEFUNC(T).
-        atk_object_notify_state_change( atk_obj, ATK_STATE_DEFUNCT, TRUE );
-
-        if( atk_get_focus_object() == atk_obj )
-            atk_focus_tracker_notify( NULL );
+        g_idle_add( (GSourceFunc) idle_defunc_state_change,
+                    g_object_ref( G_OBJECT( atk_obj ) ) );
 
         // Release the wrapper object so that it can vanish ..
         g_object_unref( mpWrapper );
