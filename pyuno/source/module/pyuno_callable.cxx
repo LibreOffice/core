@@ -67,7 +67,6 @@ PyObject* PyUNO_callable_call(
     Sequence<short> aOutParamIndex;
     Sequence<Any> aOutParam;
     Sequence<Any> aParams;
-    Sequence<Type> aParamTypes;
     Any any_params;
     Any out_params;
     Any ret_value;
