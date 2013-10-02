@@ -524,7 +524,7 @@ void SwCrsrShell::ExtendedSelectAll(bool bFootnotes)
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
     SwPosition* pPos = m_pCurCrsr->GetPoint();
-    pPos->nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfInserts();
+    pPos->nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfAutotext();
     pPos->nContent.Assign( rNodes.GoNext( &pPos->nNode ), 0 );
     pPos = m_pCurCrsr->GetMark();
     pPos->nNode = rNodes.GetEndOfContent();
@@ -535,7 +535,7 @@ void SwCrsrShell::ExtendedSelectAll(bool bFootnotes)
 bool SwCrsrShell::ExtendedSelectedAll(bool bFootnotes)
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
-    SwNodeIndex nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfInserts();
+    SwNodeIndex nNode = bFootnotes ? rNodes.GetEndOfPostIts() : rNodes.GetEndOfAutotext();
     SwCntntNode* pStart = rNodes.GoNext(&nNode);
 
     nNode = rNodes.GetEndOfContent();
