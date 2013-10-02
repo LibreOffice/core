@@ -145,25 +145,27 @@ public:
             uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
 
             bool bMatched = false;
-                try
+            try
+            {
+                uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex, uno::UNO_QUERY_THROW );
+                uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+                // get the www-standard container
+                uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
+                sal_Int32 nCntrls = xFormControls->getCount();
+                for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
                 {
-                    uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex, uno::UNO_QUERY_THROW );
-                    uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-                    // get the www-standard container
-                    uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
-                    sal_Int32 nCntrls = xFormControls->getCount();
-                    for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
+                    uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                    bMatched = ( xControl == xIf );
+                    if ( bMatched )
                     {
-                        uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
-                        bMatched = ( xControl == xIf );
-                        if ( bMatched )
-                        {
-                            sCodeName = msThisDocumentCodeName;
-                            break;
-                        }
+                        sCodeName = msThisDocumentCodeName;
+                        break;
                     }
                 }
-                catch( uno::Exception& ) {}
+            }
+            catch( uno::Exception& )
+            {
+            }
         }
         // Probably should throw here ( if !bMatched )
         return sCodeName;
