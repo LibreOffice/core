@@ -694,7 +694,6 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                     if ( xNameContainer->hasByName( aOrigContName ) )
                     {
                         uno::Reference< embed::XClassifiedObject > xClassified( xNameContainer, uno::UNO_QUERY_THROW );
-                        uno::Sequence< sal_Int8 > aClassID;
                         if ( MimeConfigurationHelper::ClassIDsEqual( xClassified->getClassID(), MimeConfigurationHelper::GetSequenceClassID( SO3_OUT_CLASSID ) ) )
                         {
                             // this is an OLE object wrongly stored in 5.0 format
