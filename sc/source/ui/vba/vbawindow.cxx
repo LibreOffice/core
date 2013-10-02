@@ -112,7 +112,6 @@ public:
             throw uno::RuntimeException("Cannot obtain view shell", uno::Reference< uno::XInterface >() );
 
         SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-        uno::Sequence<sal_Int32> aSheets( nTabCount );
         SCTAB nIndex = 0;
         const ScMarkData& rMarkData = pViewShell->GetViewData()->GetMarkData();
         sheets.reserve( nTabCount );
