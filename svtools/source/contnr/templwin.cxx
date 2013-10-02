@@ -1298,8 +1298,6 @@ void SvtTemplateWindow::ReadViewSettings()
     if ( aViewSettings.Exists() )
     {
         // read the settings
-        Sequence< NamedValue > aSettings = aViewSettings.GetUserData( );
-
         aViewSettings.GetUserItem( VIEWSETTING_SELECTEDGROUP ) >>= nSelectedGroup;
         aViewSettings.GetUserItem( VIEWSETTING_SELECTEDVIEW ) >>= nSelectedView;
         aViewSettings.GetUserItem( VIEWSETTING_SPLITRATIO ) >>= nSplitRatio;
