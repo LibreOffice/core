@@ -40,8 +40,7 @@ rtl_uString* StringPool::intern( const OUString& rStr )
         return pOrig;
 
     // Set mapping.
-    rtl_uString* pUpper = aRes.first->pData;
-    maToUpperMap.insert(StrIdMapType::value_type(pOrig, pUpper));
+    maToUpperMap.insert(StrIdMapType::value_type(pOrig, *aRes.first));
 
     return pOrig;
 }
@@ -64,7 +63,7 @@ StringPool::StrIdType StringPool::getIdentifierIgnoreCase( const OUString& rStr 
         // Passed string is not in the pool.
         return 0;
 
-    const rtl_uString* pUpper = itUpper->second;
+    const rtl_uString* pUpper = itUpper->second.pData;
     return reinterpret_cast<StrIdType>(pUpper);
 }
 

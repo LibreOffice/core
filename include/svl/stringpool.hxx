@@ -29,7 +29,7 @@ class SVL_DLLPUBLIC StringPool
 {
     typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
     typedef std::pair<StrHashType::iterator, bool> InsertResultType;
-    typedef boost::unordered_map<const rtl_uString*, const rtl_uString*> StrIdMapType;
+    typedef boost::unordered_map<const rtl_uString*, OUString> StrIdMapType;
 
     StrHashType maStrPool;
     StrHashType maStrPoolUpper;
