@@ -49,6 +49,7 @@ public:
     void testFdo37606();
     void testFdo37606Copy();
     void testFdo69862();
+    void testFdo69979();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -70,6 +71,7 @@ void Test::run()
         {"fdo37606.odt", &Test::testFdo37606},
         {"fdo37606.odt", &Test::testFdo37606Copy},
         {"fdo69862.odt", &Test::testFdo69862},
+        {"fdo69979.odt", &Test::testFdo69979},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -371,7 +373,22 @@ void Test::testFdo69862()
 
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
     CPPUNIT_ASSERT_EQUAL(String("H" "\x01" "ello."), rEnd.GetTxt());
+}
 
+void Test::testFdo69979()
+{
+    // The test doc is special in that it starts with a table and it also has a header.
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+
+    pWrtShell->SelAll();
+    SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
+    // This was "", as Ctrl-A also selected headers, but it should not.
+    CPPUNIT_ASSERT_EQUAL(String("A1"), rStart.GetTxt());
+
+    SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+    CPPUNIT_ASSERT_EQUAL(String("Hello."), rEnd.GetTxt());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
