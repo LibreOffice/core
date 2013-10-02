@@ -729,7 +729,6 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
             aSearchRequest[1].Name = "FileFormatVersion";
             aSearchRequest[1].Value <<= nVersion;
 
-            uno::Sequence< beans::PropertyValue > aFilterProps;
             uno::Reference< container::XEnumeration > xFilterEnum =
                                             xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
 
