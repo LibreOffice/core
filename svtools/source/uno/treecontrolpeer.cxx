@@ -461,7 +461,6 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
 
     Reference< XTreeNode > xTempNode;
-    Sequence< XTreeNode > aTempSeq;
 
     const Reference< XTreeNode > *pNodes = 0;
     sal_Int32 nCount = 0;
