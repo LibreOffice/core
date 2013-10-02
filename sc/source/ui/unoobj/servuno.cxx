@@ -188,7 +188,6 @@ public:
         uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
         sal_Int32 nLen = xIndex->getCount();
         bool bMatched = false;
-        uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
         for ( sal_Int32 index = 0; index < nLen; ++index )
         {
             try
