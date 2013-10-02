@@ -609,8 +609,6 @@ std::vector
 
 com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( SQLException )
 {
-    com::sun::star::uno::Sequence< Any > ret;
-
     int len = str.getLength();
     bool doubleQuote = false;
     int brackets = 0;
