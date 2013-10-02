@@ -21,7 +21,7 @@
 #define SW_UNDO_MANAGER_HXX
 
 #include <IDocumentUndoRedo.hxx>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <svx/sdrundomanager.hxx>
 
 class IDocumentDrawModelAccess;
@@ -35,7 +35,7 @@ class UndoManager
     , public SdrUndoManager
 {
 public:
-    UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
+    UndoManager(boost::shared_ptr<SwNodes> pUndoNodes,
         IDocumentDrawModelAccess & rDrawModelAccess,
         IDocumentRedlineAccess & rRedlineAccess,
         IDocumentState & rState);
@@ -90,7 +90,7 @@ private:
     IDocumentState & m_rState;
 
     /// Undo nodes array: content not currently in document
-    ::std::auto_ptr<SwNodes> m_pUndoNodes;
+    boost::shared_ptr<SwNodes> m_xUndoNodes;
 
     bool m_bGroupUndo       : 1;    // TRUE: Undo grouping enabled
     bool m_bDrawUndo        : 1;    // TRUE: Draw Undo enabled

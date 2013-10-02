@@ -48,40 +48,38 @@ using namespace ::com::sun::star;
 
 namespace sw {
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-UndoManager::UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
+UndoManager::UndoManager(boost::shared_ptr<SwNodes> xUndoNodes,
             IDocumentDrawModelAccess & rDrawModelAccess,
             IDocumentRedlineAccess & rRedlineAccess,
             IDocumentState & rState)
     :   m_rDrawModelAccess(rDrawModelAccess)
     ,   m_rRedlineAccess(rRedlineAccess)
     ,   m_rState(rState)
-    ,   m_pUndoNodes(pUndoNodes)
+    ,   m_xUndoNodes(xUndoNodes)
     ,   m_bGroupUndo(true)
     ,   m_bDrawUndo(true)
     ,   m_bLockUndoNoModifiedPosition(false)
     ,   m_UndoSaveMark(MARK_INVALID)
 {
-    OSL_ASSERT(m_pUndoNodes.get());
+    OSL_ASSERT(m_xUndoNodes.get());
     // writer expects it to be disabled initially
     // Undo is enabled by SwEditShell constructor
     SdrUndoManager::EnableUndo(false);
 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SwNodes const& UndoManager::GetUndoNodes() const
 {
-    return *m_pUndoNodes;
+    return *m_xUndoNodes;
 }
 
 SwNodes      & UndoManager::GetUndoNodes()
 {
-    return *m_pUndoNodes;
+    return *m_xUndoNodes;
 }
 
 bool UndoManager::IsUndoNodes(SwNodes const& rNodes) const
 {
-    return & rNodes == m_pUndoNodes.get();
+    return & rNodes == m_xUndoNodes.get();
 }
 
 void UndoManager::DoUndo(bool const bDoUndo)
