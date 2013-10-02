@@ -871,7 +871,6 @@ sal_Int32 ZipFile::recover()
 
     sal_Int64 nLength;
     Sequence < sal_Int8 > aBuffer;
-    Sequence < sal_Int32 > aHeaderOffsets;
 
     try
     {
