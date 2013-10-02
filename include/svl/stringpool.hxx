@@ -13,18 +13,55 @@
 #include "svl/svldllapi.h"
 #include "rtl/ustring.hxx"
 
+#include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
+
+class CharClass;
 
 namespace svl {
 
+/**
+ * Storage for pool of shared strings.  It also provides mapping from
+ * original-cased strings to upper-cased strings for case insensitive
+ * operations.
+ */
 class SVL_DLLPUBLIC StringPool
 {
     typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
+    typedef std::pair<StrHashType::iterator, bool> InsertResultType;
+    typedef boost::unordered_map<const rtl_uString*, const rtl_uString*> StrIdMapType;
+
     StrHashType maStrPool;
+    StrHashType maStrPoolUpper;
+    StrIdMapType maToUpperMap;
+    CharClass* mpCharClass;
+
 public:
     StringPool();
+    StringPool( CharClass* pCharClass );
 
+    /**
+     * Intern a string object into the shared string pool.
+     *
+     * @param rStr string object to intern.
+     *
+     * @return a pointer to the string object stored inside the pool, or NULL
+     *         if the insertion fails.
+     */
     rtl_uString* intern( const OUString& rStr );
+
+    /**
+     * Get a unique ID of string object that's expected to be in the shared
+     * string pool. If the string is not in the pool, NULL is returned.
+     *
+     * @param rStr string object to get the ID of.
+     *
+     * @return unique ID of the string object.
+     */
+    const rtl_uString* getIdentifier( const OUString& rStr ) const;
+
+private:
+    InsertResultType findOrInsert( StrHashType& rPool, const OUString& rStr ) const;
 };
 
 }
