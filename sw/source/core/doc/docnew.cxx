@@ -185,10 +185,8 @@ SwDoc::SwDoc()
     mpAttrPool(new SwAttrPool(this)),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     m_pUndoManager(new ::sw::UndoManager(
-            ::std::auto_ptr<SwNodes>(new SwNodes(this)), *this, *this, *this)),
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+            boost::shared_ptr<SwNodes>(new SwNodes(this)), *this, *this, *this)),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
