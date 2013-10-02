@@ -54,7 +54,8 @@ public:
 
     /**
      * Get a unique ID of string object that's expected to be in the shared
-     * string pool. If the string is not in the pool, NULL is returned.
+     * string pool. If the string is not in the pool, NULL is returned.  The
+     * ID obtained by this method can be used for case sensitive comparison.
      *
      * @param rStr string object to get the ID of.
      *
@@ -62,7 +63,26 @@ public:
      */
     StrIdType getIdentifier( const OUString& rStr ) const;
 
+    /**
+     * Get a unique ID of string object for case insensitive comparison. The
+     * string object is expected to be in the pool.
+     *
+     * @param rStr string object to get the ID of.
+     *
+     * @return unique ID of the string object usable for case insensitive
+     *         comparison.
+     */
     StrIdType getIdentifierIgnoreCase( const OUString& rStr ) const;
+
+    /**
+     * Go through all string objects in the pool, and clear those that are no
+     * longer used outside of the pool.
+     */
+    void purge();
+
+    size_t getCount() const;
+
+    size_t getCountIgnoreCase() const;
 
 private:
     InsertResultType findOrInsert( StrHashType& rPool, const OUString& rStr ) const;

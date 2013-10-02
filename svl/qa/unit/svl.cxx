@@ -36,7 +36,7 @@
 #include "svl/stringpool.hxx"
 #include "unotools/syslocale.hxx"
 
-#define DEBUG_UNIT_TEST 0
+#define DEBUG_UNIT_TEST 1
 
 #if DEBUG_UNIT_TEST
 #include <iostream>
@@ -68,12 +68,14 @@ public:
 
     void testNumberFormat();
     void testStringPool();
+    void testStringPoolPurge();
     void testFdo60915();
     void testI116701();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
     CPPUNIT_TEST(testStringPool);
+//  CPPUNIT_TEST(testStringPoolPurge); // FIXME: String pool's life cycle needs more work.
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST_SUITE_END();
@@ -333,6 +335,24 @@ void Test::testStringPool()
     si2 = aPool.getIdentifierIgnoreCase("ANDY");
     CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si2);
     CPPUNIT_ASSERT_EQUAL(si1, si2);
+}
+
+void Test::testStringPoolPurge()
+{
+    SvtSysLocale aSysLocale;
+    svl::StringPool aPool(aSysLocale.GetCharClassPtr());
+    aPool.intern("Andy");
+    aPool.intern("andy");
+    aPool.intern("ANDY");
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 3);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 1);
+
+    // Since no string objects referencing the pooled strings exist, purging
+    // the pool should empty it.
+    aPool.purge();
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 0);
 }
 
 void Test::checkPreviewString(SvNumberFormatter& aFormatter,

@@ -67,6 +67,60 @@ StringPool::StrIdType StringPool::getIdentifierIgnoreCase( const OUString& rStr 
     return reinterpret_cast<StrIdType>(pUpper);
 }
 
+namespace {
+
+inline sal_Int32 getRefCount( const rtl_uString* p )
+{
+    return (p->refCount & 0x3FFFFFFF);
+}
+
+}
+
+void StringPool::purge()
+{
+    StrHashType aNewStrPool;
+    StrHashType::iterator it = maStrPool.begin(), itEnd = maStrPool.end();
+    for (; it != itEnd; ++it)
+    {
+        const rtl_uString* p = it->pData;
+        if (getRefCount(p) == 1)
+        {
+            // Remove it from the upper string map.  This should unref the
+            // upper string linked to this original string.
+            maToUpperMap.erase(p);
+        }
+        else
+            // Still referenced outside the pool. Keep it.
+            aNewStrPool.insert(*it);
+    }
+
+    maStrPool.swap(aNewStrPool);
+
+    aNewStrPool.clear(); // for re-use.
+
+    // Purge the upper string pool as well.
+    it = maStrPoolUpper.begin();
+    itEnd = maStrPoolUpper.end();
+    for (; it != itEnd; ++it)
+    {
+        const rtl_uString* p = it->pData;
+        if (getRefCount(p) > 1)
+            aNewStrPool.insert(*it);
+    }
+
+    maStrPoolUpper.swap(aNewStrPool);
+}
+
+size_t StringPool::getCount() const
+{
+    return maStrPool.size();
+}
+
+size_t StringPool::getCountIgnoreCase() const
+{
+    return maStrPoolUpper.size();
+}
+
 StringPool::InsertResultType StringPool::findOrInsert( StrHashType& rPool, const OUString& rStr ) const
 {
     StrHashType::iterator it = rPool.find(rStr);
