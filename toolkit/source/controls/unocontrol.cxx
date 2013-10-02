@@ -333,12 +333,11 @@ void UnoControl::updateFromModel()
 // XTypeProvider
 IMPL_IMPLEMENTATION_ID( UnoControl )
 
-void UnoControl::disposeAccessibleContext()
+void
+UnoControl::DisposeAccessibleContext(Reference<XComponent> const& xContextComp)
 {
-    Reference< XComponent > xContextComp( maAccessibleContext.get(), UNO_QUERY );
-    if ( xContextComp.is() )
+    if (xContextComp.is())
     {
-        maAccessibleContext = NULL;
         try
         {
             xContextComp->removeEventListener( this );
@@ -354,6 +353,7 @@ void UnoControl::disposeAccessibleContext()
 void UnoControl::dispose(  ) throw(RuntimeException)
 {
     Reference< XWindowPeer > xPeer;
+    Reference<XComponent> xAccessibleComp;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if( mbDisposePeer )
@@ -361,14 +361,16 @@ void UnoControl::dispose(  ) throw(RuntimeException)
             xPeer = mxPeer;
         }
         setPeer( NULL );
+        xAccessibleComp.set(maAccessibleContext, UNO_QUERY);
+        maAccessibleContext.clear();
     }
     if( xPeer.is() )
     {
         xPeer->dispose();
     }
 
-    // dispose and release our AccessibleContext
-    disposeAccessibleContext();
+    // dispose our AccessibleContext - without Mutex locked
+    DisposeAccessibleContext(xAccessibleComp);
 
     EventObject aDisposeEvent;
     aDisposeEvent.Source = static_cast< XAggregation* >( this );
@@ -1382,6 +1384,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
     ModeChangeEvent aModeChangeEvent;
 
     Reference< XWindow > xWindow;
+    Reference<XComponent> xAccessibleComp;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( bOn == mbDesignMode )
@@ -1390,14 +1393,18 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         // remember this
         mbDesignMode = bOn;
         xWindow = xWindow.query( getPeer() );
-        // dispose our current AccessibleContext, if we have one
-        // (changing the design mode implies having a new implementation for this context,
-        // so the old one must be declared DEFUNC)
-        disposeAccessibleContext();
+
+        xAccessibleComp.set(maAccessibleContext, UNO_QUERY);
+        maAccessibleContext.clear();
 
         aModeChangeEvent.Source = *this;
         aModeChangeEvent.NewMode = mbDesignMode ? OUString("design") : OUString("alive" );
     }
+
+    // dispose current AccessibleContext, if we have one - without Mutex lock
+    // (changing the design mode implies having a new implementation for this context,
+    // so the old one must be declared DEFUNC)
+    DisposeAccessibleContext(xAccessibleComp);
 
     // ajust the visibility of our window
     if ( xWindow.is() )

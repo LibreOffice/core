@@ -124,7 +124,8 @@ protected:
     void                                                                        ImplLockPropertyChangeNotification( const OUString& rPropertyName, bool bLock );
     void                                                                        ImplLockPropertyChangeNotifications( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames, bool bLock );
 
-    void                                                                        disposeAccessibleContext();
+    void DisposeAccessibleContext(::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XComponent> const& xContext);
 
     inline void setPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _xPeer)
     {
