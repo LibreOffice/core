@@ -85,14 +85,6 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
 
 // ============================================================================
 
-namespace {
-
-const sal_uInt16 BIFF_NOTE_VISIBLE          = 0x0002;
-
-} // namespace
-
-// ============================================================================
-
 CommentModel::CommentModel() :
     mnAuthorId( -1 ),
     mnObjId( BIFF_OBJ_INVALID_ID ),
