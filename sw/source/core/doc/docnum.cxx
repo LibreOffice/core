@@ -2210,10 +2210,20 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     OUString aName;
     if( bAutoNum )
     {
-        static rtlRandomPool s_RandomPool( rtl_random_createPool() );
-        sal_Int64 n;
-        rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
-        aName = OUString::number( (n < 0 ? -n : n) );
+        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+
+        if (bHack)
+        {
+            static sal_Int64 nIdCounter = SAL_CONST_INT64(8000000000);
+            aName = OUString::number(nIdCounter++);
+        }
+        else
+        {
+            static rtlRandomPool s_RandomPool( rtl_random_createPool() );
+            sal_Int64 n;
+            rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
+            aName = OUString::number( (n < 0 ? -n : n) );
+        }
         if( pChkStr && pChkStr->isEmpty() )
             pChkStr = 0;
     }
