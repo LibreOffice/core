@@ -470,7 +470,6 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
             if( xCurrentType.is())
             {
                 Reference< chart2::XDataSeriesContainer > xSeriesCnt( xCurrentType, uno::UNO_QUERY_THROW );
-                Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries());
 
                 if( xContext.is() )
                 {
