@@ -706,7 +706,6 @@ void SvtSecurityOptions_Impl::Commit()
                         OUString  s(CSTR_MACRO_TRUSTEDAUTHORS);
                         s += "/a";
 
-                        Sequence< Sequence< com::sun::star::beans::PropertyValue > > lPropertyValuesSeq( nCnt );
                         for( sal_Int32 i = 0 ; i < nCnt ; ++i )
                         {
                             OUString aPrefix = OUStringBuffer(s).append(i).append('/').makeStringAndClear();
