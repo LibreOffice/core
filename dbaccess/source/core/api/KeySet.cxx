@@ -505,7 +505,6 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     const Any* pBegin   = rows.getConstArray();
     const Any* pEnd     = pBegin + rows.getLength();
 
-    Sequence< Any > aKeys;
     for(;pBegin != pEnd;++pBegin)
     {
         aSql.append(sCon + aOr);
