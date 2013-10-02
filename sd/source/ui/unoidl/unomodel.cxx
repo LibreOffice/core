@@ -1452,8 +1452,6 @@ sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelect
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    uno::Sequence< beans::PropertyValue > aRenderer;
-
     if( mpDocShell && mpDoc )
     {
         uno::Reference< frame::XModel > xModel;
