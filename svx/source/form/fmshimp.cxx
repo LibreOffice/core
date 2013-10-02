@@ -3286,8 +3286,6 @@ void FmXFormShell::CreateExternalView()
         {
             DBG_ASSERT(xCurrentNavController.is(), "FmXFormShell::CreateExternalView : invalid call : have no nav controller !");
             // first : dispatch the descriptions for the columns to add
-            Sequence< Reference< XControl> > aCurrentControls(xCurrentNavController->getControls());
-
             sal_Int16 nAddedColumns = 0;
 
             // for radio buttons we need some special structures
