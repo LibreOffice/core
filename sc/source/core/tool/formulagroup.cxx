@@ -38,23 +38,6 @@ extern "C" void compileOpenCLKernels(const OUString*);
 
 namespace sc {
 
-rtl_uString* FormulaGroupContext::intern( const OUString& rStr )
-{
-    StrHashType::iterator it = maStrPool.find(rStr);
-    if (it == maStrPool.end())
-    {
-        // Not yet in the pool.
-        std::pair<StrHashType::iterator, bool> r = maStrPool.insert(rStr.intern());
-        if (!r.second)
-            // Insertion failed.
-            return NULL;
-
-        it = r.first;
-    }
-
-    return it->pData;
-}
-
 namespace {
 
 /**

@@ -14,6 +14,8 @@
 #include "types.hxx"
 #include "platforminfo.hxx"
 
+#include "svl/stringpool.hxx"
+
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -26,17 +28,14 @@ namespace sc {
 
 struct FormulaGroupContext : boost::noncopyable
 {
-    typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
     typedef std::vector<double> NumArrayType;
     typedef std::vector<rtl_uString*> StrArrayType;
     typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
     typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
 
-    StrHashType maStrPool;
+    svl::StringPool maStrPool;
     NumArrayStoreType maNumArrays;
     StrArrayStoreType maStrArrays;
-
-    rtl_uString* intern( const OUString& rStr );
 };
 
 /**

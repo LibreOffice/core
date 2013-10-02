@@ -2174,7 +2174,7 @@ bool appendStrings(
                 getBlockIterators<sc::string_block>(it, nLenRemain, itData, itDataEnd);
 
                 for (; itData != itDataEnd; ++itData)
-                    rArray.push_back(rCxt.intern(*itData));
+                    rArray.push_back(rCxt.maStrPool.intern(*itData));
             }
             break;
             case sc::element_type_edittext:
@@ -2185,7 +2185,7 @@ bool appendStrings(
                 for (; itData != itDataEnd; ++itData)
                 {
                     OUString aStr = ScEditUtil::GetString(**itData, pDoc);
-                    rArray.push_back(rCxt.intern(aStr));
+                    rArray.push_back(rCxt.maStrPool.intern(aStr));
                 }
             }
             break;
@@ -2210,7 +2210,7 @@ bool appendStrings(
                         return false;
                     }
 
-                    rArray.push_back(rCxt.intern(aStr));
+                    rArray.push_back(rCxt.maStrPool.intern(aStr));
                 }
             }
             break;
@@ -2250,7 +2250,7 @@ void copyFirstBlock( sc::FormulaGroupContext& rCxt, size_t nLen, const sc::CellS
     const OUString* p = &sc::string_block::at(*rPos.first->data, rPos.second);
     const OUString* pEnd = p + nLen;
     for (; p != pEnd; ++p)
-        rArray.push_back(rCxt.intern(*p));
+        rArray.push_back(rCxt.maStrPool.intern(*p));
 }
 
 }
