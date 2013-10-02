@@ -561,8 +561,6 @@ DECLARE_STL_SET( PropertyValue, PropertyValueLess, PropertyValueSet);
 
 void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPropertySet >& _rxSource, SfxItemSet& _rDest)
 {
-    Sequence< OUString > aTableFitler;
-
     if (_rxSource.is())
     {
         for (   ConstMapInt2StringIterator aDirect = m_aDirectPropTranslator.begin();
