@@ -1450,7 +1450,6 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
 {
     const Reference<XColumnsSupplier> xDestColsSup(_xTable,UNO_QUERY_THROW);
     const Sequence< OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
-    const Sequence< OUString > aColumnNames = m_pSourceObject->getColumnNames();
     const Reference< XDatabaseMetaData > xDestMetaData( m_xDestConnection->getMetaData(), UNO_QUERY_THROW );
     const OUString sQuote = xDestMetaData->getIdentifierQuoteString();
     OUStringBuffer sColumns;
