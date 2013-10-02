@@ -128,7 +128,7 @@ StringPool::InsertResultType StringPool::findOrInsert( StrHashType& rPool, const
     if (it == rPool.end())
     {
         // Not yet in the pool.
-        std::pair<StrHashType::iterator, bool> r = rPool.insert(rStr.intern());
+        std::pair<StrHashType::iterator, bool> r = rPool.insert(rStr);
         if (!r.second)
             // Insertion failed.
             return InsertResultType(rPool.end(), false);

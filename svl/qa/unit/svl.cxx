@@ -75,7 +75,7 @@ public:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
     CPPUNIT_TEST(testStringPool);
-//  CPPUNIT_TEST(testStringPoolPurge); // FIXME: String pool's life cycle needs more work.
+    CPPUNIT_TEST(testStringPoolPurge);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST_SUITE_END();
