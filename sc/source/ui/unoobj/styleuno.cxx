@@ -940,7 +940,7 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, c
 
 //  Default-ctor wird fuer die Reflection gebraucht
 
-ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const String& rName) :
+ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName) :
     pPropSet( (eFam == SFX_STYLE_FAMILY_PARA) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() ),
     pDocShell( pDocSh ),
     eFamily( eFam ),
@@ -952,7 +952,7 @@ ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const String& rN
         pDocShell->GetDocument()->AddUnoObject(*this);
 }
 
-void ScStyleObj::InitDoc( ScDocShell* pNewDocSh, const String& rNewName )
+void ScStyleObj::InitDoc( ScDocShell* pNewDocSh, const OUString& rNewName )
 {
     if ( pNewDocSh && !pDocShell )
     {

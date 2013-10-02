@@ -218,13 +218,13 @@ private:
 
     ScStyleObj(); // disabled
 public:
-                            ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const String& rName);
+                            ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rName);
     virtual                 ~ScStyleObj();
 
                             // created by getImplementation:
     sal_Bool                IsInserted() const      { return pDocShell != NULL; }
     SfxStyleFamily          GetFamily() const       { return eFamily; }
-    void                    InitDoc( ScDocShell* pNewDocSh, const String& rNewName );
+    void                    InitDoc( ScDocShell* pNewDocSh, const OUString& rNewName );
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

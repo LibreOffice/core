@@ -216,9 +216,9 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     // communication with function-autopilot
     void                InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd );
     void                InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd );
-    void                InputReplaceSelection( const String& rStr );
-    String              InputGetFormulaStr();
-    void                ActivateInputWindow( const String* pStr = NULL,
+    void                InputReplaceSelection( const OUString& rStr );
+    OUString            InputGetFormulaStr();
+    void                ActivateInputWindow( const OUString* pStr = NULL,
                                                 sal_Bool bMatrix = false );
 
     void                InitFormEditData();

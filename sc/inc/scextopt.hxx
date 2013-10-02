@@ -28,7 +28,7 @@
 /** Extended settings for the document, used in import/export filters. */
 struct ScExtDocSettings
 {
-    String              maGlobCodeName;     ///< Global codename (VBA module name).
+    OUString            maGlobCodeName;     ///< Global codename (VBA module name).
     double              mfTabBarWidth;      ///< Width of the tabbar, relative to frame window width (0.0 ... 1.0).
     sal_uInt32          mnLinkCnt;          ///< Recursive counter for loading external documents.
     SCTAB               mnDisplTab;         ///< Index of displayed sheet.
@@ -102,9 +102,9 @@ public:
     /** @return the number of sheet codenames. */
     SCTAB               GetCodeNameCount() const;
     /** @return the specified codename (empty string = no codename). */
-    const String&       GetCodeName( SCTAB nTab ) const;
+    const OUString&     GetCodeName( SCTAB nTab ) const;
     /** Appends a codename for a sheet. */
-    void                SetCodeName( SCTAB nTab, const String& rCodeName );
+    void                SetCodeName( SCTAB nTab, const OUString& rCodeName );
 
 private:
     ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;

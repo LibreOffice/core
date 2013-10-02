@@ -66,7 +66,7 @@ class AbstractScAutoFormatDlg : public VclAbstractDialog
 {
 public:
     virtual sal_uInt16 GetIndex() const = 0 ;
-    virtual String GetCurrFormatName() = 0;
+    virtual OUString GetCurrFormatName() = 0;
 };
 
 class AbstractScColRowLabelDlg : public VclAbstractDialog
@@ -103,11 +103,11 @@ public:
 class AbstractScDataPilotServiceDlg : public VclAbstractDialog
 {
 public:
-    virtual String  GetServiceName() const = 0;
-    virtual String  GetParSource() const = 0 ;
-    virtual String  GetParName() const = 0 ;
-    virtual String  GetParUser() const = 0;
-    virtual String  GetParPass() const = 0;
+    virtual OUString  GetServiceName() const = 0;
+    virtual OUString  GetParSource() const = 0 ;
+    virtual OUString  GetParName() const = 0 ;
+    virtual OUString  GetParUser() const = 0;
+    virtual OUString  GetParPass() const = 0;
 };
 
 class AbstractScDeleteCellDlg : public VclAbstractDialog
@@ -138,7 +138,7 @@ public:
     virtual double      GetStart() const = 0;
     virtual double      GetStep() const = 0;
     virtual double      GetMax() const = 0;
-    virtual String      GetStartStr() const = 0;
+    virtual OUString    GetStartStr() const = 0;
     virtual void        SetEdStartValEnabled(sal_Bool bFlag=false) = 0;
 };
 

@@ -1779,7 +1779,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( pOkItem->GetValue() )      // OK
                 {
-                    String               aFormula;
+                    OUString             aFormula;
                     const SfxStringItem* pSItem      = (const SfxStringItem*)&pReqArgs->Get( SCITEM_STRING );
                     const SfxBoolItem*   pMatrixItem = (const SfxBoolItem*)  &pReqArgs->Get( SID_DLG_MATRIX );
 

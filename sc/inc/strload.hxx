@@ -32,10 +32,10 @@ public:
         FreeResource();
     }
 
-    const String& GetString() const { return theStr; }
+    const OUString& GetString() const { return theStr; }
 
 private:
-    String theStr;
+    OUString theStr;
 };
 
 

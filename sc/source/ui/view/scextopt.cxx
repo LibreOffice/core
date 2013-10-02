@@ -121,7 +121,7 @@ void ScExtTabSettingsCont::CopyFromMap( const ScExtTabSettingsMap& rMap )
 /** Implementation struct for ScExtDocOptions containing all members. */
 struct ScExtDocOptionsImpl
 {
-    typedef ::std::vector< String > StringVec;
+    typedef ::std::vector< OUString > StringVec;
 
     ScExtDocSettings    maDocSett;          /// Global document settings.
     ScExtTabSettingsCont maTabSett;         /// Settings for all sheets.
@@ -193,13 +193,13 @@ SCTAB ScExtDocOptions::GetCodeNameCount() const
     return static_cast< SCTAB >( mxImpl->maCodeNames.size() );
 }
 
-const String& ScExtDocOptions::GetCodeName( SCTAB nTab ) const
+const OUString& ScExtDocOptions::GetCodeName( SCTAB nTab ) const
 {
     OSL_ENSURE( (0 <= nTab) && (nTab < GetCodeNameCount()), "ScExtDocOptions::GetCodeName - invalid sheet index" );
-    return ((0 <= nTab) && (nTab < GetCodeNameCount())) ? mxImpl->maCodeNames[ static_cast< size_t >( nTab ) ] : EMPTY_STRING;
+    return ((0 <= nTab) && (nTab < GetCodeNameCount())) ? mxImpl->maCodeNames[ static_cast< size_t >( nTab ) ] : EMPTY_OUSTRING;
 }
 
-void ScExtDocOptions::SetCodeName( SCTAB nTab, const String& rCodeName )
+void ScExtDocOptions::SetCodeName( SCTAB nTab, const OUString& rCodeName )
 {
     OSL_ENSURE( nTab >= 0, "ScExtDocOptions::SetCodeName - invalid sheet index" );
     if( nTab >= 0 )

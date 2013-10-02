@@ -1536,14 +1536,14 @@ void ScModule::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
         pHdl->InputSetSelection( nStart, nEnd );
 }
 
-void ScModule::InputReplaceSelection( const String& rStr )
+void ScModule::InputReplaceSelection( const OUString& rStr )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
         pHdl->InputReplaceSelection( rStr );
 }
 
-String ScModule::InputGetFormulaStr()
+OUString ScModule::InputGetFormulaStr()
 {
     ScInputHandler* pHdl = GetInputHdl();
     String aStr;
@@ -1552,7 +1552,7 @@ String ScModule::InputGetFormulaStr()
     return aStr;
 }
 
-void ScModule::ActivateInputWindow( const String* pStrFormula, sal_Bool bMatrix )
+void ScModule::ActivateInputWindow( const OUString* pStrFormula, sal_Bool bMatrix )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if ( pHdl )

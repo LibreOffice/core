@@ -116,7 +116,7 @@ class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg
 {
     DECL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl, ScAutoFormatDlg)
     virtual sal_uInt16 GetIndex() const;
-    virtual String GetCurrFormatName();
+    virtual OUString GetCurrFormatName();
 };
 
 class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg
@@ -154,11 +154,11 @@ class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTy
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg
 {
     DECL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl, ScDataPilotServiceDlg)
-    virtual String  GetServiceName() const;
-    virtual String  GetParSource() const;
-    virtual String  GetParName() const;
-    virtual String  GetParUser() const;
-    virtual String  GetParPass() const;
+    virtual OUString  GetServiceName() const;
+    virtual OUString  GetParSource() const;
+    virtual OUString  GetParName() const;
+    virtual OUString  GetParUser() const;
+    virtual OUString  GetParPass() const;
 };
 
 class AbstractScDeleteCellDlg_Impl : public AbstractScDeleteCellDlg
@@ -189,7 +189,7 @@ class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
     virtual double      GetStart() const;
     virtual double      GetStep() const;
     virtual double      GetMax() const;
-    virtual String      GetStartStr() const;
+    virtual OUString    GetStartStr() const;
     virtual void        SetEdStartValEnabled(sal_Bool bFlag=false);
 };
 

@@ -165,7 +165,7 @@ sal_uInt16 AbstractScAutoFormatDlg_Impl::GetIndex() const
     return pDlg->GetIndex();
 }
 
-String AbstractScAutoFormatDlg_Impl::GetCurrFormatName()
+OUString AbstractScAutoFormatDlg_Impl::GetCurrFormatName()
 {
     return pDlg->GetCurrFormatName();
 }
@@ -210,27 +210,27 @@ void AbstractScDataPilotSourceTypeDlg_Impl::AppendNamedRange(const OUString& rNa
     pDlg->AppendNamedRange(rName);
 }
 
-String AbstractScDataPilotServiceDlg_Impl::GetServiceName() const
+OUString AbstractScDataPilotServiceDlg_Impl::GetServiceName() const
 {
     return pDlg->GetServiceName();
 }
 
-String AbstractScDataPilotServiceDlg_Impl::GetParSource() const
+OUString AbstractScDataPilotServiceDlg_Impl::GetParSource() const
 {
     return pDlg->GetParSource();
 }
 
-String AbstractScDataPilotServiceDlg_Impl::GetParName() const
+OUString AbstractScDataPilotServiceDlg_Impl::GetParName() const
 {
     return pDlg->GetParName();
 }
 
-String AbstractScDataPilotServiceDlg_Impl::GetParUser() const
+OUString AbstractScDataPilotServiceDlg_Impl::GetParUser() const
 {
     return pDlg->GetParUser();
 }
 
-String AbstractScDataPilotServiceDlg_Impl::GetParPass() const
+OUString AbstractScDataPilotServiceDlg_Impl::GetParPass() const
 {
     return pDlg->GetParPass();
 }
@@ -280,7 +280,7 @@ double  AbstractScFillSeriesDlg_Impl::GetMax() const
     return pDlg->GetMax();
 }
 
-String  AbstractScFillSeriesDlg_Impl::GetStartStr() const
+OUString  AbstractScFillSeriesDlg_Impl::GetStartStr() const
 {
     return pDlg->GetStartStr();
 }
