@@ -7,3 +7,20 @@ svdraw
 transparent gradient stuff.
 
 Lots of the draw and impress code is in this shared library.
+
+
+Drawing Layer Object diagram:
+
+.------- Model ------------.     .------- View -----------------------------------------.
+| SdrObject - ViewContact  | 1.* | ViewObjectContact        1.*                         |
+|              getChild()  |-----|    getPrimitiveList()  -----> Object(s) ---> SdrView |
+|              getVOC()    |     |    getRecPrimitiveList()      Contact                |
+|              getViewIn...|     |___________|__________________________________________|
+| dependantPrimitiveList() |                 |
+|_________________________ |              generates      ______
+                                             |          /      |
+                                   .----------------------.    |
+                                   | basePrimitive        |    |
+                                   |   getRange()         |----`
+                                   |   getDecomposition() |
+                                   |______________________|
