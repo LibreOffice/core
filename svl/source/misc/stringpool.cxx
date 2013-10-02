@@ -46,20 +46,20 @@ rtl_uString* StringPool::intern( const OUString& rStr )
     return pOrig;
 }
 
-const rtl_uString* StringPool::getIdentifier( const OUString& rStr ) const
+StringPool::StrIdType StringPool::getIdentifier( const OUString& rStr ) const
 {
     StrHashType::iterator it = maStrPool.find(rStr);
-    return (it == maStrPool.end()) ? NULL : it->pData;
+    return (it == maStrPool.end()) ? 0 : reinterpret_cast<StrIdType>(it->pData);
 }
 
-const rtl_uString* StringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
+StringPool::StrIdType StringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
 {
     if (!mpCharClass)
-        return NULL;
+        return 0;
 
     OUString aUpper = mpCharClass->uppercase(rStr);
     StrHashType::iterator it = maStrPoolUpper.find(aUpper);
-    return (it == maStrPool.end()) ? NULL : it->pData;
+    return (it == maStrPool.end()) ? 0 : reinterpret_cast<StrIdType>(it->pData);
 }
 
 StringPool::InsertResultType StringPool::findOrInsert( StrHashType& rPool, const OUString& rStr ) const

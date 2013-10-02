@@ -305,27 +305,30 @@ void Test::testStringPool()
     CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
 
     OUString aAndy("Andy");
-    p2 = aPool.getIdentifier(aAndy);
-    CPPUNIT_ASSERT_EQUAL(p1, p2);
+    svl::StringPool::StrIdType si1 = aPool.getIdentifier("Andy");
+    svl::StringPool::StrIdType si2 = aPool.getIdentifier(aAndy);
+    CPPUNIT_ASSERT_EQUAL(si1, si2);
 
     // Test case insensitive string ID's.
     OUString aAndyLower("andy"), aAndyUpper("ANDY");
-    p1 = aPool.getIdentifier("Andy");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p1);
-    p2 = aPool.intern(aAndyLower);
-    CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
-    p2 = aPool.intern(aAndyUpper);
-    CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
+    si1 = aPool.getIdentifier("Andy");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si1);
+    aPool.intern(aAndyLower);
+    si2 = aPool.getIdentifier(aAndyLower);
+    CPPUNIT_ASSERT_MESSAGE("They must differ.", si1 != si2);
+    aPool.intern(aAndyUpper);
+    si2 = aPool.getIdentifier(aAndyUpper);
+    CPPUNIT_ASSERT_MESSAGE("They must differ.", si1 != si2);
 
-    p1 = aPool.getIdentifierIgnoreCase("Andy");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p1);
-    p2 = aPool.getIdentifierIgnoreCase("andy");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p2);
-    CPPUNIT_ASSERT_EQUAL(p1, p2);
+    si1 = aPool.getIdentifierIgnoreCase("Andy");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si1);
+    si2 = aPool.getIdentifierIgnoreCase("andy");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si2);
+    CPPUNIT_ASSERT_EQUAL(si1, si2);
 
-    p2 = aPool.getIdentifierIgnoreCase("ANDY");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p2);
-    CPPUNIT_ASSERT_EQUAL(p1, p2);
+    si2 = aPool.getIdentifierIgnoreCase("ANDY");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si2);
+    CPPUNIT_ASSERT_EQUAL(si1, si2);
 }
 
 void Test::checkPreviewString(SvNumberFormatter& aFormatter,

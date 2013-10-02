@@ -37,6 +37,8 @@ class SVL_DLLPUBLIC StringPool
     const CharClass* mpCharClass;
 
 public:
+    typedef sal_uIntPtr StrIdType;
+
     StringPool();
     StringPool( const CharClass* pCharClass );
 
@@ -58,9 +60,9 @@ public:
      *
      * @return unique ID of the string object.
      */
-    const rtl_uString* getIdentifier( const OUString& rStr ) const;
+    StrIdType getIdentifier( const OUString& rStr ) const;
 
-    const rtl_uString* getIdentifierIgnoreCase( const OUString& rStr ) const;
+    StrIdType getIdentifierIgnoreCase( const OUString& rStr ) const;
 
 private:
     InsertResultType findOrInsert( StrHashType& rPool, const OUString& rStr ) const;
