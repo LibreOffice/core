@@ -36,6 +36,8 @@
 #include "svl/stringpool.hxx"
 #include "unotools/syslocale.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #define DEBUG_UNIT_TEST 1
 
 #if DEBUG_UNIT_TEST
@@ -350,6 +352,48 @@ void Test::testStringPoolPurge()
 
     // Since no string objects referencing the pooled strings exist, purging
     // the pool should empty it.
+    aPool.purge();
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 0);
+
+    // Now, create string objects on the heap.
+    boost::scoped_ptr<OUString> pStr1(new OUString("Andy"));
+    boost::scoped_ptr<OUString> pStr2(new OUString("andy"));
+    boost::scoped_ptr<OUString> pStr3(new OUString("ANDY"));
+    boost::scoped_ptr<OUString> pStr4(new OUString("Bruce"));
+    aPool.intern(*pStr1);
+    aPool.intern(*pStr2);
+    aPool.intern(*pStr3);
+    aPool.intern(*pStr4);
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 4);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+
+    // This shouldn't purge anything.
+    aPool.purge();
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 4);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+
+    // Delete one heap string object, and purge. That should purge one string.
+    pStr1.reset();
+    aPool.purge();
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 3);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+
+    // Ditto...
+    pStr3.reset();
+    aPool.purge();
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 2);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+
+    // Again.
+    pStr2.reset();
+    aPool.purge();
+    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 1);
+    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 1);
+
+    // Delete 'Bruce' and purge.
+    pStr4.reset();
     aPool.purge();
     CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 0);
     CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 0);
