@@ -349,8 +349,6 @@ void StorageItem::remove( const OUString& aURL, const OUString& aName )
 
 void StorageItem::clear()
 {
-    Sequence< OUString > sendSeq(1);
-
     ConfigItem::ClearNodeSet( OUString("Store") );
 }
 
