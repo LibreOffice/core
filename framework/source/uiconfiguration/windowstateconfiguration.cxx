@@ -819,7 +819,6 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
     sal_Int32                 nMask( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     sal_Int32                 i( 0 );
-    Sequence< PropertyValue > aPropSeq;
     WindowStateInfo           aWindowStateInfo;
 
     for ( i = 0; i < nCount; i++ )
@@ -1177,7 +1176,6 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
 {
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
-    Sequence< PropertyValue > aPropSeq;
     OUString                  aDelim( "," );
 
     for ( i = 0; i < nCount; i++ )
