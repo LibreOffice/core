@@ -943,8 +943,6 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if (xShape.is())
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySetInfo> info = xPropertySet->getPropertySetInfo();
-                    uno::Sequence<beans::Property> properties = info->getProperties();
                     try
                     {
                         uno::Any aAny = xPropertySet->getPropertyValue("GraphicURL");
