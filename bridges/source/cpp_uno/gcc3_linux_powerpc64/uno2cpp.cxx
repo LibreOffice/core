@@ -286,12 +286,12 @@ static void cpp_call(
 
         // Args
         void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
-    // indizes of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
+    // indices of values this have to be converted (interface conversion cpp<=>uno)
+    sal_Int32 * pTempIndices = (sal_Int32 *)(pCppArgs + nParams);
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
 
-    sal_Int32 nTempIndizes   = 0;
+    sal_Int32 nTempIndices   = 0;
 
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "n params is %d\n", nParams);
@@ -365,9 +365,9 @@ static void cpp_call(
                                 uno_constructData(
                                         pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                                         pParamTypeDescr );
-                                pTempIndizes[nTempIndizes] = nPos; // default constructed for cpp call
+                                pTempIndices[nTempIndices] = nPos; // default constructed for cpp call
                                 // will be released at reconversion
-                                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                                ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
                         }
                         // is in/inout
                         else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
@@ -379,9 +379,9 @@ static void cpp_call(
                                         pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                                         pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
 
-                                pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
+                                pTempIndices[nTempIndices] = nPos; // has to be reconverted
                                 // will be released at reconversion
-                                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                                ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
                         }
                         else // direct way
                         {
@@ -408,10 +408,10 @@ static void cpp_call(
         *ppUnoExc = 0;
 
         // reconvert temporary params
-        for ( ; nTempIndizes--; )
+        for ( ; nTempIndices--; )
         {
-            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-            typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
+            sal_Int32 nIndex = pTempIndices[nTempIndices];
+            typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndices];
 
             if (pParams[nIndex].bIn)
             {
@@ -447,12 +447,12 @@ static void cpp_call(
                                   *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
         // temporary params
-        for ( ; nTempIndizes--; )
+        for ( ; nTempIndices--; )
         {
-            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+            sal_Int32 nIndex = pTempIndices[nTempIndices];
             // destroy temp cpp param => cpp: every param was constructed
-            uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
-            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
+            uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndices], cpp_release );
+            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndices] );
         }
         // return type
         if (pReturnTypeDescr)

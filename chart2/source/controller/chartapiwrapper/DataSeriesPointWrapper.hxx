@@ -138,7 +138,7 @@ private:
 
     //this should only be used, if the DataSeriesPointWrapper is initialized via the XInitialize interface
     //because a big change in the chartmodel may leed to an dataseriespointer thats not connected to the model anymore
-    //with the indizes instead we are can aleays get the new dataseries
+    //with the indices instead we are can aleays get the new dataseries
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries >     m_xDataSeries;
 };

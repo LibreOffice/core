@@ -1069,7 +1069,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
                 uno_Sequence * pMultiSeq= *(uno_Sequence* const*) rSeq.getValue();
                 sal_Int32 dimsSeq= dims - 1;
 
-                // arDimSeqIndizes contains the current index of a block of data.
+                // arDimSeqIndices contains the current index of a block of data.
                 // E.g. Sequence<Sequence<sal_Int32>> , the index would refer to Sequence<sal_Int32>
                 // In this case arDimSeqIndices would have the size 1. That is the elements are not counted
                 // but the Sequences that contain those elements.

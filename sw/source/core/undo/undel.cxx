@@ -75,7 +75,7 @@ static void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
 // the first and last paragraph of the selection will be handled outside this
 // function.
 // Here are the main steps of the function:
-// 1. Deletion/recording of content indizes of the selection: footnotes, fly
+// 1. Deletion/recording of content indices of the selection: footnotes, fly
 //    frames and bookmarks
 // Step 1 could shift all nodes by deletion of footnotes => nNdDiff will be set.
 // 2. If the paragraph where the selection ends, is the last content of a
@@ -124,7 +124,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                         ? rPam.GetMark()
                         : rPam.GetPoint();
 
-    // Step 1. deletion/record of content indizes
+    // Step 1. deletion/record of content indices
     if( bDelFullPara )
     {
         OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );

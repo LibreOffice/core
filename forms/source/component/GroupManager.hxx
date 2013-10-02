@@ -178,9 +178,9 @@ DECLARE_STL_VECTOR(OGroupArr::iterator, OActiveGroups);
 //========================================================================
 class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
 {
-    OGroup*         m_pCompGroup;           // Alle Components nach TabIndizes sortiert
+    OGroup*         m_pCompGroup;           // Alle Components nach TabIndices sortiert
     OGroupArr       m_aGroupArr;            // Alle Components nach Gruppen sortiert
-    OActiveGroups   m_aActiveGroupMap;      // In dieser Map werden die Indizes aller Gruppen gehalten,
+    OActiveGroups   m_aActiveGroupMap;      // In dieser Map werden die Indices aller Gruppen gehalten,
                                         // die mehr als 1 Element haben
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >

@@ -166,7 +166,7 @@ void StartGrammarChecking( SwDoc &rDoc )
 /*
  * internal functions
  */
-static void lcl_DelFmtIndizes( SwFmt* pFmt )
+static void lcl_DelFmtIndices( SwFmt* pFmt )
 {
     SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)pFmt->GetCntnt();
     if ( rFmtCntnt.GetCntntIdx() )
@@ -582,11 +582,11 @@ SwDoc::~SwDoc()
     // Any of the FrmFormats can still have indices registered.
     // These need to be destroyed now at the latest.
     BOOST_FOREACH( SwFrmFmt* pFmt, *mpFrmFmtTbl )
-        lcl_DelFmtIndizes( pFmt );
+        lcl_DelFmtIndices( pFmt );
     BOOST_FOREACH( SwFrmFmt* pFmt, *mpSpzFrmFmtTbl )
-        lcl_DelFmtIndizes( pFmt );
+        lcl_DelFmtIndices( pFmt );
     BOOST_FOREACH( SwSectionFmt* pFmt, *mpSectionFmtTbl )
-        lcl_DelFmtIndizes( pFmt );
+        lcl_DelFmtIndices( pFmt );
 
     // The formats/styles that follow depend on the default formats.
     // Destroy these only after destroying the FmtIndices, because the content

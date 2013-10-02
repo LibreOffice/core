@@ -609,11 +609,11 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
 
 //--------------------------------------------------------------------------------------------------
 Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& InParams,
-                                Sequence<sal_Int16>& OutIndizes, Sequence<Any>& OutParams )
+                                Sequence<sal_Int16>& OutIndices, Sequence<Any>& OutParams )
     throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException )
 {
     if (_xDirect.is())
-        return _xDirect->invoke( FunctionName, InParams, OutIndizes, OutParams );
+        return _xDirect->invoke( FunctionName, InParams, OutIndices, OutParams );
 
     if (_xIntrospectionAccess.is())
     {
@@ -639,9 +639,9 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         Sequence<Any> aInvokeParams( nFParamsLen );
         Any* pInvokeParams                  = aInvokeParams.getArray();
 
-        // OUT Indizes
-        OutIndizes.realloc( nFParamsLen );
-        sal_Int16* pOutIndizes              = OutIndizes.getArray();
+        // OUT Indices
+        OutIndices.realloc( nFParamsLen );
+        sal_Int16* pOutIndices              = OutIndices.getArray();
         sal_uInt32 nOutIndex                = 0;
 
         for ( sal_Int32 nPos = 0; nPos < nFParamsLen; ++nPos )
@@ -675,7 +675,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                 // is OUT/INOUT parameter?
                 if (rFParam.aMode != ParamMode_IN)
                 {
-                    pOutIndizes[nOutIndex] = (sal_Int16)nPos;
+                    pOutIndices[nOutIndex] = (sal_Int16)nPos;
                     if (rFParam.aMode == ParamMode_OUT)
                         rDestType->createObject( pInvokeParams[nPos] );     // default init
                     ++nOutIndex;
@@ -692,14 +692,14 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         Any aRet = xMethod->invoke( _aMaterial, aInvokeParams );
 
         // OUT Params
-        OutIndizes.realloc( nOutIndex );
-        pOutIndizes        = OutIndizes.getArray();
+        OutIndices.realloc( nOutIndex );
+        pOutIndices        = OutIndices.getArray();
         OutParams.realloc( nOutIndex );
         Any* pOutParams = OutParams.getArray();
 
         while (nOutIndex--)
         {
-            pOutParams[nOutIndex] = pInvokeParams[ pOutIndizes[nOutIndex] ];
+            pOutParams[nOutIndex] = pInvokeParams[ pOutIndices[nOutIndex] ];
         }
 
         return aRet;

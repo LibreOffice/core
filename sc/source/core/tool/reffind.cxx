@@ -273,7 +273,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 
             if (!mnFound)                            // first reference ?
                 mnSelStart = nAbsStart;
-            mnSelEnd = nAbsStart + aExpr.getLength();        // selection, no indizes
+            mnSelEnd = nAbsStart + aExpr.getLength();        // selection, no indices
             ++mnFound;
         }
 

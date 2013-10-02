@@ -278,9 +278,9 @@ void ODbaseIndexDialog::Init()
     aIB_AddAll.Disable();
     aIB_RemoveAll.Disable();
 
-    // All indizes are first added to a list of free indizes.
+    // All indices are first added to a list of free indices.
     // Afterwards, check the index of each table in the Inf-file.
-    // These indizes are removed from the list of free indizes and
+    // These indices are removed from the list of free indices and
     // entered in the indexlist of the table.
 
     // if the string does not contain a path, cut the string
@@ -400,7 +400,7 @@ void ODbaseIndexDialog::SetCtrls()
         const OTableInfo& rTabInfo = m_aTableInfoList.front();
         aCB_Tables.SetText( rTabInfo.aTableName );
 
-        // build ListBox of the table indizes
+        // build ListBox of the table indices
         for (   ConstTableIndexListIterator aIndex = rTabInfo.aIndexList.begin();
                 aIndex != rTabInfo.aIndexList.end();
                 ++aIndex
@@ -411,7 +411,7 @@ void ODbaseIndexDialog::SetCtrls()
             aLB_TableIndexes.SelectEntryPos( 0 );
     }
 
-    // ListBox of the free indizes
+    // ListBox of the free indices
     for (   ConstTableIndexListIterator aFree = m_aFreeIndexList.begin();
             aFree != m_aFreeIndexList.end();
             ++aFree
@@ -443,7 +443,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
     Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
     aInfFile.SetGroup( aGroupIdent );
 
-    // first, delete all table indizes
+    // first, delete all table indices
     OString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     sal_uInt16 nKey = 0;
@@ -465,7 +465,7 @@ void OTableInfo::WriteInfFile( const OUString& rDSN ) const
 
     }
 
-    // now add all saved indizes
+    // now add all saved indices
     sal_uInt16 nPos = 0;
     for (   ConstTableIndexListIterator aIndex = aIndexList.begin();
             aIndex != aIndexList.end();

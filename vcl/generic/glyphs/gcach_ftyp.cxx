@@ -1819,7 +1819,7 @@ sal_uLong ServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     {
         // prepare glyphindex to character mapping
         // TODO: this is needed to support VCL's existing kerning infrastructure,
-        // eliminate it up by redesigning kerning infrastructure to work with glyph indizes
+        // eliminate it up by redesigning kerning infrastructure to work with glyph indices
         typedef boost::unordered_multimap<sal_uInt16,sal_Unicode> Cmap;
         Cmap aCmap;
         for( sal_Unicode aChar = 0x0020; aChar < 0xFFFE; ++aChar )
@@ -1829,7 +1829,7 @@ sal_uLong ServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
                 aCmap.insert( Cmap::value_type( nGlyphIndex, aChar ) );
         }
 
-        // translate both glyph indizes in kerning pairs to characters
+        // translate both glyph indices in kerning pairs to characters
         // problem is that these are 1:n mappings...
         KernVector aKernCharVector;
         aKernCharVector.reserve( nKernCount );

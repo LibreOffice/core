@@ -37,7 +37,7 @@ public:
     const static sal_Int16 THREEDFORMAT_EXTRUSIONCOLOR = 5;
 };
 
-struct MsoColorIndizes
+struct MsoColorIndices
 {
     const static sal_Int32 HAPICOLOR_BLACK = 0;
     const static sal_Int32 HAPICOLOR_WITHE = 16777215;

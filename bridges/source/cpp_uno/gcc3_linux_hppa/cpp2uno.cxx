@@ -99,14 +99,14 @@ namespace
         // parameters
         void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
         void ** pCppArgs = pUnoArgs + nParams;
-        // indizes of values this have to be converted (interface conversion
+        // indices of values this have to be converted (interface conversion
         // cpp<=>uno)
-        sal_Int32 * pTempIndizes = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+        sal_Int32 * pTempIndices = (sal_Int32 *)(pUnoArgs + (2 * nParams));
         // type descriptions for reconversions
         typelib_TypeDescription ** ppTempParamTypeDescr =
             (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
 
-        sal_Int32 nTempIndizes   = 0;
+        sal_Int32 nTempIndices   = 0;
         bool bOverFlowUsed = false;
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
         {
@@ -258,9 +258,9 @@ namespace
                 {
                     // uno out is unconstructed mem!
                     pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
-                    pTempIndizes[nTempIndizes] = nPos;
+                    pTempIndices[nTempIndices] = nPos;
                     // will be released at reconversion
-                    ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                    ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
                 }
                 // is in/inout
                 else if (bridges::cpp_uno::shared::relatesToInterfaceType(
@@ -269,9 +269,9 @@ namespace
                    uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                         pCppStack, pParamTypeDescr,
                         pThis->getBridge()->getCpp2Uno() );
-                    pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
+                    pTempIndices[nTempIndices] = nPos; // has to be reconverted
                     // will be released at reconversion
-                    ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                    ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
                 }
                 else // direct way
                 {
@@ -301,14 +301,14 @@ namespace
         if (pUnoExc)
         {
             // destruct temporary in/inout params
-            for ( ; nTempIndizes--; )
+            for ( ; nTempIndices--; )
             {
-                sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+                sal_Int32 nIndex = pTempIndices[nTempIndices];
 
                 if (pParams[nIndex].bIn) // is in/inout => was constructed
                     uno_destructData( pUnoArgs[nIndex],
-                        ppTempParamTypeDescr[nTempIndizes], 0 );
-                TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
+                        ppTempParamTypeDescr[nTempIndices], 0 );
+                TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndices] );
             }
             if (pReturnTypeDescr)
                 TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
@@ -321,11 +321,11 @@ namespace
         else // else no exception occurred...
         {
             // temporary params
-            for ( ; nTempIndizes--; )
+            for ( ; nTempIndices--; )
             {
-                sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+                sal_Int32 nIndex = pTempIndices[nTempIndices];
                 typelib_TypeDescription * pParamTypeDescr =
-                    ppTempParamTypeDescr[nTempIndizes];
+                    ppTempParamTypeDescr[nTempIndices];
 
                 if (pParams[nIndex].bOut) // inout/out
                 {

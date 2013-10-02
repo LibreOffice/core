@@ -24,9 +24,9 @@ using namespace ooo::vba;
 using namespace com::sun::star;
 
 sal_Int32
-MsoColorIndizes::getColorIndex( sal_Int32 nIndex )
+MsoColorIndices::getColorIndex( sal_Int32 nIndex )
 {
-    const static sal_Int32 COLORINDIZES[56] =
+    const static sal_Int32 COLORINDICES[56] =
     {   HAPICOLOR_BLACK, HAPICOLOR_WITHE, HAPICOLOR_RED, HAPICOLOR_BRIGHTGREEN, HAPICOLOR_BLUE, HAPICOLOR_YELLOW, HAPICOLOR_PINK,
         HAPICOLOR_TURQUOISE, HAPICOLOR_DARKRED, HAPICOLOR_GREEN, HAPICOLOR_DARKBLUE, HAPICOLOR_DARKYELLOW, HAPICOLOR_VIOLET,
         HAPICOLOR_TEAL, HAPICOLOR_GRAY_25_PERCENT, HAPICOLOR_GRAY_50_PERCENT, HAPICOLOR_PERIWINCKLE, HAPICOLOR_PLUM,
@@ -38,7 +38,7 @@ MsoColorIndizes::getColorIndex( sal_Int32 nIndex )
         HAPICOLOR_SEAGREEN, HAPICOLOR_NONAME, HAPICOLOR_OLIVEGREEN, HAPICOLOR_BROWN, HAPICOLOR_PLUM, HAPICOLOR_INDIGO,
         HAPICOLOR_GRAY_80_PERCENT
     };
-    return COLORINDIZES[nIndex];
+    return COLORINDICES[nIndex];
 }
 ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XHelperInterface > xInternalParent, const uno::Reference< drawing::XShape > xShape, const sal_Int16 nColorFormatType ) : ScVbaColorFormat_BASE( xParent, xContext ), m_xInternalParent( xInternalParent ), m_xShape( xShape ), m_nColorFormatType( nColorFormatType )
 {
@@ -123,7 +123,7 @@ ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException)
     sal_Int32 i = 0;
     for( ; i < 56; i++ )
     {
-        if( nColor == MsoColorIndizes::getColorIndex(i) )
+        if( nColor == MsoColorIndices::getColorIndex(i) )
        break;
     }
 
@@ -146,7 +146,7 @@ void SAL_CALL
 ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor ) throw (uno::RuntimeException)
 {
     // the table is 0 based
-    sal_Int32 nColor = MsoColorIndizes::getColorIndex( _schemecolor );
+    sal_Int32 nColor = MsoColorIndices::getColorIndex( _schemecolor );
     // nColor is already xl RGB
     setRGB( nColor );
 }

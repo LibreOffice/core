@@ -1732,9 +1732,9 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
             Reference<XInterface> xIntCallback= oleFact->createInstance(L"XCallback_Impl.Callback");
             Reference<XInvocation> xInv( xIntCallback, UNO_QUERY);
-            Sequence<sal_Int16> seqIndizes;
+            Sequence<sal_Int16> seqIndices;
             Sequence<Any> seqOutParams;
-            xInv->invoke( OUString( L"outValuesAll"), Sequence<Any>(), seqIndizes, seqOutParams);
+            xInv->invoke( OUString( L"outValuesAll"), Sequence<Any>(), seqIndices, seqOutParams);
 
             if( seqOutParams.getLength() == 12)
             {
@@ -1776,7 +1776,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
             Reference<XInterface> xIntCallback= oleFact->createInstance(L"XCallback_Impl.Callback");
             Reference<XInvocation> xInv( xIntCallback, UNO_QUERY);
-            Sequence<sal_Int16> seqIndizes;
+            Sequence<sal_Int16> seqIndices;
             Sequence<Any> seqOutParams;
 
 
@@ -1829,7 +1829,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 //
             Sequence<Any> params( arAny, 13);
 
-            xInv->invoke( OUString( L"inoutValuesAll"), params, seqIndizes, seqOutParams);
+            xInv->invoke( OUString( L"inoutValuesAll"), params, seqIndices, seqOutParams);
 
             if( seqOutParams.getLength() == 12)
             {
@@ -1871,7 +1871,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
 
             Reference<XInterface> xIntCallback= oleFact->createInstance(L"XCallback_Impl.Callback");
             Reference<XInvocation> xInv( xIntCallback, UNO_QUERY);
-            Sequence<sal_Int16> seqIndizes;
+            Sequence<sal_Int16> seqIndices;
             Sequence<Any> seqOutParams;
 
             Any arAny[3];
@@ -1882,7 +1882,7 @@ void SAL_CALL OComponent::testInterface(  const Reference< XCallback >& xCallbac
             OUString aString(L" a string parameter");
             arAny[2] <<= aString;
 
-            xInv->invoke( OUString( L"inValues"), Sequence<Any>(arAny,3), seqIndizes, seqOutParams);
+            xInv->invoke( OUString( L"inValues"), Sequence<Any>(arAny,3), seqIndices, seqOutParams);
 
             break;
         }
