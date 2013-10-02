@@ -83,7 +83,7 @@ ScEEImport::~ScEEImport()
 }
 
 
-sal_uLong ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
+sal_uLong ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
 {
     sal_uLong nErr = mpParser->Read( rStream, rBaseURL );
 

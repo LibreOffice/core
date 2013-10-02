@@ -57,7 +57,7 @@ public:
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                           const String& rUrl, const ::std::vector<String>& rTabNames );
+                                           const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
 
     virtual sal_Bool        GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen );
 
@@ -134,7 +134,7 @@ public:
     virtual ConvErr     Convert( _ScRangeListTabs&, XclImpStream& rStrm, sal_Size nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula );
 
     virtual ConvErr     ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                           const String& rUrl, const ::std::vector<String>& rTabNames );
+                                           const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
 
     static inline sal_Bool  IsComplRowRange( const sal_uInt16 nRow1, const sal_uInt16 nRow2 );
 

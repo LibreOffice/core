@@ -1327,7 +1327,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 }
 
 ConvErr ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, sal_Size /*nFormulaLen*/,
-                                      const String& /*rUrl*/, const vector<String>& /*rTabNames*/ )
+                                      const OUString& /*rUrl*/, const vector<OUString>& /*rTabNames*/ )
 {
     // not implemented ...
     return ConvErrNi;

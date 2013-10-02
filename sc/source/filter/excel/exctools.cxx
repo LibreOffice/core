@@ -187,19 +187,19 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
     rIn.Ignore( 1 );       // statt nUser!
 
     if( nName )
-        pName = new String( rIn.ReadUniString( nName ) );
+        pName = new OUString( rIn.ReadUniString( nName ) );
     else
     {
-        pName = new String( RTL_CONSTASCII_USTRINGPARAM( "Scenery" ) );
+        pName = new OUString( "Scenery" );
         rIn.Ignore( 1 );
     }
 
-    pUserName = new String( rIn.ReadUniString() );
+    pUserName = new OUString( rIn.ReadUniString() );
 
     if( nComment )
-        pComment = new String( rIn.ReadUniString() );
+        pComment = new OUString( rIn.ReadUniString() );
     else
-        pComment = new String;
+        pComment = new OUString;
 
     sal_uInt16          n = nCref;
     sal_uInt16          nC, nR;

@@ -371,7 +371,7 @@ XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm
                     const ScTokenArray* pArray = NULL;
                     sal_uInt16 nFmlaLen;
                     rStrm >> nFmlaLen;
-                    vector<String> aTabNames;
+                    vector<OUString> aTabNames;
                     sal_uInt16 nCount = rSupbook.GetTabCount();
                     aTabNames.reserve(nCount);
                     for (sal_uInt16 i = 0; i < nCount; ++i)

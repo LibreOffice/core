@@ -32,16 +32,16 @@ class XclImpStream;
 class ExcScenarioCell
 {
 private:
-    String                      aValue;
+    OUString                        aValue;
 public:
     const sal_uInt16                nCol;
     const sal_uInt16                nRow;
 
     ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR );
 
-    inline void SetValue( const String& rVal ) { aValue = rVal; }
+    inline void SetValue( const OUString& rVal ) { aValue = rVal; }
 
-    inline const String& GetValue( void ) const { return aValue; }
+    inline const OUString& GetValue( void ) const { return aValue; }
 };
 
 class ExcScenario
@@ -56,9 +56,9 @@ public:
 
 protected:
 
-    String* pName;
-    String* pComment;
-    String* pUserName;
+    OUString* pName;
+    OUString* pComment;
+    OUString* pUserName;
     sal_uInt8 nProtected;
     const sal_uInt16 nTab;
     boost::ptr_vector<ExcScenarioCell> aEntries;

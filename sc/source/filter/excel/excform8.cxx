@@ -1255,7 +1255,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 }
 
 ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
-                                       const String& rUrl, const vector<String>& rTabNames )
+                                       const OUString& rUrl, const vector<OUString>& rTabNames )
 {
     if( !GetDocShell() )
         return ConvErrNi;
