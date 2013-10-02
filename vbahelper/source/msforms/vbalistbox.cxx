@@ -82,7 +82,6 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
     OUString sValue = getAnyAsString( _value );
     uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( ITEMS ) >>= sList;
-    uno::Sequence< sal_Int16 > nList;
     sal_Int16 nLength = static_cast<sal_Int16>( sList.getLength() );
     sal_Int16 nValue = -1;
     sal_Int16 i = 0;
