@@ -60,7 +60,6 @@ namespace svxform
         if (!xSet.is())
             return;
 
-        uno::Sequence< OUString> aServices;
         uno::Reference< lang::XSingleServiceFactory >  xSingleFactory;
 
         OUString sString;
