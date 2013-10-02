@@ -54,7 +54,7 @@ namespace connectivity
             {  }
 
         virtual sal_Int32 SQLyygetc(void);
-        virtual void SQLyyerror(char *fmt);
+        virtual void SQLyyerror(char const *fmt);
         virtual void output(sal_Int32) { OSL_FAIL("Internal error in sdblex.l: output not possible"); }
         virtual void ECHO(void) { OSL_FAIL("Internal error in sdblex.l: ECHO not possible"); }
         virtual IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;

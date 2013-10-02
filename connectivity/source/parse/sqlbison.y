@@ -4348,10 +4348,6 @@ IMPLEMENT_CONSTASCII_STRING(KEY_STR_COLLECT, "COLLECT");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_FUSION, "FUSION");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_INTERSECTION, "INTERSECTION");
 
-IMPLEMENT_CONSTASCII_STRING(FIELD_STR_NULLDATE, "NullDate");
-
-IMPLEMENT_CONSTASCII_STRING(STR_SQL_TOKEN, "SQL_TOKEN_");
-
 //==========================================================================
 //= OParseContext
 //==========================================================================
@@ -4675,7 +4671,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
         // to work around a bug in MKS YACC return the member m_pParseTree
         // instead of Sdbyyval.pParseNode
 
-        SAL_WARN_IF(!m_pParseTree, "connectivity",
+        SAL_WARN_IF(!m_pParseTree, "connectivity.parse",
             "OSQLParser: Parser did not create ParseTree");
 		return m_pParseTree;
 	}

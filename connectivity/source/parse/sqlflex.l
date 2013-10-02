@@ -708,7 +708,7 @@ OSQLScanner::~OSQLScanner()
 {
 }
 //------------------------------------------------------------------------------
-void OSQLScanner::SQLyyerror(sal_Char *fmt)
+void OSQLScanner::SQLyyerror(char const *fmt)
 {
 
     if(IN_SQLyyerror)
