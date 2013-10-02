@@ -785,7 +785,6 @@ void ODBExport::exportSequence(const Sequence< OUString>& _aValue
                             ,::xmloff::token::XMLTokenEnum _eTokenType)
 {
     Reference<XPropertySet> xProp(getDataSource());
-    Sequence< OUString> aValue;
     if ( _aValue.getLength() )
     {
         SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, _eTokenFilter, sal_True, sal_True);
