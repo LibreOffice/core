@@ -185,8 +185,6 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
     if ( !xContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
-
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
     OFOPXMLHelper* pHelper = new OFOPXMLHelper( nFormat );
