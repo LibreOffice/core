@@ -2159,7 +2159,7 @@ void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
     }
 }
 
-void ScTabViewObj::RangeSelDone( const String& rText )
+void ScTabViewObj::RangeSelDone( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
@@ -2172,7 +2172,7 @@ void ScTabViewObj::RangeSelDone( const String& rText )
         rListener->done( aEvent );
 }
 
-void ScTabViewObj::RangeSelAborted( const String& rText )
+void ScTabViewObj::RangeSelAborted( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
@@ -2185,7 +2185,7 @@ void ScTabViewObj::RangeSelAborted( const String& rText )
         rListener->aborted( aEvent );
 }
 
-void ScTabViewObj::RangeSelChanged( const String& rText )
+void ScTabViewObj::RangeSelChanged( const OUString& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));

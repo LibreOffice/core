@@ -226,9 +226,9 @@ public:
     sal_Bool                MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool                MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
-    void                    RangeSelDone( const String& rText );
-    void                    RangeSelAborted( const String& rText );
-    void                    RangeSelChanged( const String& rText );
+    void                    RangeSelDone( const OUString& rText );
+    void                    RangeSelAborted( const OUString& rText );
+    void                    RangeSelChanged( const OUString& rText );
 
                             // XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection )

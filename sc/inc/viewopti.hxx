@@ -91,8 +91,8 @@ public:
     void                    SetObjMode( ScVObjType eObj, ScVObjMode eMode ) { aModeArr[eObj] = eMode; }
     ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
 
-    void                    SetGridColor( const Color& rCol, const String& rName ) { aGridCol = rCol; aGridColName = rName;}
-    Color                   GetGridColor( String* pStrName = NULL ) const;
+    void                    SetGridColor( const Color& rCol, const OUString& rName ) { aGridCol = rCol; aGridColName = rName;}
+    Color                   GetGridColor( OUString* pStrName = NULL ) const;
 
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
@@ -106,7 +106,7 @@ private:
     bool            aOptArr     [MAX_OPT];
     ScVObjMode      aModeArr    [MAX_TYPE];
     Color           aGridCol;
-    String          aGridColName;
+    OUString        aGridColName;
     ScGridOptions   aGridOpt;
 };
 

@@ -2673,7 +2673,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             pSettings[SC_SHOWGRID].Name = OUString(SC_UNO_SHOWGRID);
             ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWGRID].Value, pOptions->GetOption( VOPT_GRID ) );
             pSettings[SC_GRIDCOLOR].Name = OUString(SC_UNO_GRIDCOLOR);
-            String aColorName;
+            OUString aColorName;
             Color aColor = pOptions->GetGridColor(&aColorName);
             pSettings[SC_GRIDCOLOR].Value <<= static_cast<sal_Int64>(aColor.GetColor());
             pSettings[SC_SHOWPAGEBR].Name = OUString(SC_UNO_SHOWPAGEBR);

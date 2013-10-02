@@ -336,8 +336,8 @@ void ScTpContentOptions::InitGridOpt()
 
     //  also select grid color entry on subsequent calls
 
-    String  aName;
-    Color   aCol    = pLocalOptions->GetGridColor( &aName );
+    OUString  aName;
+    Color     aCol    = pLocalOptions->GetGridColor( &aName );
     nSelPos = pColorLB->GetEntryPos( aCol );
 
     if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )

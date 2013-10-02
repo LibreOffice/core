@@ -357,7 +357,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_GRID ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_GRIDCOLOR ) == 0 )
             {
-                String aColorName;
+                OUString aColorName;
                 Color aColor = aViewOpt.GetGridColor(&aColorName);
                 aRet <<= static_cast<sal_Int64>(aColor.GetColor());
             }
