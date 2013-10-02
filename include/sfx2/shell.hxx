@@ -249,6 +249,10 @@ public:
     */
     void BroadcastContextForActivation (const bool bIsActivated);
 
+    /** Enabled or disable the context broadcaster.  Returns the old state.
+    */
+    bool SetContextBroadcasterEnabled (const bool bIsEnabled);
+
     SAL_DLLPRIVATE bool CanExecuteSlot_Impl( const SfxSlot &rSlot );
     SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
     SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);

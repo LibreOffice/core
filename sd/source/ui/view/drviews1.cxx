@@ -114,9 +114,15 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 }
 
 
-void DrawViewShell::Deactivate(sal_Bool /*bIsMDIActivate*/)
+void DrawViewShell::Deactivate(sal_Bool bIsMDIActivate)
 {
-    // Do not forward to ViewShell::Deactivate() to prevent a context change.
+    // Temporarily disable context broadcasting while the Deactivate()
+    // call is forwarded to our base class.
+    const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
+
+    ViewShell::Deactivate(bIsMDIActivate);
+
+    SfxShell::SetContextBroadcasterEnabled(bIsContextBroadcasterEnabled);
 }
 
 namespace

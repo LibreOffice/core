@@ -1176,4 +1176,9 @@ void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
    }
 }
 
+bool SfxShell::SetContextBroadcasterEnabled (const bool bIsEnabled)
+{
+    return pImp->maContextChangeBroadcaster.SetBroadcasterEnabled(bIsEnabled);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
