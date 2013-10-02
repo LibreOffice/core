@@ -59,22 +59,18 @@ namespace {
 const sal_Int32 OOX_BOOKVIEW_TABBARRATIO_DEF        = 600;      /// Default tabbar ratio.
 const sal_Int32 OOX_SHEETVIEW_NORMALZOOM_DEF        = 100;      /// Default zoom for normal view.
 const sal_Int32 OOX_SHEETVIEW_SHEETLAYZOOM_DEF      = 60;       /// Default zoom for pagebreak preview.
-const sal_Int32 OOX_SHEETVIEW_PAGELAYZOOM_DEF       = 100;      /// Default zoom for page layout view.
 
 const sal_uInt8 BIFF12_PANE_FROZEN                  = 0x01;
 const sal_uInt8 BIFF12_PANE_FROZENNOSPLIT           = 0x02;
 
-const sal_uInt16 BIFF12_SHEETVIEW_WINPROTECTED      = 0x0001;
 const sal_uInt16 BIFF12_SHEETVIEW_SHOWFORMULAS      = 0x0002;
 const sal_uInt16 BIFF12_SHEETVIEW_SHOWGRID          = 0x0004;
 const sal_uInt16 BIFF12_SHEETVIEW_SHOWHEADINGS      = 0x0008;
 const sal_uInt16 BIFF12_SHEETVIEW_SHOWZEROS         = 0x0010;
 const sal_uInt16 BIFF12_SHEETVIEW_RIGHTTOLEFT       = 0x0020;
 const sal_uInt16 BIFF12_SHEETVIEW_SELECTED          = 0x0040;
-const sal_uInt16 BIFF12_SHEETVIEW_SHOWRULER         = 0x0080;
 const sal_uInt16 BIFF12_SHEETVIEW_SHOWOUTLINE       = 0x0100;
 const sal_uInt16 BIFF12_SHEETVIEW_DEFGRIDCOLOR      = 0x0200;
-const sal_uInt16 BIFF12_SHEETVIEW_SHOWWHITESPACE    = 0x0400;
 
 const sal_uInt16 BIFF12_CHARTSHEETVIEW_SELECTED     = 0x0001;
 const sal_uInt16 BIFF12_CHARTSHEETVIEW_ZOOMTOFIT    = 0x0002;
@@ -84,31 +80,6 @@ const sal_uInt8 BIFF12_WBVIEW_MINIMIZED             = 0x02;
 const sal_uInt8 BIFF12_WBVIEW_SHOWHORSCROLL         = 0x08;
 const sal_uInt8 BIFF12_WBVIEW_SHOWVERSCROLL         = 0x10;
 const sal_uInt8 BIFF12_WBVIEW_SHOWTABBAR            = 0x20;
-const sal_uInt8 BIFF12_WBVIEW_AUTOFILTERGROUP       = 0x40;
-
-const sal_uInt8 BIFF_PANE_BOTTOMRIGHT               = 0;        /// Bottom-right pane.
-const sal_uInt8 BIFF_PANE_TOPRIGHT                  = 1;        /// Right, or top-right pane.
-const sal_uInt8 BIFF_PANE_BOTTOMLEFT                = 2;        /// Bottom, or bottom-left pane.
-const sal_uInt8 BIFF_PANE_TOPLEFT                   = 3;        /// Single, top, left, or top-left pane.
-
-const sal_uInt16 BIFF_WINDOW1_HIDDEN                = 0x0001;
-const sal_uInt16 BIFF_WINDOW1_MINIMIZED             = 0x0002;
-const sal_uInt16 BIFF_WINDOW1_SHOWHORSCROLL         = 0x0008;
-const sal_uInt16 BIFF_WINDOW1_SHOWVERSCROLL         = 0x0010;
-const sal_uInt16 BIFF_WINDOW1_SHOWTABBAR            = 0x0020;
-
-const sal_uInt16 BIFF_WINDOW2_SHOWFORMULAS          = 0x0001;
-const sal_uInt16 BIFF_WINDOW2_SHOWGRID              = 0x0002;
-const sal_uInt16 BIFF_WINDOW2_SHOWHEADINGS          = 0x0004;
-const sal_uInt16 BIFF_WINDOW2_FROZEN                = 0x0008;
-const sal_uInt16 BIFF_WINDOW2_SHOWZEROS             = 0x0010;
-const sal_uInt16 BIFF_WINDOW2_DEFGRIDCOLOR          = 0x0020;
-const sal_uInt16 BIFF_WINDOW2_RIGHTTOLEFT           = 0x0040;
-const sal_uInt16 BIFF_WINDOW2_SHOWOUTLINE           = 0x0080;
-const sal_uInt16 BIFF_WINDOW2_FROZENNOSPLIT         = 0x0100;
-const sal_uInt16 BIFF_WINDOW2_SELECTED              = 0x0200;
-const sal_uInt16 BIFF_WINDOW2_DISPLAYED             = 0x0400;
-const sal_uInt16 BIFF_WINDOW2_PAGEBREAKMODE         = 0x0800;
 
 // Attention: view settings in Calc do not use com.sun.star.view.DocumentZoomType!
 const sal_Int16 API_ZOOMTYPE_PERCENT                = 0;        /// Zoom value in percent.
