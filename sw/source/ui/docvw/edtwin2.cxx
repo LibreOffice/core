@@ -181,7 +181,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 // #i104300#
                 // special handling if target is a cross-reference bookmark
                 {
-                    String sTmpSearchStr = sTxt.copy( 1, sTxt.getLength() );
+                    String sTmpSearchStr = sTxt.copy( 1 );
                     IDocumentMarkAccess* const pMarkAccess =
                                                 rSh.getIDocumentMarkAccess();
                     IDocumentMarkAccess::const_iterator_t ppBkmk =
