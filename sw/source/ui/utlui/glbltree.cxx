@@ -851,6 +851,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 pSelEntry = PrevSelected(pSelEntry);
                 if(pSelEntry)
                 {
+                    delete pTempContents;
                     pTempContents = new SwGlblDocContents;
                     pActiveShell->GetGlobalDocContent(*pTempContents);
                 }
