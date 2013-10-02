@@ -48,8 +48,6 @@ namespace rptui
 const long STD_WIN_SIZE_X = 180;
 const long STD_WIN_SIZE_Y = 320;
 
-const long LISTBOX_BORDER = 2;
-
 using namespace ::com::sun::star;
 using namespace sdbc;
 using namespace sdb;
