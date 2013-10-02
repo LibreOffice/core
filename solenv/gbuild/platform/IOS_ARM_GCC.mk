@@ -118,6 +118,19 @@ define gb_LinkTarget__command_dynamiclink
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
 		$(wildcard $(OUTDIR)/lib/*.a) \
+		$(wildcard $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib*.a) \
+		$(HUNSPELL_LIBS) \
+		$(HYPHEN_LIB) \
+		$(MYTHES_LIBS) \
+		$(wildcard $(WORKDIR)/LinkTarget/StaticLibrary/lib*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/libcdr/src/lib/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/libmspub/src/lib/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/libmwaw/src/lib/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/libodfgen/src/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/liborcus/src/*/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/libvisio/src/lib/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/libwp?/src/lib/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/openssl/*.a) \
 		$(T_LIBS) \
 		-o $(1))
 endef
