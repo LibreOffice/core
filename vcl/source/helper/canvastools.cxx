@@ -225,8 +225,6 @@ namespace vcl
                     // determine alpha channel depth
                     const uno::Sequence<sal_Int8> aTags(
                         aLayout.ColorSpace->getComponentTags() );
-                    const uno::Sequence<sal_Int32> aDepths(
-                        aLayout.ColorSpace->getComponentBitCounts() );
                     const sal_Int8* pStart(aTags.getConstArray());
                     const sal_Size  nLen(aTags.getLength());
                     const sal_Int8* pEnd(pStart+nLen);
