@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef __arm
+#if defined(__arm) || defined(__arm64)
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 
@@ -175,6 +175,8 @@ void callVirtualMethod(
     sal_uInt32 nGPR,
     double *pFPR)
 {
+#ifdef __arm
+
     // never called
     if (! pThis)
         CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
@@ -225,6 +227,21 @@ void callVirtualMethod(
         : "r0", "r1", "r2", "r3", "r4", "r5");
 
     MapReturn(r0, r1, pReturnType, (sal_uInt32*)pRegisterReturn);
+
+#else
+    abort(); // arm64 code not yet implemented
+
+    (void) pThis;
+    (void) nVtableIndex;
+    (void) pRegisterReturn;
+    (void) pReturnType;
+    (void) pStack;
+    (void) nStack;
+    (void) pGPR;
+    (void) nGPR;
+    (void) pFPR;
+#endif
+
 }
 }
 

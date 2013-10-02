@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef __arm
+#if defined(__arm) || defined(__arm64)
 
 // For iOS devices (ARM). Basically a copy of n
 // ../gcc3_linux_arm/cpp2uno.cxx with some cleanups and necessary
