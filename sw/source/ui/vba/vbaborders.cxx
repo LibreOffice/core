@@ -42,9 +42,6 @@ static const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBot
 const static OUString sTableBorder("TableBorder");
 
 //  Equiv widths in in 1/100 mm
-const static sal_Int32 OOLineThin = 35;
-const static sal_Int32 OOLineMedium = 88;
-const static sal_Int32 OOLineThick = 141;
 const static sal_Int32 OOLineHairline = 2;
 
 class SwVbaBorder : public SwVbaBorder_Base
