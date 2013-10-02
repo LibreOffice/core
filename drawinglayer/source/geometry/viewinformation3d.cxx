@@ -228,7 +228,6 @@ namespace drawinglayer
             // data set
             void impFillViewInformationFromContent()
             {
-                uno::Sequence< beans::PropertyValue > xRetval;
                 const bool bObjectTransformationUsed(!maObjectTransformation.isIdentity());
                 const bool bOrientationUsed(!maOrientation.isIdentity());
                 const bool bProjectionUsed(!maProjection.isIdentity());
