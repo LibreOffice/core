@@ -721,7 +721,8 @@ sal_Int32 SwSrcView::PrintSource(
 
     // nLinepPage is not true, if lines have to be wrapped...
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height() / nLineHeight);
-    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width()  / pOutDev->GetTextWidth(OUString('X')));
+    const sal_Int32 nCharspLine =
+        static_cast<sal_Int32>(aPaperSz.Width() / pOutDev->GetTextWidth("X"));
     sal_uInt16 nParas = static_cast< sal_uInt16 >( pTextEngine->GetParagraphCount() );
 
     sal_uInt16 nPages = (sal_uInt16) (nParas / nLinespPage + 1 );
@@ -735,7 +736,8 @@ sal_Int32 SwSrcView::PrintSource(
     for ( sal_uInt16 nPara = 0; nPara < nParas; ++nPara )
     {
         const OUString aLine( lcl_ConvertTabsToSpaces(pTextEngine->GetText( nPara )) );
-        sal_Int32 nLines = aLine.getLength() / nCharspLine + 1;
+        const sal_Int32 nLineLen = aLine.getLength();
+        const sal_Int32 nLines = (nLineLen+nCharspLine-1) / nCharspLine;
         for ( sal_Int32 nLine = 0; nLine < nLines; ++nLine )
         {
             aPos.Y() += nLineHeight;
@@ -747,7 +749,11 @@ sal_Int32 SwSrcView::PrintSource(
                 aPos = aStartPos;
             }
             if (!bCalcNumPagesOnly && nPage == nCurPage)
-                pOutDev->DrawText( aPos, aLine.copy(nLine * nCharspLine, nCharspLine) );
+            {
+                const sal_Int32 nStart = nLine * nCharspLine;
+                const sal_Int32 nLen = std::min(nLineLen-nStart, nCharspLine);
+                pOutDev->DrawText( aPos, aLine.copy(nStart, nLen) );
+            }
         }
         aPos.Y() += nParaSpace;
     }
