@@ -96,8 +96,6 @@ uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizati
     if ( !xContext.is() || !xInStream.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< beans::StringPair > aResult;
-
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
     DocTemplLocaleHelper* pHelper = new DocTemplLocaleHelper();
