@@ -611,13 +611,11 @@ UpdateCheckConfig::commitChanges()
     xChangesBatch = uno::Reference< util::XChangesBatch > ( m_xAvailableUpdates, uno::UNO_QUERY );
     if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
     {
-        util::ChangesSet aChangesSet = xChangesBatch->getPendingChanges();
         xChangesBatch->commitChanges();
     }
     xChangesBatch = uno::Reference< util::XChangesBatch > ( m_xIgnoredUpdates, uno::UNO_QUERY );
     if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
     {
-        util::ChangesSet aChangesSet = xChangesBatch->getPendingChanges();
         xChangesBatch->commitChanges();
     }
 }
