@@ -261,8 +261,6 @@ void OHierarchyElement_Impl::TestForClosing()
 void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source )
         throw ( uno::RuntimeException )
 {
-    uno::Sequence< embed::XStorage > aStoragesToCommit;
-
     try
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
