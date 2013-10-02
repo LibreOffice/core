@@ -58,8 +58,8 @@ TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
 
 //------------------------------------------------------------------------
 
-ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
-                            const String& rFilter, const String& rOpt,
+ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
+                            const OUString& rFilter, const OUString& rOpt,
                             sal_uLong nRefresh ):
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
@@ -75,8 +75,8 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
     pImpl->m_pDocSh = pDocSh;
 }
 
-ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
-                            const String& rFilter, const String& rOpt,
+ScTableLink::ScTableLink(SfxObjectShell* pShell, const OUString& rFile,
+                            const OUString& rFilter, const OUString& rOpt,
                             sal_uLong nRefresh ):
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
@@ -165,12 +165,12 @@ sal_Bool ScTableLink::IsUsed() const
     return pImpl->m_pDocSh->GetDocument()->HasLink( aFileName, aFilterName, aOptions );
 }
 
-sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
-                            const String* pNewOptions, sal_uLong nNewRefresh )
+sal_Bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
+                            const OUString* pNewOptions, sal_uLong nNewRefresh )
 {
     //  Dokument laden
 
-    if (!rNewFile.Len() || !rNewFilter.Len())
+    if (rNewFile.isEmpty() || rNewFilter.isEmpty())
         return false;
 
     OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, pImpl->m_pDocSh);
@@ -443,8 +443,8 @@ OUString ScDocumentLoader::GetOptions( SfxMedium& rMedium )
     return EMPTY_STRING;
 }
 
-bool ScDocumentLoader::GetFilterName( const String& rFileName,
-                                      String& rFilter, String& rOptions,
+bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
+                                      OUString& rFilter, OUString& rOptions,
                                       bool bWithContent, bool bWithInteraction )
 {
     TypeId aScType = TYPE(ScDocShell);
@@ -492,22 +492,11 @@ bool ScDocumentLoader::GetFilterName( const String& rFileName,
             rFilter = pSfxFilter->GetFilterName();
         else
             rFilter = ScDocShell::GetOwnFilterName();       //  sonst Calc-Datei
-        bOK = (rFilter.Len()>0);
+        bOK = !rFilter.isEmpty();
     }
 
     delete pMedium;
     return bOK;
-}
-
-bool ScDocumentLoader::GetFilterName(
-    const OUString& rFilterName, OUString& rFilter, OUString& rOptions,
-    bool bWithContent, bool bWithInteraction)
-{
-    String aTmp1, aTmp2;
-    bool bRet = GetFilterName(rFilterName, aTmp1, aTmp2, bWithContent, bWithInteraction);
-    rFilter = aTmp1;
-    rOptions = aTmp2;
-    return bRet;
 }
 
 void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )

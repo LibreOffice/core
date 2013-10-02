@@ -283,8 +283,8 @@ public:
     const OUString& GetLinkTab() const                        { return aLinkTab; }
     sal_uLong       GetLinkRefreshDelay() const                 { return nLinkRefreshDelay; }
 
-    void        SetLink( sal_uInt8 nMode, const String& rDoc, const String& rFlt,
-                        const String& rOpt, const String& rTab, sal_uLong nRefreshDelay );
+    void        SetLink( sal_uInt8 nMode, const OUString& rDoc, const OUString& rFlt,
+                        const OUString& rOpt, const OUString& rTab, sal_uLong nRefreshDelay );
 
     void        GetName( OUString& rName ) const;
     void        SetName( const OUString& rNewName );
@@ -299,7 +299,7 @@ public:
 
     const OUString&   GetPageStyle() const                    { return aPageStyle; }
     void            SetPageStyle( const OUString& rName );
-    void            PageStyleModified( const String& rNewName );
+    void            PageStyleModified( const OUString& rNewName );
 
     bool            IsProtected() const;
     void            SetProtection(const ScTableProtection* pProtect);
@@ -322,7 +322,7 @@ public:
 
     bool        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
-    bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+    bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                            ScSetStringParam* pParam = NULL );
 
     void SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
@@ -532,7 +532,7 @@ public:
     void        Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                         double nStepValue, double nMaxValue, ScProgress* pProgress);
-    String      GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
+    OUString    GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
     void        UpdateSelectionFunction( ScFunctionData& rData,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
@@ -541,7 +541,7 @@ public:
     void        AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     sal_uInt16 nFormatNo );
     void        GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData);
-    void        ScReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl ); // from sw
+    void        ScReplaceTabsStr( OUString& rStr, const OUString& rSrch, const OUString& rRepl ); // from sw
     bool        SearchAndReplace(
         const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
         ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);

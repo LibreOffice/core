@@ -74,7 +74,7 @@ class ScLinkTargetTypesObj : public ::cppu::WeakImplHelper2<
 {
 private:
     ScDocShell*             pDocShell;
-    String                  aNames[SC_LINKTARGETTYPE_COUNT];
+    OUString                aNames[SC_LINKTARGETTYPE_COUNT];
 
 public:
                             ScLinkTargetTypesObj(ScDocShell* pDocSh);
@@ -110,7 +110,7 @@ class ScLinkTargetTypeObj : public ::cppu::WeakImplHelper3<
 private:
     ScDocShell*             pDocShell;
     sal_uInt16              nType;
-    String                  aName;
+    OUString                aName;
 
 public:
                             ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT);

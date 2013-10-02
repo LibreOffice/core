@@ -399,7 +399,7 @@ bool ScDocProtection::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash
     return mpImpl->hasPasswordHash(eHash, eHash2);
 }
 
-void ScDocProtection::setPassword(const String& aPassText)
+void ScDocProtection::setPassword(const OUString& aPassText)
 {
     mpImpl->setPassword(aPassText);
 }
@@ -415,7 +415,7 @@ void ScDocProtection::setPasswordHash(
     mpImpl->setPasswordHash(aPassword, eHash, eHash2);
 }
 
-bool ScDocProtection::verifyPassword(const String& aPassText) const
+bool ScDocProtection::verifyPassword(const OUString& aPassText) const
 {
     return mpImpl->verifyPassword(aPassText);
 }
@@ -475,7 +475,7 @@ bool ScTableProtection::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHa
     return mpImpl->hasPasswordHash(eHash, eHash2);
 }
 
-void ScTableProtection::setPassword(const String& aPassText)
+void ScTableProtection::setPassword(const OUString& aPassText)
 {
     mpImpl->setPassword(aPassText);
 }
@@ -491,7 +491,7 @@ void ScTableProtection::setPasswordHash(
     mpImpl->setPasswordHash(aPassword, eHash, eHash2);
 }
 
-bool ScTableProtection::verifyPassword(const String& aPassText) const
+bool ScTableProtection::verifyPassword(const OUString& aPassText) const
 {
     return mpImpl->verifyPassword(aPassText);
 }

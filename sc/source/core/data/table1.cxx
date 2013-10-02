@@ -414,8 +414,8 @@ void ScTable::SetScenario( bool bFlag )
 }
 
 void ScTable::SetLink( sal_uInt8 nMode,
-                        const String& rDoc, const String& rFlt, const String& rOpt,
-                        const String& rTab, sal_uLong nRefreshDelay )
+                        const OUString& rDoc, const OUString& rFlt, const OUString& rOpt,
+                        const OUString& rTab, sal_uLong nRefreshDelay )
 {
     nLinkMode = nMode;
     aLinkDoc = rDoc;        // Datei

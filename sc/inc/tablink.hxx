@@ -43,10 +43,10 @@ private:
 
 public:
     TYPEINFO();
-    ScTableLink( ScDocShell* pDocSh, const String& rFile,
-                    const String& rFilter, const String& rOpt, sal_uLong nRefresh );
-    ScTableLink( SfxObjectShell* pShell, const String& rFile,
-                    const String& rFilter, const String& rOpt, sal_uLong nRefresh );
+    ScTableLink( ScDocShell* pDocSh, const OUString& rFile,
+                    const OUString& rFilter, const OUString& rOpt, sal_uLong nRefresh );
+    ScTableLink( SfxObjectShell* pShell, const OUString& rFile,
+                    const OUString& rFilter, const OUString& rOpt, sal_uLong nRefresh );
     virtual ~ScTableLink();
     virtual void Closed();
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
@@ -54,8 +54,8 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    sal_Bool    Refresh(const String& rNewFile, const String& rNewFilter,
-                    const String* pNewOptions /* = NULL */, sal_uLong nNewRefresh );
+    sal_Bool    Refresh(const OUString& rNewFile, const OUString& rNewFilter,
+                    const OUString* pNewOptions /* = NULL */, sal_uLong nNewRefresh );
     void    SetInCreate(bool bSet)      { bInCreate = bSet; }
     void    SetAddUndo(bool bSet)       { bAddUndo = bSet; }
     void    SetPaint(bool bSet)         { bDoPaint = bSet; }
@@ -79,10 +79,6 @@ private:
     ScDocShell*         pDocShell;
     SfxObjectShellRef   aRef;
     SfxMedium*          pMedium;
-
-    static bool         GetFilterName( const String& rFileName,
-                                       String& rFilter, String& rOptions,
-                                       bool bWithContent, bool bWithInteraction );
 
 public:
                         ScDocumentLoader( const OUString& rFileName,

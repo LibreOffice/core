@@ -353,7 +353,7 @@ void ScSheetLinkObj::setFilterOptions(const OUString& FilterOptions)
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
     {
-        String aOptStr(FilterOptions);
+        OUString aOptStr(FilterOptions);
         pLink->Refresh( aFileName, pLink->GetFilterName(), &aOptStr, pLink->GetRefreshDelay() );
     }
 }

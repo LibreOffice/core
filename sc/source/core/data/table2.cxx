@@ -1431,7 +1431,7 @@ bool ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
     return bOk;
 }
 
-bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
+bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const OUString& rString,
                          ScSetStringParam* pParam )
 {
     if (ValidColRow(nCol,nRow))

@@ -1153,7 +1153,7 @@ void ScTable::SetPageStyle( const OUString& rName )
     }
 }
 
-void ScTable::PageStyleModified( const String& rNewName )
+void ScTable::PageStyleModified( const OUString& rNewName )
 {
     aPageStyle = rNewName;
     InvalidateTextWidth(NULL, NULL, false, false);      // don't know what was in the style before
