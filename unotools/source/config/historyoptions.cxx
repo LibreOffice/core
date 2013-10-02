@@ -340,7 +340,6 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
 
     Sequence< Sequence< PropertyValue > > seqReturn; // Set default return value.
     Sequence< PropertyValue >             seqProperties( 4 );
-    Sequence< OUString >           lOrders;
 
     css::uno::Reference< css::container::XNameAccess > xListAccess;
     css::uno::Reference< css::container::XNameAccess > xItemList;
