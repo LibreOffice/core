@@ -193,7 +193,6 @@ void ToolbarsMenuController::addCommand(
 Reference< XDispatch > ToolbarsMenuController::getDispatchFromCommandURL( const OUString& rCommandURL )
 {
     URL                          aTargetURL;
-    Sequence<PropertyValue>      aArgs;
     Reference< XURLTransformer > xURLTransformer;
     Reference< XFrame >          xFrame;
 
