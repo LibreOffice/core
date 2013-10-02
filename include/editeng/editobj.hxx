@@ -49,6 +49,12 @@ struct Section;
 
 }
 
+namespace svl {
+
+class StringPool;
+
+}
+
 class EditTextObjectImpl;
 
 class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
@@ -71,6 +77,13 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
 public:
     EditTextObject( const EditTextObject& r );
     virtual ~EditTextObject();
+
+    /**
+     * Set paragraph strings to the shared string pool.
+     *
+     * @param rPool shared string pool.
+     */
+    void NormalizeString( svl::StringPool& rPool );
 
     const SfxItemPool* GetPool() const;
     sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format

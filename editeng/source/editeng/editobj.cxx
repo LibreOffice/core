@@ -44,6 +44,7 @@
 
 #include <vcl/graph.hxx>
 #include <svl/intitem.hxx>
+#include "svl/stringpool.hxx"
 #include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 
@@ -146,6 +147,11 @@ ContentInfo::~ContentInfo()
     for (; it != itEnd; ++it)
         aParaAttribs.GetPool()->Remove(*it->GetItem());
     aAttribs.clear();
+}
+
+void ContentInfo::NormalizeString( svl::StringPool& rPool )
+{
+    aText = OUString(rPool.intern(aText));
 }
 
 const WrongList* ContentInfo::GetWrongList() const
@@ -314,6 +320,11 @@ void EditTextObject::ChangeStyleSheetName(
 editeng::FieldUpdater EditTextObject::GetFieldUpdater()
 {
     return mpImpl->GetFieldUpdater();
+}
+
+void EditTextObject::NormalizeString( svl::StringPool& rPool )
+{
+    mpImpl->NormalizeString(rPool);
 }
 
 const SfxItemPool* EditTextObject::GetPool() const
@@ -600,6 +611,16 @@ sal_uInt16 EditTextObjectImpl::GetUserType() const
 void EditTextObjectImpl::SetUserType( sal_uInt16 n )
 {
     nUserType = n;
+}
+
+void EditTextObjectImpl::NormalizeString( svl::StringPool& rPool )
+{
+    ContentInfosType::iterator it = aContents.begin(), itEnd = aContents.end();
+    for (; it != itEnd; ++it)
+    {
+        ContentInfo& rInfo = *it;
+        rInfo.NormalizeString(rPool);
+    }
 }
 
 bool EditTextObjectImpl::IsVertical() const

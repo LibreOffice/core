@@ -35,6 +35,12 @@ struct Section;
 
 }
 
+namespace svl {
+
+class StringPool;
+
+}
+
 class XEditAttribute
 {
 private:
@@ -136,6 +142,8 @@ private:
 public:
                         ~ContentInfo();
 
+    void NormalizeString( svl::StringPool& rPool );
+
     const XEditAttributesType& GetAttribs() const { return aAttribs; }
     XEditAttributesType& GetAttribs() { return aAttribs; }
 
@@ -197,6 +205,8 @@ public:
 
     sal_uInt16 GetUserType() const;
     void SetUserType( sal_uInt16 n );
+
+    void NormalizeString( svl::StringPool& rPool );
 
     bool                    IsVertical() const;
     void                    SetVertical( bool b );
