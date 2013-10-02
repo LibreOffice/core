@@ -101,7 +101,6 @@ const sal_uInt16 BIFF12_PTFITEM_HIDDEN              = 0x0001;
 const sal_uInt16 BIFF12_PTFITEM_HIDEDETAILS         = 0x0002;
 
 const sal_uInt8 BIFF12_PTPAGEFIELD_HASNAME          = 0x01;
-const sal_uInt8 BIFF12_PTPAGEFIELD_HASOLAPCAPTION   = 0x02;
 const sal_Int32 BIFF12_PTPAGEFIELD_MULTIITEMS       = 0x001000FE;
 
 const sal_uInt16 BIFF12_PTFILTER_HASNAME            = 0x0001;
@@ -156,55 +155,6 @@ const sal_uInt32 BIFF12_PTDEF_NOCUSTOMLISTSORT      = 0x00004000;
 
 const sal_uInt8 BIFF12_PTDEF_ROWAXIS                = 1;
 const sal_uInt8 BIFF12_PTDEF_COLAXIS                = 2;
-
-// ----------------------------------------------------------------------------
-
-const sal_uInt16 BIFF_PT_NOSTRING                   = 0xFFFF;
-
-const sal_uInt16 BIFF_PTFIELD_DATAFIELD             = 0x0008;
-const sal_uInt16 BIFF_PTFIELD_DEFAULT               = 0x0001;
-const sal_uInt16 BIFF_PTFIELD_SUM                   = 0x0002;
-const sal_uInt16 BIFF_PTFIELD_COUNTA                = 0x0004;
-const sal_uInt16 BIFF_PTFIELD_AVERAGE               = 0x0008;
-const sal_uInt16 BIFF_PTFIELD_MAX                   = 0x0010;
-const sal_uInt16 BIFF_PTFIELD_MIN                   = 0x0020;
-const sal_uInt16 BIFF_PTFIELD_PRODUCT               = 0x0040;
-const sal_uInt16 BIFF_PTFIELD_COUNT                 = 0x0080;
-const sal_uInt16 BIFF_PTFIELD_STDDEV                = 0x0100;
-const sal_uInt16 BIFF_PTFIELD_STDDEVP               = 0x0200;
-const sal_uInt16 BIFF_PTFIELD_VAR                   = 0x0400;
-const sal_uInt16 BIFF_PTFIELD_VARP                  = 0x0800;
-
-const sal_uInt32 BIFF_PTFIELD2_SHOWALL              = 0x00000001;
-const sal_uInt32 BIFF_PTFIELD2_AUTOSORT             = 0x00000200;
-const sal_uInt32 BIFF_PTFIELD2_SORTASCENDING        = 0x00000400;
-const sal_uInt32 BIFF_PTFIELD2_AUTOSHOW             = 0x00000800;
-const sal_uInt32 BIFF_PTFIELD2_AUTOSHOWTOP          = 0x00001000;
-const sal_uInt32 BIFF_PTFIELD2_OUTLINE              = 0x00200000;
-const sal_uInt32 BIFF_PTFIELD2_INSERTBLANKROW       = 0x00400000;
-const sal_uInt32 BIFF_PTFIELD2_SUBTOTALTOP          = 0x00800000;
-
-const sal_uInt16 BIFF_PTFITEM_HIDDEN                = 0x0001;
-const sal_uInt16 BIFF_PTFITEM_HIDEDETAILS           = 0x0002;
-
-const sal_uInt16 BIFF_PTDEF_ROWGRANDTOTALS          = 0x0001;
-const sal_uInt16 BIFF_PTDEF_COLGRANDTOTALS          = 0x0002;
-
-const sal_uInt8 BIFF_PTDEF_ROWAXIS                  = 1;
-const sal_uInt8 BIFF_PTDEF_COLAXIS                  = 2;
-
-const sal_uInt32 BIFF_PTDEF2_PAGEOVERTHENDOWN       = 0x00000001;
-const sal_uInt32 BIFF_PTDE2F_ENABLEDRILL            = 0x00020000;
-const sal_uInt32 BIFF_PTDEF2_PRESERVEFORMATTING     = 0x00080000;
-const sal_uInt32 BIFF_PTDEF2_MERGEITEM              = 0x00100000;
-const sal_uInt32 BIFF_PTDEF2_SHOWERROR              = 0x00200000;
-const sal_uInt32 BIFF_PTDEF2_SHOWMISSING            = 0x00400000;
-const sal_uInt32 BIFF_PTDEF2_SUBTOTALHIDDENITEMS    = 0x00800000;
-
-const sal_Int16 BIFF_PTPAGEFIELDS_ALLITEMS          = 0x7FFD;
-
-const sal_Int16 BIFF_PTDATAFIELD_PREVIOUS           = 0x7FFB;
-const sal_Int16 BIFF_PTDATAFIELD_NEXT               = 0x7FFC;
 
 } // namespace
 
