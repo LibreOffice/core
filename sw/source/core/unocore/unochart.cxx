@@ -54,7 +54,7 @@
 using namespace ::com::sun::star;
 
 // from unotbl.cxx
-extern void sw_GetCellPosition( const String &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
+extern void sw_GetCellPosition( const OUString &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
 extern String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
 extern int sw_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 );
 extern int sw_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 );
@@ -2159,12 +2159,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                         nCol = nCol + i;
                     else
                         nRow = nRow + i;
-                    String aCellName( sw_GetCellName( nCol, nRow ) );
+                    OUString aCellName( sw_GetCellName( nCol, nRow ) );
 
-                    xub_StrLen nLen = aCellName.Len();
+                    sal_Int32 nLen = aCellName.getLength();
                     if (nLen)
                     {
-                        const sal_Unicode *pBuf = aCellName.GetBuffer();
+                        const sal_Unicode *pBuf = aCellName.getStr();
                         const sal_Unicode *pEnd = pBuf + nLen;
                         while (pBuf < pEnd && !('0' <= *pBuf && *pBuf <= '9'))
                             ++pBuf;
@@ -2176,12 +2176,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                             if (bUseCol)
                             {
                                 aRplc = OUString("%COLUMNLETTER");
-                                aNew = OUString(aCellName.GetBuffer(), pBuf - aCellName.GetBuffer());
+                                aNew = OUString(aCellName.getStr(), pBuf - aCellName.getStr());
                             }
                             else
                             {
                                 aRplc = OUString("%ROWNUMBER");
-                                aNew = OUString(pBuf, (aCellName.GetBuffer() + nLen) - pBuf);
+                                aNew = OUString(pBuf, (aCellName.getStr() + nLen) - pBuf);
                             }
                             xub_StrLen nPos = aTxt.Search( aRplc );
                             if (nPos != STRING_NOTFOUND)

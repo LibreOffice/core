@@ -500,7 +500,7 @@ namespace sw
         CharRuns GetPseudoCharRuns(const SwTxtNode& rTxtNd,
             xub_StrLen nTxtStart, bool bSplitOnCharSet)
         {
-            const String &rTxt = rTxtNd.GetTxt();
+            const OUString &rTxt = rTxtNd.GetTxt();
 
             bool bParaIsRTL = false;
             OSL_ENSURE(rTxtNd.GetDoc(), "No document for node?, suspicious");
@@ -516,7 +516,7 @@ namespace sw
             using namespace ::com::sun::star::i18n;
 
             sal_uInt16 nScript = i18n::ScriptType::LATIN;
-            if (rTxt.Len() && g_pBreakIt && g_pBreakIt->GetBreakIter().is())
+            if (!rTxt.isEmpty() && g_pBreakIt && g_pBreakIt->GetBreakIter().is())
                 nScript = g_pBreakIt->GetBreakIter()->getScriptType(rTxt, 0);
 
             rtl_TextEncoding eChrSet = ItemGet<SvxFontItem>(rTxtNd,
@@ -525,7 +525,7 @@ namespace sw
 
             CharRuns aRunChanges;
 
-            if (!rTxt.Len())
+            if (rTxt.isEmpty())
             {
                 aRunChanges.push_back(CharRunEntry(0, nScript, eChrSet,
                     bParaIsRTL));
@@ -550,8 +550,8 @@ namespace sw
 
             UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
             UErrorCode nError = U_ZERO_ERROR;
-            UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
-            ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),
+            UBiDi* pBidi = ubidi_openSized(rTxt.getLength(), 0, &nError);
+            ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(rTxt.getStr()), rTxt.getLength(),
                     static_cast< UBiDiLevel >(eDefaultDir), 0, &nError);
 
             sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
@@ -583,15 +583,15 @@ namespace sw
             {
                 //Split unicode text into plausable 8bit ranges for export to
                 //older non unicode aware format
-                xub_StrLen nLen = rTxt.Len();
-                xub_StrLen nPos = 0;
+                sal_Int32 nLen = rTxt.getLength();
+                sal_Int32 nPos = 0;
                 while (nPos != nLen)
                 {
                     rtl_TextEncoding ScriptType =
-                        getBestMSEncodingByChar(rTxt.GetChar(nPos++));
+                        getBestMSEncodingByChar(rTxt[nPos++]);
                     while (
                             (nPos != nLen) &&
-                            (ScriptType == getBestMSEncodingByChar(rTxt.GetChar(nPos)))
+                            (ScriptType == getBestMSEncodingByChar(rTxt[nPos]))
                           )
                     {
                         ++nPos;
@@ -605,15 +605,15 @@ namespace sw
 
             if (g_pBreakIt && g_pBreakIt->GetBreakIter().is())
             {
-                xub_StrLen nLen = rTxt.Len();
-                xub_StrLen nPos = 0;
+                sal_Int32 nLen = rTxt.getLength();
+                sal_Int32 nPos = 0;
                 while (nPos < nLen)
                 {
                     sal_Int32 nEnd2 = g_pBreakIt->GetBreakIter()->endOfScript(rTxt, nPos,
                         nScript);
                     if (nEnd2 < 0)
                         break;
-                    nPos = static_cast< xub_StrLen >(nEnd2);
+                    nPos = nEnd2;
                     aScripts.push_back(ScriptEntry(nPos, nScript));
                     nScript = g_pBreakIt->GetBreakIter()->getScriptType(rTxt, nPos);
                 }
@@ -635,12 +635,12 @@ namespace sw
                     aScriptIter != aScriptEnd
                   )
             {
-                xub_StrLen nMinPos = rTxt.Len();
+                sal_Int32 nMinPos = rTxt.getLength();
 
                 if (aBiDiIter != aBiDiEnd)
                 {
                     if (aBiDiIter->first < nMinPos)
-                        nMinPos = static_cast< xub_StrLen >(aBiDiIter->first);
+                        nMinPos = aBiDiIter->first;
                     bCharIsRTL = aBiDiIter->second;
                 }
 

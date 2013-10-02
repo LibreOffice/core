@@ -347,22 +347,22 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
  * @param [IN,OUT] rRow (0-based)
  */
 //TODO: potential for throwing proper exceptions instead of having every caller to check for errors
-void sw_GetCellPosition(const String &rCellName,
+void sw_GetCellPosition(const OUString &rCellName,
                         sal_Int32 &rColumn, sal_Int32 &rRow)
 {
     rColumn = rRow = -1;    // default return values indicating failure
-    xub_StrLen nLen = rCellName.Len();
+    sal_Int32 nLen = rCellName.getLength();
     if (nLen)
     {
-        const sal_Unicode *pBuf = rCellName.GetBuffer();
+        const sal_Unicode *pBuf = rCellName.getStr();
         const sal_Unicode *pEnd = pBuf + nLen;
         while (pBuf < pEnd && !('0' <= *pBuf && *pBuf <= '9'))
             ++pBuf;
         // start of number found?
         if (pBuf < pEnd && ('0' <= *pBuf && *pBuf <= '9'))
         {
-            OUString aColTxt(rCellName.GetBuffer(), pBuf - rCellName.GetBuffer());
-            OUString aRowTxt(pBuf, (rCellName.GetBuffer() + nLen - pBuf));
+            OUString aColTxt(rCellName.getStr(), pBuf - rCellName.getStr());
+            OUString aRowTxt(pBuf, (rCellName.getStr() + nLen - pBuf));
             if (!aColTxt.isEmpty() && !aRowTxt.isEmpty())
             {
                 sal_Int32 nColIdx = 0;

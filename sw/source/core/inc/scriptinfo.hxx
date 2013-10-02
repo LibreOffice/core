@@ -77,7 +77,7 @@ private:
     xub_StrLen nInvalidityPos;
     sal_uInt8 nDefaultDir;
 
-    void UpdateBidiInfo( const String& rTxt );
+    void UpdateBidiInfo( const OUString& rTxt );
 
     sal_Bool IsKashidaValid ( xub_StrLen nKashPos ) const;
     void MarkKashidaInvalid ( xub_StrLen nKashPos );

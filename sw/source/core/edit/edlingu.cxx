@@ -839,7 +839,7 @@ uno::Reference< XSpellAlternatives >
         xub_StrLen nLen = 1;
         if( pWrong->InWrongWord(nBegin,nLen) && !pNode->IsSymbol(nBegin) )
         {
-            String const aText(pNode->GetTxt().copy(nBegin, nLen));
+            const OUString aText(pNode->GetTxt().copy(nBegin, nLen));
             String aWord( aText );
             aWord = comphelper::string::remove(aWord, CH_TXTATR_BREAKWORD);
             aWord = comphelper::string::remove(aWord, CH_TXTATR_INWORD);
@@ -883,11 +883,11 @@ uno::Reference< XSpellAlternatives >
                 // not "in word" character to the left and right in order to
                 // preserve those. Therefore count those "in words" in order to
                 // modify the selection accordingly.
-                const sal_Unicode* pChar = aText.GetBuffer();
+                const sal_Unicode* pChar = aText.getStr();
                 xub_StrLen nLeft = 0;
                 while (pChar && *pChar++ == CH_TXTATR_INWORD)
                     ++nLeft;
-                pChar = aText.Len() ? aText.GetBuffer() + aText.Len() - 1 : 0;
+                pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : 0;
                 xub_StrLen nRight = 0;
                 while (pChar && *pChar-- == CH_TXTATR_INWORD)
                     ++nRight;
@@ -951,7 +951,7 @@ bool SwEditShell::GetGrammarCorrection(
         xub_StrLen nLen = 1;
         if (pWrong->InWrongWord(nBegin, nLen))
         {
-            String const aText(pNode->GetTxt().copy(nBegin, nLen));
+            const OUString aText(pNode->GetTxt().copy(nBegin, nLen));
 
             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( mpDoc->GetGCIterator() );
             if (xGCIterator.is())
@@ -1009,11 +1009,11 @@ bool SwEditShell::GetGrammarCorrection(
                 // not include "in word" character to the left and right in
                 // order to preserve those. Therefore count those "in words" in
                 // order to modify the selection accordingly.
-                const sal_Unicode* pChar = aText.GetBuffer();
+                const sal_Unicode* pChar = aText.getStr();
                 xub_StrLen nLeft = 0;
                 while (pChar && *pChar++ == CH_TXTATR_INWORD)
                     ++nLeft;
-                pChar = aText.Len() ? aText.GetBuffer() + aText.Len() - 1 : 0;
+                pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : 0;
                 xub_StrLen nRight = 0;
                 while (pChar && *pChar-- == CH_TXTATR_INWORD)
                     ++nRight;

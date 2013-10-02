@@ -650,7 +650,7 @@ void SwFormulaField::SetFormula(const OUString& rStr)
 
     if( nFmt && SAL_MAX_UINT32 != nFmt )
     {
-        xub_StrLen nPos = 0;
+        sal_Int32 nPos = 0;
         double fTmpValue;
         if( SwCalc::Str2Double( rStr, nPos, fTmpValue, GetDoc() ) )
             SwValueField::SetValue( fTmpValue );

@@ -167,7 +167,7 @@ class SwAutoFormat
     sal_uInt16 CalcLevel( const SwTxtNode&, sal_uInt16 *pDigitLvl = 0 ) const;
     xub_StrLen GetBigIndent( xub_StrLen& rAktSpacePos ) const;
 
-    String& DelLeadingBlanks( String& rStr ) const;
+    OUString DelLeadingBlanks(const OUString& rStr) const;
     String& DelTrailingBlanks( String& rStr ) const;
     xub_StrLen GetLeadingBlanks( const String& rStr ) const;
     xub_StrLen GetTrailingBlanks( const String& rStr ) const;
@@ -417,9 +417,8 @@ sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 {
     // Search more that 5 blanks/tabs in the string.
-    String sTmp( rNd.GetTxt() );
-    DelTrailingBlanks( DelLeadingBlanks( sTmp ));
-    const sal_Unicode* pTmp = sTmp.GetBuffer();
+    OUString sTmp( DelLeadingBlanks(rNd.GetTxt()) );
+    const sal_Unicode* pTmp = sTmp.getStr();
     while( *pTmp )
     {
         if( IsSpace( *pTmp ) )
@@ -676,15 +675,13 @@ bool SwAutoFormat::DoTable()
     return 1 < aPosArr.size();
 }
 
-String& SwAutoFormat::DelLeadingBlanks( String& rStr ) const
+OUString SwAutoFormat::DelLeadingBlanks( const OUString& rStr ) const
 {
-    xub_StrLen nL;
-    xub_StrLen n;
-
-    for( nL = rStr.Len(), n = 0; n < nL && IsSpace( rStr.GetChar(n) ); ++n )
+    sal_Int32 nL, n;
+    for( nL = rStr.getLength(), n = 0; n < nL && IsSpace( rStr[n] ); ++n )
         ;
     if( n ) // no Spaces
-        rStr.Erase( 0, n );
+        return rStr.copy(n);
     return rStr;
 }
 
@@ -2324,9 +2321,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 if( !bReplaceStyles )
                     break;
 
-                String sClrStr( pAktTxtNd->GetTxt() );
+                OUString sClrStr( DelLeadingBlanks(pAktTxtNd->GetTxt()) );
 
-                if( !DelLeadingBlanks( sClrStr ).Len() )
+                if( sClrStr.isEmpty() )
                 {
                     bEmptyLine = true;
                     eStat = READ_NEXT_PARA;

@@ -497,7 +497,7 @@ String SwView::GetThesaurusLookUpText( bool bSelection ) const
     return bSelection ? m_pWrtShell->GetSelTxt() : m_pWrtShell->GetCurWord();
 }
 
-void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rLookUpText, bool bSelection )
+void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString &rLookUpText, bool bSelection )
 {
     sal_Bool bOldIns = m_pWrtShell->IsInsMode();
     m_pWrtShell->SetInsMode( sal_True );
@@ -516,11 +516,11 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
         // include "in word" character to the left and right in order to
         // preserve those. Therefore count those "in words" in order to modify
         // the selection accordingly.
-        const sal_Unicode* pChar = rLookUpText.GetBuffer();
+        const sal_Unicode* pChar = rLookUpText.getStr();
         xub_StrLen nLeft = 0;
         while (pChar && *pChar++ == CH_TXTATR_INWORD)
             ++nLeft;
-        pChar = rLookUpText.Len() ? rLookUpText.GetBuffer() + rLookUpText.Len() - 1 : 0;
+        pChar = rLookUpText.getLength() ? rLookUpText.getStr() + rLookUpText.getLength() - 1 : 0;
         xub_StrLen nRight = 0;
         while (pChar && *pChar-- == CH_TXTATR_INWORD)
             ++nRight;

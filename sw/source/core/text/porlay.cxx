@@ -1265,7 +1265,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     }
 }
 
-void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
+void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
 {
     // remove invalid entries from direction information arrays
     aDirectionChanges.clear();
@@ -1273,10 +1273,10 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     // Bidi functions from icu 2.0
     //
     UErrorCode nError = U_ZERO_ERROR;
-    UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
+    UBiDi* pBidi = ubidi_openSized( rTxt.getLength(), 0, &nError );
     nError = U_ZERO_ERROR;
 
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),    // UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.getStr()), rTxt.getLength(),    // UChar != sal_Unicode in MinGW
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     long nCount = ubidi_countRuns( pBidi, &nError );

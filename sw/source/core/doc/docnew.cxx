@@ -668,7 +668,7 @@ SwDoc::~SwDoc()
     delete mpNumRuleTbl;
 
     {
-        for ( boost::unordered_map< String, SwList*, StringHash >::iterator
+        for ( boost::unordered_map< OUString, SwList*, OUStringHash >::iterator
                                                     aListIter = maLists.begin();
               aListIter != maLists.end();
               ++aListIter )
@@ -842,7 +842,7 @@ void SwDoc::ClearDoc()
     mpNumRuleTbl->clear();
     // #i114725#,#i115828#
     {
-        for ( boost::unordered_map< String, SwList*, StringHash >::iterator
+        for ( boost::unordered_map< OUString, SwList*, OUStringHash >::iterator
                                                     aListIter = maLists.begin();
               aListIter != maLists.end();
               ++aListIter )

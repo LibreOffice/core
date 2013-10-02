@@ -28,7 +28,6 @@
 #include <calbck.hxx>
 #include <hints.hxx>
 #include <boost/unordered_map.hpp>
-#include <stringhash.hxx>
 #include <SwNumberTreeTypes.hxx>
 #include <vector>
 

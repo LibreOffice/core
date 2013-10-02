@@ -70,7 +70,6 @@ class SwList;
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 
 #include <boost/unordered_map.hpp>
-#include <stringhash.hxx>
 
 #include <svtools/embedhlp.hxx>
 #include <vector>
@@ -352,7 +351,7 @@ class SW_DLLPUBLIC SwDoc :
     /// Hash map to find numrules by name
     mutable boost::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
 
-    typedef boost::unordered_map< String, SwList*, StringHash > tHashMapForLists;
+    typedef boost::unordered_map<OUString, SwList*, OUStringHash> tHashMapForLists;
     /// container to hold the lists of the text document
     tHashMapForLists maLists;
     /// relation between list style and its default list

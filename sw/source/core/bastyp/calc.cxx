@@ -1487,7 +1487,7 @@ String SwCalc::GetDBName(const String& rName)
 
 namespace
 {
-    static bool lcl_Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+    static bool lcl_Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
                                 double& rVal,
                                 const LocaleDataWrapper* const pLclData )
     {
@@ -1495,20 +1495,20 @@ namespace
         const sal_Unicode nCurrCmdPos = rCommandPos;
         rtl_math_ConversionStatus eStatus;
         const sal_Unicode* pEnd;
-        rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
-                                         rCommand.GetBuffer() + rCommand.Len(),
+        rVal = rtl_math_uStringToDouble( rCommand.getStr() + rCommandPos,
+                                         rCommand.getStr() + rCommand.getLength(),
                                          pLclData->getNumDecimalSep()[0],
                                          pLclData->getNumThousandSep()[0],
                                          &eStatus,
                                          &pEnd );
-        rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
+        rCommandPos = static_cast<sal_Int32>(pEnd - rCommand.getStr());
 
         return rtl_math_ConversionStatus_Ok == eStatus &&
                nCurrCmdPos != rCommandPos;
     }
 }
 
-bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
                          double& rVal, const LocaleDataWrapper* const pLclData )
 {
     const SvtSysLocale aSysLocale;
@@ -1516,7 +1516,7 @@ bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             pLclData ? pLclData : aSysLocale.GetLocaleDataPtr() );
 }
 
-bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
                          double& rVal, SwDoc* const pDoc )
 {
     const SvtSysLocale aSysLocale;
@@ -1602,7 +1602,7 @@ double SwSbxValue::GetDouble() const
     double nRet;
     if( SbxSTRING == GetType() )
     {
-        xub_StrLen nStt = 0;
+        sal_Int32 nStt = 0;
         SwCalc::Str2Double( GetOUString(), nStt, nRet );
     }
     else if (IsBool())

@@ -55,7 +55,6 @@
 #include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <boost/unordered_set.hpp>
-#include <stringhash.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
@@ -1096,38 +1095,38 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    boost::unordered_set< String, StringHashRef, StringEqRef > aSet;
-    aSet.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("CharacterCompressionType", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("LinkUpdateMode", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("FieldAutoUpdate", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("ChartAutoUpdate", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("AddParaTableSpacing", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("AddParaTableSpacingAtStart", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintAnnotationMode", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintBlackFonts", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintControls", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintDrawings", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintGraphics", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintLeftPages", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintPageBackground", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintProspect", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintReversed", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintRightPages", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintFaxName", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintPaperFromSetup", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintTables", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintSingleJobs", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("UpdateFromTemplate", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintEmptyPages", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("SmallCapsPercentage66", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("TabOverflow", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("UnbreakableNumberings", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("ClippedPictures", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("BackgroundParaOverDrawings", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("TabOverMargin", RTL_TEXTENCODING_ASCII_US));
+    boost::unordered_set< OUString, OUStringHash > aSet;
+    aSet.insert(OUString("ForbiddenCharacters"));
+    aSet.insert(OUString("IsKernAsianPunctuation"));
+    aSet.insert(OUString("CharacterCompressionType"));
+    aSet.insert(OUString("LinkUpdateMode"));
+    aSet.insert(OUString("FieldAutoUpdate"));
+    aSet.insert(OUString("ChartAutoUpdate"));
+    aSet.insert(OUString("AddParaTableSpacing"));
+    aSet.insert(OUString("AddParaTableSpacingAtStart"));
+    aSet.insert(OUString("PrintAnnotationMode"));
+    aSet.insert(OUString("PrintBlackFonts"));
+    aSet.insert(OUString("PrintControls"));
+    aSet.insert(OUString("PrintDrawings"));
+    aSet.insert(OUString("PrintGraphics"));
+    aSet.insert(OUString("PrintLeftPages"));
+    aSet.insert(OUString("PrintPageBackground"));
+    aSet.insert(OUString("PrintProspect"));
+    aSet.insert(OUString("PrintReversed"));
+    aSet.insert(OUString("PrintRightPages"));
+    aSet.insert(OUString("PrintFaxName"));
+    aSet.insert(OUString("PrintPaperFromSetup"));
+    aSet.insert(OUString("PrintTables"));
+    aSet.insert(OUString("PrintSingleJobs"));
+    aSet.insert(OUString("UpdateFromTemplate"));
+    aSet.insert(OUString("PrinterIndependentLayout"));
+    aSet.insert(OUString("PrintEmptyPages"));
+    aSet.insert(OUString("SmallCapsPercentage66"));
+    aSet.insert(OUString("TabOverflow"));
+    aSet.insert(OUString("UnbreakableNumberings"));
+    aSet.insert(OUString("ClippedPictures"));
+    aSet.insert(OUString("BackgroundParaOverDrawings"));
+    aSet.insert(OUString("TabOverMargin"));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();

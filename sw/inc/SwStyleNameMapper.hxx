@@ -25,7 +25,6 @@
 #include "swdllapi.h"
 
 #include <boost/unordered_map.hpp>
-#include <stringhash.hxx>
 
 #include <vector>
 

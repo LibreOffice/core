@@ -3306,7 +3306,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             lcl_FillTextRange( rRange, *pNode, nBegin, nLen );
 
             // get smarttag word
-            String aText( pNode->GetTxt().copy(nBegin, nLen) );
+            OUString aText( pNode->GetTxt().copy(nBegin, nLen) );
 
             //save the start and end positons of the line and the starting point
             Push();
@@ -3320,11 +3320,11 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             // include "in word" character to the left and right in order to
             // preserve those. Therefore count those "in words" in order to
             // modify the selection accordingly.
-            const sal_Unicode* pChar = aText.GetBuffer();
+            const sal_Unicode* pChar = aText.getStr();
             xub_StrLen nLeft = 0;
             while (pChar && *pChar++ == CH_TXTATR_INWORD)
                 ++nLeft;
-            pChar = aText.Len() ? aText.GetBuffer() + aText.Len() - 1 : 0;
+            pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : 0;
             xub_StrLen nRight = 0;
             while (pChar && *pChar-- == CH_TXTATR_INWORD)
                 ++nRight;

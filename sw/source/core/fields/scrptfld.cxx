@@ -47,7 +47,7 @@ OUString SwScriptField::GetDescription() const
 
 OUString SwScriptField::Expand() const
 {
-    return aEmptyStr;
+    return OUString();
 }
 
 SwField* SwScriptField::Copy() const

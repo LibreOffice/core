@@ -221,10 +221,10 @@ public:
     void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
     sal_Bool        IsCalcError() const                 { return 0 != eError; }
 
-    static bool Str2Double( const String& rStr, xub_StrLen& rPos,
+    static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal,
                                 LocaleDataWrapper const*const pData = 0 );
-    static bool Str2Double( const String& rStr, xub_StrLen& rPos,
+    static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal, SwDoc *const pDoc );
 
     SW_DLLPUBLIC static sal_Bool IsValidVarName( const OUString& rStr,
