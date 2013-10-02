@@ -42,7 +42,6 @@
 #include "document.hxx"
 
 #define COLORMAST 0xFFFFFF
-const sal_uInt16 EXC_COLOR_WINDOWBACK = 65;
 typedef std::map< sal_Int32, sal_Int32 >  PatternMap;
 typedef std::pair< sal_Int32, sal_Int32 > PatternPair;
 using namespace ::com::sun::star;
