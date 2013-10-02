@@ -121,7 +121,6 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
 
     Reference< XNameAccess > xTypes( rxContext->getServiceManager()->createInstanceWithContext(
         OUString( "com.sun.star.document.TypeDetection" ), rxContext ), UNO_QUERY_THROW );
-    Sequence< OUString > aTypeList( xFilters->getElementNames() );
 
     for( std::vector< FilterEntry >::const_iterator aIter(aFilterEntryList.begin()), aEnd(aFilterEntryList.end()); aIter != aEnd; ++aIter )
     {
