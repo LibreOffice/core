@@ -35,11 +35,8 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 const sal_Int32 BIFF12_RECONNECT_AS_REQUIRED            = 1;
-const sal_Int32 BIFF12_RECONNECT_ALWAYS                 = 2;
-const sal_Int32 BIFF12_RECONNECT_NEVER                  = 3;
 
 const sal_uInt8 BIFF12_CONNECTION_SAVEPASSWORD_ON       = 1;
-const sal_uInt8 BIFF12_CONNECTION_SAVEPASSWORD_OFF      = 2;
 
 const sal_uInt16 BIFF12_CONNECTION_KEEPALIVE            = 0x0001;
 const sal_uInt16 BIFF12_CONNECTION_NEW                  = 0x0002;
@@ -68,30 +65,6 @@ const sal_uInt32 BIFF12_WEBPR_HTMLTABLES                = 0x00010000;
 const sal_uInt8 BIFF12_WEBPR_HAS_POSTMETHOD             = 0x01;
 const sal_uInt8 BIFF12_WEBPR_HAS_EDITPAGE               = 0x02;
 const sal_uInt8 BIFF12_WEBPR_HAS_URL                    = 0x04;
-
-const sal_uInt16 BIFF_DBQUERY_ODBC                      = 0x0008;
-const sal_uInt16 BIFF_DBQUERY_SQLQUERY                  = 0x0010;
-const sal_uInt16 BIFF_DBQUERY_SERVERBASEDSQL            = 0x0020;
-const sal_uInt16 BIFF_DBQUERY_HTML                      = 0x0040;
-const sal_uInt16 BIFF_DBQUERY_SAVEPASSWORD              = 0x0080;
-const sal_uInt16 BIFF_DBQUERY_HTMLTABLES                = 0x0100;
-
-const sal_uInt16 BIFF_QTSETTINGS_KEEPALIVE              = 0x0001;
-const sal_uInt16 BIFF_QTSETTINGS_NEW                    = 0x0002;
-const sal_uInt16 BIFF_QTSETTINGS_SOURCEDATA             = 0x0004;
-const sal_uInt16 BIFF_QTSETTINGS_WEBBASEDPROV           = 0x0008;
-const sal_uInt16 BIFF_QTSETTINGS_REINITLIST             = 0x0010;
-const sal_uInt16 BIFF_QTSETTINGS_XML                    = 0x0080;
-
-const sal_uInt16 BIFF_QTSETTINGS_PARSEPRE               = 0x0001;
-const sal_uInt16 BIFF_QTSETTINGS_CONSECUTIVE            = 0x0002;
-const sal_uInt16 BIFF_QTSETTINGS_FIRSTROW               = 0x0004;
-const sal_uInt16 BIFF_QTSETTINGS_XL97CREATED            = 0x0008;
-const sal_uInt16 BIFF_QTSETTINGS_TEXTDATES              = 0x0010;
-const sal_uInt16 BIFF_QTSETTINGS_XL2000REFRESHED        = 0x0020;
-
-const sal_uInt16 BIFF_QTSETTINGS_TEXTQUERY              = 0x0001;
-const sal_uInt16 BIFF_QTSETTINGS_TABLENAMES             = 0x0002;
 
 } // namespace
 
