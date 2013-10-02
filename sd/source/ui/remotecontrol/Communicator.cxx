@@ -57,10 +57,7 @@ void Communicator::execute()
                               Transmitter::PRIORITY_HIGH );
 
     OStringBuffer aServerInformationBuffer;
-    aServerInformationBuffer
-      .append( "LO_SERVER_INFO\n" )
-      .append( OUStringToOString( OUString::createFromAscii( LIBO_VERSION_DOTTED ), RTL_TEXTENCODING_UTF8 ) )
-      .append("\n\n");
+    aServerInformationBuffer.append( "LO_SERVER_INFO\n" LIBO_VERSION_DOTTED "\n\n" );
 
     pTransmitter->addMessage( aServerInformationBuffer.makeStringAndClear(), Transmitter::PRIORITY_HIGH );
 
