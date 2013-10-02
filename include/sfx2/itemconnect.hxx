@@ -24,6 +24,8 @@
 #include "sfx2/dllapi.h"
 
 #include <memory>
+
+#include <boost/scoped_ptr.hpp>
 #include <sfx2/itemwrapper.hxx>
 #include <sfx2/controlwrapper.hxx>
 
@@ -518,7 +520,7 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
         if( !pOldItem || !(maItemWrp.GetItemValue( *pOldItem ) == aNewValue) )
         {
             sal_uInt16 nWhich = ItemWrapperHelper::GetWhichId( rDestSet, maItemWrp.GetSlotId() );
-            std::auto_ptr< ItemType > xItem(
+            boost::scoped_ptr< ItemType > xItem(
                 static_cast< ItemType* >( maItemWrp.GetDefaultItem( rDestSet ).Clone() ) );
             xItem->SetWhich( nWhich );
             maItemWrp.SetItemValue( *xItem, aNewValue );
