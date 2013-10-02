@@ -48,7 +48,7 @@ namespace uno
     @tparam E element type of sequence
 */
 template< class E >
-class Sequence
+class SAL_WARN_UNUSED Sequence
 {
     /** sequence handle
     */
