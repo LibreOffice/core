@@ -75,6 +75,7 @@ uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
     uno::Sequence<OUString> aElementNames = xDPT->getElementNames();
+    (void) aElementNames;
 
     uno::Reference< sheet::XDataPilotDescriptor > xDPDsc(xDPT->getByName("DataPilot1"),UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDPDsc.is());
