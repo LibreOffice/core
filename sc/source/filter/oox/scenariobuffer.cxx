@@ -42,15 +42,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-
-// ============================================================================
-
-namespace {
-
-const sal_Int32 BIFF_SCENARIO_DELETED       = 0x4000;
-
-} // namespace
-
 // ============================================================================
 
 ScenarioCellModel::ScenarioCellModel() :
