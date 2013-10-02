@@ -56,22 +56,7 @@ const sal_uInt32 BIFF12_DEFNAME_HIDDEN      = 0x00000001;
 const sal_uInt32 BIFF12_DEFNAME_FUNC        = 0x00000002;
 const sal_uInt32 BIFF12_DEFNAME_VBNAME      = 0x00000004;
 const sal_uInt32 BIFF12_DEFNAME_MACRO       = 0x00000008;
-const sal_uInt32 BIFF12_DEFNAME_CALCEXP     = 0x00000010;
 const sal_uInt32 BIFF12_DEFNAME_BUILTIN     = 0x00000020;
-const sal_uInt32 BIFF12_DEFNAME_PUBLISHED   = 0x00008000;
-const sal_uInt32 BIFF12_DEFNAME_WBPARAM     = 0x00010000;
-
-const sal_uInt16 BIFF_DEFNAME_HIDDEN        = 0x0001;
-const sal_uInt16 BIFF_DEFNAME_FUNC          = 0x0002;
-const sal_uInt16 BIFF_DEFNAME_VBNAME        = 0x0004;
-const sal_uInt16 BIFF_DEFNAME_MACRO         = 0x0008;
-const sal_uInt16 BIFF_DEFNAME_CALCEXP       = 0x0010;
-const sal_uInt16 BIFF_DEFNAME_BUILTIN       = 0x0020;
-const sal_uInt16 BIFF_DEFNAME_BIG           = 0x1000;
-
-const sal_uInt8 BIFF2_DEFNAME_FUNC          = 0x02;     /// BIFF2 function/command flag.
-
-const sal_uInt16 BIFF_DEFNAME_GLOBAL        = 0;        /// 0 = Globally defined name.
 
 const sal_uInt16 BIFF_REFFLAG_COL1REL       = 0x0001;
 const sal_uInt16 BIFF_REFFLAG_ROW1REL       = 0x0002;
@@ -80,7 +65,6 @@ const sal_uInt16 BIFF_REFFLAG_ROW2REL       = 0x0008;
 
 // ----------------------------------------------------------------------------
 
-const sal_Char* const spcLegacyPrefix = "Excel_BuiltIn_";
 const sal_Char* const spcOoxPrefix = "_xlnm.";
 
 const sal_Char* const sppcBaseNames[] =
@@ -99,13 +83,6 @@ const sal_Char* const sppcBaseNames[] =
     "Auto_Deactivate",
     "Sheet_Title",
     "_FilterDatabase"
-};
-
-/** Localized names for _xlnm._FilterDatabase as used in BIFF5. */
-const sal_Char* const sppcFilterDbNames[] =
-{
-    "_FilterDatabase",      // English
-    "_FilterDatenbank"      // German
 };
 
 OUString lclGetBaseName( sal_Unicode cBuiltinId )
