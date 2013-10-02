@@ -5373,8 +5373,6 @@ void SvxIconSelectorDialog::ImportGraphics(
     sal_uInt16 ret = 0;
     sal_Int32 aIndex;
     OUString aIconName;
-    uno::Sequence< OUString > URLs(1);
-    uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
     aMediaProps[0].Name = OUString("URL" );
     uno::Reference< css::ui::XUIConfigurationPersistence >
