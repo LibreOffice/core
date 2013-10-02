@@ -38,7 +38,6 @@ namespace sax_expatwrap {
 sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead )
     throw ( IOException, NotConnectedException , BufferSizeExceededException , RuntimeException )
 {
-
     if( ! m_in.is() ) {
         throw NotConnectedException();
     }
