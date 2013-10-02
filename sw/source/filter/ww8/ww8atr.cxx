@@ -2234,66 +2234,64 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             }
                         }
 
+                    String aFillTxt;
+                    sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
+                    bool bFirstFillTxt = true, bOnlyText = true;
+                    for( n = 0; n < nTOXLvl; ++n )
+                    {
+                        String aTxt;
+                        int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
+                                                    static_cast< sal_uInt8 >(n+1), aTxt );
+                        if( 1 == nRet )
                         {
-                            String aFillTxt;
-                            sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
-                            bool bFirstFillTxt = true, bOnlyText = true;
-                            for( n = 0; n < nTOXLvl; ++n )
-                            {
-                                String aTxt;
-                                int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
-                                                            static_cast< sal_uInt8 >(n+1), aTxt );
-                                if( 1 == nRet )
-                                {
-                                    bOnlyText = false;
-                                    if( MAXLEVEL == nNoPgStt )
-                                        nNoPgStt = static_cast< sal_uInt8 >(n+1);
-                                }
-                                else
-                                {
-                                    if( MAXLEVEL != nNoPgStt &&
-                                        MAXLEVEL == nNoPgEnd )
-                                        nNoPgEnd = sal_uInt8(n);
+                            bOnlyText = false;
+                            if( MAXLEVEL == nNoPgStt )
+                                nNoPgStt = static_cast< sal_uInt8 >(n+1);
+                        }
+                        else
+                        {
+                            if( MAXLEVEL != nNoPgStt &&
+                                MAXLEVEL == nNoPgEnd )
+                                nNoPgEnd = sal_uInt8(n);
 
-                                    bOnlyText = bOnlyText && 3 == nRet;
-                                    if( 3 == nRet || 4 == nRet )
-                                    {
-                                        if( bFirstFillTxt )
-                                            aFillTxt = aTxt;
-                                        else if( aFillTxt != aTxt )
-                                            aFillTxt.Erase();
-                                        bFirstFillTxt = false;
-                                    }
-                                }
-                            }
-                            if( MAXLEVEL != nNoPgStt )
+                            bOnlyText = bOnlyText && 3 == nRet;
+                            if( 3 == nRet || 4 == nRet )
                             {
-                                if (WW8ListManager::nMaxLevel < nNoPgEnd)
-                                    nNoPgEnd = WW8ListManager::nMaxLevel;
-                                sStr.AppendAscii( "\\n " );
-                                sStr += OUString::number( nNoPgStt );
-                                sStr += '-';
-                                sStr += OUString::number( nNoPgEnd  );
-                                sStr += ' ';
-                            }
-                            if( bOnlyText )
-                            {
-                                sStr.AppendAscii( "\\p \"" );
-                                sStr += aFillTxt;
-                                sStr.AppendAscii(sEntryEnd);
+                                if( bFirstFillTxt )
+                                    aFillTxt = aTxt;
+                                else if( aFillTxt != aTxt )
+                                    aFillTxt.Erase();
+                                bFirstFillTxt = false;
                             }
                         }
-
-                        if( sTOption.Len() )
-                        {
-                            sStr.AppendAscii( "\\t \"" );
-                            sStr += sTOption;
-                            sStr.AppendAscii(sEntryEnd);
-                        }
-
-                        if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
-                            sStr.AppendAscii("\\h");
                     }
+                    if( MAXLEVEL != nNoPgStt )
+                    {
+                        if (WW8ListManager::nMaxLevel < nNoPgEnd)
+                            nNoPgEnd = WW8ListManager::nMaxLevel;
+                        sStr.AppendAscii( "\\n " );
+                        sStr += OUString::number( nNoPgStt );
+                        sStr += '-';
+                        sStr += OUString::number( nNoPgEnd  );
+                        sStr += ' ';
+                    }
+                    if( bOnlyText )
+                    {
+                        sStr.AppendAscii( "\\p \"" );
+                        sStr += aFillTxt;
+                        sStr.AppendAscii(sEntryEnd);
+                    }
+
+                    if( sTOption.Len() )
+                    {
+                        sStr.AppendAscii( "\\t \"" );
+                        sStr += sTOption;
+                        sStr.AppendAscii(sEntryEnd);
+                    }
+
+                    if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
+                        sStr.AppendAscii("\\h");
+                }
             break;
             }
         }
