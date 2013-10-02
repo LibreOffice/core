@@ -17,7 +17,7 @@ gb_Gallery_INSTDIR := $(LIBO_SHARE_FOLDER)/gallery
 # BRAND_BASE_DIR is for resource files
 define gb_Gallery__make_env_args
 "-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR_FOR_BUILD)/unittest/install)" \
-"-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_Helper_make_url,$(INSTDIR)/$(LIBO_SHARE_FOLDER)/registry)" \
+"-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry)" \
 "-env:UNO_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target_for_build,ure/services)) \
 	$(foreach item,$(gb_Gallery__UNO_COMPONENTS),\
 		$(call gb_Helper_make_url,$(call gb_ComponentTarget_get_target_for_build,$(item))))" \
