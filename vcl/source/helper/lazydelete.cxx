@@ -46,6 +46,8 @@ void LazyDelete::addDeletor( LazyDeletorBase* i_pDel )
 
 void LazyDelete::flush()
 {
+    DBG_TESTSOLARMUTEX(); // must be locked
+
     unsigned int nCount = lcl_aDeletors.size();
     for( unsigned int i = 0; i < nCount; i++ )
         delete lcl_aDeletors[i];

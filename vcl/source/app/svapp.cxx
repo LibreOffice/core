@@ -364,6 +364,8 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     pSVData->mpDefInst->Yield( i_bWait && !pSVData->maAppData.mbAppQuit && !pSVData->maAppData.mbNoYield, i_bAllEvents );
     pSVData->maAppData.mnDispatchLevel--;
 
+    DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
+
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
