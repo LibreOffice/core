@@ -307,7 +307,11 @@ void Test::testStringPool()
     OUString aAndy("Andy");
     svl::StringPool::StrIdType si1 = aPool.getIdentifier("Andy");
     svl::StringPool::StrIdType si2 = aPool.getIdentifier(aAndy);
+    CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be 0.", si1);
+    CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be 0.", si2);
     CPPUNIT_ASSERT_EQUAL(si1, si2);
+    si1 = aPool.getIdentifierIgnoreCase(aAndy);
+    CPPUNIT_ASSERT_MESSAGE("Case insensitive identifier shouldn't be 0.", si1);
 
     // Test case insensitive string ID's.
     OUString aAndyLower("andy"), aAndyUpper("ANDY");

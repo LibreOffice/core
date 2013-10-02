@@ -48,18 +48,24 @@ rtl_uString* StringPool::intern( const OUString& rStr )
 
 StringPool::StrIdType StringPool::getIdentifier( const OUString& rStr ) const
 {
-    StrHashType::iterator it = maStrPool.find(rStr);
+    StrHashType::const_iterator it = maStrPool.find(rStr);
     return (it == maStrPool.end()) ? 0 : reinterpret_cast<StrIdType>(it->pData);
 }
 
 StringPool::StrIdType StringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
 {
-    if (!mpCharClass)
+    StrHashType::const_iterator itOrig = maStrPool.find(rStr);
+    if (itOrig == maStrPool.end())
+        // Not in the pool.
         return 0;
 
-    OUString aUpper = mpCharClass->uppercase(rStr);
-    StrHashType::iterator it = maStrPoolUpper.find(aUpper);
-    return (it == maStrPool.end()) ? 0 : reinterpret_cast<StrIdType>(it->pData);
+    StrIdMapType::const_iterator itUpper = maToUpperMap.find(itOrig->pData);
+    if (itUpper == maToUpperMap.end())
+        // Passed string is not in the pool.
+        return 0;
+
+    const rtl_uString* pUpper = itUpper->second;
+    return reinterpret_cast<StrIdType>(pUpper);
 }
 
 StringPool::InsertResultType StringPool::findOrInsert( StrHashType& rPool, const OUString& rStr ) const
