@@ -2017,7 +2017,6 @@ sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* 
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     sal_Int32 nFilter = -1;
 
-    Sequence< PropertyValue > lProps;
     ::comphelper::SequenceAsHashMap aFactoryProps(
         xModuleManager->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
     sal_Int32 nDefault = -1;
@@ -2797,7 +2796,6 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
             return 0;
         try
         {
-            uno::Sequence< beans::PropertyValue > aPropSeq;
             uno::Any aCommand = xUICommands->getByName(".uno:StyleNewByExample");
             OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
