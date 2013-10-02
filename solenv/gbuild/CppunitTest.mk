@@ -284,7 +284,7 @@ endef
 # Use standard configuration.
 define gb_CppunitTest_use_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,postprocess_registry_install)
-$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(INSTDIR)/$(LIBO_SHARE_FOLDER)/registry)
+$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry)
 
 endef
 
