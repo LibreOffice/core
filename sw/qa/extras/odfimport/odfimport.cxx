@@ -198,7 +198,6 @@ void Test::testOdtBorders()
             {
                 uno::Reference<text::XTextTable> const xTextTable(xServiceInfo, uno::UNO_QUERY_THROW);
                 uno::Sequence<OUString> const cells = xTextTable->getCellNames();
-                uno::Sequence< uno::Sequence< sal_Int32 > > borderWidthSequence;
                 sal_Int32 nLength = cells.getLength();
 
                 AllBordersMap::iterator it;
