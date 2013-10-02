@@ -1815,7 +1815,6 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     // uno::Sequence<beans::Property> aProperties = xPropSetInfo->getProperties();
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
-    uno::Sequence< OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
 
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     if(xInfo->hasPropertyByName("Name"))
@@ -1900,6 +1899,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     }
 
     #if DEBUG_DUMPER
+        uno::Sequence< OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
         sal_Int32 nServices = aServiceNames.getLength();
         for (sal_Int32 i = 0; i < nServices; ++i)
         {
