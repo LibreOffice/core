@@ -192,7 +192,6 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
             sal_uInt16 nId = FindMenuId(pHelpMenu, OUString(".uno:About"));
             sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
 
-            Sequence< Sequence< PropertyValue > > aAddonSubMenu;
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
 
             if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MENUITEM_SEPARATOR )
