@@ -154,7 +154,6 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             xName=xstylefamiliessupplier->getStyleFamilies();
         }
 
-        Sequence < OUString > elementNames = xName->getElementNames();
         if(xstyleLoader.is()){
             Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
