@@ -322,8 +322,6 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
         Reference<XTypeProvider> xTypes(m_xDrvColumns,UNO_QUERY);
         Sequence< Type > aTypes(xTypes->getTypes());
 
-        Sequence< Type > aSecTypes(OColumns_BASE::getTypes());
-
         const Type* pBegin = aTypes.getConstArray();
         const Type* pEnd = pBegin + aTypes.getLength();
         for (;pBegin != pEnd ; ++pBegin)
