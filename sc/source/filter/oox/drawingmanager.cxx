@@ -51,33 +51,7 @@ namespace {
 
 // OBJ record -----------------------------------------------------------------
 
-const sal_uInt16 BIFF_OBJTYPE_GROUP         = 0;
-const sal_uInt16 BIFF_OBJTYPE_LINE          = 1;
-const sal_uInt16 BIFF_OBJTYPE_RECTANGLE     = 2;
-const sal_uInt16 BIFF_OBJTYPE_OVAL          = 3;
-const sal_uInt16 BIFF_OBJTYPE_ARC           = 4;
-const sal_uInt16 BIFF_OBJTYPE_CHART         = 5;
-const sal_uInt16 BIFF_OBJTYPE_TEXT          = 6;
-const sal_uInt16 BIFF_OBJTYPE_BUTTON        = 7;
-const sal_uInt16 BIFF_OBJTYPE_PICTURE       = 8;
-const sal_uInt16 BIFF_OBJTYPE_POLYGON       = 9;        // new in BIFF4
-const sal_uInt16 BIFF_OBJTYPE_CHECKBOX      = 11;       // new in BIFF5
-const sal_uInt16 BIFF_OBJTYPE_OPTIONBUTTON  = 12;
-const sal_uInt16 BIFF_OBJTYPE_EDIT          = 13;
-const sal_uInt16 BIFF_OBJTYPE_LABEL         = 14;
-const sal_uInt16 BIFF_OBJTYPE_DIALOG        = 15;
-const sal_uInt16 BIFF_OBJTYPE_SPIN          = 16;
-const sal_uInt16 BIFF_OBJTYPE_SCROLLBAR     = 17;
-const sal_uInt16 BIFF_OBJTYPE_LISTBOX       = 18;
-const sal_uInt16 BIFF_OBJTYPE_GROUPBOX      = 19;
-const sal_uInt16 BIFF_OBJTYPE_DROPDOWN      = 20;
-const sal_uInt16 BIFF_OBJTYPE_NOTE          = 25;       // new in BIFF8
-const sal_uInt16 BIFF_OBJTYPE_DRAWING       = 30;
 const sal_uInt16 BIFF_OBJTYPE_UNKNOWN       = 0xFFFF;   // for internal use only
-
-const sal_uInt16 BIFF_OBJ_HIDDEN            = 0x0100;
-const sal_uInt16 BIFF_OBJ_VISIBLE           = 0x0200;
-const sal_uInt16 BIFF_OBJ_PRINTABLE         = 0x0400;
 
 // line formatting ------------------------------------------------------------
 
@@ -100,7 +74,6 @@ const sal_uInt8 BIFF_OBJ_LINE_THICK         = 3;
 
 const sal_uInt8 BIFF_OBJ_LINE_AUTO          = 0x01;
 
-const sal_uInt8 BIFF_OBJ_ARROW_NONE         = 0;
 const sal_uInt8 BIFF_OBJ_ARROW_OPEN         = 1;
 const sal_uInt8 BIFF_OBJ_ARROW_FILLED       = 2;
 const sal_uInt8 BIFF_OBJ_ARROW_OPENBOTH     = 3;
@@ -110,18 +83,6 @@ const sal_uInt8 BIFF_OBJ_ARROW_NARROW       = 0;
 const sal_uInt8 BIFF_OBJ_ARROW_MEDIUM       = 1;
 const sal_uInt8 BIFF_OBJ_ARROW_WIDE         = 2;
 
-const sal_uInt8 BIFF_OBJ_LINE_TL            = 0;
-const sal_uInt8 BIFF_OBJ_LINE_TR            = 1;
-const sal_uInt8 BIFF_OBJ_LINE_BR            = 2;
-const sal_uInt8 BIFF_OBJ_LINE_BL            = 3;
-
-const sal_uInt8 BIFF_OBJ_ARC_TR             = 0;
-const sal_uInt8 BIFF_OBJ_ARC_TL             = 1;
-const sal_uInt8 BIFF_OBJ_ARC_BL             = 2;
-const sal_uInt8 BIFF_OBJ_ARC_BR             = 3;
-
-const sal_uInt16 BIFF_OBJ_POLY_CLOSED       = 0x0100;
-
 // fill formatting ------------------------------------------------------------
 
 const sal_uInt8 BIFF_OBJ_FILL_AUTOCOLOR     = 65;
@@ -130,36 +91,6 @@ const sal_uInt8 BIFF_OBJ_PATT_NONE          = 0;
 const sal_uInt8 BIFF_OBJ_PATT_SOLID         = 1;
 
 const sal_uInt8 BIFF_OBJ_FILL_AUTO          = 0x01;
-
-// text formatting ------------------------------------------------------------
-
-const sal_uInt8 BIFF_OBJ_HOR_LEFT           = 1;
-const sal_uInt8 BIFF_OBJ_HOR_CENTER         = 2;
-const sal_uInt8 BIFF_OBJ_HOR_RIGHT          = 3;
-const sal_uInt8 BIFF_OBJ_HOR_JUSTIFY        = 4;
-
-const sal_uInt8 BIFF_OBJ_VER_TOP            = 1;
-const sal_uInt8 BIFF_OBJ_VER_CENTER         = 2;
-const sal_uInt8 BIFF_OBJ_VER_BOTTOM         = 3;
-const sal_uInt8 BIFF_OBJ_VER_JUSTIFY        = 4;
-
-const sal_uInt16 BIFF_OBJ_ORIENT_NONE       = 0;
-const sal_uInt16 BIFF_OBJ_ORIENT_STACKED    = 1;        /// Stacked top to bottom.
-const sal_uInt16 BIFF_OBJ_ORIENT_90CCW      = 2;        /// 90 degr. counterclockwise.
-const sal_uInt16 BIFF_OBJ_ORIENT_90CW       = 3;        /// 90 degr. clockwise.
-
-const sal_uInt16 BIFF_OBJ_TEXT_AUTOSIZE     = 0x0080;
-const sal_uInt16 BIFF_OBJ_TEXT_LOCKED       = 0x0200;
-
-const sal_Int32 BIFF_OBJ_TEXT_MARGIN        = 20000;    /// Automatic text margin (EMUs).
-
-// BIFF8 OBJ sub records ------------------------------------------------------
-
-const sal_uInt16 BIFF_OBJCMO_PRINTABLE      = 0x0010;   /// Object printable.
-const sal_uInt16 BIFF_OBJCMO_AUTOLINE       = 0x2000;   /// Automatic line formatting.
-const sal_uInt16 BIFF_OBJCMO_AUTOFILL       = 0x4000;   /// Automatic fill formatting.
-
-// ----------------------------------------------------------------------------
 
 } // namespace
 
