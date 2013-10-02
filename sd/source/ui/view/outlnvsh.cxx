@@ -383,7 +383,6 @@ void OutlineViewShell::Deactivate( sal_Bool bIsMDIActivate )
     // Links must be kept also on deactivated viewshell, to allow drag'n'drop
     // to function properly
     ViewShell::Deactivate( bIsMDIActivate );
-    SfxShell::BroadcastContextForActivation(false);
 }
 
 /**
