@@ -125,6 +125,7 @@ public:
     //misc tests unrelated to the import filters
     void testPasswordNew();
     void testPasswordOld();
+    void testPasswordWrongSHA();
 
     //test shape import
     void testControlImport();
@@ -198,6 +199,7 @@ public:
     //disable testPassword on MacOSX due to problems with libsqlite3
     //also crashes on DragonFly due to problems with nss/nspr headers
 #if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
+    CPPUNIT_TEST(testPasswordWrongSHA);
     CPPUNIT_TEST(testPasswordOld);
     CPPUNIT_TEST(testPasswordNew);
 #endif
@@ -1323,6 +1325,14 @@ void ScFiltersTest::testPasswordOld()
 {
     //tests opening a file with old password algorithm
     const OUString aFileNameBase("passwordOld.");
+    testPassword_Impl(aFileNameBase);
+}
+
+void ScFiltersTest::testPasswordWrongSHA()
+{
+    //tests opening a file wrongly using the new password algorithm
+    //in a sxc with the key algorithm missing
+    const OUString aFileNameBase("passwordWrongSHA.");
     testPassword_Impl(aFileNameBase);
 }
 
