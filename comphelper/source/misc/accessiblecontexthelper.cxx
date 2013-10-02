@@ -123,7 +123,9 @@ namespace comphelper
     //---------------------------------------------------------------------
     void SAL_CALL OAccessibleContextHelper::disposing()
     {
-        ::osl::ClearableMutexGuard aGuard( GetMutex() );
+        // rhbz#1001768: de facto this class is locked by SolarMutex;
+        // do not lock m_Mutex because it may cause deadlock
+        OMutexGuard aGuard( getExternalLock() );
 
         if ( m_pImpl->getClientId( ) )
         {
