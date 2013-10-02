@@ -1558,7 +1558,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
             xRet = mxTransfer;
 
             // do a dummy call to check, if this interface is valid (nasty)
-            Sequence< DataFlavor > aTestSeq( xRet->getTransferDataFlavors() );
+            xRet->getTransferDataFlavors();
 
         }
         catch( const ::com::sun::star::uno::Exception& )
