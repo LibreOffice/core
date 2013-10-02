@@ -74,7 +74,6 @@ const sal_uInt16 BIFF12_PCDFSITEMS_HASBLANK         = 0x0010;
 const sal_uInt16 BIFF12_PCDFSITEMS_HASMIXED         = 0x0020;
 const sal_uInt16 BIFF12_PCDFSITEMS_ISNUMERIC        = 0x0040;
 const sal_uInt16 BIFF12_PCDFSITEMS_ISINTEGER        = 0x0080;
-const sal_uInt16 BIFF12_PCDFSITEMS_HASMINMAX        = 0x0100;
 const sal_uInt16 BIFF12_PCDFSITEMS_HASLONGTEXT      = 0x0200;
 
 const sal_uInt16 BIFF12_PCITEM_ARRAY_DOUBLE         = 0x0001;
@@ -105,21 +104,13 @@ const sal_uInt8 BIFF12_PCDWBSOURCE_HASSHEET         = 0x02;
 
 // ----------------------------------------------------------------------------
 
-const sal_uInt16 BIFF_PCDSOURCE_WORKSHEET           = 0x0001;
-const sal_uInt16 BIFF_PCDSOURCE_EXTERNAL            = 0x0002;
-const sal_uInt16 BIFF_PCDSOURCE_CONSOLIDATION       = 0x0004;
-const sal_uInt16 BIFF_PCDSOURCE_SCENARIO            = 0x0010;
-
 const sal_uInt16 BIFF_PC_NOSTRING                   = 0xFFFF;
 
 const sal_uInt16 BIFF_PCDFIELD_HASITEMS             = 0x0001;
-const sal_uInt16 BIFF_PCDFIELD_HASUNSHAREDITEMS     = 0x0002;
-const sal_uInt16 BIFF_PCDFIELD_CALCULATED           = 0x0004;
 const sal_uInt16 BIFF_PCDFIELD_HASPARENT            = 0x0008;
 const sal_uInt16 BIFF_PCDFIELD_RANGEGROUP           = 0x0010;
 const sal_uInt16 BIFF_PCDFIELD_ISNUMERIC            = 0x0020;
 const sal_uInt16 BIFF_PCDFIELD_HASSEMIMIXED         = 0x0080;
-const sal_uInt16 BIFF_PCDFIELD_HASMINMAX            = 0x0100;
 const sal_uInt16 BIFF_PCDFIELD_HASLONGINDEX         = 0x0200;
 const sal_uInt16 BIFF_PCDFIELD_HASNONDATE           = 0x0400;
 const sal_uInt16 BIFF_PCDFIELD_HASDATE              = 0x0800;
