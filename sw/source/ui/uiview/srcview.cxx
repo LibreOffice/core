@@ -207,7 +207,7 @@ static OUString lcl_ConvertTabsToSpaces( OUString sLine )
             }
             // Not 4 blanks, but on 4th TabPos:
             const sal_Int32 nPadLen = 4 - (nPos % 4);
-            sLine.replaceAt(nPos, 1, OUString(aPadSpaces, nPadLen));
+            sLine = sLine.replaceAt(nPos, 1, OUString(aPadSpaces, nPadLen));
             nPos += nPadLen;
         }
     }
