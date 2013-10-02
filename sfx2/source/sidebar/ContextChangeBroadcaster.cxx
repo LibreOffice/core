@@ -39,7 +39,8 @@ namespace sfx2 { namespace sidebar {
 
 ContextChangeBroadcaster::ContextChangeBroadcaster (void)
     : msContextName(),
-      mbIsContextActive(false)
+      mbIsContextActive(false),
+      mbIsBroadcasterEnabled(true)
 {
 }
 
@@ -85,11 +86,24 @@ void ContextChangeBroadcaster::Deactivate (const cssu::Reference<css::frame::XFr
 
 
 
+bool ContextChangeBroadcaster::SetBroadcasterEnabled (const bool bIsEnabled)
+{
+    const bool bWasEnabled (mbIsBroadcasterEnabled);
+    mbIsBroadcasterEnabled = bIsEnabled;
+    return bWasEnabled;
+}
+
+
+
+
 void ContextChangeBroadcaster::BroadcastContextChange (
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     const ::rtl::OUString& rsModuleName,
     const ::rtl::OUString& rsContextName)
 {
+    if ( ! mbIsBroadcasterEnabled)
+        return;
+
     if (rsContextName.getLength() == 0)
         return;
 
