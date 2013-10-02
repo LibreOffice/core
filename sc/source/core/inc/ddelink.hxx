@@ -37,9 +37,9 @@ static bool bIsInUpdate;
 
     ScDocument*     pDoc;
 
-    String          aAppl;          // connection/ link data
-    String          aTopic;
-    String          aItem;
+    OUString        aAppl;          // connection/ link data
+    OUString        aTopic;
+    OUString        aItem;
     sal_uInt8       nMode;          // number format mode
 
     bool            bNeedUpdate;    // is set, if update was not possible
@@ -50,7 +50,7 @@ public:
     TYPEINFO();
 
             ScDdeLink( ScDocument* pD,
-                        const String& rA, const String& rT, const String& rI,
+                        const OUString& rA, const OUString& rT, const OUString& rI,
                         sal_uInt8 nM );
             ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr );
             ScDdeLink( ScDocument* pD, const ScDdeLink& rOther );
@@ -70,9 +70,9 @@ public:
     const ScMatrix* GetResult() const;
     void            SetResult( const ScMatrixRef& pRes );
 
-    const String&   GetAppl() const     { return aAppl; }
-    const String&   GetTopic() const    { return aTopic; }
-    const String&   GetItem() const     { return aItem; }
+    const OUString&   GetAppl() const     { return aAppl; }
+    const OUString&   GetTopic() const    { return aTopic; }
+    const OUString&   GetItem() const     { return aItem; }
     sal_uInt8       GetMode() const     { return nMode; }
 
     void            TryUpdate();

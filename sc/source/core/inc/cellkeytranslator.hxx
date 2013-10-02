@@ -71,7 +71,7 @@ private:
     ScCellKeywordTranslator();
 
     void init();
-    void addToMap(const String& rKey, const sal_Char* pName,
+    void addToMap(const OUString& rKey, const sal_Char* pName,
                   const ::com::sun::star::lang::Locale& rLocale,
                   OpCode eOpCode = ocNone);
     void addToMap(const TransItem* pItems, const ::com::sun::star::lang::Locale& rLocale);

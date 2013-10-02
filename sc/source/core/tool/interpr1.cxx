@@ -2562,7 +2562,7 @@ void ScInterpreter::ScCell()
 void ScInterpreter::ScCellExternal()
 {
     sal_uInt16 nFileId;
-    String aTabName;
+    OUString aTabName;
     ScSingleRefData aRef;
     ScExternalRefCache::TokenRef pToken;
     ScExternalRefCache::CellFormat aFmt;
@@ -3992,7 +3992,7 @@ void ScInterpreter::ScColumns()
             case svExternalDoubleRef:
             {
                 sal_uInt16 nFileId;
-                String aTabName;
+                OUString aTabName;
                 ScComplexRefData aRef;
                 PopExternalDoubleRef( nFileId, aTabName, aRef);
                 ScRange aAbs = aRef.toAbs(aPos);
@@ -4050,7 +4050,7 @@ void ScInterpreter::ScRows()
             case svExternalDoubleRef:
             {
                 sal_uInt16 nFileId;
-                String aTabName;
+                OUString aTabName;
                 ScComplexRefData aRef;
                 PopExternalDoubleRef( nFileId, aTabName, aRef);
                 ScRange aAbs = aRef.toAbs(aPos);
@@ -4104,7 +4104,7 @@ void ScInterpreter::ScTables()
                 case svExternalDoubleRef:
                 {
                     sal_uInt16 nFileId;
-                    String aTabName;
+                    OUString aTabName;
                     ScComplexRefData aRef;
                     PopExternalDoubleRef( nFileId, aTabName, aRef);
                     ScRange aAbs = aRef.toAbs(aPos);
@@ -7450,7 +7450,7 @@ void ScInterpreter::ScOffset()
         case svExternalSingleRef:
         {
             sal_uInt16 nFileId;
-            String aTabName;
+            OUString aTabName;
             ScSingleRefData aRef;
             PopExternalSingleRef(nFileId, aTabName, aRef);
             ScAddress aAbsRef = aRef.toAbs(aPos);
@@ -7507,7 +7507,7 @@ void ScInterpreter::ScOffset()
         case svExternalDoubleRef:
         {
             sal_uInt16 nFileId;
-            String aTabName;
+            OUString aTabName;
             ScComplexRefData aRef;
             PopExternalDoubleRef(nFileId, aTabName, aRef);
             ScRange aAbs = aRef.toAbs(aPos);
@@ -7861,10 +7861,10 @@ void ScInterpreter::ScReplace()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        String aNewStr( GetString() );
+        OUString aNewStr( GetString() );
         double fCount = ::rtl::math::approxFloor( GetDouble());
         double fPos   = ::rtl::math::approxFloor( GetDouble());
-        String aOldStr( GetString() );
+        OUString aOldStr( GetString() );
         if (fPos < 1.0 || fPos > static_cast<double>(STRING_MAXLEN)
                 || fCount < 0.0 || fCount > static_cast<double>(STRING_MAXLEN))
             PushIllegalArgument();
@@ -7872,14 +7872,14 @@ void ScInterpreter::ScReplace()
         {
             xub_StrLen nCount = static_cast<xub_StrLen>(fCount);
             xub_StrLen nPos   = static_cast<xub_StrLen>(fPos);
-            xub_StrLen nLen   = aOldStr.Len();
+            xub_StrLen nLen   = aOldStr.getLength();
             if (nPos > nLen + 1)
                 nPos = nLen + 1;
             if (nCount > nLen - nPos + 1)
                 nCount = nLen - nPos + 1;
-            aOldStr.Erase( nPos-1, nCount );
+            aOldStr = aOldStr.replaceAt( nPos-1, nCount, "" );
             if ( CheckStringResultLen( aOldStr, aNewStr ) )
-                aOldStr.Insert( aNewStr, nPos-1 );
+                aOldStr = aOldStr.replaceAt( nPos-1, 0, aNewStr );
             PushString( aOldStr );
         }
     }
@@ -8357,25 +8357,25 @@ void ScInterpreter::ScSubstitute()
         }
         else
             nAnz = 0;
-        String sNewStr = GetString();
+        OUString sNewStr = GetString();
         String sOldStr = GetString();
-        String sStr    = GetString();
-        xub_StrLen nPos = 0;
+        OUString sStr    = GetString();
+        sal_Int32 nPos = 0;
         xub_StrLen nCount = 0;
-        xub_StrLen nNewLen = sNewStr.Len();
+        xub_StrLen nNewLen = sNewStr.getLength();
         xub_StrLen nOldLen = sOldStr.Len();
         while( true )
         {
-            nPos = sStr.Search( sOldStr, nPos );
-            if (nPos != STRING_NOTFOUND)
+            nPos = sStr.indexOf( sOldStr, nPos );
+            if (nPos != -1)
             {
                 nCount++;
                 if( !nAnz || nCount == nAnz )
                 {
-                    sStr.Erase(nPos,nOldLen);
+                    sStr = sStr.replaceAt(nPos,nOldLen, "");
                     if ( CheckStringResultLen( sStr, sNewStr ) )
                     {
-                        sStr.Insert(sNewStr,nPos);
+                        sStr = sStr.replaceAt(nPos, 0, sNewStr);
                         nPos = sal::static_int_cast<xub_StrLen>( nPos + nNewLen );
                     }
                     else

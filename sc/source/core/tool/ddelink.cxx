@@ -38,7 +38,7 @@ TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
 bool ScDdeLink::bIsInUpdate = false;
 
-ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
+ScDdeLink::ScDdeLink( ScDocument* pD, const OUString& rA, const OUString& rT, const OUString& rI,
                         sal_uInt8 nM ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),

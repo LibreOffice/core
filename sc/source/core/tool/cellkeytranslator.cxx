@@ -212,7 +212,7 @@ void ScCellKeywordTranslator::init()
     #include "cellkeywords.inl"
 }
 
-void ScCellKeywordTranslator::addToMap(const String& rKey, const sal_Char* pName, const Locale& rLocale, OpCode eOpCode)
+void ScCellKeywordTranslator::addToMap(const OUString& rKey, const sal_Char* pName, const Locale& rLocale, OpCode eOpCode)
 {
     ScCellKeyword aKeyItem( pName, eOpCode, rLocale );
 

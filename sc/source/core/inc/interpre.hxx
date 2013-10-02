@@ -286,14 +286,14 @@ ScDBRangeBase* PopDBDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                           bool bDontCheckForTableOp = false );
-void PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef);
+void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef);
 void PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
-void PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef,
+void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef,
                           ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt = NULL);
-void PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, ScComplexRefData& rRef);
+void PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName, ScComplexRefData& rRef);
 void PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray);
 void PopExternalDoubleRef(ScMatrixRef& rMat);
-void GetExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& aData, ScExternalRefCache::TokenArrayRef& rArray);
+void GetExternalDoubleRef(sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& aData, ScExternalRefCache::TokenArrayRef& rArray);
 bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
 // If MatrixFormula: convert formula::svDoubleRef to svMatrix, create JumpMatrix.
@@ -310,13 +310,13 @@ void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetInde
 void PushDouble(double nVal);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
-void PushString( const String& rString );
+void PushString( const OUString& rString );
 void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
-void PushExternalSingleRef(sal_uInt16 nFileId, const String& rTabName,
+void PushExternalSingleRef(sal_uInt16 nFileId, const OUString& rTabName,
                            SCCOL nCol, SCROW nRow, SCTAB nTab);
-void PushExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName,
+void PushExternalDoubleRef(sal_uInt16 nFileId, const OUString& rTabName,
                            SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
 void PushMatrix( const sc::RangeMatrix& rMat );
@@ -359,7 +359,7 @@ inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
 // Check for String overflow of rResult+rAdd and set error and erase rResult
 // if so. Return true if ok, false if overflow
-inline bool CheckStringResultLen( String& rResult, const String& rAdd );
+inline bool CheckStringResultLen( OUString& rResult, const OUString& rAdd );
 // Set error according to rVal, and set rVal to 0.0 if there was an error.
 inline void TreatDoubleError( double& rVal );
 // Lookup using ScLookupCache, @returns true if found and result address
@@ -886,12 +886,12 @@ inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
     return false;
 }
 
-inline bool ScInterpreter::CheckStringResultLen( String& rResult, const String& rAdd )
+inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUString& rAdd )
 {
-    if ( (sal_uLong) rResult.Len() + rAdd.Len() > STRING_MAXLEN )
+    if ( (sal_uLong) rResult.getLength() + rAdd.getLength() > STRING_MAXLEN )
     {
         SetError( errStringOverflow );
-        rResult.Erase();
+        rResult = "";
         return false;
     }
     return true;

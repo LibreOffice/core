@@ -1375,7 +1375,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
         SetError( errUnknownStackVariable);
 }
 
-void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef)
+void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef)
 {
     if (!sp)
     {
@@ -1407,13 +1407,13 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, String& rTabName, 
 void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)
 {
     sal_uInt16 nFileId;
-    String aTabName;
+    OUString aTabName;
     ScSingleRefData aData;
     PopExternalSingleRef(nFileId, aTabName, aData, rToken, pFmt);
 }
 
 void ScInterpreter::PopExternalSingleRef(
-    sal_uInt16& rFileId, String& rTabName, ScSingleRefData& rRef,
+    sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef,
     ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)
 {
     PopExternalSingleRef(rFileId, rTabName, rRef);
@@ -1451,7 +1451,7 @@ void ScInterpreter::PopExternalSingleRef(
         *pFmt = aFmt;
 }
 
-void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, ScComplexRefData& rRef)
+void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName, ScComplexRefData& rRef)
 {
     if (!sp)
     {
@@ -1483,7 +1483,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, String& rTabName, 
 void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray)
 {
     sal_uInt16 nFileId;
-    String aTabName;
+    OUString aTabName;
     ScComplexRefData aData;
     PopExternalDoubleRef(nFileId, aTabName, aData);
     if (nGlobalError)
@@ -1516,7 +1516,7 @@ void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
 }
 
 void ScInterpreter::GetExternalDoubleRef(
-    sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rData, ScExternalRefCache::TokenArrayRef& rArray)
+    sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rData, ScExternalRefCache::TokenArrayRef& rArray)
 {
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
     const OUString* pFile = pRefMgr->getExternalFileName(nFileId);
@@ -1901,7 +1901,7 @@ void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 }
 
 
-void ScInterpreter::PushString( const String& rString )
+void ScInterpreter::PushString( const OUString& rString )
 {
     if (!IfErrorPushError())
         PushTempTokenWithoutError( new FormulaStringToken( rString ) );
@@ -1932,7 +1932,7 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 
 void ScInterpreter::PushExternalSingleRef(
-    sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, SCTAB nTab)
+    sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     if (!IfErrorPushError())
     {
@@ -1944,7 +1944,7 @@ void ScInterpreter::PushExternalSingleRef(
 
 
 void ScInterpreter::PushExternalDoubleRef(
-    sal_uInt16 nFileId, const String& rTabName,
+    sal_uInt16 nFileId, const OUString& rTabName,
     SCCOL nCol1, SCROW nRow1, SCTAB nTab1, SCCOL nCol2, SCROW nRow2, SCTAB nTab2)
 {
     if (!IfErrorPushError())

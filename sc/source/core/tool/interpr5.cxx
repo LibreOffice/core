@@ -1260,7 +1260,7 @@ void ScInterpreter::ScAmpersand()
 {
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    String sStr1, sStr2;
+    OUString sStr1, sStr2;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
     else
