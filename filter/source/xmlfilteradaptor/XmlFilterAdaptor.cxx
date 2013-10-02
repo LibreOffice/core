@@ -142,18 +142,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     //********************
     if (!msTemplateName.isEmpty()){
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
-
-        Reference< XNameAccess >xName;
-        if(xstylefamiliessupplier.is()){
-            xName=xstylefamiliessupplier->getStyleFamilies();
-        }
         Reference< XStyleLoader > xstyleLoader (xstylefamiliessupplier->getStyleFamilies(), UNO_QUERY);
-
-
-        if(xstyleLoader.is()){
-            xName=xstylefamiliessupplier->getStyleFamilies();
-        }
-
         if(xstyleLoader.is()){
             Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
