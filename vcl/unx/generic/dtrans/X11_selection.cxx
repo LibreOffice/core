@@ -3782,6 +3782,10 @@ void SelectionManager::run( void* pThis )
             aLast = aNow;
         }
     }
+    // close write end on exit so write() fails and other thread does not block
+    // forever
+    close(This->m_EndThreadPipe[1]);
+    close(This->m_EndThreadPipe[0]);
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "SelectionManager::run end\n" );
 #endif
@@ -3827,16 +3831,16 @@ void SelectionManager::shutdown() throw()
         aGuard.clear();
         while (osl_isThreadRunning(m_aThread))
         {
-            SolarMutexGuard guard2;
-            Application::Reschedule();
+            {   // drop mutex before write - otherwise may deadlock
+                SolarMutexGuard guard2;
+                Application::Reschedule();
+            }
             // trigger poll()'s wait end by writing a dummy value
             int dummy=0;
             dummy = write(m_EndThreadPipe[1], &dummy, 1);
         }
         osl_joinWithThread( m_aThread );
         osl_destroyThread( m_aThread );
-        close(m_EndThreadPipe[0]);
-        close(m_EndThreadPipe[1]);
         m_aThread = NULL;
         aGuard.reset();
     }
