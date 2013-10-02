@@ -215,7 +215,7 @@ LockPermissions	User	N					Formatted		User for permissions to be set.  (usually 
 Media	Cabinet	Y					Cabinet		If some or all of the files stored on the media are compressed in a cabinet, the name of that cabinet.
 Media	DiskId	N	1	32767					Primary key, integer to determine sort order for table.
 Media	DiskPrompt	Y					Text		Disk name: the visible text actually printed on the disk.  This will be used to prompt the user when this disk needs to be inserted.
-Media	LastSequence	N	0	32767					File sequence number for the last file for this media.
+Media	LastSequence	N	0	65535					File sequence number for the last file for this media.
 Media	Source	Y					Property		The property defining the location of the cabinet file.
 Media	VolumeLabel	Y					Text		The label attributed to the volume.
 MIME	CLSID	Y					Guid		Optional associated CLSID.
