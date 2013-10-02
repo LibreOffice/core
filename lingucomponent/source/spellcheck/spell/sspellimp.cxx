@@ -476,9 +476,10 @@ Reference< XSpellAlternatives >
                         OUString cvtwrd(suglst[ii],strlen(suglst[ii]),eEnc);
                         pStr[numsug + ii] = cvtwrd;
                     }
-                    pMS->free_list(&suglst, count);
                     numsug += count;
                 }
+
+                pMS->free_list(&suglst, count);
             }
         }
 
