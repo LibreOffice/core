@@ -63,7 +63,6 @@ namespace drawinglayer
             {
                 const GraphicObject aGraphicObject(aGraphic);
                 const GraphicAttr aGraphicAttr;
-                drawinglayer::primitive2d::Primitive2DSequence xOLEContent;
 
                 if(bScaleContent)
                 {
