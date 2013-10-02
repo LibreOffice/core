@@ -355,7 +355,6 @@ void GrammarCheckingIterator::ProcessResult(
                              rRes.nBehindEndOfSentencePosition  <= rRes.nStartOfNextSentencePosition;
         (void) bBoundariesOk;
         DBG_ASSERT( bBoundariesOk, "inconsistent sentence boundaries" );
-        uno::Sequence< linguistic2::SingleProofreadingError > aErrors = rRes.aErrors;
 
         uno::Reference< text::XMultiTextMarkup > xMulti( rRes.xFlatParagraph, uno::UNO_QUERY );
         if (xMulti.is())    // use new API for markups
@@ -492,9 +491,6 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
 
 void GrammarCheckingIterator::DequeueAndCheck()
 {
-    uno::Sequence< sal_Int32 >      aLangPortions;
-    uno::Sequence< lang::Locale >   aLangPortionsLocale;
-
     for (;;)
     {
         // ---- THREAD SAFE START ----
