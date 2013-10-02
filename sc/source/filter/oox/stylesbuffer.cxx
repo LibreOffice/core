@@ -117,8 +117,6 @@ const sal_Int32 OOX_XF_TEXTDIR_RTL          = 2;
 
 // OOXML cell rotation (also used in BIFF)
 const sal_Int32 OOX_XF_ROTATION_NONE        = 0;
-const sal_Int32 OOX_XF_ROTATION_90CCW       = 90;
-const sal_Int32 OOX_XF_ROTATION_90CW        = 180;
 const sal_Int32 OOX_XF_ROTATION_STACKED     = 255;
 
 // OOXML cell indentation
@@ -128,8 +126,6 @@ const sal_Int32 OOX_XF_INDENT_NONE          = 0;
 const sal_Int32 OOX_STYLE_NORMAL            = 0;        /// Default cell style.
 const sal_Int32 OOX_STYLE_ROWLEVEL          = 1;        /// RowLevel_x cell style.
 const sal_Int32 OOX_STYLE_COLLEVEL          = 2;        /// ColLevel_x cell style.
-
-const sal_Int32 OOX_STYLE_LEVELCOUNT        = 7;        /// Number of outline level styles.
 
 // BIFF12 constants -----------------------------------------------------------
 
@@ -172,11 +168,6 @@ const sal_uInt16 BIFF12_DXF_BORDER_TOP      = 6;
 const sal_uInt16 BIFF12_DXF_BORDER_BOTTOM   = 7;
 const sal_uInt16 BIFF12_DXF_BORDER_LEFT     = 8;
 const sal_uInt16 BIFF12_DXF_BORDER_RIGHT    = 9;
-const sal_uInt16 BIFF12_DXF_BORDER_DIAG     = 10;
-const sal_uInt16 BIFF12_DXF_BORDER_VERT     = 11;
-const sal_uInt16 BIFF12_DXF_BORDER_HOR      = 12;
-const sal_uInt16 BIFF12_DXF_BORDER_DIAGUP   = 13;
-const sal_uInt16 BIFF12_DXF_BORDER_DIAGDOWN = 14;
 const sal_uInt16 BIFF12_DXF_FONT_NAME       = 24;
 const sal_uInt16 BIFF12_DXF_FONT_WEIGHT     = 25;
 const sal_uInt16 BIFF12_DXF_FONT_UNDERLINE  = 26;
@@ -185,10 +176,6 @@ const sal_uInt16 BIFF12_DXF_FONT_ITALIC     = 28;
 const sal_uInt16 BIFF12_DXF_FONT_STRIKE     = 29;
 const sal_uInt16 BIFF12_DXF_FONT_OUTLINE    = 30;
 const sal_uInt16 BIFF12_DXF_FONT_SHADOW     = 31;
-const sal_uInt16 BIFF12_DXF_FONT_CONDENSE   = 32;
-const sal_uInt16 BIFF12_DXF_FONT_EXTEND     = 33;
-const sal_uInt16 BIFF12_DXF_FONT_CHARSET    = 34;
-const sal_uInt16 BIFF12_DXF_FONT_FAMILY     = 35;
 const sal_uInt16 BIFF12_DXF_FONT_HEIGHT     = 36;
 const sal_uInt16 BIFF12_DXF_FONT_SCHEME     = 37;
 const sal_uInt16 BIFF12_DXF_NUMFMT_CODE     = 38;
@@ -201,18 +188,11 @@ const sal_uInt16 BIFF12_CELLSTYLE_CUSTOM    = 0x0004;
 
 // BIFF constants -------------------------------------------------------------
 
-// BIFF predefined color indexes
-const sal_uInt16 BIFF2_COLOR_BLACK          = 0;        /// Black (text) in BIFF2.
-const sal_uInt16 BIFF2_COLOR_WHITE          = 1;        /// White (background) in BIFF2.
-
 // BIFF font flags, also used in BIFF12
-const sal_uInt16 BIFF_FONTFLAG_BOLD         = 0x0001;
 const sal_uInt16 BIFF_FONTFLAG_ITALIC       = 0x0002;
-const sal_uInt16 BIFF_FONTFLAG_UNDERLINE    = 0x0004;
 const sal_uInt16 BIFF_FONTFLAG_STRIKEOUT    = 0x0008;
 const sal_uInt16 BIFF_FONTFLAG_OUTLINE      = 0x0010;
 const sal_uInt16 BIFF_FONTFLAG_SHADOW       = 0x0020;
-const sal_uInt16 BIFF_FONTFLAG_CONDENSE     = 0x0040;
 
 // BIFF font weight
 const sal_uInt16 BIFF_FONTWEIGHT_BOLD       = 450;
@@ -223,82 +203,6 @@ const sal_uInt8 BIFF_FONTUNDERL_SINGLE      = 1;
 const sal_uInt8 BIFF_FONTUNDERL_DOUBLE      = 2;
 const sal_uInt8 BIFF_FONTUNDERL_SINGLE_ACC  = 33;
 const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
-
-// BIFF XF flags
-const sal_uInt16 BIFF_XF_LOCKED             = 0x0001;
-const sal_uInt16 BIFF_XF_HIDDEN             = 0x0002;
-const sal_uInt16 BIFF_XF_STYLE              = 0x0004;
-const sal_uInt16 BIFF_XF_STYLEPARENT        = 0x0FFF;   /// Styles don't have a parent.
-const sal_uInt16 BIFF_XF_WRAPTEXT           = 0x0008;   /// Automatic line break.
-const sal_uInt16 BIFF_XF_JUSTLASTLINE       = 0x0080;
-const sal_uInt16 BIFF_XF_SHRINK             = 0x0010;   /// Shrink to fit into cell.
-const sal_uInt16 BIFF_XF_MERGE              = 0x0020;
-
-// BIFF XF attribute used flags
-const sal_uInt8 BIFF_XF_NUMFMT_USED         = 0x01;
-const sal_uInt8 BIFF_XF_FONT_USED           = 0x02;
-const sal_uInt8 BIFF_XF_ALIGN_USED          = 0x04;
-const sal_uInt8 BIFF_XF_BORDER_USED         = 0x08;
-const sal_uInt8 BIFF_XF_AREA_USED           = 0x10;
-const sal_uInt8 BIFF_XF_PROT_USED           = 0x20;
-
-// BIFF XF text orientation
-const sal_uInt8 BIFF_XF_ORIENT_NONE         = 0;
-const sal_uInt8 BIFF_XF_ORIENT_STACKED      = 1;        /// Stacked top to bottom.
-const sal_uInt8 BIFF_XF_ORIENT_90CCW        = 2;        /// 90 degr. counterclockwise.
-const sal_uInt8 BIFF_XF_ORIENT_90CW         = 3;        /// 90 degr. clockwise.
-
-// BIFF XF line styles
-const sal_uInt8 BIFF_LINE_NONE              = 0;
-const sal_uInt8 BIFF_LINE_THIN              = 1;
-
-// BIFF XF patterns
-const sal_uInt8 BIFF_PATT_NONE              = 0;
-const sal_uInt8 BIFF_PATT_125               = 17;
-
-// BIFF2 XF flags
-const sal_uInt8 BIFF2_XF_VALFMT_MASK        = 0x3F;
-const sal_uInt8 BIFF2_XF_LOCKED             = 0x40;
-const sal_uInt8 BIFF2_XF_HIDDEN             = 0x80;
-const sal_uInt8 BIFF2_XF_LEFTLINE           = 0x08;
-const sal_uInt8 BIFF2_XF_RIGHTLINE          = 0x10;
-const sal_uInt8 BIFF2_XF_TOPLINE            = 0x20;
-const sal_uInt8 BIFF2_XF_BOTTOMLINE         = 0x40;
-const sal_uInt8 BIFF2_XF_BACKGROUND         = 0x80;
-
-// BIFF8 diagonal borders
-const sal_uInt32 BIFF_XF_DIAG_TLBR          = 0x40000000;   /// Top-left to bottom-right.
-const sal_uInt32 BIFF_XF_DIAG_BLTR          = 0x80000000;   /// Bottom-left to top-right.
-
-// BIFF STYLE flags
-const sal_uInt16 BIFF_STYLE_BUILTIN         = 0x8000;
-const sal_uInt16 BIFF_STYLE_XFMASK          = 0x0FFF;
-
-// BIFF STYLEEXT flags
-const sal_uInt8 BIFF_STYLEEXT_BUILTIN       = 0x01;
-const sal_uInt8 BIFF_STYLEEXT_HIDDEN        = 0x02;
-const sal_uInt8 BIFF_STYLEEXT_CUSTOM        = 0x04;
-
-// BIFF conditional formatting
-const sal_uInt32 BIFF_CFRULE_BORDER_LEFT    = 0x00000400;
-const sal_uInt32 BIFF_CFRULE_BORDER_RIGHT   = 0x00000800;
-const sal_uInt32 BIFF_CFRULE_BORDER_TOP     = 0x00001000;
-const sal_uInt32 BIFF_CFRULE_BORDER_BOTTOM  = 0x00002000;
-const sal_uInt32 BIFF_CFRULE_FILL_PATTERN   = 0x00010000;
-const sal_uInt32 BIFF_CFRULE_FILL_PATTCOLOR = 0x00020000;
-const sal_uInt32 BIFF_CFRULE_FILL_FILLCOLOR = 0x00040000;
-const sal_uInt32 BIFF_CFRULE_FONTBLOCK      = 0x04000000;
-const sal_uInt32 BIFF_CFRULE_ALIGNBLOCK     = 0x08000000;
-const sal_uInt32 BIFF_CFRULE_BORDERBLOCK    = 0x10000000;
-const sal_uInt32 BIFF_CFRULE_FILLBLOCK      = 0x20000000;
-const sal_uInt32 BIFF_CFRULE_PROTBLOCK      = 0x40000000;
-
-const sal_uInt32 BIFF_CFRULE_FONT_STYLE     = 0x00000002;   /// Font posture or weight modified?
-const sal_uInt32 BIFF_CFRULE_FONT_OUTLINE   = 0x00000008;   /// Font outline modified?
-const sal_uInt32 BIFF_CFRULE_FONT_SHADOW    = 0x00000010;   /// Font shadow modified?
-const sal_uInt32 BIFF_CFRULE_FONT_STRIKEOUT = 0x00000080;   /// Font cancellation modified?
-const sal_uInt32 BIFF_CFRULE_FONT_UNDERL    = 0x00000001;   /// Font underline type modified?
-const sal_uInt32 BIFF_CFRULE_FONT_ESCAPEM   = 0x00000001;   /// Font escapement type modified?
 
 // ----------------------------------------------------------------------------
 
@@ -2593,22 +2497,6 @@ void Dxf::writeToPropertySet( PropertySet& rPropSet ) const
 // ============================================================================
 
 namespace {
-
-const sal_Char* const spcLegacyStyleNamePrefix = "Excel_BuiltIn_";
-const sal_Char* const sppcLegacyStyleNames[] =
-{
-    "Normal",
-    "RowLevel_",            // outline level will be appended
-    "ColumnLevel_",         // outline level will be appended
-    "Comma",
-    "Currency",
-    "Percent",
-    "Comma_0",              // new in BIFF4
-    "Currency_0",
-    "Hyperlink",            // new in BIFF8
-    "Followed_Hyperlink"
-};
-const sal_Int32 snLegacyStyleNamesCount = static_cast< sal_Int32 >( STATIC_ARRAY_SIZE( sppcLegacyStyleNames ) );
 
 const sal_Char* const spcStyleNamePrefix = "Excel Built-in ";
 const sal_Char* const sppcStyleNames[] =
