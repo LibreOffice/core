@@ -145,7 +145,6 @@ public:
             uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
 
             bool bMatched = false;
-            uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
                 try
                 {
                     uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex, uno::UNO_QUERY_THROW );
