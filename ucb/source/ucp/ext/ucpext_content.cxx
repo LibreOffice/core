@@ -524,7 +524,6 @@ namespace ucb { namespace ucp { namespace ext
         ::osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
         Sequence< Any > aRet( i_rValues.getLength() );
-        Sequence< PropertyChangeEvent > aChanges( i_rValues.getLength() );
 
         PropertyChangeEvent aEvent;
         aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
