@@ -694,7 +694,7 @@ sal_Int32 SwSrcView::PrintSource(
     if (!pOutDev || nPage <= 0)
         return 0;
 
-    //! This logarithm for printing the n-th page is very poor since it
+    //! This algorithm for printing the n-th page is very poor since it
     //! needs to go over the text of all previous pages to get to the correct one.
     //! But since HTML source code is expected to be just a small number of pages
     //! even this poor algorithm should be enough...
