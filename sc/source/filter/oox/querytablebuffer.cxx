@@ -64,29 +64,6 @@ const sal_uInt32 BIFF12_QUERYTABLE_APPLYBORDER      = 0x00020000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYFILL        = 0x00040000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYPROTECTION  = 0x00080000;
 
-const sal_uInt16 BIFF_QUERYTABLE_HEADERS            = 0x0001;
-const sal_uInt16 BIFF_QUERYTABLE_ROWNUMBERS         = 0x0002;
-const sal_uInt16 BIFF_QUERYTABLE_DISABLEREFRESH     = 0x0004;
-const sal_uInt16 BIFF_QUERYTABLE_BACKGROUND         = 0x0008;
-const sal_uInt16 BIFF_QUERYTABLE_FIRSTBACKGROUND    = 0x0010;
-const sal_uInt16 BIFF_QUERYTABLE_REFRESHONLOAD      = 0x0020;
-const sal_uInt16 BIFF_QUERYTABLE_DELETEUNUSED       = 0x0040;
-const sal_uInt16 BIFF_QUERYTABLE_FILLFORMULAS       = 0x0080;
-const sal_uInt16 BIFF_QUERYTABLE_ADJUSTCOLWIDTH     = 0x0100;
-const sal_uInt16 BIFF_QUERYTABLE_SAVEDATA           = 0x0200;
-const sal_uInt16 BIFF_QUERYTABLE_DISABLEEDIT        = 0x0400;
-const sal_uInt16 BIFF_QUERYTABLE_OVERWRITEEXISTING  = 0x2000;
-
-const sal_uInt16 BIFF_QUERYTABLE_APPLYNUMFMT        = 0x0001;
-const sal_uInt16 BIFF_QUERYTABLE_APPLYFONT          = 0x0002;
-const sal_uInt16 BIFF_QUERYTABLE_APPLYALIGNMENT     = 0x0004;
-const sal_uInt16 BIFF_QUERYTABLE_APPLYBORDER        = 0x0008;
-const sal_uInt16 BIFF_QUERYTABLE_APPLYFILL          = 0x0010;
-const sal_uInt16 BIFF_QUERYTABLE_APPLYPROTECTION    = 0x0020;
-
-const sal_uInt32 BIFF_QTREFRESH_PRESERVEFORMAT      = 0x00000001;
-const sal_uInt32 BIFF_QTREFRESH_ADJUSTCOLWIDTH      = 0x00000002;
-
 // ----------------------------------------------------------------------------
 
 void lclAppendWebQueryTableName( OUStringBuffer& rTables, const OUString& rTableName )
