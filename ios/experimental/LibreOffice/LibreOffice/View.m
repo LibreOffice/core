@@ -15,7 +15,7 @@
 - (void)drawRect:(CGRect)rect
 {
     NSLog(@"drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
-    NSLog(@"statusBarOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation]);
+    NSLog(@"statusBarOrientation: %ld", (long)[[UIApplication sharedApplication] statusBarOrientation]);
 
     // NSDate *startDate = [NSDate date];
 

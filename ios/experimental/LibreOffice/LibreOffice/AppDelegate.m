@@ -64,7 +64,7 @@ static View *theView;
     [self.window addGestureRecognizer: tapRecognizer];
     [self.window addGestureRecognizer: panRecognizer];
 
-    NSLog(@"statusBarOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation]);
+    NSLog(@"statusBarOrientation: %ld", (long) [[UIApplication sharedApplication] statusBarOrientation]);
 
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
         lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
@@ -94,7 +94,7 @@ static View *theView;
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSLog(@"textView: %@ shouldChangeTextInRange:[%u,%u] replacementText:%@", textView, range.location, range.length, text);
+    NSLog(@"textView: %@ shouldChangeTextInRange:[%lu,%lu] replacementText:%@", textView, (unsigned long) range.location, (unsigned long) range.length, text);
     assert(textView == theView->textView);
 
     for (NSUInteger i = 0; i < [text length]; i++)
@@ -137,7 +137,7 @@ static View *theView;
     NSLog(@"New applicationFrame: %dx%d@(%d,%d)",
           (int) applicationFrame.size.width, (int) applicationFrame.size.height,
           (int) applicationFrame.origin.x, (int) applicationFrame.origin.y);
-    NSLog(@"statusBarOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation]);
+    NSLog(@"statusBarOrientation: %ld", (long) [[UIApplication sharedApplication] statusBarOrientation]);
 
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
         lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);

@@ -29,7 +29,7 @@
 {
     (void) fromInterfaceOrientation;
 
-    NSLog(@"didRotateFromInterfaceOrientation: statusBarOrientation: %d interfaceOrientation: %d", [[UIApplication sharedApplication] statusBarOrientation], [self interfaceOrientation]);
+    NSLog(@"didRotateFromInterfaceOrientation: statusBarOrientation: %ld interfaceOrientation: %ld", (long) [[UIApplication sharedApplication] statusBarOrientation], (long) [self interfaceOrientation]);
 }
 
 @end
