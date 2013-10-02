@@ -192,26 +192,26 @@ static rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
     return eRet;
 }
 
-static void lcl_ConvertTabsToSpaces( String& rLine )
+static OUString lcl_ConvertTabsToSpaces( OUString sLine )
 {
-    if ( rLine.Len() )
+    if (!sLine.isEmpty())
     {
-        sal_uInt16 nPos = 0;
-        sal_uInt16 nMax = rLine.Len();
-        while ( nPos < nMax )
+        const sal_Unicode aPadSpaces[4] = {' ', ' ', ' ', ' '};
+        sal_Int32 nPos = 0;
+        for (;;)
         {
-            if ( rLine.GetChar(nPos) == '\t' )
+            nPos = sLine.indexOf('\t', nPos);
+            if (nPos<0)
             {
-                // Not 4 blanks, but on 4th TabPos:
-                OUStringBuffer aBlanker;
-                comphelper::string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
-                rLine.Erase( nPos, 1 );
-                rLine.Insert(aBlanker.makeStringAndClear(), nPos);
-                nMax = rLine.Len();
+                break;
             }
-            nPos++; // Not optimally, if tab, but not wrong...
+            // Not 4 blanks, but on 4th TabPos:
+            const sal_Int32 nPadLen = 4 - (nPos % 4);
+            sLine.replaceAt(nPos, 1, OUString(aPadSpaces, nPadLen));
+            nPos += nPadLen;
         }
     }
+    return sLine;
 }
 
 SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
@@ -734,12 +734,10 @@ sal_Int32 SwSrcView::PrintSource(
     Point aPos( aStartPos );
     for ( sal_uInt16 nPara = 0; nPara < nParas; ++nPara )
     {
-        String aLine( pTextEngine->GetText( nPara ) );
-        lcl_ConvertTabsToSpaces( aLine );
-        sal_uInt16 nLines = aLine.Len() / nCharspLine + 1;
-        for ( sal_uInt16 nLine = 0; nLine < nLines; ++nLine )
+        const OUString aLine( lcl_ConvertTabsToSpaces(pTextEngine->GetText( nPara )) );
+        sal_Int32 nLines = aLine.getLength() / nCharspLine + 1;
+        for ( sal_Int32 nLine = 0; nLine < nLines; ++nLine )
         {
-            String aTmpLine( aLine, nLine * nCharspLine, nCharspLine );
             aPos.Y() += nLineHeight;
             if ( aPos.Y() > ( aPaperSz.Height() + TMARGPRN - nLineHeight/2 ) )
             {
@@ -749,7 +747,7 @@ sal_Int32 SwSrcView::PrintSource(
                 aPos = aStartPos;
             }
             if (!bCalcNumPagesOnly && nPage == nCurPage)
-                pOutDev->DrawText( aPos, aTmpLine );
+                pOutDev->DrawText( aPos, aLine.copy(nLine * nCharspLine, nCharspLine) );
         }
         aPos.Y() += nParaSpace;
     }
