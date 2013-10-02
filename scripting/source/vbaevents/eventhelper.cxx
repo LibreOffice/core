@@ -118,7 +118,6 @@ bool isMouseEventOk( awt::MouseEvent& evt, const Sequence< Any >& params )
 
 Sequence< Any > ooMouseEvtToVBADblClick( const Sequence< Any >& params )
 {
-    Sequence< Any > translatedParams;
     awt::MouseEvent evt;
 
     if ( !( isMouseEventOk(evt, params)) ||
