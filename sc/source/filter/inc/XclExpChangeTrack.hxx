@@ -41,7 +41,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                XclExpUserBView( const String& rUsername, const sal_uInt8* pGUID );
+                                XclExpUserBView( const OUString& rUsername, const sal_uInt8* pGUID );
 
     inline const sal_uInt8*     GetGUID() const { return aGUID; }
 
@@ -253,7 +253,7 @@ private:
 
 public:
     inline                      XclExpChTrInfo(
-                                    const String& rUsername,
+                                    const OUString& rUsername,
                                     const DateTime& rDateTime,
                                     const sal_uInt8* pGUID,
                                     sal_Int32 nLogNumber );
@@ -265,7 +265,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
-inline XclExpChTrInfo::XclExpChTrInfo( const String& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID, sal_Int32 nLogNumber ) :
+inline XclExpChTrInfo::XclExpChTrInfo( const OUString& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID, sal_Int32 nLogNumber ) :
     sUsername( rUsername ),
     mnLogNumber( nLogNumber ),
     aDateTime( rDateTime )
@@ -335,7 +335,7 @@ public:
 class XclExpChTrAction : public ExcRecord
 {
 private:
-    String                      sUsername;
+    OUString                    sUsername;
     DateTime                    aDateTime;
     sal_uInt32                  nIndex;         // action number
     XclExpChTrAction*           pAddAction;     // additional record for this action
@@ -386,7 +386,7 @@ public:
                                     sal_uInt16 nNewOpCode = EXC_CHTR_OP_UNKNOWN );
     virtual                     ~XclExpChTrAction();
 
-    inline const String&        GetUsername() const             { return sUsername; }
+    inline const OUString&      GetUsername() const             { return sUsername; }
     inline const DateTime&      GetDateTime() const             { return aDateTime; }
     inline const XclExpChTrTabIdBuffer& GetTabIdBuffer() const  { return rIdBuffer; }
     inline sal_Bool             ForceInfoRecord() const         { return bForceInfo; }

@@ -57,7 +57,7 @@ class XclImpChangeTrack : protected XclImpRoot
 {
 private:
     XclImpChTrRecHeader         aRecHeader;
-    String                      sOldUsername;
+    OUString                    sOldUsername;
 
     ScChangeTrack*              pChangeTrack;
     SotStorageStreamRef          xInStrm;        // input stream
@@ -84,7 +84,7 @@ private:
     SCTAB                       ReadTabNum();
     void                        ReadDateTime( DateTime& rDateTime );
 
-    inline void                 ReadString( String& rString );
+    inline void                 ReadString( OUString& rString );
 
     sal_Bool                    CheckRecord( sal_uInt16 nOpCode );
 
@@ -149,7 +149,7 @@ inline void XclImpChangeTrack::Read2DRange( ScRange& rRange )
     rRange.aEnd.SetCol( static_cast<SCCOL>(pStrm->ReaduInt16()) );
 }
 
-inline void XclImpChangeTrack::ReadString( String& rString )
+inline void XclImpChangeTrack::ReadString( OUString& rString )
 {
     rString = pStrm->ReadUniString();
 }

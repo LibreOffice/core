@@ -99,7 +99,7 @@ static inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
 
 //___________________________________________________________________
 
-XclExpUserBView::XclExpUserBView( const String& rUsername, const sal_uInt8* pGUID ) :
+XclExpUserBView::XclExpUserBView( const OUString& rUsername, const sal_uInt8* pGUID ) :
     sUsername( rUsername )
 {
     memcpy( aGUID, pGUID, 16 );
