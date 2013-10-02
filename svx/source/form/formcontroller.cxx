@@ -3117,7 +3117,6 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 
     if (m_xComposer.is())
     {
-        Sequence < PropertyValue> aLevel;
         Sequence< Sequence < PropertyValue > > aFilterRows = m_xComposer->getStructuredFilter();
 
         // ok, we receive the list of filters as sequence of fieldnames, value
