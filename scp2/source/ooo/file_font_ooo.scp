@@ -79,6 +79,7 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondense
 #endif 
 
 
+#ifndef WNT // fdo#62764 - Libreration fonts reportedly cause BSOD on Win7 SP1
 // Liberation fonts
 
 // Liberation Sans Narrow
@@ -111,6 +112,8 @@ STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Regular, LiberationSerif-Regular.ttf
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Bold, LiberationSerif-Bold.ttf, Liberation Serif Bold) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Italic, LiberationSerif-Italic.ttf, Liberation Serif Italic) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_BoldItalic, LiberationSerif-BoldItalic.ttf, Liberation Serif Bold Italic) 
+#endif
+
 #endif
 
 // Gentium fonts
