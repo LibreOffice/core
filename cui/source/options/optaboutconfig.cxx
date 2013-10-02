@@ -227,7 +227,6 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
         {
             Reference< XHierarchicalNameAccess >xNextHierarchicalNameAccess( aNode, uno::UNO_QUERY_THROW );
             Reference< XNameAccess > xNextNameAccess( xNextHierarchicalNameAccess, uno::UNO_QUERY_THROW );
-            uno::Sequence < OUString  > seqNext = xNextNameAccess->getElementNames();
             FillItems( xNextNameAccess, sPath + OUString("/") + seqItems[i] );
             bIsLeafNode = sal_False;
 
