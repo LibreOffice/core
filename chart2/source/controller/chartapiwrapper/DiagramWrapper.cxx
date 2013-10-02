@@ -1725,9 +1725,6 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
     {
         ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-
-        uno::Sequence< uno::Sequence< sal_Int32 > > aResult( aSeriesVector.size() );
-
         ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                 aSeriesVector.begin();
         sal_Int32 i = 0;
