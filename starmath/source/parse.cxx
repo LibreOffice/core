@@ -50,14 +50,6 @@ T* lcl_popOrZero( ::std::stack<T*> & rStack )
 }
 }
 
-static const sal_Unicode aDelimiterTable[] =
-{
-    ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
-    '%',    '\\',   '"',    '~',    '`',    '>',    '<',    '&',    '|',    '(',
-    ')',    '{',    '}',    '[',    ']',    '^',    '_',
-    '\0'    // end of list symbol
-};
-
 SmToken::SmToken() :
     eType       (TUNKNOWN),
     cMathChar   ('\0')
@@ -324,6 +316,14 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 ///////////////////////////////////////////////////////////////////////////
 
 #if OSL_DEBUG_LEVEL > 1
+
+static const sal_Unicode aDelimiterTable[] =
+{
+    ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
+    '%',    '\\',   '"',    '~',    '`',    '>',    '<',    '&',    '|',    '(',
+    ')',    '{',    '}',    '[',    ']',    '^',    '_',
+    '\0'    // end of list symbol
+};
 
 bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
     // returns 'true' iff cChar is '\0' or a delimeter
