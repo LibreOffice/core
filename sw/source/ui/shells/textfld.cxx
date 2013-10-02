@@ -496,7 +496,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 sal_Bool bIsUrl=sal_False;
                 sal_Bool bNew=sal_False;
                 bool bUpdate = false;
-                SwFldMgr* pMgr = new SwFldMgr;
+                SwFldMgr aMgr;
                 if ( pItem )
                 {
                     aText = ((SfxStringItem*)pItem)->GetValue();
@@ -507,7 +507,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if ( pIsUrl )
                         bIsUrl = pIsUrl->GetValue();
 
-                    SwScriptField* pFld = (SwScriptField*)pMgr->GetCurFld();
+                    SwScriptField* pFld = (SwScriptField*)aMgr.GetCurFld();
                     bNew = !pFld || !(pFld->GetTyp()->Which() == RES_SCRIPTFLD);
                     bUpdate = pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
                 }
@@ -535,12 +535,12 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if( bNew )
                 {
                     SwInsertFld_Data aData(TYP_SCRIPTFLD, 0, aType, aText, bIsUrl);
-                    pMgr->InsertFld(aData);
+                    aMgr.InsertFld(aData);
                     rReq.Done();
                 }
                 else if( bUpdate )
                 {
-                    pMgr->UpdateCurFld( bIsUrl, aType, aText );
+                    aMgr.UpdateCurFld( bIsUrl, aType, aText );
                     rSh.SetUndoNoResetModified();
                     rReq.Done();
                 }
