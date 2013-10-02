@@ -64,30 +64,6 @@ const sal_uInt16 BIFF12_ROW_CUSTOMHEIGHT    = 0x2000;
 const sal_uInt16 BIFF12_ROW_CUSTOMFORMAT    = 0x4000;
 const sal_uInt8 BIFF12_ROW_SHOWPHONETIC     = 0x01;
 
-const sal_uInt16 BIFF_DATATABLE_ROW         = 0x0004;
-const sal_uInt16 BIFF_DATATABLE_2D          = 0x0008;
-const sal_uInt16 BIFF_DATATABLE_REF1DEL     = 0x0010;
-const sal_uInt16 BIFF_DATATABLE_REF2DEL     = 0x0020;
-
-const sal_uInt8 BIFF_FORMULA_RES_STRING     = 0;        /// Result is a string.
-const sal_uInt8 BIFF_FORMULA_RES_BOOL       = 1;        /// Result is Boolean value.
-const sal_uInt8 BIFF_FORMULA_RES_ERROR      = 2;        /// Result is error code.
-const sal_uInt8 BIFF_FORMULA_RES_EMPTY      = 3;        /// Result is empty cell (BIFF8 only).
-const sal_uInt16 BIFF_FORMULA_SHARED        = 0x0008;   /// Shared formula cell.
-
-const sal_uInt8 BIFF2_ROW_CUSTOMFORMAT      = 0x01;
-const sal_uInt16 BIFF_ROW_DEFAULTHEIGHT     = 0x8000;
-const sal_uInt16 BIFF_ROW_HEIGHTMASK        = 0x7FFF;
-const sal_uInt32 BIFF_ROW_COLLAPSED         = 0x00000010;
-const sal_uInt32 BIFF_ROW_HIDDEN            = 0x00000020;
-const sal_uInt32 BIFF_ROW_CUSTOMHEIGHT      = 0x00000040;
-const sal_uInt32 BIFF_ROW_CUSTOMFORMAT      = 0x00000080;
-const sal_uInt32 BIFF_ROW_THICKTOP          = 0x10000000;
-const sal_uInt32 BIFF_ROW_THICKBOTTOM       = 0x20000000;
-const sal_uInt32 BIFF_ROW_SHOWPHONETIC      = 0x40000000;
-
-const sal_Int32 BIFF2_CELL_USEIXFE          = 63;
-
 } // namespace
 
 // ============================================================================
