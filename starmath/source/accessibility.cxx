@@ -1672,7 +1672,9 @@ void SmEditAccessible::ClearWin()
     pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
 
     //! make TextHelper implicitly release C++ references to some core objects
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     pTextHelper->SetEditSource( ::std::auto_ptr<SvxEditSource>(NULL) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     //! make TextHelper release references
     //! (e.g. the one set by the 'SetEventSource' call)
     pTextHelper->Dispose();

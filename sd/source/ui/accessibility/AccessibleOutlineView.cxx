@@ -84,8 +84,10 @@ AccessibleOutlineView::AccessibleOutlineView (
 
             if( pOutlineView && pOutliner )
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
                                                                                   *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
             }
         }
     }

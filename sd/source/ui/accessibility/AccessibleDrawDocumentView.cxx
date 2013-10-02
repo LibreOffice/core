@@ -110,8 +110,10 @@ void AccessibleDrawDocumentView::Init (void)
         {
             pPage->acquire();
             pPage->Init();
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             mpChildrenManager->AddAccessibleShape (
                 std::auto_ptr<AccessibleShape>(pPage));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             pPage->release();
             mpChildrenManager->Update ();
         }
@@ -304,8 +306,10 @@ void SAL_CALL
             {
                 pPage->acquire();
                 pPage->Init();
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 mpChildrenManager->AddAccessibleShape (
                     std::auto_ptr<AccessibleShape>(pPage));
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 mpChildrenManager->Update (false);
                 pPage->release();
             }

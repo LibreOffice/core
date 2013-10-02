@@ -84,7 +84,9 @@ public:
 
 protected:
     friend class ::SdModule;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     friend class ::std::auto_ptr<SdGlobalResourceContainer>;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;

@@ -56,6 +56,7 @@ sal_Int32 SvxEditSourceHint::GetEndValue() const
 
 //------------------------------------------------------------------------
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )
 {
     if( aNotify )
@@ -103,6 +104,7 @@ sal_Int32 SvxEditSourceHint::GetEndValue() const
 
     return ::std::auto_ptr<SfxHint>( new SfxHint() );
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_uInt16 nIndex )
 {
