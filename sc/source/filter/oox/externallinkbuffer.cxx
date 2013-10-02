@@ -66,13 +66,6 @@ const sal_uInt16 BIFF12_EXTNAME_STDDOCNAME  = 0x0008;
 const sal_uInt16 BIFF12_EXTNAME_OLEOBJECT   = 0x0010;
 const sal_uInt16 BIFF12_EXTNAME_ICONIFIED   = 0x0020;
 
-const sal_uInt16 BIFF_EXTNAME_BUILTIN       = 0x0001;
-const sal_uInt16 BIFF_EXTNAME_AUTOMATIC     = 0x0002;
-const sal_uInt16 BIFF_EXTNAME_PREFERPIC     = 0x0004;
-const sal_uInt16 BIFF_EXTNAME_STDDOCNAME    = 0x0008;
-const sal_uInt16 BIFF_EXTNAME_OLEOBJECT     = 0x0010;
-const sal_uInt16 BIFF_EXTNAME_ICONIFIED     = 0x8000;
-
 } // namespace
 
 // ============================================================================
