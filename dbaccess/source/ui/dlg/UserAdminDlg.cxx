@@ -60,7 +60,7 @@ DBG_NAME(OUserAdminDlg)
     {
         DBG_CTOR(OUserAdminDlg,NULL);
 
-        m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
+        m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *_pItems);

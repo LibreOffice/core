@@ -158,7 +158,7 @@ ScTemporaryChartLock::~ScTemporaryChartLock()
 void ScTemporaryChartLock::StartOrContinueLocking()
 {
     if(!mapScChartLockGuard.get())
-        mapScChartLockGuard = std::auto_ptr< ScChartLockGuard >( new ScChartLockGuard(mpDoc) );
+        mapScChartLockGuard.reset( new ScChartLockGuard(mpDoc) );
     maTimer.Start();
 }
 

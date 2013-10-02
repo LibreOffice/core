@@ -430,7 +430,7 @@ SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet & rItemS
 SfxSecurityPage::SfxSecurityPage( Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "SecurityInfoPage", "sfx/ui/securityinfopage.ui", rItemSet)
 {
-    m_pImpl = std::auto_ptr< SfxSecurityPage_Impl >(new SfxSecurityPage_Impl( *this, rItemSet ));
+    m_pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));
 }
 
 

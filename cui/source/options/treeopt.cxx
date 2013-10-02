@@ -2258,7 +2258,7 @@ short OfaTreeOptionsDialog::Execute()
     {
         // collect all DictionaryList Events while the dialog is executed
         Reference<com::sun::star::linguistic2::XSearchableDictionaryList> xDictionaryList(SvxGetDictionaryList());
-        pClamp = ::std::auto_ptr< SvxDicListChgClamp >( new SvxDicListChgClamp( xDictionaryList ) );
+        pClamp.reset( new SvxDicListChgClamp( xDictionaryList ) );
     }
     short nRet = SfxModalDialog::Execute();
 

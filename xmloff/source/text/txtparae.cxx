@@ -361,19 +361,19 @@ BoundFrameSets::BoundFrameSets(const Reference<XInterface> xModel)
     const Reference<XTextEmbeddedObjectsSupplier> xEOS(xModel, UNO_QUERY);
     const Reference<XDrawPageSupplier> xDPS(xModel, UNO_QUERY);
     if(xTFS.is())
-        m_pTexts = auto_ptr<BoundFrames>(new BoundFrames(
+        m_pTexts.reset(new BoundFrames(
             Reference<XEnumerationAccess>(xTFS->getTextFrames(), UNO_QUERY),
             &lcl_TextContentsUnfiltered));
     if(xGOS.is())
-        m_pGraphics = auto_ptr<BoundFrames>(new BoundFrames(
+        m_pGraphics.reset(new BoundFrames(
             Reference<XEnumerationAccess>(xGOS->getGraphicObjects(), UNO_QUERY),
             &lcl_TextContentsUnfiltered));
     if(xEOS.is())
-        m_pEmbeddeds = auto_ptr<BoundFrames>(new BoundFrames(
+        m_pEmbeddeds.reset(new BoundFrames(
             Reference<XEnumerationAccess>(xEOS->getEmbeddedObjects(), UNO_QUERY),
             &lcl_TextContentsUnfiltered));
     if(xDPS.is())
-        m_pShapes = auto_ptr<BoundFrames>(new BoundFrames(
+        m_pShapes.reset(new BoundFrames(
             Reference<XEnumerationAccess>(xDPS->getDrawPage(), UNO_QUERY),
             &lcl_ShapeFilter));
 };

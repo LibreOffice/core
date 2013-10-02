@@ -176,9 +176,9 @@ ConvDic::ConvDic(
     aMainURL        = rMainURL;
 
     if (bBiDirectional)
-        pFromRight = std::auto_ptr< ConvMap >( new ConvMap );
+        pFromRight.reset( new ConvMap );
     if (nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL)
-        pConvPropType = std::auto_ptr< PropTypeMap >( new PropTypeMap );
+        pConvPropType.reset( new PropTypeMap );
 
     nMaxLeftCharCount = nMaxRightCharCount = 0;
     bMaxCharCountIsValid = sal_True;

@@ -431,7 +431,7 @@ namespace dbaui
         const Reference< XComponentContext >& _rxContext, const Any& _aDataSourceName )
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADVANCED), _pItems)
     {
-        m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxContext,_pParent,this));
+        m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         m_pImpl->translateProperties(xDatasource, *_pItems);

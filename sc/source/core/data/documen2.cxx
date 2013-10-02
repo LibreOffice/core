@@ -237,7 +237,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     pDBCollection = new ScDBCollection(this);
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
-    apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
+    apTemporaryChartLock.reset( new ScTemporaryChartLock(this) );
     xColNameRanges = new ScRangePairList;
     xRowNameRanges = new ScRangePairList;
     ImplCreateOptions();

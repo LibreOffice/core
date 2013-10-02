@@ -611,12 +611,12 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
         // #111660# don't crash when nNode1 doesn't point to content node.
         if(pCntntNd)
-            pPam = ::std::auto_ptr<SwPaM>(new SwPaM(*pCntntNd, m_nCntnt));
+            pPam.reset(new SwPaM(*pCntntNd, m_nCntnt));
     }
     else
     {
         pMark = pMarkAccess->findMark(m_aName)->get();
-        pPam = ::std::auto_ptr<SwPaM>(new SwPaM(pMark->GetMarkPos()));
+        pPam.reset(new SwPaM(pMark->GetMarkPos()));
     }
 
     if(m_bSaveOtherPos)

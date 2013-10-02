@@ -312,14 +312,11 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     // submit result; set encoding, etc.
     auto_ptr<CSubmission> xSubmission;
     if (aMethod.equalsIgnoreAsciiCase("PUT"))
-        xSubmission = auto_ptr<CSubmission>(
-            new CSubmissionPut( getAction(), aFragment));
+        xSubmission.reset(new CSubmissionPut( getAction(), aFragment));
     else if (aMethod.equalsIgnoreAsciiCase("post"))
-        xSubmission = auto_ptr<CSubmission>(
-            new CSubmissionPost( getAction(), aFragment));
+        xSubmission.reset(new CSubmissionPost( getAction(), aFragment));
     else if (aMethod.equalsIgnoreAsciiCase("get"))
-        xSubmission = auto_ptr<CSubmission>(
-            new CSubmissionGet( getAction(), aFragment));
+        xSubmission.reset(new CSubmissionGet( getAction(), aFragment));
     else
     {
         OSL_FAIL("Unsupported xforms submission method");

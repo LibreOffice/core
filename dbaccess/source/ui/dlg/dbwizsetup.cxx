@@ -150,7 +150,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
 
     FreeResource();
 
-    m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
+    m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );

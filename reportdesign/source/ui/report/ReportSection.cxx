@@ -121,7 +121,7 @@ OReportSection::~OReportSection()
 
     if ( m_pReportListener.is() )
         m_pReportListener->dispose();
-    m_pFunc = ::std::auto_ptr<DlgEdFunc>();
+    m_pFunc.reset();
 
     {
         ::std::auto_ptr<OSectionView> aTemp( m_pView);

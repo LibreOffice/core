@@ -173,10 +173,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpMasterPageListWatcher(0)
 , mbUseEmbedFonts(false)
 {
-    mpDrawPageListWatcher = ::std::auto_ptr<ImpDrawPageListWatcher>(
-        new ImpDrawPageListWatcher(*this));
-    mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
-        new ImpMasterPageListWatcher(*this));
+    mpDrawPageListWatcher.reset(new ImpDrawPageListWatcher(*this));
+    mpMasterPageListWatcher.reset(new ImpMasterPageListWatcher(*this));
 
     InitLayoutVector();
     InitObjectVector();

@@ -689,10 +689,10 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 {
                     sal_Int32 nPos = aPoint.nContent.GetIndex();
                     (void) nPos;
-                    pPopup = std::auto_ptr< SwSpellPopup >(new SwSpellPopup( m_pWrtShell, aGrammarCheckRes, nErrorInResult, aSuggestions, aParaText ));
+                    pPopup.reset(new SwSpellPopup( m_pWrtShell, aGrammarCheckRes, nErrorInResult, aSuggestions, aParaText ));
                 }
                 else
-                    pPopup = std::auto_ptr< SwSpellPopup >(new SwSpellPopup( m_pWrtShell, xAlt, aParaText ));
+                    pPopup.reset(new SwSpellPopup( m_pWrtShell, xAlt, aParaText ));
                 ui::ContextMenuExecuteEvent aEvent;
                 const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 

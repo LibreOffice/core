@@ -1001,7 +1001,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         aEntry.removeSegment();
                         sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
                         OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
-                        aTempFile = std::auto_ptr< utl::TempFile >(
+                        aTempFile.reset(
                                 new utl::TempFile(sLeading,&sExt,&sPath ));
                         if( bAsSingleFile )
                             aTempFile->EnableKillingFile();

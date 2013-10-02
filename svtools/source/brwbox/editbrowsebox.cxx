@@ -120,7 +120,7 @@ namespace svt
     DBG_NAME(EditBrowseBox);
     void EditBrowseBox::impl_construct()
     {
-        m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
+        m_aImpl.reset(new EditBrowseBoxImpl());
 
         SetCompoundControl(sal_True);
         SetGridLineColor( Color( COL_LIGHTGRAY ) );
