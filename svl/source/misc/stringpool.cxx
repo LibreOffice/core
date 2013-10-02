@@ -13,7 +13,7 @@
 namespace svl {
 
 StringPool::StringPool() : mpCharClass(NULL) {}
-StringPool::StringPool( CharClass* pCharClass ) : mpCharClass(pCharClass) {}
+StringPool::StringPool( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
 
 rtl_uString* StringPool::intern( const OUString& rStr )
 {
@@ -49,6 +49,16 @@ rtl_uString* StringPool::intern( const OUString& rStr )
 const rtl_uString* StringPool::getIdentifier( const OUString& rStr ) const
 {
     StrHashType::iterator it = maStrPool.find(rStr);
+    return (it == maStrPool.end()) ? NULL : it->pData;
+}
+
+const rtl_uString* StringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
+{
+    if (!mpCharClass)
+        return NULL;
+
+    OUString aUpper = mpCharClass->uppercase(rStr);
+    StrHashType::iterator it = maStrPoolUpper.find(aUpper);
     return (it == maStrPool.end()) ? NULL : it->pData;
 }
 

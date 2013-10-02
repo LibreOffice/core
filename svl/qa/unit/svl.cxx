@@ -33,6 +33,8 @@
 
 #include "svl/zforlist.hxx"
 #include "svl/zformat.hxx"
+#include "svl/stringpool.hxx"
+#include "unotools/syslocale.hxx"
 
 #define DEBUG_UNIT_TEST 0
 
@@ -65,11 +67,13 @@ public:
     virtual void tearDown();
 
     void testNumberFormat();
+    void testStringPool();
     void testFdo60915();
     void testI116701();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
+    CPPUNIT_TEST(testStringPool);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST_SUITE_END();
@@ -286,6 +290,42 @@ void Test::testNumberFormat()
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[~buddhist]D MMMM YYYY'", false);
     }
+}
+
+void Test::testStringPool()
+{
+    SvtSysLocale aSysLocale;
+    svl::StringPool aPool(aSysLocale.GetCharClassPtr());
+
+    const rtl_uString* p1 = aPool.intern("Andy");
+    const rtl_uString* p2 = aPool.intern("Andy");
+    CPPUNIT_ASSERT_EQUAL(p1, p2);
+
+    p2 = aPool.intern("Bruce");
+    CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
+
+    OUString aAndy("Andy");
+    p2 = aPool.getIdentifier(aAndy);
+    CPPUNIT_ASSERT_EQUAL(p1, p2);
+
+    // Test case insensitive string ID's.
+    OUString aAndyLower("andy"), aAndyUpper("ANDY");
+    p1 = aPool.getIdentifier("Andy");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p1);
+    p2 = aPool.intern(aAndyLower);
+    CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
+    p2 = aPool.intern(aAndyUpper);
+    CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
+
+    p1 = aPool.getIdentifierIgnoreCase("Andy");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p1);
+    p2 = aPool.getIdentifierIgnoreCase("andy");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p2);
+    CPPUNIT_ASSERT_EQUAL(p1, p2);
+
+    p2 = aPool.getIdentifierIgnoreCase("ANDY");
+    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", p2);
+    CPPUNIT_ASSERT_EQUAL(p1, p2);
 }
 
 void Test::checkPreviewString(SvNumberFormatter& aFormatter,

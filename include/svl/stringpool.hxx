@@ -34,11 +34,11 @@ class SVL_DLLPUBLIC StringPool
     StrHashType maStrPool;
     StrHashType maStrPoolUpper;
     StrIdMapType maToUpperMap;
-    CharClass* mpCharClass;
+    const CharClass* mpCharClass;
 
 public:
     StringPool();
-    StringPool( CharClass* pCharClass );
+    StringPool( const CharClass* pCharClass );
 
     /**
      * Intern a string object into the shared string pool.
@@ -59,6 +59,8 @@ public:
      * @return unique ID of the string object.
      */
     const rtl_uString* getIdentifier( const OUString& rStr ) const;
+
+    const rtl_uString* getIdentifierIgnoreCase( const OUString& rStr ) const;
 
 private:
     InsertResultType findOrInsert( StrHashType& rPool, const OUString& rStr ) const;
