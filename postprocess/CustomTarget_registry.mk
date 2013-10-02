@@ -456,8 +456,8 @@ ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 postprocess_XCDS += onlineupdate.xcd
 postprocess_DEPS_onlineupdate := main
 postprocess_FILES_onlineupdate := \
-	$(postprocess_MOD)/org/openoffice/Office/Addons-onlineupdate.xcu \
-	$(postprocess_MOD)/org/openoffice/Office/Jobs-onlineupdate.xcu
+	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Addons-onlineupdate.xcu \
+	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Jobs-onlineupdate.xcu
 endif
 
 ifeq ($(ENABLE_OPENGL),TRUE)
