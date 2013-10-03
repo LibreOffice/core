@@ -928,7 +928,10 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     sal::static_int_cast< sal_uInt16 >(
                         pLine->GetTabBoxes().size() - nSttBox ) <
                     pFLine->GetBoxes().size() )
+                {
+                    delete pInsFLine;
                     return sal_False;
+                }
 
                 // Test for nesting
                 for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
