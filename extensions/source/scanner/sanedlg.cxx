@@ -1337,7 +1337,10 @@ sal_Bool SaneDlg::SetAdjustedNumericalValue(
     double* pValues = NULL;
     int nValues;
     if( ( nValues = mrSane.GetRange( nOption, pValues ) ) < 0 )
+    {
+        delete [] pValues;
         return sal_False;
+    }
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SaneDlg::SetAdjustedNumericalValue( \"%s\", %lg ) ",
