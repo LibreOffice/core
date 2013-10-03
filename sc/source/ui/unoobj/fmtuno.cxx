@@ -220,7 +220,7 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
         ScCondFormatEntry* pCoreEntry = new ScCondFormatEntry( aData.meMode, aData.maExpr1, aData.maExpr2,
             pDoc, aData.maPos, aData.maStyle, aData.maExprNmsp1, aData.maExprNmsp2, eGrammar1, eGrammar2 );
 
-        if ( aData.maPosStr.Len() )
+        if ( !aData.maPosStr.isEmpty() )
             pCoreEntry->SetSrcString( aData.maPosStr );
 
         if ( aData.maTokens1.getLength() )
@@ -286,7 +286,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
                 aEntry.maExpr1 = aStrVal;
             else if ( rProp.Value >>= aTokens )
             {
-                aEntry.maExpr1.Erase();
+                aEntry.maExpr1 = "";
                 aEntry.maTokens1 = aTokens;
             }
         }
@@ -298,7 +298,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
                 aEntry.maExpr2 = aStrVal;
             else if ( rProp.Value >>= aTokens )
             {
-                aEntry.maExpr2.Erase();
+                aEntry.maExpr2 = "";
                 aEntry.maTokens2 = aTokens;
             }
         }
@@ -695,7 +695,7 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
     if (!bShowError)
         pRet->ResetError();
 
-    if ( aPosString.Len() )
+    if ( !aPosString.isEmpty() )
         pRet->SetSrcString( aPosString );
 
     return pRet;
@@ -711,10 +711,10 @@ void ScTableValidationObj::ClearData_Impl()
     bShowError   = false;
     nErrorStyle  = SC_VALERR_STOP;
     aSrcPos.Set(0,0,0);
-    aExpr1.Erase();
-    aExpr2.Erase();
-    maExprNmsp1.Erase();
-    maExprNmsp2.Erase();
+    aExpr1 = "";
+    aExpr2 = "";
+    maExprNmsp1 = "";
+    maExprNmsp2 = "";
     meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  // will be overriden when needed
     aInputTitle = OUString();
     aInputMessage = OUString();
@@ -819,12 +819,12 @@ void SAL_CALL ScTableValidationObj::setTokens( sal_Int32 nIndex, const uno::Sequ
     if (nIndex == 0)
     {
         aTokens1 = aTokens;
-        aExpr1.Erase();
+        aExpr1 = "";
     }
     else if (nIndex == 1)
     {
         aTokens2 = aTokens;
-        aExpr2.Erase();
+        aExpr2 = "";
     }
 }
 

@@ -52,14 +52,14 @@ class ScValidationData;
 
 struct ScCondFormatEntryItem
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens1;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens2;
-    String              maExpr1;
-    String              maExpr2;
-    String              maExprNmsp1;
-    String              maExprNmsp2;
-    String              maPosStr;  // formula position as text
-    String              maStyle;   // display name as stored in ScStyleSheet
+    css::uno::Sequence< css::sheet::FormulaToken > maTokens1;
+    css::uno::Sequence< css::sheet::FormulaToken > maTokens2;
+    OUString            maExpr1;
+    OUString            maExpr2;
+    OUString            maExprNmsp1;
+    OUString            maExprNmsp2;
+    OUString            maPosStr;  // formula position as text
+    OUString            maStyle;   // display name as stored in ScStyleSheet
     ScAddress           maPos;
     formula::FormulaGrammar::Grammar meGrammar1; // grammar used with maExpr1
     formula::FormulaGrammar::Grammar meGrammar2; // grammar used with maExpr2
@@ -205,27 +205,27 @@ class ScTableValidationObj : public cppu::WeakImplHelper5<
 {
 private:
     SfxItemPropertySet  aPropSet;
-    sal_uInt16              nMode;          // enum ScConditionMode
-    String              aExpr1;
-    String              aExpr2;
-    String              maExprNmsp1;
-    String              maExprNmsp2;
+    sal_uInt16          nMode;          // enum ScConditionMode
+    OUString            aExpr1;
+    OUString            aExpr2;
+    OUString            maExprNmsp1;
+    OUString            maExprNmsp2;
     formula::FormulaGrammar::Grammar  meGrammar1;      // grammar used with aExpr1 and aExpr2
     formula::FormulaGrammar::Grammar  meGrammar2;      // grammar used with aExpr1 and aExpr2
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens1;
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens2;
     ScAddress           aSrcPos;
-    String              aPosString;     // formula position as text
-    sal_uInt16              nValMode;       // enum ScValidationMode
-    sal_Bool                bIgnoreBlank;
+    OUString            aPosString;     // formula position as text
+    sal_uInt16          nValMode;       // enum ScValidationMode
+    sal_Bool            bIgnoreBlank;
     sal_Int16           nShowList;
-    sal_Bool                bShowInput;
-    OUString              aInputTitle;
-    OUString              aInputMessage;
-    sal_Bool                bShowError;
-    sal_uInt16              nErrorStyle;    // enum ScValidErrorStyle
-    OUString              aErrorTitle;
-    OUString              aErrorMessage;
+    sal_Bool            bShowInput;
+    OUString            aInputTitle;
+    OUString            aInputMessage;
+    sal_Bool            bShowError;
+    sal_uInt16          nErrorStyle;    // enum ScValidErrorStyle
+    OUString            aErrorTitle;
+    OUString            aErrorMessage;
 
     void                    ClearData_Impl();
 
