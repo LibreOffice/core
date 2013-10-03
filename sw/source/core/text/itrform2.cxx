@@ -20,6 +20,7 @@
 
 #include "hintids.hxx"
 
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lspcitem.hxx>
 #include <txtflcnt.hxx>
@@ -1512,10 +1513,10 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // fly positioning can make it necessary format a line several times
     // for this, we have to keep a copy of our rest portion
     SwLinePortion* pFld = GetInfo().GetRest();
-    SwFldPortion* pSaveFld = 0;
+    boost::scoped_ptr<SwFldPortion> xSaveFld;
 
     if ( pFld && pFld->InFldGrp() && !pFld->IsFtnPortion() )
-        pSaveFld = new SwFldPortion( *((SwFldPortion*)pFld) );
+        xSaveFld.reset(new SwFldPortion( *((SwFldPortion*)pFld) ));
 
     // for an optimal repaint rectangle, we want to compare fly portions
     // before and after the BuildPortions call
@@ -1614,8 +1615,8 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
                 }
 
                 // set original rest portion
-                if ( pSaveFld )
-                    GetInfo().SetRest( new SwFldPortion( *pSaveFld ) );
+                if ( xSaveFld )
+                    GetInfo().SetRest( new SwFldPortion( *xSaveFld ) );
 
                 pCurr->SetLen( 0 );
                 pCurr->Width(0);
@@ -1660,7 +1661,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     GetInfo().GetParaPortion()->GetReformat()->LeftMove( GetInfo().GetIdx() );
 
     // delete master copy of rest portion
-    delete pSaveFld;
+    xSaveFld.reset();
 
     xub_StrLen nNewStart = nStartPos + pCurr->GetLen();
 
