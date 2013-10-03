@@ -204,6 +204,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
     if(eState < SFX_ITEM_AVAILABLE)
         EnableItem( MN_READONLY_COPY, sal_False );
+    delete pState;
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if (
@@ -213,6 +214,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     {
         EnableItem( MN_READONLY_EDITDOC, sal_False );
     }
+    delete pState;
 
     if ( !sURL.Len() )
     {
