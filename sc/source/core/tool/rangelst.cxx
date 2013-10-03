@@ -179,11 +179,11 @@ ScRangeList::~ScRangeList()
     RemoveAll();
 }
 
-sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 nMask,
+sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt16 nMask,
                            formula::FormulaGrammar::AddressConvention eConv,
                            SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
-    if ( rStr.Len() )
+    if ( !rStr.isEmpty() )
     {
         if (!cDelimiter)
             cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
@@ -202,7 +202,7 @@ sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 
         sal_uInt16 nTCount = comphelper::string::getTokenCount(rStr, cDelimiter);
         for ( sal_uInt16 i=0; i<nTCount; i++ )
         {
-            aOne = rStr.GetToken( i, cDelimiter );
+            aOne = rStr.getToken( i, cDelimiter );
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
             sal_uInt16 nRes = aRange.ParseAny( aOne, pDoc, eConv );
             sal_uInt16 nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
@@ -222,19 +222,6 @@ sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 
     }
     else
         return 0;
-}
-
-void ScRangeList::Format( String& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
-                          formula::FormulaGrammar::AddressConvention eConv,
-                          sal_Unicode cDelimiter ) const
-{
-    rStr.Erase();
-
-    if (!cDelimiter)
-        cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
-
-    FormatString func(rStr, nFlags, pDoc, eConv, cDelimiter);
-    for_each(maRanges.begin(), maRanges.end(), func);
 }
 
 void ScRangeList::Format( OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,

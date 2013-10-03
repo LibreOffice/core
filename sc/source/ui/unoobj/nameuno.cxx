@@ -176,7 +176,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
     if (pNewName)
         aInsName = *pNewName;
 
-    String aContent;                            // Content string based =>
+    OUString aContent;                            // Content string based =>
     pOld->GetSymbol( aContent, eGrammar);   // no problems with changed positions and such.
     if (pNewContent)
         aContent = *pNewContent;
@@ -235,7 +235,7 @@ void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
 OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-       String aContent;
+    OUString aContent;
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
         // GRAM_PODF_A1 for API compatibility.

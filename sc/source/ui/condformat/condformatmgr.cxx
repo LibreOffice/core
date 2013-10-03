@@ -55,9 +55,9 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument
 OUString ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat& rFormat)
 {
     ScRangeList aRange = rFormat.GetRange();
-    String aStr;
+    OUString aStr;
     aRange.Format(aStr, SCA_VALID, mpDoc, mpDoc->GetAddressConvention());
-    aStr += '\t';
+    aStr += "\t";
     aStr += ScCondFormatHelper::GetExpression(rFormat, aRange.GetTopLeftCorner());
     return aStr;
 }

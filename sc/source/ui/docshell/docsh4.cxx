@@ -2158,7 +2158,7 @@ long ScDocShell::DdeSetData( const OUString& rItem,
     //  only check for valid item string - range is parsed again in ScServerObject ctor
 
     //  named range?
-    String aPos = rItem;
+    OUString aPos = rItem;
     ScRangeName* pRange = aDocument.GetRangeName();
     if( pRange )
     {

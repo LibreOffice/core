@@ -396,7 +396,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTo
     XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
-    String sSymbol;
+    OUString sSymbol;
     rRangeList.Format( sSymbol, SCR_ABS_3D, GetDocPtr(), ::formula::FormulaGrammar::CONV_XL_A1 );
     xName->SetSymbol( sSymbol );
     return Append( xName );
@@ -564,7 +564,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr );
         xName->SetTokenArray( xTokArr );
 
-        String sSymbol;
+        OUString sSymbol;
         rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
         xName->SetSymbol( sSymbol );
 

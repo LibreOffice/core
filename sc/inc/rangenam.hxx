@@ -116,7 +116,6 @@ public:
     RangeType       GetType() const                 { return eType; }
     bool            HasType( RangeType nType ) const;
     sal_uInt32      GetUnoType() const;
-    SC_DLLPUBLIC void GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress&,
@@ -145,8 +144,8 @@ public:
 
     void            ValidateTabRefs();
 
-    static void     MakeValidName( String& rName );
-    SC_DLLPUBLIC static bool        IsNameValid( const String& rName, ScDocument* pDoc );
+    static void     MakeValidName( OUString& rName );
+    SC_DLLPUBLIC static bool        IsNameValid( const OUString& rName, ScDocument* pDoc );
 
     SCROW GetMaxRow() const;
     SCCOL GetMaxCol() const;

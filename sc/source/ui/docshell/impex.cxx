@@ -145,7 +145,7 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
 
     SCTAB nTab = ScDocShell::GetCurTab();
     aRange.aStart.SetTab( nTab );
-    String aPos( rPos );
+    OUString aPos( rPos );
     //  Benannter Bereich?
     ScRangeName* pRange = pDoc->GetRangeName();
     if( pRange )

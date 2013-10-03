@@ -31,7 +31,7 @@
 using ::formula::FormulaGrammar;
 using namespace ::com::sun::star;
 
-sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
+sal_Bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
                             ScArea&         rArea,
                             ScDocument*     pDoc,
                             SCTAB           nTab,
@@ -43,18 +43,17 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
     // but it is only used in the consolidate dialog.  Ignore for now.
 
     sal_Bool        nSuccess    = false;
-    sal_uInt16      nPointPos   = rAreaStr.Search('.');
-    sal_uInt16      nColonPos   = rAreaStr.Search(':');
+    sal_Int32       nPointPos   = rAreaStr.indexOf('.');
+    sal_Int32       nColonPos   = rAreaStr.indexOf(':');
     String      aStrArea( rAreaStr );
     ScRefAddress    startPos;
     ScRefAddress    endPos;
 
-    if ( nColonPos == STRING_NOTFOUND )
-        if ( nPointPos != STRING_NOTFOUND )
-        {
-            aStrArea += ':';
-            aStrArea += rAreaStr.Copy( nPointPos+1 ); // do not include '.' in copy
-        }
+    if ( nColonPos == -1  && nPointPos != -1 )
+    {
+        aStrArea += ':';
+        aStrArea += rAreaStr.copy( nPointPos+1 ); // do not include '.' in copy
+    }
 
     nSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos, rDetails );
 
@@ -66,24 +65,24 @@ sal_Bool ScRangeUtil::MakeArea( const String&   rAreaStr,
     return nSuccess;
 }
 
-void ScRangeUtil::CutPosString( const String&   theAreaStr,
-                                String&         thePosStr ) const
+void ScRangeUtil::CutPosString( const OUString&   theAreaStr,
+                                OUString&         thePosStr ) const
 {
     String  aPosStr;
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
 
-    sal_uInt16  nColonPos = theAreaStr.Search(':');
+    sal_Int32  nColonPos = theAreaStr.indexOf(':');
 
-    if ( nColonPos != STRING_NOTFOUND )
-        aPosStr = theAreaStr.Copy( 0, nColonPos ); // do not include ':' in copy
+    if ( nColonPos != -1 )
+        aPosStr = theAreaStr.copy( 0, nColonPos ); // do not include ':' in copy
     else
         aPosStr = theAreaStr;
 
     thePosStr = aPosStr;
 }
 
-sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
+sal_Bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
                                 ScDocument*     pDoc,
                                 ScArea***       pppAreas,
                                 sal_uInt16*         pAreaCount,
@@ -170,10 +169,10 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
     return bStrOk;
 }
 
-sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
+sal_Bool ScRangeUtil::IsAbsArea( const OUString&  rAreaStr,
                              ScDocument*    pDoc,
                              SCTAB          nTab,
-                             String*        pCompleteStr,
+                             OUString*      pCompleteStr,
                              ScRefAddress*  pStartPos,
                              ScRefAddress*  pEndPos,
                              ScAddress::Details const & rDetails ) const
@@ -195,7 +194,7 @@ sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
         if ( pCompleteStr )
         {
             *pCompleteStr  = startPos.GetRefString( pDoc, MAXTAB+1, rDetails );
-            *pCompleteStr += ':';
+            *pCompleteStr += ":";
             *pCompleteStr += endPos  .GetRefString( pDoc, nTab, rDetails );
         }
 
@@ -209,10 +208,10 @@ sal_Bool ScRangeUtil::IsAbsArea( const String&  rAreaStr,
     return bIsAbsArea;
 }
 
-sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
+sal_Bool ScRangeUtil::IsAbsPos( const OUString&   rPosStr,
                             ScDocument*     pDoc,
                             SCTAB           nTab,
-                            String*         pCompleteStr,
+                            OUString*       pCompleteStr,
                             ScRefAddress*   pPosTripel,
                             ScAddress::Details const & rDetails ) const
 {
@@ -235,7 +234,7 @@ sal_Bool ScRangeUtil::IsAbsPos( const String&   rPosStr,
 }
 
 sal_Bool ScRangeUtil::MakeRangeFromName (
-    const String&   rName,
+    const OUString& rName,
     ScDocument*     pDoc,
     SCTAB           nCurTab,
     ScRange&        rRange,
@@ -276,7 +275,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
             pData = pDoc->GetRangeName()->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
         if (pData)
         {
-            String       aStrArea;
+            OUString         aStrArea;
             ScRefAddress     aStartPos;
             ScRefAddress     aEndPos;
 
@@ -1022,16 +1021,6 @@ ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
 }
 
 bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
-{
-    // Just a wrapper for OUString for now.  It should replace the method
-    // below eventually.
-    String aTmp;
-    bool bRet = Next(aTmp, rRange);
-    rName = aTmp;
-    return bRet;
-}
-
-bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
 {
     for (;;)
     {

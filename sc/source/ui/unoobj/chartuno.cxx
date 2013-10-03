@@ -248,14 +248,14 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                 xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
             if( xReceiver.is())
             {
-                String sRangeStr;
+                OUString sRangeStr;
                 xNewRanges->Format(sRangeStr, SCR_ABS_3D, pDoc);
 
                 // connect
-                if( sRangeStr.Len() )
+                if( !sRangeStr.isEmpty() )
                     xReceiver->attachDataProvider( xDataProvider );
                 else
-                    sRangeStr = OUString("all");
+                    sRangeStr = "all";
 
                 uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
                 xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );

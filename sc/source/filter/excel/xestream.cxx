@@ -764,7 +764,7 @@ OString XclXmlUtils::ToOString( const ScRange& rRange )
 
 OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
-    String s;
+    OUString s;
     rRangeList.Format(s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ');
     return ToOString( s );
 }

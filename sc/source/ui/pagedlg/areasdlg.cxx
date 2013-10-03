@@ -432,8 +432,8 @@ void ScPrintAreasDlg::Impl_FillLists()
     //------------------------------------------------------
     // Selektion holen und String in PrintArea-ListBox merken
     //------------------------------------------------------
-    ScRange aRange;
-    String  aStrRange;
+    ScRange  aRange;
+    OUString aStrRange;
     sal_Bool bSimple = sal_True;
 
     if ( pViewData )

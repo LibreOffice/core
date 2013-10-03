@@ -446,7 +446,7 @@ void ScExternalRefCache::Table::setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCC
     else
         maCachedRanges.Join(aRange);
 
-    String aStr;
+    OUString aStr;
     maCachedRanges.Format(aStr, SCA_VALID);
 }
 

@@ -208,7 +208,7 @@ void ScConsolidateDlg::Init()
     {
         pAreaData = new ScAreaData[nAreaDataCount];
 
-        String aStrName;
+        OUString aStrName;
         sal_uInt16 nAt = 0;
         ScRange aRange;
         ScAreaNameIterator aIter( pDoc );
@@ -330,9 +330,9 @@ sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
          ((pEd != pEdDataArea) && (pEd != pEdDestArea)) )
         return false;
 
-    SCTAB   nTab    = pViewData->GetTabNo();
-    sal_Bool    bEditOk = false;
-    String  theCompleteStr;
+    SCTAB    nTab    = pViewData->GetTabNo();
+    sal_Bool bEditOk = false;
+    OUString theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
     if ( pEd == pEdDataArea )
@@ -342,7 +342,7 @@ sal_Bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
     }
     else if ( pEd == pEdDestArea )
     {
-        String aPosStr;
+        OUString aPosStr;
 
         pRangeUtil->CutPosString( pEd->GetText(), aPosStr );
         bEditOk = pRangeUtil->IsAbsPos( aPosStr, pDoc,
@@ -532,7 +532,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
         {
             if ( static_cast<size_t>(nSelPos) <= nAreaDataCount )
             {
-                String aString( pAreaData[nSelPos-1].aStrArea );
+                OUString aString( pAreaData[nSelPos-1].aStrArea );
 
                 if ( pLb == pLbDestArea )
                     pRangeUtil->CutPosString( aString, aString );

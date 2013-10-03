@@ -66,7 +66,7 @@ ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
 
 OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeException)
 {
-    String aPrintArea;
+    OUString aPrintArea;
     uno::Reference< sheet::XPrintAreas > xPrintAreas( mxSheet, uno::UNO_QUERY_THROW );
     uno::Sequence< table::CellRangeAddress > aSeq = xPrintAreas->getPrintAreas();
     sal_Int32 nCount = aSeq.getLength();

@@ -234,20 +234,11 @@ void ScRangeData::GuessPosition()
     aPos = ScAddress( (SCCOL)(-nMinCol), (SCROW)(-nMinRow), (SCTAB)(-nMinTab) );
 }
 
-void ScRangeData::GetSymbol( String& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
+void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
 {
     ScCompiler aComp(pDoc, aPos, *pCode);
     aComp.SetGrammar(eGrammar);
-    OUString aTmpSymbol (rSymbol);
-    aComp.CreateStringFromTokenArray( aTmpSymbol );
-    rSymbol = aTmpSymbol;
-}
-
-void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
-{
-    String aStr;
-    GetSymbol(aStr, eGrammar);
-    rSymbol = aStr;
+    aComp.CreateStringFromTokenArray( rSymbol );
 }
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const FormulaGrammar::Grammar eGrammar ) const
@@ -417,27 +408,27 @@ void ScRangeData::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nLocal
         rCxt.maUpdatedNames.setUpdatedName(nLocalTab, nIndex);
 }
 
-void ScRangeData::MakeValidName( String& rName )
+void ScRangeData::MakeValidName( OUString& rName )
 {
 
     // strip leading invalid characters
     xub_StrLen nPos = 0;
-    xub_StrLen nLen = rName.Len();
+    xub_StrLen nLen = rName.getLength();
     while ( nPos < nLen && !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME) )
         ++nPos;
     if ( nPos>0 )
-        rName.Erase(0,nPos);
+        rName = rName.copy(nPos);
 
     // if the first character is an invalid start character, precede with '_'
-    if ( rName.Len() && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
-        rName.Insert('_',0);
+    if ( !rName.isEmpty() && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
+        rName = "_" + rName;
 
     // replace invalid with '_'
-    nLen = rName.Len();
+    nLen = rName.getLength();
     for (nPos=0; nPos<nLen; nPos++)
     {
         if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME) )
-            rName.SetChar( nPos, '_' );
+            rName = rName.replaceAt( nPos, 1, "_" );
     }
 
     // Ensure that the proposed name is not a reference under any convention,
@@ -453,21 +444,23 @@ void ScRangeData::MakeValidName( String& rName )
         {
             //! Range Parse is partially valid also with invalid sheet name,
             //! Address Parse dito, during compile name would generate a #REF!
-            if ( rName.SearchAndReplace( '.', '_' ) == STRING_NOTFOUND )
-                rName.Insert('_',0);
+            if ( rName.indexOf( '.' ) == -1 )
+                rName = rName.replaceFirst( ".", "_" );
+            else
+                rName = "_" + rName;
         }
     }
 }
 
-bool ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
+bool ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
     sal_Char a('.');
-    if (rName.Search(a, 0) != STRING_NOTFOUND)
+    if (rName.indexOf(a) != -1)
         return false;
     xub_StrLen nPos = 0;
-    xub_StrLen nLen = rName.Len();
+    xub_StrLen nLen = rName.getLength();
     if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_CHAR_NAME ) )
         return false;
     while ( nPos < nLen )

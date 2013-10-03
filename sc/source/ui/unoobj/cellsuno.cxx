@@ -2595,9 +2595,9 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     break;
                 case SC_WID_UNO_ABSNAME:
                     {
-                        String sRet;
+                        OUString sRet;
                         aRanges.Format(sRet, SCR_ABS_3D, pDocShell->GetDocument());
-                        rAny <<= OUString(sRet);
+                        rAny <<= sRet;
                     }
             }
     }
@@ -4288,7 +4288,7 @@ OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString;
+    OUString aString;
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     if (pDocSh)

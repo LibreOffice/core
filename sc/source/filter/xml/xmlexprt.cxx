@@ -4092,7 +4092,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
                             FormulaGrammar::CONV_OOO, ' ', false, SCA_ABS_3D);
         AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
 
-        String sSymbol;
+        OUString sSymbol;
         it->second->GetSymbol(sSymbol, pDoc->GetStorageGrammar());
         OUString sTempSymbol(sSymbol);
         ScRange aRange;

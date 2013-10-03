@@ -696,10 +696,10 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 
         ScRefAddress theStartPos;
         ScRefAddress theEndPos;
-        String       theAreaStr( mpEdCopyFrom->GetText() );
-        sal_Bool        bAreaOk = false;
+        OUString     theAreaStr( mpEdCopyFrom->GetText() );
+        sal_Bool     bAreaOk = false;
 
-        if ( theAreaStr.Len() > 0 )
+        if ( !theAreaStr.isEmpty() )
         {
             bAreaOk = pRangeUtil->IsAbsArea( theAreaStr,
                                              pDoc,

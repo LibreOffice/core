@@ -46,45 +46,45 @@ public:
                 ScRangeUtil()  {}
                 ~ScRangeUtil() {}
 
-    sal_Bool    MakeArea            ( const String&     rAreaStr,
+    sal_Bool    MakeArea            ( const OUString&     rAreaStr,
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
                                   SCTAB         nTab,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    void    CutPosString        ( const String&     theAreaStr,
-                                  String&           thePosStr ) const;
+    void    CutPosString        ( const OUString&     theAreaStr,
+                                  OUString&           thePosStr ) const;
 
-    sal_Bool    IsAbsTabArea        ( const String&     rAreaStr,
+    sal_Bool    IsAbsTabArea        ( const OUString&     rAreaStr,
                                   ScDocument*       pDoc,
                                   ScArea***         pppAreas    = 0,
                                   sal_uInt16*           pAreaCount  = 0,
                                   sal_Bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    sal_Bool    IsAbsArea           ( const String& rAreaStr,
+    sal_Bool    IsAbsArea           ( const OUString& rAreaStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
-                                  String*       pCompleteStr = 0,
+                                  OUString*     pCompleteStr = 0,
                                   ScRefAddress* pStartPos    = 0,
                                   ScRefAddress* pEndPos      = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    sal_Bool    IsRefArea           ( const String&,
+    sal_Bool    IsRefArea           ( const OUString&,
                                   ScDocument*,
                                   SCTAB,
-                                  String* = 0,
+                                  OUString* = 0,
                                   ScRefAddress* = 0 ) const
                                       { return false; }
 
-    sal_Bool    IsAbsPos            ( const String& rPosStr,
+    sal_Bool    IsAbsPos            ( const OUString& rPosStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
-                                  String*       pCompleteStr = 0,
+                                  OUString*       pCompleteStr = 0,
                                   ScRefAddress* pPosTripel   = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    sal_Bool    MakeRangeFromName   ( const String& rName,
+    sal_Bool    MakeRangeFromName   ( const OUString& rName,
                                     ScDocument*     pDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
@@ -302,7 +302,6 @@ public:
             ~ScAreaNameIterator() {}
 
     bool Next( OUString& rName, ScRange& rRange );
-    bool Next( String& rName, ScRange& rRange );
     bool WasDBName() const { return !bFirstPass; }
 };
 

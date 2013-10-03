@@ -149,7 +149,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                 pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
 
                 // update string from modified ranges.  The ranges must be in the current formula syntax.
-                String aTmpStr;
+                OUString aTmpStr;
                 aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );
                 aRangeString = aTmpStr;
 
@@ -468,7 +468,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
             ScRangeList aRanges;
             aMultiMark.FillRangeListWithMarks( &aRanges, false );
-            String aStr;
+            OUString aStr;
             ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
             aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
             aRangeString = aStr;

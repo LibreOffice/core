@@ -38,14 +38,11 @@ public:
     ScRangeList& operator=(const ScRangeList& rList);
     void Append( const ScRange& rRange );
 
-    sal_uInt16 Parse( const String&, ScDocument* = NULL,
+    sal_uInt16 Parse( const OUString&, ScDocument* = NULL,
                       sal_uInt16 nMask = SCA_VALID,
                       formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                       SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
 
-    void            Format( String&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
-                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                            sal_Unicode cDelimiter = 0 ) const;
     void            Format( OUString&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0 ) const;

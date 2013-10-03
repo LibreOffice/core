@@ -4916,9 +4916,9 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
     ScDocument* pDoc = rDocShell.GetDocument();
     if (!pDoc->HasValueData( nPosX, nPosY, nTab ))
     {
-        String aName = pDoc->GetString(nPosX, nPosY, nTab);
+        OUString aName = pDoc->GetString(nPosX, nPosY, nTab);
         ScRangeData::MakeValidName(aName);
-        if (aName.Len())
+        if (!aName.isEmpty())
         {
             String aContent(ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format(SCR_ABS_3D, pDoc));
 
@@ -4926,7 +4926,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             ScRangeData* pOld = rList.findByUpperName(ScGlobal::pCharClass->uppercase(aName));
             if (pOld)
             {
-                String aOldStr;
+                OUString aOldStr;
                 pOld->GetSymbol( aOldStr );
                 if (aOldStr != aContent)
                 {

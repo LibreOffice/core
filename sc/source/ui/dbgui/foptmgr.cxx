@@ -119,7 +119,7 @@ void ScFilterOptionsMgr::Init()
         pLbCopyArea->InsertEntry( rStrUndefined, 0 );
 
         ScAreaNameIterator aIter( pDoc );
-        String aName;
+        OUString aName;
         ScRange aRange;
         while ( aIter.Next( aName, aRange ) )
         {
