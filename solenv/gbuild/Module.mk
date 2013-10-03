@@ -229,10 +229,14 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
+# has order dependency on AllModulesButInstsetNative to be able to run
+# subsequentcheck in the same make process on "make check"
 define gb_Module_add_subsequentcheck_target
 $(call gb_Module__read_targetfile,$(1),$(2),subsequentcheck target)
 
 $(call gb_Module_get_subsequentcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
+$$(gb_Module_CURRENTTARGET) :| \
+	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef

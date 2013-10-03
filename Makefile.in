@@ -229,8 +229,11 @@ bootstrap: compilerplugins
 #
 # Build
 #
+# Note: if invoked as "make check" this will also run subsequentcheck!
+#
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild \
+		all $(if $(filter check,$(MAKECMDGOALS)),subsequentcheck)
 ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
 	install-gdb-printers -a $(INSTDIR)
 endif
@@ -373,7 +376,8 @@ findunusedcode:
               | grep -v ^WSObject \
               > unusedcode.easy
 
-check: build subsequentcheck
+# the actual running of subsequentcheck is now done in "build" target => faster
+check: build
 
 dump-deps:
 	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
