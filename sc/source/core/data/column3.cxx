@@ -57,6 +57,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/broadcast.hxx>
+#include "svl/stringpool.hxx"
 #include "editeng/editstat.hxx"
 
 #include <cstdio>
@@ -1601,6 +1602,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 
 void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
 {
+    pEditText->NormalizeString(pDocument->GetCellStringPool());
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     maCells.set(it, nRow, pEditText);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
@@ -1611,6 +1613,7 @@ void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
 
 void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, EditTextObject* pEditText )
 {
+    pEditText->NormalizeString(pDocument->GetCellStringPool());
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pEditText);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
@@ -1632,24 +1635,9 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, cons
     // Sadly there is no other way to change the Pool than to
     // "spool" the Object through a corresponding Engine
     EditEngine& rEngine = pDocument->GetEditEngine();
-    if (!rEditText.HasOnlineSpellErrors())
-    {
-        rEngine.SetText(rEditText);
-        SetEditText(rBlockPos, nRow, rEngine.CreateTextObject());
-        return;
-    }
-
-    sal_uLong nControl = rEngine.GetControlWord();
-    const sal_uLong nSpellControl = EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS;
-    bool bNewControl = (nControl & nSpellControl) != nSpellControl;
-    if (bNewControl)
-        rEngine.SetControlWord(nControl | nSpellControl);
     rEngine.SetText(rEditText);
-    EditTextObject* pData = rEngine.CreateTextObject();
-    if (bNewControl)
-        rEngine.SetControlWord(nControl);
-
-    SetEditText(rBlockPos, nRow, pData);
+    SetEditText(rBlockPos, nRow, rEngine.CreateTextObject());
+    return;
 }
 
 void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool )
@@ -1664,24 +1652,9 @@ void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const S
     // Sadly there is no other way to change the Pool than to
     // "spool" the Object through a corresponding Engine
     EditEngine& rEngine = pDocument->GetEditEngine();
-    if (!rEditText.HasOnlineSpellErrors())
-    {
-        rEngine.SetText(rEditText);
-        SetEditText(nRow, rEngine.CreateTextObject());
-        return;
-    }
-
-    sal_uLong nControl = rEngine.GetControlWord();
-    const sal_uLong nSpellControl = EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS;
-    bool bNewControl = (nControl & nSpellControl) != nSpellControl;
-    if (bNewControl)
-        rEngine.SetControlWord(nControl | nSpellControl);
     rEngine.SetText(rEditText);
-    EditTextObject* pData = rEngine.CreateTextObject();
-    if (bNewControl)
-        rEngine.SetControlWord(nControl);
-
-    SetEditText(nRow, pData);
+    SetEditText(nRow, rEngine.CreateTextObject());
+    return;
 }
 
 void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )
@@ -2157,8 +2130,12 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
     if (!ValidRow(nRow))
         return;
 
+    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr);
+    if (!pStr)
+        return;
+
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    maCells.set(it, nRow, rStr);
+    maCells.set(it, nRow, OUString(pStr));
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
     CellStorageModified();
 
@@ -2172,8 +2149,12 @@ void ScColumn::SetRawString(
     if (!ValidRow(nRow))
         return;
 
+    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr);
+    if (!pStr)
+        return;
+
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
-    rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, rStr);
+    rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, OUString(pStr));
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
     CellStorageModified();

@@ -234,6 +234,7 @@ friend class ScDocRowHeightUpdater;
 friend class ScColumnTextWidthIterator;
 friend class ScFormulaCell;
 friend class ScTable;
+friend class ScColumn;
 friend struct ScRefCellValue;
 friend class ScDocumentImport;
 friend class sc::ColumnSpanSet;
@@ -2064,6 +2065,8 @@ private: // CLOOK-Impl-methods
     bool    HasPartOfMerged( const ScRange& rRange );
 
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
+
+    svl::StringPool& GetCellStringPool();
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 

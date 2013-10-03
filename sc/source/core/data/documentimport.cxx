@@ -17,6 +17,8 @@
 #include "mtvelements.hxx"
 #include "tokenarray.hxx"
 
+#include "svl/stringpool.hxx"
+
 struct ScDocumentImportImpl
 {
     ScDocument& mrDoc;
@@ -148,8 +150,12 @@ void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr
     if (!pBlockPos)
         return;
 
+    rtl_uString* pStr = mpImpl->mrDoc.GetCellStringPool().intern(rStr);
+    if (!pStr)
+        return;
+
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
-    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), rStr);
+    pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), OUString(pStr));
 }
 
 void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditText)
@@ -164,6 +170,7 @@ void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditT
     if (!pBlockPos)
         return;
 
+    pEditText->NormalizeString(mpImpl->mrDoc.GetCellStringPool());
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), pEditText);
 }

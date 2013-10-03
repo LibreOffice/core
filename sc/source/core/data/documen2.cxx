@@ -118,8 +118,8 @@ private:
 
 // STATIC DATA -----------------------------------------------------------
 
-ScDocument::ScDocument( ScDocumentMode  eMode,
-                        SfxObjectShell* pDocShell ) :
+ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
+        mpCellStringPool(new svl::StringPool(ScGlobal::pCharClass)),
         mpUndoManager( NULL ),
         pEditEngine( NULL ),
         pNoteEngine( NULL ),
@@ -598,6 +598,11 @@ ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
         return ScRefCellValue(); // empty
 
     return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row());
+}
+
+svl::StringPool& ScDocument::GetCellStringPool()
+{
+    return *mpCellStringPool;
 }
 
 bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
