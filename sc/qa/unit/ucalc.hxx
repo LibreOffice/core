@@ -80,6 +80,7 @@ public:
      */
     void testPerf();
     void testCollator();
+    void testCellStringPool();
     void testRangeList();
     void testInput();
 
@@ -284,6 +285,7 @@ public:
     CPPUNIT_TEST(testPerf);
 #endif
     CPPUNIT_TEST(testCollator);
+    CPPUNIT_TEST(testCellStringPool);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testFormulaHashAndTag);

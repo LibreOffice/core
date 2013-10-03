@@ -436,7 +436,6 @@ public:
     sal_uLong           GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, sal_uInt16 * );
                                                                 // number formatter
-
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
                                 SfxObjectShell* pDocShell = NULL );
@@ -859,6 +858,11 @@ public:
      *         if the cell at specified position is not a numeric cell.
      */
     double* GetValueCell( const ScAddress& rPos );
+
+    svl::StringPool& GetCellStringPool();
+    const svl::StringPool& GetCellStringPool() const;
+    sal_uIntPtr GetCellStringID( const ScAddress& rPos ) const;
+    sal_uIntPtr GetCellStringIDIgnoreCase( const ScAddress& rPos ) const;
 
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
@@ -2065,8 +2069,6 @@ private: // CLOOK-Impl-methods
     bool    HasPartOfMerged( const ScRange& rRange );
 
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
-
-    svl::StringPool& GetCellStringPool();
 
     std::map< SCTAB, ScSortParam > mSheetSortParams;
 

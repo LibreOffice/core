@@ -3221,6 +3221,22 @@ double* ScDocument::GetValueCell( const ScAddress& rPos )
     return maTabs[rPos.Tab()]->GetValueCell(rPos.Col(), rPos.Row());
 }
 
+sal_uIntPtr ScDocument::GetCellStringID( const ScAddress& rPos ) const
+{
+    if (!TableExists(rPos.Tab()))
+        return 0;
+
+    return maTabs[rPos.Tab()]->GetCellStringID(rPos.Col(), rPos.Row());
+}
+
+sal_uIntPtr ScDocument::GetCellStringIDIgnoreCase( const ScAddress& rPos ) const
+{
+    if (!TableExists(rPos.Tab()))
+        return 0;
+
+    return maTabs[rPos.Tab()]->GetCellStringIDIgnoreCase(rPos.Col(), rPos.Row());
+}
+
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )

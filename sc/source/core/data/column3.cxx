@@ -1732,6 +1732,64 @@ bool ScColumn::SetGroupFormulaCell( SCROW nRow, ScFormulaCell* pCell )
     return true;
 }
 
+sal_uIntPtr ScColumn::GetCellStringID( SCROW nRow ) const
+{
+    sc::CellStoreType::const_position_type aPos = maCells.position(nRow);
+    switch (aPos.first->type)
+    {
+        case sc::element_type_string:
+        {
+            const OUString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
+            return pDocument->GetCellStringPool().getIdentifier(rStr);
+        }
+        break;
+        case sc::element_type_edittext:
+        {
+            std::vector<sal_uIntPtr> aIDs;
+            const EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
+            pObj->GetStringIDs(pDocument->GetCellStringPool(), aIDs);
+            if (aIDs.size() != 1)
+                // We don't handle multiline content for now.
+                return 0;
+
+            return aIDs[0];
+        }
+        break;
+        default:
+            ;
+    }
+    return 0;
+}
+
+sal_uIntPtr ScColumn::GetCellStringIDIgnoreCase( SCROW nRow ) const
+{
+    sc::CellStoreType::const_position_type aPos = maCells.position(nRow);
+    switch (aPos.first->type)
+    {
+        case sc::element_type_string:
+        {
+            const OUString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
+            return pDocument->GetCellStringPool().getIdentifierIgnoreCase(rStr);
+        }
+        break;
+        case sc::element_type_edittext:
+        {
+            std::vector<sal_uIntPtr> aIDs;
+            const EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
+            pObj->GetStringIDsIgnoreCase(pDocument->GetCellStringPool(), aIDs);
+            if (aIDs.size() != 1)
+                // We don't handle multiline content for now.
+                return 0;
+
+            return aIDs[0];
+        }
+        break;
+        default:
+            ;
+    }
+    return 0;
+}
+
 namespace {
 
 class FilterEntriesHandler

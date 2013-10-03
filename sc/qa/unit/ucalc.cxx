@@ -63,6 +63,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include "svl/srchitem.hxx"
+#include "svl/stringpool.hxx"
 
 #include <sfx2/docfile.hxx>
 
@@ -456,6 +457,85 @@ void Test::testCollator()
     CollatorWrapper* p = ScGlobal::GetCollator();
     sal_Int32 nRes = p->compareString(s1, s2);
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
+}
+
+void Test::testCellStringPool()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    // Strings that are identical.
+    m_pDoc->SetString(ScAddress(0,0,0), "Andy");  // A1
+    m_pDoc->SetString(ScAddress(0,1,0), "Andy");  // A2
+    m_pDoc->SetString(ScAddress(0,2,0), "Bruce"); // A3
+    m_pDoc->SetString(ScAddress(0,3,0), "andy");  // A4
+    m_pDoc->SetString(ScAddress(0,4,0), "BRUCE"); // A5
+
+    sal_uIntPtr nId1 = m_pDoc->GetCellStringID(ScAddress(0,0,0));
+    sal_uIntPtr nId2 = m_pDoc->GetCellStringID(ScAddress(0,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
+    CPPUNIT_ASSERT_EQUAL(nId1, nId2);
+
+    nId2 = m_pDoc->GetCellStringID(ScAddress(0,2,0));
+    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+
+    nId2 = m_pDoc->GetCellStringID(ScAddress(0,3,0));
+    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+
+    nId2 = m_pDoc->GetCellStringID(ScAddress(0,4,0));
+    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+
+    // A3 and A5 should differ but should be equal case-insensitively.
+    nId1 = m_pDoc->GetCellStringID(ScAddress(0,2,0));
+    nId2 = m_pDoc->GetCellStringID(ScAddress(0,4,0));
+    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+
+    nId1 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,2,0));
+    nId2 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,4,0));
+    CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", nId1 == nId2);
+
+    // A2 and A4 should be equal when ignoring cases.
+    nId1 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,1,0));
+    nId2 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,3,0));
+    CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", nId1 == nId2);
+
+    // Check the string counts after purging. Purging shouldn't remove any strings in this case.
+    svl::StringPool& rPool = m_pDoc->GetCellStringPool();
+    rPool.purge();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+
+    // Clear A1 and purge again.
+    clearRange(m_pDoc, ScAddress(0,0,0));
+    rPool.purge();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+
+    // Clear A2 and purge again.
+    clearRange(m_pDoc, ScAddress(0,1,0));
+    rPool.purge();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+
+    // Clear A3 and purge again.
+    clearRange(m_pDoc, ScAddress(0,2,0));
+    rPool.purge();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
+
+    // Clear A4 and purge again.
+    clearRange(m_pDoc, ScAddress(0,3,0));
+    rPool.purge();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPool.getCountIgnoreCase());
+
+    // Clear A5 and the pool should be completely empty.
+    clearRange(m_pDoc, ScAddress(0,4,0));
+    rPool.purge();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rPool.getCountIgnoreCase());
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testRangeList()

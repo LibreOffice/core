@@ -1505,6 +1505,22 @@ bool ScTable::SetGroupFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell 
     return aCol[nCol].SetGroupFormulaCell(nRow, pCell);
 }
 
+sal_uIntPtr ScTable::GetCellStringID( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return 0;
+
+    return aCol[nCol].GetCellStringID(nRow);
+}
+
+sal_uIntPtr ScTable::GetCellStringIDIgnoreCase( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return 0;
+
+    return aCol[nCol].GetCellStringIDIgnoreCase(nRow);
+}
+
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 {
     if (ValidColRow(nCol, nRow))

@@ -343,6 +343,9 @@ public:
     ScFormulaCell* SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell );
     bool SetGroupFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell );
 
+    sal_uIntPtr GetCellStringID( SCCOL nCol, SCROW nRow ) const;
+    sal_uIntPtr GetCellStringIDIgnoreCase( SCCOL nCol, SCROW nRow ) const;
+
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 

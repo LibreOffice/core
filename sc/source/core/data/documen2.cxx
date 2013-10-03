@@ -605,6 +605,11 @@ svl::StringPool& ScDocument::GetCellStringPool()
     return *mpCellStringPool;
 }
 
+const svl::StringPool& ScDocument::GetCellStringPool() const
+{
+    return *mpCellStringPool;
+}
+
 bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                 bool bNotes ) const
 {
