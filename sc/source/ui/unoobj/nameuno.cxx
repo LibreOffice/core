@@ -85,7 +85,7 @@ static bool lcl_UserVisibleName(const ScRangeData& rData)
     return !rData.HasType(RT_DATABASE);
 }
 
-ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const String& rNm, Reference<container::XNamed> xSheet):
+ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const OUString& rNm, Reference<container::XNamed> xSheet):
     mxParent(xParent),
     pDocShell( pDocSh ),
     aName( rNm ),
@@ -149,7 +149,7 @@ SCTAB ScNamedRangeObj::GetTab_Impl()
 
 // sheet::XNamedRange
 
-void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* pNewTokens, const String* pNewContent,
+void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray* pNewTokens, const OUString* pNewContent,
                                     const ScAddress* pNewPos, const sal_uInt16* pNewType,
                                     const formula::FormulaGrammar::Grammar eGrammar )
 {
@@ -224,7 +224,7 @@ void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
     SolarMutexGuard aGuard;
     //! Formeln anpassen ?????
 
-    String aNewStr(aNewName);
+    OUString aNewStr(aNewName);
     // GRAM_PODF_A1 for API compatibility.
     Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 
@@ -247,7 +247,7 @@ void SAL_CALL ScNamedRangeObj::setContent( const OUString& aContent )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aContStr(aContent);
+    OUString aContStr(aContent);
     // GRAM_PODF_A1 for API compatibility.
     Modify_Impl( NULL, NULL, &aContStr, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 }

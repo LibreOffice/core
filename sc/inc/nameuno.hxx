@@ -60,20 +60,20 @@ class SC_DLLPUBLIC ScNamedRangeObj : public ::cppu::WeakImplHelper6<
 private:
     rtl::Reference< ScNamedRangesObj > mxParent;
     ScDocShell*             pDocShell;
-    String                  aName;
+    OUString                aName;
     com::sun::star::uno::Reference< com::sun::star::container::XNamed > mxSheet;
 
 private:
 friend class ScVbaName;
     ScRangeData*            GetRangeData_Impl();
-    void                    Modify_Impl( const String* pNewName,
-                                        const ScTokenArray* pNewTokens, const String* pNewContent,
+    void                    Modify_Impl( const OUString* pNewName,
+                                        const ScTokenArray* pNewTokens, const OUString* pNewContent,
                                         const ScAddress* pNewPos, const sal_uInt16* pNewType,
                                         const formula::FormulaGrammar::Grammar eGrammar );
     SCTAB                   GetTab_Impl();
 
 public:
-                            ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const String& rNm,
+                            ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, const OUString& rNm,
                                     com::sun::star::uno::Reference< com::sun::star::container::XNamed > xSheet = com::sun::star::uno::Reference< com::sun::star::container::XNamed > ());
     virtual                 ~ScNamedRangeObj();
 
