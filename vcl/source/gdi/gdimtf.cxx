@@ -48,7 +48,7 @@
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <comphelper/processfactory.hxx>
 
-#ifdef UNX
+#if defined(UNX) && !defined(MACOSX)
 #include <tools/prex.h>
 #include "unx/Xproto.h"
 #include <tools/postx.h>
