@@ -148,7 +148,7 @@ void AtkListener::handleChildAdded(
     const uno::Reference< accessibility::XAccessibleContext >& rxParent,
     const uno::Reference< accessibility::XAccessible>& rxAccessible)
 {
-    AtkObject * pChild = atk_object_wrapper_ref( rxAccessible );
+    AtkObject * pChild = rxAccessible.is() ? atk_object_wrapper_ref( rxAccessible ) : NULL;
 
     if( pChild )
     {
