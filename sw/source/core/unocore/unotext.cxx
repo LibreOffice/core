@@ -1886,6 +1886,8 @@ void SwXText::Impl::ConvertCell(
 
         SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
         aEndCellPam = aNewEndPaM;
+
+        delete pCorrectedRange;
     }
 
     /** check the nodes between start and end
