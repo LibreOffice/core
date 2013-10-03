@@ -245,7 +245,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     return bRet;
 }
 
-static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic, OUString &rProgName, rtl_uString *pArgs[], size_t nArgs)
 {
     oslProcess aProcess;
@@ -276,7 +276,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
         aMemStm.Seek(0);
         if (
             aMemStm.GetEndOfData() &&
-            GraphicConverter::Import(aMemStm, rGraphic, CVT_PNG) == ERRCODE_NONE
+            GraphicConverter::Import(aMemStm, rGraphic, CVT_BMP) == ERRCODE_NONE
            )
         {
             MakeAsMeta(rGraphic);
@@ -290,7 +290,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     return bRet;
 }
 
-static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic)
 {
     OUString fileName("convert" EXESUFFIX);
@@ -301,17 +301,17 @@ static bool RenderAsPNGThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     OUString arg2("300x300");
     // read eps from STDIN
     OUString arg3("eps:-");
-    // write png to STDOUT
-    OUString arg4("png:-");
+    // write bmp to STDOUT
+    OUString arg4("bmp:-");
     rtl_uString *args[] =
     {
         arg1.pData, arg2.pData, arg3.pData, arg4.pData
     };
-    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
+    return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
         sizeof(args)/sizeof(rtl_uString *));
 }
 
-static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
+static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Graphic &rGraphic)
 {
 #ifdef WNT
@@ -327,7 +327,7 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     OUString arg6("-dTextAlphaBits=4");
     OUString arg7("-dGraphicsAlphaBits=4");
     OUString arg8("-r300x300");
-    OUString arg9("-sDEVICE=png256");
+    OUString arg9("-sDEVICE=bmp256");
     OUString arg10("-sOutputFile=-");
     OUString arg11("-");
     rtl_uString *args[] =
@@ -336,16 +336,16 @@ static bool RenderAsPNGThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         arg6.pData, arg7.pData, arg8.pData, arg9.pData, arg10.pData,
         arg11.pData
     };
-    return RenderAsPNGThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
+    return RenderAsBMPThroughHelper(pBuf, nBytesRead, rGraphic, fileName, args,
         sizeof(args)/sizeof(rtl_uString *));
 }
 
-static bool RenderAsPNG(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
+static bool RenderAsBMP(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &rGraphic)
 {
-    if (RenderAsPNGThroughGS(pBuf, nBytesRead, rGraphic))
+    if (RenderAsBMPThroughGS(pBuf, nBytesRead, rGraphic))
         return true;
     else
-        return RenderAsPNGThroughConvert(pBuf, nBytesRead, rGraphic);
+        return RenderAsBMPThroughConvert(pBuf, nBytesRead, rGraphic);
 }
 
 // this method adds a replacement action containing the original wmf or tiff replacement,
@@ -679,7 +679,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                         {
                             bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
                             if (!bHasPreview)
-                                bHasPreview = RenderAsPNG(pBuf, nBytesRead, aGraphic);
+                                bHasPreview = RenderAsBMP(pBuf, nBytesRead, aGraphic);
                         }
 
                         // if there is no preview -> make a red box
