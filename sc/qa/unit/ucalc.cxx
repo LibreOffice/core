@@ -57,6 +57,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
+#include "editeng/wghtitem.hxx"
+#include "editeng/postitem.hxx"
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
@@ -534,6 +536,56 @@ void Test::testCellStringPool()
     rPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rPool.getCountIgnoreCase());
+
+    // Now, compare string and edit text cells.
+    m_pDoc->SetString(ScAddress(0,0,0), "Andy and Bruce"); // A1
+    ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
+    rEE.SetText("Andy and Bruce");
+
+    ESelection aSel;
+    aSel.nStartPara = aSel.nEndPara = 0;
+
+    {
+        // Set 'Andy' bold.
+        SfxItemSet aItemSet = rEE.GetEmptyItemSet();
+        aSel.nStartPos = 0;
+        aSel.nEndPos = 4;
+        SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
+        aItemSet.Put(aWeight);
+        rEE.QuickSetAttribs(aItemSet, aSel);
+    }
+
+    {
+        // Set 'Bruce' italic.
+        SfxItemSet aItemSet = rEE.GetEmptyItemSet();
+        SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
+        aItemSet.Put(aItalic);
+        aSel.nStartPos = 9;
+        aSel.nEndPos = 14;
+        rEE.QuickSetAttribs(aItemSet, aSel);
+    }
+
+    m_pDoc->SetEditText(ScAddress(1,0,0), rEE.CreateTextObject()); // B1
+
+    // These two should be equal.
+    nId1 = m_pDoc->GetCellStringID(ScAddress(0,0,0));
+    nId2 = m_pDoc->GetCellStringID(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
+    CPPUNIT_ASSERT_EQUAL(nId1, nId2);
+
+    rEE.SetText("ANDY and BRUCE");
+    m_pDoc->SetEditText(ScAddress(2,0,0), rEE.CreateTextObject()); // C1
+    nId2 = m_pDoc->GetCellStringID(ScAddress(2,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
+    CPPUNIT_ASSERT_MESSAGE("These two should be different when cases are considered.", nId1 != nId2);
+
+    // But they should be considered equal when cases are ignored.
+    nId1 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,0,0));
+    nId2 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(2,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
+    CPPUNIT_ASSERT_EQUAL(nId1, nId2);
 
     m_pDoc->DeleteTab(0);
 }
