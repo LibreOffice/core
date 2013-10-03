@@ -33,11 +33,6 @@ namespace comphelper
     //= OCommonAccessibleComponent
     //=====================================================================
     //---------------------------------------------------------------------
-    OCommonAccessibleComponent::OCommonAccessibleComponent( )
-    {
-    }
-
-    //---------------------------------------------------------------------
     OCommonAccessibleComponent::OCommonAccessibleComponent( IMutex* _pExternalLock )
         :OAccessibleContextHelper( _pExternalLock )
     {
@@ -46,9 +41,6 @@ namespace comphelper
     //---------------------------------------------------------------------
     OCommonAccessibleComponent::~OCommonAccessibleComponent( )
     {
-        forgetExternalLock();
-            // this ensures that the lock, which may be already destroyed as part of the derivee,
-            // is not used anymore
     }
 
     //--------------------------------------------------------------------
@@ -109,11 +101,6 @@ namespace comphelper
     //= OAccessibleComponentHelper
     //=====================================================================
     //---------------------------------------------------------------------
-    OAccessibleComponentHelper::OAccessibleComponentHelper( )
-    {
-    }
-
-    //---------------------------------------------------------------------
     OAccessibleComponentHelper::OAccessibleComponentHelper( IMutex* _pExternalLock )
         :OCommonAccessibleComponent( _pExternalLock )
     {
@@ -157,11 +144,6 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleExtendedComponentHelper
     //=====================================================================
-    //---------------------------------------------------------------------
-    OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( )
-    {
-    }
-
     //---------------------------------------------------------------------
     OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( IMutex* _pExternalLock )
         :OCommonAccessibleComponent( _pExternalLock )

@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <toolkit/helper/externallock.hxx>
 #include <vcl/window.hxx>
 
 //........................................................................
@@ -44,7 +45,7 @@ namespace toolkit
     //====================================================================
     //--------------------------------------------------------------------
     OAccessibleControlContext::OAccessibleControlContext()
-        :OAccessibleControlContext_Base( )
+        : OAccessibleControlContext_Base(new VCLExternalSolarLock)
     {
         // nothing to do here, we have a late ctor
     }

@@ -79,18 +79,11 @@ namespace comphelper
     //= OAccessibleContextHelper
     //=====================================================================
     //---------------------------------------------------------------------
-    OAccessibleContextHelper::OAccessibleContextHelper( )
-        :OAccessibleContextHelper_Base( GetMutex() )
-        ,m_pImpl( NULL )
-    {
-        m_pImpl = new OContextHelper_Impl();
-    }
-
-    //---------------------------------------------------------------------
     OAccessibleContextHelper::OAccessibleContextHelper( IMutex* _pExternalLock )
         :OAccessibleContextHelper_Base( GetMutex() )
         ,m_pImpl( NULL )
     {
+        assert(_pExternalLock);
         m_pImpl = new OContextHelper_Impl();
         m_pImpl->setExternalLock( _pExternalLock );
     }

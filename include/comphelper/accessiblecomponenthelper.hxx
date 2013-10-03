@@ -41,7 +41,6 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OCommonAccessibleComponent : public OAccessibleContextHelper
     {
     protected:
-        OCommonAccessibleComponent();
         /// see the respective base class ctor for an extensive comment on this, please
         OCommonAccessibleComponent( IMutex* _pExternalLock );
         ~OCommonAccessibleComponent();
@@ -81,7 +80,6 @@ namespace comphelper
             ,public OAccessibleComponentHelper_Base
     {
     protected:
-        OAccessibleComponentHelper( );
         /// see the respective base class ctor for an extensive comment on this, please
         OAccessibleComponentHelper( IMutex* _pExternalLock );
 
@@ -113,7 +111,6 @@ namespace comphelper
             ,public OAccessibleExtendedComponentHelper_Base
     {
     protected:
-        OAccessibleExtendedComponentHelper( );
         /// see the respective base class ctor for an extensive comment on this, please
         OAccessibleExtendedComponentHelper( IMutex* _pExternalLock );
 

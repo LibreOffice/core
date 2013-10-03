@@ -90,7 +90,6 @@ namespace comphelper
         OContextHelper_Impl*    m_pImpl;
 
     protected:
-        OAccessibleContextHelper( );
         ~OAccessibleContextHelper( );
 
         /** ctor
@@ -141,6 +140,7 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                 getAccessibleCreator( ) const;
 
+    private:
         /** forgets the reference to the external lock, if present.
 
             <p>This means any further locking will not be guard the external lock anymore, never.</p>

@@ -29,6 +29,7 @@
 #include <svtools/toolpanel/paneltabbar.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <toolkit/helper/externallock.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -263,7 +264,10 @@ namespace accessibility
     //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeckTabBarItem::AccessibleToolPanelDeckTabBarItem( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar, const size_t i_nItemPos )
-        :m_pImpl( new AccessibleToolPanelDeckTabBarItem_Impl( *this, i_rAccessibleParent, i_rPanelDeck, i_rTabBar, i_nItemPos ) )
+        : ::comphelper::OAccessibleExtendedComponentHelper(
+                new VCLExternalSolarLock)
+        , m_pImpl(new AccessibleToolPanelDeckTabBarItem_Impl(*this,
+                i_rAccessibleParent, i_rPanelDeck, i_rTabBar, i_nItemPos))
     {
     }
 
