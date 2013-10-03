@@ -814,15 +814,6 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues[ aPropValues.getLength( ) - 1 ] = aLvlVal;
-
-                            if ( pStyleSheetProperties->GetOutlineLevel( ) == 0 )
-                            {
-                                aPropValues.realloc( aPropValues.getLength( ) + 1 );
-                                beans::PropertyValue aStyleVal( rPropNameSupplier.GetName( PROP_NUMBERING_STYLE_NAME ), 0,
-                                        uno::makeAny( OUString() ),
-                                        beans::PropertyState_DIRECT_VALUE );
-                                aPropValues[ aPropValues.getLength( ) - 1 ] = aStyleVal;
-                            }
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );

@@ -1393,6 +1393,11 @@ void Test::testStyleInheritance()
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"), getProperty<OUString>(properties, "FollowStyle"));
     properties = uno::Reference< beans::XPropertySet >(paragraphStyles->getByName("Heading 11"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getProperty<OUString>(properties, "FollowStyle"));
+
+    // Make sure style #2 is Heading 1.
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]", "styleId", "Heading1");
+    // w:ind was copied from the parent (Normal) style without a good reason.
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:pPr/w:ind", 0);
 }
 
 void Test::testSmartart()
