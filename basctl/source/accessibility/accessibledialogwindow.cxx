@@ -109,8 +109,10 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
-    :AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
-    ,m_pDialogWindow( pDialogWindow )
+    : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
+    , m_pDialogWindow(pDialogWindow)
+    , m_pDlgEditor(NULL)
+    , m_pDlgEdModel(NULL)
 {
     DBG_CTOR( AccessibleDialogWindow, NULL );
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
