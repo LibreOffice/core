@@ -97,17 +97,9 @@ ALLTAR  : $(LOCALPYFILES)
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
 .IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
-.IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK)
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
-.ENDIF
-.ELSE
-.IF "$(GUI)"=="WNT"
 ALLTAR : openofficeall $(OOOHELPPACK) sdkooall
-.ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
-.ENDIF
 .ENDIF
 .ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
@@ -333,6 +325,9 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand_dev$/intro.zip
     $(COPY) $< $@
 
 hack_msitemplates .PHONY:
+.IF "$(OS)" != "WNT"
+    @true
+.ELSE
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
     -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIHELPPACKTEMPLATEDIR)
@@ -368,8 +363,7 @@ hack_msitemplates .PHONY:
     $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/banner_cp.bmp $(MSITESTTEMPLATEDIR)$/Binary$/Banner.bmp
-
-.IF "$(OS)" == "WNT"
+.ENDIF
 
 ALLLANGSTRING:=$(alllangiso)
 
@@ -384,6 +378,4 @@ sdkoodevall: hack_msitemplates $(LOCALPYFILES) sdkoodev_$(ALLLANGSTRING:s/ /,/)$
 lotestall: hack_msitemplates $(LOCALPYFILES) lotest_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
 
 lodevtestall: hack_msitemplates $(LOCALPYFILES) lodevtest_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
-
-.ENDIF			# "$(OS)" == "WNT"
 
