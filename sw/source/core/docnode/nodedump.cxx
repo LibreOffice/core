@@ -155,9 +155,9 @@ void SwFldTypes::dumpAsXml( xmlTextWriterPtr w )
             const char* name = "???";
             switch(pCurFldFmt->GetFld()->GetTyp()->Which())
             {
-                case RES_POSTITFLD:
-                    name = "swpostitfield";
-                    break;
+                case RES_PAGENUMBERFLD: name = "swpagenumberfield"; break;
+                case RES_POSTITFLD: name = "swpostitfield"; break;
+                case RES_DATETIMEFLD: name = "swdatetimefield"; break;
                 default:
                     SAL_INFO("sw.core", "unhandled field type " << pCurFldFmt->GetFld()->GetTyp()->Which());
                     break;
