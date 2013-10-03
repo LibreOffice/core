@@ -55,7 +55,11 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define NODE_NOTREMOVED 1
 #define NODE_STOPED     2
 
-XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl( )
+XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl()
+    : m_nCurrentPosition(0)
+    , m_pStopAtNode(0)
+    , m_pCurrentReservedNode(0)
+    , m_nReservedNodeIndex(0)
 {
     saxHelper.startDocument();
     m_pDocument = saxHelper.getDocument();
