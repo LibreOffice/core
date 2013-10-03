@@ -154,6 +154,16 @@ void ContentInfo::NormalizeString( svl::StringPool& rPool )
     aText = OUString(rPool.intern(aText));
 }
 
+sal_uIntPtr ContentInfo::GetStringID( const svl::StringPool& rPool ) const
+{
+    return rPool.getIdentifier(aText);
+}
+
+sal_uIntPtr ContentInfo::GetStringIDIgnoreCase( const svl::StringPool& rPool ) const
+{
+    return rPool.getIdentifierIgnoreCase(aText);
+}
+
 const WrongList* ContentInfo::GetWrongList() const
 {
     return mpWrongs.get();
@@ -325,6 +335,16 @@ editeng::FieldUpdater EditTextObject::GetFieldUpdater()
 void EditTextObject::NormalizeString( svl::StringPool& rPool )
 {
     mpImpl->NormalizeString(rPool);
+}
+
+bool EditTextObject::GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+{
+    return mpImpl->GetStringIDs(rPool, rIDs);
+}
+
+bool EditTextObject::GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+{
+    return mpImpl->GetStringIDsIgnoreCase(rPool, rIDs);
 }
 
 const SfxItemPool* EditTextObject::GetPool() const
@@ -621,6 +641,44 @@ void EditTextObjectImpl::NormalizeString( svl::StringPool& rPool )
         ContentInfo& rInfo = *it;
         rInfo.NormalizeString(rPool);
     }
+}
+
+bool EditTextObjectImpl::GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+{
+    std::vector<sal_uIntPtr> aIDs;
+    aIDs.reserve(aContents.size());
+    ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
+    for (; it != itEnd; ++it)
+    {
+        const ContentInfo& rInfo = *it;
+        sal_uIntPtr nID = rInfo.GetStringID(rPool);
+        if (!nID)
+            return false;
+
+        aIDs.push_back(nID);
+    }
+
+    rIDs.swap(aIDs);
+    return true;
+}
+
+bool EditTextObjectImpl::GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+{
+    std::vector<sal_uIntPtr> aIDs;
+    aIDs.reserve(aContents.size());
+    ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
+    for (; it != itEnd; ++it)
+    {
+        const ContentInfo& rInfo = *it;
+        sal_uIntPtr nID = rInfo.GetStringIDIgnoreCase(rPool);
+        if (!nID)
+            return false;
+
+        aIDs.push_back(nID);
+    }
+
+    rIDs.swap(aIDs);
+    return true;
 }
 
 bool EditTextObjectImpl::IsVertical() const

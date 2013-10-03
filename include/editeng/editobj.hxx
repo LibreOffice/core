@@ -85,6 +85,9 @@ public:
      */
     void NormalizeString( svl::StringPool& rPool );
 
+    bool GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    bool GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+
     const SfxItemPool* GetPool() const;
     sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
     void SetUserType( sal_uInt16 n );

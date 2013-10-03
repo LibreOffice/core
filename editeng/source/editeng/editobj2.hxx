@@ -143,6 +143,8 @@ public:
                         ~ContentInfo();
 
     void NormalizeString( svl::StringPool& rPool );
+    sal_uIntPtr GetStringID( const svl::StringPool& rPool ) const;
+    sal_uIntPtr GetStringIDIgnoreCase( const svl::StringPool& rPool ) const;
 
     const XEditAttributesType& GetAttribs() const { return aAttribs; }
     XEditAttributesType& GetAttribs() { return aAttribs; }
@@ -207,6 +209,8 @@ public:
     void SetUserType( sal_uInt16 n );
 
     void NormalizeString( svl::StringPool& rPool );
+    bool GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    bool GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
 
     bool                    IsVertical() const;
     void                    SetVertical( bool b );
