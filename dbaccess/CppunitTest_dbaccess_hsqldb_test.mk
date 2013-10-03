@@ -21,7 +21,8 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_hsqldb_test, \
     cppuhelper \
     dbaxml \
     dbtools \
-    firebird_sdbc \
+    $(if $(ENABLE_FIREBIRD_SDBC), \
+        firebird_sdbc) \
     jvmfwk \
     sal \
     subsequenttest \
