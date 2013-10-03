@@ -308,29 +308,35 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
         switch (p->GetType())
         {
             case formula::svDouble: // a double scalar
+#if 1
+                std::cerr << "a scalar double number = " << p->GetDouble() << "\n";
+#endif
                 mKernelSrc << p->GetDouble();
                 break;
             case formula::svSingleVectorRef:
                 {
-#if 0
+#if 1
                     const formula::SingleVectorRefToken* pSVR =
                         dynamic_cast< const formula::SingleVectorRefToken* >( p );
-                    std::cout << "a Single vector of size " << pSVR->GetArrayLength();
-                    std::cout << "\n";
+                    std::cerr << "a Single vector of size " << pSVR->GetArrayLength();
+                    std::cerr << "\n";
 #endif
                     mSyms.DeclRefArg(p)->GenDeclRef(mKernelSrc);
                     break;
                 }
-#if 0 //unexercised code
+#if 1 //unexercised code
             case formula::svDoubleVectorRef:
                 {
-                    const formula::DoubleVectorRefToken* pDvr =
+                    const formula::DoubleVectorRefToken* pDVR =
                         dynamic_cast< const formula::DoubleVectorRefToken* >( p );
-                    std::cout << "a Dobule vector of size\n";
+                    std::cerr << "a Dobule vector of size " << pDVR->GetArrayLength() << "\n";
                     break;
                 }
 #endif
             default:
+#if 1
+                std::cerr << "Unknown operand type " << p->GetType() << "\n";
+#endif
                 mKernelSrc << "/* Unknown Operand */";
         };
         return;
@@ -404,7 +410,12 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     // Compile kernel here!!!
     if (mpKernel->CreateKernel()) {
         std::cerr << "Cannot create kernel\n";
+#define NO_FALLBACK_TO_SWINTERP 1 /* undef this for non-TDD runs */
+#ifdef NO_FALLBACK_TO_SWINTERP
+        assert(false);
+#else
         return false;
+#endif
     }
     // Run the kernel.
     mpKernel->Launch(xGroup->mnLength);

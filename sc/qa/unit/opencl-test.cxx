@@ -121,12 +121,21 @@ void ScOpenclTest::testSharedFormulaXLS()
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
+    // AMLOEXT-5
     for (SCROW i = 0; i < 5; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
     }
+    // AMLOEXT-6
+    for (SCROW i = 6; i < 14; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+    }
+
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
