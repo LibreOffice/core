@@ -1194,8 +1194,10 @@ void SmCursor::Copy(){
     }
 
     //Set clipboard
-    if(pList->size() > 0)
+    if (pList->size() > 0)
         SetClipboard(pList);
+    else
+        delete pList;
 }
 
 void SmCursor::Paste() {
