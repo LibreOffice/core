@@ -38,7 +38,6 @@ public:
              , bool bConnectLastToFirstPoint=false
              , bool bExpandIfValuesCloseToBorder=true
              , sal_Int32 nKeepAspectRatio=-1 //0->no 1->yes other value->automatic
-             , const ::com::sun::star::drawing::Direction3D& rAspectRatio=::com::sun::star::drawing::Direction3D(1,1,1)//only taken into account if nKeepAspectRatio==1
              );
     virtual ~AreaChart();
 
@@ -84,7 +83,6 @@ private: //member
     bool                                m_bExpandIfValuesCloseToBorder; // e.g. false for net charts
 
     sal_Int32                           m_nKeepAspectRatio; //0->no 1->yes other value->automatic
-    ::com::sun::star::drawing::Direction3D m_aGivenAspectRatio; //only used if nKeepAspectRatio==1
 
     //Properties for splines:
     ::com::sun::star::chart2::CurveStyle    m_eCurveStyle;

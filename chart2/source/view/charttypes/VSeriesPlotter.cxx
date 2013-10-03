@@ -2435,9 +2435,9 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         pRet = new PieChart(xChartTypeModel,nDimensionCount, bExcludingPositioning );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,false,1,drawing::Direction3D(1,1,1) );
+        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,false,1 );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
-        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,false,new PolarPlottingPositionHelper(),true,false,1,drawing::Direction3D(1,1,1) );
+        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,false,new PolarPlottingPositionHelper(),true,false,1 );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
         pRet = new CandleStickChart(xChartTypeModel,nDimensionCount);
     else

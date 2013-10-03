@@ -79,11 +79,10 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
 {
     if( !m_pMainPosHelper )
         m_pMainPosHelper = new PlottingPositionHelper();
-    if( m_pMainPosHelper )
-    {
-        m_pMainPosHelper->AllowShiftXAxisPos(true);
-        m_pMainPosHelper->AllowShiftZAxisPos(true);
-    }
+
+    m_pMainPosHelper->AllowShiftXAxisPos(true);
+    m_pMainPosHelper->AllowShiftZAxisPos(true);
+
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
 
@@ -152,7 +151,7 @@ uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPo
 drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
 {
     if( m_nKeepAspectRatio == 1 )
-        return m_aGivenAspectRatio;
+        return drawing::Direction3D(1,1,1);
     drawing::Direction3D aRet(1,-1,1);
     if( m_nDimension == 2 )
         aRet = drawing::Direction3D(-1,-1,-1);
