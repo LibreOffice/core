@@ -3456,7 +3456,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     const SwFmtFrmSize& rSz = GetFrmFmt()->GetFrmSize();
     const SvxLRSpaceItem& rLR = GetFrmFmt()->GetLRSpace();
 
-    _FndBox* pFndBox = 0;                // for insertion/deletion
+    boost::scoped_ptr<_FndBox> xFndBox;                // for insertion/deletion
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
@@ -3560,8 +3560,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             {
                 if( bInsDel )
                 {
-                    pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo,
-                                                    aTmpLst, nDistStt );
+                    xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo,
+                                                    aTmpLst, nDistStt));
                     if (aParam.bBigger &&
                         aParam.m_Boxes.size() == m_TabSortContentBoxes.size())
                     {
@@ -3763,8 +3763,8 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 if( bInsDel )
                 {
                     aParam1.bBigger = !aParam.bBigger;
-                    pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo,
-                                                    aTmpLst, nDistStt );
+                    xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo,
+                                                    aTmpLst, nDistStt));
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
                                         aParam.bBigger ? UNDO_TABLE_DELBOX
@@ -3877,7 +3877,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 if( bInsDel )
                 {
                     aParam1.bBigger = !aParam.bBigger;
-                    pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst, nDistStt );
+                    xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst, nDistStt ));
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
                                         aParam.bBigger ? UNDO_TABLE_DELBOX
@@ -3904,20 +3904,20 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
     }
 
-    if( pFndBox )
+    if( xFndBox )
     {
         // Clean up the structure of all Lines
         GCLines();
 
         // Update Layout
-        if( !bBigger || pFndBox->AreLinesToRestore( *this ) )
-            pFndBox->MakeFrms( *this );
+        if( !bBigger || xFndBox->AreLinesToRestore( *this ) )
+            xFndBox->MakeFrms( *this );
 
         // TL_CHART2: it is currently unclear if sth has to be done here.
         // The function name hints that nothing needs to be done, on the other
         // hand there is a case where sth gets deleted.  :-(
 
-        delete pFndBox;
+        xFndBox.reset();
 
         if( ppUndo && *ppUndo )
         {
