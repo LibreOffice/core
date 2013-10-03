@@ -318,7 +318,7 @@ class SmCaretPosGraphBuildingVisitor : public SmVisitor
 public:
     /** Builds a caret position graph for pRootNode */
     SmCaretPosGraphBuildingVisitor( SmNode* pRootNode );
-    virtual ~SmCaretPosGraphBuildingVisitor() {}
+    virtual ~SmCaretPosGraphBuildingVisitor();
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );
@@ -346,8 +346,11 @@ public:
     void Visit( SmRootSymbolNode* pNode );
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
-    SmCaretPosGraph* Graph( ){
-        return pGraph;
+    SmCaretPosGraph* takeGraph()
+    {
+        SmCaretPosGraph *pRet = pGraph;
+        pGraph = 0;
+        return pRet;
     }
 private:
     SmCaretPosGraphEntry* pRightMost;

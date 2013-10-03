@@ -990,6 +990,11 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
         pRootNode->Accept(this);
 }
 
+SmCaretPosGraphBuildingVisitor::~SmCaretPosGraphBuildingVisitor()
+{
+    delete pGraph;
+}
+
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
     SmNodeIterator it( pNode );
     while( it.Next( ) ){

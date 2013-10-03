@@ -90,8 +90,7 @@ public:
 
     ~SmCursor(){
         SetClipboard();
-        if(pGraph)
-            delete pGraph;
+        delete pGraph;
         pGraph = NULL;
     }
 

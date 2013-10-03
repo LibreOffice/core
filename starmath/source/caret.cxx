@@ -39,8 +39,7 @@ SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPosGraphEntry entry){
 }
 
 SmCaretPosGraph::~SmCaretPosGraph(){
-    if(pNext)
-        delete pNext;
+    delete pNext;
     pNext = NULL;
 }
 
