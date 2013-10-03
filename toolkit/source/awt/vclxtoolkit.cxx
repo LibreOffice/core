@@ -1747,6 +1747,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
 void SAL_CALL VCLXToolkit::reschedule()
     throw (::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard aSolarGuard;
     Application::Reschedule(true);
 }
 
