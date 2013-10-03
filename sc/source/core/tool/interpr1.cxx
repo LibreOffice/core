@@ -6447,249 +6447,256 @@ void ScInterpreter::ScHLookup()
 {
     CalculateLookup(true);
 }
-void ScInterpreter::CalculateLookup(bool HLookup)
+
+void ScInterpreter::CalculateLookup(bool bHLookup)
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 3, 4 ) )
+    if (!MustHaveParamCount(nParamCount, 3, 4))
+        return;
+
+    // Optional 4th argument to declare whether or not the range is sorted.
+    bool bSorted = true;
+    if (nParamCount == 4)
+        bSorted = GetBool();
+
+    // Index of column to search.
+    double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
+
+    ScMatrixRef pMat = NULL;
+    SCSIZE nC = 0, nR = 0;
+    SCCOL nCol1 = 0;
+    SCROW nRow1 = 0;
+    SCTAB nTab1 = 0;
+    SCCOL nCol2 = 0;
+    SCROW nRow2 = 0;
+    SCTAB nTab2;
+    StackVar eType = GetStackType();
+    if (eType == svDoubleRef)
     {
-        bool bSorted;
-        if (nParamCount == 4)
-            bSorted = GetBool();
-        else
-            bSorted = true;
-        double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
-        ScMatrixRef pMat = NULL;
-        SCSIZE nC = 0, nR = 0;
-        SCCOL nCol1 = 0;
-        SCROW nRow1 = 0;
-        SCTAB nTab1 = 0;
-        SCCOL nCol2 = 0;
-        SCROW nRow2 = 0;
-        SCTAB nTab2;
-        StackVar eType = GetStackType();
-        if (eType == svDoubleRef)
+        PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+        if (nTab1 != nTab2)
         {
-            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            if (nTab1 != nTab2)
-            {
-                PushIllegalParameter();
-                return;
-            }
+            PushIllegalParameter();
+            return;
         }
-        else if (eType == svSingleRef)
-        {
-            PopSingleRef(nCol1, nRow1, nTab1);
-            nCol2 = nCol1;
-            nRow2 = nRow1;
-        }
-        else if (eType == svMatrix || eType == svExternalDoubleRef || eType == svExternalSingleRef)
-        {
-            pMat = GetMatrix();
+    }
+    else if (eType == svSingleRef)
+    {
+        PopSingleRef(nCol1, nRow1, nTab1);
+        nCol2 = nCol1;
+        nRow2 = nRow1;
+    }
+    else if (eType == svMatrix || eType == svExternalDoubleRef || eType == svExternalSingleRef)
+    {
+        pMat = GetMatrix();
 
-            if (pMat)
-                pMat->GetDimensions(nC, nR);
-            else
-            {
-                PushIllegalParameter();
-                return;
-            }
-        }
+        if (pMat)
+            pMat->GetDimensions(nC, nR);
         else
         {
             PushIllegalParameter();
             return;
         }
-        if ( fIndex < 0.0 || (HLookup ? (pMat ? (fIndex >= nR) : (fIndex+nRow1 > nRow2)) : (pMat ? (fIndex >= nC) : (fIndex+nCol1 > nCol2)) ) )
-        {
-            PushIllegalArgument();
-            return;
-        }
-        SCROW nZIndex = static_cast<SCROW>(fIndex);
-        SCCOL nSpIndex = static_cast<SCCOL>(fIndex);
+    }
+    else
+    {
+        PushIllegalParameter();
+        return;
+    }
 
-        if (!pMat)
-        {
-            nZIndex += nRow1;                       // Wertzeile
-            nSpIndex = sal::static_int_cast<SCCOL>( nSpIndex + nCol1 );     // value column
-        }
+    if ( fIndex < 0.0 || (bHLookup ? (pMat ? (fIndex >= nR) : (fIndex+nRow1 > nRow2)) : (pMat ? (fIndex >= nC) : (fIndex+nCol1 > nCol2)) ) )
+    {
+        PushIllegalArgument();
+        return;
+    }
 
-        if (nGlobalError == 0)
-        {
-            ScQueryParam rParam;
-            rParam.nCol1       = nCol1;
-            rParam.nRow1       = nRow1;
-            if ( HLookup )
-            {
-                rParam.nCol2       = nCol2;
-                rParam.nRow2       = nRow1;     // nur in der ersten Zeile suchen
-                rParam.bByRow      = false;
-            } // if ( HLookup )
-            else
-            {
-                rParam.nCol2       = nCol1;     // nur in der ersten Spalte suchen
-                rParam.nRow2       = nRow2;
-                rParam.nTab        = nTab1;
-            }
+    SCROW nZIndex = static_cast<SCROW>(fIndex);
+    SCCOL nSpIndex = static_cast<SCCOL>(fIndex);
 
-            ScQueryEntry& rEntry = rParam.GetEntry(0);
-            rEntry.bDoQuery = true;
+    if (!pMat)
+    {
+        nZIndex += nRow1;                       // Wertzeile
+        nSpIndex = sal::static_int_cast<SCCOL>( nSpIndex + nCol1 );     // value column
+    }
+
+    if (nGlobalError)
+    {
+        PushIllegalParameter();
+        return;
+    }
+
+    ScQueryParam aParam;
+    aParam.nCol1 = nCol1;
+    aParam.nRow1 = nRow1;
+    if ( bHLookup )
+    {
+        aParam.nCol2 = nCol2;
+        aParam.nRow2 = nRow1;     // nur in der ersten Zeile suchen
+        aParam.bByRow = false;
+    }
+    else
+    {
+        aParam.nCol2 = nCol1;     // nur in der ersten Spalte suchen
+        aParam.nRow2 = nRow2;
+        aParam.nTab  = nTab1;
+    }
+
+    ScQueryEntry& rEntry = aParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    if ( bSorted )
+        rEntry.eOp = SC_LESS_EQUAL;
+    if ( !FillEntry(rEntry) )
+        return;
+
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    if (rItem.meType == ScQueryEntry::ByString)
+        aParam.bRegExp = MayBeRegExp(rItem.maString, pDok);
+    if (pMat)
+    {
+        SCSIZE nMatCount = bHLookup ? nC : nR;
+        SCSIZE nDelta = SCSIZE_MAX;
+        if (rItem.meType == ScQueryEntry::ByString)
+        {
+//!!!!!!!
+//! TODO: enable regex on matrix strings
+//!!!!!!!
+            const OUString& rParamStr = rItem.maString;
             if ( bSorted )
-                rEntry.eOp = SC_LESS_EQUAL;
-            if ( !FillEntry(rEntry) )
-                return;
-
-            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            if (rItem.meType == ScQueryEntry::ByString)
-                rParam.bRegExp = MayBeRegExp(rItem.maString, pDok);
-            if (pMat)
             {
-                SCSIZE nMatCount = HLookup ? nC : nR;
-                SCSIZE nDelta = SCSIZE_MAX;
-                if (rItem.meType == ScQueryEntry::ByString)
+                static CollatorWrapper* pCollator = ScGlobal::GetCollator();
+                for (SCSIZE i = 0; i < nMatCount; i++)
                 {
-        //!!!!!!!
-        //! TODO: enable regex on matrix strings
-        //!!!!!!!
-                    const OUString& rParamStr = rItem.maString;
-                    if ( bSorted )
+                    if (bHLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i))
                     {
-                        static CollatorWrapper* pCollator = ScGlobal::GetCollator();
-                        for (SCSIZE i = 0; i < nMatCount; i++)
-                        {
-                            if (HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i))
-                            {
-                                sal_Int32 nRes =
-                                    pCollator->compareString( HLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), rParamStr);
-                                if (nRes <= 0)
-                                    nDelta = i;
-                                else if (i>0)   // #i2168# ignore first mismatch
-                                    i = nMatCount+1;
-                            }
-                            else
-                                nDelta = i;
-                        }
+                        sal_Int32 nRes =
+                            pCollator->compareString( bHLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), rParamStr);
+                        if (nRes <= 0)
+                            nDelta = i;
+                        else if (i>0)   // #i2168# ignore first mismatch
+                            i = nMatCount+1;
                     }
                     else
-                    {
-                        if (HLookup)
-                        {
-                            for (SCSIZE i = 0; i < nMatCount; i++)
-                            {
-                                if (pMat->IsString(i, 0))
-                                {
-                                    if ( ScGlobal::GetpTransliteration()->isEqual(
-                                        pMat->GetString(i,0), rParamStr))
-                                    {
-                                        nDelta = i;
-                                        i = nMatCount + 1;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            nDelta = pMat->MatchStringInColumns(rParamStr, 0, 0);
-                        }
-                    }
+                        nDelta = i;
                 }
-                else
-                {
-                    if ( bSorted )
-                    {
-                        // #i2168# ignore strings
-                        for (SCSIZE i = 0; i < nMatCount; i++)
-                        {
-                            if (!(HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i)))
-                            {
-                                if ((HLookup ? pMat->GetDouble(i,0) : pMat->GetDouble(0,i)) <= rItem.mfVal)
-                                    nDelta = i;
-                                else
-                                    i = nMatCount+1;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (HLookup)
-                        {
-                            for (SCSIZE i = 0; i < nMatCount; i++)
-                            {
-                                if (! pMat->IsString(i, 0) )
-                                {
-                                    if ( pMat->GetDouble(i,0) == rItem.mfVal)
-                                    {
-                                        nDelta = i;
-                                        i = nMatCount + 1;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            nDelta = pMat->MatchDoubleInColumns(rItem.mfVal, 0, 0);
-                        }
-                    }
-                }
-                if ( nDelta != SCSIZE_MAX )
-                {
-                    SCSIZE nX = static_cast<SCSIZE>(nSpIndex);
-                    SCSIZE nY = nDelta;
-                    if ( HLookup )
-                    {
-                        nX = nDelta;
-                        nY = static_cast<SCSIZE>(nZIndex);
-                    }
-                    if ( pMat->IsString( nX, nY) )
-                        PushString(pMat->GetString( nX,nY));
-                    else
-                        PushDouble(pMat->GetDouble( nX,nY));
-                }
-                else
-                    PushNA();
             }
             else
             {
-                rEntry.nField = nCol1;
-                bool bFound = false;
-                SCCOL nCol = 0;
-                SCROW nRow = 0;
-                if ( bSorted )
-                    rEntry.eOp = SC_LESS_EQUAL;
-                if ( HLookup )
+                if (bHLookup)
                 {
-                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
-                    // advance Entry.nField in Iterator upon switching columns
-                    aCellIter.SetAdvanceQueryParamEntryField( true );
-                    if ( bSorted )
+                    for (SCSIZE i = 0; i < nMatCount; i++)
                     {
-                        SCROW nRow1_temp;
-                        bFound = aCellIter.FindEqualOrSortedLastInRange( nCol, nRow1_temp );
+                        if (pMat->IsString(i, 0))
+                        {
+                            if ( ScGlobal::GetpTransliteration()->isEqual(
+                                pMat->GetString(i,0), rParamStr))
+                            {
+                                nDelta = i;
+                                i = nMatCount + 1;
+                            }
+                        }
                     }
-                    else if ( aCellIter.GetFirst() )
-                    {
-                        bFound = true;
-                        nCol = aCellIter.GetCol();
-                    }
-                    nRow = nZIndex;
-                } // if ( HLookup )
-                else
-                {
-                    ScAddress aResultPos( nCol1, nRow1, nTab1);
-                    bFound = LookupQueryWithCache( aResultPos, rParam);
-                    nRow = aResultPos.Row();
-                    nCol = nSpIndex;
-                }
-                if ( bFound )
-                {
-                    ScAddress aAdr( nCol, nRow, nTab1 );
-                    PushCellResultToken( true, aAdr, NULL, NULL);
                 }
                 else
-                    PushNA();
+                {
+                    nDelta = pMat->MatchStringInColumns(rParamStr, 0, 0);
+                }
             }
         }
         else
-            PushIllegalParameter();
+        {
+            if ( bSorted )
+            {
+                // #i2168# ignore strings
+                for (SCSIZE i = 0; i < nMatCount; i++)
+                {
+                    if (!(bHLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i)))
+                    {
+                        if ((bHLookup ? pMat->GetDouble(i,0) : pMat->GetDouble(0,i)) <= rItem.mfVal)
+                            nDelta = i;
+                        else
+                            i = nMatCount+1;
+                    }
+                }
+            }
+            else
+            {
+                if (bHLookup)
+                {
+                    for (SCSIZE i = 0; i < nMatCount; i++)
+                    {
+                        if (! pMat->IsString(i, 0) )
+                        {
+                            if ( pMat->GetDouble(i,0) == rItem.mfVal)
+                            {
+                                nDelta = i;
+                                i = nMatCount + 1;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    nDelta = pMat->MatchDoubleInColumns(rItem.mfVal, 0, 0);
+                }
+            }
+        }
+        if ( nDelta != SCSIZE_MAX )
+        {
+            SCSIZE nX = static_cast<SCSIZE>(nSpIndex);
+            SCSIZE nY = nDelta;
+            if ( bHLookup )
+            {
+                nX = nDelta;
+                nY = static_cast<SCSIZE>(nZIndex);
+            }
+            if ( pMat->IsString( nX, nY) )
+                PushString(pMat->GetString( nX,nY));
+            else
+                PushDouble(pMat->GetDouble( nX,nY));
+        }
+        else
+            PushNA();
+    }
+    else
+    {
+        rEntry.nField = nCol1;
+        bool bFound = false;
+        SCCOL nCol = 0;
+        SCROW nRow = 0;
+        if ( bSorted )
+            rEntry.eOp = SC_LESS_EQUAL;
+        if ( bHLookup )
+        {
+            ScQueryCellIterator aCellIter(pDok, nTab1, aParam, false);
+            // advance Entry.nField in Iterator upon switching columns
+            aCellIter.SetAdvanceQueryParamEntryField( true );
+            if ( bSorted )
+            {
+                SCROW nRow1_temp;
+                bFound = aCellIter.FindEqualOrSortedLastInRange( nCol, nRow1_temp );
+            }
+            else if ( aCellIter.GetFirst() )
+            {
+                bFound = true;
+                nCol = aCellIter.GetCol();
+            }
+            nRow = nZIndex;
+        }
+        else
+        {
+            ScAddress aResultPos( nCol1, nRow1, nTab1);
+            bFound = LookupQueryWithCache( aResultPos, aParam);
+            nRow = aResultPos.Row();
+            nCol = nSpIndex;
+        }
+
+        if ( bFound )
+        {
+            ScAddress aAdr( nCol, nRow, nTab1 );
+            PushCellResultToken( true, aAdr, NULL, NULL);
+        }
+        else
+            PushNA();
     }
 }
 

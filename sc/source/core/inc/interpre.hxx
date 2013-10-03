@@ -688,7 +688,7 @@ bool CalculateTest( bool _bTemplin
                    ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                    ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                    ,double& fT,double& fF);
-void CalculateLookup(bool HLookup);
+void CalculateLookup(bool bHLookup);
 bool FillEntry(ScQueryEntry& rEntry);
 void CalculateAddSub(bool _bSub);
 void CalculateTrendGrowth(bool _bGrowth);
