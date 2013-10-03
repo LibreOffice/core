@@ -202,12 +202,6 @@ namespace chelp {
         //                                            // of XCollator
 
         /**
-         *  Returns a copy of the popupfile
-         */
-
-        void popupDocument( URLParameter* urlPar,char **buffer,int *byteCount );
-
-        /**
          *  Returns the cascading stlye sheet used to format the HTML-output.
          *  First try is language directory, second try is main installation directory.
          */

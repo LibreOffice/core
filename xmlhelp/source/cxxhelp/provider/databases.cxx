@@ -1051,47 +1051,6 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
     return xNA;
 }
 
-void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount )
-{
-    const char* pop1 =
-        " <html>                                                                "
-        " <head>                                                                "
-        " <help:css-file-link xmlns:help=\"http://openoffice.org/2000/help\"/>  "
-        " </head>                                                               "
-        " <body>                                                                "
-        " <help:popup-cut Id=\"";
-    const sal_Int32 l1 = strlen( pop1 );
-
-    const char* pop3 = "\" Eid=\"";
-    const sal_Int32 l3 = strlen( pop3 );
-
-    const char* pop5 =
-        "\" xmlns:help=\"http://openoffice.org/2000/help\"></help:popup-cut>  "
-        " </body>                                                             "
-        " </html>";
-    const sal_Int32 l5 = strlen( pop5 );
-    sal_Int32 l2,l4;
-
-    OUString val = urlPar->get_id();
-    OString pop2O( val.getStr(),l2 = val.getLength(),RTL_TEXTENCODING_UTF8 );
-    const char* pop2 = pop2O.getStr();
-
-    val = urlPar->get_eid();
-    OString pop4O( val.getStr(),l4 = val.getLength(),RTL_TEXTENCODING_UTF8 );
-    const char* pop4 = pop4O.getStr();
-
-    (*byteCount) = l1 + l2 + l3 + l4 + l5;
-
-    *buffer = new char[ 1+*byteCount ];
-
-    memcpy( *buffer,pop1,l1 );
-    memcpy( *buffer+l1,pop2,l2 );
-    memcpy( *buffer+(l1+l2),pop3,l3 );
-    memcpy( *buffer+(l1+l2+l3),pop4,l4 );
-    memcpy( *buffer+(l1+l2+l3+l4),pop5,l5 );
-    (*buffer)[*byteCount] = 0;
-}
-
 void Databases::changeCSS(const OUString& newStyleSheet)
 {
     m_aCSS = newStyleSheet.toAsciiLowerCase();

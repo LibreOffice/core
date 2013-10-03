@@ -794,13 +794,7 @@ helpRead(void * context, char * buffer, int len) {
 
 static int
 zipRead(void * context, char * buffer, int len) {
-    if( !ugblData->m_pInitial->get_eid().isEmpty() )
-    {
-        ugblData->m_pDatabases->popupDocument( ugblData->m_pInitial,&buffer,&len);
-        return len;
-    }
-    else
-        return helpRead(context, buffer, len);
+    return helpRead(context, buffer, len);
 }
 
 static int
