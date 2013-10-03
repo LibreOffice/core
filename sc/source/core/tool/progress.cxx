@@ -72,7 +72,7 @@ static bool lcl_HasControllersLocked( SfxObjectShell& rObjSh )
     return false;
 }
 
-ScProgress::ScProgress( SfxObjectShell* pObjSh, const String& rText,
+ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
                         sal_uLong nRange, sal_Bool bAllDocs, sal_Bool bWait )
 {
 

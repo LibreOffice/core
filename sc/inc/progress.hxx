@@ -75,7 +75,7 @@ public:
     static  sal_uLong           GetGlobalPercent()  { return nGlobalPercent; }
 
                             ScProgress( SfxObjectShell* pObjSh,
-                                         const String& rText,
+                                         const OUString& rText,
                                          sal_uLong nRange, sal_Bool bAllDocs = false,
                                          sal_Bool bWait = sal_True );
                             ~ScProgress();
@@ -87,7 +87,7 @@ public:
                             /// might be NULL!
             SfxProgress*    GetSfxProgress() const { return pProgress; }
 
-            sal_Bool            SetStateText( sal_uLong nVal, const String &rVal, sal_uLong nNewRange = 0 )
+            sal_Bool            SetStateText( sal_uLong nVal, const OUString &rVal, sal_uLong nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
