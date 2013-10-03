@@ -222,6 +222,34 @@ SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
     // nothing to do here
 }
 
+struct BoxHolder : private boost::noncopyable
+{
+    SvxBorderLine* pTop;
+    SvxBorderLine* pBottom;
+    SvxBorderLine* pLeft;
+    SvxBorderLine* pRight;
+
+    BoxHolder(SvxBoxItem* pBox)
+    {
+        pTop    = pBox->GetTop() == NULL ?
+            NULL : new SvxBorderLine( *pBox->GetTop() );
+        pBottom = pBox->GetBottom() == NULL ?
+            NULL : new SvxBorderLine( *pBox->GetBottom() );
+        pLeft   = pBox->GetLeft() == NULL ?
+            NULL : new SvxBorderLine( *pBox->GetLeft() );
+        pRight  = pBox->GetRight() == NULL ?
+            NULL : new SvxBorderLine( *pBox->GetRight() );
+    }
+
+    ~BoxHolder()
+    {
+        delete pTop;
+        delete pBottom;
+        delete pLeft;
+        delete pRight;
+    }
+};
+
 
 
 // put an XML-string value into an item
@@ -410,14 +438,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
 
             /** copy SvxBorderLines */
-            SvxBorderLine* pTop    = pBox->GetTop() == NULL ?
-                                NULL : new SvxBorderLine( *pBox->GetTop() );
-            SvxBorderLine* pBottom = pBox->GetBottom() == NULL ?
-                                NULL : new SvxBorderLine( *pBox->GetBottom() );
-            SvxBorderLine* pLeft   = pBox->GetLeft() == NULL ?
-                                NULL : new SvxBorderLine( *pBox->GetLeft() );
-            SvxBorderLine* pRight  = pBox->GetRight() == NULL ?
-                                NULL : new SvxBorderLine( *pBox->GetRight() );
+            BoxHolder aBoxes(pBox);
 
             sal_Int32 nTemp;
 
@@ -471,25 +492,25 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         return false;
 
                     if( TOP_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        sw_frmitems_setXMLBorder( pTop,
+                        sw_frmitems_setXMLBorder( aBoxes.pTop,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
 
                     if( BOTTOM_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        sw_frmitems_setXMLBorder( pBottom,
+                        sw_frmitems_setXMLBorder( aBoxes.pBottom,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
 
                     if( LEFT_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        sw_frmitems_setXMLBorder( pLeft,
+                        sw_frmitems_setXMLBorder( aBoxes.pLeft,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
 
                     if( RIGHT_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        sw_frmitems_setXMLBorder( pRight,
+                        sw_frmitems_setXMLBorder( aBoxes.pRight,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
@@ -529,28 +550,28 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
                     if( TOP_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        sw_frmitems_setXMLBorder( pTop, nWidth,
+                        sw_frmitems_setXMLBorder( aBoxes.pTop, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
 
                     if( BOTTOM_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        sw_frmitems_setXMLBorder( pBottom, nWidth,
+                        sw_frmitems_setXMLBorder( aBoxes.pBottom, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
 
                     if( LEFT_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        sw_frmitems_setXMLBorder( pLeft, nWidth,
+                        sw_frmitems_setXMLBorder( aBoxes.pLeft, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
 
                     if( RIGHT_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        sw_frmitems_setXMLBorder( pRight, nWidth,
+                        sw_frmitems_setXMLBorder( aBoxes.pRight, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
@@ -558,15 +579,10 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 break;
             }
 
-            pBox->SetLine( pTop,    BOX_LINE_TOP    );
-            pBox->SetLine( pBottom, BOX_LINE_BOTTOM );
-            pBox->SetLine( pLeft,   BOX_LINE_LEFT   );
-            pBox->SetLine( pRight,  BOX_LINE_RIGHT  );
-
-            delete pTop;
-            delete pBottom;
-            delete pLeft;
-            delete pRight;
+            pBox->SetLine( aBoxes.pTop,    BOX_LINE_TOP    );
+            pBox->SetLine( aBoxes.pBottom, BOX_LINE_BOTTOM );
+            pBox->SetLine( aBoxes.pLeft,   BOX_LINE_LEFT   );
+            pBox->SetLine( aBoxes.pRight,  BOX_LINE_RIGHT  );
 
             bOk = true;
         }
