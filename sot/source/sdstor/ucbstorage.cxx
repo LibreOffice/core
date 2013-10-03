@@ -43,6 +43,7 @@
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
+#include <boost/scoped_ptr.hpp>
 #include <rtl/digest.h>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
@@ -2139,15 +2140,15 @@ sal_Int16 UCBStorage_Impl::Commit()
             {
                 UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
                 ::ucbhelper::Content* pContent = pElement->GetContent();
-                bool bDeleteContent = false;
+                boost::scoped_ptr< ::ucbhelper::Content > xDeleteContent;
                 if ( !pContent && pElement->IsModified() )
                 {
                     // if the element has never been opened, no content has been created until now
-                    bDeleteContent = true;  // remember to delete it later
                     OUString aName( m_aURL );
                     aName += "/";
                     aName += pElement->m_aOriginalName;
                     pContent = new ::ucbhelper::Content( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+                    xDeleteContent.reset(pContent);  // delete it later on exit scope
                 }
 
                 if ( pElement->m_bIsRemoved )
@@ -2219,10 +2220,6 @@ sal_Int16 UCBStorage_Impl::Commit()
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
                         nRet = nLocalRet;
                 }
-
-                if ( bDeleteContent )
-                    // content was created inside the loop
-                    delete pContent;
 
                 if ( nRet == COMMIT_RESULT_FAILURE )
                     break;
