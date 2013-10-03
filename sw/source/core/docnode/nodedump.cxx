@@ -18,9 +18,11 @@
 #include "fmtautofmt.hxx"
 #include "charfmt.hxx"
 #include <svl/itemiter.hxx>
+#include <svl/intitem.hxx>
 
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
+#include <boost/optional.hpp>
 
 namespace
 {
@@ -282,6 +284,35 @@ void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
     }
 }
 
+void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
+{
+    SfxItemIter aIter(*pSet);
+    const SfxPoolItem* pItem = aIter.FirstItem();
+    while (pItem)
+    {
+        writer.startElement("item");
+        writer.writeFormatAttribute("whichId", TMP_FORMAT, pItem->Which());
+        const char* pWhich = 0;
+        boost::optional<sal_Int32> oValue;
+        switch (pItem->Which())
+        {
+            case RES_CHRATR_POSTURE: pWhich = "posture"; break;
+            case RES_CHRATR_WEIGHT: pWhich = "weight"; break;
+            case RES_CHRATR_CJK_POSTURE: pWhich = "cjk posture"; break;
+            case RES_CHRATR_CJK_WEIGHT: pWhich = "cjk weight"; break;
+            case RES_CHRATR_CTL_POSTURE: pWhich = "ctl posture"; break;
+            case RES_CHRATR_CTL_WEIGHT: pWhich = "ctl weight"; break;
+            case RES_PARATR_OUTLINELEVEL: pWhich = "outline level"; oValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue(); break;
+        }
+        if (pWhich)
+            writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
+        if (oValue)
+            writer.writeFormatAttribute("value", TMP_FORMAT, *oValue);
+        pItem = aIter.NextItem();
+        writer.endElement();
+    }
+}
+
 void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w)
 {
     WriterHelper writer(w);
@@ -294,6 +325,8 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w)
             writer.startElement("swtxtfmtcoll");
             OString aName = OUStringToOString(pColl->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+
+            lcl_dumpSfxItemSet(writer, &pColl->GetAttrSet());
             writer.endElement();
         }
         writer.endElement();
@@ -341,27 +374,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
             {
                 boost::shared_ptr<SfxItemSet> const pSet(pHint->GetAutoFmt().GetStyleHandle());
                 writer.startElement("autofmt");
-                SfxItemIter aIter(*pSet);
-                const SfxPoolItem* pItem = aIter.FirstItem();
-                while (pItem)
-                {
-                    writer.startElement("item");
-                    writer.writeFormatAttribute("whichId", TMP_FORMAT, pItem->Which());
-                    pWhich = 0;
-                    switch (pItem->Which())
-                    {
-                        case RES_CHRATR_POSTURE: pWhich = "posture"; break;
-                        case RES_CHRATR_WEIGHT: pWhich = "weight"; break;
-                        case RES_CHRATR_CJK_POSTURE: pWhich = "cjk posture"; break;
-                        case RES_CHRATR_CJK_WEIGHT: pWhich = "cjk weight"; break;
-                        case RES_CHRATR_CTL_POSTURE: pWhich = "ctl posture"; break;
-                        case RES_CHRATR_CTL_WEIGHT: pWhich = "ctl weight"; break;
-                    }
-                    if (pWhich)
-                        writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
-                    pItem = aIter.NextItem();
-                    writer.endElement();
-                }
+                lcl_dumpSfxItemSet(writer, pSet.get());
                 writer.endElement();
             }
 
