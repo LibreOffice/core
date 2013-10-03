@@ -337,11 +337,13 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
             com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext > xAccessibleChild = xAccessible->getAccessibleContext();
             if(m_pImpl->m_xTable == xAccessible)
             {
-                std::vector< AccessibleGridControlTableCell* > xCellCont = m_pImpl->m_pTable->getCellVector();
-                int nIndex = m_aTable.GetCurrentRow()*m_aTable.GetColumnCount()+m_aTable.GetCurrentColumn();
-                if(!xCellCont.empty() && xCellCont[nIndex])
+                std::vector< AccessibleGridControlTableCell* >& rCells =
+                    m_pImpl->m_pTable->getCellVector();
+                size_t nIndex = m_aTable.GetCurrentRow() * m_aTable.GetColumnCount()
+                              + m_aTable.GetCurrentColumn();
+                if (nIndex < rCells.size() && rCells[nIndex])
                 {
-                    m_pImpl->m_pCell = xCellCont[nIndex];
+                    m_pImpl->m_pCell = rCells[nIndex];
                     m_pImpl->m_pCell->commitEvent( _nEventId, _rNewValue, _rOldValue );
                 }
             }
@@ -370,11 +372,26 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
             {
                 if(aChange.Type == AccessibleTableModelChangeType::DELETE)
                 {
-                    std::vector< AccessibleGridControlTableCell* >::iterator m_pCell = m_pImpl->m_pTable->getCellVector().begin();
-                    std::vector< Reference< XAccessible > >::iterator m_xAccessibleVector = m_pImpl->m_pTable->getAccessibleCellVector().begin();
+                    std::vector< AccessibleGridControlTableCell* >& rCells =
+                        m_pImpl->m_pTable->getCellVector();
+                    std::vector< Reference< XAccessible > >& rAccCells =
+                        m_pImpl->m_pTable->getAccessibleCellVector();
                     int nColCount = m_aTable.GetColumnCount();
-                    m_pImpl->m_pTable->getCellVector().erase(m_pCell+nColCount*aChange.FirstRow, m_pCell+nColCount*aChange.LastRow );
-                    m_pImpl->m_pTable->getAccessibleCellVector().erase(m_xAccessibleVector+nColCount*aChange.FirstRow, m_xAccessibleVector+nColCount*aChange.LastRow);
+                    // check valid index - entries are inserted lazily
+                    size_t const nStart = nColCount * aChange.FirstRow;
+                    size_t const nEnd   = nColCount * aChange.LastRow;
+                    if (nStart < rCells.size())
+                    {
+                        m_pImpl->m_pTable->getCellVector().erase(
+                            rCells.begin() + nStart,
+                            rCells.begin() + std::min(rCells.size(), nEnd));
+                    }
+                    if (nStart < rAccCells.size())
+                    {
+                        m_pImpl->m_pTable->getAccessibleCellVector().erase(
+                            rAccCells.begin() + nStart,
+                            rAccCells.begin() + std::min(rAccCells.size(), nEnd));
+                    }
                     m_pImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
                 }
                 else
