@@ -73,16 +73,14 @@ const sal_uInt16 PT_12  = 12 * 20;      // 12 pt
 const sal_uInt16 PT_14  = 14 * 20;      // 14 pt
 const sal_uInt16 PT_16  = 16 * 20;      // 16 pt
 const sal_uInt16 PT_18  = 18 * 20;      // 18 pt
-const sal_uInt16 PT_24  = 24 * 20;      // 22 pt
+const sal_uInt16 PT_24  = 24 * 20;      // 24 pt
 
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
 static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
-//  PT_16, PT_14, PT_14, PT_12, PT_12,          // normal
-// we do everything procentual now:
+    // we do everything procentual now:
     115, 100, 100, 85, 85,
     75,   75,  75, 75, 75,  // normal
-//  PT_22, PT_16, PT_12, PT_11, PT_9            // HTML mode
     PT_24, PT_18, PT_14, PT_12, PT_10,
     PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
 };
