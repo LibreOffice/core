@@ -425,8 +425,11 @@ static void suppress_decorations(struct splash* splash)
     suppress_decorations_motif(splash); // FIXME: Unconditional until Metacity/compiz's SPLASH handling is fixed
 }
 
-// Create the window
-// Return: 1 - success, 0 - failure
+/**
+ * Create the window for the splash screen
+ *
+ * @return Success: 1; Failure: 0
+ */
 static int splash_create_window( struct splash* splash, int argc, char** argv )
 {
     char *display_name = NULL;
@@ -434,6 +437,8 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     Window root_win;
     int display_width = 0;
     int display_height = 0;
+    int display_x_pos = 0;
+    int display_y_pos = 0;
     unsigned long value_mask = 0;
     XGCValues values;
     const char* name = "LibreOffice";
@@ -478,13 +483,14 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
     if( p_screens )
     {
-        int j = 0;
-        for( ; j < n_xinerama_screens; j++ )
+        for( i=0; i < n_xinerama_screens; i++ )
         {
-            if ( p_screens[j].screen_number == splash->screen )
+            if ( p_screens[i].screen_number == splash->screen )
             {
-                display_width = p_screens[j].width;
-                display_height = p_screens[j].height;
+                display_width = p_screens[i].width;
+                display_height = p_screens[i].height;
+                display_x_pos = p_screens[i].x_org;
+                display_y_pos = p_screens[i].y_org;
                 break;
             }
         }
@@ -493,7 +499,8 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
 #endif
 
     splash->win = XCreateSimpleWindow( splash->display, root_win,
-            ( display_width - splash->width ) / 2, ( display_height - splash->height ) / 2,
+            (display_x_pos + (display_width - splash->width)/2),
+            (display_y_pos + (display_height - splash->height)/2),
             splash->width, splash->height, 0,
             BlackPixel( splash->display, splash->screen ), BlackPixel( splash->display, splash->screen ) );
 
