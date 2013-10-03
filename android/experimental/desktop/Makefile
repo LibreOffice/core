@@ -39,11 +39,9 @@ copy-stuff:
 		assets
 	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
-	mkdir -p assets/ure/share/misc assets/share/registry/res assets/share/config
-	cp -R $(OUTDIR)/xml/*.xcd assets/share/registry
-	mv assets/share/registry/fcfg_langpack_en-US.xcd assets/share/registry/res
+	cp -R $(INSTDIR)/share/registry assets/share
+	mkdir -p assets/share/config
 	cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config
-	cp -R $(OUTDIR)/xml/registry/* assets/share/registry
 #
 # Set up rc, the "inifile". See BootstrapMap::getBaseIni(). As this app
 # doesn't use soffice_main() (at least I think it shouldn't), the
