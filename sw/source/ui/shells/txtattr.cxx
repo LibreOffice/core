@@ -652,6 +652,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     rSet.InvalidateItem(nSlot);
                 nSlot = 0;
             }
+            break;
 
             case SID_ATTR_PARA_LEFT_TO_RIGHT :
             case SID_ATTR_PARA_RIGHT_TO_LEFT :
