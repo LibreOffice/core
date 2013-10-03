@@ -65,14 +65,6 @@ struct Methods {
     sal_uInt16      nHash;
 };
 
-struct StringHashCode
-{
-    size_t operator()( const OUString& rStr ) const
-    {
-        return rtl_ustr_hashCode_WithLength( rStr.getStr(), rStr.getLength() );
-    }
-};
-
 static Methods aMethods[] = {
 
 { "Abs",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Abs),0             },
