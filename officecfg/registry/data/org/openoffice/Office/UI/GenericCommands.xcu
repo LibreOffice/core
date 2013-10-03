@@ -4825,7 +4825,7 @@
       </node>
       <node oor:name=".uno:RemoveFilterSort" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Remove Filter/Sort</value>
+          <value xml:lang="en-US">Reset Filter/Sort</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5093,7 +5093,7 @@
       </node>
       <node oor:name=".uno:RemoveFilter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Remove Filter</value>
+          <value xml:lang="en-US">Reset Filter</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

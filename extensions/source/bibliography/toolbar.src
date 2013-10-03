@@ -91,7 +91,7 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_REMOVEFILTER ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Command = ".uno:Bib/removeFilter" ;
-            Text [ en-US ] = "Remove Filter";
+            Text [ en-US ] = "Reset Filter";
         };
         ToolBoxItem
         {

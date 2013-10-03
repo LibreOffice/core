@@ -278,7 +278,7 @@
      <menu:menuitem menu:id="slot:26323" menu:helpid="26323" menu:label="~Standard Filter..."/>
      <menu:menuitem menu:id="slot:26324" menu:helpid="26324" menu:label="~Advanced Filter..."/>
      <menu:menuseparator/>
-     <menu:menuitem menu:id="slot:26326" menu:helpid="26326" menu:label="~Remove Filter"/>
+     <menu:menuitem menu:id="slot:26326" menu:helpid="26326" menu:label="~Reset Filter"/>
      <menu:menuitem menu:id="slot:26341" menu:helpid="26341" menu:label="~Hide AutoFilter"/>
     </menu:menupopup>
    </menu:menu>

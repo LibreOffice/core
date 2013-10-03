@@ -45,7 +45,7 @@
       </node>
       <node oor:name=".uno:Bib/removeFilter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Remove Filter</value>
+          <value xml:lang="en-US">Reset Filter</value>
         </prop>
       </node>
     </node>
