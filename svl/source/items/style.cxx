@@ -253,7 +253,7 @@ bool SfxStyleSheetBase::SetFollow( const OUString& rName )
     {
         if( !pPool->Find( rName, nFamily ) )
         {
-            OSL_FAIL( "StyleSheet-Follow nicht gefunden" );
+            SAL_WARN( "svl", "StyleSheet-Follow not found" );
             return false;
         }
         aFollow = rName;
