@@ -231,11 +231,10 @@ void SaneDlg::InitFields()
                     }
                     maReslBox.InsertValue( (long)pDouble[1] );
                 }
-                if( pDouble )
-                    delete [] pDouble;
             }
             else
                 maReslBox.Enable( sal_False );
+            delete [] pDouble;
         }
     }
     else
