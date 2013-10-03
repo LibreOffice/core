@@ -26,7 +26,7 @@
 #include "global.hxx"
 
 typedef ::std::vector< ScAddress > ScAutoNameAddresses;
-typedef ::boost::unordered_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
+typedef ::boost::unordered_map< OUString, ScAutoNameAddresses, OUStringHash > ScAutoNameHashMap;
 
 /**  Cache for faster lookup of automatic names during CompileXML
      (during CompileXML, no document content is changed). */

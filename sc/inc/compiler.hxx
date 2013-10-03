@@ -235,8 +235,8 @@ public:
                                  const ScComplexRefData&    rRef,
                                  bool bSingleRef ) const = 0;
         virtual ::com::sun::star::i18n::ParseResult
-                    parseAnyToken( const String& rFormula,
-                                   xub_StrLen nSrcPos,
+                    parseAnyToken( const OUString& rFormula,
+                                   sal_Int32 nSrcPos,
                                    const CharClass* pCharClass) const = 0;
 
         /**
@@ -245,7 +245,7 @@ public:
          *
          * @return true on successful parse, or false otherwise.
          */
-        virtual bool parseExternalName( const String& rSymbol, String& rFile, String& rName,
+        virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
                 const ScDocument* pDoc,
                 const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const = 0;
@@ -312,8 +312,8 @@ private:
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
 
     sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
-    String      aFormula;                           // formula source code
-    xub_StrLen  nSrcPos;                            // tokenizer position (source code)
+    OUString    aFormula;                           // formula source code
+    sal_Int32   nSrcPos;                            // tokenizer position (source code)
     mutable ScRawTokenRef pRawToken;
 
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
@@ -335,7 +335,7 @@ private:
     bool IsOpCode( const OUString&, bool bInArray );
     bool IsOpCode2( const String& );
     bool IsString();
-    bool IsReference( const String& );
+    bool IsReference( const OUString& );
     bool IsSingleReference( const String& );
     bool IsPredetectedReference(const OUString&);
     bool IsDoubleReference( const String& );

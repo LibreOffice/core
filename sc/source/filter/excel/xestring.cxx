@@ -103,22 +103,12 @@ XclExpString::XclExpString( XclStrFlags nFlags, sal_uInt16 nMaxLen )
     Init( 0, nFlags, nMaxLen, true );
 }
 
-XclExpString::XclExpString( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
-{
-    Assign( rString, nFlags, nMaxLen );
-}
-
 XclExpString::XclExpString( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     Assign( rString, nFlags, nMaxLen );
 }
 
 // assign ---------------------------------------------------------------------
-
-void XclExpString::Assign( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
-{
-    Build( rString.GetBuffer(), rString.Len(), nFlags, nMaxLen );
-}
 
 void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
@@ -131,7 +121,7 @@ void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMa
 }
 
 void XclExpString::AssignByte(
-        const String& rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+        const OUString& rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     // length may differ from length of rString
     OString aByteStr(OUStringToOString(rString, eTextEnc));
@@ -140,14 +130,14 @@ void XclExpString::AssignByte(
 
 // append ---------------------------------------------------------------------
 
-void XclExpString::Append( const String& rString )
+void XclExpString::Append( const OUString& rString )
 {
-    BuildAppend( rString.GetBuffer(), rString.Len() );
+    BuildAppend( rString.getStr(), rString.getLength() );
 }
 
-void XclExpString::AppendByte( const String& rString, rtl_TextEncoding eTextEnc )
+void XclExpString::AppendByte( const OUString& rString, rtl_TextEncoding eTextEnc )
 {
-    if( rString.Len() > 0 )
+    if (!rString.isEmpty())
     {
         // length may differ from length of rString
         OString aByteStr(OUStringToOString(rString, eTextEnc));

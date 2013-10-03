@@ -850,10 +850,10 @@ void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescap
     }
 }
 
-xub_StrLen ScGlobal::FindUnquoted( const String& rString, sal_Unicode cChar, xub_StrLen nStart, sal_Unicode cQuote )
+xub_StrLen ScGlobal::FindUnquoted( const OUString& rString, sal_Unicode cChar, xub_StrLen nStart, sal_Unicode cQuote )
 {
-    const sal_Unicode* const pStart = rString.GetBuffer();
-    const sal_Unicode* const pStop = pStart + rString.Len();
+    const sal_Unicode* const pStart = rString.getStr();
+    const sal_Unicode* const pStop = pStart + rString.getLength();
     const sal_Unicode* p = pStart + nStart;
     bool bQuoted = false;
     while (p < pStop)

@@ -269,7 +269,7 @@ public:
     /** Fills all cells of a line with the passed text (separators mode). */
     void                        ImplSetTextLineSep(
                                     sal_Int32 nLine, const OUString& rTextLine,
-                                    const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
+                                    const OUString& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
     /** Fills all cells of a line with the passed text (fixed width mode). */
     void                        ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine );
 

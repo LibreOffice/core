@@ -283,7 +283,7 @@ public:
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    SC_DLLPUBLIC sal_uInt16 Parse( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 Parse( const OUString&, ScDocument* = NULL,
                   const Details& rDetails = detailsOOOa1,
                   ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
@@ -447,7 +447,7 @@ public:
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
-    SC_DLLPUBLIC sal_uInt16 Parse( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 Parse( const OUString&, ScDocument* = NULL,
                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                   ScAddress::ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
@@ -455,9 +455,9 @@ public:
 
     SC_DLLPUBLIC sal_uInt16 ParseAny( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC sal_uInt16 ParseCols( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseCols( const OUString&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC sal_uInt16 ParseRows( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseRows( const OUString&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name

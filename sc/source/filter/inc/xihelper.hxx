@@ -163,7 +163,7 @@ public:
                         ~XclImpHFConverter();
 
     /** Parses the passed string and creates three new edit engine text objects. */
-    void                ParseString( const String& rHFString );
+    void                ParseString( const OUString& rHFString );
 
     /** Creates a ScPageHFItem and inserts it into the passed item set. */
     void                FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId ) const;

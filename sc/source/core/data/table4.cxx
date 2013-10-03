@@ -72,40 +72,40 @@ extern sal_uInt16 nScFillModeMouseModifier;     // global.cxx
 
 namespace {
 
-short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDigits = NULL )
+short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMinDigits = NULL )
 {
-    if ( !aValue.Len() )
+    if ( rValue.isEmpty() )
     {
         nVal = 0;
         return 0;
     }
-    const sal_Unicode* p = aValue.GetBuffer();
-    xub_StrLen nNeg = 0;
-    xub_StrLen nNum = 0;
+    const sal_Unicode* p = rValue.getStr();
+    sal_Int32 nNeg = 0;
+    sal_Int32 nNum = 0;
     if ( p[nNum] == '-' )
         nNum = nNeg = 1;
     while ( p[nNum] && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
         nNum++;
 
     sal_Unicode cNext = p[nNum];            // 0 if at the end
-    sal_Unicode cLast = p[aValue.Len()-1];
+    sal_Unicode cLast = p[rValue.getLength()-1];
 
     // #i5550# If there are numbers at the beginning and the end,
     // prefer the one at the beginning only if it's followed by a space.
     // Otherwise, use the number at the end, to enable things like IP addresses.
     if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(OUString(cLast)) ) )
     {   // number at the beginning
-        nVal = aValue.Copy( 0, nNum ).ToInt32();
+        nVal = rValue.copy( 0, nNum ).toInt32();
         //  any number with a leading zero sets the minimum number of digits
         if ( p[nNeg] == '0' && pMinDigits && ( nNum - nNeg > *pMinDigits ) )
             *pMinDigits = nNum - nNeg;
-        aValue.Erase( 0, nNum );
+        rValue = rValue.copy(nNum);
         return -1;
     }
     else
     {
         nNeg = 0;
-        xub_StrLen nEnd = nNum = aValue.Len() - 1;
+        sal_Int32 nEnd = nNum = rValue.getLength() - 1;
         while ( nNum && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
             nNum--;
         if ( p[nNum] == '-' )
@@ -115,11 +115,11 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDi
         }
         if ( nNum < nEnd - nNeg )
         {   // number at the end
-            nVal = aValue.Copy( nNum + 1 ).ToInt32();
+            nVal = rValue.copy( nNum + 1 ).toInt32();
             //  any number with a leading zero sets the minimum number of digits
             if ( p[nNum+1+nNeg] == '0' && pMinDigits && ( nEnd - nNum - nNeg > *pMinDigits ) )
                 *pMinDigits = nEnd - nNum - nNeg;
-            aValue.Erase( nNum + 1 );
+            rValue = rValue.copy(0, nNum + 1);
             return 1;
         }
     }
@@ -378,16 +378,12 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             //  -> longest number defines rMinDigits
 
             sal_Int32 nVal1;
-            String aString = aStr;
-            short nFlag1 = lcl_DecompValueString( aString, nVal1, &rMinDigits );
-            aStr = aString;
+            short nFlag1 = lcl_DecompValueString( aStr, nVal1, &rMinDigits );
             if ( nFlag1 )
             {
                 sal_Int32 nVal2;
                 GetString( nCol+nAddX, nRow+nAddY, aStr );
-                aString = aStr;
-                short nFlag2 = lcl_DecompValueString( aString, nVal2, &rMinDigits );
-                aStr = aString;
+                short nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                 if ( nFlag1 == nFlag2 )
                 {
                     rInc = (double)nVal2 - (double)nVal1;
@@ -401,9 +397,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
                             aStr = aCell.getString(pDocument);
-                            aString = aStr;
-                            nFlag2 = lcl_DecompValueString( aString, nVal2, &rMinDigits );
-                            aStr = aString;
+                            nFlag2 = lcl_DecompValueString( aStr, nVal2, &rMinDigits );
                             if ( nFlag1 == nFlag2 )
                             {
                                 double nDiff = (double)nVal2 - (double)nVal1;
@@ -428,8 +422,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             //  call DecompValueString to set rMinDigits
             sal_Int32 nDummy;
-            String aString = aStr;
-            lcl_DecompValueString( aString, nDummy, &rMinDigits );
+            lcl_DecompValueString( aStr, nDummy, &rMinDigits );
         }
     }
 }
@@ -765,7 +758,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             sal_uInt16 nCellDigits = 0;
             short nHeadNoneTail = 0;
             sal_Int32 nStringValue = 0;
-            String aValue;
+            OUString aValue;
             ScCellValue aSrcCell;
             CellType eCellType = CELLTYPE_NONE;
             bool bIsOrdinalSuffix = false;
@@ -803,7 +796,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         nHeadNoneTail = lcl_DecompValueString(
                                                 aValue, nStringValue, &nCellDigits );
 
-                                        bIsOrdinalSuffix = aValue.Equals(
+                                        bIsOrdinalSuffix = aValue.equals(
                                                 ScGlobal::GetOrdinalSuffix( nStringValue));
                                     }
                                     break;
@@ -930,7 +923,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
 String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
 {
-    String aValue;
+    OUString aValue;
 
     SCCOL nCol1 = rSource.aStart.Col();
     SCROW nRow1 = rSource.aStart.Row();
@@ -1049,10 +1042,10 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                             short nFlag = lcl_DecompValueString( aValue, nVal, &nCellDigits );
                             if ( nFlag < 0 )
                             {
-                                if (aValue.Equals( ScGlobal::GetOrdinalSuffix( nVal)))
+                                if (aValue.equals( ScGlobal::GetOrdinalSuffix( nVal)))
                                     aValue = ScGlobal::GetOrdinalSuffix( nVal + nDelta);
 
-                                aValue.Insert( lcl_ValueString( nVal + nDelta, nCellDigits ), 0 );
+                                aValue = lcl_ValueString( nVal + nDelta, nCellDigits ) + aValue;
                             }
                             else if ( nFlag > 0 )
                                 aValue += lcl_ValueString( nVal + nDelta, nCellDigits );
@@ -1141,10 +1134,10 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                 {
                     if ( nHeadNoneTail < 0 )
                     {
-                        if (aValue.Equals( ScGlobal::GetOrdinalSuffix( nVal)))
+                        if (aValue.equals( ScGlobal::GetOrdinalSuffix( nVal)))
                             aValue = ScGlobal::GetOrdinalSuffix( (sal_Int32)nStart );
 
-                        aValue.Insert( lcl_ValueString( (sal_Int32)nStart, nMinDigits ), 0 );
+                        aValue = lcl_ValueString( (sal_Int32)nStart, nMinDigits ) + aValue;
                     }
                     else
                         aValue += lcl_ValueString( (sal_Int32)nStart, nMinDigits );
@@ -1583,7 +1576,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if ( nMaxValue <= (double)LONG_MIN )
                         nMaxValue = (double)LONG_MIN + 1;
                 }
-                String aValue;
+                OUString aValue;
                 if (eCellType == CELLTYPE_STRING)
                     aValue = *aSrcCell.mpString;
                 else
@@ -1599,7 +1592,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bError = false;
                     bool bOverflow = false;
 
-                    bool bIsOrdinalSuffix = aValue.Equals( ScGlobal::GetOrdinalSuffix(
+                    bool bIsOrdinalSuffix = aValue.equals( ScGlobal::GetOrdinalSuffix(
                                 (sal_Int32)nStartVal));
 
                     rInner = nIStart;

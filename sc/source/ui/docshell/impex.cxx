@@ -490,17 +490,17 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_
 }
 
 
-void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, bool bZero )
+void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero )
 {
     rtl_TextEncoding eEnc = rStrm.GetStreamCharSet();
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
     {
         if ( !IsEndianSwap( rStrm ) )
-            rStrm.Write( rString.GetBuffer(), rString.Len() * sizeof(sal_Unicode) );
+            rStrm.Write( rString.getStr(), rString.getLength() * sizeof(sal_Unicode) );
         else
         {
-            const sal_Unicode* p = rString.GetBuffer();
-            const sal_Unicode* const pStop = p + rString.Len();
+            const sal_Unicode* p = rString.getStr();
+            const sal_Unicode* const pStop = p + rString.getLength();
             while ( p < pStop )
             {
                 rStrm << *p;
@@ -859,7 +859,7 @@ static void lcl_WriteString( SvStream& rStrm, String& rString, sal_Unicode cQuot
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
 
-static inline void lcl_WriteSimpleString( SvStream& rStrm, const String& rString )
+static inline void lcl_WriteSimpleString( SvStream& rStrm, const OUString& rString )
 {
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
@@ -1275,8 +1275,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     SCTAB nTab = aRange.aStart.Tab();
 
     bool    bFixed              = pExtOptions->IsFixedLen();
-    const String& rSeps         = pExtOptions->GetFieldSeps();
-    const sal_Unicode* pSeps    = rSeps.GetBuffer();
+    const OUString& rSeps       = pExtOptions->GetFieldSeps();
+    const sal_Unicode* pSeps    = rSeps.getStr();
     bool    bMerge              = pExtOptions->IsMergeSeps();
     sal_uInt16  nInfoCount      = pExtOptions->GetInfoCount();
     const sal_Int32* pColStart  = pExtOptions->GetColStart();
@@ -1556,10 +1556,10 @@ namespace {
  * @param rStr string to inspect.
  * @param cSep separator character.
  */
-bool hasLineBreaksOrSeps( const String& rStr, sal_Unicode cSep )
+bool hasLineBreaksOrSeps( const OUString& rStr, sal_Unicode cSep )
 {
-    const sal_Unicode* p = rStr.GetBuffer();
-    for (xub_StrLen i = 0, n = rStr.Len(); i < n; ++i, ++p)
+    const sal_Unicode* p = rStr.getStr();
+    for (sal_Int32 i = 0, n = rStr.getLength(); i < n; ++i, ++p)
     {
         sal_Unicode c = *p;
         if (c == cSep)
@@ -1710,7 +1710,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
 
     while( bOk )
     {
-        String aLine;
+        OUString aLine;
         String aText;
         OString aByteLine;
         SCCOL nCol = nStartCol;
@@ -1725,7 +1725,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
             aLine = OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
             if( rStrm.IsEof() )
                 break;
-            const sal_Unicode* p = aLine.GetBuffer();
+            const sal_Unicode* p = aLine.getStr();
             sal_Unicode cTag = *p++;
             if( cTag == 'C' )       // Content
             {
@@ -1787,7 +1787,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 else
                                 {
                                     double fVal = rtl_math_uStringToDouble( p,
-                                            aLine.GetBuffer() + aLine.Len(),
+                                            aLine.getStr() + aLine.getLength(),
                                             cDecSep, cGrpSep, NULL, NULL );
                                     pDoc->SetValue( nCol, nRow, aRange.aStart.Tab(), fVal );
                                 }
@@ -1917,10 +1917,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
             }
             else if( cTag == 'I' && *p == 'D' )
             {
-                aLine.Erase( 0, 4 );
-                if (aLine.EqualsAscii( "CALCOOO32" ))
+                aLine = aLine.copy(4);
+                if (aLine == "CALCOOO32")
                     eVersion = SYLK_OOO32;
-                else if (aLine.EqualsAscii( "SCALC3" ))
+                else if (aLine == "SCALC3")
                     eVersion = SYLK_SCALC3;
                 bMyDoc = (eVersion <= SYLK_OWN);
             }
@@ -2291,14 +2291,14 @@ static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
 }
 
 OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
-        const String& rFieldSeparators, sal_Unicode cFieldQuote )
+        const OUString& rFieldSeparators, sal_Unicode cFieldQuote )
 {
     OUString aStr;
     rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
 
     if (bEmbeddedLineBreak)
     {
-        const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
+        const sal_Unicode* pSeps = rFieldSeparators.getStr();
 
         QuoteType eQuoteState = FIELDEND_QUOTE;
         bool bFieldStart = true;

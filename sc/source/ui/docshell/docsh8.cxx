@@ -514,7 +514,7 @@ void lcl_GetColumnTypes(
         sal_Int32 nFieldLen = 0;
         sal_Int32 nPrecision = 0;
         sal_Int32 nDbType = sdbc::DataType::SQLNULL;
-        String aFieldName;
+        OUString aFieldName;
         OUString aString;
 
         // Feldname[,Type[,Width[,Prec]]]
@@ -580,11 +580,11 @@ void lcl_GetColumnTypes(
             // weitere nur alphanumerisch und Unterstrich erlaubt,
             // "_DBASELOCK" ist reserviert (obsolet weil erstes Zeichen kein Buchstabe),
             // keine doppelten Namen.
-            if ( !IsAsciiAlpha( aFieldName.GetChar(0) ) )
-                aFieldName.Insert( 'N', 0 );
+            if ( !IsAsciiAlpha( aFieldName[0] ) )
+                aFieldName = "N" + aFieldName;
             String aTmpStr;
             sal_Unicode c;
-            for ( const sal_Unicode* p = aFieldName.GetBuffer(); ( c = *p ) != 0; p++ )
+            for ( const sal_Unicode* p = aFieldName.getStr(); ( c = *p ) != 0; p++ )
             {
                 if ( IsAsciiAlpha( c ) || IsAsciiDigit( c ) || c == '_' )
                     aTmpStr += c;
@@ -592,8 +592,8 @@ void lcl_GetColumnTypes(
                     aTmpStr += '_';
             }
             aFieldName = aTmpStr;
-            if ( aFieldName.Len() > 10 )
-                aFieldName.Erase( 10 );
+            if ( aFieldName.getLength() > 10 )
+                aFieldName = aFieldName.copy(0,  10);
 
             if (!aFieldNames.insert(aFieldName).second)
             {   // doppelter Feldname, numerisch erweitern
@@ -612,8 +612,7 @@ void lcl_GetColumnTypes(
         }
         else
         {
-            aFieldName = 'N';
-            aFieldName += OUString::number(nCol+1);
+            aFieldName = "N" + OUString::number(nCol+1);
         }
 
         if ( !bTypeDefined )

@@ -448,14 +448,6 @@ struct ScImportParam
     bool            operator==  ( const ScImportParam& r ) const;
 };
 
-struct ScStringHashCode
-{
-    size_t operator()( const String& rStr ) const
-    {
-        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
-    }
-};
-
 class ScDocument;
 class ScDocShell;
 class ScDocShellRef;
@@ -663,7 +655,7 @@ SC_DLLPUBLIC    static void             EraseQuotes( OUString& rString, sal_Unic
         if cChar==cQuote the first cQuote character from nStart on is found.
         @returns offset if found, else STRING_NOTFOUND
      */
-SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const String& rString, sal_Unicode cChar, xub_StrLen nStart = 0, sal_Unicode cQuote = '\'' );
+SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const OUString& rString, sal_Unicode cChar, xub_StrLen nStart = 0, sal_Unicode cQuote = '\'' );
 
     /** Finds an unquoted instance of cChar in null-terminated pString. Same
         semantics as FindUnquoted( const String&, ...)

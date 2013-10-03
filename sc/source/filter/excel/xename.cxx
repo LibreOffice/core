@@ -328,7 +328,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_workbookParameter, "",
             // OOXTODO: XML_xlm, "",
             FSEND );
-    rWorkbook->writeEscaped( XclXmlUtils::ToOUString( msSymbol ) );
+    rWorkbook->writeEscaped( msSymbol );
     rWorkbook->endElement( XML_definedName );
 }
 

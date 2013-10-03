@@ -744,11 +744,6 @@ OString XclXmlUtils::ToOString( const OUString& s )
     return OUStringToOString( s, RTL_TEXTENCODING_UTF8  );
 }
 
-OString XclXmlUtils::ToOString( const String& s )
-{
-    return OString( s.GetBuffer(), s.Len(), RTL_TEXTENCODING_UTF8 );
-}
-
 OString XclXmlUtils::ToOString( const ScAddress& rAddress )
 {
     OUString sAddress(rAddress.Format(SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
@@ -836,11 +831,6 @@ OUString XclXmlUtils::ToOUString( const ScfUInt16Vec& rBuf, sal_Int32 nStart, sa
         nLength = (rBuf.size() - nStart);
 
     return (nLength > 0) ? OUString( &rBuf[nStart], nLength ) : OUString();
-}
-
-OUString XclXmlUtils::ToOUString( const String& s )
-{
-    return OUString( s.GetBuffer(), s.Len() );
 }
 
 OUString XclXmlUtils::ToOUString(

@@ -3949,7 +3949,7 @@ void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const 
 
 void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criterion>& rFilters) const
 {
-    typedef boost::unordered_map<String, long, ScStringHashCode> FieldNameMapType;
+    typedef boost::unordered_map<OUString, long, OUStringHash> FieldNameMapType;
     FieldNameMapType aFieldNames;
     ScDPTableData* pData = mpSource->GetData();
     long nColumnCount = pData->GetColumnCount();

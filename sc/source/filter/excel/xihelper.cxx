@@ -276,7 +276,7 @@ XclImpHFConverter::~XclImpHFConverter()
 {
 }
 
-void XclImpHFConverter::ParseString( const String& rHFString )
+void XclImpHFConverter::ParseString( const OUString& rHFString )
 {
     // edit engine objects
     mrEE.SetText( EMPTY_STRING );
@@ -301,8 +301,8 @@ void XclImpHFConverter::ParseString( const String& rHFString )
         xlPSHeight          /// Read font height ('&' is followed by num. digits, reads until non-digit).
     } eState = xlPSText;
 
-    const sal_Unicode* pChar = rHFString.GetBuffer();
-    const sal_Unicode* pNull = pChar + rHFString.Len(); // pointer to teminating null char
+    const sal_Unicode* pChar = rHFString.getStr();
+    const sal_Unicode* pNull = pChar + rHFString.getLength(); // pointer to teminating null char
     while( *pChar )
     {
         switch( eState )

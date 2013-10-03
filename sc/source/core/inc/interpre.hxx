@@ -189,7 +189,7 @@ void ReplaceCell( ScAddress& );     // for TableOp
 void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
 bool IsTableOpInRange( const ScRange& );
 sal_uLong GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
-double ConvertStringToValue( const String& );
+double ConvertStringToValue( const OUString& );
 double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
 double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
 double GetValueCellValue( const ScAddress&, double fOrig );

@@ -218,7 +218,7 @@ sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
     into account; minutes and seconds are limited to the value 59 as well.
  */
 
-double ScInterpreter::ConvertStringToValue( const String& rStr )
+double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 {
 #if 1
     // We keep this code until we provide a friendly way to convert string
@@ -237,12 +237,12 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
         // containing only spaces, be on par in these cases with what was
         // accepted in OOo and is in AOO (see also the else branch below) and
         // convert to 0 to prevent interoperability nightmares.
-        if (!rStr.Len())
+        if (rStr.isEmpty())
             return fValue;
-        else if (rStr.GetChar(0) == ' ')
+        else if (rStr[0] == ' ')
         {
-            const sal_Unicode* p = rStr.GetBuffer() + 1;
-            const sal_Unicode* const pStop = p - 1 + rStr.Len();
+            const sal_Unicode* p = rStr.getStr() + 1;
+            const sal_Unicode* const pStop = p - 1 + rStr.getLength();
             while (p < pStop && *p == ' ')
                 ++p;
             if (p == pStop)

@@ -58,7 +58,7 @@ void XclExpHeaderFooter::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     sal_Int32 nElement = GetRecId() == EXC_ID_HEADER ?  XML_oddHeader : XML_oddFooter;
     rWorksheet->startElement( nElement, FSEND );
-    rWorksheet->writeEscaped( XclXmlUtils::ToOUString( maHdrString ) );
+    rWorksheet->writeEscaped( maHdrString );
     rWorksheet->endElement( nElement );
 }
 

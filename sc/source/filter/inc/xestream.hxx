@@ -275,7 +275,6 @@ public:
     static OString ToOString( const Color& rColor );
     static OString ToOString( const OUString& s );
     static OString ToOString( const ScfUInt16Vec& rBuffer );
-    static OString ToOString( const String& s );
     static OString ToOString( const ScAddress& rRange );
     static OString ToOString( const ScRange& rRange );
     static OString ToOString( const ScRangeList& rRangeList );
@@ -286,7 +285,6 @@ public:
 
     static OUString ToOUString( const char* s );
     static OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
-    static OUString ToOUString( const String& s );
     static OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress,
                                 const ScTokenArray* pTokenArray, const ScCompiler::OpCodeMapPtr & xOpCodeMap );
     static OUString ToOUString( const XclExpString& s );

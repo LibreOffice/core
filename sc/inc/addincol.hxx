@@ -40,7 +40,7 @@ class SfxObjectShell;
 class ScUnoAddInFuncData;
 class ScFuncDesc;
 
-typedef ::boost::unordered_map< OUString, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< OUString > > ScAddInHashMap;
+typedef ::boost::unordered_map< OUString, const ScUnoAddInFuncData*, OUStringHash > ScAddInHashMap;
 
 enum ScAddInArgumentType
 {

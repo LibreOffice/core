@@ -67,7 +67,7 @@ private:
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
-    typedef ::boost::unordered_map< String, ScRange, ScStringHashCode, ::std::equal_to<String> > NameRangeMap;
+    typedef ::boost::unordered_map< OUString, ScRange, OUStringHash > NameRangeMap;
     NameRangeMap    aRangeMap;
     ScViewData*     pViewData;
     ScDocument*     pDoc;

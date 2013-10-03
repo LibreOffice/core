@@ -253,7 +253,7 @@ public:
     Size            GetTextSize();      // in 1/100mm
 
                     // actually private, public for SID_INPUT_SUM
-    void            InitRangeFinder( const String& rFormula );
+    void            InitRangeFinder(const OUString& rFormula);
 
     static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
 };

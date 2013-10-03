@@ -437,7 +437,7 @@ static bool lcl_isValidQuotedText( const String& rFormula, xub_StrLen nSrcPos, P
 }
 
 static bool lcl_parseExternalName(
-        const String& rSymbol,
+        const OUString& rSymbol,
         String& rFile,
         String& rName,
         const sal_Unicode cSep,
@@ -446,12 +446,12 @@ static bool lcl_parseExternalName(
 {
     /* TODO: future versions will have to support sheet-local names too, thus
      * return a possible sheet name as well. */
-    const sal_Unicode* const pStart = rSymbol.GetBuffer();
+    const sal_Unicode* const pStart = rSymbol.getStr();
     const sal_Unicode* p = pStart;
-    xub_StrLen nLen = rSymbol.Len();
+    sal_Int32 nLen = rSymbol.getLength();
     sal_Unicode cPrev = 0;
     String aTmpFile, aTmpName;
-    xub_StrLen i = 0;
+    sal_Int32 i = 0;
     bool bInName = false;
     if (cSep == '!')
     {
@@ -481,7 +481,7 @@ static bool lcl_parseExternalName(
                 // quote.
                 cPrev = c;
                 ++i; ++p;
-                for (xub_StrLen j = i; j < nLen; ++j, ++p)
+                for (sal_Int32 j = i; j < nLen; ++j, ++p)
                 {
                     c = *p;
                     if (c == '\'')
@@ -676,8 +676,8 @@ struct Convention_A1 : public ScCompiler::Convention
     static void MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol );
     static void MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow );
 
-    ParseResult parseAnyToken( const String& rFormula,
-                               xub_StrLen nSrcPos,
+    ParseResult parseAnyToken( const OUString& rFormula,
+                               sal_Int32 nSrcPos,
                                const CharClass* pCharClass) const
     {
         ParseResult aRet;
@@ -841,7 +841,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return sal_Unicode(0);
     }
 
-    virtual bool parseExternalName( const String& rSymbol, String& rFile, String& rName,
+    virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
@@ -1121,7 +1121,7 @@ struct ConventionXL
         return sal_Unicode(0);
     }
 
-    static bool parseExternalName( const String& rSymbol, String& rFile, String& rName,
+    static bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks )
@@ -1145,15 +1145,15 @@ struct ConventionXL
 
         rBuffer.append(sal_Unicode('['));
         rBuffer.append(sal_Unicode('\''));
-        String aFullName;
+        OUString aFullName;
         if (bEncodeUrl)
             aFullName = rFullName;
         else
             aFullName = INetURLObject::decode(rFullName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
 
-        const sal_Unicode* pBuf = aFullName.GetBuffer();
-        xub_StrLen nLen = aFullName.Len();
-        for (xub_StrLen i = 0; i < nLen; ++i)
+        const sal_Unicode* pBuf = aFullName.getStr();
+        sal_Int32 nLen = aFullName.getLength();
+        for (sal_Int32 i = 0; i < nLen; ++i)
         {
             const sal_Unicode c = pBuf[i];
             if (c == sal_Unicode('\''))
@@ -1183,12 +1183,12 @@ struct ConventionXL
         }
     }
 
-    static void parseExternalDocName( const String& rFormula, xub_StrLen& rSrcPos )
+    static void parseExternalDocName( const OUString& rFormula, sal_Int32& rSrcPos )
     {
-        xub_StrLen nLen = rFormula.Len();
-        const sal_Unicode* p = rFormula.GetBuffer();
+        sal_Int32 nLen = rFormula.getLength();
+        const sal_Unicode* p = rFormula.getStr();
         sal_Unicode cPrev = 0;
-        for (xub_StrLen i = rSrcPos; i < nLen; ++i)
+        for (sal_Int32 i = rSrcPos; i < nLen; ++i)
         {
             sal_Unicode c = p[i];
             if (i == rSrcPos)
@@ -1313,8 +1313,8 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         }
     }
 
-    virtual ParseResult parseAnyToken( const String& rFormula,
-                                       xub_StrLen nSrcPos,
+    virtual ParseResult parseAnyToken( const OUString& rFormula,
+                                       sal_Int32 nSrcPos,
                                        const CharClass* pCharClass) const
     {
         ParseResult aRet;
@@ -1335,7 +1335,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         return ConventionXL::getSpecialSymbol(eSymType);
     }
 
-    virtual bool parseExternalName( const String& rSymbol, String& rFile, String& rName,
+    virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
@@ -1503,8 +1503,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         }
     }
 
-    ParseResult parseAnyToken( const String& rFormula,
-                               xub_StrLen nSrcPos,
+    ParseResult parseAnyToken( const OUString& rFormula,
+                               sal_Int32 nSrcPos,
                                const CharClass* pCharClass) const
     {
         ConventionXL::parseExternalDocName(rFormula, nSrcPos);
@@ -1528,7 +1528,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return ConventionXL::getSpecialSymbol(eSymType);
     }
 
-    virtual bool parseExternalName( const String& rSymbol, String& rFile, String& rName,
+    virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
@@ -1797,7 +1797,7 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
 {
     cSymbol[MAXSTRLEN-1] = 0;       // Stopper
     sal_Unicode* pSym = cSymbol;
-    const sal_Unicode* const pStart = aFormula.GetBuffer();
+    const sal_Unicode* const pStart = aFormula.getStr();
     const sal_Unicode* pSrc = pStart + nSrcPos;
     bool bi18n = false;
     sal_Unicode c = *pSrc;
@@ -2311,8 +2311,8 @@ Label_MaskStateMachine:
     }
     if ( bi18n )
     {
-        nSrcPos = sal::static_int_cast<xub_StrLen>( nSrcPos + nSpaces );
-        String aSymbol;
+        nSrcPos = nSrcPos + nSpaces;
+        OUStringBuffer aSymbol;
         mnRangeOpPosInSymbol = -1;
         sal_uInt16 nErr = 0;
         do
@@ -2320,7 +2320,7 @@ Label_MaskStateMachine:
             bi18n = false;
             // special case  (e.g. $'sheetname' in OOO A1)
             if ( pStart[nSrcPos] == cSheetPrefix && pStart[nSrcPos+1] == '\'' )
-                aSymbol += pStart[nSrcPos++];
+                aSymbol.append(pStart[nSrcPos++]);
 
             ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pCharClass );
 
@@ -2329,13 +2329,13 @@ Label_MaskStateMachine:
             if ( aRes.EndPos <= nSrcPos )
             {   // ?!?
                 SetError( nErr = errIllegalChar );
-                nSrcPos = aFormula.Len();
-                aSymbol.Erase();
+                nSrcPos = aFormula.getLength();
+                aSymbol.truncate(0);
             }
             else
             {
-                aSymbol.Append( pStart + nSrcPos, (xub_StrLen)aRes.EndPos - nSrcPos );
-                nSrcPos = (xub_StrLen) aRes.EndPos;
+                aSymbol.append( pStart + nSrcPos, aRes.EndPos - nSrcPos);
+                nSrcPos = aRes.EndPos;
                 c = pStart[nSrcPos];
                 if ( aRes.TokenType & KParseType::SINGLE_QUOTE_NAME )
                 {   // special cases (e.g. 'sheetname'. or 'filename'# in OOO A1)
@@ -2344,25 +2344,25 @@ Label_MaskStateMachine:
                 // One range operator restarts parsing for second reference.
                 if (c == ':' && mnRangeOpPosInSymbol < 0)
                 {
-                    mnRangeOpPosInSymbol = aSymbol.Len();
+                    mnRangeOpPosInSymbol = aSymbol.getLength();
                     bi18n = true;
                 }
                 if ( bi18n )
-                    aSymbol += pStart[nSrcPos++];
+                    aSymbol.append(pStart[nSrcPos++]);
             }
         } while ( bi18n && !nErr );
-        xub_StrLen nLen = aSymbol.Len();
+        sal_Int32 nLen = aSymbol.getLength();
         if ( nLen >= MAXSTRLEN )
         {
             SetError( errStringOverflow );
             nLen = MAXSTRLEN-1;
         }
-        lcl_UnicodeStrNCpy( cSymbol, aSymbol.GetBuffer(), nLen );
+        lcl_UnicodeStrNCpy( cSymbol, aSymbol.getStr(), nLen );
         pSym = &cSymbol[nLen];
     }
     else
     {
-        nSrcPos = sal::static_int_cast<xub_StrLen>( pSrc - pStart );
+        nSrcPos = pSrc - pStart;
         *pSym = 0;
     }
     if (mnRangeOpPosInSymbol >= 0 && mnRangeOpPosInSymbol == (pSym-1) - &cSymbol[0])
@@ -2436,7 +2436,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     }
     if (!bFound)
     {
-        String aIntName;
+        OUString aIntName;
         if (mxSymbols->hasExternals())
         {
             // If symbols are set by filters get mapping to exact name.
@@ -2447,7 +2447,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
                 if (ScGlobal::GetAddInCollection()->GetFuncData( (*iExt).second))
                     aIntName = (*iExt).second;
             }
-            if (!aIntName.Len())
+            if (aIntName.isEmpty())
             {
                 // If that isn't found we might continue with rName lookup as a
                 // last resort by just falling through to FindFunction(), but
@@ -2456,7 +2456,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
                 return false;
             }
         }
-        if (!aIntName.Len())
+        if (aIntName.isEmpty())
         {
             // Old (deprecated) addins first for legacy.
             if (ScGlobal::GetFuncCollection()->findByName(cSymbol))
@@ -2471,10 +2471,10 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
                 aIntName = ScGlobal::GetAddInCollection()->FindFunction(
                         rName, !mxSymbols->isEnglish());
         }
-        if (aIntName.Len())
+        if (!aIntName.isEmpty())
         {
             ScRawToken aToken;
-            aToken.SetExternal( aIntName.GetBuffer() );     // international name
+            aToken.SetExternal( aIntName.getStr() );     // international name
             pRawToken = aToken.Clone();
             bFound = true;
         }
@@ -2533,7 +2533,7 @@ bool ScCompiler::IsValue( const String& rSym )
 
         if (nType == NUMBERFORMAT_LOGICAL)
         {
-            const sal_Unicode* p = aFormula.GetBuffer() + nSrcPos;
+            const sal_Unicode* p = aFormula.getStr() + nSrcPos;
             while( *p == ' ' )
                 p++;
             if (*p == '(')
@@ -2720,10 +2720,10 @@ bool ScCompiler::IsSingleReference( const String& rName )
     return ( nFlags & SCA_VALID ) != 0;
 }
 
-bool ScCompiler::IsReference( const String& rName )
+bool ScCompiler::IsReference( const OUString& rName )
 {
     // Has to be called before IsValue
-    sal_Unicode ch1 = rName.GetChar(0);
+    sal_Unicode ch1 = rName[0];
     sal_Unicode cDecSep = ( mxSymbols->isEnglish() ? '.' :
         ScGlobal::pLocaleData->getNumDecimalSep()[0] );
     if ( ch1 == cDecSep )
@@ -2744,7 +2744,7 @@ bool ScCompiler::IsReference( const String& rName )
                     break;      // may be 3:3, continue as usual
                 return false;
             }
-            sal_Unicode const * const pTabSep = rName.GetBuffer() + nPos;
+            sal_Unicode const * const pTabSep = rName.getStr() + nPos;
             sal_Unicode ch2 = pTabSep[1];   // maybe a column identifier
             if ( !(ch2 == '$' || rtl::isAsciiAlpha( ch2 )) )
                 return false;
@@ -2761,7 +2761,7 @@ bool ScCompiler::IsReference( const String& rName )
                 // and would produce wrong formulas if the conditions here are met.
                 // If you can live with these restrictions you may remove the
                 // check and return an unconditional FALSE.
-                String aTabName( rName.Copy( 0, nPos ) );
+                String aTabName( rName.copy( 0, nPos ) );
                 SCTAB nTab;
                 if ( !pDoc->GetTable( aTabName, nTab ) )
                     return false;
@@ -2787,7 +2787,7 @@ bool ScCompiler::IsReference( const String& rName )
         while (cSymbol[++nLen])
             ;
         cSymbol[mnRangeOpPosInSymbol] = 0;
-        nSrcPos -= static_cast<xub_StrLen>(nLen - mnRangeOpPosInSymbol);
+        nSrcPos -= (nLen - mnRangeOpPosInSymbol);
         mnRangeOpPosInSymbol = -1;
         mbRewind = true;
         return true;    // end all checks
@@ -2802,7 +2802,7 @@ bool ScCompiler::IsReference( const String& rName )
             case FormulaGrammar::CONV_XL_A1:
             case FormulaGrammar::CONV_XL_R1C1:
             case FormulaGrammar::CONV_XL_OOX:
-                if (rName.GetChar(0) == '\'' && IsDoubleReference( rName))
+                if (rName[0] == '\'' && IsDoubleReference( rName))
                     return true;
                 break;
             default:
@@ -3361,7 +3361,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 bColons = false;
             if ( nRefs && nRefs <= 2 )
             {   // reference twisted? 4A => A4 etc.
-                String aTab[2], aRef[2];
+                OUString aTab[2], aRef[2];
                 const ScAddress::Details aDetails( pConv->meConv, aPos );
                 if ( nRefs == 2 )
                 {
@@ -3376,18 +3376,18 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 sal_uInt16 nMask = SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW;
                 for ( int j=0; j<nRefs; j++ )
                 {
-                    xub_StrLen nTmp = 0;
-                    xub_StrLen nDotPos = STRING_NOTFOUND;
-                    while ( (nTmp = aRef[j].Search( '.', nTmp )) != STRING_NOTFOUND )
+                    sal_Int32 nTmp = 0;
+                    sal_Int32 nDotPos = -1;
+                    while ( (nTmp = aRef[j].indexOf( '.', nTmp )) != -1 )
                         nDotPos = nTmp++;      // the last one counts
-                    if ( nDotPos != STRING_NOTFOUND )
+                    if ( nDotPos != -1 )
                     {
-                        aTab[j] = aRef[j].Copy( 0, nDotPos + 1 );  // with '.'
-                        aRef[j].Erase( 0, nDotPos + 1 );
+                        aTab[j] = aRef[j].copy( 0, nDotPos + 1 );  // with '.'
+                        aRef[j] = aRef[j].copy( nDotPos + 1 );
                     }
                     String aOld( aRef[j] );
                     String aStr2;
-                    const sal_Unicode* p = aRef[j].GetBuffer();
+                    const sal_Unicode* p = aRef[j].getStr();
                     while ( *p && CharClass::isAsciiNumeric( OUString(*p) ) )
                         aStr2 += *p++;
                     aRef[j] = OUString( p );
@@ -3417,7 +3417,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
     }
 }
 
-static inline bool lcl_UpperAsciiOrI18n( String& rUpper, const OUString& rOrg, FormulaGrammar::Grammar eGrammar )
+static inline bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg, FormulaGrammar::Grammar eGrammar )
 {
     if (FormulaGrammar::isODFF( eGrammar ))
     {
@@ -3482,7 +3482,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
          * #REF!.#REF!#REF! parts. In case of reading ODF that is all
          * handled by IsPredetectedReference(), this case here remains for
          * manual/API input. */
-        String aBad( aFormula.Copy( nSrcPos-1 ) );
+        OUString aBad( aFormula.copy( nSrcPos-1 ) );
         eLastOp = pArr->AddBad( aBad )->GetOpCode();
         return false;
     }
@@ -3506,7 +3506,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if ( bMayBeFuncName )
     {
         // a function name must be followed by a parenthesis
-        const sal_Unicode* p = aFormula.GetBuffer() + nSrcPos;
+        const sal_Unicode* p = aFormula.getStr() + nSrcPos;
         while( *p == ' ' )
             p++;
         bMayBeFuncName = ( *p == '(' );
@@ -3515,7 +3515,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
 
-    String aUpper;
+    OUString aUpper;
 
     do
     {
@@ -3536,7 +3536,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
                 return true;
         }
 
-        aUpper.Erase();
+        aUpper = "";
         bool bAsciiUpper = false;
         if (bMayBeFuncName)
         {
@@ -3563,7 +3563,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
             return true;
         }
 
-        if (!aUpper.Len())
+        if (aUpper.isEmpty())
             bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
 
         // IsBoolean() before IsValue() to catch inline bools without the kludge
@@ -3609,7 +3609,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // the interpreter.
     aUpper = ScGlobal::pCharClass->lowercase( aUpper );
     ScRawToken aToken;
-    aToken.SetString( aUpper.GetBuffer() );
+    aToken.SetString( aUpper.getStr() );
     aToken.NewOpCode( ocBad );
     pRawToken = aToken.Clone();
     if ( bAutoCorrect )
@@ -3668,14 +3668,14 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         aCorrectedSymbol = "";
     }
     sal_uInt8 nForced = 0;   // ==formula forces recalc even if cell is not visible
-    if( aFormula.GetChar(nSrcPos) == '=' )
+    if( aFormula[nSrcPos] == '=' )
     {
         nSrcPos++;
         nForced++;
         if ( bAutoCorrect )
             aCorrectedFormula += "=";
     }
-    if( aFormula.GetChar(nSrcPos) == '=' )
+    if( aFormula[nSrcPos] == '=' )
     {
         nSrcPos++;
         nForced++;

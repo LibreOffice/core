@@ -1310,12 +1310,12 @@ bool ConvertDoubleRef( ScDocument* pDoc, const String& rRefString, SCTAB nDefTab
     return bRet;
 }
 
-sal_uInt16 ScAddress::Parse( const String& r, ScDocument* pDoc,
+sal_uInt16 ScAddress::Parse( const OUString& r, ScDocument* pDoc,
                          const Details& rDetails,
                          ExternalInfo* pExtInfo,
                          const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks )
 {
-    return lcl_ScAddress_Parse( r.GetBuffer(), pDoc, *this, rDetails, pExtInfo, pExternalLinks );
+    return lcl_ScAddress_Parse( r.getStr(), pDoc, *this, rDetails, pExtInfo, pExternalLinks );
 }
 
 bool ScRange::Intersects( const ScRange& r ) const
@@ -1443,12 +1443,12 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc, ScAdd
     return nRes1;
 }
 
-sal_uInt16 ScRange::Parse( const String& r, ScDocument* pDoc,
+sal_uInt16 ScRange::Parse( const OUString& r, ScDocument* pDoc,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo,
                        const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks )
 {
-    if ( r.Len() <= 0 )
+    if (r.isEmpty())
         return 0;
 
     switch (rDetails.eConv)
@@ -1459,11 +1459,11 @@ sal_uInt16 ScRange::Parse( const String& r, ScDocument* pDoc,
 
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-        return lcl_ScRange_Parse_XL_A1( *this, r.GetBuffer(), pDoc, false, pExtInfo,
+        return lcl_ScRange_Parse_XL_A1( *this, r.getStr(), pDoc, false, pExtInfo,
                 (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : NULL) );
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
-        return lcl_ScRange_Parse_XL_R1C1( *this, r.GetBuffer(), pDoc, rDetails, false, pExtInfo );
+        return lcl_ScRange_Parse_XL_R1C1( *this, r.getStr(), pDoc, rDetails, false, pExtInfo );
     }
 }
 
@@ -1486,14 +1486,14 @@ sal_uInt16 ScRange::ParseAny( const String& r, ScDocument* pDoc,
 }
 
 // Parse only full row references
-sal_uInt16 ScRange::ParseCols( const String& rStr, ScDocument* pDoc,
+sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
                            const ScAddress::Details& rDetails )
 {
-    const sal_Unicode* p = rStr.GetBuffer();
-    sal_uInt16 nRes = 0, ignored = 0;
-
-    if( NULL == p )
+    if (rStr.isEmpty())
         return 0;
+
+    const sal_Unicode* p = rStr.getStr();
+    sal_uInt16 nRes = 0, ignored = 0;
 
     (void)pDoc; // make compiler shutup we may need this later
 
@@ -1545,14 +1545,14 @@ sal_uInt16 ScRange::ParseCols( const String& rStr, ScDocument* pDoc,
 }
 
 // Parse only full row references
-sal_uInt16 ScRange::ParseRows( const String& rStr, ScDocument* pDoc,
+sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
                            const ScAddress::Details& rDetails )
 {
-    const sal_Unicode* p = rStr.GetBuffer();
-    sal_uInt16 nRes = 0, ignored = 0;
-
-    if( NULL == p )
+    if (rStr.isEmpty())
         return 0;
+
+    const sal_Unicode* p = rStr.getStr();
+    sal_uInt16 nRes = 0, ignored = 0;
 
     (void)pDoc; // make compiler shutup we may need this later
 

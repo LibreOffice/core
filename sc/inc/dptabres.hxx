@@ -681,7 +681,7 @@ private:
         size_t operator()(const ScDPItemData& r) const;
     };
     typedef ::boost::unordered_set<ScDPItemData, MemberHash> VisibleMemberType;
-    typedef ::boost::unordered_map<OUString, VisibleMemberType, ScStringHashCode> DimMemberType;
+    typedef ::boost::unordered_map<OUString, VisibleMemberType, OUStringHash> DimMemberType;
     DimMemberType maDimensions;
 
     ScDPSource* mpSource;

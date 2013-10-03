@@ -192,7 +192,7 @@ void removeChars(OUString& rStr, sal_Unicode c)
 
 }
 
-void ScInputHandler::InitRangeFinder( const String& rFormula )
+void ScInputHandler::InitRangeFinder( const OUString& rFormula )
 {
     DeleteRangeFinder();
     ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
@@ -212,10 +212,10 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
     if ( nDot != STRING_NOTFOUND )
         aDelimiters = aDelimiters.replaceAt( nDot, 1 , "");               // Delimiter ohne Punkt
 
-    const sal_Unicode* pChar = rFormula.GetBuffer();
-    xub_StrLen nLen = rFormula.Len();
-    xub_StrLen nPos = 0;
-    xub_StrLen nStart = 0;
+    const sal_Unicode* pChar = rFormula.getStr();
+    sal_Int32 nLen = rFormula.getLength();
+    sal_Int32 nPos = 0;
+    sal_Int32 nStart = 0;
     sal_uInt16 nCount = 0;
     ScRange aRange;
     while ( nPos < nLen && nCount < RANGEFIND_MAX )
@@ -252,7 +252,7 @@ handle_r1c1:
 
         if ( nPos > nStart )
         {
-            String aTest = rFormula.Copy( nStart, nPos-nStart );
+            String aTest = rFormula.copy( nStart, nPos-nStart );
             const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
             sal_uInt16 nFlags = aRange.ParseAny( aTest, pDoc, aAddrDetails );
             if ( nFlags & SCA_VALID )
@@ -395,11 +395,11 @@ static void lcl_RemoveLineEnd(OUString& rStr)
     removeChars(rStr, sal_Unicode('\n'));
 }
 
-xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
+xub_StrLen lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )
 {
     int nDir;
     sal_Unicode c1, c2 = 0;
-    c1 = rStr.GetChar( nPos );
+    c1 = rStr[nPos];
     switch ( c1 )
     {
     case '(' :
@@ -439,8 +439,8 @@ xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
     }
     if ( !nDir )
         return STRING_NOTFOUND;
-    xub_StrLen nLen = rStr.Len();
-    const sal_Unicode* p0 = rStr.GetBuffer();
+    xub_StrLen nLen = rStr.getLength();
+    const sal_Unicode* p0 = rStr.getStr();
     const sal_Unicode* p;
     const sal_Unicode* p1;
     sal_uInt16 nQuotes = 0;

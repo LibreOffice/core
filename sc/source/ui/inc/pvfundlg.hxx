@@ -233,7 +233,7 @@ private:
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
 
-    typedef ::boost::unordered_map<String, long, ScStringHashCode> DimNameIndexMap;
+    typedef ::boost::unordered_map<OUString, long, OUStringHash> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
 };

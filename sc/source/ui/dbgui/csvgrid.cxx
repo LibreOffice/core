@@ -718,7 +718,7 @@ void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
 
 void ScCsvGrid::ImplSetTextLineSep(
         sal_Int32 nLine, const OUString& rTextLine,
-        const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
+        const OUString& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
 {
     if( nLine < GetFirstVisLine() ) return;
 
@@ -730,7 +730,7 @@ void ScCsvGrid::ImplSetTextLineSep(
 
     // scan for separators
     String aCellText;
-    const sal_Unicode* pSepChars = rSepChars.GetBuffer();
+    const sal_Unicode* pSepChars = rSepChars.getStr();
     const sal_Unicode* pChar = rTextLine.getStr();
     sal_uInt32 nColIx = 0;
 

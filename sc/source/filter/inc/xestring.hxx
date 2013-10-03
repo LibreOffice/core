@@ -58,26 +58,11 @@ public:
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     explicit            XclExpString(
-                            const String& rString,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
-                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
-    /** Constructs an unformatted BIFF8 Unicode string.
-        @param nFlags  Modifiers for string export.
-        @param nMaxLen  The maximum number of characters to store in this string. */
-    explicit            XclExpString(
                             const OUString& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     // assign -----------------------------------------------------------------
-
-    /** Assigns an unformatted string, converts this object to a BIFF8 Unicode string.
-        @param nFlags  Modifiers for string export.
-        @param nMaxLen  The maximum number of characters to store in this string. */
-    void                Assign(
-                            const String& rString,
-                            XclStrFlags nFlags = EXC_STR_DEFAULT,
-                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Assigns an unformatted string, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
@@ -99,7 +84,7 @@ public:
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     void                AssignByte(
-                            const String& rString,
+                            const OUString& rString,
                             rtl_TextEncoding eTextEnc,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
@@ -108,11 +93,11 @@ public:
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF8 Unicode string. */
-    void                Append( const String& rString );
+    void                Append( const OUString& rString );
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
-    void                AppendByte( const String& rString, rtl_TextEncoding eTextEnc );
+    void                AppendByte( const OUString& rString, rtl_TextEncoding eTextEnc );
     /** Appends a character. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
     void                AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc );

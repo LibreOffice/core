@@ -2225,12 +2225,12 @@ void ScInterpreter::ScDecimal()
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fBase = ::rtl::math::approxFloor( GetDouble() );
-        String aStr( GetString() );
+        OUString aStr( GetString() );
         if ( !nGlobalError && 2 <= fBase && fBase <= 36 )
         {
             double fVal = 0.0;
             int nBase = (int) fBase;
-            const sal_Unicode* p = aStr.GetBuffer();
+            const sal_Unicode* p = aStr.getStr();
             while ( *p == ' ' || *p == '\t' )
                 p++;        // strip leading white space
             if ( nBase == 16 )

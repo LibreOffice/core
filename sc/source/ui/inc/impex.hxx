@@ -108,7 +108,7 @@ public:
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             String& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
             bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell );
-    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, bool bZero = false );
+    static  void    WriteUnicodeOrByteString( SvStream& rStrm, const OUString& rString, bool bZero = false );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
     static  inline  bool    IsEndianSwap( const SvStream& rStrm );
 
@@ -234,7 +234,7 @@ public:
 
   */
 SC_DLLPUBLIC OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
-        const String& rFieldSeparators, sal_Unicode cFieldQuote );
+        const OUString& rFieldSeparators, sal_Unicode cFieldQuote );
 
 #endif
 

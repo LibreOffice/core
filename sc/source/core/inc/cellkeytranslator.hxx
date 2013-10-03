@@ -40,7 +40,7 @@ struct ScCellKeyword
     ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const ::com::sun::star::lang::Locale& rLocale);
 };
 
-typedef ::boost::unordered_map< String, ::std::list<ScCellKeyword>, ScStringHashCode, ::std::equal_to<String> > ScCellKeywordHashMap;
+typedef ::boost::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHash > ScCellKeywordHashMap;
 
 /** Translate cell function keywords.
 

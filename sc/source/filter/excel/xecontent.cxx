@@ -358,14 +358,14 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     {
         sal_uInt16 nLevel;
         bool bRel;
-        String aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
+        OUString aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
 
         if( eProtocol == INET_PROT_SMB )
         {
             // #n382718# (and #n261623#) Convert smb notation to '\\'
             aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
-            aFileName = OUString( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
-            aFileName.SearchAndReplaceAll( '/', '\\' );
+            aFileName = aFileName.copy(4); // skip the 'smb:' part
+            aFileName = aFileName.replace('/', '\\');
         }
 
         if( !bRel )
@@ -1576,7 +1576,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                             sFormulaBuf.append( (sal_Unicode) ',' );
                         }
                         mxString1->Append( aToken );
-                        sFormulaBuf.append( XclXmlUtils::ToOUString( aToken ) );
+                        sFormulaBuf.append( aToken );
                     }
                     ::set_flag( mnFlags, EXC_DV_STRINGLIST );
 
