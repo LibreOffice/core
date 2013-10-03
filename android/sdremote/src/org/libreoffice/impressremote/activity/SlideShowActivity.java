@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
@@ -46,6 +47,8 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
 
     private Mode mMode;
 
+    private int mRingerMode;
+
     private CommunicationService mCommunicationService;
     private IntentsReceiver mIntentsReceiver;
 
@@ -58,6 +61,9 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         setUpHomeButton();
         setUpFragment();
         setUpKeepingScreenOn();
+
+        saveRingerMode(aSavedInstanceState);
+        enableQuietMode();
 
         bindService();
     }
@@ -102,6 +108,32 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         Preferences aPreferences = Preferences.getSettingsInstance(this);
 
         return aPreferences.getBoolean(Preferences.Keys.KEEP_SCREEN_ON);
+    }
+
+    private void saveRingerMode(Bundle aSavedInstanceState) {
+        if (aSavedInstanceState == null) {
+            mRingerMode = getAudioManager().getRingerMode();
+        } else {
+            mRingerMode = aSavedInstanceState.getInt(SavedStates.Keys.RINGER_MODE);
+        }
+    }
+
+    private AudioManager getAudioManager() {
+        return (AudioManager) getSystemService(AUDIO_SERVICE);
+    }
+
+    private void enableQuietMode() {
+        if (!isQuietModeRequired()) {
+            return;
+        }
+
+        getAudioManager().setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+    }
+
+    private boolean isQuietModeRequired() {
+        Preferences aPreferences = Preferences.getSettingsInstance(this);
+
+        return aPreferences.getBoolean(Preferences.Keys.QUIET_MODE);
     }
 
     private void bindService() {
@@ -509,21 +541,36 @@ public class SlideShowActivity extends SherlockFragmentActivity implements Servi
         super.onSaveInstanceState(aOutState);
 
         saveMode(aOutState);
+        rememberRingerMode(aOutState);
     }
 
     private void saveMode(Bundle aOutState) {
         aOutState.putSerializable(SavedStates.Keys.MODE, mMode);
     }
 
+    private void rememberRingerMode(Bundle aOutState) {
+        aOutState.putInt(SavedStates.Keys.RINGER_MODE, mRingerMode);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        disableQuietMode();
 
         if (!isServiceBound()) {
             return;
         }
 
         unbindService();
+    }
+
+    private void disableQuietMode() {
+        if (!isQuietModeRequired()) {
+            return;
+        }
+
+        getAudioManager().setRingerMode(mRingerMode);
     }
 
     private void unbindService() {

@@ -13,4 +13,10 @@
         android:title="@string/preferences_keep_screen_on_title"
         android:summary="@string/preferences_keep_screen_on_summary"/>
 
+    <CheckBoxPreference
+        android:key="quiet_mode"
+        android:defaultValue="false"
+        android:title="@string/preferences_quiet_mode_title"
+        android:summary="@string/preferences_quiet_mode_summary"/>
+
 </PreferenceScreen>

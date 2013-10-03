@@ -22,6 +22,7 @@ public final class SavedStates {
         public static final String MODE = "MODE";
         public static final String PIN = "PIN";
         public static final String PROGRESS_MESSAGE = "PROGRESS_MESSAGE";
+        public static final String RINGER_MODE = "RINGER_MODE";
     }
 }
 
