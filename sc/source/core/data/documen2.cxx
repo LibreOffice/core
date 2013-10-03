@@ -35,6 +35,7 @@
 #include <vcl/virdev.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
+#include "svl/stringpool.hxx"
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/crc.h>
@@ -439,6 +440,8 @@ ScDocument::~ScDocument()
 
     delete pPreviewFont;
     OSL_POSTCOND( !pAutoNameCache, "AutoNameCache still set in dtor" );
+
+    mpCellStringPool.reset();
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )

@@ -50,6 +50,7 @@
 
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
+namespace svl { class StringPool; }
 
 namespace sc {
     struct FormulaGroupContext;
@@ -242,6 +243,8 @@ friend class sc::EditTextIterator;
 private:
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
+
+    boost::scoped_ptr<svl::StringPool> mpCellStringPool;
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
