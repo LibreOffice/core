@@ -56,7 +56,7 @@ ScLookupCache::QueryCriteria::QueryCriteria( const ScLookupCache::QueryCriteria 
 {
     if (r.mbString && r.mpStr)
     {
-        mpStr = new String( *r.mpStr);
+        mpStr = new OUString( *r.mpStr);
         mbAlloc = mbString = true;
     }
 }

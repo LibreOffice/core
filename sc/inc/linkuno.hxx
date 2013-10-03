@@ -66,7 +66,7 @@ class ScSheetLinkObj : public cppu::WeakImplHelper4<
 private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
-    String                  aFileName;
+    OUString                aFileName;
     XRefreshListenerArr_Impl aRefreshListeners;
 
     ScTableLink*            GetLink_Impl() const;
@@ -74,7 +74,7 @@ private:
     void                    ModifyRefreshDelay_Impl( sal_Int32 nRefresh );
 
 public:
-                            ScSheetLinkObj(ScDocShell* pDocSh, const String& rName);
+                            ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName);
     virtual                 ~ScSheetLinkObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -378,16 +378,16 @@ class ScDDELinkObj : public cppu::WeakImplHelper5<
 {
 private:
     ScDocShell*             pDocShell;
-    String                  aAppl;
-    String                  aTopic;
-    String                  aItem;
+    OUString                aAppl;
+    OUString                aTopic;
+    OUString                aItem;
     XRefreshListenerArr_Impl aRefreshListeners;
 
     void                    Refreshed_Impl();
 
 public:
-                            ScDDELinkObj(ScDocShell* pDocSh, const String& rA,
-                                            const String& rT, const String& rI);
+                            ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
+                                            const OUString& rT, const OUString& rI);
     virtual                 ~ScDDELinkObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

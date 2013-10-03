@@ -76,7 +76,7 @@ SC_SIMPLE_SERVICE_INFO( ScSheetLinksObj, "ScSheetLinksObj", "com.sun.star.sheet.
 
 //------------------------------------------------------------------------
 
-ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const String& rName) :
+ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName) :
     aPropSet( lcl_GetSheetLinkMap() ),
     pDocShell( pDocSh ),
     aFileName( rName )
@@ -1045,8 +1045,8 @@ sal_Bool SAL_CALL ScAreaLinksObj::hasElements() throw(uno::RuntimeException)
 
 //------------------------------------------------------------------------
 
-ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const String& rA,
-                            const String& rT, const String& rI) :
+ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
+                            const OUString& rT, const OUString& rI) :
     pDocShell( pDocSh ),
     aAppl( rA ),
     aTopic( rT ),

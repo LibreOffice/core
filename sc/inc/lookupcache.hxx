@@ -63,7 +63,7 @@ public:
         union
         {
             double          mfVal;
-            const String *  mpStr;
+            const OUString *mpStr;
         };
         bool                mbAlloc  : 1;
         bool                mbString : 1;
@@ -94,7 +94,7 @@ public:
             mfVal = fVal;
         }
 
-        void setString( const String * pStr )
+        void setString( const OUString * pStr )
         {
             deleteString();
             mbAlloc = false;
@@ -102,11 +102,11 @@ public:
             mpStr = pStr;
         }
 
-        void setString( const String & rStr )
+        void setString( const OUString & rStr )
         {
             deleteString();
             mbAlloc = mbString = true;
-            mpStr = new String( rStr);
+            mpStr = new OUString( rStr);
         }
 
         bool operator==( const QueryCriteria & r ) const
