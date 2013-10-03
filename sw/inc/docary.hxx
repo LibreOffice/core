@@ -88,6 +88,7 @@ public:
     virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwCharFmt* pFmt) const;
     bool Contains(const SwCharFmt* pFmt) const;
+    void dumpAsXml(xmlTextWriterPtr w);
     /// free's any remaining child objects
     virtual ~SwCharFmts();
 };
@@ -98,6 +99,7 @@ public:
     virtual size_t GetFmtCount() const { return size(); }
     virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
     sal_uInt16 GetPos(const SwTxtFmtColl* pFmt) const;
+    void dumpAsXml(xmlTextWriterPtr w);
     virtual ~SwTxtFmtColls() {}
 };
 

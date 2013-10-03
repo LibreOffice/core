@@ -16,6 +16,7 @@
 #include "docufld.hxx"
 #include "txatbase.hxx"
 #include "fmtautofmt.hxx"
+#include "charfmt.hxx"
 #include <svl/itemiter.hxx>
 
 #include <libxml/encoding.h>
@@ -110,6 +111,8 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     m_pNodes->dumpAsXml( writer );
     mpMarkManager->dumpAsXml( writer );
     mpFldTypes->dumpAsXml( writer );
+    mpTxtFmtCollTbl->dumpAsXml( writer );
+    mpCharFmtTbl->dumpAsXml( writer );
     writer.endElement();
 }
 
@@ -259,6 +262,42 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     writer.writeFormatAttribute( "ptr", "%p", this );
     writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
+}
+
+void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
+{
+    WriterHelper writer(w);
+    if (size())
+    {
+        writer.startElement("swcharfmts");
+        for (size_t i = 0; i < size(); ++i)
+        {
+            SwCharFmt* pFmt = static_cast<SwCharFmt*>(GetFmt(i));
+            writer.startElement("swcharfmt");
+            OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+            writer.endElement();
+        }
+        writer.endElement();
+    }
+}
+
+void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w)
+{
+    WriterHelper writer(w);
+    if (size())
+    {
+        writer.startElement("swtxtfmtcolls");
+        for (size_t i = 0; i < size(); ++i)
+        {
+            SwTxtFmtColl* pColl = static_cast<SwTxtFmtColl*>(GetFmt(i));
+            writer.startElement("swtxtfmtcoll");
+            OString aName = OUStringToOString(pColl->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+            writer.endElement();
+        }
+        writer.endElement();
+    }
 }
 
 void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
