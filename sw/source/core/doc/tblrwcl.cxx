@@ -50,6 +50,7 @@
 #include <tblrwcl.hxx>
 #include <unochart.hxx>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/foreach.hpp>
 #include <switerator.hxx>
 
@@ -4191,7 +4192,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     while( pBaseLine->GetUpper() )
         pBaseLine = pBaseLine->GetUpper()->GetUpper();
 
-    _FndBox* pFndBox = 0;                // for insertion/deletion
+    boost::scoped_ptr<_FndBox> xFndBox;                // for insertion/deletion
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
@@ -4269,7 +4270,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                                     aParam, 0, true );
                         }
 
-                        pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst );
+                        xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst ));
 
                         // delete complete table when last row is deleted
                         if( !bBigger &&
@@ -4356,7 +4357,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                             ::lcl_InsDelSelLine( (*pLines)[ nBaseLinePos ],
                                                     aParam, 0, true );
                         }
-                        pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst );
+                        xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst ));
                         if( ppUndo )
                             *ppUndo = aParam.CreateUndo(
                                         bBigger ? UNDO_TABLE_INSROW
@@ -4401,25 +4402,25 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                         nRelDiff, ppUndo );
 
                     eTblChgMode = eOld;
-                    pFndBox = 0;
+                    xFndBox.reset();
                 }
             }
         }
         break;
     }
 
-    if( pFndBox )
+    if( xFndBox )
     {
         // then clean up the structure of all Lines
         GCLines();
 
         // Update Layout
-        if( bBigger || pFndBox->AreLinesToRestore( *this ) )
-            pFndBox->MakeFrms( *this );
+        if( bBigger || xFndBox->AreLinesToRestore( *this ) )
+            xFndBox->MakeFrms( *this );
 
         // TL_CHART2: it is currently unclear if sth has to be done here.
 
-        delete pFndBox;
+        xFndBox.reset();
 
         if( ppUndo && *ppUndo )
         {
