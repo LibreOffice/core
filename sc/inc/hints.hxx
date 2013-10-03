@@ -95,12 +95,12 @@ public:
 
 class ScLinkRefreshedHint : public SfxHint
 {
-    sal_uInt16      nLinkType;  // SC_LINKREFTYPE_...
-    String      aUrl;       // used for sheet links
-    String      aDdeAppl;   // used for dde links:
-    String      aDdeTopic;
-    String      aDdeItem;
-    sal_uInt8       nDdeMode;
+    sal_uInt16  nLinkType;  // SC_LINKREFTYPE_...
+    OUString    aUrl;       // used for sheet links
+    OUString    aDdeAppl;   // used for dde links:
+    OUString    aDdeTopic;
+    OUString    aDdeItem;
+    sal_uInt8   nDdeMode;
     ScAddress   aDestPos;   // used to identify area links
                             //! also use source data for area links?
 
@@ -109,16 +109,16 @@ public:
                     ScLinkRefreshedHint();
                     ~ScLinkRefreshedHint();
 
-    void            SetSheetLink( const String& rSourceUrl );
-    void            SetDdeLink( const String& rA, const String& rT, const String& rI, sal_uInt8 nM );
+    void            SetSheetLink( const OUString& rSourceUrl );
+    void            SetDdeLink( const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM );
     void            SetAreaLink( const ScAddress& rPos );
 
-    sal_uInt16              GetLinkType() const { return nLinkType; }
-    const String&       GetUrl() const      { return aUrl; }
-    const String&       GetDdeAppl() const  { return aDdeAppl; }
-    const String&       GetDdeTopic() const { return aDdeTopic; }
-    const String&       GetDdeItem() const  { return aDdeItem; }
-    sal_uInt8               GetDdeMode() const  { return nDdeMode; }
+    sal_uInt16          GetLinkType() const { return nLinkType; }
+    const OUString&     GetUrl() const      { return aUrl; }
+    const OUString&     GetDdeAppl() const  { return aDdeAppl; }
+    const OUString&     GetDdeTopic() const { return aDdeTopic; }
+    const OUString&     GetDdeItem() const  { return aDdeItem; }
+    sal_uInt8           GetDdeMode() const  { return nDdeMode; }
     const ScAddress&    GetDestPos() const  { return aDestPos; }
 };
 
@@ -127,20 +127,20 @@ public:
 class ScAutoStyleHint : public SfxHint
 {
     ScRange     aRange;
-    String      aStyle1;
-    String      aStyle2;
-    sal_uLong       nTimeout;
+    OUString    aStyle1;
+    OUString    aStyle2;
+    sal_uLong   nTimeout;
 
 public:
                     TYPEINFO();
-                    ScAutoStyleHint( const ScRange& rR, const String& rSt1,
-                                        sal_uLong nT, const String& rSt2 );
+                    ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
+                                        sal_uLong nT, const OUString& rSt2 );
                     ~ScAutoStyleHint();
 
     const ScRange&  GetRange() const    { return aRange; }
-    const String&   GetStyle1() const   { return aStyle1; }
-    sal_uInt32          GetTimeout() const  { return nTimeout; }
-    const String&   GetStyle2() const   { return aStyle2; }
+    const OUString& GetStyle1() const   { return aStyle1; }
+    sal_uInt32      GetTimeout() const  { return nTimeout; }
+    const OUString& GetStyle2() const   { return aStyle2; }
 };
 
 class ScDBRangeRefreshedHint : public SfxHint
@@ -157,14 +157,14 @@ public:
 
 class ScDataPilotModifiedHint : public SfxHint
 {
-    String          maName;
+    OUString        maName;
 
 public:
                     TYPEINFO();
-                    ScDataPilotModifiedHint( const String& rName );
+                    ScDataPilotModifiedHint( const OUString& rName );
                     ~ScDataPilotModifiedHint();
 
-    const String&   GetName() const { return maName; }
+    const OUString&   GetName() const { return maName; }
 };
 
 #endif

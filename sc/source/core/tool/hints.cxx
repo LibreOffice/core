@@ -74,14 +74,14 @@ ScLinkRefreshedHint::~ScLinkRefreshedHint()
 {
 }
 
-void ScLinkRefreshedHint::SetSheetLink( const String& rSourceUrl )
+void ScLinkRefreshedHint::SetSheetLink( const OUString& rSourceUrl )
 {
     nLinkType = SC_LINKREFTYPE_SHEET;
     aUrl = rSourceUrl;
 }
 
 void ScLinkRefreshedHint::SetDdeLink(
-            const String& rA, const String& rT, const String& rI, sal_uInt8 nM )
+            const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM )
 {
     nLinkType = SC_LINKREFTYPE_DDE;
     aDdeAppl  = rA;
@@ -98,8 +98,8 @@ void ScLinkRefreshedHint::SetAreaLink( const ScAddress& rPos )
 
 //      ScAutoStyleHint - STYLE() function has been called
 
-ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, const String& rSt1,
-                                        sal_uLong nT, const String& rSt2 ) :
+ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
+                                        sal_uLong nT, const OUString& rSt2 ) :
     aRange( rR ),
     aStyle1( rSt1 ),
     aStyle2( rSt2 ),
@@ -119,7 +119,7 @@ ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint()
 {
 }
 
-ScDataPilotModifiedHint::ScDataPilotModifiedHint( const String& rName )
+ScDataPilotModifiedHint::ScDataPilotModifiedHint( const OUString& rName )
     : maName(rName)
 {
 }
