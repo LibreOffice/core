@@ -309,8 +309,8 @@ void Test::testStringPool()
     CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
 
     OUString aAndy("Andy");
-    svl::StringPool::StrIdType si1 = aPool.getIdentifier("Andy");
-    svl::StringPool::StrIdType si2 = aPool.getIdentifier(aAndy);
+    sal_uIntPtr si1 = aPool.getIdentifier("Andy");
+    sal_uIntPtr si2 = aPool.getIdentifier(aAndy);
     CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be 0.", si1);
     CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be 0.", si2);
     CPPUNIT_ASSERT_EQUAL(si1, si2);

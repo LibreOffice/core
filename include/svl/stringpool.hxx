@@ -37,7 +37,6 @@ class SVL_DLLPUBLIC StringPool
     const CharClass* mpCharClass;
 
 public:
-    typedef sal_uIntPtr StrIdType;
 
     StringPool();
     StringPool( const CharClass* pCharClass );
@@ -61,7 +60,7 @@ public:
      *
      * @return unique ID of the string object.
      */
-    StrIdType getIdentifier( const OUString& rStr ) const;
+    sal_uIntPtr getIdentifier( const OUString& rStr ) const;
 
     /**
      * Get a unique ID of string object for case insensitive comparison. The
@@ -72,7 +71,7 @@ public:
      * @return unique ID of the string object usable for case insensitive
      *         comparison.
      */
-    StrIdType getIdentifierIgnoreCase( const OUString& rStr ) const;
+    sal_uIntPtr getIdentifierIgnoreCase( const OUString& rStr ) const;
 
     /**
      * Go through all string objects in the pool, and clear those that are no

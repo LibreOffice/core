@@ -45,13 +45,13 @@ rtl_uString* StringPool::intern( const OUString& rStr )
     return pOrig;
 }
 
-StringPool::StrIdType StringPool::getIdentifier( const OUString& rStr ) const
+sal_uIntPtr StringPool::getIdentifier( const OUString& rStr ) const
 {
     StrHashType::const_iterator it = maStrPool.find(rStr);
-    return (it == maStrPool.end()) ? 0 : reinterpret_cast<StrIdType>(it->pData);
+    return (it == maStrPool.end()) ? 0 : reinterpret_cast<sal_uIntPtr>(it->pData);
 }
 
-StringPool::StrIdType StringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
+sal_uIntPtr StringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
 {
     StrHashType::const_iterator itOrig = maStrPool.find(rStr);
     if (itOrig == maStrPool.end())
@@ -64,7 +64,7 @@ StringPool::StrIdType StringPool::getIdentifierIgnoreCase( const OUString& rStr 
         return 0;
 
     const rtl_uString* pUpper = itUpper->second.pData;
-    return reinterpret_cast<StrIdType>(pUpper);
+    return reinterpret_cast<sal_uIntPtr>(pUpper);
 }
 
 namespace {
