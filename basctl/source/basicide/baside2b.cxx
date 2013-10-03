@@ -1356,11 +1356,12 @@ void EditorWindow::ForceSyntaxTimeout()
 // ================
 //
 
-BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow) :
-    Window(pParent, WB_BORDER),
-    rModulWindow(*pModulWindow),
-    nCurYOffset(0), // memorize nCurYOffset and not take it from EditEngine
-    nMarkerPos(NoMarker)
+BreakPointWindow::BreakPointWindow (Window* pParent, ModulWindow* pModulWindow)
+    : Window(pParent, WB_BORDER)
+    , rModulWindow(*pModulWindow)
+    , nCurYOffset(0) // memorize nCurYOffset and not take it from EditEngine
+    , nMarkerPos(NoMarker)
+    , bErrorMarker(false)
 {
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
     SetHelpId(HID_BASICIDE_BREAKPOINTWINDOW);
