@@ -322,7 +322,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
     if( !pDocSh )
         return;
 
-    SvxMacroTableDtor *pDocTable = new SvxMacroTableDtor;
+    SvxMacroTableDtor aDocTable;
 
     uno::Reference< document::XEventsSupplier > xSup( pDocSh->GetModel(), uno::UNO_QUERY );
     uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
@@ -331,13 +331,13 @@ void SwHTMLWriter::OutBasicBodyEvents()
         SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( OUString::createFromAscii(aEventNames[i]) ), pDocSh, sal_True );
         if ( pMacro )
         {
-            pDocTable->Insert( aBodyEventTable[i].nEvent, *pMacro );
+            aDocTable.Insert( aBodyEventTable[i].nEvent, *pMacro );
             delete pMacro;
         }
     }
 
-    if( pDocTable && !pDocTable->empty() )
-        HTMLOutFuncs::Out_Events( Strm(), *pDocTable, aBodyEventTable,
+    if( !aDocTable.empty() )
+        HTMLOutFuncs::Out_Events( Strm(), aDocTable, aBodyEventTable,
                                   bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
 }
 
