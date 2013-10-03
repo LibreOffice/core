@@ -1480,12 +1480,21 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
                     pFndBox = 0;
             }
             if( pFndBox )
-                BOOST_FOREACH( _FndLine& rFndLine, pFndBox->GetLines() )
-                    lcl_CheckRow( rFndLine, &bMergeSelOk );
+            {
+                for (_FndLines::const_iterator it = pFndBox->GetLines().begin(),
+                        end = pFndBox->GetLines().end(); it != end; ++it)
+                {
+                    lcl_CheckRow(*it, &bMergeSelOk);
+                }
+            }
             else if( pFndLine )
-                for (_FndBoxes::const_iterator it = pFndLine->GetBoxes().begin();
-                     it != pFndLine->GetBoxes().end(); ++it)
+            {
+                for (_FndBoxes::const_iterator it = pFndLine->GetBoxes().begin(),
+                        end = pFndLine->GetBoxes().end(); it != end; ++it)
+                {
                     lcl_CheckCol(*it, &bMergeSelOk);
+                }
+            }
             if( !bMergeSelOk )
                 eRet = TBLMERGE_TOOCOMPLEX;
         }
