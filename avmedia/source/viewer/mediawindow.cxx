@@ -433,7 +433,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
             if( !aPrefSize.Width && !aPrefSize.Height )
             {
-                const BitmapEx aBmpEx( AVMEDIA_RESID( AVMEDIA_BMP_AUDIOLOGO ) );
+                const BitmapEx aBmpEx( getAudioLogo() );
                 apGraphic.reset( new Graphic( aBmpEx ) );
             }
         }
@@ -441,7 +441,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
     if( !xRet.is() && !apGraphic.get() && bAllowToCreateReplacementGraphic )
     {
-        const BitmapEx aBmpEx( AVMEDIA_RESID( AVMEDIA_BMP_EMPTYLOGO ) );
+        const BitmapEx aBmpEx( getEmptyLogo() );
         apGraphic.reset( new Graphic( aBmpEx ) );
     }
 
@@ -450,6 +450,17 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 
     return xRet;
 }
+
+BitmapEx MediaWindow::getAudioLogo()
+{
+    return BitmapEx(AVMEDIA_RESID(AVMEDIA_BMP_AUDIOLOGO));
+}
+
+BitmapEx MediaWindow::getEmptyLogo()
+{
+    return BitmapEx(AVMEDIA_RESID(AVMEDIA_BMP_EMPTYLOGO));
+}
+
 
 } // namespace avemdia
 

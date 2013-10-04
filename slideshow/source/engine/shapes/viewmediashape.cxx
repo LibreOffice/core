@@ -28,10 +28,12 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <vcl/window.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
+#include <vcl/window.hxx>
 
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -184,10 +186,32 @@ namespace slideshow
 
             if( !mpMediaWindow.get() && !mxPlayerWindow.is() )
             {
-                // fill the shape background with black
-                fillRect( pCanvas,
-                          rBounds,
-                          0x000000FFU );
+                // draw placeholder for no-video (no window) case
+                // no window and player == audio icon
+                // no window and no player == broken icon
+                BitmapEx aAudioLogo(mxPlayer.is() ?
+                    avmedia::MediaWindow::getAudioLogo() : avmedia::MediaWindow::getEmptyLogo() );
+
+                uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(
+                    pCanvas->getUNOCanvas()->getDevice(), aAudioLogo));
+
+                rendering::ViewState aViewState;
+                aViewState.AffineTransform = pCanvas->getViewState().AffineTransform;
+
+                rendering::RenderState aRenderState;
+                ::canvas::tools::initRenderState( aRenderState );
+
+                const ::Size aBmpSize( aAudioLogo.GetSizePixel() );
+
+                const ::basegfx::B2DVector aScale( rBounds.getWidth() / aBmpSize.Width(),
+                                                   rBounds.getHeight() / aBmpSize.Height() );
+                const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    aScale, rBounds.getMinimum()));
+                ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
+
+                pCanvas->getUNOCanvas()->drawBitmap( xBitmap,
+                                                     aViewState,
+                                                     aRenderState );
             }
 
             return true;
@@ -462,6 +486,13 @@ namespace slideshow
                                     mxPlayerWindow->setVisible( true );
                                     mxPlayerWindow->setEnable( true );
                                 }
+                            }
+
+                            if( !mxPlayerWindow.is() )
+                            {
+                                //if there was no playerwindow, then clear the mpMediaWindow too
+                                //so that we can draw a placeholder instead in that space
+                                mpMediaWindow.reset();
                             }
                         }
                     }

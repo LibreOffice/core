@@ -27,6 +27,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <vcl/bitmapex.hxx>
 #include <avmedia/avmediadllapi.h>
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME -1.0
@@ -106,6 +107,9 @@ namespace avmedia
         static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > grabFrame( const OUString& rURL,
                                                                                                   bool bAllowToCreateReplacementGraphic = false,
                                                                                                   double fMediaTime = AVMEDIA_FRAMEGRABBER_DEFAULTFRAME );
+
+        static BitmapEx getAudioLogo();
+        static BitmapEx getEmptyLogo();
 
     private:
 
