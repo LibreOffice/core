@@ -408,6 +408,12 @@ void SAL_CALL OApplicationController::disposing()
                             aFilter,
                             getStrippedDatabaseName(),
                             OUString() );
+
+                    // add to recent document list
+                    if ( aURL.GetProtocol() == INET_PROT_FILE )
+                        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                                                              (pFilter) ? pFilter->GetMimeType() : OUString(),
+                                                              (pFilter) ? pFilter->GetServiceName() : OUString() );
                 }
             }
 
