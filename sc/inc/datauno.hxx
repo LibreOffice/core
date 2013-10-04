@@ -495,7 +495,7 @@ class ScDatabaseRangeObj : public cppu::WeakImplHelper6<
 {
 private:
     ScDocShell*             pDocShell;
-    String                  aName;
+    OUString                aName;
     SfxItemPropertySet      aPropSet;
     XDBRefreshListenerArr_Impl aRefreshListeners;
     bool                    bIsUnnamed;
@@ -506,7 +506,7 @@ private:
     void                    Refreshed_Impl();
 
 public:
-    ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm);
+    ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm);
     SC_DLLPUBLIC ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab);
     virtual ~ScDatabaseRangeObj();
 

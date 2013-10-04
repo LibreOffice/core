@@ -1639,7 +1639,7 @@ void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
 
 //------------------------------------------------------------------------
 
-ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm) :
+ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm) :
     pDocShell( pDocSh ),
     aName( rNm ),
     aPropSet( lcl_GetDBRangePropertyMap() ),
