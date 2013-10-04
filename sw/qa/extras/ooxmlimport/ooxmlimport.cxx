@@ -40,6 +40,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <vcl/svapp.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <bordertest.hxx>
@@ -47,7 +48,7 @@
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define EMU_TO_MM100(EMU) (EMU / 360)
 
-class Test : public SwModelTestBase
+class TestDefault : public SwModelTestBase
 {
 public:
     void testN751054();
@@ -137,7 +138,7 @@ public:
     void testDefaultSectBreakCols();
     void testFdo69636();
 
-    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST_SUITE(TestDefault);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(run);
 #endif
@@ -147,113 +148,113 @@ private:
     void run();
 };
 
-void Test::run()
+void TestDefault::run()
 {
-    MethodEntry<Test> aMethods[] = {
-        {"n751054.docx", &Test::testN751054},
-        {"n751117.docx", &Test::testN751117},
-        {"n751017.docx", &Test::testN751017},
-        {"n750935.docx", &Test::testN750935},
-        {"n757890.docx", &Test::testN757890},
-        {"fdo49940.docx", &Test::testFdo49940},
-        {"n751077.docx", &Test::testN751077},
-        {"n705956-1.docx", &Test::testN705956_1},
-        {"n705956-2.docx", &Test::testN705956_2},
-        {"n747461.docx", &Test::testN747461},
-        {"n750255.docx", &Test::testN750255},
-        {"n652364.docx", &Test::testN652364},
-        {"n760764.docx", &Test::testN760764},
-        {"n764005.docx", &Test::testN764005},
-        {"n764745-alignment.docx", &Test::testN764745},
-        {"n766477.docx", &Test::testN766477},
-        {"n758883.docx", &Test::testN758883},
-        {"n766481.docx", &Test::testN766481},
-        {"n766487.docx", &Test::testN766487},
-        {"n693238.docx", &Test::testN693238},
-        {"numbering1.docx", &Test::testNumbering1},
-        {"bnc773061.docx", &Test::testBnc773061},
-        {"all_gaps_word.docx", &Test::testAllGapsWord},
-        {"n775906.docx", &Test::testN775906},
-        {"n775899.docx", &Test::testN775899},
-        {"n777345.docx", &Test::testN777345},
-        {"n777337.docx", &Test::testN777337},
-        {"n778836.docx", &Test::testN778836},
-        {"n778140.docx", &Test::testN778140},
-        {"n778828.docx", &Test::testN778828},
-        {"ink.docx", &Test::testInk},
-        {"n779834.docx", &Test::testN779834},
-        {"n779627.docx", &Test::testN779627},
-        {"n779941.docx", &Test::testN779941},
-        {"fdo55187.docx", &Test::testFdo55187},
-        {"n780563.docx", &Test::testN780563},
-        {"n780853.docx", &Test::testN780853},
-        {"n780843.docx", &Test::testN780843},
-        {"imgshadow.docx", &Test::testShadow},
-        {"n782061.docx", &Test::testN782061},
-        {"n782345.docx", &Test::testN782345},
-        {"n783638.docx", &Test::testN783638},
-        {"fdo52208.docx", &Test::testFdo52208},
-        {"n785767.docx", &Test::testN785767},
-        {"n773061.docx", &Test::testN773061},
-        {"n780645.docx", &Test::testN780645},
-        {"tableborder-finedash.docx", &Test::testFineTableDash},
-        {"n792778.docx", &Test::testN792778},
-        {"n793262.docx", &Test::testN793262},
-        {"n793998.docx", &Test::testN793998},
-        {"groupshape-line.docx", &Test::testGroupshapeLine},
-        {"n779642.docx", &Test::testN779642},
-        {"tblr-height.docx", &Test::testTbLrHeight},
-        {"fdo53985.docx", &Test::testFdo53985},
-        {"fdo59638.docx", &Test::testFdo59638},
-        {"fdo61343.docx", &Test::testFdo61343},
-        {"tools-line-numbering.docx", &Test::testToolsLineNumbering},
-        {"fdo60922.docx", &Test::testFdo60922},
-        {"fdo59273.docx", &Test::testFdo59273},
-        {"table_width.docx", &Test::testTableWidth},
-        {"conditionalstyles-tbllook.docx", &Test::testConditionalstylesTbllook},
-        {"fdo63685.docx", &Test::testFdo63685},
-        {"n592908-frame.docx", &Test::testN592908_Frame},
-        {"n592908-picture.docx", &Test::testN592908_Picture},
-        {"n779630.docx", &Test::testN779630},
-        {"indentation.docx", &Test::testIndentation},
-        {"page-border-shadow.docx", &Test::testPageBorderShadow},
-        {"n816593.docx", &Test::testN816593},
-        {"n820509.docx", &Test::testN820509},
-        {"n820788.docx", &Test::testN820788},
-        {"n820504.docx", &Test::testN820504},
-        {"fdo43641.docx", &Test::testFdo43641},
-        {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
-        {"fdo46361.docx", &Test::testFdo46361},
-        {"fdo65632.docx", &Test::testFdo65632},
-        {"fdo66474.docx", &Test::testFdo66474},
-        {"groupshape-rotation.docx", &Test::testGroupshapeRotation},
-        {"bnc780044_spacing.docx", &Test::testBnc780044Spacing},
-        {"table-auto-nested.docx", &Test::testTableAutoNested},
-        {"table-style-parprop.docx", &Test::testTableStyleParprop},
-        {"table-pagebreak.docx", &Test::testTablePagebreak},
-        {"fdo68607.docx", &Test::testFdo68607},
-        {"vml-text-vertical-adjust.docx", &Test::testVmlTextVerticalAdjust},
-        {"groupshape-sdt.docx", &Test::testGroupshapeSdt},
-        {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
-        {"fdo69636.docx", &Test::testFdo69636},
+    MethodEntry<TestDefault> aMethods[] = {
+        {"n751054.docx", &TestDefault::testN751054},
+        {"n751117.docx", &TestDefault::testN751117},
+        {"n751017.docx", &TestDefault::testN751017},
+        {"n750935.docx", &TestDefault::testN750935},
+        {"n757890.docx", &TestDefault::testN757890},
+        {"fdo49940.docx", &TestDefault::testFdo49940},
+        {"n751077.docx", &TestDefault::testN751077},
+        {"n705956-1.docx", &TestDefault::testN705956_1},
+        {"n705956-2.docx", &TestDefault::testN705956_2},
+        {"n747461.docx", &TestDefault::testN747461},
+        {"n750255.docx", &TestDefault::testN750255},
+        {"n652364.docx", &TestDefault::testN652364},
+        {"n760764.docx", &TestDefault::testN760764},
+        {"n764005.docx", &TestDefault::testN764005},
+        {"n764745-alignment.docx", &TestDefault::testN764745},
+        {"n766477.docx", &TestDefault::testN766477},
+        {"n758883.docx", &TestDefault::testN758883},
+        {"n766481.docx", &TestDefault::testN766481},
+        {"n766487.docx", &TestDefault::testN766487},
+        {"n693238.docx", &TestDefault::testN693238},
+        {"numbering1.docx", &TestDefault::testNumbering1},
+        {"bnc773061.docx", &TestDefault::testBnc773061},
+        {"all_gaps_word.docx", &TestDefault::testAllGapsWord},
+        {"n775906.docx", &TestDefault::testN775906},
+        {"n775899.docx", &TestDefault::testN775899},
+        {"n777345.docx", &TestDefault::testN777345},
+        {"n777337.docx", &TestDefault::testN777337},
+        {"n778836.docx", &TestDefault::testN778836},
+        {"n778140.docx", &TestDefault::testN778140},
+        {"n778828.docx", &TestDefault::testN778828},
+        {"ink.docx", &TestDefault::testInk},
+        {"n779834.docx", &TestDefault::testN779834},
+        {"n779627.docx", &TestDefault::testN779627},
+        {"n779941.docx", &TestDefault::testN779941},
+        {"fdo55187.docx", &TestDefault::testFdo55187},
+        {"n780563.docx", &TestDefault::testN780563},
+        {"n780853.docx", &TestDefault::testN780853},
+        {"n780843.docx", &TestDefault::testN780843},
+        {"imgshadow.docx", &TestDefault::testShadow},
+        {"n782061.docx", &TestDefault::testN782061},
+        {"n782345.docx", &TestDefault::testN782345},
+        {"n783638.docx", &TestDefault::testN783638},
+        {"fdo52208.docx", &TestDefault::testFdo52208},
+        {"n785767.docx", &TestDefault::testN785767},
+        {"n773061.docx", &TestDefault::testN773061},
+        {"n780645.docx", &TestDefault::testN780645},
+        {"tableborder-finedash.docx", &TestDefault::testFineTableDash},
+        {"n792778.docx", &TestDefault::testN792778},
+        {"n793262.docx", &TestDefault::testN793262},
+        {"n793998.docx", &TestDefault::testN793998},
+        {"groupshape-line.docx", &TestDefault::testGroupshapeLine},
+        {"n779642.docx", &TestDefault::testN779642},
+        {"tblr-height.docx", &TestDefault::testTbLrHeight},
+        {"fdo53985.docx", &TestDefault::testFdo53985},
+        {"fdo59638.docx", &TestDefault::testFdo59638},
+        {"fdo61343.docx", &TestDefault::testFdo61343},
+        {"tools-line-numbering.docx", &TestDefault::testToolsLineNumbering},
+        {"fdo60922.docx", &TestDefault::testFdo60922},
+        {"fdo59273.docx", &TestDefault::testFdo59273},
+        {"table_width.docx", &TestDefault::testTableWidth},
+        {"conditionalstyles-tbllook.docx", &TestDefault::testConditionalstylesTbllook},
+        {"fdo63685.docx", &TestDefault::testFdo63685},
+        {"n592908-frame.docx", &TestDefault::testN592908_Frame},
+        {"n592908-picture.docx", &TestDefault::testN592908_Picture},
+        {"n779630.docx", &TestDefault::testN779630},
+        {"indentation.docx", &TestDefault::testIndentation},
+        {"page-border-shadow.docx", &TestDefault::testPageBorderShadow},
+        {"n816593.docx", &TestDefault::testN816593},
+        {"n820509.docx", &TestDefault::testN820509},
+        {"n820788.docx", &TestDefault::testN820788},
+        {"n820504.docx", &TestDefault::testN820504},
+        {"fdo43641.docx", &TestDefault::testFdo43641},
+        {"table-auto-column-fixed-size.docx", &TestDefault::testTableAutoColumnFixedSize},
+        {"fdo46361.docx", &TestDefault::testFdo46361},
+        {"fdo65632.docx", &TestDefault::testFdo65632},
+        {"fdo66474.docx", &TestDefault::testFdo66474},
+        {"groupshape-rotation.docx", &TestDefault::testGroupshapeRotation},
+        {"bnc780044_spacing.docx", &TestDefault::testBnc780044Spacing},
+        {"table-auto-nested.docx", &TestDefault::testTableAutoNested},
+        {"table-style-parprop.docx", &TestDefault::testTableStyleParprop},
+        {"table-pagebreak.docx", &TestDefault::testTablePagebreak},
+        {"fdo68607.docx", &TestDefault::testFdo68607},
+        {"vml-text-vertical-adjust.docx", &TestDefault::testVmlTextVerticalAdjust},
+        {"groupshape-sdt.docx", &TestDefault::testGroupshapeSdt},
+        {"default-sect-break-cols.docx", &TestDefault::testDefaultSectBreakCols},
+        {"fdo69636.docx", &TestDefault::testFdo69636},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
-        MethodEntry<Test>& rEntry = aMethods[i];
+        MethodEntry<TestDefault>& rEntry = aMethods[i];
         load("/sw/qa/extras/ooxmlimport/data/",  rEntry.pName);
         (this->*rEntry.pMethod)();
         finish();
     }
 }
 
-void Test::testN751054()
+void TestDefault::testN751054()
 {
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
 }
 
-void Test::testN751117()
+void TestDefault::testN751117()
 {
     // First shape: the end should be an arrow, should be rotated and should be flipped.
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
@@ -275,7 +276,7 @@ void Test::testN751117()
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.LineShape"));
 }
 
-void Test::testN751017()
+void TestDefault::testN751017()
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xMasters(xTextFieldsSupplier->getTextFieldMasters());
@@ -321,7 +322,7 @@ void Test::testN751017()
     CPPUNIT_ASSERT(bFoundGet);
 }
 
-void Test::testN750935()
+void TestDefault::testN750935()
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
@@ -343,7 +344,7 @@ void Test::testN750935()
     CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
 }
 
-void Test::testN757890()
+void TestDefault::testN757890()
 {
     // The w:pStyle token affected the text outside the textbox.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -363,7 +364,7 @@ void Test::testN757890()
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
 }
 
-void Test::testFdo49940()
+void TestDefault::testFdo49940()
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -374,7 +375,7 @@ void Test::testFdo49940()
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aValue);
 }
 
-void Test::testN751077()
+void TestDefault::testN751077()
 {
 /*
 xray ThisComponent.DrawPage(1).getByIndex(0).String
@@ -389,7 +390,7 @@ xray ThisComponent.DrawPage(1).getByIndex(0).Anchor.PageStyleName
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(xTextContent->getAnchor(), "PageStyleName"));
 }
 
-void Test::testN705956_1()
+void TestDefault::testN705956_1()
 {
 /*
 Get the first image in the document and check it's the one image in the document.
@@ -417,7 +418,7 @@ xray image.AnchorType
     CPPUNIT_ASSERT_EQUAL( text::TextContentAnchorType_AS_CHARACTER, anchorType );
 }
 
-void Test::testN705956_2()
+void TestDefault::testN705956_2()
 {
 /*
 <v:shapetype> must be global, reachable even from <v:shape> inside another <w:pict>
@@ -431,7 +432,7 @@ xray image.FillColor
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xc0504d ), fillColor );
 }
 
-void Test::testN747461()
+void TestDefault::testN747461()
 {
 /*
 The document contains 3 images (Red, Black, Green, in this order), with explicit
@@ -458,7 +459,7 @@ after they are loaded.
     CPPUNIT_ASSERT_EQUAL( OUString( "Green" ), descr3 );
 }
 
-void Test::testN750255()
+void TestDefault::testN750255()
 {
 
 /*
@@ -483,7 +484,7 @@ xray para2.PageStyleName
 
 }
 
-void Test::testN652364()
+void TestDefault::testN652364()
 {
 /*
 Related to 750255 above, column break with columns on the page however should be a column break.
@@ -507,7 +508,7 @@ xray para2.PageStyleName
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle2 );
 }
 
-void Test::testN760764()
+void TestDefault::testN760764()
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -524,7 +525,7 @@ void Test::testN760764()
     CPPUNIT_ASSERT_EQUAL(8.f, fValue);
 }
 
-void Test::testN764005()
+void TestDefault::testN764005()
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
 
@@ -537,7 +538,7 @@ void Test::testN764005()
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
 }
 
-void Test::testN764745()
+void TestDefault::testN764745()
 {
 /*
 shape = ThisComponent.DrawPage.getByIndex(0)
@@ -565,7 +566,7 @@ xray ThisComponent.StyleFamilies.PageStyles.Default.Width
     CPPUNIT_ASSERT( pos.X > width / 2 );
 }
 
-void Test::testN766477()
+void TestDefault::testN766477()
 {
     /*
      * The problem was that the checkbox was not checked.
@@ -588,7 +589,7 @@ void Test::testN766477()
     CPPUNIT_ASSERT_EQUAL(OUString("Checkbox_Checked"), aElementNames[0]);
 }
 
-void Test::testN758883()
+void TestDefault::testN758883()
 {
     /*
      * The problem was that direct formatting of the paragraph was not applied
@@ -635,7 +636,7 @@ void Test::testN758883()
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, eAnchorType);
 }
 
-void Test::testN766481()
+void TestDefault::testN766481()
 {
     /*
      * The problem was that we had an additional paragraph before the pagebreak.
@@ -653,7 +654,7 @@ void Test::testN766481()
     CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
 }
 
-void Test::testN766487()
+void TestDefault::testN766487()
 {
     /*
      * The problem was that 1) the font size of the first para was too large 2) numbering had no first-line-indent.
@@ -683,7 +684,7 @@ void Test::testN766487()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-360)), nValue);
 }
 
-void Test::testN693238()
+void TestDefault::testN693238()
 {
     /*
      * The problem was that a continous section break at the end of the doc caused the margins to be ignored.
@@ -696,7 +697,7 @@ void Test::testN693238()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nValue);
 }
 
-void Test::testNumbering1()
+void TestDefault::testNumbering1()
 {
 /* <w:numPr> in the paragraph itself was overriden by <w:numpr> introduced by the paragraph's <w:pStyle>
 enum = ThisComponent.Text.createEnumeration
@@ -742,7 +743,7 @@ note that the indexes may get off as the implementation evolves, C++ code seache
     CPPUNIT_ASSERT_EQUAL( style::NumberingType::ARABIC, numberingType );
 }
 
-void Test::testBnc773061()
+void TestDefault::testBnc773061()
 {
     uno::Reference< text::XTextRange > paragraph = getParagraph( 1 );
     uno::Reference< text::XTextRange > normal = getRun( paragraph, 1, "Normal " );
@@ -756,13 +757,13 @@ void Test::testBnc773061()
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 100 ), getProperty< sal_Int32 >( lowered, "CharEscapementHeight" ));
 }
 
-void Test::testAllGapsWord()
+void TestDefault::testAllGapsWord()
 {
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
 }
 
-void Test::testN775906()
+void TestDefault::testN775906()
 {
     /*
      * The problem was that right margin (via direct formatting) erased the left/first margin (inherited from numbering style).
@@ -776,7 +777,7 @@ void Test::testN775906()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1905), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
-void Test::testN775899()
+void TestDefault::testN775899()
 {
     /*
      * The problem was that a floating table wasn't imported as a frame, then it contained fake paragraphs.
@@ -800,7 +801,7 @@ void Test::testN775899()
     CPPUNIT_ASSERT_EQUAL(sal_False, xParaEnum->hasMoreElements());
 }
 
-void Test::testN777345()
+void TestDefault::testN777345()
 {
     // The problem was that v:imagedata inside v:rect was ignored.
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
@@ -811,7 +812,7 @@ void Test::testN777345()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(2529763117U), aGraphic.GetChecksum());
 }
 
-void Test::testN777337()
+void TestDefault::testN777337()
 {
     /*
      * The problem was that the top and bottom margin on the first page was only 0.1cm instead of 1.7cm.
@@ -825,7 +826,7 @@ void Test::testN777337()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1702), getProperty<sal_Int32>(xPropertySet, "BottomMargin"));
 }
 
-void Test::testN778836()
+void TestDefault::testN778836()
 {
     /*
      * The problem was that the paragraph inherited margins from the numbering
@@ -836,7 +837,7 @@ void Test::testN778836()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), getProperty<sal_Int32>(getParagraph(0), "ParaFirstLineIndent"));
 }
 
-void Test::testN778140()
+void TestDefault::testN778140()
 {
     /*
      * The problem was that the paragraph top/bottom margins were incorrect due
@@ -846,7 +847,7 @@ void Test::testN778140()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(176), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
 }
 
-void Test::testN778828()
+void TestDefault::testN778828()
 {
     /*
      * The problem was that a page break after a continous section break caused
@@ -859,7 +860,7 @@ void Test::testN778828()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 }
 
-void Test::testInk()
+void TestDefault::testInk()
 {
     /*
      * The problem was that ~nothing was imported, except an empty CustomShape.
@@ -870,12 +871,12 @@ void Test::testInk()
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.OpenBezierShape"));
 }
 
-void Test::testN779834()
+void TestDefault::testN779834()
 {
     // This document simply crashed the importer.
 }
 
-void Test::testN779627()
+void TestDefault::testN779627()
 {
     /*
      * The problem was that the table left position was based on the tableCellMar left value
@@ -909,13 +910,13 @@ void Test::testN779627()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
 }
 
-void Test::testFdo55187()
+void TestDefault::testFdo55187()
 {
     // 0x010d was imported as a newline.
     getParagraph(1, OUString("lup\xc4\x8dka", 7, RTL_TEXTENCODING_UTF8));
 }
 
-void Test::testN780563()
+void TestDefault::testN780563()
 {
     /*
      * Make sure we have the table in the fly frame created
@@ -925,7 +926,7 @@ void Test::testN780563()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount( ));
 }
 
-void Test::testN780853()
+void TestDefault::testN780853()
 {
     /*
      * The problem was that the table was not imported.
@@ -937,7 +938,7 @@ void Test::testN780853()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
-void Test::testN780843()
+void TestDefault::testN780843()
 {
     /*
      * The problem was that wrong footer was picked.
@@ -957,7 +958,7 @@ void Test::testN780843()
     CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), xFooter->getString());
 }
 
-void Test::testShadow()
+void TestDefault::testShadow()
 {
     /*
      * The problem was that drop shadows on inline images were not being
@@ -970,7 +971,7 @@ void Test::testShadow()
     CPPUNIT_ASSERT(sal_Int32(aShadow.ShadowWidth) > 0);
 }
 
-void Test::testN782061()
+void TestDefault::testN782061()
 {
     /*
      * The problem was that the character escapement in the second run was -58.
@@ -978,7 +979,7 @@ void Test::testN782061()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-9), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapement"));
 }
 
-void Test::testN782345()
+void TestDefault::testN782345()
 {
     /*
      * The problem was that the page break was inserted before the 3rd para, instead of before the 2nd para.
@@ -986,7 +987,7 @@ void Test::testN782345()
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
-void Test::testN779941()
+void TestDefault::testN779941()
 {
     /*
      * Make sure top/bottom margins of tables are set to 0 (problem was: bottom margin set to 0.35cm)
@@ -1008,14 +1009,14 @@ void Test::testN779941()
     }
 }
 
-void Test::testN783638()
+void TestDefault::testN783638()
 {
     // The problem was that the margins of inline images were not zero.
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "LeftMargin"));
 }
 
-void Test::testFdo52208()
+void TestDefault::testFdo52208()
 {
     // The problem was that the document had 2 pages instead of 1.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -1026,7 +1027,7 @@ void Test::testFdo52208()
 }
 
 
-void Test::testN785767()
+void TestDefault::testN785767()
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
@@ -1037,7 +1038,7 @@ void Test::testN785767()
     CPPUNIT_ASSERT_MESSAGE("B1 must not have default width", sal_Int16(10000 / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
 }
 
-void Test::testN773061()
+void TestDefault::testN773061()
 {
 // xray ThisComponent.TextFrames(0).LeftBorderDistance
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1049,7 +1050,7 @@ void Test::testN773061()
     CPPUNIT_ASSERT_EQUAL( getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ), sal_Int32( 0 ));
 }
 
-void Test::testN780645()
+void TestDefault::testN780645()
 {
     // The problem was that when the number of cells didn't match the grid, we
     // didn't take care of direct cell widths.
@@ -1060,7 +1061,7 @@ void Test::testN780645()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2135), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position); // was 1999
 }
 
-void Test::testFineTableDash()
+void TestDefault::testFineTableDash()
 {
     // The problem was that finely dashed borders on tables were unsupported
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1071,7 +1072,7 @@ void Test::testFineTableDash()
     CPPUNIT_ASSERT_EQUAL(aBorder.RightLine.LineStyle, table::BorderLineStyle::FINE_DASHED);
 }
 
-void Test::testN792778()
+void TestDefault::testN792778()
 {
     /*
      * The problem was that the importer didn't handle complex groupshapes with groupshapes, textboxes and graphics inside.
@@ -1103,7 +1104,7 @@ void Test::testN792778()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11684), xInnerShape->getPosition().Y);
 }
 
-void Test::testGroupshapeLine()
+void TestDefault::testGroupshapeLine()
 {
     /*
      * Another fallout from n#792778, this time first the lines inside a
@@ -1134,7 +1135,7 @@ void Test::testGroupshapeLine()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getSize().Height);
 }
 
-void Test::testN793262()
+void TestDefault::testN793262()
 {
     uno::Reference<container::XEnumerationAccess> xHeaderText = getProperty< uno::Reference<container::XEnumerationAccess> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
     uno::Reference<container::XEnumeration> xHeaderParagraphs(xHeaderText->createEnumeration());
@@ -1149,7 +1150,7 @@ void Test::testN793262()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(76), getProperty<sal_Int32>(xTable->getCellByName("A1"), "TopBorderDistance"));
 }
 
-void Test::testN793998()
+void TestDefault::testN793998()
 {
     sal_Int32 nTextPortion = parseDump("/root/page/body/txt/Text[1]", "nWidth").toInt32(); // Width of the first (text) portion
     sal_Int32 nTabPortion = parseDump("/root/page/body/txt/Text[2]", "nWidth").toInt32(); // Width of the second (tab) portion
@@ -1159,7 +1160,7 @@ void Test::testN793998()
     CPPUNIT_ASSERT(nTextPortion + nTabPortion > nParagraph - nRightMargin);
 }
 
-void Test::testN779642()
+void TestDefault::testN779642()
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
 
@@ -1181,7 +1182,7 @@ void Test::testN779642()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", nValue, text::RelOrientation::PAGE_PRINT_AREA);
 }
 
-void Test::testTbLrHeight()
+void TestDefault::testTbLrHeight()
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -1191,7 +1192,7 @@ void Test::testTbLrHeight()
     CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(0), "SizeType"));
 }
 
-void Test::testFdo53985()
+void TestDefault::testFdo53985()
 {
     // Unhandled excetion prevented import of the rest of the document.
 
@@ -1200,7 +1201,7 @@ void Test::testFdo53985()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTables->getCount()); // Only 4 tables were imported.
 }
 
-void Test::testFdo59638()
+void TestDefault::testFdo59638()
 {
     // The problem was that w:lvlOverride inside w:num was ignores by dmapper.
 
@@ -1223,7 +1224,7 @@ void Test::testFdo59638()
     CPPUNIT_FAIL("no BulletChar property");
 }
 
-void Test::testFdo61343()
+void TestDefault::testFdo61343()
 {
     // The problem was that there were a groupshape in the doc, followed by an
     // OLE object, and this lead to a crash.
@@ -1232,7 +1233,7 @@ void Test::testFdo61343()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
 
-void Test::testToolsLineNumbering()
+void TestDefault::testToolsLineNumbering()
 {
     /*
      * Test the line numbering feature import (Tools->Line Numbering ...)
@@ -1267,13 +1268,13 @@ void Test::testToolsLineNumbering()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nValue);
 }
 
-void Test::testFdo60922()
+void TestDefault::testFdo60922()
 {
     // This was 0, not 100, due to wrong import of w:position w:val="0"
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapementHeight"));
 }
 
-void Test::testFdo59273()
+void TestDefault::testFdo59273()
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
@@ -1286,7 +1287,7 @@ void Test::testFdo59273()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7498), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[2].Position);
 }
 
-void Test::testTableWidth()
+void TestDefault::testTableWidth()
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -1298,7 +1299,7 @@ void Test::testTableWidth()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrames->getByIndex(0), "FrameWidthPercent"));
 }
 
-void Test::testConditionalstylesTbllook()
+void TestDefault::testConditionalstylesTbllook()
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -1307,13 +1308,13 @@ void Test::testConditionalstylesTbllook()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x7F7F7F), getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor"));
 }
 
-void Test::testFdo63685()
+void TestDefault::testFdo63685()
 {
     // Was 85697, i.e. original 114120 was converted to mm100 from twips, not from EMUs.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(getShape(1), "TopMargin"));
 }
 
-void Test::testN592908_Frame()
+void TestDefault::testN592908_Frame()
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
@@ -1321,7 +1322,7 @@ void Test::testN592908_Frame()
     CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
 }
 
-void Test::testN592908_Picture()
+void TestDefault::testN592908_Picture()
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     text::WrapTextMode eValue;
@@ -1329,7 +1330,7 @@ void Test::testN592908_Picture()
     CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
 }
 
-void Test::testN779630()
+void TestDefault::testN779630()
 {
     // First shape: date picker
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
@@ -1350,14 +1351,14 @@ void Test::testN779630()
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "Dropdown")));
 }
 
-void Test::testIndentation()
+void TestDefault::testIndentation()
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was RL_TB (e.g. right-to-left).
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>(xPropertySet, "WritingMode"));
 }
 
-void Test::testPageBorderShadow()
+void TestDefault::testPageBorderShadow()
 {
     // The problem was that in w:pgBorders, child elements had a w:shadow attribute, but that was ignored.
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "ShadowFormat");
@@ -1367,7 +1368,7 @@ void Test::testPageBorderShadow()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(48/8*20)), aShadow.ShadowWidth);
 }
 
-void Test::testN816593()
+void TestDefault::testN816593()
 {
     // Two consecutive <w:tbl> without any paragraph in between, but with different tblpPr. In this
     // case we need to have 2 different tables instead of 1
@@ -1376,7 +1377,7 @@ void Test::testN816593()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
-void Test::testN820509()
+void TestDefault::testN820509()
 {
     // Design mode was enabled.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -1390,7 +1391,7 @@ void Test::testN820509()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
 }
 
-void Test::testN820788()
+void TestDefault::testN820788()
 {
     // The problem was that AutoSize was not enabled for the text frame.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1400,7 +1401,7 @@ void Test::testN820788()
     CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xFrame, "SizeType"));
 }
 
-void Test::testN820504()
+void TestDefault::testN820504()
 {
     uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xFamiliesAccess(xFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
@@ -1414,7 +1415,7 @@ void Test::testN820504()
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
-void Test::testFdo43641()
+void TestDefault::testFdo43641()
 {
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
@@ -1422,7 +1423,7 @@ void Test::testFdo43641()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(928694)), xLine->getSize().Width);
 }
 
-void Test::testTableAutoColumnFixedSize()
+void TestDefault::testTableAutoColumnFixedSize()
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -1432,7 +1433,7 @@ void Test::testTableAutoColumnFixedSize()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
-void Test::testFdo46361()
+void TestDefault::testFdo46361()
 {
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroupShape->getByIndex(0), uno::UNO_QUERY);
@@ -1450,7 +1451,7 @@ void Test::testFdo46361()
     CPPUNIT_ASSERT_EQUAL(OUString("text\ntext\n"), uno::Reference<text::XTextRange>(xGroupShape->getByIndex(2), uno::UNO_QUERY)->getString());
 }
 
-void Test::testFdo65632()
+void TestDefault::testFdo65632()
 {
     // The problem was that the footnote text had fake redline: only the body
     // text has redline in fact.
@@ -1461,7 +1462,7 @@ void Test::testFdo65632()
     CPPUNIT_ASSERT_EQUAL(OUString("Text"), getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "TextPortionType"));
 }
 
-void Test::testFdo66474()
+void TestDefault::testFdo66474()
 {
     // The table wasn't relative (relative with was 0), so the table didn't
     // take the full available width, like it would have to.
@@ -1470,13 +1471,13 @@ void Test::testFdo66474()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
-void Test::testGroupshapeRotation()
+void TestDefault::testGroupshapeRotation()
 {
     // Rotation on groupshapes wasn't handled at all by the VML importer.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(315 * 100), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
 }
 
-void Test::testBnc780044Spacing()
+void TestDefault::testBnc780044Spacing()
 {
     // The document has global w:spacing in styles.xml , and local w:spacing in w:pPr, which however
     // only applied to text runs, not to as-character pictures. So the picture made the line higher.
@@ -1487,7 +1488,7 @@ void Test::testBnc780044Spacing()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
-void Test::testTableAutoNested()
+void TestDefault::testTableAutoNested()
 {
     // This was 176, when compat option is not enabled, the auto paragraph bottom margin value was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(494), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
@@ -1498,7 +1499,7 @@ void Test::testTableAutoNested()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(23051), getProperty<sal_Int32>(xTables->getByIndex(1), "Width"));
 }
 
-void Test::testTableStyleParprop()
+void TestDefault::testTableStyleParprop()
 {
     // The problem was that w:spacing's w:after=0 (a paragraph property) wasn't imported from table style.
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
@@ -1507,7 +1508,7 @@ void Test::testTableStyleParprop()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
 }
 
-void Test::testTablePagebreak()
+void TestDefault::testTablePagebreak()
 {
     // Page break inside table: should be ignored (was style::BreakType_PAGE_BEFORE before).
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, getProperty<style::BreakType>(getParagraphOrTable(2), "BreakType"));
@@ -1516,7 +1517,7 @@ void Test::testTablePagebreak()
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(3), "BreakType"));
 }
 
-void Test::testFdo68607()
+void TestDefault::testFdo68607()
 {
     // Bugdoc was 8 pages in Word, 1 in Writer due to pointlessly wrapping the
     // table in a frame. Exact layout may depend on fonts available, etc. --
@@ -1524,7 +1525,7 @@ void Test::testFdo68607()
     CPPUNIT_ASSERT(getPages() > 1);
 }
 
-void Test::testVmlTextVerticalAdjust()
+void TestDefault::testVmlTextVerticalAdjust()
 {
     uno::Reference<drawing::XShapes> xOuterGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xInnerGroupShape(xOuterGroupShape->getByIndex(0), uno::UNO_QUERY);
@@ -1533,7 +1534,7 @@ void Test::testVmlTextVerticalAdjust()
     CPPUNIT_ASSERT_EQUAL(drawing::TextVerticalAdjust_TOP, getProperty<drawing::TextVerticalAdjust>(xShape, "TextVerticalAdjust"));
 }
 
-void Test::testGroupshapeSdt()
+void TestDefault::testGroupshapeSdt()
 {
     // All problems here are due to the groupshape: we have a drawinglayer rectangle, not a writer textframe.
     uno::Reference<drawing::XShapes> xOuterGroupShape(getShape(1), uno::UNO_QUERY);
@@ -1547,7 +1548,7 @@ void Test::testGroupshapeSdt()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), "CharKerning"));
 }
 
-void Test::testDefaultSectBreakCols()
+void TestDefault::testDefaultSectBreakCols()
 {
     // First problem: the first two paragraphs did not have their own text section, so the whole document had two columns.
     uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First."), "TextSection");
@@ -1561,7 +1562,7 @@ void Test::testDefaultSectBreakCols()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
 }
 
-void Test::testFdo69636()
+void TestDefault::testFdo69636()
 {
     // The problem was that the mso-layout-flow-alt:bottom-to-top VML shape property wasn't handled for sw text frames.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1570,7 +1571,80 @@ void Test::testFdo69636()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(900), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xFrame->getText()), 1), "CharRotation"));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestDefault);
+
+class TestSmartart : public SwModelTestBase
+{
+public:
+
+    virtual void setUp()
+    {
+        SwModelTestBase::setUp();
+
+        SvtFilterOptions::Get().SetSmartArt2Shape( sal_True );
+    }
+
+    virtual void tearDown()
+    {
+        SvtFilterOptions::Get().SetSmartArt2Shape( sal_False );
+
+        SwModelTestBase::tearDown();
+    }
+
+    void testSmartart();
+
+    CPPUNIT_TEST_SUITE(TestSmartart);
+#if !defined(MACOSX) && !defined(WNT)
+    CPPUNIT_TEST(run);
+#endif
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+    void run();
+};
+
+void TestSmartart::run()
+{
+    MethodEntry<TestSmartart> aMethods[] = {
+        {"smartart.docx", &TestSmartart::testSmartart},
+    };
+    header();
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<TestSmartart>& rEntry = aMethods[i];
+        load("/sw/qa/extras/ooxmlimport/data/",  rEntry.pName);
+        (this->*rEntry.pMethod)();
+        finish();
+    }
+}
+
+void TestSmartart::testSmartart()
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
+
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nValue(0);
+    xPropertySet->getPropertyValue("FillColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), nValue); // If fill color is right, theme import is OK
+
+    uno::Reference<text::XTextRange> xTextRange(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sample"), xTextRange->getString()); // Shape has text
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextRange->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("ParaAdjust") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TestSmartart);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

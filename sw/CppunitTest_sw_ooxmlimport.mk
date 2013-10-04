@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport, \
     sal \
     test \
     unotest \
+    utl \
     sw \
     vcl \
 	$(gb_UWINAPI) \
@@ -50,6 +51,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
 	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    drawinglayer/drawinglayer \
     embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
@@ -69,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
     svl/source/fsstor/fsstorage \
     svl/util/svl \
     svtools/util/svt \
+    svx/util/svx \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
