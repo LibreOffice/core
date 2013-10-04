@@ -115,9 +115,9 @@ local repo
     fi
     echo "setting up push url for ${repo?}"
     if [ "${repo?}" = "helpcontent2" ] ; then
-	git config remote.origin.pushurl "ssh://${PUSH_USER}gerrit.libreoffice.org:29418/help"
+	git config remote.origin.pushurl "ssh://${PUSH_USER}logerrit/help"
     else
-	git config remote.origin.pushurl "ssh://${PUSH_USER}gerrit.libreoffice.org:29418/${repo?}"
+	git config remote.origin.pushurl "ssh://${PUSH_USER}logerrit/${repo?}"
     fi
     popd > /dev/null
 }
@@ -137,7 +137,7 @@ SUBMODULES_ACTIVE=""
 local repo
 
     for repo in ${SUBMODULES_ALL?} ; do
-	if [ -d ${repo?}/.git ] ; then
+	if [ -d ${repo?}/.git -o -f ${repo?}/.git ] ; then
 	    SUBMODULES_ACTIVE="${repo?} ${SUBMODULES_ACTIVE?}"
 	fi
     done
