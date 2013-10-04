@@ -81,7 +81,7 @@ public:
 class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 {
 private:
-    String          aName;
+    OUString        aName;
     ScDocument*     pDoc;
     SdrUndoGroup*   pUndoGroup;
     sal_Bool            bRecording;
@@ -96,7 +96,7 @@ private:
     void            ResizeLastRectFromAnchor( SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero = true );
 
 public:
-                    ScDrawLayer( ScDocument* pDocument, const String& rName );
+                    ScDrawLayer( ScDocument* pDocument, const OUString& rName );
     virtual         ~ScDrawLayer();
 
     virtual SdrPage*  AllocPage(bool bMasterPage);
@@ -109,7 +109,7 @@ public:
 
     sal_Bool            ScAddPage( SCTAB nTab );
     void            ScRemovePage( SCTAB nTab );
-    void            ScRenamePage( SCTAB nTab, const String& rNewName );
+    void            ScRenamePage( SCTAB nTab, const OUString& rNewName );
     void            ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
                     // incl. content, bAlloc=FALSE -> only content
     void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool bAlloc );
@@ -156,12 +156,12 @@ public:
 
                     //  GetVisibleName: name for navigator etc: GetPersistName or GetName
                     //  (ChartListenerCollection etc. must use GetPersistName directly)
-    static String   GetVisibleName( SdrObject* pObj );
+    static OUString GetVisibleName( SdrObject* pObj );
 
-    SdrObject*      GetNamedObject( const String& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const;
+    SdrObject*      GetNamedObject( const OUString& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const;
                     // if pnCounter != NULL, the search for a name starts with this index + 1,
                     // and the index really used is returned.
-    String          GetNewGraphicName( long* pnCounter = NULL ) const;
+    OUString        GetNewGraphicName( long* pnCounter = NULL ) const;
     void            EnsureGraphicNames();
 
     static bool IsCellAnchored( const SdrObject& rObj );

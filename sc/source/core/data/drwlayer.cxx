@@ -189,7 +189,7 @@ static void lcl_ReverseTwipsToMM( Rectangle& rRect )
 // -----------------------------------------------------------------------
 
 
-ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
+ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     FmFormModel( SvtPathOptions().GetPalettePath(),
                  NULL,                          // SfxItemPool* Pool
                  pGlobalDrawPersist ?
@@ -366,7 +366,7 @@ void ScDrawLayer::ScRemovePage( SCTAB nTab )
     ResetTab(nTab, pDoc->GetTableCount()-1);
 }
 
-void ScDrawLayer::ScRenamePage( SCTAB nTab, const String& rNewName )
+void ScDrawLayer::ScRenamePage( SCTAB nTab, const OUString& rNewName )
 {
     ScDrawPage* pPage = (ScDrawPage*) GetPage(static_cast<sal_uInt16>(nTab));
     if (pPage)
@@ -1650,7 +1650,7 @@ Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, boo
     return aCellRect;
 }
 
-String ScDrawLayer::GetVisibleName( SdrObject* pObj )
+OUString ScDrawLayer::GetVisibleName( SdrObject* pObj )
 {
     String aName = pObj->GetName();
     if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
@@ -1676,7 +1676,7 @@ inline sal_Bool IsNamedObject( SdrObject* pObj, const String& rName )
               static_cast<SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
 }
 
-SdrObject* ScDrawLayer::GetNamedObject( const String& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const
+SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, SCTAB& rFoundTab ) const
 {
     sal_uInt16 nTabCount = GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nTabCount; nTab++)
@@ -1704,10 +1704,10 @@ SdrObject* ScDrawLayer::GetNamedObject( const String& rName, sal_uInt16 nId, SCT
     return NULL;
 }
 
-String ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
+OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
 {
-    String aBase = ScGlobal::GetRscString(STR_GRAPHICNAME);
-    aBase += ' ';
+    OUString aBase = ScGlobal::GetRscString(STR_GRAPHICNAME);
+    aBase += " ";
 
     bool bThere = true;
     String aGraphicName;
