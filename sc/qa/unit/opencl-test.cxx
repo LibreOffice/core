@@ -54,8 +54,10 @@ public:
             const OUString &rUserData, unsigned int nFilterFlags,
             unsigned int nClipboardID, unsigned int nFilterVersion);
     void testSharedFormulaXLS();
+    void testSharedFormulaXLSGroundWater();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
+    CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -85,8 +87,8 @@ void ScOpenclTest::enableOpenCL(ScDocShell* pShell)
     pShell->SetFormulaOptions(rOpt);
 }
 
-#if 0
-void ScOpenclTest::testSharedFormulaXLS()
+
+void ScOpenclTest::testSharedFormulaXLSGroundWater()
 {
     ScDocShellRef xDocSh = loadDoc("ground-water-daily.", XLS);
 
@@ -96,7 +98,7 @@ void ScOpenclTest::testSharedFormulaXLS()
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
 
-    ScDocShellRef xDocShRes = loadDoc("ground-water-daily-result.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("ground-water-daily.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -109,7 +111,7 @@ void ScOpenclTest::testSharedFormulaXLS()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-#else
+
 void ScOpenclTest::testSharedFormulaXLS()
 {
     ScDocShellRef xDocSh = loadDoc("sum_ex.", XLS);
@@ -139,9 +141,6 @@ void ScOpenclTest::testSharedFormulaXLS()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-
-
-#endif
 
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
