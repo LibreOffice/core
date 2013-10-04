@@ -505,7 +505,7 @@ OUString ScChartListenerCollection::getUniqueName(const OUString& rPrefix) const
     return OUString();
 }
 
-void ScChartListenerCollection::ChangeListening( const String& rName,
+void ScChartListenerCollection::ChangeListening( const OUString& rName,
         const ScRangeListRef& rRangeListRef, bool bDirty )
 {
     ScChartListener* pCL = findByName(rName);

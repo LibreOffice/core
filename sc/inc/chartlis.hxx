@@ -178,7 +178,7 @@ public:
      */
     OUString getUniqueName(const OUString& rPrefix) const;
 
-    void            ChangeListening( const String& rName,
+    void            ChangeListening( const OUString& rName,
                                     const ScRangeListRef& rRangeListRef,
                                     bool bDirty = false );
     // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
