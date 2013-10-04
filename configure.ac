@@ -11992,10 +11992,9 @@ AC_SUBST(OOO_JUNIT_JAR)
 AC_SUBST(SCPDEFS)
 
 #
-# check for wget and md5sum
+# check for wget and curl
 #
 WGET=
-MD5SUM=
 CURL=
 
 if test "$enable_fetch_external" != "no"; then
@@ -12014,6 +12013,16 @@ done
 if test -z "$WGET" -a -z "$CURL"; then
     AC_MSG_ERROR([neither wget nor curl found!])
 fi
+
+fi
+
+AC_SUBST(WGET)
+AC_SUBST(CURL)
+
+#
+# check for md5sum
+#
+MD5SUM=
 
 for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
     if test "$i" = "md5"; then
@@ -12040,10 +12049,6 @@ if test -z "$MD5SUM"; then
     AC_MSG_ERROR([no md5sum: found!])
 fi
 
-fi
-
-AC_SUBST(WGET)
-AC_SUBST(CURL)
 AC_SUBST(MD5SUM)
 
 dnl ===================================================================
