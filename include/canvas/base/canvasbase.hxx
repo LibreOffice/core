@@ -398,11 +398,11 @@ namespace canvas
 
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawTextLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XTextLayout >& layoutetText,
+            drawTextLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XTextLayout >& laidOutText,
                             const ::com::sun::star::rendering::ViewState&                                       viewState,
                             const ::com::sun::star::rendering::RenderState&                                     renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
         {
-            tools::verifyArgs(layoutetText, viewState, renderState,
+            tools::verifyArgs(laidOutText, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -411,7 +411,7 @@ namespace canvas
             mbSurfaceDirty = true;
             maCanvasHelper.modifying();
 
-            return maCanvasHelper.drawTextLayout( this, layoutetText, viewState, renderState );
+            return maCanvasHelper.drawTextLayout( this, laidOutText, viewState, renderState );
         }
 
 

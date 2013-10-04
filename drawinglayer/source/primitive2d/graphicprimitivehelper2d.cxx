@@ -300,7 +300,7 @@ namespace drawinglayer
                     if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
                         || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
                     {
-                        // clipping needed. Embed to MaskPrimitive2D. Create childs and mask polygon
+                        // clipping needed. Embed to MaskPrimitive2D. Create children and mask polygon
                         basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
                         aMaskPolygon.transform(rTransform);
 

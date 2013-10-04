@@ -2006,7 +2006,7 @@ sal_Bool SfxDispatcher::_FillState
 
         // Determine the object and call the Message of this object
         SfxShell *pSh = GetShell(rSvr.GetShellLevel());
-        DBG_ASSERT(pSh, "ObjektShell not found");
+        DBG_ASSERT(pSh, "ObjectShell not found");
 
         SfxStateFunc pFunc;
 

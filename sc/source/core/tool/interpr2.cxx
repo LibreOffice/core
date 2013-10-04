@@ -972,10 +972,10 @@ void ScInterpreter::ScDIA()
 }
 
 double ScInterpreter::ScGetGDA(double fWert, double fRest, double fDauer,
-                double fPeriode, double fFaktor)
+                double fPeriode, double fFactor)
 {
     double fGda, fZins, fAlterWert, fNeuerWert;
-    fZins = fFaktor / fDauer;
+    fZins = fFactor / fDauer;
     if (fZins >= 1.0)
     {
         fZins = 1.0;
@@ -1003,20 +1003,20 @@ void ScInterpreter::ScGDA()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 4, 5 ) )
     {
-        double nFaktor;
+        double nFactor;
         if (nParamCount == 5)
-            nFaktor = GetDouble();
+            nFactor = GetDouble();
         else
-            nFaktor = 2.0;
+            nFactor = 2.0;
         double nPeriode = GetDouble();
         double nDauer   = GetDouble();
         double nRest    = GetDouble();
         double nWert    = GetDouble();
-        if (nWert < 0.0 || nRest < 0.0 || nFaktor <= 0.0 || nRest > nWert
+        if (nWert < 0.0 || nRest < 0.0 || nFactor <= 0.0 || nRest > nWert
                         || nPeriode < 1.0 || nPeriode > nDauer)
             PushIllegalArgument();
         else
-            PushDouble(ScGetGDA(nWert, nRest, nDauer, nPeriode, nFaktor));
+            PushDouble(ScGetGDA(nWert, nRest, nDauer, nPeriode, nFactor));
     }
 }
 
@@ -1065,7 +1065,7 @@ void ScInterpreter::ScGDA2()
 }
 
 double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
-                             double fDauer1,double fPeriode,double fFaktor)
+                             double fDauer1,double fPeriode,double fFactor)
 {
     double fVdb=0;
     double fIntEnd   = ::rtl::math::approxCeil(fPeriode);
@@ -1082,7 +1082,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
     {
         if(!bNowLia)
         {
-            fGda = ScGetGDA(fWert, fRest, fDauer, (double) i, fFaktor);
+            fGda = ScGetGDA(fWert, fRest, fDauer, (double) i, fFactor);
             fLia = fRestwert/ (fDauer1 - (double) (i-1));
 
             if (fLia > fGda)
@@ -1120,23 +1120,23 @@ void ScInterpreter::ScVDB()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
     {
-        double fWert, fRest, fDauer, fAnfang, fEnde, fFaktor, fVdb = 0.0;
+        double fWert, fRest, fDauer, fAnfang, fEnde, fFactor, fVdb = 0.0;
         bool bFlag;
         if (nParamCount == 7)
             bFlag = GetBool();
         else
             bFlag = false;
         if (nParamCount >= 6)
-            fFaktor = GetDouble();
+            fFactor = GetDouble();
         else
-            fFaktor = 2.0;
+            fFactor = 2.0;
         fEnde   = GetDouble();
         fAnfang = GetDouble();
         fDauer  = GetDouble();
         fRest   = GetDouble();
         fWert   = GetDouble();
         if (fAnfang < 0.0 || fEnde < fAnfang || fEnde > fDauer || fWert < 0.0
-                          || fRest > fWert || fFaktor <= 0.0)
+                          || fRest > fWert || fFactor <= 0.0)
             PushIllegalArgument();
         else
         {
@@ -1150,7 +1150,7 @@ void ScInterpreter::ScVDB()
             {
                 for (sal_uLong i = nLoopStart + 1; i <= nLoopEnd; i++)
                 {
-                    double fTerm = ScGetGDA(fWert, fRest, fDauer, (double) i, fFaktor);
+                    double fTerm = ScGetGDA(fWert, fRest, fDauer, (double) i, fFactor);
 
                     //  Teilperioden am Anfang / Ende beruecksichtigen:
                     if ( i == nLoopStart+1 )
@@ -1169,7 +1169,7 @@ void ScInterpreter::ScVDB()
                 //@Die Frage aller Fragen: "Ist das hier richtig"
                 if(!::rtl::math::approxEqual(fAnfang,::rtl::math::approxFloor(fAnfang)))
                 {
-                    if(fFaktor>1)
+                    if(fFactor>1)
                     {
                         if(fAnfang>fDauer/2 || ::rtl::math::approxEqual(fAnfang,fDauer/2))
                         {
@@ -1181,8 +1181,8 @@ void ScInterpreter::ScVDB()
                     }
                 }
 
-                fWert-=ScInterVDB(fWert,fRest,fDauer,fDauer1,fAnfang,fFaktor);
-                fVdb=ScInterVDB(fWert,fRest,fDauer,fDauer-fAnfang,fEnde-fAnfang,fFaktor);
+                fWert-=ScInterVDB(fWert,fRest,fDauer,fDauer1,fAnfang,fFactor);
+                fVdb=ScInterVDB(fWert,fRest,fDauer,fDauer-fAnfang,fEnde-fAnfang,fFactor);
             }
         }
         PushDouble(fVdb);

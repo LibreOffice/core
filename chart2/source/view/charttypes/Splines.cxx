@@ -249,13 +249,13 @@ void lcl_SplineCalculation::CalculatePeriodic()
             double xDiff2p1 = xDiff2 + xDiff1;
             double xDiff0p2 = xDiff0 + xDiff2;
             double xDiff1p0 = xDiff1 + xDiff0;
-            double fFaktor = 1.5 / (xDiff0*xDiff1 + xDiff1*xDiff2 + xDiff2*xDiff0);
+            double fFactor = 1.5 / (xDiff0*xDiff1 + xDiff1*xDiff2 + xDiff2*xDiff0);
             double yDiff0 = (m_aPoints[ 1 ].second - m_aPoints[ 0 ].second) / xDiff0;
             double yDiff1 = (m_aPoints[ 2 ].second - m_aPoints[ 1 ].second) / xDiff1;
             double yDiff2 = (m_aPoints[ 0 ].second - m_aPoints[ 2 ].second) / xDiff2;
-            m_aSecDerivY[ 1 ] = fFaktor * (yDiff1*xDiff2p1 - yDiff0*xDiff0p2);
-            m_aSecDerivY[ 2 ] = fFaktor * (yDiff2*xDiff0p2 - yDiff1*xDiff1p0);
-            m_aSecDerivY[ 3 ] = fFaktor * (yDiff0*xDiff1p0 - yDiff2*xDiff2p1);
+            m_aSecDerivY[ 1 ] = fFactor * (yDiff1*xDiff2p1 - yDiff0*xDiff0p2);
+            m_aSecDerivY[ 2 ] = fFactor * (yDiff2*xDiff0p2 - yDiff1*xDiff1p0);
+            m_aSecDerivY[ 3 ] = fFactor * (yDiff0*xDiff1p0 - yDiff2*xDiff2p1);
             m_aSecDerivY[ 0 ] = m_aSecDerivY[ 3 ];
         }
         else if (n==2)

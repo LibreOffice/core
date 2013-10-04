@@ -155,7 +155,7 @@ FltError ImportExcel::Read( void )
                                 if( pExcRoot->eDateiTyp == Biff2 )
                                 {
                                     eAkt = Z_Biff2;
-                                    NeueTabelle();
+                                    NewTable();
                                 }
                             break;
                             case EXC_BIFF3:
@@ -163,7 +163,7 @@ FltError ImportExcel::Read( void )
                                 if( pExcRoot->eDateiTyp == Biff3 )
                                 {
                                     eAkt = Z_Biff3;
-                                    NeueTabelle();
+                                    NewTable();
                                 }
                             break;
                             case EXC_BIFF4:
@@ -171,7 +171,7 @@ FltError ImportExcel::Read( void )
                                 if( pExcRoot->eDateiTyp == Biff4 )
                                 {
                                     eAkt = Z_Biff4;
-                                    NeueTabelle();
+                                    NewTable();
                                 }
                                 else if( pExcRoot->eDateiTyp == Biff4W )
                                     eAkt = Z_Biff4W;
@@ -189,7 +189,7 @@ FltError ImportExcel::Read( void )
                                 else if( pExcRoot->eDateiTyp == Biff5 )
                                 {
                                     // #i62752# possible to have BIFF5 sheet without globals
-                                    NeueTabelle();
+                                    NewTable();
                                     eAkt = Z_Biff5TPre;  // Shrfmla Prefetch, Row-Prefetch
                                     nBofLevel = 0;
                                     aIn.StoreGlobalPosition(); // und Position merken
@@ -441,7 +441,7 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff4 )
                         {
                             eAkt = Z_Biff4T;
-                            NeueTabelle();
+                            NewTable();
                         }
                         else
                             eAkt = Z_Ende;
@@ -530,7 +530,7 @@ FltError ImportExcel::Read( void )
                     case 0x8F:  break;                  // BUNDLEHEADER [   4 ]
                     case 0x0409:                        // BOF          [   4 ]
                         Bof4();
-                        NeueTabelle();
+                        NewTable();
                         if( pExcRoot->eDateiTyp == Biff4 )
                         {
                             eAkt = Z_Biff4T;
@@ -696,7 +696,7 @@ FltError ImportExcel::Read( void )
                 {
                     case 0x0809:                        // BOF          [    5]
                         Bof5();
-                        NeueTabelle();
+                        NewTable();
                         switch( pExcRoot->eDateiTyp )
                         {
                             case Biff5:
@@ -882,7 +882,7 @@ FltError ImportExcel8::Read( void )
                         Bof5(); // read the BOF record
                     else
                         pExcRoot->eDateiTyp = Biff8;    // on missing BOF, assume a standard worksheet
-                    NeueTabelle();
+                    NewTable();
                     switch( pExcRoot->eDateiTyp )
                     {
                     case Biff8:     // worksheet
@@ -976,7 +976,7 @@ FltError ImportExcel8::Read( void )
                     else if( pExcRoot->eDateiTyp == Biff8 )
                     {
                         // #i62752# possible to have BIFF8 sheet without globals
-                        NeueTabelle();
+                        NewTable();
                         eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
                         bSheetHasCodeName = false; // reset
                         aIn.StoreGlobalPosition();

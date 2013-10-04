@@ -279,7 +279,7 @@ FieldUnit MapToFieldUnit( const SfxMapUnit eUnit )
 
 // -----------------------------------------------------------------------
 
-long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFaktor )
+long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor )
 {
     DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP       ||
                 eUnit == SFX_MAPUNIT_100TH_MM   ||
@@ -313,7 +313,7 @@ long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFaktor )
             nRet += 10 - nTmp;
         nRet /= 10;
     }
-    return nRet * nFaktor / 20;
+    return nRet * nFactor / 20;
 }
 
 // -----------------------------------------------------------------------

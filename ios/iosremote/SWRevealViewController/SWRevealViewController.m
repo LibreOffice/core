@@ -544,7 +544,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
     // Uncomment the following code if you want the child controllers
     // to be loaded at this point.
     //
-    // We leave this commented out because we think loading childs here is conceptually wrong.
+    // We leave this commented out because we think loading children here is conceptually wrong.
     // Instead, we refrain view loads until necesary, for example we may never load
     // the rear controller view -or the front controller view- if it is never displayed.
     //

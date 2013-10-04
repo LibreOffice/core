@@ -631,11 +631,11 @@ double ScGetBw(double fZins, double fZzr, double fRmz,
 void ScBW();
 void ScDIA();
 double ScGetGDA(double fWert, double fRest, double fDauer,
-                       double fPeriode, double fFaktor);
+                       double fPeriode, double fFactor);
 void ScGDA();
 void ScGDA2();
 double ScInterVDB(double fWert,double fRest,double fDauer,double fDauer1,
-                double fPeriode,double fFaktor);
+                double fPeriode,double fFactor);
 void ScVDB();
 void ScLaufz();
 void ScLIA();

@@ -886,7 +886,7 @@ OUString UHashMap::getNameFromId(sal_uInt32 nId)
         if (it->second == nId)
             return it->first;
     }
-    OSL_FAIL("[CL] unknown SdrObjekt identifier");
+    OSL_FAIL("[CL] unknown SdrObject identifier");
     return OUString();
 }
 

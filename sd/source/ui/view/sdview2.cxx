@@ -329,7 +329,7 @@ void View::DoPaste (::Window* pWindow)
                         pOutliner->QuickInsertLineBreak( ESelection( nPara, nParaLen, nPara, nParaLen ) );
                     }
 
-                    DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titelobjekt contains hard line breaks" );
+                    DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titleobject contains hard line breaks" );
                     pOutliner->SetUpdateMode(bOldUpdateMode);
                 }
             }

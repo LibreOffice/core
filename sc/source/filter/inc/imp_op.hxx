@@ -201,7 +201,7 @@ protected:
                                             //      -> excform.cxx
 
     virtual void            EndSheet( void );
-    void                    NeueTabelle( void );
+    void                    NewTable( void );
     const ScTokenArray*     ErrorToFormula( sal_uInt8 bErrOrVal, sal_uInt8 nError,
                                 double& rVal );
 

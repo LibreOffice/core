@@ -222,7 +222,7 @@ static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 
 // -----------------------------------------------------------------------
 
-static int ImplKommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
+static int ImplCommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 {
     if ( c1 == c2 )
         return sal_True;
@@ -267,7 +267,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
         {
             // if it is a literal copy otherwise ignore because it might be the next valid
             // character of the string
-            if ( ImplKommaPointCharEqual( cChar, cLiteral ) )
+            if ( ImplCommaPointCharEqual( cChar, cLiteral ) )
                 nStrIndex++;
             else
             {
@@ -313,7 +313,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
                         {
                             if ( rEditMask[n] == EDITMASK_LITERAL )
                             {
-                                if ( ImplKommaPointCharEqual( cChar, rLiteralMask[n] ) )
+                                if ( ImplCommaPointCharEqual( cChar, rLiteralMask[n] ) )
                                     i = n+1;
 
                                 break;
@@ -655,7 +655,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                     {
                         // only valid if no literal present
                         if ( (rEditMask[nTempPos+1] != EDITMASK_LITERAL ) &&
-                             ImplKommaPointCharEqual( cChar, rLiteralMask[nTempPos] ) )
+                             ImplCommaPointCharEqual( cChar, rLiteralMask[nTempPos] ) )
                         {
                             nTempPos++;
                             ImplPatternMaxPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nNewPos, nTempPos );

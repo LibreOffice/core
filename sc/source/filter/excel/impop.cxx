@@ -1226,7 +1226,7 @@ void ImportExcel::EndSheet( void )
 }
 
 
-void ImportExcel::NeueTabelle( void )
+void ImportExcel::NewTable( void )
 {
     SCTAB nTab = GetCurrScTab();
     if( nTab > 0 && !pD->HasTable( nTab ) )

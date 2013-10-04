@@ -40,7 +40,7 @@ void SwCache::Check()
         SwCacheObj *pTmp = pLast;
         while ( pTmp && pTmp != pObj )
             pTmp = pTmp->GetPrev();
-        SAL_WARN_IF( !pTmp, "sw.core", "Objekt not found." );
+        SAL_WARN_IF( !pTmp, "sw.core", "Object not found." );
 
         ++nCnt;
         if ( pObj == pFirst )

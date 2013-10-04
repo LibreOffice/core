@@ -205,7 +205,7 @@ namespace vclcanvas
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
             drawTextLayout( const ::com::sun::star::rendering::XCanvas*         rCanvas,
                             const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::rendering::XTextLayout >& layoutetText,
+                                    ::com::sun::star::rendering::XTextLayout >& laidOutText,
                             const ::com::sun::star::rendering::ViewState&       viewState,
                             const ::com::sun::star::rendering::RenderState&     renderState );
 

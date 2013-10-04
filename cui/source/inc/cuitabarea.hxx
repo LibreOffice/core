@@ -689,7 +689,7 @@ private:
 
     ColorModel          eCM;
 
-    Color               aAktuellColor;
+    Color               aCurrentColor;
 
     void    ConvertColorValues (Color& rColor, ColorModel eModell);
     void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
