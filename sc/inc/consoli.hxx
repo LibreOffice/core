@@ -80,11 +80,11 @@ private:
     double**            ppCount;
     double**            ppSumSqr;
     ScReferenceList**   ppRefs;
-    OUString**          ppColHeaders;
-    OUString**          ppRowHeaders;
+    OUString*           mpColHeaders;
+    OUString*           mpRowHeaders;
     SCSIZE              nDataCount;
     SCSIZE              nTitleCount;
-    OUString**          ppTitles;
+    OUString*           mpTitles;
     SCSIZE**            ppTitlePos;
     sal_Bool                bCornerUsed;
     OUString            aCornerText;        // only for bColByName && bRowByName
