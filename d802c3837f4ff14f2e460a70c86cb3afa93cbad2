@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///RY\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-10-04T22:46:26Z",
+      "side": 1,
+      "message": "fdo#70000 -- to prevent the bugzilla notifications to misfire against the wrong bug",
+      "revId": "d802c3837f4ff14f2e460a70c86cb3afa93cbad2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
