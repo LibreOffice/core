@@ -169,7 +169,7 @@ void ScCompiler::DeInit()
     }
 }
 
-bool ScCompiler::IsEnglishSymbol( const String& rName )
+bool ScCompiler::IsEnglishSymbol( const OUString& rName )
 {
     // function names are always case-insensitive
     OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
@@ -438,8 +438,8 @@ static bool lcl_isValidQuotedText( const String& rFormula, xub_StrLen nSrcPos, P
 
 static bool lcl_parseExternalName(
         const OUString& rSymbol,
-        String& rFile,
-        String& rName,
+        OUString& rFile,
+        OUString& rName,
         const sal_Unicode cSep,
         const ScDocument* pDoc = NULL,
         const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks = NULL )
@@ -721,7 +721,7 @@ struct ConventionOOO_A1 : public Convention_A1
     ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
     static String MakeTabStr( const ScCompiler& rComp, SCTAB nTab, String& aDoc )
     {
-        String aString;
+        OUString aString;
         OUString aTmp;
         if (!rComp.GetDoc()->GetName( nTab, aTmp ))
             aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
@@ -732,8 +732,8 @@ struct ConventionOOO_A1 : public Convention_A1
             xub_StrLen nPos = ScCompiler::GetDocTabPos( aString );
             if ( nPos != STRING_NOTFOUND )
             {
-                aDoc = aString.Copy( 0, nPos + 1 );
-                aString.Erase( 0, nPos + 1 );
+                aDoc = aString.copy( 0, nPos + 1 );
+                aString = aString.copy( nPos + 1 );
                 aDoc = INetURLObject::decode( aDoc, INET_HEX_ESCAPE,
                                               INetURLObject::DECODE_UNAMBIGUOUS );
             }
@@ -741,7 +741,7 @@ struct ConventionOOO_A1 : public Convention_A1
                 aDoc.Erase();
             ScCompiler::CheckTabQuotes( aString, FormulaGrammar::CONV_OOO );
         }
-        aString += '.';
+        aString += ".";
         return aString;
     }
 
@@ -841,7 +841,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return sal_Unicode(0);
     }
 
-    virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
+    virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
@@ -849,7 +849,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return lcl_parseExternalName(rSymbol, rFile, rName, sal_Unicode('#'), pDoc, pExternalLinks);
     }
 
-    virtual String makeExternalNameStr( const String& rFile, const String& rName ) const
+    virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const
     {
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), false);
     }
@@ -892,7 +892,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
         if (bODF)
@@ -919,14 +919,14 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, false);
     }
 
     void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
         ScRange aAbsRange = rRef.toAbs(rCompiler.GetPos());
@@ -985,7 +985,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, false);
@@ -1006,20 +1006,20 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, true);
     }
 
-    virtual String makeExternalNameStr( const String& rFile, const String& rName ) const
+    virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const
     {
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), true);
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, true);
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, true);
@@ -1033,12 +1033,12 @@ struct ConventionXL
 {
     static bool GetDocAndTab( const ScCompiler& rComp,
                               const ScSingleRefData& rRef,
-                              String& rDocName,
-                              String& rTabName )
+                              OUString& rDocName,
+                              OUString& rTabName )
     {
         bool bHasDoc = false;
 
-        rDocName.Erase();
+        rDocName = "";
         OUString aTmp;
         ScAddress aAbs = rRef.toAbs(rComp.GetPos());
         if (rRef.IsTabDeleted() || !rComp.GetDoc()->GetName(aAbs.Tab(), aTmp))
@@ -1052,11 +1052,11 @@ struct ConventionXL
         xub_StrLen nPos = ScCompiler::GetDocTabPos( rTabName);
         if (nPos != STRING_NOTFOUND)
         {
-            rDocName = rTabName.Copy( 0, nPos );
+            rDocName = rTabName.copy( 0, nPos );
             // TODO : More research into how XL escapes the doc path
             rDocName = INetURLObject::decode( rDocName, INET_HEX_ESCAPE,
                     INetURLObject::DECODE_UNAMBIGUOUS );
-            rTabName.Erase( 0, nPos + 1 );
+            rTabName = rTabName.copy( nPos + 1 );
             bHasDoc = true;
         }
 
@@ -1073,7 +1073,7 @@ struct ConventionXL
     {
         if( rRef.Ref1.IsFlag3D() )
         {
-            String aStartTabName, aStartDocName, aEndTabName, aEndDocName;
+            OUString aStartTabName, aStartDocName, aEndTabName, aEndDocName;
             bool bStartHasDoc = false, bEndHasDoc = false;
 
             bStartHasDoc = GetDocAndTab( rComp, rRef.Ref1,
@@ -1121,7 +1121,7 @@ struct ConventionXL
         return sal_Unicode(0);
     }
 
-    static bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
+    static bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks )
@@ -1335,7 +1335,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         return ConventionXL::getSpecialSymbol(eSymType);
     }
 
-    virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
+    virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
@@ -1343,13 +1343,13 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
     }
 
-    virtual String makeExternalNameStr( const String& rFile, const String& rName ) const
+    virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const
     {
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         // ['file:///path/to/file/filename.xls']'Sheet Name'!$A$1
@@ -1371,7 +1371,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
@@ -1528,7 +1528,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return ConventionXL::getSpecialSymbol(eSymType);
     }
 
-    virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
+    virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument* pDoc,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const
@@ -1536,13 +1536,13 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
     }
 
-    virtual String makeExternalNameStr( const String& rFile, const String& rName ) const
+    virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const
     {
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         // ['file:///path/to/file/filename.xls']'Sheet Name'!$A$1
@@ -1567,7 +1567,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     }
 
     virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                     sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
+                                     sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         const OUString* pFullName = pRefMgr->getExternalFileName(nFileId);
@@ -1666,7 +1666,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
 }
 
-void ScCompiler::CheckTabQuotes( String& rString,
+void ScCompiler::CheckTabQuotes( OUString& rString,
                                  const FormulaGrammar::AddressConvention eConv )
 {
     using namespace ::com::sun::star::i18n;
@@ -1674,7 +1674,7 @@ void ScCompiler::CheckTabQuotes( String& rString,
     sal_Int32 nContFlags = nStartFlags;
     ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::IDENTNAME, rString, 0, nStartFlags, EMPTY_STRING, nContFlags, EMPTY_STRING);
-    bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.Len());
+    bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength());
 
     switch ( eConv )
     {
@@ -1690,7 +1690,7 @@ void ScCompiler::CheckTabQuotes( String& rString,
                 const OUString one_quote(static_cast<sal_Unicode>('\''));
                 const OUString two_quote("''");
                 // escape embedded quotes
-                rString.SearchAndReplaceAll( one_quote, two_quote );
+                rString = rString.replaceAll( one_quote, two_quote );
             }
             break;
     }
@@ -1703,18 +1703,17 @@ void ScCompiler::CheckTabQuotes( String& rString,
 
     if( bNeedsQuote )
     {
-        rString.Insert( '\'', 0 );
-        rString += '\'';
+        rString = "'" + rString + "'";
     }
 }
 
-xub_StrLen ScCompiler::GetDocTabPos( const String& rString )
+xub_StrLen ScCompiler::GetDocTabPos( const OUString& rString )
 {
-    if (rString.GetChar(0) != '\'')
+    if (rString[0] != '\'')
         return STRING_NOTFOUND;
     xub_StrLen nPos = ScGlobal::FindUnquoted( rString, SC_COMPILER_FILE_TAB_SEP);
     // it must be 'Doc'#
-    if (nPos != STRING_NOTFOUND && rString.GetChar(nPos-1) != '\'')
+    if (nPos != STRING_NOTFOUND && rString[nPos-1] != '\'')
         nPos = STRING_NOTFOUND;
     return nPos;
 }
@@ -2496,13 +2495,13 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     return bFound;
 }
 
-bool ScCompiler::IsOpCode2( const String& rName )
+bool ScCompiler::IsOpCode2( const OUString& rName )
 {
     bool bFound = false;
     sal_uInt16 i;
 
     for( i = ocInternalBegin; i <= ocInternalEnd && !bFound; i++ )
-        bFound = rName.EqualsAscii( pInternal[ i-ocInternalBegin ] );
+        bFound = rName.equalsAscii( pInternal[ i-ocInternalBegin ] );
 
     if (bFound)
     {
@@ -2513,7 +2512,7 @@ bool ScCompiler::IsOpCode2( const String& rName )
     return bFound;
 }
 
-bool ScCompiler::IsValue( const String& rSym )
+bool ScCompiler::IsValue( const OUString& rSym )
 {
     double fVal;
     sal_uInt32 nIndex = ( mxSymbols->isEnglish() ?
@@ -2632,7 +2631,7 @@ bool ScCompiler::IsPredetectedReference(const OUString& rName)
     return false;
 }
 
-bool ScCompiler::IsDoubleReference( const String& rName )
+bool ScCompiler::IsDoubleReference( const OUString& rName )
 {
     ScRange aRange( aPos, aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
@@ -2674,7 +2673,7 @@ bool ScCompiler::IsDoubleReference( const String& rName )
     return ( nFlags & SCA_VALID ) != 0;
 }
 
-bool ScCompiler::IsSingleReference( const String& rName )
+bool ScCompiler::IsSingleReference( const OUString& rName )
 {
     ScAddress aAddr( aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
@@ -2812,7 +2811,7 @@ bool ScCompiler::IsReference( const OUString& rName )
     return false;
 }
 
-bool ScCompiler::IsMacro( const String& rName )
+bool ScCompiler::IsMacro( const OUString& rName )
 {
 #ifdef DISABLE_SCRIPTING
     (void) rName;
@@ -2857,7 +2856,7 @@ bool ScCompiler::IsMacro( const String& rName )
 #endif
 }
 
-bool ScCompiler::IsNamedRange( const String& rUpperName )
+bool ScCompiler::IsNamedRange( const OUString& rUpperName )
 {
     // IsNamedRange is called only from NextNewToken, with an upper-case string
 
@@ -2887,7 +2886,7 @@ bool ScCompiler::IsNamedRange( const String& rUpperName )
         return false;
 }
 
-bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
+bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
 {
     /* FIXME: This code currently (2008-12-02T15:41+0100 in CWS mooxlsc)
      * correctly parses external named references in OOo, as required per RFE
@@ -2898,12 +2897,12 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
     if (!pConv)
         return false;
 
-    String aFile, aName;
+    OUString aFile, aName;
     if (!pConv->parseExternalName( rSymbol, aFile, aName, pDoc, &maExternalLinks))
         return false;
 
     ScRawToken aToken;
-    if (aFile.Len() > MAXSTRLEN || aName.Len() > MAXSTRLEN)
+    if (aFile.getLength() > MAXSTRLEN || aName.getLength() > MAXSTRLEN)
         return false;
 
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -2922,9 +2921,9 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
     return true;
 }
 
-bool ScCompiler::IsDBRange( const String& rName )
+bool ScCompiler::IsDBRange( const OUString& rName )
 {
-    if (rName.EqualsAscii("[]"))
+    if (rName.equalsAscii("[]"))
     {
         if (pRawToken && pRawToken->GetOpCode() == ocDBArea)
         {
@@ -2948,7 +2947,7 @@ bool ScCompiler::IsDBRange( const String& rName )
     return true;
 }
 
-bool ScCompiler::IsColRowName( const String& rName )
+bool ScCompiler::IsColRowName( const OUString& rName )
 {
     bool bInList = false;
     bool bFound = false;
@@ -3200,7 +3199,7 @@ bool ScCompiler::IsColRowName( const String& rName )
         return false;
 }
 
-bool ScCompiler::IsBoolean( const String& rName )
+bool ScCompiler::IsBoolean( const OUString& rName )
 {
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName ) );
     if( iLook != mxSymbols->getHashMap()->end() &&
@@ -3216,7 +3215,7 @@ bool ScCompiler::IsBoolean( const String& rName )
         return false;
 }
 
-bool ScCompiler::IsErrorConstant( const String& rName ) const
+bool ScCompiler::IsErrorConstant( const OUString& rName ) const
 {
     sal_uInt16 nError = GetErrorConstant( rName);
     if (nError)
@@ -4081,10 +4080,10 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
 }
 
 bool ScCompiler::IsCharFlagAllConventions(
-    String const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric )
+    OUString const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric )
 {
-    sal_Unicode c = rStr.GetChar( nPos );
-    sal_Unicode cLast = nPos > 0 ? rStr.GetChar( nPos-1 ) : 0;
+    sal_Unicode c = rStr[ nPos ];
+    sal_Unicode cLast = nPos > 0 ? rStr[ nPos-1 ] : 0;
     if (c < 128)
     {
         for ( int nConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
@@ -4187,7 +4186,7 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
         ScAddress aAbs = rRef.toAbs(aPos);
         if (pDoc->HasStringData(aAbs.Col(), aAbs.Row(), aAbs.Tab()))
         {
-            String aStr = pDoc->GetString(aAbs);
+            OUString aStr = pDoc->GetString(aAbs);
             EnQuote( aStr );
             rBuffer.append(aStr);
         }
@@ -4242,21 +4241,20 @@ void ScCompiler::LocalizeString( OUString& rName )
 
 // Put quotes around string if non-alphanumeric characters are contained,
 // quote characters contained within are escaped by '\\'.
-bool ScCompiler::EnQuote( String& rStr )
+bool ScCompiler::EnQuote( OUString& rStr )
 {
-    sal_Int32 nType = ScGlobal::pCharClass->getStringType( rStr, 0, rStr.Len() );
+    sal_Int32 nType = ScGlobal::pCharClass->getStringType( rStr, 0, rStr.getLength() );
     if ( !CharClass::isNumericType( nType )
             && CharClass::isAlphaNumericType( nType ) )
         return false;
 
-    xub_StrLen nPos = 0;
-    while ( (nPos = rStr.Search( '\'', nPos)) != STRING_NOTFOUND )
+    sal_Int32 nPos = 0;
+    while ( (nPos = rStr.indexOf( '\'', nPos)) != -1 )
     {
-        rStr.Insert( '\\', nPos );
+        rStr = rStr.replaceAt( nPos, 0, "\\" );
         nPos += 2;
     }
-    rStr.Insert( '\'', 0 );
-    rStr += '\'';
+    rStr = "'" + rStr + "'";
     return true;
 }
 

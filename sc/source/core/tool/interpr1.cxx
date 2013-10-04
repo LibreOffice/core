@@ -7360,7 +7360,7 @@ void ScInterpreter::ScIndirect()
 
 void ScInterpreter::ScAddressFunc()
 {
-    String  sTabStr;
+    OUString  sTabStr;
 
     sal_uInt8    nParamCount = GetByte();
     if( !MustHaveParamCount( nParamCount, 2, 5 ) )
@@ -7419,7 +7419,7 @@ void ScInterpreter::ScAddressFunc()
     const ScAddress aAdr( nCol, nRow, 0);
     OUString aRefStr(aAdr.Format(nFlags, pDok, aDetails));
 
-    if( nParamCount >= 5 && sTabStr.Len() )
+    if( nParamCount >= 5 && !sTabStr.isEmpty() )
     {
         String aDoc;
         if (eConv == FormulaGrammar::CONV_OOO)
@@ -7428,19 +7428,19 @@ void ScInterpreter::ScAddressFunc()
             xub_StrLen nPos = ScCompiler::GetDocTabPos( sTabStr);
             if (nPos != STRING_NOTFOUND)
             {
-                if (sTabStr.GetChar(nPos+1) == '$')
+                if (sTabStr[nPos+1] == '$')
                     ++nPos;     // also split 'Doc'#$Tab
-                aDoc = sTabStr.Copy( 0, nPos+1);
-                sTabStr.Erase( 0, nPos+1);
+                aDoc = sTabStr.copy( 0, nPos+1);
+                sTabStr = sTabStr.copy( nPos+1);
             }
         }
         /* TODO: yet unsupported external reference in CONV_XL_R1C1 syntax may
          * need some extra handling to isolate Tab from Doc. */
-        if (sTabStr.GetChar(0) != '\'' || sTabStr.GetChar(sTabStr.Len()-1) != '\'')
+        if (sTabStr[0] != '\'' || sTabStr[sTabStr.getLength()-1] != '\'')
             ScCompiler::CheckTabQuotes( sTabStr, eConv);
         if (aDoc.Len())
-            sTabStr.Insert( aDoc, 0);
-        sTabStr += static_cast<sal_Unicode>(eConv == FormulaGrammar::CONV_XL_R1C1 ? '!' : '.');
+            sTabStr = aDoc + sTabStr;
+        sTabStr += eConv == FormulaGrammar::CONV_XL_R1C1 ? OUString("!") : OUString(".");
         sTabStr += aRefStr;
         PushString( sTabStr );
     }

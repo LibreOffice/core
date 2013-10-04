@@ -416,7 +416,7 @@ void ScRangeStringConverter::GetTokenByOffset(
 void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUString& rTabName, sal_Unicode /* cQuote */)
 {
     // quote character is always "'"
-    String aQuotedTab(rTabName);
+    OUString aQuotedTab(rTabName);
     ScCompiler::CheckTabQuotes(aQuotedTab, ::formula::FormulaGrammar::CONV_OOO);
     rBuf.append(aQuotedTab);
 }

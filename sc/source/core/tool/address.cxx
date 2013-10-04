@@ -1694,18 +1694,18 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
         }
         if( nFlags & SCA_TAB_3D )
         {
-            String aTabName, aDocName;
+            OUString aTabName, aDocName;
             OUString aTmp;
             pDoc->GetName(nTab, aTmp);
             aTabName = aTmp; // TODO: remove use of String here.
             // External Reference, same as in ScCompiler::MakeTabStr()
-            if( aTabName.GetChar(0) == '\'' )
+            if( aTabName[0] == '\'' )
             {   // "'Doc'#Tab"
                 xub_StrLen nPos = ScCompiler::GetDocTabPos( aTabName);
                 if (nPos != STRING_NOTFOUND)
                 {
-                    aDocName = aTabName.Copy( 0, nPos + 1 );
-                    aTabName.Erase( 0, nPos + 1 );
+                    aDocName = aTabName.copy( 0, nPos + 1 );
+                    aTabName = aTabName.copy( nPos + 1 );
                 }
             }
             else if( nFlags & SCA_FORCE_DOC )
@@ -1733,11 +1733,9 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             case formula::FormulaGrammar::CONV_XL_A1:
             case formula::FormulaGrammar::CONV_XL_R1C1:
             case formula::FormulaGrammar::CONV_XL_OOX:
-                if (aDocName.Len() > 0)
+                if (!aDocName.isEmpty())
                 {
-                    r += "[";
-                    r += aDocName;
-                    r += "]";
+                    r += "[" + aDocName + "]";
                 }
                 r += aTabName;
                 r += "!";
@@ -1771,20 +1769,18 @@ static void
 lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
                   const ScAddress::Details& rDetails,
                   sal_uInt16 nFlags,
-                  String& rTabName, String& rDocName )
+                  OUString& rTabName, OUString& rDocName )
 {
-    OUString aTmp;
-    pDoc->GetName(nTab, aTmp);
-    rTabName = aTmp;
-    rDocName.Erase();
+    pDoc->GetName(nTab, rTabName);
+    rDocName = "";
     // External reference, same as in ScCompiler::MakeTabStr()
-    if ( rTabName.GetChar(0) == '\'' )
+    if ( rTabName[0] == '\'' )
     {   // "'Doc'#Tab"
         xub_StrLen nPos = ScCompiler::GetDocTabPos( rTabName);
         if (nPos != STRING_NOTFOUND)
         {
-            rDocName = rTabName.Copy( 0, nPos + 1 );
-            rTabName.Erase( 0, nPos + 1 );
+            rDocName = rTabName.copy( 0, nPos + 1 );
+            rTabName = rTabName.copy( nPos + 1 );
         }
     }
     else if( nFlags & SCA_FORCE_DOC )
@@ -1806,14 +1802,12 @@ lcl_ScRange_Format_XL_Header( OUString& r, const ScRange& rRange,
 {
     if( nFlags & SCA_TAB_3D )
     {
-        String aTabName, aDocName;
+        OUString aTabName, aDocName;
         lcl_Split_DocTab( pDoc, rRange.aStart.Tab(), rDetails, nFlags,
                           aTabName, aDocName );
-        if( aDocName.Len() > 0 )
+        if( !aDocName.isEmpty() )
         {
-            r += "[";
-            r += aDocName;
-            r += "]";
+            r += "[" + aDocName + "]";
         }
         r += aTabName;
 

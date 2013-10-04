@@ -245,19 +245,19 @@ public:
          *
          * @return true on successful parse, or false otherwise.
          */
-        virtual bool parseExternalName( const OUString& rSymbol, String& rFile, String& rName,
+        virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
                 const ScDocument* pDoc,
                 const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks ) const = 0;
 
-        virtual String makeExternalNameStr( const String& rFile, const String& rName ) const = 0;
+        virtual OUString makeExternalNameStr( const OUString& rFile, const OUString& rName ) const = 0;
 
         virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                         sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
+                                         sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
         virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                         sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
+                                         sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
         enum SpecialSymbolType
@@ -331,20 +331,20 @@ private:
 
     virtual void SetError(sal_uInt16 nError);
     xub_StrLen NextSymbol(bool bInArray);
-    bool IsValue( const String& );
+    bool IsValue( const OUString& );
     bool IsOpCode( const OUString&, bool bInArray );
-    bool IsOpCode2( const String& );
+    bool IsOpCode2( const OUString& );
     bool IsString();
     bool IsReference( const OUString& );
-    bool IsSingleReference( const String& );
+    bool IsSingleReference( const OUString& );
     bool IsPredetectedReference(const OUString&);
-    bool IsDoubleReference( const String& );
-    bool IsMacro( const String& );
-    bool IsNamedRange( const String& );
-    bool IsExternalNamedRange( const String& rSymbol );
-    bool IsDBRange( const String& );
-    bool IsColRowName( const String& );
-    bool IsBoolean( const String& );
+    bool IsDoubleReference( const OUString& );
+    bool IsMacro( const OUString& );
+    bool IsNamedRange( const OUString& );
+    bool IsExternalNamedRange( const OUString& rSymbol );
+    bool IsDBRange( const OUString& );
+    bool IsColRowName( const OUString& );
+    bool IsBoolean( const OUString& );
     void AutoCorrectParsedSymbol();
 
     void SetRelNameReference();
@@ -367,21 +367,21 @@ public:
     static void DeInit();               /// all
 
     // for ScAddress::Format()
-    static void CheckTabQuotes( String& aTabName,
+    static void CheckTabQuotes( OUString& aTabName,
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc..
 
         @returns the position of the unquoted # hash mark in 'Doc'#Tab, or
                  STRING_NOTFOUND if none. */
-    static xub_StrLen GetDocTabPos( const String& rString );
+    static xub_StrLen GetDocTabPos( const OUString& rString );
 
-    static bool EnQuote( String& rStr );
+    static bool EnQuote( OUString& rStr );
     sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 
     // Check if it is a valid english function name
-    bool IsEnglishSymbol( const String& rName );
-    bool IsErrorConstant( const String& ) const;
+    bool IsEnglishSymbol( const OUString& rName );
+    bool IsErrorConstant( const OUString& ) const;
 
     //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
     // #i101512# SetCompileForFAP is in formula::FormulaCompiler
@@ -442,7 +442,7 @@ public:
         in nFlags, all bits must match. If bTestLetterNumeric is false and
         char>=128, no LetterNumeric test is done and false is returned. */
     static bool IsCharFlagAllConventions(
-        String const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric = true );
+        OUString const & rStr, xub_StrLen nPos, sal_uLong nFlags, bool bTestLetterNumeric = true );
 
 private:
     // FormulaCompiler
