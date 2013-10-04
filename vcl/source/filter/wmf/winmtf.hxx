@@ -817,7 +817,6 @@ class EnhWMFReader : public WinMtf
     sal_Bool        ReadHeader();
                     // Liesst und konvertiert ein Rechteck
     Rectangle       ReadRectangle( sal_Int32, sal_Int32, sal_Int32, sal_Int32 );
-    void            ImplExtTextOut( sal_Bool bWideCharakter );
 
 public:
                     EnhWMFReader(
