@@ -423,7 +423,8 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
                 pOrigGrf = pClpBitmap;
 
             // is it an URL-Button ?
-            String sURL, sDesc;
+            OUString sURL;
+            OUString sDesc;
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
                 pBkmk = new INetBookmark( sURL, sDesc );
@@ -923,7 +924,8 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
                 pOrigGrf = pClpBitmap;
 
             // is it an URL-Button ?
-            String sURL, sDesc;
+            OUString sURL;
+            OUString sDesc;
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
                 AddFormat( FORMAT_STRING );
@@ -3010,7 +3012,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
                 pOrigGrf = pClpBitmap;
 
             // is it an URL-Button ?
-            String sURL, sDesc;
+            OUString sURL;
+            OUString sDesc;
             if( pWrtShell->GetURLFromButton( sURL, sDesc ) )
             {
                 AddFormat( FORMAT_STRING );

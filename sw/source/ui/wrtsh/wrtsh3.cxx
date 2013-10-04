@@ -169,7 +169,7 @@ sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCa
 
     // If a util::URL-Button is selected, return its util::URL
     // otherwise an emtpy string.
-bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
+bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
 {
     bool bRet = false;
     const SdrView *pDView = GetDrawView();
@@ -207,14 +207,14 @@ bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
                         OUString uTmp;
                         if( (aTmp >>= uTmp) && !uTmp.isEmpty())
                         {
-                            rDescr = String(uTmp);
+                            rDescr = uTmp;
                         }
 
                         // util::URL
                         aTmp = xPropSet->getPropertyValue( "TargetURL" );
                         if( (aTmp >>= uTmp) && !uTmp.isEmpty())
                         {
-                            rURL = String(uTmp);
+                            rURL = uTmp;
                         }
                         bRet = true;
                     }

@@ -428,7 +428,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     inline bool IsInClickToEdit() const ;
 
     // if a URL-Button is selected, return its URL; otherwise an empty string
-    bool GetURLFromButton( String& rURL, String& rDescr ) const;
+    bool GetURLFromButton( OUString& rURL, OUString& rDescr ) const;
 
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
                          const sal_uInt16 nAction );
