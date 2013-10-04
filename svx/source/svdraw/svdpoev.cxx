@@ -682,7 +682,7 @@ void SdrPolyEditView::TransformMarkedPoints(
                 aStr = ImpGetResStr(STR_EditResize);
                 break;
             case SDRREPFUNC_OBJ_ROTATE:
-                aStr = ImpGetResStr(STR_EditResize); // no own string for rotate ?!?
+                aStr = ImpGetResStr(STR_EditRotate /*STR_EditResize*/); // TTTT: maybe there is, check // no own string for rotate ?!?
                 break;
         }
 

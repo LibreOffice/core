@@ -30,8 +30,9 @@
 
 //=============================================================================
 
-/** This enumeration defines the escape direction a connector takes on
-    a glue point.
+/** This enumeration defines the escape direction a connector can take
+    a glue point. More than one direction may be allowed. When all
+    directions are allowed, SMART is used.
  */
 published enum EscapeDirection
 {
@@ -56,12 +57,50 @@ published enum EscapeDirection
     DOWN,
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR EscapeDirection::  HORIZONTAL
+    // DOCUMENTATION OMITTED FOR EscapeDirection::  HORIZONTAL (LEFT & RIGHT)
     HORIZONTAL,
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR EscapeDirection::  VERTICAL
+    // DOCUMENTATION OMITTED FOR EscapeDirection::  VERTICAL (UP & DOWN)
     VERTICAL
+
+    // As can be seen when looking at HORIZONTAL and VERTICAL the true meaning of
+    // this EscapeDirection is a combination of LEFT/RIGHT/UP/DOWN describing all
+    // allowed escape directions from which the router may choose the best one. To
+    // allow this the following incompatible expansion would be needed:
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  UPWARD (LEFT & UP)
+    // LEFTUP,
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  UPWARD (UP & RIGHT)
+    // UPRIGHT,
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  UPWARD (RIGHT & DOWN)
+    // RIGHTDOWN,
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  DOWNLEFT (DOWN & LEFT)
+    // DOWNLEFT,
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  UPWARD (LEFT & UP & RIGHT)
+    // UPWARD,
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  RIGHTWARD (UP & RIGHT & DOWN)
+    // RIGHTWARD,
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  DOWNWARD (RIGHT & DOWN & LEFT)
+    // DOWNWARD,
+    //
+    // //-------------------------------------------------------------------------
+    // // DOCUMENTATION OMITTED FOR EscapeDirection::  LEFTWARD (DOWN & LEFT & UP)
+    // LEFTWARD
+
 };
 
 //=============================================================================

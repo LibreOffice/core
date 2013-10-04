@@ -31,8 +31,8 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 #include <svx/svdsob.hxx>
-#include <svx/svdtypes.hxx> // fuer SdrLayerID
-#include <svx/svdglue.hxx> // Klebepunkte
+#include <svx/svdtypes.hxx>
+#include <svx/sdrglue.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xenum.hxx>
@@ -212,7 +212,7 @@ class SVX_DLLPUBLIC SdrObjGeoData
 public:
     basegfx::B2DHomMatrix   maSdrObjectTransformation;
     basegfx::B2DPoint       maObjectAnchor;
-    SdrGluePointList*       mpGPL;
+    sdr::glue::List*        mpGPL;
     SdrLayerID              mnLayerID;
 
     /// bitfield
@@ -232,7 +232,7 @@ class SdrObjPlusData
 {
 public:
     SdrObjUserDataList*         mpUserDataList; // applikationsspeziefische Daten
-    SdrGluePointList*           mpGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
+    sdr::glue::List*            mpGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
 
     // object name, title and description
     String                      maObjName;
@@ -723,13 +723,13 @@ public:
     // Automatische Klebepunkte:
     // je 4 Scheitelpunkt- und Eckpositionen muss ein Knotenobjekt liefern
     // i.d.R. 0=oben, 1=rechts, 2=unten, 3=links
-    virtual SdrGluePoint GetVertexGluePoint(sal_uInt32 nNum) const;
+    virtual sdr::glue::Point GetVertexGluePoint(sal_uInt32 nNum) const;
 
     // Liste aller Klebepunkte. Kann NULL sein.
-    virtual const SdrGluePointList* GetGluePointList() const;
+    virtual sdr::glue::List* GetGluePointList(bool bForce) const;
 
     // Nach veraendern der GluePointList muss man am Obj SendRepaintBroadcast rufen!
-    virtual SdrGluePointList* ForceGluePointList();
+    // TTTT:GLUE virtual sdr::glue::List* ForceGluePointList();
 
     /** sets the writing mode of the object's context
 

@@ -304,6 +304,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/sdrpagewindow \
     svx/source/svdraw/sdrobjecttools \
     svx/source/svdraw/sdrpaintwindow \
+    svx/source/svdraw/sdrglue \
     svx/source/svdraw/selectioncontroller \
     svx/source/svdraw/svdattr \
     svx/source/svdraw/svdcrtv \
@@ -317,7 +318,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdetc \
     svx/source/svdraw/svdfmtf \
     svx/source/svdraw/svdglev \
-    svx/source/svdraw/svdglue \
     svx/source/svdraw/svdhdl \
     svx/source/svdraw/svdhlpln \
     svx/source/svdraw/svdibrow \

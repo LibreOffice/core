@@ -397,7 +397,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
     // copy GluePoints
     if(mpGluePoints)
     {
-        pNeuPlusData->mpGluePoints = new SdrGluePointList(*mpGluePoints);
+        pNeuPlusData->mpGluePoints = new sdr::glue::List(*mpGluePoints);
     }
 
     // copy object name, title and description
@@ -1585,7 +1585,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
         }
         else
         {
-            rGeo.mpGPL = new SdrGluePointList(*mpPlusData->mpGluePoints);
+            rGeo.mpGPL = new sdr::glue::List(*mpPlusData->mpGluePoints);
         }
     }
     else
@@ -1631,7 +1631,7 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
         }
         else
         {
-            mpPlusData->mpGluePoints = new SdrGluePointList(*rGeo.mpGPL);
+            mpPlusData->mpGluePoints = new sdr::glue::List(*rGeo.mpGPL);
         }
     }
     else
@@ -2063,61 +2063,78 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHar
     }
 }
 
-SdrGluePoint SdrObject::GetVertexGluePoint(sal_uInt32 nPosNum) const
+sdr::glue::Point SdrObject::GetVertexGluePoint(sal_uInt32 nPosNum) const
 {
-    basegfx::B2DPoint aGluePoint(0.5, 0.5);
+    basegfx::B2DPoint aGluePosition(0.5, 0.5);
 
     switch(nPosNum)
     {
         default: //case 0: TopCenter
         {
-            aGluePoint.setY(0.0);
+            aGluePosition.setY(0.0);
             break;
         }
         case 1: // RightCenter
         {
-            aGluePoint.setX(1.0);
+            aGluePosition.setX(1.0);
             break;
         }
         case 2: // BottomCenter
         {
-            aGluePoint.setY(1.0);
+            aGluePosition.setY(1.0);
             break;
         }
         case 3: // LeftCenter
         {
-            aGluePoint.setX(0.0);
+            aGluePosition.setX(0.0);
             break;
         }
     }
 
-    aGluePoint = getSdrObjectTransformation() * aGluePoint;
-    SdrGluePoint aGP(aGluePoint - sdr::legacy::GetSnapRange(*this).getCenter());
-    aGP.SetPercent(false);
+    // create GluePoint, need to set UserDefined to false for these default GluePoints
+    return sdr::glue::Point(
+        aGluePosition,
+        sdr::glue::Point::ESCAPE_DIRECTION_SMART,
+        sdr::glue::Point::Alignment_Center,
+        sdr::glue::Point::Alignment_Center,
+        true,   // mbRelative
+        false); // mbUserDefined
 
-    return aGP;
+    // TTTT:GLUE
+    //aGluePosition = getSdrObjectTransformation() * aGluePosition;
+    //sdr::glue::Point aGP(aGluePosition - sdr::legacy::GetSnapRange(*this).getCenter());
+    //aGP.SetPercent(false);
+    //
+    //return aGP;
 }
 
-const SdrGluePointList* SdrObject::GetGluePointList() const
+// TTTT:GLUE
+//const sdr::glue::List* SdrObject::GetGluePointList() const
+//{
+//  if(mpPlusData)
+//    {
+//        return mpPlusData->mpGluePoints;
+//    }
+//
+//  return 0;
+//}
+
+sdr::glue::List* SdrObject::GetGluePointList(bool bForce) const
 {
-    if(mpPlusData)
+    if(bForce)
     {
-        return mpPlusData->mpGluePoints;
+        if(!mpPlusData)
+        {
+            const_cast< SdrObject* >(this)->ImpForcePlusData();
+        }
+
+        if(!mpPlusData->mpGluePoints)
+        {
+            const_cast< SdrObject* >(this)->mpPlusData->mpGluePoints = new sdr::glue::List;
+        }
     }
 
-    return 0;
-}
-
-SdrGluePointList* SdrObject::ForceGluePointList()
-{
-    ImpForcePlusData();
-
-    if(!mpPlusData->mpGluePoints)
-    {
-        mpPlusData->mpGluePoints = new SdrGluePointList;
-    }
-
-    return mpPlusData->mpGluePoints;
+    return mpPlusData ? mpPlusData->mpGluePoints : 0;
 }
 
 void extractLineContourFromPrimitive2DSequence(
@@ -2602,7 +2619,7 @@ void SdrObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransfo
     //SetGlueReallyAbsolute(false);
 
     //if (GetGluePointList()!=NULL) {
-    //  SdrGluePointList* pGPL=ForceGluePointList();
+    //  sdr::glue::List* pGPL=GetGluePointList(true);
     //  pGPL->SetReallyAbsolute(true,*this);
     //  NbcShearGluePoints(rRef,nWink,tn,bVShear);
     //  pGPL->SetReallyAbsolute(false,*this);
@@ -2610,14 +2627,31 @@ void SdrObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransfo
 
     if(rTransformation != getSdrObjectTransformation())
     {
-        if(GetGluePointList())
+        basegfx::B2DVector aOldAbsoluteScale;
+        sdr::glue::List* pGPL = GetGluePointList(false);
+
+        if(pGPL)
         {
-            ForceGluePointList()->TransformGluePoints(rTransformation, sdr::legacy::GetSnapRange(*this));
+            // remember old absolute size
+            aOldAbsoluteScale = basegfx::absolute(getSdrObjectScale());
         }
 
         const SdrObjectChangeBroadcaster aSdrObjectChangeBroadcaster(*this);
+
         maSdrObjectTransformation.setB2DHomMatrix(rTransformation);
         SetChanged();
+
+        if(pGPL)
+        {
+            // get new absolute size
+            const basegfx::B2DVector aNewAbsoluteScale(basegfx::absolute(getSdrObjectScale()));
+
+            if(!aOldAbsoluteScale.equal(aNewAbsoluteScale))
+            {
+                // adapt the non-relative gluepoints according to their alignments
+                pGPL->adaptToChangedScale(aOldAbsoluteScale, aNewAbsoluteScale);
+            }
+        }
     }
 }
 

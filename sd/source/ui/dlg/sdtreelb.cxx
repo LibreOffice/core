@@ -86,6 +86,16 @@ public:
 
 bool SD_DLLPRIVATE SdPageObjsTLB::bIsInDrag = false;
 
+void SdPageObjsTLB::SetViewFrame( SfxViewFrame* pViewFrame )
+{
+    mpFrame = pViewFrame;
+}
+
+bool SdPageObjsTLB::IsLinkableSelected() const
+{
+    return mbLinkableSelected;
+}
+
 bool SdPageObjsTLB::IsInDrag()
 {
     return bIsInDrag;

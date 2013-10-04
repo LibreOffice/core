@@ -2107,13 +2107,13 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     //  // #i38892#
     //  const bool bNeedsMirrorX(((SdrObjCustomShape*)pObject)->IsMirroredX() != bMirroredX);
     //  const bool bNeedsMirrorY(((SdrObjCustomShape*)pObject)->IsMirroredY() != bMirroredY);
-    //  boost::scoped_ptr< SdrGluePointList > pListCopy;
+    //  boost::scoped_ptr< sdr::glue::List > pListCopy;
     //
     //  if( bNeedsMirrorX || bNeedsMirrorY )
     //  {
-    //      const SdrGluePointList* pList = pObject->GetGluePointList();
+    //      const sdr::glue::List* pList = pObject->GetGluePointList(false);
     //      if( pList )
-    //          pListCopy.reset( new SdrGluePointList(*pList) );
+    //          pListCopy.reset( new sdr::glue::List(*pList) );
     //  }
     //
     //    if ( bNeedsMirrorX )
@@ -2137,7 +2137,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     //
     //  if( pListCopy )
     //  {
-    //      SdrGluePointList* pNewList = const_cast< SdrGluePointList* >( pObject->GetGluePointList() );
+    //      sdr::glue::List* pNewList = pObject->GetGluePointList(false);
     //      if(pNewList)
     //          *pNewList = *pListCopy;
     //  }

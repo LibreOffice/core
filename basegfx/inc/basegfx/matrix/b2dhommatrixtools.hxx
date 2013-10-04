@@ -174,6 +174,13 @@ namespace basegfx
             const B2DHomMatrix& rSource,
             const B2DRange& rRange);
 
+        // eventually correct the scaling of the given matrix to be not zero. If the
+        // scaling is zero in X and/or Y, it gets corrected to the given default values
+        B2DHomMatrix guaranteeMinimalScaling(
+            const B2DHomMatrix& rSource,
+            double fDefaultScaleX = 1.0,
+            double fDefaultScaleY = 1.0);
+
         /* tooling methods for converting API matrices (drawing::HomogenMatrix3)
            to B2DHomMatrix
          */

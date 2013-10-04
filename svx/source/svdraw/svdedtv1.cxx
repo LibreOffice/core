@@ -251,21 +251,10 @@ void SdrEditView::ResizeMarkedObj(const basegfx::B2DPoint& rRefPoint, const base
                 AddUndo( getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pO));
             }
 
-            basegfx::B2DHomMatrix aObjectMatrix(pO->getSdrObjectTransformation());
+            // get transformation and correct to minimal scaling for zero-width/height objects
+            basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::guaranteeMinimalScaling(pO->getSdrObjectTransformation()));
 
-            // check for zero-width/height objects
-            if(basegfx::fTools::equalZero(aObjectMatrix.get(0, 0)))
-            {
-                // no width
-                aObjectMatrix.set(0, 0, 1.0);
-            }
-
-            if(basegfx::fTools::equalZero(aObjectMatrix.get(1, 1)))
-            {
-                // no height
-                aObjectMatrix.set(1, 1, 1.0);
-            }
-
+            // apply current transformation and set
             aObjectMatrix = aTransformation * aObjectMatrix;
             pO->setSdrObjectTransformation(aObjectMatrix);
         }

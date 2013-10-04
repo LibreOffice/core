@@ -1069,25 +1069,36 @@ void SdrMarkView::CreateMarkHandles(SdrHdlList& rTarget)
 
         if(!aMarkedGluePoints.empty())
         {
-            const SdrGluePointList* pGPL=pObj->GetGluePointList();
+            const sdr::glue::List* pGPL=pObj->GetGluePointList(false);
 
             if(pGPL)
             {
-                const basegfx::B2DRange aObjSnapRange(sdr::legacy::GetSnapRange(*pObj));
+                // TTTT:GLUE const basegfx::B2DRange aObjSnapRange(sdr::legacy::GetSnapRange(*pObj));
 
                 for(sdr::selection::Indices::const_iterator aCurrent(aMarkedGluePoints.begin());
                     aCurrent != aMarkedGluePoints.end(); aCurrent++)
                 {
                     const sal_uInt32 nId(*aCurrent);
-                    const sal_uInt32 nNumGP(pGPL->FindGluePoint(nId));
+                    const sdr::glue::Point* pCandidate = pGPL->findByID(nId);
 
-                    if(SDRGLUEPOINT_NOTFOUND != nNumGP)
+                    if(pCandidate)
                     {
-                        const SdrGluePoint& rGP=(*pGPL)[nNumGP];
-                        basegfx::B2DPoint aPos(rGP.GetAbsolutePos(aObjSnapRange));
+                        const basegfx::B2DPoint aPos(pObj->getSdrObjectTransformation() * pCandidate->getUnitPosition());
                         SdrHdl* pGlueHdl = new SdrHdl(rTarget, pObj, HDL_GLUE, aPos);
+
                         pGlueHdl->SetObjHdlNum(nId);
                     }
+
+                    // TTTT:GLUE
+                    //const sal_uInt32 nNumGP(pGPL->FindGluePoint(nId));
+                    //
+                    //if(SDRGLUEPOINT_NOTFOUND != nNumGP)
+                    //{
+                    //    const sdr::glue::Point& rGP=(*pGPL)[nNumGP];
+                    //    basegfx::B2DPoint aPos(rGP.GetAbsolutePos(aObjSnapRange));
+                    //    SdrHdl* pGlueHdl = new SdrHdl(rTarget, pObj, HDL_GLUE, aPos);
+                    //    pGlueHdl->SetObjHdlNum(nId);
+                    //}
                 }
             }
         }

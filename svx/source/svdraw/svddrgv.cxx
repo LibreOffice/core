@@ -852,20 +852,30 @@ bool SdrDragView::BegInsGluePoint(const basegfx::B2DPoint& rPnt)
         pObj->TakeObjNameSingul(aName);
         aStr.SearchAndReplaceAscii("%1", aName);
         maInsPointUndoStr = aStr;
-        SdrGluePointList* pGPL=pObj->ForceGluePointList();
+        sdr::glue::List* pGPL=pObj->GetGluePointList(true);
 
         if(pGPL)
         {
-            const sal_uInt32 nGlueIdx(pGPL->Insert(SdrGluePoint()));
-            SdrGluePoint& rGP=(*pGPL)[nGlueIdx];
-            const sal_uInt32 nGlueId(rGP.GetId());
+            sdr::glue::Point& rNew = pGPL->add(sdr::glue::Point());
+            const sal_uInt32 nGlueId(rNew.getID());
             SdrHdl* pHdl = 0;
 
-            rGP.SetAbsolutePos(rPnt, sdr::legacy::GetSnapRange(*pObj));
+            // TTTT:GLUE
+            //const sal_uInt32 nGlueIdx(pGPL->Insert(sdr::glue::Point()));
+            //sdr::glue::Point& rGP=(*pGPL)[nGlueIdx];
+            //const sal_uInt32 nGlueId(rGP.GetId());
+
+            // the moved candidate is identified. GetObjectMatrix, but take care for objects
+            // with zero width/height
+            basegfx::B2DHomMatrix aCorrectedObjectTransformation(basegfx::tools::guaranteeMinimalScaling(pObj->getSdrObjectTransformation()));
+
+            aCorrectedObjectTransformation.invert();
+            rNew.setUnitPosition(aCorrectedObjectTransformation * rPnt);
+            // rGP.SetAbsolutePos(rPnt, sdr::legacy::GetSnapRange(*pObj));
 
             if(MarkGluePoint(pObj, nGlueId))
             {
-                pHdl=GetGluePointHdl(pObj,nGlueId);
+                pHdl = GetGluePointHdl(pObj, nGlueId);
             }
 
             if(pHdl && HDL_GLUE == pHdl->GetKind() && pHdl->GetObj() == pObj && pHdl->GetObjHdlNum() == nGlueId)

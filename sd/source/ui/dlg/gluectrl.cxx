@@ -28,7 +28,7 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <svx/dialogs.hrc>
-#include <svx/svdglue.hxx>
+#include <svx/sdrglue.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -48,18 +48,11 @@ using namespace ::com::sun::star::frame;
 #define ESCDIR_COUNT 5
 static sal_uInt16 aEscDirArray[] =
 {
-    SDRESC_SMART,
-    SDRESC_LEFT,
-    SDRESC_RIGHT,
-    SDRESC_TOP,
-    SDRESC_BOTTOM,
-//  SDRESC_LO,
-//  SDRESC_LU,
-//  SDRESC_RO,
-//  SDRESC_RU,
-//  SDRESC_HORZ,
-//  SDRESC_VERT,
-//  SDRESC_ALL
+    sdr::glue::Point::ESCAPE_DIRECTION_SMART,
+    sdr::glue::Point::ESCAPE_DIRECTION_LEFT,
+    sdr::glue::Point::ESCAPE_DIRECTION_RIGHT,
+    sdr::glue::Point::ESCAPE_DIRECTION_TOP,
+    sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM
 };
 
 

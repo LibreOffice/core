@@ -45,7 +45,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdglue.hxx>
+#include <svx/sdrglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdattrx.hxx>
@@ -55,7 +55,7 @@
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/svdglue.hxx>
+#include <svx/sdrglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svl/itemiter.hxx>
@@ -965,20 +965,28 @@ void SdrPaintView::GlueInvalidate() const
 
                 for(sal_uInt32 nObjNum(0); nObjNum < nObjAnz; nObjNum++)
                 {
-                    const SdrObject* pObj=pOL->GetObj(nObjNum);
-                    const SdrGluePointList* pGPL=pObj->GetGluePointList();
+                    const SdrObject* pObj = pOL->GetObj(nObjNum);
+                    const sdr::glue::List* pGPL = pObj ? pObj->GetGluePointList(false) : 0;
 
-                    if(pGPL && pGPL->GetCount())
+                    if(pGPL)
                     {
-                        const basegfx::B2DRange aObjectRange(sdr::legacy::GetSnapRange(*pObj));
+                        const sdr::glue::PointVector aGluePointVecor(pGPL->getVector());
 
-                        for(sal_uInt32 a(0); a < pGPL->GetCount(); a++)
+                        for(sal_uInt32 a(0); a < aGluePointVecor.size(); a++)
                         {
-                            const SdrGluePoint& rCandidate = (*pGPL)[a];
-                            const basegfx::B2DPoint aPos(rCandidate.GetAbsolutePos(aObjectRange));
-                            const basegfx::B2DRange aRange(aPos - aLogicHalfSevenPix, aPos + aLogicHalfSevenPix);
+                            const sdr::glue::Point* pCandidate = aGluePointVecor[a];
 
-                            InvalidateOneWin((Window&)rOutDev, aRange);
+                            if(pCandidate)
+                            {
+                                const basegfx::B2DPoint aPos(pObj->getSdrObjectTransformation() * pCandidate->getUnitPosition());
+                                const basegfx::B2DRange aRange(aPos - aLogicHalfSevenPix, aPos + aLogicHalfSevenPix);
+
+                                InvalidateOneWin((Window&)rOutDev, aRange);
+                            }
+                            else
+                            {
+                                OSL_ENSURE(false, "Got sdr::glue::PointVector with empty entries (!)");
+                            }
                         }
                     }
                 }

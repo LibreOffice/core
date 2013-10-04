@@ -1812,89 +1812,145 @@ void SdrObjCustomShape::setSdrObjectTransformation(const basegfx::B2DHomMatrix& 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// #i38892#
-void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
+// TTTT:GLUE
+//void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
+//{
+//  const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
+//
+//  if(pSdrObject)
+//  {
+//      const sdr::glue::List* pSource = pSdrObject->GetGluePointList(false);
+//
+//      if(pSource && pSource->GetCount())
+//      {
+//          //if(!SdrTextObj::GetGluePointList())
+//          //{
+//          //  SdrTextObj::ForceGluePointList();
+//          //}
+//
+//          const sdr::glue::List* pList = SdrTextObj::GetGluePointList(true);
+//
+//          if(pList)
+//          {
+//              sdr::glue::List aNewList;
+//              sal_uInt16 a;
+//
+//              // build transform matrix from helper object to local
+//              basegfx::B2DHomMatrix aTransFromHelperToLocal(pSdrObject->getSdrObjectTransformation());
+//              aTransFromHelperToLocal.invert();
+//              aTransFromHelperToLocal = getSdrObjectTransformation() * aTransFromHelperToLocal;
+//
+//              for(a = 0; a < pSource->GetCount(); a++)
+//              {
+//                  sdr::glue::Point aCopy((*pSource)[a]);
+//                  aCopy.SetUserDefined(false);
+//
+//                  basegfx::B2DPoint aGluePos(aCopy.GetPos());
+//                  aGluePos *= aTransFromHelperToLocal;
+//                  aCopy.SetPos(aGluePos);
+//
+//                  aNewList.Insert(aCopy);
+//              }
+//
+//              for(a = 0; a < pList->GetCount(); a++)
+//              {
+//                  const sdr::glue::Point& rCandidate = (*pList)[a];
+//
+//                  if(rCandidate.IsUserDefined())
+//                  {
+//                      aNewList.Insert(rCandidate);
+//                  }
+//              }
+//
+//              // copy new list to local. This is NOT very convenient behaviour, the local
+//              // GluePointList should not be set, but be delivered by using GetGluePointList(),
+//              // maybe on demand. Since the local object is changed here, this is assumed to
+//              // be a result of GetGluePointList and thus the list is copied
+//              if(mpPlusData)
+//              {
+//                  *mpPlusData->mpGluePoints = aNewList;
+//              }
+//          }
+//      }
+//  }
+//}
+
+sdr::glue::List* SdrObjCustomShape::GetGluePointList(bool bForce) const
 {
-    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
+    sdr::glue::List* pOld = GetGluePointList(false);
+    sdr::glue::List* pNew = GetGluePointList(bForce);
 
-    if(pSdrObject)
+    if(bForce && !pOld && pNew)
     {
-        const SdrGluePointList* pSource = pSdrObject->GetGluePointList();
+        // new list was created, add GluePoints from created visualization as non-user-defined GluePoints
+        const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
 
-        if(pSource && pSource->GetCount())
+        if(pSdrObject)
         {
-            if(!SdrTextObj::GetGluePointList())
+            const sdr::glue::List* pSource = pSdrObject->GetGluePointList(false);
+
+            if(pSource)
             {
-                SdrTextObj::ForceGluePointList();
-            }
+                // build transform from helper object unit coordinates to target object unit coordinates;
+                // we need the inverse of the target object transform. temporarily correct zero sizes for invert
+                basegfx::B2DHomMatrix aInvLocal(basegfx::tools::guaranteeMinimalScaling(getSdrObjectTransformation()));
+                aInvLocal.invert();
 
-            const SdrGluePointList* pList = SdrTextObj::GetGluePointList();
+                // build full transform
+                basegfx::B2DHomMatrix aFullHelperUnitToTargetUnit(aInvLocal * pSdrObject->getSdrObjectTransformation());
 
-            if(pList)
-            {
-                SdrGluePointList aNewList;
-                sal_uInt16 a;
+                // get vector, change and copy points
+                const sdr::glue::PointVector aCandidates(pSource->getVector());
 
-                // build transform matrix from helper object to local
-                basegfx::B2DHomMatrix aTransFromHelperToLocal(pSdrObject->getSdrObjectTransformation());
-                aTransFromHelperToLocal.invert();
-                aTransFromHelperToLocal = getSdrObjectTransformation() * aTransFromHelperToLocal;
-
-                for(a = 0; a < pSource->GetCount(); a++)
+                for(sal_uInt32 a(0); a < aCandidates.size(); a++)
                 {
-                    SdrGluePoint aCopy((*pSource)[a]);
-                    aCopy.SetUserDefined(false);
+                    const sdr::glue::Point* pCandidate(aCandidates[a]);
 
-                    basegfx::B2DPoint aGluePos(aCopy.GetPos());
-                    aGluePos *= aTransFromHelperToLocal;
-                    aCopy.SetPos(aGluePos);
-
-                    aNewList.Insert(aCopy);
-                }
-
-                for(a = 0; a < pList->GetCount(); a++)
-                {
-                    const SdrGluePoint& rCandidate = (*pList)[a];
-
-                    if(rCandidate.IsUserDefined())
+                    if(pCandidate)
                     {
-                        aNewList.Insert(rCandidate);
-                    }
-                }
+                        const basegfx::B2DPoint aNewPos(aFullHelperUnitToTargetUnit * pCandidate->getUnitPosition());
+                        const sdr::glue::Point aNewPoint(
+                            aNewPos,
+                            pCandidate->getEscapeDirections(),
+                            pCandidate->getHorizontalAlignment(),
+                            pCandidate->getVerticalAlignment(),
+                            pCandidate->getRelative(),
+                            false);
 
-                // copy new list to local. This is NOT very convenient behaviour, the local
-                // GluePointList should not be set, but be delivered by using GetGluePointList(),
-                // maybe on demand. Since the local object is changed here, this is assumed to
-                // be a result of GetGluePointList and thus the list is copied
-                if(mpPlusData)
-                {
-                    *mpPlusData->mpGluePoints = aNewList;
+                        pNew->add(aNewPoint);
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Got empty slot in sdr::glue::PointVector (!)");
+                    }
                 }
             }
         }
+
+        // TTTT:GLUE check here (!)
+        // Add custom glues here (!)
+        // ((SdrObjCustomShape*)this)->ImpCheckCustomGluePointsAreAdded();
     }
+
+    return mpPlusData ? mpPlusData->mpGluePoints : 0;
+
+    //((SdrObjCustomShape*)this)->ImpCheckCustomGluePointsAreAdded();
+    //return SdrTextObj::GetGluePointList();
 }
 
-// #i38892#
-const SdrGluePointList* SdrObjCustomShape::GetGluePointList() const
-{
-    ((SdrObjCustomShape*)this)->ImpCheckCustomGluePointsAreAdded();
-    return SdrTextObj::GetGluePointList();
-}
-
-// #i38892#
-SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
-{
-    if(SdrTextObj::ForceGluePointList())
-    {
-        ImpCheckCustomGluePointsAreAdded();
-        return SdrTextObj::ForceGluePointList();
-    }
-    else
-    {
-        return 0L;
-    }
-}
+//// #i38892# TTTT:GLUE
+//sdr::glue::List* SdrObjCustomShape::ForceGluePointList()
+//{
+//  if(SdrTextObj::ForceGluePointList())
+//  {
+//      ImpCheckCustomGluePointsAreAdded();
+//      return SdrTextObj::ForceGluePointList();
+//  }
+//  else
+//  {
+//      return 0L;
+//  }
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

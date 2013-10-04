@@ -25,7 +25,7 @@
 #define _SVDOEDGE_HXX
 
 #include <svx/svdotext.hxx>
-#include <svx/svdglue.hxx>
+#include <svx/sdrglue.hxx>
 #include <svx/svxdllapi.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
@@ -49,7 +49,7 @@ private:
     friend class                SdrCreateView;
 
 protected:
-    basegfx::B2DPoint           maObjOfs;       // Wird beim Draggen eines Knotens gesetzt
+    // TTTT:GLUE basegfx::B2DPoint          maObjOfs;       // Wird beim Draggen eines Knotens gesetzt
     SdrObject*                  mpConnectedSdrObject;          // Referenziertes Objekt
     sal_uInt16                  mnConnectorId;        // Konnektornummer
 
@@ -63,7 +63,7 @@ public:
     SdrObjConnection() { ResetVars(); }
 
     void ResetVars();
-    bool TakeGluePoint(SdrGluePoint& rGP, bool bSetAbsolutePos) const;
+    bool TakeGluePoint(sdr::glue::Point& rGP/* TTTT:GLUE, bool bSetAbsolutePos*/) const;
 
     inline void SetBestConnection( bool rB ) { mbBestConnection = rB; };
     inline void SetBestVertex( bool rB ) { mbBestVertex = rB; };
@@ -114,7 +114,7 @@ public:
 
     basegfx::B2DPoint& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode);
     const basegfx::B2DPoint& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode) const { return const_cast< SdrEdgeInfoRec* >(this)->ImpGetLineVersatzPoint(eLineCode); }
-    sal_uInt16 ImpGetPolyIdx(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const;
+    sal_uInt32 ImpGetPolyIdx(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const;
     bool ImpIsHorzLine(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const;
     void ImpSetLineVersatz(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount, long nVal);
     long ImpGetLineVersatz(SdrEdgeLineCode eLineCode, sal_uInt32 nPointCount) const;
@@ -212,9 +212,9 @@ public:
     SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &maCon1 : &maCon2); }
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrGluePoint GetVertexGluePoint(sal_uInt32 nNum) const;
-    virtual const SdrGluePointList* GetGluePointList() const;
-    virtual SdrGluePointList* ForceGluePointList();
+    virtual sdr::glue::Point GetVertexGluePoint(sal_uInt32 nNum) const;
+    virtual sdr::glue::List* GetGluePointList(bool bForce) const;
+    // TTTT:GLUE virtual sdr::glue::List* ForceGluePointList();
 
     // bTail1=true: Linienanfang, sonst LinienEnde
     // pObj=NULL: Disconnect

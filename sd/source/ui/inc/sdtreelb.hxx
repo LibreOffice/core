@@ -196,7 +196,7 @@ public:
     virtual void            SelectHdl();
     virtual void            KeyInput( const KeyEvent& rKEvt );
 
-    void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
+    void                    SetViewFrame( SfxViewFrame* pViewFrame );
     SfxViewFrame*           GetViewFrame() const { return mpFrame; }
 
     void                    Fill( const SdDrawDocument*, bool bAllPages, const String& rDocName );
@@ -211,7 +211,7 @@ public:
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
 
-    bool                    IsLinkableSelected() const { return mbLinkableSelected; }
+    bool                    IsLinkableSelected() const;
 
     static bool             IsInDrag();
     using SvLBox::ExecuteDrop;

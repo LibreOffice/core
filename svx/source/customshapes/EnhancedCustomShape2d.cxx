@@ -2296,25 +2296,58 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
     return pRet;
 }
 
-void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
+void EnhancedCustomShape2d::ApplyGluePoints(SdrObject* pTarget)
 {
-    if ( pObj && seqGluePoints.getLength() )
+    if(pTarget)
     {
-        sal_uInt32 i, nCount = seqGluePoints.getLength();
-        for ( i = 0; i < nCount; i++ )
+        const sal_uInt32 nCount(seqGluePoints.getLength());
+
+        if(nCount)
         {
-            SdrGluePoint aGluePoint;
+            sdr::glue::List* pList = pTarget->GetGluePointList(true);
 
-            aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
-            aGluePoint.SetPercent( sal_False );
+            if(pList)
+            {
+                // positions from GetPoint(seqGluePoints) are relative to absolute object size
+                const basegfx::B2DVector aObjectScale(
+                    basegfx::absolute(pCustomShapeObj->getSdrObjectScale()));
+                const basegfx::B2DPoint aScaleToUnit(
+                    basegfx::fTools::equalZero(aObjectScale.getX()) ? 1.0 : 1.0/ aObjectScale.getX(),
+                    basegfx::fTools::equalZero(aObjectScale.getY()) ? 1.0 : 1.0/ aObjectScale.getY());
 
-            aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
-            aGluePoint.SetEscDir( SDRESC_SMART );
-            SdrGluePointList* pList = pObj->ForceGluePointList();
-            if( pList )
-                /* sal_uInt16 nId = */ pList->Insert( aGluePoint );
+                for(sal_uInt32 a(0); a < nCount; a++)
+                {
+                    const basegfx::B2DPoint aPosition(GetPoint(seqGluePoints[a], sal_True, sal_True));
+                    const sdr::glue::Point aNew(
+                        aPosition * aScaleToUnit,
+                        sdr::glue::Point::ESCAPE_DIRECTION_SMART,
+                        sdr::glue::Point::Alignment_Minimum,
+                        sdr::glue::Point::Alignment_Minimum);
+
+                    pList->add(aNew);
+                }
+            }
         }
     }
+
+    // TTTT:GLUE
+    //if ( pObj && seqGluePoints.getLength() )
+    //{
+    //    sal_uInt32 i, nCount = seqGluePoints.getLength();
+    //    for ( i = 0; i < nCount; i++ )
+    //    {
+    //        sdr::glue::Point aGluePoint;
+    //
+    //        aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
+    //        aGluePoint.SetPercent( sal_False );
+    //
+    //        aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
+    //        aGluePoint.setEscapeDirections( sdr::glue::Point::ESCAPE_DIRECTION_SMART );
+    //        sdr::glue::List* pList = pObj->GetGluePointList(true);
+    //        if( pList )
+    //            /* sal_uInt16 nId = */ pList->Insert( aGluePoint );
+    //    }
+    //}
 }
 
 SdrObject* EnhancedCustomShape2d::CreateLineGeometry()

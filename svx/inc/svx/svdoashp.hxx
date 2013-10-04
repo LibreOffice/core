@@ -112,8 +112,8 @@ public:
     // #i37011# centralize throw-away of render geometry
     void InvalidateRenderGeometry();
 
-    // #i38892#
-    void ImpCheckCustomGluePointsAreAdded();
+    // TTTT:GLUE #i38892#
+    // void ImpCheckCustomGluePointsAreAdded();
 
     // returns the new text range that corresponds to the current logic range. The return value can be empty if nothing changed.
     basegfx::B2DRange ImpCalculateTextFrame();
@@ -216,8 +216,8 @@ public:
     virtual void          SaveGeoData(SdrObjGeoData &rGeo) const;
     virtual void          RestGeoData(const SdrObjGeoData &rGeo);
 
-    virtual const SdrGluePointList* GetGluePointList() const;
-    virtual SdrGluePointList* ForceGluePointList();
+    virtual sdr::glue::List* GetGluePointList(bool bForce) const;
+    // TTTT:GLUE virtual sdr::glue::List* ForceGluePointList();
 
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 

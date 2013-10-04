@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef _SVDGLEV_HXX
 #define _SVDGLEV_HXX
 
@@ -30,7 +28,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // predefines
 
-class SdrGluePoint;
+class sdr::glue::Point;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -39,10 +37,10 @@ class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
 private:
     // Markierte Klebepunkte kopieren und anstelle der alten markieren
     void ImpCopyMarkedGluePoints();
-    typedef void (*PGlueDoFunc)(SdrGluePoint&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);
-    typedef void (*PGlueTrFunc)(basegfx::B2DPoint&, const void*, const void*, const void*, const void*, const void*);
+    typedef void (*PGlueDoFunc)(sdr::glue::Point&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);
+    // TTTT:GLUE typedef void (*PGlueTrFunc)(basegfx::B2DPoint&, const void*, const void*, const void*, const void*, const void*);
     void ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1 = 0, const void* p2 = 0, const void* p3 = 0, const void* p4 = 0, const void* p5 = 0);
-    void ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1 = 0, const void* p2 = 0, const void* p3 = 0, const void* p4 = 0, const void* p5 = 0);
+    void ImpTransformMarkedGluePoints(const basegfx::B2DHomMatrix& rTransform);
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -53,7 +51,8 @@ public:
     // Durch den Parameter nThisEsc uebergibt man die Richtung, die man
     // checken bzw. setzen/loeschen will.
     // Moegliche Werte fuer nThisEsc sind z.Zt.
-    // SDRESC_LEFT, SDRESC_RIGHT, SDRESC_TOP und SDRESC_BOTTOM
+    // ESCAPE_DIRECTION_LEFT, ESCAPE_DIRECTION_RIGHT,
+    // ESCAPE_DIRECTION_TOP und ESCAPE_DIRECTION_BOTTOM
     TRISTATE IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const;
     void SetMarkedGluePointsEscDir(sal_uInt16 nThisEsc, bool bOn);
     bool IsSetMarkedGluePointsEscDirPossible() const { return !IsReadOnly() && areGluesSelected(); }
@@ -74,16 +73,20 @@ public:
     //      SDRVERTALIGN_TOP
     //      SDRVERTALIGN_BOTTOM
     //      SDRVERTALIGN_DONTCARE (nur bei Get())
-    sal_uInt16 GetMarkedGluePointsAlign(bool bVert) const;
-    void SetMarkedGluePointsAlign(bool bVert, sal_uInt16 nAlign);
+    sdr::glue::Point::Alignment GetMarkedGluePointsAlign(bool bVert) const;
+    void SetMarkedGluePointsAlign(bool bVert, sdr::glue::Point::Alignment nAlign);
     bool IsSetMarkedGluePointsAlignPossible() const { return !IsReadOnly() && areGluesSelected(); }
 
     // Alle merkierten Klebepunkte entfernen
     void DeleteMarkedGluePoints();
 
-    void MoveMarkedGluePoints(const basegfx::B2DVector& rDelta, bool bCopy = false);
-    void ResizeMarkedGluePoints(const basegfx::B2DPoint& rRef, const basegfx::B2DVector& rScale, bool bCopy = false);
-    void RotateMarkedGluePoints(const basegfx::B2DPoint& rRef, double fAngle, bool bCopy = false);
+    // central GluePoint transformator
+    void TransformMarkedGluePoints(const basegfx::B2DHomMatrix& rTransformation, const SdrRepeatFunc aRepFunc, bool bCopy = false);
+
+    // TTTT:GLUE
+    //void MoveMarkedGluePoints(const basegfx::B2DVector& rDelta, bool bCopy = false);
+    //void ResizeMarkedGluePoints(const basegfx::B2DPoint& rRef, const basegfx::B2DVector& rScale, bool bCopy = false);
+    //void RotateMarkedGluePoints(const basegfx::B2DPoint& rRef, double fAngle, bool bCopy = false);
 };
 
 #endif //_SVDGLEV_HXX

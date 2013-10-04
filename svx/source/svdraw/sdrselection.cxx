@@ -110,7 +110,7 @@ namespace sdr
                 OSL_ENSURE(pCandidate, "Missing SdrObject pointer in glue selection(!)");
                 bool bErase(false);
                 IndicesMap::iterator aNext(aIndices);
-                const SdrGluePointList* pGPL = pCandidate->GetGluePointList();
+                const sdr::glue::List* pGPL = pCandidate->GetGluePointList(false);
 
                 aNext++;
 
@@ -124,7 +124,7 @@ namespace sdr
                     // it over to a new list. Thus, all no longer existing GluePoints will be erased
                     for(Indices::const_iterator aIter(aCurrent.begin()); aIter != aCurrent.end(); aIter++)
                     {
-                        if(SDRGLUEPOINT_NOTFOUND != pGPL->FindGluePoint(*aIter))
+                        if(pGPL->findByID(*aIter))
                         {
                             aNewList.insert(aNewList.end(), *aIter);
                         }

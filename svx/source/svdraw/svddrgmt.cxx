@@ -531,28 +531,36 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
         for(sal_uInt32 nm(0); nm < aSelection.size(); nm++)
         {
-            const sdr::selection::Indices aMarkedGluePoints(getSdrView().getSelectedGluesForSelectedSdrObject(*aSelection[nm]));
+            const SdrObject* pSdrObjCandidate = aSelection[nm];
 
-            if(aMarkedGluePoints.size())
+            if(pSdrObjCandidate)
             {
-                const SdrGluePointList* pGPL = aSelection[nm]->GetGluePointList();
+                const sdr::selection::Indices aMarkedGluePoints(getSdrView().getSelectedGluesForSelectedSdrObject(*pSdrObjCandidate));
 
-                if(pGPL)
+                if(aMarkedGluePoints.size())
                 {
-                    const basegfx::B2DRange aSnapRange(sdr::legacy::GetSnapRange(*aSelection[nm]));
+                    // TTTT:GLUE
+                    const sdr::glue::List* pGPL = pSdrObjCandidate->GetGluePointList(false);
 
-                    for(sdr::selection::Indices::const_iterator aCurrent(aMarkedGluePoints.begin());
-                        aCurrent != aMarkedGluePoints.end(); aCurrent++)
+                    if(pGPL)
                     {
-                        const sal_uInt32 nObjPt(*aCurrent);
-                        const sal_uInt32 nGlueNum(pGPL->FindGluePoint(nObjPt));
-
-                        if(SDRGLUEPOINT_NOTFOUND != nGlueNum)
+                        for(sdr::selection::Indices::const_iterator aCurrent(aMarkedGluePoints.begin());
+                            aCurrent != aMarkedGluePoints.end(); aCurrent++)
                         {
-                            aPositions.push_back((*pGPL)[nGlueNum].GetAbsolutePos(aSnapRange));
+                            const sal_uInt32 nObjPt(*aCurrent);
+                            const sdr::glue::Point* pCandidate = pGPL->findByID(nObjPt);
+
+                            if(pCandidate)
+                            {
+                                aPositions.push_back(pSdrObjCandidate->getSdrObjectTransformation() * pCandidate->getUnitPosition());
+                            }
                         }
                     }
                 }
+            }
+            else
+            {
+                OSL_ENSURE(false, "ObjectSelection vector with unallowed gaps (!)");
             }
         }
 
@@ -599,21 +607,10 @@ SdrObject* SdrDragMethod::GetDragObj() const
 void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
     // use get/setSdrObjectTransformation now. This will also work when object has a path
-    basegfx::B2DHomMatrix aObjectMatrix(rTarget.getSdrObjectTransformation());
+    // correct to minimal scaling for zero-width/height objects
+    basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::guaranteeMinimalScaling(rTarget.getSdrObjectTransformation()));
 
-    // check for zero-width/height objects
-    if(basegfx::fTools::equalZero(aObjectMatrix.get(0, 0)))
-    {
-        // no width
-        aObjectMatrix.set(0, 0, 1.0);
-    }
-
-    if(basegfx::fTools::equalZero(aObjectMatrix.get(1, 1)))
-    {
-        // no height
-        aObjectMatrix.set(1, 1, 1.0);
-    }
-
+    // apply current transformation and set
     aObjectMatrix = getCurrentTransformation() * aObjectMatrix;
     rTarget.setSdrObjectTransformation(aObjectMatrix);
 }
@@ -1688,52 +1685,73 @@ void SdrDragMove::MoveSdrDrag(const basegfx::B2DPoint& rPoint)
 
         if(getSdrView().IsDraggingGluePoints() && getSdrView().areSdrObjectsSelected())
         {
-            // Klebepunkte aufs BoundRect des Obj limitieren
-            aNewPos -= DragStat().GetStart();
+            // limit delta move to possible GluePoint move possibilities
+            const basegfx::B2DVector aOriginalAbsoluteDelta(aNewPos - DragStat().GetStart());
+            basegfx::B2DVector aNewAbsoluteDelta(aOriginalAbsoluteDelta);
             const SdrObjectVector aSelection(getSdrView().getSelectedSdrObjectVectorFromSdrMarkView());
 
             for(sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size(); nMarkNum++)
             {
                 const SdrObject* pObj = aSelection[nMarkNum];
-                const sdr::selection::Indices rMarkedGluePoints = getSdrView().getSelectedGluesForSelectedSdrObject(*pObj);
 
-                if(rMarkedGluePoints.size())
+                if(pObj)
                 {
-                    const SdrGluePointList* pGPL = pObj->GetGluePointList();
-                    const basegfx::B2DRange& rObjectRange(pObj->getObjectRange(&getSdrView()));
-                    const basegfx::B2DRange aObjectSnapRange(sdr::legacy::GetSnapRange(*pObj));
+                    const sdr::selection::Indices rMarkedGluePoints = getSdrView().getSelectedGluesForSelectedSdrObject(*pObj);
 
-                    for(sdr::selection::Indices::const_iterator aCurrent(rMarkedGluePoints.begin()); aCurrent != rMarkedGluePoints.end(); aCurrent++)
+                    if(rMarkedGluePoints.size())
                     {
-                        const sal_uInt32 nId(*aCurrent);
-                        const sal_uInt32 nGlueNum(pGPL->FindGluePoint(nId));
+                        const sdr::glue::List* pGPL = pObj->GetGluePointList(false);
 
-                        if(SDRGLUEPOINT_NOTFOUND != nGlueNum)
+                        if(pGPL)
                         {
-                            basegfx::B2DPoint aPt((*pGPL)[nGlueNum].GetAbsolutePos(aObjectSnapRange) + aNewPos);
+                            // the SdrObject candidate with potentially moved GluePoints is identified. GetObjectMatrix,
+                            // but take care for objects with zero width/height. Also prepare inverse transformation
+                            const basegfx::B2DHomMatrix aCorrectedObjectTransformation(basegfx::tools::guaranteeMinimalScaling(pObj->getSdrObjectTransformation()));
+                            basegfx::B2DHomMatrix aInverseCorrectedObjectTransformation(aCorrectedObjectTransformation);
 
-                            if(aPt.getX() < rObjectRange.getMinX())
+                            aInverseCorrectedObjectTransformation.invert();
+
+                            for(sdr::selection::Indices::const_iterator aCurrent(rMarkedGluePoints.begin()); aCurrent != rMarkedGluePoints.end(); aCurrent++)
                             {
-                                aNewPos.setX(aNewPos.getX() - (aPt.getX() - rObjectRange.getMinX()));
-                            }
-                            if(aPt.getX() > rObjectRange.getMaxX())
-                            {
-                                aNewPos.setX(aNewPos.getX() - (aPt.getX() - rObjectRange.getMaxX()));
-                            }
-                            if(aPt.getY() < rObjectRange.getMinY())
-                            {
-                                aNewPos.setY(aNewPos.getY() - (aPt.getY() - rObjectRange.getMinY()));
-                            }
-                            if(aPt.getY() > rObjectRange.getMaxY())
-                            {
-                                aNewPos.setY(aNewPos.getY() - (aPt.getY() - rObjectRange.getMaxY()));
+                                const sal_uInt32 nId(*aCurrent);
+                                const sdr::glue::Point* pGlueCandidate = pGPL->findByID(nId);
+
+                                if(pGlueCandidate)
+                                {
+                                    // get potentially moved position as absolute position and add absolute delta
+                                    const basegfx::B2DPoint aAbsolutePosition(aCorrectedObjectTransformation * pGlueCandidate->getUnitPosition());
+                                    basegfx::B2DPoint aClampedAbsolutePosition(aAbsolutePosition + aNewAbsoluteDelta);
+
+                                    // calculate back to unit position of moved point, clamp that position in unit coordinates
+                                    // to unit coordinates and convert back to absolute coordinates; this gives the clamped potentially
+                                    // moved position
+                                    aClampedAbsolutePosition = aInverseCorrectedObjectTransformation * aClampedAbsolutePosition;
+                                    aClampedAbsolutePosition = basegfx::B2DRange::getUnitB2DRange().clamp(aClampedAbsolutePosition);
+                                    aClampedAbsolutePosition = aCorrectedObjectTransformation * aClampedAbsolutePosition;
+
+                                    // calculate the potentially changed delta move
+                                    const basegfx::B2DVector aClampedDelta(aClampedAbsolutePosition - aAbsolutePosition);
+
+                                    // prefer the new delta move vector when it's shorter than the original
+                                    if(aClampedDelta.getLength() < aNewAbsoluteDelta.getLength())
+                                    {
+                                        aNewAbsoluteDelta = aClampedDelta;
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                else
+                {
+                    OSL_ENSURE(false, "ObjectSelection vector with illegal empty slots (!)");
+                }
             }
 
-            aNewPos += DragStat().GetStart();
+            if(!aOriginalAbsoluteDelta.equal(aNewAbsoluteDelta))
+            {
+                aNewPos = aNewPos - aOriginalAbsoluteDelta + aNewAbsoluteDelta;
+            }
         }
 
         if(getSdrView().IsOrthogonal())
@@ -1769,9 +1787,13 @@ bool SdrDragMove::EndSdrDrag(bool bCopy)
             SDRREPFUNC_OBJ_MOVE,
             bCopy);
     }
-    else if (IsDraggingGluePoints())
+    else if(IsDraggingGluePoints())
     {
-        getSdrView().MoveMarkedGluePoints(DragStat().GetNow() - DragStat().GetPrev(), bCopy);
+        getSdrView().TransformMarkedGluePoints(
+            basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetNow() - DragStat().GetPrev()),
+            SDRREPFUNC_OBJ_MOVE,
+            bCopy);
+        // TTTT:GLUE getSdrView().MoveMarkedGluePoints(DragStat().GetNow() - DragStat().GetPrev(), bCopy);
     }
     else
     {
@@ -2064,9 +2086,19 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
             SDRREPFUNC_OBJ_RESIZE,
             bCopy);
     }
-    else if (IsDraggingGluePoints())
+    else if(IsDraggingGluePoints())
     {
-        getSdrView().ResizeMarkedGluePoints(DragStat().GetRef1(), maScale, bCopy);
+        basegfx::B2DHomMatrix aTransform;
+
+        aTransform.translate(-DragStat().GetRef1());
+        aTransform.scale(maScale);
+        aTransform.translate(DragStat().GetRef1());
+
+        getSdrView().TransformMarkedGluePoints(
+            aTransform,
+            SDRREPFUNC_OBJ_MOVE,
+            bCopy);
+        // TTTT:GLUE getSdrView().ResizeMarkedGluePoints(DragStat().GetRef1(), maScale, bCopy);
     }
     else
     {
@@ -2192,7 +2224,11 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
         }
         else if(IsDraggingGluePoints())
         {
-            getSdrView().RotateMarkedGluePoints(DragStat().GetRef1(), mfDeltaRotation, bCopy);
+            getSdrView().TransformMarkedGluePoints(
+                basegfx::tools::createRotateAroundPoint(DragStat().GetRef1(), mfDeltaRotation),
+                SDRREPFUNC_OBJ_ROTATE,
+                bCopy);
+            // TTTT:GLUE getSdrView().RotateMarkedGluePoints(DragStat().GetRef1(), mfDeltaRotation, bCopy);
         }
         else
         {

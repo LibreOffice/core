@@ -4806,23 +4806,50 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 
                 if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::CUSTOM )
                 {
-                    const SdrGluePointList* pList = pCustoShape->GetGluePointList();
-                    if ( pList )
+                    const sdr::glue::List* pList = pCustoShape->GetGluePointList(false);
+                    const sdr::glue::PointVector aGluePointVector(pList ? pList->getVector() : sdr::glue::PointVector());
+
+                    if(aGluePointVector.size())
                     {
                         Polygon aPoly;
-                        sal_uInt16 nNum, nAnz = pList->GetCount();
-                        if ( nAnz )
+
+                        for(sal_uInt32 a(0); a < aGluePointVector.size(); a++)
                         {
-                            for ( nNum = 0; nNum < nAnz; nNum++ )
+                            const sdr::glue::Point* pCandidate = aGluePointVector[a];
+
+                            if(pCandidate)
                             {
-                                const SdrGluePoint& rGP = (*pList)[ nNum ];
-                                const basegfx::B2DPoint aPt( rGP.GetAbsolutePos( sdr::legacy::GetSnapRange(*pCustoShape) ) );
-                                aPoly.Insert( POLY_APPEND, Point(basegfx::fround(aPt.getX()), basegfx::fround(aPt.getY())) );
+                                const basegfx::B2DPoint aPt(pCustoShape->getSdrObjectTransformation() * pCandidate->getUnitPosition());
+
+                                aPoly.Insert(POLY_APPEND, Point(basegfx::fround(aPt.getX()), basegfx::fround(aPt.getY())));
                             }
-                            nRule = GetClosestPoint( aPoly, aRefPoint );
-                            bRectangularConnection = false;
+                            else
+                            {
+                                OSL_ENSURE(false, "Got sdr::glue::PointVector with empty entries (!)");
+                            }
                         }
+
+                        nRule = GetClosestPoint( aPoly, aRefPoint );
+                        bRectangularConnection = false;
                     }
+
+                    // TTTT:GLUE
+                    //if ( pList )
+                    //{
+                    //    Polygon aPoly;
+                    //    sal_uInt16 nNum, nAnz = pList->GetCount();
+                    //    if ( nAnz )
+                    //    {
+                    //        for ( nNum = 0; nNum < nAnz; nNum++ )
+                    //        {
+                    //            const sdr::glue::Point& rGP = (*pList)[ nNum ];
+                    //            const basegfx::B2DPoint aPt( rGP.GetAbsolutePos( sdr::legacy::GetSnapRange(*pCustoShape) ) );
+                    //            aPoly.Insert( POLY_APPEND, Point(basegfx::fround(aPt.getX()), basegfx::fround(aPt.getY())) );
+                    //        }
+                    //        nRule = GetClosestPoint( aPoly, aRefPoint );
+                    //        bRectangularConnection = false;
+                    //    }
+                    //}
                 }
                 else if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {

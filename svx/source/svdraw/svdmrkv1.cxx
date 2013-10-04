@@ -312,31 +312,40 @@ void SdrMarkView::impCreatePointRanges() const
 
 bool SdrMarkView::HasMarkableGluePoints() const
 {
-    bool bRet(false);
-
     if(IsGluePointEditMode() && areSdrObjectsSelected())
     {
         const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
 
-        for(sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size() && !bRet; nMarkNum++)
+        for(sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size(); nMarkNum++)
         {
             const SdrObject* pObj = aSelection[nMarkNum];
-            const SdrGluePointList* pGPL=pObj->GetGluePointList();
+            const sdr::glue::List* pGPL = pObj ? pObj->GetGluePointList(false) : 0;
 
-            if(pGPL && pGPL->GetCount())
+            if(pGPL)
             {
-                for(sal_uInt32 a(0); !bRet && a < pGPL->GetCount(); a++)
+                const sdr::glue::PointVector aCandidates(pGPL->getVector());
+
+                for(sal_uInt32 a(0); a < aCandidates.size(); a++)
                 {
-                    if((*pGPL)[a].IsUserDefined())
+                    const sdr::glue::Point* pCandidate = aCandidates[a];
+
+                    if(pCandidate)
                     {
-                        bRet = true;
+                        if(aCandidates[a]->getUserDefined())
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Got a sdr::glue::PointVector with empty spots (!)");
                     }
                 }
             }
         }
     }
 
-    return bRet;
+    return false;
 }
 
 sal_uInt32 SdrMarkView::GetMarkableGluePointCount() const
@@ -350,17 +359,37 @@ sal_uInt32 SdrMarkView::GetMarkableGluePointCount() const
         for(sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size(); nMarkNum++)
         {
             const SdrObject* pObj = aSelection[nMarkNum];
-            const SdrGluePointList* pGPL=pObj->GetGluePointList();
+            const sdr::glue::List* pGPL = pObj ? pObj->GetGluePointList(false) : 0;
 
-            if(pGPL && pGPL->GetCount())
+            if(pGPL)
             {
-                for(sal_uInt32 a(0); a < pGPL->GetCount(); a++)
+                const sdr::glue::PointVector aCandidates(pGPL->getVector());
+
+                for(sal_uInt32 a(0); a < aCandidates.size(); a++)
                 {
-                    if((*pGPL)[a].IsUserDefined())
+                    const sdr::glue::Point* pCandidate = aCandidates[a];
+
+                    if(pCandidate)
                     {
-                        nAnz++;
+                        if(aCandidates[a]->getUserDefined())
+                        {
+                            nAnz++;
+                        }
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Got a sdr::glue::PointVector with empty spots (!)");
                     }
                 }
+
+                // TTTT:GLUE
+                //for(sal_uInt32 a(0); a < pGPL->GetCount(); a++)
+                //{
+                //    if((*pGPL)[a].IsUserDefined())
+                //    {
+                //        nAnz++;
+                //    }
+                //}
             }
         }
     }
@@ -399,61 +428,110 @@ void SdrMarkView::MarkGluePoints(const basegfx::B2DRange* pRange, bool bUnmark)
     for(sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size(); nMarkNum++)
     {
         const SdrObject* pObj = aSelection[nMarkNum];
-        const SdrGluePointList* pGPL=pObj->GetGluePointList();
-        sdr::selection::Indices aMarkedGluePoints(getSelectedGluesForSelectedSdrObject(*pObj));
-        bool bGluePointsChanged(false);
 
-        if(bUnmark && !pRange)
+        if(!pObj)
         {
-            // UnmarkAll
-            if(aMarkedGluePoints.size())
-            {
-                aMarkedGluePoints.clear();
-                bGluePointsChanged = true;
-            }
+            OSL_ENSURE(false, "Got SdrObjectVector from selection with empty entries (!)");
         }
         else
         {
-            if(pGPL && (!aMarkedGluePoints.empty() || !bUnmark))
+            sdr::selection::Indices aMarkedGluePoints(getSelectedGluesForSelectedSdrObject(*pObj));
+            bool bGluePointsChanged(false);
+
+            if(bUnmark && !pRange)
             {
-                const sal_uInt32 nGPAnz(pGPL->GetCount());
-                const basegfx::B2DRange aObjSnapRange(nGPAnz ? sdr::legacy::GetSnapRange(*pObj) : basegfx::B2DRange());
-
-                for(sal_uInt32 nGPNum(0); nGPNum < nGPAnz; nGPNum++)
+                // UnmarkAll
+                if(aMarkedGluePoints.size())
                 {
-                    const SdrGluePoint& rGP=(*pGPL)[nGPNum];
+                    aMarkedGluePoints.clear();
+                    bGluePointsChanged = true;
+                }
+            }
+            else
+            {
+                const sdr::glue::List* pGPL = pObj->GetGluePointList(false);
 
-                    if(rGP.IsUserDefined())
+                if(pGPL && (!aMarkedGluePoints.empty() || !bUnmark))
+                {
+                    const sdr::glue::PointVector aCandidates(pGPL->getVector());
+
+                    for(sal_uInt32 a(0); a < aCandidates.size(); a++)
                     {
-                        if(!pRange || pRange->isInside(rGP.GetAbsolutePos(aObjSnapRange)))
-                        {
-                            sdr::selection::Indices::iterator aFound(aMarkedGluePoints.find(rGP.GetId()));
+                        const sdr::glue::Point* pCandidate = aCandidates[a];
 
-                            if(bUnmark)
+                        if(pCandidate)
+                        {
+                            if(pCandidate->getUserDefined())
                             {
-                                if(aFound != aMarkedGluePoints.end())
+                                if(!pRange || pRange->isInside(pObj->getSdrObjectTransformation() * pCandidate->getUnitPosition()))
                                 {
-                                    aMarkedGluePoints.erase(aFound);
-                                    bGluePointsChanged = true;
-                                }
-                            }
-                            else
-                            {
-                                if(aFound == aMarkedGluePoints.end())
-                                {
-                                    aMarkedGluePoints.insert(rGP.GetId());
-                                    bGluePointsChanged = true;
+                                    sdr::selection::Indices::iterator aFound(aMarkedGluePoints.find(pCandidate->getID()));
+
+                                    if(bUnmark)
+                                    {
+                                        if(aFound != aMarkedGluePoints.end())
+                                        {
+                                            aMarkedGluePoints.erase(aFound);
+                                            bGluePointsChanged = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if(aFound == aMarkedGluePoints.end())
+                                        {
+                                            aMarkedGluePoints.insert(pCandidate->getID());
+                                            bGluePointsChanged = true;
+                                        }
+                                    }
                                 }
                             }
                         }
+                        else
+                        {
+                            OSL_ENSURE(false, "Got a sdr::glue::PointVector with empty spots (!)");
+                        }
                     }
+
+                    // TTTT:GLUE
+                    //const sal_uInt32 nGPAnz(pGPL->GetCount());
+                    //const basegfx::B2DRange aObjSnapRange(nGPAnz ? sdr::legacy::GetSnapRange(*pObj) : basegfx::B2DRange());
+                    //
+                    //for(sal_uInt32 nGPNum(0); nGPNum < nGPAnz; nGPNum++)
+                    //{
+                    //    const sdr::glue::Point& rGP=(*pGPL)[nGPNum];
+                    //
+                    //    if(rGP.IsUserDefined())
+                    //    {
+                    //        if(!pRange || pRange->isInside(rGP.GetAbsolutePos(aObjSnapRange)))
+                    //        {
+                    //            sdr::selection::Indices::iterator aFound(aMarkedGluePoints.find(rGP.GetId()));
+                    //
+                    //            if(bUnmark)
+                    //            {
+                    //                if(aFound != aMarkedGluePoints.end())
+                    //                {
+                    //                    aMarkedGluePoints.erase(aFound);
+                    //                    bGluePointsChanged = true;
+                    //                }
+                    //            }
+                    //            else
+                    //            {
+                    //                if(aFound == aMarkedGluePoints.end())
+                    //                {
+                    //                    aMarkedGluePoints.insert(rGP.GetId());
+                    //                    bGluePointsChanged = true;
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
             }
-        }
 
-        if(bGluePointsChanged)
-        {
-            setSelectedGluesForSelectedSdrObject(*pObj, aMarkedGluePoints);
+            if(bGluePointsChanged)
+            {
+                setSelectedGluesForSelectedSdrObject(*pObj, aMarkedGluePoints);
+            }
         }
     }
 }
@@ -468,7 +546,7 @@ bool SdrMarkView::PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj
         return false;
     }
 
-    SdrObject* pObj0=rpObj;
+    // SdrObject* pObj0 = rpObj;
     const SdrObjectVector aSelection(getSelectedSdrObjectVectorFromSdrMarkView());
     sal_uInt32 nMarkNum(aSelection.size());
 
@@ -476,26 +554,56 @@ bool SdrMarkView::PickGluePoint(const basegfx::B2DPoint& rPnt, SdrObject*& rpObj
     {
         nMarkNum--;
         SdrObject* pObj = aSelection[nMarkNum];
-        const SdrGluePointList* pGPL=pObj->GetGluePointList();
+        const sdr::glue::List* pGPL = pObj ? pObj->GetGluePointList(false) : 0;
 
         if(pGPL)
         {
-            const sal_uInt32 nNum(pGPL->GPLHitTest(rPnt, getHitTolLog(), sdr::legacy::GetSnapRange(*pObj), false));
+            const sdr::glue::PointVector aCandidates(pGPL->getVector());
 
-            if(SDRGLUEPOINT_NOTFOUND != nNum)
+            for(sal_uInt32 a(0); a < aCandidates.size(); a++)
             {
-                // #i38892#
-                const SdrGluePoint& rCandidate = (*pGPL)[nNum];
+                const sdr::glue::Point* pCandidate = aCandidates[a];
 
-                if(rCandidate.IsUserDefined())
+                if(pCandidate)
                 {
-                    rpObj=pObj;
-                    rnId=(*pGPL)[nNum].GetId();
+                    if(pCandidate->getUserDefined())
+                    {
+                        const basegfx::B2DPoint aAbsolutePos(pObj->getSdrObjectTransformation() * pCandidate->getUnitPosition());
+                        const double fDist(basegfx::B2DVector(aAbsolutePos - rPnt).getLength());
 
-                    return true;
+                        if(basegfx::fTools::lessOrEqual(fDist, getHitTolLog()))
+                        {
+                            rpObj = pObj;
+                            rnId = pCandidate->getID();
+
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    OSL_ENSURE(false, "Got a sdr::glue::PointVector with empty spots (!)");
                 }
             }
         }
+
+        // TTTT:GLUE
+        //    const sal_uInt32 nNum(pGPL->GPLHitTest(rPnt, getHitTolLog(), pObj->getSdrObjectTransformation(), false));
+        //
+        //    if(SDRGLUEPOINT_NOTFOUND != nNum)
+        //    {
+        //        // #i38892#
+        //        const sdr::glue::Point& rCandidate = (*pGPL)[nNum];
+        //
+        //        if(rCandidate.IsUserDefined())
+        //        {
+        //            rpObj=pObj;
+        //            rnId=(*pGPL)[nNum].GetId();
+        //
+        //            return true;
+        //        }
+        //    }
+        //}
     }
 
     return false;
