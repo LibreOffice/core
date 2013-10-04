@@ -25,7 +25,7 @@ namespace svl {
  * original-cased strings to upper-cased strings for case insensitive
  * operations.
  */
-class SVL_DLLPUBLIC StringPool
+class SVL_DLLPUBLIC SharedStringPool
 {
     typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
     typedef std::pair<StrHashType::iterator, bool> InsertResultType;
@@ -38,8 +38,8 @@ class SVL_DLLPUBLIC StringPool
 
 public:
 
-    StringPool();
-    StringPool( const CharClass* pCharClass );
+    SharedStringPool();
+    SharedStringPool( const CharClass* pCharClass );
 
     /**
      * Intern a string object into the shared string pool.

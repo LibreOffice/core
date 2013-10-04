@@ -35,7 +35,7 @@
 #include <vcl/virdev.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/crc.h>
@@ -119,7 +119,7 @@ private:
 // STATIC DATA -----------------------------------------------------------
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
-        mpCellStringPool(new svl::StringPool(ScGlobal::pCharClass)),
+        mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
         mpUndoManager( NULL ),
         pEditEngine( NULL ),
         pNoteEngine( NULL ),
@@ -600,12 +600,12 @@ ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
     return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row());
 }
 
-svl::StringPool& ScDocument::GetCellStringPool()
+svl::SharedStringPool& ScDocument::GetCellStringPool()
 {
     return *mpCellStringPool;
 }
 
-const svl::StringPool& ScDocument::GetCellStringPool() const
+const svl::SharedStringPool& ScDocument::GetCellStringPool() const
 {
     return *mpCellStringPool;
 }

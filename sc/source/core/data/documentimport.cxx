@@ -17,7 +17,7 @@
 #include "mtvelements.hxx"
 #include "tokenarray.hxx"
 
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 
 struct ScDocumentImportImpl
 {

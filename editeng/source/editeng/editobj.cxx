@@ -44,7 +44,7 @@
 
 #include <vcl/graph.hxx>
 #include <svl/intitem.hxx>
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 #include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 
@@ -149,17 +149,17 @@ ContentInfo::~ContentInfo()
     aAttribs.clear();
 }
 
-void ContentInfo::NormalizeString( svl::StringPool& rPool )
+void ContentInfo::NormalizeString( svl::SharedStringPool& rPool )
 {
     aText = OUString(rPool.intern(aText));
 }
 
-sal_uIntPtr ContentInfo::GetStringID( const svl::StringPool& rPool ) const
+sal_uIntPtr ContentInfo::GetStringID( const svl::SharedStringPool& rPool ) const
 {
     return rPool.getIdentifier(aText);
 }
 
-sal_uIntPtr ContentInfo::GetStringIDIgnoreCase( const svl::StringPool& rPool ) const
+sal_uIntPtr ContentInfo::GetStringIDIgnoreCase( const svl::SharedStringPool& rPool ) const
 {
     return rPool.getIdentifierIgnoreCase(aText);
 }
@@ -332,17 +332,17 @@ editeng::FieldUpdater EditTextObject::GetFieldUpdater()
     return mpImpl->GetFieldUpdater();
 }
 
-void EditTextObject::NormalizeString( svl::StringPool& rPool )
+void EditTextObject::NormalizeString( svl::SharedStringPool& rPool )
 {
     mpImpl->NormalizeString(rPool);
 }
 
-bool EditTextObject::GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+bool EditTextObject::GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
 {
     return mpImpl->GetStringIDs(rPool, rIDs);
 }
 
-bool EditTextObject::GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+bool EditTextObject::GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
 {
     return mpImpl->GetStringIDsIgnoreCase(rPool, rIDs);
 }
@@ -633,7 +633,7 @@ void EditTextObjectImpl::SetUserType( sal_uInt16 n )
     nUserType = n;
 }
 
-void EditTextObjectImpl::NormalizeString( svl::StringPool& rPool )
+void EditTextObjectImpl::NormalizeString( svl::SharedStringPool& rPool )
 {
     ContentInfosType::iterator it = aContents.begin(), itEnd = aContents.end();
     for (; it != itEnd; ++it)
@@ -643,7 +643,7 @@ void EditTextObjectImpl::NormalizeString( svl::StringPool& rPool )
     }
 }
 
-bool EditTextObjectImpl::GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+bool EditTextObjectImpl::GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
 {
     std::vector<sal_uIntPtr> aIDs;
     aIDs.reserve(aContents.size());
@@ -662,7 +662,7 @@ bool EditTextObjectImpl::GetStringIDs( const svl::StringPool& rPool, std::vector
     return true;
 }
 
-bool EditTextObjectImpl::GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+bool EditTextObjectImpl::GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
 {
     std::vector<sal_uIntPtr> aIDs;
     aIDs.reserve(aContents.size());

@@ -57,7 +57,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/broadcast.hxx>
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 #include "editeng/editstat.hxx"
 
 #include <cstdio>

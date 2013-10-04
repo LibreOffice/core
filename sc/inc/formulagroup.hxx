@@ -14,7 +14,7 @@
 #include "types.hxx"
 #include "platforminfo.hxx"
 
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 
 #include <vector>
 #include <boost/noncopyable.hpp>
@@ -33,7 +33,7 @@ struct FormulaGroupContext : boost::noncopyable
     typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
     typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
 
-    svl::StringPool maStrPool;
+    svl::SharedStringPool maStrPool;
     NumArrayStoreType maNumArrays;
     StrArrayStoreType maStrArrays;
 };

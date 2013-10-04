@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 #include "unotools/charclass.hxx"
 
 namespace svl {
 
-StringPool::StringPool() : mpCharClass(NULL) {}
-StringPool::StringPool( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
+SharedStringPool::SharedStringPool() : mpCharClass(NULL) {}
+SharedStringPool::SharedStringPool( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
 
-rtl_uString* StringPool::intern( const OUString& rStr )
+rtl_uString* SharedStringPool::intern( const OUString& rStr )
 {
     InsertResultType aRes = findOrInsert(maStrPool, rStr);
     if (aRes.first == maStrPool.end())
@@ -45,13 +45,13 @@ rtl_uString* StringPool::intern( const OUString& rStr )
     return pOrig;
 }
 
-sal_uIntPtr StringPool::getIdentifier( const OUString& rStr ) const
+sal_uIntPtr SharedStringPool::getIdentifier( const OUString& rStr ) const
 {
     StrHashType::const_iterator it = maStrPool.find(rStr);
     return (it == maStrPool.end()) ? 0 : reinterpret_cast<sal_uIntPtr>(it->pData);
 }
 
-sal_uIntPtr StringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
+sal_uIntPtr SharedStringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
 {
     StrHashType::const_iterator itOrig = maStrPool.find(rStr);
     if (itOrig == maStrPool.end())
@@ -76,7 +76,7 @@ inline sal_Int32 getRefCount( const rtl_uString* p )
 
 }
 
-void StringPool::purge()
+void SharedStringPool::purge()
 {
     StrHashType aNewStrPool;
     StrHashType::iterator it = maStrPool.begin(), itEnd = maStrPool.end();
@@ -111,17 +111,17 @@ void StringPool::purge()
     maStrPoolUpper.swap(aNewStrPool);
 }
 
-size_t StringPool::getCount() const
+size_t SharedStringPool::getCount() const
 {
     return maStrPool.size();
 }
 
-size_t StringPool::getCountIgnoreCase() const
+size_t SharedStringPool::getCountIgnoreCase() const
 {
     return maStrPoolUpper.size();
 }
 
-StringPool::InsertResultType StringPool::findOrInsert( StrHashType& rPool, const OUString& rStr ) const
+SharedStringPool::InsertResultType SharedStringPool::findOrInsert( StrHashType& rPool, const OUString& rStr ) const
 {
     StrHashType::iterator it = rPool.find(rStr);
     bool bInserted = false;

@@ -50,7 +50,7 @@
 
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
-namespace svl { class StringPool; }
+namespace svl { class SharedStringPool; }
 
 namespace sc {
     struct FormulaGroupContext;
@@ -245,7 +245,7 @@ private:
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
 
-    boost::scoped_ptr<svl::StringPool> mpCellStringPool;
+    boost::scoped_ptr<svl::SharedStringPool> mpCellStringPool;
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
@@ -859,8 +859,8 @@ public:
      */
     double* GetValueCell( const ScAddress& rPos );
 
-    svl::StringPool& GetCellStringPool();
-    const svl::StringPool& GetCellStringPool() const;
+    svl::SharedStringPool& GetCellStringPool();
+    const svl::SharedStringPool& GetCellStringPool() const;
     sal_uIntPtr GetCellStringID( const ScAddress& rPos ) const;
     sal_uIntPtr GetCellStringIDIgnoreCase( const ScAddress& rPos ) const;
 

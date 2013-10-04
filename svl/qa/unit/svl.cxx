@@ -33,7 +33,7 @@
 
 #include "svl/zforlist.hxx"
 #include "svl/zformat.hxx"
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 #include "unotools/syslocale.hxx"
 
 #include <boost/scoped_ptr.hpp>
@@ -299,7 +299,7 @@ void Test::testNumberFormat()
 void Test::testStringPool()
 {
     SvtSysLocale aSysLocale;
-    svl::StringPool aPool(aSysLocale.GetCharClassPtr());
+    svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
 
     const rtl_uString* p1 = aPool.intern("Andy");
     const rtl_uString* p2 = aPool.intern("Andy");
@@ -342,7 +342,7 @@ void Test::testStringPool()
 void Test::testStringPoolPurge()
 {
     SvtSysLocale aSysLocale;
-    svl::StringPool aPool(aSysLocale.GetCharClassPtr());
+    svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
     aPool.intern("Andy");
     aPool.intern("andy");
     aPool.intern("ANDY");

@@ -51,7 +51,7 @@ struct Section;
 
 namespace svl {
 
-class StringPool;
+class SharedStringPool;
 
 }
 
@@ -83,10 +83,10 @@ public:
      *
      * @param rPool shared string pool.
      */
-    void NormalizeString( svl::StringPool& rPool );
+    void NormalizeString( svl::SharedStringPool& rPool );
 
-    bool GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
-    bool GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    bool GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    bool GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
 
     const SfxItemPool* GetPool() const;
     sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format

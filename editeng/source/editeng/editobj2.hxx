@@ -37,7 +37,7 @@ struct Section;
 
 namespace svl {
 
-class StringPool;
+class SharedStringPool;
 
 }
 
@@ -142,9 +142,9 @@ private:
 public:
                         ~ContentInfo();
 
-    void NormalizeString( svl::StringPool& rPool );
-    sal_uIntPtr GetStringID( const svl::StringPool& rPool ) const;
-    sal_uIntPtr GetStringIDIgnoreCase( const svl::StringPool& rPool ) const;
+    void NormalizeString( svl::SharedStringPool& rPool );
+    sal_uIntPtr GetStringID( const svl::SharedStringPool& rPool ) const;
+    sal_uIntPtr GetStringIDIgnoreCase( const svl::SharedStringPool& rPool ) const;
 
     const XEditAttributesType& GetAttribs() const { return aAttribs; }
     XEditAttributesType& GetAttribs() { return aAttribs; }
@@ -208,9 +208,9 @@ public:
     sal_uInt16 GetUserType() const;
     void SetUserType( sal_uInt16 n );
 
-    void NormalizeString( svl::StringPool& rPool );
-    bool GetStringIDs( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
-    bool GetStringIDsIgnoreCase( const svl::StringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    void NormalizeString( svl::SharedStringPool& rPool );
+    bool GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    bool GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
 
     bool                    IsVertical() const;
     void                    SetVertical( bool b );

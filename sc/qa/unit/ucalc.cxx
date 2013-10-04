@@ -65,7 +65,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include "svl/srchitem.hxx"
-#include "svl/stringpool.hxx"
+#include "svl/sharedstringpool.hxx"
 
 #include <sfx2/docfile.hxx>
 
@@ -502,7 +502,7 @@ void Test::testCellStringPool()
     CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", nId1 == nId2);
 
     // Check the string counts after purging. Purging shouldn't remove any strings in this case.
-    svl::StringPool& rPool = m_pDoc->GetCellStringPool();
+    svl::SharedStringPool& rPool = m_pDoc->GetCellStringPool();
     rPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
