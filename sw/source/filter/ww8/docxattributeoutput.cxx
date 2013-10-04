@@ -2358,13 +2358,27 @@ void DocxAttributeOutput::StartStyles()
 
 void DocxAttributeOutput::DocDefaults( )
 {
-    // To-Do : fill the '<w:docDefaults>' node with actual data
-
     // Write the '<w:docDefaults>' section here
-    m_pSerializer->startElementNS( XML_w, XML_docDefaults, FSEND );
-    m_pSerializer->singleElementNS( XML_w, XML_rPrDefault, FSEND );
-    m_pSerializer->singleElementNS( XML_w, XML_pPrDefault, FSEND );
-    m_pSerializer->endElementNS( XML_w, XML_docDefaults );
+    m_pSerializer->startElementNS(XML_w, XML_docDefaults, FSEND);
+
+    // Output the default run properties
+    m_pSerializer->startElementNS(XML_w, XML_rPrDefault, FSEND);
+    StartRunProperties();
+
+    // TODO find out which run properties do we want to write
+    const RES_CHRATR aDefaultRunProperties[] = {
+        RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT,
+        RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+    };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aDefaultRunProperties); ++i)
+        OutputItem(m_rExport.pDoc->GetDefault(aDefaultRunProperties[i]));
+
+    EndRunProperties(NULL);
+    m_pSerializer->endElementNS(XML_w, XML_rPrDefault);
+
+    // TODO should we output some paragraph properties too?
+    m_pSerializer->singleElementNS(XML_w, XML_pPrDefault, FSEND);
+    m_pSerializer->endElementNS(XML_w, XML_docDefaults);
 }
 
 void DocxAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )
