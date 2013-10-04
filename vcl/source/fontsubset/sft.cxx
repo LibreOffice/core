@@ -745,7 +745,10 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
     } while (flags & MORE_COMPONENTS);
 
-
+    // #i123417# some fonts like IFAOGrec have no outline points in some compound glyphs
+    // so this unlikely but possible scenario should be handled gracefully
+    if( myPoints.empty() )
+        return 0;
 
     np = myPoints.size();
 
@@ -2620,7 +2623,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
     /* now calculate npoints and ncontours */
     ControlPoint *cp;
     n = GetTTGlyphPoints(ttf, glyphID, &cp);
-    if (n != -1)
+    if (n > 0)
     {
         int m = 0;
         for (int i = 0; i < n; i++)
