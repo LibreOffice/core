@@ -1250,7 +1250,7 @@ void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpScToken& rTokData )
     if( mxData->mbOk ) mxData->mbOk = aApplic.Len() && aTopic.Len() && aItem.Len();
     if( mxData->mbOk )
     {
-        sal_uInt16 nExtSheet, nExtName;
+        sal_uInt16 nExtSheet(0), nExtName(0);
         if( mxData->mpLinkMgr && mxData->mpLinkMgr->InsertDde( nExtSheet, nExtName, aApplic, aTopic, aItem ) )
             AppendNameXToken( nExtSheet, nExtName, rTokData.mnSpaces );
         else
@@ -2377,7 +2377,7 @@ void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFunc
 
 void XclExpFmlaCompImpl::AppendEuroToolCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces )
 {
-    sal_uInt16 nExtSheet, nExtName;
+    sal_uInt16 nExtSheet(0), nExtName(0);
     if( mxData->mpLinkMgr && mxData->mpLinkMgr->InsertEuroTool( nExtSheet, nExtName, rExtFuncData.maFuncName ) )
         AppendNameXToken( nExtSheet, nExtName, nSpaces );
     else
