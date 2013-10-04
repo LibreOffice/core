@@ -399,12 +399,14 @@ bool Customization::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarIm
     return true;
 }
 
-TBDelta::TBDelta() : doprfatendFlags(0)
-,ibts(0)
-,cidNext(0)
-,cid(0)
-,fc(0)
-,cbTBC(0)
+TBDelta::TBDelta()
+    : doprfatendFlags(0)
+    , ibts(0)
+    , cidNext(0)
+    , cid(0)
+    , fc(0)
+    , CiTBDE(0)
+    , cbTBC(0)
 {
 }
 
