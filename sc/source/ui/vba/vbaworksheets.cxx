@@ -269,7 +269,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
         nSheetIndex++;
 
     SCTAB nSheetName = nCount + 1L;
-    String aStringBase( RTL_CONSTASCII_USTRINGPARAM("Sheet") );
+    OUString aStringBase( "Sheet" );
     uno::Any result;
     for (SCTAB i=0; i < nNewSheets; i++, nSheetName++)
     {

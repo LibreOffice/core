@@ -93,9 +93,9 @@ ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) thro
 
 // Methods
 void SAL_CALL
-ScVbaCharacters::Insert( const OUString& String ) throw (css::uno::RuntimeException)
+ScVbaCharacters::Insert( const OUString& rString ) throw (css::uno::RuntimeException)
 {
-    m_xSimpleText->insertString( m_xTextRange, String, bReplace );
+    m_xSimpleText->insertString( m_xTextRange, rString, bReplace );
 }
 
 void SAL_CALL

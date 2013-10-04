@@ -303,7 +303,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     ScDocShell* pShell = excel::getDocShell( xModel );
     if ( pShell )
     {
-        String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        OUString aPrjName( "Standard" );
         pShell->GetBasicManager()->SetName( aPrjName );
 
         /*  Set library container to VBA compatibility mode. This will create
@@ -328,10 +328,10 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 // set up the module info for the workbook and sheets in the nealy created
                 // spreadsheet
                 ScDocument* pDoc = pShell->GetDocument();
-                String sCodeName = pDoc->GetCodeName();
-                if ( sCodeName.Len() == 0 )
+                OUString sCodeName = pDoc->GetCodeName();
+                if ( sCodeName.isEmpty() )
                 {
-                    sCodeName = String( RTL_CONSTASCII_USTRINGPARAM("ThisWorkbook") );
+                    sCodeName = "ThisWorkbook";
                     pDoc->SetCodeName( sCodeName );
                 }
 

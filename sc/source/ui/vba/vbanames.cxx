@@ -217,7 +217,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             {
                 xArea.set( xRange->Areas( uno::makeAny( nArea ) ), uno::UNO_QUERY_THROW );
 
-                String sRangeAdd = xArea->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
+                OUString sRangeAdd = xArea->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
                 if ( nArea > 1 )
                     sTmp += ",";
                 sTmp = sTmp + "'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd;

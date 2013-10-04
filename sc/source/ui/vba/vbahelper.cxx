@@ -574,8 +574,8 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
 }
 bool NeedEsc(sal_Unicode cCode)
 {
-    String sEsc(".^$+\\|{}()");
-    return (STRING_NOTFOUND != sEsc.Search(cCode));
+    OUString sEsc(".^$+\\|{}()");
+    return (-1 != sEsc.indexOf(cCode));
 }
 
 OUString VBAToRegexp(const OUString &rIn, bool bForLike )
