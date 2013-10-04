@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///SY\u003d",
+        "filename": "connectivity/source/drivers/mork/MConnection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-10-04T14:43:20Z",
+      "side": 1,
+      "message": "just a quick hint, could use boost::scoped_ptr for these members so they are deleted automatically",
+      "revId": "67c3dc893a4bef94587981ec62dd4ea26393e428",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
