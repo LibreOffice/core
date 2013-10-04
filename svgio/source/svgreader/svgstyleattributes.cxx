@@ -940,6 +940,13 @@ namespace svgio
                 {
                     const basegfx::B2DPolygon aCandidate(rPath.getB2DPolygon(a));
                     const sal_uInt32 nPointCount(aCandidate.count());
+                    const sal_uInt32 nMarkerCount(aCandidate.isClosed() ? nPointCount + 1 : nPointCount);
+                }
+
+                for (sal_uInt32 a(0); a < nCount; a++)
+                {
+                    const basegfx::B2DPolygon aCandidate(rPath.getB2DPolygon(a));
+                    const sal_uInt32 nPointCount(aCandidate.count());
 
                     if(nPointCount)
                     {
@@ -949,7 +956,7 @@ namespace svgio
                         basegfx::B2DRange aClipRange;
                         const SvgMarkerNode* pPrepared = 0;
 
-                        if(pStart)
+                        if(pStart && a==0)
                         {
                             if(prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pStart))
                             {
@@ -958,20 +965,22 @@ namespace svgio
                             }
                         }
 
-                        if(pMid && nMarkerCount > 2)
+                        if(pMid)
                         {
                             if(pMid == pPrepared || prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pMid))
                             {
                                 pPrepared = pMid;
+                                const sal_uInt32 nFirstIndex(a==0 ? 1 : 0);
+                                const sal_uInt32 nLastIndex(a==nCount-1 ? nMarkerCount-1 : nMarkerCount);
 
-                                for(sal_uInt32 b(1); b < nMarkerCount - 1; b++)
+                                for(sal_uInt32 b(nFirstIndex); b < nLastIndex; b++)
                                 {
                                     add_singleMarker(rTarget, aMarkerPrimitives, aMarkerTransform, aClipRange, *pPrepared, aCandidate, b);
                                 }
                             }
                         }
 
-                        if(pEnd)
+                        if(pEnd && a==nCount-1)
                         {
                             if(pEnd == pPrepared || prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pEnd))
                             {
