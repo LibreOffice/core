@@ -352,7 +352,7 @@ void ScDPGroupItem::FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) c
 
 // -----------------------------------------------------------------------
 
-ScDPGroupDimension::ScDPGroupDimension( long nSource, const String& rNewName ) :
+ScDPGroupDimension::ScDPGroupDimension( long nSource, const OUString& rNewName ) :
     nSourceDim( nSource ),
     nGroupDim( -1 ),
     aGroupName( rNewName ),
