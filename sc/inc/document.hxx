@@ -880,7 +880,6 @@ public:
     void SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
     void GetNumberFormatInfo( short& nType, sal_uLong& nIndex, const ScAddress& rPos ) const;
-    void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScFormulaCell* GetFormulaCell( const ScAddress& rPos ) const;
     SC_DLLPUBLIC ScFormulaCell* GetFormulaCell( const ScAddress& rPos );

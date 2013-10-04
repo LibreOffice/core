@@ -630,9 +630,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_RANGE_FORMULA:
                 {
-                    String aString;
+                    OUString aString;
                     pDoc->GetFormula( nPosX, nPosY, nTab, aString );
-                    if( aString.Len() == 0 )
+                    if( aString.isEmpty() )
                     {
                         pDoc->GetInputString( nPosX, nPosY, nTab, aString );
                     }

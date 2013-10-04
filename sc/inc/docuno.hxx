@@ -102,7 +102,7 @@ private:
 
     bool                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
                                                 const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptions,
-                                                ScMarkData& rMark, ScPrintSelectionStatus& rStatus, String& rPagesStr ) const;
+                                                ScMarkData& rMark, ScPrintSelectionStatus& rStatus, OUString& rPagesStr ) const;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
     void                    HandleCalculateEvents();
 

@@ -831,25 +831,24 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
     return p;
 }
 
-static void lcl_DoubleEscapeChar( String& rString, sal_Unicode cStr )
+static void lcl_DoubleEscapeChar( OUString& rString, sal_Unicode cStr )
 {
-    xub_StrLen n = 0;
-    while( ( n = rString.Search( cStr, n ) ) != STRING_NOTFOUND )
+    sal_Int32 n = 0;
+    while( ( n = rString.indexOf( cStr, n ) ) != -1 )
     {
-        rString.Insert( cStr, n );
+        rString = rString.replaceAt( n, 0, OUString(cStr) );
         n += 2;
     }
 }
 
-static void lcl_WriteString( SvStream& rStrm, String& rString, sal_Unicode cQuote, sal_Unicode cEsc )
+static void lcl_WriteString( SvStream& rStrm, OUString& rString, sal_Unicode cQuote, sal_Unicode cEsc )
 {
     if (cEsc)
         lcl_DoubleEscapeChar( rString, cEsc );
 
     if (cQuote)
     {
-        rString.Insert( cQuote, 0 );
-        rString.Append( cQuote );
+        rString = OUString(cQuote) + rString + OUString(cQuote);
     }
 
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
@@ -1591,7 +1590,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
     if (!pDoc->GetClipParam().isMultiRange() && nStartTab == nEndTab)
         pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow );
 
-    String aCell;
+    OUString aCell;
 
     bool bConvertLF = (GetSystemLineEnd() != LINEEND_LF);
 
@@ -1610,7 +1609,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         if (bFormulas)
                         {
                             pDoc->GetFormula( nCol, nRow, nStartTab, aCell );
-                            if( aCell.Search( cSep ) != STRING_NOTFOUND )
+                            if( aCell.indexOf( cSep ) != -1 )
                                 lcl_WriteString( rStrm, aCell, cStr, cStr );
                             else
                                 lcl_WriteSimpleString( rStrm, aCell );
@@ -1619,19 +1618,19 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         {
                             aCell = pDoc->GetString(nCol, nRow, nStartTab);
 
-                            bool bMultiLineText = ( aCell.Search( '\n' ) != STRING_NOTFOUND );
+                            bool bMultiLineText = ( aCell.indexOf( '\n' ) != -1 );
                             if( bMultiLineText )
                             {
                                 if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
-                                    aCell.SearchAndReplaceAll( '\n', ' ' );
+                                    aCell = aCell.replaceAll( "\n", " " );
                                 else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
                                     aCell = convertLineEnd(aCell, GetSystemLineEnd());
                             }
 
                             if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                                aCell.SearchAndReplaceAll( cSep, mExportTextOptions.mcSeparatorConvertTo );
+                                aCell = aCell.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
 
-                            if( mExportTextOptions.mbAddQuotes && ( aCell.Search( cSep ) != STRING_NOTFOUND ) )
+                            if( mExportTextOptions.mbAddQuotes && ( aCell.indexOf( cSep ) != -1 ) )
                                 lcl_WriteString( rStrm, aCell, cStr, cStr );
                             else
                                 lcl_WriteSimpleString( rStrm, aCell );
@@ -1650,17 +1649,17 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     {
                         aCell = pDoc->GetString(nCol, nRow, nStartTab);
 
-                        bool bMultiLineText = ( aCell.Search( '\n' ) != STRING_NOTFOUND );
+                        bool bMultiLineText = ( aCell.indexOf( '\n' ) != -1 );
                         if( bMultiLineText )
                         {
                             if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
-                                aCell.SearchAndReplaceAll( '\n', ' ' );
+                                aCell = aCell.replaceAll( "\n", " " );
                             else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
                                 aCell = convertLineEnd(aCell, GetSystemLineEnd());
                         }
 
                         if( mExportTextOptions.mcSeparatorConvertTo && cSep )
-                            aCell.SearchAndReplaceAll( cSep, mExportTextOptions.mcSeparatorConvertTo );
+                            aCell = aCell.replaceAll( OUString(cSep), OUString(mExportTextOptions.mcSeparatorConvertTo) );
 
                         if( mExportTextOptions.mbAddQuotes && hasLineBreaksOrSeps(aCell, cSep) )
                             lcl_WriteString( rStrm, aCell, cStr, cStr );
@@ -1947,7 +1946,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     SCROW nStartRow = aRange.aStart.Row();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
-    String aCellStr;
+    OUString aCellStr;
     String aValStr;
     lcl_WriteSimpleString( rStrm,
             String( RTL_CONSTASCII_USTRINGPARAM( "ID;PCALCOOO32")));
@@ -1995,7 +1994,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
-                    aCellStr.SearchAndReplaceAll( OUString('\n'), OUString(SYLK_LF) );
+                    aCellStr = aCellStr.replaceAll( OUString('\n'), OUString(SYLK_LF) );
 
                     aBufStr = "C;X";
                     aBufStr += OUString::number( c );
@@ -2012,7 +2011,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         switch ( pFCell->GetMatrixFlag() )
                         {
                             case MM_REFERENCE :
-                                aCellStr.Erase();
+                                aCellStr = "";
                             break;
                             default:
                                 OUString aOUCellStr;
@@ -2024,15 +2023,14 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                  * writes in SYLK. */
                         }
                         if ( pFCell->GetMatrixFlag() != MM_NONE &&
-                                aCellStr.Len() > 2 &&
-                                aCellStr.GetChar(0) == '{' &&
-                                aCellStr.GetChar(aCellStr.Len()-1) == '}' )
+                                aCellStr.getLength() > 2 &&
+                                aCellStr[0] == '{' &&
+                                aCellStr[aCellStr.getLength()-1] == '}' )
                         {   // cut off matrix {} characters
-                            aCellStr.Erase(aCellStr.Len()-1,1);
-                            aCellStr.Erase(0,1);
+                            aCellStr = aCellStr.copy(1, aCellStr.getLength()-2);
                         }
-                        if ( aCellStr.GetChar(0) == '=' )
-                            aCellStr.Erase(0,1);
+                        if ( aCellStr[0] == '=' )
+                            aCellStr = aCellStr.copy(1);
                         String aPrefix;
                         switch ( pFCell->GetMatrixFlag() )
                         {
@@ -2065,7 +2063,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aPrefix = ";E";
                         }
                         lcl_WriteSimpleString( rStrm, aPrefix );
-                        if ( aCellStr.Len() )
+                        if ( !aCellStr.isEmpty() )
                             lcl_WriteString( rStrm, aCellStr, 0, ';' );
                     }
                     WriteUnicodeOrByteEndl( rStrm );

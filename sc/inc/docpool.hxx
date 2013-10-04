@@ -57,7 +57,7 @@ public:
     static void                 CheckRef( const SfxPoolItem& );
 
     void StyleDeleted( ScStyleSheet* pStyle );      // delete templates(?) in organizer
-    void CellStyleCreated( const String& rName );
+    void CellStyleCreated( const OUString& rName );
     virtual SfxItemPresentation     GetPresentation(
                                         const SfxPoolItem&  rItem,
                                         SfxItemPresentation ePresentation,

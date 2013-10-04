@@ -3245,13 +3245,6 @@ void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& r
         rString = OUString();
 }
 
-void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
-{
-    OUString aString;
-    GetInputString( nCol, nRow, nTab, aString);
-    rString = aString;
-}
-
 sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rString )
 {
     // Used in formulas (add-in parameters etc), so it must use the same semantics as
@@ -3427,13 +3420,6 @@ void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rForm
         rFormula = OUString();
 }
 
-
-void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const
-{
-    OUString aString;
-    GetFormula( nCol, nRow, nTab, aString);
-    rFormula = aString;
-}
 
 const ScTokenArray* ScDocument::GetFormulaTokens( const ScAddress& rPos ) const
 {

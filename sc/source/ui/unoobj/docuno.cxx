@@ -769,7 +769,7 @@ static bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Recta
 bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      const uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
-                                     ScPrintSelectionStatus& rStatus, String& rPagesStr ) const
+                                     ScPrintSelectionStatus& rStatus, OUString& rPagesStr ) const
 {
     OSL_ENSURE( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
     OSL_ENSURE( pDocShell, "FillRenderMarkData: DocShell must be set" );
@@ -932,7 +932,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     if ( nPrintRange == 1 )
         rPagesStr = aPageRange;
     else
-        rPagesStr.Erase();
+        rPagesStr = "";
 
     return bDone;
 }
@@ -951,7 +951,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    String aPagesStr;
+    OUString aPagesStr;
     if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         return 0;
 
@@ -967,7 +967,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
     sal_Int32 nPages = pPrintFuncCache->GetPageCount();
 
     sal_Int32 nSelectCount = nPages;
-    if ( aPagesStr.Len() )
+    if ( !aPagesStr.isEmpty() )
     {
         StringRangeEnumerator aRangeEnum( aPagesStr, 0, nPages-1 );
         nSelectCount = aRangeEnum.size();
@@ -1002,7 +1002,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    String aPagesStr;
+    OUString aPagesStr;
     // #i115266# if FillRenderMarkData fails, keep nTotalPages at 0, but still handle getRenderer(0) below
     long nTotalPages = 0;
     if ( FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
@@ -1110,7 +1110,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    String aPagesStr;
+    OUString aPagesStr;
     if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         throw lang::IllegalArgumentException();
 

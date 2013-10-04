@@ -606,7 +606,7 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
 
     if ( pHdl )
     {
-        String                  aString;
+        OUString                aString;
         const EditTextObject*   pObject     = NULL;
         ScViewData*             pViewData   = GetViewData();
         ScDocument*             pDoc        = pViewData->GetDocument();
@@ -668,7 +668,7 @@ void ScTabViewShell::UpdateInputHandler( sal_Bool bForce /* = sal_False */, sal_
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                     double fDummy;
                     if ( pFormatter->IsNumberFormat(aString, nNumFmt, fDummy) )
-                        aString.Insert('\'',0);
+                        aString = "'" + aString;
                 }
             }
         }

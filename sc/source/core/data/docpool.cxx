@@ -664,7 +664,7 @@ void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
     }
 }
 
-void ScDocumentPool::CellStyleCreated( const String& rName )
+void ScDocumentPool::CellStyleCreated( const OUString& rName )
 {
     // If a style was created, don't keep any pattern with its name string in the pool,
     // because it would compare equal to a pattern with a pointer to the new style.

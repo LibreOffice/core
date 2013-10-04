@@ -5190,16 +5190,15 @@ sal_Bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNe
 
     sal_Bool bRet = false;
 
-    String aFormula;
+    OUString aFormula;
     pDoc->GetFormula( nStartCol, nStartRow, nTab, aFormula );
-    if ( aFormula.GetChar(0) == '{' && aFormula.GetChar(aFormula.Len()-1) == '}' )
+    if ( aFormula[0] == '{' && aFormula[aFormula.getLength()-1] == '}' )
     {
         String aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
         if (bUndo)
             rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
 
-        aFormula.Erase(0,1);
-        aFormula.Erase(aFormula.Len()-1,1);
+        aFormula = aFormula.copy(1, aFormula.getLength()-2);
 
         ScMarkData aMark;
         aMark.SetMarkArea( rOldRange );

@@ -641,13 +641,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
 
                     //
-                    String aStartStr;
+                    OUString aStartStr;
 
                     //  suggest default Startvalue only, when just 1 row or column
                     if ( nStartCol == nEndCol || nStartRow == nEndRow )
                     {
                         double fInputEndVal = 0.0;
-                        String aEndStr;
+                        OUString aEndStr;
 
                         pDoc->GetInputString( nStartCol, nStartRow, nStartTab, aStartStr);
                         pDoc->GetValue( nStartCol, nStartRow, nStartTab, fStartVal );
@@ -656,7 +656,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if(eFillDir==FILL_TO_BOTTOM && nStartRow < nEndRow )
                         {
                             pDoc->GetInputString( nStartCol, nStartRow+1, nStartTab, aEndStr);
-                            if(aEndStr.Len()>0)
+                            if(!aEndStr.isEmpty())
                             {
                                 pDoc->GetValue( nStartCol, nStartRow+1, nStartTab, fInputEndVal);
                                 fIncVal=fInputEndVal-fStartVal;
@@ -667,7 +667,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if(nStartCol < nEndCol)
                             {
                                 pDoc->GetInputString( nStartCol+1, nStartRow, nStartTab, aEndStr);
-                                if(aEndStr.Len()>0)
+                                if(!aEndStr.isEmpty())
                                 {
                                     pDoc->GetValue( nStartCol+1, nStartRow, nStartTab, fInputEndVal);
                                     fIncVal=fInputEndVal-fStartVal;
