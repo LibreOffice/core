@@ -6244,7 +6244,7 @@ OUString ScCellObj::GetOutputString_Impl() const
     return aVal;
 }
 
-void ScCellObj::SetString_Impl(const String& rString, sal_Bool bInterpret, sal_Bool bEnglish)
+void ScCellObj::SetString_Impl(const OUString& rString, sal_Bool bInterpret, sal_Bool bEnglish)
 {
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )

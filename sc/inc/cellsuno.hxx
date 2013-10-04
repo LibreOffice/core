@@ -830,7 +830,7 @@ private:
 private:
     OUString    GetInputString_Impl(bool bEnglish) const;
     OUString    GetOutputString_Impl() const;
-    void        SetString_Impl(const String& rString, sal_Bool bInterpret, sal_Bool bEnglish);
+    void        SetString_Impl(const OUString& rString, sal_Bool bInterpret, sal_Bool bEnglish);
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
     com::sun::star::table::CellContentType GetResultType_Impl();
