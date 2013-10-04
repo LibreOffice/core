@@ -22,13 +22,13 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include <basegfx/range/b2irectangle.hxx>
 
 namespace chart
 {
 
-class ShapeFactory;
+class AbstractShapeFactory;
 
 /** The VDiagram is responsible to generate the visible parts of the Diagram
 that is wall, floor, axes and data series.
@@ -81,7 +81,7 @@ private: //members
                     ::com::sun::star::drawing::XShapes >                    m_xTarget;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>           m_xShapeFactory;
-    ShapeFactory*                                                           m_pShapeFactory;
+    AbstractShapeFactory* m_pShapeFactory;
 
     // this is the surrounding shape which contains floor, wall and coordinate
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >   m_xOuterGroupShape;

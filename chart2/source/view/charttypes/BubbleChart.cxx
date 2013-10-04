@@ -19,7 +19,7 @@
 
 #include "BubbleChart.hxx"
 #include "PlottingPositionHelper.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "ViewDefines.hxx"

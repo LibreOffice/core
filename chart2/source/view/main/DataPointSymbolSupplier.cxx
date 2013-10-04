@@ -18,7 +18,7 @@
  */
 
 #include "chartview/DataPointSymbolSupplier.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "macros.hxx"
 
 namespace chart
@@ -38,11 +38,11 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
     uno::Reference< drawing::XShapes > xGroupShapes =
         uno::Reference<drawing::XShapes>( xGroup, uno::UNO_QUERY );
 
-    ShapeFactory aShapeFactory(xShapeFactory);
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     drawing::Position3D  aPos(0,0,0);
-    for(sal_Int32 nS=0;nS<ShapeFactory::getSymbolCount();nS++)
+    for(sal_Int32 nS=0;nS<AbstractShapeFactory::getSymbolCount();nS++)
     {
-        aShapeFactory.createSymbol2D( xGroupShapes, aPos, rSize, nS );
+        pShapeFactory->createSymbol2D( xGroupShapes, aPos, rSize, nS );
     }
     return xGroupShapes;
 }

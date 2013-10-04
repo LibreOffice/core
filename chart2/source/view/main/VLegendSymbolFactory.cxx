@@ -20,7 +20,7 @@
 #include "VLegendSymbolFactory.hxx"
 #include "macros.hxx"
 #include "PropertyMapper.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "ObjectIdentifier.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -110,7 +110,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
         return xResult;
 
     // add an invisible square box to maintain aspect ratio
-    Reference< drawing::XShape > xBound( ShapeFactory(xShapeFactory).createInvisibleRectangle(
+    Reference< drawing::XShape > xBound( AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createInvisibleRectangle(
                 xResultGroup, rEntryKeyAspectRatio  ));
 
     // create symbol
@@ -136,7 +136,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             {
                 drawing::Direction3D aSymbolSize( nSize, nSize, 0 );
                 drawing::Position3D aPos( rEntryKeyAspectRatio.Width/2, rEntryKeyAspectRatio.Height/2, 0 );
-                ShapeFactory aFactory( xShapeFactory );
+                AbstractShapeFactory* pFactory = AbstractShapeFactory::getOrCreateShapeFactory( xShapeFactory );
                 if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                 {
                     // take series color as fill color
@@ -144,7 +144,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                     // border of symbols always same as fill color
                     aSymbol.BorderColor = aSymbol.FillColor;
 
-                    xSymbol.set( aFactory.createSymbol2D(
+                    xSymbol.set( pFactory->createSymbol2D(
                                      xResultGroup,
                                      aPos,
                                      aSymbolSize,
@@ -154,7 +154,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 }
                 else if( aSymbol.Style == chart2::SymbolStyle_GRAPHIC )
                 {
-                    xSymbol.set( aFactory.createGraphic2D(
+                    xSymbol.set( pFactory->createGraphic2D(
                                      xResultGroup,
                                      aPos,
                                      aSymbolSize,

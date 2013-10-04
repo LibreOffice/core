@@ -32,7 +32,7 @@ namespace chart
 /**
 */
 class PlottingPositionHelper;
-class ShapeFactory;
+class AbstractShapeFactory;
 
 class LabelPositionHelper
 {
@@ -41,7 +41,7 @@ public:
         PlottingPositionHelper* pPosHelper
         , sal_Int32 nDimensionCount
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
-        , ShapeFactory* pShapeFactory );
+        , AbstractShapeFactory* pShapeFactory );
     virtual ~LabelPositionHelper();
 
     ::com::sun::star::awt::Point transformSceneToScreenPosition(
@@ -66,7 +66,7 @@ private:
     //these members are only necessary for transformation from 3D to 2D
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >    m_xLogicTarget;
-    ShapeFactory*                                           m_pShapeFactory;
+    AbstractShapeFactory* m_pShapeFactory;
 };
 
 } //namespace chart

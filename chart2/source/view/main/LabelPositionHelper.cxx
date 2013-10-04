@@ -21,7 +21,7 @@
 #include "PlottingPositionHelper.hxx"
 #include "CommonConverters.hxx"
 #include "PropertyMapper.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "macros.hxx"
 #include "RelativeSizeHelper.hxx"
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -36,7 +36,7 @@ LabelPositionHelper::LabelPositionHelper(
                     PlottingPositionHelper* pPosHelper
                     , sal_Int32 nDimensionCount
                     , const uno::Reference< drawing::XShapes >& xLogicTarget
-                    , ShapeFactory* pShapeFactory )
+                    , AbstractShapeFactory* pShapeFactory )
                     : m_pPosHelper(pPosHelper)
                     , m_nDimensionCount(nDimensionCount)
                     , m_xLogicTarget(xLogicTarget)

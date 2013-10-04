@@ -27,10 +27,12 @@ namespace chart
 
 class ShapeFactory : public AbstractShapeFactory
 {
-public:
+    friend AbstractShapeFactory;
+
     ShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory)
         {m_xShapeFactory = xFactory;}
 
+public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroup2D(
             const ::com::sun::star::uno::Reference<

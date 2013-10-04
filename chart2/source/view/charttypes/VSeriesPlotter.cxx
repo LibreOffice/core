@@ -18,7 +18,7 @@
  */
 
 #include "VSeriesPlotter.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 
 #include "CommonConverters.hxx"
@@ -543,9 +543,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         LabelPositionHelper::changeTextAdjustment( *pPropValues, *pPropNames, eAlignment );
 
         //create text shape
-        xTextShape = ShapeFactory(m_xShapeFactory).
+        xTextShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
             createText( xTarget_, aText.makeStringAndClear()
-                        , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
+                        , *pPropNames, *pPropValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ) );
 
         if( !xTextShape.is() )
             return xTextShape;
@@ -556,7 +556,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             const double fDegreesPi( fRotationDegrees * ( F_PI / -180.0 ) );
             uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue( "Transformation", ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
+                xProp->setPropertyValue( "Transformation", AbstractShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
@@ -1086,7 +1086,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
                 createGroupShape( xTarget, rVDataSeries.getDataCurveCID( nN, bAverageLine ) );
             uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xRegressionGroupShapes, PolyToPointSequence( aRegressionPoly ), &aVLineProperties );
-            m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
+            AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
             aDefaultPos = xShape->getPosition();
         }
 
@@ -1189,12 +1189,12 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
             uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
                 xEquationTarget, aFormula.makeStringAndClear(),
-                aNames, aValues, ShapeFactory::makeTransformation( aScreenPosition2D ));
+                aNames, aValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ));
 
             OSL_ASSERT( xTextShape.is());
             if( xTextShape.is())
             {
-                ShapeFactory::setShapeName( xTextShape, rEquationCID );
+                AbstractShapeFactory::setShapeName( xTextShape, rEquationCID );
                 awt::Size aSize( xTextShape->getSize() );
                 awt::Point aPos( RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
                     aScreenPosition2D, aSize, aRelativePosition.Anchor ) );
@@ -2306,7 +2306,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
             {
                 // symbol
-                uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory(xShapeFactory).createGroup2D( xTarget ));
+                uno::Reference< drawing::XShapes > xSymbolGroup( AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
 
                 // create the symbol
                 Reference< drawing::XShape > xShape( this->createLegendSymbolForPoint( rEntryKeyAspectRatio,
@@ -2320,7 +2320,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_DATA_POINT, nIdx ) );
                     aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                     OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
-                    ShapeFactory::setShapeName( xShape, aCID );
+                    AbstractShapeFactory::setShapeName( xShape, aCID );
                 }
 
                 // label
@@ -2335,7 +2335,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         else
         {
             // symbol
-            uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory(xShapeFactory).createGroup2D( xTarget ));
+            uno::Reference< drawing::XShapes > xSymbolGroup( AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
 
             // create the symbol
             Reference< drawing::XShape > xShape( this->createLegendSymbolForSeries(
@@ -2348,7 +2348,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
                 OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                 OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
-                ShapeFactory::setShapeName( xShape, aCID );
+                AbstractShapeFactory::setShapeName( xShape, aCID );
             }
 
             // label
@@ -2378,7 +2378,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
 
                     // symbol
-                    uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory(xShapeFactory).createGroup2D( xTarget ));
+                    uno::Reference< drawing::XShapes > xSymbolGroup( AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
 
                     // create the symbol
                     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
@@ -2396,7 +2396,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                         OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( eObjectType, i ) );
                         aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
                         OUString aCID = ObjectIdentifier::createClassifiedIdentifierForParticles( rSeries.getSeriesParticle(), aChildParticle );
-                        ShapeFactory::setShapeName( xShape, aCID );
+                        AbstractShapeFactory::setShapeName( xShape, aCID );
                     }
 
                     aResult.push_back(aEntry);

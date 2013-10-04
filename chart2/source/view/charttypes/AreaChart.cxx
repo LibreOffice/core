@@ -19,7 +19,7 @@
 
 #include "AreaChart.hxx"
 #include "PlottingPositionHelper.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "ViewDefines.hxx"
@@ -442,7 +442,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     { // default to creating a straight line
         SAL_WARN_IF(CurveStyle_LINES != m_eCurveStyle, "chart2.areachart", "Unknown curve style");
         bool bIsClipped = false;
-        if( m_bConnectLastToFirstPoint && !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
+        if( m_bConnectLastToFirstPoint && !AbstractShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
         {
             // do NOT connect last and first point, if one is NAN, and NAN handling is NAN_AS_GAP
             double fFirstY = pSeries->getYValue( 0 );
@@ -465,7 +465,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
             Clipping::clipPolygonAtRectangle( *pSeriesPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
 
-    if(!ShapeFactory::hasPolygonAnyLines(aPoly))
+    if(!AbstractShapeFactory::hasPolygonAnyLines(aPoly))
         return false;
 
     //transformation 3) -> 4)
@@ -524,7 +524,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
-    if( m_bConnectLastToFirstPoint && !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
+    if( m_bConnectLastToFirstPoint && !AbstractShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
     {
         if( pPreviousSeriesPoly )
             addPolygon( aPoly, *pPreviousSeriesPoly );
@@ -556,17 +556,17 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     {
         appendPoly( aPoly, *pPreviousSeriesPoly );
     }
-    ShapeFactory::closePolygon(aPoly);
+    AbstractShapeFactory::closePolygon(aPoly);
 
     //apply clipping
     {
         drawing::PolyPolygonShape3D aClippedPoly;
         Clipping::clipPolygonAtRectangle( aPoly, pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly, false );
-        ShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
+        AbstractShapeFactory::closePolygon(aClippedPoly); //again necessary after clipping
         aPoly = aClippedPoly;
     }
 
-    if(!ShapeFactory::hasPolygonAnyLines(aPoly))
+    if(!AbstractShapeFactory::hasPolygonAnyLines(aPoly))
         return false;
 
     //transformation 3) -> 4)

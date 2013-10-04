@@ -19,7 +19,7 @@
 
 #include "chartview/DrawModelWrapper.hxx"
 #include "macros.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "ChartItemPool.hxx"
 #include "ObjectIdentifier.hxx"
 #include <svx/unomodel.hxx>
@@ -235,7 +235,7 @@ uno::Reference< drawing::XDrawPage > DrawModelWrapper::getMainDrawPage()
         }
     }
     //ensure that additional shapes are in front of the chart objects so create the chart root before
-    ShapeFactory(this->getShapeFactory()).getOrCreateChartRootShape( m_xMainDrawPage );
+    AbstractShapeFactory::getOrCreateShapeFactory(this->getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
     return m_xMainDrawPage;
 }
 uno::Reference< drawing::XDrawPage > DrawModelWrapper::getHiddenDrawPage()
@@ -265,7 +265,7 @@ uno::Reference< drawing::XDrawPage > DrawModelWrapper::getHiddenDrawPage()
 void DrawModelWrapper::clearMainDrawPage()
 {
     //uno::Reference<drawing::XShapes> xChartRoot( m_xMainDrawPage, uno::UNO_QUERY );
-    uno::Reference<drawing::XShapes> xChartRoot( ShapeFactory::getChartRootShape( m_xMainDrawPage ) );
+    uno::Reference<drawing::XShapes> xChartRoot( AbstractShapeFactory::getChartRootShape( m_xMainDrawPage ) );
     if( xChartRoot.is() )
     {
         sal_Int32 nSubCount = xChartRoot->getCount();
@@ -281,7 +281,7 @@ void DrawModelWrapper::clearMainDrawPage()
 uno::Reference< drawing::XShapes > DrawModelWrapper::getChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
-    return ShapeFactory::getChartRootShape( xDrawPage );
+    return AbstractShapeFactory::getChartRootShape( xDrawPage );
 }
 
 void DrawModelWrapper::lockControllers()

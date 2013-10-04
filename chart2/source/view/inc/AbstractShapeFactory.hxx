@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace chart {
 
@@ -51,6 +52,8 @@ class Stripe;
 class AbstractShapeFactory
 {
 public:
+
+    static AbstractShapeFactory* getOrCreateShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory);
 
     virtual ~AbstractShapeFactory() {};
 

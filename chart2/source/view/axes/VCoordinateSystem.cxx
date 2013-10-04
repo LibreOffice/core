@@ -22,7 +22,7 @@
 #include "VPolarCoordinateSystem.hxx"
 #include "ScaleAutomatism.hxx"
 #include "VSeriesPlotter.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "servicenames_coosystems.hxx"
 #include "macros.hxx"
 #include "AxisIndexDefines.hxx"
@@ -104,20 +104,20 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     //create group shape for grids first thus axes are always painted above grids
-    ShapeFactory aShapeFactory(xShapeFactory);
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     if(nDimensionCount==2)
     {
         //create and add to target
-        m_xLogicTargetForGrids = aShapeFactory.createGroup2D( xLogicTarget );
-        xLogicTargetForSeriesBehindAxis = aShapeFactory.createGroup2D( xLogicTarget );
-        m_xLogicTargetForAxes = aShapeFactory.createGroup2D( xLogicTarget );
+        m_xLogicTargetForGrids = pShapeFactory->createGroup2D( xLogicTarget );
+        xLogicTargetForSeriesBehindAxis = pShapeFactory->createGroup2D( xLogicTarget );
+        m_xLogicTargetForAxes = pShapeFactory->createGroup2D( xLogicTarget );
     }
     else
     {
         //create and added to target
-        m_xLogicTargetForGrids = aShapeFactory.createGroup3D( xLogicTarget );
-        xLogicTargetForSeriesBehindAxis = aShapeFactory.createGroup3D( xLogicTarget );
-        m_xLogicTargetForAxes = aShapeFactory.createGroup3D( xLogicTarget );
+        m_xLogicTargetForGrids = pShapeFactory->createGroup3D( xLogicTarget );
+        xLogicTargetForSeriesBehindAxis = pShapeFactory->createGroup3D( xLogicTarget );
+        m_xLogicTargetForAxes = pShapeFactory->createGroup3D( xLogicTarget );
     }
     m_xFinalTarget  = xFinalTarget;
     m_xShapeFactory = xShapeFactory;

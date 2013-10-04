@@ -23,7 +23,7 @@
 #include "CommonConverters.hxx"
 #include "ObjectIdentifier.hxx"
 #include "RelativePositionHelper.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "RelativeSizeHelper.hxx"
 #include "LegendEntryProvider.hxx"
 #include "chartview/DrawModelWrapper.hxx"
@@ -847,7 +847,7 @@ void VLegend::createShapes(
         // set name to enable selection
         {
             OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( m_xLegend, m_xModel ) );
-            ShapeFactory::setShapeName( m_xShape, ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle ) );
+            AbstractShapeFactory::setShapeName( m_xShape, ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle ) );
         }
 
         // create and insert sub-shapes
@@ -894,7 +894,7 @@ void VLegend::createShapes(
                     Reference< beans::XPropertySet >( xBorder, uno::UNO_QUERY ));
 
                 //because of this name this border will be used for marking the legend
-                ShapeFactory(m_xShapeFactory).setShapeName( xBorder, "MarkHandles" );
+                AbstractShapeFactory::setShapeName( xBorder, "MarkHandles" );
             }
 
             // create entries

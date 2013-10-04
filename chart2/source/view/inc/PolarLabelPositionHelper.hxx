@@ -38,7 +38,7 @@ public:
         PolarPlottingPositionHelper* pPosHelper
         , sal_Int32 nDimensionCount
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xLogicTarget
-        , ShapeFactory* pShapeFactory );
+        , AbstractShapeFactory* pShapeFactory );
     virtual ~PolarLabelPositionHelper();
 
     ::com::sun::star::awt::Point getLabelScreenPositionAndAlignmentForLogicValues(

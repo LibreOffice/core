@@ -95,7 +95,7 @@ void VDiagram::init(
 
     m_xTarget  = xTarget;
     m_xShapeFactory = xFactory;
-    m_pShapeFactory = new ShapeFactory(xFactory);
+    m_pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xFactory);
 }
 
 void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
@@ -132,10 +132,10 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
         //do not change aspect ratio
         awt::Size  aAspectRatio( static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME),
                                  static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME ));
-        m_aCurrentSizeWithoutAxes = awt::Size( ShapeFactory::calculateNewSizeRespectingAspectRatio(
+        m_aCurrentSizeWithoutAxes = awt::Size( AbstractShapeFactory::calculateNewSizeRespectingAspectRatio(
                         rAvailableSize, aAspectRatio ) );
         //center diagram position
-        m_aCurrentPosWithoutAxes = awt::Point( ShapeFactory::calculateTopLeftPositionToCenterObject(
+        m_aCurrentPosWithoutAxes = awt::Point( AbstractShapeFactory::calculateTopLeftPositionToCenterObject(
             rPos, rAvailableSize, m_aCurrentSizeWithoutAxes ) );
 
     }
@@ -192,7 +192,7 @@ void VDiagram::createShapes_2d()
                 {
                     //we always need this object as dummy object for correct scene dimensions
                     //but it should not be visible in this case:
-                    ShapeFactory::makeShapeInvisible( m_xWall2D );
+                    AbstractShapeFactory::makeShapeInvisible( m_xWall2D );
                 }
                 else
                 {
@@ -458,12 +458,12 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
     adjustAspectRatio3d( rAvailableSize );
 
     //do not change aspect ratio of 3D scene with 2D bound rect
-    m_aCurrentSizeWithoutAxes = ShapeFactory::calculateNewSizeRespectingAspectRatio(
+    m_aCurrentSizeWithoutAxes = AbstractShapeFactory::calculateNewSizeRespectingAspectRatio(
                     rAvailableSize, m_xOuterGroupShape->getSize() );
     m_xOuterGroupShape->setSize( m_aCurrentSizeWithoutAxes );
 
     //center diagram position
-    m_aCurrentPosWithoutAxes= ShapeFactory::calculateTopLeftPositionToCenterObject(
+    m_aCurrentPosWithoutAxes= AbstractShapeFactory::calculateTopLeftPositionToCenterObject(
          rPos, rAvailableSize, m_aCurrentSizeWithoutAxes );
     m_xOuterGroupShape->setPosition(m_aCurrentPosWithoutAxes);
 
@@ -480,7 +480,7 @@ void VDiagram::createShapes_3d()
     m_xOuterGroupShape = uno::Reference< drawing::XShape >(
             m_xShapeFactory->createInstance(
             "com.sun.star.drawing.Shape3DSceneObject" ), uno::UNO_QUERY );
-    ShapeFactory::setShapeName( m_xOuterGroupShape, "PlotAreaExcludingAxes" );
+    AbstractShapeFactory::setShapeName( m_xOuterGroupShape, "PlotAreaExcludingAxes" );
     m_xTarget->add(m_xOuterGroupShape);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
@@ -535,7 +535,7 @@ void VDiagram::createShapes_3d()
             {
                 //we always need this object as dummy object for correct scene dimensions
                 //but it should not be visible in this case:
-                ShapeFactory::makeShapeInvisible( xShape );
+                AbstractShapeFactory::makeShapeInvisible( xShape );
             }
         }
         //add back wall
@@ -563,7 +563,7 @@ void VDiagram::createShapes_3d()
             {
                 //we always need this object as dummy object for correct scene dimensions
                 //but it should not be visible in this case:
-                ShapeFactory::makeShapeInvisible( xShape );
+                AbstractShapeFactory::makeShapeInvisible( xShape );
             }
         }
     }
@@ -639,12 +639,12 @@ void VDiagram::createShapes_3d()
         {
             //we always need this object as dummy object for correct scene dimensions
             //but it should not be visible in this case:
-            ShapeFactory::makeShapeInvisible( xShape );
+            AbstractShapeFactory::makeShapeInvisible( xShape );
         }
         else
         {
             OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, OUString() ) );//@todo read CID from model
-            ShapeFactory::setShapeName( xShape, aFloorCID );
+            AbstractShapeFactory::setShapeName( xShape, aFloorCID );
         }
     }
 

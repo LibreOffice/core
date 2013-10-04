@@ -38,10 +38,28 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
+#include "DummyShapeFactory.hxx"
+#include "ShapeFactory.hxx"
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 
 namespace chart {
+
+AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Reference< lang::XMultiServiceFactory> xFactory)
+{
+    static AbstractShapeFactory* pShapeFactory = NULL;
+
+    if(pShapeFactory)
+        return pShapeFactory;
+
+    if(getenv("CHART_DUMMY_FACTORY"))
+        pShapeFactory = new dummy::DummyShapeFactory();
+    else
+        pShapeFactory = new ShapeFactory(xFactory);
+
+    return pShapeFactory;
+}
 
 sal_Int32 AbstractShapeFactory::getSymbolCount()
 {

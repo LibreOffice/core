@@ -35,7 +35,7 @@
 namespace chart
 {
 
-class ShapeFactory;
+class AbstractShapeFactory;
 class PlottingPositionHelper;
 
 class PlotterBase
@@ -79,7 +79,7 @@ protected: //member
                     ::com::sun::star::drawing::XShapes >                m_xFinalTarget;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
-    ShapeFactory*                                                       m_pShapeFactory;
+    AbstractShapeFactory* m_pShapeFactory;
     OUString   m_aCID;
 
     sal_Int32                                           m_nDimension;

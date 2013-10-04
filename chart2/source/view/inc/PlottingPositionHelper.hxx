@@ -35,7 +35,7 @@
 namespace chart
 {
 
-class ShapeFactory;
+class AbstractShapeFactory;
 
 class PlottingPositionHelper
 {
@@ -81,7 +81,7 @@ public:
     static com::sun::star::awt::Point transformSceneToScreenPosition(
                   const com::sun::star::drawing::Position3D& rScenePosition3D
                 , const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xSceneTarget
-                , ShapeFactory* pShapeFactory, sal_Int32 nDimensionCount );
+                , AbstractShapeFactory* pShapeFactory, sal_Int32 nDimensionCount );
 
     inline double getLogicMinX() const;
     inline double getLogicMinY() const;

@@ -21,7 +21,7 @@
 
 #include "VCartesianAxis.hxx"
 #include "PlottingPositionHelper.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "ViewDefines.hxx"
@@ -93,11 +93,11 @@ Reference< drawing::XShape > createSingleLabel(
 
     // #i78696# use mathematically correct rotation now
     const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
-    uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
-    OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
+    uno::Any aATransformation = AbstractShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
+    OUString aLabel = AbstractShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
 
-    Reference< drawing::XShape > xShape2DText = ShapeFactory(xShapeFactory)
-                    .createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
+    Reference< drawing::XShape > xShape2DText = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)
+                    ->createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
     LabelPositionHelper::correctPositionForRotation( xShape2DText
         , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
@@ -113,7 +113,7 @@ bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShap
     if(!xShape.is())
         return false;
 
-    ::basegfx::B2IRectangle aShapeRect = BaseGFXHelper::makeRectangle(xShape->getPosition(),ShapeFactory::getSizeAfterRotation( xShape, fRotationAngleDegree ));
+    ::basegfx::B2IRectangle aShapeRect = BaseGFXHelper::makeRectangle(xShape->getPosition(),AbstractShapeFactory::getSizeAfterRotation( xShape, fRotationAngleDegree ));
 
     if( bIsVerticalAxis )
     {
@@ -293,7 +293,7 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
         xShape2DText = pTickInfo->xTextShape;
         if( xShape2DText.is() )
         {
-            awt::Size aSize = ShapeFactory::getSizeAfterRotation( xShape2DText, fRotationAngleDegree );
+            awt::Size aSize = AbstractShapeFactory::getSizeAfterRotation( xShape2DText, fRotationAngleDegree );
             if(fabs(aStaggerDirection.getX())>fabs(aStaggerDirection.getY()))
                 nDistance = ::std::max(nDistance,aSize.Width);
             else
@@ -1525,7 +1525,7 @@ void VCartesianAxis::updatePositions()
 
                     // #i78696# use mathematically correct rotation now
                     const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
-                    uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
+                    uno::Any aATransformation = AbstractShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                     //set new position
                     uno::Reference< beans::XPropertySet > xProp( xShape2DText, uno::UNO_QUERY );

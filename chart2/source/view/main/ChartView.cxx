@@ -23,7 +23,7 @@
 #include "ViewDefines.hxx"
 #include "VDiagram.hxx"
 #include "VTitle.hxx"
-#include "ShapeFactory.hxx"
+#include "AbstractShapeFactory.hxx"
 #include "VCoordinateSystem.hxx"
 #include "VSeriesPlotter.hxx"
 #include "CommonConverters.hxx"
@@ -1404,7 +1404,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             aVDiagram.reduceToMimimumSize();
     }
 
-    uno::Reference< drawing::XShapes > xTextTargetShapes( ShapeFactory(m_xShapeFactory).createGroup2D(xDiagramPlusAxes_Shapes) );
+    uno::Reference< drawing::XShapes > xTextTargetShapes( AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->createGroup2D(xDiagramPlusAxes_Shapes) );
 
     // - create axis and grids for all coordinate systems
 
@@ -1432,7 +1432,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         VCoordinateSystem* pVCooSys = rVCooSysList[0];
         pVCooSys->createMaximumAxesLabels();
 
-        aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
+        aConsumedOuterRect = ::basegfx::B2IRectangle( AbstractShapeFactory::getRectangleOfShape(xBoundingShape) );
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
         if( !bUseFixedInnerSize )
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
@@ -1449,7 +1449,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
         bool bLessSpaceConsumedThanExpected = false;
         {
-            aConsumedOuterRect = ShapeFactory::getRectangleOfShape(xBoundingShape);
+            aConsumedOuterRect = AbstractShapeFactory::getRectangleOfShape(xBoundingShape);
             if( aConsumedOuterRect.getMinX() > aAvailableOuterRect.getMinX()
                 || aConsumedOuterRect.getMaxX() < aAvailableOuterRect.getMaxX()
                 || aConsumedOuterRect.getMinY() > aAvailableOuterRect.getMinY()
@@ -1516,7 +1516,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     {
         m_bPointsWereSkipped = false;
 
-        aConsumedOuterRect = ::basegfx::B2IRectangle( ShapeFactory::getRectangleOfShape(xBoundingShape) );
+        aConsumedOuterRect = ::basegfx::B2IRectangle( AbstractShapeFactory::getRectangleOfShape(xBoundingShape) );
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
         if( !bUseFixedInnerSize )
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
@@ -1528,9 +1528,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         }
 
         //clear and recreate
-        ShapeFactory::removeSubShapes( xSeriesTargetInFrontOfAxis ); //xSeriesTargetBehindAxis is a sub shape of xSeriesTargetInFrontOfAxis and will be removed here
+        AbstractShapeFactory::removeSubShapes( xSeriesTargetInFrontOfAxis ); //xSeriesTargetBehindAxis is a sub shape of xSeriesTargetInFrontOfAxis and will be removed here
         xSeriesTargetBehindAxis.clear();
-        ShapeFactory::removeSubShapes( xTextTargetShapes );
+        AbstractShapeFactory::removeSubShapes( xTextTargetShapes );
 
         //set new transformation
         for( nC=0; nC < rVCooSysList.size(); nC++)
@@ -2428,8 +2428,9 @@ void ChartView::createShapes()
 
     awt::Size aPageSize = ChartModelHelper::getPageSize( m_xChartModel );
 
-    uno::Reference<drawing::XShapes> xPageShapes( ShapeFactory(m_xShapeFactory)
-        .getOrCreateChartRootShape( m_xDrawPage ) );
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+    uno::Reference<drawing::XShapes> xPageShapes(
+            pShapeFactory->getOrCreateChartRootShape( m_xDrawPage ) );
 
     SdrPage* pPage = ChartView::getSdrPage();
     if(pPage) //it is necessary to use the implementation here as the uno page does not provide a propertyset
@@ -2452,17 +2453,18 @@ void ChartView::createShapes()
         //create the group shape for diagram and axes first to have title and legends on top of it
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
         OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
-        uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xPageShapes,aDiagramCID) );
+        uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
+                pShapeFactory->createGroup2D(xPageShapes,aDiagramCID) );
 
-        uno::Reference< drawing::XShape > xDiagram_MarkHandles( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
+        uno::Reference< drawing::XShape > xDiagram_MarkHandles( pShapeFactory->createInvisibleRectangle(
                     xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-        ShapeFactory::setShapeName( xDiagram_MarkHandles, "MarkHandles" );
+        AbstractShapeFactory::setShapeName( xDiagram_MarkHandles, "MarkHandles" );
 
-        uno::Reference< drawing::XShape > xDiagram_OuterRect( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
+        uno::Reference< drawing::XShape > xDiagram_OuterRect( pShapeFactory->createInvisibleRectangle(
                     xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-        ShapeFactory::setShapeName( xDiagram_OuterRect, "PlotAreaIncludingAxes" );
+        AbstractShapeFactory::setShapeName( xDiagram_OuterRect, "PlotAreaIncludingAxes" );
 
-        uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
+        uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
 
         bool bAutoPositionDummy = true;
 
@@ -2979,8 +2981,8 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::Runt
 OUString ChartView::dump() throw (uno::RuntimeException)
 {
     impl_updateView();
-    uno::Reference<drawing::XShapes> xPageShapes( ShapeFactory(m_xShapeFactory)
-        .getOrCreateChartRootShape( m_xDrawPage ) );
+    uno::Reference<drawing::XShapes> xPageShapes( AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)
+        ->getOrCreateChartRootShape( m_xDrawPage ) );
 
     if (!xPageShapes.is())
         return OUString();
