@@ -92,7 +92,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else                        // einblenden
                 {
-                    std::vector<String> rNames;
+                    std::vector<OUString> rNames;
                     rNames.push_back(aName);
                     ShowTable( rNames );
                 }
@@ -111,8 +111,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TABLE_SHOW:
             {
-                String aName;
-                std::vector<String> rNames;
+                OUString aName;
+                std::vector<OUString> rNames;
                 if ( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
@@ -178,7 +178,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     sal_Bool bOk = false;
                     const SfxPoolItem*  pTabItem;
                     const SfxPoolItem*  pNameItem;
-                    String              aName;
+                    OUString            aName;
 
                     if ( pReqArgs->HasItem( FN_PARAM_1, &pTabItem ) &&
                          pReqArgs->HasItem( nSlot, &pNameItem ) )
@@ -324,7 +324,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     sal_Bool        bDone   = false;
                     const SfxPoolItem* pItem;
-                    String      aName;
+                    OUString      aName;
 
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                         nTabNr = ((const SfxUInt16Item*)pItem)->GetValue();
@@ -351,21 +351,21 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     sal_uInt16      nRet    = RET_OK;
                     sal_Bool        bDone   = false;
-                    String      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
+                    OUString      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
                     OUString aName;
-                    String      aDlgTitle;
+                    OUString      aDlgTitle;
                     const sal_Char* pHelpId = 0;
 
                     switch ( nSlot )
                     {
                         case FID_TAB_APPEND:
-                            aDlgTitle = String(ScResId(SCSTR_APDTABLE));
+                            aDlgTitle = OUString(ScResId(SCSTR_APDTABLE));
                             pDoc->CreateValidTabName( aName );
                             pHelpId = HID_SC_APPEND_NAME;
                             break;
 
                         case FID_TAB_RENAME:
-                            aDlgTitle = String(ScResId(SCSTR_RENAMETAB));
+                            aDlgTitle = OUString(ScResId(SCSTR_RENAMETAB));
                             pDoc->GetName( pViewData->GetTabNo(), aName );
                             pHelpId = HID_SC_RENAME_NAME;
                             break;
@@ -375,7 +375,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg(
-                        GetDialogParent(), aDlgTitle, String(ScResId(SCSTR_NAME)),
+                        GetDialogParent(), aDlgTitle, OUString(ScResId(SCSTR_NAME)),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId, RID_SCDLG_STRINPUT);
 
@@ -533,7 +533,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         }
                         bDoIt = true;
 
-                        String aFoundDocName;
+                        OUString aFoundDocName;
                         if ( nDoc != SC_DOC_NEW )
                         {
                             ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
@@ -619,7 +619,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     //  handle several sheets
 
                     ::svl::IUndoManager* pUndoManager = pDocSh->GetUndoManager();
-                    String aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
+                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
                     pUndoManager->EnterListAction( aUndo, aUndo );
 
                     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
@@ -705,8 +705,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
                     AbstractScTabBgColorDlg* pDlg = pFact->CreateScTabBgColorDlg(
                                                                 GetDialogParent(),
-                                                                String(ScResId(SCSTR_SET_TAB_BG_COLOR)),
-                                                                String(ScResId(SCSTR_NO_TAB_BG_COLOR)),
+                                                                OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
+                                                                OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)),
                                                                 aTabBgColor,
                                                                 CMD_FID_TAB_SET_TAB_BG_COLOR,
                                                                 RID_SCDLG_TAB_BG_COLOR);

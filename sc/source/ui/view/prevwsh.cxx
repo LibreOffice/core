@@ -738,7 +738,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 SCTAB nTab                      = pPreview->GetTab();
-                String aOldName                 = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
+                OUString aOldName               = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
                 ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
                 SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
                 OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
@@ -852,7 +852,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );
                     else
                     {
-                        String aOldName                 = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
+                        OUString aOldName               = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
                         ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
                         SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
                         OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );

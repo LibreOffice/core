@@ -1098,7 +1098,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                 nScrollMin = aViewData.GetFixPosY();
             long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
 
-            String aHelpStr;
+            OUString aHelpStr;
             Rectangle aRect;
             sal_uInt16 nAlign;
             if (bHoriz)

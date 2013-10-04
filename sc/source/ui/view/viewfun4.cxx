@@ -166,7 +166,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         SotStorageStreamRef xStream;
         if ( aDataHelper.GetSotStorageStream( SOT_FORMAT_RTF, xStream ) && xStream.Is() )
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            aImpEx.ImportStream( *xStream, String(), SOT_FORMAT_RTF );
+            aImpEx.ImportStream( *xStream, OUString(), SOT_FORMAT_RTF );
         else if ( aDataHelper.GetString( SOT_FORMAT_RTF, aStr ) )
             aImpEx.ImportString( aStr, SOT_FORMAT_RTF );
 
@@ -254,7 +254,7 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
                 if (aFinder.GetFound())
                 {
                     ScAddress aPos = pCell->aPos;
-                    String aNew = aFinder.GetText();
+                    OUString aNew = aFinder.GetText();
                     ScCompiler aComp( pDoc, aPos);
                     aComp.SetGrammar(pDoc->GetGrammar());
                     ScTokenArray* pArr = aComp.CompileString( aNew );
@@ -308,7 +308,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScSplitPos eWhich = GetViewData()->GetActivePart();
     EESpellState eState;
-    String sOldText, sNewString;
+    OUString sOldText, sNewString;
     EditTextObject* pOldTObj = NULL;
     const EditTextObject* pTObject = NULL;
     EditView* pEditView = NULL;
@@ -397,7 +397,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
         SvtLanguageTable aLangTab;
-        String aErr = aLangTab.GetString(eLnge);
+        OUString aErr = aLangTab.GetString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
         InfoBox aBox( GetViewData()->GetDialogParent(), aErr );
         aBox.Execute();
@@ -582,7 +582,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bo
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rFile );
-    String aStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    OUString aStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
     // is it a media URL?
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL ) )
@@ -635,7 +635,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, sal_Bo
     {
         if ( bLink )
         {
-            String aFltName = rGraphicFilter.GetImportFormatName(nFilterFormat);
+            OUString aFltName = rGraphicFilter.GetImportFormatName(nFilterFormat);
             return PasteGraphic( rPos, aGraphic, aStrURL, aFltName );
         }
         else
@@ -706,7 +706,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
     {
         //  in die gerade editierte Zelle einfuegen
 
-        String aTargetFrame;
+        OUString aTargetFrame;
         if (pTarget)
             aTargetFrame = *pTarget;
         pViewData->GetViewShell()->InsertURLField( rDescription, rURL, aTargetFrame );

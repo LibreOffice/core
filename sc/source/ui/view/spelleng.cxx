@@ -90,7 +90,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
     {
         mbIsAnyModified = true;
 
-        String aNewStr = GetText();
+        OUString aNewStr = GetText();
 
         bool bMultiTab = (rMark.GetSelectCount() > 1);
         OUString aVisibleStr;

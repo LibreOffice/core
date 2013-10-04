@@ -134,7 +134,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
     sal_Bool bOld = pEngine->GetUpdateMode();
     pEngine->SetUpdateMode(false);
 
-    String aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
+    OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
     pEngine->GetUndoManager().EnterListAction( aName, aName );
 
     rEditView.RemoveAttribs(true);
@@ -205,11 +205,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_THES:
             {
-                String aReplaceText;
+                OUString aReplaceText;
                 SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , false );
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
-                if (aReplaceText.Len() > 0)
+                if (!aReplaceText.isEmpty())
                     ReplaceTextWithSynonym( *pEditView, aReplaceText );
             }
             break;
@@ -354,7 +354,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
                     if ( pFontItem )
                     {
-                        String aFontName(pFontItem->GetValue());
+                        OUString aFontName(pFontItem->GetValue());
                         Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
                         aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
@@ -487,7 +487,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 if (pEngine->GetParagraphCount() == 1)
                 {
-                    String aText = pEngine->GetText();
+                    OUString aText = pEngine->GetText();
                     ESelection aSel = pEditView->GetSelection();    // aktuelle View
 
                     ScDocument* pDoc = pViewData->GetDocument();
@@ -495,7 +495,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     aFinder.ToggleRel( aSel.nStartPos, aSel.nEndPos );
                     if (aFinder.GetFound())
                     {
-                        String aNew = aFinder.GetText();
+                        OUString aNew = aFinder.GetText();
                         ESelection aNewSel( 0,aFinder.GetSelStart(), 0,aFinder.GetSelEnd() );
                         pEngine->SetText( aNew );
                         pTableView->SetSelection( aNewSel );
@@ -519,9 +519,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
-                    const String& rName     = pHyper->GetName();
-                    const String& rURL      = pHyper->GetURL();
-                    const String& rTarget   = pHyper->GetTargetFrame();
+                    const OUString& rName     = pHyper->GetName();
+                    const OUString& rURL      = pHyper->GetURL();
+                    const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
                     sal_Bool bDone = false;
@@ -697,8 +697,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     else if ( pActiveView )
                     {
                         // use selected text as name for urls
-                        String sReturn = pActiveView->GetSelected();
-                        sReturn.Erase(255);
+                        OUString sReturn = pActiveView->GetSelected();
+                        sReturn = sReturn.copy(0, 255);
                         aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
                     rSet.Put(aHLinkItem);
@@ -1151,7 +1151,7 @@ OUString ScEditShell::GetSelectionText( bool bWholeWord )
         {
             EditEngine* pEngine = pEditView->GetEditEngine();
             ESelection  aSel = pEditView->GetSelection();
-            String      aStrCurrentDelimiters = pEngine->GetWordDelimiters();
+            OUString    aStrCurrentDelimiters = pEngine->GetWordDelimiters();
 
             pEngine->SetWordDelimiters(" .,;\"'");
             aStrSelection = pEngine->GetWord( aSel.nEndPara, aSel.nEndPos );

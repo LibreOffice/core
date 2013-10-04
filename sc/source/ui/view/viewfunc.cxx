@@ -358,18 +358,18 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             else if ( rString[0] == '+' || rString[0] == '-' )
             {
                 // if there is more than one leading '+' or '-' character, remove the additional ones
-                String aString( rString );
+                OUString aString( rString );
                 xub_StrLen nIndex = 1;
-                xub_StrLen nLen = aString.Len();
-                while ( nIndex < nLen && ( aString.GetChar( nIndex ) == '+' || aString.GetChar( nIndex ) == '-' ) )
+                xub_StrLen nLen = aString.getLength();
+                while ( nIndex < nLen && ( aString[ nIndex ] == '+' || aString[ nIndex ] == '-' ) )
                 {
                     ++nIndex;
                 }
-                aString.Erase( 1, nIndex - 1 );
+                aString = aString.replaceAt( 1, nIndex - 1, "" );
 
                 // if the remaining part without the leading '+' or '-' character
                 // is non-empty and not a number, handle as formula
-                if ( aString.Len() > 1 )
+                if ( aString.getLength() > 1 )
                 {
                     sal_uInt32 nFormat = 0;
                     pDoc->GetNumberFormat( nCol, nRow, nTab, nFormat );
@@ -396,7 +396,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             {
                 aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
             }
-            String aFormula( rString );
+            OUString aFormula( rString );
             ScTokenArray* pArr;
             sal_Bool bAgain;
             do
@@ -417,20 +417,19 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 }
                 if ( bCorrected )
                 {
-                    String aCorrectedFormula;
+                    OUString aCorrectedFormula;
                     if ( bAddEqual )
                     {
-                        aCorrectedFormula = '=';
-                        aCorrectedFormula += aComp.GetCorrectedFormula();
+                        aCorrectedFormula = "=" + aComp.GetCorrectedFormula();
                     }
                     else
                         aCorrectedFormula = aComp.GetCorrectedFormula();
                     short nResult;
-                    if ( aCorrectedFormula.Len() == 1 )
+                    if ( aCorrectedFormula.getLength() == 1 )
                         nResult = RET_NO;   // empty formula, just '='
                     else
                     {
-                        String aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
+                        OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
                         aMessage += aCorrectedFormula;
                         nResult = QueryBox( GetViewData()->GetDialogParent(),
                                                 WinBits(WB_YES_NO | WB_DEF_YES),
@@ -634,7 +633,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         sal_Bool bSimple = false;
         sal_Bool bCommon = false;
         ScPatternAttr* pCellAttrs = NULL;
-        String aString;
+        OUString aString;
 
         const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
         ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
@@ -651,8 +650,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             if ( !bSimple && aEngine.GetParagraphCount() == 1 )
             {
-                String aParStr = aEngine.GetText( 0 );
-                if ( aParStr.GetChar(0) == '=' )
+                OUString aParStr = aEngine.GetText( 0 );
+                if ( aParStr[0] == '=' )
                     bSimple = sal_True;
             }
 
@@ -1367,7 +1366,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, sal_Bool bRe
             pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, sal_True, pUndoDoc, &aFuncMark );
             aFuncMark.MarkToMulti();
 
-            String aName = pStyleSheet->GetName();
+            OUString aName = pStyleSheet->GetName();
             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoSelectionStyle( pDocSh, aFuncMark, aMarkRange, aName, pUndoDoc ) );
         }
@@ -1401,7 +1400,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, sal_Bool bRe
             ScMarkData aUndoMark = aFuncMark;
             aUndoMark.SetMultiMarkArea( aMarkRange );
 
-            String aName = pStyleSheet->GetName();
+            OUString aName = pStyleSheet->GetName();
             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoSelectionStyle( pDocSh, aUndoMark, aMarkRange, aName, pUndoDoc ) );
         }
@@ -2436,7 +2435,7 @@ void ScViewFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
 
     if (bUndo)
     {
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
+        OUString aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
     }
 
@@ -2466,7 +2465,7 @@ void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
 
         if (bUndo)
         {
-            String aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
+            OUString aUndo = ScGlobal::GetRscString( STR_UNDO_PROTECT_TAB );
             pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
         }
 
@@ -2498,7 +2497,7 @@ sal_Bool ScViewFunc::Unprotect( SCTAB nTab, const OUString& rPassword )
 
         if (bUndo)
         {
-            String aUndo = ScGlobal::GetRscString( STR_UNDO_UNPROTECT_TAB );
+            OUString aUndo = ScGlobal::GetRscString( STR_UNDO_UNPROTECT_TAB );
             pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
         }
 
@@ -2776,14 +2775,14 @@ sal_Bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
     ScRangeData* pNewEntry = new ScRangeData( pDoc, rName, rSymbol,
             ScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
                 nTab), nType );
-    String aUpType = rType.toAsciiUpperCase();
-    if ( aUpType.Search( 'P' ) != STRING_NOTFOUND )
+    OUString aUpType = rType.toAsciiUpperCase();
+    if ( aUpType.indexOf( 'P' ) != -1 )
         nType |= RT_PRINTAREA;
-    if ( aUpType.Search( 'R' ) != STRING_NOTFOUND )
+    if ( aUpType.indexOf( 'R' ) != -1 )
         nType |= RT_ROWHEADER;
-    if ( aUpType.Search( 'C' ) != STRING_NOTFOUND )
+    if ( aUpType.indexOf( 'C' ) != -1 )
         nType |= RT_COLHEADER;
-    if ( aUpType.Search( 'F' ) != STRING_NOTFOUND )
+    if ( aUpType.indexOf( 'F' ) != -1 )
         nType |= RT_CRITERIA;
     pNewEntry->AddType(nType);
 

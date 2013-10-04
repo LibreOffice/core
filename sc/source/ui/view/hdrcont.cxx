@@ -270,8 +270,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     sal_Bool bMirrored = IsMirrored();
 
-    String              aString;
-    sal_uInt16              nBarSize;
+    OUString            aString;
+    sal_uInt16          nBarSize;
     Point               aScrPos;
     Size                aTextSize;
 
@@ -908,7 +908,7 @@ void ScHeaderControl::ShowDragHelp()
         long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
                                : ( nDragPos + 2 - nScrPos );
 
-        String aHelpStr = GetDragHelp( nVal );
+        OUString aHelpStr = GetDragHelp( nVal );
         Point aPos = OutputToScreenPixel( Point(0,0) );
         Size aSize = GetSizePixel();
 

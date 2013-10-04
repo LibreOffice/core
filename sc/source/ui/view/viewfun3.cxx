@@ -977,7 +977,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
              ( bMarkIsFiltered && nUnfilteredRows < nDestSizeY+1 ) )
         {
             ScWaitCursorOff aWaitOff( GetFrameWin() );
-            String aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
+            OUString aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
             QueryBox aBox( GetViewData()->GetDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO), aMessage );
             if ( aBox.Execute() != RET_YES )
@@ -1111,7 +1111,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
     if ( bRecord )
     {
-        String aUndo = ScGlobal::GetRscString( pClipDoc->IsCutMode() ? STR_UNDO_MOVE : STR_UNDO_COPY );
+        OUString aUndo = ScGlobal::GetRscString( pClipDoc->IsCutMode() ? STR_UNDO_MOVE : STR_UNDO_COPY );
         pUndoMgr->EnterListAction( aUndo, aUndo );
     }
 
@@ -1508,7 +1508,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (pDoc->IsUndoEnabled())
     {
         ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        String aUndo = ScGlobal::GetRscString(
+        OUString aUndo = ScGlobal::GetRscString(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
         pUndoMgr->EnterListAction(aUndo, aUndo);
 
@@ -1670,7 +1670,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     if (pDoc->IsUndoEnabled())
     {
         svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        String aUndo = ScGlobal::GetRscString(
+        OUString aUndo = ScGlobal::GetRscString(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
         pUndoMgr->EnterListAction(aUndo, aUndo);
 
@@ -1745,7 +1745,7 @@ sal_Bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDest
 
         if ( bRecord )
         {
-            String aUndo = ScGlobal::GetRscString( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
+            OUString aUndo = ScGlobal::GetRscString( bCut ? STR_UNDO_MOVE : STR_UNDO_COPY );
             pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
         }
 
@@ -1907,7 +1907,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         {
             if (!aEdits.is_null(i))
             {
-                String  aFieldName=aEdits[i].GetText();
+                OUString  aFieldName=aEdits[i].GetText();
                 pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
             }
         }

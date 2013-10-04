@@ -62,7 +62,7 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
     SCTAB       nTab = pViewData->GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
-    String aTrackText;
+    OUString aTrackText;
     bool bLeftEdge = false;
 
     //  Change-Tracking
@@ -141,30 +141,30 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
 
             DateTime aDT = pFound->GetDateTime();
             aTrackText  = pFound->GetUser();
-            aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
+            aTrackText += ", ";
             aTrackText += ScGlobal::pLocaleData->getDate(aDT);
-            aTrackText += ' ';
+            aTrackText += " ";
             aTrackText += ScGlobal::pLocaleData->getTime(aDT);
-            aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n" ));
-            String aComStr=pFound->GetComment();
-            if(aComStr.Len()>0)
+            aTrackText += ":\n";
+            OUString aComStr=pFound->GetComment();
+            if(!aComStr.isEmpty())
             {
                 aTrackText += aComStr;
-                aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "\n( " ));
+                aTrackText += "\n( ";
             }
             OUString aTmp;
             pFound->GetDescription(aTmp, pDoc);
-            aTrackText += String(aTmp);
-            if(aComStr.Len()>0)
+            aTrackText += aTmp;
+            if(!aComStr.isEmpty())
             {
-                aTrackText +=')';
+                aTrackText += ")";
             }
         }
     }
 
     //  Notiz nur, wenn sie nicht schon auf dem Drawing-Layer angezeigt wird:
     const ScPostIt* pNote = pDoc->GetNotes( aCellPos.Tab() )->findByAddress( aCellPos );
-    if ( (aTrackText.Len() > 0) || (pNote && !pNote->IsCaptionShown()) )
+    if ( (!aTrackText.isEmpty()) || (pNote && !pNote->IsCaptionShown()) )
     {
         bool bNew = true;
         bool bFast = false;
@@ -286,7 +286,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
     if ( bHelpEnabled && !bDone && !nButtonDown )       // nur ohne gedrueckten Button
     {
-        String aHelpText;
+        OUString aHelpText;
         Rectangle aPixRect;
         Point aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
 
@@ -309,7 +309,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                     {
                         //  Bei ImageMaps die Description anzeigen, wenn vorhanden
                         aHelpText = pIMapObj->GetAltText();
-                        if (!aHelpText.Len())
+                        if (aHelpText.isEmpty())
                             aHelpText = pIMapObj->GetURL();
                         if( bCtrlClickHlink )
                         {
@@ -325,7 +325,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                     }
                 }
                 // URL in shape text or at shape itself (URL in text overrides object URL)
-                if ( aHelpText.Len() == 0 )
+                if ( aHelpText.isEmpty() )
                 {
                     if( aVEvt.eEvent == SDREVENT_EXECUTEURL )
                     {
@@ -368,7 +368,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             }
         }
 
-        if ( !aHelpText.Len() )                                 // Text-URL
+        if ( aHelpText.isEmpty() )                                 // Text-URL
         {
             OUString aUrl;
             if ( GetEditUrl( aPosPixel, NULL, &aUrl, NULL ) )
@@ -400,7 +400,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             }
         }
 
-        if ( aHelpText.Len() )
+        if ( !aHelpText.isEmpty() )
         {
             Rectangle aScreenRect(OutputToScreenPixel(aPixRect.TopLeft()),
                                     OutputToScreenPixel(aPixRect.BottomRight()));

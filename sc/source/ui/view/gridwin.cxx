@@ -1134,7 +1134,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         const size_t nDefCount = SAL_N_ELEMENTS(nDefIDs);
         for (i=0; i<nDefCount; i++)
         {
-            String aEntry( (ScResId) nDefIDs[i] );
+            OUString aEntry( (ScResId) nDefIDs[i] );
             pFilterBox->InsertEntry( aEntry );
             long nTextWidth = pFilterBox->GetTextWidth( aEntry );
             if ( nTextWidth > nMaxText )
@@ -1334,7 +1334,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
 void ScGridWindow::FilterSelect( sal_uLong nSel )
 {
-    String aString = pFilterBox->GetEntry( static_cast< sal_uInt16 >( nSel ) );
+    OUString aString = pFilterBox->GetEntry( static_cast< sal_uInt16 >( nSel ) );
 
     SCCOL nCol = pFilterBox->GetCol();
     SCROW nRow = pFilterBox->GetRow();
@@ -2399,7 +2399,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
         if ( pDisp && !bFormulaMode && !rMark.IsMultiMarked() )
         {
-            String aAddr;                               // CurrentCell
+            OUString aAddr;                               // CurrentCell
             if( rMark.IsMarked() )
             {
                 ScRange aScRange;
@@ -2408,9 +2408,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 if ( aScRange.aStart == aScRange.aEnd )
                 {
                     //  make sure there is a range selection string even for a single cell
-                    String aSingle = aAddr;
-                    aAddr.Append( (sal_Char) ':' );
-                    aAddr.Append( aSingle );
+                    aAddr = aAddr + ":" + aAddr;
                 }
 
                 //! SID_MARKAREA gibts nicht mehr ???
@@ -4070,7 +4068,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             else if ( nDestPosX != aSource.aStart.Col() || nDestPosY != aSource.aStart.Row() ||
                         nSourceTab != nThisTab )
             {
-                String aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
+                OUString aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
                 SCsCOL nCorrectCursorPosCol = 0;
@@ -4212,7 +4210,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             OSL_ENSURE(pSourceSh, "drag document has no shell");
             if (pSourceSh)
             {
-                String aUndo = ScGlobal::GetRscString( STR_UNDO_COPY );
+                OUString aUndo = ScGlobal::GetRscString( STR_UNDO_COPY );
                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
                 bDone = sal_True;
@@ -4229,13 +4227,13 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
                 if ( bDone )
                 {
-                    String aApp = Application::GetAppName();
-                    String aTopic = pSourceSh->GetTitle( SFX_TITLE_FULLNAME );
+                    OUString aApp = Application::GetAppName();
+                    OUString aTopic = pSourceSh->GetTitle( SFX_TITLE_FULLNAME );
                     OUString aItem(aSource.Format(SCA_VALID | SCA_TAB_3D, pSourceDoc));
 
                     // TODO: we could define ocQuote for "
                     const OUString aQuote('"');
-                    const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
+                    const OUString& sSep = ScCompiler::GetNativeSymbol( ocSep);
                     OUStringBuffer aFormula;
                     aFormula.append('=');
                     aFormula.append(ScCompiler::GetNativeSymbol(ocDde));
@@ -4272,7 +4270,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             //! HasSelectedBlockMatrixFragment without selected sheet?
             //! or don't start dragging on a part of a matrix
 
-            String aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
+            OUString aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
             pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
             bDone = sal_True;

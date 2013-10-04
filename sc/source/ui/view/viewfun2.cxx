@@ -505,7 +505,7 @@ sal_Bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 
 void ScViewFunc::EnterAutoSum(const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr)
 {
-    String aFormula = GetAutoSumFormula( rRangeList, bSubTotal, rAddr );
+    OUString aFormula = GetAutoSumFormula( rRangeList, bSubTotal, rAddr );
     EnterBlock( aFormula, NULL );
 }
 
@@ -658,7 +658,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 const ScRange aRange( nCol, nStartRow, nTab, nCol, nSumEndRow, nTab );
                 if ( lcl_GetAutoSumForColumnRange( pDoc, aRangeList, aRange ) )
                 {
-                    const String aFormula = GetAutoSumFormula(
+                    const OUString aFormula = GetAutoSumFormula(
                         aRangeList, bSubTotal, ScAddress(nCol, nInsRow, nTab));
                     EnterData( nCol, nInsRow, nTab, aFormula );
                 }
@@ -692,7 +692,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
                 const ScRange aRange( nStartCol, nRow, nTab, nSumEndCol, nRow, nTab );
                 if ( lcl_GetAutoSumForRowRange( pDoc, aRangeList, aRange ) )
                 {
-                    const String aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
+                    const OUString aFormula = GetAutoSumFormula( aRangeList, bSubTotal, ScAddress(nInsCol, nRow, nTab) );
                     EnterData( nInsCol, nRow, nTab, aFormula );
                 }
             }
@@ -782,7 +782,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     }
 
     ScDocument* pDoc = GetViewData()->GetDocument();
-    String aNewStr = rString;
+    OUString aNewStr = rString;
     if ( pData )
     {
         const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -806,7 +806,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
     pInsDoc->ResetClip( pDoc, nTab );
 
-    if (aNewStr.GetChar(0) == '=')                      // Formula ?
+    if (aNewStr[0] == '=')                      // Formula ?
     {
         //  SetString not possible, because in Clipboard-Documents nothing will be compiled!
         pInsDoc->SetFormulaCell(aPos, new ScFormulaCell(pDoc, aPos, aNewStr));
@@ -968,7 +968,7 @@ void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const OUString* pPrint,
                 sal_uInt16 nTCount = comphelper::string::getTokenCount(*pPrint, sep);
                 for (sal_uInt16 i=0; i<nTCount; i++)
                 {
-                    String aToken = pPrint->getToken(i, sep);
+                    OUString aToken = pPrint->getToken(i, sep);
                     if ( aRange.ParseAny( aToken, pDoc, aDetails ) & SCA_VALID )
                         pDoc->AddPrintRange( nTab, aRange );
                 }
@@ -1830,7 +1830,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 
     if ( pDoc )
     {
-        String  aTargetValStr;
+        OUString  aTargetValStr;
         if ( rParam.pStrTargetVal != NULL )
             aTargetValStr = *(rParam.pStrTargetVal);
 
@@ -2411,7 +2411,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
         OUString aFilterName;
         if (pMed->GetFilter())
             aFilterName = pMed->GetFilter()->GetFilterName();
-        String aOptions = ScDocumentLoader::GetOptions(*pMed);
+        OUString aOptions = ScDocumentLoader::GetOptions(*pMed);
 
         sal_Bool bWasThere = pDoc->HasLink( aFileName, aFilterName, aOptions );
 
@@ -2486,8 +2486,8 @@ void ScViewFunc::MoveTable(
 
         //  execute without SFX_CALLMODE_RECORD, because already contained in move command
 
-        String aUrl = OUString("private:factory/");
-        aUrl.AppendAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));               // "scalc"
+        OUString aUrl("private:factory/");
+        aUrl += STRING_SCAPP;               // "scalc"
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
         SfxStringItem aTarget( SID_TARGETNAME, OUString("_blank") );
 
@@ -2824,7 +2824,7 @@ void ScViewFunc::MoveTable(
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::ShowTable( const std::vector<String>& rNames )
+void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -2836,7 +2836,7 @@ void ScViewFunc::ShowTable( const std::vector<String>& rNames )
 
     bool bFound(false);
 
-    for (std::vector<String>::const_iterator itr=rNames.begin(), itrEnd = rNames.end(); itr!=itrEnd; ++itr)
+    for (std::vector<OUString>::const_iterator itr=rNames.begin(), itrEnd = rNames.end(); itr!=itrEnd; ++itr)
     {
         aName = *itr;
         if (pDoc->GetTable(aName, nPos))

@@ -599,7 +599,7 @@ long ScTabControl::AllowRenaming()
     if ( nId )
     {
         SCTAB nTab = nId - 1;
-        String aNewName = GetEditText();
+        OUString aNewName = GetEditText();
         sal_Bool bDone = pViewSh->RenameTable( aNewName, nTab );
         if ( bDone )
             nRet = TABBAR_RENAMING_YES;

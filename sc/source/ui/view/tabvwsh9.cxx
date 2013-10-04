@@ -90,7 +90,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
         Graphic aGraphic( pGalleryItem->GetGraphic() );
         Point   aPos     = GetInsertPos();
 
-        String aPath, aFilter;
+        OUString aPath, aFilter;
         PasteGraphic( aPos, aGraphic, aPath, aFilter );
     }
     else if ( nType == com::sun::star::gallery::GalleryItemType::MEDIA )

@@ -33,7 +33,7 @@
 
 //==================================================================
 
-static String lcl_MetricString( long nTwips, const String& rText )
+static OUString lcl_MetricString( long nTwips, const OUString& rText )
 {
     if ( nTwips <= 0 )
         return ScGlobal::GetRscString(STR_TIP_HIDE);
@@ -43,10 +43,10 @@ static String lcl_MetricString( long nTwips, const String& rText )
 
         sal_Int64 nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FUNIT_TWIP, eUserMet );
 
-        String aStr = rText;
-        aStr += ' ';
+        OUString aStr = rText;
+        aStr += " ";
         aStr += ScGlobal::pLocaleData->getNum( nUserVal, 2 );
-        aStr += ' ';
+        aStr += " ";
         aStr += SdrFormatter::GetUnitStr(eUserMet);
 
         return aStr;

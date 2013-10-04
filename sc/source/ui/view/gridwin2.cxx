@@ -948,7 +948,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, sal_Bool bUp )
             {
                 if (bUndo)
                 {
-                    String aUndo = ScGlobal::GetRscString( STR_UNDO_DRAG_BREAK );
+                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DRAG_BREAK );
                     pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
                 }
 

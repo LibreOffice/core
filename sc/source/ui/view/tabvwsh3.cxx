@@ -74,7 +74,7 @@ using ::std::auto_ptr;
 
 /** Try to parse the given range using Calc-style syntax first, then
     Excel-style if that fails. */
-static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
 {
     sal_uInt16 nResult = rScRange.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
@@ -85,7 +85,7 @@ static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDo
 
 /** Try to parse the given address using Calc-style syntax first, then
     Excel-style if that fails. */
-static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
 {
     sal_uInt16 nResult = rScAddress.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
@@ -113,7 +113,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(FID_INSERT_FILE,sal_True,&pItem) == SFX_ITEM_SET )
                 {
-                    String aFileName = ((const SfxStringItem*)pItem)->GetValue();
+                    OUString aFileName = ((const SfxStringItem*)pItem)->GetValue();
 
                         // Einfuege-Position
 
@@ -224,7 +224,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_CURRENTCELL:
             if ( pReqArgs )
             {
-                String aAddress;
+                OUString aAddress;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
@@ -307,7 +307,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( !(nResult & SCA_VALID) && comphelper::string::isdigitAsciiString(aAddress) )
                 {
-                    sal_Int32 nNumeric = aAddress.ToInt32();
+                    sal_Int32 nNumeric = aAddress.toInt32();
                     if ( nNumeric > 0 && nNumeric <= MAXROW+1 )
                     {
                         //  1-basierte Zeilennummer
@@ -423,7 +423,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_CURRENTOBJECT:
             if ( pReqArgs )
             {
-                String aName = ((const SfxStringItem&)pReqArgs->Get(nSlot)).GetValue();
+                OUString aName = ((const SfxStringItem&)pReqArgs->Get(nSlot)).GetValue();
                 SelectObject( aName );
             }
             break;
@@ -449,7 +449,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_CURRENTDOC:
             if ( pReqArgs )
             {
-                String aStrDocName( ((const SfxStringItem&)pReqArgs->
+                OUString aStrDocName( ((const SfxStringItem&)pReqArgs->
                                         Get(nSlot)).GetValue() );
 
                 SfxViewFrame*   pViewFrame = NULL;
@@ -798,8 +798,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
-                    String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
-                    String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
+                    OUString( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
+                    OUString( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
                     GetStaticInterface()->GetSlot(SID_SELECT_TABLES)->GetCommand(), HID_SELECTTABLES );
 
                 // fill all table names with selection state
@@ -945,7 +945,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                          pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA( SfxStringItem ) )
                     {
-                        String aComment = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aComment = ((const SfxStringItem*)pItem)->GetValue();
                         pDocSh->SetChangeComment( pAction, aComment );
                         rReq.Done();
                     }
@@ -1026,7 +1026,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     if (pDlg->Execute() == RET_OK)
                     {
-                        String aPassword = pDlg->GetPassword();
+                        OUString aPassword = pDlg->GetPassword();
                         Protect( TABLEID_DOC, aPassword );
                         rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, sal_True ) );
                         rReq.Done();
@@ -1074,13 +1074,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     if (pDlg->Execute() == RET_OK)
                     {
-                        String aPassword = pDlg->GetPassword();
+                        OUString aPassword = pDlg->GetPassword();
                         Unprotect(nTab, aPassword);
                     }
                 }
                 else
                     // this sheet is not password-protected.
-                    Unprotect(nTab, String());
+                    Unprotect(nTab, OUString());
 
                 if (!pReqArgs)
                 {

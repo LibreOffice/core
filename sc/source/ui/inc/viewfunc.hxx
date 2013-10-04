@@ -273,7 +273,7 @@ public:
                                         const OUString& rFilter, const OUString& rOptions,
                                         const OUString& rSource, sal_uLong nRefresh );
 
-    void            ShowTable( const std::vector<String>& rNames );
+    void            ShowTable( const std::vector<OUString>& rNames );
     void            HideTable( const ScMarkData& rMark );
 
     void            MakeScenario( const OUString& rName, const OUString& rComment,

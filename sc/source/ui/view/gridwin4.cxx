@@ -77,7 +77,7 @@ static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 }
 
 static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
-                        const String& rTitle, const Color& rColor, sal_Bool bTextBelow,
+                        const OUString& rTitle, const Color& rColor, sal_Bool bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, sal_Bool bLayoutRTL )
 {
@@ -917,7 +917,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
         Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
 
-        String aPageStr = ScGlobal::GetRscString( STR_PGNUM );
+        OUString aPageStr = ScGlobal::GetRscString( STR_PGNUM );
         if ( nPageScript == 0 )
         {
             //  get script type of translated "Page" string only once

@@ -178,7 +178,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    String aStr( ((const SfxStringItem&)pReqArgs->
+                    OUString aStr( ((const SfxStringItem&)pReqArgs->
                                     Get( SID_ENTER_STRING )).GetValue() );
 
                     pTabViewShell->EnterData( GetViewData()->GetCurX(),
@@ -209,7 +209,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    String aStr = ((const SfxStringItem&)pReqArgs->
+                    OUString aStr = ((const SfxStringItem&)pReqArgs->
                                     Get( SID_INSERT_MATRIX )).GetValue();
                     ScDocument* pDoc = GetViewData()->GetDocument();
                     pTabViewShell->EnterMatrix( aStr, pDoc->GetGrammar() );
@@ -230,7 +230,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             Get( FID_INPUTLINE_STATUS );
 
                 ScAddress aCursorPos = pStatusItem->GetPos();
-                String aString = pStatusItem->GetString();
+                OUString aString = pStatusItem->GetString();
                 const EditTextObject* pData = pStatusItem->GetEditData();
 
                 if (pData)
@@ -239,7 +239,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         pTabViewShell->EnterBlock( aString, pData );
                     }
-                    else if ( aString.Len() > 0 && ( aString.GetChar(0) == '=' || aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
+                    else if ( !aString.isEmpty() && ( aString[0] == '=' || aString[0] == '+' || aString[0] == '-' ) )
                     {
                         pTabViewShell->EnterData( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aString, pData );
                     }
@@ -436,7 +436,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( rMark.IsMultiMarked() )
                     {
                         SCTAB i=1;
-                        String aBaseName;
+                        OUString aBaseName;
                         OUString aName;
                         OUString aComment;
                         Color  aColor;
@@ -445,9 +445,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         OUString aTmp;
                         pDoc->GetName(nTab, aTmp);
                         aBaseName = aTmp;
-                        aBaseName += '_';
+                        aBaseName += "_";
                         aBaseName += ScGlobal::GetRscString(STR_SCENARIO);
-                        aBaseName += '_';
+                        aBaseName += "_";
 
                         //  first test, if the prefix is recognised as valid,
                         //  else avoid only doubles
@@ -472,8 +472,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         if ( pReqArgs != NULL )
                         {
-                            String aArgName;
-                            String aArgComment;
+                            OUString aArgName;
+                            OUString aArgComment;
                             const SfxPoolItem* pItem;
                             if ( pReqArgs->GetItemState( SID_SCENARIOS, sal_True, &pItem ) == SFX_ITEM_SET )
                                 aArgName = ((const SfxStringItem*)pItem)->GetValue();

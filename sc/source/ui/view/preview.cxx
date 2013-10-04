@@ -738,7 +738,7 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
 
 static Size lcl_GetDocPageSize( ScDocument* pDoc, SCTAB nTab )
 {
-    String aName = pDoc->GetPageStyle( nTab );
+    OUString aName = pDoc->GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aName, SFX_STYLE_FAMILY_PAGE );
     if ( pStyleSheet )
@@ -1015,7 +1015,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
 
             ScDocument * pDoc = pDocShell->GetDocument();
-            String   aOldName = pDoc->GetPageStyle( nTab );
+            OUString aOldName = pDoc->GetPageStyle( nTab );
             bool bUndo = pDoc->IsUndoEnabled();
             ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
             SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );

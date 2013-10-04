@@ -2459,10 +2459,8 @@ void ScOutputData::AddPDFNotes()
                         OUString aTitle(aAddress.Format(SCA_VALID, mpDoc, mpDoc->GetAddressConvention()));
 
                         // Content has to be a simple string without line breaks
-                        String aContent = pNote->GetText();
-                        xub_StrLen nPos;
-                        while ( (nPos=aContent.Search('\n')) != STRING_NOTFOUND )
-                            aContent.SetChar( nPos, ' ' );
+                        OUString aContent = pNote->GetText();
+                        aContent = aContent.replaceAll("\n", " ");
 
                         vcl::PDFNote aNote;
                         aNote.Title = aTitle;

@@ -361,14 +361,14 @@ sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embe
 
 sal_Bool ScViewFunc::PasteBitmapEx( const Point& rPos, const BitmapEx& rBmpEx )
 {
-    String aEmpty;
+    OUString aEmpty;
     Graphic aGraphic(rBmpEx);
     return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
 }
 
 sal_Bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
 {
-    String aEmpty;
+    OUString aEmpty;
     Graphic aGraphic(rMtf);
     return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
 }
@@ -406,7 +406,7 @@ sal_Bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     // path was the name of the graphic in history
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pScDrawView->GetModel();
-    String aName = pLayer->GetNewGraphicName();                 // "Graphics"
+    OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pGrafObj->SetName(aName);
 
     // don't mark if OLE

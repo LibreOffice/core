@@ -55,7 +55,7 @@
 
 sal_Bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
 {
-    String aStr;
+    OUString aStr;
 
     ScSubTotalFunc eFunc = (ScSubTotalFunc) SC_MOD()->GetAppOptions().GetStatusFunc();
     ScViewData* pViewData   = GetViewData();
@@ -95,14 +95,14 @@ sal_Bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
         SCTAB       nTab        = pViewData->GetTabNo();
 
         aStr = ScGlobal::GetRscString(nGlobStrId);
-        aStr += '=';
+        aStr += "=";
 
         ScAddress aCursor( nPosX, nPosY, nTab );
         double nVal;
         if ( pDoc->GetSelectionFunction( eFunc, aCursor, rMark, nVal ) )
         {
             if ( nVal == 0.0 )
-                aStr += '0';
+                aStr += "0";
             else
             {
                 // Number in the standard format, the other on the cursor position
@@ -268,7 +268,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     // disable if already set to default
 
-                    String aStyleName = pDoc->GetPageStyle( nTab );
+                    OUString aStyleName = pDoc->GetPageStyle( nTab );
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName,
                                                     SFX_STYLE_FAMILY_PAGE );
@@ -551,9 +551,9 @@ bool ScTabViewShell::IsRefInputMode() const
             ScInputHandler* pHdl = pScMod->GetInputHdl();
             if ( pHdl )
             {
-                String aString = pHdl->GetEditString();
-                if ( !pHdl->GetSelIsRef() && aString.Len() > 1 &&
-                     ( aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
+                OUString aString = pHdl->GetEditString();
+                if ( !pHdl->GetSelIsRef() && aString.getLength() > 1 &&
+                     ( aString[0] == '+' || aString[0] == '-' ) )
                 {
                     const ScViewData* pViewData = GetViewData();
                     if ( pViewData )

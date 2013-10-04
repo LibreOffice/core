@@ -376,7 +376,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
 
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
+        OUString aUndo = ScGlobal::GetRscString( STR_UNDO_QUERY );
         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
         ScRange aRange;

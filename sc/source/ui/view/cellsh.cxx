@@ -601,7 +601,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_RANGE_NOTETEXT:
                 {
                     //  always take cursor position, do not use top-left cell of selection
-                    String aNoteText;
+                    OUString aNoteText;
                     if ( const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nPosX, nPosY) )
                         aNoteText = pNote->GetText();
                     rSet.Put( SfxStringItem( nWhich, aNoteText ) );

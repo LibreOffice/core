@@ -555,7 +555,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord )
 //          Pivot
 //
 
-static OUString lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
+static OUString lcl_MakePivotTabName( const OUString& rPrefix, SCTAB nNumber )
 {
     OUString aName = rPrefix + OUString::number( nNumber );
     return aName;
@@ -583,13 +583,13 @@ bool ScDBFunc::MakePivotTable(
     {
         SCTAB nSrcTab = GetViewData()->GetTabNo();
 
-        String aName( ScGlobal::GetRscString(STR_PIVOT_TABLE) );
+        OUString aName( ScGlobal::GetRscString(STR_PIVOT_TABLE) );
         OUString aStr;
 
         pDoc->GetName( nSrcTab, aStr );
-        aName += '_';
-        aName += String(aStr);
-        aName += '_';
+        aName += "_";
+        aName += aStr;
+        aName += "_";
 
         SCTAB nNewTab = nSrcTab+1;
 
@@ -770,7 +770,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
         {
             bool bIsDataLayout;
             OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
-            String aBaseDimName( aDimName );
+            OUString aBaseDimName( aDimName );
 
             sal_Bool bInGroupDim = false;
             sal_Bool bFoundParts = false;
@@ -1548,13 +1548,13 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                                 break;
 
                             const OUString* pLayoutName = pMem->GetLayoutName();
-                            String aMemberName;
+                            OUString aMemberName;
                             if (pLayoutName)
                                 aMemberName = *pLayoutName;
                             else
                                 aMemberName = aPosData.MemberName;
 
-                            String aNew = lcl_replaceMemberNameInSubtotal(rString, aMemberName);
+                            OUString aNew = lcl_replaceMemberNameInSubtotal(rString, aMemberName);
                             pDim->SetSubtotalName(aNew);
                             bChange = true;
                         }
@@ -1602,7 +1602,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
     }
 }
 
-static void lcl_MoveToEnd( ScDPSaveDimension& rDim, const String& rItemName )
+static void lcl_MoveToEnd( ScDPSaveDimension& rDim, const OUString& rItemName )
 {
     ScDPSaveMember* pNewMember = NULL;
     const ScDPSaveMember* pOldMember = rDim.GetExistingMemberByName( rItemName );
@@ -1822,7 +1822,7 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
                 sal_Int32 nMemberCount = aMemberNames.getLength();
                 for (sal_Int32 nMemberPos=0; nMemberPos<nMemberCount; ++nMemberPos)
                 {
-                    String aMemberStr( aMemberNames[nMemberPos] );
+                    OUString aMemberStr( aMemberNames[nMemberPos] );
 
                     if ( !bInserted && aMemberNames[nMemberPos] == aDestData.MemberName )
                     {
@@ -2064,7 +2064,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     pInsDoc->SetClipArea( ScRange( 0, 0, nNewTab, nEndCol, nEndRow, nNewTab ) );
 
     ::svl::IUndoManager* pMgr = GetViewData()->GetDocShell()->GetUndoManager();
-    String aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
+    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
     pMgr->EnterListAction( aUndo, aUndo );
 
     OUString aNewTabName;

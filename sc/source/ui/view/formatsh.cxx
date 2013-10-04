@@ -187,21 +187,21 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 if ( pStyleSheet )
                     rSet.Put( SfxTemplateItem( nSlotId, pStyleSheet->GetName() ) );
                 else
-                    rSet.Put( SfxTemplateItem( nSlotId, String() ) );
+                    rSet.Put( SfxTemplateItem( nSlotId, OUString() ) );
             }
             break;
 
             case SID_STYLE_FAMILY4:     // page style sheets
             {
                 SCTAB           nCurTab     = GetViewData()->GetTabNo();
-                String          aPageStyle  = pDoc->GetPageStyle( nCurTab );
+                OUString        aPageStyle  = pDoc->GetPageStyle( nCurTab );
                 SfxStyleSheet*  pStyleSheet = (SfxStyleSheet*)pStylePool->
                                     Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
 
                 if ( pStyleSheet )
                     rSet.Put( SfxTemplateItem( nSlotId, aPageStyle ) );
                 else
-                    rSet.Put( SfxTemplateItem( nSlotId, String() ) );
+                    rSet.Put( SfxTemplateItem( nSlotId, OUString() ) );
             }
             break;
 
@@ -265,7 +265,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     ScDocument*         pDoc        = pDocSh->GetDocument();
     ScMarkData&         rMark       = GetViewData()->GetMarkData();
     ScModule*           pScMod      = SC_MOD();
-    String              aRefName;
+    OUString            aRefName;
     bool                bUndo       = pDoc->IsUndoEnabled();
     SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
 
@@ -353,15 +353,15 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             eFamily = (SfxStyleFamily)((const SfxUInt16Item*)pFamItem)->GetValue();
         else if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, sal_True, &pFamItem ) )
         {
-            String sFamily = ((const SfxStringItem*)pFamItem)->GetValue();
-            if (sFamily.CompareToAscii("CellStyles") == COMPARE_EQUAL)
+            OUString sFamily = ((const SfxStringItem*)pFamItem)->GetValue();
+            if (sFamily.equalsAscii("CellStyles"))
                 eFamily = SFX_STYLE_FAMILY_PARA;
-            else if (sFamily.CompareToAscii("PageStyles") == COMPARE_EQUAL)
+            else if (sFamily.equalsAscii("PageStyles"))
                 eFamily = SFX_STYLE_FAMILY_PAGE;
         }
 
-        String                  aStyleName;
-        sal_uInt16                  nRetMask = 0xffff;
+        OUString                aStyleName;
+        sal_uInt16              nRetMask = 0xffff;
 
         pStylePool->SetSearchMask( eFamily, SFXSTYLEBIT_ALL );
 
@@ -558,7 +558,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             if ( bUndo )
                             {
-                                String aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
+                                OUString aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
                                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
                                 bListAction = true;
                             }
@@ -620,7 +620,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                                 if ( bUndo )
                                 {
-                                    String aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
+                                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
                                     pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
                                     bListAction = true;
                                 }
@@ -694,7 +694,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
                             for (; itr != itrEnd && *itr < nTabCount; ++itr)
                             {
-                                String aOldName = pDoc->GetPageStyle( *itr );
+                                OUString aOldName = pDoc->GetPageStyle( *itr );
                                 if ( aOldName != aStyleName )
                                 {
                                     pDoc->SetPageStyle( *itr, aStyleName );
@@ -719,7 +719,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        const String& rStrCurStyle = pDoc->GetPageStyle( nCurTab );
+                        const OUString& rStrCurStyle = pDoc->GetPageStyle( nCurTab );
 
                         if ( rStrCurStyle != aStyleName )
                         {
@@ -775,7 +775,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 // alte Items aus der Vorlage merken
                 SfxItemSet aOldSet = pStyleSheet->GetItemSet();
-                String aOldName = pStyleSheet->GetName();
+                OUString aOldName = pStyleSheet->GetName();
 
                 switch ( eFam )
                 {
@@ -903,7 +903,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             //! auch fuer Seitenvorlagen die Abfragen hier
 
-                            String aNewName = pStyleSheet->GetName();
+                            OUString aNewName = pStyleSheet->GetName();
                             if ( aNewName != aOldName &&
                                     pDoc->RenamePageStyleInUse( aOldName, aNewName ) )
                             {
@@ -1124,16 +1124,16 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 
                 if(SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, true, &pItem) && eType != -1)
                 {
-                    String aCode = ((const SfxStringItem*)pItem)->GetValue();
-                    sal_uInt16 aLen = aCode.Len();
-                    String* sFormat = new String[4];
-                    String sTmpStr = OUString();
+                    OUString aCode = ((const SfxStringItem*)pItem)->GetValue();
+                    sal_uInt16 aLen = aCode.getLength();
+                    OUString* sFormat = new OUString[4];
+                    OUString sTmpStr = OUString();
                     sal_uInt16 nCount(0);
                     sal_uInt16 nStrCount(0);
 
                     while(nCount < aLen)
                     {
-                        sal_Unicode cChar = aCode.GetChar(nCount);
+                        sal_Unicode cChar = aCode[nCount];
 
                         if(cChar == sal_Unicode(','))
                         {
@@ -1143,7 +1143,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                         }
                         else
                         {
-                            sTmpStr += cChar;
+                            sTmpStr += OUString(cChar);
                         }
 
                         nCount++;
@@ -1152,10 +1152,10 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                             break;
                     }
 
-                    const sal_Bool bThousand = (sal_Bool)sFormat[0].ToInt32();
-                    const sal_Bool bNegRed = (sal_Bool)sFormat[1].ToInt32();
-                    const sal_uInt16 nPrecision = (sal_uInt16)sFormat[2].ToInt32();
-                    const sal_uInt16 nLeadZeroes = (sal_uInt16)sFormat[3].ToInt32();
+                    const sal_Bool bThousand = (sal_Bool)sFormat[0].toInt32();
+                    const sal_Bool bNegRed = (sal_Bool)sFormat[1].toInt32();
+                    const sal_uInt16 nPrecision = (sal_uInt16)sFormat[2].toInt32();
+                    const sal_uInt16 nLeadZeroes = (sal_uInt16)sFormat[3].toInt32();
 
                     aCode = pFormatter->GenerateFormat(
                         nCurrentNumberFormat,//modify
@@ -2443,12 +2443,12 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                         sal_uInt16 nLeadZeroes(0);
 
                         pFormatter->GetFormatSpecialInfo(nNumberFormat,bThousand, bNegRed, nPrecision, nLeadZeroes);
-                        String aFormat;
-                        static String sBreak = OUString(",");
-                        const String sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
-                        const String sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
-                        const String sPrecision = OUString::number(nPrecision);
-                        const String sLeadZeroes = OUString::number(nLeadZeroes);
+                        OUString aFormat;
+                        static OUString sBreak = OUString(",");
+                        const OUString sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
+                        const OUString sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
+                        const OUString sPrecision = OUString::number(nPrecision);
+                        const OUString sLeadZeroes = OUString::number(nLeadZeroes);
 
                         aFormat += sThousand;
                         aFormat += sBreak;
@@ -2600,7 +2600,7 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
             SvxFrameDirection eDirection = ( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ) ?
                                                 FRMDIR_HORI_LEFT_TOP : FRMDIR_HORI_RIGHT_TOP;
 
-            String aUndo = ScGlobal::GetRscString( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ?
+            OUString aUndo = ScGlobal::GetRscString( nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT ?
                                                     STR_UNDO_L2R : STR_UNDO_R2L );
             ScDocShell* pDocSh = GetViewData()->GetDocShell();
             pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );

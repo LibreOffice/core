@@ -75,7 +75,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
             {
                 //  in beiden Faellen erstmal auf der sichtbaren View selektieren
 
-                String aName;
+                OUString aName;
                 SdrView* pDrView = GetSdrView();
                 if (pDrView)
                 {
@@ -177,7 +177,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
         {
             case SID_ACTIVE_OBJ_NAME:
                 {
-                    String aName;
+                    OUString aName;
                     uno::Reference < embed::XEmbeddedObject > xOLE = lcl_GetSelectedObj( GetSdrView() );
                     if (xOLE.is())
                     {

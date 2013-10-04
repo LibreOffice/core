@@ -78,7 +78,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
     if (!bVisible)
     {
         SvtPathOptions aPathOpt;
-        String aPath = aPathOpt.GetPalettePath();
+        OUString aPath = aPathOpt.GetPalettePath();
         pModel = new SdrModel(aPath);
         pModel->SetScaleUnit(MAP_100TH_MM);
         SfxItemPool& rPool = pModel->GetItemPool();

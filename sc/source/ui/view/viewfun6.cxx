@@ -181,7 +181,7 @@ void ScViewFunc::DetectiveMarkPred()
         ScRange aRange;
         if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos, true))
         {
-            const String& rTabName = p->GetString();
+            const OUString& rTabName = p->GetString();
             OUStringBuffer aBuf;
             aBuf.append(*pPath);
             aBuf.append(sal_Unicode('#'));

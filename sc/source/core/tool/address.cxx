@@ -142,12 +142,12 @@ static bool lcl_ScRange_External_TabSpan(
         ScRange & rRange,
         sal_uInt16 & rFlags,
         ScAddress::ExternalInfo* pExtInfo,
-        const String & rExternDocName,
-        const String & rStartTabName,
-        const String & rEndTabName,
+        const OUString & rExternDocName,
+        const OUString & rStartTabName,
+        const OUString & rEndTabName,
         ScDocument* pDoc )
 {
-    if (!rExternDocName.Len())
+    if (rExternDocName.isEmpty())
         return !pExtInfo || !pExtInfo->mbExternal;
 
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -155,14 +155,14 @@ static bool lcl_ScRange_External_TabSpan(
     {
         // This is an internal document.  Get the sheet positions from the
         // ScDocument instance.
-        if (rStartTabName.Len())
+        if (!rStartTabName.isEmpty())
         {
             SCTAB nTab;
             if (pDoc->GetTable(rStartTabName, nTab))
                 rRange.aStart.SetTab(nTab);
         }
 
-        if (rEndTabName.Len())
+        if (!rEndTabName.isEmpty())
         {
             SCTAB nTab;
             if (pDoc->GetTable(rEndTabName, nTab))
@@ -188,7 +188,7 @@ static bool lcl_ScRange_External_TabSpan(
         }
     }
 
-    if (!rEndTabName.Len() || rStartTabName == rEndTabName)
+    if (rEndTabName.isEmpty() || rStartTabName == rEndTabName)
     {
         rRange.aEnd.SetTab( rRange.aStart.Tab());
         return true;
@@ -1381,7 +1381,7 @@ void ScRange::ExtendTo( const ScRange& rRange )
 }
 
 static sal_uInt16
-lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc, ScAddress::ExternalInfo* pExtInfo = NULL )
+lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScAddress::ExternalInfo* pExtInfo = NULL )
 {
     sal_uInt16 nRes1 = 0, nRes2 = 0;
     xub_StrLen nPos = ScGlobal::FindUnquoted( r, ':');
@@ -1653,12 +1653,12 @@ lcl_r1c1_append_r ( OUString &r, int nRow, bool bIsAbs,
     }
 }
 
-static String
+static OUString
 getFileNameFromDoc( const ScDocument* pDoc )
 {
     // TODO : er points at ScGlobal::GetAbsDocName()
     // as a better template.  Look into it
-    String sFileName;
+    OUString sFileName;
     SfxObjectShell* pShell;
 
     if( NULL != pDoc &&
@@ -2024,17 +2024,17 @@ void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
     }
     else
     {
-        String aStr;
+        OUString aStr;
         while (nCol >= 26)
         {
             SCCOL nC = nCol % 26;
-            aStr += static_cast<sal_Unicode>( 'A' +
-                    static_cast<sal_uInt16>(nC));
+            aStr += OUString( static_cast<sal_Unicode>( 'A' +
+                    static_cast<sal_uInt16>(nC)));
             nCol = sal::static_int_cast<SCCOL>( nCol - nC );
             nCol = nCol / 26 - 1;
         }
-        aStr += static_cast<sal_Unicode>( 'A' +
-                static_cast<sal_uInt16>(nCol));
+        aStr += OUString(static_cast<sal_Unicode>( 'A' +
+                static_cast<sal_uInt16>(nCol)));
         rBuf.append(comphelper::string::reverseString(aStr));
     }
 }

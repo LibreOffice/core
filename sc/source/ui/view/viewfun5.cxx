@@ -130,7 +130,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 // mba: BaseURL doesn't make sense for clipboard
                 // #i43716# Medium must be allocated with "new".
                 // DoLoad stores the pointer and deletes it with the SfxObjectShell.
-                SfxMedium* pMedium = new SfxMedium( xStore, String() );
+                SfxMedium* pMedium = new SfxMedium( xStore, OUString() );
 
                 //  TODO/LATER: is it a problem that we don't support binary formats here?
                 ScDocShellRef xDocShRef = new ScDocShell(SFX_CREATE_MODE_EMBEDDED);
@@ -316,7 +316,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     }
                 }
                 if(!bRet)
-                    bRet = aObj.ImportStream( *xStream, String(), nFormatId );
+                    bRet = aObj.ImportStream( *xStream, OUString(), nFormatId );
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
             }
             else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
@@ -329,7 +329,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     ScAbstractDialogFactory* pFact =
                         ScAbstractDialogFactory::Create();
                     AbstractScImportAsciiDlg *pDlg =
-                        pFact->CreateScImportAsciiDlg( NULL, String(), &aStrm,
+                        pFact->CreateScImportAsciiDlg( NULL, OUString(), &aStrm,
                                 SC_PASTETEXT);
 
                     if (pDlg->Execute() == RET_OK)
@@ -386,7 +386,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             //  slot execute, so it can be added to the undo action
 
             ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, SC_DBSEL_KEEP );
-            String sTarget;
+            OUString sTarget;
             if (pDBData)
                 sTarget = pDBData->GetName();
             else
@@ -482,7 +482,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             MakeDrawLayer();    // before loading model, so 3D factory has been created
 
             SvtPathOptions aPathOpt;
-            String aPath = aPathOpt.GetPalettePath();
+            OUString aPath = aPathOpt.GetPalettePath();
 
             ScDocShellRef aDragShellRef( new ScDocShell );
             aDragShellRef->DoInitNew(NULL);
@@ -595,7 +595,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             sal_uLong nCount = aFileList.Count();
             for( sal_uLong i = 0; i < nCount ; i++ )
             {
-                String aFile = aFileList.GetFile( i );
+                OUString aFile = aFileList.GetFile( i );
 
                 PasteFile( aPos, aFile, bLink );
 

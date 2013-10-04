@@ -1771,10 +1771,10 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                             long nRepeatCount = nAvailable / nRepeatSize;
                             if ( nRepeatCount > 1 )
                             {
-                                String aCellStr = aVars.GetString();
-                                String aRepeated = aCellStr;
+                                OUString aCellStr = aVars.GetString();
+                                OUString aRepeated = aCellStr;
                                 for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                                    aRepeated.Append( aCellStr );
+                                    aRepeated += aCellStr;
                                 aVars.SetAutoText( aRepeated );
                             }
                         }
@@ -2005,17 +2005,17 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         //  in Metafiles immer DrawTextArray, damit die Positionen mit
                         //  aufgezeichnet werden (fuer nicht-proportionales Resize):
 
-                        String aString = aVars.GetString();
+                        OUString aString = aVars.GetString();
                         if (bMetaFile || pFmtDevice != mpDev || aZoomX != aZoomY)
                         {
-                            sal_Int32* pDX = new sal_Int32[aString.Len()];
+                            sal_Int32* pDX = new sal_Int32[aString.getLength()];
                             pFmtDevice->GetTextArray( aString, pDX );
 
                             if ( !mpRefDevice->GetConnectMetaFile() ||
                                     mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
                             {
                                 double fMul = GetStretch();
-                                xub_StrLen nLen = aString.Len();
+                                xub_StrLen nLen = aString.getLength();
                                 for (xub_StrLen i=0; i<nLen; i++)
                                     pDX[i] = (long)(pDX[i] / fMul + 0.5);
                             }
@@ -2842,7 +2842,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             if ( nAvailable >= 2 * nFormatted )
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
-                String aCellStr = rParam.mpEngine->GetText();
+                OUString aCellStr = rParam.mpEngine->GetText();
                 rParam.mpEngine->SetText( aCellStr );
 
                 long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
@@ -2855,9 +2855,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                     long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        String aRepeated = aCellStr;
+                        OUString aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated.Append( aCellStr );
+                            aRepeated += aCellStr;
                         rParam.mpEngine->SetText( aRepeated );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
@@ -3336,7 +3336,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             if ( nAvailable >= 2 * nFormatted )
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
-                String aCellStr = rParam.mpEngine->GetText();
+                OUString aCellStr = rParam.mpEngine->GetText();
                 rParam.mpEngine->SetText( aCellStr );
 
                 long nRepeatSize = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
@@ -3349,9 +3349,9 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                     const long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        String aRepeated = aCellStr;
+                        OUString aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated.Append( aCellStr );
+                            aRepeated += aCellStr;
                         rParam.mpEngine->SetText( aRepeated );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
@@ -3607,7 +3607,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
             if ( nAvailable >= 2 * nFormatted )
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
-                String aCellStr = rParam.mpEngine->GetText();
+                OUString aCellStr = rParam.mpEngine->GetText();
                 rParam.mpEngine->SetText( aCellStr );
 
                 long nRepeatSize = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
@@ -3620,9 +3620,9 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                     const long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        String aRepeated = aCellStr;
+                        OUString aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated.Append( aCellStr );
+                            aRepeated += aCellStr;
                         rParam.mpEngine->SetText( aRepeated );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
@@ -3891,7 +3891,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             if ( nAvailable >= 2 * nFormatted )
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
-                String aCellStr = rParam.mpEngine->GetText();
+                OUString aCellStr = rParam.mpEngine->GetText();
                 rParam.mpEngine->SetText( aCellStr );
 
                 long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
@@ -3904,9 +3904,9 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
                     long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
-                        String aRepeated = aCellStr;
+                        OUString aRepeated = aCellStr;
                         for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated.Append( aCellStr );
+                            aRepeated += aCellStr;
                         rParam.mpEngine->SetText( aRepeated );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
@@ -4300,7 +4300,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         if ( nAvailable >= 2 * nFormatted )
         {
             // "repeat" is handled with unformatted text (for performance reasons)
-            String aCellStr = rParam.mpEngine->GetText();
+            OUString aCellStr = rParam.mpEngine->GetText();
             rParam.mpEngine->SetText( aCellStr );
 
             long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
@@ -4313,9 +4313,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
                 long nRepeatCount = nAvailable / nRepeatSize;
                 if ( nRepeatCount > 1 )
                 {
-                    String aRepeated = aCellStr;
+                    OUString aRepeated = aCellStr;
                     for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                        aRepeated.Append( aCellStr );
+                        aRepeated += aCellStr;
                     rParam.mpEngine->SetText( aRepeated );
 
                     nEngineHeight = rParam.mpEngine->GetTextHeight();

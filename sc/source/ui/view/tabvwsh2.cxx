@@ -147,14 +147,14 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             nNewFormId = ((const SfxUInt16Item*)pItem)->GetValue();
     }
 
-    String sStringItemValue;
+    OUString sStringItemValue;
     if ( pArgs )
     {
         const SfxPoolItem* pItem;
         if ( pArgs->GetItemState( nNewId, sal_True, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
             sStringItemValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
-    bool bSwitchCustom = ( sStringItemValue.Len() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );
+    bool bSwitchCustom = ( !sStringItemValue.isEmpty() && !sDrawCustom.isEmpty() && sStringItemValue != sDrawCustom );
 
     if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
         nNewId = SID_DRAW_TEXT;

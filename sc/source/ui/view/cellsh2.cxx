@@ -721,7 +721,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            String aName = pDlg->GetSelectEntry();
+                            OUString aName = pDlg->GetSelectEntry();
                             pTabViewShell->GotoDBArea( aName );
                             rReq.AppendItem( SfxStringItem( SID_SELECT_DB, aName ) );
                             rReq.Done();
@@ -753,7 +753,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SfxItemSet aArgSet( GetPool(), (*ScTPValidationValueGetRanges)() );
                     ScValidationMode eMode = SC_VALID_ANY;
                     ScConditionMode eOper = SC_COND_EQUAL;
-                    String aExpr1, aExpr2;
+                    OUString aExpr1, aExpr2;
                     sal_Bool bBlank = sal_True;
                     sal_Int16 nListType = ValidListType::UNSORTED;
                     sal_Bool bShowHelp = false;
@@ -825,7 +825,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             eOper = (ScConditionMode) ((const SfxAllEnumItem*)pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_VALUE1, sal_True, &pItem ) == SFX_ITEM_SET )
                         {
-                            String aTemp1 = ((const SfxStringItem*)pItem)->GetValue();
+                            OUString aTemp1 = ((const SfxStringItem*)pItem)->GetValue();
                             if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
                             {
                                 sal_uInt32 nNumIndex = 0;
@@ -842,7 +842,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         }
                         if ( pOutSet->GetItemState( FID_VALID_VALUE2, sal_True, &pItem ) == SFX_ITEM_SET )
                         {
-                            String aTemp2 = ((const SfxStringItem*)pItem)->GetValue();
+                            OUString aTemp2 = ((const SfxStringItem*)pItem)->GetValue();
                             if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
                             {
                                 sal_uInt32 nNumIndex = 0;
@@ -922,12 +922,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SvMemoryStream aStream;
                     aStream.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
                     ScImportExport::SetNoEndianSwap( aStream );
-                    aExport.ExportStream( aStream, String(), FORMAT_STRING );
+                    aExport.ExportStream( aStream, OUString(), FORMAT_STRING );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
                     AbstractScImportAsciiDlg *pDlg = pFact->CreateScImportAsciiDlg(
-                        NULL, String(), &aStream, SC_TEXTTOCOLUMNS);
+                        NULL, OUString(), &aStream, SC_TEXTTOCOLUMNS);
                     OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
 
                     if ( pDlg->Execute() == RET_OK )
@@ -935,7 +935,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScDocShell* pDocSh = pData->GetDocShell();
                         OSL_ENSURE( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
 
-                        String aUndo = ScGlobal::GetRscString( STR_UNDO_TEXTTOCOLUMNS );
+                        OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TEXTTOCOLUMNS );
                         pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
                         ScImportExport aImport( pDoc, aRange.aStart );
@@ -945,7 +945,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aImport.SetExtOptions( aOptions );
                         aImport.SetApi( false );
                         aStream.Seek( 0 );
-                        aImport.ImportStream( aStream, String(), FORMAT_STRING );
+                        aImport.ImportStream( aStream, OUString(), FORMAT_STRING );
 
                         pDocSh->GetUndoManager()->LeaveListAction();
                     }

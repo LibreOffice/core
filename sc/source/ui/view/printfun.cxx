@@ -1365,7 +1365,7 @@ void ScPrintFunc::PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY )
     else
         nPosX -= nOneX;
     long nPosY = nScrY - nOneY;
-    String aText;
+    OUString aText;
 
     for (nCol=nX1; nCol<=nX2; nCol++)
     {
@@ -1409,7 +1409,7 @@ void ScPrintFunc::PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY )
         nPosX -= nOneX;
     }
     long nPosY = nScrY - nOneY;
-    String aText;
+    OUString aText;
 
     for (SCROW nRow=nY1; nRow<=nY2; nRow++)
     {
@@ -1874,8 +1874,8 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
                     {
                         pEditEngine->Draw( pDev, Point( nPosX, nPosY ), 0 );
 
-                        String aMarkStr(rPos.Format(SCA_VALID, pDoc, pDoc->GetAddressConvention()));
-                        aMarkStr += ':';
+                        OUString aMarkStr(rPos.Format(SCA_VALID, pDoc, pDoc->GetAddressConvention()));
+                        aMarkStr += ":";
 
                         //  cell position also via EditEngine, for correct positioning
                         pEditEngine->SetText(aMarkStr);
