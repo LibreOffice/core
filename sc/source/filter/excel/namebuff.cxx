@@ -63,7 +63,7 @@ NameBuffer::~NameBuffer()
 void NameBuffer::operator <<( const OUString &rNewString )
 {
     OSL_ENSURE( maHashes.size() + nBase < 0xFFFF,
-        "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
+        "*NameBuffer::GetLastIndex(): I've had enough of this!" );
 
     maHashes.push_back( new StringHashEntry( rNewString ) );
 }
@@ -81,7 +81,7 @@ void SharedFormulaBuffer::Store( const ScRange& rRange, const ScTokenArray& rArr
 {
     for (SCCOL i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); ++i)
     {
-        // Create one group per column.
+        // Create one group per column
         ScAddress aPos = rRange.aStart;
         aPos.SetCol(i);
 
@@ -113,7 +113,7 @@ sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const
 sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
 {
     OSL_ENSURE( nExcIndex,
-        "*ExtSheetBuffer::GetScTabIndex(): Sheet-Index == 0!" );
+        "*ExtSheetBuffer::GetScTabIndex(): Sheet index == 0!" );
 
     if ( !nExcIndex || nExcIndex > maEntries.size() )
         return false;
@@ -128,10 +128,10 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
     }
 
     if( rTabNum == 0xFFFF )
-    {// neue Tabelle erzeugen
+    {// Create new table
         SCTAB   nNewTabNum;
         if( pCur->bSWB )
-        {// Tabelle ist im selben Workbook!
+        {// Table is in the same workbook!
             if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
             {
                 rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
@@ -141,7 +141,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
                 rTabNum = 0xFFFD;
         }
         else if( pExcRoot->pIR->GetDocShell() )
-        {// Tabelle ist 'echt' extern
+        {// Table 'really' external
             if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
             {
                 String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
@@ -153,8 +153,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
                     return sal_True;
                 }
                 else
-                    rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
-                                            //  wohl auch nicht mehr gehen...
+                    rTabNum = 0xFFFE; // Table wasn't created once -> won't be possible probably
             }
             else
                 rTabNum = 0xFFFE;

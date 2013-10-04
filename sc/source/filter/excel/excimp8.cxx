@@ -386,10 +386,11 @@ void ImportExcel8::PostDocLoad( void )
 
     ImportExcel::PostDocLoad();
 
-    // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
+    // Take scenarios into account!
+    // ATTENTION: The table count in the document is incremented here!
     if( !pD->IsClipboard() && maScenList.aEntries.size() )
     {
-        pD->UpdateChartListenerCollection();    // references in charts must be updated
+        pD->UpdateChartListenerCollection(); // references in charts must be updated
 
         maScenList.Apply( GetRoot() );
     }

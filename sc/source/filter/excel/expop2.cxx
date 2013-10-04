@@ -46,7 +46,7 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     ExportTyp( rStrm, &rExpData.mrDoc, rExpData.meTextEnc ),
     XclExpRoot( rExpData )
 {
-    // nur Teil der Root-Daten gebraucht
+    // Only a part of the root file is needed
     pExcRoot = &GetOldRoot();
     pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
     pExcRoot->eDateiTyp = Biff5;
@@ -84,7 +84,7 @@ FltError ExportBiff5::Write()
     }
 
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
-    pExcDoc->Write( aOut );     // wechstreamen
+    pExcDoc->Write( aOut );     // stream out
 
     if( pDocShell && xRootStrg.Is() )
     {
