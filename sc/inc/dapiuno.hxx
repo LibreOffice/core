@@ -303,13 +303,13 @@ class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
 {
 private:
     SCTAB                   nTab;
-    String                  aName;
+    OUString                aName;
     XModifyListenerArr_Impl aModifyListeners;
 
     void                    Refreshed_Impl();
 
 public:
-                            ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
+                            ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN);
     virtual                 ~ScDataPilotTableObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

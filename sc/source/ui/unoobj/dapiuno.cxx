@@ -1105,7 +1105,7 @@ ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
 
 //------------------------------------------------------------------------
 
-ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const String& rN) :
+ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN) :
     ScDataPilotDescriptorBase( pDocSh ),
     nTab( nT ),
     aName( rN ),
