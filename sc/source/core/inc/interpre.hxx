@@ -690,7 +690,7 @@ bool CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>&
 void CalculateSkewOrSkewp( bool bSkewp );
 void CalculateSlopeIntercept(bool bSlope);
 void CalculateSmallLarge(bool bSmall);
-void CalculatePearsonCovar(bool _bPearson,bool _bStexy);
+void CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _bSample );  //fdo#70000 argument _bSample is ignored if _bPearson == true
 bool CalculateTest( bool _bTemplin
                    ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                    ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
@@ -795,7 +795,8 @@ void ScConfidence();
 void ScTrimMean();
 void ScProbability();
 void ScCorrel();
-void ScCovar();
+void ScCovarianceP();
+void ScCovarianceS();
 void ScPearson();
 void ScRSQ();
 void ScSTEXY();
