@@ -450,7 +450,7 @@ static bool lcl_parseExternalName(
     const sal_Unicode* p = pStart;
     sal_Int32 nLen = rSymbol.getLength();
     sal_Unicode cPrev = 0;
-    String aTmpFile, aTmpName;
+    OUString aTmpFile, aTmpName;
     sal_Int32 i = 0;
     bool bInName = false;
     if (cSep == '!')
@@ -458,7 +458,7 @@ static bool lcl_parseExternalName(
         // For XL use existing parser that resolves bracketed and quoted and
         // indexed external document names.
         ScRange aRange;
-        String aStartTabName, aEndTabName;
+        OUString aStartTabName, aEndTabName;
         sal_uInt16 nFlags = 0;
         p = aRange.Parse_XL_Header( p, pDoc, aTmpFile, aStartTabName,
                 aEndTabName, nFlags, true, pExternalLinks );
@@ -496,7 +496,7 @@ static bool lcl_parseExternalName(
                         {
                             // two consecutive quotes equal a single quote in
                             // the file name.
-                            aTmpFile.Append(c);
+                            aTmpFile += OUString(c);
                             cPrev = 'a';
                         }
                         else
@@ -514,10 +514,10 @@ static bool lcl_parseExternalName(
 
                         i = j;
                         bInName = true;
-                        aTmpName.Append(c); // Keep the separator as part of the name.
+                        aTmpName += OUString(c); // Keep the separator as part of the name.
                         break;
                     }
-                    aTmpFile.Append(c);
+                    aTmpFile += OUString(c);
                     cPrev = c;
                 }
 
@@ -545,14 +545,14 @@ static bool lcl_parseExternalName(
                 // A second separator ?  Not a valid external name.
                 return false;
             }
-            aTmpName.Append(c);
+            aTmpName += OUString(c);
         }
         else
         {
             if (c == cSep)
             {
                 bInName = true;
-                aTmpName.Append(c); // Keep the separator as part of the name.
+                aTmpName += OUString(c); // Keep the separator as part of the name.
             }
             else
             {
@@ -582,7 +582,7 @@ static bool lcl_parseExternalName(
                     return false;
                 }
                 while (false);
-                aTmpFile.Append(c);
+                aTmpFile += OUString(c);
             }
         }
         cPrev = c;
@@ -594,29 +594,28 @@ static bool lcl_parseExternalName(
         return false;
     }
 
-    xub_StrLen nNameLen = aTmpName.Len();
+    xub_StrLen nNameLen = aTmpName.getLength();
     if (nNameLen < 2)
     {
         // Name must be at least 2-char long (separator plus name).
         return false;
     }
 
-    if (aTmpName.GetChar(0) != cSep)
+    if (aTmpName[0] != cSep)
     {
         // 1st char of the name must equal the separator.
         return false;
     }
 
-    sal_Unicode cLast = aTmpName.GetChar(nNameLen-1);
-    if (cLast == sal_Unicode('!'))
+    if (aTmpName[nNameLen-1] == '!')
     {
         // Check against #REF!.
-        if (aTmpName.EqualsAscii("#REF!"))
+        if (aTmpName.equalsAscii("#REF!"))
             return false;
     }
 
     rFile = aTmpFile;
-    rName = aTmpName.Copy(1); // Skip the first char as it is always the separator.
+    rName = aTmpName.copy(1); // Skip the first char as it is always the separator.
     return true;
 }
 

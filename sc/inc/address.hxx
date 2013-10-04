@@ -304,7 +304,7 @@ public:
     inline size_t hash() const;
 
     /// "A1" or "$A$1" or R1C1 or R[1]C[1]
-    String GetColRowString( bool bAbsolute = false,
+    OUString GetColRowString( bool bAbsolute = false,
                             const Details& rDetails = detailsOOOa1) const;
 };
 
@@ -453,7 +453,7 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC sal_uInt16 ParseAny( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC sal_uInt16 ParseAny( const OUString&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC sal_uInt16 ParseCols( const OUString&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
@@ -481,7 +481,7 @@ public:
             bOnlyAcceptSingle==true was given.
      */
     const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument* pDoc,
-            String& rExternDocName, String& rStartTabName, String& rEndTabName, sal_uInt16& nFlags,
+            OUString& rExternDocName, OUString& rStartTabName, OUString& rEndTabName, sal_uInt16& nFlags,
             bool bOnlyAcceptSingle,
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
@@ -698,7 +698,7 @@ public:
     inline  int     operator != ( const ScRefAddress& r ) const
                     { return !(operator==(r)); }
 
-            String  GetRefString( ScDocument* pDoc, SCTAB nActTab,
+            OUString  GetRefString( ScDocument* pDoc, SCTAB nActTab,
                                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 };
 
@@ -753,12 +753,12 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
     }
 }
 
-bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
+bool ConvertSingleRef( ScDocument* pDoc, const OUString& rRefString,
         SCTAB nDefTab, ScRefAddress& rRefAddress,
         const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
         ScAddress::ExternalInfo* pExtInfo = NULL );
 
-bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
+bool ConvertDoubleRef(ScDocument* pDoc, const OUString& rRefString,
         SCTAB nDefTab, ScRefAddress& rStartRefAddress,
         ScRefAddress& rEndRefAddress,
         const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
@@ -782,7 +782,7 @@ inline OUString ScColToAlpha( SCCOL nCol )
 }
 
 /// get column number of A..IV... string
-bool AlphaToCol( SCCOL& rCol, const String& rStr);
+bool AlphaToCol( SCCOL& rCol, const OUString& rStr);
 
 #endif // SC_ADDRESS_HXX
 
