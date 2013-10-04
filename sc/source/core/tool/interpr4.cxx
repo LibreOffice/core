@@ -2726,7 +2726,7 @@ void ScInterpreter::ScExternal()
                     break;
 
                 case SC_ADDINARG_STRING:
-                    aParam <<= OUString( GetString() );
+                    aParam <<= GetString();
                     break;
 
                 case SC_ADDINARG_INTEGER_ARRAY:
@@ -2806,7 +2806,7 @@ void ScInterpreter::ScExternal()
                         case svString:
                         case svSingleRef:
                             {
-                                OUString aString = OUString( GetString() );
+                                const OUString& aString = GetString();
                                 uno::Sequence<OUString> aInner( &aString, 1 );
                                 uno::Sequence< uno::Sequence<OUString> > aOuter( &aInner, 1 );
                                 aParam <<= aOuter;
@@ -2841,7 +2841,7 @@ void ScInterpreter::ScExternal()
                                 if ( nStackType == svDouble )
                                     aElem <<= (double) GetDouble();
                                 else if ( nStackType == svString )
-                                    aElem <<= OUString( GetString() );
+                                    aElem <<= GetString();
                                 else
                                 {
                                     ScAddress aAdr;
@@ -2891,7 +2891,7 @@ void ScInterpreter::ScExternal()
                             aParam <<= (double) GetDouble();
                             break;
                         case svString:
-                            aParam <<= OUString( GetString() );
+                            aParam <<= GetString();
                             break;
                         case svSingleRef:
                             {

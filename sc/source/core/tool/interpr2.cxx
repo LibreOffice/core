@@ -162,7 +162,7 @@ void ScInterpreter::ScGetHour()
 
 void ScInterpreter::ScGetDateValue()
 {
-    String aInputString = GetString();
+    const OUString& aInputString = GetString();
     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
@@ -388,7 +388,7 @@ void ScInterpreter::ScGetDateDif()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        OUString aInterval = GetString();
+        const OUString& aInterval = GetString();
         double nDate2    = GetDouble();
         double nDate1    = GetDouble();
 

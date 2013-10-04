@@ -591,7 +591,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                 break;
                 case svString:
                 {
-                    const String& rStr = GetString();
+                    const OUString& rStr = GetString();
                     if ( nGlobalError )
                     {
                         pResMat->PutDouble( CreateDoubleError( nGlobalError),
@@ -3150,7 +3150,7 @@ void ScInterpreter::ScTrim()
 
 void ScInterpreter::ScUpper()
 {
-    String aString = ScGlobal::pCharClass->uppercase(GetString());
+    OUString aString = ScGlobal::pCharClass->uppercase(GetString());
     PushString(aString);
 }
 
@@ -3182,15 +3182,15 @@ void ScInterpreter::ScPropper()
 
 void ScInterpreter::ScLower()
 {
-    String aString = ScGlobal::pCharClass->lowercase(GetString());
+    OUString aString = ScGlobal::pCharClass->lowercase(GetString());
     PushString(aString);
 }
 
 
 void ScInterpreter::ScLen()
 {
-    String aStr( GetString() );
-    PushDouble( aStr.Len() );
+    const OUString& aStr = GetString();
+    PushDouble( aStr.getLength() );
 }
 
 
@@ -3456,7 +3456,7 @@ void ScInterpreter::ScClean()
 void ScInterpreter::ScCode()
 {
 //2do: make it full range unicode?
-    const String& rStr = GetString();
+    String aStr = GetString();
     //"classic" ByteString conversion flags
     const sal_uInt32 convertFlags =
         RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
@@ -3465,7 +3465,7 @@ void ScInterpreter::ScCode()
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-    PushInt( (sal_uChar) OUStringToOString(OUString(rStr.GetChar(0)), osl_getThreadTextEncoding(), convertFlags).toChar() );
+    PushInt( (sal_uChar) OUStringToOString(OUString(aStr.GetChar(0)), osl_getThreadTextEncoding(), convertFlags).toChar() );
 }
 
 
@@ -6713,7 +6713,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
         break;
         case svString:
         {
-            const String& sStr = GetString();
+            const OUString& sStr = GetString();
             rItem.meType = ScQueryEntry::ByString;
             rItem.maString = sStr;
         }
@@ -8262,11 +8262,11 @@ void ScInterpreter::ScMid()
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
         double fAnfang = ::rtl::math::approxFloor(GetDouble());
-        const String& rStr = GetString();
+        String aStr = GetString();
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             PushIllegalArgument();
         else
-            PushString(rStr.Copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
+            PushString(aStr.Copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
     }
 }
 
@@ -8275,7 +8275,7 @@ void ScInterpreter::ScText()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        OUString sFormatString = GetString();
+        const OUString& sFormatString = GetString();
         OUString aStr;
         bool bString = false;
         double fVal = 0.0;
@@ -8432,7 +8432,7 @@ void ScInterpreter::ScConcat()
     String aRes;
     while( nParamCount-- > 0)
     {
-        const String& rStr = GetString();
+        const OUString& rStr = GetString();
         aRes.Insert( rStr, 0 );
     }
     PushString( aRes );
