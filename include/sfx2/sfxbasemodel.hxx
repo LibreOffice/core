@@ -195,7 +195,7 @@ public:
         @onerror    -
     */
 
-    SfxBaseModel( SfxObjectShell *pObjektShell = NULL ) ;
+    SfxBaseModel( SfxObjectShell *pObjectShell = NULL ) ;
 
     /**___________________________________________________________________________________________________
         @short      -
