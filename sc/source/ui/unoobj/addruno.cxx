@@ -56,7 +56,7 @@ void ScAddressConversionObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString, ::formula::FormulaGrammar::AddressConvention eConv )
+sal_Bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula::FormulaGrammar::AddressConvention eConv )
 {
     if (!pDocShell)
         return false;
