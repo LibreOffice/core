@@ -352,6 +352,8 @@ enum OpCodeEnum
         ocProb              = SC_OPCODE_PROB,
         ocCorrel            = SC_OPCODE_CORREL,
         ocCovar             = SC_OPCODE_COVAR,
+        ocCovarP            = SC_OPCODE_COVARP,
+        ocCovarS            = SC_OPCODE_COVARS,
         ocPearson           = SC_OPCODE_PEARSON,
         ocRSQ               = SC_OPCODE_RSQ,
         ocSTEYX             = SC_OPCODE_STEYX,

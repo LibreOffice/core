@@ -3790,16 +3790,22 @@ void ScInterpreter::ScCorrel()
     ScPearson();
 }
 
-void ScInterpreter::ScCovar()
+void ScInterpreter::ScCovarP()
 {
-    CalculatePearsonCovar(false,false);
+    CalculatePearsonCovar( false, false, false );
+}
+
+void ScInterpreter::ScCovarS()
+{
+    CalculatePearsonCovar( false, false, true );
 }
 
 void ScInterpreter::ScPearson()
 {
     CalculatePearsonCovar(true,false);
 }
-void ScInterpreter::CalculatePearsonCovar(bool _bPearson,bool _bStexy)
+
+void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _bSample )
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
@@ -3879,7 +3885,10 @@ void ScInterpreter::CalculatePearsonCovar(bool _bPearson,bool _bStexy)
         } // if ( _bPearson )
         else
         {
-            PushDouble( fSumDeltaXDeltaY / fCount);
+            if ( _bSample )
+                PushDouble( fSumDeltaXDeltaY / ( fCount - 1 ) );
+            else
+                PushDouble( fSumDeltaXDeltaY / fCount);
         }
     }
 }

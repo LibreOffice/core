@@ -2222,6 +2222,8 @@ void Test::testFunctionLists()
         "COUNTIF",
         "COUNTIFS",
         "COVAR",
+        "COVARIANCE.P",
+        "COVARIANCE.S",
         "CRITBINOM",
         "DEVSQ",
         "EXPONDIST",
