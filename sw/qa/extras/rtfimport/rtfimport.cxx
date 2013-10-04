@@ -151,6 +151,7 @@ public:
     void testFdo64671();
     void testFdo62044();
     void testFdo68076();
+    void testFdo69384();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -272,6 +273,7 @@ void Test::run()
         {"fdo64671.rtf", &Test::testFdo64671},
         {"fdo62044.rtf", &Test::testFdo62044},
         {"fdo68076.rtf", &Test::testFdo68076},
+        {"hello.rtf", &Test::testFdo69384},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1251,6 +1253,18 @@ void Test::testFdo68076()
     // Encoding of the last char was wrong (more 'o' than 'y').
     OUString aExpected("\xD0\x9E\xD0\xB1\xD1\x8A\xD0\xB5\xD0\xBA\xD1\x82 \xE2\x80\x93 \xD1\x83", 19, RTL_TEXTENCODING_UTF8);
     getParagraph(1, aExpected);
+}
+
+void Test::testFdo69384()
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo69384-paste.rtf", xEnd);
+
+    // Import got interrupted in the middle of style sheet table import,
+    // resuling in missing styles and text.
+    getStyles("ParagraphStyles")->getByName("Text body justified");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
