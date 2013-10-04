@@ -367,7 +367,12 @@ private:
 
 public:
     WW8PLCFx(ww::WordVersion eVersion, bool bSprm)
-        : meVer(eVersion), bIsSprm(bSprm), bDirty(false) {}
+        : meVer(eVersion)
+        , bIsSprm(bSprm)
+        , nStartFc(-1)
+        , bDirty(false)
+    {
+    }
     virtual ~WW8PLCFx() {}
     bool IsSprm() const { return bIsSprm; }
     virtual sal_uLong GetIdx() const = 0;
