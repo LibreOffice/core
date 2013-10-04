@@ -70,16 +70,16 @@ void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
 }
 
 template< typename T >
-static void lcl_AddString( String**& pData, T& nCount, const String& rInsert )
+static void lcl_AddString( OUString**& pData, T& nCount, const OUString& rInsert )
 {
-    String** pOldData = pData;
-    pData = new String*[ nCount+1 ];
+    OUString** pOldData = pData;
+    pData = new OUString*[ nCount+1 ];
     if (pOldData)
     {
-        memcpy( pData, pOldData, nCount * sizeof(String*) );
+        memcpy( pData, pOldData, nCount * sizeof(OUString*) );
         delete[] pOldData;
     }
-    pData[nCount] = new String(rInsert);
+    pData[nCount] = new OUString(rInsert);
     ++nCount;
 }
 
@@ -160,7 +160,7 @@ void ScConsData::DeleteData()
     if (bRowByName) nRowCount = 0;
 
     bCornerUsed = false;
-    aCornerText.Erase();
+    aCornerText = "";
 }
 
 #undef DELETEARR
@@ -289,7 +289,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
     }
 }
 
-void ScConsData::AddName( const String& rName )
+void ScConsData::AddName( const OUString& rName )
 {
     SCSIZE nArrX;
     SCSIZE nArrY;
@@ -506,7 +506,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         if (bCornerUsed)
         {
             if (aCornerText != aThisCorner)
-                aCornerText.Erase();
+                aCornerText = "";
         }
         else
         {
@@ -656,7 +656,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
     //  Ecke links oben
 
-    if ( bColByName && bRowByName && aCornerText.Len() )
+    if ( bColByName && bRowByName && !aCornerText.isEmpty() )
         pDestDoc->SetString( nCol, nRow, nTab, aCornerText );
 
     //  Titel

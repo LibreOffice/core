@@ -80,14 +80,14 @@ private:
     double**            ppCount;
     double**            ppSumSqr;
     ScReferenceList**   ppRefs;
-    String**            ppColHeaders;
-    String**            ppRowHeaders;
+    OUString**          ppColHeaders;
+    OUString**          ppRowHeaders;
     SCSIZE              nDataCount;
     SCSIZE              nTitleCount;
-    String**            ppTitles;
+    OUString**          ppTitles;
     SCSIZE**            ppTitlePos;
     sal_Bool                bCornerUsed;
-    String              aCornerText;        // only for bColByName && bRowByName
+    OUString            aCornerText;        // only for bColByName && bRowByName
 
 public:
                 ScConsData();
@@ -105,7 +105,7 @@ public:
 
     void        AddData( ScDocument* pSrcDoc, SCTAB nTab,
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    void        AddName( const String& rName );
+    void        AddName( const OUString& rName );
 
     void        OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab );
 
