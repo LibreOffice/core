@@ -54,7 +54,7 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  , mpOldEditParent( NULL )
  , mbOldDlgLayoutEnabled( false )
  , mbOldEditParentLayoutEnabled( false )
- , bHighLightRef( false )
+ , bHighlightRef( false )
  , bAccInserted( false )
 {
     ScInputOptions aInputOption=SC_MOD()->GetInputOptions();
@@ -116,7 +116,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
 {
     if( bEnableColorRef )
     {
-        bHighLightRef=true;
+        bHighlightRef=true;
         ScViewData* pViewData=ScDocShell::GetViewData();
         if ( pViewData )
         {
@@ -176,7 +176,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 {
     if( bEnableColorRef)
     {
-        bHighLightRef=true;
+        bHighlightRef=true;
         ScViewData* pViewData=ScDocShell::GetViewData();
         if ( pViewData && pRefComp.get() )
         {
@@ -234,7 +234,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
 {
     ScViewData* pViewData=ScDocShell::GetViewData();
 
-    if( pViewData && bHighLightRef && bEnableColorRef)
+    if( pViewData && bHighlightRef && bEnableColorRef)
     {
         ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
 
@@ -247,7 +247,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
                 pTabViewShell->DoneRefMode( false );
             pTabViewShell->ClearHighlightRanges();
         }
-        bHighLightRef=false;
+        bHighlightRef=false;
     }
 }
 // -----------------------------------------------------------------------------

@@ -190,7 +190,7 @@ public:
     inline const SvxNoHyphenItem     &GetNoHyphenHere( sal_Bool = sal_True ) const;
     inline const SvxBlinkItem        &GetBlink( sal_Bool = sal_True ) const;
     inline const SvxBrushItem        &GetChrBackground( sal_Bool = sal_True ) const;
-    inline const SvxBrushItem        &GetChrHighLight( sal_Bool = sal_True ) const;
+    inline const SvxBrushItem        &GetChrHighlight( sal_Bool = sal_True ) const;
 
     inline const SvxFontItem         &GetCJKFont( sal_Bool = sal_True ) const;
     inline const SvxFontHeightItem   &GetCJKSize( sal_Bool = sal_True ) const;

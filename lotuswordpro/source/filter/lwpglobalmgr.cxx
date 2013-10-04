@@ -146,7 +146,7 @@ OUString LwpGlobalMgr::GetEditorName(sal_uInt8 nID)
     return A2OUSTR("");
 }
 
-XFColor LwpGlobalMgr::GetHighLightColor(sal_uInt8 nID)
+XFColor LwpGlobalMgr::GetHighlightColor(sal_uInt8 nID)
 {
     std::map<sal_uInt16,LwpEditorAttr*>::iterator iter;
 

@@ -3815,7 +3815,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         FSEND );
 }
 
-OString DocxAttributeOutput::TransHighLightColor( const Color& rColor )
+OString DocxAttributeOutput::TransHighlightColor( const Color& rColor )
 {
     switch (rColor.GetColor())
     {
@@ -4424,9 +4424,9 @@ void DocxAttributeOutput::CharBorder(
     impl_borderLine( m_pSerializer, XML_bdr, pAllBorder, nDist, bShadow );
 }
 
-void DocxAttributeOutput::CharHighLight( const SvxBrushItem& rHighLight )
+void DocxAttributeOutput::CharHighlight( const SvxBrushItem& rHighlight )
 {
-    const OString sColor = TransHighLightColor( rHighLight.GetColor() );
+    const OString sColor = TransHighlightColor( rHighlight.GetColor() );
     if ( !sColor.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_highlight,

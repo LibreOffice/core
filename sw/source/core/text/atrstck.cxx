@@ -798,7 +798,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             rFnt.SetBackColor(new Color( ((SvxBrushItem&)rItem).GetColor() ) );
             break;
         case RES_CHRATR_HIGHLIGHT :
-            rFnt.SetHighLightColor( ((SvxBrushItem&)rItem).GetColor() );
+            rFnt.SetHighlightColor( ((SvxBrushItem&)rItem).GetColor() );
             break;
         case RES_CHRATR_CJK_FONT :
             rFnt.SetName( ((SvxFontItem&)rItem).GetFamilyName(), SW_CJK );

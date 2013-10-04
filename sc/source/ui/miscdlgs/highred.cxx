@@ -70,7 +70,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     MinSize.Height()+=2;
     MinSize.Width()+=2;
     aOkButton.SetClickHdl(LINK( this, ScHighlightChgDlg, OKBtnHdl));
-    aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighLightHandle ));
+    aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighlightHandle ));
     aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
     aFilterCtr.HideRange(false);
     aFilterCtr.Show();
@@ -140,7 +140,7 @@ void ScHighlightChgDlg::Init()
         aFilterCtr.SetRange(aRefStr);
     }
     aFilterCtr.Enable(sal_True,sal_True);
-    HighLightHandle(&aHighlightBox);
+    HighlightHandle(&aHighlightBox);
 }
 
 //----------------------------------------------------------------------------
@@ -186,7 +186,7 @@ sal_Bool ScHighlightChgDlg::IsRefInputMode() const
     return aEdAssign.IsVisible();
 }
 
-IMPL_LINK( ScHighlightChgDlg, HighLightHandle, CheckBox*, pCb )
+IMPL_LINK( ScHighlightChgDlg, HighlightHandle, CheckBox*, pCb )
 {
     if(pCb!=NULL)
     {

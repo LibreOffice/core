@@ -111,7 +111,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         pModInfo->RevisionFlag = sal_False;
         pModInfo->HasCharStyle = sal_False;
         pModInfo->HasLangOverride = sal_False;
-        pModInfo->HasHighLight = sal_False;
+        pModInfo->HasHighlight = sal_False;
         ReadModifiers( pObjStrm, pModInfo );
     }
 
@@ -230,7 +230,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
 {
     if (!m_pModifiers)
         return;
-    if (!m_pModifiers->FontID && !m_pModifiers->HasCharStyle && !m_pModifiers->HasHighLight)
+    if (!m_pModifiers->FontID && !m_pModifiers->HasCharStyle && !m_pModifiers->HasHighlight)
     {
         m_ModFlag = sal_False;
         return;
@@ -271,9 +271,9 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         }
     }
 
-    if (m_pModifiers->HasHighLight)
+    if (m_pModifiers->HasHighlight)
     {
-        XFColor  aColor = GetHighLightColor();//right yellow
+        XFColor  aColor = GetHighlightColor();//right yellow
         if (pStyle)//change the style directly
             pStyle->GetFont()->SetBackColor(aColor);
         else //register a new style
@@ -347,8 +347,8 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
                 break;
             case FRIB_MTAG_ATTRIBUTE:
                 pModInfo->aTxtAttrOverride.Read(pObjStrm);
-                if (pModInfo->aTxtAttrOverride.IsHighLight())
-                    pModInfo->HasHighLight = sal_True;
+                if (pModInfo->aTxtAttrOverride.IsHighlight())
+                    pModInfo->HasHighlight = sal_True;
                 break;
             case FRIB_MTAG_REVISION:
                 pModInfo->RevisionType = pObjStrm->QuickReaduInt8();
@@ -424,10 +424,10 @@ OUString LwpFrib::GetEditor()
     return pGlobal->GetEditorName(m_nEditor);
 }
 
-XFColor LwpFrib::GetHighLightColor()
+XFColor LwpFrib::GetHighlightColor()
 {
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
-    return pGlobal->GetHighLightColor(m_nEditor);
+    return pGlobal->GetHighlightColor(m_nEditor);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

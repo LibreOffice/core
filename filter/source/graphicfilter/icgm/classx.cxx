@@ -207,7 +207,7 @@ void CGM::ImplDoClass8()
         case 0x02 : /*Inheritance Filter */break;               // NS
         case 0x03 : /*Clip Inheritance */break;                 // NS
         case 0x04 : /*Segment Transformation */break;
-        case 0x05 : /*Segment HighLighting */break;             // NS
+        case 0x05 : /*Segment Highlighting */break;             // NS
         case 0x06 : /*Segment Display Priority */break;         // NS
         case 0x07 : /*Segment Pick Priority */break;            // NS
         case 0xfe : /*INQ Current Position */break;

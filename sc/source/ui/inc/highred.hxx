@@ -78,7 +78,7 @@ private:
     void                    Init();
 
     DECL_LINK( RefHandle, SvxTPFilter* );
-    DECL_LINK(HighLightHandle, CheckBox*);
+    DECL_LINK(HighlightHandle, CheckBox*);
     DECL_LINK(OKBtnHdl, PushButton*);
 
 

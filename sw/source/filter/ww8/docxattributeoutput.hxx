@@ -377,13 +377,13 @@ private:
         FontPitch pitch, rtl_TextEncoding encoding );
 
     /**
-     * Translate a color object to the corresponding HighLightColorValues enumaration item
+     * Translate a color object to the corresponding HighlightColorValues enumaration item
      *
      * @param[in]   rColor      a color object to translate
      * @return      color name (e.g. "red"), if color is inside the enumeration's range
      *              empty string, otherwise
     **/
-    OString TransHighLightColor( const Color& rColor );
+    OString TransHighlightColor( const Color& rColor );
 protected:
 
     /// Output frames - the implementation.
@@ -489,7 +489,7 @@ protected:
     virtual void CharBorder( const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow );
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
-    virtual void CharHighLight( const SvxBrushItem& rHighLight );
+    virtual void CharHighlight( const SvxBrushItem& rHighlight );
 
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat( const SwFmtINetFmt& );

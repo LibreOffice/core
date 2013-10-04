@@ -88,7 +88,7 @@ public:
     XFStyleManager* GetXFStyleManager(){return m_pXFStyleManager;}
     void SetEditorAttrMap(sal_uInt16 nID, LwpEditorAttr* pAttr);
     OUString GetEditorName(sal_uInt8 nID);
-    XFColor GetHighLightColor(sal_uInt8 nID);
+    XFColor GetHighlightColor(sal_uInt8 nID);
 private:
     LwpGlobalMgr(LwpSvStream* pSvStream);
 private:

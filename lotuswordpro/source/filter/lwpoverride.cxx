@@ -168,7 +168,7 @@ void LwpTextAttributeOverride::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-sal_Bool LwpTextAttributeOverride::IsHighLight()
+sal_Bool LwpTextAttributeOverride::IsHighlight()
 {
     return (m_nValues & TAO_HIGHLIGHT);
 }

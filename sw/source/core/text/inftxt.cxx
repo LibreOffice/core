@@ -1184,9 +1184,9 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 
         pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
-        if( m_pFnt->GetHighLightColor() != COL_TRANSPARENT )
+        if( m_pFnt->GetHighlightColor() != COL_TRANSPARENT )
         {
-            pTmpOut->SetFillColor( m_pFnt->GetHighLightColor() );
+            pTmpOut->SetFillColor( m_pFnt->GetHighlightColor() );
         }
         else
         {

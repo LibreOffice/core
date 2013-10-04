@@ -87,7 +87,7 @@ inline const SvxBlinkItem  &SwAttrSet::GetBlink(sal_Bool bInP) const
     {   return (const SvxBlinkItem&)Get( RES_CHRATR_BLINK,bInP); }
 inline const SvxBrushItem &SwAttrSet::GetChrBackground( sal_Bool bInP ) const
     {   return (const SvxBrushItem&)Get( RES_CHRATR_BACKGROUND, bInP ); }
-inline const SvxBrushItem &SwAttrSet::GetChrHighLight( sal_Bool bInP ) const
+inline const SvxBrushItem &SwAttrSet::GetChrHighlight( sal_Bool bInP ) const
     {   return (const SvxBrushItem&)Get( RES_CHRATR_HIGHLIGHT, bInP ); }
 inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( sal_Bool bInP ) const
     {   return (const SvxEmphasisMarkItem&)Get( RES_CHRATR_EMPHASIS_MARK, bInP ); }
@@ -154,8 +154,8 @@ inline const SvxBlinkItem           &SwFmt::GetBlink(sal_Bool bInP) const
     {   return aSet.GetBlink(bInP); }
 inline const SvxBrushItem           &SwFmt::GetChrBackground(sal_Bool bInP) const
     {   return aSet.GetChrBackground(bInP); }
-inline const SvxBrushItem &SwFmt::GetChrHighLight(sal_Bool bInP) const
-    {   return aSet.GetChrHighLight(bInP); }
+inline const SvxBrushItem &SwFmt::GetChrHighlight(sal_Bool bInP) const
+    {   return aSet.GetChrHighlight(bInP); }
 inline const SvxEmphasisMarkItem   &SwFmt::GetEmphasisMark( sal_Bool bInP ) const
     {   return aSet.GetEmphasisMark(bInP); }
 inline const SvxTwoLinesItem       &SwFmt::Get2Lines( sal_Bool bInP ) const

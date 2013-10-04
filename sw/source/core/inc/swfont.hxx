@@ -127,7 +127,7 @@ class SwFont
                                 // CTL == Complex text layout ( Hebrew, Arabic )
     SwSubFont   aSub[SW_SCRIPTS]; // Latin-, CJK- and CTL-font
     Color*      pBackColor;     // background color (i.e. at character styles)
-    Color       m_aHighLightColor;   // highlight color
+    Color       m_aHighlightColor;   // highlight color
     Color       aUnderColor;    // color of the underlining
     Color       aOverColor;     // color of the overlining
 
@@ -183,8 +183,8 @@ public:
     // set background color
     void SetBackColor( Color* pNewColor );
     inline const Color* GetBackColor() const{ return pBackColor; }
-    void SetHighLightColor( const Color& aNewColor );
-    const Color& GetHighLightColor() const { return m_aHighLightColor; }
+    void SetHighlightColor( const Color& aNewColor );
+    const Color& GetHighlightColor() const { return m_aHighlightColor; }
 
     inline void ChkMagic( ViewShell *pSh, sal_uInt8 nWhich )
         { if( !aSub[ nWhich ].pMagic ) GoMagic( pSh, nWhich ); }
@@ -1003,9 +1003,9 @@ inline void SwFont::SetShadowLocation( const SvxShadowLocation aLocation )
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
-inline void SwFont::SetHighLightColor( const Color& aNewColor )
+inline void SwFont::SetHighlightColor( const Color& aNewColor )
 {
-    m_aHighLightColor = aNewColor;
+    m_aHighlightColor = aNewColor;
     bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }

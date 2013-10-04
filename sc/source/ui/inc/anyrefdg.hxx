@@ -66,7 +66,7 @@ class ScFormulaReferenceHelper
     bool                mbOldEditParentLayoutEnabled;  // Original layout state of edit widget parent
 
     bool                bEnableColorRef;
-    bool                bHighLightRef;
+    bool                bHighlightRef;
     bool                bAccInserted;
 
     DECL_LINK( AccelSelectHdl, Accelerator* );

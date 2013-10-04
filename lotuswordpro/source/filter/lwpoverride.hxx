@@ -138,7 +138,7 @@ public:
 
     inline sal_uInt16 GetHideLevels() const;
 
-    sal_Bool IsHighLight();
+    sal_Bool IsHighlight();
 
 protected:
     LwpTextAttributeOverride(LwpTextAttributeOverride const& rOther);

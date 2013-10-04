@@ -439,7 +439,7 @@ published service CharacterProperties
      *
      *  @since LibreOffice 4.2
     **/
-    [optional, property] com::sun::star::util::Color CharHighLight;
+    [optional, property] com::sun::star::util::Color CharHighlight;
 
 };
 

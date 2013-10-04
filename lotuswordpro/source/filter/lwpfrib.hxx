@@ -81,7 +81,7 @@ struct ModifierInfo
     sal_uInt16 CodePage;
     sal_Bool HasCharStyle;
     sal_Bool HasLangOverride;
-    sal_Bool HasHighLight;
+    sal_Bool HasHighlight;
     sal_uInt8 RevisionType;
     sal_Bool RevisionFlag;
 };
@@ -102,7 +102,7 @@ public:
     void SetType(sal_uInt8 type) { m_nFribType = type;}
     void SetEditor(sal_uInt8 editor) { m_nEditor = editor;}
     OUString GetEditor();
-    XFColor GetHighLightColor();
+    XFColor GetHighlightColor();
 protected:
     LwpPara* m_pPara;
     LwpFrib* m_pNext;
