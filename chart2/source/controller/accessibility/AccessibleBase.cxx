@@ -716,7 +716,7 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
             SolarMutexGuard aSolarGuard;
             aRect = pWindow->LogicToPixel( aRect );
 
-            // aLogicRect ist relative to the page, but we need a value relative
+            // aLogicRect is relative to the page, but we need a value relative
             // to the parent object
             awt::Point aParentLocOnScreen;
             uno::Reference< XAccessibleComponent > xParent( getAccessibleParent(), uno::UNO_QUERY );

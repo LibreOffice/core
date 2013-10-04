@@ -45,7 +45,7 @@ class FilterConfigItem;
 |*
 |*    Description       Checks if there is a string(pDest) of length nSize
 |*                      inside the memory area pSource which is nComp bytes long.
-|*                      Check is NON-CASE-SENSITIVE. The return value ist the
+|*                      Check is NON-CASE-SENSITIVE. The return value is the
 |*                      address where the string is found or NULL
 |*
 *************************************************************************/

@@ -102,13 +102,13 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
                 rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
                 if (RES_PARATR_DROP == pMap->nWID)
                 {
-                    pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem ist const...
+                    pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem is const...
                     pDrop->SetCharFmt(xStyle->GetCharFmt());
                     m_pDoc->SetDefault(*pDrop);
                 }
                 else // RES_TXTATR_CHARFMT == pMap->nWID
                 {
-                    pCharFmt = (SwFmtCharFmt*)rItem.Clone();   // because rItem ist const...
+                    pCharFmt = (SwFmtCharFmt*)rItem.Clone();   // because rItem is const...
                     pCharFmt->SetCharFmt(xStyle->GetCharFmt());
                     m_pDoc->SetDefault(*pCharFmt);
                 }

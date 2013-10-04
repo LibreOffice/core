@@ -44,7 +44,7 @@
 /*************************************************************************
  *                  inline IsNastyFollow()
  *************************************************************************/
-// A Follow on the same page as its master ist nasty.
+// A Follow on the same page as its master is nasty.
 inline sal_Bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
     OSL_ENSURE( !pFrm->IsFollow() || !pFrm->GetPrev() ||

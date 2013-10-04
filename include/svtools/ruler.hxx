@@ -151,7 +151,7 @@ has to be passed. In the array, the following values have to be initialized:
                                 RULER_BORDER_VARIABLE
                                 Not all of the column spacings are equal
                                 RULER_BORDER_TABLE
-                                Table border. Whenever this style ist set, the column
+                                Table border. Whenever this style is set, the column
                                 width must be 0.
                                 RULER_BORDER_SNAP
                                 Auxiliary line. Whenever this style is set, the

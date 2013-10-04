@@ -141,7 +141,7 @@ End Function
 Function OpenDocument(DocPath as String, Args(), Optional bDisposable as Boolean)
 Dim oComponents as Object
 Dim oComponent as Object
-	&apos; Search if one of the active Components ist the one that you search for
+	&apos; Search if one of the active Components is the one that you search for
 	oComponents = StarDesktop.Components.CreateEnumeration
 	While oComponents.HasmoreElements
 		oComponent = oComponents.NextElement
@@ -165,7 +165,7 @@ End Function
 Function TaskonDesktop(DocPath as String) as Boolean
 Dim oComponents as Object
 Dim oComponent as Object
-	&apos; Search if one of the active Components ist the one that you search for
+	&apos; Search if one of the active Components is the one that you search for
 	oComponents = StarDesktop.Components.CreateEnumeration
 	While oComponents.HasmoreElements
 		oComponent = oComponents.NextElement

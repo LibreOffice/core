@@ -800,7 +800,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 
         m_pLbGradientType->SelectEntryPos(
             sal::static_int_cast< sal_uInt16 >( eXGS ) );
-        // if the entry is not in the listbox ist,
+        // if the entry is not in the listbox,
         // colors are added temporarily
         m_pLbColorFrom->SetNoSelection();
         m_pLbColorFrom->SelectEntry( pGradient->GetStartColor() );

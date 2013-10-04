@@ -420,7 +420,7 @@ public class ProcessHandler
 
         if (!this.isFinished())
         {
-            dbg("runCommand Process ist not finished but there are no changes in output stream.");
+            dbg("runCommand Process is not finished but there are no changes in output stream.");
             this.kill();
         }
     }

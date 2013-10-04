@@ -94,7 +94,7 @@ public:
     /** Sets a direct double if token type is formula::svDouble, or mbEmpty if
         formula::svEmptyCell, else token. If p is NULL, that is set as well, effectively
         resulting in GetType()==svUnknown. If the already existing result is
-        ScMatrixFormulaCellToken, the upper left ist set to token.
+        ScMatrixFormulaCellToken, the upper left is set to token.
 
         ATTENTION! formula::FormulaToken had to be allocated using 'new' and if of type
         formula::svDouble and no RefCount was set may not be used after this call

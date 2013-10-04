@@ -1672,7 +1672,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
             else
             {
                 // other EditEngine ...
-                if (pEditEngine->HasText())   // #88630# SC ist removing the content when switching the task
+                if (pEditEngine->HasText())   // #88630# SC is removing the content when switching the task
                     DeleteSelected();
             }
         }

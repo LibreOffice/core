@@ -26,7 +26,7 @@ Public ImportDialogArea as Object
 Public oFactoryKey as Object
 Public bShowLogFile as Boolean
 
-&apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
+&apos; If the ProgressPage is already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
 Public bConversionIsRunning as Boolean
 Public RetValue as Integer

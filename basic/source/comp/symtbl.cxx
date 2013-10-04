@@ -388,7 +388,7 @@ sal_uInt32 SbiSymDef::Define()
     return nChain;
 }
 
-// A symbol definition may have its own pool. This is the caseDies ist
+// A symbol definition may have its own pool. This is the case
 // for objects and procedures (local variable)
 
 SbiSymPool& SbiSymDef::GetPool()

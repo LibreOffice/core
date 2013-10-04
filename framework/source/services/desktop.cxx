@@ -951,7 +951,7 @@ void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css
     @short      try to find a frame with special parameters
     @descr      This method searches for a frame with the specified name.
                 Frames may contain other frames (e.g. a frameset) and may
-                be contained in other frames. This hierarchie ist searched by
+                be contained in other frames. This hierarchie is searched by
                 this method.
                 First some special names are taken into account, i.e. "",
                 "_self", "_top", "_parent" etc. The FrameSearchFlags are ignored

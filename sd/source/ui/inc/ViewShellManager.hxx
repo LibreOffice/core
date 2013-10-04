@@ -147,7 +147,7 @@ public:
         only shells that are higher on the stack are its object bars.
 
         Call this method after a focus change to bring a view mode view
-        shell and ist associated tool bar shells to the top of the
+        shell and is associated tool bar shells to the top of the
         stack.
 
         The mbKeepMainViewShellOnTop flag is not obeyed.

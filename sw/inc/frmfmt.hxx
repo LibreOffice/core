@@ -93,7 +93,7 @@ public:
     const SwContact *FindContactObj() const
         { return ((SwFrmFmt*)this)->FindContactObj(); }
 
-    /** @return the SdrObject, that ist connected to the ContactObject.
+    /** @return the SdrObject, that is connected to the ContactObject.
        Only DrawFrmFmts are connected to the "real SdrObject". FlyFrmFmts
        are connected to a Master and all FlyFrms has the "real SdrObject".
        "Real SdrObject" has position and a Z-order. */

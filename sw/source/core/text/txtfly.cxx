@@ -795,7 +795,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // their influence ends at the borders of the FlyCnt!
             // If we are currently formatting the text of the FlyCnt, then
             // it has to get out of the way of the Frm anchored at paragraph!
-            // pCurrFrm ist the anchor of pNew?
+            // pCurrFrm is the anchor of pNew?
             // #i26945#
             const SwFrm* pTmp = _pAnchoredObj->GetAnchorFrm();
             if( pTmp == pCurrFrm )

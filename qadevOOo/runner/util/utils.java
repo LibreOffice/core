@@ -862,7 +862,7 @@ public class utils {
     }
 
     /**
-     * String.replaceAll() ist available since Java 1.4 but the runner must be buldabale with Java 1.3
+     * String.replaceAll() is available since Java 1.4 but the runner must be buldabale with Java 1.3
      * @param originalString
      * @param searchString
      * @param replaceString

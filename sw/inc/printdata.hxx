@@ -125,7 +125,7 @@ public:
         bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
     }
 
-    /** Note: in the context where this class ist used the pointers should always be valid
+    /** Note: in the context where this class is used the pointers should always be valid
        during the lifetime of this object */
     const SwPrintUIOptions &    GetPrintUIOptions() const       { return *m_pPrintUIOptions; }
     const SwRenderData &        GetRenderData() const           { return *m_pRenderData; }

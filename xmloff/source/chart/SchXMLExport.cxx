@@ -144,7 +144,7 @@ public:
         for writing the corresponding attributes at series
 
         All attributes contained in xAttrList are written at the chart element,
-        which ist the outer element of a chart. So these attributes can easily
+        which is the outer element of a chart. So these attributes can easily
         be parsed again by the container
      */
     void exportChart( com::sun::star::uno::Reference<

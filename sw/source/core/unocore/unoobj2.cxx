@@ -779,7 +779,7 @@ void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew
         {
             const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
         }
-        // or if the range has been removed but the depend ist still
+        // or if the range has been removed but the depend is still
         // connected then the depend must be removed
         else if (bAlreadyRegistered && !GetRegisteredIn() &&
                     m_ObjectDepend.GetRegisteredIn())

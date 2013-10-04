@@ -1121,7 +1121,7 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
 
 /*
  * Save all open documents so they will be reopened
- * the next time the application ist started
+ * the next time the application is started
  *
  * returns sal_True if at least one document could be saved...
  *

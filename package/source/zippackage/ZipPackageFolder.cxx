@@ -115,7 +115,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath 
             }
             else if ( !rInfo.pStream->IsFromManifest() )
             {
-                // the stream is not in META-INF and ist notregistered in manifest.xml,
+                // the stream is not in META-INF and is not registered in manifest.xml,
                 // check whether it is an internal part of the package format
                 if ( !aPath.isEmpty() || rShortName != "mimetype" )
                 {
