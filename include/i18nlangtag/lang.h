@@ -583,6 +583,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_SAMI_PITE_SWEDEN      0x843B  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_SAMI_NORTHERN_NORWAY)) */
 #define LANGUAGE_USER_NGAEBERE              0x0689
 #define LANGUAGE_USER_ENGLISH_UK_OED        0x8C09  /* makeLangID( 0x23, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
+#define LANGUAGE_USER_KUMYK                 0x068A
 
 
 /* Primary language ID range for on-the-fly assignment. */

@@ -562,6 +562,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_CORNISH,               "kw",  "UK", false },
     { LANGUAGE_USER_SAMI_PITE_SWEDEN,      "sje", "SE", false },
     { LANGUAGE_USER_NGAEBERE,              "gym", "PA", false },
+    { LANGUAGE_USER_KUMYK,                 "kum", "RU", false },
     { LANGUAGE_MULTIPLE,                   "mul", ""  , false },   // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , false },   // undetermined language, language cannot be identified
     { LANGUAGE_NONE,                       "zxx", ""  , false },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
