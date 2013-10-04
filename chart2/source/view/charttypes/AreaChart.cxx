@@ -57,7 +57,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
                      , bool bConnectLastToFirstPoint
                      , bool bExpandIfValuesCloseToBorder
                      , sal_Int32 nKeepAspectRatio
-                     , const drawing::Direction3D& rAspectRatio
                      )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, bCategoryXAxis )
         , m_pMainPosHelper(pPlottingPositionHelper)
@@ -68,7 +67,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_bConnectLastToFirstPoint( bConnectLastToFirstPoint )
         , m_bExpandIfValuesCloseToBorder( bExpandIfValuesCloseToBorder )
         , m_nKeepAspectRatio(nKeepAspectRatio)
-        , m_aGivenAspectRatio(rAspectRatio)
         , m_eCurveStyle(CurveStyle_LINES)
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)

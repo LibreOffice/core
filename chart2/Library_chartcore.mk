@@ -91,6 +91,8 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/Clipping \
     chart2/source/view/main/DataPointSymbolSupplier \
     chart2/source/view/main/DrawModelWrapper \
+    chart2/source/view/main/DummyShapeFactory \
+    chart2/source/view/main/DummyXShape \
     chart2/source/view/main/LabelPositionHelper \
     chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/PlotterBase \
@@ -99,6 +101,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/PropertyMapper \
     chart2/source/view/main/_serviceregistration_view \
     chart2/source/view/main/ShapeFactory \
+    chart2/source/view/main/AbstractShapeFactory \
     chart2/source/view/main/Stripe \
     chart2/source/view/main/VDataSeries \
     chart2/source/view/main/VLegend \
