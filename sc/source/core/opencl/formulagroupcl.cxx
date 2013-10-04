@@ -421,9 +421,13 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                 TraverseAST(cur->Children[1]);
                 return;
             case ocAdd:
-                TraverseAST(cur->Children[0]);
-                mKernelSrc << "+";
+            case ocSub:
+                // A-B would be converted as:
+                // Children[1] = A
+                // Children[0] = B
                 TraverseAST(cur->Children[1]);
+                mKernelSrc << (p->GetOpCode() == ocAdd?"+":"-");
+                TraverseAST(cur->Children[0]);
                 return;
             case ocMin:
             case ocMax:
