@@ -126,7 +126,7 @@ class ScChartObj : public ::comphelper::OBaseMutex
 private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;           // Charts are per sheet
-    String                  aChartName;
+    OUString                aChartName;
 
     void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
     void    GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
@@ -143,7 +143,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
 
 public:
-                            ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
+                            ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN);
     virtual                 ~ScChartObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

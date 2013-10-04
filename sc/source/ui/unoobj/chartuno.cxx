@@ -444,7 +444,7 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
 
 //------------------------------------------------------------------------
 
-ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN)
+ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
     :ScChartObj_Base( m_aMutex )
     ,ScChartObj_PBase( ScChartObj_Base::rBHelper )
     ,pDocShell( pDocSh )
