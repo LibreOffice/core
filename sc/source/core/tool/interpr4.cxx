@@ -4139,7 +4139,9 @@ StackVar ScInterpreter::Interpret()
                 case ocTrimMean         : ScTrimMean();                 break;
                 case ocProb             : ScProbability();              break;
                 case ocCorrel           : ScCorrel();                   break;
-                case ocCovar            : ScCovar();                    break;
+                case ocCovar            :
+                case ocCovarianceP      : ScCovarianceP();              break;
+                case ocCovarianceS      : ScCovarianceS();              break;
                 case ocPearson          : ScPearson();                  break;
                 case ocRSQ              : ScRSQ();                      break;
                 case ocSTEYX            : ScSTEXY();                    break;

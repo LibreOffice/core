@@ -2347,6 +2347,8 @@ void Test::testFunctionLists()
         "CHISQDIST",
         "CHISQINV",
         "CHITEST",
+        "COM.MICROSOFT.COVARIANCE.P",
+        "COM.MICROSOFT.COVARIANCE.S",
         "CONFIDENCE",
         "CORREL",
         "COUNT",
