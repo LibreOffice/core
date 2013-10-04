@@ -42,8 +42,9 @@ struct SC_DLLPUBLIC ScQueryEntry
         QueryType     meType;
         double        mfVal;
         OUString maString;
+        sal_uIntPtr mnStrId;
 
-        Item() : meType(ByValue), mfVal(0.0) {}
+        Item() : meType(ByValue), mfVal(0.0), mnStrId(0) {}
 
         bool operator== (const Item& r) const;
     };

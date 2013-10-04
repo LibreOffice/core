@@ -60,6 +60,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include "svl/stringpool.hxx"
 
 #include <stdlib.h>
 #include <string.h>
@@ -6448,6 +6449,43 @@ void ScInterpreter::ScHLookup()
     CalculateLookup(true);
 }
 
+namespace {
+
+#if 1
+bool isFilterByEqualString( const ScQueryParam& )
+{
+    return false;
+}
+#else
+bool isFilterByEqualString( const ScQueryParam& rParam )
+{
+    if (rParam.bRegExp)
+        // filter by regular expression.
+        return false;
+
+    if (!rParam.GetEntryCount())
+        // No entries.
+        return false;
+
+    const ScQueryEntry& rEntry = rParam.GetEntry(0);
+    if (rEntry.eOp != SC_EQUAL)
+        return false;
+
+    const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+    if (rItems.size() != 1)
+        // Multi-item query is not supported.
+        return false;
+
+    if (rItems[0].meType != ScQueryEntry::ByString)
+        // Not by string equality.
+        return false;
+
+    return true;
+}
+#endif
+
+}
+
 void ScInterpreter::CalculateLookup(bool bHLookup)
 {
     sal_uInt8 nParamCount = GetByte();
@@ -6684,9 +6722,18 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         }
         else
         {
-            ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam);
-            nRow = aResultPos.Row();
+            if (isFilterByEqualString(aParam))
+            {
+                nRow = nRow1;
+                bFound = true;
+            }
+            else
+            {
+                ScAddress aResultPos( nCol1, nRow1, nTab1);
+                bFound = LookupQueryWithCache( aResultPos, aParam);
+                nRow = aResultPos.Row();
+            }
+
             nCol = nSpIndex;
         }
 
@@ -6716,6 +6763,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             const OUString& sStr = GetString();
             rItem.meType = ScQueryEntry::ByString;
             rItem.maString = sStr;
+            rItem.mnStrId = pDok->GetCellStringPool().getIdentifierIgnoreCase(rItem.maString);
         }
         break;
         case svDoubleRef :
@@ -6740,6 +6788,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
                 GetCellString(aStr, aCell);
                 rItem.meType = ScQueryEntry::ByString;
                 rItem.maString = aStr;
+                rItem.mnStrId = pDok->GetCellStringPool().getIdentifierIgnoreCase(rItem.maString);
             }
         }
         break;
@@ -6748,6 +6797,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             OUString aStr;
             const ScMatValType nType = GetDoubleOrStringFromMatrix(rItem.mfVal, aStr);
             rItem.maString = aStr;
+            rItem.mnStrId = pDok->GetCellStringPool().getIdentifierIgnoreCase(rItem.maString);
             rItem.meType = ScMatrix::IsNonValueType(nType) ?
                 ScQueryEntry::ByString : ScQueryEntry::ByValue;
         }
