@@ -367,7 +367,6 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
                 addWindowListener( this );
             }
 
-            // PosSize_POSSIZE defined in <stardiv/uno/awt/window.hxx>
             m_xPeerWindow->setPosSize(  m_nX, m_nY, m_nWidth, m_nHeight, PosSize::POSSIZE   );
             m_xPeerWindow->setEnable(   m_bEnable                                           );
             m_xPeerWindow->setVisible(  m_bVisible && !m_bInDesignMode                      );
@@ -461,7 +460,6 @@ void SAL_CALL BaseControl::setPosSize(  sal_Int32   nX      ,
                                         sal_Int16   nFlags  ) throw( RuntimeException )
 {
     // - change size and position of window and save the values
-    // - "nFlags" declared in <stardiv/uno/awt/window.hxx> ("#define PosSize_X .....")
 
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );

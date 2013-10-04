@@ -24,14 +24,11 @@
 #include <smart/com/sun/star/io/XActiveDataSource.hxx>
 #include <smart/com/sun/star/io/XConnectable.hxx>
 #include <smart/com/sun/star/io/XMarkableStream.hxx>
-
 #include <smart/com/sun/star/lang/XServiceInfo.hxx>
-
 #include <smart/com/sun/star/beans/XPropertySet.hxx>
 
 #include <usr/services.hxx>
 #include <usr/factoryhlp.hxx>
-
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 #include <usr/weak.hxx>      // OWeakObject
 
@@ -47,14 +44,12 @@ using namespace usr;
 
 #define DATASTREAM_TEST_MAX_HANDLE 1
 
-/****
-* The following test class tests XDataInputStream and XDataOutputStream at equal terms,
-* so when errors occur, it may be in either one implementation.
-* The class also  uses stardiv.uno.io.pipe. If problems occur, make sure to run also the
-* pipe test routines ( test.com.sun.star.io.pipe ).
-*
-*
-*****/
+/*
+ * The following test class tests XDataInputStream and XDataOutputStream at equal terms,
+ * so when errors occur, it may be in either one implementation.
+ * The class also  uses com.sun.star.io.Pipe. If problems occur, make sure to run also the
+ * pipe test routines ( test.com.sun.star.io.Pipe ).
+ */
 
 class ODataStreamTest :
         public XSimpleTest,

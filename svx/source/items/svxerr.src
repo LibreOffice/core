@@ -91,11 +91,11 @@ Resource RID_SVXERRCODE
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The form layer wasn't loaded as the required IO-services (stardiv.uno.io.*) could not be instantiated.";
+        Text [ en-US ] = "The form layer wasn't loaded as the required IO-services (com.sun.star.io.*) could not be instantiated.";
     };
     String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "The form layer wasn't written as the required IO services (stardiv.uno.io.*) could not be instantiated.";
+        Text [ en-US ] = "The form layer wasn't written as the required IO services (com.sun.star.io.*) could not be instantiated.";
     };
     String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
     {

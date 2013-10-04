@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <stdio.h>
 
 #include <com/sun/star/test/XSimpleTest.hpp>
@@ -29,13 +28,10 @@
 #include <com/sun/star/io/XConnectable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/factory.hxx>
-
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
@@ -58,14 +54,12 @@ using namespace ::com::sun::star::beans;
 
 #define DATASTREAM_TEST_MAX_HANDLE 1
 
-/****
-* The following test class tests XDataInputStream and XDataOutputStream at equal terms,
-* so when errors occur, it may be in either one implementation.
-* The class also  uses stardiv.uno.io.pipe. If problems occur, make sure to run also the
-* pipe test routines ( test.com.sun.star.io.pipe ).
-*
-*
-*****/
+/*
+ * The following test class tests XDataInputStream and XDataOutputStream at equal terms,
+ * so when errors occur, it may be in either one implementation.
+ * The class also  uses com.sun.star.io.pipe. If problems occur, make sure to run also the
+ * pipe test routines ( test.com.sun.star.io.pipe ).
+ */
 
 class ODataStreamTest :
         public WeakImplHelper1< XSimpleTest >
