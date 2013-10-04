@@ -727,6 +727,29 @@ static const FunctionData saFuncTableOox[] =
     { "AVERAGEIFS",             "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS }
 };
 
+/** Functions new in Excel 2010.
+
+    A lot of statistical functions have been renamed (although the 'old' function name still is valid).
+    See http://office.microsoft.com/en-us/excel-help/what-s-new-changes-made-to-excel-functions-HA010355760.aspx
+
+    Functions with FUNCFLAG_IMPORTONLY are rewritten in
+    sc/source/filter/excel/xeformula.cxx during export for
+    BIFF, OOXML export uses this different mapping here but still uses the
+    mapping there to determine the feature set.
+
+    FIXME: either have the exporter determine the feature set from the active
+    mapping, preferred, or enhance that mapping there such that for OOXML the
+    rewrite can be overridden.
+
+    @See sc/source/filter/excel/xlformula.cxx saFuncTable_2010
+ */
+/* FIXME: BIFF12 function identifiers available? Where to obtain? */
+static const FunctionData saFuncTable2010[] =
+{
+    { "COM.MICROSOFT.COVARIANCE.P",           "COVARIANCE.P",        NOID,    NOID,   2,  2,  V, { VA }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.COVARIANCE.S",           "COVARIANCE.S",        NOID,    NOID,   2,  2,  V, { VA }, FUNCFLAG_MACROCALL_NEW }
+};
+
 /** Functions new in Excel 2013.
 
     See http://office.microsoft.com/en-us/excel-help/new-functions-in-excel-2013-HA103980604.aspx
@@ -957,6 +980,7 @@ FunctionProviderImpl::FunctionProviderImpl( FilterType eFilter, BiffType eBiff, 
     if( eBiff >= BIFF8 )
         initFuncs( saFuncTableBiff8, STATIC_ARRAY_END( saFuncTableBiff8 ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTableOox, STATIC_ARRAY_END( saFuncTableOox ), nMaxParam, bImportFilter, eFilter );
+    initFuncs( saFuncTable2010, STATIC_ARRAY_END( saFuncTable2010 ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTable2013, STATIC_ARRAY_END( saFuncTable2013 ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTableOdf, STATIC_ARRAY_END( saFuncTableOdf ), nMaxParam, bImportFilter, eFilter );
     initFuncs( saFuncTableOOoLO, STATIC_ARRAY_END( saFuncTableOOoLO ), nMaxParam, bImportFilter, eFilter );
