@@ -370,7 +370,11 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocAverageIfs,         NOID,   3,  MX, V, { RO, RO, VR }, EXC_FUNCFLAG_IMPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
     { ocAverageIfs,         255,    4,  MX, V, { RO_E, RO, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
     { ocIfError,            NOID,   2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
-    { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) }
+    { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
+    { ocCovarP,             NOID,   2,  2,  V, { VA }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "COVARIANCE.P" ) },
+    { ocCovarP,             255,    2,  2,  V, { VA }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "COVARIANCE.P" ) },
+    { ocCovarS,             NOID,   2,  2,  V, { VA }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "COVARIANCE.S" ) },
+    { ocCovarS,             255,    2,  2,  V, { VA }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "COVARIANCE.S" ) }
 };
 
 
