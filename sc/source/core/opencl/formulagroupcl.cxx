@@ -39,8 +39,8 @@ public:
 /// by a Push operation in the given RPN.
 class DynamicKernelArgument {
 public:
-    DynamicKernelArgument(const std::string &s, FormulaToken *ft, OpCode):
-        mSymName(s), mFormulaRef(ft), mpClmem(NULL) {}
+    DynamicKernelArgument(const std::string &s, FormulaTreeNode *ft):
+        mSymName(s), mFormulaTree(ft), mpClmem(NULL) {}
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss)
@@ -65,7 +65,7 @@ public:
     }
 protected:
     const std::string mSymName;
-    const FormulaToken *mFormulaRef;
+    FormulaTreeNode *mFormulaTree;
     // Used by marshaling
     cl_mem mpClmem;
 };
@@ -73,10 +73,11 @@ protected:
 /// Map the buffer used by an argument and do necessary argument setting
 void DynamicKernelArgument::Marshal(cl_kernel k, int argno)
 {
+    FormulaToken *ref = mFormulaTree->CurrentFormula;
     assert(mpClmem == NULL);
-    assert(mFormulaRef->GetType() == formula::svSingleVectorRef);
+    assert(ref->GetType() == formula::svSingleVectorRef);
     const formula::SingleVectorRefToken* pSVR =
-        dynamic_cast< const formula::SingleVectorRefToken* >(mFormulaRef);
+        dynamic_cast< const formula::SingleVectorRefToken* >(ref);
     assert(pSVR);
     double *pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
     size_t szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
@@ -102,8 +103,8 @@ void DynamicKernelArgument::Marshal(cl_kernel k, int argno)
 class DynamicKernelReducedArgument: public DynamicKernelArgument
 {
 public:
-    DynamicKernelReducedArgument(const std::string &s, FormulaToken *ft,
-        OpCode op): DynamicKernelArgument(s, ft, op), mOpCode(op) {}
+    DynamicKernelReducedArgument(const std::string &s, FormulaTreeNode *ft):
+        DynamicKernelArgument(s, ft) {}
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss)
     {
@@ -116,20 +117,31 @@ public:
     }
     /// Create buffer and pass the buffer to a given kernel
     virtual void Marshal(cl_kernel, int);
-private:
-    OpCode mOpCode;
 };
 
 void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno)
 {
-    const formula::DoubleVectorRefToken* pDVR =
-        dynamic_cast< const formula::DoubleVectorRefToken* >(mFormulaRef);
-    assert(pDVR);
+    FormulaToken *ref = mFormulaTree->CurrentFormula;
+    // May have variable arguments..Not handling them now
+    assert(mFormulaTree->Children.size() == ref->GetByte());
+    // TODO: implement the following rationale here:
+    // if the argument of this reduce operation contains only
+    // fixed ranges, then each range is calculated by another
+    // kernel and will have only one reduction per
+    // range per vector
+    if (ref->GetByte() > 1)
+        return; // FIXME Not supporting more than one range for now
+    FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
+    assert(pChild);
+    const formula::DoubleVectorRefToken* pChildDVR =
+        dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
+    assert(pChildDVR);
     // Pass that ..
-    double *pHostBuffer = const_cast<double*>(pDVR->GetArrays()[0].mpNumericArray);
-    size_t nHostBuffer = pDVR->GetArrayLength();
+    double *pHostBuffer = const_cast<double*>(
+        pChildDVR->GetArrays()[0].mpNumericArray);
+    size_t nHostBuffer = pChildDVR->GetArrayLength();
 #if 0
-    std::cerr << "Marshal a Single vector of size " << pDVR->GetArrayLength();
+    std::cerr << "Marshal a Single vector of size " << pChildDVR->GetArrayLength();
     std::cerr << " at argument "<< argno << "\n";
 #endif
     // Obtain cl context
@@ -138,9 +150,10 @@ void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno)
     cl_int err;
     // TODO either call an OpenCL reduce kerenl or use Bolt (preferred)
     // This is a CPU quick hack just to show it works. But can be REALLY slow!!
+    int opc = ref->GetOpCode();
     double cur_top = pHostBuffer[0];
-    for (int i = 1; i < nHostBuffer; i++) {
-        switch(mOpCode)
+    for (unsigned int i = 1; i < nHostBuffer; i++) {
+        switch(opc)
         {
             case ocMin:
                 cur_top = fmin(cur_top, pHostBuffer[i]);
@@ -155,7 +168,7 @@ void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno)
                 assert(0);
         }
     }
-    if (mOpCode == ocAverage)
+    if (opc == ocAverage)
         cur_top /= nHostBuffer;
     // Pass the scalar result back to the rest of the formula kernel
     err = clSetKernelArg(k, argno, sizeof(double), (void*)&cur_top);
@@ -171,7 +184,7 @@ public:
     typedef std::list< std::shared_ptr<DynamicKernelArgument> > ArgumentList;
     SymbolTable(void):mCurId(0) {}
     template <class T>
-    const DynamicKernelArgument *DeclRefArg(FormulaToken *, OpCode);
+    const DynamicKernelArgument *DeclRefArg(FormulaTreeNode *);
     /// Used to generate declartion in the kernel declaration
     void DumpParamDecls(std::stringstream &ss)
     {
@@ -317,17 +330,16 @@ DynamicKernel::~DynamicKernel()
 // kernel with argument with unique name and return so.
 // The template argument T must be a subclass of DynamicKernelArgument
 template <typename T>
-const DynamicKernelArgument *SymbolTable::DeclRefArg(FormulaToken *ref,
-    OpCode op)
+const DynamicKernelArgument *SymbolTable::DeclRefArg(FormulaTreeNode *t)
 {
+    FormulaToken *ref = t->CurrentFormula;
     ArgumentMap::iterator it = mSymbols.find(ref);
     if (it == mSymbols.end()) {
         // Allocate new symbols
         std::cerr << "DeclRefArg: Allocate a new symbol:";
         std::stringstream ss;
         ss << "tmp"<< mCurId++;
-        std::shared_ptr<DynamicKernelArgument> new_arg(
-            new T(ss.str(), ref, op));
+        std::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t));
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
         std::cerr << ss.str() <<"\n";
@@ -390,7 +402,7 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                     std::cerr << "a Single vector of size ";
                     std::cerr << pSVR->GetArrayLength() << "\n";
 #endif
-                    mSyms.DeclRefArg<DynamicKernelArgument>(p, p->GetOpCode())
+                    mSyms.DeclRefArg<DynamicKernelArgument>(cur)
                         ->GenDeclRef(mKernelSrc);
                     break;
                 }
@@ -415,10 +427,12 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
         // Operator
         switch (p->GetOpCode())
         {
+            // FIXME: merge all binary operators..
             case ocMul:
-                TraverseAST(cur->Children[0]);
-                mKernelSrc << "*";
+            case ocDiv:
                 TraverseAST(cur->Children[1]);
+                mKernelSrc << (p->GetOpCode() == ocMul?"*":"/");
+                TraverseAST(cur->Children[0]);
                 return;
             case ocAdd:
             case ocSub:
@@ -432,31 +446,8 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
             case ocMin:
             case ocMax:
             case ocAverage:
-                {
-                    // May have variable arguments..Not handling them now
-                    assert(cur->Children.size() == p->GetByte());
-                    // Rationale here: if the argument contains only
-                    // fixed ranges, then each range is calculated by another
-                    // kernel and will have only one reduction per
-                    // range per vector
-                    mKernelSrc << "/*Reduction*/";
-                    if (p->GetByte() > 1)
-                        return; // FIXME Not supporting more than one range for now
-                    FormulaToken *pChild = cur->Children[0]->CurrentFormula;
-                    assert(pChild);
-                    const formula::DoubleVectorRefToken* pChildDVR =
-                        dynamic_cast<const formula::DoubleVectorRefToken *>(
-                        pChild);
-                    assert(pChildDVR);
-                    if (pChildDVR)
-                    {
-                        // std::cerr << "a Dobule vector of size ";
-                        // std::cerr << pChildDVR->GetArrayLength() << "\n";
-                        mSyms.DeclRefArg<DynamicKernelReducedArgument>(pChild,
-                            p->GetOpCode())->GenDeclRef(mKernelSrc);
-                    }
-                    break;
-                }
+                mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
+                    ->GenDeclRef(mKernelSrc);
                 return;
             default:
                 std::cerr << " /* UnknownOperator(" << p->GetOpCode() << ") */";
