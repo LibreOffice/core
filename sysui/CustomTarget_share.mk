@@ -23,7 +23,6 @@ else ifeq ($(ENABLE_KDE4),TRUE)
 else
 	brand_URIPARAM :=
 endif
-endif
 
 share_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/share)
 share_SRCDIR := $(SRCDIR)/sysui/desktop
