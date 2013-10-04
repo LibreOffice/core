@@ -166,6 +166,7 @@ public:
     void testFdo44715();
     void testFdo68076();
     void testFdo68291();
+    void testFdo69384();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -317,6 +318,7 @@ void Test::run()
         {"fdo44715.rtf", &Test::testFdo44715},
         {"fdo68076.rtf", &Test::testFdo68076},
         {"fdo68291.odt", &Test::testFdo68291},
+        {"hello.rtf", &Test::testFdo69384},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1523,6 +1525,18 @@ void Test::testFdo68291()
 
     // This was "Standard", causing an unwanted page break on next paste.
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "PageDescName"));
+}
+
+void Test::testFdo69384()
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo69384-paste.rtf", xEnd);
+
+    // Import got interrupted in the middle of style sheet table import,
+    // resuling in missing styles and text.
+    getStyles("ParagraphStyles")->getByName("Text body justified");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

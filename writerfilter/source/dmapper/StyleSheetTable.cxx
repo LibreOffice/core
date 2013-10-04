@@ -725,9 +725,16 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     uno::Reference< style::XStyle > xStyle;
                     OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
 
-                    // When pasting, don't update existing styles.
-                    if(xStyles->hasByName( sConvertedStyleName ) && m_pImpl->m_bIsNewDoc)
+                    if(xStyles->hasByName( sConvertedStyleName ))
+                    {
+                        // When pasting, don't update existing styles.
+                        if (!m_pImpl->m_bIsNewDoc)
+                        {
+                            ++aIt;
+                            continue;
+                        }
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
+                    }
                     else
                     {
                         bInsert = true;
