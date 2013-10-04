@@ -40,6 +40,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <vcl/svapp.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <swmodeltestbase.hxx>
 #include <bordertest.hxx>
@@ -140,6 +141,7 @@ public:
     void testBnc779620();
     void testFdo43093();
     void testMultiColumnSeparator();
+    void testSmartart();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -244,12 +246,17 @@ void Test::run()
         {"bnc779620.docx", &Test::testBnc779620},
         {"fdo43093.docx", &Test::testFdo43093},
         {"multi-column-separator-with-line.docx", &Test::testMultiColumnSeparator},
+        {"smartart.docx", &Test::testSmartart},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
         MethodEntry<Test>& rEntry = aMethods[i];
+        if (OString(rEntry.pName) == "smartart.docx")
+            SvtFilterOptions::Get().SetSmartArt2Shape(sal_True);
         load("/sw/qa/extras/ooxmlimport/data/",  rEntry.pName);
+        if (OString(rEntry.pName) == "smartart.docx")
+            SvtFilterOptions::Get().SetSmartArt2Shape(sal_False);
         (this->*rEntry.pMethod)();
         finish();
     }
@@ -1594,8 +1601,8 @@ void Test::testChartProp()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(15236), getProperty<sal_Int32>(xPropertySet, "Width"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8886), getProperty<sal_Int32>(xPropertySet, "Height"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15240), getProperty<sal_Int32>(xPropertySet, "Width"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8890), getProperty<sal_Int32>(xPropertySet, "Height"));
 }
 
 void Test::testBnc779620()
@@ -1639,6 +1646,31 @@ void Test::testFdo43093()
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLLDir);
 }
 
+void Test::testSmartart()
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount()); // One groupshape in the doc
+
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xGroup->getCount()); // 3 rectangles and an arrow in the group
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(1), uno::UNO_QUERY);
+    sal_Int32 nValue(0);
+    xPropertySet->getPropertyValue("FillColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), nValue); // If fill color is right, theme import is OK
+
+    uno::Reference<text::XTextRange> xTextRange(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sample"), xTextRange->getString()); // Shape has text
+
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextRange->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    xPropertySet->getPropertyValue("ParaAdjust") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), nValue); // Paragraph properties are imported
+}
 
 void Test::testMultiColumnSeparator()
 {
