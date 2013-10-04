@@ -309,6 +309,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_PROB { Text = "PROB" ; };
     String SC_OPCODE_CORREL { Text = "CORREL" ; };
     String SC_OPCODE_COVAR { Text = "COVAR" ; };
+    String SC_OPCODE_COVARIANCE_P { Text = "COM.MICROSOFT.COVARIANCE.P" ; };
+    String SC_OPCODE_COVARIANCE_S { Text = "COM.MICROSOFT.COVARIANCE.S" ; };
     String SC_OPCODE_PEARSON { Text = "PEARSON" ; };
     String SC_OPCODE_RSQ { Text = "RSQ" ; };
     String SC_OPCODE_STEYX { Text = "STEYX" ; };
@@ -657,6 +659,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_PROB { Text = "PROB" ; };
     String SC_OPCODE_CORREL { Text = "CORREL" ; };
     String SC_OPCODE_COVAR { Text = "COVAR" ; };
+    String SC_OPCODE_COVARIANCE_P { Text = "COVARIANCE.P" ; };
+    String SC_OPCODE_COVARIANCE_S { Text = "COVARIANCE.S" ; };
     String SC_OPCODE_PEARSON { Text = "PEARSON" ; };
     String SC_OPCODE_RSQ { Text = "RSQ" ; };
     String SC_OPCODE_STEYX { Text = "STEYX" ; };
@@ -1787,6 +1791,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_COVAR
     {
         Text [ en-US ] = "COVAR" ;
+    };
+    String SC_OPCODE_COVARIANCE_P
+    {
+        Text [ en-US ] = "COVARIANCE.P" ;
+    };
+    String SC_OPCODE_COVARIANCE_S
+    {
+        Text [ en-US ] = "COVARIANCE.S" ;
     };
     String SC_OPCODE_PEARSON
     {

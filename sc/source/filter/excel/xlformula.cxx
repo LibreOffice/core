@@ -394,6 +394,23 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { opcode, NOID, minparam,     MX,           V, { RX },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
     { opcode,  255, (minparam)+1, MX,           V, { RO_E, RX }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
 
+#define EXC_FUNCENTRY_V_VA( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { VA },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
+    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
+/** Functions new in Excel 2010.
+
+    See http://office.microsoft.com/en-us/excel-help/what-s-new-changes-made-to-excel-functions-HA010355760.aspx
+    A lot of statistical functions have been renamed (the 'old' function names still exist).
+
+    @See sc/source/filter/oox/formulabase.cxx saFuncTable2010 for V,VR,RO,...
+ */
+static const XclFunctionInfo saFuncTable_2010[] =
+{
+    EXC_FUNCENTRY_V_VA(         ocCovarianceP,   2,  2,  0,  "COVARIANCE.P" ),
+    EXC_FUNCENTRY_V_VA(         ocCovarianceS,   2,  2,  0,  "COVARIANCE.S" )
+};
+
 /** Functions new in Excel 2013.
 
     See http://office.microsoft.com/en-us/excel-help/new-functions-in-excel-2013-HA103980604.aspx
@@ -505,6 +522,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
     if( eBiff >= EXC_BIFF8 )
         (this->*pFillFunc)( saFuncTable_8, STATIC_ARRAY_END( saFuncTable_8 ) );
     (this->*pFillFunc)( saFuncTable_Oox, STATIC_ARRAY_END( saFuncTable_Oox ) );
+    (this->*pFillFunc)( saFuncTable_2010, STATIC_ARRAY_END( saFuncTable_2010 ) );
     (this->*pFillFunc)( saFuncTable_2013, STATIC_ARRAY_END( saFuncTable_2013 ) );
     (this->*pFillFunc)( saFuncTable_Odf, STATIC_ARRAY_END( saFuncTable_Odf ) );
 }
