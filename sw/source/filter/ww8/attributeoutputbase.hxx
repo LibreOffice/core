@@ -104,6 +104,7 @@ class SwTextGridItem;
 class SwFmtLineNumber;
 class SvxFrameDirectionItem;
 class SfxGrabBagItem;
+class SfxUInt16Item;
 class SwFmtRuby;
 class SwTxtNode;
 class SwTOXMark;
@@ -573,6 +574,9 @@ protected:
 
     /// Sfx item RES_PARATR_GRABBAG
     virtual void ParaGrabBag( const SfxGrabBagItem& ) = 0;
+
+    /// Sfx item RES_PARATR_OUTLINELEVEL
+    virtual void ParaOutlineLevel( const SfxUInt16Item& ) = 0;
 
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld ) = 0;

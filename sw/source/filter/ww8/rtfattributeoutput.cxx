@@ -3123,6 +3123,10 @@ void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& /*rItem*/)
 {
 }
 
+void RtfAttributeOutput::ParaOutlineLevel(const SfxUInt16Item& /*rItem*/)
+{
+}
+
 void RtfAttributeOutput::WriteExpand( const SwField* pFld )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);

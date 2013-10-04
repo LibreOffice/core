@@ -3366,14 +3366,25 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
     }
 }
 
+void lcl_OutlineLevel(sax_fastparser::FSHelperPtr pSerializer, sal_uInt16 nLevel)
+{
+    if (nLevel >= WW8ListManager::nMaxLevel)
+        nLevel = WW8ListManager::nMaxLevel - 1;
+
+    pSerializer->singleElementNS(XML_w, XML_outlineLvl,
+            FSNS(XML_w, XML_val), OString::number(nLevel).getStr(),
+            FSEND);
+}
+
 void DocxAttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt& /*rNFmt*/, const SwFmt& /*rFmt*/ )
 {
-    if ( nLvl >= WW8ListManager::nMaxLevel )
-        nLvl = WW8ListManager::nMaxLevel - 1;
+    lcl_OutlineLevel(m_pSerializer, nLvl);
+}
 
-    m_pSerializer->singleElementNS( XML_w, XML_outlineLvl,
-            FSNS( XML_w, XML_val ), OString::number( nLvl ).getStr( ),
-            FSEND );
+void DocxAttributeOutput::ParaOutlineLevel(const SfxUInt16Item& rItem)
+{
+    if (rItem.GetValue() > 0)
+        lcl_OutlineLevel(m_pSerializer, rItem.GetValue() - 1);
 }
 
 void DocxAttributeOutput::PageBreakBefore( bool bBreak )

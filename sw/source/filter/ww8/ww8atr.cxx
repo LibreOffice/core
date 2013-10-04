@@ -4714,6 +4714,10 @@ void WW8AttributeOutput::ParaGrabBag(const SfxGrabBagItem& /*rItem*/)
 {
 }
 
+void WW8AttributeOutput::ParaOutlineLevel(const SfxUInt16Item& /*rItem*/)
+{
+}
+
 // "Separate paragraphs"
 void WW8AttributeOutput::ParaSplit( const SvxFmtSplitItem& rSplit )
 {
@@ -5256,6 +5260,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_PARATR_GRABBAG:
             ParaGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
+            break;
+        case RES_PARATR_OUTLINELEVEL:
+            ParaOutlineLevel(static_cast<const SfxUInt16Item&>(rHt));
             break;
 
         default:
