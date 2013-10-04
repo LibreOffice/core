@@ -1427,11 +1427,11 @@ void ScColumn::StartListeningInArea( sc::StartListeningContext& rCxt, SCROW nRow
 }
 
 bool ScColumn::ParseString(
-    ScCellValue& rCell, SCROW nRow, SCTAB nTabP, const String& rString,
+    ScCellValue& rCell, SCROW nRow, SCTAB nTabP, const OUString& rString,
     formula::FormulaGrammar::AddressConvention eConv,
     ScSetStringParam* pParam )
 {
-    if (!rString.Len())
+    if (rString.isEmpty())
         return false;
 
     bool bNumFmtSet = false;
@@ -1448,15 +1448,15 @@ bool ScColumn::ParseString(
         aParam.mpNumFormatter = pDocument->GetFormatTable();
 
     nIndex = nOldIndex = GetNumberFormat( nRow );
-    if ( rString.Len() > 1
+    if ( rString.getLength() > 1
             && aParam.mpNumFormatter->GetType(nIndex) != NUMBERFORMAT_TEXT )
-        cFirstChar = rString.GetChar(0);
+        cFirstChar = rString[0];
     else
         cFirstChar = 0; // Text
 
     if ( cFirstChar == '=' )
     {
-        if ( rString.Len() == 1 ) // = Text
+        if ( rString.getLength() == 1 ) // = Text
             rCell.set(rString);
         else // = Formula
             rCell.set(
@@ -1472,7 +1472,7 @@ bool ScColumn::ParseString(
         {
             // Cell format is not 'Text', and the first char
             // is an apostrophe. Check if the input is considered a number.
-            String aTest = rString.Copy(1);
+            OUString aTest = rString.copy(1);
             double fTest;
             bNumeric = aParam.mpNumFormatter->IsNumberFormat(aTest, nIndex, fTest);
             if (bNumeric)
@@ -1583,7 +1583,7 @@ bool ScColumn::ParseString(
 /**
  * Returns true if the cell format was set as well
  */
-bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
+bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
                           formula::FormulaGrammar::AddressConvention eConv,
                           ScSetStringParam* pParam )
 {
