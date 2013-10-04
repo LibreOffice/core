@@ -1402,6 +1402,10 @@ void Test::testStyleInheritance()
     assertXPath(pXmlStyles, "/w:styles/w:style[2]", "styleId", "Heading1");
     // w:ind was copied from the parent (Normal) style without a good reason.
     assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:pPr/w:ind", 0);
+
+    // Check that we output real content of rPrDefault
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "ascii", "Times New Roman");
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang", "bidi", "ar-SA");
 }
 
 void Test::testSmartart()
