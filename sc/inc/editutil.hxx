@@ -167,10 +167,10 @@ public:
                     /// Overwritten method to be able to apply defaults already set
     void            SetText( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
-    void            SetTextNewDefaults( const String& rText,
+    void            SetTextNewDefaults( const OUString& rText,
                         const SfxItemSet& rDefaults, sal_Bool bRememberCopy = sal_True );
                     /// Current defaults are not applied, new defaults are applied
-    void            SetTextNewDefaults( const String& rText,
+    void            SetTextNewDefaults( const OUString& rText,
                         SfxItemSet* pDefaults, sal_Bool bTakeOwnership = sal_True );
 
                     /// Paragraph attributes that are not defaults are copied to
@@ -198,10 +198,10 @@ public:
 
 struct ScHeaderFieldData
 {
-    String      aTitle;             // title or file name (if no title)
-    String      aLongDocName;       // path and file name
-    String      aShortDocName;      // pure file name
-    String      aTabName;
+    OUString    aTitle;             // title or file name (if no title)
+    OUString    aLongDocName;       // path and file name
+    OUString    aShortDocName;      // pure file name
+    OUString    aTabName;
     Date        aDate;
     Time        aTime;
     long        nPageNo;

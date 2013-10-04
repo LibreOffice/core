@@ -1792,7 +1792,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
 
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
-    if ( rData.aLongDocName.Len() )
+    if ( !rData.aLongDocName.isEmpty() )
         rData.aShortDocName = rURLObj.GetName( INetURLObject::DECODE_UNAMBIGUOUS );
     else
         rData.aShortDocName = rData.aLongDocName = rData.aTitle;

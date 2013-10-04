@@ -1033,7 +1033,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
-    if ( aFieldData.aLongDocName.Len() )
+    if ( !aFieldData.aLongDocName.isEmpty() )
         aFieldData.aShortDocName = rURLObj.GetName( INetURLObject::DECODE_UNAMBIGUOUS );
     else
         aFieldData.aShortDocName = aFieldData.aLongDocName = aFieldData.aTitle;

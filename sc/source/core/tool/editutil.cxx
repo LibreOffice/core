@@ -587,7 +587,7 @@ void ScEditEngineDefaulter::SetText( const OUString& rText )
         SetUpdateMode( sal_True );
 }
 
-void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
+void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
             const SfxItemSet& rSet, sal_Bool bRememberCopy )
 {
     sal_Bool bUpdateMode = GetUpdateMode();
@@ -599,7 +599,7 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
         SetUpdateMode( sal_True );
 }
 
-void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
+void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
             SfxItemSet* pSet, sal_Bool bTakeOwnership )
 {
     sal_Bool bUpdateMode = GetUpdateMode();
