@@ -7251,3 +7251,28 @@ SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
+
+//--------------------------------------------------------------------------
+SfxVoidItem PresentationMinimizer SID_PRESENTATION_MINIMIZER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]

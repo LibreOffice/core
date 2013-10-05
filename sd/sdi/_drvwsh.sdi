@@ -2739,4 +2739,8 @@ interface DrawView
         ExecMethod = ExecutePropPanelAttr ;
         StateMethod = GetStatePropPanelAttr ;
     ]
+    SID_PRESENTATION_MINIMIZER
+    [
+        ExecMethod = FuTemporary ;
+    ]
 }

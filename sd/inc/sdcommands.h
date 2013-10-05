@@ -118,6 +118,7 @@
 #define CMD_SID_TP_EDIT_MASTER                      ".uno:TaskPaneEditMaster"
 #define CMD_SID_INSERTPAGE_LAYOUT_MENU              ".uno:TaskPaneInsertPage"
 #define CMD_SID_PHOTOALBUM                          ".uno:PhotoAlbumDialog"
+#define CMD_SID_PRESENTATION_MINIMIZER              ".uno:PresentationMinimizer"
 
 #endif
 
