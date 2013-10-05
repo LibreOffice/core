@@ -186,12 +186,6 @@ interface SlideSorterView
         ExecMethod = ExecStatusBar ;
         StateMethod = GetStatusBarState ;
     ]
-    SID_ATTR_ZOOMSLIDER // status()
-    [
-        ExecMethod = ExecStatusBar ;
-        StateMethod = GetStatusBarState ;
-    ]
-
     SID_RELOAD // ole : no, status : ?
     [
         GroupId = GID_DOCUMENT ;
