@@ -870,12 +870,13 @@ uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const Stri
 */
 SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             const uno::Reference< embed::XStorage >& _refPics,
-            String& _aStrmName ) const
+            const String& rStrmName ) const
 {
     SvStream* pStrm( 0L );
 
-    if( _refPics.is() && _aStrmName.Len() )
+    if( _refPics.is() && rStrmName.Len() )
     {
+        String _aStrmName(rStrmName);
         // If stream doesn't exist in the storage, try access the graphic file by
         // re-generating its name.
         // A save action can have changed the filename of the embedded graphic,

@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
         input parameter - reference to storage, which should contain the
         embedded graphic stream.
 
-        @param _aStrmName
+        @param rStrmName
         input parameter - proposed name of the embedded graphic stream.
 
         @return SvStream*
@@ -104,7 +104,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     */
     SvStream* _GetStreamForEmbedGrf(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _refPics,
-            String& _aStrmName ) const;
+            const String& rStrmName ) const;
 
     /** helper method to get a substorage of the document storage for readonly access.
 
