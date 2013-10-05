@@ -2124,7 +2124,6 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
 
 static bool lcl_GetTokenToParaBreak( OUString& rStr, OUString& rRet, bool bRegExpRplc )
 {
-    bool bRet = false;
     if( bRegExpRplc )
     {
         sal_Int32 nPos = 0;
@@ -2139,24 +2138,23 @@ static bool lcl_GetTokenToParaBreak( OUString& rStr, OUString& rRet, bool bRegEx
             // Has this been escaped?
             if( nPos && '\\' == rStr[nPos-1])
             {
-                if( ++nPos >= rStr.getLength() )
+                nPos += sPara.getLength();
+                if( nPos >= rStr.getLength() )
+                {
                     break;
+                }
             }
             else
             {
                 rRet = rStr.copy( 0, nPos );
                 rStr = rStr.copy( nPos + sPara.getLength() );
-                bRet = true;
-                break;
+                return true;
             }
         }
     }
-    if( !bRet )
-    {
-        rRet = rStr;
-        rStr = OUString();
-    }
-    return bRet;
+    rRet = rStr;
+    rStr = OUString();
+    return false;
 }
 
 bool SwDoc::ReplaceRange( SwPaM& rPam, const OUString& rStr,
