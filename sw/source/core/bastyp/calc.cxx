@@ -646,7 +646,7 @@ SwCalcOper SwCalc::GetToken()
     {
 #endif
 
-    if( nCommandPos >= sCommand.Len() )
+    if( nCommandPos >= sCommand.getLength() )
         return eCurrOper = CALC_ENDCALC;
 
     using namespace ::com::sun::star::i18n;
@@ -666,8 +666,8 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::IDENTNAME )
         {
-            String aName( sCommand.Copy( nRealStt,
-                            static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
+            String aName( sCommand.copy( nRealStt,
+                            aRes.EndPos - nRealStt ) );
             //#101436#: The variable may contain a database name. It must not be
             // converted to lower case! Instead all further comparisons must be
             // done case-insensitive
@@ -716,8 +716,8 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::ONE_SINGLE_CHAR )
         {
-            String aName( sCommand.Copy( nRealStt,
-                              static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
+            String aName( sCommand.copy( nRealStt,
+                              aRes.EndPos - nRealStt ));
             if( 1 == aName.Len() )
             {
                 bSetError = false;
@@ -755,8 +755,8 @@ SwCalcOper SwCalc::GetToken()
                         else
                             eCurrOper = CALC_NOT, eTmp2 = CALC_NEQ;
 
-                        if( aRes.EndPos < sCommand.Len() &&
-                            '=' == sCommand.GetChar( (xub_StrLen)aRes.EndPos ) )
+                        if( aRes.EndPos < sCommand.getLength() &&
+                            '=' == sCommand[aRes.EndPos] )
                         {
                             eCurrOper = eTmp2;
                             ++aRes.EndPos;
@@ -769,32 +769,32 @@ SwCalcOper SwCalc::GetToken()
                     break;
 
                 case '[':
-                    if( aRes.EndPos < sCommand.Len() )
+                    if( aRes.EndPos < sCommand.getLength() )
                     {
                         aVarName.Erase();
-                        xub_StrLen nFndPos = (xub_StrLen)aRes.EndPos,
+                        sal_Int32 nFndPos = aRes.EndPos,
                                              nSttPos = nFndPos;
 
                         do {
-                            if( STRING_NOTFOUND != ( nFndPos =
-                                sCommand.Search( ']', nFndPos )) )
+                            if( -1 != ( nFndPos =
+                                sCommand.indexOf( ']', nFndPos )) )
                             {
                                 // ignore the ]
-                                if( '\\' == sCommand.GetChar(nFndPos-1))
+                                if ('\\' == sCommand[nFndPos-1])
                                 {
-                                    aVarName += sCommand.Copy( nSttPos,
+                                    aVarName += sCommand.copy( nSttPos,
                                                     nFndPos - nSttPos - 1 );
                                     nSttPos = ++nFndPos;
                                 }
                                 else
                                     break;
                             }
-                        } while( STRING_NOTFOUND != nFndPos );
+                        } while( nFndPos != -1 );
 
-                        if( STRING_NOTFOUND != nFndPos )
+                        if( nFndPos != -1 )
                         {
                             if( nSttPos != nFndPos )
-                                aVarName += sCommand.Copy( nSttPos,
+                                aVarName += sCommand.copy( nSttPos,
                                                     nFndPos - nSttPos );
                             aRes.EndPos = nFndPos + 1;
                             eCurrOper = CALC_NAME;
@@ -816,8 +816,8 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::BOOLEAN )
         {
-            String aName( sCommand.Copy( nRealStt,
-                                         static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
+            String aName( sCommand.copy( nRealStt,
+                                         aRes.EndPos - nRealStt ));
             if( aName.Len() )
             {
                 sal_Unicode ch = aName.GetChar(0);
@@ -837,7 +837,7 @@ SwCalcOper SwCalc::GetToken()
                 }
             }
         }
-        else if( nRealStt == sCommand.Len() )
+        else if( nRealStt == sCommand.getLength() )
         {
             eCurrOper = CALC_ENDCALC;
             bSetError = false;
@@ -852,7 +852,7 @@ SwCalcOper SwCalc::GetToken()
     };
 
 #if OSL_DEBUG_LEVEL > 1
-#define NextCh( s, n )  (nCommandPos < sCommand.Len() ? sCommand.GetChar( nCommandPos++ ) : 0)
+#define NextCh( s, n )  (nCommandPos < sCommand.getLength() ? sCommand[nCommandPos++] : 0)
 
     }
     else
@@ -880,8 +880,8 @@ SwCalcOper SwCalc::GetToken()
         case '\n':
             {
                 sal_Unicode c;
-                while( nCommandPos < sCommand.Len() &&
-                       ( ( c = sCommand.GetChar( nCommandPos ) ) == ' ' ||
+                while( nCommandPos < sCommand.getLength() &&
+                       ( ( c = sCommand[nCommandPos] ) == ' ' ||
                        c == '\t' || c == '\x0a' || c == '\x0d' ))
                 {
                     ++nCommandPos;
@@ -902,7 +902,7 @@ SwCalcOper SwCalc::GetToken()
             break;
 
         case '=':
-            if( '=' == sCommand.GetChar( nCommandPos ) )
+            if( '=' == sCommand[nCommandPos] )
             {
                 ++nCommandPos;
                 eCurrOper = CALC_EQ;
@@ -914,7 +914,7 @@ SwCalcOper SwCalc::GetToken()
             break;
 
         case '!':
-            if( '=' == sCommand.GetChar( nCommandPos ) )
+            if( '=' == sCommand[nCommandPos] )
             {
                 ++nCommandPos;
                 eCurrOper = CALC_NEQ;
@@ -928,7 +928,7 @@ SwCalcOper SwCalc::GetToken()
         case '>':
         case '<':
             eCurrOper = '>' == ch  ? CALC_GRE : CALC_LES;
-            if( '=' == (ch = sCommand.GetChar( nCommandPos ) ) )
+            if( '=' == (ch = sCommand[nCommandPos] ) )
             {
                 ++nCommandPos;
                 eCurrOper = CALC_GRE == eCurrOper ? CALC_GEQ : CALC_LEQ;
@@ -1023,7 +1023,7 @@ SwCalcOper SwCalc::GetToken()
                 if( ch )
                     --nCommandPos;
 
-                String aStr( sCommand.Copy( nStt, nCommandPos-nStt ));
+                String aStr( sCommand.copy( nStt, nCommandPos-nStt ));
                 aStr = pCharClass->lowercase( aStr );
 
                 // catch currency symbol
@@ -1481,7 +1481,7 @@ String SwCalc::GetDBName(const String& rName)
     SwDBData aData = rDoc.GetDBData();
     String sRet = aData.sDataSource;
     sRet += DB_DELIM;
-    sRet += String(aData.sCommand);
+    sRet += aData.sCommand;
     return sRet;
 }
 

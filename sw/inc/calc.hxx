@@ -169,7 +169,7 @@ class SwCalc
 {
     SwHash*     VarTable[ TBLSZ ];
     String      aVarName, sCurrSym;
-    String      sCommand;
+    OUString    sCommand;
     std::vector<const SwUserFieldType*> aRekurStk;
     SwSbxValue  nLastLeft;
     SwSbxValue  nNumberValue;
