@@ -472,28 +472,28 @@ struct StreamAndStorageNames
     OUString sStorage;
 };
 
-StreamAndStorageNames lcl_GetStreamStorageNames( OUString aUserData )
+StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
 {
     StreamAndStorageNames aNames;
-    if( aUserData.isEmpty() )
+    if( sUserData.isEmpty() )
         return aNames;
 
     const OUString aProt( "vnd.sun.star.Package:" );
-    if (aUserData.startsWith(aProt))
+    if (sUserData.startsWith(aProt))
     {
         // 6.0 (XML) Package
-        const sal_Int32 nPos = aUserData.indexOf('/');
+        const sal_Int32 nPos = sUserData.indexOf('/');
         if (nPos<0)
         {
-            aNames.sStream = aUserData.copy(aProt.getLength());
+            aNames.sStream = sUserData.copy(aProt.getLength());
         }
         else
         {
             sal_Int32 nPathStart = aProt.getLength();
-            if (aUserData.startsWith("./"))
+            if (sUserData.startsWith("./"))
                 nPathStart += 2;
-            aNames.sStorage = aUserData.copy( nPathStart, nPos-nPathStart );
-            aNames.sStream = aUserData.copy( nPos+1 );
+            aNames.sStorage = sUserData.copy( nPathStart, nPos-nPathStart );
+            aNames.sStream = sUserData.copy( nPos+1 );
         }
     }
     else
