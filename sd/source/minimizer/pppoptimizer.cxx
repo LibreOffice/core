@@ -23,8 +23,8 @@
 #include <osl/file.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <comphelper/processfactory.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -192,10 +192,10 @@ Sequence< OUString > PPPOptimizer_getSupportedServiceNames()
     return aRet;
 }
 
-Reference< XInterface > PPPOptimizer_createInstance( const Reference< XComponentContext > & rSMgr )
+Reference< XInterface > PPPOptimizer_createInstance( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rxFactory )
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new PPPOptimizer( rSMgr );
+    return (cppu::OWeakObject*) new PPPOptimizer( comphelper::getComponentContext(rxFactory) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

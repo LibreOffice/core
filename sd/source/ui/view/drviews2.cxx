@@ -165,6 +165,9 @@
 #include "stlpool.hxx"
 #include "undolayer.hxx"
 #include "unmodpg.hxx"
+
+#include "optimizerdialog.hxx"
+
 #include <sfx2/sidebar/Sidebar.hxx>
 
 namespace {
@@ -174,6 +177,7 @@ namespace {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 #define MIN_ACTIONS_FOR_DIALOG  5000    ///< if there are more meta objects, we show a dialog during the break up
 
@@ -2794,6 +2798,45 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             GetViewFrame()->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
             GetViewFrame()->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_PRESENTATION_MINIMIZER_MENU:
+        {
+            try
+            {
+                sal_Int64 nFileSizeSource = 0;
+                sal_Int64 nFileSizeDest = 0;
+                Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_QUERY_THROW );
+                Reference< XFrame > xFrame( GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
+                OptimizerDialog* mpOptimizerDialog = new OptimizerDialog( xContext, xFrame/*, this*/ );
+                mpOptimizerDialog->execute();
+
+                const Any* pVal( mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeSource ) );
+                if ( pVal )
+                    *pVal >>= nFileSizeSource;
+                pVal = mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeDestination );
+                if ( pVal )
+                    *pVal >>= nFileSizeDest;
+
+                if ( nFileSizeSource && nFileSizeDest )
+                {
+                    OUStringBuffer sBuf( OUString("Your Presentation has been minimized from:") );
+                    sBuf.append( OUString::number( nFileSizeSource >> 10 ) );
+                    sBuf.append( OUString("KB to ") );
+                    sBuf.append( OUString::number( nFileSizeDest >> 10 ) );
+                    sBuf.append( OUString("KB.") );
+                    OUString sResult( sBuf.makeStringAndClear() );
+                    SAL_INFO("sdext.minimizer", sResult );
+                }
+                delete mpOptimizerDialog, mpOptimizerDialog = NULL;
+            }
+            catch( ... )
+            {
+
+            }
             Cancel();
             rReq.Ignore ();
         }

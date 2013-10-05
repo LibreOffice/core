@@ -67,6 +67,7 @@ extern uno::Sequence< OUString >  SlideLayoutController_getSupportedServiceNames
 extern uno::Reference< uno::XInterface > SAL_CALL InsertSlideController_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
 extern OUString InsertSlideController_getImplementationName() throw( uno::RuntimeException );
 extern uno::Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( uno::RuntimeException );
+
 }
 
 namespace sd { namespace framework {
@@ -193,6 +194,12 @@ extern uno::Sequence<OUString> SAL_CALL SlideSorterService_getSupportedServiceNa
     throw (uno::RuntimeException);
 } }
 
+
+extern uno::Reference< uno::XInterface > SAL_CALL PPPOptimizer_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString PPPOptimizer_getImplementationName();
+extern uno::Sequence< OUString >  PPPOptimizer_getSupportedServiceNames();
+
+
 using namespace ::sd;
 using namespace ::sd::framework;
 using namespace ::sd::presenter;
@@ -231,6 +238,7 @@ enum FactoryId
     SlideSorterServiceFactoryId,
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
+    PresentationMinimizerFactoryId,
 };
 typedef ::boost::unordered_map<OUString, FactoryId, OUStringHash, comphelper::UStringEqual> FactoryMap;
 
@@ -264,6 +272,7 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
         (*spFactoryMap)[SlideSorterService_getImplementationName()] = SlideSorterServiceFactoryId;
         (*spFactoryMap)[SlideLayoutController_getImplementationName()] = SlideLayoutControllerFactoryId;
         (*spFactoryMap)[InsertSlideController_getImplementationName()] = InsertSlideControllerFactoryId;
+        (*spFactoryMap)[PPPOptimizer_getImplementationName()] = PresentationMinimizerFactoryId;
     }
     return spFactoryMap;
 };
@@ -453,6 +462,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
                         sd::InsertSlideController_getImplementationName(),
                         sd::InsertSlideController_createInstance,
                         sd::InsertSlideController_getSupportedServiceNames());
+                case PresentationMinimizerFactoryId:
+                    xFactory = ::cppu::createSingleFactory(
+                        xMSF,
+                        PPPOptimizer_getImplementationName(),
+                        PPPOptimizer_createInstance,
+                        PPPOptimizer_getSupportedServiceNames());
+                    break;
                 default:
                     break;
             }

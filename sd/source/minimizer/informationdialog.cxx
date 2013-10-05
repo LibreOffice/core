@@ -41,7 +41,6 @@
 // - INFORMATIONDIALOG -
 // ---------------------
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;

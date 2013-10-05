@@ -33,7 +33,6 @@
 // - OPTIMIZERDIALOG -
 // -------------------
 
-using namespace ::rtl;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::awt;
@@ -204,7 +203,7 @@ void OptimizerDialog::UpdateConfiguration()
 
 // -----------------------------------------------------------------------------
 
-OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
+OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame/*, Reference< XDispatch > rxStatusDispatcher*/ ) :
     UnoDialog( rxContext, rxFrame ),
     ConfigurationAccess( rxContext, NULL ),
     mnCurrentStep( 0 ),
@@ -216,8 +215,9 @@ OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContex
     mxActionListenerListBox0Pg0( new ActionListenerListBox0Pg0( *this ) ),
     mxTextListenerFormattedField0Pg1( new TextListenerFormattedField0Pg1( *this ) ),
     mxTextListenerComboBox0Pg1( new TextListenerComboBox0Pg1( *this ) ),
-    mxSpinListenerFormattedField0Pg1( new SpinListenerFormattedField0Pg1( *this ) ),
+    mxSpinListenerFormattedField0Pg1( new SpinListenerFormattedField0Pg1( *this ) )/*,
     mxStatusDispatcher( rxStatusDispatcher )
+                                                                                   */
 {
     Reference< XStorable > xStorable( mxController->getModel(), UNO_QUERY_THROW );
     mbIsReadonly = xStorable->isReadonly();

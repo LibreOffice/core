@@ -62,7 +62,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 using namespace ::std;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::awt;
@@ -516,7 +515,7 @@ void ImpOptimizer::DispatchStatus()
     if ( mxStatusDispatcher.is() )
     {
         URL aURL;
-        aURL.Protocol = OUString( "vnd.com.sun.star.comp.SunPresentationMinimizer:"  );
+        aURL.Protocol = OUString( "vnd.com.sun.star.comp.PresentationMinimizer:"  );
         aURL.Path = OUString( "statusupdate"  );
         mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }

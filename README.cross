@@ -145,11 +145,9 @@ CXX_FOR_BUILD=ccache g++
 --disable-activex
 --disable-directx
 --disable-ext-nlpsolver
---disable-ext-presenter-minimizer
---disable-ext-report-builder
---disable-ext-scripting-beanshell
---disable-ext-scripting-javascript
---disable-ext-wiki-publisher
+--disable-report-builder
+--disable-scripting-beanshell
+--disable-scripting-javascript
 --disable-ext-wiki-publisher
 --disable-pdfimport
 --enable-python=system
