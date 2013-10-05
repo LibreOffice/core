@@ -446,8 +446,12 @@ private:
     size_t CurrentLib;
 
 public:
+    BasicLibs()
+        : CurrentLib(0)
+    {
+    }
     ~BasicLibs();
-    OUString          aBasicLibPath; // TODO: Should be member of manager, but currently not incompatible
+    OUString        aBasicLibPath; // TODO: Should be member of manager, but currently not incompatible
     BasicLibInfo*   GetObject( size_t i );
     BasicLibInfo*   First();
     BasicLibInfo*   Next();
