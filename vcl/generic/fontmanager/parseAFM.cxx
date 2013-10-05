@@ -415,7 +415,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                         gfi->afmVersion = strdup( keyword );
                     break;
                 case COMMENT:
-                    keyword = linetoken(fp);
+                    linetoken(fp);
                     break;
                 case FONTNAME:
                     if ((keyword = token(fp,tokenlen)) != NULL)
