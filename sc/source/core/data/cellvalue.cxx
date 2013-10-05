@@ -163,7 +163,7 @@ ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.meType), 
     switch (rCell.meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(*rCell.mpString);
+            mpString = new OUString(rCell.mpString->pData);
         break;
         case CELLTYPE_EDIT:
             mpEditText = rCell.mpEditText->Clone();
@@ -186,7 +186,7 @@ ScCellValue::ScCellValue( const ScCellValue& r ) : meType(r.meType), mfValue(r.m
     switch (r.meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(*r.mpString);
+            mpString = new OUString(r.mpString->pData);
         break;
         case CELLTYPE_EDIT:
             mpEditText = r.mpEditText->Clone();
@@ -272,7 +272,7 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
     switch (meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(*aRefVal.mpString);
+            mpString = new OUString(aRefVal.mpString->pData);
         break;
         case CELLTYPE_EDIT:
             if (aRefVal.mpEditText)
@@ -297,7 +297,7 @@ void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int n
     switch (meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(*rOther.mpString);
+            mpString = new OUString(rOther.mpString->pData);
         break;
         case CELLTYPE_EDIT:
         {
