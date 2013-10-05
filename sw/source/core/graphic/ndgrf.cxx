@@ -466,40 +466,42 @@ sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 namespace
 {
 
-void lcl_GetStreamStorageNames( String aUserData,
-                                String& rStrmName,
-                                String& rStorName )
+struct StreamAndStorageNames
 {
-    rStorName.Erase();
-    rStrmName.Erase();
+    OUString sStream;
+    OUString sStorage;
+};
 
-    if( !aUserData.Len() )
-        return;
+StreamAndStorageNames lcl_GetStreamStorageNames( OUString aUserData )
+{
+    StreamAndStorageNames aNames;
+    if( aUserData.isEmpty() )
+        return aNames;
 
-    String aProt( "vnd.sun.star.Package:" );
-    if( 0 == aUserData.CompareTo( aProt, aProt.Len() ) )
+    const OUString aProt( "vnd.sun.star.Package:" );
+    if (aUserData.startsWith(aProt))
     {
         // 6.0 (XML) Package
-        xub_StrLen nPos = aUserData.Search( '/' );
-        if( STRING_NOTFOUND == nPos )
+        const sal_Int32 nPos = aUserData.indexOf('/');
+        if (nPos<0)
         {
-            rStrmName = aUserData.Copy( aProt.Len() );
+            aNames.sStream = aUserData.copy(aProt.getLength());
         }
         else
         {
-            xub_StrLen nPathStart = aProt.Len();
-            if( 0 == aUserData.CompareToAscii( "./", 2 ) )
+            sal_Int32 nPathStart = aProt.getLength();
+            if (aUserData.startsWith("./"))
                 nPathStart += 2;
-            rStorName = aUserData.Copy( nPathStart, nPos-nPathStart );
-            rStrmName = aUserData.Copy( nPos+1 );
+            aNames.sStorage = aUserData.copy( nPathStart, nPos-nPathStart );
+            aNames.sStream = aUserData.copy( nPos+1 );
         }
     }
     else
     {
         OSL_FAIL( "<lcl_GetStreamStorageNames(..)> - unknown graphic URL type. Code for handling 3.1 - 5.2 storages has been deleted by issue i53025." );
     }
-    OSL_ENSURE( STRING_NOTFOUND == rStrmName.Search( '/' ),
-            "invalid graphic stream name" );
+    OSL_ENSURE( aNames.sStream.indexOf('/')<0, "invalid graphic stream name" );
+    return aNames;
 }
 
 }
@@ -554,10 +556,9 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         {
             try
             {
-                String aStrmName, aPicStgName;
-                lcl_GetStreamStorageNames( maGrfObj.GetUserData(), aStrmName, aPicStgName );
-                uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
-                SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
+                const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
+                uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
+                SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
                 if ( pStrm )
                 {
                     if ( ImportGraphic( *pStrm ) )
@@ -816,12 +817,11 @@ void SwGrfNode::DelStreamName()
         {
             try
             {
-                String aPicStgName, aStrmName;
-                lcl_GetStreamStorageNames( maGrfObj.GetUserData(), aStrmName, aPicStgName );
+                const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
                 uno::Reference < embed::XStorage > refPics = xDocStg;
-                if ( aPicStgName.Len() )
-                    refPics = xDocStg->openStorageElement( aPicStgName, embed::ElementModes::READWRITE );
-                refPics->removeElement( aStrmName );
+                if ( !aNames.sStorage.isEmpty() )
+                    refPics = xDocStg->openStorageElement( aNames.sStorage, embed::ElementModes::READWRITE );
+                refPics->removeElement( aNames.sStream );
                 uno::Reference < embed::XTransactedObject > xTrans( refPics, uno::UNO_QUERY );
                 if ( xTrans.is() )
                     xTrans->commit();
@@ -923,10 +923,9 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         try
         {
-            String aStrmName, aPicStgName;
-            lcl_GetStreamStorageNames( maGrfObj.GetUserData(), aStrmName, aPicStgName );
-            uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
-            SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
+            const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
+            uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
+            SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
             if ( pStrm )
             {
                 const OUString aURL(maGrfObj.GetUserData());
@@ -1003,10 +1002,9 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
         {
             try
             {
-                String aStrmName, aPicStgName;
-                lcl_GetStreamStorageNames( maGrfObj.GetUserData(), aStrmName, aPicStgName );
-                uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
-                SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
+                const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
+                uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
+                SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
                 if ( pStrm )
                 {
                     if( pGrfObj->IsInSwapOut() )
