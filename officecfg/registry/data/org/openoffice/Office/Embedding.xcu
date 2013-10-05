@@ -22,7 +22,7 @@
     <node oor:name="PRIMARY" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>Primary</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+        <!-- Is not shown in UI. No translation is required. -->
       </prop>
       <prop oor:name="VerbID">
         <value>0</value>
@@ -65,7 +65,7 @@
     <node oor:name="HIDE" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>Hide</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+        <!-- Is not shown in UI. No translation is required. -->
       </prop>
       <prop oor:name="VerbID">
         <value>-3</value>
@@ -80,7 +80,7 @@
     <node oor:name="UIACTIVATE" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>UI activate</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+        <!-- Is not shown in UI. No translation is required. -->
       </prop>
       <prop oor:name="VerbID">
         <value>-4</value>
@@ -95,7 +95,7 @@
     <node oor:name="IPACTIVATE" oor:op="replace">
       <prop oor:name="VerbUIName">
         <value>Activate inplace</value>
-        <value xml:lang="x-comment">Is not shown in UI. No translation is required.</value>
+        <!-- Is not shown in UI. No translation is required. -->
       </prop>
       <prop oor:name="VerbID">
         <value>-5</value>
