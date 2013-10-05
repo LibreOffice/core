@@ -139,6 +139,7 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/Addons.xcu \
 	org/openoffice/Office/Common.xcu \
 	org/openoffice/Office/DataAccess.xcu \
+	org/openoffice/Office/PresentationMinimizer.xcu \
 	org/openoffice/Office/PresenterScreen.xcu \
 	org/openoffice/Office/TableWizard.xcu \
 	org/openoffice/Office/UI.xcu \

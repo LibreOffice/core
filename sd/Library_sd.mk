@@ -42,6 +42,7 @@ $(eval $(call gb_Library_set_include,sd,\
 	-I$(SRCDIR)/sd/inc \
 	-I$(SRCDIR)/sd/source/ui/inc \
 	-I$(SRCDIR)/sd/source/ui/slidesorter/inc \
+    -I$(SRCDIR)/sd/source/minimizer \
 	-I$(WORKDIR)/SdiTarget/sd/sdi \
 ))
 
@@ -496,6 +497,20 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/viewshe3 \
 	sd/source/ui/view/viewshel \
 	sd/source/ui/view/zoomlist \
+    sd/source/minimizer/configurationaccess \
+    sd/source/minimizer/fileopendialog \
+    sd/source/minimizer/graphiccollector \
+    sd/source/minimizer/impoptimizer \
+    sd/source/minimizer/informationdialog \
+    sd/source/minimizer/optimizationstats \
+    sd/source/minimizer/optimizerdialog \
+    sd/source/minimizer/optimizerdialogcontrols \
+    sd/source/minimizer/pagecollector \
+    sd/source/minimizer/pppoptimizer \
+    sd/source/minimizer/pppoptimizertoken \
+    sd/source/minimizer/unodialog \
+    sd/source/minimizer/pppoptimizeruno \
+    sd/source/minimizer/pppoptimizerdialog \
 ))
 
 ifeq ($(ENABLE_SDREMOTE),TRUE)
