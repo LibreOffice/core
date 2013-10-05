@@ -312,7 +312,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             else
             {
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                pLibRootEntry = AddEntry(
+                AddEntry(
                     aLibName,
                     Image( IDEResId( nId ) ),
                     pDocumentRootEntry, true,
