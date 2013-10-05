@@ -1175,6 +1175,39 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "ttc: %s contains %d fonts\n", aFullPath.getStr(), nLength );
 #endif
+
+            sal_uInt64 fileSize;
+
+            OUString aURL;
+            if (!osl::File::getFileURLFromSystemPath(OStringToOUString(aFullPath, osl_getThreadTextEncoding()),
+                aURL))
+            {
+                fileSize = 0;
+            }
+            else
+            {
+                osl::File aFile(aURL);
+                if (aFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock) != osl::File::E_None)
+                    fileSize = 0;
+                else
+                {
+                    osl::DirectoryItem aItem;
+                    osl::DirectoryItem::get( aURL, aItem );
+                    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
+                    aItem.getFileStatus( aFileStatus );
+                    fileSize = aFileStatus.getFileSize();
+                }
+            }
+
+            //Feel free to calc the exact max possible number of fonts a file
+            //could contain given its physical size. But this will clamp it to
+            //a sane starting point
+            //http://processingjs.nihongoresources.com/the_smallest_font/
+            //https://github.com/grzegorzrolek/null-ttf
+            int nMaxFontsPossible = fileSize / 528;
+
+            nLength = std::min(nLength, nMaxFontsPossible);
+
             for( int i = 0; i < nLength; i++ )
             {
                 TrueTypeFontFile* pFont     = new TrueTypeFontFile();
