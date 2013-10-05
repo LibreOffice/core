@@ -457,7 +457,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntr
         else
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            pLibSubRootEntry = AddEntry(
+            AddEntry(
                 aEntryName,
                 Image( IDEResId( RID_IMG_MODLIB ) ),
                 pLibRootEntry, true,
