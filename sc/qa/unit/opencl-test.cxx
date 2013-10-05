@@ -138,6 +138,13 @@ void ScOpenclTest::testSharedFormulaXLS()
         CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
     }
 
+    for (SCROW i = 15; i < 18; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+    }
+
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
