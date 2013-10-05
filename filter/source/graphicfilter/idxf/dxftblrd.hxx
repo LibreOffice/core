@@ -36,9 +36,9 @@ public:
 
     DXFLType * pSucc;
 
-    char sName[DXF_MAX_STRING_LEN+1];        //  2
+    OString m_sName;                         //  2
     long nFlags;                             // 70
-    char sDescription[DXF_MAX_STRING_LEN+1]; //  3
+    OString m_sDescription;                  //  3
     long nDashCount;                         // 73
     double fPatternLength;                   // 40
     double fDash[DXF_MAX_DASH_COUNT];        // 49,49,...
@@ -58,10 +58,10 @@ public:
 
     DXFLayer * pSucc;
 
-    char sName[DXF_MAX_STRING_LEN+1];     //  2
+    OString m_sName;                      //  2
     long nFlags;                          // 70
     long nColor;                          // 62
-    char sLineType[DXF_MAX_STRING_LEN+1]; //  6
+    OString m_sLineType;                  //  6
 
     DXFLayer();
     void Read(DXFGroupReader & rDGR);
@@ -78,15 +78,15 @@ public:
 
     DXFStyle * pSucc;
 
-    char sName[DXF_MAX_STRING_LEN+1];         //  2
+    OString m_sName;                          //  2
     long nFlags;                              // 70
     double fHeight;                           // 40
     double fWidthFak;                         // 41
     double fOblAngle;                         // 50
     long nTextGenFlags;                       // 71
     double fLastHeightUsed;                   // 42
-    char sPrimFontFile[DXF_MAX_STRING_LEN+1]; //  3
-    char sBigFontFile[DXF_MAX_STRING_LEN+1];  //  4
+    OString m_sPrimFontFile;                  //  3
+    OString m_sBigFontFile;                   //  4
 
     DXFStyle();
     void Read(DXFGroupReader & rDGR);
@@ -103,7 +103,7 @@ public:
 
     DXFVPort * pSucc;
 
-    char sName[DXF_MAX_STRING_LEN+1]; //  2
+    OString m_sName;                  //  2
     long nFlags;                      // 70
     double fMinX;                     // 10
     double fMinY;                     // 20
@@ -164,9 +164,9 @@ public:
     void Clear();
 
     // look for table entries:
-    DXFLType * SearchLType(const char * pName) const;
-    DXFLayer * SearchLayer(const char * pName) const;
-    DXFVPort * SearchVPort(const char * pName) const;
+    DXFLType * SearchLType(OString const& rName) const;
+    DXFLayer * SearchLayer(OString const& rName) const;
+    DXFVPort * SearchVPort(OString const& rName) const;
 
 };
 
