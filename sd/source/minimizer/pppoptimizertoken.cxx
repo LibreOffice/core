@@ -262,7 +262,7 @@ static const TokenTable pTokenTableArray[] =
     { "STR_CREATE_REPLACEMENT",     STR_CREATE_REPLACEMENT },
     { "STR_CURRENT_FILESIZE",       STR_CURRENT_FILESIZE },
     { "STR_ESTIMATED_FILESIZE",     STR_ESTIMATED_FILESIZE },
-    { "STR_MB",                     STR_MB },
+    { "STR_MB",                     STR_MB_NEW },
     { "MY_SETTINGS",                STR_MY_SETTINGS },
     { "STR_DEFAULT_SESSION",        STR_DEFAULT_SESSION },
     { "STR_MODIFY_WARNING",         STR_MODIFY_WARNING },

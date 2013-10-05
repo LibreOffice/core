@@ -62,8 +62,10 @@ class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
 
-    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher );
+    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, 
+                     com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame/*,
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher
+                                                                                             */);
     ~OptimizerDialog();
 
     sal_Bool                execute();
