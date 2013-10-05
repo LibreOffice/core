@@ -43,6 +43,7 @@ extern "C"
         if( pServiceManager )
         {
             Reference< XSingleComponentFactory > xFactory;
+            /*
             if( aImplName.equals( PPPOptimizer_getImplementationName() ) )
             {
                 xFactory = createSingleComponentFactory(
@@ -58,6 +59,7 @@ extern "C"
                         OUString::createFromAscii( pImplName ),
                         PPPOptimizerDialog_getSupportedServiceNames() );
             }
+            */
             if( xFactory.is() )
             {
                 xFactory->acquire();

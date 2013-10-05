@@ -16,7 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
-<oor:component-schema oor:name="SunPresentationMinimizer" oor:package="org.openoffice.Office.extension" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US" oor:package="org.openoffice.Office" oor:name="PresentationMinimizer">
+ <info>
+    <desc>Configuration of the Presentation Minimizer.</desc>
+ </info>
+ <import oor:component="org.openoffice.Office.Impress"/>
 	<templates>
 		<group oor:name="OptimizerSettings">
             <info>
@@ -69,7 +73,7 @@
 					<desc>Specifies if linked graphics are to be embedded</desc>
 				</info>
 				<value>true</value>
-			</prop>	
+			</prop>
 			<prop oor:name="OLEOptimization" oor:type="xs:boolean">
 				<info>
 					<desc>Specifies if OLE Objects are converted to Graphic objects at all</desc>
@@ -213,7 +217,7 @@
 			<prop oor:name="STR_EMBED_LINKED_GRAPHICS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_EMBED_LINKED_GRAPHICS.</desc></info>
 				<value>~Break links to external graphics</value>
-			</prop>		
+			</prop>
 			<prop oor:name="STR_OLE_OBJECTS" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OLE_OBJECTS.</desc></info>
 				<value>OLE Objects</value>
@@ -347,7 +351,7 @@ The current presentation contains no OLE objects.</value>
 			<prop oor:name="STR_YES" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_YES.</desc></info>
 				<value>~Yes</value>
-			</prop>			
+			</prop>
             <prop oor:name="STR_OK" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_OK.</desc></info>
                 <value>OK</value>
