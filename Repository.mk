@@ -645,7 +645,6 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
-	SunPresentationMinimizer \
 	mysqlc \
 	passive_native \
 ))

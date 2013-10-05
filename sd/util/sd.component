@@ -87,4 +87,7 @@
   <implementation name="sd::RandomAnimationNode">
     <service name="com.sun.star.comp.sd.RandomAnimationNode"/>
   </implementation>
+  <implementation name="com.sun.star.comp.PPPOptimizerImp">
+    <service name="com.sun.star.comp.PPPOptimizer"/>
+  </implementation>
 </component>
