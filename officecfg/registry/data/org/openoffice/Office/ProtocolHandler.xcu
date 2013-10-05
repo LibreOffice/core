@@ -64,5 +64,11 @@
         <value>vnd.org.libreoffice.presenterscreen:*</value>
       </prop>
     </node>
+    <node oor:name="com.sun.star.comp.PresentationMinimizerImp"
+          oor:op="replace" install:module="impress">
+      <prop oor:name="Protocols" oor:type="oor:string-list">
+        <value>vnd.com.sun.star.comp.PresentationMinimizer:*</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>

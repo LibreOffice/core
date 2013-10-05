@@ -22,12 +22,6 @@ en-US = "Extensions"
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS]
 en-US = "Useful %PRODUCTNAME extensions."
 
-[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_MINIMIZER]
-en-US = "Presentation Minimizer"
-
-[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_MINIMIZER]
-en-US = "Presentation Minimizer"
-
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_MEDIAWIKI]
 en-US = "MediaWiki Publisher"
 

@@ -26,6 +26,9 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -166,6 +169,8 @@
 #include "undolayer.hxx"
 #include "unmodpg.hxx"
 #include <sfx2/sidebar/Sidebar.hxx>
+
+#include "ViewShellBase.hxx"
 
 namespace {
     const char CustomAnimationPanelId[] = "CustomAnimationPanel";
@@ -2796,6 +2801,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetViewFrame()->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
             Cancel();
             rReq.Ignore ();
+        }
+        break;
+
+        case SID_PRESENTATION_MINIMIZER:
+        {
+            Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
+            Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
+            Reference<frame::XDispatchProvider> xProvider(GetViewShellBase().GetController()->getFrame(), UNO_QUERY);
+            if (xProvider.is())
+            {
+                util::URL aURL;
+                aURL.Complete = "vnd.com.sun.star.comp.PresentationMinimizer:execute";
+                xParser->parseStrict(aURL);
+                uno::Reference<frame::XDispatch> xDispatch(xProvider->queryDispatch(aURL, OUString(), 0));
+                if (xDispatch.is())
+                {
+                    xDispatch->dispatch(aURL, uno::Sequence< beans::PropertyValue >());
+                }
+            }
+            Cancel();
+            rReq.Ignore();
         }
         break;
 
