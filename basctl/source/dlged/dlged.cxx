@@ -68,20 +68,21 @@ static OUString aTitlePropName( "Title" );
 
 TYPEINIT1( DlgEdHint, SfxHint );
 
-DlgEdHint::DlgEdHint (Kind eHint) :
-    eKind(eHint)
-{ }
+DlgEdHint::DlgEdHint(Kind eHint)
+    : eKind(eHint)
+    , pDlgEdObj(0)
+{
+}
 
-
-DlgEdHint::DlgEdHint (Kind eHint, DlgEdObj* pObj) :
-    eKind(eHint),
-    pDlgEdObj(pObj)
-{ }
-
+DlgEdHint::DlgEdHint(Kind eHint, DlgEdObj* pObj)
+    : eKind(eHint)
+    , pDlgEdObj(pObj)
+{
+}
 
 DlgEdHint::~DlgEdHint()
-{ }
-
+{
+}
 
 //============================================================================
 // DlgEditor
