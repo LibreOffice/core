@@ -88,8 +88,16 @@ public:
 /// Handles <style:font-face-uri>
 class XMLFontStyleContextFontFaceUri : public SvXMLStyleContext
 {
+    // the CSS2 standard ( http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#referencing )
+    // defines these format strings.
+    const char* OPENTYPE_FORMAT = "opentype";
+    const char* TRUETYPE_FORMAT = "truetype";
+    const char* EOT_FORMAT      = "embedded-opentype";
+
     const XMLFontStyleContextFontFace& font;
-    void handleEmbeddedFont( const OUString& url );
+    OUString format;
+    OUString linkPath;
+    void handleEmbeddedFont( const OUString& url, bool eot );
 public:
 
     TYPEINFO();
@@ -101,6 +109,29 @@ public:
             const XMLFontStyleContextFontFace& font );
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+        const OUString& rValue );
+    void SetFormat( const OUString& rFormat );
+    void EndElement();
+    SvXMLImportContext * CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+};
+
+/// Handles <svg:font-face-format>
+class XMLFontStyleContextFontFaceFormat : public SvXMLStyleContext
+{
+    XMLFontStyleContextFontFaceUri& uri;
+public:
+    TYPEINFO();
+
+    XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            XMLFontStyleContextFontFaceUri& uri );
+
+    void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
         const OUString& rValue );
 };
 

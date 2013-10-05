@@ -85,6 +85,8 @@
 #include "cmst.h"
 #endif
 
+#include "libeot.h"
+
 using namespace vcl;
 
 #if (OSL_DEBUG_LEVEL < 3)

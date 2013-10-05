@@ -44,10 +44,11 @@ public:
       @param fontName name of the font (e.g. 'Times New Roman')
       @param extra additional text to use for name (e.g. to distinguish regular from bold, italic,...), "?" for unique
       @param key key to xor the data with, from the start until the key's length (not repeated)
+      @param eot whether the data is compressed in Embedded OpenType format
     */
     static bool addEmbeddedFont( com::sun::star::uno::Reference< com::sun::star::io::XInputStream > stream,
         const OUString& fontName, const char* extra,
-        std::vector< unsigned char > key = std::vector< unsigned char >());
+        std::vector< unsigned char > key = std::vector< unsigned char >(), bool eot = false);
 
     /**
       Returns an URL for a file where to store contents of a given temporary font.
@@ -75,7 +76,7 @@ public:
       @param size size of the font data
       @param rights type of operation to be allowed for the font
     */
-    static bool sufficientFontRights( const void* data, long size, FontRights rights );
+    static bool sufficientTTFRights( const void* data, long size, FontRights rights );
 
     /**
       Removes all temporary fonts in the path used by fileUrlForTemporaryFont().
