@@ -1451,6 +1451,24 @@ endef
 endif # SYSTEM_MSPUB
 
 
+#
+# This isn't yet final... I just added it to get things to compile.
+# TODO: update this before submitting, when I figure out how to host and distribute libeot
+#
+define gb_LinkTarget__use_eot
+$(call gb_LinkTarget_set_include,$(1),\
+	-I/home/brennan/projects/libreoffice/workdir/unxlngx6/UnpackedTarball/libeot/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	/home/brennan/projects/libreoffice/workdir/unxlngx6/UnpackedTarball/libeot/.libs/libeot.a \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libeot)
+
+endef
+
+
+
 ifeq ($(SYSTEM_VISIO),YES)
 
 define gb_LinkTarget__use_visio

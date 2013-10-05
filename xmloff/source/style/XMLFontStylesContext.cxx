@@ -190,6 +190,26 @@ OUString XMLFontStyleContextFontFace::familyName() const
     return ret;
 }
 
+TYPEINIT1( XMLFontStyleContextFontFaceFormat, SvXMLStyleContext );
+
+XMLFontStyleContextFontFaceFormat::XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport,
+        sal_uInt16 nPrfx, const OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > &xAttrList,
+        XMLFontStyleContextFontFaceUri& _uri )
+    : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList)
+    , uri(_uri)
+{
+}
+
+void XMLFontStyleContextFontFaceFormat::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
+    const OUString& rValue )
+{
+    if( nPrefixKey == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_STRING ))
+        uri.SetFormat(rValue);
+    else
+        SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+}
 
 TYPEINIT1( XMLFontStyleContextFontFaceSrc, SvXMLImportContext );
 
@@ -224,16 +244,57 @@ XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rIm
 {
 }
 
+SvXMLImportContext * XMLFontStyleContextFontFaceUri::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
+{
+    if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_FORMAT ))
+        return new XMLFontStyleContextFontFaceFormat( GetImport(), nPrefix, rLocalName, xAttrList, *this );
+    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
 void XMLFontStyleContextFontFaceUri::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
     const OUString& rValue )
 {
     if( nPrefixKey == XML_NAMESPACE_XLINK && IsXMLToken( rLocalName, XML_HREF ))
-        handleEmbeddedFont( rValue );
+        linkPath = rValue;
     else
         SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
 
-void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
+void XMLFontStyleContextFontFaceUri::SetFormat( const OUString& rFormat )
+{
+    format = rFormat;
+}
+void XMLFontStyleContextFontFaceUri::EndElement()
+{
+    if( linkPath.getLength() == 0 )
+    {
+        SAL_WARN( "xmloff", "svg:font-face-uri tag with no link; ignoring." );
+        return;
+    }
+    bool eot;
+    // Assume by default that the font is not compressed.
+    if( format.getLength() == 0
+        || format.equalsAscii( OPENTYPE_FORMAT )
+        || format.equalsAscii( TRUETYPE_FORMAT ))
+    {
+        eot = false;
+    }
+    else if( format.equalsAscii( EOT_FORMAT ))
+    {
+        eot = true;
+    }
+    else
+    {
+        SAL_WARN( "xmloff", "Unknown format of embedded font; assuming TTF." );
+        eot = false;
+    }
+    handleEmbeddedFont( linkPath, eot );
+}
+
+void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bool eot )
 {
     if( GetImport().embeddedFontAlreadyProcessed( url ))
     {
@@ -252,7 +313,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
         uno::Reference< io::XInputStream > inputStream;
         inputStream.set( storage->openStreamElement( url.copy( url.indexOf( '/' ) + 1 ), ::embed::ElementModes::READ ),
             UNO_QUERY_THROW );
-        if( EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, "?" ))
+        if( EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, "?", std::vector< unsigned char >(), eot ))
             GetImport().NotifyEmbeddedFontRead();
         inputStream->closeInput();
     }
