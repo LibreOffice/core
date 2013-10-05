@@ -52,6 +52,7 @@
 		8C0323AB17A943720037432E /* UIImageView+setImageAnimated.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0323AA17A943720037432E /* UIImageView+setImageAnimated.m */; };
 		8C06B31D17B7EC83002F5CF8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C06B31B17B7EC83002F5CF8 /* Localizable.strings */; };
 		8C06B31E17B7ED1E002F5CF8 /* iPad_autosize.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C06B32017B7ED1E002F5CF8 /* iPad_autosize.storyboard */; };
+		8C0C879317F4C46E003CE6B2 /* WalkThroughPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8C0C879217F4C46E003CE6B2 /* WalkThroughPageViewController.xib */; };
 		8C0DC83A17A4177C0099E5AE /* nextButton_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC83617A4177C0099E5AE /* nextButton_pressed.png */; };
 		8C0DC83B17A4177C0099E5AE /* nextButton_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC83717A4177C0099E5AE /* nextButton_pressed@2x.png */; };
 		8C0DC83C17A4177C0099E5AE /* previousButton_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C0DC83817A4177C0099E5AE /* previousButton_pressed.png */; };
@@ -99,6 +100,7 @@
 		8C3A648C17DCBE9E004A77D9 /* timer_settime_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */; };
 		8C3A648D17DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */; };
 		8C3A648E17DCBE9E004A77D9 /* timer_start_btn_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */; };
+		8C408A8218001DF00095D80F /* UIImage+imageWithColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C408A8118001DF00095D80F /* UIImage+imageWithColor.m */; };
 		8C8C7FB017EDA9330022A6BD /* UINavigationController+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8C7FAF17EDA9330022A6BD /* UINavigationController+Theme.m */; };
 		8C8C7FB317EDAFD20022A6BD /* more_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C8C7FB117EDAFD20022A6BD /* more_ipad.png */; };
 		8C8C7FB417EDAFD20022A6BD /* more_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C8C7FB217EDAFD20022A6BD /* more_ipad@2x.png */; };
@@ -137,7 +139,7 @@
 		8CBF9E0817DE79EB0044D949 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0717DE79EB0044D949 /* AboutViewController.m */; };
 		8CBF9E0A17E103B50044D949 /* licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF9E0917E103B40044D949 /* licenses.html */; };
 		8CD6EC6817CBBAF40071827A /* WalkThroughPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */; };
-		8CD6EC6917CBBAF40071827A /* WalkThroughPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */; };
+		8CD6EC6917CBBAF40071827A /* WalkThroughPageViewControllerWithHint.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6717CBBAF40071827A /* WalkThroughPageViewControllerWithHint.xib */; };
 		8CD6EC7017CC3FA00071827A /* WalkThroughContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */; };
 		8CD6EC7717CE31560071827A /* forwardButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC7517CE31550071827A /* forwardButton.png */; };
 		8CD6EC7817CE31560071827A /* forwardButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6EC7617CE31550071827A /* forwardButton@2x.png */; };
@@ -226,6 +228,7 @@
 		8C06B32617B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/iPad_autosize.storyboard"; sourceTree = "<group>"; };
 		8C06B32717B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8C06B32817B7ED33002F5CF8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		8C0C879217F4C46E003CE6B2 /* WalkThroughPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewController.xib; path = iosremote/Views/WalkThroughPageViewController.xib; sourceTree = "<group>"; };
 		8C0DC83617A4177C0099E5AE /* nextButton_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nextButton_pressed.png; sourceTree = "<group>"; };
 		8C0DC83717A4177C0099E5AE /* nextButton_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nextButton_pressed@2x.png"; sourceTree = "<group>"; };
 		8C0DC83817A4177C0099E5AE /* previousButton_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previousButton_pressed.png; sourceTree = "<group>"; };
@@ -287,6 +290,8 @@
 		8C3A648517DCBE9E004A77D9 /* timer_settime_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_settime_btn_dark.png; sourceTree = "<group>"; };
 		8C3A648617DCBE9E004A77D9 /* timer_settime_btn_dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timer_settime_btn_dark@2x.png"; sourceTree = "<group>"; };
 		8C3A648717DCBE9E004A77D9 /* timer_start_btn_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer_start_btn_dark.png; sourceTree = "<group>"; };
+		8C408A8018001DF00095D80F /* UIImage+imageWithColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+imageWithColor.h"; path = "iosremote/Categories/UIImage+imageWithColor.h"; sourceTree = "<group>"; };
+		8C408A8118001DF00095D80F /* UIImage+imageWithColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+imageWithColor.m"; path = "iosremote/Categories/UIImage+imageWithColor.m"; sourceTree = "<group>"; };
 		8C8C7FAE17EDA9330022A6BD /* UINavigationController+Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Theme.h"; path = "iosremote/Categories/UINavigationController+Theme.h"; sourceTree = "<group>"; };
 		8C8C7FAF17EDA9330022A6BD /* UINavigationController+Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Theme.m"; path = "iosremote/Categories/UINavigationController+Theme.m"; sourceTree = "<group>"; };
 		8C8C7FB117EDAFD20022A6BD /* more_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_ipad.png; sourceTree = "<group>"; };
@@ -349,7 +354,7 @@
 		8CBF9E0917E103B40044D949 /* licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = licenses.html; sourceTree = "<group>"; };
 		8CD6EC6517CBBAF40071827A /* WalkThroughPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughPageViewController.h; path = iosremote/Classes/WalkThroughPageViewController.h; sourceTree = "<group>"; };
 		8CD6EC6617CBBAF40071827A /* WalkThroughPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughPageViewController.m; path = iosremote/Classes/WalkThroughPageViewController.m; sourceTree = "<group>"; };
-		8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewController.xib; path = iosremote/Views/WalkThroughPageViewController.xib; sourceTree = "<group>"; };
+		8CD6EC6717CBBAF40071827A /* WalkThroughPageViewControllerWithHint.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WalkThroughPageViewControllerWithHint.xib; path = iosremote/Views/WalkThroughPageViewControllerWithHint.xib; sourceTree = "<group>"; };
 		8CD6EC6E17CC3FA00071827A /* WalkThroughContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WalkThroughContainerViewController.h; path = iosremote/Classes/WalkThroughContainerViewController.h; sourceTree = "<group>"; };
 		8CD6EC6F17CC3FA00071827A /* WalkThroughContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WalkThroughContainerViewController.m; path = iosremote/Classes/WalkThroughContainerViewController.m; sourceTree = "<group>"; };
 		8CD6EC7517CE31550071827A /* forwardButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardButton.png; sourceTree = "<group>"; };
@@ -635,6 +640,8 @@
 				8C19F42E17B05089005BDB61 /* LibONavigationController.m */,
 				8C19F43417B10D48005BDB61 /* UIViewController+LibOStyling.h */,
 				8C19F43517B10D49005BDB61 /* UIViewController+LibOStyling.m */,
+				8C408A8018001DF00095D80F /* UIImage+imageWithColor.h */,
+				8C408A8118001DF00095D80F /* UIImage+imageWithColor.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -801,8 +808,9 @@
 		8CD6EC6A17CBBAFF0071827A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8C0C879217F4C46E003CE6B2 /* WalkThroughPageViewController.xib */,
 				8CD6EC8717CF4ABA0071827A /* WalkThroughPageViewMainImageController.xib */,
-				8CD6EC6717CBBAF40071827A /* WalkThroughPageViewController.xib */,
+				8CD6EC6717CBBAF40071827A /* WalkThroughPageViewControllerWithHint.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -867,6 +875,7 @@
 				57C6E407175E06E800E8BC5F /* Default@2x.png in Resources */,
 				57C6E409175E06E800E8BC5F /* Default-568h@2x.png in Resources */,
 				57867A541787172A00EBBE52 /* impress.jpeg in Resources */,
+				8C0C879317F4C46E003CE6B2 /* WalkThroughPageViewController.xib in Resources */,
 				57867A5A1787510700EBBE52 /* pushed_next_button.png in Resources */,
 				57867A5B1787510700EBBE52 /* released_next_button.png in Resources */,
 				57867A5E178752CD00EBBE52 /* pushed_previous_button.png in Resources */,
@@ -906,7 +915,7 @@
 				8C19F44B17B1FEFE005BDB61 /* gear_transparent_bg@2x.png in Resources */,
 				8C19F44D17B20427005BDB61 /* add@2x.png in Resources */,
 				8C06B31D17B7EC83002F5CF8 /* Localizable.strings in Resources */,
-				8CD6EC6917CBBAF40071827A /* WalkThroughPageViewController.xib in Resources */,
+				8CD6EC6917CBBAF40071827A /* WalkThroughPageViewControllerWithHint.xib in Resources */,
 				8CD6EC7717CE31560071827A /* forwardButton.png in Resources */,
 				8CD6EC7817CE31560071827A /* forwardButton@2x.png in Resources */,
 				8CD6EC7B17CE358B0071827A /* buttonBackground.png in Resources */,
@@ -981,6 +990,7 @@
 				57CFED9917838FDC00E82E05 /* EditableTableViewCell.m in Sources */,
 				57FE71E31785C61400B50125 /* PinValidationViewController.m in Sources */,
 				57FE71E917861A9000B50125 /* SlideShowPreviewViewController.m in Sources */,
+				8C408A8218001DF00095D80F /* UIImage+imageWithColor.m in Sources */,
 				8C8C7FB017EDA9330022A6BD /* UINavigationController+Theme.m in Sources */,
 				57867A571787385800EBBE52 /* SlideShowViewController~iphone.m in Sources */,
 				57701742178B0A6900B99793 /* SlideShowSwipeInList~iphone.m in Sources */,

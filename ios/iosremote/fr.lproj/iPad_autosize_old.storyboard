@@ -67,14 +67,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Connecter" id="wYh-MF-Ao6">
-                        <barButtonItem key="leftBarButtonItem" title="Aide" image="more_icon.png" id="JjD-di-uqV">
-                            <connections>
-                                <action selector="onClickMenuButton:" destination="5QV-E7-KNT" id="k4j-0Z-IEW"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="add.png" id="pU6-XF-laS">
+                        <barButtonItem key="leftBarButtonItem" image="add.png" id="pU6-XF-laS">
                             <connections>
                                 <segue destination="65c-5D-pB7" kind="push" identifier="create_new_server" id="ORn-0W-dHd"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="more_icon.png" id="AN0-81-gat">
+                            <connections>
+                                <action selector="onClickMenuButton:" destination="5QV-E7-KNT" id="MvY-cd-0md"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -217,7 +217,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="02F-Tj-9xO" userLabel="slideShowPreview">
-                                <rect key="frame" x="201" y="438" width="138" height="44"/>
+                                <rect key="frame" x="201" y="437" width="138" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                                 <state key="normal" title="Preferences" backgroundImage="buttonBackground.png">
@@ -477,7 +477,7 @@
                                         </subviews>
                                     </scrollView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cOI-Hc-1QU">
-                                        <rect key="frame" x="731" y="22" width="64" height="53"/>
+                                        <rect key="frame" x="722" y="23" width="64" height="53"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>

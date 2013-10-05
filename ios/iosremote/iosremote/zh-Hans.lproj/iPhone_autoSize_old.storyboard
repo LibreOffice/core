@@ -57,14 +57,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Impress Remote" id="yR1-m8-JWN">
-                        <barButtonItem key="leftBarButtonItem" image="more_icon.png" id="Ved-Cp-htB">
-                            <connections>
-                                <action selector="onClickMenuButton:" destination="2" id="UgM-Gd-2OX"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="add.png" style="done" id="bHy-yX-SPg">
+                        <barButtonItem key="leftBarButtonItem" image="add.png" style="done" id="bHy-yX-SPg">
                             <connections>
                                 <segue destination="maT-Bx-l5y" kind="push" identifier="create_new_server" id="UYr-8d-fk5"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="gear_transparent_bg.png" id="cmR-3g-K7w">
+                            <connections>
+                                <action selector="onClickMenuButton:" destination="2" id="lvB-fS-gSV"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -218,10 +218,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ry2-Av-6er" userLabel="slideShowPreview">
-                                <rect key="frame" x="101" y="393" width="118" height="44"/>
+                                <rect key="frame" x="101" y="392" width="118" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Preferences" backgroundImage="buttonBackground.png">
+                                <state key="normal" title="Settings" backgroundImage="buttonBackground.png">
                                     <color key="titleColor" red="1" green="0.50196078430000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -606,8 +606,8 @@
         <image name="WTPairingScreenshot.png" width="474" height="312"/>
         <image name="add.png" width="30" height="30"/>
         <image name="buttonBackground.png" width="45" height="45"/>
+        <image name="gear_transparent_bg.png" width="30" height="30"/>
         <image name="ic_launcher.png" width="16" height="16"/>
-        <image name="more_icon.png" width="30" height="30"/>
         <image name="pointer.png" width="143" height="147"/>
         <image name="pointer_pushed.png" width="143" height="147"/>
         <image name="pushed_next_button.png" width="315" height="220"/>
@@ -626,6 +626,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="eIY-4P-1sI"/>
-        <segue reference="5gZ-R8-9y7"/>
+        <segue reference="0SL-2n-fWY"/>
     </inferredMetricsTieBreakers>
 </document>

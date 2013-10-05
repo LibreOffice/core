@@ -162,7 +162,7 @@
 						<reference key="NSNextResponder" ref="826207736"/>
 						<int key="NSvFlags">1310</int>
 						<object class="NSPSMatrix" key="NSFrameMatrix"/>
-						<string key="NSFrame">{{20, 237.00000000000003}, {83, 167}}</string>
+						<string key="NSFrame">{{20, 236.5}, {83, 167.50000000000003}}</string>
 						<reference key="NSSuperview" ref="826207736"/>
 						<reference key="NSNextKeyView" ref="712287771"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -176,13 +176,13 @@
 						<int key="IBUIBaselineAdjustment">0</int>
 						<int key="IBUINumberOfLines">10</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription">
-							<string key="name">Helvetica</string>
+							<string key="name">Helvetica-Oblique</string>
 							<string key="family">Helvetica</string>
-							<int key="traits">0</int>
+							<int key="traits">1</int>
 							<double key="pointSize">15</double>
 						</object>
 						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica</string>
+							<string key="NSName">Helvetica-Oblique</string>
 							<double key="NSSize">15</double>
 							<int key="NSfFlags">16</int>
 						</object>

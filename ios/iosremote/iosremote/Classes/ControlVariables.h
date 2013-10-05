@@ -49,6 +49,8 @@
 
 #define kAppSmallTextFont                          [UIFont fontWithName:@"HelveticaNeue" size:14.0f]
 
+
+#define kPopoverItemHighlightBGColor               [UIColor colorWithRed:.4 green:.4 blue:.4 alpha:0.1]
 int kDefaultTimerWidget, kCountDownTimerDefaultDuration;
 BOOL kStopwatchAutoStart, kCountDownTimerAutoStart, kCountDownTimerVibration;
 

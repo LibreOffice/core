@@ -14,6 +14,7 @@
 
 #import "PopoverView.h"
 #import "PopoverView_Configuration.h"
+#import "UIImage+imageWithColor.h"
 #import <QuartzCore/QuartzCore.h>
 
 #pragma mark - Implementation
@@ -361,10 +362,19 @@
     
     UIFont *font = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kTextFontPad : kTextFontPhone;
     
+    float padding = kBoxPadding;
+    float maxItemWidth = 0.0;
+    
     for (NSString *string in stringArray) {
         CGSize textSize = [string sizeWithFont:font];
-        UIButton *textButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
-        textButton.backgroundColor = [UIColor clearColor];
+        if (textSize.width > maxItemWidth) {
+            maxItemWidth = textSize.width;
+        }
+    }
+    
+    for (NSString *string in stringArray) {
+        CGSize textSize = [string sizeWithFont:font];
+        UIButton *textButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, maxItemWidth + 2 * padding, textSize.height + padding)];
         textButton.titleLabel.font = font;
         textButton.titleLabel.textAlignment = kTextAlignment;
         textButton.titleLabel.textColor = kTextColor;
@@ -373,6 +383,10 @@
         [textButton setTitleColor:kTextColor forState:UIControlStateNormal];
         [textButton setTitleColor:kTextHighlightColor forState:UIControlStateHighlighted];
         [textButton addTarget:self action:@selector(didTapButton:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [textButton setBackgroundImage:[UIImage imageWithColor:kPopoverItemHighlightBGColor
+                                                         size:CGSizeMake(1.f, 1.f)]
+                            forState:UIControlStateHighlighted];
         
         [labelArray addObject:[textButton AUTORELEASE]];
     }

@@ -86,11 +86,22 @@
 - (WalkThroughPageViewController *)viewControllerAtIndex:(NSUInteger)index {
     
     WalkThroughPageViewController *childViewController;
-    if (index == 2) {
-        childViewController = [[WalkThroughPageViewController alloc] initWithNibName:@"WalkThroughPageViewMainImageController" bundle:nil];
-    } else {
-        childViewController = [[WalkThroughPageViewController alloc] initWithNibName:@"WalkThroughPageViewController" bundle:nil];
+    
+    switch (index) {
+        case 0:
+            childViewController = [[WalkThroughPageViewController alloc] initWithNibName:@"WalkThroughPageViewControllerWithHint" bundle:nil];
+            break;
+        case 1:
+            childViewController = [[WalkThroughPageViewController alloc] initWithNibName:@"WalkThroughPageViewController" bundle:nil];
+            break;
+        case 2:
+            childViewController = [[WalkThroughPageViewController alloc] initWithNibName:@"WalkThroughPageViewMainImageController" bundle:nil];
+            break;
+        default:
+            NSLog(@"Shouldn't happen. Switch case not met in WalkThroughContainerViewController");
+            break;
     }
+
     childViewController.index = index;
     
     return childViewController;
