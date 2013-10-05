@@ -7,28 +7,28 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,SunPresentationMinimizer))
+$(eval $(call gb_Library_Library,PresentationMinimizer))
 
-$(eval $(call gb_Library_set_componentfile,SunPresentationMinimizer,sdext/source/minimizer/minimizer))
+$(eval $(call gb_Library_set_componentfile,PresentationMinimizer,sdext/source/minimizer/minimizer))
 
-$(eval $(call gb_Library_use_externals,SunPresentationMinimizer,\
+$(eval $(call gb_Library_use_externals,PresentationMinimizer,\
 	boost_headers \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,SunPresentationMinimizer))
+$(eval $(call gb_Library_use_sdk_api,PresentationMinimizer))
 
-$(eval $(call gb_Library_use_api,SunPresentationMinimizer,\
+$(eval $(call gb_Library_use_api,PresentationMinimizer,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_use_libraries,SunPresentationMinimizer,\
+$(eval $(call gb_Library_use_libraries,PresentationMinimizer,\
     cppu \
     cppuhelper \
     sal \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,SunPresentationMinimizer,\
+$(eval $(call gb_Library_add_exception_objects,PresentationMinimizer,\
     sdext/source/minimizer/configurationaccess \
     sdext/source/minimizer/fileopendialog \
     sdext/source/minimizer/graphiccollector \

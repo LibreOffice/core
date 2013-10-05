@@ -36,7 +36,7 @@ using namespace ::com::sun::star::container;
 
 static const OUString& GetPathToConfigurationRoot (void)
 {
-    static const OUString sPathToConfigurationRoot ("org.openoffice.Office.extension.SunPresentationMinimizer");
+    static const OUString sPathToConfigurationRoot ("org.openoffice.Office.PresentationMinimizer");
     return sPathToConfigurationRoot;
 }
 
