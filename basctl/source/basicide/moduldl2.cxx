@@ -477,11 +477,12 @@ IMPL_LINK_NOARG(ExportDialog, OkButtonHandler)
 }
 
 ExportDialog::ExportDialog( Window * pParent )
-    : ModalDialog( pParent, IDEResId( RID_DLG_EXPORT ) ),
-        maExportAsPackageButton( this, IDEResId( RB_EXPORTASPACKAGE ) ),
-        maExportAsBasicButton( this, IDEResId( RB_EXPORTASBASIC ) ),
-        maOKButton( this, IDEResId( RID_PB_OK ) ),
-        maCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+    : ModalDialog( pParent, IDEResId( RID_DLG_EXPORT ) )
+    , maExportAsPackageButton( this, IDEResId( RB_EXPORTASPACKAGE ) )
+    , maExportAsBasicButton( this, IDEResId( RB_EXPORTASBASIC ) )
+    , maOKButton( this, IDEResId( RID_PB_OK ) )
+    , maCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+    , mbExportAsPackage(false)
 {
     FreeResource();
     maExportAsPackageButton.Check();
