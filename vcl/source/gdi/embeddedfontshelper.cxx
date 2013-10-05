@@ -18,16 +18,29 @@
 #include <vcl/svapp.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <fontsubset.hxx>
 #include <outdev.h>
 #include <outfont.hxx>
 #include <salgdi.hxx>
 
+#include <config_eot.h>
+
+#if ENABLE_EOT
+extern "C"
+{
+namespace libeot
+{
+#include <libeot.h>
+} // namespace libeot
+} // extern "C"
+#endif
+
 using namespace com::sun::star;
 using namespace vcl;
 
 static void clearDir( const OUString& path )
-    {
+{
     osl::Directory dir( path );
     if( dir.reset() == osl::Directory::E_None )
     {
@@ -53,7 +66,7 @@ void EmbeddedFontsHelper::clearTemporaryFontFiles()
 }
 
 bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > stream, const OUString& fontName,
-    const char* extra, std::vector< unsigned char > key )
+    const char* extra, std::vector< unsigned char > key, bool eot )
 {
     OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, extra );
     osl::File file( fileUrl );
@@ -78,7 +91,8 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
              pos < read && keyPos < key.size();
              ++pos )
             buffer[ pos ] ^= key[ keyPos++ ];
-        if( read > 0 )
+        // if eot, don't write the file out yet, since we need to unpack it first.
+        if( !eot && read > 0 )
         {
             sal_uInt64 writtenTotal = 0;
             while( writtenTotal < read )
@@ -92,13 +106,50 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
         if( read <= 0 )
             break;
     }
+    bool sufficientFontRights;
+#if ENABLE_EOT
+    if( eot )
+    {
+        unsigned uncompressedFontSize = 0;
+        unsigned char *nakedPointerToUncompressedFont = NULL;
+        libeot::EOTMetadata eotMetadata;
+        libeot::EOTError uncompressError =
+            libeot::eot2ttf_buffer( (const unsigned char *)&fontData[0], fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize ):
+        boost::shared_ptr<unsigned char> uncompressedFont( nakedPointerToUncompressedFont, libeot::freeEOTBuffer );
+        if( uncompressError != libeot::EOT_SUCCESS )
+        {
+            SAL_WARN( "vcl.fonts", "Failed to uncompress font" );
+            osl::File::remove( fileUrl );
+            return false;
+        }
+        sal_uInt64 writtenTotal = 0;
+        while( writtenTotal < uncompressedFontSize )
+        {
+            sal_uInt64 written;
+            if( file.write( uncompressedFont.get() + writtenTotal, uncompressedFontSize - writtenTotal, written ) != osl::File::E_None )
+            {
+                SAL_WARN( "vcl.fonts", "Error writing temporary font file" );
+                osl::File::remove( fileUrl );
+                return false;
+            }
+            writtenTotal += written;
+        }
+        sufficientFontRights = libeot::canLegallyEdit( eotMetadata );
+        libeot::EOTfreeMetadata( &eotMetadata );
+    }
+#endif
+
     if( file.close() != osl::File::E_None )
     {
         SAL_WARN( "vcl.fonts", "Writing temporary font file failed" );
         osl::File::remove( fileUrl );
         return false;
     }
-    if( !sufficientFontRights( &fontData.front(), fontData.size(), EditingAllowed ))
+    if( !eot )
+    {
+        sufficientFontRights = sufficientTTFRights( &fontData.front(), fontData.size(), EditingAllowed );
+    }
+    if( sufficientFontRights )
     {
         // It would be actually better to open the document in read-only mode in this case,
         // warn the user about this, and provide a button to drop the font(s) in order
@@ -139,7 +190,7 @@ void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString
 // to have a different meaning (guessing from code, IsSubsettable() might
 // possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
 // So just try to open the data as ttf and see.
-bool EmbeddedFontsHelper::sufficientFontRights( const void* data, long size, FontRights rights )
+bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, long size, FontRights rights )
 {
     TrueTypeFont* font;
     if( OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) == SF_OK )
@@ -225,7 +276,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
         long size;
         if( const void* data = graphics->GetEmbedFontData( selected, unicodes, widths, info, &size ))
         {
-            if( sufficientFontRights( data, size, rights ))
+            if( sufficientTTFRights( data, size, rights ))
             {
                 osl::File file( url );
                 if( file.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) == osl::File::E_None )

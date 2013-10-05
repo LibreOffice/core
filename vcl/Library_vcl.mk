@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 $(eval $(call gb_Library_use_externals,vcl,\
 	jpeg \
 	nss3 \
+	libeot \
 ))
 
 $(eval $(call gb_Library_use_libraries,vcl,\

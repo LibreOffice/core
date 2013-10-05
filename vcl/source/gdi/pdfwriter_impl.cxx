@@ -85,6 +85,12 @@
 #include "cmst.h"
 #endif
 
+#include <config_eot.h>
+
+#if ENABLE_EOT
+#include "libeot.h"
+#endif
+
 using namespace vcl;
 
 #if (OSL_DEBUG_LEVEL < 3)
