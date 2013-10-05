@@ -657,7 +657,7 @@ SwCalcOper SwCalc::GetToken()
                                                       coContFlags, aEmptyStr );
 
         bool bSetError = true;
-        xub_StrLen nRealStt = nCommandPos + (xub_StrLen)aRes.LeadingWhiteSpace;
+        sal_Int32 nRealStt = nCommandPos + aRes.LeadingWhiteSpace;
         if( aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
         {
             nNumberValue.PutDouble( aRes.Value );
@@ -675,7 +675,7 @@ SwCalcOper SwCalc::GetToken()
             // catch currency symbol
             if( sLowerCaseName == sCurrSym )
             {
-                nCommandPos = (xub_StrLen)aRes.EndPos;
+                nCommandPos = aRes.EndPos;
                 return GetToken(); // call again
             }
 
@@ -701,7 +701,7 @@ SwCalcOper SwCalc::GetToken()
                 default:
                     break;
                 }
-                nCommandPos = (xub_StrLen)aRes.EndPos;
+                nCommandPos = aRes.EndPos;
                 return eCurrOper;
             }
             aVarName = aName;
@@ -848,7 +848,7 @@ SwCalcOper SwCalc::GetToken()
             eError = CALC_SYNTAX;
             eCurrOper = CALC_PRINT;
         }
-        nCommandPos = (xub_StrLen)aRes.EndPos;
+        nCommandPos = aRes.EndPos;
     };
 
 #if OSL_DEBUG_LEVEL > 1
@@ -993,17 +993,17 @@ SwCalcOper SwCalc::GetToken()
 
         case '"':
             {
-                xub_StrLen nStt = nCommandPos;
+                sal_Int32 nStt = nCommandPos;
                 while( 0 != ( ch = NextCh( sCommand, nCommandPos ) ) &&
                        '"' != ch )
                 {
                     ;
                 }
 
-                xub_StrLen nLen = nCommandPos - nStt;
+                sal_Int32 nLen = nCommandPos - nStt;
                 if( '"' == ch )
                     --nLen;
-                nNumberValue.PutString( sCommand.Copy( nStt, nLen ));
+                nNumberValue.PutString( sCommand.copy( nStt, nLen ));
                 eCurrOper = CALC_NUMBER;
             }
             break;
@@ -1012,7 +1012,7 @@ SwCalcOper SwCalc::GetToken()
             if (ch && (pCharClass->isLetter( sCommand, nCommandPos - 1) ||
                 '_' == ch))
             {
-                xub_StrLen nStt = nCommandPos-1;
+                sal_Int32 nStt = nCommandPos-1;
                 while( 0 != (ch = NextCh( sCommand, nCommandPos )) &&
                        (pCharClass->isLetterNumeric( sCommand, nCommandPos - 1) ||
                        ch == '_' || ch == '.' ) )

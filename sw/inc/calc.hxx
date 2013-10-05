@@ -174,7 +174,7 @@ class SwCalc
     SwSbxValue  nLastLeft;
     SwSbxValue  nNumberValue;
     SwCalcExp   aErrExpr;
-    xub_StrLen  nCommandPos;
+    sal_Int32   nCommandPos;
 
     SwDoc&      rDoc;
     SvtSysLocale m_aSysLocale;
