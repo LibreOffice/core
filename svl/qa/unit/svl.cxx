@@ -53,13 +53,6 @@ using ::std::endl;
 
 namespace {
 
-#if DEBUG_UNIT_TEST
-::std::ostream& operator<< (::std::ostream& os, const OUString& str)
-{
-    return os << OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
-}
-#endif
-
 class Test : public CppUnit::TestFixture {
 public:
     Test();
