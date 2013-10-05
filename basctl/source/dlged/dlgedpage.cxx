@@ -29,8 +29,9 @@ TYPEINIT1( DlgEdPage, SdrPage );
 
 //----------------------------------------------------------------------------
 
-DlgEdPage::DlgEdPage( DlgEdModel& rModel, bool bMasterPage )
-    :SdrPage( rModel, bMasterPage )
+DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
+    : SdrPage(rModel, bMasterPage)
+    , pDlgEdForm(0)
 {
 }
 
