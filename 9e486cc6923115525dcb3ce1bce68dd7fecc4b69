@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAYn///Q4\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9721,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2013-10-05T09:13:19Z",
+      "side": 1,
+      "message": "funny definition of \"shorter\". \nGetting the human readable version is done to be consistent with other checks that not only print \"bah, your installed version sucks\", but also being able to print \"we detected that you have version xy installed, but we need at least version wz\"\n\nAlso your proposal fails short since not all versions of flex report the version as second field. Especially those that are not suitable to build (like 2.5.4 for example) print \"flex version \u003cwhatever version\u003e\":\n$ /usr/bin/flex -V | cut -d\" \" -f2 | sed \u0027s/\\.//\u0027g\nversion\n\nAlso while your suggestion works for something like flex (where not much releases are expected), it doesn\u0027t account for increase/decrease of the digits in the minor/micro version part\n\nwhile 2.5.36 will fulfill the test when shortened to 2536 and compared to 2535, a hypothetical version 2.6.1 will be treated as 261 and thus fail the check.\n\nIf you only want one single command, and disregard storing the version for printing in the error in case of failure to pass, then one could use \n\nflex --version |awk \u0027{split($NF,ver,\".\"); printf(\"%d%03d%03d\", ver[1], ver[2], ver[3])}\u0027\n\nof to be \"shorter\" :-) : flex -V | awk ....\n\nBut That is less readable, and requires doubling of the brackets to satisfy autoconf quoting.",
+      "parentUuid": "AAAAYn///RM\u003d",
+      "revId": "9e486cc6923115525dcb3ce1bce68dd7fecc4b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAYn///RI\u003d",
         "filename": "configure.ac",
         "patchSetId": 1
