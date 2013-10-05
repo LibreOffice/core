@@ -86,6 +86,7 @@ uno::Reference<drawing::XShape>
           , const drawing::Position3D& , const drawing::Direction3D&
           , sal_Int32 )
 {
+    return new DummyXShape();
 }
 
 uno::Reference<drawing::XShape>

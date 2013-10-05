@@ -85,7 +85,6 @@ VDiagram::VDiagram(
 
 VDiagram::~VDiagram()
 {
-    delete m_pShapeFactory;
 }
 
 void VDiagram::init(

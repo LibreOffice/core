@@ -56,7 +56,6 @@ void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogic
 
 PlotterBase::~PlotterBase()
 {
-    delete m_pShapeFactory;
 }
 
 void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
