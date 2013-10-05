@@ -33,6 +33,24 @@
       "revId": "9e486cc6923115525dcb3ce1bce68dd7fecc4b69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///RA\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9722,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-10-05T08:34:08Z",
+      "side": 1,
+      "message": "Sorry take that back. I missed \"%03d\" in your awk version.",
+      "parentUuid": "AAAAYn///RI\u003d",
+      "revId": "9e486cc6923115525dcb3ce1bce68dd7fecc4b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
