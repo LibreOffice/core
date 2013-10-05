@@ -31,21 +31,6 @@ End
 
 #ifdef WITH_EXTENSION_INTEGRATION
 
-/* ** Presentation Minimizer ** */
-
-#ifdef WITH_EXTENSION_MINIMIZER
-Module gid_Module_Optional_Extensions_MINIMIZER
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MINIMIZER);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Presentation_Minimizer );
-    Minimal = NO;
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** MediaWiki Publisher** */
 
 #ifndef WITHOUT_EXTENSION_MEDIAWIKI

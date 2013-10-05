@@ -516,7 +516,7 @@ void ImpOptimizer::DispatchStatus()
     if ( mxStatusDispatcher.is() )
     {
         URL aURL;
-        aURL.Protocol = OUString( "vnd.com.sun.star.comp.SunPresentationMinimizer:"  );
+        aURL.Protocol = OUString( "vnd.com.sun.star.comp.PresentationMinimizer:"  );
         aURL.Path = OUString( "statusupdate"  );
         mxStatusDispatcher->dispatch( aURL, GetStatusSequence() );
     }

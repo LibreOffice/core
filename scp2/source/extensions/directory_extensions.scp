@@ -22,17 +22,6 @@
 
 #ifdef WITH_EXTENSION_INTEGRATION
 
-/* ** Presentation Minimizer ** */
-
-#ifdef WITH_EXTENSION_MINIMIZER
-
-Directory gid_Brand_Dir_Share_Extensions_Presentation_Minimizer
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "presentation-minimizer";
-End
-
-#endif
-
 /* ** MediaWiki Publisher** */
 
 #ifndef WITHOUT_EXTENSION_MEDIAWIKI
