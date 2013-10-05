@@ -28,17 +28,25 @@
 
 class ImpErrorQuad
 {
-    long                    nRed;
-    long                    nGreen;
-    long                    nBlue;
+    long nRed;
+    long nGreen;
+    long nBlue;
 
 public:
 
-    inline                  ImpErrorQuad() {}
-    inline                  ImpErrorQuad( const BitmapColor& rColor ) :
-                                nRed    ( (long) rColor.GetRed() << 5L ),
-                                nGreen  ( (long) rColor.GetGreen() << 5L ),
-                                nBlue   ( (long) rColor.GetBlue() << 5L ) {}
+    ImpErrorQuad()
+        : nRed(0)
+        , nGreen(0)
+        , nBlue(0)
+    {
+    }
+
+    ImpErrorQuad( const BitmapColor& rColor )
+        : nRed( (long) rColor.GetRed() << 5L )
+        , nGreen( (long) rColor.GetGreen() << 5L )
+        , nBlue( (long) rColor.GetBlue() << 5L )
+    {
+    }
 
     inline void             operator=( const BitmapColor& rColor );
     inline ImpErrorQuad&    operator-=( const BitmapColor& rColor );
