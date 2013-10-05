@@ -40,25 +40,25 @@ DXFBlock::~DXFBlock()
 
 void DXFBlock::Read(DXFGroupReader & rDGR)
 {
-    sName[0]=0;
-    sAlsoName[0]=0;
+    m_sName = "";
+    m_sAlsoName = "";
     aBasePoint.fx=0.0;
     aBasePoint.fy=0.0;
     aBasePoint.fz=0.0;
     nFlags=0;
-    sXRef[0]=0;
+    m_sXRef = "";
 
     while (rDGR.Read()!=0)
     {
         switch (rDGR.GetG())
         {
-            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
-            case  3: strncpy( sAlsoName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+            case  2: m_sName = OString(rDGR.GetS()); break;
+            case  3: m_sAlsoName = OString(rDGR.GetS()); break;
             case 70: nFlags=rDGR.GetI(); break;
             case 10: aBasePoint.fx=rDGR.GetF(); break;
             case 20: aBasePoint.fy=rDGR.GetF(); break;
             case 30: aBasePoint.fz=rDGR.GetF(); break;
-            case  1: strncpy( sXRef, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+            case  1: m_sXRef = OString(rDGR.GetS()); break;
         }
     }
     DXFEntities::Read(rDGR);
@@ -104,11 +104,11 @@ void DXFBlocks::Read(DXFGroupReader & rDGR)
 }
 
 
-DXFBlock * DXFBlocks::Search(const char * sName) const
+DXFBlock * DXFBlocks::Search(OString const& rName) const
 {
     DXFBlock * pB;
     for (pB=pFirst; pB!=NULL; pB=pB->pSucc) {
-        if (strcmp(sName,pB->sName)==0) break;
+        if (rName == pB->m_sName) break;
     }
     return pB;
 }
