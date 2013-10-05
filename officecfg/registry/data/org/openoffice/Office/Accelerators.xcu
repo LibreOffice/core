@@ -642,7 +642,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -1083,7 +1083,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:AlignHorizontalCenter</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -1393,7 +1393,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -1637,7 +1637,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -1933,7 +1933,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -2386,7 +2386,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -2616,7 +2616,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -2890,7 +2890,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -3254,7 +3254,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -3707,7 +3707,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -4015,7 +4015,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -4492,7 +4492,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -4776,7 +4776,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -5229,7 +5229,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -5549,7 +5549,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -6002,7 +6002,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -6322,7 +6322,7 @@
         </node>
         <node oor:name="F11" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
@@ -6775,7 +6775,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:CenterPara</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
@@ -7247,7 +7247,7 @@
         </node>
         <node oor:name="T_MOD1" oor:op="replace">
           <prop oor:name="Command">
-            <value xml:lang="x-no-translate" install:module="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SubScript</value>
             <value xml:lang="es" install:module="unxwnt">.uno:AlignHorizontalCenter</value>
             <value xml:lang="en-US" install:module="macosx">.uno:DesignerDialog</value>
