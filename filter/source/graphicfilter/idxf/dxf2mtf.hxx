@@ -60,7 +60,7 @@ private:
 
     long GetEntityColor(const DXFBasicEntity & rE);
 
-    DXFLineInfo LTypeToDXFLineInfo(const char * sLineType);
+    DXFLineInfo LTypeToDXFLineInfo(OString const& rLineType);
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 

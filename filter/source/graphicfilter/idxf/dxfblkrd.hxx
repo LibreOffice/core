@@ -34,11 +34,11 @@ public:
         // pointer to the nex block in the list DXFBlocks::pFirst
 
     // properties of blocks; commented with group codes:
-    char sName[DXF_MAX_STRING_LEN+1];     //  2
-    char sAlsoName[DXF_MAX_STRING_LEN+1]; //  3
+    OString m_sName;                      //  2
+    OString m_sAlsoName;                  //  3
     long nFlags;                          // 70
     DXFVector aBasePoint;                 // 10,20,30
-    char sXRef[DXF_MAX_STRING_LEN+1];     //  1
+    OString m_sXRef;                      //  1
 
     DXFBlock();
     ~DXFBlock();
@@ -66,7 +66,7 @@ public:
     void Read(DXFGroupReader & rDGR);
         // reads all block per rDGR until a ENDSEC oder EOF.
 
-    DXFBlock * Search(const char * sName) const;
+    DXFBlock * Search(OString const& rName) const;
         // looks for a block with the name, return NULL if not successful
 
     void Clear();

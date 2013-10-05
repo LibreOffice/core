@@ -299,7 +299,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 DXFBlock * pB;
                 DXFBoundingBox aBox;
                 DXFVector aP;
-                pB=aBlocks.Search(pE->sName);
+                pB=aBlocks.Search(pE->m_sName);
                 if (pB==NULL) break;
                 CalcBoundingBox(*pB,aBox);
                 if (aBox.bEmpty==sal_True) break;
@@ -341,7 +341,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 DXFBlock * pB;
                 DXFBoundingBox aBox;
                 DXFVector aP;
-                pB=aBlocks.Search(pE->sPseudoBlock);
+                pB = aBlocks.Search(pE->m_sPseudoBlock);
                 if (pB==NULL) break;
                 CalcBoundingBox(*pB,aBox);
                 if (aBox.bEmpty==sal_True) break;
