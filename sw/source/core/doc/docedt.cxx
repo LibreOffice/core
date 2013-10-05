@@ -2122,25 +2122,30 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
 }
 
-static bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, bool bRegExpRplc )
+static bool lcl_GetTokenToParaBreak( OUString& rStr, OUString& rRet, bool bRegExpRplc )
 {
     bool bRet = false;
     if( bRegExpRplc )
     {
-        xub_StrLen nPos = 0;
-        OUString sPara("\\n");
-        while( STRING_NOTFOUND != ( nPos = rStr.Search( sPara, nPos )) )
+        sal_Int32 nPos = 0;
+        const OUString sPara("\\n");
+        for (;;)
         {
-            // Has this been escaped?
-            if( nPos && '\\' == rStr.GetChar( nPos-1 ))
+            nPos = rStr.indexOf( sPara, nPos );
+            if (nPos<0)
             {
-                if( ++nPos >= rStr.Len() )
+                break;
+            }
+            // Has this been escaped?
+            if( nPos && '\\' == rStr[nPos-1])
+            {
+                if( ++nPos >= rStr.getLength() )
                     break;
             }
             else
             {
-                rRet = rStr.Copy( 0, nPos );
-                rStr.Erase( 0, nPos + sPara.getLength() );
+                rRet = rStr.copy( 0, nPos );
+                rStr = rStr.copy( nPos + sPara.getLength() );
                 bRet = true;
                 break;
             }
@@ -2149,7 +2154,7 @@ static bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, bool bRegExpRpl
     if( !bRet )
     {
         rRet = rStr;
-        rStr.Erase();
+        rStr = OUString();
     }
     return bRet;
 }
@@ -2257,7 +2262,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
         sal_Bool bOneNode = pStt->nNode == pEnd->nNode;
 
         // Own Undo?
-        String sRepl( rStr );
+        OUString sRepl( rStr );
         SwTxtNode* pTxtNd = pStt->nNode.GetNode().GetTxtNode();
         xub_StrLen nStt = pStt->nContent.GetIndex(),
                 nEnd = bOneNode ? pEnd->nContent.GetIndex()
@@ -2289,7 +2294,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 nStt = pStt->nContent.GetIndex();
             }
 
-            if( sRepl.Len() )
+            if( !sRepl.isEmpty() )
             {
                 // Apply the first character's attributes to the ReplaceText
                 SfxItemSet aSet( GetAttrPool(),
@@ -2313,7 +2318,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 xub_StrLen nPtCnt = aDelPam.GetPoint()->nContent.GetIndex();
 
                 bool bFirst = true;
-                String sIns;
+                OUString sIns;
                 while ( lcl_GetTokenToParaBreak( sRepl, sIns, bRegExReplace ) )
                 {
                     InsertString( aDelPam, sIns );
@@ -2333,7 +2338,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                     else
                         SplitNode( *aDelPam.GetPoint(), false );
                 }
-                if( sIns.Len() )
+                if( !sIns.isEmpty() )
                 {
                     InsertString( aDelPam, sIns );
                 }
@@ -2410,14 +2415,14 @@ SetRedlineMode( eOld );
                             : pTxtNd->GetTxt().getLength();
 
             bool bFirst = true;
-            String sIns;
+            OUString sIns;
             while ( lcl_GetTokenToParaBreak( sRepl, sIns, bRegExReplace ) )
             {
                 if (!bFirst || nStt == pTxtNd->GetTxt().getLength())
                 {
                     InsertString( aDelPam, sIns );
                 }
-                else if( nStt < nEnd || sIns.Len() )
+                else if( nStt < nEnd || !sIns.isEmpty() )
                 {
                     pTxtNd->ReplaceText( pStt->nContent, nEnd - nStt, sIns );
                 }
@@ -2425,13 +2430,13 @@ SetRedlineMode( eOld );
                 bFirst = false;
             }
 
-            if( bFirst || sIns.Len() )
+            if( bFirst || !sIns.isEmpty() )
             {
                 if (!bFirst || nStt == pTxtNd->GetTxt().getLength())
                 {
                     InsertString( aDelPam, sIns );
                 }
-                else if( nStt < nEnd || sIns.Len() )
+                else if( nStt < nEnd || !sIns.isEmpty() )
                 {
                     pTxtNd->ReplaceText( pStt->nContent, nEnd - nStt, sIns );
                 }
