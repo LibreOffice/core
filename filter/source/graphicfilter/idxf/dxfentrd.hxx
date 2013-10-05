@@ -68,8 +68,8 @@ public:
 
     // properties that all entities have, each
     // commented with group codes:
-    char sLayer[DXF_MAX_STRING_LEN+1];    //  8
-    char sLineType[DXF_MAX_STRING_LEN+1]; //  6
+    OString m_sLayer;                     //  8
+    OString m_sLineType;                  //  6
     double fElevation;                    // 38
     double fThickness;                    // 39
     long nColor;                          // 62
@@ -210,11 +210,11 @@ public:
 
     DXFVector aP0;                     // 10,20,30
     double fHeight;                    // 40
-    char sText[DXF_MAX_STRING_LEN+1];  //  1
+    OString m_sText;                   //  1
     double fRotAngle;                  // 50
     double fXScale;                    // 41
     double fOblAngle;                  // 42
-    char sStyle[DXF_MAX_STRING_LEN+1]; //  7
+    OString m_sStyle;                  //  7
     long nGenFlags;                    // 71
     long nHorzJust;                    // 72
     long nVertJust;                    // 73
@@ -235,7 +235,7 @@ public:
 
     DXFVector aP0;                    // 10,20,30
     double fSize;                     // 40
-    char sName[DXF_MAX_STRING_LEN+1]; //  2
+    OString m_sName;                  //  2
     double fRotAngle;                 // 50
     double fXScale;                   // 41
     double fOblAngle;                 // 51
@@ -254,7 +254,7 @@ class DXFInsertEntity : public DXFBasicEntity {
 public:
 
     long nAttrFlag;                   // 66
-    char sName[DXF_MAX_STRING_LEN+1]; //  2
+    OString m_sName;                  //  2
     DXFVector aP0;                    // 10,20,30
     double fXScale;                   // 41
     double fYScale;                   // 42
@@ -280,15 +280,15 @@ public:
 
     DXFVector aP0;                      // 10,20,30
     double fHeight;                     // 40
-    char sDefVal[DXF_MAX_STRING_LEN+1]; //  1
-    char sPrompt[DXF_MAX_STRING_LEN+1]; //  3
-    char sTagStr[DXF_MAX_STRING_LEN+1]; //  2
+    OString m_sDefVal;                  //  1
+    OString m_sPrompt;                  //  3
+    OString m_sTagStr;                  //  2
     long nAttrFlags;                    // 70
     long nFieldLen;                     // 73
     double fRotAngle;                   // 50
     double fXScale;                     // 41
     double fOblAngle;                   // 51
-    char sStyle[DXF_MAX_STRING_LEN+1];  //  7
+    OString m_sStyle;                   //  7
     long nGenFlags;                     // 71
     long nHorzJust;                     // 72
     long nVertJust;                     // 74
@@ -309,14 +309,14 @@ public:
 
     DXFVector aP0;                      // 10,20,30
     double fHeight;                     // 40
-    char sText[DXF_MAX_STRING_LEN+1];   //  1
-    char sTagStr[DXF_MAX_STRING_LEN+1]; //  2
+    OString m_sText;                    //  1
+    OString m_sTagStr;                  //  2
     long nAttrFlags;                    // 70
     long nFieldLen;                     // 73
     double fRotAngle;                   // 50
     double fXScale;                     // 41
     double fOblAngle;                   // 51
-    char sStyle[DXF_MAX_STRING_LEN+1];  //  7
+    OString m_sStyle;                   //  7
     long nGenFlags;                     // 71
     long nHorzJust;                     // 72
     long nVertJust;                     // 74
@@ -542,7 +542,7 @@ class DXFDimensionEntity : public DXFBasicEntity {
 
 public:
 
-    char sPseudoBlock[DXF_MAX_STRING_LEN+1]; //  2
+    OString m_sPseudoBlock;                  //  2
 
     DXFDimensionEntity();
 

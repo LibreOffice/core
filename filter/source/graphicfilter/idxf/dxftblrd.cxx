@@ -26,9 +26,7 @@
 DXFLType::DXFLType()
 {
     pSucc=NULL;
-    sName[0]=0;
     nFlags=0;
-    sDescription[0]=0;
     nDashCount=0;
 }
 
@@ -41,12 +39,10 @@ void DXFLType::Read(DXFGroupReader & rDGR)
         switch (rDGR.GetG())
         {
         case  2:
-            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN );
-            sName[DXF_MAX_STRING_LEN] = 0;
+            m_sName = OString(rDGR.GetS());
             break;
         case  3:
-            strncpy( sDescription, rDGR.GetS(), DXF_MAX_STRING_LEN );
-            sDescription[DXF_MAX_STRING_LEN] = 0;
+            m_sDescription = OString(rDGR.GetS());
             break;
         case 70:
             nFlags=rDGR.GetI();
@@ -85,10 +81,8 @@ void DXFLType::Read(DXFGroupReader & rDGR)
 DXFLayer::DXFLayer()
 {
     pSucc=NULL;
-    sName[0]=0;
     nFlags=0;
     nColor=-1;
-    sLineType[0]=0;
 }
 
 void DXFLayer::Read(DXFGroupReader & rDGR)
@@ -98,12 +92,10 @@ void DXFLayer::Read(DXFGroupReader & rDGR)
         switch(rDGR.GetG())
         {
         case  2:
-            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN );
-            sName[DXF_MAX_STRING_LEN] = 0;
+            m_sName = OString(rDGR.GetS());
             break;
         case  6:
-            strncpy( sLineType, rDGR.GetS(), DXF_MAX_STRING_LEN );
-            sLineType[DXF_MAX_STRING_LEN] = 0;
+            m_sLineType = OString(rDGR.GetS());
             break;
         case 70:
             nFlags=rDGR.GetI();
@@ -120,15 +112,12 @@ void DXFLayer::Read(DXFGroupReader & rDGR)
 DXFStyle::DXFStyle()
 {
     pSucc=NULL;
-    sName[0]=0;
     nFlags=0;
     fHeight=0.0;
     fWidthFak=1.0;
     fOblAngle=0.0;
     nTextGenFlags=0;
     fLastHeightUsed=0.0;
-    sPrimFontFile[0]=0;
-    sBigFontFile[0]=0;
 }
 
 void DXFStyle::Read(DXFGroupReader & rDGR)
@@ -138,16 +127,13 @@ void DXFStyle::Read(DXFGroupReader & rDGR)
         switch(rDGR.GetG())
         {
         case  2:
-            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN );
-            sName[DXF_MAX_STRING_LEN] = 0;
+            m_sName = OString(rDGR.GetS());
             break;
         case  3:
-            strncpy( sPrimFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN );
-            sPrimFontFile[DXF_MAX_STRING_LEN] = 0;
+            m_sPrimFontFile = OString(rDGR.GetS());
             break;
         case  4:
-            strncpy( sBigFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN );
-            sBigFontFile[DXF_MAX_STRING_LEN] = 0;
+            m_sBigFontFile = OString(rDGR.GetS());
             break;
         case 70:
             nFlags=rDGR.GetI();
@@ -177,7 +163,6 @@ DXFVPort::DXFVPort()
 {
     pSucc=NULL;
 
-    sName[0]=0;
     nFlags=0;
     fMinX=0;
     fMinY=0;
@@ -218,8 +203,7 @@ void DXFVPort::Read(DXFGroupReader & rDGR)
         switch(rDGR.GetG())
         {
         case  2:
-            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN);
-            sName[DXF_MAX_STRING_LEN] = 0;
+            m_sName = OString(rDGR.GetS());
             break;
         case 10: fMinX=rDGR.GetF(); break;
         case 11: fMaxX=rDGR.GetF(); break;
@@ -360,31 +344,31 @@ void DXFTables::Clear()
 }
 
 
-DXFLType * DXFTables::SearchLType(const char * pName) const
+DXFLType * DXFTables::SearchLType(OString const& rName) const
 {
     DXFLType * p;
     for (p=pLTypes; p!=NULL; p=p->pSucc) {
-        if (strcmp(pName,p->sName)==0) break;
+        if (rName == p->m_sName) break;
     }
     return p;
 }
 
 
-DXFLayer * DXFTables::SearchLayer(const char * pName) const
+DXFLayer * DXFTables::SearchLayer(OString const& rName) const
 {
     DXFLayer * p;
     for (p=pLayers; p!=NULL; p=p->pSucc) {
-        if (strcmp(pName,p->sName)==0) break;
+        if (rName == p->m_sName) break;
     }
     return p;
 }
 
 
-DXFVPort * DXFTables::SearchVPort(const char * pName) const
+DXFVPort * DXFTables::SearchVPort(OString const& rName) const
 {
     DXFVPort * p;
     for (p=pVPorts; p!=NULL; p=p->pSucc) {
-        if (strcmp(pName,p->sName)==0) break;
+        if (rName == p->m_sName) break;
     }
     return p;
 }
