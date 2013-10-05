@@ -113,12 +113,14 @@ $(call gb_Helper_abbreviate_dirs,\
 		--noout \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
+		--path $(SRCDIR)/officecfg/registry \
 		$(gb_XcuDataTarget_XSLT_DataVal) \
 		$(3) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
+		--path $(SRCDIR)/officecfg/registry \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
 endef
@@ -249,6 +251,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		$(gb_Configuration__stringparam_schemaRoot) \
 		--stringparam locale $(word 2,$(subst /, ,$(2))) \
+		--path $(SRCDIR)/officecfg/registry \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
 endef
