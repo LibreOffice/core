@@ -41,8 +41,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     GraphicObject *mpReplacementGraphic;
     ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
-    String aNewStrmName;                 /**< SW3/XML: new stream name (either SW3 stream
-                                         // name or package url) */
     String aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
     sal_Bool bTransparentFlagValid  :1;
     sal_Bool bInSwapIn              :1;
@@ -181,7 +179,6 @@ public:
     short SwapOut();
     /// Access to storage stream-name.
     void SetStreamName( const String& r ) { maGrfObj.SetUserData( r ); }
-    void SetNewStreamName( const String& r ) { aNewStrmName = r; }
     /// Is this node selected by any shell?
     sal_Bool IsSelected() const;
 
