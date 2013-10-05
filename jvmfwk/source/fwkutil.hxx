@@ -51,7 +51,9 @@ struct Bootstrap :
             OUStringBuffer buf(256);
             buf.append(getLibraryLocation());
 #if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
-            buf.appendAscii( "/../" LIBO_ETC_FOLDER );
+            // For some reason the jvmfwk3rc file is traditionally in
+            // "ure/lib", i.e.  in LIBO_URE_ETC_FOLDER
+            buf.appendAscii( "/../" LIBO_URE_ETC_FOLDER );
 #endif
             buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));
             OUString sIni = buf.makeStringAndClear();

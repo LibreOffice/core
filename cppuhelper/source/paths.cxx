@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_folders.h>
 
 #include "sal/config.h"
 
@@ -72,15 +73,16 @@ rtl::OUString cppu::getUnoIniUri() {
 #else
     rtl::OUString uri(get_this_libpath());
 #if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
-    // We keep both the LO and URE dylibs direcly in the Frameworks
-    // folder and rc files in Resources. Except for unorc, of which
-    // there are two, the "LO" one (which is in Resources) and the
-    // "URE" one which is in Resources/ure. As this code goes into the
-    // cppuhelper library which is part of URE, we are looking for the
-    // latter one here. I think...
-    if (uri.endsWith( "/Frameworks" ) )
+    // We keep both the LO and URE dylibs direcly in "Frameworks"
+    // (that is, LIBO_LIB_FOLDER) and rc files in "Resources"
+    // (LIBO_ETC_FOLDER). Except for unorc, of which there are two,
+    // the "LO" one (which is in "Resources") and the "URE" one (which
+    // is in "Resources/ure/etc" (LIBO_URE_ETC_FOLDER)). As this code
+    // goes into the cppuhelper library which is part of URE, we are
+    // looking for the latter one here. I think...
+    if (uri.endsWith( "/" LIBO_LIB_FOLDER ) )
     {
-        uri = uri.copy( 0, uri.getLength() - (sizeof("Frameworks")-1) ) + "Resources/ure";
+        uri = uri.copy( 0, uri.getLength() - (sizeof(LIBO_LIB_FOLDER)-1) ) + LIBO_URE_ETC_FOLDER;
     }
 #endif
 #endif

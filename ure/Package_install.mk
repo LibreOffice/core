@@ -28,7 +28,7 @@ else
 $(eval $(call gb_Package_add_symbolic_link,ure_install,ure-link,ure))
 endif
 
-$(eval $(call gb_Package_add_files,ure_install,$(LIBO_URE_LIB_FOLDER),\
+$(eval $(call gb_Package_add_files,ure_install,$(LIBO_URE_ETC_FOLDER),\
 	$(call gb_Helper_get_rcfile,jvmfwk3) \
 	$(call gb_Helper_get_rcfile,uno) \
 ))
