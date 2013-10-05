@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAYn///RM\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9721,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-10-05T08:29:29Z",
+      "side": 1,
+      "message": "It can be done shorter:\n\n flex -V | cut -d\" \" -f2 | sed \u0027s/\\.//\u0027g",
+      "revId": "9e486cc6923115525dcb3ce1bce68dd7fecc4b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAYn///RI\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9722,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-10-05T08:29:29Z",
+      "side": 1,
+      "message": "On my fresh OpenSUSE machine that check would fail:\n\n wizball~\u003eflex -V | cut -d\" \" -f2 | sed \u0027s/\\.//\u0027g\n 2537",
+      "revId": "9e486cc6923115525dcb3ce1bce68dd7fecc4b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
