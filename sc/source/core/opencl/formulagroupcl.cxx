@@ -53,7 +53,7 @@ public:
         ss << mSymName << "[gid0]";
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual void Marshal(cl_kernel, int);
+    virtual void Marshal(cl_kernel, int, int);
     virtual ~DynamicKernelArgument()
     {
         //std::cerr << "~DynamicKernelArgument: " << mSymName <<"\n";
@@ -71,7 +71,7 @@ protected:
 };
 
 /// Map the buffer used by an argument and do necessary argument setting
-void DynamicKernelArgument::Marshal(cl_kernel k, int argno)
+void DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
 {
     FormulaToken *ref = mFormulaTree->CurrentFormula;
     assert(mpClmem == NULL);
@@ -116,19 +116,20 @@ public:
         ss << mSymName;
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual void Marshal(cl_kernel, int);
+    virtual void Marshal(cl_kernel, int, int);
 };
 
-void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno)
+void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
 {
     FormulaToken *ref = mFormulaTree->CurrentFormula;
     // May have variable arguments..Not handling them now
     assert(mFormulaTree->Children.size() == ref->GetByte());
-    // TODO: implement the following rationale here:
     // if the argument of this reduce operation contains only
     // fixed ranges, then each range is calculated by another
     // kernel and will have only one reduction per
     // range per vector
+    int opc = ref->GetOpCode();
+    int total_nr = 0;
     if (ref->GetByte() > 1)
         return; // FIXME Not supporting more than one range for now
     FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
@@ -138,19 +139,10 @@ void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno)
     assert(pChildDVR);
     // Pass that ..
     double *pHostBuffer = const_cast<double*>(
-        pChildDVR->GetArrays()[0].mpNumericArray);
+            pChildDVR->GetArrays()[0].mpNumericArray);
     size_t nHostBuffer = pChildDVR->GetArrayLength();
-#if 0
-    std::cerr << "Marshal a Single vector of size " << pChildDVR->GetArrayLength();
-    std::cerr << " at argument "<< argno << "\n";
-#endif
-    // Obtain cl context
-    KernelEnv kEnv;
-    OclCalc::setKernelEnv(&kEnv);
-    cl_int err;
     // TODO either call an OpenCL reduce kerenl or use Bolt (preferred)
     // This is a CPU quick hack just to show it works. But can be REALLY slow!!
-    int opc = ref->GetOpCode();
     double cur_top = pHostBuffer[0];
     for (unsigned int i = 1; i < nHostBuffer; i++) {
         switch(opc)
@@ -168,11 +160,90 @@ void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno)
                 assert(0);
         }
     }
+    total_nr += nHostBuffer;
     if (opc == ocAverage)
-        cur_top /= nHostBuffer;
+        cur_top /= total_nr;
+    // Obtain cl context
+    KernelEnv kEnv;
+    OclCalc::setKernelEnv(&kEnv);
+    cl_int err;
     // Pass the scalar result back to the rest of the formula kernel
     err = clSetKernelArg(k, argno, sizeof(double), (void*)&cur_top);
     assert(CL_SUCCESS == err);
+}
+
+/// Handling reductions of a Double Vector that leads to an array of results
+class DynamicKernelSlidingArgument: public DynamicKernelArgument
+{
+public:
+    DynamicKernelSlidingArgument(const std::string &s, FormulaTreeNode *ft):
+        DynamicKernelArgument(s, ft), bNeedHostMappedWindow(true) {}
+    /// Create buffer and pass the buffer to a given kernel
+    virtual void Marshal(cl_kernel, int, int nVectorWidth);
+    /// Do the sliding window computation. TODO use GPU kernels
+    virtual void ComputeSlidingWindow(double *pResults,
+            double *pHostBuffer, size_t nHostBuffer, size_t nWindowSize, int nVectorWidth)
+    {
+        assert(mFormulaTree->CurrentFormula->GetOpCode() == ocAverage);
+        for (int i = 0; i < nVectorWidth; i++)
+        {
+            double LocalSum = 0.0;
+            for (size_t j = 0; j < nWindowSize; j++)
+            {
+                LocalSum += pHostBuffer[i+j];
+            }
+            LocalSum /= nWindowSize;
+            pResults[i] = LocalSum;
+        }
+    }
+private:
+    bool bNeedHostMappedWindow;
+};
+void DynamicKernelSlidingArgument::Marshal(cl_kernel k, int argno, int nVectorWidth)
+{
+    // Obtain cl context
+    KernelEnv kEnv;
+    OclCalc::setKernelEnv(&kEnv);
+    cl_int err;
+    // The result vector
+    mpClmem = clCreateBuffer(kEnv.mpkContext,
+            (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
+            nVectorWidth*sizeof(double), NULL, &err);
+    assert(CL_SUCCESS == err);
+    double *pHostIntermediateResults = NULL;
+    if (bNeedHostMappedWindow)
+    {
+        // Map result vector to host space for writing
+        pHostIntermediateResults = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+                mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
+                nVectorWidth*sizeof(double), 0, NULL, NULL, &err);
+        assert(err == CL_SUCCESS);
+    }
+
+    FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
+    assert(pChild);
+    const formula::DoubleVectorRefToken* pChildDVR =
+        dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
+    assert(pChildDVR);
+    // Prepare intermediate results (on CPU for now)
+    double *pHostInput = const_cast<double*>(
+        pChildDVR->GetArrays()[0].mpNumericArray);
+    size_t nHostBuffer = pChildDVR->GetArrayLength();
+    size_t nWindowSize = pChildDVR->GetRefRowSize();
+    assert(nHostBuffer == nWindowSize+nVectorWidth-1);
+    ComputeSlidingWindow(pHostIntermediateResults, pHostInput,
+            nHostBuffer, nWindowSize, nVectorWidth);
+    // Computation done.
+    if (bNeedHostMappedWindow)
+    {
+        // Pass the ownership back to GPU.
+        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
+                pHostIntermediateResults, 0, NULL, NULL);
+        assert(CL_SUCCESS == err);
+    }
+
+    err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
+    assert(err == CL_SUCCESS);
 }
 
 /// Holds the symbol table for a given dynamic kernel
@@ -196,19 +267,19 @@ public:
     }
     /// Memory mapping from host to device and pass buffers to the given kernel as
     /// arguments
-    void Marshal(cl_kernel);
+    void Marshal(cl_kernel, int);
 private:
     unsigned int mCurId;
     ArgumentMap mSymbols;
     ArgumentList mParams;
 };
 
-void SymbolTable::Marshal(cl_kernel k)
+void SymbolTable::Marshal(cl_kernel k, int nVectorWidth)
 {
     int i = 1; //The first argument is reserved for results
     for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
             ++it) {
-        (*it)->Marshal(k, i++);
+        (*it)->Marshal(k, i++, nVectorWidth);
     }
 }
 
@@ -291,7 +362,7 @@ public:
         err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
         assert(CL_SUCCESS == err);
         // The rest of buffers
-        mSyms.Marshal(mpKernel);
+        mSyms.Marshal(mpKernel, nr);
         size_t global_work_size[] = {nr};
         clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
             global_work_size, NULL, 0, NULL, NULL);
@@ -406,19 +477,9 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                         ->GenDeclRef(mKernelSrc);
                     break;
                 }
-#if 0 //unexercised code
-            case formula::svDoubleVectorRef:
-                {
-                    const formula::DoubleVectorRefToken* pDVR =
-                        dynamic_cast< const formula::DoubleVectorRefToken* >( p );
-                    std::cerr << "a Dobule vector of size ";
-                    std::cerr << pDVR->GetArrayLength() << "\n";
-                    break;
-                }
-#endif
             default:
 #if 1
-                std::cerr << "Unknown operand type " << p->GetType() << "\n";
+                std::cerr << "Unhandled operand type " << p->GetType() << "\n";
 #endif
                 mKernelSrc << "/* Unknown Operand */";
         };
@@ -446,8 +507,28 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
             case ocMin:
             case ocMax:
             case ocAverage:
-                mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
-                    ->GenDeclRef(mKernelSrc);
+                {
+
+                    assert(cur->Children.size() == p->GetByte());
+                    FormulaToken *pChild = cur->Children[0]->CurrentFormula;
+                    assert(pChild);
+                    const formula::DoubleVectorRefToken* pChildDVR =
+                        dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
+                    assert(pChildDVR);
+                    if (pChildDVR->IsStartFixed() && pChildDVR->IsEndFixed())
+                    {
+                        // Reduce to a scalar variable
+                        mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
+                            ->GenDeclRef(mKernelSrc);
+                    } else if (!pChildDVR->IsStartFixed() && !pChildDVR->IsEndFixed()) {
+                        // Reduce to an array
+                        std::cerr << "Found a sligding window\n";
+                        mSyms.DeclRefArg<DynamicKernelSlidingArgument>(cur)
+                            ->GenDeclRef(mKernelSrc);
+                    } else {
+                        assert(0 && "Unhandled case!\n");
+                    }
+                }
                 return;
             default:
                 std::cerr << " /* UnknownOperator(" << p->GetOpCode() << ") */";
