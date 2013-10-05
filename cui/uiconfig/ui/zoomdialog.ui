@@ -171,7 +171,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="variable">
-                                <property name="label" translatable="yes">Variable</property>
+                                <property name="label" translatable="yes">Variable:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -291,7 +291,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkRadioButton" id="columns">
-                                <property name="label" translatable="yes">Columns</property>
+                                <property name="label" translatable="yes">Columns:</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
