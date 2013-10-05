@@ -38,18 +38,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#define DEBUG_UNIT_TEST 1
-
-#if DEBUG_UNIT_TEST
-#include <iostream>
-#endif
-
 using namespace ::com::sun::star;
-
-#if DEBUG_UNIT_TEST
-using ::std::cout;
-using ::std::endl;
-#endif
 
 namespace {
 
