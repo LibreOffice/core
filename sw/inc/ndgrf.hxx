@@ -104,7 +104,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     */
     SvStream* _GetStreamForEmbedGrf(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _refPics,
-            const String& rStrmName ) const;
+            const OUString& rStreamName ) const;
 
     /** helper method to get a substorage of the document storage for readonly access.
 

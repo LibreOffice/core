@@ -870,37 +870,36 @@ uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const Stri
 */
 SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             const uno::Reference< embed::XStorage >& _refPics,
-            const String& rStrmName ) const
+            const OUString& rStreamName ) const
 {
     SvStream* pStrm( 0L );
 
-    if( _refPics.is() && rStrmName.Len() )
+    if( _refPics.is() && !rStreamName.isEmpty() )
     {
-        String _aStrmName(rStrmName);
+        OUString sStreamName(rStreamName);
         // If stream doesn't exist in the storage, try access the graphic file by
         // re-generating its name.
         // A save action can have changed the filename of the embedded graphic,
         // because a changed unique ID of the graphic is calculated.
         // --> recursive calls of <GetUniqueID()> have to be avoided.
         // Thus, use local static boolean to assure this.
-        if ( !_refPics->hasByName( _aStrmName ) ||
-               !_refPics->isStreamElement( _aStrmName ) )
+        if ( !_refPics->hasByName( sStreamName ) ||
+             !_refPics->isStreamElement( sStreamName ) )
         {
-            xub_StrLen nExtPos = _aStrmName.Search( '.' );
-            String aExtStr = _aStrmName.Copy( nExtPos );
             if ( GetGrfObj().GetType() != GRAPHIC_NONE )
             {
-                _aStrmName = OStringToOUString(GetGrfObj().GetUniqueID(),
-                    RTL_TEXTENCODING_ASCII_US);
-                _aStrmName += aExtStr;
+                const sal_Int32 nExtPos = sStreamName.indexOf('.');
+                const OUString aExtStr = (nExtPos>=0) ? sStreamName.copy( nExtPos ) : OUString();
+                sStreamName = OStringToOUString(GetGrfObj().GetUniqueID(),
+                    RTL_TEXTENCODING_ASCII_US) + aExtStr;
             }
         }
 
         // assure that graphic file exist in the storage.
-        if ( _refPics->hasByName( _aStrmName ) &&
-             _refPics->isStreamElement( _aStrmName ) )
+        if ( _refPics->hasByName( sStreamName ) &&
+             _refPics->isStreamElement( sStreamName ) )
         {
-            uno::Reference < io::XStream > refStrm = _refPics->openStreamElement( _aStrmName, embed::ElementModes::READ );
+            uno::Reference < io::XStream > refStrm = _refPics->openStreamElement( sStreamName, embed::ElementModes::READ );
             pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
         }
         else
