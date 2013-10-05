@@ -246,7 +246,7 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
         Image aImage;
         GetRootEntryBitmaps( rDocument, aImage );
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        pDocumentRootEntry = AddEntry(
+        AddEntry(
             aRootName,
             aImage,
             0, true,
