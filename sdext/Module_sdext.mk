@@ -13,14 +13,9 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Library_PresenterScreen \
 ))
 
-ifeq ($(ENABLE_MINIMIZER),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
-    Configuration_minimizer \
-    Extension_minimizer \
-    Library_minimizer \
-    Rdb_minimizer \
+    Library_PresentationMinimizer \
 ))
-endif
 
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\

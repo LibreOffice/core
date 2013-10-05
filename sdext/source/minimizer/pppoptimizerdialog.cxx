@@ -28,7 +28,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-#define SERVICE_NAME "com.sun.star.comp.SunPresentationMinimizer"
+#define SERVICE_NAME "com.sun.star.comp.PresentationMinimizer"
 #include <rtl/ustrbuf.hxx>
 
 // ----------------------
@@ -92,7 +92,7 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizerDialog::query
     const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
-    if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) == 0 )
+    if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PresentationMinimizer:" ) == 0 )
         xRet = this;
 
     return xRet;
@@ -122,7 +122,7 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
     throw( RuntimeException )
 {
 
-    if ( mxController.is() && ( rURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) == 0 ) )
+    if ( mxController.is() && ( rURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PresentationMinimizer:" ) == 0 ) )
     {
         if ( rURL.Path.compareToAscii( "execute" ) == 0 )
         {
@@ -185,7 +185,7 @@ void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatus
 
 OUString PPPOptimizerDialog_getImplementationName()
 {
-    return OUString( "com.sun.star.comp.SunPresentationMinimizerImp" );
+    return OUString( "com.sun.star.comp.PresentationMinimizerImp" );
 }
 
 Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()

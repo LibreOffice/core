@@ -22,19 +22,6 @@
 
 #ifdef WITH_EXTENSION_INTEGRATION
 
-/* ** Presentation Minimizer ** */
-
-#ifdef WITH_EXTENSION_MINIMIZER
-
-File gid_File_Oxt_Presentation_Minimizer
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "Extension/presentation-minimizer.filelist";
-End
-
-#endif
-
 /* ** MediaWiki Publisher** */
 
 #ifndef WITHOUT_EXTENSION_MEDIAWIKI

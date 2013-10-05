@@ -753,11 +753,6 @@ AC_ARG_ENABLE(ext-mariadb-connector,
         [Enable the build of the MariaDB/MySQL Connector extension.])
 )
 
-AC_ARG_ENABLE(ext-presenter-minimizer,
-    AS_HELP_STRING([--disable-ext-presenter-minimizer],
-        [Disable the Presentation Minimizer extension.])
-)
-
 AC_ARG_ENABLE(report-builder,
     AS_HELP_STRING([--disable-report-builder],
         [Disable the Report Builder.])
@@ -10368,18 +10363,6 @@ fi
 
 AC_SUBST(ENABLE_OPENCL)
 
-# presenter minimizer extension?
-AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
-if test "x$enable_ext_presenter_minimizer" != "xno" -a "x$enable_extension_integration" != "xno"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_MINIMIZER=TRUE
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MINIMIZER"
-else
-    AC_MSG_RESULT([no])
-    ENABLE_MINIMIZER=
-fi
-AC_SUBST(ENABLE_MINIMIZER)
-
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=
@@ -10458,7 +10441,7 @@ fi
 AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
-AC_MSG_CHECKING([whether to build the Report Builder extension])
+AC_MSG_CHECKING([whether to build the Report Builder])
 if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_REPORTBUILDER=TRUE
