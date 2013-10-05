@@ -30,7 +30,7 @@ SbiImage::SbiImage()
     pStringOff = NULL;
     pStrings   = NULL;
     pCode      = NULL;
-    pLegacyPCode       = NULL;
+    pLegacyPCode = NULL;
     nFlags     = 0;
     nStrings   = 0;
     nStringSize= 0;
@@ -41,6 +41,8 @@ SbiImage::SbiImage()
     bError     = false;
     bFirstInit = true;
     eCharSet   = osl_getThreadTextEncoding();
+    nStringIdx = 0;
+    nStringOff = 0;
 }
 
 SbiImage::~SbiImage()
