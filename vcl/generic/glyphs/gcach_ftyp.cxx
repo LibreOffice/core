@@ -1912,6 +1912,7 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
 {
     mpPointAry  = new Point[ mnMaxPoints ];
     mpFlagAry   = new sal_uInt8 [ mnMaxPoints ];
+    maPosition.x = maPosition.y = 0;
 }
 
 // -----------------------------------------------------------------------
