@@ -58,6 +58,8 @@ published interface XLinguProperties
     [attribute] boolean IsSpellWithDigits;
 
     /** defines if the capitalization of words should be checked or not.
+
+        @deprecated
     */
     [attribute] boolean IsSpellCapitalization;
 

@@ -349,6 +349,7 @@
         <!-- OldLocation: soffice.ini -->
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
+          <deprecated/>
           <desc>Checks the correct use of capitalization.</desc>
           <label>Check capitalization</label>
         </info>
