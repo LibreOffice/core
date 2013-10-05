@@ -73,6 +73,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	sd/util/sdd \
 	sd/util/sdfilt \
 	sdext/source/presenter/presenter \
+	sdext/source/minimizer/minimizer \
 	sfx2/util/sfx \
 	slideshow/util/slideshow \
 	sot/util/sot \

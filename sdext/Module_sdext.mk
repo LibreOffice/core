@@ -15,12 +15,13 @@ $(eval $(call gb_Module_add_targets,sdext,\
 
 ifeq ($(ENABLE_MINIMIZER),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\
-    Configuration_minimizer \
-    Extension_minimizer \
-    Library_minimizer \
-    Rdb_minimizer \
+    Library_PresentationMinimizer \
 ))
 endif
+
+#    Configuration_minimizer \
+#    Extension_minimizer \
+#    Rdb_minimizer \
 
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_Module_add_targets,sdext,\

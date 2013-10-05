@@ -92,9 +92,11 @@ postprocess_FILES_graphicfilter := \
 
 postprocess_DEPS_impress := main
 postprocess_FILES_impress := \
+	$(postprocess_XCS)/Office/PresentationMinimizer.xcs \
 	$(postprocess_XCS)/Office/PresenterScreen.xcs \
 	$(postprocess_XCS)/Office/UI/Effects.xcs \
 	$(postprocess_XCS)/Office/UI/ImpressWindowState.xcs \
+	$(postprocess_XCU)/Office/PresentationMinimizer.xcu \
 	$(postprocess_XCU)/Office/PresenterScreen.xcu \
 	$(postprocess_XCU)/Office/UI/Effects.xcu \
 	$(postprocess_XCU)/Office/UI/ImpressWindowState.xcu \

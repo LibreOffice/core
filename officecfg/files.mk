@@ -41,6 +41,7 @@ officecfg_XCSFILES := \
     Office/OOoImprovement/Settings \
     Office/OptionsDialog \
     Office/Paths \
+    Office/PresentationMinimizer \
     Office/PresenterScreen \
     Office/ProtocolHandler \
     Office/Recovery \
