@@ -37,6 +37,7 @@ namespace ww8
 
 WW8TableNodeInfoInner::WW8TableNodeInfoInner(WW8TableNodeInfo * pParent)
 : mpParent(pParent)
+, mnDepth(0)
 , mnCell(0)
 , mnRow(0)
 , mnShadowsBefore(0)
