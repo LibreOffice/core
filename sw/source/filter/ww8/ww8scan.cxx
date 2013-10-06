@@ -5956,8 +5956,8 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         if( 20 < nRead )
             rSt.SeekRel( nRead-20 );
     }
-    while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
-                    //   und kann vorzeitig per "break" verlassen werden.
+    while( 0 ); // Trick: obiger Block wird genau einmal durchlaufen
+                //   und kann vorzeitig per "break" verlassen werden.
 
     nRemaining -= cbStshi;
 
