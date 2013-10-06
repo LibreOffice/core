@@ -35,7 +35,7 @@
 #include "editeng/editengdllapi.h"
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 
 #include <tools/rtti.hxx>   // due to typedef TypeId
 #include <vector>

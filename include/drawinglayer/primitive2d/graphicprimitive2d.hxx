@@ -24,7 +24,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

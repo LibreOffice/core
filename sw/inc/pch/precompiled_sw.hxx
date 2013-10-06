@@ -754,7 +754,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/embedtransfer.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>

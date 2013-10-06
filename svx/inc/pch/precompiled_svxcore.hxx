@@ -515,7 +515,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/filechangedchecker.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>

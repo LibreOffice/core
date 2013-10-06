@@ -30,7 +30,7 @@
 #include <svl/style.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/linkmgr.hxx>

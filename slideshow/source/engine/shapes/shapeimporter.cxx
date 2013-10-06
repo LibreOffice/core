@@ -22,7 +22,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <basegfx/point/b2dpoint.hxx>

@@ -209,7 +209,7 @@
 #include <string.h>
 #include <string>
 #include <svl/lngmisc.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <tools/color.hxx>
 #include <tools/globname.hxx>
 #include <tools/resmgr.hxx>

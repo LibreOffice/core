@@ -64,7 +64,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 
 // for auto_ptr
 #include <memory>

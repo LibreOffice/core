@@ -21,7 +21,7 @@
 #include <tools/solar.h>
 #include <tools/helpers.hxx>
 #include <svtools/GraphicManager.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/window.hxx>

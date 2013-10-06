@@ -55,7 +55,7 @@
 #define VALID_FOLLOWTEXT    0x0100
 #include <svl/poolitem.hxx>
 #include <vcl/font.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 
 // class SvxBulletItem ---------------------------------------------------
 

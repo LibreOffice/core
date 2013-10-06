@@ -30,7 +30,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <swtypes.hxx>
 #include <grfatr.hxx>
 #include <swunohelper.hxx>

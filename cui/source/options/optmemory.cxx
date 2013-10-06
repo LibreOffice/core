@@ -24,7 +24,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/GraphicManager.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>

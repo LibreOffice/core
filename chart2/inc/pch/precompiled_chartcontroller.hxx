@@ -222,7 +222,7 @@
 #include <svtools/colrdlg.hxx>
 #include <svtools/contextmenuhelper.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/transfer.hxx>

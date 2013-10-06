@@ -37,7 +37,7 @@
 
 #include "descriptor.hxx"
 #include "graphic.hxx"
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include "provider.hxx"
 #include <vcl/dibtools.hxx>
 

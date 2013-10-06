@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <sal/types.h>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 

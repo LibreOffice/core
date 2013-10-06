@@ -38,7 +38,7 @@
 // for Graphic
 #include <vcl/graph.hxx>
 // for GraphicObject
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
 
 #include <comphelper/processfactory.hxx>

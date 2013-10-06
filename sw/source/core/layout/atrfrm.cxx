@@ -64,7 +64,7 @@
 #include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <editeng/brushitem.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <unomid.h>
 #include <comcore.hrc>
 #include <svx/svdundo.hxx> // #111827#

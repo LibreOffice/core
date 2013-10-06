@@ -91,7 +91,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/borderhelper.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/formpdfexport.hxx>

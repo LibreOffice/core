@@ -20,7 +20,7 @@
 #ifndef _NDGRF_HXX
 #define _NDGRF_HXX
 #include <sfx2/lnkbase.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <ndnotxt.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <boost/shared_ptr.hpp>

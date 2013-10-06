@@ -25,7 +25,7 @@
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <rtl/ustring.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>

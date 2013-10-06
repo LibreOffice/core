@@ -28,7 +28,7 @@
 #include "grfcache.hxx"
 #include <rtl/crc.h>
 
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/GraphicManager.hxx>
 
 #define RELEASE_TIMEOUT 10000

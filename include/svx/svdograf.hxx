@@ -23,7 +23,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include "svx/svxdllapi.h"
 
 namespace sdr

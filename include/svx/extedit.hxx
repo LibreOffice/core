@@ -10,7 +10,7 @@
 #ifndef _EXTEDIT_HXX
 #define _EXTEDIT_HXX
 
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <vcl/graph.hxx>

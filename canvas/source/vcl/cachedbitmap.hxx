@@ -22,7 +22,7 @@
 
 #include <canvas/base/cachedprimitivebase.hxx>
 
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 
 #include <boost/shared_ptr.hpp>
 

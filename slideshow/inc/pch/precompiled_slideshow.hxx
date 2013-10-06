@@ -199,7 +199,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <stdio.h>
 #include <string>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>

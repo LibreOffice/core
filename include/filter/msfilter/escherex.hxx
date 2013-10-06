@@ -27,7 +27,7 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

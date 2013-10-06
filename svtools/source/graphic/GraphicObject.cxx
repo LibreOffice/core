@@ -31,7 +31,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/GraphicManager.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>

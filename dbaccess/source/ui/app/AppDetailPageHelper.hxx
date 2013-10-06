@@ -32,7 +32,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include "callbacks.hxx"
 #include <memory>
 

@@ -438,7 +438,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <svtools/fontsubstconfig.hxx>
-#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicObject.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/htmlcfg.hxx>
