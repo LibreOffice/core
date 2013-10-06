@@ -43,6 +43,7 @@
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
 #include <switerator.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -157,6 +158,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
 
     sal_uInt16 nOutl = 0;
     SwOutlineNodes* pOutlNds = (SwOutlineNodes*)&GetNodes().GetOutLineNds();
+    boost::scoped_ptr<SwOutlineNodes> xTmpOutlNds;
     SwNodePtr pStartNd;
 
     if ( !bOutline) {
@@ -165,17 +167,15 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
             // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
             if( pSplitColl->GetAttrOutlineLevel() == 0 )
             {
-                pOutlNds = new SwOutlineNodes;
+                xTmpOutlNds.reset(new SwOutlineNodes);
+                pOutlNds = xTmpOutlNds.get();
                 SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
                 for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
                     if( pTNd->GetNodes().IsDocNodes() )
                         pOutlNds->insert( pTNd );
 
                 if( pOutlNds->empty() )
-                {
-                    delete pOutlNds;
                     return false;
-                }
             }
         }
         else
@@ -482,8 +482,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
         }
     } while( pStartNd );
 
-    if( pOutlNds != &GetNodes().GetOutLineNds() )
-        delete pOutlNds;
+    xTmpOutlNds.reset();
 
     switch( eDocType )
     {
