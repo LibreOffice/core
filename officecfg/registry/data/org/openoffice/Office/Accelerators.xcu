@@ -100,10 +100,10 @@
           <value xml:lang="de">.uno:SearchDialog</value>
         </prop>
       </node>
-      <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+      <node oor:name="H_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US">.uno:SearchDialog</value>
+          <value xml:lang="en-US" install:module="unxwnt">.uno:SearchDialog</value>
         </prop>
       </node>
       <node oor:name="G_MOD1" oor:op="replace">
@@ -309,10 +309,10 @@
             <value xml:lang="en-US">vnd.sun.star.findbar:FocusToFindbar</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SearchDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SearchDialog</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -889,16 +889,16 @@
             <value xml:lang="en-US">.uno:SelectData</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -1495,10 +1495,10 @@
             <value xml:lang="en-US">.uno:FormatUngroup</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="I_MOD1" oor:op="replace">
@@ -1538,16 +1538,16 @@
             <value xml:lang="en-US">.uno:LeftPara</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -2138,10 +2138,10 @@
             <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="INSERT" oor:op="replace">
@@ -2222,16 +2222,16 @@
             <value xml:lang="en-US">.uno:ExecuteMacroField</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -2736,10 +2736,10 @@
             <value xml:lang="en-US">.uno:FormatUngroup</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="I_MOD1" oor:op="replace">
@@ -2785,16 +2785,16 @@
             <value xml:lang="en-US">.uno:LeftPara</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -3459,10 +3459,10 @@
             <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="INSERT" oor:op="replace">
@@ -3543,16 +3543,16 @@
             <value xml:lang="en-US">.uno:ExecuteMacroField</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -4226,10 +4226,10 @@
             <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="INSERT" oor:op="replace">
@@ -4322,16 +4322,16 @@
             <value xml:lang="en-US">.uno:ExecuteMacroField</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -4981,10 +4981,10 @@
             <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="INSERT" oor:op="replace">
@@ -5065,16 +5065,16 @@
             <value xml:lang="en-US">.uno:ExecuteMacroField</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -5754,10 +5754,10 @@
             <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="INSERT" oor:op="replace">
@@ -5838,16 +5838,16 @@
             <value xml:lang="en-US">.uno:ExecuteMacroField</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -6527,10 +6527,10 @@
             <value xml:lang="en-US">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
-        <node oor:name="H_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="de">.uno:SuperScript</value>
+            <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="INSERT" oor:op="replace">
@@ -6611,16 +6611,16 @@
             <value xml:lang="en-US">.uno:ExecuteMacroField</value>
           </prop>
         </node>
-        <node oor:name="M_MOD1" oor:op="replace" install:module="unxwnt">
+        <node oor:name="M_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:ResetAttributes</value>
           </prop>
         </node>
-        <node oor:name="M_MOD3" oor:op="replace" install:module="macosx">
+        <node oor:name="M_MOD3" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:ResetAttributes</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:ResetAttributes</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
