@@ -210,7 +210,8 @@ AC_ARG_WITH(android-ndk-toolchain-version,
 
 AC_ARG_WITH(android-sdk,
     AS_HELP_STRING([--with-android-sdk],
-        [Specify location of the Android SDK. Mandatory when building for Android.]),
+        [Specify location of the Android SDK. Mandatory when building for Android,
+        or when building the Impress Remote Android app.]),
 ,)
 
 ANDROID_NDK_HOME=
@@ -660,17 +661,9 @@ linux-android*)
         AC_MSG_ERROR([the --with-android-ndk-toolchain-version option is mandatory])
     fi
 
-    if test -z "$with_android_sdk"; then
-        AC_MSG_ERROR([the --with-android-sdk option is mandatory])
-    fi
-
     # Verify that the NDK and SDK options are proper
     if test ! -f "$ANDROID_NDK_HOME/platforms/android-9/arch-arm/usr/lib/libc.a"; then
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
-    fi
-
-    if test ! -d "$ANDROID_SDK_HOME/platforms"; then
-        AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
     fi
 
     AC_DEFINE(HAVE_FT_FACE_GETCHARVARIANTINDEX)
@@ -681,6 +674,16 @@ linux-android*)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
 esac
+
+if echo "$host_os" | grep -q linux-android || test "$enable_sdremote_android" = "yes"; then
+    if test -z "$with_android_sdk"; then
+        AC_MSG_ERROR([the --with-android-sdk option is mandatory])
+    fi
+
+    if test ! -d "$ANDROID_SDK_HOME/platforms"; then
+        AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
+    fi
+fi
 
 if test "$_os" = "AIX"; then
     AC_PATH_PROG(GAWK, gawk)
@@ -997,13 +1000,19 @@ AC_ARG_ENABLE(packagekit,
 
 AC_ARG_ENABLE(sdremote,
     AS_HELP_STRING([--disable-sdremote],
-        [Determines whether to enable Impress remote control.]),
+        [Determines whether to enable Impress remote control (i.e. the server component).]),
 ,enable_sdremote=yes)
 
 AC_ARG_ENABLE(sdremote-bluetooth,
     AS_HELP_STRING([--disable-sdremote-bluetooth],
         [Determines whether to build sdremote with bluetooth support.
          Requires dbus on Linux.]))
+
+AC_ARG_ENABLE(sdremote-android,
+    AS_HELP_STRING([--enable-sdremote-android],
+        [Determines whether to build the Impress Remote Android app -- requires
+        a correctly configured android sdk. Automatically enabled if ]),
+,enable_sdremote_android=no)
 
 AC_ARG_ENABLE(gconf,
     AS_HELP_STRING([--disable-gconf],
@@ -10115,6 +10124,17 @@ fi
 AC_SUBST(ENABLE_SDREMOTE)
 AC_SUBST(ENABLE_SDREMOTE_BLUETOOTH)
 AC_SUBST(SYSTEM_BLUEZ)
+
+AC_MSG_CHECKING([whether to enable Impress remote control android app])
+if echo "$host_os" | grep -q linux-android || test "$enable_sdremote_android" = "yes"; then
+    AC_MSG_RESULT([yes])
+    ENABLE_SDREMOTE_ANDROID=TRUE
+    AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
+else
+    ENABLE_SDREMOTE=
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_SDREMOTE_ANDROID)
 
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
