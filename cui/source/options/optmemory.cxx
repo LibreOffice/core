@@ -25,6 +25,7 @@
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/grfmgr.hxx>
+#include <svtools/GraphicManager.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
@@ -182,11 +183,11 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     // create a dummy graphic object to get access to the common GraphicManager
     GraphicObject       aDummyObject;
-    GraphicManager&     rGrfMgr = aDummyObject.GetGraphicManager();
+    GraphicManager*     rGrfMgr = GraphicManager::GetGlobalManager();
 
-    rGrfMgr.SetMaxCacheSize(totalCacheSize);
-    rGrfMgr.SetMaxObjCacheSize(objectCacheSize, true);
-    rGrfMgr.SetCacheTimeout(objectReleaseTime);
+    rGrfMgr->SetMaxCacheSize(totalCacheSize);
+    rGrfMgr->SetMaxObjCacheSize(objectCacheSize, true);
+    rGrfMgr->SetCacheTimeout(objectReleaseTime);
 
     // OLECache
     officecfg::Office::Common::Cache::Writer::OLE_Objects::set(

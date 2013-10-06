@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
+
 #include <salhelper/timer.hxx>
-#include <svtools/grfmgr.hxx>
 #include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/outdev.hxx>
@@ -26,7 +27,9 @@
 #include <rtl/strbuf.hxx>
 #include "grfcache.hxx"
 #include <rtl/crc.h>
-#include <memory>
+
+#include <svtools/grfmgr.hxx>
+#include <svtools/GraphicManager.hxx>
 
 #define RELEASE_TIMEOUT 10000
 #define MAX_BMP_EXTENT  4096
@@ -143,7 +146,7 @@ class GraphicCacheEntry
 {
 private:
 
-    GraphicObjectList_impl  maGraphicObjectList;
+    GraphicObjectList   maGraphicObjectList;
 
     GraphicID           maID;
     GfxLink             maGfxLink;
@@ -324,7 +327,7 @@ void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
 bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
 {
     for(
-        GraphicObjectList_impl::iterator it = maGraphicObjectList.begin();
+        GraphicObjectList::iterator it = maGraphicObjectList.begin();
         it != maGraphicObjectList.end();
         ++it
     ) {
@@ -809,7 +812,9 @@ GraphicDisplayCacheEntry::~GraphicDisplayCacheEntry()
 void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const
 {
     if( mpMtf )
-        GraphicManager::ImplDraw( pOut, rPt, rSz, *mpMtf, maAttr );
+    {
+        GraphicManager::Draw( pOut, rPt, rSz, *mpMtf, maAttr );
+    }
     else if( mpBmpEx )
     {
         if( maAttr.IsRotated() )

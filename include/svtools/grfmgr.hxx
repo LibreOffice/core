@@ -156,19 +156,13 @@ public:
 
 class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
 {
-    friend class GraphicManager;
-
 private:
-
-    static GraphicManager*  mpGlobalMgr;
-
     Graphic                 maGraphic;
     GraphicAttr             maAttr;
     Size                    maPrefSize;
     MapMode                 maPrefMapMode;
     sal_uLong               mnSizeBytes;
     GraphicType             meType;
-    GraphicManager*         mpMgr;
     String*                 mpLink;
     Link*                   mpSwapStreamHdl;
     String*                 mpUserData;
@@ -329,8 +323,6 @@ public:
 
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();
-
-    GraphicManager&         GetGraphicManager() const { return *mpMgr; }
 
     sal_Bool                IsCached(
                                 OutputDevice* pOut,
@@ -504,130 +496,6 @@ public:
         double fTopCrop,
         double fRightCrop,
         double fBottomCrop) const;
-};
-
-typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
-
-class SVT_DLLPUBLIC GraphicManager
-{
-    friend class GraphicObject;
-    friend class GraphicDisplayCacheEntry;
-
-private:
-
-    GraphicObjectList_impl  maObjList;
-    GraphicCache*           mpCache;
-
-                        GraphicManager( const GraphicManager& ) {}
-    GraphicManager&     operator=( const GraphicManager& ) { return *this; }
-
-    sal_Bool SVT_DLLPRIVATE ImplDraw(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            GraphicObject& rObj,
-                            const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
-                            sal_Bool& rCached
-                        );
-
-    sal_Bool SVT_DLLPRIVATE ImplCreateOutput(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const BitmapEx& rBmpEx,
-                            const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
-                            BitmapEx* pBmpEx = NULL
-                        );
-    sal_Bool SVT_DLLPRIVATE ImplCreateOutput(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const GDIMetaFile& rMtf,
-                            const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
-                            GDIMetaFile& rOutMtf,
-                            BitmapEx& rOutBmpEx
-                        );
-
-    static void SVT_DLLPRIVATE ImplAdjust(
-                            BitmapEx& rBmpEx,
-                            const GraphicAttr& rAttr,
-                            sal_uLong nAdjustmentFlags
-                        );
-    static void SVT_DLLPRIVATE ImplAdjust(
-                            GDIMetaFile& rMtf,
-                            const GraphicAttr& rAttr,
-                            sal_uLong nAdjustmentFlags
-                        );
-    static void SVT_DLLPRIVATE ImplAdjust(
-                            Animation& rAnimation,
-                            const GraphicAttr& rAttr,
-                            sal_uLong nAdjustmentFlags
-                        );
-
-    static void SVT_DLLPRIVATE ImplDraw(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const GDIMetaFile& rMtf,
-                            const GraphicAttr& rAttr
-                        );
-
-                    // Only used by GraphicObject's Ctor's and Dtor's
-    void SVT_DLLPRIVATE ImplRegisterObj(
-                            const GraphicObject& rObj,
-                            Graphic& rSubstitute,
-                            const OString* pID = NULL,
-                            const GraphicObject* pCopyObj = NULL
-                        );
-    void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
-    inline sal_Bool SVT_DLLPRIVATE ImplHasObjects() const { return !maObjList.empty(); }
-
-                    // Only used in swap case by GraphicObject
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    sal_Bool SVT_DLLPRIVATE ImplFillSwappedGraphicObject(
-                            const GraphicObject& rObj,
-                            Graphic& rSubstitute
-                        );
-    void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
-
-    OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
-
-public:
-
-                        GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
-                        ~GraphicManager();
-
-    void                SetMaxCacheSize( sal_uLong nNewCacheSize );
-
-    void                SetMaxObjCacheSize(
-                            sal_uLong nNewMaxObjSize,
-                            sal_Bool bDestroyGreaterCached = sal_False
-                        );
-
-    void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
-
-    void                ReleaseFromCache( const GraphicObject& rObj );
-
-    sal_Bool            IsInCache(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            const GraphicObject& rObj,
-                            const GraphicAttr& rAttr
-                        ) const;
-
-    sal_Bool            DrawObj(
-                            OutputDevice* pOut,
-                            const Point& rPt,
-                            const Size& rSz,
-                            GraphicObject& rObj,
-                            const GraphicAttr& rAttr,
-                            const sal_uLong nFlags,
-                            sal_Bool& rCached
-                        );
 };
 
 #endif // _GRFMGR_HXX

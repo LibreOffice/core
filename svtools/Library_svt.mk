@@ -150,12 +150,12 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/filter/DocumentToGraphicRenderer \
     svtools/source/filter/exportdialog \
     svtools/source/graphic/descriptor \
+    svtools/source/graphic/GraphicManager \
     svtools/source/graphic/graphic \
     svtools/source/graphic/graphicunofactory \
     svtools/source/graphic/grfattr \
     svtools/source/graphic/grfcache \
     svtools/source/graphic/grfmgr \
-    svtools/source/graphic/grfmgr2 \
     svtools/source/graphic/provider \
     svtools/source/graphic/renderer \
     svtools/source/graphic/transformer \
