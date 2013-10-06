@@ -286,7 +286,8 @@ void ScFiltersTest::testBasicCellContentODS()
     // Numeric value of 0.
     ScRefCellValue aCell;
     aCell.assign(*pDoc, ScAddress(1,4,0)); // B5
-    CPPUNIT_ASSERT_MESSAGE("This cell must be numeric.", aCell.meType == CELLTYPE_VALUE);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "This cell must be numeric.", CELLTYPE_VALUE, aCell.meType);
     CPPUNIT_ASSERT_EQUAL(0.0, aCell.mfValue);
 
     xDocSh->DoClose();
@@ -455,7 +456,7 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     //Import works around this by setting these cells as text cells so that
     //the blank text is used for display instead of the number 0.
     //If this is working properly, the following cell should NOT have value data.
-    CPPUNIT_ASSERT_EQUAL(pDoc->GetString(3,0,2), OUString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(3,0,2));
 
     // fdo#59293 with cached value import error formulas require special
     // treatment
@@ -738,8 +739,8 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(!pTop);
     CPPUNIT_ASSERT(!pBottom);
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
-            table::BorderLineStyle::SOLID);
+    CPPUNIT_ASSERT_EQUAL(
+        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
 
     pDoc->GetBorderLines( 2, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(!pLeft);
@@ -747,9 +748,9 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(!pBottom);
 
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
-            table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),20L);
+    CPPUNIT_ASSERT_EQUAL(
+        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(20L, pRight->GetWidth());
 
     pDoc->GetBorderLines( 2, 8, 0, &pLeft, &pTop, &pRight, &pBottom );
 
@@ -757,9 +758,9 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(pTop);
     CPPUNIT_ASSERT(pBottom);
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
-            table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),5L);
+    CPPUNIT_ASSERT_EQUAL(
+        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(5L, pRight->GetWidth());
     CPPUNIT_ASSERT(pRight->GetColor() == Color(COL_BLUE));
 
     xDocSh->DoClose();
@@ -779,27 +780,27 @@ void ScFiltersTest::testBorderImpl( sal_uLong nFormatType )
 
     pDoc->GetBorderLines( 2, 3, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
-            table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),1L);
+    CPPUNIT_ASSERT_EQUAL(
+        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(1L, pRight->GetWidth());
 
     pDoc->GetBorderLines( 3, 5, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
-            table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),20L);
+    CPPUNIT_ASSERT_EQUAL(
+        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(20L, pRight->GetWidth());
 
     pDoc->GetBorderLines( 5, 7, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
-            table::BorderLineStyle::SOLID);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),30L);
+    CPPUNIT_ASSERT_EQUAL(
+        table::BorderLineStyle::SOLID, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(30L, pRight->GetWidth());
 
     pDoc->GetBorderLines( 7, 9, 0, &pLeft, &pTop, &pRight, &pBottom );
     CPPUNIT_ASSERT(pRight);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
-            table::BorderLineStyle::FINE_DASHED);
-    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),1L);
+    CPPUNIT_ASSERT_EQUAL(
+        table::BorderLineStyle::FINE_DASHED, pRight->GetBorderLineStyle());
+    CPPUNIT_ASSERT_EQUAL(1L, pRight->GetWidth());
 }
 
 void ScFiltersTest::testBorderXLS()
@@ -1360,7 +1361,9 @@ void ScFiltersTest::testChartImportODS()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     // Ensure that the document contains "Empty", "Chart", "Data" and "Title" sheets in this exact order.
-    CPPUNIT_ASSERT_MESSAGE("There should be 4 sheets in this document.", pDoc->GetTableCount() == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be 4 sheets in this document.", sal_Int16(4),
+        pDoc->GetTableCount());
     OUString aName;
     pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Empty"), aName);
@@ -1392,14 +1395,21 @@ void ScFiltersTest::testNumberFormatHTML()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     // Check the header just in case.
-    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(0, 0, 0) == "Product");
-    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(1, 0, 0) == "Price");
-    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(2, 0, 0) == "Note");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Cell value is not as expected", OUString("Product"),
+        pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Cell value is not as expected", OUString("Price"),
+        pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Cell value is not as expected", OUString("Note"),
+        pDoc->GetString(2, 0, 0));
 
     // B2 should be imported as a value cell.
     bool bHasValue = pDoc->HasValueData(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
-    CPPUNIT_ASSERT_MESSAGE("Incorrect value.", pDoc->GetValue(1, 1, 0) == 199.98);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Incorrect value.", 199.98, pDoc->GetValue(1, 1, 0));
 
     xDocSh->DoClose();
 }
@@ -1412,14 +1422,21 @@ void ScFiltersTest::testNumberFormatCSV()
     ScDocument* pDoc = xDocSh->GetDocument();
 
     // Check the header just in case.
-    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(0, 0, 0) == "Product");
-    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(1, 0, 0) == "Price");
-    CPPUNIT_ASSERT_MESSAGE("Cell value is not as expected", pDoc->GetString(2, 0, 0) == "Note");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Cell value is not as expected", OUString("Product"),
+        pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Cell value is not as expected", OUString("Price"),
+        pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Cell value is not as expected", OUString("Note"),
+        pDoc->GetString(2, 0, 0));
 
     // B2 should be imported as a value cell.
     bool bHasValue = pDoc->HasValueData(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("Fail to import number as a value cell.", bHasValue);
-    CPPUNIT_ASSERT_MESSAGE("Incorrect value.", pDoc->GetValue(1, 1, 0) == 199.98);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Incorrect value.", 199.98, pDoc->GetValue(1, 1, 0));
 
     xDocSh->DoClose();
 }
@@ -1438,7 +1455,8 @@ void ScFiltersTest::testCellAnchoredShapesODS()
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
     sal_uIntPtr nCount = pPage->GetObjCount();
-    CPPUNIT_ASSERT_MESSAGE("There should be 2 objects.", nCount == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be 2 objects.", sal_uIntPtr(2), nCount);
     for (sal_uIntPtr i = 0; i < nCount; ++i)
     {
         SdrObject* pObj = pPage->GetObj(i);
@@ -1478,11 +1496,15 @@ void ScFiltersTest::testPivotTableBasicODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-basic.ods", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly two sheets.", pDoc->GetTableCount() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be exactly two sheets.", sal_Int16(2),
+        pDoc->GetTableCount());
 
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly one pivot table instance.", pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be exactly one pivot table instance.", sal_uInt32(1),
+        pDPs->GetCount());
 
     const ScDPObject* pDPObj = (*pDPs)[0];
     CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
@@ -1492,7 +1514,10 @@ void ScFiltersTest::testPivotTableBasicODS()
 
     // Row fields
     pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly 3 row fields (2 normal dimensions and 1 layout dimension).", aDims.size() == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        ("There should be exactly 3 row fields (2 normal dimensions and 1"
+         " layout dimension)."),
+        std::vector<ScDPSaveDimension const *>::size_type(3), aDims.size());
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row1"));
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Row2"));
     const ScDPSaveDimension* pDataLayout = pSaveData->GetExistingDataLayoutDimension();
@@ -1501,21 +1526,29 @@ void ScFiltersTest::testPivotTableBasicODS()
 
     // Column fields
     pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aDims);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly 2 column fields.", aDims.size() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be exactly 2 column fields.",
+        std::vector<ScDPSaveDimension const *>::size_type(2), aDims.size());
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Col1"));
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Col2"));
 
     // Page fields
     pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_PAGE, aDims);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly 2 page fields.", aDims.size() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be exactly 2 page fields.",
+        std::vector<ScDPSaveDimension const *>::size_type(2), aDims.size());
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Page1"));
     CPPUNIT_ASSERT_MESSAGE("Dimension expected, but not found.", hasDimension(aDims, "Page2"));
 
     // Check the data field.
     pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly 1 data field.", aDims.size() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "There should be exactly 1 data field.",
+        std::vector<ScDPSaveDimension const *>::size_type(1), aDims.size());
     const ScDPSaveDimension* pDim = aDims.back();
-    CPPUNIT_ASSERT_MESSAGE("Function for the data field should be COUNT.", pDim->GetFunction() == sheet::GeneralFunction_COUNT);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Function for the data field should be COUNT.",
+        sal_uInt16(sheet::GeneralFunction_COUNT), pDim->GetFunction());
 
     xDocSh->DoClose();
 }
@@ -1613,7 +1646,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Sheet name is ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Sheet name is "));
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.", pEditText->HasField(text::textfield::Type::TABLE));
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is Test."), ScEditUtil::GetString(*pEditText, pDoc));
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet name is ?."), ScEditUtil::GetString(*pEditText, NULL));
@@ -1625,7 +1658,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("URL: ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("URL: "));
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.", pEditText->HasField(text::textfield::Type::URL));
     CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"), ScEditUtil::GetString(*pEditText, pDoc));
     CPPUNIT_ASSERT_EQUAL(OUString("URL: http://libreoffice.org"), ScEditUtil::GetString(*pEditText, NULL));
@@ -1637,7 +1670,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Date: ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Date: "));
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DATE));
     CPPUNIT_ASSERT_MESSAGE("Date field not resolved with pDoc.", ScEditUtil::GetString(*pEditText, pDoc).indexOf("/20") > 0);
     CPPUNIT_ASSERT_MESSAGE("Date field not resolved with NULL.", ScEditUtil::GetString(*pEditText, NULL).indexOf("/20") > 0);
@@ -1649,7 +1682,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Title: ") == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.startsWith("Title: "));
     CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.", pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
     CPPUNIT_ASSERT_EQUAL(OUString("Title: Test Document"), ScEditUtil::GetString(*pEditText, pDoc));
     CPPUNIT_ASSERT_EQUAL(OUString("Title: ?"), ScEditUtil::GetString(*pEditText, NULL));
