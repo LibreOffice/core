@@ -2061,6 +2061,18 @@ uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
 }
 
 uno::Reference< drawing::XShape >
+    ShapeFactory::createRectangle(
+            const uno::Reference<
+            drawing::XShapes >& xTarget )
+{
+    uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
+                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
+    xTarget->add( xShape );
+
+    return xShape;
+}
+
+uno::Reference< drawing::XShape >
         ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
                     , const OUString& rText
                     , const tNameSequence& rPropNames

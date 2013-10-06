@@ -30,15 +30,10 @@ uno::Reference< drawing::XShapes > DataPointSymbolSupplier::create2DSymbolList(
             , const uno::Reference< drawing::XShapes >& xTarget
             , const drawing::Direction3D& rSize )
 {
-    uno::Reference< drawing::XShape > xGroup(
-                xShapeFactory->createInstance(
-                "com.sun.star.drawing.GroupShape" ), uno::UNO_QUERY );
-    if(xTarget.is())
-        xTarget->add(xGroup);
-    uno::Reference< drawing::XShapes > xGroupShapes =
-        uno::Reference<drawing::XShapes>( xGroup, uno::UNO_QUERY );
-
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
+    uno::Reference< drawing::XShapes > xGroupShapes =
+        pShapeFactory->createGroup2D( xTarget );
+
     drawing::Position3D  aPos(0,0,0);
     for(sal_Int32 nS=0;nS<AbstractShapeFactory::getSymbolCount();nS++)
     {

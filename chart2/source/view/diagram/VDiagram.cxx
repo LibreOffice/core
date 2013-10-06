@@ -170,11 +170,10 @@ void VDiagram::createShapes_2d()
 
     //add back wall
     {
-        m_xWall2D = uno::Reference< drawing::XShape >(
-            m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.RectangleShape" ), uno::UNO_QUERY );
+        AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+        m_xWall2D = pShapeFactory->createRectangle(
+                xGroupForWall );
 
-        xGroupForWall->add(m_xWall2D);
         uno::Reference< beans::XPropertySet > xProp( m_xWall2D, uno::UNO_QUERY );
         if( xProp.is())
         {
@@ -477,10 +476,7 @@ void VDiagram::createShapes_3d()
 
     //create shape
     m_xOuterGroupShape = uno::Reference< drawing::XShape >(
-            m_xShapeFactory->createInstance(
-            "com.sun.star.drawing.Shape3DSceneObject" ), uno::UNO_QUERY );
-    AbstractShapeFactory::setShapeName( m_xOuterGroupShape, "PlotAreaExcludingAxes" );
-    m_xTarget->add(m_xOuterGroupShape);
+            m_pShapeFactory->createGroup3D( m_xTarget, "PlotAreaExcludingAxes" ), uno::UNO_QUERY);
 
     uno::Reference< drawing::XShapes > xOuterGroup_Shapes =
             uno::Reference<drawing::XShapes>( m_xOuterGroupShape, uno::UNO_QUERY );

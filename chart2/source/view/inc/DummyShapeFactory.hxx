@@ -160,6 +160,11 @@ public:
                 , const tNameSequence& rPropNames
                 , const tAnySequence& rPropValues );
 
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createRectangle(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget );
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage );

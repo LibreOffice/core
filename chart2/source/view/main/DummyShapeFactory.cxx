@@ -252,6 +252,14 @@ uno::Reference< drawing::XShape > DummyShapeFactory::createRectangle(
 }
 
 uno::Reference< drawing::XShape >
+    DummyShapeFactory::createRectangle(
+            const uno::Reference<
+            drawing::XShapes >& )
+{
+    return new DummyXShape();
+}
+
+uno::Reference< drawing::XShape >
         DummyShapeFactory::createText( const uno::Reference< drawing::XShapes >&
                     , const OUString&
                     , const tNameSequence&
