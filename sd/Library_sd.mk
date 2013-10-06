@@ -38,12 +38,17 @@ $(eval $(call gb_Library_add_sdi_headers,sd,\
 
 $(eval $(call gb_Library_set_include,sd,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/bluez_bluetooth/inc \
 	-I$(SRCDIR)/sd/inc \
 	-I$(SRCDIR)/sd/source/ui/inc \
 	-I$(SRCDIR)/sd/source/ui/slidesorter/inc \
 	-I$(WORKDIR)/SdiTarget/sd/sdi \
 ))
+
+ifneq ($(SYSTEM_BLUEZ),YES)
+$(eval $(call gb_Library_add_cxxflags,sd,\
+	-I$(SRCDIR)/bluez_bluetooth/inc \
+))
+endif
 
 $(eval $(call gb_Library_add_defs,sd,\
 	-DSD_DLLIMPLEMENTATION \

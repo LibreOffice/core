@@ -10031,28 +10031,34 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                     AC_MSG_RESULT([external])
                     AC_CHECK_HEADER(bluetooth/bluetooth.h, [],
                         [AC_MSG_ERROR(bluetooth.h not found. install bluez)], [])
+		    SYSTEM_BLUEZ=YES
                 else
                     AC_MSG_RESULT([internal])
-                    BUILD_TYPE="$BUILD_TYPE BLUEZ"
+	            SYSTEM_BLUEZ=NO
                 fi
             else
                 AC_MSG_RESULT([no, dbus disabled])
                 ENABLE_SDREMOTE_BLUETOOTH=
+                SYSTEM_BLUEZ=NO 
             fi
         else
             AC_MSG_RESULT([yes])
             ENABLE_SDREMOTE_BLUETOOTH=TRUE
+            SYSTEM_BLUEZ=NO
         fi
     else
         AC_MSG_RESULT([no])
         ENABLE_SDREMOTE_BLUETOOTH=
+        SYSTEM_BLUEZ=NO
     fi
 else
     ENABLE_SDREMOTE=
+    SYSTEM_BLUEZ=NO
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SDREMOTE)
 AC_SUBST(ENABLE_SDREMOTE_BLUETOOTH)
+AC_SUBST(SYSTEM_BLUEZ)
 
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
