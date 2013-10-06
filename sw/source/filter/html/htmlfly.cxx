@@ -1582,8 +1582,8 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     rHTMLWrt.OutNewLine();
     OStringBuffer sOut;
     sOut.append(OOO_STRING_SVTOOLS_HTML_division).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
-        .append(bHeader ? "HEADER" : "FOOTER");
+        .append(OOO_STRING_SVTOOLS_HTML_O_title).append('=')
+        .append( bHeader ? "header" : "footer" );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.makeStringAndClear().getStr() );
 
     rHTMLWrt.IncIndentLevel();  // den Inhalt von Multicol einruecken;

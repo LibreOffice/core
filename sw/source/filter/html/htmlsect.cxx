@@ -100,12 +100,12 @@ void SwHTMLParser::NewDivision( int nToken )
         case HTML_O_HREF:
             aHRef =  rOption.GetString();
             break;
-        case HTML_O_TYPE:
+        case HTML_O_TITLE:
             {
                 const OUString& rType = rOption.GetString();
-                if( rType.equalsIgnoreAsciiCase( "HEADER" ) )
+                if( rType.equalsIgnoreAsciiCase("header") )
                     bHeader = sal_True;
-                else if( rType.equalsIgnoreAsciiCase( "FOOTER" ) )
+                else if( rType.equalsIgnoreAsciiCase("footer") )
                     bFooter = sal_True;
             }
         }
