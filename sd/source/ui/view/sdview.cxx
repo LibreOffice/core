@@ -1408,6 +1408,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         pSdrModel->AddUndo(pUndoGroup);
         pSdrModel->EndUndo();
     }
+    else
+        delete pUndoGroup;
 
     delete pOutliner;
     delete pOutlinerView;
