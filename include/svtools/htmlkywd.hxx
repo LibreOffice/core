@@ -276,14 +276,6 @@
 #define OOO_STRING_SVTOOLS_HTML_S_uml "uml"
 #define OOO_STRING_SVTOOLS_HTML_S_yen "yen"
 
-// Netscape kennt noch ein paar in Grossbuchstaben ...
-#define OOO_STRING_SVTOOLS_HTML_C_LT "lt"
-#define OOO_STRING_SVTOOLS_HTML_C_GT "gt"
-#define OOO_STRING_SVTOOLS_HTML_C_AMP "amp"
-#define OOO_STRING_SVTOOLS_HTML_C_QUOT "quot"
-#define OOO_STRING_SVTOOLS_HTML_S_COPY "copy"
-#define OOO_STRING_SVTOOLS_HTML_S_REG "reg"
-
 // HTML4
 #define OOO_STRING_SVTOOLS_HTML_S_alefsym "alefsym"
 #define OOO_STRING_SVTOOLS_HTML_S_Alpha "Alpha"

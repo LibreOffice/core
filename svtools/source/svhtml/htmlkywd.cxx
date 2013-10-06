@@ -365,14 +365,6 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_uml},        168},
     {{OOO_STRING_SVTOOLS_HTML_S_yen},        165},
 
-// Netscape has some in upper case...
-    {{OOO_STRING_SVTOOLS_HTML_C_LT},             60},
-    {{OOO_STRING_SVTOOLS_HTML_C_GT},             62},
-    {{OOO_STRING_SVTOOLS_HTML_C_AMP},        38},
-    {{OOO_STRING_SVTOOLS_HTML_C_QUOT},       34},
-    {{OOO_STRING_SVTOOLS_HTML_S_COPY},      169},
-    {{OOO_STRING_SVTOOLS_HTML_S_REG},       174},
-
 // special characters, which will be converted to tokens !!!
     {{OOO_STRING_SVTOOLS_HTML_S_nbsp},      1},
     {{OOO_STRING_SVTOOLS_HTML_S_shy},       2},
