@@ -886,7 +886,7 @@ int HTMLParser::_GetNextRawToken()
                 }
 
                 OUString aTok( sTmpBuffer.toString() );
-                aTok = aTok.toAsciiUpperCase();
+                aTok = aTok.toAsciiLowerCase();
                 bool bDone = false;
                 if( bReadScript || !aEndToken.isEmpty() )
                 {
@@ -1132,7 +1132,7 @@ int HTMLParser::_GetNextToken()
 
                     // Search token in table:
                     sSaveToken = aToken;
-                    aToken = aToken.toAsciiUpperCase();
+                    aToken = aToken.toAsciiLowerCase();
                     if( 0 == (nRet = GetHTMLToken( aToken )) )
                         // Unknown control
                         nRet = HTML_UNKNOWNCONTROL_ON;
@@ -1930,7 +1930,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
         sCmp = pHeader;
     }
 
-    sCmp = sCmp.toAsciiUpperCase();
+    sCmp = sCmp.toAsciiLowerCase();
 
     // A HTML document must have a '<' in the first line
     sal_Int32 nStart = sCmp.indexOf('<');
