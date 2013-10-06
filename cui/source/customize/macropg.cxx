@@ -493,7 +493,6 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
     mpImpl->pEventLB->SetUpdateMode( sal_False );
     rListBox.Clear();
-    SvTreeListEntry*    pE = rListBox.GetEntry( 0 );
     EventsHash* eventsHash;
     Reference< container::XNameReplace> nameReplace;
     if(bAppEvents)
@@ -552,7 +551,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         rListBox.MakeVisible( _pE );
     }
 
-    pE = rListBox.GetEntry(0);
+    SvTreeListEntry* pE = rListBox.GetEntry(0);
     if( pE )
     {
         rListBox.Select( pE );
