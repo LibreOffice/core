@@ -3809,6 +3809,7 @@ void clearUnoServiceCtors( void )
 SbUnoServiceCtor::SbUnoServiceCtor( const OUString& aName_, Reference< XServiceConstructorDescription > xServiceCtorDesc )
     : SbxMethod( aName_, SbxOBJECT )
     , m_xServiceCtorDesc( xServiceCtorDesc )
+    , pNext(0)
 {
 }
 
