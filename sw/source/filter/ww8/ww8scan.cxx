@@ -7169,7 +7169,7 @@ void WW8DopTypography::WriteToMem(sal_uInt8 *&pData) const
     sal_uInt16 a16Bit = fKerningPunct;
     a16Bit |= (iJustification << 1) & 0x0006;
     a16Bit |= (iLevelOfKinsoku << 3) & 0x0018;
-    a16Bit |= (f2on1 << 5) & 0x002;
+    a16Bit |= (f2on1 << 5) & 0x0020;
     a16Bit |= (reserved1 << 6) & 0x03C0;
     a16Bit |= (reserved2 << 10) & 0xFC00;
     Set_UInt16(pData,a16Bit);
