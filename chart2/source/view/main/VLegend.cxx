@@ -915,19 +915,12 @@ void VLegend::createShapes(
             Reference< drawing::XShape > xBorder =
                 pShapeFactory->createRectangle( xLegendContainer,
                         aLegendSize,
-                        awt::Point(0,0));
+                        awt::Point(0,0),
+                        aLineFillProperties.first,
+                        aLineFillProperties.second );
 
-            if( xBorder.is())
-            {
-
-                // apply legend properties
-                PropertyMapper::setMultiProperties(
-                    aLineFillProperties.first, aLineFillProperties.second,
-                    Reference< beans::XPropertySet >( xBorder, uno::UNO_QUERY ));
-
-                //because of this name this border will be used for marking the legend
-                AbstractShapeFactory::setShapeName( xBorder, "MarkHandles" );
-            }
+            //because of this name this border will be used for marking the legend
+            AbstractShapeFactory::setShapeName( xBorder, "MarkHandles" );
         }
     }
     catch( const uno::Exception & ex )

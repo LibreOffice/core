@@ -31,11 +31,12 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-void lcl_setPropetiesToShape(
-    const Reference< beans::XPropertySet > & xProp,
-    const Reference< drawing::XShape > & xShape,
-    ::chart::VLegendSymbolFactory::tPropertyType ePropertyType,
-    const awt::Size& aMaxSymbolExtent = awt::Size(0,0))
+
+void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
+        ::chart::tNameSequence& rNames,
+        ::chart::tAnySequence& rValues,
+        ::chart::VLegendSymbolFactory::tPropertyType ePropertyType,
+        const awt::Size& aMaxSymbolExtent = awt::Size(0,0))
 {
     const ::chart::tPropertyNameMap & aFilledSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
     const ::chart::tPropertyNameMap & aLineSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
@@ -43,45 +44,52 @@ void lcl_setPropetiesToShape(
     const ::chart::tPropertyNameMap & aFillNameMap( ::chart::PropertyMapper::getPropertyNameMapForFillProperties());
     const ::chart::tPropertyNameMap & aFillLineNameMap( ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties());
 
-    Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-    if( xProp.is() && xShapeProp.is() )
+    ::chart::tPropertyNameValueMap aValueMap;
+    switch( ePropertyType )
     {
-        ::chart::tPropertyNameValueMap aValueMap;
-        switch( ePropertyType )
-        {
-            case ::chart::VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES:
-                ::chart::PropertyMapper::getValueMap( aValueMap, aFilledSeriesNameMap, xProp );
-                break;
-            case ::chart::VLegendSymbolFactory::PROP_TYPE_LINE_SERIES:
-                ::chart::PropertyMapper::getValueMap( aValueMap, aLineSeriesNameMap, xProp );
-                break;
-            case ::chart::VLegendSymbolFactory::PROP_TYPE_LINE:
-                ::chart::PropertyMapper::getValueMap( aValueMap, aLineNameMap, xProp );
-                break;
-            case ::chart::VLegendSymbolFactory::PROP_TYPE_FILL:
-                ::chart::PropertyMapper::getValueMap( aValueMap, aFillNameMap, xProp );
-                break;
-            case ::chart::VLegendSymbolFactory::PROP_TYPE_FILL_AND_LINE:
-                ::chart::PropertyMapper::getValueMap( aValueMap, aFillLineNameMap, xProp );
-                break;
-        }
-
-        ::chart::tNameSequence aPropNames;
-        ::chart::tAnySequence aPropValues;
-        ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-
-        uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(aPropValues,aPropNames,"LineWidth");
-        sal_Int32 nLineWidth = 0;
-        if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
-        {
-            // use legend entry height as upper limit for line width
-            sal_Int32 nMaxLineWidthForLegend = aMaxSymbolExtent.Height;
-            if( nLineWidth>nMaxLineWidthForLegend )
-                *pLineWidthAny = uno::makeAny( nMaxLineWidthForLegend );
-        }
-
-        ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
+        case ::chart::VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES:
+            ::chart::PropertyMapper::getValueMap( aValueMap, aFilledSeriesNameMap, xProp );
+            break;
+        case ::chart::VLegendSymbolFactory::PROP_TYPE_LINE_SERIES:
+            ::chart::PropertyMapper::getValueMap( aValueMap, aLineSeriesNameMap, xProp );
+            break;
+        case ::chart::VLegendSymbolFactory::PROP_TYPE_LINE:
+            ::chart::PropertyMapper::getValueMap( aValueMap, aLineNameMap, xProp );
+            break;
+        case ::chart::VLegendSymbolFactory::PROP_TYPE_FILL:
+            ::chart::PropertyMapper::getValueMap( aValueMap, aFillNameMap, xProp );
+            break;
+        case ::chart::VLegendSymbolFactory::PROP_TYPE_FILL_AND_LINE:
+            ::chart::PropertyMapper::getValueMap( aValueMap, aFillLineNameMap, xProp );
+            break;
     }
+
+    ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( rNames, rValues, aValueMap );
+
+    uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(rValues,rNames,"LineWidth");
+    sal_Int32 nLineWidth = 0;
+    if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
+    {
+        // use legend entry height as upper limit for line width
+        sal_Int32 nMaxLineWidthForLegend = aMaxSymbolExtent.Height;
+        if( nLineWidth>nMaxLineWidthForLegend )
+            *pLineWidthAny = uno::makeAny( nMaxLineWidthForLegend );
+    }
+}
+
+void lcl_setPropetiesToShape(
+    const Reference< beans::XPropertySet > & xProp,
+    const Reference< drawing::XShape > & xShape,
+    ::chart::VLegendSymbolFactory::tPropertyType ePropertyType,
+    const awt::Size& aMaxSymbolExtent = awt::Size(0,0))
+{
+    ::chart::tNameSequence aPropNames;
+    ::chart::tAnySequence aPropValues;
+    getPropNamesAndValues( xProp, aPropNames, aPropValues,
+            ePropertyType, aMaxSymbolExtent );
+
+    Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+    ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
 }
 
 } // anonymous namespace
@@ -176,13 +184,16 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
         }
         else // eStyle == LegendSymbolStyle_BOX
         {
+            tNameSequence aPropNames;
+            tAnySequence aPropValues;
+
+            getPropNamesAndValues( xLegendEntryProperties, aPropNames, aPropValues,
+                    ePropertyType );// PROP_TYPE_FILLED_SERIES
+
             Reference< drawing::XShape > xShape =
                 pShapeFactory->createRectangle( xResultGroup,
-                        rEntryKeyAspectRatio, awt::Point( 0, 0 ));
-            if( xShape.is() )
-            {
-                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
-            }
+                        rEntryKeyAspectRatio, awt::Point( 0, 0 ),
+                        aPropNames, aPropValues );
         }
     }
     catch( const uno::Exception & ex )

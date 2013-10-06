@@ -200,7 +200,9 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::awt::Size& rSize
-                , const ::com::sun::star::awt::Point& rPosition ) = 0;
+                , const ::com::sun::star::awt::Point& rPosition
+                , const tNameSequence& rPropNames
+                , const tAnySequence& rPropValues ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<

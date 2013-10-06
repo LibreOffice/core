@@ -244,7 +244,9 @@ uno::Reference< drawing::XShape > DummyShapeFactory::createInvisibleRectangle(
 uno::Reference< drawing::XShape > DummyShapeFactory::createRectangle(
         const uno::Reference< drawing::XShapes >&
         , const awt::Size&
-        , const awt::Point& )
+        , const awt::Point&
+        , const tNameSequence&
+        , const tAnySequence& )
 {
     return new DummyXShape();
 }

@@ -171,7 +171,9 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::awt::Size& rSize
-                , const ::com::sun::star::awt::Point& rPosition );
+                , const ::com::sun::star::awt::Point& rPosition
+                , const tNameSequence& rPropNames
+                , const tAnySequence& rPropValues );
 
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >

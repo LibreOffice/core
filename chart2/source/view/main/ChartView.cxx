@@ -2303,39 +2303,25 @@ void formatPage(
         if( !xShapeFactory.is() )
             return;
 
-        uno::Reference< beans::XPropertySet > xPageProp;
-        // create a shape for the background
-        {
-            uno::Reference< drawing::XShape > xShape(
-                xShapeFactory->createInstance(
-                    "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
-            if( xTarget.is() &&
-                xShape.is())
-            {
-                xTarget->add( xShape );
-                xShape->setSize( rPageSize );
-                xPageProp.set( xShape, uno::UNO_QUERY );
-                if( xPageProp.is())
-                {
-                    xPageProp->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ));
-                }
-            }
-        }
 
         //format page
-        if( xPageProp.is())
-        {
-            tPropertyNameValueMap aNameValueMap;
-            PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
+        tPropertyNameValueMap aNameValueMap;
+        aNameValueMap.insert( tPropertyNameValueMap::value_type( "LineStyle", uno::makeAny( drawing::LineStyle_NONE )));
+        PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
-            OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
-            aNameValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( aCID ) ) ); //CID OUString
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
+        aNameValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( aCID ) ) ); //CID OUString
 
-            tNameSequence aNames;
-            tAnySequence aValues;
-            PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aNameValueMap );
-            PropertyMapper::setMultiProperties( aNames, aValues, xPageProp );
-        }
+        tNameSequence aNames;
+        tAnySequence aValues;
+        PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aNameValueMap );
+
+        AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
+        uno::Reference< drawing::XShape > xShape =
+            pShapeFactory->createRectangle( xTarget,
+                    rPageSize,
+                    awt::Point( 0, 0 ),
+                    aNames, aValues );
     }
     catch( const uno::Exception & ex )
     {
