@@ -1018,7 +1018,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
             SwInputChild* pChildWin = (SwInputChild*)pVFrame->
                                                 GetChildWindow( nId );
-            String sSum;
+            OUString sSum;
             GetShell().GetAutoSum(sSum);
             if( pChildWin )
                 pChildWin->SetFormula( sSum );

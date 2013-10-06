@@ -684,7 +684,7 @@ public:
 
     sal_Bool SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff = 283 );
 
-    sal_Bool GetAutoSum( String& rFml ) const;
+    sal_Bool GetAutoSum( OUString& rFml ) const;
 
     /** Phy: real page count.
      Virt: consider offset that may have been set by user. */

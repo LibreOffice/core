@@ -2346,19 +2346,18 @@ static bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& r
 }
 
     // ask formula for auto-sum
-sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
+sal_Bool SwFEShell::GetAutoSum( OUString& rFml ) const
 {
     SwFrm *pFrm = GetCurrFrm();
     SwTabFrm *pTab = pFrm ? pFrm->ImplFindTabFrm() : 0;
     if( !pTab )
         return sal_False;
 
-    rFml = OUString::createFromAscii( sCalc_Sum );
-
     SwCellFrms aCells;
+    OUString sFields;
     if( ::GetAutoSumSel( *this, aCells ))
     {
-        sal_uInt16 nW = 0, nInsPos = 0;
+        sal_uInt16 nW = 0;
         for( size_t n = aCells.size(); n; )
         {
             SwCellFrm* pCFrm = aCells[ --n ];
@@ -2371,9 +2370,6 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                 if( USHRT_MAX == nBoxW )
                     continue;       // skip space at beginning
 
-                rFml += '(';
-                nInsPos = rFml.Len();
-
                 // formula only if box is contained
                 if( RES_BOXATR_FORMULA == nBoxW &&
                     !::lcl_IsFormulaSelBoxes( *pTab->GetTable(), pCFrm->
@@ -2383,10 +2379,8 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                     // restore previous spaces!
                     for( size_t i = aCells.size(); n+1 < i; )
                     {
-                        String sTmp(OUString("|<"));
-                        sTmp += aCells[ --i ]->GetTabBox()->GetName();
-                        sTmp += '>';
-                        rFml.Insert( sTmp, nInsPos );
+                        sFields = "|<" + aCells[--i]->GetTabBox()->GetName() + ">"
+                            + sFields;
                     }
                 }
                 else
@@ -2400,7 +2394,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                         GetTabBox()->GetFrmFmt()->GetTblBoxFormula(), aCells ))
                     break;
                 else if( USHRT_MAX != nBoxW )
-                    rFml.Insert( cListDelim, nInsPos );
+                    sFields = OUString(cListDelim) + sFields;
                 else
                     break;
             }
@@ -2416,18 +2410,16 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                         // redo only for values!
 
                         nW = RES_BOXATR_VALUE;
-                        rFml.Erase( nInsPos );
+                        sFields = OUString();
                         // restore previous spaces!
                         for( size_t i = aCells.size(); n+1 < i; )
                         {
-                            String sTmp(OUString("|<" ));
-                            sTmp += aCells[ --i ]->GetTabBox()->GetName();
-                            sTmp += '>';
-                            rFml.Insert( sTmp, nInsPos );
+                            sFields = "|<" + aCells[--i]->GetTabBox()->GetName() + ">"
+                                + sFields;
                         }
                     }
                     else
-                        rFml.Insert( cListDelim, nInsPos );
+                        sFields = OUString(cListDelim) + sFields;
                 }
                 else if( USHRT_MAX == nBoxW )
                     break;
@@ -2439,12 +2431,14 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                 // possibly allow texts??
                 break;
 
-            rFml.Insert( "<" + OUString(pCFrm->GetTabBox()->GetName()) + ">", nInsPos );
+            sFields = "<" + pCFrm->GetTabBox()->GetName() + ">" + sFields;
         }
-        if( nW )
-        {
-            rFml += ')';
-        }
+    }
+
+    rFml = OUString::createFromAscii( sCalc_Sum );
+    if (!sFields.isEmpty())
+    {
+        rFml += "(" + sFields + ")";
     }
 
     return sal_True;
