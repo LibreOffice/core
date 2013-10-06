@@ -6032,8 +6032,8 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             if( 10 < nRead )
                 rSt.SeekRel( nRead-10 );
         }
-        while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
-                        //   und kann vorzeitig per "break" verlassen werden.
+        while( 0 ); // Trick: obiger Block wird genau einmal durchlaufen
+                    //   und kann vorzeitig per "break" verlassen werden.
 
         if( (0 != rSt.GetError()) || !nRead )
             DELETEZ( pStd );        // per NULL den Error melden
