@@ -95,6 +95,7 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_xMetaData(NULL)
     ,m_nRowPos(0)
     ,m_nOldRowPos(0)
+    ,m_bWasNull(false)
     ,m_nFetchSize(0)
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
     ,m_nFetchDirection(FetchDirection::FORWARD)
@@ -107,12 +108,12 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_nParamIndex(0)
     ,m_bIsAlwaysFalseQuery(sal_False)
     ,m_pKeySet(NULL)
+    ,m_pSortIndex(NULL)
     ,m_nNewRow(0)
     ,m_nUpdatedRow(0)
     ,m_RowStates(0)
     ,m_bIsReadOnly(-1)
 {
-
     //m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());
 }
 // -------------------------------------------------------------------------
