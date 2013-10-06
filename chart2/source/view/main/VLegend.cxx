@@ -153,19 +153,14 @@ awt::Size lcl_createTextShapes(
     const tPropertyValues & rTextProperties )
 {
     awt::Size aResult;
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
 
     for( tViewLegendEntryContainer::const_iterator aIt( rEntries.begin());
          aIt != rEntries.end(); ++aIt )
     {
         try
         {
-            // create label shape
-            Reference< drawing::XShape > xEntry(
-                xShapeFactory->createInstance(
-                    "com.sun.star.drawing.TextShape"), uno::UNO_QUERY_THROW );
-            xTarget->add( xEntry );
-
-            // set label text
+            OUString aLabelString;
             Sequence< Reference< XFormattedString2 > > aLabelSeq = (*aIt).aLabel;
             for( sal_Int32 i = 0; i < aLabelSeq.getLength(); ++i )
             {
@@ -173,23 +168,20 @@ awt::Size lcl_createTextShapes(
                 if( i == 1 )
                     break;
 
-                Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
-                OUString aLabelString( aLabelSeq[i]->getString());
+                aLabelString = aLabelString + aLabelSeq[i]->getString();
                 // workaround for Issue #i67540#
                 if( aLabelString.isEmpty())
                     aLabelString = " ";
-                if( xRange.is())
-                    xRange->setString( aLabelString );
-
-                PropertyMapper::setMultiProperties(
-                    rTextProperties.first, rTextProperties.second,
-                    Reference< beans::XPropertySet >( xRange, uno::UNO_QUERY ));
-
-                // adapt max-extent
-                awt::Size aCurrSize( xEntry->getSize());
-                aResult.Width  = ::std::max( aResult.Width,  aCurrSize.Width  );
-                aResult.Height = ::std::max( aResult.Height, aCurrSize.Height );
             }
+
+            Reference< drawing::XShape > xEntry =
+                pShapeFactory->createText( xTarget, aLabelString,
+                        rTextProperties.first, rTextProperties.second, uno::Any() );
+
+            // adapt max-extent
+            awt::Size aCurrSize( xEntry->getSize());
+            aResult.Width  = ::std::max( aResult.Width,  aCurrSize.Width  );
+            aResult.Height = ::std::max( aResult.Height, aCurrSize.Height );
 
             rOutTextShapes.push_back( xEntry );
         }
@@ -840,24 +832,16 @@ void VLegend::createShapes(
     try
     {
         //create shape and add to page
-        m_xShape.set( m_xShapeFactory->createInstance(
-                          "com.sun.star.drawing.GroupShape"), uno::UNO_QUERY );
-        m_xTarget->add( m_xShape );
-
-        // set name to enable selection
-        {
-            OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( m_xLegend, m_xModel ) );
-            AbstractShapeFactory::setShapeName( m_xShape, ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle ) );
-        }
+        AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+        OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( m_xLegend, m_xModel ) );
+        m_xShape.set( pShapeFactory->createGroup2D( m_xTarget,
+                    ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle )),
+                uno::UNO_QUERY);
 
         // create and insert sub-shapes
         Reference< drawing::XShapes > xLegendContainer( m_xShape, uno::UNO_QUERY );
         if( xLegendContainer.is())
         {
-            Reference< drawing::XShape > xBorder(
-                m_xShapeFactory->createInstance(
-                    "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
-
             // for quickly setting properties
             tPropertyValues aLineFillProperties;
             tPropertyValues aTextProperties;
@@ -882,19 +866,6 @@ void VLegend::createShapes(
                         eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
                 }
                 lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
-            }
-
-            if( xBorder.is())
-            {
-                xLegendContainer->add( xBorder );
-
-                // apply legend properties
-                PropertyMapper::setMultiProperties(
-                    aLineFillProperties.first, aLineFillProperties.second,
-                    Reference< beans::XPropertySet >( xBorder, uno::UNO_QUERY ));
-
-                //because of this name this border will be used for marking the legend
-                AbstractShapeFactory::setShapeName( xBorder, "MarkHandles" );
             }
 
             // create entries
@@ -934,13 +905,28 @@ void VLegend::createShapes(
 
             bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( xLegendProp, m_nDefaultWritingMode );
 
-            if( aViewEntries.size() ) {
+            if( !aViewEntries.empty() ) {
                 // place entries
                 aLegendSize = lcl_placeLegendEntries( aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize, aMaxSymbolExtent,
                                                       aTextProperties, xLegendContainer, m_xShapeFactory, aLegendSize );
 
-                if( xBorder.is() )
-                    xBorder->setSize( aLegendSize );
+            }
+
+            Reference< drawing::XShape > xBorder =
+                pShapeFactory->createRectangle( xLegendContainer,
+                        aLegendSize,
+                        awt::Point(0,0));
+
+            if( xBorder.is())
+            {
+
+                // apply legend properties
+                PropertyMapper::setMultiProperties(
+                    aLineFillProperties.first, aLineFillProperties.second,
+                    Reference< beans::XPropertySet >( xBorder, uno::UNO_QUERY ));
+
+                //because of this name this border will be used for marking the legend
+                AbstractShapeFactory::setShapeName( xBorder, "MarkHandles" );
             }
         }
     }
