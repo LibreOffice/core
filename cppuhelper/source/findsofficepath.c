@@ -129,21 +129,7 @@ static char* platformSpecific()
  */
 static char* platformSpecific()
 {
-    const int SEPARATOR = '/';
-    const char* PATHSEPARATOR = ":";
-    const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/soffice";
-
     char* path = NULL;
-    char* env = NULL;
-    char* str = NULL;
-    char* dir = NULL;
-    char* file = NULL;
-    char* resolved = NULL;
-    char* sep = NULL;
-
-    char buffer[PATH_MAX];
-    int pos;
 
 #ifdef MACOSX
     /* On MacOS we have no soffice link under /usr/bin but the default office location is known
@@ -159,6 +145,21 @@ static char* platformSpecific()
     }
     return path;
 #else
+    const int SEPARATOR = '/';
+    const char* PATHSEPARATOR = ":";
+    const char* PATHVARNAME = "PATH";
+    const char* APPENDIX = "/soffice";
+
+    char* env = NULL;
+    char* str = NULL;
+    char* dir = NULL;
+    char* file = NULL;
+    char* resolved = NULL;
+    char* sep = NULL;
+
+    char buffer[PATH_MAX];
+    int pos;
+
 /* get the value of the PATH environment variable */
     env = getenv( PATHVARNAME );
     str = (char*) malloc( strlen( env ) + 1 );
