@@ -310,11 +310,11 @@ def _uno_import( name, *optargs, **kwargs ):
               # uno and non-uno errors as uno lookups are attempted for all
               # "from xxx import yyy" imports following a python failure.
               #
-              # The traceback from the original python exception is kept to
-              # pinpoint the actual failing location, but in Python 3 the
-              # original message is most likely unhelpful for uno failures,
-              # as it will most commonly be a missing top level module,
-              # like 'com'.  Our exception appends the uno lookup failure.
+              # In Python 3, the original python exception traceback is reused
+              # to help pinpoint the actual failing location.  Its original
+              # message, unlike Python 2, is unlikely to be helpful for uno
+              # failures, as it most commonly is just a top level module like
+              # 'com'.  So our exception appends the uno lookup failure.
               # This is more ambiguous, but it plus the traceback should be
               # sufficient to identify a root cause for python or uno issues.
               #
@@ -327,9 +327,10 @@ def _uno_import( name, *optargs, **kwargs ):
               # keeps the exception relevant to the primary failure point,
               # preventing us from re-processing our own import errors.
 
-              uno_import_exc = ImportError(
-                  "%s (or '%s.%s' is unknown)" % (py_import_exc, name, x)
-                  ).with_traceback(py_import_exc.__traceback__)
+              uno_import_exc = ImportError("%s (or '%s.%s' is unknown)" %
+                                           (py_import_exc, name, x))
+              if sys.version_info[0] >= 3:
+                  uno_import_exc = uno_import_exc.with_traceback(py_import_exc.__traceback__)
               uno_import_exc._uno_import_failed = True
               raise uno_import_exc
 
