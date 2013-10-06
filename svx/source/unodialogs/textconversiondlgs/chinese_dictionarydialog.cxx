@@ -817,7 +817,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl)
 short ChineseDictionaryDialog::Execute()
 {
     sal_Int32 nTextConversionOptions = m_nTextConversionOptions;
-    if(m_nTextConversionOptions | i18n::TextConversionOption::USE_CHARACTER_VARIANTS )
+    if(m_nTextConversionOptions & i18n::TextConversionOption::USE_CHARACTER_VARIANTS )
         nTextConversionOptions = nTextConversionOptions^i18n::TextConversionOption::USE_CHARACTER_VARIANTS ;
 
     m_aCT_DictionaryToSimplified.refillFromDictionary( nTextConversionOptions );
