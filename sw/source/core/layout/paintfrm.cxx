@@ -4231,7 +4231,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
  * Paint border shadow.
  *
  * @param[in]       rRect       aligned rect to clip the result
- * @param[in|out]   rOutRect    full painting area as input
+ * @param[in,out]   rOutRect    full painting area as input
  *                              painting area reduced by shadow space for border and background as output
  * @param[in]       rShadow     includes shadow attributes
  * @param[in]       bDrawFullShadowRectangle    paint full rect of shadow
