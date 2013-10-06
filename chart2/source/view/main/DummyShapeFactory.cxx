@@ -204,6 +204,14 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
+    DummyShapeFactory::createCircle( const uno::Reference< drawing::XShapes >&
+                    , const awt::Size&
+                    , const awt::Point& )
+{
+    return new DummyXShape();
+}
+
+uno::Reference< drawing::XShape >
         DummyShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >&
                     , const drawing::PolyPolygonShape3D&
                     , const VLineProperties& )
@@ -219,9 +227,24 @@ uno::Reference< drawing::XShape >
     return new DummyXShape();
 }
 
+uno::Reference< drawing::XShape >
+    DummyShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& ,
+            const awt::Size& , const awt::Point& )
+{
+    return new DummyXShape();
+}
+
 uno::Reference< drawing::XShape > DummyShapeFactory::createInvisibleRectangle(
             const uno::Reference< drawing::XShapes >&
             , const awt::Size& )
+{
+    return new DummyXShape();
+}
+
+uno::Reference< drawing::XShape > DummyShapeFactory::createRectangle(
+        const uno::Reference< drawing::XShapes >&
+        , const awt::Size&
+        , const awt::Point& )
 {
     return new DummyXShape();
 }

@@ -1859,6 +1859,21 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
+    ShapeFactory::createCircle( const uno::Reference< drawing::XShapes >& xTarget
+                    , const awt::Size& rSize
+                    , const awt::Point& rPosition )
+{
+    uno::Reference< drawing::XShape > xShape(
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.EllipseShape" ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+    xShape->setSize( rSize );
+    xShape->setPosition( rPosition );
+
+    return xShape;
+}
+
+uno::Reference< drawing::XShape >
         ShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::PolyPolygonShape3D& rPoints
                     , const VLineProperties& rLineProperties )
@@ -1983,6 +1998,21 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
+uno::Reference< drawing::XShape >
+    ShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& xTarget,
+            const awt::Size& rSize, const awt::Point& rPosition )
+{
+    //create shape
+    uno::Reference< drawing::XShape > xShape(
+        m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.LineShape" ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+    xShape->setSize( rSize );
+    xShape->setPosition( rPosition );
+
+    return xShape;
+}
+
 uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
             const uno::Reference< drawing::XShapes >& xTarget
             , const awt::Size& rSize )
@@ -1994,7 +2024,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
 
         uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
                 "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
-        if( xTarget.is() && xShape.is())
+        if( xShape.is())
         {
             xTarget->add( xShape );
             ShapeFactory::makeShapeInvisible( xShape );
@@ -2007,6 +2037,23 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
         ASSERT_EXCEPTION( ex );
     }
     return 0;
+}
+
+uno::Reference< drawing::XShape > ShapeFactory::createRectangle(
+        const uno::Reference< drawing::XShapes >& xTarget
+        , const awt::Size& rSize
+        , const awt::Point& rPosition )
+{
+    uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
+                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
+    if( xShape.is())
+    {
+        xTarget->add( xShape );
+        xShape->setSize( rSize );
+        xShape->setPosition( rPosition );
+    }
+
+    return xShape;
 }
 
 uno::Reference< drawing::XShape >

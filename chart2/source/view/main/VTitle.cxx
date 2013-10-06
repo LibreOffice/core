@@ -177,6 +177,7 @@ void VTitle::createShapes(
         {
             ASSERT_EXCEPTION( e );
         }
+
         if(bStackCharacters)
         {
             //if the characters should be stacked we use only the first character properties for code simplicity

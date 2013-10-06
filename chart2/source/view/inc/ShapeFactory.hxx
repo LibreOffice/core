@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_SHAPEFACTORY_HXX
 
 #include "AbstractShapeFactory.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace chart
 {
@@ -134,6 +133,10 @@ public:
                     , const ::com::sun::star::drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties = NULL );
 
+    virtual com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+        createLine ( const ::com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xTarget,
+                const com::sun::star::awt::Size& rSize, const com::sun::star::awt::Point& rPosition );
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
@@ -143,6 +146,11 @@ public:
         createCircle2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createCircle( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , const ::com::sun::star::awt::Size& rSize
+                    , const ::com::sun::star::awt::Point& rPosition );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D
@@ -157,6 +165,14 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::awt::Size& rSize );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createRectangle(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget
+                , const ::com::sun::star::awt::Size& rSize
+                , const ::com::sun::star::awt::Point& rPosition );
+
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<

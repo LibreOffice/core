@@ -19,6 +19,8 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -160,6 +162,10 @@ public:
                     , const ::com::sun::star::drawing::PointSequenceSequence& rPoints
                     , const VLineProperties* pLineProperties = NULL ) = 0;
 
+    virtual com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
+        createLine ( const ::com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xTarget,
+                const com::sun::star::awt::Size& rSize, const com::sun::star::awt::Point& rPosition ) = 0;
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPoints
@@ -169,6 +175,11 @@ public:
         createCircle2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize ) = 0;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createCircle( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , const ::com::sun::star::awt::Size& rSize
+                    , const ::com::sun::star::awt::Point& rPosition ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D
@@ -183,6 +194,13 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::awt::Size& rSize ) = 0;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createRectangle(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xTarget
+                , const ::com::sun::star::awt::Size& rSize
+                , const ::com::sun::star::awt::Point& rPosition ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<

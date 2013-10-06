@@ -102,15 +102,15 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     if( ! (xSymbolContainer.is() && xShapeFactory.is()))
         return xResult;
 
-    xResult.set( xShapeFactory->createInstance(
-                     "com.sun.star.drawing.GroupShape"), uno::UNO_QUERY );
-    xSymbolContainer->add( xResult );
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
+    xResult.set( pShapeFactory->createGroup2D( xSymbolContainer ), uno::UNO_QUERY );
+
     Reference< drawing::XShapes > xResultGroup( xResult, uno::UNO_QUERY );
     if( ! xResultGroup.is())
         return xResult;
 
     // add an invisible square box to maintain aspect ratio
-    Reference< drawing::XShape > xBound( AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createInvisibleRectangle(
+    Reference< drawing::XShape > xBound( pShapeFactory->createInvisibleRectangle(
                 xResultGroup, rEntryKeyAspectRatio  ));
 
     // create symbol
@@ -118,14 +118,11 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     {
         if( eStyle == LegendSymbolStyle_LINE )
         {
-            Reference< drawing::XShape > xLine( xShapeFactory->createInstance(
-                    "com.sun.star.drawing.LineShape"), uno::UNO_QUERY );
+            Reference< drawing::XShape > xLine =
+                pShapeFactory->createLine( xResultGroup, awt::Size( rEntryKeyAspectRatio.Width, 0 ),
+                        awt::Point( 0, rEntryKeyAspectRatio.Height/2 ));
             if( xLine.is())
             {
-                xResultGroup->add( xLine );
-                xLine->setSize(  awt::Size( rEntryKeyAspectRatio.Width, 0 ));
-                xLine->setPosition( awt::Point( 0, rEntryKeyAspectRatio.Height/2 ));
-
                 lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType, rEntryKeyAspectRatio );
             }
 
@@ -162,32 +159,28 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 }
                 else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
                 {
-                    OSL_TRACE("the given parameter is not allowed to contain an automatic symbol style");
+                    SAL_WARN("chart", "the given parameter is not allowed to contain an automatic symbol style");
                 }
             }
         }
         else if( eStyle == LegendSymbolStyle_CIRCLE )
         {
-            Reference< drawing::XShape > xShape( xShapeFactory->createInstance(
-                "com.sun.star.drawing.EllipseShape"), uno::UNO_QUERY );
+            sal_Int32 nSize = std::min( rEntryKeyAspectRatio.Width, rEntryKeyAspectRatio.Height );
+            Reference< drawing::XShape > xShape =
+                pShapeFactory->createCircle( xResultGroup, awt::Size( nSize, nSize ),
+                        awt::Point( rEntryKeyAspectRatio.Width/2-nSize/2, rEntryKeyAspectRatio.Height/2-nSize/2 ));
             if( xShape.is() )
             {
-                xResultGroup->add( xShape );
-                sal_Int32 nSize = std::min( rEntryKeyAspectRatio.Width, rEntryKeyAspectRatio.Height );
-                xShape->setSize( awt::Size( nSize, nSize ) );
-                xShape->setPosition( awt::Point( rEntryKeyAspectRatio.Width/2-nSize/2, rEntryKeyAspectRatio.Height/2-nSize/2 ) );
                 lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
             }
         }
         else // eStyle == LegendSymbolStyle_BOX
         {
-            Reference< drawing::XShape > xShape( xShapeFactory->createInstance(
-                "com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY );
+            Reference< drawing::XShape > xShape =
+                pShapeFactory->createRectangle( xResultGroup,
+                        rEntryKeyAspectRatio, awt::Point( 0, 0 ));
             if( xShape.is() )
             {
-                xResultGroup->add( xShape );
-                xShape->setSize( rEntryKeyAspectRatio );
-                xShape->setPosition( awt::Point( 0, 0 ) );
                 lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType ); // PROP_TYPE_FILLED_SERIES );
             }
         }
