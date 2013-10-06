@@ -610,8 +610,8 @@ void SwHTMLWriter::OutHiddenControls(
                 OutNewLine( sal_True );
             OStringBuffer sOut;
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_input).append(' ')
-                .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
-                .append(OOO_STRING_SVTOOLS_HTML_IT_hidden);
+                .append(OOO_STRING_SVTOOLS_HTML_O_type).append("=\"")
+                .append(OOO_STRING_SVTOOLS_HTML_IT_hidden).append("\"");
 
             aTmp = xPropSet->getPropertyValue(
                             OUString("Name") );
@@ -830,7 +830,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( aSz.Height() )
             {
                 sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).
-                    append('=').append(static_cast<sal_Int32>(aSz.Height()));
+                    append("=\"").append(static_cast<sal_Int32>(aSz.Height())).append("\"");
             }
 
             aTmp = xPropSet->getPropertyValue(
@@ -866,14 +866,14 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( aSz.Height() )
                 {
                     sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rows).
-                        append('=').
-                        append(static_cast<sal_Int32>(aSz.Height()));
+                        append("=\"").
+                        append(static_cast<sal_Int32>(aSz.Height())).append("\"");
                 }
                 if( aSz.Width() )
                 {
                     sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
-                        append('=').
-                        append(static_cast<sal_Int32>(aSz.Width()));
+                        append("=\"").
+                        append(static_cast<sal_Int32>(aSz.Width())).append("\"");
                 }
 
                 aTmp = xPropSet->getPropertyValue(
@@ -890,7 +890,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                         *(sal_Bool*)aTmp.getValue()) ? OOO_STRING_SVTOOLS_HTML_WW_hard
                                                      : OOO_STRING_SVTOOLS_HTML_WW_soft;
                     sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_wrap).
-                        append('=').append(pWrapStr);
+                        append("=\"").append(pWrapStr).append("\"");
                 }
             }
             else
@@ -908,7 +908,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( aSz.Width() )
                 {
                     sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).
-                        append('=').append(static_cast<sal_Int32>(aSz.Width()));
+                        append("=\"").append(static_cast<sal_Int32>(aSz.Width())).append("\"");
                 }
 
                 aTmp = xPropSet->getPropertyValue(
@@ -918,8 +918,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 {
                     sOptions.append(' ').
                         append(OOO_STRING_SVTOOLS_HTML_O_maxlength).
-                        append('=').append(static_cast<sal_Int32>(
-                                *(sal_Int16*) aTmp.getValue()));
+                        append("=\"").append(static_cast<sal_Int32>(
+                                *(sal_Int16*) aTmp.getValue())).append("\"");
                 }
 
                 OUString sDefaultText("DefaultText");
@@ -945,7 +945,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( aSz.Width() )
             {
                 sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).
-                    append('=').append(static_cast<sal_Int32>(aSz.Width()));
+                    append("=\"").append(static_cast<sal_Int32>(aSz.Width())).append("\"");
             }
 
             // VALUE vim form aus Sicherheitsgruenden nicht exportieren
@@ -971,7 +971,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     if( eType != TYPE_NONE )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
-            append('=').append(TypeNames[eType]);
+            append("=\"").append(TypeNames[eType]).append("\"");
     }
 
     aTmp = xPropSet->getPropertyValue("Name");
@@ -1038,13 +1038,13 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( aPixelSz.Width() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append('=').append(static_cast<sal_Int32>(aPixelSz.Width()));
+                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Width())).append("\"");
         }
 
         if( aPixelSz.Height() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-                append('=').append(static_cast<sal_Int32>(aPixelSz.Height()));
+                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
         }
     }
 
@@ -1059,7 +1059,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 nTabIndex = 32767;
 
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_tabindex).
-                append('=').append(static_cast<sal_Int32>(nTabIndex));
+                append("=\"").append(static_cast<sal_Int32>(nTabIndex)).append("\"");
         }
     }
 

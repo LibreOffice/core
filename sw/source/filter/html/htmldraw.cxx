@@ -708,7 +708,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     if( pStr )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_behavior).
-            append('=').append(pStr);
+            append("=\"").append(pStr).append("\"");
     }
 
     // DIRECTION
@@ -725,7 +725,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     if( pStr )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_direction).
-            append('=').append(pStr);
+            append("=\"").append(pStr).append("\"");
     }
 
     // LOOP
@@ -734,15 +734,15 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                              .GetValue();
     if( 0==nCount )
         nCount = SDRTEXTANI_SLIDE==eAniKind ? 1 : -1;
-    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_loop).append('=').
-        append(nCount);
+    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_loop).append("=\"").
+        append(nCount).append("\"");
 
     // SCROLLDELAY
     sal_uInt16 nDelay =
         ((const SdrTextAniDelayItem&)rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
                                             .GetValue();
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolldelay).
-        append('=').append(static_cast<sal_Int32>(nDelay));
+        append("=\"").append(static_cast<sal_Int32>(nDelay)).append("\"");
 
     // SCROLLAMOUNT
     sal_Int16 nAmount =
@@ -761,7 +761,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     if( nAmount )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrollamount).
-            append('=').append(static_cast<sal_Int32>(nAmount));
+            append("=\"").append(static_cast<sal_Int32>(nAmount)).append("\"");
     }
 
     Size aTwipSz( pTextObj->GetLogicRect().GetSize() );
@@ -793,13 +793,13 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         if( aPixelSz.Width() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append('=').append(static_cast<sal_Int32>(aPixelSz.Width()));
+                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Width())).append("\"");
         }
 
         if( aPixelSz.Height() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-                append('=').append(static_cast<sal_Int32>(aPixelSz.Height()));
+                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
         }
     }
 
@@ -811,7 +811,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         const Color& rFillColor =
             ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append("=");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor, rHTMLWrt.eDestEnc );
     }

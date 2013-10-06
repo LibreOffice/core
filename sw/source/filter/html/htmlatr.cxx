@@ -803,7 +803,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( USHRT_MAX != nNumStart )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
-                 append('=').append(static_cast<sal_Int32>(nNumStart));
+                 append("=\"").append(static_cast<sal_Int32>(nNumStart)).append("\"");
         }
         sOut.append('>');
         rWrt.Strm() << sOut.getStr();
@@ -2137,18 +2137,19 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 }
 
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width)
-                    .append('=');
+                    .append("=\"");
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
-                rWrt.OutULong( rHTMLWrt.ToPixel(nPageWidth-nLeft-nRight,false) );
+                rWrt.OutULong( rHTMLWrt.ToPixel(nPageWidth-nLeft-nRight,false) ) << "\"";
 
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align)
-                    .append('=');
+                    .append("=\"");
                 if( !nLeft )
                     sOut.append(OOO_STRING_SVTOOLS_HTML_AL_left);
                 else if( !nRight )
                     sOut.append(OOO_STRING_SVTOOLS_HTML_AL_right);
                 else
                     sOut.append(OOO_STRING_SVTOOLS_HTML_AL_center);
+                sOut.append("\"");
             }
         }
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -2160,15 +2161,15 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             {
                 sal_uInt16 nWidth = pBorderLine->GetScaledWidth();
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size)
-                    .append('=');
+                    .append("=\"");
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
-                rWrt.OutULong( rHTMLWrt.ToPixel(nWidth,false) );
+                rWrt.OutULong( rHTMLWrt.ToPixel(nWidth,false) ) << "\"";
 
                 const Color& rBorderColor = pBorderLine->GetColor();
                 if( !rBorderColor.IsRGBEqual( Color(COL_GRAY) ) )
                 {
                     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_color)
-                        .append('=');
+                        .append("=");
                     rWrt.Strm() << sOut.makeStringAndClear().getStr();
                     HTMLOutFuncs::Out_Color( rWrt.Strm(), rBorderColor,
                                              rHTMLWrt.eDestEnc );
@@ -2633,7 +2634,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
 
         OStringBuffer sOut(OOO_STRING_SVTOOLS_HTML_linebreak);
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).append('=').append(pStr);
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).append("=").append(pStr).append("\"");
         HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), sOut.getStr() );
 
         rHTMLWrt.bClearLeft = sal_False;
@@ -2710,7 +2711,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
         OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_font).append(' ')
-            .append(OOO_STRING_SVTOOLS_HTML_O_color).append('=');
+            .append(OOO_STRING_SVTOOLS_HTML_O_color).append("=");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor, rHTMLWrt.eDestEnc ) << '>';
     }
@@ -2778,8 +2779,8 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 
         sal_uInt32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
         sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).append('=').
-             append(static_cast<sal_Int32>(nSize));
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).append("=\"").
+             append(static_cast<sal_Int32>(nSize)).append("\"");
         rWrt.Strm() << sOut.getStr();
 
         if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr &&
@@ -3218,8 +3219,8 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     if( pStr )
     {
         OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
-            .append(pStr);
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
+            .append(pStr).append("\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
     }
 

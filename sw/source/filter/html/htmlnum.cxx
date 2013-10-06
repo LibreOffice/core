@@ -817,7 +817,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             if( pStr )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
-                    append('=').append(pStr);
+                    append("=\"").append(pStr).append("\"");
             }
         }
         else if( SVX_NUM_BITMAP == eType )
@@ -848,7 +848,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             if( cType )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
-                    append('=').append(cType);
+                    append("=\"").append(cType).append("\"");
             }
 
             sal_uInt16 nStartVal = rNumFmt.GetStart();
@@ -868,7 +868,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             if( nStartVal != 1 )
             {
                 sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_start).
-                    append('=').append(static_cast<sal_Int32>(nStartVal));
+                    append("=\"").append(static_cast<sal_Int32>(nStartVal)).append("\"");
             }
         }
 

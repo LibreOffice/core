@@ -600,7 +600,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                                 MapMode(MAP_TWIP) ).Width();
             }
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_gutter).
-                append('=').append(static_cast<sal_Int32>(nGutter));
+                append("=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
         }
     }
 
@@ -842,7 +842,7 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
     if( pColorItem )
     {
         OStringBuffer sOut;
-        sOut.append(' ').append(pTag).append('=');
+        sOut.append(' ').append(pTag).append("=");
         rHWrt.Strm() << sOut.makeStringAndClear().getStr();
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor.GetColor() )

@@ -321,12 +321,12 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( nRowSpan>1 )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
-            append('=').append(static_cast<sal_Int32>(nRowSpan));
+            append("=\"").append(static_cast<sal_Int32>(nRowSpan)).append("\"");
     }
     if( nColSpan > 1 )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
-            append('=').append(static_cast<sal_Int32>(nColSpan));
+            append("=\"").append(static_cast<sal_Int32>(nColSpan)).append("\"");
     }
 #ifndef PURE_HTML
     long nWidth = 0;
@@ -376,7 +376,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( bOutWidth )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-            append('=');
+            append("=\"");
         if( nPrcWidth != USHRT_MAX )
         {
             sOut.append(static_cast<sal_Int32>(nPrcWidth)).append('%');
@@ -385,14 +385,15 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         {
             sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
         }
+        sOut.append("\"");
         if( !bLayoutExport && nColSpan==1 )
             pCol->SetOutWidth( false );
     }
 
     if( nHeight )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-            append('=').append(static_cast<sal_Int32>(aPixelSz.Height()));
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height)
+            .append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
     }
 #endif
 
@@ -407,10 +408,11 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         sal_Int16 eVertOri = pCell->GetVertOri();
         if( text::VertOrientation::TOP==eVertOri || text::VertOrientation::BOTTOM==eVertOri )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign).
-                append('=').append(text::VertOrientation::TOP==eVertOri ?
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign)
+                .append("=\"").append(text::VertOrientation::TOP==eVertOri ?
                     OOO_STRING_SVTOOLS_HTML_VA_top :
-                    OOO_STRING_SVTOOLS_HTML_VA_bottom);
+                    OOO_STRING_SVTOOLS_HTML_VA_bottom)
+                .append("\"");
         }
     }
 
@@ -549,7 +551,8 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     {
         OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign)
-            .append('=').append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
+            .append("=\"").append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
+            .append("\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
     }
 
@@ -648,31 +651,31 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     if( bColsOption )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
-            append('=').append(static_cast<sal_Int32>(aCols.size()));
+            append("=\"").append(static_cast<sal_Int32>(aCols.size())).append("\"");
     }
 
     // ALIGN= ausgeben
     if( text::HoriOrientation::RIGHT == eAlign )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-            append('=').append(OOO_STRING_SVTOOLS_HTML_AL_right);
+            append("=\"").append(OOO_STRING_SVTOOLS_HTML_AL_right).append("\"");
     }
     else if( text::HoriOrientation::CENTER == eAlign )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-            append('=').append(OOO_STRING_SVTOOLS_HTML_AL_center);
+            append("=\"").append(OOO_STRING_SVTOOLS_HTML_AL_center).append("\"");
     }
     else if( text::HoriOrientation::LEFT == eAlign )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
-            append('=').append(OOO_STRING_SVTOOLS_HTML_AL_left);
+            append("=\"").append(OOO_STRING_SVTOOLS_HTML_AL_left).append("\"");
     }
 
     // WIDTH ausgeben: Stammt aus Layout oder ist berechnet
     if( nTabWidth )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-            append('=');
+            append("=\"");
         if( HasRelWidths() )
             sOut.append(static_cast<sal_Int32>(nTabWidth)).append('%');
         else if( Application::GetDefaultDevice() )
@@ -687,8 +690,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         else
         {
             OSL_ENSURE( Application::GetDefaultDevice(), "kein Application-Window!?" );
-            sOut.append(RTL_CONSTASCII_STRINGPARAM("100%"));
+            sOut.append("100%");
         }
+        sOut.append("\"");
     }
 
     if( (nHSpace || nVSpace) && Application::GetDefaultDevice())
@@ -704,23 +708,23 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         if( aPixelSpc.Width() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).
-                append('=').append(static_cast<sal_Int32>(aPixelSpc.Width()));
+                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Width())).append("\"");
         }
 
         if( aPixelSpc.Height() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).
-                append('=').append(static_cast<sal_Int32>(aPixelSpc.Height()));
+                append("=\"").append(static_cast<sal_Int32>(aPixelSpc.Height())).append("\"");
         }
     }
 
     // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellpadding).
-        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellPadding,false)));
+        append("=\"").append(static_cast<sal_Int32>(rWrt.ToPixel(nCellPadding,false))).append("\"");
 
     // CELLSPACING ausgeben: Stammt aus Layout oder ist berechnet
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
-        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing,false)));
+        append("=\"").append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing,false))).append("\"");
 
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
@@ -743,8 +747,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         rWrt.OutNewLine(); // <CAPTION> in neue Zeile
         OStringBuffer sOutStr(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_caption));
-        sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
-               .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
+        sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
+               .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
+               .append("\"");
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOutStr.getStr(), sal_True );
         HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption, rWrt.eDestEnc, &rWrt.aNonConvertableCharacters    );
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_caption, sal_False );
@@ -788,12 +793,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             }
 
             sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append('=');
+                append("=\"");
             if( bRel )
                 sOutStr.append(static_cast<sal_Int32>(nWidth)).append('*');
             else
                 sOutStr.append(static_cast<sal_Int32>(rWrt.ToPixel(nWidth,false)));
-            sOutStr.append('>');
+            sOutStr.append("\">");
             rWrt.Strm() << sOutStr.makeStringAndClear().getStr();
 
             if( bColGroups && pColumn->bRightBorder && nCol<nCols-1 )
@@ -1109,8 +1114,8 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         else
         {
             OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_division));
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
-                .append(OOO_STRING_SVTOOLS_HTML_AL_right);
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
+                .append(OOO_STRING_SVTOOLS_HTML_AL_right).append("\"");
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.getStr(),
                                         sal_True );
         }
