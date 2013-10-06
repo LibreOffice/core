@@ -240,7 +240,8 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
                         nsSetAttrMode::SETATTR_NOTXTATRCHR |
                         nsSetAttrMode::SETATTR_NOHINTADJUST );
         // shouldn't be possible to hit any error/merging path from here
-        assert(pAttr);
+        if(pAttr == NULL) return;
+
         if (m_bFormatIgnoreStart)
         {
             pAttr->SetFormatIgnoreStart(true);
