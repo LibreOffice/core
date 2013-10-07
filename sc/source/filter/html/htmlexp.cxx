@@ -732,7 +732,7 @@ void ScHTMLExport::WriteTables()
 
         // --- <COLGROUP> ----
         {
-            nCol = nStartCol;
+            SCCOL nCol = nStartCol;
             sal_Int32 nWidth = 0;
             sal_Int32 nSpan = 0;
             while( nCol <= nEndCol )
@@ -1038,27 +1038,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             append('=');
         aStrTD.append(lcl_makeHTMLColorTriplet(aBgColor));
     }
-
-    double fVal = 0.0;
-    if ( bValueData )
-    {
-        switch (aCell.meType)
-        {
-            case CELLTYPE_VALUE:
-                fVal = aCell.mfValue;
-                if ( bCalcAsShown && fVal != 0.0 )
-                    fVal = pDoc->RoundValueAsShown( fVal, nFormat );
-                break;
-            case CELLTYPE_FORMULA:
-                fVal = aCell.mpFormula->GetValue();
-                break;
-            default:
-                OSL_FAIL( "value data with unsupported cell type" );
-        }
-    }
-
-    aStrTD.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValueData, fVal,
-        nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars));
 
     TAG_ON(aStrTD.makeStringAndClear().getStr());
 
