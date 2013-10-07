@@ -12,6 +12,7 @@
 #include "Player.hxx"
 #include "Media.hxx"
 #include "SymbolLoader.hxx"
+ #include "Common.hxx"
 
 struct libvlc_media_t;
 
@@ -50,6 +51,7 @@ namespace
     void ( *libvlc_video_set_scale ) ( libvlc_media_player_t *p_mi, float f_factor );
     int ( *libvlc_video_get_size ) ( libvlc_media_player_t *p_mi, unsigned num,
                                      unsigned *px, unsigned *py );
+    int ( *libvlc_video_get_track_count ) ( libvlc_media_player_t *p_mi );
 }
 
 namespace avmedia
@@ -87,7 +89,8 @@ namespace wrapper
             SYM_MAP( libvlc_video_set_mouse_input ),
             SYM_MAP( libvlc_media_player_retain ),
             SYM_MAP( libvlc_video_set_scale ),
-            SYM_MAP( libvlc_video_get_size )
+            SYM_MAP( libvlc_video_get_size ),
+            SYM_MAP( libvlc_video_get_track_count )
         };
 
         return InitApiMap( VLC_PLAYER_API );
