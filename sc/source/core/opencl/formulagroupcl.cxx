@@ -34,7 +34,9 @@ public:
     typedef std::vector<FormulaTreeNode *> Children_T;
     Children_T Children;
 };
-/// Holds an argument reference to a SingleVectorRef.
+/// Holds an input (read-only) argument reference to a SingleVectorRef.
+/// or a DoubleVectorRef for non-sliding-window argument of complex functions
+/// like SumOfProduct
 /// In most of the cases the argument is introduced
 /// by a Push operation in the given RPN.
 class DynamicKernelArgument {
@@ -53,7 +55,7 @@ public:
         ss << mSymName << "[gid0]";
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual void Marshal(cl_kernel, int, int);
+    virtual size_t Marshal(cl_kernel, int, int);
     virtual ~DynamicKernelArgument()
     {
         //std::cerr << "~DynamicKernelArgument: " << mSymName <<"\n";
@@ -63,7 +65,12 @@ public:
             assert(ret == CL_SUCCESS);
         }
     }
-    virtual void GenSlidingWindowFunction(std::stringstream &ss) {};
+    virtual void GenSlidingWindowFunction(std::stringstream &) {};
+    virtual void GenSlidingWindowDeclRef(std::stringstream &ss)
+    {
+        GenDeclRef(ss);
+    }
+    const std::string &GetSymName(void) const { return mSymName; }
 protected:
     const std::string mSymName;
     FormulaTreeNode *mFormulaTree;
@@ -72,20 +79,29 @@ protected:
 };
 
 /// Map the buffer used by an argument and do necessary argument setting
-void DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
+size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
 {
     FormulaToken *ref = mFormulaTree->CurrentFormula;
     assert(mpClmem == NULL);
-    assert(ref->GetType() == formula::svSingleVectorRef);
-    const formula::SingleVectorRefToken* pSVR =
-        dynamic_cast< const formula::SingleVectorRefToken* >(ref);
-    assert(pSVR);
-    double *pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
-    size_t szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
+    double *pHostBuffer = NULL;
+    size_t szHostBuffer = 0;
+    if (ref->GetType() == formula::svSingleVectorRef) {
+        const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(ref);
+        assert(pSVR);
+        pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
+        szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
 #if 0
-    std::cerr << "Marshal a Single vector of size " << pSVR->GetArrayLength();
-    std::cerr << " at argument "<< argno << "\n";
+        std::cerr << "Marshal a Single vector of size " << pSVR->GetArrayLength();
+        std::cerr << " at argument "<< argno << "\n";
 #endif
+    } else if (ref->GetType() == formula::svDoubleVectorRef) {
+        const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
+        assert(pDVR);
+        pHostBuffer = const_cast<double*>(pDVR->GetArrays()[0].mpNumericArray);
+        szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
+    }
     // Obtain cl context
     KernelEnv kEnv;
     OclCalc::setKernelEnv(&kEnv);
@@ -98,6 +114,7 @@ void DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
 
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
     assert(CL_SUCCESS == err);
+    return 1;
 }
 
 /// Arguments that are reduced from a another vector outside the dynamic kernel
@@ -117,10 +134,10 @@ public:
         ss << mSymName;
     }
     /// Create buffer and pass the buffer to a given kernel
-    virtual void Marshal(cl_kernel, int, int);
+    virtual size_t Marshal(cl_kernel, int, int);
 };
 
-void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
+size_t DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
 {
     FormulaToken *ref = mFormulaTree->CurrentFormula;
     // May have variable arguments..Not handling them now
@@ -132,7 +149,7 @@ void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
     int opc = ref->GetOpCode();
     int total_nr = 0;
     if (ref->GetByte() > 1)
-        return; // FIXME Not supporting more than one range for now
+        return 0; // FIXME Not supporting more than one range for now
     FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
     assert(pChild);
     const formula::DoubleVectorRefToken* pChildDVR =
@@ -171,16 +188,66 @@ void DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
     // Pass the scalar result back to the rest of the formula kernel
     err = clSetKernelArg(k, argno, sizeof(double), (void*)&cur_top);
     assert(CL_SUCCESS == err);
+    return 1;
 }
 
-/// Handling reductions of a Double Vector that leads to an array of results
+/// Handling a Double Vector that is used as a sliding window input
+/// to either a sliding window average or sum-of-products
 class DynamicKernelSlidingArgument: public DynamicKernelArgument
 {
 public:
     DynamicKernelSlidingArgument(const std::string &s, FormulaTreeNode *ft):
         DynamicKernelArgument(s, ft) {}
+    virtual void GenSlidingWindowFunction(std::stringstream &)
+    {
+        assert(0 && "This class should not be directly used");
+    }
+    /// Generate use/references to the argument,
+    /// if used in a standalone way
+    virtual void GenDeclRef(std::stringstream &) const
+    {
+        assert(0 && "This class should not be directly used");
+    }
+    virtual void GenSlidingWindowDeclRef(std::stringstream &ss)
+    {
+        ss << mSymName << "[i + gid0]";
+    }
+};
+
+/// Helper functions that have multiple buffers
+class DynamicKernelSoPArguments: public DynamicKernelArgument
+{
+public:
+    typedef std::unique_ptr<DynamicKernelArgument> SubArgument;
+
+    DynamicKernelSoPArguments(const std::string &s, FormulaTreeNode *ft):
+        DynamicKernelArgument(s, ft) {
+        size_t nChildren = ft->Children.size();
+        for (unsigned i = 0; i < nChildren; i++)
+        {
+            FormulaToken *pChild = ft->Children[i]->CurrentFormula;
+            assert(pChild);
+            assert(pChild->GetOpCode() == ocPush);
+            assert(pChild->GetType() == formula::svDoubleVectorRef);
+            const formula::DoubleVectorRefToken* pChildDVR =
+                dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
+            assert(pChildDVR);
+            std::stringstream tmpname;
+            tmpname << s << "_" << i;
+            std::string ts = tmpname.str();
+            if (pChildDVR->IsStartFixed() && pChildDVR->IsEndFixed())
+                mvSubArguments.push_back(
+                        SubArgument(new DynamicKernelArgument(ts, ft->Children[i])));
+            else if (!pChildDVR->IsStartFixed() && !pChildDVR->IsEndFixed())
+                mvSubArguments.push_back(
+                        SubArgument(new DynamicKernelSlidingArgument(ts, ft->Children[i])));
+            else
+                assert (0 && "Unsupported sliding window type");
+        }
+    }
     /// Create buffer and pass the buffer to a given kernel
-    virtual void Marshal(cl_kernel, int, int nVectorWidth);
+    virtual size_t Marshal(cl_kernel, int, int nVectorWidth);
+
     //// Generate sliding window helper. An example for sum
     ///  double custom_sliding_dotproduct(int nWindow, __global *sliding) {
     ///    int nr = get_global_size(0);
@@ -194,10 +261,25 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss)
     {
         ss << "\ndouble " << mSymName;
-        ss << "_SlidingDotProduct(int nWindow, __global double *sliding) {\n\t";
+        ss << "_SlidingDotProduct(int nWindow,";
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            mvSubArguments[i]->GenDecl(ss);
+        }
+        ss << ") {\n\t";
         ss << "double tmp = 0.0;\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
         ss << "for (int i = 0; i < nWindow; i++)\n\t\t";
-        ss << "tmp += sliding[i + get_global_id(0)];\n\t";
+        ss << "tmp += ";
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        {
+            if (i)
+                ss << "*";
+            mvSubArguments[i]->GenSlidingWindowDeclRef(ss);
+        }
+        ss << ";\n\t";
         ss << "return tmp;\n";
         ss << "}";
     }
@@ -205,6 +287,8 @@ public:
     /// Generate use/references to the argument
     virtual void GenDeclRef(std::stringstream &ss) const
     {
+        OpCode opc = mFormulaTree->CurrentFormula->GetOpCode();
+        assert(opc == ocAverage || opc == ocSumProduct);
         FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
         assert(pChild);
         const formula::DoubleVectorRefToken* pChildDVR =
@@ -212,38 +296,38 @@ public:
         assert(pChildDVR);
         // Prepare intermediate results (on CPU for now)
         size_t nWindowSize = pChildDVR->GetRefRowSize();
-        ss << mSymName << "_SlidingDotProduct("<<nWindowSize<<", "<<mSymName<<")";
+        ss << mSymName << "_SlidingDotProduct("<<nWindowSize<<", ";
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            ss << mvSubArguments[i]->GetSymName();
+        }
+        ss << ")";
         if (mFormulaTree->CurrentFormula->GetOpCode() == ocAverage)
             ss << "/(double)"<<nWindowSize;
-        else
-            assert(0 && "Unsupported sliding window type");
     }
+    virtual void GenDecl(std::stringstream &ss)
+    {
+        for(auto it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
+            ++it) {
+            if (it != mvSubArguments.begin())
+                ss << ", ";
+            (*it)->GenDecl(ss);
+        }
+    }
+private:
+    std::vector<SubArgument> mvSubArguments;
 };
-void DynamicKernelSlidingArgument::Marshal(cl_kernel k, int argno, int nVectorWidth)
+
+size_t DynamicKernelSoPArguments::Marshal(cl_kernel k, int argno, int nVectorWidth)
 {
-    // Obtain cl context
-    KernelEnv kEnv;
-    OclCalc::setKernelEnv(&kEnv);
-    cl_int err;
-    // The result vector
-    FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
-    assert(pChild);
-    const formula::DoubleVectorRefToken* pChildDVR =
-        dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
-    assert(pChildDVR);
-    // Prepare intermediate results (on CPU for now)
-    double *pHostInput = const_cast<double*>(
-        pChildDVR->GetArrays()[0].mpNumericArray);
-    size_t nHostBuffer = pChildDVR->GetArrayLength();
-    size_t nWindowSize = pChildDVR->GetRefRowSize();
-    assert(nHostBuffer == nWindowSize+nVectorWidth-1);
-    mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
-            nHostBuffer*sizeof(double), pHostInput, &err);
-    assert(CL_SUCCESS == err);
-    err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
-    assert(err == CL_SUCCESS);
-    return;
+    unsigned i = 0;
+    for(auto it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
+            ++it) {
+        (*it)->Marshal(k, argno + (i++), nVectorWidth);
+    }
+    return i;
 }
 
 /// Holds the symbol table for a given dynamic kernel
@@ -288,7 +372,7 @@ void SymbolTable::Marshal(cl_kernel k, int nVectorWidth)
     int i = 1; //The first argument is reserved for results
     for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
             ++it) {
-        (*it)->Marshal(k, i++, nVectorWidth);
+        i+=(*it)->Marshal(k, i, nVectorWidth);
     }
 }
 
@@ -551,12 +635,31 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                         //  {
                         //      (custom_sliding_sum(N, sliding)+fixed) /
                         //            get_global_size(0)) ...
-                        mSyms.DeclRefArg<DynamicKernelSlidingArgument>(cur)
+
+                        mSyms.DeclRefArg<DynamicKernelSoPArguments>(cur)
                             ->GenDeclRef(mKernelSrc);
                     } else {
                         assert(0 && "Unhandled case!\n");
                     }
                 }
+                return;
+            case ocSumProduct:
+                // Reduce to an array on CPU
+                // for code like avg($A1:$A2, $B$3:$B$4) Generate code like
+                //  double custom_sliding_dotproduct(int nWindow,
+                //                                   __global *sliding) {
+                //    double tmp = 0.0;
+                //    for (int i = 0; i < nWindow; i++) {
+                //        tmp += sliding[i+get_global_id(0)];
+                //    }
+                //    return tmp;
+                //  }
+                //  __kernel DynamicKernel (..., __global double *windows,
+                //                          double fixed, ...
+                //  {
+                //      (custom_sliding_sum(N, sliding)+fixed) /
+                //            get_global_size(0)) ...
+                mSyms.DeclRefArg<DynamicKernelSoPArguments>(cur)->GenDeclRef(mKernelSrc);
                 return;
             default:
                 std::cerr << " /* UnknownOperator(" << p->GetOpCode() << ") */";
