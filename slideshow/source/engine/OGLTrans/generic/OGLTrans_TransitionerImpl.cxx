@@ -29,6 +29,7 @@
 // Includes <GL/gl.h>
 #include "OGLTrans_TransitionImpl.hxx"
 
+#include <string.h>
 #include <sal/types.h>
 
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -518,7 +519,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
     unx::GLXFBConfig* fbconfigs = NULL;
-    int nfbconfigs, value, i = 0;
+    int nfbconfigs = 0, value = 0, i = 0;
 #endif
 
     while( *pAttributeTable )
@@ -576,6 +577,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 
             if( i != nfbconfigs ) {
                 vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
+                GLWin.fbc = fbconfigs[i];
                 mbHasTFPVisual = true;
                 pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
                 SAL_INFO("slideshow.opengl", "found visual suitable for texture_from_pixmap");
@@ -624,10 +626,6 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 #elif defined( UNX )
         GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
         GLWin.win = pChildSysData->aWindow;
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-        if( mbHasTFPVisual )
-            GLWin.fbc = fbconfigs[i];
-#endif
         GLWin.vi = vi;
         GLWin.GLXExtensions = unx::glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
         SAL_INFO("slideshow.opengl", "available GLX extensions: " << GLWin.GLXExtensions);
@@ -1762,7 +1760,6 @@ void OGLTransitionerImpl::disposing()
 
 OGLTransitionerImpl::OGLTransitionerImpl() :
     OGLTransitionerImplBase(m_aMutex),
-    GLWin(),
     GLleavingSlide( 0 ),
     GLenteringSlide( 0 ),
     pWindow( NULL ),
@@ -1775,15 +1772,7 @@ OGLTransitionerImpl::OGLTransitionerImpl() :
     SlideBitmapLayout(),
     SlideSize()
 {
-#if defined( _WIN32 )
-    GLWin.hWnd = 0;
-#elif defined( UNX )
-    GLWin.ctx = 0;
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
-    mnFrameCount = 0;
-#endif
+    memset(&GLWin, 0, sizeof(GLWin));
 }
 
 typedef cppu::WeakComponentImplHelper1<presentation::XTransitionFactory> OGLTransitionFactoryImplBase;
