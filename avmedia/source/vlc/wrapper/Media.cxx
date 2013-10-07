@@ -25,18 +25,21 @@ namespace wrapper
 namespace
 {
     libvlc_media_t* ( *libvlc_media_new_path ) ( libvlc_instance_t *p_instance, const char *path );
+    libvlc_media_t* ( *libvlc_media_new_location ) (libvlc_instance_t *p_instance, const char *psz_mrl);
     void ( *libvlc_media_release ) ( libvlc_media_t *p_md );
     void ( *libvlc_media_retain ) ( libvlc_media_t *p_md );
     libvlc_time_t ( *libvlc_media_get_duration ) ( libvlc_media_t *p_md );
     void ( *libvlc_media_parse ) ( libvlc_media_t *p_md );
     int ( *libvlc_media_is_parsed ) ( libvlc_media_t *p_md );
+    char* ( *libvlc_media_get_mrl )(libvlc_media_t *p_md);
+
 
     libvlc_media_t* InitMedia( const rtl::OUString& url, Instance& instance )
     {
         rtl::OString dest;
         url.convertToString(&dest, RTL_TEXTENCODING_UTF8, 0);
 
-        return libvlc_media_new_path(instance, dest.getStr());
+        return libvlc_media_new_location(instance, dest.getStr());
     }
 }
 
@@ -49,7 +52,9 @@ bool Media::LoadSymbols()
         SYM_MAP( libvlc_media_retain ),
         SYM_MAP( libvlc_media_get_duration ),
         SYM_MAP( libvlc_media_parse ),
-        SYM_MAP( libvlc_media_is_parsed )
+        SYM_MAP( libvlc_media_is_parsed ),
+        SYM_MAP( libvlc_media_get_mrl ),
+        SYM_MAP( libvlc_media_new_location )
     };
 
     return InitApiMap( VLC_MEDIA_API );
@@ -58,6 +63,10 @@ bool Media::LoadSymbols()
 Media::Media( const rtl::OUString& url, Instance& instance )
     : mMedia( InitMedia( url, instance ) )
 {
+    if (mMedia == NULL)
+    {
+        // TODO: Error
+    }
 }
 
 Media::Media( const Media& other )
