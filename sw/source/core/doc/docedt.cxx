@@ -46,6 +46,8 @@
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
 
+#include <stdio.h>
+
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -2440,7 +2442,7 @@ SetRedlineMode( eOld );
                 }
             }
 
-            *rPam.GetMark() = *aDelPam.GetMark();
+            *rPam.Start() = *aDelPam.GetMark();
 
             ++aPtNd;
             rPam.GetMark()->nNode = aPtNd;
