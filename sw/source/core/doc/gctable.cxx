@@ -85,8 +85,10 @@ static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPa
 {
     const SwTableLines& rLines = pBox->GetTabLines();
     if( !rLines.empty() )
+    {
         BOOST_FOREACH( const SwTableLine* pLine, rLines )
             lcl_GCBorder_GetLastBox_L( pLine, pPara );
+    }
     else
         pPara->push_back( (SwTableBox*)pBox );
 }
