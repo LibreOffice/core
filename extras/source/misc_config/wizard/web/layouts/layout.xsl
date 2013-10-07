@@ -121,7 +121,7 @@ places...
 	 
 
 	 <xsl:template match="document/@update-date">
-	 	<span class="doclastchangedate">
+	 	<span class="doclastchangeddate">
 	 		<xsl:value-of select="."/>
 	 	</span>
 	 	<br/>
