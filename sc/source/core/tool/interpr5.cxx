@@ -439,7 +439,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
         break;
         case svString :
         {
-            String aStr = GetString();
+            OUString aStr = GetString();
             pMat = GetNewMat( 1, 1);
             if ( pMat )
             {
@@ -1083,7 +1083,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
                     xResMat->PutError( nErr, i, j);
                 else
                 {
-                    String aTmp( pMat1->GetString( *pFormatter, i, j));
+                    OUString aTmp( pMat1->GetString( *pFormatter, i, j));
                     aTmp += pMat2->GetString( *pFormatter, i, j);
                     xResMat->PutString( aTmp, i, j);
                 }
@@ -1279,7 +1279,7 @@ void ScInterpreter::ScAmpersand()
     }
     else if (pMat1 || pMat2)
     {
-        String sStr;
+        OUString sStr;
         bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
@@ -1314,7 +1314,7 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            String aTmp( sStr);
+                            OUString aTmp( sStr);
                             aTmp += pMat->GetString( *pFormatter, i, j);
                             pResMat->PutString( aTmp, i, j);
                         }
@@ -1330,7 +1330,7 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            String aTmp( pMat->GetString( *pFormatter, i, j));
+                            OUString aTmp( pMat->GetString( *pFormatter, i, j));
                             aTmp += sStr;
                             pResMat->PutString( aTmp, i, j);
                         }
@@ -3185,17 +3185,17 @@ void ScInterpreter::ScInfo()
 {
     if( MustHaveParamCount( GetByte(), 1 ) )
     {
-        String aStr = GetString();
+        OUString aStr = GetString();
         ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
-        if( aStr.EqualsAscii( "SYSTEM" ) )
-            PushString( String( SC_INFO_OSVERSION ) );
-        else if( aStr.EqualsAscii( "OSVERSION" ) )
-            PushString( String( "Windows (32-bit) NT 5.01" ) );
-        else if( aStr.EqualsAscii( "RELEASE" ) )
+        if( aStr.equalsAscii( "SYSTEM" ) )
+            PushString( OUString( SC_INFO_OSVERSION ) );
+        else if( aStr.equalsAscii( "OSVERSION" ) )
+            PushString( OUString( "Windows (32-bit) NT 5.01" ) );
+        else if( aStr.equalsAscii( "RELEASE" ) )
             PushString( ::utl::Bootstrap::getBuildIdData( OUString() ) );
-        else if( aStr.EqualsAscii( "NUMFILE" ) )
+        else if( aStr.equalsAscii( "NUMFILE" ) )
             PushDouble( 1 );
-        else if( aStr.EqualsAscii( "RECALC" ) )
+        else if( aStr.equalsAscii( "RECALC" ) )
             PushString( ScGlobal::GetRscString( pDok->GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
         else
             PushIllegalArgument();

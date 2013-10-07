@@ -531,7 +531,7 @@ void ScInterpreter::ScGetDateDif()
 
 void ScInterpreter::ScGetTimeValue()
 {
-    String aInputString = GetString();
+    OUString aInputString = GetString();
     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
@@ -1938,13 +1938,13 @@ void ScInterpreter::ScStyle()
     sal_uInt8 nParamCount = GetByte();
     if (nParamCount >= 1 && nParamCount <= 3)
     {
-        String aStyle2;                             // Vorlage nach Timer
+        OUString aStyle2;                             // Vorlage nach Timer
         if (nParamCount >= 3)
             aStyle2 = GetString();
         long nTimeOut = 0;                          // Timeout
         if (nParamCount >= 2)
             nTimeOut = (long)(GetDouble()*1000.0);
-        String aStyle1 = GetString();               // Vorlage fuer sofort
+        OUString aStyle1 = GetString();               // Vorlage fuer sofort
 
         if (nTimeOut < 0)
             nTimeOut = 0;
@@ -2280,8 +2280,8 @@ void ScInterpreter::ScConvert()
 {   // Value, FromUnit, ToUnit
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        String aToUnit( GetString() );
-        String aFromUnit( GetString() );
+        OUString aToUnit( GetString() );
+        OUString aFromUnit( GetString() );
         double fVal = GetDouble();
         if ( nGlobalError )
             PushError( nGlobalError);
@@ -2313,7 +2313,7 @@ void ScInterpreter::ScRoman()
             static const sal_uInt16 pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
             static const sal_uInt16 nMaxIndex = (sal_uInt16)((sizeof(pValues)/sizeof(pValues[0])) - 1);
 
-            String aRoman;
+            OUString aRoman;
             sal_uInt16 nVal = (sal_uInt16) fVal;
             sal_uInt16 nMode = (sal_uInt16) fMode;
 
@@ -2337,8 +2337,8 @@ void ScInterpreter::ScRoman()
                         else
                             nSteps = nMode;
                     }
-                    aRoman += pChars[ nIndex ];
-                    aRoman += pChars[ nIndex2 ];
+                    aRoman += OUString( pChars[ nIndex ] );
+                    aRoman += OUString( pChars[ nIndex2 ] );
                     nVal = sal::static_int_cast<sal_uInt16>( nVal + pValues[ nIndex ] );
                     nVal = sal::static_int_cast<sal_uInt16>( nVal - pValues[ nIndex2 ] );
                 }
@@ -2348,7 +2348,7 @@ void ScInterpreter::ScRoman()
                     {
                         // assert can't happen with nVal<4000 precondition
                         assert( nIndex >= 1 );
-                        aRoman += pChars[ nIndex - 1 ];
+                        aRoman += OUString( pChars[ nIndex - 1 ] );
                     }
                     sal_Int32 nPad = nDigit % 5;
                     if (nPad)
@@ -2503,7 +2503,7 @@ void ScInterpreter::ScHyperLink()
                     SetError( errIllegalArgument);
             }
         }
-        String aUrl = GetString();
+        OUString aUrl = GetString();
         ScMatrixRef pResMat = GetNewMat( 1, 2);
         if (nGlobalError)
         {
@@ -2595,7 +2595,7 @@ void ScInterpreter::ScEuroConvert()
             double fToRate;
             int    nFromDec;
             int    nToDec;
-            String aEur( "EUR");
+            OUString aEur( "EUR");
             if ( lclConvertMoney( aFromUnit, fFromRate, nFromDec )
                 && lclConvertMoney( aToUnit, fToRate, nToDec ) )
             {

@@ -114,7 +114,7 @@ private:
 class FormatString : public ::std::unary_function<const ScRange*, void>
 {
 public:
-    FormatString(String& rStr, sal_uInt16 nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
+    FormatString(OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
         mrStr(rStr),
         mnFlags(nFlags),
         mpDoc(pDoc),
@@ -136,11 +136,11 @@ public:
         if (mbFirst)
             mbFirst = false;
         else
-            mrStr += mcDelim;
+            mrStr += OUString(mcDelim);
         mrStr += aStr;
     }
 private:
-    String& mrStr;
+    OUString& mrStr;
     sal_uInt16 mnFlags;
     ScDocument* mpDoc;
     FormulaGrammar::AddressConvention meConv;
@@ -191,7 +191,7 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
         nMask |= SCA_VALID;             // falls das jemand vergessen sollte
         sal_uInt16 nResult = (sal_uInt16)~0;    // alle Bits setzen
         ScRange aRange;
-        String aOne;
+        OUString aOne;
         SCTAB nTab = 0;
         if ( pDoc )
         {
@@ -232,7 +232,7 @@ void ScRangeList::Format( OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
     if (!cDelimiter)
         cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
-    String aStr;
+    OUString aStr;
     FormatString func(aStr, nFlags, pDoc, eConv, cDelimiter);
     for_each(maRanges.begin(), maRanges.end(), func);
     rStr = aStr;

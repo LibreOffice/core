@@ -84,10 +84,10 @@ using ::std::auto_ptr;
 struct ScCompare
 {
     double  nVal[2];
-    String* pVal[2];
+    OUString* pVal[2];
     bool    bVal[2];
     bool    bEmpty[2];
-        ScCompare( String* p1, String* p2 )
+        ScCompare( OUString* p1, OUString* p2 )
         {
             pVal[ 0 ] = p1;
             pVal[ 1 ] = p2;
@@ -261,7 +261,7 @@ static void lcl_storeJumpMatResult( const ScMatrix* pMat, ScMatrix* pResMat, SCS
     }
     else
     {
-        const String& rStr = pMat->GetString( nC, nR );
+        const OUString& rStr = pMat->GetString( nC, nR );
         pResMat->PutString( rStr, nC, nR );
     }
 }
@@ -865,7 +865,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
         }
         else
         {
-            if ( rComp.pVal[ 1 ]->Len() )
+            if ( !rComp.pVal[ 1 ]->isEmpty() )
                 fRes = -1;      // empty cell < "..."
             // else: empty cell == ""
         }
@@ -885,7 +885,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
         }
         else
         {
-            if ( rComp.pVal[ 0 ]->Len() )
+            if ( !rComp.pVal[ 0 ]->isEmpty() )
                 fRes = 1;       // "..." > empty cell
             // else: "" == empty cell
         }
@@ -926,11 +926,11 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
             if (pOptions->bRegEx)
             {
                 sal_Int32 nStart = 0;
-                sal_Int32 nStop  = rComp.pVal[0]->Len();
+                sal_Int32 nStop  = rComp.pVal[0]->getLength();
                 bool bMatch = rEntry.GetSearchTextPtr(
                         !pOptions->bIgnoreCase)->SearchForward( *rComp.pVal[0],
                             &nStart, &nStop);
-                if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rComp.pVal[0]->Len()))
+                if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rComp.pVal[0]->getLength()))
                     bMatch = false;     // RegEx must match entire string.
                 fRes = (bMatch ? 0 : 1);
             }
@@ -944,13 +944,13 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
                     bMatch = pTransliteration->isEqual( *rComp.pVal[0], *rComp.pVal[1]);
                 else
                 {
-                    String aCell( pTransliteration->transliterate(
+                    OUString aCell( pTransliteration->transliterate(
                                 *rComp.pVal[0], ScGlobal::eLnge, 0,
-                                rComp.pVal[0]->Len(), NULL));
-                    String aQuer( pTransliteration->transliterate(
+                                rComp.pVal[0]->getLength(), NULL));
+                    OUString aQuer( pTransliteration->transliterate(
                                 *rComp.pVal[1], ScGlobal::eLnge, 0,
-                                rComp.pVal[1]->Len(), NULL));
-                    bMatch = (aCell.Search( aQuer ) != STRING_NOTFOUND);
+                                rComp.pVal[1]->getLength(), NULL));
+                    bMatch = (aCell.indexOf( aQuer ) != -1);
                 }
                 fRes = (bMatch ? 0 : 1);
             }
@@ -982,7 +982,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
                 // As in ScTable::ValidQuery() match a numeric string for a
                 // number query that originated from a string, e.g. in SUMIF
                 // and COUNTIF. Transliteration is not needed here.
-                bool bEqual = rComp.pVal[nStringQuery-1]->Equals(rItem.maString);
+                bool bEqual = (*rComp.pVal[nStringQuery-1]) == rItem.maString;
                 // match => fRes=0, else fRes=1
                 fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
             }
@@ -995,7 +995,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
 
 double ScInterpreter::Compare()
 {
-    String aVal1, aVal2;
+    OUString aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
     for( short i = 1; i >= 0; i-- )
     {
@@ -1084,7 +1084,7 @@ double ScInterpreter::Compare()
 
 sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
 {
-    String aVal1, aVal2;
+    OUString aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
     sc::RangeMatrix aMat[2];
     ScAddress aAdr;
@@ -2401,7 +2401,7 @@ void ScInterpreter::ScCell()
             }
             bError = !PopDoubleRefOrSingleRef( aCellPos );
         }
-        String aInfoType( GetString() );
+        OUString aInfoType( GetString() );
         if( bError || nGlobalError )
             PushIllegalParameter();
         else
@@ -2412,25 +2412,25 @@ void ScInterpreter::ScCell()
             ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
 
 // *** ADDRESS INFO ***
-            if( aInfoType.EqualsAscii( "COL" ) )
+            if( aInfoType.equalsAscii( "COL" ) )
             {   // column number (1-based)
                 PushInt( aCellPos.Col() + 1 );
             }
-            else if( aInfoType.EqualsAscii( "ROW" ) )
+            else if( aInfoType.equalsAscii( "ROW" ) )
             {   // row number (1-based)
                 PushInt( aCellPos.Row() + 1 );
             }
-            else if( aInfoType.EqualsAscii( "SHEET" ) )
+            else if( aInfoType.equalsAscii( "SHEET" ) )
             {   // table number (1-based)
                 PushInt( aCellPos.Tab() + 1 );
             }
-            else if( aInfoType.EqualsAscii( "ADDRESS" ) )
+            else if( aInfoType.equalsAscii( "ADDRESS" ) )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
                 sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
                 OUString aStr(aCellPos.Format(nFlags, pDok, pDok->GetAddressConvention()));
                 PushString(aStr);
             }
-            else if( aInfoType.EqualsAscii( "FILENAME" ) )
+            else if( aInfoType.equalsAscii( "FILENAME" ) )
             {   // file name and table name: 'FILENAME'#$TABLE
                 SCTAB nTab = aCellPos.Tab();
                 OUString aFuncResult;
@@ -2457,7 +2457,7 @@ void ScInterpreter::ScCell()
                 }
                 PushString( aFuncResult );
             }
-            else if( aInfoType.EqualsAscii( "COORD" ) )
+            else if( aInfoType.equalsAscii( "COORD" ) )
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
                 // Yes, passing tab as col is intentional!
                 OUStringBuffer aFuncResult;
@@ -2473,7 +2473,7 @@ void ScInterpreter::ScCell()
             }
 
 // *** CELL PROPERTIES ***
-            else if( aInfoType.EqualsAscii( "CONTENTS" ) )
+            else if( aInfoType.equalsAscii( "CONTENTS" ) )
             {   // contents of the cell, no formatting
                 if (aCell.hasString())
                 {
@@ -2484,7 +2484,7 @@ void ScInterpreter::ScCell()
                 else
                     PushDouble(GetCellValue(aCellPos, aCell));
             }
-            else if( aInfoType.EqualsAscii( "TYPE" ) )
+            else if( aInfoType.equalsAscii( "TYPE" ) )
             {   // b = blank; l = string (label); v = otherwise (value)
                 sal_Unicode c;
                 if (aCell.hasString())
@@ -2493,7 +2493,7 @@ void ScInterpreter::ScCell()
                     c = aCell.hasNumeric() ? 'v' : 'b';
                 PushString( OUString(c) );
             }
-            else if( aInfoType.EqualsAscii( "WIDTH" ) )
+            else if( aInfoType.equalsAscii( "WIDTH" ) )
             {   // column width (rounded off as count of zero characters in standard font and size)
                 Printer*    pPrinter = pDok->GetPrinter();
                 MapMode     aOldMode( pPrinter->GetMapMode() );
@@ -2510,7 +2510,7 @@ void ScInterpreter::ScCell()
                 int nZeroCount = (int)(pDok->GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
                 PushInt( nZeroCount );
             }
-            else if( aInfoType.EqualsAscii( "PREFIX" ) )
+            else if( aInfoType.equalsAscii( "PREFIX" ) )
             {   // ' = left; " = right; ^ = centered
                 sal_Unicode c = 0;
                 if (aCell.hasString())
@@ -2529,7 +2529,7 @@ void ScInterpreter::ScCell()
                 }
                 PushString( OUString(c) );
             }
-            else if( aInfoType.EqualsAscii( "PROTECT" ) )
+            else if( aInfoType.equalsAscii( "PROTECT" ) )
             {   // 1 = cell locked
                 const ScProtectionAttr* pProtAttr = (const ScProtectionAttr*)
                     pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION );
@@ -2537,19 +2537,19 @@ void ScInterpreter::ScCell()
             }
 
 // *** FORMATTING ***
-            else if( aInfoType.EqualsAscii( "FORMAT" ) )
+            else if( aInfoType.equalsAscii( "FORMAT" ) )
             {   // specific format code for standard formats
                 OUString aFuncResult;
                 sal_uLong   nFormat = pDok->GetNumberFormat( aCellPos );
                 getFormatString(pFormatter, nFormat, aFuncResult);
                 PushString( aFuncResult );
             }
-            else if( aInfoType.EqualsAscii( "COLOR" ) )
+            else if( aInfoType.equalsAscii( "COLOR" ) )
             {   // 1 = negative values are colored, otherwise 0
                 const SvNumberformat* pFormat = pFormatter->GetEntry( pDok->GetNumberFormat( aCellPos ) );
                 PushInt( lcl_FormatHasNegColor( pFormat ) ? 1 : 0 );
             }
-            else if( aInfoType.EqualsAscii( "PARENTHESES" ) )
+            else if( aInfoType.equalsAscii( "PARENTHESES" ) )
             {   // 1 = format string contains a '(' character, otherwise 0
                 const SvNumberformat* pFormat = pFormatter->GetEntry( pDok->GetNumberFormat( aCellPos ) );
                 PushInt( lcl_FormatHasOpenPar( pFormat ) ? 1 : 0 );
@@ -3444,11 +3444,11 @@ static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 
 void ScInterpreter::ScClean()
 {
-    String aStr( GetString() );
-    for ( xub_StrLen i = 0; i < aStr.Len(); i++ )
+    OUString aStr( GetString() );
+    for ( xub_StrLen i = 0; i < aStr.getLength(); i++ )
     {
-        if ( !lcl_ScInterpreter_IsPrintable( aStr.GetChar( i ) ) )
-            aStr.Erase(i,1);
+        if ( !lcl_ScInterpreter_IsPrintable( aStr[i] ) )
+            aStr = aStr.replaceAt(i,1,"");
     }
     PushString(aStr);
 }
@@ -3457,7 +3457,7 @@ void ScInterpreter::ScClean()
 void ScInterpreter::ScCode()
 {
 //2do: make it full range unicode?
-    String aStr = GetString();
+    OUString aStr = GetString();
     //"classic" ByteString conversion flags
     const sal_uInt32 convertFlags =
         RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
@@ -3466,7 +3466,7 @@ void ScInterpreter::ScCode()
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-    PushInt( (sal_uChar) OUStringToOString(OUString(aStr.GetChar(0)), osl_getThreadTextEncoding(), convertFlags).toChar() );
+    PushInt( (sal_uChar) OUStringToOString(OUString(aStr[0]), osl_getThreadTextEncoding(), convertFlags).toChar() );
 }
 
 
@@ -4299,7 +4299,7 @@ void ScInterpreter::ScTable()
             {
                 case svString :
                 {
-                    String aStr( PopString() );
+                    OUString aStr( PopString() );
                     if ( pDok->GetTable( aStr, nVal ) )
                         ++nVal;
                     else
@@ -5901,7 +5901,7 @@ void ScInterpreter::ScLookup()
 
     // The third parameter, result array, for double, string and single reference.
     double fResVal = 0.0;
-    String aResStr;
+    OUString aResStr;
     ScAddress aResAdr;
     StackVar eResArrayType = svUnknown;
 
@@ -7295,7 +7295,7 @@ void ScInterpreter::ScIndirect()
         }
         const ScAddress::Details aDetails( eConv, aPos );
         SCTAB nTab = aPos.Tab();
-        String sRefStr( GetString() );
+        OUString sRefStr( GetString() );
         ScRefAddress aRefAd, aRefAd2;
         ScAddress::ExternalInfo aExtInfo;
         if (ConvertDoubleRef(pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo))
@@ -7421,7 +7421,7 @@ void ScInterpreter::ScAddressFunc()
 
     if( nParamCount >= 5 && !sTabStr.isEmpty() )
     {
-        String aDoc;
+        OUString aDoc;
         if (eConv == FormulaGrammar::CONV_OOO)
         {
             // Isolate Tab from 'Doc'#Tab
@@ -7438,7 +7438,7 @@ void ScInterpreter::ScAddressFunc()
          * need some extra handling to isolate Tab from Doc. */
         if (sTabStr[0] != '\'' || sTabStr[sTabStr.getLength()-1] != '\'')
             ScCompiler::CheckTabQuotes( sTabStr, eConv);
-        if (aDoc.Len())
+        if (!aDoc.isEmpty())
             sTabStr = aDoc + sTabStr;
         sTabStr += eConv == FormulaGrammar::CONV_XL_R1C1 ? OUString("!") : OUString(".");
         sTabStr += aRefStr;
@@ -8011,13 +8011,13 @@ void ScInterpreter::ScFind()
             fAnz = GetDouble();
         else
             fAnz = 1.0;
-        String sStr = GetString();
-        if( fAnz < 1.0 || fAnz > (double) sStr.Len() )
+        OUString sStr = GetString();
+        if( fAnz < 1.0 || fAnz > (double) sStr.getLength() )
             PushNoValue();
         else
         {
-            xub_StrLen nPos = sStr.Search( GetString(), (xub_StrLen) fAnz - 1 );
-            if (nPos == STRING_NOTFOUND)
+            sal_Int32 nPos = sStr.indexOf( GetString(), (xub_StrLen) fAnz - 1 );
+            if (nPos == -1)
                 PushNoValue();
             else
                 PushDouble((double)(nPos + 1));
@@ -8031,8 +8031,8 @@ void ScInterpreter::ScExact()
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        String s1( GetString() );
-        String s2( GetString() );
+        OUString s1( GetString() );
+        OUString s2( GetString() );
         PushInt( s1 == s2 );
     }
 }
@@ -8057,8 +8057,8 @@ void ScInterpreter::ScLeft()
         }
         else
             n = 1;
-        String aStr( GetString() );
-        aStr.Erase( n );
+        OUString aStr( GetString() );
+        aStr = aStr.copy( 0, n );
         PushString( aStr );
     }
 }
@@ -8258,9 +8258,9 @@ void ScInterpreter::ScRight()
         }
         else
             n = 1;
-        String aStr( GetString() );
-        if( n < aStr.Len() )
-            aStr.Erase( 0, aStr.Len() - n );
+        OUString aStr( GetString() );
+        if( n < aStr.getLength() )
+            aStr = aStr.copy( aStr.getLength() - n );
         PushString( aStr );
     }
 }
@@ -8312,11 +8312,11 @@ void ScInterpreter::ScMid()
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
         double fAnfang = ::rtl::math::approxFloor(GetDouble());
-        String aStr = GetString();
+        OUString aStr = GetString();
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             PushIllegalArgument();
         else
-            PushString(aStr.Copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
+            PushString(aStr.copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
     }
 }
 
@@ -8415,12 +8415,12 @@ void ScInterpreter::ScSubstitute()
         else
             nAnz = 0;
         OUString sNewStr = GetString();
-        String sOldStr = GetString();
+        OUString sOldStr = GetString();
         OUString sStr    = GetString();
         sal_Int32 nPos = 0;
         xub_StrLen nCount = 0;
         xub_StrLen nNewLen = sNewStr.getLength();
-        xub_StrLen nOldLen = sOldStr.Len();
+        xub_StrLen nOldLen = sOldStr.getLength();
         while( true )
         {
             nPos = sStr.indexOf( sOldStr, nPos );
@@ -8454,10 +8454,10 @@ void ScInterpreter::ScRept()
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fAnz = ::rtl::math::approxFloor(GetDouble());
-        String aStr( GetString() );
+        OUString aStr( GetString() );
         if ( fAnz < 0.0 )
             PushIllegalArgument();
-        else if ( fAnz * aStr.Len() > STRING_MAXLEN )
+        else if ( fAnz * aStr.getLength() > STRING_MAXLEN )
         {
             PushError( errStringOverflow );
         }
@@ -8465,7 +8465,7 @@ void ScInterpreter::ScRept()
             PushString( EMPTY_STRING );
         else
         {
-            const xub_StrLen nLen = aStr.Len();
+            const xub_StrLen nLen = aStr.getLength();
             xub_StrLen n = (xub_StrLen) fAnz;
             OUStringBuffer aRes(n*nLen);
             while( n-- )
@@ -8479,11 +8479,11 @@ void ScInterpreter::ScRept()
 void ScInterpreter::ScConcat()
 {
     sal_uInt8 nParamCount = GetByte();
-    String aRes;
+    OUString aRes;
     while( nParamCount-- > 0)
     {
         const OUString& rStr = GetString();
-        aRes.Insert( rStr, 0 );
+        aRes = rStr + aRes;
     }
     PushString( aRes );
 }

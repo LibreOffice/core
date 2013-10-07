@@ -408,20 +408,20 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     }
 }
 
-static bool lcl_isValidQuotedText( const String& rFormula, xub_StrLen nSrcPos, ParseResult& rRes )
+static bool lcl_isValidQuotedText( const OUString& rFormula, xub_StrLen nSrcPos, ParseResult& rRes )
 {
     // Tokens that start at ' can have anything in them until a final '
     // but '' marks an escaped '
     // We've earlier guaranteed that a string containing '' will be
     // surrounded by '
-    if (rFormula.GetChar(nSrcPos) == '\'')
+    if (rFormula[nSrcPos] == '\'')
     {
         xub_StrLen nPos = nSrcPos+1;
-        while (nPos < rFormula.Len())
+        while (nPos < rFormula.getLength())
         {
-            if (rFormula.GetChar(nPos) == '\'')
+            if (rFormula[nPos] == '\'')
             {
-                if ( (nPos+1 == rFormula.Len()) || (rFormula.GetChar(nPos+1) != '\'') )
+                if ( (nPos+1 == rFormula.getLength()) || (rFormula[nPos+1] != '\'') )
                 {
                     rRes.TokenType = KParseType::SINGLE_QUOTE_NAME;
                     rRes.EndPos = nPos+1;
@@ -687,7 +687,7 @@ struct Convention_A1 : public ScCompiler::Convention
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names because of Xcl :-/
-        static const String aAddAllowed(OUString("?#"));
+        static const OUString aAddAllowed("?#");
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
@@ -718,7 +718,7 @@ struct ConventionOOO_A1 : public Convention_A1
 {
     ConventionOOO_A1() : Convention_A1 (FormulaGrammar::CONV_OOO) { }
     ConventionOOO_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1 (eConv) { }
-    static String MakeTabStr( const ScCompiler& rComp, SCTAB nTab, String& aDoc )
+    static OUString MakeTabStr( const ScCompiler& rComp, SCTAB nTab, OUString& aDoc )
     {
         OUString aString;
         OUString aTmp;
@@ -737,7 +737,7 @@ struct ConventionOOO_A1 : public Convention_A1
                                               INetURLObject::DECODE_UNAMBIGUOUS );
             }
             else
-                aDoc.Erase();
+                aDoc = "";
             ScCompiler::CheckTabQuotes( aString, FormulaGrammar::CONV_OOO );
         }
         aString += ".";
@@ -760,8 +760,8 @@ struct ConventionOOO_A1 : public Convention_A1
             }
             else
             {
-                String aDoc;
-                String aRefStr(MakeTabStr(rComp, rAbsRef.Tab(), aDoc));
+                OUString aDoc;
+                OUString aRefStr(MakeTabStr(rComp, rAbsRef.Tab(), aDoc));
                 rBuffer.append(aDoc);
                 if (!rRef.IsTabRel())
                     rBuffer.append(sal_Unicode('$'));
@@ -855,7 +855,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
     bool makeExternalSingleRefStr(
         OUStringBuffer& rBuffer, sal_uInt16 nFileId,
-        const String& rTabName, const ScSingleRefData& rRef, const ScAddress& rPos,
+        const OUString& rTabName, const ScSingleRefData& rRef, const ScAddress& rPos,
         ScExternalRefManager* pRefMgr, bool bDisplayTabName, bool bEncodeUrl ) const
     {
         ScAddress aAbsRef = rRef.toAbs(rPos);
@@ -1128,12 +1128,12 @@ struct ConventionXL
         return lcl_parseExternalName( rSymbol, rFile, rName, sal_Unicode('!'), pDoc, pExternalLinks);
     }
 
-    static String makeExternalNameStr( const String& rFile, const String& rName )
+    static OUString makeExternalNameStr( const OUString& rFile, const OUString& rName )
     {
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('!'), false);
     }
 
-    static void makeExternalDocStr( OUStringBuffer& rBuffer, const String& rFullName, bool bEncodeUrl )
+    static void makeExternalDocStr( OUStringBuffer& rBuffer, const OUString& rFullName, bool bEncodeUrl )
     {
         // Format that is easier to deal with inside OOo, because we use file
         // URL, and all characetrs are allowed.  Check if it makes sense to do
@@ -2759,7 +2759,7 @@ bool ScCompiler::IsReference( const OUString& rName )
                 // and would produce wrong formulas if the conditions here are met.
                 // If you can live with these restrictions you may remove the
                 // check and return an unconditional FALSE.
-                String aTabName( rName.copy( 0, nPos ) );
+                OUString aTabName( rName.copy( 0, nPos ) );
                 SCTAB nTab;
                 if ( !pDoc->GetTable( aTabName, nTab ) )
                     return false;
@@ -3284,7 +3284,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
         else
         {
             OUString aSymbol( aCorrectedSymbol );
-            String aDoc;
+            OUString aDoc;
             sal_Int32 nPosition;
             if ( aSymbol[0] == '\''
               && ((nPosition = aSymbol.indexOf( "'#" )) != -1) )
@@ -3298,9 +3298,9 @@ void ScCompiler::AutoCorrectParsedSymbol()
             {   // duplicated or too many ':'? B:2::C10 => B2:C10
                 bColons = true;
                 sal_Int32 nIndex = 0;
-                String aTmp1( aSymbol.getToken( 0, ':', nIndex ) );
-                xub_StrLen nLen1 = aTmp1.Len();
-                String aSym, aTmp2;
+                OUString aTmp1( aSymbol.getToken( 0, ':', nIndex ) );
+                xub_StrLen nLen1 = aTmp1.getLength();
+                OUString aSym, aTmp2;
                 bool bLastAlp, bNextNum;
                 bLastAlp = bNextNum = true;
                 xub_StrLen nStrip = 0;
@@ -3308,7 +3308,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 for ( xub_StrLen j=1; j<nCount; j++ )
                 {
                     aTmp2 = aSymbol.getToken( 0, ':', nIndex );
-                    xub_StrLen nLen2 = aTmp2.Len();
+                    xub_StrLen nLen2 = aTmp2.getLength();
                     if ( nLen1 || nLen2 )
                     {
                         if ( nLen1 )
@@ -3328,10 +3328,10 @@ void ScCompiler::AutoCorrectParsedSymbol()
                             }
                             else
                             {
-                                xub_StrLen nSymLen = aSym.Len();
+                                xub_StrLen nSymLen = aSym.getLength();
                                 if ( nSymLen
-                                  && (aSym.GetChar( nSymLen - 1 ) != ':') )
-                                    aSym += ':';
+                                  && (aSym[ nSymLen - 1 ] != ':') )
+                                    aSym += ":";
                                 nStrip = 0;
                             }
                             bLastAlp = !bNextNum;
@@ -3383,11 +3383,11 @@ void ScCompiler::AutoCorrectParsedSymbol()
                         aTab[j] = aRef[j].copy( 0, nDotPos + 1 );  // with '.'
                         aRef[j] = aRef[j].copy( nDotPos + 1 );
                     }
-                    String aOld( aRef[j] );
-                    String aStr2;
+                    OUString aOld( aRef[j] );
+                    OUString aStr2;
                     const sal_Unicode* p = aRef[j].getStr();
                     while ( *p && CharClass::isAsciiNumeric( OUString(*p) ) )
-                        aStr2 += *p++;
+                        aStr2 += OUString(*p++);
                     aRef[j] = OUString( p );
                     aRef[j] += aStr2;
                     if ( bColons || aRef[j] != aOld )
@@ -3985,7 +3985,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
                 return true;
             }
 
-            const String& rName = _aToken.GetString();
+            const OUString& rName = _aToken.GetString();
             ScExternalRefCache::TokenArrayRef xNew = pRefMgr->getRangeNameTokens(
                 _aToken.GetIndex(), rName, &aPos);
 

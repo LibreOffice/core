@@ -460,7 +460,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
                 }
                 else
                 {
-                    String aStr = pFCell->GetString();
+                    OUString aStr = pFCell->GetString();
                     fValue = ConvertStringToValue( aStr );
                 }
             }
@@ -662,7 +662,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                 aCell.assign(*pDok, ScAddress(nCol, nRow, nTab));
                 if (!aCell.isEmpty())
                 {
-                    String  aStr;
+                    OUString  aStr;
                     sal_uInt16  nErr = 0;
                     bool    bOk = true;
                     switch (aCell.meType)
@@ -767,7 +767,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     sal_uInt16  nErr = 0;
                     sal_uInt16  nType = 0; // 0 = Zahl; 1 = String
                     double  nVal = 0.0;
-                    String  aStr;
+                    OUString  aStr;
                     bool    bOk = true;
                     switch (aCell.meType)
                     {
@@ -1688,7 +1688,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if (eType == ScParameterClassification::Array)
                     {
                         sal_uInt16 nFileId = p->GetIndex();
-                        const String& rTabName = p->GetString();
+                        const OUString& rTabName = p->GetString();
                         const ScComplexRefData& rRef = static_cast<ScToken*>(p)->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
                         GetExternalDoubleRef(nFileId, rTabName, rRef, pArray);
@@ -1851,7 +1851,7 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
             }
             else
             {
-                String aStr( nMatVal.GetString());
+                OUString aStr( nMatVal.GetString());
                 FormulaTokenRef xRes = new FormulaStringToken( aStr);
                 PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_TEXT;
@@ -2478,8 +2478,8 @@ void ScInterpreter::ScDBGet()
 void ScInterpreter::ScExternal()
 {
     sal_uInt8 nParamCount = GetByte();
-    String aUnoName;
-    String aFuncName( ScGlobal::pCharClass->uppercase( pCur->GetExternal() ) );
+    OUString aUnoName;
+    OUString aFuncName( ScGlobal::pCharClass->uppercase( pCur->GetExternal() ) );
     FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
     if (pFuncData)
     {
@@ -2604,7 +2604,7 @@ void ScInterpreter::ScExternal()
                             sal_Char* pcErg = new sal_Char[ADDIN_MAXSTRLEN];
                             ppParam[0] = pcErg;
                             pFuncData->Call(ppParam);
-                            String aUni( pcErg, osl_getThreadTextEncoding() );
+                            OUString aUni( pcErg, strlen(pcErg), osl_getThreadTextEncoding() );
                             PushString( aUni );
                             delete[] pcErg;
                         }
@@ -2675,7 +2675,7 @@ void ScInterpreter::ScExternal()
             PushIllegalParameter();
         }
     }
-    else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false) ).Len()  )
+    else if ( !( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false) ).isEmpty()  )
     {
         //  bLocalFirst=false in FindFunction, cFunc should be the stored
         //  internal name
@@ -3066,7 +3066,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     uno::Reference< uno::XInterface > xIf;
     if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
     {
-        String sProj = String( "Standard" );
+        OUString sProj( "Standard" );
         if ( !pDok->GetDocumentShell()->GetBasicManager()->GetName().isEmpty() )
         {
             sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
@@ -3097,7 +3097,7 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
         xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( pDok->GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {
-            String sDummy("A-Range");
+            OUString sDummy("A-Range");
             SbxObjectRef aObj = GetSbUnoObject( sDummy, uno::Any( xVBARange ) );
             SetSbUnoObjectDfltPropName( aObj );
             bOk = pPar->PutObject( aObj );
@@ -3121,7 +3121,7 @@ void ScInterpreter::ScMacro()
     SbxBase::ResetError();
 
     sal_uInt8 nParamCount = GetByte();
-    String aMacro( pCur->GetExternal() );
+    OUString aMacro( pCur->GetExternal() );
 
     SfxObjectShell* pDocSh = pDok->GetDocumentShell();
     if ( !pDocSh || !pDok->CheckMacroWarn() )
@@ -3154,12 +3154,8 @@ void ScInterpreter::ScMacro()
     bool bUseVBAObjects = pModule->IsVBACompat();
     SbxObject* pObject = pModule->GetParent();
     OSL_ENSURE(pObject->IsA(TYPE(StarBASIC)), "No Basic found!");
-    String aMacroStr = pObject->GetName();
-    aMacroStr += '.';
-    aMacroStr += pModule->GetName();
-    aMacroStr += '.';
-    aMacroStr += pMethod->GetName();
-    String aBasicStr;
+    OUString aMacroStr = pObject->GetName() + "." + pModule->GetName() + "." + pMethod->GetName();
+    OUString aBasicStr;
     if (pObject->GetParent())
     {
         aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic

@@ -63,7 +63,6 @@ typedef ::boost::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHa
 class ScCellKeywordTranslator
 {
 public:
-    static void transKeyword(String& rName, const ::com::sun::star::lang::Locale* pLocale = NULL, OpCode eOpCode = ocNone);
     static void transKeyword(OUString& rName, const ::com::sun::star::lang::Locale* pLocale = NULL, OpCode eOpCode = ocNone);
     ~ScCellKeywordTranslator();
 

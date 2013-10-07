@@ -229,8 +229,8 @@ bool InitExternalFunc(const OUString& rModuleName)
                     if ( fpAdvice && eAsyncType != NONE )
                         (*((Advice)fpAdvice))( i, pfCallBack );
                 }
-                String aInternalName( cInternalName, osl_getThreadTextEncoding() );
-                String aFuncName( cFuncName, osl_getThreadTextEncoding() );
+                OUString aInternalName( cInternalName, strlen(cInternalName), osl_getThreadTextEncoding() );
+                OUString aFuncName( cFuncName, strlen(cFuncName), osl_getThreadTextEncoding() );
                 pFuncData = new FuncData( pModuleData,
                                           aInternalName,
                                           aFuncName,

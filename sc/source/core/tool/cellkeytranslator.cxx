@@ -77,7 +77,7 @@ ScCellKeyword::ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const Locale
 
 ::std::auto_ptr<ScCellKeywordTranslator> ScCellKeywordTranslator::spInstance(NULL);
 
-static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
+static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
                             OpCode eOpCode = ocNone, const Locale* pLocale = NULL)
 {
     ScCellKeywordHashMap::const_iterator itrEnd = aMap.end();
@@ -159,22 +159,15 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
     rName = OUString::createFromAscii(aBestMatchName);
 }
 
-void ScCellKeywordTranslator::transKeyword(String& rName, const Locale* pLocale, OpCode eOpCode)
+void ScCellKeywordTranslator::transKeyword(OUString& rName, const Locale* pLocale, OpCode eOpCode)
 {
     if ( !spInstance.get() )
         spInstance.reset( new ScCellKeywordTranslator );
 
     LanguageType eLang = pLocale ? LanguageTag(*pLocale).makeFallback().getLanguageType() : LANGUAGE_SYSTEM;
     Sequence<sal_Int32> aOffsets;
-    rName = spInstance->maTransWrapper.transliterate(rName, eLang, 0, rName.Len(), &aOffsets);
+    rName = spInstance->maTransWrapper.transliterate(rName, eLang, 0, rName.getLength(), &aOffsets);
     lclMatchKeyword(rName, spInstance->maStringNameMap, eOpCode, pLocale);
-}
-
-void ScCellKeywordTranslator::transKeyword(OUString& rName, const Locale* pLocale, OpCode eOpCode)
-{
-    String aName = rName;
-    transKeyword(aName, pLocale, eOpCode);
-    rName = aName;
 }
 
 ScCellKeywordTranslator::ScCellKeywordTranslator() :

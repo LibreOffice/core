@@ -45,13 +45,13 @@ sal_Bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
     sal_Bool        nSuccess    = false;
     sal_Int32       nPointPos   = rAreaStr.indexOf('.');
     sal_Int32       nColonPos   = rAreaStr.indexOf(':');
-    String      aStrArea( rAreaStr );
+    OUString      aStrArea( rAreaStr );
     ScRefAddress    startPos;
     ScRefAddress    endPos;
 
     if ( nColonPos == -1  && nPointPos != -1 )
     {
-        aStrArea += ':';
+        aStrArea += ":";
         aStrArea += rAreaStr.copy( nPointPos+1 ); // do not include '.' in copy
     }
 
@@ -68,7 +68,7 @@ sal_Bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
 void ScRangeUtil::CutPosString( const OUString&   theAreaStr,
                                 OUString&         thePosStr ) const
 {
-    String  aPosStr;
+    OUString  aPosStr;
     // BROKEN BROKEN BROKEN
     // but it is only used in the consolidate dialog.  Ignore for now.
 
@@ -107,26 +107,26 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
      */
 
     sal_Bool    bStrOk = false;
-    String  aTempAreaStr(rAreaStr);
-    String  aStartPosStr;
-    String  aEndPosStr;
+    OUString  aTempAreaStr(rAreaStr);
+    OUString  aStartPosStr;
+    OUString  aEndPosStr;
 
-    if ( STRING_NOTFOUND == aTempAreaStr.Search(':') )
+    if ( -1 == aTempAreaStr.indexOf(':') )
     {
-        aTempAreaStr.Append(':');
-        aTempAreaStr.Append(rAreaStr);
+        aTempAreaStr += ":";
+        aTempAreaStr += rAreaStr;
     }
 
-    sal_uInt16   nColonPos = aTempAreaStr.Search(':');
+    sal_Int32   nColonPos = aTempAreaStr.indexOf(':');
 
-    if (   STRING_NOTFOUND != nColonPos
-        && STRING_NOTFOUND != aTempAreaStr.Search('.') )
+    if (   -1 != nColonPos
+        && -1 != aTempAreaStr.indexOf('.') )
     {
         ScRefAddress    aStartPos;
         ScRefAddress    aEndPos;
 
-        aStartPosStr = aTempAreaStr.Copy( 0,           nColonPos  );
-        aEndPosStr   = aTempAreaStr.Copy( nColonPos+1, STRING_LEN );
+        aStartPosStr = aTempAreaStr.copy( 0,           nColonPos  );
+        aEndPosStr   = aTempAreaStr.copy( nColonPos+1, STRING_LEN );
 
         if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos, rDetails ) )
         {
@@ -472,12 +472,12 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
     if( nOffset >= 0 )
     {
         sal_Int32 nIndex = IndexOf( sToken, ':', 0, cQuote );
-        String aUIString(sToken);
+        OUString aUIString(sToken);
 
         if( nIndex < 0 )
         {
-            if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
-                aUIString.Erase( 0, 1 );
+            if ( aUIString[0] == '.' )
+                aUIString = aUIString.copy( 1 );
             bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
             ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
             if (!bResult && eConv != eConvUI)
@@ -487,15 +487,15 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
         }
         else
         {
-            if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
+            if ( aUIString[0] == '.' )
             {
-                aUIString.Erase( 0, 1 );
+                aUIString = aUIString.copy( 1 );
                 --nIndex;
             }
 
-            if ( nIndex < aUIString.Len() - 1 &&
-                    aUIString.GetChar((xub_StrLen)nIndex + 1) == (sal_Unicode) '.' )
-                aUIString.Erase( (xub_StrLen)nIndex + 1, 1 );
+            if ( nIndex < aUIString.getLength() - 1 &&
+                    aUIString[ nIndex + 1 ] == '.' )
+                aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
 
             bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
 
@@ -503,17 +503,17 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
             {
-                bResult = ((rRange.aStart.Parse( aUIString.Copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
+                bResult = ((rRange.aStart.Parse( aUIString.copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID) &&
-                          ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
+                          ((rRange.aEnd.Parse( aUIString.copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID);
 
                 ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
                 if (!bResult && eConv != eConvUI)
                 {
-                    bResult = ((rRange.aStart.Parse( aUIString.Copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
+                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
                                     eConvUI) & SCA_VALID) == SCA_VALID) &&
-                              ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
+                              ((rRange.aEnd.Parse( aUIString.copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
                                     eConvUI) & SCA_VALID) == SCA_VALID);
                 }
             }

@@ -57,7 +57,7 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAl
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
-                String aName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                OUString aName = ((SdrOle2Obj*)pObject)->GetPersistName();
                 bool bHit = true;
                 if ( !bAllCharts )
                 {
@@ -135,7 +135,7 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
         {
             if( pObject->GetObjIdentifier() == OBJ_OLE2 && ((SdrOle2Obj*)pObject)->IsChart() )
             {
-                String aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                OUString aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
 
                 Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
                 Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
@@ -175,7 +175,7 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const S
         {
             if( pObject->GetObjIdentifier() == OBJ_OLE2 && ((SdrOle2Obj*)pObject)->IsChart() )
             {
-                String aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                OUString aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
                 Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
                 Reference< util::XModifiable > xModif(xChartDoc, uno::UNO_QUERY_THROW);
                 xModif->setModified( sal_True);

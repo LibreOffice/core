@@ -173,7 +173,7 @@ bool lcl_createExcelQuery(
 
         SCSIZE nIndex = 0;
         SCROW nRow = 1;
-        String aCellStr;
+        OUString aCellStr;
         while (nRow < nRows)
         {
             nCol = 0;
@@ -181,7 +181,7 @@ bool lcl_createExcelQuery(
             {
                 aCellStr = pQueryRef->getString(nCol, nRow);
                 aCellStr = ScGlobal::pCharClass->uppercase( aCellStr );
-                if (aCellStr.Len() > 0)
+                if (!aCellStr.isEmpty())
                 {
                     if (nIndex < nNewEntries)
                     {

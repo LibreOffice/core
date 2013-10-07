@@ -819,7 +819,7 @@ ScAutoFormat::ScAutoFormat() :
 {
     //  create default autoformat
     ScAutoFormatData* pData = new ScAutoFormatData;
-    String aName(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
+    OUString aName(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
     pData->SetName(aName);
 
     //  default font, default height

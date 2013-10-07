@@ -301,7 +301,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMat
         {
             if ( pMatrix->IsString( nCol, nRow ) )
             {
-                String aStr;
+                OUString aStr;
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )
                     aStr = pMatrix->GetString( nCol, nRow );
                 pColAry[nCol] <<= OUString( aStr );
@@ -406,7 +406,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                         // Try string, else use empty as last resort.
 
                         if ( pColArr[nCol] >>= aUStr )
-                            xMatrix->PutString( String( aUStr ),
+                            xMatrix->PutString( aUStr,
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                         else

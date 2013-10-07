@@ -168,8 +168,8 @@ void ScQueryParamBase::Resize(size_t nNew)
 
 void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
 {
-    const String aCellStr = rStr;
-    if (aCellStr.Len() > 0)
+    const OUString aCellStr = rStr;
+    if (!aCellStr.isEmpty())
     {
         if ( nIndex >= maEntries.size() )
             Resize( nIndex+1 );
@@ -179,41 +179,41 @@ void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
 
         rEntry.bDoQuery = sal_True;
         // Operatoren herausfiltern
-        if (aCellStr.GetChar(0) == '<')
+        if (aCellStr[0] == '<')
         {
-            if (aCellStr.GetChar(1) == '>')
+            if (aCellStr[1] == '>')
             {
-                rItem.maString = aCellStr.Copy(2);
+                rItem.maString = aCellStr.copy(2);
                 rEntry.eOp   = SC_NOT_EQUAL;
             }
-            else if (aCellStr.GetChar(1) == '=')
+            else if (aCellStr[1] == '=')
             {
-                rItem.maString = aCellStr.Copy(2);
+                rItem.maString = aCellStr.copy(2);
                 rEntry.eOp   = SC_LESS_EQUAL;
             }
             else
             {
-                rItem.maString = aCellStr.Copy(1);
+                rItem.maString = aCellStr.copy(1);
                 rEntry.eOp   = SC_LESS;
             }
         }
-        else if (aCellStr.GetChar(0) == '>')
+        else if (aCellStr[0]== '>')
         {
-            if (aCellStr.GetChar(1) == '=')
+            if (aCellStr[1] == '=')
             {
-                rItem.maString = aCellStr.Copy(2);
+                rItem.maString = aCellStr.copy(2);
                 rEntry.eOp   = SC_GREATER_EQUAL;
             }
             else
             {
-                rItem.maString = aCellStr.Copy(1);
+                rItem.maString = aCellStr.copy(1);
                 rEntry.eOp   = SC_GREATER;
             }
         }
         else
         {
-            if (aCellStr.GetChar(0) == '=')
-                rItem.maString = aCellStr.Copy(1);
+            if (aCellStr[0] == '=')
+                rItem.maString = aCellStr.copy(1);
             else
                 rItem.maString = aCellStr;
             rEntry.eOp = SC_EQUAL;

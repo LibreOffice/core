@@ -240,7 +240,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
 {
     ++nDataCount;
 
-    String aTitle;
+    OUString aTitle;
 
     SCCOL nStartCol = nCol1;
     SCROW nStartRow = nRow1;
@@ -252,7 +252,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
         for (SCCOL nCol=nStartCol; nCol<=nCol2; nCol++)
         {
             aTitle = pSrcDoc->GetString(nCol, nRow1, nTab);
-            if (aTitle.Len())
+            if (!aTitle.isEmpty())
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
@@ -269,7 +269,7 @@ void ScConsData::AddFields( ScDocument* pSrcDoc, SCTAB nTab,
         for (SCROW nRow=nStartRow; nRow<=nRow2; nRow++)
         {
             aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
-            if (aTitle.Len())
+            if (!aTitle.isEmpty())
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
@@ -495,7 +495,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
 
     if ( bColByName && bRowByName )
     {
-        String aThisCorner = pSrcDoc->GetString(nCol1, nRow1, nTab);
+        OUString aThisCorner = pSrcDoc->GetString(nCol1, nRow1, nTab);
         if (bCornerUsed)
         {
             if (aCornerText != aThisCorner)
@@ -514,7 +514,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     SCROW nStartRow = nRow1;
     if (bColByName) ++nStartRow;
     if (bRowByName) ++nStartCol;
-    String aTitle;
+    OUString aTitle;
     SCCOL*  pDestCols = NULL;
     SCROW*  pDestRows = NULL;
     if (bColByName)
@@ -524,7 +524,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         {
             aTitle = pSrcDoc->GetString(nCol, nRow1, nTab);
             SCCOL nPos = SC_CONS_NOTFOUND;
-            if (aTitle.Len())
+            if (!aTitle.isEmpty())
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nColCount && !bFound; i++)
@@ -545,7 +545,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         {
             aTitle = pSrcDoc->GetString(nCol1, nRow, nTab);
             SCROW nPos = SC_CONS_NOTFOUND;
-            if (aTitle.Len())
+            if (!aTitle.isEmpty())
             {
                 bool bFound = false;
                 for (SCSIZE i=0; i<nRowCount && !bFound; i++)
@@ -692,7 +692,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
     if ( ppRefs && ppUsed )                             // Referenzen einfuegen
     {
                                 //! unterscheiden, ob nach Kategorien aufgeteilt
-        String aString;
+        OUString aString;
 
         ScSingleRefData aSRef;      // Daten fuer Referenz-Formelzellen
         aSRef.InitFlags(); // This reference is absolute at all times.
@@ -777,7 +777,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                 if (ppTitlePos && mpTitles && mpRowHeaders)
                 {
-                    String aDelim( " / " );
+                    OUString aDelim( " / " );
                     for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
                     {
                         SCSIZE nTPos = ppTitlePos[nArrY][nPos];

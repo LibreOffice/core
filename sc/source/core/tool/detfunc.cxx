@@ -161,7 +161,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(0.0, 0.0), 100.0, 100.0));
     aCircle.setClosed(true);
 
-    String aName = SC_LINEEND_NAME;
+    OUString aName = SC_LINEEND_NAME;
 
     aArrowSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aArrowSet.Put( XLineStartWidthItem( 200 ) );
@@ -184,7 +184,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aFromTabSet.Put( XLineEndWidthItem( 200 ) );
     aFromTabSet.Put( XLineEndCenterItem( false ) );
 
-    aCircleSet.Put( XLineColorItem( String(), Color( ScDetectiveFunc::GetErrorColor() ) ) );
+    aCircleSet.Put( XLineColorItem( OUString(), Color( ScDetectiveFunc::GetErrorColor() ) ) );
     aCircleSet.Put( XFillStyleItem( XFILL_NONE ) );
     sal_uInt16 nWidth = 55;     // 54 = 1 Pixel
     aCircleSet.Put( XLineWidthItem( nWidth ) );
@@ -199,14 +199,14 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
     aTriangle.setClosed(true);
 
-    String aName = SC_LINEEND_NAME;
+    OUString aName = SC_LINEEND_NAME;
 
     aCaptionSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
     aCaptionSet.Put( XLineStartCenterItem( false ) );
     aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
     Color aYellow( ScDetectiveFunc::GetCommentColor() );
-    aCaptionSet.Put( XFillColorItem( String(), aYellow ) );
+    aCaptionSet.Put( XFillColorItem( OUString(), aYellow ) );
 
     //  shadow
     //  SdrShadowItem has sal_False, instead the shadow is set for the rectangle
@@ -503,7 +503,7 @@ sal_Bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
 
     ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
-    rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
+    rAttrSet.Put( XLineColorItem( OUString(), Color( nColorData ) ) );
 
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
@@ -568,7 +568,7 @@ sal_Bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
 
     ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
-    rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
+    rAttrSet.Put( XLineColorItem( OUString(), Color( nColorData ) ) );
 
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
@@ -1439,7 +1439,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
                     {
                         ScCommentData aData( rDoc, pModel );
                         SfxItemSet aAttrColorSet = pObject->GetMergedItemSet();
-                        aAttrColorSet.Put( XFillColorItem( String(), GetCommentColor() ) );
+                        aAttrColorSet.Put( XFillColorItem( OUString(), GetCommentColor() ) );
                         aData.UpdateCaptionSet( aAttrColorSet );
                         pObject->SetMergedItemSetAndBroadcast( aData.GetCaptionSet() );
                         if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
@@ -1521,7 +1521,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
                     if ( bArrow || bError )
                     {
                         ColorData nColorData = ( bError ? GetErrorColor() : GetArrowColor() );
-                        pObject->SetMergedItem( XLineColorItem( String(), Color( nColorData ) ) );
+                        pObject->SetMergedItem( XLineColorItem( OUString(), Color( nColorData ) ) );
 
                         // repaint only
                         pObject->ActionChanged();

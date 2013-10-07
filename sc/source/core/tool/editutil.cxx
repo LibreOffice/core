@@ -726,10 +726,10 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 //      Zahlen aus \sw\source\core\doc\numbers.cxx
 //
 
-static String lcl_GetCharStr( sal_Int32 nNo )
+static OUString lcl_GetCharStr( sal_Int32 nNo )
 {
     OSL_ENSURE( nNo, "0 is an invalid number !!" );
-    String aStr;
+    OUString aStr;
 
     const sal_Int32 coDiff = 'Z' - 'A' +1;
     sal_Int32 nCalc;
@@ -738,7 +738,7 @@ static String lcl_GetCharStr( sal_Int32 nNo )
         nCalc = nNo % coDiff;
         if( !nCalc )
             nCalc = coDiff;
-        aStr.Insert( (sal_Unicode)('a' - 1 + nCalc ), 0 );
+        aStr = OUString( (sal_Unicode)('a' - 1 + nCalc ) ) + aStr;
         nNo = sal::static_int_cast<sal_Int32>( nNo - nCalc );
         if( nNo )
             nNo /= coDiff;
