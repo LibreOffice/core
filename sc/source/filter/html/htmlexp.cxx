@@ -1039,6 +1039,27 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         aStrTD.append(lcl_makeHTMLColorTriplet(aBgColor));
     }
 
+    double fVal = 0.0;
+    if ( bValueData )
+    {
+        switch (aCell.meType)
+        {
+            case CELLTYPE_VALUE:
+                fVal = aCell.mfValue;
+                if ( bCalcAsShown && fVal != 0.0 )
+                    fVal = pDoc->RoundValueAsShown( fVal, nFormat );
+                break;
+            case CELLTYPE_FORMULA:
+                fVal = aCell.mpFormula->GetValue();
+                break;
+            default:
+                OSL_FAIL( "value data with unsupported cell type" );
+        }
+    }
+
+    aStrTD.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValueData, fVal,
+        nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars));
+
     TAG_ON(aStrTD.makeStringAndClear().getStr());
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
