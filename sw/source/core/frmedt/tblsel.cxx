@@ -1427,8 +1427,10 @@ static bool lcl_CheckCol( _FndBox const& rFndBox, bool* pPara )
             *pPara = false;
         }
         else
+        {
             BOOST_FOREACH( _FndLine const& rFndLine, rFndBox.GetLines() )
                 lcl_CheckRow( rFndLine, pPara );
+        }
     }
     // is box protected ??
     else if (rFndBox.GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected())
