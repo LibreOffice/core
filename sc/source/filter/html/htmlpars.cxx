@@ -298,8 +298,8 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            String aContentType = OUString( "text/html; charset=" );
-            aContentType.AppendAscii( pCharSet );
+            OUString aContentType = OUString( "text/html; charset=" );
+            aContentType += OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
             xValues->Append( SvKeyValue( OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
@@ -1107,7 +1107,7 @@ void ScHTMLLayoutParser::TableDataOff( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
 {
-    String aTabName;
+    OUString aTabName;
 
     if ( ++nTableLevel > 1 )
     {   // Table in Table
@@ -1142,7 +1142,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                         // Border is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
-                        aTabName.Assign( rOption.GetString() );
+                        aTabName = rOption.GetString();
                     break;
                 }
             }
@@ -1202,7 +1202,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                         //BorderOn is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
-                        aTabName.Assign( rOption.GetString() );
+                        aTabName = rOption.GetString();
                     break;
                 }
             }
@@ -1496,15 +1496,15 @@ void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
 
 sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
 {
-    const String& rOptVal = rOption.GetString();
-    if ( rOptVal.Search('%') != STRING_NOTFOUND )
+    const OUString& rOptVal = rOption.GetString();
+    if ( rOptVal.indexOf('%') != -1 )
     {   // Percent
         sal_uInt16 nW = (nTableWidth ? nTableWidth : (sal_uInt16) aPageSize.Width());
         return (sal_uInt16)((rOption.GetNumber() * nW) / 100);
     }
     else
     {
-        if ( rOptVal.Search('*') != STRING_NOTFOUND )
+        if ( rOptVal.indexOf('*') != -1 )
         {   // Relative to what?
             // TODO: Collect all relative values in ColArray and then MakeCol
             return 0;
@@ -1554,20 +1554,20 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
             {
                 case HTML_O_FACE :
                 {
-                    const String& rFace = rOption.GetString();
-                    String aFontName;
+                    const OUString& rFace = rOption.GetString();
+                    OUString aFontName;
                     sal_Int32 nPos = 0;
                     while( nPos != -1 )
                     {
                         // Font list, VCL uses the semicolon as separator
                         // HTML uses the comma
-                        String aFName = rFace.GetToken( 0, ',', nPos );
+                        OUString aFName = rFace.getToken( 0, ',', nPos );
                         aFName = comphelper::string::strip(aFName, ' ');
-                        if( aFontName.Len() )
-                            aFontName += ';';
+                        if( !aFontName.isEmpty() )
+                            aFontName += ";";
                         aFontName += aFName;
                     }
-                    if ( aFontName.Len() )
+                    if ( !aFontName.isEmpty() )
                         pActEntry->aItemSet.Put( SvxFontItem( FAMILY_DONTKNOW,
                             aFontName, EMPTY_STRING, PITCH_DONTKNOW,
                             RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
@@ -2949,8 +2949,8 @@ sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            String aContentType = OUString( "text/html; charset=" );
-            aContentType.AppendAscii( pCharSet );
+            OUString aContentType = OUString( "text/html; charset=" );
+            aContentType += OUString::createFromAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
             xValues->Append( SvKeyValue( OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
@@ -3074,16 +3074,16 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
         {
             case HTML_O_FACE :
             {
-                const String& rFace = itr->GetString();
-                String aFontName;
+                const OUString& rFace = itr->GetString();
+                OUString aFontName;
                 sal_Int32 nPos = 0;
                 while( nPos != -1 )
                 {
                     // font list separator: VCL = ';' HTML = ','
-                    String aFName = comphelper::string::strip(rFace.GetToken(0, ',', nPos), ' ');
+                    OUString aFName = comphelper::string::strip(rFace.getToken(0, ',', nPos), ' ');
                     aFontName = ScGlobal::addToken(aFontName, aFName, ';');
                 }
-                if ( aFontName.Len() )
+                if ( !aFontName.isEmpty() )
                     mpCurrTable->PutItem( SvxFontItem( FAMILY_DONTKNOW,
                         aFontName, EMPTY_STRING, PITCH_DONTKNOW,
                         RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );

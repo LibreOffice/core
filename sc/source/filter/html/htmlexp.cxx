@@ -381,11 +381,11 @@ void ScHTMLExport::WriteHeader()
     else
     {   // Fontlist, VCL: Semicolon as separator
         // CSS1: Comma as separator and every single font name quoted
-        const String& rList = aHTMLStyle.aFontFamilyName;
+        const OUString& rList = aHTMLStyle.aFontFamilyName;
         for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32) nFonts; j++ )
         {
             rStrm << '\"';
-            OUT_STR( rList.GetToken( 0, ';', nPos ) );
+            OUT_STR( rList.getToken( 0, ';', nPos ) );
             rStrm << '\"';
             if ( j < nFonts-1 )
                 rStrm << ", ";
@@ -827,7 +827,7 @@ void ScHTMLExport::WriteTables()
         }
 
         if ( bAll )
-            OUT_COMMENT( String("**************************************************************************") );
+            OUT_COMMENT( OUString("**************************************************************************") );
     }
 }
 
@@ -1083,11 +1083,11 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             }
             else
             {   // Font list, VCL: Semicolon as separator, HTML: Comma
-                const String& rList = rFontItem.GetFamilyName();
+                const OUString& rList = rFontItem.GetFamilyName();
                 for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32)nFonts; j++ )
                 {
                     OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
-                        rList.GetToken( 0, ';', nPos ), eDestEnc,
+                        rList.getToken( 0, ';', nPos ), eDestEnc,
                         &aNonConvertibleChars);
                     aStr.append(aTmpStr);
                     if ( j < nFonts-1 )
@@ -1138,9 +1138,9 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         }
         else
         {
-            String aStr = aStrOut;
-            xub_StrLen nPos = aStr.Search( '\n' );
-            if ( nPos == STRING_NOTFOUND )
+            OUString aStr = aStrOut;
+            sal_Int32 nPos = aStr.indexOf( '\n' );
+            if ( nPos == -1 )
             {
                 OUT_STR( aStrOut );
             }
@@ -1149,13 +1149,13 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 xub_StrLen nStartPos = 0;
                 do
                 {
-                    String aSingleLine( aStr, nStartPos, nPos - nStartPos );
+                    OUString aSingleLine = aStr.copy( nStartPos, nPos - nStartPos );
                     OUT_STR( aSingleLine );
                     TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
                     nStartPos = nPos + 1;
                 }
-                while( ( nPos = aStr.Search( '\n', nStartPos ) ) != STRING_NOTFOUND );
-                String aSingleLine( aStr, nStartPos, aStr.Len() - nStartPos );
+                while( ( nPos = aStr.indexOf( '\n', nStartPos ) ) != -1 );
+                OUString aSingleLine = aStr.copy( nStartPos, aStr.getLength() - nStartPos );
                 OUT_STR( aSingleLine );
             }
         }
@@ -1267,7 +1267,7 @@ sal_Bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
 
         OUString aSrc = rFileNm;
         OUString aDest = aTargetUrl.GetPartBeforeLastName();
-        aDest += String(aFileUrl.GetName());
+        aDest += aFileUrl.GetName();
 
         if( bFileToFile )
         {

@@ -67,7 +67,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
 {
     Size aPageSize;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    const String& aPageStyle = mpDoc->GetPageStyle( rRange.aStart.Tab() );
+    const OUString& aPageStyle = mpDoc->GetPageStyle( rRange.aStart.Tab() );
     ScStyleSheet* pStyleSheet = (ScStyleSheet*)mpDoc->
         GetStyleSheetPool()->Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
     if ( pStyleSheet )
@@ -192,7 +192,7 @@ void ScHTMLImport::WriteToDocument(
         // insert table id as name
         if (!pTable->GetTableName().isEmpty())
         {
-            String aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
+            OUString aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
             if (!mpDoc->GetRangeName()->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
                 InsertRangeName( mpDoc, aName, aNewRange );
         }
@@ -208,14 +208,14 @@ OUString ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& r
 {
     OSL_ENSURE( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
 
-    String aNewName;
+    OUString aNewName;
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     ScRangeList aRangeList;
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rOrigName, ';');
     sal_Int32 nStringIx = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
     {
-        String aToken( rOrigName.getToken( 0, ';', nStringIx ) );
+        OUString aToken( rOrigName.getToken( 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
             sal_uLong nIndex = 1;
