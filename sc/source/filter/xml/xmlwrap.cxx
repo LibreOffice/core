@@ -214,7 +214,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
             OSL_FAIL(aError.getStr());
 #endif
 
-            String sErr = OUString::number( r.LineNumber ) +
+            OUString sErr = OUString::number( r.LineNumber ) +
                           "," +
                           OUString::number( r.ColumnNumber );
 

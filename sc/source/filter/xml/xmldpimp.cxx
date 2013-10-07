@@ -546,7 +546,7 @@ void ScXMLDataPilotTableContext::EndElement()
 
     // #i94570# Names have to be unique, or the tables can't be accessed by API.
     if ( pDPCollection->GetByName(pDPObject->GetName()) )
-        pDPObject->SetName( String() );     // ignore the invalid name, create a new name in AfterXMLLoading
+        pDPObject->SetName( OUString() );     // ignore the invalid name, create a new name in AfterXMLLoading
 
     pDPCollection->InsertNewTable(pDPObject);
     SetButtons();

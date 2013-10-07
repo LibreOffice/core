@@ -147,7 +147,7 @@ void ScXMLTableScenarioContext::EndElement()
             nFlags |= SC_SCENARIO_VALUE;
         if( bProtected )
             nFlags |= SC_SCENARIO_PROTECT;
-        pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
+        pDoc->SetScenarioData( nCurrTable, OUString( sComment ), aBorderColor, nFlags );
         for( size_t i = 0; i < aScenarioRanges.size(); ++i )
         {
             ScRange* pRange(aScenarioRanges[ i ]);

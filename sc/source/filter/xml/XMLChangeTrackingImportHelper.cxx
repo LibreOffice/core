@@ -453,7 +453,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsActio
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
-    String sComment (pAction->aInfo.sComment);
+    OUString sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionIns(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, pAction->nActionType);
@@ -466,7 +466,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelActio
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
-    String sComment (pAction->aInfo.sComment);
+    OUString sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionDel(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, pAction->nActionType, pAction->nD, pTrack);
@@ -482,7 +482,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
         OUString aUser;
         ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
-        String sComment (pAction->aInfo.sComment);
+        OUString sComment (pAction->aInfo.sComment);
 
         ScChangeAction* pNewAction = new ScChangeActionMove(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
             pAction->pMoveRanges->aTargetRange, aUser, aDateTime, sComment, pAction->pMoveRanges->aSourceRange , pTrack);
@@ -497,7 +497,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAc
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
-    String sComment (pAction->aInfo.sComment);
+    OUString sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionReject(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment);
@@ -514,7 +514,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContent
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
-    String sComment (pAction->aInfo.sComment);
+    OUString sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionContent(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment, aCell, pDoc, pAction->pCellInfo->sInputString);

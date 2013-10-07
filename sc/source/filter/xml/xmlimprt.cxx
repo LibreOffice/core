@@ -2412,7 +2412,7 @@ void ScXMLImport::ExamineDefaultStyle()
                 // The standard format is all-latin if the decimal separator dosen't
                 // have a different script type
 
-                String aDecSep;
+                OUString aDecSep;
                 LanguageType nFormatLang = pFormat->GetLanguage();
                 if ( nFormatLang == LANGUAGE_SYSTEM )
                     aDecSep = ScGlobal::pLocaleData->getNumDecimalSep();
@@ -2484,7 +2484,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     OUString sOUName;
                     if (rChangeProps[i].Value >>= sOUName)
                     {
-                        String sAuthorName(sOUName);
+                        OUString sAuthorName(sOUName);
                         pViewSettings->SetTheAuthorToShow(sAuthorName);
                     }
                 }
@@ -2495,7 +2495,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     OUString sOUComment;
                     if (rChangeProps[i].Value >>= sOUComment)
                     {
-                        String sComment(sOUComment);
+                        OUString sComment(sOUComment);
                         pViewSettings->SetTheComment(sComment);
                     }
                 }
@@ -3224,7 +3224,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
                                 OUString sValue;
                                 if(aSeq[i].Value >>= sValue)
                                 {
-                                    String sTabName(sValue);
+                                    OUString sTabName(sValue);
                                     SCTAB nTab(0);
                                     if (pDoc->GetTable(sTabName, nTab))
                                     {

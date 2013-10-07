@@ -3654,7 +3654,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
             Characters(sAuthor);
         }
 
-        String aDate(pCurrentCell->xAnnotation->getDate());
+        OUString aDate(pCurrentCell->xAnnotation->getDate());
         if (pDoc)
         {
             SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
