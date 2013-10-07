@@ -454,12 +454,12 @@ void SbiProcDef::SetType( SbxDataType t )
 
 void SbiProcDef::Match( SbiProcDef* pOld )
 {
-    SbiSymDef* po, *pn=NULL;
+    SbiSymDef *pn=NULL;
     // parameter 0 is the function name
     sal_uInt16 i;
     for( i = 1; i < aParams.GetSize(); i++ )
     {
-        po = pOld->aParams.Get( i );
+        SbiSymDef* po = pOld->aParams.Get( i );
         pn = aParams.Get( i );
         // no type matching - that is done during running
         // but is it maybe called with too little parameters?
@@ -467,7 +467,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
         {
             break;
         }
-        po = pOld->aParams.Next();
+        pOld->aParams.Next();
     }
 
     if( pn && i < aParams.GetSize() && pOld->pIn )
