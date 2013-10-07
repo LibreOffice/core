@@ -1493,8 +1493,10 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
 
     // Delete the Box's Lines
     if( !pBox->GetTabLines().empty() )
+    {
         BOOST_FOREACH( SwTableLine* pLine, pBox->GetTabLines() )
             lcl_DelLine( pLine, pDelPara );
+    }
     else
     {
         SwDoc* pDoc = pDelPara->rNds.GetDoc();
