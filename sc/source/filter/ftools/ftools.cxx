@@ -152,20 +152,20 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
 OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
 {
     //fdo#37872: we don't allow points in range names any more
-    String sName = rName.replace(static_cast<sal_Unicode>('.'),
+    OUString sName = rName.replace(static_cast<sal_Unicode>('.'),
         static_cast<sal_Unicode>('_'));
-    xub_StrLen nLen = sName.Len();
+    xub_StrLen nLen = sName.getLength();
     if( nLen && !ScCompiler::IsCharFlagAllConventions( sName, 0, SC_COMPILER_C_CHAR_NAME ) )
-        sName.SetChar( 0, '_' );
+        sName = sName.replaceAt( 0, 1, "_" );
     for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )
         if( !ScCompiler::IsCharFlagAllConventions( sName, nPos, SC_COMPILER_C_NAME ) )
-            sName.SetChar( nPos, '_' );
+            sName = sName.replaceAt( nPos, 1, "_" );
     return sName;
 }
 
 // *** streams and storages *** -----------------------------------------------
 
-SotStorageRef ScfTools::OpenStorageRead( SotStorageRef xStrg, const String& rStrgName )
+SotStorageRef ScfTools::OpenStorageRead( SotStorageRef xStrg, const OUString& rStrgName )
 {
     SotStorageRef xSubStrg;
     if( xStrg.Is() && xStrg->IsContained( rStrgName ) )
@@ -173,7 +173,7 @@ SotStorageRef ScfTools::OpenStorageRead( SotStorageRef xStrg, const String& rStr
     return xSubStrg;
 }
 
-SotStorageRef ScfTools::OpenStorageWrite( SotStorageRef xStrg, const String& rStrgName )
+SotStorageRef ScfTools::OpenStorageWrite( SotStorageRef xStrg, const OUString& rStrgName )
 {
     SotStorageRef xSubStrg;
     if( xStrg.Is() )
@@ -181,7 +181,7 @@ SotStorageRef ScfTools::OpenStorageWrite( SotStorageRef xStrg, const String& rSt
     return xSubStrg;
 }
 
-SotStorageStreamRef ScfTools::OpenStorageStreamRead( SotStorageRef xStrg, const String& rStrmName )
+SotStorageStreamRef ScfTools::OpenStorageStreamRead( SotStorageRef xStrg, const OUString& rStrmName )
 {
     SotStorageStreamRef xStrm;
     if( xStrg.Is() && xStrg->IsContained( rStrmName ) && xStrg->IsStream( rStrmName ) )
@@ -189,7 +189,7 @@ SotStorageStreamRef ScfTools::OpenStorageStreamRead( SotStorageRef xStrg, const 
     return xStrm;
 }
 
-SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const String& rStrmName )
+SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const OUString& rStrmName )
 {
     OSL_ENSURE( !xStrg || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
     SotStorageStreamRef xStrm;
