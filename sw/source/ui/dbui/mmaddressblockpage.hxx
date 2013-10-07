@@ -69,9 +69,9 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
     ImageButton         m_aPrevSetIB;
     ImageButton         m_aNextSetIB;
 
-    String              m_sDocument;
-    String              m_sCurrentAddress;
-    String              m_sChangeAddress;
+    OUString            m_sDocument;
+    OUString            m_sCurrentAddress;
+    OUString            m_sChangeAddress;
 
     SwMailMergeWizard*  m_pWizard;
 

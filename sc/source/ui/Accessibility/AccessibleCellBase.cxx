@@ -212,15 +212,14 @@ OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    String sName( ScResId(STR_ACC_CELL_NAME) );
+    OUString sName( SC_RESSTR(STR_ACC_CELL_NAME) );
     // Document not needed, because only the cell address, but not the tablename is needed
     // always us OOO notation
     OUString sAddress(maCellAddress.Format(SCA_VALID, NULL));
-    sName.SearchAndReplaceAscii("%1", sAddress);
     /*  #i65103# ZoomText merges cell address and contents, e.g. if value 2 is
         contained in cell A1, ZT reads "cell A twelve" instead of "cell A1 - 2".
         Simple solution: Append a space character to the cell address. */
-    sName.Append( ' ' );
+    sName = sName.replaceFirst("%1", sAddress) + " ";
     return OUString(sName);
 }
 

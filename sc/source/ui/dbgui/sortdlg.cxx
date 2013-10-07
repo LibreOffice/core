@@ -54,9 +54,9 @@ ScSortWarningDlg::ScSortWarningDlg( Window* pParent,
     get( aBtnExtSort, "extend" );
     get( aBtnCurSort, "current" );
 
-    String sTextName = aFtText->GetText();
-    sTextName.SearchAndReplaceAscii("%1", rExtendText);
-    sTextName.SearchAndReplaceAscii("%2", rCurrentText);
+    OUString sTextName = aFtText->GetText();
+    sTextName = sTextName.replaceFirst("%1", rExtendText);
+    sTextName = sTextName.replaceFirst("%2", rCurrentText);
     aFtText->SetText( sTextName );
 
     aBtnExtSort->SetClickHdl( LINK( this, ScSortWarningDlg, BtnHdl ) );

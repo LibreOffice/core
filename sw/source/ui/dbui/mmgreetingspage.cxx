@@ -319,9 +319,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     lcl_FillGreetingsBox(m_aMaleLB, rConfig, SwMailMergeConfigItem::MALE);
     lcl_FillGreetingsBox(m_aNeutralCB, rConfig, SwMailMergeConfigItem::NEUTRAL);
 
-    String sTemp(m_sDocument);
-    sTemp.SearchAndReplaceAscii("%1", OUString::number(1));
-    m_aDocumentIndexFI.SetText(sTemp);
+    m_aDocumentIndexFI.SetText(m_sDocument.replaceFirst("%1", OUString::number(1)));
 }
 
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
@@ -428,9 +426,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
     m_aPrevSetIB.Enable(bEnable);
     m_aNextSetIB.Enable(bEnable);
     m_aDocumentIndexFI.Enable(bEnable);
-    String sTemp(m_sDocument);
-    sTemp.SearchAndReplaceAscii("%1", OUString::number(nPos));
-    m_aDocumentIndexFI.SetText(sTemp);
+    m_aDocumentIndexFI.SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
     return 0;
 }
 

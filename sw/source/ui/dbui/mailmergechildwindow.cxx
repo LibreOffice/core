@@ -547,12 +547,11 @@ void  SwSendMailDialog::IterateMails()
         {
             Image aInsertImg = m_aImageList.GetImage( FN_FORMULA_CANCEL );
 
-            String sMessage = m_sSendingTo;
+            OUString sMessage = m_sSendingTo;
             String sTmp(pCurrentMailDescriptor->sEMail);
             sTmp += '\t';
             sTmp += m_sFailed;
-            sMessage.SearchAndReplaceAscii("%1", sTmp);
-            m_aStatusLB.InsertEntry( sMessage, aInsertImg, aInsertImg);
+            m_aStatusLB.InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
             ++m_nSendCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
@@ -646,12 +645,11 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
     }
     Image aInsertImg = m_aImageList.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
 
-    String sMessage = m_sSendingTo;
-    String sTmp(xMessage->getRecipients()[0]);
-    sTmp += '\t';
+    OUString sMessage = m_sSendingTo;
+    OUString sTmp(xMessage->getRecipients()[0]);
+    sTmp += "\t";
     sTmp += bResult ? m_sCompleted : m_sFailed;
-    sMessage.SearchAndReplaceAscii("%1", sTmp);
-    m_aStatusLB.InsertEntry( sMessage, aInsertImg, aInsertImg);
+    m_aStatusLB.InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
     ++m_nSendCount;
     if(!bResult)
         ++m_nErrorCount;
@@ -667,13 +665,12 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
 
 void SwSendMailDialog::UpdateTransferStatus()
 {
-    String sStatus( m_sTransferStatus );
-    sStatus.SearchAndReplaceAscii("%1", OUString::number(m_nSendCount) );
-    sStatus.SearchAndReplaceAscii("%2", OUString::number(m_pImpl->nDocumentCount));
+    OUString sStatus( m_sTransferStatus );
+    sStatus = sStatus.replaceFirst("%1", OUString::number(m_nSendCount) );
+    sStatus = sStatus.replaceFirst("%2", OUString::number(m_pImpl->nDocumentCount));
     m_aTransferStatusFT.SetText(sStatus);
 
-    sStatus = m_sErrorStatus;
-    sStatus.SearchAndReplaceAscii("%1", OUString::number(m_nErrorCount) );
+    sStatus = m_sErrorStatus.replaceFirst("%1", OUString::number(m_nErrorCount) );
     m_aErrorStatusFT.SetText(sStatus);
 
     if(m_pImpl->aDescriptors.size())

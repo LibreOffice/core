@@ -615,7 +615,7 @@ OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription(void)
 OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    String sName(ScResId(STR_ACC_TABLE_NAME));
+    OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
 
     if (mpViewShell && mpViewShell->GetDocument())
     {
@@ -625,11 +625,11 @@ OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName(void)
         {
             OUString sCoreName;
             if (mpViewShell->GetDocument()->GetName( mpTableInfo->GetTab(), sCoreName ))
-                sName.SearchAndReplaceAscii("%1", sCoreName);
+                sName = sName.replaceFirst("%1", sCoreName);
         }
     }
 
-    return OUString(sName);
+    return sName;
 }
 
 Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

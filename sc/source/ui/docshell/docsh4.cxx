@@ -1010,8 +1010,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         catch ( uno::Exception& )
                                         {
                                         }
-                                        String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
-                                        aMessage.SearchAndReplaceAscii( "%1", aUserName );
+                                        OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
+                                        aMessage = aMessage.replaceFirst( "%1", aUserName );
 
                                         WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage );
                                         aBox.Execute();

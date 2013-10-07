@@ -2084,14 +2084,14 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
 
 OUString ScAccessibleDocument::GetCurrentCellName() const
 {
-    String sName( ScResId(STR_ACC_CELL_NAME) );
+    OUString sName(SC_RESSTR(STR_ACC_CELL_NAME));
     if (mpViewShell)
     {
         // Document not needed, because only the cell address, but not the tablename is needed
         OUString sAddress(mpViewShell->GetViewData()->GetCurPos().Format(SCA_VALID, NULL));
-        sName.SearchAndReplaceAscii("%1", sAddress);
+        sName = sName.replaceFirst("%1", sAddress);
     }
-    return OUString(sName);
+    return sName;
 }
 
 OUString ScAccessibleDocument::GetCurrentCellDescription() const

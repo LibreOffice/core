@@ -138,9 +138,7 @@ void SwMailMergeAddressBlockPage::ActivatePage()
     if(bIsLetter)
     {
         m_aHideEmptyParagraphsCB.Check( rConfigItem.IsHideEmptyParagraphs() );
-        String sTemp(m_sDocument);
-        sTemp.SearchAndReplaceAscii("%1", OUString::number(1));
-        m_aDocumentIndexFI.SetText(sTemp);
+        m_aDocumentIndexFI.SetText(m_sDocument.replaceFirst("%1", OUString::number(1)));
 
         m_aSettingsWIN.Clear();
         const uno::Sequence< OUString> aBlocks =
@@ -319,18 +317,14 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
         }
     }
     m_aPrevSetIB.Enable(bEnable);
-    String sTemp(m_sDocument);
-    sTemp.SearchAndReplaceAscii("%1", OUString::number(nPos));
-    m_aDocumentIndexFI.SetText(sTemp);
+    m_aDocumentIndexFI.SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
 
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     sal_Bool bHasResultSet = rConfig.GetResultSet().is();
     m_aCurrentAddressFI.Show(bHasResultSet);
     if(bHasResultSet)
     {
-        String sTmp = m_sCurrentAddress;
-        sTmp.SearchAndReplaceAscii("%1", rConfig.GetCurrentDBData().sDataSource );
-        m_aCurrentAddressFI.SetText(sTmp);
+        m_aCurrentAddressFI.SetText(m_sCurrentAddress.replaceFirst("%1", rConfig.GetCurrentDBData().sDataSource));
         m_aAddressListPB.SetText(m_sChangeAddress);
     }
     EnableAddressBlock(bHasResultSet, m_aAddressCB.IsChecked());

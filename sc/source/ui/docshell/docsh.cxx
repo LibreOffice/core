@@ -792,8 +792,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                         }
                                         else
                                         {
-                                            String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
-                                            aMessage.SearchAndReplaceAscii( "%1", aUserName );
+                                            OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
+                                            aMessage = aMessage.replaceFirst( "%1", aUserName );
 
                                             WarningBox aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
                                             if ( aBox.Execute() == RET_RETRY )

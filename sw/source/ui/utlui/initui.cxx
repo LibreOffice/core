@@ -230,9 +230,9 @@ ShellResource::~ShellResource()
     delete pAutoFmtNameLst;
 }
 
-String ShellResource::GetPageDescName( sal_uInt16 nNo, PageNameMode eMode )
+OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
 {
-    String sRet;
+    OUString sRet;
 
     switch (eMode)
     {
@@ -247,8 +247,7 @@ String ShellResource::GetPageDescName( sal_uInt16 nNo, PageNameMode eMode )
             break;
     }
 
-    sRet.SearchAndReplaceAscii( "$(ARG1)", OUString::number( nNo ));
-    return sRet;
+    return sRet.replaceFirst( "$(ARG1)", OUString::number( nNo ));
 }
 
 

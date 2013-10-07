@@ -2327,9 +2327,8 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
                 SwMergeSourceWarningBox_Impl aWarning( &GetViewFrame()->GetWindow());
-                String sTmp(aWarning.GetMessText());
-                sTmp.SearchAndReplaceAscii("%1", sSource);
-                aWarning.SetMessText(sTmp);
+                OUString sTmp(aWarning.GetMessText());
+                aWarning.SetMessText(sTmp.replaceFirst("%1", sSource));
                 if(RET_OK == aWarning.Execute())
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

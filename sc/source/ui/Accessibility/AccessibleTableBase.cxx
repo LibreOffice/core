@@ -358,11 +358,11 @@ OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    String sName(ScResId(STR_ACC_TABLE_NAME));
+    OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
     OUString sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
-        sName.SearchAndReplaceAscii("%1", sCoreName);
-    return OUString(sName);
+        sName = sName.replaceFirst("%1", sCoreName);
+    return sName;
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL

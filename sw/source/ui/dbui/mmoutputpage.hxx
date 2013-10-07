@@ -174,7 +174,7 @@ class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
     String                  m_sStop;
     String                  m_sSend;
     String                  m_sTransferStatus;
-    String                  m_sErrorStatus;
+    OUString                m_sErrorStatus;
     String                  m_sSendingTo;
     String                  m_sCompleted;
     String                  m_sFailed;

@@ -1719,12 +1719,11 @@ void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< OUString >& _out
         else if ( xSection == xReportDefinition->getDetail() )
             nPos = xGroups->getCount()-1;
 
-        const String sGroup = String(ModuleRes(RID_STR_SCOPE_GROUP));
+        const OUString sGroup = ModuleRes(RID_STR_SCOPE_GROUP).toString();
         for (sal_Int32 i = 0 ; i <= nPos ; ++i)
         {
             xGroup.set(xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
-            String sGroupName = sGroup;
-            sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
+            OUString sGroupName = sGroup.replaceFirst("%1",xGroup->getExpression());
             _out_rList.push_back(sGroupName);
         }
         _out_rList.push_back(xReportDefinition->getName());
@@ -1747,10 +1746,9 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
         const uno::Reference< report::XGroup> xGroup(xSection->getGroup(),uno::UNO_QUERY);
         if ( xGroup.is() )
         {
-            String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+            OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP).toString();
             _rsNamePostFix = xGroup->getExpression();
-            sGroupName.SearchAndReplaceAscii("%1",_rsNamePostFix);
-            m_sScope = sGroupName;
+            m_sScope = sGroupName.replaceFirst("%1",_rsNamePostFix);
             xReturn = xGroup.get();
         }
         else if ( xSection == xReportDefinition->getDetail() )
@@ -1760,10 +1758,9 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
             if ( nCount )
             {
                 const uno::Reference< report::XGroup> xGroup2(xGroups->getByIndex(nCount - 1),uno::UNO_QUERY_THROW);
-                String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
                 _rsNamePostFix = xGroup2->getExpression();
-                sGroupName.SearchAndReplaceAscii("%1",_rsNamePostFix);
-                m_sScope = sGroupName;
+                m_sScope = sGroupName.replaceFirst("%1",_rsNamePostFix);
                 xReturn = xGroup2.get();
             }
         }
@@ -1786,9 +1783,8 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
         for (sal_Int32 i = 0 ; i < nCount; ++i)
         {
             const uno::Reference< report::XGroup> xGroup(xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
-            String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
-            sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
-            if ( m_sScope == OUString(sGroupName) )
+            OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+            if ( m_sScope == sGroupName.replaceFirst("%1",xGroup->getExpression()) )
             {
                 _rsNamePostFix = xGroup->getExpression();
                 xReturn = xGroup.get();
@@ -1833,9 +1829,8 @@ sal_Bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
                             uno::Reference< report::XGroup> xGroup(aFind.first->second.second,uno::UNO_QUERY);
                             if ( xGroup.is() )
                             {
-                                String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
-                                sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
-                                m_sScope = sGroupName;
+                                OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                                m_sScope = sGroupName.replaceFirst("%1",xGroup->getExpression());
                             }
                             else
                                 m_sScope = xReportDefinition->getName();
@@ -2095,9 +2090,8 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
                 const uno::Reference< report::XGroup > xGroup(aFind.first->second.second,uno::UNO_QUERY);
                 if ( xGroup.is() )
                 {
-                    String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
-                    sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
-                    _Out_sScope = sGroupName;
+                    OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                    _Out_sScope = sGroupName.replaceFirst("%1",xGroup->getExpression());
                 }
                 else
                     _Out_sScope = uno::Reference< report::XReportDefinition >(aFind.first->second.second,uno::UNO_QUERY_THROW)->getName();

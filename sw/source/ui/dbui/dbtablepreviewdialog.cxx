@@ -53,11 +53,10 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
     {
         if ( pValues[nValue].Name == "Command" )
         {
-            String sDescription = m_aDescriptionFI.GetText();
+            OUString sDescription = m_aDescriptionFI.GetText();
             OUString sTemp;
             pValues[nValue].Value >>= sTemp;
-            sDescription.SearchAndReplaceAscii("%1", sTemp);
-            m_aDescriptionFI.SetText(sDescription);
+            m_aDescriptionFI.SetText(sDescription.replaceFirst("%1", sTemp));
             break;
         }
     }

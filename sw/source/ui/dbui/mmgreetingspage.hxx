@@ -100,7 +100,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
     ImageButton         m_aPrevSetIB;
     ImageButton         m_aNextSetIB;
 
-    String              m_sDocument;
+    OUString            m_sDocument;
 
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
     DECL_LINK(InsertDataHdl_Impl, ImageButton*);

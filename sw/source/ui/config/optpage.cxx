@@ -752,14 +752,13 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     if( SFX_ITEM_SET == rSet.GetItemState(nLangSlot, sal_False, &pLang))
         eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
 
-    String sTmp = pLabelFT->GetText();
-    String sToReplace = sScriptWestern;
+    OUString sTmp = pLabelFT->GetText();
+    OUString sToReplace = sScriptWestern;
     if(FONT_GROUP_CJK == nFontGroup )
         sToReplace = sScriptAsian;
     else if(FONT_GROUP_CTL == nFontGroup )
         sToReplace = sScriptComplex;
-    sTmp.SearchAndReplaceAscii("%1", sToReplace);
-    pLabelFT->SetText(sTmp);
+    pLabelFT->SetText(sTmp.replaceFirst("%1", sToReplace));
 
     const SfxPoolItem* pItem;
 

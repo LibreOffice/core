@@ -924,27 +924,24 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
     String tmp3(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     m_pLbl3->SetText(sLbl2);
-    String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
-    sColumnWidth.SearchAndReplaceAscii("%1", tmp1);
-    aEd1.SetAccessibleName(sColumnWidth);
+    OUString sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    aEd1.SetAccessibleName(sColumnWidth.replaceFirst("%1", tmp1));
 
     sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
-    sColumnWidth.SearchAndReplaceAscii("%1", tmp2);
-    aEd2.SetAccessibleName(sColumnWidth);
+    aEd2.SetAccessibleName(sColumnWidth.replaceFirst("%1", tmp2));
 
     sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
-    sColumnWidth.SearchAndReplaceAscii("%1", tmp3);
-    aEd3.SetAccessibleName(sColumnWidth);
+    aEd3.SetAccessibleName(sColumnWidth.replaceFirst("%1", tmp3));
 
-    String sDist = SW_RESSTR( STR_ACCESS_PAGESETUP_SPACING ) ;
-    String sDist1 = sDist;
-    sDist1.SearchAndReplaceAscii("%1", tmp1);
-    sDist1.SearchAndReplaceAscii("%2", tmp2);
+    OUString sDist = SW_RESSTR( STR_ACCESS_PAGESETUP_SPACING ) ;
+    OUString sDist1 = sDist;
+    sDist1 = sDist1.replaceFirst("%1", tmp1);
+    sDist1 = sDist1.replaceFirst("%2", tmp2);
     aDistEd1.SetAccessibleName(sDist1);
 
-    String sDist2 = sDist;
-    sDist2.SearchAndReplaceAscii("%1", tmp2);
-    sDist2.SearchAndReplaceAscii("%2", tmp3);
+    OUString sDist2 = sDist;
+    sDist2 = sDist2.replaceFirst("%1", tmp2);
+    sDist2 = sDist2.replaceFirst("%2", tmp3);
     aDistEd2.SetAccessibleName(sDist2);
 }
 

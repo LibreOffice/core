@@ -339,17 +339,15 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    String sDesc(ScResId(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR));
-    sDesc.SearchAndReplaceAscii("%1", String(ScResId(SCSTR_UNKNOWN)));
-    return OUString( sDesc );
+    OUString sDesc(SC_RESSTR(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR));
+    return sDesc.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
 }
 
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    String sName(ScResId(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
-    sName.SearchAndReplaceAscii("%1", String(ScResId(SCSTR_UNKNOWN)));
-    return OUString( sName );
+    OUString sName(SC_RESSTR(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
+    return sName.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
 }
 
 Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)
