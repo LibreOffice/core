@@ -46,45 +46,31 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_comment},     HTML_COMMENT},
     {{OOO_STRING_SVTOOLS_HTML_doctype},      HTML_DOCTYPE},
     {{OOO_STRING_SVTOOLS_HTML_embed},       HTML_EMBED},    // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_figureoverlay}, HTML_FIGUREOVERLAY},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_horzrule},        HTML_HORZRULE},
-    {{OOO_STRING_SVTOOLS_HTML_horztab},     HTML_HORZTAB},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_image},          HTML_IMAGE},
-    {{OOO_STRING_SVTOOLS_HTML_image2},         HTML_IMAGE},
     {{OOO_STRING_SVTOOLS_HTML_input},          HTML_INPUT},
-    {{OOO_STRING_SVTOOLS_HTML_isindex},     HTML_ISINDEX},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_li},            HTML_LI_ON},
     {{OOO_STRING_SVTOOLS_HTML_linebreak},      HTML_LINEBREAK},
     {{OOO_STRING_SVTOOLS_HTML_link},            HTML_LINK}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_meta},            HTML_META}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_nextid},      HTML_NEXTID},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_of},          HTML_OF},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_option},        HTML_OPTION},
     {{OOO_STRING_SVTOOLS_HTML_param},       HTML_PARAM},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_range},       HTML_RANGE},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_spacer},      HTML_SPACER},   // Netscape 3.0b5
-    {{OOO_STRING_SVTOOLS_HTML_wbr},         HTML_WBR},  // Netscape
 
     {{OOO_STRING_SVTOOLS_HTML_abbreviation},    HTML_ABBREVIATION_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_above},       HTML_ABOVE_ON}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_acronym},     HTML_ACRONYM_ON},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_address},      HTML_ADDRESS_ON},
     {{OOO_STRING_SVTOOLS_HTML_anchor},        HTML_ANCHOR_ON},
     {{OOO_STRING_SVTOOLS_HTML_applet},      HTML_APPLET_ON},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_array},       HTML_ARRAY_ON}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_author},      HTML_AUTHOR_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_banner},      HTML_BANNER_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_bar},         HTML_BAR_ON},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_basefont},        HTML_BASEFONT_ON},  // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_below},       HTML_BELOW_ON}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_bigprint},        HTML_BIGPRINT_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_blink},       HTML_BLINK_ON}, // Netscape
     {{OOO_STRING_SVTOOLS_HTML_blockquote},    HTML_BLOCKQUOTE_ON},
     {{OOO_STRING_SVTOOLS_HTML_blockquote30},    HTML_BLOCKQUOTE30_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_body},            HTML_BODY_ON},
     {{OOO_STRING_SVTOOLS_HTML_bold},            HTML_BOLD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_boldtext},        HTML_BOLDTEXT_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_box},         HTML_BOX_ON},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_caption},     HTML_CAPTION_ON},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_center},      HTML_CENTER_ON},    // Netscape
     {{OOO_STRING_SVTOOLS_HTML_citiation},      HTML_CITIATION_ON},
@@ -97,8 +83,6 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_deletedtext}, HTML_DELETEDTEXT_ON},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_dirlist},      HTML_DIRLIST_ON},
     {{OOO_STRING_SVTOOLS_HTML_division},        HTML_DIVISION_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_dot},         HTML_DOT_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_doubledot},   HTML_DOUBLEDOT_ON}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_dt},            HTML_DT_ON},
     {{OOO_STRING_SVTOOLS_HTML_emphasis},        HTML_EMPHASIS_ON},
     {{OOO_STRING_SVTOOLS_HTML_figure},      HTML_FIGURE_ON},    // HTML 3.0
@@ -107,7 +91,6 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_form},            HTML_FORM_ON},
     {{OOO_STRING_SVTOOLS_HTML_frame},       HTML_FRAME_ON}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_frameset},        HTML_FRAMESET_ON},  // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_hat},         HTML_HAT_ON},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_head},            HTML_HEAD_ON},
     {{OOO_STRING_SVTOOLS_HTML_head1},          HTML_HEAD1_ON},
     {{OOO_STRING_SVTOOLS_HTML_head2},          HTML_HEAD2_ON},
@@ -117,16 +100,12 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_head6},          HTML_HEAD6_ON},
     {{OOO_STRING_SVTOOLS_HTML_html},            HTML_HTML_ON},
     {{OOO_STRING_SVTOOLS_HTML_iframe},      HTML_IFRAME_ON},    // IE 3.0b2
-    {{OOO_STRING_SVTOOLS_HTML_ilayer},      HTML_ILAYER_ON},
     {{OOO_STRING_SVTOOLS_HTML_insertedtext},    HTML_INSERTEDTEXT_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_italic},        HTML_ITALIC_ON},
-    {{OOO_STRING_SVTOOLS_HTML_item},            HTML_ITEM_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_keyboard},        HTML_KEYBOARD_ON},
     {{OOO_STRING_SVTOOLS_HTML_language},        HTML_LANGUAGE_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_layer},       HTML_LAYER_ON},
     {{OOO_STRING_SVTOOLS_HTML_listheader},  HTML_LISTHEADER_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_map},         HTML_MAP_ON},   // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_math},            HTML_MATH_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_menulist},        HTML_MENULIST_ON},
     {{OOO_STRING_SVTOOLS_HTML_multicol},        HTML_MULTICOL_ON},  // Netscape 3.0b5
     {{OOO_STRING_SVTOOLS_HTML_nobr},            HTML_NOBR_ON},  // Netscape
@@ -141,15 +120,12 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_person},      HTML_PERSON_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_plaintext},   HTML_PLAINTEXT_ON}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_preformtxt},    HTML_PREFORMTXT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_root},            HTML_ROOT_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_row},         HTML_ROW_ON},   // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_sample},        HTML_SAMPLE_ON},
     {{OOO_STRING_SVTOOLS_HTML_script},        HTML_SCRIPT_ON}, // HTML 3.2
     {{OOO_STRING_SVTOOLS_HTML_select},        HTML_SELECT_ON},
     {{OOO_STRING_SVTOOLS_HTML_shortquote},  HTML_SHORTQUOTE_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_smallprint},  HTML_SMALLPRINT_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_span},            HTML_SPAN_ON},  // Style Sheets
-    {{OOO_STRING_SVTOOLS_HTML_squareroot},  HTML_SQUAREROOT_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_strikethrough},HTML_STRIKETHROUGH_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_strong},        HTML_STRONG_ON},
     {{OOO_STRING_SVTOOLS_HTML_style},       HTML_STYLE_ON}, // HTML 3.0
@@ -161,17 +137,13 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_tablerow},        HTML_TABLEROW_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_tbody},          HTML_TBODY_ON}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_teletype},        HTML_TELETYPE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_text},            HTML_TEXT_ON},  // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_textarea},        HTML_TEXTAREA_ON},
-    {{OOO_STRING_SVTOOLS_HTML_textflow},        HTML_TEXTFLOW_ON},
     {{OOO_STRING_SVTOOLS_HTML_tfoot},          HTML_TFOOT_ON}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_thead},          HTML_THEAD_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_tilde},       HTML_TILDE_ON}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_title},          HTML_TITLE_ON},
     {{OOO_STRING_SVTOOLS_HTML_underline},      HTML_UNDERLINE_ON},
     {{OOO_STRING_SVTOOLS_HTML_unorderlist},  HTML_UNORDERLIST_ON},
     {{OOO_STRING_SVTOOLS_HTML_variable},        HTML_VARIABLE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_vector},      HTML_VECTOR_ON},    // HTML 3.0
 
     {{OOO_STRING_SVTOOLS_HTML_xmp},         HTML_XMP_ON},
     {{OOO_STRING_SVTOOLS_HTML_listing},     HTML_LISTING_ON},
@@ -179,7 +151,6 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_definstance},  HTML_DEFINSTANCE_ON},
     {{OOO_STRING_SVTOOLS_HTML_strike},        HTML_STRIKE_ON},
 
-    {{OOO_STRING_SVTOOLS_HTML_bgsound},     HTML_BGSOUND},
     {{OOO_STRING_SVTOOLS_HTML_comment2},        HTML_COMMENT2_ON},
     {{OOO_STRING_SVTOOLS_HTML_marquee},         HTML_MARQUEE_ON},
     {{OOO_STRING_SVTOOLS_HTML_plaintext2},    HTML_PLAINTEXT2_ON},
