@@ -11,6 +11,8 @@
 
 namespace
 {
+    const char AVMEDIA_NO_ERROR[] = "No error";
+
     const char* ( *libvlc_get_version ) (void);
     char *  ( * libvlc_errmsg ) (void);
 }
@@ -39,7 +41,8 @@ const char* Common::Version()
 
 const char* Common::LastErrorMessage()
 {
-    return libvlc_errmsg();
+    const char *errorMsg = libvlc_errmsg();
+    return errorMsg == NULL ? AVMEDIA_NO_ERROR : errorMsg;
 }
 }
 }
