@@ -196,7 +196,10 @@ namespace
         {}
         bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const ::com::sun::star::beans::PropertyValue& rhs) const
         {
-            return !!(lhs.Name.equalsIgnoreAsciiCase( rhs.Name ));
+            const rtl_uString* l = lhs.Name.pData;
+            const rtl_uString* r = rhs.Name.pData;
+            const int c = rtl_ustr_compareIgnoreAsciiCase_WithLength( l->buffer, l->length, r->buffer, r->length );
+            return (c < 0);
         }
     };
 
