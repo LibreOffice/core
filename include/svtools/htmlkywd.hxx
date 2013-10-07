@@ -22,8 +22,6 @@
 
 #include "sal/config.h"
 
-#define OOO_STRING_SVTOOLS_HTML_doctype32 \
-    "HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\""
 #define OOO_STRING_SVTOOLS_HTML_doctype40 \
     "HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\""
 

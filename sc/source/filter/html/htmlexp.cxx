@@ -316,7 +316,7 @@ Size ScHTMLExport::MMToPixel( const Size& rSize )
 
 sal_uLong ScHTMLExport::Write()
 {
-    rStrm << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype32 << '>'
+    rStrm << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype40 << '>'
         << sNewLine << sNewLine;
     TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
     WriteHeader();

@@ -683,7 +683,7 @@ sal_Bool OHTMLImportExport::Write()
     ODatabaseImportExport::Write();
     if(m_xObject.is())
     {
-        (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype32 << '>' << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine;
+        (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype40 << '>' << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine;
         TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
         WriteHeader();
         OUT_LF();
