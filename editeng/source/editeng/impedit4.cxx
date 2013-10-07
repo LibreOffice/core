@@ -1084,7 +1084,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
         }
 
         // The Text...
-        pC->GetText() = pNode->Copy( nStartPos, nEndPos-nStartPos );
+        pC->SetText(pNode->Copy(nStartPos, nEndPos-nStartPos));
 
         // and the Attribute...
         sal_uInt16 nAttr = 0;

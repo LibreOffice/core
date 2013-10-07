@@ -145,16 +145,16 @@ public:
     void NormalizeString( svl::SharedStringPool& rPool );
     sal_uIntPtr GetStringID( const svl::SharedStringPool& rPool ) const;
     sal_uIntPtr GetStringIDIgnoreCase( const svl::SharedStringPool& rPool ) const;
+    OUString GetText() const;
+    void SetText( const OUString& rStr );
 
     const XEditAttributesType& GetAttribs() const { return aAttribs; }
     XEditAttributesType& GetAttribs() { return aAttribs; }
 
-    const OUString&     GetText()           const   { return aText; }
     const OUString&     GetStyle()          const   { return aStyle; }
     const SfxItemSet&   GetParaAttribs()    const   { return aParaAttribs; }
     SfxStyleFamily      GetFamily()         const   { return eFamily; }
 
-    OUString&           GetText()           { return aText; }
     OUString&           GetStyle()          { return aStyle; }
     SfxItemSet&         GetParaAttribs()    { return aParaAttribs; }
     SfxStyleFamily&     GetFamily()         { return eFamily; }

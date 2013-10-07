@@ -164,6 +164,16 @@ sal_uIntPtr ContentInfo::GetStringIDIgnoreCase( const svl::SharedStringPool& rPo
     return rPool.getIdentifierIgnoreCase(aText);
 }
 
+OUString ContentInfo::GetText() const
+{
+    return aText;
+}
+
+void ContentInfo::SetText( const OUString& rStr )
+{
+    aText = rStr;
+}
+
 const WrongList* ContentInfo::GetWrongList() const
 {
     return mpWrongs.get();
@@ -1341,7 +1351,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
         // The Text...
         OString aByteString = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStream);
-        pC->GetText() = OStringToOUString(aByteString, eSrcEncoding);
+        pC->SetText(OStringToOUString(aByteString, eSrcEncoding));
 
         // StyleName and Family...
         pC->GetStyle() = rIStream.ReadUniOrByteString(eSrcEncoding);
@@ -1378,7 +1388,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     sal_Char cEncodedChar = aByteString[nStart];
                     sal_Unicode cChar = OUString(&cEncodedChar, 1,
                         ((SvxCharSetColorItem*)pItem)->GetCharSet()).toChar();
-                    pC->GetText() = pC->GetText().replaceAt(nStart, 1, OUString(cChar));
+                    pC->SetText(pC->GetText().replaceAt(nStart, 1, OUString(cChar)));
                 }
                 else
                 {
@@ -1390,7 +1400,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                         // Convert CH_FEATURE to CH_FEATURE_OLD
                         DBG_ASSERT( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
                         if ( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD )
-                            pC->GetText() = pC->GetText().replaceAt( nStart, 1, OUString(CH_FEATURE) );
+                            pC->SetText(pC->GetText().replaceAt(nStart, 1, OUString(CH_FEATURE)));
                     }
                 }
             }
@@ -1405,7 +1415,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                pC->GetText() = OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL);
+                pC->SetText(OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL));
                 bSymbolPara = true;
             }
         }
@@ -1422,7 +1432,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     // Not correctly converted
                     OString aPart(aByteString.copy(rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart()));
                     OUString aNew(OStringToOUString(aPart, rFontItem.GetCharSet()));
-                    pC->GetText() = pC->GetText().replaceAt( rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart(), aNew );
+                    pC->SetText(pC->GetText().replaceAt(rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart(), aNew));
                 }
 
                 // Convert StarMath and StarBats to StarSymbol
@@ -1445,7 +1455,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                         DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
                         sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
                         if ( cConv )
-                            pC->GetText() = pC->GetText().replaceAt( nChar, 1, OUString(cConv) );
+                            pC->SetText(pC->GetText().replaceAt(nChar, 1, OUString(cConv)));
                     }
 
                     DestroyFontToSubsFontConverter( hConv );
@@ -1479,7 +1489,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                         DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
                         sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
                         if ( cConv )
-                            pC->GetText() = pC->GetText().replaceAt( nChar, 1, OUString(cConv) );
+                            pC->SetText(pC->GetText().replaceAt(nChar, 1, OUString(cConv)));
                     }
                 }
 
