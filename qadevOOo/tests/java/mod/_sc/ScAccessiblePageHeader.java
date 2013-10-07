@@ -39,6 +39,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XHeaderFooterContent;
 import com.sun.star.sheet.XSpreadsheet;
@@ -138,22 +139,30 @@ public class ScAccessiblePageHeader extends TestCase {
         AccessibilityTools at = new AccessibilityTools();
 
         XInterface oObj = null;
-        for (;;) {
+        for (int i = 0;; ++i) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
-            XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-            if (xRoot != null) {
-                oObj = AccessibilityTools.getAccessibleObjectForRole
-                    (xRoot, AccessibleRole.HEADER, "");
-                if (oObj != null) {
-                    log.println("ImplementationName " + utils.getImplName(oObj));
-                    AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
-                    break;
+            try {
+                XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+                XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+                if (xRoot != null) {
+                    oObj = AccessibilityTools.getAccessibleObjectForRole
+                        (xRoot, AccessibleRole.HEADER, "");
+                    if (oObj != null) {
+                        log.println("ImplementationName " + utils.getImplName(oObj));
+                        AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+                        break;
+                    }
                 }
+            } catch (DisposedException e) {
+                log.println("Ignoring DisposedException");
+            }
+            if (i == 20) { // give up after 10 sec
+                throw new RuntimeException(
+                    "Couldn't get AccessibleRoot.HEADER object");
             }
             log.println("No HEADER found yet, retrying");
         }
