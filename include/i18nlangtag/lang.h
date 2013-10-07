@@ -584,6 +584,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_NGAEBERE              0x0689
 #define LANGUAGE_USER_ENGLISH_UK_OED        0x8C09  /* makeLangID( 0x23, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_KUMYK                 0x068A
+#define LANGUAGE_USER_NOGAI                 0x068B
 
 
 /* Primary language ID range for on-the-fly assignment. */
