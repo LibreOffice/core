@@ -1293,8 +1293,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                                     pParaContext->SetFrameMode(false);
                                 }
                                 nIntValue = text::VertOrientation::NONE;
+                                break;
                             }
-                            default:nIntValue = text::VertOrientation::NONE;
+                            default:
+                                nIntValue = text::VertOrientation::NONE;
+                                break;
                         }
                         pParaProperties->SetyAlign( nIntValue );
                     break;
