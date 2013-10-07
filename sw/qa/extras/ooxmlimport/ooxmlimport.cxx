@@ -138,6 +138,7 @@ public:
     void testFdo69636();
     void testChartProp();
     void testBnc779620();
+    void testFdo43093();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -240,6 +241,7 @@ void Test::run()
         {"fdo69636.docx", &Test::testFdo69636},
         {"chart-prop.docx", &Test::testChartProp},
         {"bnc779620.docx", &Test::testBnc779620},
+        {"fdo43093.docx", &Test::testFdo43093},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1356,9 +1358,12 @@ void Test::testN779630()
 
 void Test::testIndentation()
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
-    // This was RL_TB (e.g. right-to-left).
-    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>(xPropertySet, "WritingMode"));
+    uno::Reference<uno::XInterface> xParaLTRTitle(getParagraph( 1, "Title aligned"));
+    uno::Reference<uno::XInterface> xParaLTRNormal(getParagraph( 2, ""));
+
+    // this will test the text direction for paragraphs
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaLTRTitle, "WritingMode" ));
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>( xParaLTRNormal, "WritingMode" ));
 }
 
 void Test::testPageBorderShadow()
@@ -1593,6 +1598,40 @@ void Test::testBnc779620()
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
+
+void Test::testFdo43093()
+{
+    // The problem was that the direction and alignment are not correct for RTL paragraphs.
+    uno::Reference<uno::XInterface> xParaRtlRight(getParagraph( 1, "Right and RTL in M$"));
+    sal_Int32 nRtlRight = getProperty< sal_Int32 >( xParaRtlRight, "ParaAdjust" );
+    sal_Int16 nRRDir  = getProperty< sal_Int32 >( xParaRtlRight, "WritingMode" );
+
+    uno::Reference<uno::XInterface> xParaRtlLeft(getParagraph( 2, "Left and RTL in M$"));
+    sal_Int32 nRtlLeft = getProperty< sal_Int32 >( xParaRtlLeft, "ParaAdjust" );
+    sal_Int16 nRLDir  = getProperty< sal_Int32 >( xParaRtlLeft, "WritingMode" );
+
+    uno::Reference<uno::XInterface> xParaLtrRight(getParagraph( 3, "Right and LTR in M$"));
+    sal_Int32 nLtrRight = getProperty< sal_Int32 >( xParaLtrRight, "ParaAdjust" );
+    sal_Int16 nLRDir  = getProperty< sal_Int32 >( xParaLtrRight, "WritingMode" );
+
+    uno::Reference<uno::XInterface> xParaLtrLeft(getParagraph( 4, "Left and LTR in M$"));
+    sal_Int32 nLtrLeft = getProperty< sal_Int32 >( xParaLtrLeft, "ParaAdjust" );
+    sal_Int16 nLLDir  = getProperty< sal_Int32 >( xParaLtrLeft, "WritingMode" );
+
+    // this will test the both the text direction and alignment for each paragraph
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nRtlRight);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nRRDir);
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nRtlLeft);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nRLDir);
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nLtrRight);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
+
+    CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_LEFT), nLtrLeft);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLLDir);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

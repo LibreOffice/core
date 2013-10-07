@@ -95,7 +95,7 @@ LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, xInsertTextRange, bIsNewDoc )),
-    mnBackgroundColor(0), mbIsHighlightSet(false)
+    mnBackgroundColor(0), mbIsHighlightSet(false), mbIsBIDI(false)
 {
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
@@ -1527,7 +1527,7 @@ sal_Int32 lcl_getCurrentNumberingProperty(uno::Reference<container::XIndexAccess
 }
 
 // In rtl-paragraphs the meaning of left/right are to be exchanged
-static bool ExchangeLeftRight( const PropertyMapPtr rContext )
+    static bool ExchangeLeftRight( const PropertyMapPtr rContext, bool mbIsBIDI)
 {
     bool bExchangeLeftRight = false;
     PropertyMap::const_iterator aPropParaIte = rContext->find( PropertyDefinition( PROP_WRITING_MODE ));
@@ -1537,6 +1537,8 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext )
         if( (aPropParaIte->second >>= aAdjust) && aAdjust == text::WritingMode2::RL_TB )
             bExchangeLeftRight = true;
     }
+    else
+        return mbIsBIDI;
     return bExchangeLeftRight;
 }
 
@@ -1566,7 +1568,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPIncLvl
     case NS_sprm::LN_PJcExtra: // sprmPJc Asian (undocumented)
     case NS_sprm::LN_PJc: // sprmPJc
-        handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext ));
+        handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, mbIsBIDI ));
         break;
     case NS_sprm::LN_PFSideBySide:
         break;  // sprmPFSideBySide
@@ -1662,7 +1664,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case 17:
     case NS_sprm::LN_PDxaLeft:   // sprmPDxaLeft
     {
-        bool bExchangeLeftRight = ExchangeLeftRight( rContext );
+        bool bExchangeLeftRight = ExchangeLeftRight( rContext, mbIsBIDI );
         if( NS_sprm::LN_PDxaLeft == nSprmId || 0x17 == nSprmId|| (bExchangeLeftRight && nSprmId == 0x845d) || ( !bExchangeLeftRight && nSprmId == 0x845e))
             rContext->Insert(
                              eSprmType == SPRM_DEFAULT ? PROP_PARA_LEFT_MARGIN : PROP_LEFT_MARGIN,
@@ -1958,8 +1960,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         {
             if (nIntValue != 0)
             {
+                mbIsBIDI = true;
                 rContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB ));
                 rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_RIGHT ));
+            }
+            else
+            {
+                rContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::LR_TB ));
+                rContext->Insert(PROP_PARA_ADJUST, uno::makeAny( style::ParagraphAdjust_LEFT ));
             }
         }
 
@@ -3119,6 +3127,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
 
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {
+        mbIsBIDI = false;
         m_pImpl->SetCurrentParaStyleId( sStringValue );
         StyleSheetTablePtr pStyleTable = m_pImpl->GetStyleSheetTable();
         const OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
