@@ -49,7 +49,6 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_horzrule},        HTML_HORZRULE},
     {{OOO_STRING_SVTOOLS_HTML_image},          HTML_IMAGE},
     {{OOO_STRING_SVTOOLS_HTML_input},          HTML_INPUT},
-    {{OOO_STRING_SVTOOLS_HTML_li},            HTML_LI_ON},
     {{OOO_STRING_SVTOOLS_HTML_linebreak},      HTML_LINEBREAK},
     {{OOO_STRING_SVTOOLS_HTML_link},            HTML_LINK}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_meta},            HTML_META}, // HTML 3.0
@@ -104,6 +103,7 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_italic},        HTML_ITALIC_ON},
     {{OOO_STRING_SVTOOLS_HTML_keyboard},        HTML_KEYBOARD_ON},
     {{OOO_STRING_SVTOOLS_HTML_language},        HTML_LANGUAGE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_li},            HTML_LI_ON},
     {{OOO_STRING_SVTOOLS_HTML_listheader},  HTML_LISTHEADER_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_map},         HTML_MAP_ON},   // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_menulist},        HTML_MENULIST_ON},
