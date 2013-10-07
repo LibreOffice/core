@@ -1547,14 +1547,6 @@ void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const
         rString = OUString();
 }
 
-const svl::SharedString* ScTable::GetStringCell( SCCOL nCol, SCROW nRow ) const
-{
-    if (!ValidColRow(nCol,nRow))
-        return NULL;
-
-    return aCol[nCol].GetStringCell(nRow);
-}
-
 double* ScTable::GetValueCell( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol,nRow))

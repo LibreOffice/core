@@ -292,7 +292,6 @@ public:
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
     void        GetString( SCROW nRow, OUString& rString ) const;
-    const svl::SharedString* GetStringCell( SCROW nRow ) const;
     double* GetValueCell( SCROW nRow );
     void        GetInputString( SCROW nRow, OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;

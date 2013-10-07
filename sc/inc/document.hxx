@@ -844,17 +844,6 @@ public:
     SC_DLLPUBLIC OUString GetString( const ScAddress& rPos ) const;
 
     /**
-     * Return a pointer to the string object stored in string cell.
-     *
-     * @param rPos cell position.
-     *
-     * @return pointer to the string object stored in string cell, or NULL if
-     *         the cell at specified position is not a string cell. Note that
-     *         it returns NULL even for a edit cell.
-     */
-    const svl::SharedString* GetStringCell( const ScAddress& rPos ) const;
-
-    /**
      * Return a pointer to the double value stored in value cell.
      *
      * @param rPos cell position

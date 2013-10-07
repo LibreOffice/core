@@ -2284,19 +2284,6 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
     ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()), pDocument);
 }
 
-const svl::SharedString* ScColumn::GetStringCell( SCROW nRow ) const
-{
-    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
-    sc::CellStoreType::const_iterator it = aPos.first;
-    if (it == maCells.end())
-        return NULL;
-
-    if (it->type != sc::element_type_string)
-        return NULL;
-
-    return &sc::string_block::at(*it->data, aPos.second);
-}
-
 double* ScColumn::GetValueCell( SCROW nRow )
 {
     std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(nRow);
