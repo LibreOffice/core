@@ -47,7 +47,7 @@ ScMessagePool::ScMessagePool()
                               MSGPOOL_START, MSGPOOL_END,
                               aMsgItemInfos, NULL ),
     //
-    aGlobalStringItem       ( SfxStringItem         ( SCITEM_STRING, String() ) ),
+    aGlobalStringItem       ( SfxStringItem         ( SCITEM_STRING, OUString() ) ),
     aGlobalSearchItem       ( SvxSearchItem         ( SCITEM_SEARCHDATA ) ),
     aGlobalSortItem         ( ScSortItem            ( SCITEM_SORTDATA, NULL ) ),
     aGlobalQueryItem        ( ScQueryItem           ( SCITEM_QUERYDATA, NULL, NULL ) ),

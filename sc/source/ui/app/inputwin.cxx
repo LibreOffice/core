@@ -456,7 +456,7 @@ void ScInputWindow::Select()
                                     const ScRangeList aRangeList;
                                     ScAddress aAddr = aRange.aEnd;
                                     aAddr.IncRow();
-                                    const String aFormula = pViewSh->GetAutoSumFormula(
+                                    const OUString aFormula = pViewSh->GetAutoSumFormula(
                                         aRangeList, bSubTotal, aAddr );
                                     SetFuncString( aFormula );
                                     break;
@@ -470,7 +470,7 @@ void ScInputWindow::Select()
                         const sal_Bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                         const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
                         ScAddress aAddr = pViewSh->GetViewData()->GetCurPos();
-                        const String aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
+                        const OUString aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
                         SetFuncString( aFormula );
 
                         if ( bDataFound && pScMod->IsEditMode() )
@@ -482,9 +482,9 @@ void ScInputWindow::Select()
 
                                 //! SetSelection am InputHandler ???
                                 //! bSelIsRef setzen ???
-                                const xub_StrLen nOpen = aFormula.Search('(');
-                                const xub_StrLen nLen = aFormula.Len();
-                                if ( nOpen != STRING_NOTFOUND && nLen > nOpen )
+                                const sal_Int32 nOpen = aFormula.indexOf('(');
+                                const xub_StrLen nLen = aFormula.getLength();
+                                if ( nOpen != -1 && nLen > nOpen )
                                 {
                                     sal_uInt8 nAdd(1);
                                     if (bSubTotal)
@@ -619,8 +619,8 @@ void ScInputWindow::SetTextString( const OUString& rString )
         aTextWindow.SetTextString(rString);
     else
     {
-        String aNew = rString;
-        aNew.Erase(32767);
+        OUString aNew = rString;
+        aNew = aNew.copy(0, 32767);
         aTextWindow.SetTextString(aNew);
     }
 }
@@ -2174,7 +2174,7 @@ void ScPosWnd::FillFunctions()
 {
     Clear();
 
-    String aFirstName;
+    OUString aFirstName;
     const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
     sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
     const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
@@ -2191,7 +2191,7 @@ void ScPosWnd::FillFunctions()
                 if ( pDesc->nFIndex == nId && pDesc->pFuncName )
                 {
                     InsertEntry( *pDesc->pFuncName );
-                    if (!aFirstName.Len())
+                    if (aFirstName.isEmpty())
                         aFirstName = *pDesc->pFuncName;
                     break;  // nicht weitersuchen
                 }
@@ -2237,7 +2237,7 @@ void ScPosWnd::HideTip()
     }
 }
 
-static ScNameInputType lcl_GetInputType( const String& rText )
+static ScNameInputType lcl_GetInputType( const OUString& rText )
 {
     ScNameInputType eRet = SC_NAME_INPUT_BAD_NAME;      // the more general error
 
@@ -2268,7 +2268,7 @@ static ScNameInputType lcl_GetInputType( const String& rText )
         else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
         else if ( comphelper::string::isdigitAsciiString( rText ) &&
-                  ( nNumeric = rText.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
+                  ( nNumeric = rText.toInt32() ) > 0 && nNumeric <= MAXROW+1 )
             eRet = SC_NAME_INPUT_ROW;
         else if ( pDoc->GetTable( rText, nNameTab ) )
             eRet = SC_NAME_INPUT_SHEET;
@@ -2338,7 +2338,7 @@ void ScPosWnd::Modify()
             aPos = pWin->OutputToScreenPixel( aPos );
             Rectangle aRect( aPos, aPos );
 
-            String aText = ScGlobal::GetRscString( nStrId );
+            OUString aText = ScGlobal::GetRscString( nStrId );
             sal_uInt16 nAlign = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
             nTipVisible = Help::ShowTip(pWin, aRect, aText, nAlign);
         }
@@ -2357,8 +2357,8 @@ void ScPosWnd::Select()
 
 void ScPosWnd::DoEnter()
 {
-    String aText = GetText();
-    if ( aText.Len() )
+    OUString aText = GetText();
+    if ( !aText.isEmpty() )
     {
         if ( bFormulaMode )
         {

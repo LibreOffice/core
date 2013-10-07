@@ -206,10 +206,10 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
                             OUString::createFromAscii( pMinDelimiters ) );
 
     sal_Int32 nColon = aDelimiters.indexOf( ':' );
-    if ( nColon != STRING_NOTFOUND )
+    if ( nColon != -1 )
         aDelimiters = aDelimiters.replaceAt( nColon, 1, "");             // Delimiter ohne Doppelpunkt
     sal_Int32 nDot = aDelimiters.indexOf(cSheetSep);
-    if ( nDot != STRING_NOTFOUND )
+    if ( nDot != -1 )
         aDelimiters = aDelimiters.replaceAt( nDot, 1 , "");               // Delimiter ohne Punkt
 
     const sal_Unicode* pChar = rFormula.getStr();
@@ -252,7 +252,7 @@ handle_r1c1:
 
         if ( nPos > nStart )
         {
-            String aTest = rFormula.copy( nStart, nPos-nStart );
+            OUString aTest = rFormula.copy( nStart, nPos-nStart );
             const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
             sal_uInt16 nFlags = aRange.ParseAny( aTest, pDoc, aAddrDetails );
             if ( nFlags & SCA_VALID )
@@ -299,7 +299,7 @@ handle_r1c1:
     }
 }
 
-static void lcl_Replace( EditView* pView, const String& rNewStr, const ESelection& rOldSel )
+static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelection& rOldSel )
 {
     if ( pView )
     {
@@ -334,7 +334,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         aJustified.Justify();           // Ref in der Formel immer richtigherum anzeigen
         ScDocument* pDoc = pDocView->GetViewData()->GetDocument();
         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
-        String aNewStr(aJustified.Format(pData->nFlags, pDoc, aAddrDetails));
+        OUString aNewStr(aJustified.Format(pData->nFlags, pDoc, aAddrDetails));
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
 
         DataChanging();
@@ -346,7 +346,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         DataChanged();
         bInRangeUpdate = false;
 
-        long nDiff = aNewStr.Len() - (long)(nOldEnd-nOldStart);
+        long nDiff = aNewStr.getLength() - (long)(nOldEnd-nOldStart);
 
         pData->aRef = rNew;
         pData->nSelEnd = (xub_StrLen)(pData->nSelEnd + nDiff);
@@ -379,7 +379,7 @@ void ScInputHandler::DeleteRangeFinder()
 
 //==================================================================
 
-inline String GetEditText(EditEngine* pEng)
+inline OUString GetEditText(EditEngine* pEng)
 {
     return ScEditUtil::GetSpaceDelimitedString(*pEng);
 }
@@ -740,8 +740,8 @@ void ScInputHandler::GetFormulaData()
                     const ScFuncDesc* pDesc = pFuncList->GetFunction( j );
                     if ( pDesc->nFIndex == nId && pDesc->pFuncName )
                     {
-                        String aEntry = *pDesc->pFuncName;
-                        aEntry.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
+                        OUString aEntry = *pDesc->pFuncName;
+                        aEntry += "()";
                         pFormulaData->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
                         break;                  // nicht weitersuchen
                     }
@@ -754,7 +754,7 @@ void ScInputHandler::GetFormulaData()
             if ( pDesc->pFuncName )
             {
                 pDesc->initArgumentInfo();
-                String aEntry = pDesc->getSignature();
+                OUString aEntry = pDesc->getSignature();
                 pFormulaDataPara->insert(ScTypedStrData(aEntry, 0.0, ScTypedStrData::Standard));
             }
         }
@@ -813,15 +813,15 @@ void ScInputHandler::ShowTipCursor()
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
     {
-        String aFormula = pEngine->GetText( 0 );
+        OUString aFormula = pEngine->GetText( 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
         if( aSel.nEndPos )
         {
-            if ( aFormula.Len() < aSel.nEndPos )
+            if ( aFormula.getLength() < aSel.nEndPos )
                 return;
             xub_StrLen nPos = aSel.nEndPos;
-            String  aSelText = aFormula.Copy( 0, nPos );
+            OUString  aSelText = aFormula.copy( 0, nPos );
             xub_StrLen  nNextFStart = 0;
             xub_StrLen  nNextFEnd = 0;
             xub_StrLen  nArgPos = 0;
@@ -833,11 +833,11 @@ void ScInputHandler::ShowTipCursor()
 
             while( !bFound )
             {
-                aSelText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
-                xub_StrLen nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
+                aSelText += ")";
+                xub_StrLen nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.getLength()-1 );
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
-                    sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText.GetChar( nLeftParentPos-1 ) : 0;
+                    sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText[ nLeftParentPos-1 ] : 0;
                     if( !(comphelper::string::isalphaAscii(c)) )
                         continue;
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, true);
@@ -858,7 +858,7 @@ void ScInputHandler::ShowTipCursor()
                                 for( sal_uInt16 i=0; i < nArgs; i++ )
                                 {
                                     xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
-                                    if( nArgPos <= aSelText.Len()-1 )
+                                    if( nArgPos <= aSelText.getLength()-1 )
                                     {
                                         nActive = i+1;
                                         bFlag = true;
@@ -955,18 +955,18 @@ void ScInputHandler::ShowTipCursor()
                 else
                 {
                     sal_uInt16 nPosition = 0;
-                    String aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
-                    if( aText.GetChar( aSel.nEndPos-1 ) == '=' )
+                    OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
+                    if( aText[ aSel.nEndPos-1 ] == '=' )
                     {
                         break;
                     }
                     OUString aNew;
-                    nPosition = aText.Len()+1;
+                    nPosition = aText.getLength()+1;
                     ScTypedCaseStrSet::const_iterator it =
                         findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
                     if (it != pFormulaDataPara->end())
                     {
-                        if( aFormula.GetChar( nPosition ) =='(' )
+                        if( aFormula[ nPosition ] =='(' )
                         {
                             ShowTipBelow( aNew );
                             bFound = true;
@@ -1040,7 +1040,7 @@ void ScInputHandler::UseFormulaData()
     //  Formeln duerfen nur 1 Absatz haben
     if ( pActiveView && pFormulaData && pEngine->GetParagraphCount() == 1 )
     {
-        String aTotal = pEngine->GetText( 0 );
+        OUString aTotal = pEngine->GetText( 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
 
@@ -1048,7 +1048,7 @@ void ScInputHandler::UseFormulaData()
         //  (z.B. Clipboard mit Zeilenumbruechen) kann es sein, dass die Selektion
         //  nicht mehr zur EditEngine passt. Dann halt kommentarlos abbrechen:
 
-        if ( aSel.nEndPos > aTotal.Len() )
+        if ( aSel.nEndPos > aTotal.getLength() )
             return;
 
         //  steht der Cursor am Ende eines Wortes?
@@ -1056,7 +1056,7 @@ void ScInputHandler::UseFormulaData()
         if ( aSel.nEndPos > 0 )
         {
             xub_StrLen nPos = aSel.nEndPos;
-            String  aFormula = aTotal.Copy( 0, nPos );;
+            OUString  aFormula = aTotal.copy( 0, nPos );;
             xub_StrLen  nLeftParentPos = 0;
             xub_StrLen  nNextFStart = 0;
             xub_StrLen  nNextFEnd = 0;
@@ -1082,13 +1082,13 @@ void ScInputHandler::UseFormulaData()
 
             while( !bFound )
             {
-                aFormula.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ")" ) );
-                nLeftParentPos = lcl_MatchParenthesis( aFormula, aFormula.Len()-1 );
+                aFormula += ")";
+                nLeftParentPos = lcl_MatchParenthesis( aFormula, aFormula.getLength()-1 );
                 if( nLeftParentPos == STRING_NOTFOUND )
                     break;
 
                 // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
-                sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula.GetChar( nLeftParentPos-1 ) : 0;
+                sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula[ nLeftParentPos-1 ] : 0;
                 if( !(comphelper::string::isalphaAscii(c)) )
                     continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, true);
@@ -1109,7 +1109,7 @@ void ScInputHandler::UseFormulaData()
                             for( sal_uInt16 i=0; i < nArgs; i++ )
                             {
                                 xub_StrLen nLength = static_cast<xub_StrLen>(aArgs[i].getLength());
-                                if( nArgPos <= aFormula.Len()-1 )
+                                if( nArgPos <= aFormula.getLength()-1 )
                                 {
                                     nActive = i+1;
                                     bFlag = true;
@@ -1227,7 +1227,7 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
         pActiveView->ShowCursor();
 }
 
-static void lcl_CompleteFunction( EditView* pView, const String& rInsert, bool& rParInserted )
+static void lcl_CompleteFunction( EditView* pView, const OUString& rInsert, bool& rParInserted )
 {
     if (pView)
     {
@@ -1237,22 +1237,22 @@ static void lcl_CompleteFunction( EditView* pView, const String& rInsert, bool& 
         pView->SetSelection(aSel);
         pView->SelectCurrentWord();
 
-        String aInsStr = rInsert;
-        xub_StrLen nInsLen = aInsStr.Len();
-        bool bDoParen = ( nInsLen > 1 && aInsStr.GetChar(nInsLen-2) == '('
-                                      && aInsStr.GetChar(nInsLen-1) == ')' );
+        OUString aInsStr = rInsert;
+        xub_StrLen nInsLen = aInsStr.getLength();
+        bool bDoParen = ( nInsLen > 1 && aInsStr[nInsLen-2] == '('
+                                      && aInsStr[nInsLen-1] == ')' );
         if ( bDoParen )
         {
             //  Klammern hinter Funktionsnamen nicht einfuegen, wenn direkt dahinter
             //  schon eine Klammer steht (z.B. wenn der Funktionsname geaendert wurde).
 
             ESelection aWordSel = pView->GetSelection();
-            String aOld = pView->GetEditEngine()->GetText(0);
-            sal_Unicode cNext = aOld.GetChar(aWordSel.nEndPos);
+            OUString aOld = pView->GetEditEngine()->GetText(0);
+            sal_Unicode cNext = aOld[aWordSel.nEndPos];
             if ( cNext == '(' )
             {
                 bDoParen = false;
-                aInsStr.Erase( nInsLen - 2 );   // Klammern weglassen
+                aInsStr = aInsStr.copy( 0, nInsLen - 2 );   // Klammern weglassen
             }
         }
 
@@ -1305,7 +1305,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     //!     (Anfuehrungszeichen bei Strings werden nur hier eingefuegt)
 
     if(rFormula.isEmpty())
-        return String();
+        return OUString();
 
     boost::scoped_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( pDoc, rPos, rFormula ) );
 
@@ -1401,7 +1401,7 @@ void ScInputHandler::PasteManualTip()
     {
         DataChanging();                                     // kann nicht neu sein
 
-        String aInsert = aManualTip;
+        OUString aInsert = aManualTip;
         EditView* pActiveView = pTopView ? pTopView : pTableView;
         if (!pActiveView->HasSelection())
         {
@@ -1422,11 +1422,11 @@ void ScInputHandler::PasteManualTip()
             if ( aSel.nEndPos == pEngine->GetTextLen(0) )
             {
                 //  alles selektiert -> Anfuehrungszeichen weglassen
-                if ( aInsert.GetChar(0) == '"' )
-                    aInsert.Erase(0,1);
-                xub_StrLen nInsLen = aInsert.Len();
-                if ( nInsLen && aInsert.GetChar(nInsLen-1) == '"' )
-                    aInsert.Erase( nInsLen-1 );
+                if ( aInsert[0] == '"' )
+                    aInsert = aInsert.copy(1);
+                xub_StrLen nInsLen = aInsert.getLength();
+                if ( nInsLen && aInsert[nInsLen-1] == '"' )
+                    aInsert = aInsert.copy( 0, nInsLen-1 );
             }
             else if ( aSel.nEndPos )
             {
@@ -1471,8 +1471,8 @@ bool ScInputHandler::CursorAtClosingPar()
     {
         ESelection aSel = pActiveView->GetSelection();
         xub_StrLen nPos = aSel.nStartPos;
-        String aFormula = pEngine->GetText(0);
-        if ( nPos < aFormula.Len() && aFormula.GetChar(nPos) == ')' )
+        OUString aFormula = pEngine->GetText(0);
+        if ( nPos < aFormula.getLength() && aFormula[nPos] == ')' )
             return true;
     }
     return false;
@@ -1687,8 +1687,8 @@ void ScInputHandler::UpdateParenthesis()
                 //  Das Zeichen links vom Cursor wird angeschaut
 
                 xub_StrLen nPos = aSel.nStartPos - 1;
-                String aFormula = pEngine->GetText(0);
-                sal_Unicode c = aFormula.GetChar(nPos);
+                OUString aFormula = pEngine->GetText(0);
+                sal_Unicode c = aFormula[nPos];
                 if ( c == '(' || c == ')' )
                 {
                     xub_StrLen nOther = lcl_MatchParenthesis( aFormula, nPos );
@@ -2044,7 +2044,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
             //  Edit-Engine fuellen
 
-            String aStr;
+            OUString aStr;
             if (bTextValid)
             {
                 pEngine->SetText(aCurrentText);
@@ -2055,13 +2055,12 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             else
                 aStr = GetEditText(pEngine);
 
-            if (aStr.Len() > 3 &&                   // Matrix-Formel ?
-                aStr.GetChar(0) == '{' &&
-                aStr.GetChar(1) == '=' &&
-                aStr.GetChar(aStr.Len()-1) == '}')
+            if (aStr.getLength() > 3 &&                   // Matrix-Formel ?
+                aStr[0] == '{' &&
+                aStr[1] == '=' &&
+                aStr[aStr.getLength()-1] == '}')
             {
-                aStr.Erase(0,1);
-                aStr.Erase(aStr.Len()-1,1);
+                aStr = aStr.copy(1, aStr.getLength() -2);
                 pEngine->SetText(aStr);
                 if ( pInputWin )
                     pInputWin->SetTextString(aStr);
@@ -2072,7 +2071,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             if ( bAutoComplete )
                 GetColData();
 
-            if ( ( aStr.GetChar(0) == '=' || aStr.GetChar(0) == '+' || aStr.GetChar(0) == '-' ) &&
+            if ( ( aStr[0] == '=' || aStr[0] == '+' || aStr[0] == '-' ) &&
                  !cTyped && !bCreatingFuncView )
                 InitRangeFinder(aStr);              // Formel wird editiert -> RangeFinder
 
@@ -2449,12 +2448,12 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
 
 //  lcl_IsNumber - true, wenn nur Ziffern (dann keine Autokorrektur)
 
-static bool lcl_IsNumber(const String& rString)
+static bool lcl_IsNumber(const OUString& rString)
 {
-    xub_StrLen nLen = rString.Len();
+    xub_StrLen nLen = rString.getLength();
     for (xub_StrLen i=0; i<nLen; i++)
     {
-        sal_Unicode c = rString.GetChar(i);
+        sal_Unicode c = rString[i];
         if ( c < '0' || c > '9' )
             return false;
     }
@@ -2964,7 +2963,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
     //  String aus Referenz erzeugen
 
-    String aRefStr;
+    OUString aRefStr;
     const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
     if (bOtherDoc)
     {
@@ -2972,15 +2971,15 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
         OSL_ENSURE(rRef.aStart.Tab()==rRef.aEnd.Tab(), "nStartTab!=nEndTab");
 
-        String aTmp(rRef.Format(SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails));      // immer 3d
+        OUString aTmp(rRef.Format(SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails));      // immer 3d
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
-        String aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+        OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
-        aRefStr = '\'';
+        aRefStr = "\'";
         aRefStr += aFileName;
-        aRefStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "'#" ));
+        aRefStr += "'#";
         aRefStr += aTmp;
     }
     else
@@ -3019,9 +3018,9 @@ void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
 
     DataChanging();                         // kann nicht neu sein
 
-    String aText = rFuncName;
+    OUString aText = rFuncName;
     if (bAddPar)
-        aText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
+        aText += "()";
 
     if (pTableView)
     {
@@ -3066,7 +3065,7 @@ void ScInputHandler::ClearText()
 
     DataChanging();                         // darf nicht neu sein
 
-    String aEmpty;
+    OUString aEmpty;
     if (pTableView)
     {
         pTableView->GetEditEngine()->SetText( aEmpty );
@@ -3226,15 +3225,15 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
                     {
-                        String aStrLoP;
+                        OUString aStrLoP;
 
                         if ( bStartEdit && bCellHasPercentFormat && ((nChar >= '0' && nChar <= '9') || nChar == '-') )
-                            aStrLoP = '%';
+                            aStrLoP = "%";
 
                         if (pTableView)
                         {
                             pTableView->GetEditEngine()->SetText( aStrLoP );
-                            if ( aStrLoP.Len() )
+                            if ( !aStrLoP.isEmpty() )
                                 pTableView->SetSelection( ESelection(0,0, 0,0) );   // before the '%'
 
                             // don't call SetSelection if the string is empty anyway,
@@ -3243,7 +3242,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                         if (pTopView)
                         {
                             pTopView->GetEditEngine()->SetText( aStrLoP );
-                            if ( aStrLoP.Len() )
+                            if ( !aStrLoP.isEmpty() )
                                 pTopView->SetSelection( ESelection(0,0, 0,0) );     // before the '%'
                         }
                     }
@@ -3400,7 +3399,7 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
                     if (eMode==SC_INPUT_NONE)
                         if (pTableView || pTopView)
                         {
-                            String aStrLoP;
+                            OUString aStrLoP;
                             if (pTableView)
                             {
                                 pTableView->GetEditEngine()->SetText( aStrLoP );

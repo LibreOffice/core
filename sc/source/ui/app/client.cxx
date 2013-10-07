@@ -56,7 +56,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
 {
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
     SdrOle2Obj* pOle2Obj = NULL;
-    String aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
+    OUString aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
     sal_uInt16 nPages = pModel->GetPageCount();
     for (sal_uInt16 nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)

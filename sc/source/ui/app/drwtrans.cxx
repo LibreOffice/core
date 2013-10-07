@@ -169,8 +169,8 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                 OUString sTmp;
                                 if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                                 {
-                                    String aUrl = sTmp;
-                                    String aAbs;
+                                    OUString aUrl = sTmp;
+                                    OUString aAbs;
                                     const SfxMedium* pMedium;
                                     if (pContainerShell && (pMedium = pContainerShell->GetMedium()) != NULL)
                                     {
@@ -183,13 +183,13 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                         aAbs = aUrl;
 
                                     // Label
-                                    String aLabel;
+                                    OUString aLabel;
                                     if(xInfo->hasPropertyByName( sPropLabel ))
                                     {
                                         aAny = xPropSet->getPropertyValue( sPropLabel );
                                         if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                                         {
-                                            aLabel = String(sTmp);
+                                            aLabel = sTmp;
                                         }
                                     }
                                     pBookmark = new INetBookmark( aAbs, aLabel );
@@ -581,7 +581,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false, false );
 
                     // mba: no relative ULRs for clipboard!
-                    SfxMedium aMedium( xWorkStore, String() );
+                    SfxMedium aMedium( xWorkStore, OUString() );
                     bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
                     pEmbObj->DoSaveCompleted();
 

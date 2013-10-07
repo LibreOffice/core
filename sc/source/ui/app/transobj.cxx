@@ -403,7 +403,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 
                 sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
                 // mba: no BaseURL for data exchange
-                if ( pImpEx->ExportStream( *rxOStm, String(), nFormat ) )
+                if ( pImpEx->ExportStream( *rxOStm, OUString(), nFormat ) )
                     bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
             break;
@@ -449,7 +449,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false, false );
 
                 // mba: no relative ULRs for clipboard!
-                SfxMedium aMedium( xWorkStore, String() );
+                SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
                 pEmbObj->DoSaveCompleted();
 
@@ -660,7 +660,7 @@ void ScTransferObj::InitDocShell()
 
         Size aPaperSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );       // Twips
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
-        String aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
+        OUString aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
         SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
         if (pStyleSheet)
         {
@@ -816,7 +816,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             }
             else
             {
-                String aStr = pFCell->GetString();
+                OUString aStr = pFCell->GetString();
                 if ( pFCell->IsMultilineResult() )
                 {
                     ScFieldEditEngine& rEngine = pDestDoc->GetEditEngine();

@@ -1546,7 +1546,7 @@ void ScModule::InputReplaceSelection( const OUString& rStr )
 OUString ScModule::InputGetFormulaStr()
 {
     ScInputHandler* pHdl = GetInputHdl();
-    String aStr;
+    OUString aStr;
     if ( pHdl )
         aStr = pHdl->GetFormString();
     return aStr;
@@ -2231,7 +2231,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
             ******************************************************************/
 
             const SvxURLField* pURLField = (const SvxURLField*) pField;
-            String aURL = pURLField->GetURL();
+            OUString aURL = pURLField->GetURL();
 
             switch ( pURLField->GetFormat() )
             {
