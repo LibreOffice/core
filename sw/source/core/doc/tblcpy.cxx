@@ -1029,8 +1029,10 @@ static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara );
 static void _FndCntntBox( const SwTableBox* pBox, SwSelBoxes* pPara )
 {
     if( !pBox->GetTabLines().empty() )
+    {
         BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
             _FndCntntLine( pLine, pPara );
+    }
     else
         pPara->insert( (SwTableBox*)pBox );
 }
