@@ -737,7 +737,8 @@ void OHTMLImportExport::WriteBody()
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteBody" );
 
-    IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
+    IncIndent(1);
+    (*m_pStream) << "<" << OOO_STRING_SVTOOLS_HTML_style << " " << OOO_STRING_SVTOOLS_HTML_O_type << "=\"text/css\">";
 
     (*m_pStream) << sMyBegComment; OUT_LF();
     (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body " { " << sFontFamily << '"' << OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() << '\"';

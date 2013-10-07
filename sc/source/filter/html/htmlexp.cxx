@@ -363,7 +363,9 @@ void ScHTMLExport::WriteHeader()
 
     // CSS1 StyleSheet
     PageDefaults( bAll ? 0 : aRange.aStart.Tab() );
-    IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
+    IncIndent(1);
+    rStrm << "<" << OOO_STRING_SVTOOLS_HTML_style << " " << OOO_STRING_SVTOOLS_HTML_O_type << "=\"text/css\">";
+
     rStrm << sMyBegComment; OUT_LF();
     rStrm << OOO_STRING_SVTOOLS_HTML_body << "," << OOO_STRING_SVTOOLS_HTML_division << "," << OOO_STRING_SVTOOLS_HTML_table << ","
         << OOO_STRING_SVTOOLS_HTML_thead << "," << OOO_STRING_SVTOOLS_HTML_tbody << "," << OOO_STRING_SVTOOLS_HTML_tfoot << ","
