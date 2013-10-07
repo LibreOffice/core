@@ -152,7 +152,7 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
     {
         XColorEntry* pEntry = xColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();
-        String sName = pEntry->GetName();
+        OUString sName = pEntry->GetName();
 
         m_pContentColorLB->InsertEntry( aColor, sName );
         m_pMoveColorLB->InsertEntry( aColor, sName );

@@ -392,7 +392,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
 
     for ( sal_uInt16 i = 0; i < aUnitArr.Count(); ++i )
     {
-        String sMetric = aUnitArr.GetStringByPos( i );
+        OUString sMetric = aUnitArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aUnitArr.GetValue( i );
 
         switch ( eFUnit )

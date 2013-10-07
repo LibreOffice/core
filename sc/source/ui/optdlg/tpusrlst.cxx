@@ -267,12 +267,12 @@ sal_uInt16 ScTpUserLists::UpdateUserListBox()
     //----------------------------------------------------------
 
     size_t nCount = pUserLists->size();
-    String  aEntry;
+    OUString  aEntry;
 
     for ( size_t i=0; i<nCount; ++i )
     {
         aEntry = (*pUserLists)[i]->GetString();
-        OSL_ENSURE( aEntry.Len() > 0, "Empty UserList-entry :-/" );
+        OSL_ENSURE( !aEntry.isEmpty(), "Empty UserList-entry :-/" );
         mpLbLists->InsertEntry( aEntry );
     }
 
@@ -291,13 +291,13 @@ void ScTpUserLists::UpdateEntries( size_t nList )
     {
         const ScUserListData* pList = (*pUserLists)[nList];
         sal_uInt16          nSubCount = pList->GetSubCount();
-        String          aEntryListStr;
+        OUString          aEntryListStr;
 
         for ( sal_uInt16 i=0; i<nSubCount; i++ )
         {
             if ( i!=0 )
-                aEntryListStr += CR;
-            aEntryListStr += String(pList->GetSubStr(i));
+                aEntryListStr += OUString(CR);
+            aEntryListStr += pList->GetSubStr(i);
         }
 
         mpEdEntries->SetText(convertLineEnd(aEntryListStr, GetSystemLineEnd()));
@@ -312,19 +312,19 @@ void ScTpUserLists::UpdateEntries( size_t nList )
 
 void ScTpUserLists::MakeListStr( OUString& rListStr )
 {
-    String  aStr;
+    OUString  aStr;
 
     xub_StrLen nToken = comphelper::string::getTokenCount(rListStr, LF);
 
     for(xub_StrLen i=0;i<nToken;i++)
     {
         OUString aString = comphelper::string::strip(rListStr.getToken(i, LF), ' ');
-        aStr+=aString;
-        aStr+=cDelimiter;
+        aStr += aString;
+        aStr += OUString(cDelimiter);
     }
 
     aStr = comphelper::string::strip(aStr, cDelimiter);
-    xub_StrLen nLen = aStr.Len();
+    xub_StrLen nLen = aStr.getLength();
 
     rListStr = "";
 
@@ -332,14 +332,14 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
     xub_StrLen c = 0;
     while ( c < nLen )
     {
-        rListStr += OUString(aStr.GetChar(c));
+        rListStr += OUString(aStr[c]);
         c++;
 
-        if ( aStr.GetChar(c) == cDelimiter )
+        if ( aStr[c] == cDelimiter )
         {
-            rListStr += OUString(aStr.GetChar(c));
+            rListStr += OUString(aStr[c]);
 
-            while ( (aStr.GetChar(c) == cDelimiter) && (c < nLen) )
+            while ( (aStr[c] == cDelimiter) && (c < nLen) )
                 c++;
         }
     }
@@ -388,8 +388,8 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     if ( nCellDir != RET_CANCEL )
     {
-        String  aStrList;
-        String  aStrField;
+        OUString  aStrList;
+        OUString  aStrField;
 
         if ( nCellDir == SCRET_COLS )
         {
@@ -401,18 +401,18 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                     {
                         aStrField = pDoc->GetString(col, row, nTab);
 
-                        if ( aStrField.Len() > 0 )
+                        if ( !aStrField.isEmpty() )
                         {
                             aStrList += aStrField;
-                            aStrList += '\n';
+                            aStrList += "\n";
                         }
                     }
                     else
                         bValueIgnored = sal_True;
                 }
-                if ( aStrList.Len() > 0 )
+                if ( !aStrList.isEmpty() )
                     AddNewList( aStrList );
-                aStrList.Erase();
+                aStrList = "";
             }
         }
         else
@@ -425,18 +425,18 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                     {
                         aStrField = pDoc->GetString(col, row, nTab);
 
-                        if ( aStrField.Len() > 0 )
+                        if ( !aStrField.isEmpty() )
                         {
                             aStrList += aStrField;
-                            aStrList += '\n';
+                            aStrList += "\n";
                         }
                     }
                     else
                         bValueIgnored = sal_True;
                 }
-                if ( aStrList.Len() > 0 )
+                if ( !aStrList.isEmpty() )
                     AddNewList( aStrList );
-                aStrList.Erase();
+                aStrList = "";
             }
         }
 
@@ -572,11 +572,11 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
     }
     else if (pBtn == mpBtnAdd || pBtn == mpBtnModify)
     {
-        String theEntriesStr( mpEdEntries->GetText() );
+        OUString theEntriesStr( mpEdEntries->GetText() );
 
         if ( !bModifyMode )
         {
-            if ( theEntriesStr.Len() > 0 )
+            if ( !theEntriesStr.isEmpty() )
             {
                 AddNewList( theEntriesStr );
                 UpdateUserListBox();
@@ -609,7 +609,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 
             OSL_ENSURE( nSelList != LISTBOX_ENTRY_NOTFOUND, "Modify without List :-/" );
 
-            if ( theEntriesStr.Len() > 0 )
+            if ( !theEntriesStr.isEmpty() )
             {
                 ModifyList( nSelList, theEntriesStr );
                 UpdateUserListBox();
@@ -646,7 +646,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         if ( mpLbLists->GetEntryCount() > 0 )
         {
             sal_uInt16 nRemovePos   = mpLbLists->GetSelectEntryPos();
-            String aMsg         ( aStrQueryRemove.getToken( 0, '#' ) );
+            OUString aMsg         ( aStrQueryRemove.getToken( 0, '#' ) );
 
             aMsg += mpLbLists->GetEntry( nRemovePos );
             aMsg += aStrQueryRemove.getToken( 1, '#' );

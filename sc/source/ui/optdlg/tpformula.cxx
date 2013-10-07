@@ -172,8 +172,8 @@ bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
 bool ScTpFormulaOptions::IsValidSeparatorSet() const
 {
     // Make sure the column and row separators are different.
-    String aColStr = mpEdSepArrayCol->GetText();
-    String aRowStr = mpEdSepArrayRow->GetText();
+    OUString aColStr = mpEdSepArrayCol->GetText();
+    OUString aRowStr = mpEdSepArrayRow->GetText();
     if (aColStr == aRowStr)
         return false;
 
@@ -199,12 +199,12 @@ IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit*, pEdit )
     if (!pEdit)
         return 0;
 
-    String aStr = pEdit->GetText();
-    if (aStr.Len() > 1)
+    OUString aStr = pEdit->GetText();
+    if (aStr.getLength() > 1)
     {
         // In case the string is more than one character long, only grab the
         // first character.
-        aStr = aStr.Copy(0, 1);
+        aStr = aStr.copy(0, 1);
         pEdit->SetText(aStr);
     }
 
