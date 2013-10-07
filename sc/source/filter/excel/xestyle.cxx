@@ -2251,7 +2251,7 @@ const sal_uInt32 EXC_XFLIST_INDEXBASE   = 0xFFFE0000;
 /** Maximum count of XF records to store in the XF list (performance). */
 const sal_uInt32 EXC_XFLIST_HARDLIMIT   = 256 * 1024;
 
-bool lclIsBuiltInStyle( const String& rStyleName )
+bool lclIsBuiltInStyle( const OUString& rStyleName )
 {
     return
         XclTools::IsBuiltInStyleName( rStyleName ) ||

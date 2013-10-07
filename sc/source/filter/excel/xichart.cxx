@@ -1104,8 +1104,8 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
     // create API struct for label values, set API label separator
     cssc2::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
     rPropSet.SetProperty( EXC_CHPROP_LABEL, aPointLabel );
-    String aSep = mxLabelProps ? mxLabelProps->maSeparator : OUString('\n');
-    if( aSep.Len() == 0 )
+    OUString aSep = mxLabelProps ? mxLabelProps->maSeparator : OUString('\n');
+    if( aSep.isEmpty() )
         aSep = "; ";
     rPropSet.SetStringProperty( EXC_CHPROP_LABELSEPARATOR, aSep );
 
@@ -1245,7 +1245,7 @@ void lclUpdateText( XclImpChTextRef& rxText, const XclImpChText* xDefText )
     }
 }
 
-void lclFinalizeTitle( XclImpChTextRef& rxTitle, const XclImpChText* pDefText, const String& rAutoTitle )
+void lclFinalizeTitle( XclImpChTextRef& rxTitle, const XclImpChText* pDefText, const OUString& rAutoTitle )
 {
     /*  Do not update a title, if it is not visible (if rxTitle is null).
         Existing reference indicates enabled title. */
@@ -3557,7 +3557,7 @@ void XclImpChAxesSet::Finalize()
 
         // finalize axis titles
         const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
-        String aAutoTitle("Axis Title");
+        OUString aAutoTitle("Axis Title");
         lclFinalizeTitle( mxXAxisTitle, pDefText, aAutoTitle );
         lclFinalizeTitle( mxYAxisTitle, pDefText, aAutoTitle );
         lclFinalizeTitle( mxZAxisTitle, pDefText, aAutoTitle );
@@ -4145,17 +4145,17 @@ void XclImpChChart::FinalizeDataFormats()
 void XclImpChChart::FinalizeTitle()
 {
     // special handling for auto-generated title
-    String aAutoTitle;
+    OUString aAutoTitle;
     if( !mxTitle || (!mxTitle->IsDeleted() && !mxTitle->HasString()) )
     {
         // automatic title from first series name (if there are no series on secondary axes set)
         if( !mxSecnAxesSet->IsValidAxesSet() )
             aAutoTitle = mxPrimAxesSet->GetSingleSeriesTitle();
-        if( mxTitle || (aAutoTitle.Len() > 0) )
+        if( mxTitle || (!aAutoTitle.isEmpty()) )
         {
             if( !mxTitle )
                 mxTitle.reset( new XclImpChText( GetChRoot() ) );
-            if( aAutoTitle.Len() == 0 )
+            if( aAutoTitle.isEmpty() )
                 aAutoTitle = "Chart Title";
         }
     }

@@ -130,8 +130,8 @@ private:
     XclImpSupbookTabList maSupbTabList;     /// All sheet names of the document.
     XclImpExtNameList   maExtNameList;      /// All external names of the document.
     OUString            maXclUrl;           /// URL of the external document (Excel mode).
-    String              maFilterName;       /// Detected filer name.
-    String              maFilterOpt;        /// Detected filer options.
+    OUString            maFilterName;       /// Detected filer name.
+    OUString            maFilterOpt;        /// Detected filer options.
     XclSupbookType      meType;             /// Type of the supbook record.
     sal_uInt16          mnSBTab;            /// Current Excel sheet index from SUPBOOK for XCT/CRN records.
 };
@@ -514,7 +514,7 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
                 break;
                 case SC_MATVAL_STRING:
                 {
-                    const String& rStr = aVal.GetString();
+                    const OUString& rStr = aVal.GetString();
                     ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
                     xTab->setCell(nCol, nRow, pToken, 0, false);
                 }
@@ -646,7 +646,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
         meType = EXC_SBTYPE_EXTERN;
         for( sal_uInt16 nSBTab = 0; nSBTab < nSBTabCnt; ++nSBTab )
         {
-            String aTabName( rStrm.ReadUniString() );
+            OUString aTabName( rStrm.ReadUniString() );
             maSupbTabList.push_back( new XclImpSupbookTab( aTabName ) );
         }
     }
@@ -719,14 +719,14 @@ void XclImpSupbook::LoadCachedValues()
     if (meType != EXC_SBTYPE_EXTERN || GetExtDocOptions().GetDocSettings().mnLinkCnt > 0 || !GetDocShell())
         return;
 
-    String aAbsUrl( ScGlobal::GetAbsDocName(maXclUrl, GetDocShell()) );
+    OUString aAbsUrl( ScGlobal::GetAbsDocName(maXclUrl, GetDocShell()) );
 
     ScExternalRefManager* pRefMgr = GetRoot().GetDoc().GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aAbsUrl);
 
     for (XclImpSupbookTabList::iterator itTab = maSupbTabList.begin(); itTab != maSupbTabList.end(); ++itTab)
     {
-        const String& rTabName = itTab->GetTabName();
+        const OUString& rTabName = itTab->GetTabName();
         ScExternalRefCache::TableTypeRef pCacheTable = pRefMgr->getCacheTable(nFileId, rTabName, true);
         itTab->LoadCachedValues(pCacheTable);
         pCacheTable->setWholeTableCached();

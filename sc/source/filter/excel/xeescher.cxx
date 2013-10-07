@@ -541,7 +541,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     // meta file
     //! TODO - needs check
     Reference< XPropertySet > xShapePS( xShape, UNO_QUERY );
-    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, String( "MetaFile" ), false ) )
+    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, OUString( "MetaFile" ), false ) )
     {
         sal_uInt32 nBlipId;
         if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )
@@ -690,7 +690,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     //Export description as alt text
     if( SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape ) )
     {
-        String  aAltTxt( pSdrObj->GetDescription(), 0, MSPROP_DESCRIPTION_MAX_LEN );
+        OUString  aAltTxt = pSdrObj->GetDescription().copy( 0, MSPROP_DESCRIPTION_MAX_LEN );
         aPropOpt.AddOpt( ESCHER_Prop_wzDescription, aAltTxt );
     }
 
@@ -1214,7 +1214,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     mbVisible( pScNote && pScNote->IsCaptionShown() )
 {
     // get the main note text
-    String aNoteText;
+    OUString aNoteText;
     if( pScNote )
     {
         aNoteText = pScNote->GetText();
@@ -1404,8 +1404,8 @@ void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
 bool
 XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxEventType& nEventType )
 {
-    String aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, nEventType, GetDocShell() );
-    if( aMacroName.Len() )
+    OUString aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, nEventType, GetDocShell() );
+    if( !aMacroName.isEmpty() )
     {
         return SetMacroLink( aMacroName );
     }

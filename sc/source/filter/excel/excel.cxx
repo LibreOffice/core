@@ -151,7 +151,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     if( xRootStrg->GetError() ) return eERR_OPEN;
 
     // create BIFF dependent strings
-    String aStrmName, aClipName, aClassName;
+    OUString aStrmName, aClipName, aClassName;
     if( bBiff8 )
     {
         aStrmName = EXC_STREAM_WORKBOOK;

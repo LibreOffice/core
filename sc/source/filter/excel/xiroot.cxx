@@ -280,8 +280,8 @@ void XclImpRoot::ReadCodeName( XclImpStream& rStrm, bool bGlobals )
 {
     if( mrImpData.mbHasBasic && (GetBiff() == EXC_BIFF8) )
     {
-        String aName = rStrm.ReadUniString();
-        if( aName.Len() > 0 )
+        OUString aName = rStrm.ReadUniString();
+        if( !aName.isEmpty() )
         {
             if( bGlobals )
             {

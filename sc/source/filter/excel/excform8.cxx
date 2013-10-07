@@ -98,7 +98,7 @@ bool ExcelToSc8::GetExternalFileIdFromXti( sal_uInt16 nIxti, sal_uInt16& rFileId
     if (!pFileUrl || pFileUrl->isEmpty() || !GetDocShell())
         return false;
 
-    String aFileUrl = ScGlobal::GetAbsDocName(*pFileUrl, GetDocShell());
+    OUString aFileUrl = ScGlobal::GetAbsDocName(*pFileUrl, GetDocShell());
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
     rFileId = pRefMgr->getExternalFileId(aFileUrl);
 
@@ -164,7 +164,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( String( "-/-" ) );
+        aPool.Store( OUString( "-/-" ) );
         aPool >> aStack;
         rpTokArray = aPool[ aStack.Get() ];
         return ConvOK;
@@ -711,7 +711,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                         case xlExtEuroConvert:
                             {
-                                aStack << aPool.Store( ocEuroConvert, String() );
+                                aStack << aPool.Store( ocEuroConvert, OUString() );
                             }
                         break;
                         case xlExtOLE:
@@ -1260,7 +1260,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     if( !GetDocShell() )
         return ConvErrNi;
 
-    String aFileUrl = ScGlobal::GetAbsDocName(rUrl, GetDocShell());
+    OUString aFileUrl = ScGlobal::GetAbsDocName(rUrl, GetDocShell());
 
     sal_uInt8               nOp, nByte;
     bool                    bError = false;
@@ -1334,7 +1334,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
                 aSRD.SetFlag3D(true);
                 ExcRelToScRel8(nRow, nGrbitCol, aSRD, true);
                 aCRD.Ref1 = aCRD.Ref2 = aSRD;
-                String aTabName = rTabNames[nExtTab1];
+                OUString aTabName = rTabNames[nExtTab1];
 
                 if (nExtTab1 == nExtTab2)
                 {
@@ -1365,7 +1365,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
                 rR2.SetFlag3D(true);
                 ExcRelToScRel8(nRow2, nGrbitCol2, rR2, true);
 
-                String aTabName = rTabNames[nExtTab1];
+                OUString aTabName = rTabNames[nExtTab1];
                 aStack << aPool.StoreExtRef(nFileId, aTabName, aCRD);
             }
             break;

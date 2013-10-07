@@ -350,7 +350,7 @@ namespace {
         The new string object.
  */
 XclExpStringRef lclCreateFormattedString(
-        const XclExpRoot& rRoot, const String& rText, const ScPatternAttr* pCellAttr,
+        const XclExpRoot& rRoot, const OUString& rText, const ScPatternAttr* pCellAttr,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     /*  Create an empty Excel string object with correctly initialized BIFF mode,
@@ -441,7 +441,7 @@ XclExpStringRef lclCreateFormattedString(
     for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
     {
         ESelection aSel( nPara, 0 );
-        String aParaText( rEE.GetText( nPara ) );
+        OUString aParaText( rEE.GetText( nPara ) );
 
         std::vector<sal_uInt16> aPosList;
         rEE.GetPortions( nPara, aPosList );
@@ -450,7 +450,7 @@ XclExpStringRef lclCreateFormattedString(
         for( std::vector<sal_uInt16>::const_iterator it(aPosList.begin()); it != aPosList.end(); ++it )
         {
             aSel.nEndPos = static_cast< xub_StrLen >( *it );
-            String aXclPortionText( aParaText, aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
+            OUString aXclPortionText = aParaText.copy( aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
             aItemSet.ClearItem();
             SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
@@ -479,7 +479,7 @@ XclExpStringRef lclCreateFormattedString(
                     else
                     {
                         OSL_FAIL( "lclCreateFormattedString - unknown text field" );
-                        aXclPortionText.Erase();
+                        aXclPortionText = "";
                     }
                 }
             }
@@ -488,7 +488,7 @@ XclExpStringRef lclCreateFormattedString(
             sal_uInt16 nXclPortionStart = xString->Len();
             // add portion text to Excel string
             XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
-            if( (nXclPortionStart < xString->Len()) || (aParaText.Len() == 0) )
+            if( (nXclPortionStart < xString->Len()) || (aParaText.isEmpty()) )
             {
                 /*  Construct font from current edit engine text portion. Edit engine
                     creates different portions for different script types, no need to loop. */
@@ -683,7 +683,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 {
     if( !pTextObj ) return;
 
-    String aText;
+    OUString aText;
     sal_Int32 nHeight = 0;
     SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
@@ -847,13 +847,13 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 }
                 else
                 {
-                    String aPortionText( mrEE.GetText( aSel ) );
-                    aPortionText.SearchAndReplaceAll( OUString('&'), OUString("&&") );
+                    OUString aPortionText( mrEE.GetText( aSel ) );
+                    aPortionText = aPortionText.replaceAll( "&", "&&" );
                     // #i17440# space between font height and numbers in text
-                    if( bFontHtChanged && aParaText.getLength() && aPortionText.Len() )
+                    if( bFontHtChanged && aParaText.getLength() && !aPortionText.isEmpty() )
                     {
                         sal_Unicode cLast = aParaText[ aParaText.getLength() - 1 ];
-                        sal_Unicode cFirst = aPortionText.GetChar( 0 );
+                        sal_Unicode cFirst = aPortionText[0];
                         if( ('0' <= cLast) && (cLast <= '9') && ('0' <= cFirst) && (cFirst <= '9') )
                             aParaText += " ";
                     }
@@ -872,7 +872,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
     mrEE.SetUpdateMode( bOldUpdateMode );
 
-    if( aText.Len() )
+    if( !aText.isEmpty() )
     {
         maHFString += "&" + OUString(cPortionCode) + aText;
         mnTotalHeight = ::std::max( mnTotalHeight, nHeight );

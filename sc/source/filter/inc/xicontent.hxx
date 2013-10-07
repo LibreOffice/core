@@ -86,7 +86,7 @@ public:
 
     /** Convert the sheet name with invalid character(s) in URL when the URL is
         to a location within the same document (e.g. #'Sheet&Name'.A1). */
-    static void         ConvertToValidTabName(String& rName);
+    static void         ConvertToValidTabName(OUString& rName);
 
 private:
     /** We don't want anybody to instantiate this class, since it is just a

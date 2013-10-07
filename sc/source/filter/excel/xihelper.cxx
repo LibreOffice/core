@@ -286,8 +286,8 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
 
     // parser temporaries
     maCurrText = "";
-    String aReadFont;           // current font name
-    String aReadStyle;          // current font style
+    OUString aReadFont;           // current font name
+    OUString aReadStyle;          // current font style
     sal_uInt16 nReadHeight = 0; // current font height
     ResetFontData();
 
@@ -385,8 +385,8 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                     break;
 
                     case '\"':          // font name
-                        aReadFont.Erase();
-                        aReadStyle.Erase();
+                        aReadFont = "";
+                        aReadStyle = "";
                         eState = xlPSFont;
                     break;
                     default:
@@ -412,7 +412,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         eState = xlPSFontStyle;
                     break;
                     default:
-                        aReadFont += *pChar;
+                        aReadFont += OUString(*pChar);
                 }
             }
             break;
@@ -425,13 +425,13 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                 {
                     case '\"':
                         SetAttribs();
-                        if( aReadFont.Len() )
+                        if( !aReadFont.isEmpty() )
                             mxFontData->maName = aReadFont;
                         mxFontData->maStyle = aReadStyle;
                         eState = xlPSText;
                     break;
                     default:
-                        aReadStyle += *pChar;
+                        aReadStyle += OUString(*pChar);
                 }
             }
             break;
@@ -625,9 +625,9 @@ void XclImpUrlHelper::DecodeUrl(
     rbSameWb = false;
 
     sal_Unicode cCurrDrive = 0;
-    String aDosBase( INetURLObject( rRoot.GetBasePath() ).getFSysPath( INetURLObject::FSYS_DOS ) );
-    if( (aDosBase.Len() > 2) && aDosBase.EqualsAscii( ":\\", 1, 2 ) )
-        cCurrDrive = aDosBase.GetChar( 0 );
+    OUString aDosBase( INetURLObject( rRoot.GetBasePath() ).getFSysPath( INetURLObject::FSYS_DOS ) );
+    if( (aDosBase.getLength() > 2) && aDosBase.copy(1,2).equalsAscii( ":\\" ) )
+        cCurrDrive = aDosBase[0];
 
     const sal_Unicode* pChar = rEncodedUrl.getStr();
     while( *pChar )

@@ -78,7 +78,7 @@
 
 using namespace oox;
 
-static String lcl_GetVbaTabName( SCTAB n )
+static OUString lcl_GetVbaTabName( SCTAB n )
 {
     OUString aRet = "__VBA__"  + OUString::number( static_cast<sal_uInt16>(n) );
     return aRet;
@@ -225,8 +225,8 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         if( HasVbaStorage() )
         {
             Add( new XclObproj );
-            const String& rCodeName = GetExtDocOptions().GetDocSettings().maGlobCodeName;
-            if( rCodeName.Len() )
+            const OUString& rCodeName = GetExtDocOptions().GetDocSettings().maGlobCodeName;
+            if( !rCodeName.isEmpty() )
                 Add( new XclCodename( rCodeName ) );
         }
     }
@@ -674,7 +674,7 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
     if (GetTabInfo().IsExportTab( mnScTab ) )
     {
         // worksheet export
-        String sSheetName = XclXmlUtils::GetStreamName( "xl/", "worksheets/sheet", mnScTab+1 );
+        OUString sSheetName = XclXmlUtils::GetStreamName( "xl/", "worksheets/sheet", mnScTab+1 );
 
         sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetStreamForPath( sSheetName );
 

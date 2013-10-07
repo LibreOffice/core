@@ -109,15 +109,15 @@ typedef ::std::vector< XclExpOperandListRef > XclExpOperandListVector;
 /** Encapsulates all data needed for a call to an external function (macro, add-in). */
 struct XclExpExtFuncData
 {
-    String              maFuncName;         /// Name of the function.
+    OUString            maFuncName;         /// Name of the function.
     bool                mbVBasic;           /// True = Visual Basic macro call.
     bool                mbHidden;           /// True = Create hidden defined name.
 
     inline explicit     XclExpExtFuncData() : mbVBasic( false ), mbHidden( false ) {}
-    void                Set( const String& rFuncName, bool bVBasic, bool bHidden );
+    void                Set( const OUString& rFuncName, bool bVBasic, bool bHidden );
 };
 
-void XclExpExtFuncData::Set( const String& rFuncName, bool bVBasic, bool bHidden )
+void XclExpExtFuncData::Set( const OUString& rFuncName, bool bVBasic, bool bHidden )
 {
     maFuncName = rFuncName;
     mbVBasic = bVBasic;
@@ -178,7 +178,7 @@ XclExpFuncData::XclExpFuncData( const XclExpScToken& rTokData,
 {
     OSL_ENSURE( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
     // set name of an add-in function
-    if( (maExtFuncData.maFuncName.Len() == 0) && dynamic_cast< const FormulaExternalToken* >( mrTokData.mpScToken ) )
+    if( (maExtFuncData.maFuncName.isEmpty()) && dynamic_cast< const FormulaExternalToken* >( mrTokData.mpScToken ) )
         maExtFuncData.Set( GetScToken().GetExternal(), true, false );
 }
 
@@ -417,7 +417,7 @@ private:
     void                Append( sal_uInt16 nData );
     void                Append( sal_uInt32 nData );
     void                Append( double fData );
-    void                Append( const String& rString );
+    void                Append( const OUString& rString );
 
     void                AppendAddress( const XclAddress& rXclPos );
     void                AppendRange( const XclRange& rXclRange );
@@ -431,7 +431,7 @@ private:
     void                AppendErrorToken( sal_uInt8 nErrCode, sal_uInt8 nSpaces = 0 );
     void                AppendMissingToken( sal_uInt8 nSpaces = 0 );
     void                AppendNameToken( sal_uInt16 nNameIdx, sal_uInt8 nSpaces = 0 );
-    void                AppendMissingNameToken( const String& rName, sal_uInt8 nSpaces = 0 );
+    void                AppendMissingNameToken( const OUString& rName, sal_uInt8 nSpaces = 0 );
     void                AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nSpaces = 0 );
     void                AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces = 0 );
     void                AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces = 0 );
@@ -458,7 +458,7 @@ private:
     void                AppendExt( sal_uInt8 nData, size_t nCount );
     void                AppendExt( sal_uInt16 nData );
     void                AppendExt( double fData );
-    void                AppendExt( const String& rString );
+    void                AppendExt( const OUString& rString );
 
     // ------------------------------------------------------------------------
 private:
@@ -1226,7 +1226,7 @@ void XclExpFmlaCompImpl::ProcessBoolean( const XclExpScToken& rTokData )
 
 namespace {
 
-inline bool lclGetTokenString( String& rString, const XclExpScToken& rTokData )
+inline bool lclGetTokenString( OUString& rString, const XclExpScToken& rTokData )
 {
     bool bIsStr = (rTokData.GetType() == svString) && (rTokData.GetOpCode() == ocPush);
     if( bIsStr )
@@ -1238,7 +1238,7 @@ inline bool lclGetTokenString( String& rString, const XclExpScToken& rTokData )
 
 void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpScToken& rTokData )
 {
-    String aApplic, aTopic, aItem;
+    OUString aApplic, aTopic, aItem;
 
     mxData->mbOk = GetNextToken().GetOpCode() == ocOpen;
     if( mxData->mbOk ) mxData->mbOk = lclGetTokenString( aApplic, GetNextToken() );
@@ -1247,7 +1247,7 @@ void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpScToken& rTokData )
     if( mxData->mbOk ) mxData->mbOk = GetNextToken().GetOpCode() == ocSep;
     if( mxData->mbOk ) mxData->mbOk = lclGetTokenString( aItem, GetNextToken() );
     if( mxData->mbOk ) mxData->mbOk = GetNextToken().GetOpCode() == ocClose;
-    if( mxData->mbOk ) mxData->mbOk = aApplic.Len() && aTopic.Len() && aItem.Len();
+    if( mxData->mbOk ) mxData->mbOk = !aApplic.isEmpty() && !aTopic.isEmpty() && !aItem.isEmpty();
     if( mxData->mbOk )
     {
         sal_uInt16 nExtSheet(0), nExtName(0);
@@ -1318,8 +1318,8 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
                 }
                 else    // string or empty
                 {
-                    const String& rStr = nMatVal.GetString();
-                    if( rStr.Len() == 0 )
+                    const OUString& rStr = nMatVal.GetString();
+                    if( rStr.isEmpty() )
                     {
                         AppendExt( EXC_CACHEDVAL_EMPTY );
                         AppendExt( 0, 8 );
@@ -1350,8 +1350,8 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpScToken& rTokData )
     // no exportable function found - try to create an external macro call
     if( !pFuncInfo && (eOpCode >= SC_OPCODE_START_NO_PAR) )
     {
-        const String& rFuncName = ScCompiler::GetNativeSymbol( eOpCode );
-        if( rFuncName.Len() )
+        const OUString& rFuncName = ScCompiler::GetNativeSymbol( eOpCode );
+        if( !rFuncName.isEmpty() )
         {
             aExtFuncData.Set( rFuncName, true, false );
             pFuncInfo = maFuncProv.GetFuncInfoFromOpCode( ocMacro );
@@ -2017,7 +2017,7 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
 
         // store external cell contents in CRN records
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        const String& rTabName = rTokData.mpScToken->GetString();
+        const OUString& rTabName = rTokData.mpScToken->GetString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCell(nFileId, rTabName, aRefData.toAbs(*mxData->mpScBasePos));
 
@@ -2053,7 +2053,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 
         // store external cell contents in CRN records
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        const String& rTabName = rTokData.mpScToken->GetString();
+        const OUString& rTabName = rTokData.mpScToken->GetString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCellRange(nFileId, rTabName, aRefData.toAbs(*mxData->mpScBasePos));
 
@@ -2117,7 +2117,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
     {
         ScExternalRefManager& rExtRefMgr = *GetDoc().GetExternalRefManager();
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        const String& rName = rTokData.mpScToken->GetString();
+        const OUString& rName = rTokData.mpScToken->GetString();
         ScExternalRefCache::TokenArrayRef xArray = rExtRefMgr.getRangeNameTokens( nFileId, rName );
         if( xArray.get() )
         {
@@ -2214,7 +2214,7 @@ inline void lclAppend( ScfUInt8Vec& orVector, double fData )
     DoubleToSVBT64( fData, &*(orVector.end() - 8) );
 }
 
-inline void lclAppend( ScfUInt8Vec& orVector, const XclExpRoot& rRoot, const String& rString, XclStrFlags nStrFlags )
+inline void lclAppend( ScfUInt8Vec& orVector, const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nStrFlags )
 {
     XclExpStringRef xXclStr = XclExpStringHelper::CreateString( rRoot, rString, nStrFlags, EXC_TOK_STR_MAXLEN );
     size_t nSize = orVector.size();
@@ -2249,7 +2249,7 @@ void XclExpFmlaCompImpl::Append( double fData )
     lclAppend( mxData->maTokVec, fData );
 }
 
-void XclExpFmlaCompImpl::Append( const String& rString )
+void XclExpFmlaCompImpl::Append( const OUString& rString )
 {
     lclAppend( mxData->maTokVec, GetRoot(), rString, EXC_STR_8BITLENGTH );
 }
@@ -2338,7 +2338,7 @@ void XclExpFmlaCompImpl::AppendNameToken( sal_uInt16 nNameIdx, sal_uInt8 nSpaces
         AppendErrorToken( EXC_ERR_NAME );
 }
 
-void XclExpFmlaCompImpl::AppendMissingNameToken( const String& rName, sal_uInt8 nSpaces )
+void XclExpFmlaCompImpl::AppendMissingNameToken( const OUString& rName, sal_uInt8 nSpaces )
 {
     sal_uInt16 nNameIdx = GetNameManager().InsertRawName( rName );
     AppendNameToken( nNameIdx, nSpaces );
@@ -2536,7 +2536,7 @@ void XclExpFmlaCompImpl::AppendExt( double fData )
     lclAppend( mxData->maExtDataVec, fData );
 }
 
-void XclExpFmlaCompImpl::AppendExt( const String& rString )
+void XclExpFmlaCompImpl::AppendExt( const OUString& rString )
 {
     lclAppend( mxData->maExtDataVec, GetRoot(), rString, (meBiff == EXC_BIFF8) ? EXC_STR_DEFAULT : EXC_STR_8BITLENGTH );
 }

@@ -232,7 +232,7 @@ ExcScenario::~ExcScenario()
 void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
-    String              aSzenName( *pName );
+    OUString            aSzenName( *pName );
     sal_uInt16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
@@ -247,7 +247,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
     {
         sal_uInt16 nCol = iter->nCol;
         sal_uInt16 nRow = iter->nRow;
-        String aVal = iter->GetValue();
+        OUString aVal = iter->GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );
 

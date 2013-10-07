@@ -2069,12 +2069,12 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
 {
     if( maTextData.mxString )
     {
-        String aLabel = maTextData.mxString->GetText();
+        OUString aLabel = maTextData.mxString->GetText();
         if( maTextData.maData.mnShortcut > 0 )
         {
-            xub_StrLen nPos = aLabel.Search( static_cast< sal_Unicode >( maTextData.maData.mnShortcut ) );
-            if( nPos != STRING_NOTFOUND )
-                aLabel.Insert( '~', nPos );
+            sal_Int32 nPos = aLabel.indexOf( static_cast< sal_Unicode >( maTextData.maData.mnShortcut ) );
+            if( nPos != -1 )
+                aLabel = aLabel.replaceAt( nPos, 0, "~" );
         }
         rPropSet.SetStringProperty( "Label", aLabel );
 
@@ -2883,13 +2883,13 @@ XclImpPictureObj::XclImpPictureObj( const XclImpRoot& rRoot ) :
 
 String XclImpPictureObj::GetOleStorageName() const
 {
-    String aStrgName;
+    OUString aStrgName;
     if( (mbEmbedded || mbLinked) && !mbControl && (mnStorageId > 0) )
     {
         aStrgName = mbEmbedded ? EXC_STORAGE_OLE_EMBEDDED : EXC_STORAGE_OLE_LINKED;
         static const sal_Char spcHexChars[] = "0123456789ABCDEF";
         for( sal_uInt8 nIndex = 32; nIndex > 0; nIndex -= 4 )
-            aStrgName.Append( sal_Unicode( spcHexChars[ ::extract_value< sal_uInt8 >( mnStorageId, nIndex - 4, 4 ) ] ) );
+            aStrgName += OUString( sal_Unicode( spcHexChars[ ::extract_value< sal_uInt8 >( mnStorageId, nIndex - 4, 4 ) ] ) );
     }
     return aStrgName;
 }
@@ -3300,7 +3300,7 @@ XclImpDffConverter::~XclImpDffConverter()
 String XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId )
 {
     OUString sOleName;
-    String sCodeName = GetExtDocOptions().GetCodeName( nTab );
+    OUString sCodeName = GetExtDocOptions().GetCodeName( nTab );
 
     if (mxOleCtrlNameOverride.is() && mxOleCtrlNameOverride->hasByName(sCodeName))
     {
@@ -3459,8 +3459,8 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
         {
             SfxObjectShell* pDocShell = GetDocShell();
             SotStorageRef xSrcStrg = GetRootStorage();
-            String aStrgName = rPicObj.GetOleStorageName();
-            if( pDocShell && xSrcStrg.Is() && (aStrgName.Len() > 0) )
+            OUString aStrgName = rPicObj.GetOleStorageName();
+            if( pDocShell && xSrcStrg.Is() && (!aStrgName.isEmpty()) )
             {
                 // first try to resolve graphic from DFF storage
                 Graphic aGraphic;
@@ -3558,8 +3558,8 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
         return 0;   // simply return, xSdrObj will be destroyed
 
     // set shape information from DFF stream
-    String aObjName = GetPropertyString( DFF_Prop_wzName, rDffStrm );
-    String aHyperlink = ReadHlinkProperty( rDffStrm );
+    OUString aObjName = GetPropertyString( DFF_Prop_wzName, rDffStrm );
+    OUString aHyperlink = ReadHlinkProperty( rDffStrm );
     bool bVisible = !GetPropertyBool( DFF_Prop_fHidden );
     bool bAutoMargin = GetPropertyBool( DFF_Prop_AutoTextMargin );
     xDrawObj->SetDffData( rDffObjData, aObjName, aHyperlink, bVisible, bAutoMargin );
@@ -3681,7 +3681,7 @@ String XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
         implemented in class XclImpHyperlink. This function has to create an
         instance of the XclImpStream class to be able to reuse the
         functionality of XclImpHyperlink. */
-    String aString;
+    OUString aString;
     sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape );
     if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rDffStrm ) )
     {
@@ -4169,7 +4169,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
     if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
     {
         sal_uInt16 nPartLen = ::std::min( nTotalLen, static_cast< sal_uInt16 >( rStrm.GetRecLeft() ) );
-        String aNoteText = rStrm.ReadRawByteString( nPartLen );
+        OUString aNoteText = rStrm.ReadRawByteString( nPartLen );
         nTotalLen = nTotalLen - nPartLen;
         while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
         {
@@ -4178,7 +4178,7 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
             if( aXclPos.mnRow == 0xFFFF )
             {
                 OSL_ENSURE( nPartLen <= nTotalLen, "XclImpObjectManager::ReadNote3 - string too long" );
-                aNoteText.Append( rStrm.ReadRawByteString( nPartLen ) );
+                aNoteText += rStrm.ReadRawByteString( nPartLen );
                 nTotalLen = nTotalLen - ::std::min( nTotalLen, nPartLen );
             }
             else

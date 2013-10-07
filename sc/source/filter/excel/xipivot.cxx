@@ -406,8 +406,8 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
 {
     if( const XclImpPCField* pBaseField = GetGroupBaseField() )
     {
-        const String& rBaseFieldName = pBaseField->GetFieldName( rVisNames );
-        if( rBaseFieldName.Len() > 0 )
+        const OUString& rBaseFieldName = pBaseField->GetFieldName( rVisNames );
+        if( !rBaseFieldName.isEmpty() )
         {
             // *** create a ScDPSaveGroupItem for each own item, they collect base item names ***
             ScDPSaveGroupItemVec aGroupItems;
@@ -469,8 +469,8 @@ void XclImpPCField::ConvertDateGroupField( ScDPSaveData& rSaveData, const ScfStr
         {
             if( const XclImpPCField* pBaseField = GetGroupBaseField() )
             {
-                const String& rBaseFieldName = pBaseField->GetFieldName( rVisNames );
-                if( rBaseFieldName.Len() > 0 )
+                const OUString& rBaseFieldName = pBaseField->GetFieldName( rVisNames );
+                if( !rBaseFieldName.isEmpty() )
                 {
                     ScDPSaveGroupDimension aGroupDim( rBaseFieldName, GetFieldName( rVisNames ) );
                     aGroupDim.SetDateInfo( aDateInfo, nScDateType );
@@ -1074,8 +1074,8 @@ static OUString lcl_convertExcelSubtotalName(const OUString& rName)
 
 ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
 {
-    const String& rFieldName = GetFieldName();
-    if( rFieldName.Len() == 0 )
+    const OUString& rFieldName = GetFieldName();
+    if( rFieldName.isEmpty() )
         return 0;
 
     const XclImpPCField* pCacheField = GetCacheField();

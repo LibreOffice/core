@@ -471,7 +471,7 @@ void XclExpPCField::InsertOrigTextItem( const OUString& rText )
     size_t nPos = 0;
     bool bFound = false;
     // #i76047# maximum item text length in pivot cache is 255
-    String aShortText( rText, 0, ::std::min( static_cast<sal_uInt16>(rText.getLength()), EXC_PC_MAXSTRLEN ) );
+    OUString aShortText = rText.copy( 0, ::std::min( static_cast<sal_uInt16>(rText.getLength()), EXC_PC_MAXSTRLEN ) );
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
         if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( aShortText )) == true )
             InsertItemArrayIndex( nPos );

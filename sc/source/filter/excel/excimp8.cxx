@@ -520,29 +520,28 @@ static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
     if (rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL)
         return;
 
-    String aStr = rEntry.GetQueryItem().maString;
-    xub_StrLen nLen = aStr.Len();
-    sal_Unicode nStart = aStr.GetChar( 0 );
-    sal_Unicode nEnd   = aStr.GetChar( nLen-1 );
+    OUString aStr = rEntry.GetQueryItem().maString;
+    xub_StrLen nLen = aStr.getLength();
+    sal_Unicode nStart = aStr[0];
+    sal_Unicode nEnd   = aStr[ nLen-1 ];
     if( nLen >2 && nStart == '*' && nEnd == '*' )
     {
-        aStr.Erase( nLen-1, 1 );
-        aStr.Erase( 0, 1 );
+        aStr = aStr.copy( 1, nLen-2 );
         rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_CONTAINS : SC_DOES_NOT_CONTAIN;
     }
     else if( nLen > 1 && nStart == '*' && nEnd != '*' )
     {
-        aStr.Erase( 0, 1 );
+        aStr = aStr.copy( 1 );
         rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_ENDS_WITH : SC_DOES_NOT_END_WITH;
     }
     else if( nLen > 1 && nStart != '*' && nEnd == '*' )
     {
-        aStr.Erase( nLen-1, 1 );
+        aStr = aStr.copy( 0, nLen-1 );
         rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_BEGINS_WITH : SC_DOES_NOT_BEGIN_WITH;
     }
     else if( nLen == 2 && nStart == '*' && nEnd == '*' )
     {
-        aStr.Erase( 0, 1 );
+        aStr = aStr.copy( 1 );
     }
     rEntry.GetQueryItem().maString = aStr;
 }
@@ -764,7 +763,7 @@ void XclImpAutoFilterData::CreateScDBData()
     if( bActive || bCriteria)
     {
         ScDocument* pDoc = pExcRoot->pIR->GetDocPtr();
-        String aNewName = OUString(STR_DB_LOCAL_NONAME);
+        OUString aNewName(STR_DB_LOCAL_NONAME);
         pCurrDBData = new ScDBData(aNewName , Tab(),
                                 StartCol(),StartRow(), EndCol(),EndRow() );
         if(bCriteria)

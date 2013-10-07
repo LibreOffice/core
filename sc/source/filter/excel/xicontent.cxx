@@ -152,7 +152,7 @@ void lclGetAbsPath( OUString& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShel
 }
 
 /** Inserts the URL into a text cell. Does not modify value or formula cells. */
-void lclInsertUrl( XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SCROW nScRow, SCTAB nScTab )
+void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW nScRow, SCTAB nScTab )
 {
     ScDocumentImport& rDoc = rRoot.GetDocImport();
     ScAddress aScPos( nScCol, nScRow, nScTab );
@@ -222,8 +222,8 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     // #i80006# Excel silently ignores invalid hi-byte of column index (TODO: everywhere?)
     aXclRange.maFirst.mnCol &= 0xFF;
     aXclRange.maLast.mnCol &= 0xFF;
-    String aString = ReadEmbeddedData( rStrm );
-    if ( aString.Len() > 0 )
+    OUString aString = ReadEmbeddedData( rStrm );
+    if ( !aString.isEmpty() )
         rStrm.GetRoot().GetXFRangeBuffer().SetHyperlink( aXclRange, aString );
 }
 
@@ -340,53 +340,53 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     return( OUString() );
 }
 
-void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
+void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
 {
-    xub_StrLen n = rUrl.Len();
+    xub_StrLen n = rUrl.getLength();
     if (n < 4)
         // Needs at least 4 characters.
         return;
 
-    sal_Unicode c = rUrl.GetChar(0);
-    if (c != sal_Unicode('#'))
+    sal_Unicode c = rUrl[0];
+    if (c != '#')
         // the 1st character must be '#'.
         return;
 
-    String aNewUrl(OUString('#')), aTabName;
+    OUString aNewUrl('#'), aTabName;
 
     bool bInQuote = false;
     bool bQuoteTabName = false;
     for (xub_StrLen i = 1; i < n; ++i)
     {
-        c = rUrl.GetChar(i);
-        if (c == sal_Unicode('\''))
+        c = rUrl[i];
+        if (c == '\'')
         {
-            if (bInQuote && i+1 < n && rUrl.GetChar(i+1) == sal_Unicode('\''))
+            if (bInQuote && i+1 < n && rUrl[i+1] == sal_Unicode('\''))
             {
                 // Two consecutive single quotes ('') signify a single literal
                 // quite.  When this occurs, the whole table name needs to be
                 // quoted.
                 bQuoteTabName = true;
-                aTabName.Append(c);
-                aTabName.Append(c);
+                aTabName += OUString(c);
+                aTabName += OUString(c);
                 ++i;
                 continue;
             }
 
             bInQuote = !bInQuote;
-            if (!bInQuote && aTabName.Len() > 0)
+            if (!bInQuote && !aTabName.isEmpty())
             {
                 if (bQuoteTabName)
-                    aNewUrl.Append(sal_Unicode('\''));
-                aNewUrl.Append(aTabName);
+                    aNewUrl += OUString('\'');
+                aNewUrl += aTabName;
                 if (bQuoteTabName)
-                    aNewUrl.Append(sal_Unicode('\''));
+                    aNewUrl += OUString('\'');
             }
         }
         else if (bInQuote)
-            aTabName.Append(c);
+            aTabName += OUString(c);
         else
-            aNewUrl.Append(c);
+            aNewUrl += OUString(c);
     }
 
     if (bInQuote)
@@ -399,7 +399,7 @@ void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
 
 void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, const OUString& rUrl )
 {
-    String aUrl(rUrl);
+    OUString aUrl(rUrl);
     ConvertToValidTabName(aUrl);
 
     SCTAB nScTab = rRoot.GetCurrScTab();
@@ -552,7 +552,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** create style sheet ***
 
-    String aStyleName( XclTools::GetCondFormatStyleName( GetCurrScTab(), mnFormatIndex, mnCondIndex ) );
+    OUString aStyleName( XclTools::GetCondFormatStyleName( GetCurrScTab(), mnFormatIndex, mnCondIndex ) );
     SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
 
     const XclImpPalette& rPalette = GetPalette();
@@ -722,10 +722,10 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     /*  Empty strings are single NUL characters in Excel (string length is 1).
         -> Do not let the stream replace them with '?' characters. */
     rStrm.SetNulSubstChar( '\0' );
-    String aPromptTitle(   rStrm.ReadUniString() );
-    String aErrorTitle(    rStrm.ReadUniString() );
-    String aPromptMessage( rStrm.ReadUniString() );
-    String aErrorMessage(  rStrm.ReadUniString() );
+    OUString aPromptTitle(   rStrm.ReadUniString() );
+    OUString aErrorTitle(    rStrm.ReadUniString() );
+    OUString aPromptMessage( rStrm.ReadUniString() );
+    OUString aErrorMessage(  rStrm.ReadUniString() );
     rStrm.SetNulSubstChar();    // back to default
 
     // formula(s)
@@ -836,7 +836,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rItem.maValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
 
     // *** prompt box ***
-    if( aPromptTitle.Len() || aPromptMessage.Len() )
+    if( !aPromptTitle.isEmpty() || !aPromptMessage.isEmpty() )
     {
         // set any text stored in the record
         rItem.maValidData.SetInput( aPromptTitle, aPromptMessage );
@@ -976,10 +976,10 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
     if( GetBiff() == EXC_BIFF8 )
     {
         rStrm.Ignore( 10 );
-        String aXclName( rStrm.ReadUniString() );
+        OUString aXclName( rStrm.ReadUniString() );
 
         // #i64794# Excel replaces spaces with underscores
-        aXclName.SearchAndReplaceAll( ' ', '_' );
+        aXclName = aXclName.replaceAll( " ", "_" );
 
         // find the defined name used in Calc
         if( const XclImpName* pName = GetNameManager().FindName( aXclName, GetCurrScTab() ) )
@@ -1025,7 +1025,7 @@ void XclImpWebQueryBuffer::ReadWqtables( XclImpStream& rStrm )
 void XclImpWebQueryBuffer::Apply()
 {
     ScDocument& rDoc = GetDoc();
-    String aFilterName( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
+    OUString aFilterName( EXC_WEBQRY_FILTER );
     for( XclImpWebQueryList::iterator itQuery = maWQList.begin(); itQuery != maWQList.end(); ++itQuery )
         itQuery->Apply( rDoc, aFilterName );
 }

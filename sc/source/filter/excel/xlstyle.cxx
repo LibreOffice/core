@@ -582,7 +582,7 @@ const sal_Char *const sppcPropNamesControl[] =
 
 /** Inserts all passed API font settings into the font data object. */
 void lclSetApiFontSettings( XclFontData& rFontData,
-        const String& rApiFontName, float fApiHeight, float fApiWeight,
+        const OUString& rApiFontName, float fApiHeight, float fApiWeight,
         Awt::FontSlant eApiPosture, sal_Int16 nApiUnderl, sal_Int16 nApiStrikeout )
 {
     rFontData.maName = XclTools::GetXclFontName( rApiFontName );
@@ -1540,7 +1540,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
             rNumFmt.meLanguage = eLang;
 
             if( pBuiltIn->mpFormat )
-                rNumFmt.maFormat = String( pBuiltIn->mpFormat, RTL_TEXTENCODING_UTF8 );
+                rNumFmt.maFormat = OUString( pBuiltIn->mpFormat, strlen(pBuiltIn->mpFormat), RTL_TEXTENCODING_UTF8 );
             else
                 rNumFmt.maFormat = EMPTY_STRING;
 

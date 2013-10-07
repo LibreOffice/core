@@ -806,7 +806,7 @@ XclExpFormulaCell::XclExpFormulaCell(
         bool bForceLineBreak = false;
         if( nFormatType == NUMBERFORMAT_TEXT )
         {
-            String aResult = mrScFmlaCell.GetString();
+            OUString aResult = mrScFmlaCell.GetString();
             bForceLineBreak = mrScFmlaCell.IsMultilineResult();
             nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
         }
@@ -2327,7 +2327,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 nMergeBaseXFId = mxMergedcells->GetBaseXFId( aScPos );
         }
 
-        String aAddNoteText;    // additional text to be appended to a note
+        OUString aAddNoteText;    // additional text to be appended to a note
 
         switch (rScCell.meType)
         {
@@ -2402,7 +2402,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         if( xCell )
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
-        if ( aAddNoteText.Len()  )
+        if ( !aAddNoteText.isEmpty()  )
             mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, NULL, aAddNoteText ) );
 
         // other sheet contents

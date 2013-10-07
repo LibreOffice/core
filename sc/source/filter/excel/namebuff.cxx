@@ -144,9 +144,9 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
         {// Tabelle ist 'echt' extern
             if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
             {
-                String      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
+                OUString      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
                                     pExcRoot->pIR->GetDocShell() ) );
-                String      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
+                OUString      aTabName( ScGlobal::GetDocTabName( aURL, pCur->aTab ) );
                 if( pExcRoot->pIR->GetDoc().LinkExternalTab( nNewTabNum, aTabName, aURL, pCur->aTab ) )
                 {
                     rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);

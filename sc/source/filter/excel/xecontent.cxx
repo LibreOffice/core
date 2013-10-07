@@ -334,11 +334,11 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     mxVarData( new SvMemoryStream ),
     mnFlags( 0 )
 {
-    const String& rUrl = rUrlField.GetURL();
-    const String& rRepr = rUrlField.GetRepresentation();
+    const OUString& rUrl = rUrlField.GetURL();
+    const OUString& rRepr = rUrlField.GetRepresentation();
     INetURLObject aUrlObj( rUrl );
     const INetProtocol eProtocol = aUrlObj.GetProtocol();
-    bool bWithRepr = rRepr.Len() > 0;
+    bool bWithRepr = !rRepr.isEmpty();
     XclExpStream aXclStrm( *mxVarData, rRoot );         // using in raw write mode.
 
     // description
@@ -409,17 +409,17 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
         msTarget = XclXmlUtils::ToOUString( aUrl );
     }
-    else if( rUrl.GetChar( 0 ) == '#' )     // hack for #89066#
+    else if( rUrl[0] == '#' )     // hack for #89066#
     {
-        String aTextMark( rUrl.Copy( 1 ) );
+        OUString aTextMark( rUrl.copy( 1 ) );
 
-        xub_StrLen nSepPos = aTextMark.SearchAndReplace( '.', '!' );
-        String aSheetName( aTextMark.Copy(0, nSepPos));
+        sal_Int32 nSepPos = aTextMark.indexOf( '.' );
+        aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
+        OUString aSheetName( aTextMark.copy(0, nSepPos));
 
-        if ( aSheetName.Search(' ') != STRING_NOTFOUND && aSheetName.GetChar(0) != '\'')
+        if ( aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
         {
-            aTextMark.Insert('\'', nSepPos);
-            aTextMark.Insert('\'', 0);
+            aTextMark = "'" + aTextMark.replaceAt(nSepPos, 0, "'");
         }
 
         mxTextMark.reset( new XclExpString( aTextMark, EXC_STR_FORCEUNICODE, 255 ) );
@@ -1805,7 +1805,7 @@ XclExpWebQuery::XclExpWebQuery(
 {
     // comma separated list of HTML table names or indexes
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rSource, ';');
-    String aNewTables;
+    OUString aNewTables;
     OUString aAppendTable;
     sal_Int32 nStringIx = 0;
     bool bExitLoop = false;
@@ -1820,7 +1820,7 @@ XclExpWebQuery::XclExpWebQuery(
 
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found
     {
-        if( aNewTables.Len() )
+        if( !aNewTables.isEmpty() )
             mxQryTables.reset( new XclExpString( aNewTables ) );
         else
             mbEntireDoc = true;
@@ -1933,14 +1933,14 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     aLinkProp.GetProperty( aUrl, SC_UNONAME_LINKURL );
                     aLinkProp.GetProperty( nRefresh, SC_UNONAME_REFDELAY );
 
-                    String aAbsDoc( ScGlobal::GetAbsDocName( aUrl, pShell ) );
+                    OUString aAbsDoc( ScGlobal::GetAbsDocName( aUrl, pShell ) );
                     INetURLObject aUrlObj( aAbsDoc );
-                    String aWebQueryUrl( aUrlObj.getFSysPath( INetURLObject::FSYS_DOS ) );
-                    if( !aWebQueryUrl.Len() )
+                    OUString aWebQueryUrl( aUrlObj.getFSysPath( INetURLObject::FSYS_DOS ) );
+                    if( aWebQueryUrl.isEmpty() )
                         aWebQueryUrl = aAbsDoc;
 
                     // find range or create a new range
-                    String aRangeName;
+                    OUString aRangeName;
                     ScRange aScDestRange;
                     ScUnoConversion::FillScRange( aScDestRange, aDestRange );
                     if( const ScRangeData* pRangeData = rRoot.GetNamedRanges().findByRange( aScDestRange ) )
@@ -1959,7 +1959,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     }
 
                     // create and store the web query record
-                    if( aRangeName.Len() )
+                    if( !aRangeName.isEmpty() )
                         AppendNewRecord( new XclExpWebQuery(
                             aRangeName, aWebQueryUrl, xAreaLink->getSourceArea(), nRefresh ) );
                 }

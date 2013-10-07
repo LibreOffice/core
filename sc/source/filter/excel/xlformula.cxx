@@ -36,7 +36,7 @@ using namespace ::formula;
 OUString XclFunctionInfo::GetMacroFuncName() const
 {
     if( IsMacroFunc() )
-        return String( mpcMacroName, RTL_TEXTENCODING_UTF8 );
+        return OUString( mpcMacroName, strlen(mpcMacroName), RTL_TEXTENCODING_UTF8 );
     return OUString();
 }
 
@@ -753,7 +753,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
         sal_Int32 nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
-            String aToken( aString.getToken( 0, cStringSep, nStringIx ) );
+            OUString aToken( aString.getToken( 0, cStringSep, nStringIx ) );
             if( bTrimLeadingSpaces )
                 aToken = comphelper::string::stripStart(aToken, ' ');
             if( nToken > 0 )

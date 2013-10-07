@@ -900,7 +900,7 @@ sal_Size XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags )
 
 OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
-    String aRet;
+    OUString aRet;
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 
@@ -940,7 +940,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         }
 
         *pcEndChar = '\0';
-        aRet.Append( pcBuffer );
+        aRet += OUString( pcBuffer );
 
         nCharsLeft = nCharsLeft - nReadSize;
         if( nCharsLeft > 0 )
@@ -955,7 +955,7 @@ OUString XclImpStream::ReadUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
 {
     bool b16Bit;
     sal_Size nExtSize = ReadUniStringExtHeader( b16Bit, nFlags );
-    String aRet( ReadRawUniString( nChars, b16Bit ) );
+    OUString aRet( ReadRawUniString( nChars, b16Bit ) );
     Ignore( nExtSize );
     return aRet;
 }

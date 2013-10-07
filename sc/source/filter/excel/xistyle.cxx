@@ -615,7 +615,7 @@ void XclImpNumFmtBuffer::Initialize()
 
 void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
 {
-    String aFormat;
+    OUString aFormat;
     switch( GetBiff() )
     {
         case EXC_BIFF2:
@@ -1567,7 +1567,7 @@ void XclImpXFBuffer::CreateUserStyles()
         BIFF4W import filter is never used to import from clipboard... */
     bool bReserveAll = (GetBiff() == EXC_BIFF4) && (GetCurrScTab() > 0);
     SfxStyleSheetIterator aStyleIter( GetDoc().GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
-    String aStandardName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
+    OUString aStandardName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
     for( SfxStyleSheetBase* pStyleSheet = aStyleIter.First(); pStyleSheet; pStyleSheet = aStyleIter.Next() )
         if( (pStyleSheet->GetName() != aStandardName) && (bReserveAll || !pStyleSheet->IsUserDefined()) )
             if( aCellStyles.count( pStyleSheet->GetName() ) == 0 )
@@ -1577,7 +1577,7 @@ void XclImpXFBuffer::CreateUserStyles()
         in the aConflictNameStyles list. */
     for( XclImpStyleList::iterator itStyle = maBuiltinStyles.begin(); itStyle != maBuiltinStyles.end(); ++itStyle )
     {
-        String aStyleName = XclTools::GetBuiltInStyleName( itStyle->GetBuiltinId(), itStyle->GetName(), itStyle->GetLevel() );
+        OUString aStyleName = XclTools::GetBuiltInStyleName( itStyle->GetBuiltinId(), itStyle->GetName(), itStyle->GetLevel() );
         OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
             "XclImpXFBuffer::CreateUserStyles - multiple styles with equal built-in identifier" );
         if( aCellStyles.count( aStyleName ) > 0 )
@@ -1604,11 +1604,11 @@ void XclImpXFBuffer::CreateUserStyles()
     for( XclImpStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
     {
         XclImpStyle* pStyle = *aIt;
-        String aUnusedName;
+        OUString aUnusedName;
         sal_Int32 nIndex = 0;
         do
         {
-            aUnusedName.Assign( pStyle->GetName() ).Append( ' ' ).Append( OUString::number( ++nIndex ) );
+            aUnusedName = pStyle->GetName() + " " + OUString::number( ++nIndex );
         }
         while( aCellStyles.count( aUnusedName ) > 0 );
         aCellStyles[ aUnusedName ] = pStyle;

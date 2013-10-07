@@ -104,7 +104,7 @@ void XclImpPageSettings::ReadCenter( XclImpStream& rStrm )
 
 void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
 {
-    String aString;
+    OUString aString;
     if( rStrm.GetRecLeft() )
         aString = (GetBiff() <= EXC_BIFF5) ? rStrm.ReadByteString( false ) : rStrm.ReadUniString();
 

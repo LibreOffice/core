@@ -46,7 +46,7 @@ class XclExpName : public XclExpRecord, protected XclExpRoot
 {
 public:
     /** Creates a standard defined name. */
-    explicit            XclExpName( const XclExpRoot& rRoot, const String& rName );
+    explicit            XclExpName( const XclExpRoot& rRoot, const OUString& rName );
     /** Creates a built-in defined name. */
     explicit            XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn );
 
@@ -130,13 +130,13 @@ public:
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab, const ScRangeList& aRangeList );
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, const ScRange& aRange );
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
-    sal_uInt16          InsertUniqueName( const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertUniqueName( const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Returns index of an existing name, or creates a name without definition. */
-    sal_uInt16          InsertRawName( const String& rName );
+    sal_uInt16          InsertRawName( const OUString& rName );
     /** Searches or inserts a defined name describing a macro name.
         @param bVBasic  true = Visual Basic macro; false = Sheet macro.
         @param bFunc  true = Macro function; false = Macro procedure. */
-    sal_uInt16          InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden );
+    sal_uInt16          InsertMacroCall( const OUString& rMacroName, bool bVBasic, bool bFunc, bool bHidden );
 
     /** Returns the NAME record at the specified position or 0 on error. */
     const XclExpName*   GetName( sal_uInt16 nNameIdx ) const;
@@ -165,10 +165,10 @@ private:
     sal_uInt16          FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScIdx );
 
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
-    sal_uInt16          FindBuiltInNameIdx( const String& rName,
+    sal_uInt16          FindBuiltInNameIdx( const OUString& rName,
                             const XclTokenArray& rTokArr, bool bDBRange ) const;
     /** Returns an unused name for the passed name. */
-    String              GetUnusedName( const String& rName ) const;
+    OUString            GetUnusedName( const OUString& rName ) const;
 
     /** Appends a new NAME record to the record list.
         @return  The 1-based NAME record index used elsewhere in the Excel file. */
@@ -200,7 +200,7 @@ private:
 // *** Implementation ***
 // ============================================================================
 
-XclExpName::XclExpName( const XclExpRoot& rRoot, const String& rName ) :
+XclExpName::XclExpName( const XclExpRoot& rRoot, const OUString& rName ) :
     XclExpRecord( EXC_ID_NAME ),
     XclExpRoot( rRoot ),
     maOrigName( rName ),
@@ -229,7 +229,7 @@ XclExpName::XclExpName( const XclExpRoot& rRoot, sal_Unicode cBuiltIn ) :
     // special case for BIFF5/7 filter source range - name appears as plain text without built-in flag
     if( (GetBiff() <= EXC_BIFF5) && (cBuiltIn == EXC_BUILTIN_FILTERDATABASE) )
     {
-        String aName( XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE ) );
+        OUString aName( XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE ) );
         mxName = XclExpStringHelper::CreateString( rRoot, aName, EXC_STR_8BITLENGTH );
         maOrigName = XclTools::GetXclBuiltInDefName( cBuiltIn );
     }
@@ -403,19 +403,19 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTo
 }
 
 sal_uInt16 XclExpNameManagerImpl::InsertUniqueName(
-        const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
+        const OUString& rName, XclTokenArrayRef xTokArr, SCTAB nScTab )
 {
-    OSL_ENSURE( rName.Len(), "XclExpNameManagerImpl::InsertUniqueName - empty name" );
+    OSL_ENSURE( !rName.isEmpty(), "XclExpNameManagerImpl::InsertUniqueName - empty name" );
     XclExpNameRef xName( new XclExpName( GetRoot(), GetUnusedName( rName ) ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
     return Append( xName );
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertRawName( const String& rName )
+sal_uInt16 XclExpNameManagerImpl::InsertRawName( const OUString& rName )
 {
     // empty name? may occur in broken external Calc tokens
-    if( !rName.Len() )
+    if( rName.isEmpty() )
         return 0;
 
     // try to find an existing NAME record, regardless of its type
@@ -431,10 +431,10 @@ sal_uInt16 XclExpNameManagerImpl::InsertRawName( const String& rName )
     return Append( xName );
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden )
+sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const OUString& rMacroName, bool bVBasic, bool bFunc, bool bHidden )
 {
     // empty name? may occur in broken external Calc tokens
-    if( !rMacroName.Len() )
+    if( rMacroName.isEmpty() )
         return 0;
 
     // try to find an existing NAME record
@@ -488,11 +488,11 @@ sal_uInt16 XclExpNameManagerImpl::FindNamedExpIndex( SCTAB nTab, sal_uInt16 nScI
 }
 
 sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
-        const String& rName, const XclTokenArray& rTokArr, bool bDBRange ) const
+        const OUString& rName, const XclTokenArray& rTokArr, bool bDBRange ) const
 {
     /*  Get built-in index from the name. Special case: the database range
         'unnamed' will be mapped to Excel's built-in '_FilterDatabase' name. */
-    sal_Unicode cBuiltIn = (bDBRange && (rName == String(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)))) ?
+    sal_Unicode cBuiltIn = (bDBRange && (rName == OUString(STR_DB_LOCAL_NONAME))) ?
         EXC_BUILTIN_FILTERDATABASE : XclTools::GetBuiltInDefNameIndex( rName );
 
     if( cBuiltIn < EXC_BUILTIN_UNKNOWN )
@@ -512,9 +512,9 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
     return 0;
 }
 
-String XclExpNameManagerImpl::GetUnusedName( const String& rName ) const
+OUString XclExpNameManagerImpl::GetUnusedName( const OUString& rName ) const
 {
-    String aNewName( rName );
+    OUString aNewName( rName );
     sal_Int32 nAppIdx = 0;
     bool bExist = true;
     while( bExist )
@@ -527,7 +527,7 @@ String XclExpNameManagerImpl::GetUnusedName( const String& rName ) const
             bExist = xName->GetOrigName() == aNewName;
             // name exists -> create a new name "<originalname>_<counter>"
             if( bExist )
-                aNewName.Assign( rName ).Append( '_' ).Append( OUString::number( ++nAppIdx ) );
+                aNewName = rName + "_" + OUString::number( ++nAppIdx );
         }
     }
     return aNewName;
@@ -543,7 +543,7 @@ sal_uInt16 XclExpNameManagerImpl::Append( XclExpNameRef xName )
 
 sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRangeData )
 {
-    const String& rName = rRangeData.GetName();
+    const OUString& rName = rRangeData.GetName();
 
     /*  #i38821# recursive names: first insert the (empty) name object,
         otherwise a recursive call of this function from the formula compiler

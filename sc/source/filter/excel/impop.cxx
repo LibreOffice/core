@@ -590,7 +590,7 @@ void ImportExcel::Externname25( void )
 
     aIn >> nOpt >> nRes;
 
-    String aName( aIn.ReadByteString( false ) );
+    OUString aName( aIn.ReadByteString( false ) );
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name

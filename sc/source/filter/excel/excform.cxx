@@ -215,7 +215,7 @@ ExcelToSc::~ExcelToSc()
 
 void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 {
-    aPool.Store( String("Dummy()") );
+    aPool.Store( OUString("Dummy()") );
     aPool >> aStack;
     pErgebnis = aPool[ aStack.Get() ];
 }
@@ -254,7 +254,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( String("-/-") );
+        aPool.Store( OUString("-/-") );
         aPool >> aStack;
         pErgebnis = aPool[ aStack.Get() ];
         return ConvOK;
