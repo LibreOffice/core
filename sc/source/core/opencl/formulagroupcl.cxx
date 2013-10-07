@@ -63,6 +63,7 @@ public:
             assert(ret == CL_SUCCESS);
         }
     }
+    virtual void GenSlidingWindowFunction(std::stringstream &ss) {};
 protected:
     const std::string mSymName;
     FormulaTreeNode *mFormulaTree;
@@ -177,27 +178,46 @@ class DynamicKernelSlidingArgument: public DynamicKernelArgument
 {
 public:
     DynamicKernelSlidingArgument(const std::string &s, FormulaTreeNode *ft):
-        DynamicKernelArgument(s, ft), bNeedHostMappedWindow(true) {}
+        DynamicKernelArgument(s, ft) {}
     /// Create buffer and pass the buffer to a given kernel
     virtual void Marshal(cl_kernel, int, int nVectorWidth);
-    /// Do the sliding window computation. TODO use GPU kernels
-    virtual void ComputeSlidingWindow(double *pResults,
-            double *pHostBuffer, size_t nHostBuffer, size_t nWindowSize, int nVectorWidth)
+    //// Generate sliding window helper. An example for sum
+    ///  double custom_sliding_dotproduct(int nWindow, __global *sliding) {
+    ///    int nr = get_global_size(0);
+    ///    double tmp = 0.0;
+    ///    for (int i = 0; i < nWindow; i++) {
+    ///        tmp += sliding[i+get_global_id(0)];
+    ///    }
+    ///    return tmp;
+    ///  }
+    /// FIXME: optimization
+    virtual void GenSlidingWindowFunction(std::stringstream &ss)
     {
-        assert(mFormulaTree->CurrentFormula->GetOpCode() == ocAverage);
-        for (int i = 0; i < nVectorWidth; i++)
-        {
-            double LocalSum = 0.0;
-            for (size_t j = 0; j < nWindowSize; j++)
-            {
-                LocalSum += pHostBuffer[i+j];
-            }
-            LocalSum /= nWindowSize;
-            pResults[i] = LocalSum;
-        }
+        ss << "\ndouble " << mSymName;
+        ss << "_SlidingDotProduct(int nWindow, __global double *sliding) {\n\t";
+        ss << "double tmp = 0.0;\n\t";
+        ss << "for (int i = 0; i < nWindow; i++)\n\t\t";
+        ss << "tmp += sliding[i + get_global_id(0)];\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
     }
-private:
-    bool bNeedHostMappedWindow;
+
+    /// Generate use/references to the argument
+    virtual void GenDeclRef(std::stringstream &ss) const
+    {
+        FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
+        assert(pChild);
+        const formula::DoubleVectorRefToken* pChildDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
+        assert(pChildDVR);
+        // Prepare intermediate results (on CPU for now)
+        size_t nWindowSize = pChildDVR->GetRefRowSize();
+        ss << mSymName << "_SlidingDotProduct("<<nWindowSize<<", "<<mSymName<<")";
+        if (mFormulaTree->CurrentFormula->GetOpCode() == ocAverage)
+            ss << "/(double)"<<nWindowSize;
+        else
+            assert(0 && "Unsupported sliding window type");
+    }
 };
 void DynamicKernelSlidingArgument::Marshal(cl_kernel k, int argno, int nVectorWidth)
 {
@@ -206,20 +226,6 @@ void DynamicKernelSlidingArgument::Marshal(cl_kernel k, int argno, int nVectorWi
     OclCalc::setKernelEnv(&kEnv);
     cl_int err;
     // The result vector
-    mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
-            nVectorWidth*sizeof(double), NULL, &err);
-    assert(CL_SUCCESS == err);
-    double *pHostIntermediateResults = NULL;
-    if (bNeedHostMappedWindow)
-    {
-        // Map result vector to host space for writing
-        pHostIntermediateResults = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
-                mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-                nVectorWidth*sizeof(double), 0, NULL, NULL, &err);
-        assert(err == CL_SUCCESS);
-    }
-
     FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
     assert(pChild);
     const formula::DoubleVectorRefToken* pChildDVR =
@@ -231,19 +237,13 @@ void DynamicKernelSlidingArgument::Marshal(cl_kernel k, int argno, int nVectorWi
     size_t nHostBuffer = pChildDVR->GetArrayLength();
     size_t nWindowSize = pChildDVR->GetRefRowSize();
     assert(nHostBuffer == nWindowSize+nVectorWidth-1);
-    ComputeSlidingWindow(pHostIntermediateResults, pHostInput,
-            nHostBuffer, nWindowSize, nVectorWidth);
-    // Computation done.
-    if (bNeedHostMappedWindow)
-    {
-        // Pass the ownership back to GPU.
-        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
-                pHostIntermediateResults, 0, NULL, NULL);
-        assert(CL_SUCCESS == err);
-    }
-
+    mpClmem = clCreateBuffer(kEnv.mpkContext,
+            (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
+            nHostBuffer*sizeof(double), pHostInput, &err);
+    assert(CL_SUCCESS == err);
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
     assert(err == CL_SUCCESS);
+    return;
 }
 
 /// Holds the symbol table for a given dynamic kernel
@@ -256,6 +256,15 @@ public:
     SymbolTable(void):mCurId(0) {}
     template <class T>
     const DynamicKernelArgument *DeclRefArg(FormulaTreeNode *);
+    /// Used to generate sliding window helpers
+    void DumpSlidingWindowFunctions(std::stringstream &ss)
+    {
+        for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
+            ++it) {
+            (*it)->GenSlidingWindowFunction(ss);
+            ss << "\n";
+        }
+    }
     /// Used to generate declartion in the kernel declaration
     void DumpParamDecls(std::stringstream &ss)
     {
@@ -298,12 +307,16 @@ public:
         } else if (OpenclDevice::gpuEnv.mnAmdFp64Flag) {
             decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
         }
+        mSyms.DumpSlidingWindowFunctions(decl);
         decl << "__kernel void DynamicKernel" << GetMD5();
         decl << "(\n__global double *result";
         mSyms.DumpParamDecls(decl);
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
         mKernelSrc.str() << ";\n}\n";
         mFullProgramSrc = decl.str();
+#if 1
+        std::cerr<< "Program to be compiled = \n" << mFullProgramSrc << "\n";
+#endif
         return decl.str();
     }
     /// Produce kernel hash
@@ -520,9 +533,24 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                         // Reduce to a scalar variable
                         mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
                             ->GenDeclRef(mKernelSrc);
-                    } else if (!pChildDVR->IsStartFixed() && !pChildDVR->IsEndFixed()) {
-                        // Reduce to an array
-                        std::cerr << "Found a sligding window\n";
+                    } else if (!pChildDVR->IsStartFixed() &&
+                            !pChildDVR->IsEndFixed()) {
+
+                        // Reduce to an array on CPU
+                        // for code like avg($A1:$A2, $B$3:$B$4) Generate code like
+                        //  double custom_sliding_dotproduct(int nWindow,
+                        //                                   __global *sliding) {
+                        //    double tmp = 0.0;
+                        //    for (int i = 0; i < nWindow; i++) {
+                        //        tmp += sliding[i+get_global_id(0)];
+                        //    }
+                        //    return tmp;
+                        //  }
+                        //  __kernel DynamicKernel (..., __global double *windows,
+                        //                          double fixed, ...
+                        //  {
+                        //      (custom_sliding_sum(N, sliding)+fixed) /
+                        //            get_global_size(0)) ...
                         mSyms.DeclRefArg<DynamicKernelSlidingArgument>(cur)
                             ->GenDeclRef(mKernelSrc);
                     } else {
