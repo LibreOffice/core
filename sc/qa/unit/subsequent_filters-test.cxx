@@ -1503,7 +1503,7 @@ void ScFiltersTest::testPivotTableBasicODS()
     ScDPCollection* pDPs = pDoc->GetDPCollection();
     CPPUNIT_ASSERT_MESSAGE("Failed to get a live ScDPCollection instance.", pDPs);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "There should be exactly one pivot table instance.", sal_uInt32(1),
+        "There should be exactly one pivot table instance.", size_t(1),
         pDPs->GetCount());
 
     const ScDPObject* pDPObj = (*pDPs)[0];
