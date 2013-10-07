@@ -61,14 +61,8 @@ const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
 // globale Funktionen (->am Ende der Datei):
 
-static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
-static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
-static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
-{
-    String aStr;
-    lcl_GetRepeatRangeString(pRange, pDoc, bIsRow, aStr);
-    rStr = aStr;
-}
+static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
+static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr );
 
 #if 0
 // this method is useful when debugging address flags.
@@ -162,7 +156,7 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
     {
         sal_uInt16 nCount = aLb[i]->GetEntryCount();
         for ( sal_uInt16 j=0; j<nCount; j++ )
-            delete (String*)aLb[i]->GetEntryData(j);
+            delete (OUString*)aLb[i]->GetEntryData(j);
     }
 }
 
@@ -195,18 +189,17 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pRefInputEdit );
 
-        String  aStr;
+        OUString  aStr;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         if ( pEdPrintArea == pRefInputEdit )
         {
             aStr = rRef.Format(SCR_ABS, pDoc, eConv);
-            String aVal = pEdPrintArea->GetText();
+            OUString aVal = pEdPrintArea->GetText();
             Selection aSel = pEdPrintArea->GetSelection();
             aSel.Justify();
-            aVal.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
-            aVal.Insert( aStr, (xub_StrLen)aSel.Min() );
-            Selection aNewSel( aSel.Min(), aSel.Min()+aStr.Len() );
+            aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
+            Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
             pEdPrintArea->SetRefString( aVal );
             pEdPrintArea->SetSelection( aNewSel );
         }
@@ -228,11 +221,11 @@ void ScPrintAreasDlg::AddRefEntry()
     if ( pRefInputEdit == pEdPrintArea )
     {
         const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
-        String aVal = pEdPrintArea->GetText();
-        aVal += sep;
+        OUString aVal = pEdPrintArea->GetText();
+        aVal += OUString(sep);
         pEdPrintArea->SetText(aVal);
 
-        xub_StrLen nLen = aVal.Len();
+        xub_StrLen nLen = aVal.getLength();
         pEdPrintArea->SetSelection( Selection( nLen, nLen ) );
 
         Impl_ModifyHdl( pEdPrintArea );
@@ -273,7 +266,7 @@ void ScPrintAreasDlg::SetActive()
 
 void ScPrintAreasDlg::Impl_Reset()
 {
-    String          aStrRange;
+    OUString        aStrRange;
     const ScRange*  pRepeatColRange = pDoc->GetRepeatColRange( nCurTab );
     const ScRange*  pRepeatRowRange = pDoc->GetRepeatRowRange( nCurTab );
 
@@ -297,8 +290,8 @@ void ScPrintAreasDlg::Impl_Reset()
     //-------------------------
     // Druckbereich
     //-------------------------
-    aStrRange.Erase();
-    String aOne;
+    aStrRange = "";
+    OUString aOne;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
     sal_uInt16 nRangeCount = pDoc->GetPrintRangeCount( nCurTab );
@@ -307,8 +300,8 @@ void ScPrintAreasDlg::Impl_Reset()
         const ScRange* pPrintRange = pDoc->GetPrintRange( nCurTab, i );
         if (pPrintRange)
         {
-            if ( aStrRange.Len() )
-                aStrRange += sep;
+            if ( !aStrRange.isEmpty() )
+                aStrRange += OUString(sep);
             aOne = pPrintRange->Format(SCR_ABS, pDoc, eConv);
             aStrRange += aOne;
         }
@@ -343,10 +336,10 @@ void ScPrintAreasDlg::Impl_Reset()
 
 bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 {
-    String  aRangeStr = pEd->GetText();
+    OUString  aRangeStr = pEd->GetText();
     bool bDataChanged = (pEd->GetSavedValue() != aRangeStr);
 
-    if ( (aRangeStr.Len() > 0) && pEdPrintArea != pEd )
+    if ( !aRangeStr.isEmpty() && pEdPrintArea != pEd )
     {
         ScRange aRange;
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -365,12 +358,12 @@ bool ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
 sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
 {
     sal_Bool        bOk = false;
-    String      aStrPrintArea   = pEdPrintArea->GetText();
-    String      aStrRepeatRow   = pEdRepeatRow->GetText();
-    String      aStrRepeatCol   = pEdRepeatCol->GetText();
+    OUString      aStrPrintArea   = pEdPrintArea->GetText();
+    OUString      aStrRepeatRow   = pEdRepeatRow->GetText();
+    OUString      aStrRepeatCol   = pEdRepeatCol->GetText();
 
     sal_Bool bPrintAreaOk = sal_True;
-    if ( aStrPrintArea.Len() )
+    if ( !aStrPrintArea.isEmpty() )
     {
         const sal_uInt16 nValidAddr  = SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
         const sal_uInt16 nValidRange = nValidAddr | SCA_VALID_ROW2 | SCA_VALID_COL2;
@@ -382,7 +375,7 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
         xub_StrLen nSepCount = comphelper::string::getTokenCount(aStrPrintArea, sep);
         for ( xub_StrLen i = 0; i < nSepCount && bPrintAreaOk; ++i )
         {
-            String aOne = aStrPrintArea.GetToken(i, sep);
+            OUString aOne = aStrPrintArea.getToken(i, sep);
             sal_uInt16 nResult = aRange.Parse( aOne, pDoc, eConv );
             if ((nResult & nValidRange) != nValidRange)
             {
@@ -393,11 +386,11 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
         }
     }
 
-    sal_Bool bRepeatRowOk = (aStrRepeatRow.Len() == 0);
+    sal_Bool bRepeatRowOk = aStrRepeatRow.isEmpty();
     if ( !bRepeatRowOk )
         bRepeatRowOk = lcl_CheckRepeatString(aStrRepeatRow, pDoc, true, NULL);
 
-    sal_Bool bRepeatColOk = (aStrRepeatCol.Len() == 0);
+    sal_Bool bRepeatColOk = aStrRepeatCol.isEmpty();
     if ( !bRepeatColOk )
         bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, NULL);
 
@@ -450,7 +443,7 @@ void ScPrintAreasDlg::Impl_FillLists()
         aList->Format(aStrRange, SCR_ABS, pDoc, eConv);
     }
 
-    pLbPrintArea->SetEntryData( SC_AREASDLG_PR_SELECT, new String( aStrRange ) );
+    pLbPrintArea->SetEntryData( SC_AREASDLG_PR_SELECT, new OUString( aStrRange ) );
 
     //------------------------------------------------------
     // Ranges holen und in ListBoxen merken
@@ -477,7 +470,7 @@ void ScPrintAreasDlg::Impl_FillLists()
                 aSymbol = aRange.Format(SCR_ABS, pDoc, eConv);
                 pLbPrintArea->SetEntryData(
                     pLbPrintArea->InsertEntry(aName),
-                    new String(aSymbol) );
+                    new OUString(aSymbol) );
             }
 
             if (itr->second->HasType(RT_ROWHEADER))
@@ -485,7 +478,7 @@ void ScPrintAreasDlg::Impl_FillLists()
                 lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
                 pLbRepeatRow->SetEntryData(
                     pLbRepeatRow->InsertEntry(aName),
-                    new String(aSymbol) );
+                    new OUString(aSymbol) );
             }
 
             if (itr->second->HasType(RT_COLHEADER))
@@ -493,7 +486,7 @@ void ScPrintAreasDlg::Impl_FillLists()
                 lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
                 pLbRepeatCol->SetEntryData(
                     pLbRepeatCol->InsertEntry(aName),
-                    new String(aSymbol));
+                    new OUString(aSymbol));
             }
         }
     }
@@ -511,7 +504,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
         if ( Impl_CheckRefStrings() )
         {
             bool            bDataChanged = false;
-            String          aStr;
+            OUString        aStr;
             SfxStringItem   aPrintArea( SID_CHANGE_PRINTAREA, aStr );
             SfxStringItem   aRepeatRow( FN_PARAM_2, aStr );
             SfxStringItem   aRepeatCol( FN_PARAM_3, aStr );
@@ -620,7 +613,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
     else if( nSelPos == nUserDefPos && !pLb->IsTravelSelect() && pEd->GetText().isEmpty())
         pLb->SelectEntryPos( 0 );
     else if( nSelPos >= nFirstCustomPos )
-        pEd->SetText( *static_cast< String* >( pLb->GetEntryData( nSelPos ) ) );
+        pEd->SetText( *static_cast< OUString* >( pLb->GetEntryData( nSelPos ) ) );
 
     return 0;
 }
@@ -657,13 +650,13 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     if ( (nEntryCount > nFirstCustomPos) && !aStrEd.isEmpty() )
     {
         sal_Bool    bFound  = false;
-        String* pSymbol = NULL;
+        OUString* pSymbol = NULL;
         sal_uInt16 i;
 
         for ( i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {
-            pSymbol = (String*)pLb->GetEntryData( i );
-            bFound  = ( pSymbol->Equals(aStrEd) || pSymbol->Equals(aEdUpper) );
+            pSymbol = (OUString*)pLb->GetEntryData( i );
+            bFound  = ( (*pSymbol)  ==aStrEd || (*pSymbol) == aEdUpper );
         }
 
         pLb->SelectEntryPos( bFound ? i-1 : nUserDefPos );
@@ -682,21 +675,21 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 
 // TODO: It might make sense to move these functions to address.?xx. -kohei
 
-static bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // Zulaessige Syntax fuer rStr:
     // Row: [$]1-MAXTAB
     // Col: [$]A-IV
 
-    String  aStr    = rStr;
-    xub_StrLen nLen = aStr.Len();
+    OUString  aStr    = rStr;
+    xub_StrLen nLen = aStr.getLength();
     SCCOLROW    nNum    = 0;
     sal_Bool    bStrOk  = ( nLen > 0 ) && ( bIsRow ? ( nLen < 6 ) : ( nLen < 4 ) );
 
     if ( bStrOk )
     {
-        if ( '$' == aStr.GetChar(0) )
-            aStr.Erase( 0, 1 );
+        if ( '$' == aStr[0] )
+            aStr = aStr.copy( 1 );
 
         if ( bIsRow )
         {
@@ -704,7 +697,7 @@ static bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
 
             if ( bStrOk )
             {
-                sal_Int32 n = aStr.ToInt32();
+                sal_Int32 n = aStr.toInt32();
 
                 if ( ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) ) != false )
                     nNum = static_cast<SCCOLROW>(n - 1);
@@ -724,29 +717,29 @@ static bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
     return bStrOk;
 }
 
-static bool lcl_CheckOne_XL_A1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_A1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // XL A1 style is identical to OOO one for print range formats.
     return lcl_CheckOne_OOO(rStr, bIsRow, rVal);
 }
 
-static bool lcl_CheckOne_XL_R1C1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
-    xub_StrLen nLen = rStr.Len();
+    xub_StrLen nLen = rStr.getLength();
     if (nLen <= 1)
         // There must be at least two characters.
         return false;
 
     const sal_Unicode preUpper = bIsRow ? 'R' : 'C';
     const sal_Unicode preLower = bIsRow ? 'r' : 'c';
-    if (rStr.GetChar(0) != preUpper && rStr.GetChar(0) != preLower)
+    if (rStr[0] != preUpper && rStr[0] != preLower)
         return false;
 
-    String aNumStr = rStr.Copy(1);
+    OUString aNumStr = rStr.copy(1);
     if (!CharClass::isAsciiNumeric(aNumStr))
         return false;
 
-    sal_Int32 nNum = aNumStr.ToInt32();
+    sal_Int32 nNum = aNumStr.toInt32();
 
     if (nNum <= 0)
         return false;
@@ -758,7 +751,7 @@ static bool lcl_CheckOne_XL_R1C1( const String& rStr, bool bIsRow, SCCOLROW& rVa
     return true;
 }
 
-static bool lcl_CheckRepeatOne( const String& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckRepeatOne( const OUString& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
 {
     switch (eConv)
     {
@@ -776,7 +769,7 @@ static bool lcl_CheckRepeatOne( const String& rStr, formula::FormulaGrammar::Add
     return false;
 }
 
-static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange )
+static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange )
 {
     // Row: [valid row] rsep [valid row]
     // Col: [valid col] rsep [valid col]
@@ -793,13 +786,13 @@ static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bI
         pRange->aEnd.SetRow(0);
     }
 
-    String aBuf;
+    OUString aBuf;
     SCCOLROW nVal = 0;
-    xub_StrLen nLen = rStr.Len();
+    xub_StrLen nLen = rStr.getLength();
     bool bEndPos = false;
     for (xub_StrLen i = 0; i < nLen; ++i)
     {
-        const sal_Unicode c = rStr.GetChar(i);
+        const sal_Unicode c = rStr[i];
         if (c == rsep)
         {
             if (bEndPos)
@@ -807,7 +800,7 @@ static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bI
                 return false;
 
             // range separator
-            if (aBuf.Len() == 0)
+            if (aBuf.isEmpty())
                 return false;
 
             bool bRes = lcl_CheckRepeatOne(aBuf, eConv, bIsRow, nVal);
@@ -828,14 +821,14 @@ static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bI
                 }
             }
 
-            aBuf.Erase();
+            aBuf = "";
             bEndPos = true;
         }
         else
-            aBuf.Append(c);
+            aBuf += OUString(c);
     }
 
-    if (aBuf.Len() > 0)
+    if (!aBuf.isEmpty())
     {
         bool bRes = lcl_CheckRepeatOne(aBuf, eConv, bIsRow, nVal);
         if (!bRes)
@@ -863,9 +856,9 @@ static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bI
 
 // ----------------------------------------------------------------------------
 
-static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr )
+static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
 {
-    rStr.Erase();
+    rStr = "";
     if (!pRange)
         return;
 

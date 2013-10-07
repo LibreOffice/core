@@ -326,23 +326,23 @@ void ScEditWindow::LoseFocus()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
-    String sName;
-    String sDescription(GetHelpText());
+    OUString sName;
+    OUString sDescription(GetHelpText());
     switch (eLocation)
     {
     case Left:
         {
-            sName = String(ScResId(STR_ACC_LEFTAREA_NAME));
+            sName = OUString(ScResId(STR_ACC_LEFTAREA_NAME));
         }
         break;
     case Center:
         {
-            sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
+            sName = OUString(ScResId(STR_ACC_CENTERAREA_NAME));
         }
         break;
     case Right:
         {
-            sName = String(ScResId(STR_ACC_RIGHTAREA_NAME));
+            sName = OUString(ScResId(STR_ACC_RIGHTAREA_NAME));
         }
         break;
     }
