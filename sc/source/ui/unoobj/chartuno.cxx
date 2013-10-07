@@ -118,7 +118,7 @@ void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
 {
-    String aName;
+    OUString aName;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -151,7 +151,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
         }
     }
 
-    if (aName.Len())
+    if (!aName.isEmpty())
         return new ScChartObj( pDocShell, nTab, aName );
     return NULL;
 }
@@ -416,7 +416,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::Runti
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart(pObject) )
                     {
-                        String aName;
+                        OUString aName;
                         uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                         if ( xObj.is() )
                             aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
@@ -501,15 +501,15 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
                 for (long i = 0; i < nPropCount; i++)
                 {
                     const beans::PropertyValue& rProp = pPropArray[i];
-                    String aPropName(rProp.Name);
+                    OUString aPropName(rProp.Name);
 
-                    if (aPropName.EqualsAscii( "CellRangeRepresentation" ))
+                    if (aPropName.equalsAscii( "CellRangeRepresentation" ))
                         rProp.Value >>= aRanges;
-                    else if (aPropName.EqualsAscii( "DataRowSource" ))
+                    else if (aPropName.equalsAscii( "DataRowSource" ))
                         eDataRowSource = (chart::ChartDataRowSource)ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-                    else if (aPropName.EqualsAscii( "HasCategories" ))
+                    else if (aPropName.equalsAscii( "HasCategories" ))
                         bHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-                    else if (aPropName.EqualsAscii( "FirstCellAsLabel" ))
+                    else if (aPropName.equalsAscii( "FirstCellAsLabel" ))
                         bFirstCellAsLabel = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
                 }
 

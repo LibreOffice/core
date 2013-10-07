@@ -145,21 +145,21 @@ void SAL_CALL ScCellSearchObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString(aPropertyName);
+    OUString aString(aPropertyName);
 
-    if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        pSearchItem->SetBackward( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHBYROW ))  pSearchItem->SetRowDirection( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHCASE ))   pSearchItem->SetExact( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHREGEXP )) pSearchItem->SetRegExp( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIM ))    pSearchItem->SetLevenshtein( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMREL )) pSearchItem->SetLEVRelaxed( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSTYLES )) pSearchItem->SetPattern( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHWORDS ))  pSearchItem->SetWordOnly( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMADD )) pSearchItem->SetLEVLonger( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMEX ))  pSearchItem->SetLEVOther( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMREM )) pSearchItem->SetLEVShorter( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHTYPE ))   pSearchItem->SetCellType( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
-    else if (aString.EqualsAscii( SC_UNO_SRCHFILTERED )) pSearchItem->SetSearchFiltered( ScUnoHelpFunctions::GetBoolFromAny(aValue) );
+    if (aString.equalsAscii( SC_UNO_SRCHBACK ))        pSearchItem->SetBackward( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHBYROW ))  pSearchItem->SetRowDirection( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHCASE ))   pSearchItem->SetExact( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHREGEXP )) pSearchItem->SetRegExp( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIM ))    pSearchItem->SetLevenshtein( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMREL )) pSearchItem->SetLEVRelaxed( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHSTYLES )) pSearchItem->SetPattern( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHWORDS ))  pSearchItem->SetWordOnly( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMADD )) pSearchItem->SetLEVLonger( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMEX ))  pSearchItem->SetLEVOther( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMREM )) pSearchItem->SetLEVShorter( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHTYPE ))   pSearchItem->SetCellType( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+    else if (aString.equalsAscii( SC_UNO_SRCHFILTERED )) pSearchItem->SetSearchFiltered( ScUnoHelpFunctions::GetBoolFromAny(aValue) );
 }
 
 uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyName )
@@ -167,22 +167,22 @@ uno::Any SAL_CALL ScCellSearchObj::getPropertyValue( const OUString& aPropertyNa
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString(aPropertyName);
+    OUString aString(aPropertyName);
     uno::Any aRet;
 
-    if (aString.EqualsAscii( SC_UNO_SRCHBACK ))        ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetBackward() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHBYROW ))  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRowDirection() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHCASE ))   ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetExact() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHREGEXP )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRegExp() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIM ))    ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLevenshtein() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMREL )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLEVRelaxed() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSTYLES )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetPattern() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHWORDS ))  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetWordOnly() );
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMADD )) aRet <<= (sal_Int16) pSearchItem->GetLEVLonger();
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMEX ))  aRet <<= (sal_Int16) pSearchItem->GetLEVOther();
-    else if (aString.EqualsAscii( SC_UNO_SRCHSIMREM )) aRet <<= (sal_Int16) pSearchItem->GetLEVShorter();
-    else if (aString.EqualsAscii( SC_UNO_SRCHTYPE ))   aRet <<= (sal_Int16) pSearchItem->GetCellType();
-    else if (aString.EqualsAscii( SC_UNO_SRCHFILTERED )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsSearchFiltered() );
+    if (aString.equalsAscii( SC_UNO_SRCHBACK ))        ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetBackward() );
+    else if (aString.equalsAscii( SC_UNO_SRCHBYROW ))  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRowDirection() );
+    else if (aString.equalsAscii( SC_UNO_SRCHCASE ))   ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetExact() );
+    else if (aString.equalsAscii( SC_UNO_SRCHREGEXP )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetRegExp() );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIM ))    ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLevenshtein() );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMREL )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsLEVRelaxed() );
+    else if (aString.equalsAscii( SC_UNO_SRCHSTYLES )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetPattern() );
+    else if (aString.equalsAscii( SC_UNO_SRCHWORDS ))  ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->GetWordOnly() );
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMADD )) aRet <<= (sal_Int16) pSearchItem->GetLEVLonger();
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMEX ))  aRet <<= (sal_Int16) pSearchItem->GetLEVOther();
+    else if (aString.equalsAscii( SC_UNO_SRCHSIMREM )) aRet <<= (sal_Int16) pSearchItem->GetLEVShorter();
+    else if (aString.equalsAscii( SC_UNO_SRCHTYPE ))   aRet <<= (sal_Int16) pSearchItem->GetCellType();
+    else if (aString.equalsAscii( SC_UNO_SRCHFILTERED )) ScUnoHelpFunctions::SetBoolInAny( aRet, pSearchItem->IsSearchFiltered() );
 
     return aRet;
 }
@@ -199,9 +199,8 @@ OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr(rServiceName);
-    return aServiceStr.EqualsAscii( SCSEARCHDESCRIPTOR_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCREPLACEDESCRIPTOR_SERVICE );
+    return rServiceName.equalsAscii( SCSEARCHDESCRIPTOR_SERVICE ) ||
+           rServiceName.equalsAscii( SCREPLACEDESCRIPTOR_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()

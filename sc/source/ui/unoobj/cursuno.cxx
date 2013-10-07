@@ -464,9 +464,8 @@ OUString SAL_CALL ScCellCursorObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr( rServiceName );
-    return aServiceStr.EqualsAscii( SCSHEETCELLCURSOR_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLCURSOR_SERVICE ) ||
+    return rServiceName.equalsAscii( SCSHEETCELLCURSOR_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELLCURSOR_SERVICE ) ||
            ScCellRangeObj::supportsService(rServiceName);
 }
 

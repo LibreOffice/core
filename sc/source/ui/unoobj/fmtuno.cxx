@@ -312,7 +312,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         {
             OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
-                aEntry.maPosStr = String( aStrVal );
+                aEntry.maPosStr = aStrVal;
         }
         else if ( rProp.Name == SC_UNONAME_STYLENAME )
         {
@@ -568,7 +568,7 @@ void SAL_CALL ScTableConditionalEntry::setFormula1( const OUString& aFormula1 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    aData.maExpr1 = String( aFormula1 );
+    aData.maExpr1 = aFormula1;
 }
 
 OUString SAL_CALL ScTableConditionalEntry::getFormula2() throw(uno::RuntimeException)
@@ -581,7 +581,7 @@ void SAL_CALL ScTableConditionalEntry::setFormula2( const OUString& aFormula2 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    aData.maExpr2 = String( aFormula2 );
+    aData.maExpr2 = aFormula2;
 }
 
 table::CellAddress SAL_CALL ScTableConditionalEntry::getSourcePosition() throw(uno::RuntimeException)
@@ -766,7 +766,7 @@ void SAL_CALL ScTableValidationObj::setFormula1( const OUString& aFormula1 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    aExpr1 = String( aFormula1 );
+    aExpr1 = aFormula1;
 }
 
 OUString SAL_CALL ScTableValidationObj::getFormula2() throw(uno::RuntimeException)
@@ -779,7 +779,7 @@ void SAL_CALL ScTableValidationObj::setFormula2( const OUString& aFormula2 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    aExpr2 = String( aFormula2 );
+    aExpr2 = aFormula2;
 }
 
 table::CellAddress SAL_CALL ScTableValidationObj::getSourcePosition() throw(uno::RuntimeException)
@@ -849,37 +849,37 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString(aPropertyName);
+    OUString aString(aPropertyName);
 
-    if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       bShowInput = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  bShowError = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if ( aString.EqualsAscii( SC_UNONAME_IGNOREBL ) ) bIgnoreBlank = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-    else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aValue >>= nShowList;
-    else if ( aString.EqualsAscii( SC_UNONAME_INPTITLE ) )
+    if ( aString.equalsAscii( SC_UNONAME_SHOWINP ) )       bShowInput = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    else if ( aString.equalsAscii( SC_UNONAME_SHOWERR ) )  bShowError = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    else if ( aString.equalsAscii( SC_UNONAME_IGNOREBL ) ) bIgnoreBlank = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+    else if ( aString.equalsAscii( SC_UNONAME_SHOWLIST ) ) aValue >>= nShowList;
+    else if ( aString.equalsAscii( SC_UNONAME_INPTITLE ) )
     {
         OUString aStrVal;
         if ( aValue >>= aStrVal )
-            aInputTitle = String( aStrVal );
+            aInputTitle = aStrVal;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_INPMESS ) )
+    else if ( aString.equalsAscii( SC_UNONAME_INPMESS ) )
     {
         OUString aStrVal;
         if ( aValue >>= aStrVal )
-            aInputMessage = String( aStrVal );
+            aInputMessage = aStrVal;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRTITLE ) )
+    else if ( aString.equalsAscii( SC_UNONAME_ERRTITLE ) )
     {
         OUString aStrVal;
         if ( aValue >>= aStrVal )
-            aErrorTitle = String( aStrVal );
+            aErrorTitle = aStrVal;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRMESS ) )
+    else if ( aString.equalsAscii( SC_UNONAME_ERRMESS ) )
     {
         OUString aStrVal;
         if ( aValue >>= aStrVal )
-            aErrorMessage = String( aStrVal );
+            aErrorMessage = aStrVal;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_TYPE ) )
+    else if ( aString.equalsAscii( SC_UNONAME_TYPE ) )
     {
         sheet::ValidationType eType = (sheet::ValidationType)
                                 ScUnoHelpFunctions::GetEnumFromAny( aValue );
@@ -899,7 +899,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             }
         }
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRALSTY ) )
+    else if ( aString.equalsAscii( SC_UNONAME_ERRALSTY ) )
     {
         sheet::ValidationAlertStyle eStyle = (sheet::ValidationAlertStyle)
                                 ScUnoHelpFunctions::GetEnumFromAny( aValue );
@@ -915,15 +915,15 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             }
         }
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_SOURCESTR ) )
+    else if ( aString.equalsAscii( SC_UNONAME_SOURCESTR ) )
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
         OUString aStrVal;
         if ( aValue >>= aStrVal )
-            aPosString = String( aStrVal );
+            aPosString =  aStrVal;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_FORMULANMSP1 ) )
+    else if ( aString.equalsAscii( SC_UNONAME_FORMULANMSP1 ) )
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
@@ -931,7 +931,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
         if ( aValue >>= aStrVal )
             maExprNmsp1 = aStrVal;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_FORMULANMSP2 ) )
+    else if ( aString.equalsAscii( SC_UNONAME_FORMULANMSP2 ) )
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
@@ -939,7 +939,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
         if ( aValue >>= aStrVal )
             maExprNmsp2 = aStrVal;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_GRAMMAR1 ) )
+    else if ( aString.equalsAscii( SC_UNONAME_GRAMMAR1 ) )
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
@@ -947,7 +947,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
         if ( aValue >>= nVal )
             meGrammar1 = static_cast< FormulaGrammar::Grammar >(nVal);
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_GRAMMAR2 ) )
+    else if ( aString.equalsAscii( SC_UNONAME_GRAMMAR2 ) )
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
@@ -962,18 +962,18 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString(aPropertyName);
+    OUString aString(aPropertyName);
     uno::Any aRet;
 
-    if ( aString.EqualsAscii( SC_UNONAME_SHOWINP ) )       ScUnoHelpFunctions::SetBoolInAny( aRet, bShowInput );
-    else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, bShowError );
-    else if ( aString.EqualsAscii( SC_UNONAME_IGNOREBL ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, bIgnoreBlank );
-    else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aRet <<= nShowList;
-    else if ( aString.EqualsAscii( SC_UNONAME_INPTITLE ) ) aRet <<= OUString( aInputTitle );
-    else if ( aString.EqualsAscii( SC_UNONAME_INPMESS ) )  aRet <<= OUString( aInputMessage );
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRTITLE ) ) aRet <<= OUString( aErrorTitle );
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRMESS ) )  aRet <<= OUString( aErrorMessage );
-    else if ( aString.EqualsAscii( SC_UNONAME_TYPE ) )
+    if ( aString.equalsAscii( SC_UNONAME_SHOWINP ) )       ScUnoHelpFunctions::SetBoolInAny( aRet, bShowInput );
+    else if ( aString.equalsAscii( SC_UNONAME_SHOWERR ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, bShowError );
+    else if ( aString.equalsAscii( SC_UNONAME_IGNOREBL ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, bIgnoreBlank );
+    else if ( aString.equalsAscii( SC_UNONAME_SHOWLIST ) ) aRet <<= nShowList;
+    else if ( aString.equalsAscii( SC_UNONAME_INPTITLE ) ) aRet <<= OUString( aInputTitle );
+    else if ( aString.equalsAscii( SC_UNONAME_INPMESS ) )  aRet <<= OUString( aInputMessage );
+    else if ( aString.equalsAscii( SC_UNONAME_ERRTITLE ) ) aRet <<= OUString( aErrorTitle );
+    else if ( aString.equalsAscii( SC_UNONAME_ERRMESS ) )  aRet <<= OUString( aErrorMessage );
+    else if ( aString.equalsAscii( SC_UNONAME_TYPE ) )
     {
         sheet::ValidationType eType = sheet::ValidationType_ANY;
         switch (nValMode)
@@ -989,7 +989,7 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
         }
         aRet <<= eType;
     }
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRALSTY ) )
+    else if ( aString.equalsAscii( SC_UNONAME_ERRALSTY ) )
     {
         sheet::ValidationAlertStyle eStyle = sheet::ValidationAlertStyle_STOP;
         switch (nErrorStyle)

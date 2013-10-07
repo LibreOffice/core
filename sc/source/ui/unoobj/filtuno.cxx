@@ -167,15 +167,15 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName(rProp.Name);
+        OUString aPropName(rProp.Name);
 
-        if ( aPropName.EqualsAscii( SC_UNONAME_FILENAME ) )
+        if ( aPropName.equalsAscii( SC_UNONAME_FILENAME ) )
             rProp.Value >>= aFileName;
-        else if ( aPropName.EqualsAscii( SC_UNONAME_FILTERNAME ) )
+        else if ( aPropName.equalsAscii( SC_UNONAME_FILTERNAME ) )
             rProp.Value >>= aFilterName;
-        else if ( aPropName.EqualsAscii( SC_UNONAME_FILTEROPTIONS ) )
+        else if ( aPropName.equalsAscii( SC_UNONAME_FILTEROPTIONS ) )
             rProp.Value >>= aFilterOptions;
-        else if ( aPropName.EqualsAscii( SC_UNONAME_INPUTSTREAM ) )
+        else if ( aPropName.equalsAscii( SC_UNONAME_INPUTSTREAM ) )
             rProp.Value >>= xInputStream;
     }
 }
@@ -191,7 +191,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
-    String aFilterString( aFilterName );
+    OUString aFilterString( aFilterName );
 
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -201,7 +201,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         //  ascii import is special...
 
         INetURLObject aURL( aFileName );
-        String aPrivDatName(aURL.getName());
+        OUString aPrivDatName(aURL.getName());
         SvStream* pInStream = NULL;
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );

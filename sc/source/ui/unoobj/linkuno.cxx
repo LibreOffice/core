@@ -218,30 +218,30 @@ void SAL_CALL ScSheetLinkObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
+    OUString aNameString(aPropertyName);
     OUString aValStr;
-    if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
     {
         if ( aValue >>= aValStr )
             setFileName( aValStr );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
     {
         if ( aValue >>= aValStr )
             setFilter( aValStr );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
     {
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
@@ -254,17 +254,17 @@ uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const OUString& aPropertyNam
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
+    OUString aNameString(aPropertyName);
     uno::Any aRet;
-    if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
         aRet <<= getFileName();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
         aRet <<= getFilter();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
         aRet <<= getFilterOptions();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
         aRet <<= getRefreshDelay();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
         aRet <<= getRefreshDelay();
     return aRet;
 }
@@ -288,7 +288,7 @@ void ScSheetLinkObj::setFileName(const OUString& rNewName)
         //  pLink->Refresh mit neuem Dateinamen bringt sfx2::LinkManager durcheinander
         //  darum per Hand die Tabellen umsetzen und Link per UpdateLinks neu erzeugen
 
-        String aNewStr(ScGlobal::GetAbsDocName( String(rNewName), pDocShell ));
+        OUString aNewStr(ScGlobal::GetAbsDocName( rNewName, pDocShell ));
 
         //  zuerst Tabellen umsetzen
 
@@ -332,7 +332,7 @@ void ScSheetLinkObj::setFilter(const OUString& Filter)
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
     {
-        String aFilterStr(Filter);
+        OUString aFilterStr(Filter);
         pLink->Refresh( aFileName, aFilterStr, NULL, pLink->GetRefreshDelay() );
     }
 }
@@ -435,7 +435,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
 
     if (pDocShell)
     {
-        String aNameStr(aName);
+        OUString aNameStr(aName);
 
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
@@ -443,7 +443,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
             if (pDoc->IsLinked(nTab))
             {
                 //! case-insensitiv ???
-                String aLinkDoc = pDoc->GetLinkDoc( nTab );
+                OUString aLinkDoc = pDoc->GetLinkDoc( nTab );
                 if ( aLinkDoc == aNameStr )
                     return new ScSheetLinkObj( pDocShell, aNameStr );
             }
@@ -533,7 +533,7 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
 
     if (pDocShell)
     {
-        String aNameStr(aName);
+        OUString aNameStr(aName);
 
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
@@ -541,7 +541,7 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
             if (pDoc->IsLinked(nTab))
             {
                 //! case-insensitiv ???
-                String aLinkDoc(pDoc->GetLinkDoc( nTab ));
+                OUString aLinkDoc(pDoc->GetLinkDoc( nTab ));
                 if ( aLinkDoc == aNameStr )
                     return sal_True;
             }
@@ -649,10 +649,10 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
     {
-        String aFile    (pLink->GetFile());
-        String aFilter  (pLink->GetFilter());
-        String aOptions (pLink->GetOptions());
-        String aSource  (pLink->GetSource());
+        OUString aFile    (pLink->GetFile());
+        OUString aFilter  (pLink->GetFilter());
+        OUString aOptions (pLink->GetOptions());
+        OUString aSource  (pLink->GetSource());
         ScRange aDest   (pLink->GetDestArea());
         sal_uLong nRefresh  = pLink->GetRefreshDelay();
 
@@ -666,15 +666,15 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
         sal_Bool bFitBlock = sal_True;          // verschieben, wenn durch Update Groesse geaendert
         if (pNewFile)
         {
-            aFile = String( *pNewFile );
+            aFile = *pNewFile;
             aFile = ScGlobal::GetAbsDocName( aFile, pDocShell );    //! in InsertAreaLink?
         }
         if (pNewFilter)
-            aFilter = String( *pNewFilter );
+            aFilter = *pNewFilter;
         if (pNewOptions)
-            aOptions = String( *pNewOptions );
+            aOptions = *pNewOptions;
         if (pNewSource)
-            aSource = String( *pNewSource );
+            aSource = *pNewSource;
         if (pNewDest)
         {
             ScUnoConversion::FillScRange( aDest, *pNewDest );
@@ -764,30 +764,30 @@ void SAL_CALL ScAreaLinkObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
+    OUString aNameString(aPropertyName);
     OUString aValStr;
-    if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
     {
         if ( aValue >>= aValStr )
             setFileName( aValStr );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
     {
         if ( aValue >>= aValStr )
             setFilter( aValStr );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
     {
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
@@ -800,17 +800,17 @@ uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const OUString& aPropertyName
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
+    OUString aNameString(aPropertyName);
     uno::Any aRet;
-    if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
         aRet <<= getFileName();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
         aRet <<= getFilter();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
         aRet <<= getFilterOptions();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
         aRet <<= getRefreshDelay();
-    else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
         aRet <<= getRefreshDelay();
     return aRet;
 }
@@ -964,10 +964,10 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        String aFileStr   (aFileName);
-        String aFilterStr (aFilter);
-        String aOptionStr (aFilterOptions);
-        String aSourceStr (aSourceArea);
+        OUString aFileStr   (aFileName);
+        OUString aFilterStr (aFilter);
+        OUString aOptionStr (aFilterOptions);
+        OUString aSourceStr (aSourceArea);
         ScAddress aDestAddr( (SCCOL)aDestPos.Column, (SCROW)aDestPos.Row, aDestPos.Sheet );
 
         aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
@@ -1084,14 +1084,10 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XNamed
 
-static String lcl_BuildDDEName( const String& rAppl, const String& rTopic, const String& rItem )
+static OUString lcl_BuildDDEName( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
 {
     //  Appl|Topic!Item (wie Excel)
-    String aRet = rAppl;
-    aRet += '|';
-    aRet += rTopic;
-    aRet += '!';
-    aRet += rItem;
+    OUString aRet = rAppl + "|" + rTopic + "!" + rItem;
     return aRet;
 }
 
@@ -1300,7 +1296,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
 {
     if (pDocShell)
     {
-        String aNamStr(aName);
+        OUString aNamStr(aName);
         OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -1399,7 +1395,7 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        String aNamStr(aName);
+        OUString aNamStr(aName);
         OUString aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();

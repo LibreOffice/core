@@ -459,10 +459,10 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName
 {
     if ( pDocShell )
     {
-        String aNameStr( aName );
-        if ( aNameStr.EqualsAscii( SC_FAMILYNAME_CELL ) )
+        OUString aNameStr( aName );
+        if ( aNameStr.equalsAscii( SC_FAMILYNAME_CELL ) )
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PARA );
-        else if ( aNameStr.EqualsAscii( SC_FAMILYNAME_PAGE ) )
+        else if ( aNameStr.equalsAscii( SC_FAMILYNAME_PAGE ) )
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
     }
     // no assertion - called directly from getByName
@@ -531,8 +531,8 @@ sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameStr( aName );
-    return ( aNameStr.EqualsAscii( SC_FAMILYNAME_CELL ) || aNameStr.EqualsAscii( SC_FAMILYNAME_PAGE ) );
+    OUString aNameStr( aName );
+    return ( aNameStr.equalsAscii( SC_FAMILYNAME_CELL ) || aNameStr.equalsAscii( SC_FAMILYNAME_PAGE ) );
 }
 
 // style::XStyleLoader
@@ -562,13 +562,13 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
         for (long i = 0; i < nPropCount; i++)
         {
             const beans::PropertyValue& rProp = pPropArray[i];
-            String aPropName(rProp.Name);
+            OUString aPropName(rProp.Name);
 
-            if (aPropName.EqualsAscii( SC_UNONAME_OVERWSTL ))
+            if (aPropName.equalsAscii( SC_UNONAME_OVERWSTL ))
                 bLoadReplace = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName.EqualsAscii( SC_UNONAME_LOADCELL ))
+            else if (aPropName.equalsAscii( SC_UNONAME_LOADCELL ))
                 bLoadCellStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName.EqualsAscii( SC_UNONAME_LOADPAGE ))
+            else if (aPropName.equalsAscii( SC_UNONAME_LOADPAGE ))
                 bLoadPageStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         }
 
@@ -638,7 +638,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
             SfxStyleSheetBase* pStyle = aIter[(sal_uInt16)nIndex];
             if ( pStyle )
             {
-                return new ScStyleObj( pDocShell, eFamily, String (pStyle->GetName()) );
+                return new ScStyleObj( pDocShell, eFamily, pStyle->GetName() );
             }
         }
     }
@@ -649,7 +649,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell )
     {
-        String aString(aName);
+        OUString aString(aName);
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -673,7 +673,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
         if ( pStyleObj && pStyleObj->GetFamily() == eFamily &&
                 !pStyleObj->IsInserted() )  // noch nicht eingefuegt?
         {
-            String aNameStr(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
+            OUString aNameStr(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
             ScDocument* pDoc = pDocShell->GetDocument();
             ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -723,7 +723,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
     bool bFound = false;
     if ( pDocShell )
     {
-        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
+        OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -862,7 +862,7 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const OUString& aName )
     SolarMutexGuard aGuard;
     if ( pDocShell )
     {
-        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
+        OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -1067,7 +1067,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
         //! DocFunc-Funktion??
         //! Undo ?????????????
 
-        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, sal::static_int_cast<sal_uInt16>(eFamily) ));
+        OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, sal::static_int_cast<sal_uInt16>(eFamily) ));
         sal_Bool bOk = pStyle->SetParent( aString );
         if (bOk)
         {
@@ -1123,7 +1123,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
         //! DocFunc-Funktion??
         //! Undo ?????????????
 
-        String aString(aNewName);
+        OUString aString(aNewName);
         sal_Bool bOk = pStyle->SetName( aString );
         if (bOk)
         {

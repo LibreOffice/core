@@ -152,7 +152,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 sal_Int64 nColor = 0;
                 if (aValue >>= nColor)
                 {
-                    String aColorName;
+                    OUString aColorName;
                     Color aColor(static_cast<sal_uInt32>(nColor));
                     aViewOpt.SetGridColor(aColor, aColorName);
                 }
@@ -473,9 +473,8 @@ OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::Ru
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr( rServiceName );
-    return aServiceStr.EqualsAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCDOCUMENTSETTINGS_SERVICE );
+    return rServiceName.equalsAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE ) ||
+           rServiceName.equalsAscii( SCDOCUMENTSETTINGS_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()

@@ -218,7 +218,7 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 
 ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const OUString& aName)
 {
-    String aString(aName);
+    OUString aString(aName);
     sal_uInt16 nIndex;
     if (lcl_FindAutoFormatIndex(
             *ScGlobal::GetOrCreateAutoFormat(), aString, nIndex ))
@@ -241,7 +241,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
         ScAutoFormatObj* pFormatObj = ScAutoFormatObj::getImplementation( xInterface );
         if ( pFormatObj && !pFormatObj->IsInserted() )  // noch nicht eingefuegt?
         {
-            String aNameStr(aName);
+            OUString aNameStr(aName);
             ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
             sal_uInt16 nDummy;
@@ -385,7 +385,7 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString(aName);
+    OUString aString(aName);
     sal_uInt16 nDummy;
     return lcl_FindAutoFormatIndex(
         *ScGlobal::GetOrCreateAutoFormat(), aString, nDummy );
@@ -533,7 +533,7 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNewString(aNewName);
+    OUString aNewString(aNewName);
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
     sal_uInt16 nDummy;
@@ -594,19 +594,19 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
         ScAutoFormatData* pData = pFormats->findByIndex(nFormatIndex);
         OSL_ENSURE(pData,"AutoFormat Daten nicht da");
 
-        String aPropString(aPropertyName);
+        OUString aPropString(aPropertyName);
         sal_Bool bBool = sal_Bool();
-        if (aPropString.EqualsAscii( SC_UNONAME_INCBACK ) && (aValue >>= bBool))
+        if (aPropString.equalsAscii( SC_UNONAME_INCBACK ) && (aValue >>= bBool))
             pData->SetIncludeBackground( bBool );
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCBORD ) && (aValue >>= bBool))
+        else if (aPropString.equalsAscii( SC_UNONAME_INCBORD ) && (aValue >>= bBool))
             pData->SetIncludeFrame( bBool );
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCFONT ) && (aValue >>= bBool))
+        else if (aPropString.equalsAscii( SC_UNONAME_INCFONT ) && (aValue >>= bBool))
             pData->SetIncludeFont( bBool );
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCJUST ) && (aValue >>= bBool))
+        else if (aPropString.equalsAscii( SC_UNONAME_INCJUST ) && (aValue >>= bBool))
             pData->SetIncludeJustify( bBool );
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCNUM ) && (aValue >>= bBool))
+        else if (aPropString.equalsAscii( SC_UNONAME_INCNUM ) && (aValue >>= bBool))
             pData->SetIncludeValueFormat( bBool );
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCWIDTH ) && (aValue >>= bBool))
+        else if (aPropString.equalsAscii( SC_UNONAME_INCWIDTH ) && (aValue >>= bBool))
             pData->SetIncludeWidthHeight( bBool );
 
         // else Fehler
@@ -632,18 +632,17 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
         sal_Bool bValue;
         sal_Bool bError = false;
 
-        String aPropString(aPropertyName);
-        if (aPropString.EqualsAscii( SC_UNONAME_INCBACK ))
+        if (aPropertyName.equalsAscii( SC_UNONAME_INCBACK ))
             bValue = pData->GetIncludeBackground();
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCBORD ))
+        else if (aPropertyName.equalsAscii( SC_UNONAME_INCBORD ))
             bValue = pData->GetIncludeFrame();
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCFONT ))
+        else if (aPropertyName.equalsAscii( SC_UNONAME_INCFONT ))
             bValue = pData->GetIncludeFont();
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCJUST ))
+        else if (aPropertyName.equalsAscii( SC_UNONAME_INCJUST ))
             bValue = pData->GetIncludeJustify();
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCNUM ))
+        else if (aPropertyName.equalsAscii( SC_UNONAME_INCNUM ))
             bValue = pData->GetIncludeValueFormat();
-        else if (aPropString.EqualsAscii( SC_UNONAME_INCWIDTH ))
+        else if (aPropertyName.equalsAscii( SC_UNONAME_INCWIDTH ))
             bValue = pData->GetIncludeWidthHeight();
         else
             bError = sal_True;      // unbekannte Property

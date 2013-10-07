@@ -243,9 +243,8 @@ OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeEx
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr(rServiceName);
-    return aServiceStr.EqualsAscii( SCFUNCTIONACCESS_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCDOCSETTINGS_SERVICE );
+    return rServiceName.equalsAscii( SCFUNCTIONACCESS_SERVICE ) ||
+           rServiceName.equalsAscii( SCDOCSETTINGS_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()

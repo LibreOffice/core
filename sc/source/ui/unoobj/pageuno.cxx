@@ -52,8 +52,7 @@ OUString SAL_CALL ScPageObj::getImplementationName()
 sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr(rServiceName);
-    return aServiceStr.EqualsAscii( "com.sun.star.sheet.SpreadsheetDrawPage" );
+    return rServiceName.equalsAscii( "com.sun.star.sheet.SpreadsheetDrawPage" );
 }
 
 uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()

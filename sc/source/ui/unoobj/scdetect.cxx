@@ -290,8 +290,8 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     uno::Reference< XInteractionHandler > xInteraction;
     String aURL;
     OUString sTemp;
-    String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
+    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
     OUString aDocumentTitle; // interesting only if set in this method
 
@@ -323,7 +323,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")) )
+        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
@@ -374,21 +374,21 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = OUString( "private:factory/" );
-    if( aURL.Match( aPrefix ) == aPrefix.Len() )
+    OUString aPrefix = OUString( "private:factory/" );
+    if( aURL.Match( aPrefix ) == aPrefix.getLength() )
     {
-        String aPattern( aPrefix );
-        aPattern += OUString("scalc");
-        if ( aURL.Match( aPattern ) >= aPattern.Len() )
+        OUString aPattern( aPrefix );
+        aPattern += "scalc";
+        if ( aURL.Match( aPattern ) >= aPattern.getLength() )
             pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
     }
     else
     {
         // container for Calc filters
         SfxFilterMatcher aMatcher("scalc");
-        if ( aPreselectedFilterName.Len() )
+        if ( !aPreselectedFilterName.isEmpty() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
-        else if( aTypeName.Len() )
+        else if( !aTypeName.isEmpty() )
             pFilter = aMatcher.GetFilter4EA( aTypeName );
 
         // ctor of SfxMedium uses owner transition of ItemSet
@@ -450,7 +450,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                         packages::zip::ZipIOException aZipException;
 
                         // repairing is done only if this type is requested from outside
-                        if ( ( aWrap.TargetException >>= aZipException ) && aTypeName.Len() )
+                        if ( ( aWrap.TargetException >>= aZipException ) && !aTypeName.isEmpty() )
                         {
                             if ( xInteraction.is() )
                             {
@@ -477,7 +477,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                             }
 
                             if ( !bRepairAllowed )
-                                aTypeName.Erase();
+                                aTypeName = "";
                         }
                     }
                     catch( uno::RuntimeException& )
@@ -486,10 +486,10 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                     }
                     catch( uno::Exception& )
                     {
-                        aTypeName.Erase();
+                        aTypeName = "";
                     }
 
-                    if ( aTypeName.Len() )
+                    if ( !aTypeName.isEmpty() )
                         pFilter = SfxFilterMatcher("scalc").GetFilter4EA( aTypeName );
                 }
             }

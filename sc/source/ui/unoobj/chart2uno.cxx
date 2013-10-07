@@ -1123,7 +1123,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     SCTAB nTab    = 0;
 
     sal_uInt16 nFileId = 0;
-    String aExtTabName;
+    OUString aExtTabName;
     bool bExternal = false;
 
     vector<ScTokenRef>::const_iterator itr = rRefTokens.begin(), itrEnd = rRefTokens.end();
@@ -2265,15 +2265,15 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
             {
                 // convert one address (remove dots)
 
-                String aUIString(sToken);
+                OUString aUIString(sToken);
 
                 sal_Int32 nIndex = ScRangeStringConverter::IndexOf( sToken, ':', 0, cQuote );
-                if ( nIndex >= 0 && nIndex < aUIString.Len() - 1 &&
-                        aUIString.GetChar((xub_StrLen)nIndex + 1) == (sal_Unicode) '.' )
-                    aUIString.Erase( (xub_StrLen)nIndex + 1, 1 );
+                if ( nIndex >= 0 && nIndex < aUIString.getLength() - 1 &&
+                        aUIString[nIndex + 1] == '.' )
+                    aUIString = aUIString.replaceAt( nIndex + 1, 1, "" );
 
-                if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
-                    aUIString.Erase( 0, 1 );
+                if ( aUIString[0] == '.' )
+                    aUIString = aUIString.copy( 1 );
 
                 if( !sRet.isEmpty() )
                     sRet.append( (sal_Unicode) ';' );
@@ -2659,7 +2659,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
         return 0;
 
     sal_uInt16 nFileId = pToken->GetIndex();
-    const String& rTabName = pToken->GetString();
+    const OUString& rTabName = pToken->GetString();
     ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, aRange, NULL);
     if (!pArray)
         // no external data exists for this range.
@@ -3156,8 +3156,8 @@ public:
             {
                 if ( meOrigin != chart2::data::LabelOrigin_LONG_SIDE)
                 {
-                    String aString = ScGlobal::GetRscString(STR_COLUMN);
-                    aString += ' ';
+                    OUString aString = ScGlobal::GetRscString(STR_COLUMN);
+                    aString += " ";
                     ScAddress aPos( nCol, 0, 0 );
                     OUString aColStr(aPos.Format(SCA_VALID_COL, NULL));
                     aString += aColStr;

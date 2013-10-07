@@ -76,7 +76,7 @@ ScLinkTargetTypesObj::ScLinkTargetTypesObj(ScDocShell* pDocSh) :
     pDocShell->GetDocument()->AddUnoObject(*this);
 
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
-        aNames[i] = String( ScResId( nTypeResIds[i] ) );
+        aNames[i] = ScResId( nTypeResIds[i] );
 }
 
 ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
@@ -98,7 +98,7 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
 {
     if (pDocShell)
     {
-        String aNameStr(aName);
+        OUString aNameStr(aName);
         for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
             if ( aNames[i] == aNameStr )
                 return uno::makeAny(uno::Reference< beans::XPropertySet >(new ScLinkTargetTypeObj( pDocShell, i )));
@@ -118,7 +118,7 @@ uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) thr
 
 sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( uno::RuntimeException )
 {
-    String aNameStr = aName;
+    OUString aNameStr = aName;
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         if ( aNames[i] == aNameStr )
             return sal_True;
@@ -144,7 +144,7 @@ ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :
     nType( nT )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
-    aName = String( ScResId( nTypeResIds[nType] ) );    //! on demand?
+    aName = ScResId( nTypeResIds[nType] );    //! on demand?
 }
 
 ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
@@ -238,10 +238,10 @@ uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& Property
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     uno::Any aRet;
-    String aNameStr(PropertyName);
-    if ( aNameStr.EqualsAscii( SC_UNO_LINKDISPBIT ) )
+    OUString aNameStr(PropertyName);
+    if ( aNameStr.equalsAscii( SC_UNO_LINKDISPBIT ) )
         SetLinkTargetBitmap( aRet, nType );
-    else if ( aNameStr.EqualsAscii( SC_UNO_LINKDISPNAME ) )
+    else if ( aNameStr.equalsAscii( SC_UNO_LINKDISPNAME ) )
         aRet <<= OUString( aName );
 
     return aRet;

@@ -469,10 +469,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         }
         break;
         case SC_SERVICE_CELLSTYLE:
-            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, String() ));
+            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PARA, OUString() ));
             break;
         case SC_SERVICE_PAGESTYLE:
-            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PAGE, String() ));
+            xRet.set((style::XStyle*)new ScStyleObj( NULL, SFX_STYLE_FAMILY_PAGE, OUString() ));
             break;
         case SC_SERVICE_AUTOFORMAT:
             xRet.set((container::XIndexAccess*)new ScAutoFormatObj( SC_AFMTOBJ_INVALID ));

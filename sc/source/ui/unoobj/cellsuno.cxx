@@ -133,14 +133,14 @@ using namespace com::sun::star;
 
 class ScNamedEntry
 {
-    String  aName;
-    ScRange aRange;
+    OUString  aName;
+    ScRange   aRange;
 
 public:
-            ScNamedEntry(const String& rN, const ScRange& rR) :
+            ScNamedEntry(const OUString& rN, const ScRange& rR) :
                 aName(rN), aRange(rR) {}
 
-    const String&   GetName() const     { return aName; }
+    const OUString& GetName() const     { return aName; }
     const ScRange&  GetRange() const    { return aRange; }
 };
 
@@ -1288,7 +1288,7 @@ static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRang
             const OUString* pColArr = rColSeq.getConstArray();
             for (long nCol=0; nCol<nCols; nCol++)
             {
-                String aText(pColArr[nCol]);
+                OUString aText(pColArr[nCol]);
                 ScAddress aPos( nDocCol, nDocRow, nTab );
 
                 ScInputStringType aRes =
@@ -1385,16 +1385,16 @@ static OUString lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPos, sal
     if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
     {
         double fDummy;
-        String aTempString = aVal;
+        OUString aTempString = aVal;
         sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aTempString, nNumFmt, fDummy));
         if ( bIsNumberFormat )
-            aTempString.Insert('\'',0);
-        else if ( aTempString.Len() && aTempString.GetChar(0) == '\'' )
+            aTempString = "'" + aTempString;
+        else if ( !aTempString.isEmpty() && aTempString[0] == '\'' )
         {
             //  if the string starts with a "'", add another one because setFormula
             //  strips one (like text input, except for "text" number formats)
             if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
-                aTempString.Insert('\'',0);
+                aTempString = "'" + aTempString;
         }
         aVal = aTempString;
     }
@@ -2009,7 +2009,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
                 bChartRowAsHdr = false;
             else if ( pEntry->nWID == SC_WID_UNO_CELLSTYL )
             {
-                String aStyleName( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ) );
+                OUString aStyleName( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ) );
                 pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aStyleName, sal_True, sal_True );
             }
         }
@@ -2348,7 +2348,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     {
                         OUString aStrVal;
                         aValue >>= aStrVal;
-                        String aString(ScStyleNameConversion::ProgrammaticToDisplayName(
+                        OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName(
                                                             aStrVal, SFX_STYLE_FAMILY_PARA ));
                         pDocShell->GetDocFunc().ApplyStyle( *GetMarkData(), aString, sal_True, sal_True );
                     }
@@ -2513,7 +2513,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     break;
                 case SC_WID_UNO_CELLSTYL:
                     {
-                        String aStyleName;
+                        OUString aStyleName;
                         const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(*GetMarkData());
                         if (pStyle)
                             aStyleName = pStyle->GetName();
@@ -3051,7 +3051,7 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
         }
         if (!xChartRanges.Is())         //  sonst Ranges direkt uebernehmen
             xChartRanges = new ScRangeList(aRanges);
-        ScChartArray aArr( pDocShell->GetDocument(), xChartRanges, String() );
+        ScChartArray aArr( pDocShell->GetDocument(), xChartRanges, OUString() );
 
         // RowAsHdr = ColHeaders und umgekehrt
         aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );
@@ -3134,7 +3134,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
     if ( pDocShell && xChartRanges.Is() )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        ScChartArray aArr( pDoc, xChartRanges, String() );
+        ScChartArray aArr( pDoc, xChartRanges, OUString() );
         aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
         const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
         if (pPosMap)
@@ -3208,7 +3208,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
         if ( pDocShell && xChartRanges.Is() )
         {
             ScDocument* pDoc = pDocShell->GetDocument();
-            ScChartArray aArr( pDoc, xChartRanges, String() );
+            ScChartArray aArr( pDoc, xChartRanges, OUString() );
             aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
@@ -3280,7 +3280,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
         if ( pDocShell && xChartRanges.Is() )
         {
             ScDocument* pDoc = pDocShell->GetDocument();
-            ScChartArray aArr( pDoc, xChartRanges, String() );
+            ScChartArray aArr( pDoc, xChartRanges, OUString() );
             aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
@@ -4408,7 +4408,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
 
 // XNameContainer
 
-static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const String& rName )
+static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const OUString& rName )
 {
     sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -4434,8 +4434,8 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
         {
             //  if explicit name is given and already existing, throw exception
 
-            String aNamStr(aName);
-            if ( aNamStr.Len() )
+            OUString aNamStr(aName);
+            if ( !aNamStr.isEmpty() )
             {
                 size_t nNamedCount = m_pImpl->m_aNamedEntries.size();
                 for (size_t n = 0; n < nNamedCount; n++)
@@ -4473,11 +4473,11 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
 }
 
 static sal_Bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
-                            const String& rName, size_t& rIndex )
+                            const OUString& rName, size_t& rIndex )
 {
     if (pDocSh)
     {
-        String aRangeStr;
+        OUString aRangeStr;
         ScDocument* pDoc = pDocSh->GetDocument();
         for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
@@ -4494,7 +4494,7 @@ static sal_Bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDo
 
 static sal_Bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
                             const ScRangeList& rRanges, ScDocShell* pDocSh,
-                            const String& rName, ScRange& rFound )
+                            const OUString& rName, ScRange& rFound )
 {
     //  exact range in list?
 
@@ -4551,7 +4551,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     sal_Bool bDone = false;
-    String aNameStr(aName);
+    OUString aNameStr(aName);
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     size_t nIndex = 0;
@@ -4629,7 +4629,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    String aNameStr(aName);
+    OUString aNameStr(aName);
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     ScRange aRange;
@@ -4649,7 +4649,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
 }
 
 static sal_Bool lcl_FindEntryName( const ScNamedEntryArr_Impl& rNamedEntries,
-                        const ScRange& rRange, String& rName )
+                        const ScRange& rRange, OUString& rName )
 {
     sal_uInt16 nCount = rNamedEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -4670,7 +4670,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
     const ScRangeList& rRanges = GetRangeList();
     if (pDocSh)
     {
-        String aRangeStr;
+        OUString aRangeStr;
         ScDocument* pDoc = pDocSh->GetDocument();
         size_t nCount = rRanges.size();
 
@@ -4696,7 +4696,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameStr(aName);
+    OUString aNameStr(aName);
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     ScRange aRange;
@@ -4757,11 +4757,11 @@ OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr(rServiceName);
-    return aServiceStr.EqualsAscii( SCSHEETCELLRANGES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCPARAPROPERTIES_SERVICE );
+    OUString aServiceStr(rServiceName);
+    return aServiceStr.equalsAscii( SCSHEETCELLRANGES_SERVICE ) ||
+           aServiceStr.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
+           aServiceStr.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
+           aServiceStr.equalsAscii( SCPARAPROPERTIES_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
@@ -4983,7 +4983,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
 
         ScRange aCellRange;
         sal_Bool bFound = false;
-        String aString(aName);
+        OUString aString(aName);
         sal_uInt16 nParse = aCellRange.ParseAny( aString, pDoc, rDetails );
         if ( nParse & SCA_VALID )
         {
@@ -6048,12 +6048,11 @@ OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeExce
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr( rServiceName );
-    return aServiceStr.EqualsAscii( SCSHEETCELLRANGE_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLRANGE_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCPARAPROPERTIES_SERVICE );
+    return rServiceName.equalsAscii( SCSHEETCELLRANGE_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELLRANGE_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCPARAPROPERTIES_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
@@ -6195,7 +6194,7 @@ OUString ScCellObj::GetInputString_Impl(bool bEnglish) const      // fuer getFor
 {
     if (GetDocShell())
         return lcl_GetInputString( GetDocShell()->GetDocument(), aCellPos, bEnglish );
-    return String();
+    return OUString();
 }
 
 OUString ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellPos)
@@ -6283,7 +6282,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
     if (!pDocSh)
         return;
 
-    String aString(rText);
+    OUString aString(rText);
     ScDocument* pDoc = pDocSh->GetDocument();
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     sal_uInt32 nOldFormat = pDoc->GetNumberFormat( aCellPos );
@@ -6373,12 +6372,12 @@ OUString SAL_CALL ScCellObj::getString() throw(uno::RuntimeException)
 void SAL_CALL ScCellObj::setString( const OUString& aText ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString(aText);
+    OUString aString(aText);
     SetString_Impl(aString, false, false);  // immer Text
 
     // don't create pUnoText here if not there
     if (mxUnoText.is())
-        mxUnoText->SetSelection(ESelection( 0,0, 0,aString.Len() ));
+        mxUnoText->SetSelection(ESelection( 0,0, 0,aString.getLength() ));
 }
 
 void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& xRange,
@@ -6519,7 +6518,7 @@ OUString SAL_CALL ScCellObj::getFormula() throw(uno::RuntimeException)
 void SAL_CALL ScCellObj::setFormula( const OUString& aFormula ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aString(aFormula);
+    OUString aString(aFormula);
     SetString_Impl(aString, sal_True, sal_True); // Interpret as English
 }
 
@@ -6732,7 +6731,7 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
         {
             OUString aStrVal;
             aValue >>= aStrVal;
-            String aString(aStrVal);
+            OUString aString(aStrVal);
             SetString_Impl(aString, sal_True, false);   // lokal interpretieren
         }
         else if ( pEntry->nWID == SC_WID_UNO_FORMRT )
@@ -6785,14 +6784,13 @@ sal_Bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
     //  but ScCellObj is used instead of ScCellRangeObj in CellRanges collections,
     //  so it must support them
 
-    String aServiceStr(rServiceName);
-    return aServiceStr.EqualsAscii( SCSHEETCELL_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELL_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCPARAPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCSHEETCELLRANGE_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLRANGE_SERVICE );
+    return rServiceName.equalsAscii( SCSHEETCELL_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELL_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCPARAPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCSHEETCELLRANGE_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELLRANGE_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
@@ -7251,7 +7249,7 @@ void SAL_CALL ScTableSheetObj::setName( const OUString& aNewName )
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        String aString(aNewName);
+        OUString aString(aNewName);
         pDocSh->GetDocFunc().RenameTable( GetTab_Impl(), aString, sal_True, sal_True );
     }
 }
@@ -7677,7 +7675,7 @@ void SAL_CALL ScTableSheetObj::setLinkMode( sheet::SheetLinkMode nLinkMode )
 OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aFile;
+    OUString aFile;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
         aFile = pDocSh->GetDocument()->GetLinkDoc( GetTab_Impl() );
@@ -7701,7 +7699,7 @@ void SAL_CALL ScTableSheetObj::setLinkUrl( const OUString& aLinkUrl )
 OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aSheet;
+    OUString aSheet;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
         aSheet = pDocSh->GetDocument()->GetLinkTab( GetTab_Impl() );
@@ -7993,7 +7991,7 @@ void SAL_CALL ScTableSheetObj::protect( const OUString& aPassword )
     // #i108245# if already protected, don't change anything
     if ( pDocSh && !pDocSh->GetDocument()->IsTabProtected( GetTab_Impl() ) )
     {
-        String aString(aPassword);
+        OUString aString(aPassword);
         pDocSh->GetDocFunc().Protect( GetTab_Impl(), aString, sal_True );
     }
 }
@@ -8005,7 +8003,7 @@ void SAL_CALL ScTableSheetObj::unprotect( const OUString& aPassword )
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        String aString(aPassword);
+        OUString aString(aPassword);
         sal_Bool bDone = pDocSh->GetDocFunc().Unprotect( GetTab_Impl(), aString, sal_True );
         if (!bDone)
             throw lang::IllegalArgumentException();
@@ -8067,7 +8065,7 @@ void SAL_CALL ScTableSheetObj::setScenarioComment( const OUString& aScenarioComm
         pDoc->GetName( nTab, aName );
         pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
 
-        aComment = String( aScenarioComment );
+        aComment = aScenarioComment;
 
         pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
     }
@@ -8179,8 +8177,8 @@ void ScTableSheetObj::setExternalName( const OUString& aUrl, const OUString& aSh
         if ( pDoc )
         {
             const SCTAB nTab = GetTab_Impl();
-            const String aAbsDocName( ScGlobal::GetAbsDocName( aUrl, pDocSh ) );
-            const String aDocTabName( ScGlobal::GetDocTabName( aAbsDocName, aSheetName ) );
+            const OUString aAbsDocName( ScGlobal::GetAbsDocName( aUrl, pDocSh ) );
+            const OUString aDocTabName( ScGlobal::GetDocTabName( aAbsDocName, aSheetName ) );
             if ( !pDoc->RenameTab( nTab, aDocTabName, false /*bUpdateRef*/, sal_True /*bExternalDocument*/ ) )
             {
                 throw container::ElementExistException( OUString(), *this );
@@ -8703,14 +8701,13 @@ OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr( rServiceName );
-    return aServiceStr.EqualsAscii( SCSPREADSHEET_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCSHEETCELLRANGE_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLRANGE_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCELLPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCCHARPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCPARAPROPERTIES_SERVICE ) ||
-           aServiceStr.EqualsAscii( SCLINKTARGET_SERVICE );
+    return rServiceName.equalsAscii( SCSPREADSHEET_SERVICE ) ||
+           rServiceName.equalsAscii( SCSHEETCELLRANGE_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELLRANGE_SERVICE ) ||
+           rServiceName.equalsAscii( SCCELLPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCCHARPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCPARAPROPERTIES_SERVICE ) ||
+           rServiceName.equalsAscii( SCLINKTARGET_SERVICE );
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()

@@ -172,7 +172,7 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
 
     ScRangeName* pNewRanges = new ScRangeName(*pNames);
 
-    String aInsName = pOld->GetName();
+    OUString aInsName = pOld->GetName();
     if (pNewName)
         aInsName = *pNewName;
 
@@ -862,7 +862,7 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
 ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
-        return new ScNamedRangeObj(this, pDocShell, String(aName));
+        return new ScNamedRangeObj(this, pDocShell, aName);
     return NULL;
 }
 
@@ -893,7 +893,7 @@ ScLocalNamedRangesObj::~ScLocalNamedRangesObj()
 ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName( aName ) )
-        return new ScNamedRangeObj( this, pDocShell, String(aName), mxSheet);
+        return new ScNamedRangeObj( this, pDocShell, aName, mxSheet);
     return NULL;
 
 }

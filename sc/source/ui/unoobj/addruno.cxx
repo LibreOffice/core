@@ -138,8 +138,8 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
         throw uno::RuntimeException();
 
     sal_Bool bSuccess = false;
-    String aNameStr(aPropertyName);
-    if ( aNameStr.EqualsAscii( SC_UNONAME_ADDRESS ) )
+    OUString aNameStr(aPropertyName);
+    if ( aNameStr.equalsAscii( SC_UNONAME_ADDRESS ) )
     {
         //  read the cell/range address from API struct
         if ( bIsRange )
@@ -161,7 +161,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             }
         }
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_REFSHEET ) )
+    else if ( aNameStr.equalsAscii( SC_UNONAME_REFSHEET ) )
     {
         //  set the reference sheet
         sal_Int32 nIntVal = 0;
@@ -171,38 +171,38 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
             bSuccess = sal_True;
         }
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_UIREPR ) )
+    else if ( aNameStr.equalsAscii( SC_UNONAME_UIREPR ) )
     {
         //  parse the UI representation string
         OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
-            String aUIString = sRepresentation;
+            OUString aUIString = sRepresentation;
             bSuccess = ParseUIString( aUIString );
         }
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
+    else if ( aNameStr.equalsAscii( SC_UNONAME_PERSREPR ) || aNameStr.equalsAscii( SC_UNONAME_XLA1REPR ) )
     {
-        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) ?
+        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.equalsAscii( SC_UNONAME_XLA1REPR ) ?
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  parse the file format string
         OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
-            String aUIString(sRepresentation);
+            OUString aUIString(sRepresentation);
 
             //  cell or range: strip a single "." at the start
-            if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
-                aUIString.Erase( 0, 1 );
+            if ( aUIString[0]== (sal_Unicode) '.' )
+                aUIString = aUIString.copy( 1 );
 
             if ( bIsRange )
             {
                 //  range: also strip a "." after the last colon
                 sal_Int32 nColon = OUString(aUIString).lastIndexOf( (sal_Unicode) ':' );
-                if ( nColon >= 0 && nColon < aUIString.Len() - 1 &&
-                     aUIString.GetChar((xub_StrLen)nColon+1) == (sal_Unicode) '.' )
-                    aUIString.Erase( (xub_StrLen)nColon+1, 1 );
+                if ( nColon >= 0 && nColon < aUIString.getLength() - 1 &&
+                     aUIString[nColon+1] == '.' )
+                    aUIString = aUIString.replaceAt( nColon+1, 1, "" );
             }
 
             //  parse the rest like a UI string
@@ -226,8 +226,8 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
     ScDocument* pDoc = pDocShell->GetDocument();
     uno::Any aRet;
 
-    String aNameStr(aPropertyName);
-    if ( aNameStr.EqualsAscii( SC_UNONAME_ADDRESS ) )
+    OUString aNameStr(aPropertyName);
+    if ( aNameStr.equalsAscii( SC_UNONAME_ADDRESS ) )
     {
         if ( bIsRange )
         {
@@ -242,11 +242,11 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             aRet <<= aCellAddress;
         }
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_REFSHEET ) )
+    else if ( aNameStr.equalsAscii( SC_UNONAME_REFSHEET ) )
     {
         aRet <<= nRefSheet;
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_UIREPR ) )
+    else if ( aNameStr.equalsAscii( SC_UNONAME_UIREPR ) )
     {
         //  generate UI representation string - include sheet only if different from ref sheet
         OUString aFormatStr;
@@ -259,22 +259,22 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             aFormatStr = aRange.aStart.Format(nFlags, pDoc);
         aRet <<= aFormatStr;
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
+    else if ( aNameStr.equalsAscii( SC_UNONAME_PERSREPR ) || aNameStr.equalsAscii( SC_UNONAME_XLA1REPR ) )
     {
-        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) ?
+        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.equalsAscii( SC_UNONAME_XLA1REPR ) ?
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  generate file format string - always include sheet
-        String aFormatStr(aRange.aStart.Format(SCA_VALID | SCA_TAB_3D, pDoc, eConv));
+        OUString aFormatStr(aRange.aStart.Format(SCA_VALID | SCA_TAB_3D, pDoc, eConv));
         if ( bIsRange )
         {
             //  manually concatenate range so both parts always have the sheet name
-            aFormatStr.Append( (sal_Unicode) ':' );
+            aFormatStr += ":";
             sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
                 nFlags |= SCA_TAB_3D;
             OUString aSecond(aRange.aEnd.Format(nFlags, pDoc, eConv));
-            aFormatStr.Append( aSecond );
+            aFormatStr += aSecond ;
         }
         aRet <<= OUString( aFormatStr );
     }
@@ -296,8 +296,8 @@ OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::Run
 sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr( rServiceName );
-    return aServiceStr.EqualsAscii( bIsRange ? SC_SERVICENAME_RANGEADDRESS
+    OUString aServiceStr( rServiceName );
+    return aServiceStr.equalsAscii( bIsRange ? SC_SERVICENAME_RANGEADDRESS
                                              : SC_SERVICENAME_CELLADDRESS );
 }
 

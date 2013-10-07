@@ -338,9 +338,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
+    OUString aNameString(aPropertyName);
 
-    if ( aNameString.EqualsAscii( SC_UNONAME_ANCHOR ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_ANCHOR ) )
     {
         uno::Reference<sheet::XCellRangeAddressable> xRangeAdd(aValue, uno::UNO_QUERY);
         if (xRangeAdd.is())
@@ -448,7 +448,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
         else
             throw lang::IllegalArgumentException("only XCell or XSpreadsheet objects allowed", static_cast<cppu::OWeakObject*>(this), 0);
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_IMAGEMAP ) )
     {
         SdrObject* pObj = GetSdrObject();
         if ( pObj )
@@ -472,7 +472,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_HORIPOS ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_HORIPOS ) )
     {
         sal_Int32 nPos = 0;
         if (aValue >>= nPos)
@@ -570,7 +570,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_VERTPOS ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_VERTPOS ) )
     {
         sal_Int32 nPos = 0;
         if (aValue >>= nPos)
@@ -639,15 +639,15 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
     }
-    else if  ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
-               aNameString.EqualsAscii( SC_UNONAME_URL) )
+    else if  ( aNameString.equalsAscii( SC_UNONAME_HYPERLINK ) ||
+               aNameString.equalsAscii( SC_UNONAME_URL) )
     {
         OUString sHlink;
         ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this, true);
         if ( ( aValue >>= sHlink ) && pInfo )
             pInfo->SetHlink( sHlink );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_MOVEPROTECT ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_MOVEPROTECT ) )
     {
         if( SdrObject* pObj = this->GetSdrObject() )
         {
@@ -669,10 +669,10 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString = aPropertyName;
+    OUString aNameString = aPropertyName;
 
     uno::Any aAny;
-    if ( aNameString.EqualsAscii( SC_UNONAME_ANCHOR ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_ANCHOR ) )
     {
         SdrObject *pObj = GetSdrObject();
         if (pObj)
@@ -703,7 +703,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
             }
         }
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_IMAGEMAP ) )
     {
         uno::Reference< uno::XInterface > xImageMap;
         SdrObject* pObj = GetSdrObject();
@@ -720,7 +720,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
         }
         aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_HORIPOS ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_HORIPOS ) )
     {
         SdrObject *pObj = GetSdrObject();
         if (pObj)
@@ -779,7 +779,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
             }
         }
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_VERTPOS ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_VERTPOS ) )
     {
         SdrObject *pObj = GetSdrObject();
         if (pObj)
@@ -824,15 +824,15 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
             }
         }
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
-              aNameString.EqualsAscii( SC_UNONAME_URL ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_HYPERLINK ) ||
+              aNameString.equalsAscii( SC_UNONAME_URL ) )
     {
         OUString sHlink;
         if ( ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this) )
             sHlink = pInfo->GetHlink();
         aAny <<= sHlink;
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_MOVEPROTECT ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_MOVEPROTECT ) )
     {
         sal_Bool aProt = false;
         if ( SdrObject* pObj = this->GetSdrObject() )
@@ -916,22 +916,22 @@ beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const OUString& aPro
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
+    OUString aNameString(aPropertyName);
 
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
-    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_IMAGEMAP ) )
     {
         // ImageMap is always "direct"
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_ANCHOR ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_ANCHOR ) )
     {
         // Anchor is always "direct"
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_HORIPOS ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_HORIPOS ) )
     {
         // HoriPos is always "direct"
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_VERTPOS ) )
+    else if ( aNameString.equalsAscii( SC_UNONAME_VERTPOS ) )
     {
         // VertPos is always "direct"
     }
@@ -965,9 +965,9 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const OUString& aPropertyName )
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aPropertyName);
+    OUString aNameString(aPropertyName);
 
-    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_IMAGEMAP ) )
     {
         SdrObject* pObj = GetSdrObject();
         if ( pObj )
@@ -997,10 +997,10 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const OUString& aPropertyName 
                                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString = aPropertyName;
+    OUString aNameString = aPropertyName;
 
     uno::Any aAny;
-    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    if ( aNameString.equalsAscii( SC_UNONAME_IMAGEMAP ) )
     {
         //  default: empty ImageMap
         uno::Reference< uno::XInterface > xImageMap(SvUnoImageMap_createInstance( GetSupportedMacroItems() ));
