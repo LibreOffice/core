@@ -299,7 +299,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     SfxStyleSheetBase* pSourceStyle = aIter.First();
     while (pSourceStyle)
     {
-        String aName = pSourceStyle->GetName();
+        OUString aName = pSourceStyle->GetName();
         SfxStyleSheetBase* pDestStyle = pDestPool->Find( pSourceStyle->GetName(), pSourceStyle->GetFamily() );
         if ( pDestStyle )
         {

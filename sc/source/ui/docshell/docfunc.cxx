@@ -1093,11 +1093,11 @@ bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
 }
 
 
-static ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
+static ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const OUString& rText, const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScTokenArray* pCode = new ScTokenArray;
     pCode->AddStringXML( rText );
-    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (rFormulaNmsp.Len() > 0) )
+    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (!rFormulaNmsp.isEmpty()) )
         pCode->AddStringXML( rFormulaNmsp );
     return pCode;
 }
@@ -1186,9 +1186,9 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, sal_B
         return false;
     }
 
-    String aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! ist das noetig ???
+    OUString aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! ist das noetig ???
 
-    if( ScPostIt* pNote = (aNewText.Len() > 0) ? pDoc->GetNotes(rPos.Tab())->GetOrCreateNote( rPos ) : pDoc->GetNotes( rPos.Tab() )->findByAddress(rPos) )
+    if( ScPostIt* pNote = (!aNewText.isEmpty()) ? pDoc->GetNotes(rPos.Tab())->GetOrCreateNote( rPos ) : pDoc->GetNotes( rPos.Tab() )->findByAddress(rPos) )
         pNote->SetText( rPos, aNewText );
 
     //! Undo !!!
@@ -1717,7 +1717,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     // the patch comes from mloiseleur and maoyg
     bool bInsertMerge = false;
     std::vector<ScRange> qIncreaseRange;
-    String aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTCELLS );
+    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTCELLS );
     if (bRecord)
         rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
 
@@ -2134,7 +2134,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     //the patch comes from maoyg
     ::std::vector<ScRange> qDecreaseRange;
     bool bDeletingMerge = false;
-    String aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
+    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_DELETECELLS );
     if (bRecord)
         rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
 
@@ -2854,7 +2854,7 @@ sal_Bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos
 }
 
 //------------------------------------------------------------------------
-uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, String& sCodeName )
+uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, OUString& sCodeName )
 {
     uno::Reference< lang::XMultiServiceFactory> xSF(rDocSh.GetModel(), uno::UNO_QUERY);
     uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess;
@@ -2868,7 +2868,7 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
 
 }
 
-static script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
+static script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, OUString& sModule )
 {
     script::ModuleInfo sModuleInfo;
     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
@@ -2885,7 +2885,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        String aLibName( "Standard" );
+        OUString aLibName( "Standard" );
         if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
         {
             aLibName = rDocSh.GetBasicManager()->GetName();
@@ -2897,7 +2897,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName
     {
         // if the Module with codename exists then find a new name
         sal_Int32 nNum = 0;
-        String genModuleName;
+        OUString genModuleName;
         if ( !sModuleName.isEmpty() )
             genModuleName = sModuleName;
         else
@@ -2933,7 +2933,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        String aLibName( "Standard" );
+        OUString aLibName( "Standard" );
         if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
         {
             aLibName = rDocSh.GetBasicManager()->GetName();
@@ -3754,7 +3754,7 @@ sal_Bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, sal_Bool b
         {
             if (!bApi)
             {
-                InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                InfoBox aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
                 aBox.Execute();
             }
             return false;
@@ -3786,7 +3786,7 @@ sal_Bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, sal_Bool b
         {
             if (!bApi)
             {
-                InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                InfoBox aBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
                 aBox.Execute();
             }
             return false;
@@ -4920,7 +4920,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
         ScRangeData::MakeValidName(aName);
         if (!aName.isEmpty())
         {
-            String aContent(ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format(SCR_ABS_3D, pDoc));
+            OUString aContent(ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format(SCR_ABS_3D, pDoc));
 
             bool bInsert = false;
             ScRangeData* pOld = rList.findByUpperName(ScGlobal::pCharClass->uppercase(aName));
@@ -4934,11 +4934,11 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         bInsert = sal_True;     // per API nicht nachfragen
                     else
                     {
-                        String aTemplate = ScGlobal::GetRscString( STR_CREATENAME_REPLACE );
+                        OUString aTemplate = ScGlobal::GetRscString( STR_CREATENAME_REPLACE );
 
-                        String aMessage = aTemplate.GetToken( 0, '#' );
+                        OUString aMessage = aTemplate.getToken( 0, '#' );
                         aMessage += aName;
-                        aMessage += aTemplate.GetToken( 1, '#' );
+                        aMessage += aTemplate.getToken( 1, '#' );
 
                         short nResult = QueryBox( rDocShell.GetActiveDialogParent(),
                                                     WinBits(WB_YES_NO_CANCEL | WB_DEF_YES),
@@ -5133,7 +5133,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
 #endif
             OUString aName;
             OUStringBuffer aContent;
-            String aFormula;
+            OUString aFormula;
             SCROW nOutRow = nStartRow;
             for (j=0; j<nValidCount; j++)
             {
@@ -5141,8 +5141,7 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
                 pData->GetName(aName);
                 // relative Referenzen Excel-konform auf die linke Spalte anpassen:
                 pData->UpdateSymbol(aContent, ScAddress( nStartCol, nOutRow, nTab ));
-                aFormula = '=';
-                aFormula += aContent.toString();
+                aFormula = "=" + aContent.toString();
                 ScSetStringParam aParam;
                 aParam.setTextInput();
                 pDoc->SetString(ScAddress(nStartCol,nOutRow,nTab), aName, &aParam);
@@ -5194,7 +5193,7 @@ sal_Bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNe
     pDoc->GetFormula( nStartCol, nStartRow, nTab, aFormula );
     if ( aFormula[0] == '{' && aFormula[aFormula.getLength()-1] == '}' )
     {
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
+        OUString aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
         if (bUndo)
             rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
 
@@ -5253,7 +5252,7 @@ sal_Bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilt
                 if ( !nRemoved )
                 {
                     // group all remove and the insert action
-                    String aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
+                    OUString aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
                     rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
                 }
 
@@ -5400,7 +5399,7 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
 
 void ScDocFunc::EnterListAction( sal_uInt16 nNameResId )
 {
-    String aUndo( ScGlobal::GetRscString( nNameResId ) );
+    OUString aUndo( ScGlobal::GetRscString( nNameResId ) );
     rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
 }
 

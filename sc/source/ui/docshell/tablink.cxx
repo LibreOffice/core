@@ -99,7 +99,7 @@ ScTableLink::~ScTableLink()
     // Verbindung aufheben
 
     StopRefreshTimer();
-    String aEmpty;
+    OUString aEmpty;
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
     SCTAB nCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
@@ -207,8 +207,8 @@ sal_Bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilt
     pSrcShell->DoLoad(pMed);
 
     // Optionen koennten gesetzt worden sein
-    String aNewOpt = ScDocumentLoader::GetOptions(*pMed);
-    if (!aNewOpt.Len())
+    OUString aNewOpt = ScDocumentLoader::GetOptions(*pMed);
+    if (aNewOpt.isEmpty())
         aNewOpt = aOptions;
 
     //  Undo...
@@ -236,7 +236,7 @@ sal_Bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilt
         sal_uInt8 nMode = pDoc->GetLinkMode(nTab);
         if (nMode && aFileName.equals(pDoc->GetLinkDoc(nTab)))
         {
-            String aTabName = pDoc->GetLinkTab(nTab);
+            OUString aTabName = pDoc->GetLinkTab(nTab);
 
             //  Undo
 
@@ -280,7 +280,7 @@ sal_Bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilt
             if( pMed->GetError() == 0 )
             {
                 // no sheet name -> use first sheet
-                if ( aTabName.Len() && !bAutoTab )
+                if ( !aTabName.isEmpty() && !bAutoTab )
                     bFound = pSrcDoc->GetTable( aTabName, nSrcTab );
                 else
                     bFound = true;

@@ -53,7 +53,7 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
         pDocSh->GetDocStat( aDocStat );
 
     VclFrame *pFrame = get<VclFrame>("StatisticsInfoPage");
-    String aInfo = pFrame->get_label();
+    OUString aInfo = pFrame->get_label();
     aInfo += aDocStat.aDocName;
     pFrame->set_label(aInfo);
     m_pFtTables   ->SetText( OUString::number( aDocStat.nTableCount ) );

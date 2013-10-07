@@ -31,7 +31,7 @@ using namespace formula;
 
 // -----------------------------------------------------------------------
 
-static sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
+static sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const OUString& rName )
 {
     if (pDocSh)
     {
@@ -162,16 +162,16 @@ sal_Bool ScServerObject::GetData(
         bRefreshListener = false;
     }
 
-    String aDdeTextFmt = pDocSh->GetDdeTextFmt();
+    OUString aDdeTextFmt = pDocSh->GetDdeTextFmt();
     ScDocument* pDoc = pDocSh->GetDocument();
 
     if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {
         ScImportExport aObj( pDoc, aRange );
-        if( aDdeTextFmt.GetChar(0) == 'F' )
+        if( aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( sal_True );
-        if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
-            aDdeTextFmt.EqualsAscii( "FSYLK" ) )
+        if( aDdeTextFmt.equalsAscii( "SYLK" ) ||
+            aDdeTextFmt.equalsAscii( "FSYLK" ) )
         {
             OString aByteData;
             if( aObj.ExportByteString( aByteData, osl_getThreadTextEncoding(), SOT_FORMATSTR_ID_SYLK ) )
@@ -183,8 +183,8 @@ sal_Bool ScServerObject::GetData(
             }
             return 0;
         }
-        if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
-            aDdeTextFmt.EqualsAscii( "FCSV" ) )
+        if( aDdeTextFmt.equalsAscii( "CSV" ) ||
+            aDdeTextFmt.equalsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
         aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
         return aObj.ExportData( rMimeType, rData ) ? 1 : 0;

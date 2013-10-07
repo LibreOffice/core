@@ -694,7 +694,7 @@ void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& 
     if (!pDoc)
         return;
 
-    String aUpperName = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
     RangeNameMap& rMap = pDoc->maRangeNames;
     rMap.insert(RangeNameMap::value_type(aUpperName, pArray));
     pDoc->maRealRangeNameMap.insert(NamePairMap::value_type(aUpperName, rName));
@@ -744,7 +744,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
     DocItem& rDoc = *pDocItem;
 
     // Now, find the table position of the first table to cache.
-    const String& rFirstTabName = rData.front().maTableName;
+    const OUString& rFirstTabName = rData.front().maTableName;
     TableNameIndexMap::iterator itrTabName = rDoc.maTableNameIndex.find(
         ScGlobal::pCharClass->uppercase(rFirstTabName));
     if (itrTabName == rDoc.maTableNameIndex.end())
@@ -813,7 +813,7 @@ bool ScExternalRefCache::isDocInitialized(sal_uInt16 nFileId)
     return pDoc->mbInitFromSource;
 }
 
-static bool lcl_getTableDataIndex(const ScExternalRefCache::TableNameIndexMap& rMap, const String& rName, size_t& rIndex)
+static bool lcl_getTableDataIndex(const ScExternalRefCache::TableNameIndexMap& rMap, const OUString& rName, size_t& rIndex)
 {
     ScExternalRefCache::TableNameIndexMap::const_iterator itr = rMap.find(rName);
     if (itr == rMap.end())
@@ -961,7 +961,7 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
     if (pDoc)
     {
         size_t nIndex = 0;
-        String aTabNameUpper = ScGlobal::pCharClass->uppercase( rTabName);
+        OUString aTabNameUpper = ScGlobal::pCharClass->uppercase( rTabName);
         if (lcl_getTableDataIndex( pDoc->maTableNameIndex, aTabNameUpper, nIndex))
         {
             size_t nStop = ::std::min( nIndex + nSheets, pDoc->maTables.size());
@@ -1146,7 +1146,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     DocItem& rDoc = *pDoc;
 
     size_t nIndex;
-    String aTabNameUpper = ScGlobal::pCharClass->uppercase(rTabName);
+    OUString aTabNameUpper = ScGlobal::pCharClass->uppercase(rTabName);
     if (lcl_getTableDataIndex(rDoc.maTableNameIndex, aTabNameUpper, nIndex))
     {
         // specified table found.
@@ -1640,7 +1640,7 @@ namespace {
  */
 void putCellDataIntoCache(
     ScExternalRefCache& rRefCache, const ScExternalRefCache::TokenRef& pToken,
-    sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
+    sal_uInt16 nFileId, const OUString& rTabName, const ScAddress& rCell,
     const ScExternalRefCache::CellFormat* pFmt)
 {
     // Now, insert the token into cache table but don't cache empty cells.
@@ -1666,7 +1666,7 @@ void putCellDataIntoCache(
  */
 void putRangeDataIntoCache(
     ScExternalRefCache& rRefCache, ScExternalRefCache::TokenArrayRef& pArray,
-    sal_uInt16 nFileId, const String& rTabName,
+    sal_uInt16 nFileId, const OUString& rTabName,
     const vector<ScExternalRefCache::SingleRangeData>& rCacheData,
     const ScRange& rCacheRange, const ScRange& rDataRange)
 {
@@ -2033,7 +2033,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     sal_uInt16 nFileId, ScDocument* pSrcDoc, OUString& rName)
 {
     ScRangeName* pExtNames = pSrcDoc->GetRangeName();
-    String aUpperName = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
     const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
     if (!pRangeData)
         return ScExternalRefCache::TokenArrayRef();
@@ -2581,7 +2581,7 @@ void ScExternalRefManager::resetSrcFileData(const OUString& rBaseFileUrl)
 
 void ScExternalRefManager::updateAbsAfterLoad()
 {
-    String aOwn( getOwnDocumentName() );
+    OUString aOwn( getOwnDocumentName() );
     for (vector<SrcFileData>::iterator itr = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
           itr != itrEnd; ++itr)
     {
@@ -2589,8 +2589,8 @@ void ScExternalRefManager::updateAbsAfterLoad()
         // to be called when the original name is no longer needed (after CompileXML)
 
         itr->maybeCreateRealFileName( aOwn );
-        String aReal = itr->maRealFileName;
-        if (aReal.Len())
+        OUString aReal = itr->maRealFileName;
+        if (!aReal.isEmpty())
             itr->maFileName = aReal;
     }
 }

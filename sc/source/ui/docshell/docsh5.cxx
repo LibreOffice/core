@@ -252,13 +252,13 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         {
             ScDBCollection* pUndoColl = NULL;
 
-            String aNewName;
+            OUString aNewName;
             if (eMode==SC_DB_IMPORT)
             {
                 aDocument.CompileDBFormula( sal_True );         // CreateFormulaString
                 pUndoColl = new ScDBCollection( *pColl );   // Undo fuer Import1-Bereich
 
-                String aImport = ScGlobal::GetRscString( STR_DBNAME_IMPORT );
+                OUString aImport = ScGlobal::GetRscString( STR_DBNAME_IMPORT );
                 long nCount = 0;
                 const ScDBData* pDummy = NULL;
                 ScDBCollection::NamedDBs& rDBs = pColl->getNamedDBs();
@@ -901,7 +901,7 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
             sal_Bool bVbaEnabled = aDocument.IsInVBAMode();
             if ( bVbaEnabled )
             {
-                String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                OUString aLibName( "Standard" );
                 Reference< XLibraryContainer > xLibContainer = GetBasicContainer();
                 Reference< XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY );
 

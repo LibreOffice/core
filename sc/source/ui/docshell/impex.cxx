@@ -275,7 +275,7 @@ bool ScImportExport::ExportData( const OUString& rMimeType,
 {
     SvMemoryStream aStrm;
     // mba: no BaseURL for data exchange
-    if( ExportStream( aStrm, String(),
+    if( ExportStream( aStrm, OUString(),
                 SotExchange::GetFormatIdFromMimeType( rMimeType ) ))
     {
         aStrm << (sal_uInt8) 0;
@@ -296,7 +296,7 @@ bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
         case FORMAT_STRING :
         {
             ScImportStringStream aStrm( rText);
-            return ImportStream( aStrm, String(), nFmt );
+            return ImportStream( aStrm, OUString(), nFmt );
             // ImportStream must handle RTL_TEXTENCODING_UNICODE
         }
         //break;
@@ -307,7 +307,7 @@ bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
             SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), STREAM_READ );
             aStrm.SetStreamCharSet( eEnc );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
-            return ImportStream( aStrm, String(), nFmt );
+            return ImportStream( aStrm, OUString(), nFmt );
         }
     }
 }
@@ -330,7 +330,7 @@ bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
     aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
     SetNoEndianSwap( aStrm );       //! no swapping in memory
     // mba: no BaseURL for data exc
-    if( ExportStream( aStrm, String(), nFmt ) )
+    if( ExportStream( aStrm, OUString(), nFmt ) )
     {
         aStrm << (sal_Unicode) 0;
         aStrm.Seek( STREAM_SEEK_TO_END );
@@ -358,7 +358,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
     aStrm.SetStreamCharSet( eEnc );
     SetNoEndianSwap( aStrm );       //! no swapping in memory
     // mba: no BaseURL for data exchange
-    if( ExportStream( aStrm, String(), nFmt ) )
+    if( ExportStream( aStrm, OUString(), nFmt ) )
     {
         aStrm << (sal_Char) 0;
         aStrm.Seek( STREAM_SEEK_TO_END );
@@ -434,7 +434,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sa
     }
     if( nFmt == SOT_FORMATSTR_ID_LINK && !bAll )
     {
-        String aDocName;
+        OUString aDocName;
         if ( pDoc->IsClipboard() )
             aDocName = ScGlobal::GetClipDocName();
         else
@@ -444,8 +444,8 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sa
                 aDocName = pShell->GetTitle( SFX_TITLE_FULLNAME );
         }
 
-        OSL_ENSURE( aDocName.Len(), "ClipBoard document has no name! :-/" );
-        if( aDocName.Len() )
+        OSL_ENSURE( !aDocName.isEmpty(), "ClipBoard document has no name! :-/" );
+        if( !aDocName.isEmpty() )
         {
             // Always use Calc A1 syntax for paste link.
             OUString aRefName;
@@ -712,21 +712,21 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
     return p;
 }
 
-static void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
+static void lcl_UnescapeSylk( OUString & rString, SylkVersion eVersion )
 {
     // Older versions didn't escape the semicolon.
     // Older versions quoted the string and doubled embedded quotes, but not
     // the semicolons, which was plain wrong.
     if (eVersion >= SYLK_OOO32)
-        rString.SearchAndReplaceAll( OUString(DOUBLE_SEMICOLON), OUString(';') );
+        rString = rString.replaceAll( OUString(DOUBLE_SEMICOLON), OUString(';') );
     else
-        rString.SearchAndReplaceAll( OUString(DOUBLE_DOUBLEQUOTE), OUString('"') );
+        rString = rString.replaceAll( OUString(DOUBLE_DOUBLEQUOTE), OUString('"') );
 
-    rString.SearchAndReplaceAll( OUString(SYLK_LF), OUString('\n') );
+    rString = rString.replaceAll( OUString(SYLK_LF), OUString('\n') );
 }
 
 static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
-        String& rString, SylkVersion eVersion )
+        OUString& rString, SylkVersion eVersion )
 {
     const sal_Unicode* pStartQuote = p;
     const sal_Unicode* pEndQuote = 0;
@@ -762,13 +762,13 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
     }
     if (!pEndQuote)
         pEndQuote = p;  // Take all data as string.
-    rString.Append( pStartQuote + 1, sal::static_int_cast<xub_StrLen>( pEndQuote - pStartQuote - 1 ) );
+    rString += OUString(pStartQuote + 1, sal::static_int_cast<xub_StrLen>( pEndQuote - pStartQuote - 1 ) );
     lcl_UnescapeSylk( rString, eVersion);
     return p;
 }
 
 static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
-        String& rString, SylkVersion eVersion )
+        OUString& rString, SylkVersion eVersion )
 {
     const sal_Unicode* pStart = p;
     if (eVersion >= SYLK_OOO32)
@@ -784,7 +784,7 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
             }
             ++p;
         }
-        rString.Append( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
+        rString += OUString( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
         lcl_UnescapeSylk( rString, eVersion);
     }
     else
@@ -825,7 +825,7 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
         {
             while (*p && *p != ';')
                 ++p;
-            rString.Append( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
+            rString += OUString( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
         }
     }
     return p;
@@ -954,13 +954,13 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
 
 
 static bool lcl_PutString(
-    ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rStr, sal_uInt8 nColFormat,
+    ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rStr, sal_uInt8 nColFormat,
     SvNumberFormatter* pFormatter, bool bDetectNumFormat,
     ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
     ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
 {
     bool bMultiLine = false;
-    if ( nColFormat == SC_COL_SKIP || !rStr.Len() || !ValidCol(nCol) || !ValidRow(nRow) )
+    if ( nColFormat == SC_COL_SKIP || rStr.isEmpty() || !ValidCol(nCol) || !ValidRow(nRow) )
         return bMultiLine;
 
     if ( nColFormat == SC_COL_TEXT )
@@ -999,7 +999,7 @@ static bool lcl_PutString(
     else if ( nColFormat != SC_COL_STANDARD )                   // Datumsformate
     {
         const sal_uInt16 nMaxNumberParts = 7;   // Y-M-D h:m:s.t
-        xub_StrLen nLen = rStr.Len();
+        xub_StrLen nLen = rStr.getLength();
         xub_StrLen nStart[nMaxNumberParts];
         xub_StrLen nEnd[nMaxNumberParts];
 
@@ -1018,7 +1018,7 @@ static bool lcl_PutString(
                     nFound<nMaxNumberParts); nPos++ )
         {
             if (bInNum && nFound == 3 && nColFormat == SC_COL_YMD &&
-                    nPos <= nStart[nFound]+2 && rStr.GetChar(nPos) == 'T')
+                    nPos <= nStart[nFound]+2 && rStr[nPos] == 'T')
                 bInNum = false;     // ISO-8601: YYYY-MM-DDThh:mm...
             else if ((((!bInNum && nFound==nMP) || (bInNum && nFound==nMP+1))
                         && ScGlobal::pCharClass->isLetterNumeric( rStr, nPos))
@@ -1044,7 +1044,7 @@ static bool lcl_PutString(
             xub_StrLen nDateLen = nEnd[0] + 1 - nDateStart;
 
             if ( nDateLen >= 5 && nDateLen <= 8 &&
-                    ScGlobal::pCharClass->isNumeric( rStr.Copy( nDateStart, nDateLen ) ) )
+                    ScGlobal::pCharClass->isNumeric( rStr.copy( nDateStart, nDateLen ) ) )
             {
                 //  6 digits: 2 each for day, month, year
                 //  8 digits: 4 for year, 2 each for day and month
@@ -1074,14 +1074,14 @@ static bool lcl_PutString(
         {
             using namespace ::com::sun::star;
             bool bSecondCal = false;
-            sal_uInt16 nDay  = (sal_uInt16) rStr.Copy( nStart[nDP], nEnd[nDP]+1-nStart[nDP] ).ToInt32();
-            sal_uInt16 nYear = (sal_uInt16) rStr.Copy( nStart[nYP], nEnd[nYP]+1-nStart[nYP] ).ToInt32();
-            String aMStr = rStr.Copy( nStart[nMP], nEnd[nMP]+1-nStart[nMP] );
-            sal_Int16 nMonth = (sal_Int16) aMStr.ToInt32();
+            sal_uInt16 nDay  = (sal_uInt16) rStr.copy( nStart[nDP], nEnd[nDP]+1-nStart[nDP] ).toInt32();
+            sal_uInt16 nYear = (sal_uInt16) rStr.copy( nStart[nYP], nEnd[nYP]+1-nStart[nYP] ).toInt32();
+            OUString aMStr = rStr.copy( nStart[nMP], nEnd[nMP]+1-nStart[nMP] );
+            sal_Int16 nMonth = (sal_Int16) aMStr.toInt32();
             if (!nMonth)
             {
-                static const String aSeptCorrect( RTL_CONSTASCII_USTRINGPARAM( "SEPT" ) );
-                static const String aSepShortened( RTL_CONSTASCII_USTRINGPARAM( "SEP" ) );
+                static const OUString aSeptCorrect( "SEPT" );
+                static const OUString aSepShortened( "SEP" );
                 uno::Sequence< i18n::CalendarItem2 > xMonths;
                 sal_Int32 i, nMonthCount;
                 //  first test all month names from local international
@@ -1141,16 +1141,16 @@ static bool lcl_PutString(
                 // time fields to zero (ICU calendar instance defaults to current date/time)
                 nHour = nMinute = nSecond = nMilli = 0;
                 if (nFound > 3)
-                    nHour = (sal_Int16) rStr.Copy( nStart[3], nEnd[3]+1-nStart[3]).ToInt32();
+                    nHour = (sal_Int16) rStr.copy( nStart[3], nEnd[3]+1-nStart[3]).toInt32();
                 if (nFound > 4)
-                    nMinute = (sal_Int16) rStr.Copy( nStart[4], nEnd[4]+1-nStart[4]).ToInt32();
+                    nMinute = (sal_Int16) rStr.copy( nStart[4], nEnd[4]+1-nStart[4]).toInt32();
                 if (nFound > 5)
-                    nSecond = (sal_Int16) rStr.Copy( nStart[5], nEnd[5]+1-nStart[5]).ToInt32();
+                    nSecond = (sal_Int16) rStr.copy( nStart[5], nEnd[5]+1-nStart[5]).toInt32();
                 if (nFound > 6)
                 {
                     sal_Unicode cDec = '.';
                     OUString aT( &cDec, 1);
-                    aT += rStr.Copy( nStart[6], nEnd[6]+1-nStart[6]);
+                    aT += rStr.copy( nStart[6], nEnd[6]+1-nStart[6]);
                     rtl_math_ConversionStatus eStatus;
                     double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus, 0);
                     if (eStatus == rtl_math_ConversionStatus_Ok)
@@ -1190,7 +1190,7 @@ static bool lcl_PutString(
     }
 
     // Standard or date not determined -> SetString / EditCell
-    if( rStr.Search( '\n' ) == STRING_NOTFOUND )
+    if( rStr.indexOf( '\n' ) == -1 )
     {
         ScSetStringParam aParam;
         aParam.mpNumFormatter = pFormatter;
@@ -1210,7 +1210,7 @@ static bool lcl_PutString(
 }
 
 
-static String lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
+static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
                      bool& rbIsQuoted, bool& rbOverflowCell )
 {
     sal_Int32 nLen = rLine.getLength();
@@ -1706,7 +1706,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     while( bOk )
     {
         OUString aLine;
-        String aText;
+        OUString aText;
         OString aByteLine;
         SCCOL nCol = nStartCol;
         SCROW nRow = nStartRow;
@@ -1763,7 +1763,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( *p == '"' )
                             {
                                 bText = true;
-                                aText.Erase();
+                                aText = "";
                                 p = lcl_ScanSylkString( p, aText, eVersion);
                             }
                             else
@@ -1808,7 +1808,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             }
                             if( !bMyDoc || !bData )
                                 break;
-                            aText = '=';
+                            aText = "=";
                             p = lcl_ScanSylkFormula( p, aText, eVersion);
                             ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
                             /* FIXME: do we want GRAM_ODFF_A1 instead? At the
@@ -1947,9 +1947,8 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
     OUString aCellStr;
-    String aValStr;
-    lcl_WriteSimpleString( rStrm,
-            String( RTL_CONSTASCII_USTRINGPARAM( "ID;PCALCOOO32")));
+    OUString aValStr;
+    lcl_WriteSimpleString( rStrm, OUString("ID;PCALCOOO32") );
     WriteUnicodeOrByteEndl( rStrm );
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
@@ -2031,7 +2030,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         }
                         if ( aCellStr[0] == '=' )
                             aCellStr = aCellStr.copy(1);
-                        String aPrefix;
+                        OUString aPrefix;
                         switch ( pFCell->GetMatrixFlag() )
                         {
                             case MM_FORMULA :
@@ -2045,7 +2044,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aPrefix += OUString::number( nR );
                                 aPrefix += ";C";
                                 aPrefix += OUString::number( nC );
-                                aPrefix.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ";M" ) );
+                                aPrefix += ";M";
                             }
                             break;
                             case MM_REFERENCE :

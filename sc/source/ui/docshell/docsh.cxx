@@ -322,7 +322,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                             {
                                 xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
-                                if( String(aName).Equals(String(aLinkTabName), nIndex, nLinkTabNameLength) &&
+                                if(aName == aLinkTabName.copy(nIndex, nLinkTabNameLength) &&
                                     (aName[nIndex - 1] == '#') && // before the table name should be the # char
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
@@ -617,8 +617,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         ScAutoStyleHint& rStlHint = (ScAutoStyleHint&)rHint;
         ScRange aRange = rStlHint.GetRange();
-        String aName1 = rStlHint.GetStyle1();
-        String aName2 = rStlHint.GetStyle2();
+        OUString aName1 = rStlHint.GetStyle1();
+        OUString aName2 = rStlHint.GetStyle2();
         sal_uInt32 nTimeout = rStlHint.GetTimeout();
 
         if (!pAutoStyleList)
@@ -762,7 +762,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     {
                                         xCloseable->close( sal_True );
 
-                                        String aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        OUString aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
                                         bool bNoLockAccess = false;
                                         try
                                         {
@@ -1036,16 +1036,16 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     const SfxFilter* pFilter = rMedium.GetFilter();
     if (pFilter)
     {
-        String aFltName = pFilter->GetFilterName();
+        OUString aFltName = pFilter->GetFilterName();
 
-        sal_Bool bCalc3 = ( aFltName.EqualsAscii(pFilterSc30) );
-        sal_Bool bCalc4 = ( aFltName.EqualsAscii(pFilterSc40) );
+        sal_Bool bCalc3 = ( aFltName.equalsAscii(pFilterSc30) );
+        sal_Bool bCalc4 = ( aFltName.equalsAscii(pFilterSc40) );
         if (!bCalc3 && !bCalc4)
             aDocument.SetInsertingFromOtherDoc( sal_True );
 
-        if (aFltName.EqualsAscii(pFilterXML))
+        if (aFltName.equalsAscii(pFilterXML))
             bRet = LoadXML( &rMedium, NULL );
-        else if (aFltName.EqualsAscii(pFilterSc10))
+        else if (aFltName.equalsAscii(pFilterSc10))
         {
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
@@ -1060,9 +1060,9 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bRet = sal_True;
             }
         }
-        else if (aFltName.EqualsAscii(pFilterLotus))
+        else if (aFltName.equalsAscii(pFilterLotus))
         {
-            String sItStr;
+            OUString sItStr;
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
@@ -1071,7 +1071,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
 
-            if (sItStr.Len() == 0)
+            if (sItStr.isEmpty())
             {
                 //  default for lotus import (from API without options):
                 //  IBM_437 encoding
@@ -1093,18 +1093,18 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = sal_True;
             bSetRowHeights = sal_True;
         }
-        else if ( aFltName.EqualsAscii(pFilterExcel4) || aFltName.EqualsAscii(pFilterExcel5) ||
-                   aFltName.EqualsAscii(pFilterExcel95) || aFltName.EqualsAscii(pFilterExcel97) ||
-                   aFltName.EqualsAscii(pFilterEx4Temp) || aFltName.EqualsAscii(pFilterEx5Temp) ||
-                   aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp) )
+        else if ( aFltName.equalsAscii(pFilterExcel4) || aFltName.equalsAscii(pFilterExcel5) ||
+                   aFltName.equalsAscii(pFilterExcel95) || aFltName.equalsAscii(pFilterExcel97) ||
+                   aFltName.equalsAscii(pFilterEx4Temp) || aFltName.equalsAscii(pFilterEx5Temp) ||
+                   aFltName.equalsAscii(pFilterEx95Temp) || aFltName.equalsAscii(pFilterEx97Temp) )
         {
             EXCIMPFORMAT eFormat = EIF_AUTO;
-            if ( aFltName.EqualsAscii(pFilterExcel4) || aFltName.EqualsAscii(pFilterEx4Temp) )
+            if ( aFltName.equalsAscii(pFilterExcel4) || aFltName.equalsAscii(pFilterEx4Temp) )
                 eFormat = EIF_BIFF_LE4;
-            else if ( aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
-                      aFltName.EqualsAscii(pFilterEx5Temp) || aFltName.EqualsAscii(pFilterEx95Temp) )
+            else if ( aFltName.equalsAscii(pFilterExcel5) || aFltName.equalsAscii(pFilterExcel95) ||
+                      aFltName.equalsAscii(pFilterEx5Temp) || aFltName.equalsAscii(pFilterEx95Temp) )
                 eFormat = EIF_BIFF5;
-            else if ( aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx97Temp) )
+            else if ( aFltName.equalsAscii(pFilterExcel97) || aFltName.equalsAscii(pFilterEx97Temp) )
                 eFormat = EIF_BIFF8;
 
             MakeDrawLayer();                //! im Filter
@@ -1131,7 +1131,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
                 bRet = true;
         }
-        else if (aFltName.EqualsAscii(pFilterAscii))
+        else if (aFltName.equalsAscii(pFilterAscii))
         {
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
@@ -1199,9 +1199,9 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = sal_True;
             bSetSimpleTextColWidths = sal_True;
         }
-        else if (aFltName.EqualsAscii(pFilterDBase))
+        else if (aFltName.equalsAscii(pFilterDBase))
         {
-            String sItStr;
+            OUString sItStr;
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
@@ -1210,7 +1210,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
 
-            if (sItStr.Len() == 0)
+            if (sItStr.isEmpty())
             {
                 //  default for dBase import (from API without options):
                 //  IBM_850 encoding
@@ -1236,13 +1236,13 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
         }
-        else if (aFltName.EqualsAscii(pFilterDif))
+        else if (aFltName.equalsAscii(pFilterDif))
         {
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
             {
                 FltError eError;
-                String sItStr;
+                OUString sItStr;
                 SfxItemSet*  pSet = rMedium.GetItemSet();
                 const SfxPoolItem* pItem;
                 if ( pSet && SFX_ITEM_SET ==
@@ -1251,7 +1251,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     sItStr = ((const SfxStringItem*)pItem)->GetValue();
                 }
 
-                if (sItStr.Len() == 0)
+                if (sItStr.isEmpty())
                 {
                     //  default for DIF import (from API without options):
                     //  ISO8859-1/MS_1252 encoding
@@ -1276,7 +1276,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetSimpleTextColWidths = sal_True;
             bSetRowHeights = sal_True;
         }
-        else if (aFltName.EqualsAscii(pFilterSylk))
+        else if (aFltName.equalsAscii(pFilterSylk))
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
             if( !rMedium.IsStorage() )
@@ -1304,7 +1304,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetSimpleTextColWidths = sal_True;
             bSetRowHeights = sal_True;
         }
-        else if (aFltName.EqualsAscii(pFilterQPro6))
+        else if (aFltName.equalsAscii(pFilterQPro6))
         {
             FltError eError = ScFormatFilter::Get().ScImportQuattroPro( rMedium, &aDocument);
             if (eError != eERR_OK)
@@ -1322,7 +1322,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             // wrapping enabled look nicer..
             bSetRowHeights = sal_True;
         }
-        else if (aFltName.EqualsAscii(pFilterRtf))
+        else if (aFltName.equalsAscii(pFilterRtf))
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
             if( !rMedium.IsStorage() )
@@ -1357,10 +1357,10 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( eError != eERR_OK && !GetError() )
                 SetError(eError, OUString( OSL_LOG_PREFIX ));
         }
-        else if (aFltName.EqualsAscii(pFilterHtml) || aFltName.EqualsAscii(pFilterHtmlWebQ))
+        else if (aFltName.equalsAscii(pFilterHtml) || aFltName.equalsAscii(pFilterHtmlWebQ))
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
-            sal_Bool bWebQuery = aFltName.EqualsAscii(pFilterHtmlWebQ);
+            sal_Bool bWebQuery = aFltName.equalsAscii(pFilterHtmlWebQ);
             if( !rMedium.IsStorage() )
             {
                 SvStream* pInStream = rMedium.GetInStream();
@@ -1373,7 +1373,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if ( pSet && SFX_ITEM_SET ==
                          pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
                     {
-                        String aFilterOption = (static_cast<const SfxStringItem*>(pItem))->GetValue();
+                        OUString aFilterOption = (static_cast<const SfxStringItem*>(pItem))->GetValue();
                         lcl_parseHtmlFilterOption(aFilterOption, eLang, bDateConvert);
                     }
 
@@ -2162,17 +2162,17 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
     OSL_ENSURE( rMed.GetFilter(), "Filter == 0" );
 
     sal_Bool bRet = false;
-    String aFltName = rMed.GetFilter()->GetFilterName();
+    OUString aFltName = rMed.GetFilter()->GetFilterName();
 
-    if (aFltName.EqualsAscii(pFilterXML))
+    if (aFltName.equalsAscii(pFilterXML))
     {
         //TODO/LATER: this shouldn't happen!
         OSL_FAIL("XML filter in ConvertFrom?!");
         bRet = SaveXML( &rMed, NULL );
     }
-    else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
-             aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx5Temp) ||
-             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp))
+    else if (aFltName.equalsAscii(pFilterExcel5) || aFltName.equalsAscii(pFilterExcel95) ||
+             aFltName.equalsAscii(pFilterExcel97) || aFltName.equalsAscii(pFilterEx5Temp) ||
+             aFltName.equalsAscii(pFilterEx95Temp) || aFltName.equalsAscii(pFilterEx97Temp))
     {
         WaitObject aWait( GetActiveDialogParent() );
 
@@ -2210,7 +2210,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
         if( bDoSave )
         {
             ExportFormatExcel eFormat = ExpBiff5;
-            if( aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp ) )
+            if( aFltName.equalsAscii( pFilterExcel97 ) || aFltName.equalsAscii( pFilterEx97Temp ) )
                 eFormat = ExpBiff8;
             FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
@@ -2226,12 +2226,12 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX ) );
         }
     }
-    else if (aFltName.EqualsAscii(pFilterAscii))
+    else if (aFltName.equalsAscii(pFilterAscii))
     {
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
         {
-            String sItStr;
+            OUString sItStr;
             SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
@@ -2240,7 +2240,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
 
-            if ( sItStr.Len() == 0 )
+            if ( sItStr.isEmpty() )
             {
                 //  default for ascii export (from API without options):
                 //  ISO8859-1/MS_1252 encoding, comma, double quotes
@@ -2259,9 +2259,9 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
                     rMed.SetError(SCWARN_EXPORT_ASCII, OUString( OSL_LOG_PREFIX ));
         }
     }
-    else if (aFltName.EqualsAscii(pFilterDBase))
+    else if (aFltName.equalsAscii(pFilterDBase))
     {
-        String sCharSet;
+        OUString sCharSet;
         SfxItemSet* pSet = rMed.GetItemSet();
         const SfxPoolItem* pItem;
         if ( pSet && SFX_ITEM_SET ==
@@ -2270,7 +2270,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             sCharSet = ((const SfxStringItem*)pItem)->GetValue();
         }
 
-        if (sCharSet.Len() == 0)
+        if (sCharSet.isEmpty())
         {
             //  default for dBase export (from API without options):
             //  IBM_850 encoding
@@ -2323,12 +2323,12 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             }
         }
     }
-    else if (aFltName.EqualsAscii(pFilterDif))
+    else if (aFltName.equalsAscii(pFilterDif))
     {
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
         {
-            String sItStr;
+            OUString sItStr;
             SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
@@ -2337,7 +2337,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
 
-            if (sItStr.Len() == 0)
+            if (sItStr.isEmpty())
             {
                 //  default for DIF export (from API without options):
                 //  ISO8859-1/MS_1252 encoding
@@ -2355,7 +2355,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
                     rMed.SetError(SCWARN_EXPORT_ASCII, OUString( OSL_LOG_PREFIX ));
         }
     }
-    else if (aFltName.EqualsAscii(pFilterSylk))
+    else if (aFltName.equalsAscii(pFilterSylk))
     {
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
@@ -2372,7 +2372,7 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_SYLK );
         }
     }
-    else if (aFltName.EqualsAscii(pFilterHtml))
+    else if (aFltName.equalsAscii(pFilterHtml))
     {
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )

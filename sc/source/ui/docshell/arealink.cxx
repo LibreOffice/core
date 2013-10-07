@@ -237,7 +237,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
     if (rNewFile.isEmpty() || rNewFilter.isEmpty())
         return false;
 
-    String aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
+    OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, pImpl->m_pDocSh ) );
     sal_Bool bNewUrlName = (aNewUrl != aFileName);
 
     const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
@@ -263,12 +263,12 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
 
     // Optionen koennten gesetzt worden sein
-    String aNewOpt = ScDocumentLoader::GetOptions(*pMed);
-    if (!aNewOpt.Len())
+    OUString aNewOpt = ScDocumentLoader::GetOptions(*pMed);
+    if (aNewOpt.isEmpty())
         aNewOpt = aOptions;
 
     // correct source range name list for web query import
-    String aTempArea;
+    OUString aTempArea;
 
     if( rNewFilter == ScDocShell::GetWebQueryFilterName() )
         aTempArea = ScFormatFilter::Get().GetHTMLRangeNameList( pSrcDoc, rNewArea );
@@ -284,7 +284,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
 
     for( nToken = 0; nToken < nTokenCnt; nToken++ )
     {
-        String aToken( aTempArea.GetToken( 0, ';', nStringIx ) );
+        OUString aToken( aTempArea.getToken( 0, ';', nStringIx ) );
         ScRange aTokenRange;
         if( FindExtRange( aTokenRange, pSrcDoc, aToken ) )
         {
@@ -366,7 +366,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
             nStringIx = 0;
             for( nToken = 0; nToken < nTokenCnt; nToken++ )
             {
-                String aToken( aTempArea.GetToken( 0, ';', nStringIx ) );
+                OUString aToken( aTempArea.getToken( 0, ';', nStringIx ) );
                 ScRange aTokenRange;
                 if( FindExtRange( aTokenRange, pSrcDoc, aToken ) )
                 {
@@ -401,7 +401,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
         }
         else
         {
-            String aErr = ScGlobal::GetRscString(STR_LINKERROR);
+            OUString aErr = ScGlobal::GetRscString(STR_LINKERROR);
             pDoc->SetString( aDestPos.Col(), aDestPos.Row(), aDestPos.Tab(), aErr );
         }
 

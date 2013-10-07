@@ -110,7 +110,7 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     //  create database range
     ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
     DBG_ASSERT(pDBData, "can't create DB data");
-    String sTarget = pDBData->GetName();
+    OUString sTarget = pDBData->GetName();
 
     UpdateImport( sTarget, aDesc );
 
@@ -150,7 +150,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     sal_Bool bApi = false;                      //! pass as argument
     sal_Bool bTruncated = false;                // for warning
     sal_uInt16 nErrStringId = 0;
-    String aErrorMessage;
+    OUString aErrorMessage;
 
     SCCOL nCol = rParam.nCol1;
     SCROW nRow = rParam.nRow1;
@@ -364,10 +364,10 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             ++nInserted;
                             if (!(nInserted & 15))
                             {
-                                String aPict = ScGlobal::GetRscString( STR_PROGRESS_IMPORT );
-                                String aText = aPict.GetToken(0,'#');
+                                OUString aPict = ScGlobal::GetRscString( STR_PROGRESS_IMPORT );
+                                OUString aText = aPict.getToken(0,'#');
                                 aText += OUString::number( nInserted );
-                                aText += aPict.GetToken(1,'#');
+                                aText += aPict.getToken(1,'#');
 
                                 if (!aProgress.SetStateText( 0, aText ))    // stopped by user?
                                 {
@@ -644,7 +644,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         if (pWaitWin)
             pWaitWin->LeaveWait();
 
-        if (!aErrorMessage.Len())
+        if (aErrorMessage.isEmpty())
         {
             if (!nErrStringId)
                 nErrStringId = STR_MSSG_IMPORTDATA_0;

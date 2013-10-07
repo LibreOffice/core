@@ -149,7 +149,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( aDocument.IsBlockEditable( nTab, nCol,nRow, nCol, nRow ) )
                     {
-                        String aVal = ((const SfxStringItem*)pTextItem)->GetValue();
+                        OUString aVal = ((const SfxStringItem*)pTextItem)->GetValue();
                         aDocument.SetString( nCol, nRow, nTab, aVal );
 
                         PostPaintCell( nCol, nRow, nTab );
@@ -187,7 +187,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         aDesc.initializeFrom( aProperties );
                 }
 
-                String sTarget;
+                OUString sTarget;
                 if ( pReqArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
                     sTarget = ((const SfxStringItem*)pItem)->GetValue();
 
@@ -208,7 +208,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             bMakeArea = true;
                             if (bUndo)
                             {
-                                String aStrImport = ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
+                                OUString aStrImport = ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
                                 GetUndoManager()->EnterListAction( aStrImport, aStrImport );
                             }
 
@@ -223,10 +223,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 bool bDo = true;
                 if (!bIsNewArea)
                 {
-                    String aTemplate = ScGlobal::GetRscString( STR_IMPORT_REPLACE );
-                    String aMessage = aTemplate.GetToken( 0, '#' );
+                    OUString aTemplate = ScGlobal::GetRscString( STR_IMPORT_REPLACE );
+                    OUString aMessage = aTemplate.getToken( 0, '#' );
                     aMessage += sTarget;
-                    aMessage += aTemplate.GetToken( 1, '#' );
+                    aMessage += aTemplate.getToken( 1, '#' );
 
                     QueryBox aBox( 0, WinBits(WB_YES_NO | WB_DEF_YES), aMessage );
                     bDo = ( aBox.Execute() == RET_YES );
@@ -258,7 +258,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 ScDocument* pDoc = GetDocument();
                 const   SfxPoolItem* pItem;
-                String  aChartName, aRangeName;
+                OUString  aChartName, aRangeName;
 
                 ScRange         aSingleRange;
                 ScRangeListRef  aRangeListRef;
@@ -304,7 +304,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-                if (pViewSh && bValid && aChartName.Len() != 0 )
+                if (pViewSh && bValid && !aChartName.isEmpty() )
                 {
                     Window* pParent = pViewSh->GetDialogParent();
 
@@ -803,7 +803,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( pItem->ISA(SfxStringItem) )
                     {
-                        String aName = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aName = ((const SfxStringItem*)pItem)->GetValue();
                         SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
@@ -990,7 +990,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     {
                                         xCloseable->close( sal_True );
 
-                                        String aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        OUString aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
                                         try
                                         {
                                             ::svt::DocumentLockFile aLockFile( GetSharedFileURL() );
@@ -1159,7 +1159,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJust
                 else
                 {
                     InfoBox aBox( GetActiveDialogParent(),
-                        String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                        OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
                     aBox.Execute();
                 }
             }
@@ -1363,7 +1363,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages )
 {
     sal_Bool bUndo(aDocument.IsUndoEnabled());
-    String aStyleName = aDocument.GetPageStyle( nTab );
+    OUString aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
@@ -1398,7 +1398,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     bool bChange = false;
     SCTAB nTab = rRange.aStart.Tab();
 
-    String aStyleName = aDocument.GetPageStyle( nTab );
+    OUString aStyleName = aDocument.GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
     OSL_ENSURE( pStyleSheet, "PageStyle not found" );
@@ -1529,7 +1529,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                 else if ( pReqArgs == NULL )
                 {
                     sal_Bool bUndo(aDocument.IsUndoEnabled());
-                    String aOldName = aDocument.GetPageStyle( nCurTab );
+                    OUString aOldName = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet
                         = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
@@ -1556,7 +1556,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
                             WaitObject aWait( GetActiveDialogParent() );
 
-                            String aNewName = pStyleSheet->GetName();
+                            OUString aNewName = pStyleSheet->GetName();
                             if ( aNewName != aOldName &&
                                 aDocument.RenamePageStyleInUse( aOldName, aNewName ) )
                             {
@@ -1602,7 +1602,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                 }
                 else if ( pReqArgs == NULL )
                 {
-                    String aStr( aDocument.GetPageStyle( nCurTab ) );
+                    OUString aStr( aDocument.GetPageStyle( nCurTab ) );
 
                     ScStyleSheetPool* pStylePool
                         = aDocument.GetStyleSheetPool();
@@ -1745,7 +1745,7 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
 
             case SID_HFEDIT:
                 {
-                    String              aStr        = aDocument.GetPageStyle( nCurTab );
+                    OUString            aStr        = aDocument.GetPageStyle( nCurTab );
                     ScStyleSheetPool*   pStylePool  = aDocument.GetStyleSheetPool();
                     SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( aStr, SFX_STYLE_FAMILY_PAGE );
 
@@ -2282,8 +2282,8 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
                 if ( pMed->GetFilter() )
                     pImpl->pRequest->AppendItem(
                             SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-                String sOptions = ScDocumentLoader::GetOptions( *pMed );
-                if ( sOptions.Len() > 0 )
+                OUString sOptions = ScDocumentLoader::GetOptions( *pMed );
+                if ( !sOptions.isEmpty() )
                     pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
             }
             const SfxPoolItem* pItem = NULL;

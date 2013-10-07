@@ -27,22 +27,22 @@
 
 struct ScAutoStyleInitData
 {
-    ScRange aRange;
-    String  aStyle1;
+    ScRange     aRange;
+    OUString    aStyle1;
     sal_uLong   nTimeout;
-    String  aStyle2;
+    OUString    aStyle2;
 
-    ScAutoStyleInitData( const ScRange& rR, const String& rSt1, sal_uLong nT, const String& rSt2 ) :
+    ScAutoStyleInitData( const ScRange& rR, const OUString& rSt1, sal_uLong nT, const OUString& rSt2 ) :
         aRange(rR), aStyle1(rSt1), nTimeout(nT), aStyle2(rSt2) {}
 };
 
 struct ScAutoStyleData
 {
-    sal_uLong   nTimeout;
-    ScRange aRange;
-    String  aStyle;
+    sal_uLong nTimeout;
+    ScRange   aRange;
+    OUString  aStyle;
 
-    ScAutoStyleData( sal_uLong nT, const ScRange& rR, const String& rT ) :
+    ScAutoStyleData( sal_uLong nT, const ScRange& rR, const OUString& rT ) :
         nTimeout(nT), aRange(rR), aStyle(rT) {}
 };
 

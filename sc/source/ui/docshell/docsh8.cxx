@@ -101,24 +101,24 @@ using ::std::vector;
 
 namespace
 {
-    sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)
+    sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr, uno::Reference<sdbc::XConnection>& _rConnection, OUString& _rTabName, const OUString& rFullFileName, rtl_TextEncoding eCharSet)
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetSmartURL( rFullFileName );
         _rTabName = aURL.getBase( INetURLObject::LAST_SEGMENT, true,
                 INetURLObject::DECODE_UNAMBIGUOUS );
-        String aExtension = aURL.getExtension();
+        OUString aExtension = aURL.getExtension();
         aURL.removeSegment();
         aURL.removeFinalSlash();
-        String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+        OUString aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
         uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
         _rDrvMgr.set( sdbc::DriverManager::create( xContext ) );
 
         // get connection
 
-        String aConnUrl = OUString("sdbc:dbase:");
+        OUString aConnUrl("sdbc:dbase:");
         aConnUrl += aPath;
 
         svxform::ODataAccessCharsetHelper aHelper;
@@ -164,7 +164,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
         bMoveData = false;
         bKillSource = true;
     }
-    String aName = rDestObj.getName();
+    OUString aName = rDestObj.getName();
     INetURLObject aDestPathObj = rDestObj;
     aDestPathObj.removeSegment();
     aDestPathObj.setFinalSlash();
@@ -313,7 +313,7 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, CharSet eCharS
 
     try
     {
-        String aTabName;
+        OUString aTabName;
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
         sal_uLong nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
@@ -563,10 +563,10 @@ void lcl_GetColumnTypes(
                     nFieldLen = aString.getToken( 2, ',' ).toInt32();
                     if ( !bPrecDefined && nToken > 3 )
                     {
-                        String aTmp( aString.getToken( 3, ',' ) );
+                        OUString aTmp( aString.getToken( 3, ',' ) );
                         if ( CharClass::isAsciiNumeric(aTmp) )
                         {
-                            nPrecision = aTmp.ToInt32();
+                            nPrecision = aTmp.toInt32();
                             bPrecDefined = sal_True;
                         }
                     }
@@ -582,14 +582,14 @@ void lcl_GetColumnTypes(
             // keine doppelten Namen.
             if ( !IsAsciiAlpha( aFieldName[0] ) )
                 aFieldName = "N" + aFieldName;
-            String aTmpStr;
+            OUString aTmpStr;
             sal_Unicode c;
             for ( const sal_Unicode* p = aFieldName.getStr(); ( c = *p ) != 0; p++ )
             {
                 if ( IsAsciiAlpha( c ) || IsAsciiDigit( c ) || c == '_' )
-                    aTmpStr += c;
+                    aTmpStr += OUString(c);
                 else
-                    aTmpStr += '_';
+                    aTmpStr += "_";
             }
             aFieldName = aTmpStr;
             if ( aFieldName.getLength() > 10 )
@@ -598,13 +598,13 @@ void lcl_GetColumnTypes(
             if (!aFieldNames.insert(aFieldName).second)
             {   // doppelter Feldname, numerisch erweitern
                 sal_uInt16 nSub = 1;
-                String aFixPart( aFieldName );
+                OUString aFixPart( aFieldName );
                 do
                 {
                     ++nSub;
-                    String aVarPart = OUString::number( nSub );
-                    if ( aFixPart.Len() + aVarPart.Len() > 10 )
-                        aFixPart.Erase( 10 - aVarPart.Len() );
+                    OUString aVarPart = OUString::number( nSub );
+                    if ( aFixPart.getLength() + aVarPart.getLength() > 10 )
+                        aFixPart = aFixPart.copy( 0, 10 - aVarPart.getLength() );
                     aFieldName = aFixPart;
                     aFieldName += aVarPart;
                 } while (!aFieldNames.insert(aFieldName).second);
@@ -821,7 +821,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
     SCROW nDocRow = 0;
     ScFieldEditEngine aEditEngine(&aDocument, aDocument.GetEditPool());
     OUString aString;
-    String aTabName;
+    OUString aTabName;
 
     try
     {
@@ -1128,8 +1128,8 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
                 else
                     bTest = true;
             }
-            String sPosition( ScAddress( nDocCol, nDocRow, nTab).GetColRowString());
-            String sEncoding( SvxTextEncodingTable().GetTextString( eCharSet));
+            OUString sPosition( ScAddress( nDocCol, nDocRow, nTab).GetColRowString());
+            OUString sEncoding( SvxTextEncodingTable().GetTextString( eCharSet));
             nErr = *new TwoStringErrorInfo( (bEncErr ? SCERR_EXPORT_ENCODING :
                         SCERR_EXPORT_FIELDWIDTH), sPosition, sEncoding,
                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);

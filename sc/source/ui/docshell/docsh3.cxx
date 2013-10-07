@@ -529,7 +529,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
 
     if (nDiffFlags & (SFX_PRINTER_CHG_ORIENTATION | SFX_PRINTER_CHG_SIZE))
     {
-        String aStyle = aDocument.GetPageStyle( GetCurTab() );
+        OUString aStyle = aDocument.GetPageStyle( GetCurTab() );
         ScStyleSheetPool* pStPl = aDocument.GetStyleSheetPool();
         SfxStyleSheet* pStyleSheet = (SfxStyleSheet*)pStPl->Find(aStyle, SFX_STYLE_FAMILY_PAGE);
         if (pStyleSheet)
@@ -642,12 +642,12 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pP
 {
     if (!pAction) return;           // ohne Aktion ist nichts..
 
-    String aComment = pAction->GetComment();
-    String aAuthor = pAction->GetUser();
+    OUString aComment = pAction->GetComment();
+    OUString aAuthor = pAction->GetUser();
 
     DateTime aDT = pAction->GetDateTime();
-    String aDate = ScGlobal::pLocaleData->getDate( aDT );
-    aDate += ' ';
+    OUString aDate = ScGlobal::pLocaleData->getDate( aDT );
+    aDate += " ";
     aDate += ScGlobal::pLocaleData->getTime( aDT, false, false );
 
     SfxItemSet aSet( GetPool(),
@@ -680,7 +680,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
     aDocument.EndChangeTracking();
     aDocument.StartChangeTracking();
 
-    String aOldUser;
+    OUString aOldUser;
     pTrack = aDocument.GetChangeTrack();
     if ( pTrack )
     {
@@ -688,11 +688,11 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 
         //  check if comparing to same document
 
-        String aThisFile;
+        OUString aThisFile;
         const SfxMedium* pThisMed = GetMedium();
         if (pThisMed)
             aThisFile = pThisMed->GetName();
-        String aOtherFile;
+        OUString aOtherFile;
         SfxObjectShell* pOtherSh = rOtherDoc.GetDocumentShell();
         if (pOtherSh)
         {
@@ -700,7 +700,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
             if (pOtherMed)
                 aOtherFile = pOtherMed->GetName();
         }
-        sal_Bool bSameDoc = ( aThisFile == aOtherFile && aThisFile.Len() );
+        sal_Bool bSameDoc = ( aThisFile == aOtherFile && !aThisFile.isEmpty() );
         if ( !bSameDoc )
         {
             //  create change actions from comparing with the name of the user
@@ -713,9 +713,9 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
             uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
             OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
-            String aDocUser = xDocProps->getModifiedBy();
+            OUString aDocUser = xDocProps->getModifiedBy();
 
-            if ( aDocUser.Len() )
+            if ( !aDocUser.isEmpty() )
                 pTrack->SetUser( aDocUser );
         }
     }
@@ -902,7 +902,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
     //  MergeChangeData in das aktuelle Dokument uebernehmen
     sal_Bool bHasRejected = false;
-    String aOldUser = pThisTrack->GetUser();
+    OUString aOldUser = pThisTrack->GetUser();
     pThisTrack->SetUseFixDateTime( sal_True );
     ScMarkData& rMarkData = pViewSh->GetViewData()->GetMarkData();
     ScMarkData aOldMarkData( rMarkData );
@@ -1099,8 +1099,8 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         }
                     }
                 }
-                const String& rComment = pSourceAction->GetComment();
-                if ( rComment.Len() )
+                const OUString& rComment = pSourceAction->GetComment();
+                if ( !rComment.isEmpty() )
                 {
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
