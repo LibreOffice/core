@@ -126,7 +126,7 @@ void ScFilterOptionsMgr::Init()
             sal_uInt16 nInsert = pLbCopyArea->InsertEntry( aName );
 
             OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, pDoc, eConv));
-            pLbCopyArea->SetEntryData( nInsert, new String( aRefStr ) );
+            pLbCopyArea->SetEntryData( nInsert, new OUString( aRefStr ) );
         }
 
         pBtnDestPers->Check( sal_True );         // beim Aufruf immer an
@@ -208,11 +208,11 @@ void ScFilterOptionsMgr::Init()
 
 sal_Bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 {
-    String aPosStr( rPosStr );
-    xub_StrLen nColonPos = aPosStr.Search( ':' );
+    OUString aPosStr( rPosStr );
+    sal_Int32 nColonPos = aPosStr.indexOf( ':' );
 
-    if ( STRING_NOTFOUND != nColonPos )
-        aPosStr.Erase( nColonPos );
+    if ( -1 != nColonPos )
+        aPosStr = aPosStr.copy( 0, nColonPos );
 
     sal_uInt16 nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
 
@@ -228,7 +228,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
 {
     if ( pLb == pLbCopyArea )
     {
-        String aString;
+        OUString aString;
         sal_uInt16 nSelPos = pLbCopyArea->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
@@ -247,19 +247,19 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 {
     if ( pEd == pEdCopyArea )
     {
-        String  theCurPosStr = pEd->GetText();
+        OUString  theCurPosStr = pEd->GetText();
         sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
-            String* pStr    = NULL;
+            OUString* pStr    = NULL;
             sal_Bool    bFound  = false;
             sal_uInt16  i       = 0;
             sal_uInt16  nCount  = pLbCopyArea->GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {
-                pStr = (String*)pLbCopyArea->GetEntryData( i );
+                pStr = (OUString*)pLbCopyArea->GetEntryData( i );
                 bFound = (theCurPosStr == *pStr);
             }
 

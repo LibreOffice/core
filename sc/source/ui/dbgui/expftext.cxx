@@ -59,7 +59,7 @@ ScExpandedFixedText::ScExpandedFixedText( Window* pParent,
 
 void ScExpandedFixedText::RequestHelp(const HelpEvent& rEvt)
 {
-    String  aTxtStr = GetText();
+    OUString  aTxtStr = GetText();
     long    nTxtWidth = GetTextWidth(aTxtStr);
     if ( ( rEvt.GetMode() & HELPMODE_QUICK ) == HELPMODE_QUICK &&
          nTxtWidth > GetSizePixel().Width())

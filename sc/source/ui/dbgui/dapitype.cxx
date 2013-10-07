@@ -126,7 +126,7 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
     const OUString* pArray = rServices.getConstArray();
     for (long i=0; i<nCount; i++)
     {
-        String aName = pArray[i];
+        OUString aName = pArray[i];
         aLbService.InsertEntry( aName );
     }
     aLbService.SelectEntryPos( 0 );

@@ -619,7 +619,7 @@ void ScTabPageSortOptions::Init()
         // Check whether the field that is passed on is a database field:
 
         ScAddress aScAddress( aSortData.nCol1, aSortData.nRow1, nCurTab );
-        String theArea =
+        OUString theArea =
             ScRange( aScAddress,
                  ScAddress( aSortData.nCol2, aSortData.nRow2, nCurTab )
                ).Format(SCR_ABS, pDoc, eConv);
@@ -637,9 +637,7 @@ void ScTabPageSortOptions::Init()
             }
         }
 
-        theArea.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
-        theArea += theDbName;
-        theArea += ')';
+        theArea += " (" + theDbName + ")";
 
         m_pBtnHeader->SetText( aStrColLabel );
     }
@@ -813,12 +811,12 @@ int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
     if ( m_pBtnCopyResult->IsChecked() )
     {
-        String      thePosStr = m_pEdOutPos->GetText();
+        OUString    thePosStr = m_pEdOutPos->GetText();
         ScAddress   thePos;
-        xub_StrLen  nColonPos = thePosStr.Search( ':' );
+        sal_Int32   nColonPos = thePosStr.indexOf( ':' );
 
-        if ( STRING_NOTFOUND != nColonPos )
-            thePosStr.Erase( nColonPos );
+        if ( -1 != nColonPos )
+            thePosStr = thePosStr.copy( 0, nColonPos );
 
         if ( pViewData )
         {
@@ -917,7 +915,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
         sal_uInt16  nSelPos = m_pLbOutPos->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
-            aString = *(String*)m_pLbOutPos->GetEntryData( nSelPos );
+            aString = *(OUString*)m_pLbOutPos->GetEntryData( nSelPos );
 
         m_pEdOutPos->SetText( aString );
     }
@@ -945,19 +943,19 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
     if (pEd == m_pEdOutPos)
     {
-       String  theCurPosStr = m_pEdOutPos->GetText();
+        OUString  theCurPosStr = m_pEdOutPos->GetText();
         sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
-            String* pStr    = NULL;
+            OUString* pStr    = NULL;
             sal_Bool    bFound  = false;
             sal_uInt16  i       = 0;
             sal_uInt16  nCount  = m_pLbOutPos->GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {
-                pStr = (String*)m_pLbOutPos->GetEntryData( i );
+                pStr = (OUString*)m_pLbOutPos->GetEntryData( i );
                 bFound = (theCurPosStr == *pStr);
             }
 
@@ -994,8 +992,8 @@ IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
         const OUString* pArray = aAlgos.getConstArray();
         for (long i=0; i<nCount; i++)
         {
-            String sAlg = pArray[i];
-            String sUser = pColRes->GetTranslation( sAlg );
+            OUString sAlg = pArray[i];
+            OUString sUser = pColRes->GetTranslation( sAlg );
             m_pLbAlgorithm->InsertEntry( sUser, LISTBOX_APPEND );
         }
         m_pLbAlgorithm->SelectEntryPos( 0 );       // first entry is default

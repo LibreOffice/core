@@ -83,7 +83,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
         const OUString* pArray = aNames.getConstArray();
         for (long nPos = 0; nPos < nCount; nPos++)
         {
-            String aName = pArray[nPos];
+            OUString aName = pArray[nPos];
             aLbDatabase.InsertEntry( aName );
         }
     }
@@ -134,8 +134,8 @@ void ScDataPilotDatabaseDlg::FillObjects()
 {
     aCbObject.Clear();
 
-    String aDatabaseName = aLbDatabase.GetSelectEntry();
-    if (!aDatabaseName.Len())
+    OUString aDatabaseName = aLbDatabase.GetSelectEntry();
+    if (aDatabaseName.isEmpty())
         return;
 
     sal_uInt16 nSelect = aLbType.GetSelectEntryPos();
@@ -192,7 +192,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
         const OUString* pArray = aNames.getConstArray();
         for( long nPos=0; nPos<nCount; nPos++ )
         {
-            String aName = pArray[nPos];
+            OUString aName = pArray[nPos];
             aCbObject.InsertEntry( aName );
         }
     }

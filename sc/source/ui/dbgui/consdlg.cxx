@@ -47,16 +47,16 @@ public:
     ScAreaData()  {}
     ~ScAreaData() {}
 
-    void Set( const String& rName, const String& rArea, sal_Bool bDb )
+    void Set( const OUString& rName, const OUString& rArea, sal_Bool bDb )
                 {
                     aStrName  = rName;
                     aStrArea  = rArea;
                     bIsDbArea = bDb;
                 }
 
-    String  aStrName;
-    String  aStrArea;
-    sal_Bool    bIsDbArea;
+    OUString  aStrName;
+    OUString  aStrArea;
+    sal_Bool  bIsDbArea;
 };
 
 
@@ -126,7 +126,7 @@ void ScConsolidateDlg::Init()
 {
     OSL_ENSURE( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
 
-    String aStr;
+    OUString aStr;
     sal_uInt16 i=0;
 
     pRbDataArea->SetReferences(this, pEdDataArea);
@@ -214,7 +214,7 @@ void ScConsolidateDlg::Init()
         ScAreaNameIterator aIter( pDoc );
         while ( aIter.Next( aStrName, aRange ) )
         {
-            String aStrArea(aRange.Format(SCA_ABS_3D, pDoc, eConv));
+            OUString aStrArea(aRange.Format(SCA_ABS_3D, pDoc, eConv));
             pAreaData[nAt++].Set( aStrName, aStrArea, aIter.WasDBName() );
         }
     }
@@ -243,7 +243,7 @@ void ScConsolidateDlg::FillAreaLists()
     if ( pRangeUtil && pAreaData && (nAreaDataCount > 0) )
     {
         for ( size_t i=0;
-              (i<nAreaDataCount) && (pAreaData[i].aStrName.Len()>0);
+              (i<nAreaDataCount) && (!pAreaData[i].aStrName.isEmpty());
               i++ )
         {
             pLbDataArea->InsertEntry( pAreaData[i].aStrName, i+1 );
@@ -267,7 +267,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pRefInputEdit );
 
-        String      aStr;
+        OUString      aStr;
         sal_uInt16      nFmt = SCR_ABS_3D;       //!!! nCurTab fehlt noch
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
     {
         ScRefAddress aDestAddress;
         SCTAB       nTab = pViewData->GetTabNo();
-        String      aDestPosStr( pEdDestArea->GetText() );
+        OUString    aDestPosStr( pEdDestArea->GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
@@ -451,7 +451,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
     {
         if ( !pEdDataArea->GetText().isEmpty() )
         {
-            String      aNewEntry( pEdDataArea->GetText() );
+            OUString    aNewEntry( pEdDataArea->GetText() );
             ScArea**    ppAreas = NULL;
             sal_uInt16      nAreaCount = 0;
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -464,7 +464,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 
                 for ( sal_uInt16 i=0; i<nAreaCount; i++ )
                 {
-                    String aNewArea;
+                    OUString aNewArea;
 
                     if ( ppAreas[i] )
                     {
@@ -485,7 +485,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
             }
             else if ( VerifyEdit( pEdDataArea ) )
             {
-                String aNewArea( pEdDataArea->GetText() );
+                OUString aNewArea( pEdDataArea->GetText() );
 
                 if ( pLbConsAreas->GetEntryPos( aNewArea ) == LISTBOX_ENTRY_NOTFOUND )
                     pLbConsAreas->InsertEntry( aNewArea );
@@ -560,8 +560,8 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 {
     if ( pEd == pEdDataArea )
     {
-        String aAreaStr( pEd->GetText() );
-        if ( aAreaStr.Len() > 0 )
+        OUString aAreaStr( pEd->GetText() );
+        if ( !aAreaStr.isEmpty() )
         {
             pBtnAdd->Enable();
         }

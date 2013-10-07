@@ -59,46 +59,46 @@ using namespace com::sun::star::uno;
 
 // ============================================================================
 
-static void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
+static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {
     xub_StrLen i;
     xub_StrLen nCount = comphelper::string::getTokenCount(rList, '\t');
     for ( i=0; i<nCount; i+=2 )
-        rCombo.InsertEntry( rList.GetToken(i,'\t') );
+        rCombo.InsertEntry( rList.getToken(i,'\t') );
 
     if ( cSelect )
     {
-        String aStr;
+        OUString aStr;
         for ( i=0; i<nCount; i+=2 )
-            if ( (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32() == cSelect )
-                aStr = rList.GetToken(i,'\t');
-        if (!aStr.Len())
-            aStr = cSelect;         // Ascii
+            if ( (sal_Unicode)rList.getToken(i+1,'\t').toInt32() == cSelect )
+                aStr = rList.getToken(i,'\t');
+        if (aStr.isEmpty())
+            aStr = OUString(cSelect);         // Ascii
 
         rCombo.SetText(aStr);
     }
 }
 
-static sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
+static sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const OUString& rList )
 {
     sal_Unicode c = 0;
-    String aStr = rCombo.GetText();
-    if ( aStr.Len() )
+    OUString aStr = rCombo.GetText();
+    if ( !aStr.isEmpty() )
     {
         xub_StrLen nCount = comphelper::string::getTokenCount(rList, '\t');
         for ( xub_StrLen i=0; i<nCount; i+=2 )
         {
-            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )
-                c = (sal_Unicode)rList.GetToken(i+1,'\t').ToInt32();
+            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.getToken(i,'\t') ) )
+                c = (sal_Unicode)rList.getToken(i+1,'\t').toInt32();
         }
-        if (!c && aStr.Len())
+        if (!c && !aStr.isEmpty())
         {
-            sal_Unicode cFirst = aStr.GetChar( 0 );
+            sal_Unicode cFirst = aStr[0];
             // #i24235# first try the first character of the string directly
-            if( (aStr.Len() == 1) || (cFirst < '0') || (cFirst > '9') )
+            if( (aStr.getLength() == 1) || (cFirst < '0') || (cFirst > '9') )
                 c = cFirst;
             else    // keep old behaviour for compatibility (i.e. "39" -> "'")
-                c = (sal_Unicode) aStr.ToInt32();       // Ascii
+                c = (sal_Unicode) aStr.toInt32();       // Ascii
         }
     }
     return c;
@@ -176,7 +176,7 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
 }
 
 static void save_Separators(
-    String maSeparators, String maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
+    OUString maSeparators, OUString maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
     bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
     sal_Int32 nCharSet, sal_Int32 nLanguage, ScImportAsciiCall eCall )
 {
@@ -275,16 +275,14 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     get(pLbType, "columntype");
     get(mpTableBox, "scrolledwindowcolumntype");
 
-    String aName = GetText();
+    OUString aName = GetText();
     switch (meCall)
     {
         case SC_TEXTTOCOLUMNS:
             SetText( get<FixedText>("textalttitle")->GetText() );
             break;
         case SC_IMPORTFILE:
-            aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
-            aName += aDatName;
-            aName += ']';
+            aName += " - [" + aDatName + "]";
         default:
             SetText( aName );
     }
@@ -302,7 +300,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage, meCall);
     // load from saved settings
-    maFieldSeparators = String(sFieldSeparators);
+    maFieldSeparators = OUString(sFieldSeparators);
 
     if( bMergeDelimiters )
         pCkbAsOnce->Check();
@@ -658,7 +656,7 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     else if( pCtrl == pEdOther )
         pCkbOther->Check( !pEdOther->GetText().isEmpty() );
 
-    String aOldFldSeps( maFieldSeparators);
+    OUString aOldFldSeps( maFieldSeparators);
     maFieldSeparators = GetSeparators();
     sal_Unicode cOldSep = mcTextSep;
     mcTextSep = lcl_CharFromCombo( *pCbTextSep, aTextSepList );

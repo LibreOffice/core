@@ -1063,9 +1063,9 @@ void ScCsvGrid::ImplDrawColumnHeader( OutputDevice& rOutDev, sal_uInt32 nColInde
 
 void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
 {
-    String aPlainText( rText );
-    aPlainText.SearchAndReplaceAll( '\t', ' ' );
-    aPlainText.SearchAndReplaceAll( '\n', ' ' );
+    OUString aPlainText( rText );
+    aPlainText = aPlainText.replaceAll( "\t", " " );
+    aPlainText = aPlainText.replaceAll( "\n", " " );
     mpEditEngine->SetPaperSize( maEdEngSize );
 
     /*  #i60296# If string contains mixed script types, the space character
@@ -1076,8 +1076,8 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
     for( xub_StrLen nToken = 0; nToken < nTokenCount; ++nToken )
     {
         sal_Int32 nBeginIx = nCharIxInt;
-        String aToken = aPlainText.GetToken( 0, ' ', nCharIxInt );
-        if( aToken.Len() > 0 )
+        OUString aToken = aPlainText.getToken( 0, ' ', nCharIxInt );
+        if( !aToken.isEmpty() )
         {
             sal_Int32 nX = rPos.X() + GetCharWidth() * nBeginIx;
             mpEditEngine->SetText( aToken );
@@ -1160,7 +1160,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
         StringVec& rStrVec = maTexts[ nLine ];
         if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].getLength() > nStrPos) )
         {
-            String aText( rStrVec[ nColIndex ], nStrPos, nStrLen );
+            OUString aText = rStrVec[ nColIndex ].copy( nStrPos, nStrLen );
             ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
         }
     }
@@ -1190,7 +1190,7 @@ void ScCsvGrid::ImplDrawRowHeaders()
     sal_Int32 nLastLine = GetLastVisLine();
     for( sal_Int32 nLine = GetFirstVisLine(); nLine <= nLastLine; ++nLine )
     {
-        String aText( OUString::number( nLine + 1 ) );
+        OUString aText( OUString::number( nLine + 1 ) );
         sal_Int32 nX = GetHdrX() + (GetHdrWidth() - maBackgrDev.GetTextWidth( aText )) / 2;
         maBackgrDev.DrawText( Point( nX, GetY( nLine ) ), aText );
     }

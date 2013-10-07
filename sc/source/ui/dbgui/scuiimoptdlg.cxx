@@ -36,21 +36,21 @@
 class ScDelimiterTable
 {
 public:
-        ScDelimiterTable( const String& rDelTab )
+        ScDelimiterTable( const OUString& rDelTab )
             :   theDelTab ( rDelTab ),
                 cSep      ( '\t' ),
                 nCount    ( comphelper::string::getTokenCount(rDelTab, '\t') ),
                 nIter     ( 0 )
             {}
 
-    sal_uInt16  GetCode( const String& rDelimiter ) const;
-    String  GetDelimiter( sal_Unicode nCode ) const;
+    sal_uInt16  GetCode( const OUString& rDelimiter ) const;
+    OUString  GetDelimiter( sal_Unicode nCode ) const;
 
-    String  FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
-    String  NextDel()   { nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
+    OUString  FirstDel()  { nIter = 0; return theDelTab.getToken( nIter, cSep ); }
+    OUString  NextDel()   { nIter +=2; return theDelTab.getToken( nIter, cSep ); }
 
 private:
-    const String        theDelTab;
+    const OUString      theDelTab;
     const sal_Unicode   cSep;
     const xub_StrLen    nCount;
     xub_StrLen          nIter;
@@ -58,7 +58,7 @@ private:
 
 //------------------------------------------------------------------------
 
-sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
+sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
 {
     sal_Unicode nCode = 0;
 
@@ -67,9 +67,9 @@ sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
         xub_StrLen i = 0;
         while ( i<nCount )
         {
-            if ( rDel == theDelTab.GetToken( i, cSep ) )
+            if ( rDel == theDelTab.getToken( i, cSep ) )
             {
-                nCode = (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32();
+                nCode = (sal_Unicode) theDelTab.getToken( i+1, cSep ).toInt32();
                 i     = nCount;
             }
             else
@@ -82,18 +82,18 @@ sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
 
 //------------------------------------------------------------------------
 
-String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
+OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
-    String aStrDel;
+    OUString aStrDel;
 
     if ( nCount >= 2 )
     {
         xub_StrLen i = 0;
         while ( i<nCount )
         {
-            if ( nCode == (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32() )
+            if ( nCode == (sal_Unicode) theDelTab.getToken( i+1, cSep ).toInt32() )
             {
-                aStrDel = theDelTab.GetToken( i, cSep );
+                aStrDel = theDelTab.getToken( i, cSep );
                 i       = nCount;
             }
             else
@@ -139,12 +139,12 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( sFieldSep );
-    pTextSepTab  = new ScDelimiterTable( String(ScResId(SCSTR_TEXTSEP)) );
+    pTextSepTab  = new ScDelimiterTable( OUString(ScResId(SCSTR_TEXTSEP)) );
 
-    String aStr = pFieldSepTab->FirstDel();
+    OUString aStr = pFieldSepTab->FirstDel();
     sal_Unicode nCode;
 
-    while ( aStr.Len() > 0 )
+    while ( !aStr.isEmpty() )
     {
         aEdFieldSep.InsertEntry( aStr );
         aStr = pFieldSepTab->NextDel();
@@ -152,7 +152,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
     aStr = pTextSepTab->FirstDel();
 
-    while ( aStr.Len() > 0 )
+    while ( !aStr.isEmpty() )
     {
         aEdTextSep.InsertEntry( aStr );
         aStr = pTextSepTab->NextDel();
@@ -184,7 +184,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             nCode = pOptions->nFieldSepCode;
             aStr  = pFieldSepTab->GetDelimiter( nCode );
 
-            if ( !aStr.Len() )
+            if ( aStr.isEmpty() )
                 aEdFieldSep.SetText( OUString((sal_Unicode)nCode) );
             else
                 aEdFieldSep.SetText( aStr );
@@ -192,7 +192,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             nCode = pOptions->nTextSepCode;
             aStr  = pTextSepTab->GetDelimiter( nCode );
 
-            if ( !aStr.Len() )
+            if ( aStr.isEmpty() )
                 aEdTextSep.SetText( OUString((sal_Unicode)nCode) );
             else
                 aEdTextSep.SetText( aStr );
@@ -278,7 +278,7 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
     ScDelimiterTable* pTab;
-    String  aStr( rEd.GetText() );
+    OUString  aStr( rEd.GetText() );
     sal_uInt16  nCode;
 
     if ( &rEd == &aEdTextSep )
@@ -286,7 +286,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     else
         pTab = pFieldSepTab;
 
-    if ( !aStr.Len() )
+    if ( aStr.isEmpty() )
     {
         nCode = 0;          // kein Trennzeichen
     }
@@ -295,7 +295,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
         nCode = pTab->GetCode( aStr );
 
         if ( nCode == 0 )
-            nCode = (sal_uInt16)aStr.GetChar(0);
+            nCode = (sal_uInt16)aStr[0];
     }
 
     return nCode;

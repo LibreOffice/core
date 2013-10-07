@@ -109,7 +109,7 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
     sal_uInt16 i;
 
     for ( i=1; i<nEntries; i++ )
-        delete (String*)pLbFilterArea->GetEntryData( i );
+        delete (OUString*)pLbFilterArea->GetEntryData( i );
 
     delete pOptionsMgr;
 
@@ -159,7 +159,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                 nInsert = pLbFilterArea->InsertEntry(itr->second->GetName());
                 OUString aSymbol;
                 itr->second->GetSymbol(aSymbol);
-                pLbFilterArea->SetEntryData(nInsert, new String(aSymbol));
+                pLbFilterArea->SetEntryData(nInsert, new OUString(aSymbol));
             }
         }
 
@@ -295,8 +295,8 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
     if ( (pBtn == pBtnOk) && pDoc && pViewData )
     {
-        String          theCopyStr( pEdCopyArea->GetText() );
-        String          theAreaStr( pEdFilterArea->GetText() );
+        OUString          theCopyStr( pEdCopyArea->GetText() );
+        OUString          theAreaStr( pEdFilterArea->GetText() );
         ScQueryParam    theOutParam( theQueryData );
         ScAddress       theAdrCopy;
         sal_Bool            bEditInputOk    = true;
@@ -306,10 +306,10 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
         if ( pBtnCopyResult->IsChecked() )
         {
-            xub_StrLen nColonPos = theCopyStr.Search( ':' );
+            sal_Int32 nColonPos = theCopyStr.indexOf( ':' );
 
-            if ( STRING_NOTFOUND != nColonPos )
-                theCopyStr.Erase( nColonPos );
+            if ( -1 != nColonPos )
+                theCopyStr = theCopyStr.copy( 0, nColonPos );
 
             sal_uInt16 nResult = theAdrCopy.Parse( theCopyStr, pDoc, eConv );
 
@@ -443,11 +443,11 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
 {
     if ( pLb == pLbFilterArea )
     {
-        String  aString;
+        OUString  aString;
         sal_uInt16  nSelPos = pLbFilterArea->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
-            aString = *(String*)pLbFilterArea->GetEntryData( nSelPos );
+            aString = *(OUString*)pLbFilterArea->GetEntryData( nSelPos );
 
         pEdFilterArea->SetText( aString );
     }
@@ -464,19 +464,19 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
     {
         if ( pDoc && pViewData )
         {
-            String  theCurAreaStr = pEd->GetText();
+            OUString  theCurAreaStr = pEd->GetText();
             sal_uInt16  nResult = ScRange().Parse( theCurAreaStr, pDoc );
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
-                String* pStr    = NULL;
+                OUString* pStr    = NULL;
                 sal_Bool    bFound  = false;
                 sal_uInt16  i       = 0;
                 sal_uInt16  nCount  = pLbFilterArea->GetEntryCount();
 
                 for ( i=1; i<nCount && !bFound; i++ )
                 {
-                    pStr = (String*)pLbFilterArea->GetEntryData( i );
+                    pStr = (OUString*)pLbFilterArea->GetEntryData( i );
                     bFound = (theCurAreaStr == *pStr);
                 }
 

@@ -824,7 +824,7 @@ OUString ScDPShowDetailDlg::GetDimensionName() const
 {
     // Look up the internal dimension name which may be different from the
     // displayed field name.
-    String aSelectedName = maLbDims.GetSelectEntry();
+    OUString aSelectedName = maLbDims.GetSelectEntry();
     DimNameIndexMap::const_iterator itr = maNameIndexMap.find(aSelectedName);
     if (itr == maNameIndexMap.end())
         // This should never happen!

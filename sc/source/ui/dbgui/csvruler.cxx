@@ -41,7 +41,7 @@ using namespace com::sun::star::uno;
 
 static void load_FixedWidthList(ScCsvSplits &aSplits)
 {
-    String sSplits;
+    OUString sSplits;
     OUString sFixedWidthLists;
 
     Sequence<Any>aValues;
@@ -59,12 +59,12 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
         aSplits.Clear();
         pProperties[0] >>= sFixedWidthLists;
 
-        sSplits = String( sFixedWidthLists );
+        sSplits = sFixedWidthLists;
 
         // String ends with a semi-colon so there is no 'int' after the last one.
         xub_StrLen n = comphelper::string::getTokenCount(sSplits, ';') - 1;
         for (xub_StrLen i = 0; i < n; ++i)
-            aSplits.Insert( sSplits.GetToken(i).ToInt32() );
+            aSplits.Insert( sSplits.getToken(i, ';').toInt32() );
     }
 }
 static void save_FixedWidthList(ScCsvSplits aSplits)
@@ -590,7 +590,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
     maBackgrDev.SetTextFillColor();
     for( nPos = ((nFirstPos + 9) / 10) * 10; nPos <= nLastPos; nPos += 10 )
     {
-        String aText( OUString::number( nPos ) );
+        OUString aText( OUString::number( nPos ) );
         sal_Int32 nTextWidth = maBackgrDev.GetTextWidth( aText );
         sal_Int32 nTextX = GetX( nPos ) - nTextWidth / 2;
         ImplDrawArea( nTextX - 1, nTextWidth + 2 );

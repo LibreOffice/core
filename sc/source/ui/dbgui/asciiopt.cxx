@@ -179,20 +179,20 @@ bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     return false;
 }
 
-static OUString lcl_decodeSepString( const String & rSepNums, bool & o_bMergeFieldSeps )
+static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeFieldSeps )
 {
-    String aFieldSeps;
+    OUString aFieldSeps;
     xub_StrLen nSub = comphelper::string::getTokenCount( rSepNums, '/');
     for (xub_StrLen i=0; i<nSub; ++i)
     {
-        String aCode = rSepNums.GetToken( i, '/' );
-        if ( aCode.EqualsAscii(pStrMrg) )
+        OUString aCode = rSepNums.getToken( i, '/' );
+        if ( aCode.equalsAscii(pStrMrg) )
             o_bMergeFieldSeps = true;
         else
         {
-            sal_Int32 nVal = aCode.ToInt32();
+            sal_Int32 nVal = aCode.toInt32();
             if ( nVal )
-                aFieldSeps += (sal_Unicode) nVal;
+                aFieldSeps += OUString((sal_Unicode) nVal);
         }
     }
     return aFieldSeps;
@@ -204,7 +204,7 @@ static OUString lcl_decodeSepString( const String & rSepNums, bool & o_bMergeFie
 void ScAsciiOptions::ReadFromString( const OUString& rString )
 {
     xub_StrLen nCount = comphelper::string::getTokenCount(rString, ',');
-    String aToken;
+    OUString aToken;
 
     // Field separator.
     if ( nCount >= 1 )
@@ -212,7 +212,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         bFixedLen = bMergeFieldSeps = false;
 
         aToken = rString.getToken(0,',');
-        if ( aToken.EqualsAscii(pStrFix) )
+        if ( aToken.equalsAscii(pStrFix) )
             bFixedLen = true;
         aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
     }
@@ -221,7 +221,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     if ( nCount >= 2 )
     {
         aToken = rString.getToken(1,',');
-        sal_Int32 nVal = aToken.ToInt32();
+        sal_Int32 nVal = aToken.toInt32();
         cTextSep = (sal_Unicode) nVal;
     }
 
@@ -236,7 +236,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     if ( nCount >= 4 )
     {
         aToken = rString.getToken(3,',');
-        nStartRow = aToken.ToInt32();
+        nStartRow = aToken.toInt32();
     }
 
     // Column info.
@@ -254,8 +254,8 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
             pColFormat = new sal_uInt8[nInfoCount];
             for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
             {
-                pColStart[nInfo]  = (sal_Int32) aToken.GetToken( 2*nInfo, '/' ).ToInt32();
-                pColFormat[nInfo] = (sal_uInt8) aToken.GetToken( 2*nInfo+1, '/' ).ToInt32();
+                pColStart[nInfo]  = (sal_Int32) aToken.getToken( 2*nInfo, '/' ).toInt32();
+                pColFormat[nInfo] = (sal_uInt8) aToken.getToken( 2*nInfo+1, '/' ).toInt32();
             }
         }
         else
@@ -269,21 +269,21 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     if (nCount >= 6)
     {
         aToken = rString.getToken(5, ',');
-        eLang = static_cast<LanguageType>(aToken.ToInt32());
+        eLang = static_cast<LanguageType>(aToken.toInt32());
     }
 
     // Import quoted field as text.
     if (nCount >= 7)
     {
         aToken = rString.getToken(6, ',');
-        bQuotedFieldAsText = aToken.EqualsAscii("true") ? true : false;
+        bQuotedFieldAsText = aToken.equalsAscii("true") ? true : false;
     }
 
     // Detect special numbers.
     if (nCount >= 8)
     {
         aToken = rString.getToken(7, ',');
-        bDetectSpecialNumber = aToken.EqualsAscii("true") ? true : false;
+        bDetectSpecialNumber = aToken.equalsAscii("true") ? true : false;
     }
     else
         bDetectSpecialNumber = true;    // default of versions that didn't add the parameter
@@ -362,22 +362,22 @@ OUString ScAsciiOptions::WriteToString() const
 sal_Unicode ScAsciiOptions::GetWeightedFieldSep( const OUString & rFieldSeps, bool bDecodeNumbers )
 {
     bool bMergeFieldSeps = false;
-    String aFieldSeps( bDecodeNumbers ? lcl_decodeSepString( rFieldSeps, bMergeFieldSeps) : rFieldSeps);
-    if (aFieldSeps.Len() <= 1)
-        return aFieldSeps.GetChar(0);
+    OUString aFieldSeps( bDecodeNumbers ? lcl_decodeSepString( rFieldSeps, bMergeFieldSeps) : rFieldSeps);
+    if (aFieldSeps.getLength() <= 1)
+        return aFieldSeps[0];
     else
     {
         // There can be only one separator for output. See also fdo#53449
-        if (aFieldSeps.Search(',') != STRING_NOTFOUND)
+        if (aFieldSeps.indexOf(',') != -1)
             return ',';
-        else if (aFieldSeps.Search('\t') != STRING_NOTFOUND)
+        else if (aFieldSeps.indexOf('\t') != -1)
             return '\t';
-        else if (aFieldSeps.Search(';') != STRING_NOTFOUND)
+        else if (aFieldSeps.indexOf(';') != -1)
             return ';';
-        else if (aFieldSeps.Search(' ') != STRING_NOTFOUND)
+        else if (aFieldSeps.indexOf(' ') != -1)
             return ' ';
         else
-            return aFieldSeps.GetChar(0);
+            return aFieldSeps[0];
     }
 }
 

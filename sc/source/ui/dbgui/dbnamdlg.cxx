@@ -67,7 +67,7 @@ private:
     CheckBox&   rBtnFormat;
     CheckBox&   rBtnStrip;
     ScRange&    rCurArea;
-    String      aStr;
+    OUString    aStr;
     ScRange     aArea;
     sal_Bool        bHeader:1;
     sal_Bool        bSize:1;
@@ -182,7 +182,7 @@ void ScDbNameDlg::Init()
     m_pEdAssign->SetModifyHdl  ( LINK( this, ScDbNameDlg, AssModifyHdl ) );
     UpdateNames();
 
-    String  theAreaStr;
+    OUString  theAreaStr;
 
     if ( pViewData && pDoc )
     {
@@ -413,16 +413,16 @@ IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
 IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
-    String  aNewName = comphelper::string::strip(m_pEdName->GetText(), ' ');
-    String  aNewArea = m_pEdAssign->GetText();
+    OUString  aNewName = comphelper::string::strip(m_pEdName->GetText(), ' ');
+    OUString  aNewArea = m_pEdAssign->GetText();
 
-    if ( aNewName.Len() > 0 && aNewArea.Len() > 0 )
+    if ( !aNewName.isEmpty() > 0 && !aNewArea.isEmpty() )
     {
-        if ( ScRangeData::IsNameValid( aNewName, pDoc ) && !aNewName.EqualsAscii(STR_DB_LOCAL_NONAME) )
+        if ( ScRangeData::IsNameValid( aNewName, pDoc ) && !aNewName.equalsAscii(STR_DB_LOCAL_NONAME) )
         {
             //  weil jetzt editiert werden kann, muss erst geparst werden
             ScRange aTmpRange;
-            String aText = m_pEdAssign->GetText();
+            OUString aText = m_pEdAssign->GetText();
             if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
             {
                 theCurArea = aTmpRange;
@@ -516,12 +516,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 
     if (itr != rDBs.end())
     {
-        String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
+        OUString aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
 
         OUStringBuffer aBuf;
-        aBuf.append(aStrDelMsg.GetToken(0, '#'));
+        aBuf.append(aStrDelMsg.getToken(0, '#'));
         aBuf.append(aStrEntry);
-        aBuf.append(aStrDelMsg.GetToken(1, '#'));
+        aBuf.append(aStrDelMsg.getToken(1, '#'));
         QueryBox aBox(this, WinBits(WB_YES_NO|WB_DEF_YES), aBuf.makeStringAndClear());
 
         if (RET_YES == aBox.Execute())
@@ -631,7 +631,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
     //  hier parsen fuer Save() etc.
 
     ScRange aTmpRange;
-    String aText = m_pEdAssign->GetText();
+    OUString aText = m_pEdAssign->GetText();
     if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
         theCurArea = aTmpRange;
 

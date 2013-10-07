@@ -436,7 +436,7 @@ void ScDPFieldControlBase::MouseMove( const MouseEvent& rMEvt )
     {
         Point aPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
         Rectangle   aRect( aPos, GetSizePixel() );
-        String aHelpText = GetFieldText(nIndex);
+        OUString aHelpText = GetFieldText(nIndex);
         Help::ShowQuickHelp( this, aRect, aHelpText );
     }
 }
@@ -584,7 +584,7 @@ void ScDPFieldControlBase::DrawBackground( OutputDevice& rDev )
     sal_Int32 nStringIx = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
     {
-        String aLine( GetText().getToken( 0, '\n', nStringIx ) );
+        OUString aLine( GetText().getToken( 0, '\n', nStringIx ) );
         Point aLinePos( (aSize.Width() - rDev.GetCtrlTextWidth( aLine )) / 2, nY );
         rDev.DrawCtrlText( aLinePos, aLine );
         nY += rDev.GetTextHeight();
