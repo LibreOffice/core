@@ -153,8 +153,8 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
 {
-    String        aFormat;
-    String        sBreak = OUString(",");
+    OUString      aFormat;
+    OUString      sBreak = OUString(",");
     bool          bThousand     =    mpBtnThousand->IsEnabled()
         && mpBtnThousand->IsChecked();
     bool          bNegRed       =    mpBtnNegRed->IsEnabled()
@@ -166,10 +166,10 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
         ? (sal_uInt16)mpEdLeadZeroes->GetValue()
         : (sal_uInt16)0;
 
-    String sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
-    String sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
-    String sPrecision = OUString::number(nPrecision);
-    String sLeadZeroes = OUString::number(nLeadZeroes);
+    OUString sThousand = OUString::number(static_cast<sal_Int32>(bThousand));
+    OUString sNegRed = OUString::number(static_cast<sal_Int32>(bNegRed));
+    OUString sPrecision = OUString::number(nPrecision);
+    OUString sLeadZeroes = OUString::number(nLeadZeroes);
 
     aFormat += sThousand;
     aFormat += sBreak;
@@ -286,7 +286,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             if( eState >= SFX_ITEM_AVAILABLE)
             {
                 const SfxStringItem* pItem = (const SfxStringItem*)pState;
-                String aCode = pItem->GetValue();
+                OUString aCode = pItem->GetValue();
             /*  if(aCode.Equals(String::CreateFromAscii("General")))
                 {
                     mnCategorySelected = 0;
@@ -302,14 +302,14 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     mnCategorySelected = 1;
                     mpLbCategory->SelectEntryPos(1);
                 }*/
-                sal_uInt16 aLen = aCode.Len();
-                String* sFormat = new String[4];
-                String  sTmpStr = OUString();
+                sal_uInt16 aLen = aCode.getLength();
+                OUString* sFormat = new OUString[4];
+                OUString  sTmpStr = OUString();
                 sal_uInt16 nCount = 0;
                 sal_uInt16 nStrCount = 0;
                 while( nCount < aLen )
                 {
-                    sal_Unicode cChar = aCode.GetChar(nCount);
+                    sal_Unicode cChar = aCode[nCount];
                     if(cChar == sal_Unicode(','))
                     {
                         sFormat[nStrCount] = sTmpStr;
@@ -318,14 +318,14 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     }
                     else
                     {
-                        sTmpStr += cChar;
+                        sTmpStr += OUString(cChar);
                     }
                     nCount++;
                 }
-                bThousand   =    sFormat[0].ToInt32();
-                bNegRed     =    sFormat[1].ToInt32();
-                nPrecision  =    (sal_uInt16)sFormat[2].ToInt32();
-                nLeadZeroes =    (sal_uInt16)sFormat[3].ToInt32();
+                bThousand   =    sFormat[0].toInt32();
+                bNegRed     =    sFormat[1].toInt32();
+                nPrecision  =    (sal_uInt16)sFormat[2].toInt32();
+                nLeadZeroes =    (sal_uInt16)sFormat[3].toInt32();
                 delete[] sFormat;
             }
             else

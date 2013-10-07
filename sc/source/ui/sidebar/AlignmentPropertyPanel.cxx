@@ -483,7 +483,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         else
         {
-            mpMtrAngle->SetText( String() );
+            mpMtrAngle->SetText( OUString() );
             mpCtrlDial->SetRotation( 0 );
         }
         break;
