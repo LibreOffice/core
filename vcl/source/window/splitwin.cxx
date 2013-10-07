@@ -2542,30 +2542,21 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
         {
             sal_Bool    bPropSmaller = (mnMouseModifier & KEY_SHIFT) ? sal_True : sal_False;
             sal_Bool    bPropGreater = (mnMouseModifier & KEY_MOD1) ? sal_True : sal_False;
+            long    nDelta = mnMSplitPos-mnMStartPos;
 
             if ( (mnSplitTest & SPLIT_WINDOW) && !mpMainSet->mpItems )
             {
-                // nDelta corresponds to the direction to which user drags the mouse.
-                // If nDelta > 0, means user has dragged the handle towards the right and vice-versa
-                long nDelta = mnMSplitPos-mnMStartPos;
-
                 if ( (mpSplitSet == mpMainSet) && mbBottomRight )
                     nDelta *= -1;
                 ImplSetWindowSize( nDelta );
             }
             else
             {
-                long nNewSize( 0 );
-
-                // where is the sidebar is attached?
+                long nNewSize = mpSplitSet->mpItems[mnSplitPos].mnPixSize;
                 if ( (mpSplitSet == mpMainSet) && mbBottomRight )
-                    nNewSize = mnMaxSize - mnMStartPos; // right hand side of the screen
+                    nNewSize -= nDelta;
                 else
-                    nNewSize = mnMStartPos; // left hand side of the screen
-
-                // do not make the sidebar wider than mnMaxSize
-                nNewSize = std::min(nNewSize, mpSplitSet->mpItems[mnSplitPos].mnMaxSize);
-
+                    nNewSize += nDelta;
                 SplitItem( mpSplitSet->mpItems[mnSplitPos].mnId, nNewSize,
                            bPropSmaller, bPropGreater );
             }
