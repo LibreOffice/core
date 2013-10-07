@@ -148,7 +148,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     if (maFontHeight[ maFont [ nStyle ] ])
         rItemSet.Put( SvxFontHeightItem( (sal_uLong) (20 * maFontHeight[ maFont[ nStyle ] ] ), 100, ATTR_FONT_HEIGHT ) );
 
-    String fntName = maFontType[ maFont[ nStyle ] ];
+    OUString fntName = maFontType[ maFont[ nStyle ] ];
     rItemSet.Put( SvxFontItem( FAMILY_SYSTEM, fntName, EMPTY_STRING, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
 
     pDoc->ApplyPattern( nCol, nRow, nTab, aPattern );

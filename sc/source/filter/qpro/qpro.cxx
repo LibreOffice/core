@@ -162,8 +162,8 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 {
                     if( nTab < 26 )
                     {
-                        String aName;
-                        aName.Append( sal_Unicode( 'A' + nTab ) );
+                        OUString aName;
+                        aName += OUString( sal_Unicode( 'A' + nTab ) );
                         if (!nTab)
                             pDoc->RenameTab( nTab, aName, false, false);
                         else
