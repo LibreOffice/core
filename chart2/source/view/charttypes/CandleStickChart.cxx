@@ -231,37 +231,33 @@ void CandleStickChart::createShapes()
                     //create min-max line
                     if( isValidPosition(aPosMiddleMinimum) && isValidPosition(aPosMiddleMaximum) )
                     {
-                        uno::Reference< drawing::XShape > xShape(
-                            m_xShapeFactory->createInstance( "com.sun.star.drawing.PolyLineShape" ),
-                            uno::UNO_QUERY );
-                        xPointGroupShape_Shapes->add(xShape);
-                        uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-                        if(xProp.is())
-                        {
-                            drawing::PolyPolygonShape3D aPoly;
-                            sal_Int32 nLineIndex =0;
-                            AddPointToPoly( aPoly, aPosMiddleMinimum, nLineIndex);
-                            AddPointToPoly( aPoly, aPosMiddleMaximum, nLineIndex);
-                            xProp->setPropertyValue( UNO_NAME_POLYPOLYGON, uno::makeAny( PolyToPointSequence(aPoly) ) );
-                        }
+                        drawing::PolyPolygonShape3D aPoly;
+                        sal_Int32 nLineIndex =0;
+                        AddPointToPoly( aPoly, aPosMiddleMinimum, nLineIndex);
+                        AddPointToPoly( aPoly, aPosMiddleMaximum, nLineIndex);
+
+                        uno::Reference< drawing::XShape > xShape =
+                            m_pShapeFactory->createLine2D( xPointGroupShape_Shapes,
+                                    PolyToPointSequence(aPoly), NULL);
                         this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                     }
 
                     //create first-last shape
                     if(bJapaneseStyle && isValidPosition(aPosLeftFirst) && isValidPosition(aPosRightLast) )
                     {
-                        uno::Reference< drawing::XShape > xShape(
-                            m_xShapeFactory->createInstance( "com.sun.star.drawing.RectangleShape" ),
-                            uno::UNO_QUERY );
-                        xLossGainTarget->add(xShape);
-
-                        xShape->setPosition( Position3DToAWTPoint( aPosLeftFirst ) );
                         drawing::Direction3D aDiff = aPosRightLast-aPosLeftFirst;
                         awt::Size aAWTSize( Direction3DToAWTSize( aDiff ));
                         // workaround for bug in drawing: if height is 0 the box gets infinitely large
                         if( aAWTSize.Height == 0 )
                             aAWTSize.Height = 1;
-                        xShape->setSize( aAWTSize );
+
+                        tNameSequence aNames;
+                        tAnySequence aValues;
+
+                        uno::Reference< drawing::XShape > xShape =
+                            m_pShapeFactory->createRectangle( xLossGainTarget,
+                                    aAWTSize, Position3DToAWTPoint( aPosLeftFirst ),
+                                    aNames, aValues);
 
                         uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                         if(xProp.is())
@@ -292,14 +288,12 @@ void CandleStickChart::createShapes()
 
                         if( aPoly.SequenceX.getLength() )
                         {
-                            uno::Reference< drawing::XShape > xShape(
-                                m_xShapeFactory->createInstance( "com.sun.star.drawing.PolyLineShape" ),
-                                uno::UNO_QUERY );
-                            xPointGroupShape_Shapes->add(xShape);
+                            uno::Reference< drawing::XShape > xShape =
+                                m_pShapeFactory->createLine2D( xPointGroupShape_Shapes,
+                                        PolyToPointSequence(aPoly), NULL );
                             uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                             if(xProp.is())
                             {
-                                xProp->setPropertyValue( UNO_NAME_POLYPOLYGON, uno::makeAny( PolyToPointSequence(aPoly) ) );
                                 this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                             }
                         }
