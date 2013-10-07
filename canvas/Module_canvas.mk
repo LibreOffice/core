@@ -32,7 +32,7 @@ $(eval $(call gb_Module_add_targets,canvas,\
 ))
 endif
 
-ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_OPENGL_CANVAS),TRUE)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_oglcanvas \
 ))
