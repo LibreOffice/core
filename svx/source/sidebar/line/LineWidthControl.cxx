@@ -132,14 +132,14 @@ void LineWidthControl::Initialize()
 
     rStr = new OUString[9];
     //modify,
-    rStr[0] = "05";
-    rStr[1] = "08";
-    rStr[2] = "10";
-    rStr[3] = "15";
-    rStr[4] = "23";
-    rStr[5] = "30";
-    rStr[6] = "45";
-    rStr[7] = "60";
+    rStr[0] = "0.5";
+    rStr[1] = "0.8";
+    rStr[2] = "1.0";
+    rStr[3] = "1.5";
+    rStr[4] = "2.3";
+    rStr[5] = "3.0";
+    rStr[6] = "4.5";
+    rStr[7] = "6.0";
     rStr[8] = SVX_RESSTR(STR_WIDTH_LAST_CUSTOM);
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
@@ -147,7 +147,7 @@ void LineWidthControl::Initialize()
 
     for(int i = 0; i <= 7 ; i++)
     {
-        rStr[i] = rStr[i].replaceAt(1, 1, OUString(cSep));//Modify
+        rStr[i] = rStr[i].replace('.', cSep);//Modify
         rStr[i] += mstrPT;
     }
     //end
