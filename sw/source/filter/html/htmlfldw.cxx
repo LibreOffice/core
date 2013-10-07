@@ -379,20 +379,26 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 }
 
                 rHTMLWrt.bTagOn = sal_True;
+
                 const SfxPoolItem *aItems[5];
                 sal_uInt16 nItems = 0;
-                for( sal_uInt16 i=0; i<4; i++ )
+
+                assert(pWhichIds && pRefWhichIds);
+                if (pWhichIds && pRefWhichIds)
                 {
-                    const SfxPoolItem *pRefItem =
-                        aScriptItemSet.GetItem( pRefWhichIds[i] );
-                    const SfxPoolItem *pItem =
-                        aScriptItemSet.GetItem( pWhichIds[i] );
-                    if( pRefItem && pItem &&
-                        !(0==i ? swhtml_css1atr_equalFontItems( *pRefItem, *pItem )
-                               : *pRefItem == *pItem) )
+                    for( sal_uInt16 i=0; i<4; i++ )
                     {
-                        Out( aHTMLAttrFnTab, *pItem, rHTMLWrt );
-                        aItems[nItems++] = pItem;
+                        const SfxPoolItem *pRefItem =
+                            aScriptItemSet.GetItem( pRefWhichIds[i] );
+                        const SfxPoolItem *pItem =
+                            aScriptItemSet.GetItem( pWhichIds[i] );
+                        if( pRefItem && pItem &&
+                            !(0==i ? swhtml_css1atr_equalFontItems( *pRefItem, *pItem )
+                                   : *pRefItem == *pItem) )
+                        {
+                            Out( aHTMLAttrFnTab, *pItem, rHTMLWrt );
+                            aItems[nItems++] = pItem;
+                        }
                     }
                 }
 
