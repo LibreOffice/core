@@ -271,10 +271,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if ( !nRowSpan )
         return;
 
-#ifndef PURE_HTML
     SwWriteTableCol *pCol = aCols[nCol];
-#endif
-
     bool bOutWidth = true;
 
     const SwStartNode* pSttNd = pBox->GetSttNd();
@@ -328,7 +325,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
             append("=\"").append(static_cast<sal_Int32>(nColSpan)).append("\"");
     }
-#ifndef PURE_HTML
+
     long nWidth = 0;
     sal_uInt32 nPrcWidth = USHRT_MAX;
     if( bOutWidth )
@@ -395,7 +392,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height)
             .append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
     }
-#endif
 
     const SfxItemSet& rItemSet = pBox->GetFrmFmt()->GetAttrSet();
     const SfxPoolItem *pItem;
