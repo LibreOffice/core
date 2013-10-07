@@ -214,7 +214,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     Reference< rdf::XDocumentMetadataAccess>                   m_xDocumentMetadata      ;
     ::rtl::Reference< ::sfx2::DocumentUndoManager >            m_pDocumentUndoManager   ;
     Sequence< document::CmisProperty>                          m_cmisProperties         ;
-    SfxGrabBagItem*                                            m_pGrabBagItem           ;
+    boost::shared_ptr<SfxGrabBagItem>                          m_pGrabBagItem           ;
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
             :   m_pObjectShell          ( pObjectShell  )
@@ -233,7 +233,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_xDocumentMetadata     () // lazy
             ,   m_pDocumentUndoManager  ()
             ,   m_cmisProperties  ()
-            ,   m_pGrabBagItem          ( NULL          )
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -243,7 +242,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
     virtual ~IMPL_SfxBaseModel_DataContainer()
     {
-        delete m_pGrabBagItem;
     }
 
     // ::sfx2::IModifiableDocument
@@ -3489,7 +3487,7 @@ sal_Bool SfxBaseModel::hasValidSignatures() const
 
 void SfxBaseModel::getGrabBagItem(com::sun::star::uno::Any& rVal) const
 {
-    if (m_pData->m_pGrabBagItem != NULL)
+    if (m_pData->m_pGrabBagItem.get())
         m_pData->m_pGrabBagItem->QueryValue(rVal);
     else {
         uno::Sequence<beans::PropertyValue> aValue(0);
@@ -3499,8 +3497,8 @@ void SfxBaseModel::getGrabBagItem(com::sun::star::uno::Any& rVal) const
 
 void SfxBaseModel::setGrabBagItem(const com::sun::star::uno::Any& rVal)
 {
-    if (m_pData->m_pGrabBagItem == NULL)
-        m_pData->m_pGrabBagItem = new SfxGrabBagItem;
+    if (!m_pData->m_pGrabBagItem.get())
+        m_pData->m_pGrabBagItem.reset(new SfxGrabBagItem);
 
     m_pData->m_pGrabBagItem->PutValue(rVal);
 }
