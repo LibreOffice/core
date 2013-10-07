@@ -182,7 +182,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         }
 
         pData->SetMode( (sal_uInt16) eMode );
-        String rStrExp = GetMeText();
+        OUString rStrExp = GetMeText();
 
         Update(rStrExp);
     }
@@ -203,7 +203,7 @@ void ScFormulaDlg::fill()
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
     notifyChange();
-    String rStrExp;
+    OUString rStrExp;
     if (pData)
     {
         //  Daten schon vorhanden -> Zustand wiederherstellen (nach Umschalten)
@@ -231,8 +231,8 @@ void ScFormulaDlg::fill()
             pData->SetInputHandler(pInputHdl);
         }
 
-        String aOldFormulaTmp(pScMod->InputGetFormulaStr());
-        pScMod->InputSetSelection( 0, aOldFormulaTmp.Len());
+        OUString aOldFormulaTmp(pScMod->InputGetFormulaStr());
+        pScMod->InputSetSelection( 0, aOldFormulaTmp.getLength());
 
         rStrExp=pData->GetUndoStr();
         pScMod->InputReplaceSelection(rStrExp);
@@ -400,7 +400,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             RefInputStart(GetActiveEdit());
         }
 
-        String      aRefStr;
+        OUString      aRefStr;
         sal_Bool bOtherDoc = ( pRefDoc != pDoc && pRefDoc->GetDocumentShell()->HasName() );
         if ( bOtherDoc )
         {
@@ -413,12 +413,12 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             SfxObjectShell* pObjSh = pRefDoc->GetDocumentShell();
 
             // #i75893# convert escaped URL of the document to something user friendly
-//           String aFileName = pObjSh->GetMedium()->GetName();
-            String aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+//           OUString aFileName = pObjSh->GetMedium()->GetName();
+            OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
-            aRefStr = '\'';
+            aRefStr = "'";
             aRefStr += aFileName;
-            aRefStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "'#" ));
+            aRefStr += "'#";
             aRefStr += aTmp;
         }
         else

@@ -661,7 +661,7 @@ sal_Bool ScFunctionDockWin::Close()
 SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
                                 SfxChildAlignment aChildAlign)
 {
-    String aString = OUString("ww");
+    OUString aString("ww");
     Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
     if(!bInit)
     {
@@ -693,7 +693,7 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
         case SFX_ALIGN_NOALIGNMENT:
 
                         aString = aCatBox.GetEntry(0);
-                        aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM("www"));
+                        aString += "www";
                         aTxtSize = Size( aFiFuncDesc.GetTextWidth(aString),
                                             aFiFuncDesc.GetTextHeight() );
 
@@ -833,13 +833,13 @@ void ScFunctionDockWin::UpdateFunctionList()
 
 void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
 {
-    String aFirstArgStr;
-    String aArgStr;
-    String aString=pAllFuncList->GetSelectEntry();
+    OUString aFirstArgStr;
+    OUString aArgStr;
+    OUString aString=pAllFuncList->GetSelectEntry();
     SfxViewShell* pCurSh = SfxViewShell::Current();
     nArgs=0;
 
-    if(aString.Len()>0)
+    if(!aString.isEmpty())
     {
 
         ScModule* pScMod = SC_MOD();
@@ -848,7 +848,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
         if(!pScMod->IsEditMode())
         {
             pScMod->SetInputMode(SC_INPUT_TABLE);
-            aString = '=';
+            aString = "=";
             aString += pAllFuncList->GetSelectEntry();
             if (pHdl)
                 pHdl->ClearText();
@@ -867,7 +867,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                 // suppress flag as well, but practically it doesn't.
                 aFirstArgStr = *(pDesc->ppDefArgNames[0]);
                 aFirstArgStr = comphelper::string::strip(aFirstArgStr, ' ');
-                aFirstArgStr.SearchAndReplaceAll(' ', '_');
+                aFirstArgStr = aFirstArgStr.replaceAll(" ", "_");
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS && nArgs != PAIRED_VAR_ARGS )
                 {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
@@ -885,9 +885,9 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                         if (!pDesc->pDefArgFlags[nArg].bSuppress)
                         {
                             aArgStr += aArgSep;
-                            String sTmp(*(pDesc->ppDefArgNames[nArg]));
+                            OUString sTmp(*(pDesc->ppDefArgNames[nArg]));
                             sTmp = comphelper::string::strip(sTmp, ' ');
-                            sTmp.SearchAndReplaceAll(' ', '_');
+                            sTmp = sTmp.replaceAll(" ", "_");
                             aArgStr += sTmp;
                         }
                     }
@@ -898,7 +898,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
         {
             if (pHdl->GetEditString().isEmpty())
             {
-                aString = '=';
+                aString = "=";
                 aString += pAllFuncList->GetSelectEntry();
             }
             EditView *pEdView=pHdl->GetActiveView();
@@ -909,13 +909,13 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                     pHdl->InsertFunction(aString);
                     pEdView->InsertText(aArgStr,sal_True);
                     ESelection  aESel=pEdView->GetSelection();
-                    aESel.nEndPos=aESel.nStartPos+aFirstArgStr.Len();
+                    aESel.nEndPos = aESel.nStartPos + aFirstArgStr.getLength();
                     pEdView->SetSelection(aESel);
                     pHdl->DataChanged();
                 }
                 else
                 {
-                    aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
+                    aString += "()";
                     pEdView->InsertText(aString,false);
                     pHdl->DataChanged();
                 }
