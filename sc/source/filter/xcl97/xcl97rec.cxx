@@ -747,8 +747,8 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         // Excel has one alignment per NoteObject while Calc supports
         // one alignment per paragraph - use the first paragraph
         // alignment (if set) as our overall alignment.
-        String aParaText( rEditObj.GetText( 0 ) );
-        if( aParaText.Len() )
+        OUString aParaText( rEditObj.GetText( 0 ) );
+        if( !aParaText.isEmpty() )
         {
             SfxItemSet aSet( rEditObj.GetParaAttribs( 0));
             const SfxPoolItem* pItem = NULL;
@@ -838,12 +838,12 @@ XclObjOle::~XclObjOle()
 void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
     // write only as embedded, not linked
-    String          aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
+    OUString        aStorageName( "MBD" );
     sal_Char        aBuf[ sizeof(sal_uInt32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
     sal_uInt32          nPictureId = sal_uInt32(sal_uIntPtr(this) >> 2);
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
-    aStorageName.AppendAscii( aBuf );
+    aStorageName += OUString::createFromAscii(aBuf);
     SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
                             STREAM_READWRITE| STREAM_SHARE_DENYALL );
     if( xOleStg.Is() )
@@ -1203,8 +1203,8 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm ) const
 
 ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 {
-    String  sTmpName;
-    String  sTmpComm;
+    OUString  sTmpName;
+    OUString  sTmpComm;
     OUString aTmp;
     Color   aDummyCol;
     sal_uInt16  nFlags;
@@ -1232,7 +1232,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     sal_Bool    bContLoop = sal_True;
     SCROW   nRow;
     SCCOL   nCol;
-    String  sText;
+    OUString  sText;
     double  fVal;
 
     for( size_t nRange = 0; (nRange < pRList->size()) && bContLoop; nRange++ )

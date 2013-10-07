@@ -157,13 +157,13 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab,
     {
         // external ref - read doc and tab name and find sc tab num
         // - URL
-        String aEncUrl( pStrm->ReadUniString() );
+        OUString aEncUrl( pStrm->ReadUniString() );
         OUString aUrl;
         bool bSelf;
         XclImpUrlHelper::DecodeUrl( aUrl, bSelf, GetRoot(), aEncUrl );
         pStrm->Ignore( 1 );
         // - sheet name, always separated from URL
-        String aTabName( pStrm->ReadUniString() );
+        OUString aTabName( pStrm->ReadUniString() );
         pStrm->Ignore( 1 );
 
         rExtInfo.mbExternal = true;
@@ -324,10 +324,10 @@ void XclImpChangeTrack::ReadChTrInfo()
 {
     pStrm->DisableDecryption();
     pStrm->Ignore( 32 );
-    String sUsername( pStrm->ReadUniString() );
+    OUString sUsername( pStrm->ReadUniString() );
     if( !pStrm->IsValid() ) return;
 
-    if( sUsername.Len() )
+    if( !sUsername.isEmpty() )
         pChangeTrack->SetUser( sUsername );
     pStrm->Seek( 148 );
     if( !pStrm->IsValid() ) return;

@@ -1454,7 +1454,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     aRecList.push_back( new XclExpChTr0x0195 );
     aRecList.push_back( new XclExpChTr0x0194( *pTempChangeTrack ) );
 
-    String sLastUsername;
+    OUString sLastUsername;
     DateTime aLastDateTime( DateTime::EMPTY );
     sal_uInt32 nIndex = 1;
     sal_Int32 nLogNumber = 1;
