@@ -749,21 +749,33 @@ namespace
             char* srcBuf =  (char*)rSrcBitmap->getBuffer().get();
             sal_Int32 dstStride =  getScanlineStride();
             sal_Int32 srcStride =  rSrcBitmap->getScanlineStride();
-            int bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; // round up to bytes
+            sal_Int32 bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; // round up to bytes
+            bool dstTopDown = isTopDown();
+            bool srcTopDown = rSrcBitmap->isTopDown();
 
             if (dstBuf == srcBuf && nSrcY < nDestY) // reverse copy order to avoid overlapping
             {
-                dstBuf += dstStride * (getBufferSize().getY() - 1);
-                srcBuf += srcStride * (getBufferSize().getY() - 1);
                 nSrcY = getBufferSize().getY() - nSrcY - nSrcHeight;
                 nDestY = getBufferSize().getY() - nDestY - nSrcHeight;
+                srcTopDown = !srcTopDown;
+                dstTopDown = !dstTopDown;
+            }
+
+            if (!dstTopDown)
+            {
+                dstBuf += dstStride * (getBufferSize().getY() - 1);
                 dstStride = -dstStride;
+            }
+
+            if (!srcTopDown)
+            {
+                srcBuf += srcStride * (rSrcBitmap->getBufferSize().getY() - 1);
                 srcStride = -srcStride;
             }
 
             char* dstline = dstBuf + dstStride * nDestY + nDestX * bytesPerPixel;
             char* srcline = srcBuf + srcStride * nSrcY + nSrcX * bytesPerPixel;
-            int lineBytes = nSrcWidth * bytesPerPixel;
+            sal_Int32 lineBytes = nSrcWidth * bytesPerPixel;
 
             for(; 0 < nSrcHeight; nSrcHeight--)
             {
@@ -1914,6 +1926,8 @@ inline sal_uInt32 nextPow2( sal_uInt32 x )
 
     return ++x;
 }
+
+
 
 
 namespace
