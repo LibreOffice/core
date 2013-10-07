@@ -29,8 +29,8 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument
 
     maHeaderBar.SetPosSizePixel( Point(0, 0), Size( aBoxSize.Width(), 16 ) );
 
-    String aConditionStr(ScGlobal::GetRscString(STR_HEADER_COND));
-    String aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
+    OUString aConditionStr(ScGlobal::GetRscString(STR_HEADER_COND));
+    OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
 
     long nTabSize = aBoxSize.Width()/2;
     maHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, nTabSize, HIB_LEFT| HIB_VCENTER );
