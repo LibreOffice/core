@@ -948,12 +948,14 @@ void ExportDialog::updateControls()
         OUString aEst( nRealFileSize ? msEstimatedSizePix2 : msEstimatedSizePix1 );
         sal_Int64 nRawFileSize( GetRawFileSize() );
         sal_Int32 nInd = aEst.indexOf( "%" );
-        aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRawFileSize ) );
+        if (nInd != -1)
+            aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRawFileSize ) );
 
         if ( nRealFileSize )
         {
             nInd = aEst.indexOf( "%", nInd );
-            aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
+            if (nInd != -1)
+                aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
         }
         mpFtEstimatedSize->SetText( aEst );
     }
@@ -963,7 +965,8 @@ void ExportDialog::updateControls()
         {
             OUString aEst( msEstimatedSizeVec );
             sal_Int32 nInd = aEst.indexOf( "%" );
-            aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
+            if (nInd != -1)
+                aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
             mpFtEstimatedSize->SetText( aEst );
         }
     }
