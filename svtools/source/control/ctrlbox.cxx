@@ -1431,10 +1431,30 @@ FontStyleBox::FontStyleBox( Window* pParent, const ResId& rResId ) :
     aLastStyle = GetText();
 }
 
-FontStyleBox::FontStyleBox( Window* pParent, WinBits nBits ) :
-    ComboBox( pParent, nBits )
+FontStyleBox::FontStyleBox(Window* pParent, WinBits nBits)
+    : ComboBox(pParent, nBits)
 {
     aLastStyle = GetText();
+
+    //Use the standard texts to get an optimal size and stick to that size.
+    //That should stop the character dialog dancing around.
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_LIGHT));
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_LIGHT_ITALIC));
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_NORMAL));
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_NORMAL_ITALIC));
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BOLD));
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BOLD_ITALIC));
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BLACK));
+    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BLACK_ITALIC));
+    aOptimalSize = GetOptimalSize();
+    Clear();
+}
+
+Size FontStyleBox::GetOptimalSize() const
+{
+    if (aOptimalSize.Width() || aOptimalSize.Height())
+        return aOptimalSize;
+    return ComboBox::GetOptimalSize();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontStyleBox(Window *pParent, VclBuilder::stringmap &rMap)

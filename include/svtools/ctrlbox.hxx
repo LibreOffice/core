@@ -450,6 +450,8 @@ class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 {
     OUString        aLastStyle;
 
+    Size            aOptimalSize;
+
 private:
     using ComboBox::SetText;
 public:
@@ -460,6 +462,7 @@ public:
     virtual void    Select();
     virtual void    LoseFocus();
     virtual void    Modify();
+    virtual Size    GetOptimalSize() const;
 
     void            SetText( const OUString& rText );
     void            Fill( const OUString& rName, const FontList* pList );
