@@ -615,11 +615,11 @@ namespace basegfx
             }
 
             B2DPolygon aCurrSegment;
-            const size_t sliceSize=sizeof(numbers)/sizeof(*numbers)/12;
+            const size_t sliceSize=SAL_N_ELEMENTS(numbers)/12;
             const int* pCurrSegment=numbers + nNumber*sliceSize;
             for( size_t i=0; i<sliceSize; i++, pCurrSegment++)
             {
-                if( !(*pCurrSegment ^ bLitSegments) )
+                if( !(*pCurrSegment ^ int(bLitSegments)) )
                 {
                     const size_t j=2*i;
                     aCurrSegment.clear();
