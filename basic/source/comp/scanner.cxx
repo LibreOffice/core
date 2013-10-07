@@ -47,6 +47,7 @@ SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
     bInStatement =
     bPrevLineExtentsComment = false;
     bHash    = true;
+    pSaveLine = NULL;
 }
 
 SbiScanner::~SbiScanner()
