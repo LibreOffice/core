@@ -52,16 +52,19 @@ icu_CFLAGS:=" \
 	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
 	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
+	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),-g) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_CXXFLAGS:=" \
 	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
+	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
 	$(if $(filter $(true),$(gb_SYMBOL)),-g) \
 	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_LDFLAGS:=" \
+	$(if $(ENABLE_LTO),$(gb_LTOFLAGS)) \
 	$(if $(filter TRUE,$(HAVE_LD_HASH_STYLE)),-Wl$(COMMA)--hash-style=$(WITH_LINKER_HASH_STYLE)) \
     $(if $(SYSBASE),-L../lib -L../../lib -L../stubdata -L../../stubdata -L$(SYSBASE)/usr/lib) \
     $(if $(filter TRUE,$(HAVE_LD_BSYMBOLIC_FUNCTIONS)),\
