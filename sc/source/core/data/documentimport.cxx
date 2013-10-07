@@ -150,7 +150,7 @@ void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr
     if (!pBlockPos)
         return;
 
-    rtl_uString* pStr = mpImpl->mrDoc.GetCellStringPool().intern(rStr);
+    rtl_uString* pStr = mpImpl->mrDoc.GetCellStringPool().intern(rStr).getData();
     if (!pStr)
         return;
 

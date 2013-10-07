@@ -283,42 +283,32 @@ void Test::testStringPool()
     SvtSysLocale aSysLocale;
     svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
 
-    const rtl_uString* p1 = aPool.intern("Andy");
-    const rtl_uString* p2 = aPool.intern("Andy");
-    CPPUNIT_ASSERT_EQUAL(p1, p2);
+    svl::SharedString p1, p2;
+    p1 = aPool.intern("Andy");
+    p2 = aPool.intern("Andy");
+    CPPUNIT_ASSERT_EQUAL(p1.getData(), p2.getData());
 
     p2 = aPool.intern("Bruce");
-    CPPUNIT_ASSERT_MESSAGE("They must differ.", p1 != p2);
+    CPPUNIT_ASSERT_MESSAGE("They must differ.", p1.getData() != p2.getData());
 
     OUString aAndy("Andy");
-    sal_uIntPtr si1 = aPool.getIdentifier("Andy");
-    sal_uIntPtr si2 = aPool.getIdentifier(aAndy);
-    CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be 0.", si1);
-    CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be 0.", si2);
-    CPPUNIT_ASSERT_EQUAL(si1, si2);
-    si1 = aPool.getIdentifierIgnoreCase(aAndy);
-    CPPUNIT_ASSERT_MESSAGE("Case insensitive identifier shouldn't be 0.", si1);
+    p1 = aPool.intern("Andy");
+    p2 = aPool.intern(aAndy);
+    CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be NULL.", p1.getData());
+    CPPUNIT_ASSERT_MESSAGE("Identifier shouldn't be NULL.", p2.getData());
+    CPPUNIT_ASSERT_EQUAL(p1.getData(), p2.getData());
 
     // Test case insensitive string ID's.
     OUString aAndyLower("andy"), aAndyUpper("ANDY");
-    si1 = aPool.getIdentifier("Andy");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si1);
-    aPool.intern(aAndyLower);
-    si2 = aPool.getIdentifier(aAndyLower);
-    CPPUNIT_ASSERT_MESSAGE("They must differ.", si1 != si2);
-    aPool.intern(aAndyUpper);
-    si2 = aPool.getIdentifier(aAndyUpper);
-    CPPUNIT_ASSERT_MESSAGE("They must differ.", si1 != si2);
-
-    si1 = aPool.getIdentifierIgnoreCase("Andy");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si1);
-    si2 = aPool.getIdentifierIgnoreCase("andy");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si2);
-    CPPUNIT_ASSERT_EQUAL(si1, si2);
-
-    si2 = aPool.getIdentifierIgnoreCase("ANDY");
-    CPPUNIT_ASSERT_MESSAGE("This shouldn't be NULL.", si2);
-    CPPUNIT_ASSERT_EQUAL(si1, si2);
+    p1 = aPool.intern(aAndy);
+    p2 = aPool.intern(aAndyLower);
+    CPPUNIT_ASSERT_MESSAGE("Failed to intern strings.", p1.getData() && p2.getData());
+    CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
+    CPPUNIT_ASSERT_MESSAGE("These two ID's should be equal.", p1.getDataIgnoreCase() == p2.getDataIgnoreCase());
+    p2 = aPool.intern(aAndyUpper);
+    CPPUNIT_ASSERT_MESSAGE("Failed to intern string.", p2.getData());
+    CPPUNIT_ASSERT_MESSAGE("These two ID's should differ.", p1.getData() != p2.getData());
+    CPPUNIT_ASSERT_MESSAGE("These two ID's should be equal.", p1.getDataIgnoreCase() == p2.getDataIgnoreCase());
 }
 
 void Test::testStringPoolPurge()
@@ -335,8 +325,8 @@ void Test::testStringPoolPurge()
     // Since no string objects referencing the pooled strings exist, purging
     // the pool should empty it.
     aPool.purge();
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 0);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
 
     // Now, create string objects on the heap.
     boost::scoped_ptr<OUString> pStr1(new OUString("Andy"));
@@ -348,37 +338,37 @@ void Test::testStringPoolPurge()
     aPool.intern(*pStr3);
     aPool.intern(*pStr4);
 
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 4);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
     // This shouldn't purge anything.
     aPool.purge();
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 4);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
     // Delete one heap string object, and purge. That should purge one string.
     pStr1.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 3);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
     // Ditto...
     pStr3.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 2);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aPool.getCountIgnoreCase());
 
     // Again.
     pStr2.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 1);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPool.getCountIgnoreCase());
 
     // Delete 'Bruce' and purge.
     pStr4.reset();
     aPool.purge();
-    CPPUNIT_ASSERT_MESSAGE("Wrong string count.", aPool.getCount() == 0);
-    CPPUNIT_ASSERT_MESSAGE("Wrong case insensitive string count.", aPool.getCountIgnoreCase() == 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
 }
 
 void Test::checkPreviewString(SvNumberFormatter& aFormatter,

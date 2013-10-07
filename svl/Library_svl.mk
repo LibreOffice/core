@@ -110,6 +110,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/lockfilecommon \
     svl/source/misc/ownlist \
     svl/source/misc/sharecontrolfile \
+    svl/source/misc/sharedstring \
     svl/source/misc/sharedstringpool \
     svl/source/misc/strmadpt \
     svl/source/misc/urihelper \

@@ -151,7 +151,7 @@ ContentInfo::~ContentInfo()
 
 void ContentInfo::NormalizeString( svl::SharedStringPool& rPool )
 {
-    aText = OUString(rPool.intern(aText));
+    aText = OUString(rPool.intern(aText).getData());
 }
 
 sal_uIntPtr ContentInfo::GetStringID( const svl::SharedStringPool& rPool ) const

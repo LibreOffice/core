@@ -10,8 +10,7 @@
 #ifndef SVL_STRINGPOOL_HXX
 #define SVL_STRINGPOOL_HXX
 
-#include "svl/svldllapi.h"
-#include "rtl/ustring.hxx"
+#include "svl/sharedstring.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
@@ -29,11 +28,11 @@ class SVL_DLLPUBLIC SharedStringPool
 {
     typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
     typedef std::pair<StrHashType::iterator, bool> InsertResultType;
-    typedef boost::unordered_map<const rtl_uString*, OUString> StrIdMapType;
+    typedef boost::unordered_map<const rtl_uString*, OUString> StrStoreType;
 
     StrHashType maStrPool;
     StrHashType maStrPoolUpper;
-    StrIdMapType maToUpperMap;
+    StrStoreType maStrStore;
     const CharClass* mpCharClass;
 
 public:
@@ -49,7 +48,7 @@ public:
      * @return a pointer to the string object stored inside the pool, or NULL
      *         if the insertion fails.
      */
-    rtl_uString* intern( const OUString& rStr );
+    SharedString intern( const OUString& rStr );
 
     /**
      * Get a unique ID of string object that's expected to be in the shared

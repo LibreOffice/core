@@ -15,21 +15,29 @@ namespace svl {
 SharedStringPool::SharedStringPool() : mpCharClass(NULL) {}
 SharedStringPool::SharedStringPool( const CharClass* pCharClass ) : mpCharClass(pCharClass) {}
 
-rtl_uString* SharedStringPool::intern( const OUString& rStr )
+SharedString SharedStringPool::intern( const OUString& rStr )
 {
     InsertResultType aRes = findOrInsert(maStrPool, rStr);
     if (aRes.first == maStrPool.end())
         // Insertion failed.
-        return NULL;
+        return SharedString();
 
     rtl_uString* pOrig = aRes.first->pData;
 
-    if (!aRes.second)
-        // No new string has been inserted. Return the existing string in the pool.
-        return pOrig;
-
     if (!mpCharClass)
-        return pOrig;
+        // We don't track case insensitive strings.
+        return SharedString(pOrig, NULL);
+
+    if (!aRes.second)
+    {
+        // No new string has been inserted. Return the existing string in the pool.
+        StrStoreType::iterator it = maStrStore.find(pOrig);
+        if (it == maStrStore.end())
+            return SharedString();
+
+        rtl_uString* pUpper = it->second.pData;
+        return SharedString(pOrig, pUpper);
+    }
 
     // This is a new string insertion. Establish mapping to upper-case variant.
 
@@ -37,12 +45,11 @@ rtl_uString* SharedStringPool::intern( const OUString& rStr )
     aRes = findOrInsert(maStrPoolUpper, aUpper);
     if (aRes.first == maStrPoolUpper.end())
         // Failed to insert or fetch upper-case variant. Should never happen.
-        return pOrig;
+        return SharedString();
 
-    // Set mapping.
-    maToUpperMap.insert(StrIdMapType::value_type(pOrig, *aRes.first));
+    maStrStore.insert(StrStoreType::value_type(pOrig, *aRes.first));
 
-    return pOrig;
+    return SharedString(pOrig, aRes.first->pData);
 }
 
 sal_uIntPtr SharedStringPool::getIdentifier( const OUString& rStr ) const
@@ -58,8 +65,8 @@ sal_uIntPtr SharedStringPool::getIdentifierIgnoreCase( const OUString& rStr ) co
         // Not in the pool.
         return 0;
 
-    StrIdMapType::const_iterator itUpper = maToUpperMap.find(itOrig->pData);
-    if (itUpper == maToUpperMap.end())
+    StrStoreType::const_iterator itUpper = maStrStore.find(itOrig->pData);
+    if (itUpper == maStrStore.end())
         // Passed string is not in the pool.
         return 0;
 
@@ -87,7 +94,7 @@ void SharedStringPool::purge()
         {
             // Remove it from the upper string map.  This should unref the
             // upper string linked to this original string.
-            maToUpperMap.erase(p);
+            maStrStore.erase(p);
         }
         else
             // Still referenced outside the pool. Keep it.

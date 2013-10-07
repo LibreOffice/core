@@ -2188,7 +2188,7 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
     if (!ValidRow(nRow))
         return;
 
-    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr);
+    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr).getData();
     if (!pStr)
         return;
 
@@ -2207,7 +2207,7 @@ void ScColumn::SetRawString(
     if (!ValidRow(nRow))
         return;
 
-    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr);
+    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr).getData();
     if (!pStr)
         return;
 
