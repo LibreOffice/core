@@ -2710,9 +2710,9 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* pEntry 
     Rectangle aFocusRect( aBoundRect.Left(), aBmpRect.Top() - 1,
                           aBoundRect.Right() - 4, aTextRect.Bottom() + 1 );
     // the focus rectangle should not touch the text
-    if( aFocusRect.Left() - 1 >= pEntry->aRect.Left() )
+    if( aFocusRect.Left() > ::std::numeric_limits<long>::min() && aFocusRect.Left() - 1 >= pEntry->aRect.Left() )
         aFocusRect.Left()--;
-    if( aFocusRect.Right() + 1 <= pEntry->aRect.Right() )
+    if( aFocusRect.Right() < ::std::numeric_limits<long>::max() && aFocusRect.Right() + 1 <= pEntry->aRect.Right() )
         aFocusRect.Right()++;
 
     return aFocusRect;
