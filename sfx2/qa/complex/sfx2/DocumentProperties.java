@@ -138,7 +138,7 @@ public class DocumentProperties
 
 //            xDP2.loadFromMedium(temp + "EMPTY.odt", noArgs);
             xDP2.loadFromMedium("", mimeEmptyArgs);
-            assertTrue ("Author", "".equals(xDP2.getAuthor()));
+            assertEquals("Author", "", xDP2.getAuthor());
 
             System.out.println("...done");
 
@@ -146,7 +146,7 @@ public class DocumentProperties
 
             xDP2.loadFromMedium(TestDocument.getUrl("CUSTOM.odt"),
                 noArgs);
-            assertTrue ("Author", "".equals(xDP2.getAuthor()));
+            assertEquals("Author", "", xDP2.getAuthor());
             xDP2.storeToMedium(temp + "CUSTOM.odt", mimeArgs);
 
             //FIXME: now what? comparing for binary equality seems useless
@@ -175,33 +175,35 @@ public class DocumentProperties
 
             System.out.println("Checking meta-data import...");
 
-            assertTrue("Author", "Karl-Heinz Mustermann".equals(xDP.getAuthor()));
-            assertTrue("Generator",
-            "StarOffice/8$Solaris_x86 OpenOffice.org_project/680m232$Build-9227"
-                .equals(xDP.getGenerator()));
-            assertTrue("CreationDate", 2007 == xDP.getCreationDate().Year);
-            assertTrue("Title", "Urgent Memo".equals(xDP.getTitle()));
-            assertTrue("Subject", "Wichtige Mitteilung".equals(xDP.getSubject()));
-            assertTrue("Description",
-                "Modern internal company memorandum in full-blocked style"
-                .equals(xDP.getDescription()));
-//            assertTrue("Language", "".equals(xDP.getLanguage()));
-            assertTrue("ModifiedBy",
-                "Karl-Heinz Mustermann".equals(xDP.getModifiedBy()));
-            assertTrue("ModificationDate", 10 == xDP.getModificationDate().Month);
-            assertTrue("PrintedBy",
-                "Karl-Heinz Mustermann".equals(xDP.getPrintedBy()));
-            assertTrue("PrintDate", 29 == xDP.getPrintDate().Day);
-            assertTrue("TemplateName",
-                "Modern Memo".equals(xDP.getTemplateName()));
+            assertEquals("Author", "Karl-Heinz Mustermann", xDP.getAuthor());
+            assertEquals(
+                "Generator",
+                "StarOffice/8$Solaris_x86 OpenOffice.org_project/680m232$Build-9227",
+                xDP.getGenerator());
+            assertEquals("CreationDate", 2007, xDP.getCreationDate().Year);
+            assertEquals("Title", "Urgent Memo", xDP.getTitle());
+            assertEquals("Subject", "Wichtige Mitteilung", xDP.getSubject());
+            assertEquals(
+                "Description",
+                "Modern internal company memorandum in full-blocked style",
+                xDP.getDescription());
+//          assertEquals("Language", "", xDP.getLanguage());
+            assertEquals(
+                "ModifiedBy", "Karl-Heinz Mustermann", xDP.getModifiedBy());
+            assertEquals(
+                "ModificationDate", 10, xDP.getModificationDate().Month);
+            assertEquals(
+                "PrintedBy", "Karl-Heinz Mustermann", xDP.getPrintedBy());
+            assertEquals("PrintDate", 29, xDP.getPrintDate().Day);
+            assertEquals("TemplateName", "Modern Memo", xDP.getTemplateName());
             assertTrue("TemplateURL",
                 xDP.getTemplateURL().endsWith("memmodern.ott"));
-            assertTrue("TemplateDate", 17 == xDP.getTemplateDate().Hours);
-            assertTrue("AutoloadURL", "../TEST.odt".equals(xDP.getAutoloadURL()));
-            assertTrue("AutoloadSecs", 0 == xDP.getAutoloadSecs());
-            assertTrue("DefaultTarget", "_blank".equals(xDP.getDefaultTarget()));
-            assertTrue("EditingCycles", 3 == xDP.getEditingCycles());
-            assertTrue("EditingDuration", 320 == xDP.getEditingDuration());
+            assertEquals("TemplateDate", 17, xDP.getTemplateDate().Hours);
+            assertEquals("AutoloadURL", "../TEST.odt", xDP.getAutoloadURL());
+            assertEquals("AutoloadSecs", 0, xDP.getAutoloadSecs());
+            assertEquals("DefaultTarget", "_blank", xDP.getDefaultTarget());
+            assertEquals("EditingCycles", 3, xDP.getEditingCycles());
+            assertEquals("EditingDuration", 320, xDP.getEditingDuration());
 
             String[] kws = xDP.getKeywords();
             assertTrue("Keywords", fromArray(kws).containsAll(
@@ -222,12 +224,12 @@ public class DocumentProperties
 
             XPropertyContainer udpc = xDP.getUserDefinedProperties();
             XPropertySet udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
-            assertTrue("UserDefined 1", "Dies ist ein wichtiger Hinweis"
-                    .equals(udps.getPropertyValue("Hinweis")));
-            assertTrue("UserDefined 2", ("Kann Spuren von N"
-                + new String(new byte[] { (byte) 0xc3, (byte) 0xbc }, "UTF-8")
-                + "ssen enthalten")
-                    .equals(udps.getPropertyValue("Warnung")));
+            assertEquals(
+                "UserDefined 1", "Dies ist ein wichtiger Hinweis",
+                udps.getPropertyValue("Hinweis"));
+            assertEquals(
+                "UserDefined 2", "Kann Spuren von N\u00FCssen enthalten",
+                udps.getPropertyValue("Warnung"));
 
             System.out.println("...done");
 
@@ -240,68 +242,70 @@ public class DocumentProperties
 
             str = "me";
             xDP.setAuthor(str);
-            assertTrue("setAuthor", str.equals(xDP.getAuthor()));
+            assertEquals("setAuthor", str, xDP.getAuthor());
             str = "the computa";
             xDP.setGenerator(str);
-            assertTrue("setGenerator", str.equals(xDP.getGenerator()));
+            assertEquals("setGenerator", str, xDP.getGenerator());
             dt.Year = 2038;
             dt.Month = 1;
             dt.Day = 1;
             xDP.setCreationDate(dt);
-            assertTrue("setCreationDate", dt.Year == xDP.getCreationDate().Year);
+            assertEquals(
+                "setCreationDate", dt.Year, xDP.getCreationDate().Year);
             str = "El t'itulo";
             xDP.setTitle(str);
-            assertTrue("setTitle", str.equals(xDP.getTitle()));
+            assertEquals("setTitle", str, xDP.getTitle());
             str = "Ein verkommenes Subjekt";
             xDP.setSubject(str);
-            assertTrue("setSubject", str.equals(xDP.getSubject()));
+            assertEquals("setSubject", str, xDP.getSubject());
             str = "Este descripci'on no es importante";
             xDP.setDescription(str);
-            assertTrue("setDescription", str.equals(xDP.getDescription()));
+            assertEquals("setDescription", str, xDP.getDescription());
             l.Language = "en";
             l.Country = "GB";
             xDP.setLanguage(l);
             Locale l2 = xDP.getLanguage();
-            assertTrue("setLanguage Lang", l.Language.equals(l2.Language));
-            assertTrue("setLanguage Cty", l.Country.equals(l2.Country));
+            assertEquals("setLanguage Lang", l.Language, l2.Language);
+            assertEquals("setLanguage Cty", l.Country, l2.Country);
             str = "myself";
             xDP.setModifiedBy(str);
-            assertTrue("setModifiedBy", str.equals(xDP.getModifiedBy()));
+            assertEquals("setModifiedBy", str, xDP.getModifiedBy());
             dt.Year = 2042;
             xDP.setModificationDate(dt);
-            assertTrue("setModificationDate",
-                dt.Year == xDP.getModificationDate().Year);
+            assertEquals(
+                "setModificationDate", dt.Year, xDP.getModificationDate().Year);
             str = "i didnt do it";
             xDP.setPrintedBy(str);
-            assertTrue("setPrintedBy", str.equals(xDP.getPrintedBy()));
+            assertEquals("setPrintedBy", str, xDP.getPrintedBy());
             dt.Year = 2024;
             xDP.setPrintDate(dt);
-            assertTrue("setPrintDate", dt.Year == xDP.getPrintDate().Year);
+            assertEquals("setPrintDate", dt.Year, xDP.getPrintDate().Year);
             str = "blah";
             xDP.setTemplateName(str);
-            assertTrue("setTemplateName", str.equals(xDP.getTemplateName()));
+            assertEquals("setTemplateName", str, xDP.getTemplateName());
             str = "gopher://some-hole-in-the-ground/";
             xDP.setTemplateURL(str);
-            assertTrue("setTemplateURL", str.equals(xDP.getTemplateURL()));
+            assertEquals("setTemplateURL", str, xDP.getTemplateURL());
             dt.Year = 2043;
             xDP.setTemplateDate(dt);
-            assertTrue("setTemplateDate", dt.Year == xDP.getTemplateDate().Year);
+            assertEquals(
+                "setTemplateDate", dt.Year, xDP.getTemplateDate().Year);
             str = "http://nowhere/";
             xDP.setAutoloadURL(str);
-            assertTrue("setAutoloadURL", str.equals(xDP.getAutoloadURL()));
+            assertEquals("setAutoloadURL", str, xDP.getAutoloadURL());
             i = 3661; // this might not work (due to conversion via double...)
             xDP.setAutoloadSecs(i);
 //            System.out.println("set: " + i + " get: " + xDP.getAutoloadSecs());
-            assertTrue("setAutoloadSecs", i == xDP.getAutoloadSecs());
+            assertEquals("setAutoloadSecs", i, xDP.getAutoloadSecs());
             str = "_blank";
             xDP.setDefaultTarget(str);
-            assertTrue("setDefaultTarget", str.equals(xDP.getDefaultTarget()));
+            assertEquals("setDefaultTarget", str, xDP.getDefaultTarget());
             i = 42;
             xDP.setEditingCycles((short) i);
-            assertTrue("setEditingCycles", i == xDP.getEditingCycles());
+            assertEquals("setEditingCycles", i, xDP.getEditingCycles());
             i = 84;
             xDP.setEditingDuration(i);
-            assertTrue("setEditingDuration", i == xDP.getEditingDuration());
+            assertEquals("setEditingDuration", i, xDP.getEditingDuration());
             str = "";
 
             String[] kws2 = new String[] {
@@ -376,8 +380,8 @@ public class DocumentProperties
                 // ignore
             }
 
-            assertTrue("UserDefined bool", new Boolean(b).equals(
-                    udps.getPropertyValue("Frobnicate")));
+            assertEquals(
+                "UserDefined bool", b, udps.getPropertyValue("Frobnicate"));
             assertTrue("UserDefined duration", eqDuration(dur, (Duration)
                     udps.getPropertyValue("FrobDuration")));
             assertTrue("UserDefined time", eqTime(t, (Time)
@@ -386,12 +390,11 @@ public class DocumentProperties
                     udps.getPropertyValue("FrobEndDate")));
             assertTrue("UserDefined datetime", eqDateTime(dt, (DateTime)
                     udps.getPropertyValue("FrobStartTime")));
-            assertTrue("UserDefined float", new Double(d).equals(
-                    udps.getPropertyValue("Pi")));
-            assertTrue("UserDefined string", "bar".equals(
-                    udps.getPropertyValue("Foo")));
-            assertTrue("UserDefined empty name", "eeeeek".equals(
-                    udps.getPropertyValue("")));
+            assertEquals("UserDefined float", d, udps.getPropertyValue("Pi"));
+            assertEquals(
+                "UserDefined string", "bar", udps.getPropertyValue("Foo"));
+            assertEquals(
+                "UserDefined empty name", "eeeeek", udps.getPropertyValue(""));
 
             try {
                 udps.getPropertyValue("Removed");
@@ -419,8 +422,8 @@ public class DocumentProperties
             udpc = xDP.getUserDefinedProperties();
             udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
 
-            assertTrue("UserDefined bool", new Boolean(b).equals(
-                    udps.getPropertyValue("Frobnicate")));
+            assertEquals(
+                "UserDefined bool", b, udps.getPropertyValue("Frobnicate"));
             assertTrue("UserDefined duration", eqDuration(dur, (Duration)
                     udps.getPropertyValue("FrobDuration")));
             // this is now a Duration!
@@ -433,10 +436,9 @@ public class DocumentProperties
                     udps.getPropertyValue("FrobEndDate")));
             assertTrue("UserDefined datetime", eqDateTime(dt, (DateTime)
                     udps.getPropertyValue("FrobStartTime")));
-            assertTrue("UserDefined float", new Double(d).equals(
-                    udps.getPropertyValue("Pi")));
-            assertTrue("UserDefined string", "bar".equals(
-                    udps.getPropertyValue("Foo")));
+            assertEquals("UserDefined float", d, udps.getPropertyValue("Pi"));
+            assertEquals(
+                "UserDefined string", "bar", udps.getPropertyValue("Foo"));
 
             try {
                 udps.getPropertyValue("Removed");
