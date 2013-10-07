@@ -2189,6 +2189,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const OUString& rStr,
         // park aPam somewhere so it does not point to node that is deleted
         aPam.DeleteMark();
         *aPam.GetPoint() = SwPosition(GetNodes().GetEndOfContent());
+        rPam.Normalize(false);
         return ReplaceRangeImpl(rPam, rStr, bRegExReplace); // original pam!
     }
 
