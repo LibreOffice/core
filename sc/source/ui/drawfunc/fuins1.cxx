@@ -94,7 +94,7 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
 //------------------------------------------------------------------------
 
 static void lcl_InsertGraphic( const Graphic& rGraphic,
-                        const String& rFileName, const String& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
+                        const OUString& rFileName, const OUString& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
                         ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView )
 {
     //  set the size so the graphic has its original pixel size
@@ -135,7 +135,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     //  Path is no longer used as name for the graphics object
 
     ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
-    String aName = pLayer->GetNewGraphicName();                 // "Graphics"
+    OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pObj->SetName(aName);
 
     //  don't select if from (dispatch) API, to allow subsequent cell operations
@@ -214,9 +214,9 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     if ( pReqArgs &&
          pReqArgs->GetItemState( SID_INSERT_GRAPHIC, sal_True, &pItem ) == SFX_ITEM_SET )
     {
-        String aFileName = ((const SfxStringItem*)pItem)->GetValue();
+        OUString aFileName = ((const SfxStringItem*)pItem)->GetValue();
 
-        String aFilterName;
+        OUString aFilterName;
         if ( pReqArgs->GetItemState( FN_PARAM_FILTER, sal_True, &pItem ) == SFX_ITEM_SET )
             aFilterName = ((const SfxStringItem*)pItem)->GetValue();
 
@@ -241,8 +241,8 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             int nError = aDlg.GetGraphic(aGraphic);
             if( nError == GRFILTER_OK )
             {
-                String aFileName = aDlg.GetPath();
-                String aFilterName = aDlg.GetCurrentFilter();
+                OUString aFileName = aDlg.GetPath();
+                OUString aFilterName = aDlg.GetCurrentFilter();
                 sal_Bool bAsLink = aDlg.IsAsLink();
 
                 // really store as link only?

@@ -230,7 +230,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
                     if ( pFontItem )
                     {
-                        String aFontName(pFontItem->GetValue());
+                        OUString aFontName(pFontItem->GetValue());
                         Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
                         aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
@@ -262,9 +262,9 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
-                    const String& rName     = pHyper->GetName();
-                    const String& rURL      = pHyper->GetURL();
-                    const String& rTarget   = pHyper->GetTargetFrame();
+                    const OUString& rName     = pHyper->GetName();
+                    const OUString& rURL      = pHyper->GetURL();
+                    const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
                     sal_Bool bDone = false;
@@ -344,11 +344,11 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_THES:
             {
-                String aReplaceText;
+                OUString aReplaceText;
                 SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, false );
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
-                if (aReplaceText.Len() > 0)
+                if (!aReplaceText.isEmpty())
                     ReplaceTextWithSynonym( pOutView->GetEditView(), aReplaceText );
             }
             break;
@@ -403,8 +403,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             if (!bField)
             {
                 // use selected text as name for urls
-                String sReturn = pOutView->GetSelected();
-                sReturn.Erase(255);
+                OUString sReturn = pOutView->GetSelected();
+                sReturn = sReturn.copy(0, 255);
                 aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
             }
         }
@@ -635,16 +635,16 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                         {
                             if (bUpdate)
                                 pOutliner->SetUpdateMode( false );
-                            String aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
+                            OUString aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
                             pOutliner->GetUndoManager().EnterListAction( aName, aName );
                             bChanged = sal_True;
                         }
 
-                        String aFieldText = rEditEng.GetText( aFieldSel );
+                        OUString aFieldText = rEditEng.GetText( aFieldSel );
                         pOutliner->QuickInsertText( aFieldText, aFieldSel );
                         if ( nPar == aSel.nEndPara )
                         {
-                            nNewEnd = sal::static_int_cast<xub_StrLen>( nNewEnd + aFieldText.Len() );
+                            nNewEnd = sal::static_int_cast<xub_StrLen>( nNewEnd + aFieldText.getLength() );
                             --nNewEnd;
                         }
                     }

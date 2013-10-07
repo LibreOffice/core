@@ -164,7 +164,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                String sURL, sTarget;
+                OUString sURL, sTarget;
                 if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER))
                 {
                    // Support for imported Excel docs
@@ -253,7 +253,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
 
                 // open hyperlink, if found at object or in object's text
-                if ( sURL.Len() > 0 )
+                if ( !sURL.isEmpty() )
                 {
                     ScGlobal::OpenURL( sURL, sTarget );
                     pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );

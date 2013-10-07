@@ -334,7 +334,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
-    aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), String(), SFX_EVENT_MOUSECLICK_OBJECT );
+    aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), OUString(), SFX_EVENT_MOUSECLICK_OBJECT );
     pItemSet->Put( aNamesItem, SID_EVENTCONFIG );
 
     com::sun::star::uno::Reference < com::sun::star::frame::XFrame > xFrame;

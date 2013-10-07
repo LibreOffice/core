@@ -48,7 +48,7 @@ ScMediaShell::ScMediaShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
     SetHelpId(HID_SCSHELL_MEDIA);
-    SetName( String( ScResId( SCSTR_MEDIASHELL ) ) );
+    SetName( OUString( ScResId( SCSTR_MEDIASHELL ) ) );
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Media));
 }
 

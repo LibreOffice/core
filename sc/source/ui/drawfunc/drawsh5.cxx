@@ -154,9 +154,9 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
-                    const String& rName     = pHyper->GetName();
-                    const String& rURL      = pHyper->GetURL();
-                    const String& rTarget   = pHyper->GetTargetFrame();
+                    const OUString& rName     = pHyper->GetName();
+                    const OUString& rURL      = pHyper->GetURL();
+                    const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
                     sal_Bool bDone = false;
@@ -201,7 +201,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                     aAny <<= aTmp;
                                     xPropSet->setPropertyValue( sPropTargetURL, aAny );
 
-                                    if( rTarget.Len() && xInfo->hasPropertyByName( sPropTargetFrame ) )
+                                    if( !rTarget.isEmpty() && xInfo->hasPropertyByName( sPropTargetFrame ) )
                                     {
                                         aAny <<= OUString(rTarget);
                                         xPropSet->setPropertyValue( sPropTargetFrame, aAny );
@@ -526,9 +526,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                 //  ScUndoRenameObject can be used until there is a common action for all objects.
                                 if(OBJ_OLE2 == nObjType)
                                 {
-                                    const String aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
+                                    const OUString aPersistName = static_cast<SdrOle2Obj*>(pSelected)->GetPersistName();
 
-                                    if(aPersistName.Len())
+                                    if(!aPersistName.isEmpty())
                                     {
                                         pDocSh->GetUndoManager()->AddUndoAction(
                                             new ScUndoRenameObject(pDocSh, aPersistName, pSelected->GetName(), aName));

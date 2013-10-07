@@ -55,9 +55,7 @@ public:
         if( pPageView )
         {
             SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
-            String      aStr( m_pView->GetDescriptionOfMarkedObjects() );
-            aStr.Append( sal_Unicode(' ') );
-            aStr.Append( String( "External Edit" ) );
+            OUString    aStr = m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
             m_pView->BegUndo( aStr );
             pNewObj->SetGraphicObject( aGraphic );
             m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
@@ -145,10 +143,7 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
                 if( pPageView )
                 {
                     SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
-
-                    aStr.Append( sal_Unicode(' ') );
-                    aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );
+                    OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + OUString(ScResId( SCSTR_UNDO_GRAFFILTER ));
                     pView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
                     pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
@@ -232,8 +227,7 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
             {
                 SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
                 SdrPageView* pPageView = pView->GetSdrPageView();
-                String aUndoString( pView->GetDescriptionOfMarkedObjects() );
-                aUndoString += String( " Compress" );
+                OUString aUndoString = pView->GetDescriptionOfMarkedObjects() + " Compress";
                 pView->BegUndo( aUndoString );
                 pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
                 pView->EndUndo();
