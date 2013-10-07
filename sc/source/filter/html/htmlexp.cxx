@@ -724,17 +724,6 @@ void ScHTMLExport::WriteTables()
         aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
             append(RTL_CONSTASCII_STRINGPARAM("=\"")).
             append(static_cast<sal_Int32>(nCellSpacing)).append('"');
-        // COLS=n
-        SCCOL nColCnt = 0;
-        SCCOL nCol;
-        for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
-        {
-            if ( !pDoc->ColHidden(nCol, nTab) )
-                ++nColCnt;
-        }
-        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
-            append(static_cast<sal_Int32>(nColCnt)).append('"');
 
         // BORDER=0, we do the styling of the cells in <TD>
         aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).

@@ -642,14 +642,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.OutDirection( rWrt.nDirection );
     }
 
-    // COLS ausgeben: Nur bei Export ueber Layout, wenn es beim Import
-    // vorhanden war.
-    if( bColsOption )
-    {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
-            append("=\"").append(static_cast<sal_Int32>(aCols.size())).append("\"");
-    }
-
     // ALIGN= ausgeben
     if( text::HoriOrientation::RIGHT == eAlign )
     {
