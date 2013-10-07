@@ -229,7 +229,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
 	$(if $(DISABLE_SCRIPTING),,dlgprov) \
 	$(if $(ENABLE_DIRECTX),directx9canvas) \
-	$(if $(ENABLE_OPENGL),oglcanvas) \
+	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	drawinglayer \
 	editeng \
 	egi \

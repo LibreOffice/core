@@ -10263,11 +10263,14 @@ if test "x$enable_opengl" = "xno"; then
 elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
+    ENABLE_OPENGL_CANVAS=
+    add_warning "openGL canvas not adapted for Mac yet - disabling"
     SYSTEM_MESA_HEADERS=YES
     AC_MSG_RESULT([yes])
 elif test $_os = WINNT; then
     # Experimental: try to use OpenGL on Windows
     ENABLE_OPENGL=TRUE
+    ENABLE_OPENGL_CANVAS=TRUE
     # We need the internal "Mesa" headers.
     SYSTEM_MESA_HEADERS=NO
     BUILD_TYPE="$BUILD_TYPE MESA"
@@ -10276,8 +10279,12 @@ else
     save_LDFLAGS=$LDFLAGS
     LDFLAGS="$LDFLAGS -lm"
     AC_MSG_RESULT([yes])
-    AC_CHECK_LIB([GL], [main], [:],
-              [AC_MSG_ERROR(libGL not installed or functional)], [])
+    AC_CHECK_LIB([GL], [main],
+        [AC_CHECK_LIB([GL], [glCreateShader], [ENABLE_OPENGL_CANVAS=TRUE],
+            [add_warning "no shader support in libGL - will enable openGL transitions, but not openGL canvas"
+             AC_MSG_WARN([no shader support in libGL - will enable openGL transitions, but not openGL canvas])
+             ENABLE_OPENGL_CANVAS=], [])],
+        [AC_MSG_ERROR(libGL not installed or functional)], [])
     LDFLAGS="$LDFLAGS -lGL"
     AC_CHECK_LIB([GLU], [main], [:],
               [AC_MSG_ERROR(libGLU not installed or functional)], [])
@@ -10306,6 +10313,7 @@ fi
 
 AC_SUBST(SYSTEM_MESA_HEADERS)
 AC_SUBST(ENABLE_OPENGL)
+AC_SUBST(ENABLE_OPENGL_CANVAS)
 
 dnl =================================================
 dnl Check whether to build with OpenCL support.
