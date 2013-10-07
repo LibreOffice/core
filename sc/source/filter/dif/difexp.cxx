@@ -224,16 +224,16 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 // In fact we should create a common method if this would be
                 // needed just one more time..
                 OSL_ASSERT(aOS.getLength() == 0);
-                String aTmpStr = aString;
+                OUString aTmpStr = aString;
                 aOS.appendAscii(pStringData);
                 rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear(), eCharSet);
                 if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                 {
-                    xub_StrLen nPos = aTmpStr.Search( cStrDelim );
-                    while ( nPos != STRING_NOTFOUND )
+                    sal_Int32 nPos = aTmpStr.indexOf( cStrDelim );
+                    while ( nPos != -1 )
                     {
-                        aTmpStr.Insert( cStrDelim, nPos );
-                        nPos = aTmpStr.Search( cStrDelim, nPos+2 );
+                        aTmpStr = aTmpStr.replaceAt( nPos, 0, OUString(cStrDelim) );
+                        nPos = aTmpStr.indexOf( cStrDelim, nPos+2 );
                     }
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
                     write_uInt16s_FromOUString(rOut, aTmpStr);

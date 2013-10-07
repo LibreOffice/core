@@ -182,9 +182,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                         }
                         else
                         {
-                            String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#IND: " ));
-                            aTmp += aData;
-                            aTmp += sal_Unicode('?');
+                            OUString aTmp = "#IND:" + aData + "?";
                             pDoc->SetString(aPos, aTmp, &aStrParam);
                         }
                     }
