@@ -136,7 +136,7 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
         if ( rReferenceRange.aStart != rReferenceRange.aEnd )
             RefInputStart( mpActiveEdit );
 
-        String aReferenceString;
+        OUString aReferenceString;
 
         if ( mpActiveEdit == mpInputRangeEdit )
         {
