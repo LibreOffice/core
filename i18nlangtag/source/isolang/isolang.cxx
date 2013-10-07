@@ -585,6 +585,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_MONGOLIAN,                       "mn-Cyrl", "MN" },  // macrolanguage code
     { LANGUAGE_MONGOLIAN_MONGOLIAN,             "mn-Mong", "MN" },  // macrolanguage code
     { LANGUAGE_USER_PALI_LATIN,                 "pi-Latn", ""   },
+    { LANGUAGE_USER_KARAKALPAK_LATIN,          "kaa-Latn", "UZ" },
     { LANGUAGE_DONTKNOW,                        "",        ""   }   // marks end of table
 };
 

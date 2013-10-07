@@ -372,6 +372,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Ngäbere" ; LANGUAGE_USER_NGAEBERE ; > ;
         < "Kumyk" ; LANGUAGE_USER_KUMYK ; > ;
         < "Nogai" ; LANGUAGE_USER_NOGAI ; > ;
+        < "Karakalpak Latin" ; LANGUAGE_USER_KARAKALPAK_LATIN ; > ;
     };
 };
 
