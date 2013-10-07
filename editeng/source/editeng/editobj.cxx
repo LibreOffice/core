@@ -121,7 +121,7 @@ ContentInfo::ContentInfo( SfxItemPool& rPool ) :
 
 // the real Copy constructor is nonsens, since I have to work with another Pool!
 ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse ) :
-    aText(rCopyFrom.aText),
+    maText(rCopyFrom.maText),
     aStyle(rCopyFrom.aStyle),
     eFamily(rCopyFrom.eFamily),
     aParaAttribs(rPoolToUse, EE_PARA_START, EE_CHAR_END)
@@ -151,27 +151,30 @@ ContentInfo::~ContentInfo()
 
 void ContentInfo::NormalizeString( svl::SharedStringPool& rPool )
 {
-    aText = OUString(rPool.intern(aText).getData());
+    maText = rPool.intern(OUString(maText.getData()));
 }
 
 sal_uIntPtr ContentInfo::GetStringID( const svl::SharedStringPool& rPool ) const
 {
-    return rPool.getIdentifier(aText);
+    rtl_uString* p = const_cast<rtl_uString*>(maText.getData());
+    return rPool.getIdentifier(OUString(p));
 }
 
 sal_uIntPtr ContentInfo::GetStringIDIgnoreCase( const svl::SharedStringPool& rPool ) const
 {
-    return rPool.getIdentifierIgnoreCase(aText);
+    rtl_uString* p = const_cast<rtl_uString*>(maText.getData());
+    return rPool.getIdentifierIgnoreCase(OUString(p));
 }
 
 OUString ContentInfo::GetText() const
 {
-    return aText;
+    rtl_uString* p = const_cast<rtl_uString*>(maText.getData());
+    return OUString(p);
 }
 
 void ContentInfo::SetText( const OUString& rStr )
 {
-    aText = rStr;
+    maText = svl::SharedString(rStr.pData, NULL);
 }
 
 const WrongList* ContentInfo::GetWrongList() const
@@ -200,7 +203,7 @@ bool ContentInfo::isWrongListEqual(const ContentInfo& rCompare) const
 void ContentInfo::Dump() const
 {
     cout << "--" << endl;
-    cout << "text: '" << aText << "'" << endl;
+    cout << "text: '" << OUString(maText.getData()) << "'" << endl;
     cout << "style: '" << aStyle << "'" << endl;
 
     XEditAttributesType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
@@ -216,7 +219,7 @@ void ContentInfo::Dump() const
 
 bool ContentInfo::operator==( const ContentInfo& rCompare ) const
 {
-    if( (aText == rCompare.aText) &&
+    if( (maText == rCompare.maText) &&
             (aStyle == rCompare.aStyle ) &&
             (aAttribs.size() == rCompare.aAttribs.size()) &&
             (eFamily == rCompare.eFamily ) &&

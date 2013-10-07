@@ -27,6 +27,8 @@ public:
 
     SharedString& operator= ( const SharedString& r );
 
+    bool operator== ( const SharedString& r ) const;
+
     rtl_uString* getData();
     const rtl_uString* getData() const;
 

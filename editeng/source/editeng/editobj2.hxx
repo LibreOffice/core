@@ -24,6 +24,7 @@
 #include <editdoc.hxx>
 
 #include <unotools/fontcvt.hxx>
+#include "svl/sharedstring.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
@@ -128,7 +129,7 @@ public:
     typedef boost::ptr_vector<XEditAttribute> XEditAttributesType;
 
 private:
-    OUString            aText;
+    svl::SharedString maText;
     OUString            aStyle;
 
     XEditAttributesType aAttribs;

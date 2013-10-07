@@ -56,6 +56,23 @@ SharedString& SharedString::operator= ( const SharedString& r )
     return *this;
 }
 
+bool SharedString::operator== ( const SharedString& r ) const
+{
+    // Only compare case sensitive strings.
+    if (mpData)
+    {
+        if (!r.mpData)
+            return false;
+
+        if (mpData->length != r.mpData->length)
+            return false;
+
+        return rtl_ustr_compare_WithLength(mpData->buffer, mpData->length, r.mpData->buffer, r.mpData->length);
+    }
+
+    return !r.mpData;
+}
+
 rtl_uString* SharedString::getData()
 {
     return mpData;
