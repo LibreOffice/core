@@ -146,7 +146,7 @@ void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const OUString& rBaseU
 {
     switch( nFormat )
     {
-        case( IMAP_FORMAT_BIN ) : Write( rOStm, rBaseURL );
+        case( IMAP_FORMAT_BIN ) : Write( rOStm, rBaseURL ); break;
         case( IMAP_FORMAT_CERN ) : ImpWriteCERN( rOStm, rBaseURL ); break;
         case( IMAP_FORMAT_NCSA ) : ImpWriteNCSA( rOStm, rBaseURL ); break;
 
