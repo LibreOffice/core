@@ -376,7 +376,8 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
             delete pFldMgr;
 
-            pSh->GotoFly(pFirstFlyFmt->GetName(), FLYCNTTYPE_ALL, sal_False);
+            if (pFirstFlyFmt)
+                pSh->GotoFly(pFirstFlyFmt->GetName(), FLYCNTTYPE_ALL, sal_False);
 
             pSh->EndAllAction();
             pSh->DoUndo( sal_True );
