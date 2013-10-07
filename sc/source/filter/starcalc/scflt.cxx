@@ -72,7 +72,7 @@ using namespace com::sun::star;
 
 #define DEFCHARSET          RTL_TEXTENCODING_MS_1252
 
-#define SC10TOSTRING(p)     String((p),DEFCHARSET)
+#define SC10TOSTRING(p)     OUString((p), strlen(p), DEFCHARSET)
 
 const SCCOL SC10MAXCOL = 255;   // #i85906# don't try to load more columns than there are in the file
 
@@ -377,7 +377,7 @@ static void lcl_ChangeColor( sal_uInt16 nIndex, Color& rColor )
     rColor.SetColor( aCol );
 }
 
-static String lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
+static OUString lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
 {
     OUString  aName = ScGlobal::GetRscString( STR_PAGESTYLE ) + " " + OUString::number( i + 1 );
     return aName;
@@ -712,7 +712,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         pPage->Head = (short) ( pPage->Head * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
         pPage->Foot = (short) ( pPage->Foot * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
 
-        String aName = lcl_MakeOldPageStyleFormatName( i );
+        OUString aName = lcl_MakeOldPageStyleFormatName( i );
 
         ScStyleSheet* pSheet = (ScStyleSheet*) &pStylePool->Make( aName,
                                     SFX_STYLE_FAMILY_PAGE,
@@ -758,9 +758,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                 aEditAttribs.Put(SvxUnderlineItem(UNDERLINE_SINGLE, EE_CHAR_UNDERLINE), EE_CHAR_UNDERLINE);
             if (pHeadFootLine->LogFont.lfStrikeOut != 0)
                 aEditAttribs.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT), EE_CHAR_STRIKEOUT);
-            String aText( pHeadFootLine->Title, DEFCHARSET );
+            OUString aText( pHeadFootLine->Title, strlen(pHeadFootLine->Title), DEFCHARSET );
             aEditEngine.SetText( aText );
-            aEditEngine.QuickSetAttribs( aEditAttribs, ESelection( 0, 0, 0, aText.Len() ) );
+            aEditEngine.QuickSetAttribs( aEditAttribs, ESelection( 0, 0, 0, aText.getLength() ) );
 
             EditTextObject* pObject = aEditEngine.CreateTextObject();
             ScPageHFItem aHeaderItem(nHeadFoot ? ATTR_PAGE_FOOTERRIGHT : ATTR_PAGE_HEADERRIGHT);
@@ -1153,7 +1153,7 @@ void Sc10Import::LoadPatternCollection()
     for( sal_uInt16 i = 0 ; i < pPatternCollection->GetCount() ; i++ )
     {
         Sc10PatternData* pPattern = pPatternCollection->At( i );
-        String aName( pPattern->Name, DEFCHARSET );
+        OUString aName( pPattern->Name, strlen(pPattern->Name), DEFCHARSET );
         SfxStyleSheetBase* pStyle = pStylePool->Find( aName, SFX_STYLE_FAMILY_PARA );
         if( pStyle == NULL )
             pStylePool->Make( aName, SFX_STYLE_FAMILY_PARA );
@@ -1425,7 +1425,7 @@ void Sc10Import::LoadTables()
         lcl_ReadPageFormat(rStream, PageFormat);
 
         sal_uInt16 nAt = aPageCollection.InsertFormat(PageFormat);
-        String aPageName = lcl_MakeOldPageStyleFormatName( nAt );
+        OUString aPageName = lcl_MakeOldPageStyleFormatName( nAt );
 
         pPrgrsBar->Progress();
 
@@ -1689,7 +1689,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 sal_Char* pNote = new sal_Char[NoteLen+1];
                 rStream.Read(pNote, NoteLen);
                 pNote[NoteLen] = 0;
-                String aNoteText( SC10TOSTRING(pNote));
+                OUString aNoteText( SC10TOSTRING(pNote));
                 delete [] pNote;
                 ScAddress aPos( Col, static_cast<SCROW>(Row), Tab );
                 ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
