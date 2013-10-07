@@ -47,21 +47,23 @@ namespace
         wchar_t arCurrent[MAX_PATH];
         DWORD dwType, dwCurrentSize = sizeof( arCurrent );
 
-        if ( ::RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"SOFTWARE\\VideoLAN\\VLC",
-                             0, KEY_READ, &hKey ) == ERROR_SUCCESS )
+        //TODO: This one will work only with LibreOffice 32-bit + VLC 32-bit on Win x86_64.
+        const LONG errorCore = ::RegOpenKeyExW( HKEY_LOCAL_MACHINE, L"SOFTWARE\\Wow6432Node\\VideoLAN\\VLC", 0, KEY_READ | KEY_WOW64_64KEY, &hKey );
+        if ( errorCore == ERROR_SUCCESS )
         {
             if ( ::RegQueryValueExW( hKey, L"InstallDir", NULL, &dwType, (LPBYTE) arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
                  dwType == REG_SZ )
             {
                 ::RegCloseKey( hKey );
-                // The value might be 0-terminated or not
-                if (arCurrent[dwCurrentSize/2] == 0)
-                    dwCurrentSize -= 2;
-                return OUString( arCurrent, dwCurrentSize ) + "/";
+                dwCurrentSize -= 2;
+                dwCurrentSize /= 2;
+
+                return OUString( arCurrent, dwCurrentSize ) + OUString::createFromAscii("\\");
             }
 
             ::RegCloseKey( hKey );
         }
+
         return OUString();
     }
 #endif
@@ -99,6 +101,7 @@ namespace
 
         oslModule aModule = osl_loadModule( fullPath.pData,
                                             SAL_LOADMODULE_DEFAULT );
+
 
         if( aModule == NULL)
         {
