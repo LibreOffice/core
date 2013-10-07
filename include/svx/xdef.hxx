@@ -29,7 +29,7 @@
 \************************************************************************/
 
 #define COL_DEFAULT_SHAPE_FILLING  RGB_COLORDATA( 0x72, 0x9F, 0xCF )
-#define COL_DEFAULT_SHAPE_STROKE    RGB_COLORDATA( 52, 101, 175 )
+#define COL_DEFAULT_SHAPE_STROKE    RGB_COLORDATA( 52, 101, 164 )
 
 #define XATTR_START             1000
 

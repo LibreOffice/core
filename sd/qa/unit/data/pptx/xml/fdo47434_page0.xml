@@ -2,8 +2,8 @@
 <XShapes>
  <XShape positionX="5358" positionY="4366" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 4" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465af" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465af" distance="20" angle="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
   <FillBitmap width="32" height="32"/>
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
@@ -63,8 +63,8 @@
  </XShape>
  <XShape positionX="5356" positionY="5159" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 5" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465af" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465af" distance="20" angle="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
   <FillBitmap width="32" height="32"/>
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
@@ -124,8 +124,8 @@
  </XShape>
  <XShape positionX="14486" positionY="4366" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 6" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465af" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465af" distance="20" angle="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
   <FillBitmap width="32" height="32"/>
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
@@ -185,8 +185,8 @@
  </XShape>
  <XShape positionX="14484" positionY="5159" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 8" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465af" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465af" distance="20" angle="0"/>
+  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
   <FillBitmap width="32" height="32"/>
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
