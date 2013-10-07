@@ -592,12 +592,12 @@ void SbxObject::Remove( SbxVariable* pVar )
     }
 }
 
-static sal_Bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
+static bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
 {
     SbxArrayRef p = (SbxArray*) SbxBase::Load( rStrm );
     if( !p.Is() )
     {
-        return sal_False;
+        return false;
     }
     for( sal_uInt16 i = 0; i < p->Count(); i++ )
     {
@@ -610,7 +610,7 @@ static sal_Bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )
         }
     }
     pArray->Merge( p );
-    return sal_True;
+    return true;
 }
 
 // The load of an object is additive!
@@ -758,7 +758,7 @@ OUString SbxObject::GenerateSource( const OUString &rLinePrefix,
     return aSource;
 }
 
-static sal_Bool CollectAttrs( const SbxBase* p, OUString& rRes )
+static bool CollectAttrs( const SbxBase* p, OUString& rRes )
 {
     OUString aAttrs;
     if( p->IsHidden() )
@@ -794,12 +794,12 @@ static sal_Bool CollectAttrs( const SbxBase* p, OUString& rRes )
         rRes = " (";
         rRes += aAttrs;
         rRes += ")";
-        return sal_True;
+        return true;
     }
     else
     {
         rRes = "";
-        return sal_False;
+        return false;
     }
 }
 

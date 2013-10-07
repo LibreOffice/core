@@ -466,8 +466,8 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
     // Library must be loaded
     loadLibrary( Name );
 
-    sal_Bool bKillCryptedFiles = sal_False;
-    sal_Bool bKillUncryptedFiles = sal_False;
+    bool bKillCryptedFiles = false;
+    bool bKillUncryptedFiles = false;
 
     // Remove or change password?
     if( bOldPassword )
@@ -503,7 +503,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
                 // Store application basic uncrypted
                 uno::Reference< embed::XStorage > xStorage;
                 storeLibraries_Impl( xStorage, false );
-                bKillCryptedFiles = sal_True;
+                bKillCryptedFiles = true;
             }
         }
     }
@@ -523,7 +523,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
             // Store applictaion basic crypted
             uno::Reference< embed::XStorage > xStorage;
             storeLibraries_Impl( xStorage, false );
-            bKillUncryptedFiles = sal_True;
+            bKillUncryptedFiles = true;
         }
     }
 
@@ -913,10 +913,10 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         pScriptLib->mbLoadedBinary = true;
     }
 
-    sal_Bool bLoadSource = sal_False;
+    bool bLoadSource = false;
     if( !pScriptLib->mbLoadedSource && pLib->mbPasswordVerified && !bVerifyPasswordOnly )
     {
-        bLoadSource = sal_True;
+        bLoadSource = true;
         pScriptLib->mbLoadedSource = true;
     }
 

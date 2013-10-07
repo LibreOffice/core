@@ -2242,7 +2242,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 // number of Parameter -1 because of Param0 == this
                 sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
                 Sequence<Any> args;
-                sal_Bool bOutParams = sal_False;
+                bool bOutParams = false;
                 sal_uInt32 i;
 
                 if( !bInvocation && mxUnoAccess.is() )
@@ -2300,7 +2300,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             {
                                 ParamMode aParamMode = rInfo.aMode;
                                 if( aParamMode != ParamMode_IN )
-                                    bOutParams = sal_True;
+                                    bOutParams = true;
                             }
                         }
                     }
@@ -2417,21 +2417,21 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
 
 
     //*** Define the name ***
-    sal_Bool bFatalError = sal_True;
+    bool bFatalError = true;
 
     // Is it an interface or a struct?
-    sal_Bool bSetClassName = sal_False;
+    bool bSetClassName = false;
     OUString aClassName_;
     if( eType == TypeClass_STRUCT || eType == TypeClass_EXCEPTION )
     {
         // Struct is Ok
-        bFatalError = sal_False;
+        bFatalError = false;
 
         // insert the real name of the class
         if( aName_.isEmpty() )
         {
             aClassName_ = aUnoObj_.getValueType().getTypeName();
-            bSetClassName = sal_True;
+            bSetClassName = true;
         }
         typelib_TypeDescription * pDeclTD = 0;
         typelib_typedescription_getByName( &pDeclTD, maTmpUnoObj.getValueTypeName().pData );
@@ -2441,7 +2441,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     else if( eType == TypeClass_INTERFACE )
     {
         // Interface works always through the type in the Any
-        bFatalError = sal_False;
+        bFatalError = false;
     }
     if( bSetClassName )
         SetClassName( aClassName_ );
@@ -3652,7 +3652,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             // Parameter count -1 because of Param0 == this
             sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
             Sequence<Any> args;
-            sal_Bool bOutParams = sal_False;
+            bool bOutParams = false;
 
             Reference< XServiceConstructorDescription > xCtor = pUnoCtor->getServiceCtorDesc();
             Sequence< Reference< XParameter > > aParameterSeq = xCtor->getParameters();
@@ -3739,7 +3739,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             if( !bOutParams )
                             {
                                 if( xParam->isOut() )
-                                    bOutParams = sal_True;
+                                    bOutParams = true;
                             }
                         }
                         else
@@ -4101,7 +4101,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 
     // Check if to firing or approveFiring has to be called
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( FunctionName );
-    sal_Bool bApproveFiring = sal_False;
+    bool bApproveFiring = false;
     if( !xMethod.is() )
         return aRet;
     Reference< XIdlClass > xReturnType = xMethod->getReturnType();
@@ -4109,7 +4109,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
     if( ( xReturnType.is() && xReturnType->getTypeClass() != TypeClass_VOID ) ||
         aExceptionSeq.getLength() > 0 )
     {
-        bApproveFiring = sal_True;
+        bApproveFiring = true;
     }
     else
     {
@@ -4122,7 +4122,7 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
             {
                 if( pInfos[ i ].aMode != ParamMode_IN )
                 {
-                    bApproveFiring = sal_True;
+                    bApproveFiring = true;
                     break;
                 }
             }
@@ -4496,7 +4496,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     OUString aFunctionName = m_aPrefix;
     aFunctionName += rFunction;
 
-    sal_Bool bSetRescheduleBack = sal_False;
+    bool bSetRescheduleBack = false;
     sal_Bool bOldReschedule = sal_True;
     SbiInstance* pInst = GetSbData()->pInst;
     if( pInst && pInst->IsCompatibility() )
@@ -4505,7 +4505,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
         if ( bOldReschedule )
         {
             pInst->EnableReschedule( sal_False );
-            bSetRescheduleBack = sal_True;
+            bSetRescheduleBack = true;
         }
     }
 
@@ -5002,7 +5002,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             // Is it in Uno a sequence?
             SbxDataType eType = pVar->GetFullType();
 
-            sal_Bool bMaybeVoid = sal_False;
+            bool bMaybeVoid = false;
             OUString aName( pVar->GetName() );
             StructFieldInfo::iterator it = maFields.find( aName );
 
