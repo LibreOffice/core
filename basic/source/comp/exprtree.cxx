@@ -55,9 +55,11 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
 SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
 {
     pParser = p;
-    eCurExpr = SbOPERAND;
-    pNext = NULL;
     bBased = bError = bByVal = bBracket = false;
+    nParenLevel = 0;
+    eCurExpr = SbOPERAND;
+    m_eMode = EXPRMODE_STANDARD;
+    pNext = NULL;
     pExpr = new SbiExprNode( pParser, n, t );
     pExpr->Optimize();
 }
@@ -65,9 +67,11 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
 SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPar )
 {
     pParser = p;
-    pNext = NULL;
     bBased = bError = bByVal = bBracket = false;
+    nParenLevel = 0;
     eCurExpr = SbOPERAND;
+    m_eMode = EXPRMODE_STANDARD;
+    pNext = NULL;
     pExpr = new SbiExprNode( pParser, r, SbxVARIANT, pPar );
 }
 
