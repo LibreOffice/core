@@ -104,9 +104,7 @@ ScSolverSuccessDialog::ScSolverSuccessDialog( Window* pParent, const OUString& r
     maBtnOk         ( this, ScResId( BTN_OK ) ),
     maBtnCancel     ( this, ScResId( BTN_CANCEL ) )
 {
-    String aMessage = maFtResult.GetText();
-    aMessage.Append( (sal_Char) ' ' );
-    aMessage.Append( rSolution );
+    OUString aMessage = maFtResult.GetText() + " " + rSolution;
     maFtResult.SetText( aMessage );
     FreeResource();
 }
@@ -503,7 +501,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         // "target"/"value": single cell
         bool bSingle = ( mpEdActive == m_pEdObjectiveCell || mpEdActive == m_pEdTargetValue );
 
-        String aStr;
+        OUString aStr;
         ScAddress aAdr = rRef.aStart;
         ScRange aNewRef( rRef );
         if ( bSingle )
@@ -524,12 +522,11 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         // variable cells can be several ranges, so only the selection is replaced
         if ( mpEdActive == m_pEdVariableCells )
         {
-            String aVal = mpEdActive->GetText();
+            OUString aVal = mpEdActive->GetText();
             Selection aSel = mpEdActive->GetSelection();
             aSel.Justify();
-            aVal.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
-            aVal.Insert( aStr, (xub_StrLen)aSel.Min() );
-            Selection aNewSel( aSel.Min(), aSel.Min()+aStr.Len() );
+            aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aStr );
+            Selection aNewSel( aSel.Min(), aSel.Min()+aStr.getLength() );
             mpEdActive->SetRefString( aVal );
             mpEdActive->SetSelection( aNewSel );
         }
@@ -774,7 +771,7 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
 
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
-    String aMessage = bCondition ? maConditionError : maInputError;
+    OUString aMessage = bCondition ? maConditionError : maInputError;
     ErrorBox( this, WinBits( WB_OK | WB_DEF_OK ), aMessage ).Execute();
     if (pFocus)
     {
@@ -955,7 +952,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         aConstraint.Left     = aObjective;
         aConstraint.Operator = sheet::SolverConstraintOperator_EQUAL;
 
-        String aValStr = m_pEdTargetValue->GetText();
+        OUString aValStr = m_pEdTargetValue->GetText();
         ScRange aRightRange;
         if ( ParseRef( aRightRange, aValStr, false ) )
             aConstraint.Right <<= table::CellAddress( aRightRange.aStart.Tab(),

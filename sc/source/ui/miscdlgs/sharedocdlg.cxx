@@ -102,8 +102,8 @@ ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     long nTabs[] = { 2, 0, 0 };
     m_pLbUsers->SetTabs( nTabs );
 
-    String aHeader(get<FixedText>("name")->GetText());
-    aHeader += '\t';
+    OUString aHeader(get<FixedText>("name")->GetText());
+    aHeader += "\t";
     aHeader += get<FixedText>("accessed")->GetText();
     m_pLbUsers->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
     m_pLbUsers->SetSelectionMode( NO_SELECTION );
@@ -182,8 +182,8 @@ void ScShareDocumentDlg::UpdateView()
                         Time aTime( nHours, nMinutes );
                         DateTime aDateTime( aDate, aTime );
 
-                        String aString( aUser );
-                        aString += '\t';
+                        OUString aString( aUser );
+                        aString += "\t";
                         aString += formatTime(aDateTime, *ScGlobal::pLocaleData);
 
                         m_pLbUsers->InsertEntry( aString, NULL );
@@ -206,13 +206,13 @@ void ScShareDocumentDlg::UpdateView()
     {
         // get OOO user name
         SvtUserOptions aUserOpt;
-        String aUser = aUserOpt.GetFirstName();
-        if ( aUser.Len() > 0 )
+        OUString aUser = aUserOpt.GetFirstName();
+        if ( !aUser.isEmpty() )
         {
-            aUser += ' ';
+            aUser += " ";
         }
-        aUser += String(aUserOpt.GetLastName());
-        if ( aUser.Len() == 0 )
+        aUser += aUserOpt.GetLastName();
+        if ( aUser.isEmpty() )
         {
             // get sys user name
             OUString aUserName;
@@ -220,15 +220,14 @@ void ScShareDocumentDlg::UpdateView()
             aSecurity.getUserName( aUserName );
             aUser = aUserName;
         }
-        if ( aUser.Len() == 0 )
+        if ( aUser.isEmpty() )
         {
             // unknown user name
             aUser = m_aStrUnknownUser;
         }
-        aUser += ' ';
+        aUser += " ";
         aUser += m_aStrExclusiveAccess;
-        String aString( aUser );
-        aString += '\t';
+        OUString aString = aUser + "\t";
 
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
@@ -239,7 +238,7 @@ void ScShareDocumentDlg::UpdateView()
         DateTime aDateTime(d,t);
 
         aString += formatTime(aDateTime, *ScGlobal::pLocaleData);
-        aString += ' ';
+        aString += " ";
         aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
 
         m_pLbUsers->InsertEntry( aString, NULL );

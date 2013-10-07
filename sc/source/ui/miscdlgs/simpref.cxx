@@ -105,7 +105,7 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( &aEdAssign );
 
         theCurArea = rRef;
-        String aRefStr;
+        OUString aRefStr;
         if ( bSingleCell )
         {
             ScAddress aAdr = rRef.aStart;
@@ -116,12 +116,11 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         if ( bMultiSelection )
         {
-            String aVal = aEdAssign.GetText();
+            OUString aVal = aEdAssign.GetText();
             Selection aSel = aEdAssign.GetSelection();
             aSel.Justify();
-            aVal.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
-            aVal.Insert( aRefStr, (xub_StrLen)aSel.Min() );
-            Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.Len() );
+            aVal = aVal.replaceAt( aSel.Min(), aSel.Len(), aRefStr );
+            Selection aNewSel( aSel.Min(), aSel.Min()+aRefStr.getLength() );
             aEdAssign.SetRefString( aVal );
             aEdAssign.SetSelection( aNewSel );
         }
@@ -206,7 +205,7 @@ void ScSimpleRefDlg::RefInputDone( sal_Bool bForced)
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
 {
     bAutoReOpen=false;
-    String aResult=aEdAssign.GetText();
+    OUString aResult=aEdAssign.GetText();
     aCloseHdl.Call(&aResult);
     Link aUnoLink = aDoneHdl;       // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
@@ -218,7 +217,7 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 {
     bAutoReOpen=false;
-    String aResult=aEdAssign.GetText();
+    OUString aResult=aEdAssign.GetText();
     aCloseHdl.Call(NULL);
     Link aUnoLink = aAbortedHdl;    // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );

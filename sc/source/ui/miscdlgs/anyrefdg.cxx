@@ -152,7 +152,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
     {
         ScRange aRange;
-        String aRangeStr( rStr.getToken( nToken, ';' ) );
+        OUString aRangeStr( rStr.getToken( nToken, ';' ) );
 
         sal_uInt16 nFlags = aRange.ParseAny( aRangeStr, pDoc, aDetails );
         if ( nFlags & SCA_VALID )
@@ -481,8 +481,8 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             OUString sLabel = pLabel->GetText();
             if (!sLabel.isEmpty())
             {
-                String sNewDialogText = sOldDialogText;
-                sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+                OUString sNewDialogText = sOldDialogText;
+                sNewDialogText += ": ";
                 sNewDialogText += comphelper::string::stripEnd(sLabel, ':');
                 m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
             }
@@ -893,7 +893,7 @@ void ScRefHandler::SwitchToDocument()
 sal_Bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be 0
 {
     //  default: allow only same document (overridden in function dialog)
-    String aCmpName;
+    OUString aCmpName;
     if ( pDocSh )
         aCmpName = pDocSh->GetTitle();
 

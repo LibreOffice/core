@@ -121,8 +121,8 @@ void ScHighlightChgDlg::Init()
     aCbAccept.Check(aChangeViewSet.IsShowAccepted());
     aCbReject.Check(aChangeViewSet.IsShowRejected());
 
-    String aString=aChangeViewSet.GetTheAuthorToShow();
-    if(aString.Len()!=0)
+    OUString aString=aChangeViewSet.GetTheAuthorToShow();
+    if(!aString.isEmpty())
     {
         aFilterCtr.SelectAuthor(aString);
     }

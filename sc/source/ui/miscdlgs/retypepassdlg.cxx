@@ -374,7 +374,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         else
         {
             // Set a new password.
-            String aNewPass = aDlg.GetNewPassword();
+            OUString aNewPass = aDlg.GetNewPassword();
             pProtected->setPassword(aNewPass);
         }
 
@@ -455,17 +455,17 @@ void ScRetypePassInputDlg::Init()
 
 void ScRetypePassInputDlg::CheckPasswordInput()
 {
-    String aPass1 = maPassword1Edit.GetText();
-    String aPass2 = maPassword2Edit.GetText();
+    OUString aPass1 = maPassword1Edit.GetText();
+    OUString aPass2 = maPassword2Edit.GetText();
 
-    if (!aPass1.Len() || !aPass2.Len())
+    if (aPass1.isEmpty() || aPass2.isEmpty())
     {
         // Empty password is not allowed.
         maBtnOk.Disable();
         return;
     }
 
-    if (!aPass1.Equals(aPass2))
+    if (aPass1 != aPass2)
     {
         // The two passwords differ.
         maBtnOk.Disable();

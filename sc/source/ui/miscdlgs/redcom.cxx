@@ -107,11 +107,11 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         sal_Bool bPrev=FindPrev(pChangeAction)!=NULL;
         pDlg->EnableTravel(bNext,bPrev);
 
-        String aAuthor = pChangeAction->GetUser();
+        OUString aAuthor = pChangeAction->GetUser();
 
         DateTime aDT = pChangeAction->GetDateTime();
-        String aDate = ScGlobal::pLocaleData->getDate( aDT );
-        aDate += ' ';
+        OUString aDate = ScGlobal::pLocaleData->getDate( aDT );
+        aDate += " ";
         aDate += ScGlobal::pLocaleData->getTime( aDT, false, false );
 
         pDlg->ShowLastAuthor(aAuthor, aDate);

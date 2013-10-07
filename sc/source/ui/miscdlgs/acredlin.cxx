@@ -233,8 +233,8 @@ void ScAcceptChgDlg::Init()
     pTPFilter->SetComment(aChangeViewSet.GetTheComment());
 
     pTPFilter->CheckAuthor(aChangeViewSet.HasAuthor());
-    String aString=aChangeViewSet.GetTheAuthorToShow();
-    if(aString.Len()!=0)
+    OUString aString=aChangeViewSet.GetTheAuthorToShow();
+    if(!aString.isEmpty())
     {
         pTPFilter->SelectAuthor(aString);
         if(pTPFilter->GetSelectedAuthor()!=aString)
@@ -299,13 +299,13 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
-    String aUser=pScChangeAction->GetUser();
+    OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     ScChangeActionType eType=pScChangeAction->GetType();
     OUString aDesc;
 
-    String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+    OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
     if(eType==SC_CAT_CONTENT)
     {
@@ -317,9 +317,9 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 
     if (!aDesc.isEmpty())
     {
-        aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aComment += String(aDesc);
-        aComment += ')';
+        aComment += " (";
+        aComment += aDesc;
+        aComment += ")";
     }
 
     if (pTheView->IsValidEntry(aUser, aDateTime, aComment))
@@ -355,7 +355,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
     bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
-    String aUser=pScChangeAction->GetUser();
+    OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     OUString aRefStr;
@@ -430,13 +430,13 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
         bIsGenerated = true;
     }
 
-    String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+    OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
     if (!aDesc.isEmpty())
     {
-        aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aComment += String(aDesc);
-        aComment += ')';
+        aComment +=  " (";
+        aComment += aDesc;
+        aComment += ")";
     }
 
     aBuf.append(aComment);
@@ -510,7 +510,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
     bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
-    String aUser=pScChangeAction->GetUser();
+    OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     if (pTheView->IsValidEntry(aUser, aDateTime) || bIsGenerated)
@@ -537,7 +537,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
 
         OUString aRefStr;
         ScChangeActionType eType=pScChangeAction->GetType();
-        String aString;
+        OUString aString;
         OUString aDesc;
 
         ScRedlinData* pNewData=new ScRedlinData;
@@ -581,33 +581,33 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
 
         }
 
-        aString+='\t';
+        aString += "\t";
         pScChangeAction->GetRefString(aRefStr, pDoc, true);
-        aString+=aRefStr;
-        aString+='\t';
+        aString += aRefStr;
+        aString += "\t";
 
         if(!bIsGenerated)
         {
-            aString+=aUser;
-            aString+='\t';
-            aString+=ScGlobal::pLocaleData->getDate(aDateTime);
-            aString+=' ';
-            aString+=ScGlobal::pLocaleData->getTime(aDateTime);
-            aString+='\t';
+            aString += aUser;
+            aString += "\t";
+            aString += ScGlobal::pLocaleData->getDate(aDateTime);
+            aString += " ";
+            aString += ScGlobal::pLocaleData->getTime(aDateTime);
+            aString += "\t";
         }
         else
         {
-            aString+='\t';
-            aString+='\t';
+            aString += "\t";
+            aString += "\t";
         }
 
-        String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+        OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
         if (!aDesc.isEmpty())
         {
-            aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-            aComment += String(aDesc);
-            aComment += ')';
+            aComment += " (" ;
+            aComment += aDesc;
+            aComment += ")";
         }
         if (pTheView->IsValidComment(aComment))
         {
@@ -633,7 +633,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
-    String aUser=pScChangeAction->GetUser();
+    OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     if (pTheView->IsValidEntry(aUser, aDateTime) || bIsGenerated)
@@ -655,74 +655,74 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     }
 
     OUString aRefStr;
-    String aString;
-    String a2String;
-    String aDesc;
+    OUString aString;
+    OUString a2String;
+    OUString aDesc;
 
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
         OUString aTmp;
         pScChangeAction->GetOldString(aTmp, pDoc);
         a2String = aTmp;
-        if(a2String.Len()==0) a2String=aStrEmpty;
+        if(a2String.isEmpty()) a2String=aStrEmpty;
 
         //aString+="\'";
         aString+=a2String;
         //aString+="\'";
 
         aDesc=aStrChildOrgContent;
-        aDesc.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+        aDesc += ": ";
     }
     else
     {
         OUString aTmp;
         pScChangeAction->GetNewString(aTmp, pDoc);
         a2String = aTmp;
-        if(a2String.Len()==0)
+        if(a2String.isEmpty())
         {
             a2String=aStrEmpty;
             aString+=a2String;
         }
         else
         {
-            aString+='\'';
-            aString+=a2String;
-            aString+='\'';
-            a2String=aString;
+            aString += "\'";
+            aString += a2String;
+            aString += "\'";
+            a2String =aString;
         }
-        aDesc=aStrChildContent;
+        aDesc = aStrChildContent;
 
     }
 
-    aDesc+=a2String;
-    aString+='\t';
+    aDesc += a2String;
+    aString += "\t";
     pScChangeAction->GetRefString(aRefStr, pDoc, true);
-    aString+=aRefStr;
-    aString+='\t';
+    aString += aRefStr;
+    aString += "\t";
 
     if(!bIsGenerated)
     {
-        aString+=aUser;
-        aString+='\t';
+        aString += aUser;
+        aString += "\t";
 
-        aString+=ScGlobal::pLocaleData->getDate(aDateTime);
-        aString+=' ';
-        aString+=ScGlobal::pLocaleData->getTime(aDateTime);
-        aString+='\t';
+        aString += ScGlobal::pLocaleData->getDate(aDateTime);
+        aString += " ";
+        aString += ScGlobal::pLocaleData->getTime(aDateTime);
+        aString += "\t";
     }
     else
     {
-        aString+='\t';
-        aString+='\t';
+        aString += "\t";
+        aString += "\t";
     }
 
-    String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
+    OUString aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
-    if(aDesc.Len()>0)
+    if(!aDesc.isEmpty())
     {
-        aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aComment+=aDesc;
-        aComment+=')';
+        aComment += " (" ;
+        aComment += aDesc;
+        aComment += ")";
     }
 
     aString+=aComment;

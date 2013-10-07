@@ -64,7 +64,7 @@ class ScSolverOptionsString : public SvLBoxString
     sal_Int32   mnIntValue;
 
 public:
-    ScSolverOptionsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
+    ScSolverOptionsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr ) :
         SvLBoxString( pEntry, nFlags, rStr ),
         mbIsDouble( false ),
         mfDoubleValue( 0.0 ),
@@ -83,8 +83,8 @@ public:
 void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     //! move position? (SvxLinguTabPage: aPos.X() += 20)
-    String aNormalStr( GetText() );
-    aNormalStr.Append( (sal_Unicode) ':' );
+    OUString aNormalStr( GetText() );
+    aNormalStr += ":";
     rDev.DrawText( rPos, aNormalStr );
 
     Point aNewPos( rPos );
@@ -144,8 +144,8 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
     sal_Int32 nImplCount = maImplNames.getLength();
     for (sal_Int32 nImpl=0; nImpl<nImplCount; ++nImpl)
     {
-        String aImplName( maImplNames[nImpl] );
-        String aDescription( maDescriptions[nImpl] );   // user-visible descriptions in list box
+        OUString aImplName( maImplNames[nImpl] );
+        OUString aDescription( maDescriptions[nImpl] );   // user-visible descriptions in list box
         maLbEngine.InsertEntry( aDescription );
         if ( aImplName == maEngine )
             nSelect = nImpl;
@@ -255,7 +255,7 @@ void ScSolverOptionsDialog::FillListBox()
     maLbSettings.SetUpdateMode(false);
     maLbSettings.Clear();
 
-    String sEmpty;
+    OUString sEmpty;
     if (!mpCheckButtonData)
         mpCheckButtonData = new SvLBoxButtonData( &maLbSettings );
 
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
     sal_uInt16 nSelectPos = maLbEngine.GetSelectEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
     {
-        String aNewEngine( maImplNames[nSelectPos] );
+        OUString aNewEngine( maImplNames[nSelectPos] );
         if ( aNewEngine != maEngine )
         {
             maEngine = aNewEngine;
@@ -467,7 +467,7 @@ void ScSolverValueDialog::SetValue( double fValue )
 
 double ScSolverValueDialog::GetValue() const
 {
-    String aInput = maEdValue.GetText();
+    OUString aInput = maEdValue.GetText();
 
     const LocaleDataWrapper* pLocaleData = ScGlobal::GetpLocaleData();
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;

@@ -178,7 +178,7 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
     xub_StrLen nRangeCount = comphelper::string::getTokenCount(rSource, ';');
     for ( xub_StrLen i=0; i<nRangeCount; i++ )
     {
-        String aRange = rSource.getToken(i,';');
+        OUString aRange = rSource.getToken(i,';');
         m_pLbRanges->SelectEntry( aRange );
     }
 

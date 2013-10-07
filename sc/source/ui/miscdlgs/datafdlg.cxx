@@ -204,7 +204,7 @@ ScDataFormDlg::~ScDataFormDlg()
 
 void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
 {
-    String  aFieldName;
+    OUString  aFieldName;
     for (sal_uInt16 i = 0; i < aColLength; ++i)
     {
         if (!maEdits.is_null(i))

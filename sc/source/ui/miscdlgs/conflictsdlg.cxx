@@ -427,7 +427,7 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     maLbConflicts.SetTabs( nTabs );
 
     OUString aTab('\t');
-    String aHeader( maStrTitleConflict );
+    OUString aHeader( maStrTitleConflict );
     aHeader += aTab;
     aHeader += maStrTitleAuthor;
     aHeader += aTab;
@@ -479,7 +479,7 @@ OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflic
 
 OUString ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocument* pDoc )
 {
-    String aString;
+    OUString aString;
 
     OSL_ENSURE( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
     OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
@@ -487,22 +487,22 @@ OUString ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocum
     {
         OUString aDesc;
         pAction->GetDescription(aDesc, pDoc, true, false);
-        aString += String(aDesc);
-        aString += '\t';
+        aString += aDesc;
+        aString += "\t";
 
-        String aUser = comphelper::string::strip(pAction->GetUser(), ' ');
-        if ( aUser.Len() == 0 )
+        OUString aUser = comphelper::string::strip(pAction->GetUser(), ' ');
+        if ( aUser.isEmpty() )
         {
             aUser = maStrUnknownUser;
         }
         aString += aUser;
-        aString += '\t';
+        aString += "\t";
 
         DateTime aDateTime = pAction->GetDateTime();
         aString += ScGlobal::pLocaleData->getDate( aDateTime );
-        aString += ' ';
+        aString += " ";
         aString += ScGlobal::pLocaleData->getTime( aDateTime, false );
-        aString += '\t';
+        aString += "\t";
     }
 
     return aString;
@@ -779,7 +779,7 @@ void ScConflictsDlg::UpdateView()
                         }
                     }
 
-                    String aString( GetActionString( pAction, mpSharedDoc ) );
+                    OUString aString( GetActionString( pAction, mpSharedDoc ) );
                     maLbConflicts.InsertEntry( aString, static_cast< RedlinData* >( NULL ), pRootEntry );
                 }
             }
@@ -800,7 +800,7 @@ void ScConflictsDlg::UpdateView()
                         }
                     }
 
-                    String aString( GetActionString( pAction, mpOwnDoc ) );
+                    OUString aString( GetActionString( pAction, mpOwnDoc ) );
                     RedlinData* pUserData = new RedlinData();
                     pUserData->pData = static_cast< void* >( pAction );
                     maLbConflicts.InsertEntry( aString, pUserData, pRootEntry );

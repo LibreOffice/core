@@ -238,7 +238,7 @@ void ScMoveTableDlg::InitDocListBox()
     ScDocShell*     pScSh   = NULL;
     sal_uInt16          nSelPos = 0;
     sal_uInt16          i       = 0;
-    String          aEntryName;
+    OUString          aEntryName;
 
     pLbDoc->Clear();
     pLbDoc->SetUpdateMode( false );
@@ -254,7 +254,7 @@ void ScMoveTableDlg::InitDocListBox()
             if ( pScSh == SfxObjectShell::Current() )
             {
                 mnCurrentDocPos = nSelPos = i;
-                aEntryName += sal_Unicode( ' ' );
+                aEntryName += " ";
                 aEntryName += msCurrentDoc;
             }
 

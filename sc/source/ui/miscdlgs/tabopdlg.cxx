@@ -221,12 +221,12 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 
 //----------------------------------------------------------------------------
 
-static sal_Bool lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
+static sal_Bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
     sal_Bool bRet = false;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    if ( rString.Search(':') != STRING_NOTFOUND )
+    if ( rString.indexOf(':') != -1 )
         bRet = ConvertDoubleRef( pDoc, rString, nCurTab, rStart, rEnd, eConv );
     else
     {

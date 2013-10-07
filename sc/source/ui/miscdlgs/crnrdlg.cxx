@@ -492,11 +492,11 @@ void ScColRowNameRangesDlg::UpdateNames()
     SCCOL nCol2;
     SCROW nRow2;
     SCTAB nTab2;
-    String rString;
+    OUString rString;
     OUString strShow;
     const ScAddress::Details aDetails(pDoc->GetAddressConvention());
 
-    String aString;
+    OUString aString;
     OUString strDelim(" --- ");
     aString = strDelim;
     aString += ScGlobal::GetRscString( STR_COLUMN );
@@ -537,7 +537,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             strShow += "]";
 
             //@008 String einfuegen in Listbox
-            String aInsStr = aString;
+            OUString aInsStr = aString;
             aInsStr += strShow;
             nPos = pLbRange->InsertEntry( aInsStr );
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
@@ -582,7 +582,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             }
             strShow += "]";
 
-            String aInsStr = aString;
+            OUString aInsStr = aString;
             aInsStr += strShow;
             nPos = pLbRange->InsertEntry( aInsStr );
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
@@ -744,10 +744,10 @@ IMPL_LINK_NOARG_INLINE_END(ScColRowNameRangesDlg, CancelBtnHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
 {
-    String aNewArea( pEdAssign->GetText() );
-    String aNewData( pEdAssign2->GetText() );
+    OUString aNewArea( pEdAssign->GetText() );
+    OUString aNewData( pEdAssign2->GetText() );
 
-    if ( aNewArea.Len() > 0 && aNewData.Len() > 0 )
+    if ( !aNewArea.isEmpty() && !aNewData.isEmpty() )
     {
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         ScRange aRange1, aRange2;
@@ -816,7 +816,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
 {
-    String aRangeStr = pLbRange->GetSelectEntry();
+    OUString aRangeStr = pLbRange->GetSelectEntry();
     sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
     sal_Bool bColName =
         ((sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataCol);
@@ -833,11 +833,11 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
         bFound = sal_True;
     if ( bFound )
     {
-        String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
-        String aMsg       = aStrDelMsg.GetToken( 0, '#' );
+        OUString aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
+        OUString aMsg       = aStrDelMsg.getToken( 0, '#' );
 
         aMsg += aRangeStr;
-        aMsg += aStrDelMsg.GetToken( 1, '#' );
+        aMsg += aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES == QUERYBOX(aMsg) )
         {
@@ -903,7 +903,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
         ++nMoves;
         pLbRange->SelectEntryPos( ++nSelectPos );
     }
-    String aRangeStr = pLbRange->GetSelectEntry();
+    OUString aRangeStr = pLbRange->GetSelectEntry();
     if ( nMoves )
     {
         if ( nSelectPos > 1 && nSelectPos >= nCnt )
@@ -913,8 +913,8 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
             pLbRange->SelectEntryPos( nSelectPos );
             aRangeStr = pLbRange->GetSelectEntry();
         }
-        else if ( nSelectPos > 2 && nSelectPos < nCnt && aRangeStr.Len()
-                  && OUString(aRangeStr) == pEdAssign->GetText() )
+        else if ( nSelectPos > 2 && nSelectPos < nCnt && !aRangeStr.isEmpty()
+                  && aRangeStr == pEdAssign->GetText() )
         {   // nach oben wandern statt nach unten auf die vorherige Position
             nSelectPos -= 2;
             pLbRange->SelectEntryPos( nSelectPos );
@@ -979,9 +979,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
 {
-    String aNewArea( pEdAssign->GetText() );
+    OUString aNewArea( pEdAssign->GetText() );
     sal_Bool bValid = false;
-    if ( aNewArea.Len() > 0 )
+    if ( !aNewArea.isEmpty() )
     {
         ScRange aRange;
         if ( (aRange.ParseAny( aNewArea, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )
@@ -1028,8 +1028,8 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1DataModifyHdl)
 
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range2DataModifyHdl)
 {
-    String aNewData( pEdAssign2->GetText() );
-    if ( aNewData.Len() > 0 )
+    OUString aNewData( pEdAssign2->GetText() );
+    if ( !aNewData.isEmpty() )
     {
         ScRange aRange;
         if ( (aRange.ParseAny( aNewData, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )

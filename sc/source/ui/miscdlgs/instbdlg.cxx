@@ -327,7 +327,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
     }
     else
     {
-        String aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
+        OUString aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
         (void)ErrorBox( this,WinBits( WB_OK | WB_DEF_OK ),aErrMsg).Execute();
     }
     return 0;

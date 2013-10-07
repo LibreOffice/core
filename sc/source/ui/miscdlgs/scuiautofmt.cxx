@@ -234,7 +234,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 {
     if ( !bFmtInserted && pSelFmtData )
     {
-        String              aStrStandard( SfxResId(STR_STANDARD) );
+        OUString aStrStandard( SfxResId(STR_STANDARD) );
         OUString aFormatName;
         ScStringInputDlg*   pDlg;
         bool bOk = false;
@@ -308,7 +308,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
     if ( (nIndex > 0) && (aLbFormat.GetEntryCount() > 0) )
     {
-        String aMsg( aStrDelMsg.getToken( 0, '#' ) );
+        OUString aMsg( aStrDelMsg.getToken( 0, '#' ) );
 
         aMsg += aLbFormat.GetSelectEntry();
         aMsg += aStrDelMsg.getToken( 1, '#' );
@@ -349,7 +349,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
     {
 
         OUString aFormatName = aLbFormat.GetSelectEntry();
-        String aEntry;
+        OUString aEntry;
 
         ScStringInputDlg* pDlg = new ScStringInputDlg( this,
                                          aStrRename,
