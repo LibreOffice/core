@@ -25,11 +25,16 @@
 #include "expr.hxx"
 
 
-SbiExprNode::SbiExprNode( void )
+SbiExprNode::SbiExprNode()
 {
     pLeft = NULL;
     pRight = NULL;
+    pWithParent = NULL;
+    pGen = NULL;
     eNodeType = SbxDUMMY;
+    eType = SbxVARIANT;
+    eTok = NIL;
+    bError = false;
 }
 
 SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode* r )
