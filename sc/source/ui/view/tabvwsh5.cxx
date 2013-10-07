@@ -38,6 +38,7 @@
 #include "editsh.hxx"
 #include "hints.hxx"
 #include "cellvalue.hxx"
+#include "svl/sharedstring.hxx"
 
 //==================================================================
 
@@ -332,7 +333,7 @@ void ScTabViewShell::MakeNumberInfoItem( ScDocument*         pDoc,
 
         case CELLTYPE_STRING:
         {
-            aCellString = *aCell.mpString;
+            aCellString = aCell.mpString->getString();
             eValType = SVX_VALUE_TYPE_STRING;
         }
         break;

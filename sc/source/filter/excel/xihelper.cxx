@@ -19,6 +19,7 @@
 
 #include "xihelper.hxx"
 #include <svl/itemset.hxx>
+#include "svl/sharedstring.hxx"
 #include <editeng/editobj.hxx>
 #include <tools/urlobj.hxx>
 #include "scitems.hxx"
@@ -877,7 +878,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
                         xScMatrix->PutDouble( itValue->GetValue(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_STRING:
-                        xScMatrix->PutString( itValue->GetString(), nScCol, nScRow );
+                        xScMatrix->PutString(svl::SharedString(itValue->GetString()), nScCol, nScRow);
                     break;
                     case EXC_CACHEDVAL_BOOL:
                         xScMatrix->PutBoolean( itValue->GetBool(), nScCol, nScRow );

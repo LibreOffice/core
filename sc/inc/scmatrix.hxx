@@ -34,6 +34,8 @@ class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;
 
+namespace svl { class SharedString; }
+
 /**
  * Try NOT to use this struct.  This struct should go away in a hopefully
  * not so distant futture.
@@ -242,9 +244,9 @@ public:
     void PutDouble( double fVal, SCSIZE nIndex);
     void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
-    void PutString( const OUString& rStr, SCSIZE nC, SCSIZE nR);
-    void PutString( const OUString& rStr, SCSIZE nIndex);
-    void PutString(const OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
+    void PutString( const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR);
+    void PutString( const svl::SharedString& rStr, SCSIZE nIndex);
+    void PutString( const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutEmpty( SCSIZE nC, SCSIZE nR);
 

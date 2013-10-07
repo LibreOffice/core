@@ -938,7 +938,7 @@ public:
         mrClipTab.SetValue(nTransCol, mnTransRow, fVal);
     }
 
-    void operator() (size_t nRow, const OUString& rStr)
+    void operator() (size_t nRow, const svl::SharedString& rStr)
     {
         if (mbAsLink)
         {
@@ -1533,6 +1533,12 @@ void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const OUString& rStr )
         aCol[nCol].SetRawString(nRow, rStr);
 }
 
+void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rStr )
+{
+    if (ValidColRow(nCol, nRow))
+        aCol[nCol].SetRawString(nRow, rStr);
+}
+
 void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const
 {
     if (ValidColRow(nCol,nRow))
@@ -1541,7 +1547,7 @@ void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const
         rString = OUString();
 }
 
-const OUString* ScTable::GetStringCell( SCCOL nCol, SCROW nRow ) const
+const svl::SharedString* ScTable::GetStringCell( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol,nRow))
         return NULL;

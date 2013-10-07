@@ -17,6 +17,7 @@
 #include "editutil.hxx"
 #include "tokenarray.hxx"
 #include "formula/token.hxx"
+#include "svl/sharedstring.hxx"
 
 namespace {
 
@@ -36,7 +37,7 @@ template<typename _T>
 OUString getString( const _T& rVal )
 {
     if (rVal.meType == CELLTYPE_STRING)
-        return *rVal.mpString;
+        return rVal.mpString->getString();
 
     if (rVal.meType == CELLTYPE_EDIT)
     {
@@ -163,7 +164,7 @@ ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.meType), 
     switch (rCell.meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(rCell.mpString->pData);
+            mpString = new svl::SharedString(*rCell.mpString);
         break;
         case CELLTYPE_EDIT:
             mpEditText = rCell.mpEditText->Clone();
@@ -177,7 +178,7 @@ ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.meType), 
 }
 
 ScCellValue::ScCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
-ScCellValue::ScCellValue( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
+ScCellValue::ScCellValue( const svl::SharedString& rString ) : meType(CELLTYPE_STRING), mpString(new svl::SharedString(rString)) {}
 ScCellValue::ScCellValue( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
 ScCellValue::ScCellValue( const ScFormulaCell& rFormula ) : meType(CELLTYPE_FORMULA), mpFormula(rFormula.Clone()) {}
 
@@ -186,7 +187,7 @@ ScCellValue::ScCellValue( const ScCellValue& r ) : meType(r.meType), mfValue(r.m
     switch (r.meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(r.mpString->pData);
+            mpString = new svl::SharedString(*r.mpString);
         break;
         case CELLTYPE_EDIT:
             mpEditText = r.mpEditText->Clone();
@@ -233,11 +234,11 @@ void ScCellValue::set( double fValue )
     mfValue = fValue;
 }
 
-void ScCellValue::set( const OUString& rStr )
+void ScCellValue::set( const svl::SharedString& rStr )
 {
     clear();
     meType = CELLTYPE_STRING;
-    mpString = new OUString(rStr);
+    mpString = new svl::SharedString(rStr);
 }
 
 void ScCellValue::set( const EditTextObject& rEditText )
@@ -272,7 +273,7 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
     switch (meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(aRefVal.mpString->pData);
+            mpString = new svl::SharedString(*aRefVal.mpString);
         break;
         case CELLTYPE_EDIT:
             if (aRefVal.mpEditText)
@@ -297,7 +298,7 @@ void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int n
     switch (meType)
     {
         case CELLTYPE_STRING:
-            mpString = new OUString(rOther.mpString->pData);
+            mpString = new svl::SharedString(*rOther.mpString);
         break;
         case CELLTYPE_EDIT:
         {
@@ -342,7 +343,7 @@ void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
         {
             ScSetStringParam aParam;
             aParam.setTextInput();
-            rDoc.SetString(rPos, *mpString, &aParam);
+            rDoc.SetString(rPos, mpString->getString(), &aParam);
         }
         break;
         case CELLTYPE_EDIT:
@@ -373,7 +374,7 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
             // Currently, string cannot be placed without copying.
             ScSetStringParam aParam;
             aParam.setTextInput();
-            rDoc.SetString(rPos, *mpString, &aParam);
+            rDoc.SetString(rPos, mpString->getString(), &aParam);
             delete mpString;
         }
         break;
@@ -471,7 +472,7 @@ void ScCellValue::swap( ScCellValue& r )
 
 ScRefCellValue::ScRefCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
 ScRefCellValue::ScRefCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
-ScRefCellValue::ScRefCellValue( const OUString* pString ) : meType(CELLTYPE_STRING), mpString(pString) {}
+ScRefCellValue::ScRefCellValue( const svl::SharedString* pString ) : meType(CELLTYPE_STRING), mpString(pString) {}
 ScRefCellValue::ScRefCellValue( const EditTextObject* pEditText ) : meType(CELLTYPE_EDIT), mpEditText(pEditText) {}
 ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORMULA), mpFormula(pFormula) {}
 
@@ -504,7 +505,7 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
         {
             ScSetStringParam aParam;
             aParam.setTextInput();
-            rDoc.SetString(rPos, *mpString, &aParam);
+            rDoc.SetString(rPos, mpString->getString(), &aParam);
         }
         break;
         case CELLTYPE_EDIT:
@@ -557,7 +558,7 @@ OUString ScRefCellValue::getString( const ScDocument* pDoc )
         case CELLTYPE_VALUE:
             return OUString::number(mfValue);
         case CELLTYPE_STRING:
-            return *mpString;
+            return mpString->getString();
         case CELLTYPE_EDIT:
             if (mpEditText)
                 return ScEditUtil::GetString(*mpEditText, pDoc);

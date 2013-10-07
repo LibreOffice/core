@@ -21,6 +21,7 @@
 #include "XclImpChangeTrack.hxx"
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include "chgviset.hxx"
 #include "formulacell.hxx"
 #include "chgtrack.hxx"
@@ -249,7 +250,7 @@ void XclImpChangeTrack::ReadCell(
             if( pStrm->IsValid() )
             {
                 rCell.meType = CELLTYPE_STRING;
-                rCell.mpString = new OUString(sString);
+                rCell.mpString = new svl::SharedString(GetDoc().GetCellStringPool().intern(sString));
             }
         }
         break;

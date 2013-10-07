@@ -44,6 +44,7 @@
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <editeng/scripttypeitem.hxx>
 #include "editeng/fieldupdater.hxx"
 
@@ -950,7 +951,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             break;
             case CELLTYPE_STRING:
             {
-                OUString aStr = *aCell1.mpString; // make a copy.
+                svl::SharedString aStr = *aCell1.mpString; // make a copy.
                 it1 = maCells.set_empty(it1, nRow1, nRow1); // original string is gone.
                 maCells.set(it1, nRow2, aStr);
             }
@@ -1018,7 +1019,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         break;
         case CELLTYPE_STRING:
         {
-            OUString aStr = *aCell1.mpString; // make a copy.
+            svl::SharedString aStr = *aCell1.mpString; // make a copy.
             switch (aCell2.meType)
             {
                 case CELLTYPE_VALUE:
@@ -1471,12 +1472,13 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
                 std::advance(itDataEnd, nDataSize);
 
                 // Convert to simple strings.
-                std::vector<OUString> aConverted;
+                std::vector<svl::SharedString> aConverted;
                 aConverted.reserve(nDataSize);
                 for (; itData != itDataEnd; ++itData)
                 {
                     const EditTextObject& rObj = **itData;
-                    aConverted.push_back(ScEditUtil::GetString(rObj, pDocument));
+                    svl::SharedString aSS = pDocument->GetCellStringPool().intern(ScEditUtil::GetString(rObj, pDocument));
+                    aConverted.push_back(aSS);
                 }
                 aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nCurRow, aConverted.begin(), aConverted.end());
             }
@@ -1504,7 +1506,11 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
                     if (rFC.IsValue())
                         aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, rFC.GetValue());
                     else
-                        aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, rFC.GetString());
+                    {
+                        svl::SharedString aSS = pDocument->GetCellStringPool().intern(rFC.GetString());
+                        if (aSS.getData())
+                            aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, aSS);
+                    }
                 }
             }
             break;
@@ -1794,8 +1800,12 @@ class CopyByCloneHandler
             }
             else
             {
-                maDestPos.miCellPos =
-                    mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, aStr);
+                svl::SharedString aSS = mrDestCol.GetDoc().GetCellStringPool().intern(aStr);
+                if (aSS.getData())
+                {
+                    maDestPos.miCellPos =
+                        mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, aSS);
+                }
             }
 
             setDefaultAttrToDest(nRow);
@@ -1855,8 +1865,8 @@ public:
 
                 for (; it != itEnd; ++it, ++nRow)
                 {
-                    const OUString& rStr = *it;
-                    if (rStr.isEmpty())
+                    const svl::SharedString& rStr = *it;
+                    if (rStr.getString().isEmpty())
                     {
                         // String cell with empty value is used to special-case cell value removal.
                         maDestPos.miCellPos = mrDestCol.GetCellStore().set_empty(

@@ -25,6 +25,7 @@
 #include "mtvelements.hxx"
 
 #include <svl/zforlist.hxx>
+#include "svl/sharedstring.hxx"
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 
@@ -55,7 +56,7 @@ using ::std::unary_function;
  */
 struct custom_string_trait
 {
-    typedef OUString string_type;
+    typedef svl::SharedString string_type;
     typedef sc::string_block string_element_block;
 
     static const mdds::mtv::element_t string_type_identifier = sc::element_type_string;
@@ -179,9 +180,9 @@ public:
     void PutDouble( double fVal, SCSIZE nIndex);
     void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
-    void PutString(const OUString& rStr, SCSIZE nC, SCSIZE nR);
-    void PutString(const OUString& rStr, SCSIZE nIndex);
-    void PutString(const OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
+    void PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR);
+    void PutString(const svl::SharedString& rStr, SCSIZE nIndex);
+    void PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
@@ -361,7 +362,7 @@ void ScMatrixImpl::PutDouble( double fVal, SCSIZE nIndex)
     PutDouble(fVal, nC, nR);
 }
 
-void ScMatrixImpl::PutString(const OUString& rStr, SCSIZE nC, SCSIZE nR)
+void ScMatrixImpl::PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
         maMat.set(nR, nC, rStr);
@@ -371,7 +372,7 @@ void ScMatrixImpl::PutString(const OUString& rStr, SCSIZE nC, SCSIZE nR)
     }
 }
 
-void ScMatrixImpl::PutString(const OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+void ScMatrixImpl::PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
         maMat.set(nR, nC, pArray, pArray + nLen);
@@ -381,7 +382,7 @@ void ScMatrixImpl::PutString(const OUString* pArray, size_t nLen, SCSIZE nC, SCS
     }
 }
 
-void ScMatrixImpl::PutString(const OUString& rStr, SCSIZE nIndex)
+void ScMatrixImpl::PutString(const svl::SharedString& rStr, SCSIZE nIndex)
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
@@ -479,7 +480,7 @@ OUString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
         switch (maMat.get_type(aPos))
         {
             case mdds::mtm::element_string:
-                return maMat.get_string(aPos);
+                return maMat.get_string(aPos).getString();
             case mdds::mtm::element_empty:
                 return EMPTY_OUSTRING;
             case mdds::mtm::element_numeric:
@@ -518,7 +519,7 @@ OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSI
     switch (maMat.get_type(aPos))
     {
         case mdds::mtm::element_string:
-            return maMat.get_string(aPos);
+            return maMat.get_string(aPos).getString();
         case mdds::mtm::element_empty:
         {
             if (!maMatFlag.get<bool>(nR, nC))
@@ -574,7 +575,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
             break;
             case mdds::mtm::element_string:
                 aVal.nType = SC_MATVAL_STRING;
-                aVal.aStr = maMat.get_string(aPos);
+                aVal.aStr = maMat.get_string(aPos).getString();
             break;
             case mdds::mtm::element_empty:
                 // Empty path equals empty plus flag.
@@ -1034,7 +1035,7 @@ size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_blo
             MatrixImplType::string_block_type::const_iterator itEnd = MatrixImplType::string_block_type::end(*node.data);
             for (; it != itEnd; ++it, ++nCount)
             {
-                if (ScGlobal::GetpTransliteration()->isEqual(*it, maMatchValue))
+                if (ScGlobal::GetpTransliteration()->isEqual(it->getString(), maMatchValue))
                 {
                     return mnIndex + nCount;
                 }
@@ -1354,7 +1355,7 @@ void ScMatrixImpl::Dump() const
             switch (maMat.get_type(nRow, nCol))
             {
                 case mdds::mtm::element_string:
-                    cout << "string (" << maMat.get_string(nRow, nCol) << ")";
+                    cout << "string (" << maMat.get_string(nRow, nCol).getString() << ")";
                 break;
                 case mdds::mtm::element_numeric:
                     cout << "numeric (" << maMat.get_numeric(nRow, nCol) << ")";
@@ -1497,17 +1498,17 @@ void ScMatrix::PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR
     pImpl->PutDouble(pArray, nLen, nC, nR);
 }
 
-void ScMatrix::PutString(const OUString& rStr, SCSIZE nC, SCSIZE nR)
+void ScMatrix::PutString(const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutString(rStr, nC, nR);
 }
 
-void ScMatrix::PutString(const OUString& rStr, SCSIZE nIndex)
+void ScMatrix::PutString(const svl::SharedString& rStr, SCSIZE nIndex)
 {
     pImpl->PutString(rStr, nIndex);
 }
 
-void ScMatrix::PutString(const OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+void ScMatrix::PutString(const svl::SharedString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutString(pArray, nLen, nC, nR);
 }

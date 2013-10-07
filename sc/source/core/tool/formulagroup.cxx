@@ -79,10 +79,10 @@ void flushSegment(
     ScMatrix& rMat, size_t nCol, rtl_uString** pHead, rtl_uString** pCur, rtl_uString** pTop )
 {
     size_t nOffset = pHead - pTop;
-    std::vector<OUString> aStrs;
+    std::vector<svl::SharedString> aStrs;
     aStrs.reserve(pCur - pHead);
     for (; pHead != pCur; ++pHead)
-        aStrs.push_back(OUString(*pHead));
+        aStrs.push_back(svl::SharedString(*pHead, NULL));
 
     rMat.PutString(&aStrs[0], aStrs.size(), nCol, nOffset);
 }

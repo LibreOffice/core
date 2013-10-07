@@ -18,6 +18,12 @@ class EditTextObject;
 class ScColumn;
 struct ScRefCellValue;
 
+namespace svl {
+
+class SharedString;
+
+}
+
 /**
  * Store arbitrary cell value of any kind.  It only stores cell value and
  * nothing else.  It creates a copy of the original cell value, and manages
@@ -28,7 +34,7 @@ struct SC_DLLPUBLIC ScCellValue
     CellType meType;
     union {
         double mfValue;
-        OUString* mpString;
+        svl::SharedString* mpString;
         EditTextObject* mpEditText;
         ScFormulaCell* mpFormula;
     };
@@ -36,7 +42,7 @@ struct SC_DLLPUBLIC ScCellValue
     ScCellValue();
     ScCellValue( const ScRefCellValue& rCell );
     ScCellValue( double fValue );
-    ScCellValue( const OUString& rString );
+    ScCellValue( const svl::SharedString& rString );
     ScCellValue( const EditTextObject& rEditText );
     ScCellValue( const ScFormulaCell& rFormula );
     ScCellValue( const ScCellValue& r );
@@ -45,7 +51,7 @@ struct SC_DLLPUBLIC ScCellValue
     void clear();
 
     void set( double fValue );
-    void set( const OUString& rStr );
+    void set( const svl::SharedString& rStr );
     void set( const EditTextObject& rEditText );
     void set( const ScFormulaCell& rFormula );
     void set( ScFormulaCell* pFormula );
@@ -98,14 +104,14 @@ struct SC_DLLPUBLIC ScRefCellValue
     CellType meType;
     union {
         double mfValue;
-        const OUString* mpString;
+        const svl::SharedString* mpString;
         const EditTextObject* mpEditText;
         ScFormulaCell* mpFormula;
     };
 
     ScRefCellValue();
     ScRefCellValue( double fValue );
-    ScRefCellValue( const OUString* pString );
+    ScRefCellValue( const svl::SharedString* pString );
     ScRefCellValue( const EditTextObject* pEditText );
     ScRefCellValue( ScFormulaCell* pFormula );
     ScRefCellValue( const ScRefCellValue& r );

@@ -39,6 +39,7 @@
 #include "document.hxx"
 #include "refupdatecontext.hxx"
 #include "types.hxx"
+#include "svl/sharedstring.hxx"
 
 using ::std::vector;
 
@@ -1788,7 +1789,7 @@ FormulaToken* ScTokenArray::MergeArray( )
                 }
                 else if ( t->GetType() == svString )
                 {
-                    pArray->PutString( t->GetString(), nCol, nRow );
+                    pArray->PutString(svl::SharedString(t->GetString()), nCol, nRow);
                 }
             break;
 

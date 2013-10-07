@@ -261,8 +261,8 @@ static void lcl_storeJumpMatResult( const ScMatrix* pMat, ScMatrix* pResMat, SCS
     }
     else
     {
-        const OUString& rStr = pMat->GetString( nC, nR );
-        pResMat->PutString( rStr, nC, nR );
+        const OUString& rStr = pMat->GetString(nC, nR);
+        pResMat->PutString(svl::SharedString(rStr), nC, nR);
     }
 }
 

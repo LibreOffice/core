@@ -1475,6 +1475,7 @@ struct PartiallyFilledEmptyMatrix
 
 void Test::testMatrix()
 {
+    svl::SharedStringPool& rPool = m_pDoc->GetCellStringPool();
     ScMatrixRef pMat, pMat2;
 
     // First, test the zero matrix type.
@@ -1524,7 +1525,7 @@ void Test::testMatrix()
     pMat->PutBoolean(true, 1, 1);
     pMat->PutDouble(-12.5, 4, 5);
     OUString aStr("Test");
-    pMat->PutString(aStr, 8, 2);
+    pMat->PutString(rPool.intern(aStr), 8, 2);
     pMat->PutEmptyPath(8, 11);
     checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
 
@@ -1546,7 +1547,7 @@ void Test::testMatrix()
     pMat->PutDouble(-25, 1, 1);
     CPPUNIT_ASSERT_EQUAL(-25.0, pMat->GetMinValue(false));
     CPPUNIT_ASSERT_EQUAL(-8.0, pMat->GetMaxValue(false));
-    pMat->PutString("Test", 0, 0);
+    pMat->PutString(rPool.intern("Test"), 0, 0);
     CPPUNIT_ASSERT_EQUAL(0.0, pMat->GetMaxValue(true)); // text as zero.
     CPPUNIT_ASSERT_EQUAL(-8.0, pMat->GetMaxValue(false)); // ignore text.
     pMat->PutBoolean(true, 0, 0);
@@ -1562,7 +1563,7 @@ void Test::testMatrix()
     pMat = new ScMatrix(3, 3);
     pMat->PutDouble(2.5, 0, 0);
     pMat->PutDouble(1.2, 0, 1);
-    pMat->PutString("A", 1, 1);
+    pMat->PutString(rPool.intern("A"), 1, 1);
     pMat->PutDouble(2.3, 2, 1);
     pMat->PutDouble(-20, 2, 2);
 
@@ -1585,7 +1586,7 @@ void Test::testMatrix()
     }
 
     pMat2 = new ScMatrix(3, 3, 10.0);
-    pMat2->PutString("B", 1, 0);
+    pMat2->PutString(rPool.intern("B"), 1, 0);
     pMat2->MergeDoubleArray(aDoubles, ScMatrix::Mul);
 
     {

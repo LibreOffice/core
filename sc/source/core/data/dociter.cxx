@@ -41,6 +41,7 @@
 
 #include "tools/fract.hxx"
 #include "editeng/editobj.hxx"
+#include "svl/sharedstring.hxx"
 
 #include <vector>
 
@@ -963,7 +964,7 @@ ScCellValue ScCellIterator::getCellValue() const
     switch (maCurCell.meType)
     {
         case CELLTYPE_STRING:
-            aRet.mpString = new OUString(*maCurCell.mpString);
+            aRet.mpString = new svl::SharedString(*maCurCell.mpString);
         break;
         case CELLTYPE_EDIT:
             aRet.mpEditText = maCurCell.mpEditText->Clone();

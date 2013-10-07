@@ -50,7 +50,12 @@
 
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
-namespace svl { class SharedStringPool; }
+namespace svl {
+
+class SharedString;
+class SharedStringPool;
+
+}
 
 namespace sc {
     struct FormulaGroupContext;
@@ -847,7 +852,7 @@ public:
      *         the cell at specified position is not a string cell. Note that
      *         it returns NULL even for a edit cell.
      */
-    const OUString* GetStringCell( const ScAddress& rPos ) const;
+    const svl::SharedString* GetStringCell( const ScAddress& rPos ) const;
 
     /**
      * Return a pointer to the double value stored in value cell.
@@ -859,7 +864,7 @@ public:
      */
     double* GetValueCell( const ScAddress& rPos );
 
-    svl::SharedStringPool& GetCellStringPool();
+    SC_DLLPUBLIC svl::SharedStringPool& GetCellStringPool();
     const svl::SharedStringPool& GetCellStringPool() const;
     sal_uIntPtr GetCellStringID( const ScAddress& rPos ) const;
     sal_uIntPtr GetCellStringIDIgnoreCase( const ScAddress& rPos ) const;

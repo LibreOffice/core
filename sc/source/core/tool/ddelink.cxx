@@ -21,6 +21,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstring.hxx"
 
 #include "ddelink.hxx"
 #include "brdcst.hxx"
@@ -187,7 +188,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
                     // empty cell
                     pResult->PutEmpty(nC, nR);
                 else
-                    pResult->PutString( aEntry, nC, nR );
+                    pResult->PutString(svl::SharedString(aEntry), nC, nR);
             }
         }
     }

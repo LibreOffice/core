@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "cellform.hxx"
+
 #include <sfx2/objsh.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstring.hxx"
 
-#include "cellform.hxx"
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "cellvalue.hxx"
@@ -47,7 +49,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
     switch (rCell.meType)
     {
         case CELLTYPE_STRING:
-            rFormatter.GetOutputString(*rCell.mpString, nFormat, rString, ppColor, bUseStarFormat);
+            rFormatter.GetOutputString(rCell.mpString->getString(), nFormat, rString, ppColor, bUseStarFormat);
         break;
         case CELLTYPE_EDIT:
             rFormatter.GetOutputString(rCell.getString(pDoc), nFormat, rString, ppColor );

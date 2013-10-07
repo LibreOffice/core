@@ -13,6 +13,7 @@
 #include "address.hxx"
 #include "formulacell.hxx"
 #include "svl/broadcast.hxx"
+#include "svl/sharedstring.hxx"
 #include "editeng/editobj.hxx"
 #include "calcmacros.hxx"
 
@@ -62,7 +63,7 @@ const mdds::mtv::element_t element_type_empty = mdds::mtv::element_type_empty;
 
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> broadcaster_block;
 typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> celltextattr_block;
-typedef mdds::mtv::default_element_block<element_type_string, rtl::OUString> string_block;
+typedef mdds::mtv::default_element_block<element_type_string, svl::SharedString> string_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_edittext, EditTextObject> edittext_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_formula, ScFormulaCell> formula_block;
 
@@ -79,9 +80,9 @@ MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SvtBroadcaster, sc::element_type_broadcast
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScFormulaCell, sc::element_type_formula, NULL, sc::formula_block)
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(EditTextObject, sc::element_type_edittext, NULL, sc::edittext_block)
 
-namespace rtl {
+namespace svl {
 
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(OUString, sc::element_type_string, OUString(), sc::string_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(SharedString, sc::element_type_string, SharedString(), sc::string_block)
 
 }
 

@@ -174,7 +174,7 @@ public:
             setInfo(nRow, ScRefCellValue(fVal));
     }
 
-    void operator() (size_t nRow, const OUString& rStr)
+    void operator() (size_t nRow, const svl::SharedString& rStr)
     {
         if (!isHidden(nRow))
             setInfo(nRow, ScRefCellValue(&rStr));

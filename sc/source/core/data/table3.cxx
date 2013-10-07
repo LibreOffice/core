@@ -396,11 +396,11 @@ short ScTable::CompareCell(
                 OUString aStr1;
                 OUString aStr2;
                 if (eType1 == CELLTYPE_STRING)
-                    aStr1 = *rCell1.mpString;
+                    aStr1 = rCell1.mpString->getString();
                 else
                     GetString(nCell1Col, nCell1Row, aStr1);
                 if (eType2 == CELLTYPE_STRING)
-                    aStr2 = *rCell2.mpString;
+                    aStr2 = rCell2.mpString->getString();
                 else
                     GetString(nCell2Col, nCell2Row, aStr2);
 

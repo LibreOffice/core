@@ -2360,7 +2360,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             case CELLTYPE_STRING:
             {
                 xCell.reset(new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, *rScCell.mpString));
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.mpString->getString()));
             }
             break;
 

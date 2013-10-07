@@ -576,10 +576,14 @@ public:
         checkLength(aCell);
     }
 
-    void operator() (size_t /*nRow*/, const OUString& rStr)
+    void operator() (size_t /*nRow*/, const svl::SharedString& rSS)
     {
-        ScRefCellValue aCell(&rStr);
-        checkLength(aCell);
+        OUString aStr = rSS.getString();
+        if (aStr.getLength() > mnMaxLen)
+        {
+            mnMaxLen = aStr.getLength();
+            maMaxLenStr = aStr;
+        }
     }
 
     void operator() (size_t /*nRow*/, const EditTextObject* p)
@@ -1007,26 +1011,27 @@ protected:
     };
 
     std::vector<StrEntry> maStrEntries;
+    ScDocument* mpDoc;
 
-    StrEntries(sc::CellStoreType& rCells) : mrCells(rCells) {}
+    StrEntries(sc::CellStoreType& rCells, ScDocument* pDoc) : mrCells(rCells), mpDoc(pDoc) {}
 
 public:
     void commitStrings()
     {
+        svl::SharedStringPool& rPool = mpDoc->GetCellStringPool();
         sc::CellStoreType::iterator it = mrCells.begin();
         std::vector<StrEntry>::iterator itStr = maStrEntries.begin(), itStrEnd = maStrEntries.end();
         for (; itStr != itStrEnd; ++itStr)
-            it = mrCells.set(it, itStr->mnRow, itStr->maStr);
+            it = mrCells.set(it, itStr->mnRow, rPool.intern(itStr->maStr));
     }
 };
 
 class RemoveEditAttribsHandler : public StrEntries
 {
-    ScDocument* mpDoc;
     boost::scoped_ptr<ScFieldEditEngine> mpEngine;
 
 public:
-    RemoveEditAttribsHandler(sc::CellStoreType& rCells, ScDocument* pDoc) : StrEntries(rCells), mpDoc(pDoc) {}
+    RemoveEditAttribsHandler(sc::CellStoreType& rCells, ScDocument* pDoc) : StrEntries(rCells, pDoc) {}
 
     void operator() (size_t nRow, EditTextObject*& pObj)
     {
@@ -1838,8 +1843,8 @@ formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
         }
         case sc::element_type_string:
         {
-            OUString aStr = sc::string_block::at(*it->data, aPos.second);
-            return formula::FormulaTokenRef(new formula::FormulaStringToken(aStr));
+            const svl::SharedString& rSS = sc::string_block::at(*it->data, aPos.second);
+            return formula::FormulaTokenRef(new formula::FormulaStringToken(rSS.getString()));
         }
         case sc::element_type_edittext:
         {
@@ -1881,9 +1886,9 @@ public:
             mrMat.PutString(rCell.GetString(), mnMatCol, nRow - mnTopRow);
     }
 
-    void operator() (size_t nRow, const OUString& rStr)
+    void operator() (size_t nRow, const svl::SharedString& rSS)
     {
-        mrMat.PutString(rStr, mnMatCol, nRow - mnTopRow);
+        mrMat.PutString(rSS.getString(), mnMatCol, nRow - mnTopRow);
     }
 
     void operator() (size_t nRow, const EditTextObject* pStr)
@@ -1911,7 +1916,7 @@ struct CellBucket
     SCSIZE mnNumValStart;
     SCSIZE mnStrValStart;
     std::vector<double> maNumVals;
-    std::vector<OUString> maStrVals;
+    std::vector<svl::SharedString> maStrVals;
 
     CellBucket() : mnNumValStart(0), mnStrValStart(0) {}
 
@@ -1925,7 +1930,7 @@ struct CellBucket
         }
         else if (!maStrVals.empty())
         {
-            const OUString* p = &maStrVals[0];
+            const svl::SharedString* p = &maStrVals[0];
             rMat.PutString(p, maStrVals.size(), nCol, mnStrValStart);
             reset();
         }
@@ -1947,11 +1952,12 @@ class FillMatrixHandler
 
     SCCOL mnCol;
     SCTAB mnTab;
-    const ScDocument* mpDoc;
+    ScDocument* mpDoc;
+    svl::SharedStringPool& mrPool;
 
 public:
-    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab, const ScDocument* pDoc) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab), mpDoc(pDoc) {}
+    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab, ScDocument* pDoc) :
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab), mpDoc(pDoc), mrPool(pDoc->GetCellStringPool()) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -1967,22 +1973,25 @@ public:
             break;
             case sc::element_type_string:
             {
-                const OUString* p = &sc::string_block::at(*node.data, nOffset);
+                const svl::SharedString* p = &sc::string_block::at(*node.data, nOffset);
                 mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
             }
             break;
             case sc::element_type_edittext:
             {
-                std::vector<OUString> aStrs;
-                aStrs.reserve(nDataSize);
+                std::vector<svl::SharedString> aSSs;
+                aSSs.reserve(nDataSize);
                 sc::edittext_block::const_iterator it = sc::edittext_block::begin(*node.data);
                 std::advance(it, nOffset);
                 sc::edittext_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
                 for (; it != itEnd; ++it)
-                    aStrs.push_back(ScEditUtil::GetString(**it, mpDoc));
+                {
+                    OUString aStr = ScEditUtil::GetString(**it, mpDoc);
+                    aSSs.push_back(mrPool.intern(aStr));
+                }
 
-                const OUString* p = &aStrs[0];
+                const svl::SharedString* p = &aSSs[0];
                 mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
             }
             break;
@@ -2029,7 +2038,7 @@ public:
                         continue;
                     }
 
-                    OUString aStr = rCell.GetString();
+                    svl::SharedString aStr = mrPool.intern(rCell.GetString());
                     if (!aBucket.maStrVals.empty() && nThisRow == nPrevRow + 1)
                     {
                         // Secondary strings.
@@ -2174,7 +2183,7 @@ bool appendStrings(
                 getBlockIterators<sc::string_block>(it, nLenRemain, itData, itDataEnd);
 
                 for (; itData != itDataEnd; ++itData)
-                    rArray.push_back(rCxt.maStrPool.intern(*itData).getData());
+                    rArray.push_back(itData->getData());
             }
             break;
             case sc::element_type_edittext:
@@ -2247,10 +2256,10 @@ void copyFirstBlock( sc::FormulaGroupContext& rCxt, size_t nLen, const sc::CellS
     sc::FormulaGroupContext::StrArrayType& rArray = rCxt.maStrArrays.back();
     rArray.reserve(nLen);
 
-    const OUString* p = &sc::string_block::at(*rPos.first->data, rPos.second);
-    const OUString* pEnd = p + nLen;
+    svl::SharedString* p = &sc::string_block::at(*rPos.first->data, rPos.second);
+    svl::SharedString* pEnd = p + nLen;
     for (; p != pEnd; ++p)
-        rArray.push_back(rCxt.maStrPool.intern(*p).getData());
+        rArray.push_back(p->getData());
 }
 
 }

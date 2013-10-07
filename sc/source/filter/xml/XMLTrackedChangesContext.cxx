@@ -32,6 +32,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
@@ -1265,6 +1266,7 @@ void ScXMLChangeCellContext::EndElement()
 {
     if (!bEmpty)
     {
+        ScDocument* pDoc = GetScImport().GetDocument();
         if (pEditTextObj)
         {
             if (GetImport().GetTextImport()->GetCursor().is())
@@ -1278,12 +1280,10 @@ void ScXMLChangeCellContext::EndElement()
                         sal_True );
                 }
             }
-            if (GetScImport().GetDocument())
-            {
-                // The cell will own the text object instance.
-                mrOldCell.meType = CELLTYPE_EDIT;
-                mrOldCell.mpEditText = pEditTextObj->CreateTextObject();
-            }
+
+            // The cell will own the text object instance.
+            mrOldCell.meType = CELLTYPE_EDIT;
+            mrOldCell.mpEditText = pEditTextObj->CreateTextObject();
             GetScImport().GetTextImport()->ResetCursor();
             pEditTextObj->release();
         }
@@ -1294,7 +1294,7 @@ void ScXMLChangeCellContext::EndElement()
                 if (!sText.isEmpty() && bString)
                 {
                     mrOldCell.meType = CELLTYPE_STRING;
-                    mrOldCell.mpString = new OUString(sText);
+                    mrOldCell.mpString = new svl::SharedString(pDoc->GetCellStringPool().intern(sText));
                 }
                 else
                 {

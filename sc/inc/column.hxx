@@ -284,13 +284,15 @@ public:
     sal_uIntPtr GetCellStringIDIgnoreCase( SCROW nRow ) const;
 
     void SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast = true );
+    void SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const OUString& rStr, bool bBroadcast = true );
+    void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );
     void SetValue( SCROW nRow, double fVal );
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
     void        GetString( SCROW nRow, OUString& rString ) const;
-    const OUString* GetStringCell( SCROW nRow ) const;
+    const svl::SharedString* GetStringCell( SCROW nRow ) const;
     double* GetValueCell( SCROW nRow );
     void        GetInputString( SCROW nRow, OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;

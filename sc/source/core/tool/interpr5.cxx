@@ -450,7 +450,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     nGlobalError = 0;
                 }
                 else
-                    pMat->PutString( aStr, 0);
+                    pMat->PutString(svl::SharedString(aStr), 0);
             }
         }
         break;
@@ -1083,9 +1083,9 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
                     xResMat->PutError( nErr, i, j);
                 else
                 {
-                    OUString aTmp( pMat1->GetString( *pFormatter, i, j));
+                    OUString aTmp = pMat1->GetString(*pFormatter, i, j);
                     aTmp += pMat2->GetString( *pFormatter, i, j);
-                    xResMat->PutString( aTmp, i, j);
+                    xResMat->PutString(svl::SharedString(aTmp), i, j);
                 }
             }
         }
@@ -1314,9 +1314,9 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            OUString aTmp( sStr);
+                            OUString aTmp = sStr;
                             aTmp += pMat->GetString( *pFormatter, i, j);
-                            pResMat->PutString( aTmp, i, j);
+                            pResMat->PutString(svl::SharedString(aTmp), i, j);
                         }
                     }
             }
@@ -1330,9 +1330,9 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            OUString aTmp( pMat->GetString( *pFormatter, i, j));
+                            OUString aTmp = pMat->GetString(*pFormatter, i, j);
                             aTmp += sStr;
-                            pResMat->PutString( aTmp, i, j);
+                            pResMat->PutString(svl::SharedString(aTmp), i, j);
                         }
                     }
             }

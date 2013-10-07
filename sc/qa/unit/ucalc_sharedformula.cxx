@@ -15,6 +15,7 @@
 #include "clipparam.hxx"
 #include "undoblk.hxx"
 #include "scopetools.hxx"
+#include "svl/sharedstring.hxx"
 
 #include "formula/grammar.hxx"
 
@@ -156,10 +157,10 @@ void Test::testSharedFormulas()
 
     // Set string value to B16 to make B17:B18 shared.
     aPos.SetRow(15);
-    ScCellValue aCell("Test");
+    ScCellValue aCell(svl::SharedString("Test"));
     CPPUNIT_ASSERT_MESSAGE("This should be a string value.", aCell.meType == CELLTYPE_STRING);
     aCell.commit(*m_pDoc, aPos);
-    CPPUNIT_ASSERT_EQUAL(*aCell.mpString, m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(aCell.mpString->getString(), m_pDoc->GetString(aPos));
     aPos.SetRow(16);
     pFC = m_pDoc->GetFormulaCell(aPos);
     // B17:B18 should be shared.

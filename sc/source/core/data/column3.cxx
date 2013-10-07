@@ -1087,7 +1087,7 @@ public:
         }
     }
 
-    void operator() (size_t nRow, const OUString& rStr)
+    void operator() (size_t nRow, const svl::SharedString& rStr)
     {
         miNewCellsPos = maNewCells.set(miNewCellsPos, nRow-mnRowOffset, rStr);
     }
@@ -1200,7 +1200,7 @@ public:
                 break;
                 case sc::element_type_string:
                 {
-                    OUString aVal = sc::string_block::at(*aPos.first->data, aPos.second);
+                    const svl::SharedString& aVal = sc::string_block::at(*aPos.first->data, aPos.second);
                     miNewCellsPos = maNewCells.set(
                             miNewCellsPos, nDestRow-mnRowOffset, aVal);
                 }
@@ -1454,10 +1454,14 @@ bool ScColumn::ParseString(
     else
         cFirstChar = 0; // Text
 
+    svl::SharedStringPool& rPool = pDocument->GetCellStringPool();
+
     if ( cFirstChar == '=' )
     {
         if ( rString.getLength() == 1 ) // = Text
-            rCell.set(rString);
+        {
+            rCell.set(rPool.intern(rString));
+        }
         else // = Formula
             rCell.set(
                 new ScFormulaCell(
@@ -1477,11 +1481,11 @@ bool ScColumn::ParseString(
             bNumeric = aParam.mpNumFormatter->IsNumberFormat(aTest, nIndex, fTest);
             if (bNumeric)
                 // This is a number. Strip out the first char.
-                rCell.set(aTest);
+                rCell.set(rPool.intern(aTest));
         }
         if (!bNumeric)
             // This is normal text. Take it as-is.
-            rCell.set(rString);
+            rCell.set(rPool.intern(rString));
     }
     else
     {
@@ -1573,7 +1577,7 @@ bool ScColumn::ParseString(
                 ApplyPattern(nRow, aNewAttrs);
             }
 
-            rCell.set(rString);
+            rCell.set(rPool.intern(rString));
         }
     }
 
@@ -1739,8 +1743,8 @@ sal_uIntPtr ScColumn::GetCellStringID( SCROW nRow ) const
     {
         case sc::element_type_string:
         {
-            const OUString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
-            return pDocument->GetCellStringPool().getIdentifier(rStr);
+            const svl::SharedString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
+            return reinterpret_cast<sal_uIntPtr>(rStr.getData());
         }
         break;
         case sc::element_type_edittext:
@@ -1768,8 +1772,8 @@ sal_uIntPtr ScColumn::GetCellStringIDIgnoreCase( SCROW nRow ) const
     {
         case sc::element_type_string:
         {
-            const OUString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
-            return pDocument->GetCellStringPool().getIdentifierIgnoreCase(rStr);
+            const svl::SharedString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
+            return reinterpret_cast<sal_uIntPtr>(rStr.getDataIgnoreCase());
         }
         break;
         case sc::element_type_edittext:
@@ -1865,7 +1869,7 @@ public:
         processCell(nRow, aCell);
     }
 
-    void operator() (size_t nRow, const OUString& rStr)
+    void operator() (size_t nRow, const svl::SharedString& rStr)
     {
         ScRefCellValue aCell(&rStr);
         processCell(nRow, aCell);
@@ -1998,7 +2002,7 @@ public:
         switch (maPos.first->type)
         {
             case sc::element_type_string:
-                return sc::string_block::at(*maPos.first->data, maPos.second);
+                return sc::string_block::at(*maPos.first->data, maPos.second).getString();
             case sc::element_type_edittext:
             {
                 const EditTextObject* p = sc::edittext_block::at(*maPos.first->data, maPos.second);
@@ -2098,13 +2102,16 @@ class FormulaToValueHandler
         ScCellValue maValue;
 
         Entry(SCROW nRow, double f) : mnRow(nRow), maValue(f) {}
-        Entry(SCROW nRow, const OUString& rStr) : mnRow(nRow), maValue(rStr) {}
+        Entry(SCROW nRow, const svl::SharedString& rStr) : mnRow(nRow), maValue(rStr) {}
     };
 
     typedef std::vector<Entry> EntriesType;
     EntriesType maEntries;
+    svl::SharedStringPool& mrStrPool;
 
 public:
+
+    FormulaToValueHandler(ScDocument& rDoc) : mrStrPool(rDoc.GetCellStringPool()) {}
 
     void operator() (size_t nRow, const ScFormulaCell* p)
     {
@@ -2112,7 +2119,7 @@ public:
         if (p2->IsValue())
             maEntries.push_back(Entry(nRow, p2->GetValue()));
         else
-            maEntries.push_back(Entry(nRow, p2->GetString()));
+            maEntries.push_back(Entry(nRow, mrStrPool.intern(p2->GetString())));
     }
 
     void commitCells(ScColumn& rColumn)
@@ -2142,7 +2149,7 @@ public:
 
 void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
 {
-    FormulaToValueHandler aFunc;
+    FormulaToValueHandler aFunc(*pDocument);
     sc::CellStoreType::const_iterator itPos = maCells.begin();
 
     ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow );
@@ -2188,12 +2195,20 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
     if (!ValidRow(nRow))
         return;
 
-    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr).getData();
-    if (!pStr)
+    svl::SharedString aSS = pDocument->GetCellStringPool().intern(rStr);
+    if (!aSS.getData())
+        return;
+
+    SetRawString(nRow, aSS, bBroadcast);
+}
+
+void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast )
+{
+    if (!ValidRow(nRow))
         return;
 
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    maCells.set(it, nRow, OUString(pStr));
+    maCells.set(it, nRow, rStr);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
     CellStorageModified();
 
@@ -2204,15 +2219,21 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
 void ScColumn::SetRawString(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const OUString& rStr, bool bBroadcast )
 {
+    svl::SharedString aSS = pDocument->GetCellStringPool().intern(rStr);
+    if (!aSS.getData())
+        return;
+
+    SetRawString(rBlockPos, nRow, aSS, bBroadcast);
+}
+
+void ScColumn::SetRawString(
+    sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const svl::SharedString& rStr, bool bBroadcast )
+{
     if (!ValidRow(nRow))
         return;
 
-    rtl_uString* pStr = pDocument->GetCellStringPool().intern(rStr).getData();
-    if (!pStr)
-        return;
-
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
-    rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, OUString(pStr));
+    rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, rStr);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
     CellStorageModified();
@@ -2263,7 +2284,7 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
     ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()), pDocument);
 }
 
-const OUString* ScColumn::GetStringCell( SCROW nRow ) const
+const svl::SharedString* ScColumn::GetStringCell( SCROW nRow ) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
@@ -2551,7 +2572,7 @@ public:
         processCell(nRow, aCell);
     }
 
-    void operator() (size_t nRow, const OUString& rStr)
+    void operator() (size_t nRow, const svl::SharedString& rStr)
     {
         ScRefCellValue aCell(&rStr);
         processCell(nRow, aCell);

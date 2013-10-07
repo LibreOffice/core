@@ -45,6 +45,7 @@
 #include "svl/stritem.hxx"
 #include "svl/urihelper.hxx"
 #include "svl/zformat.hxx"
+#include "svl/sharedstring.hxx"
 #include "sfx2/linkmgr.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
@@ -644,7 +645,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                         xMat->PutDouble(pToken->GetDouble(), nC, nR);
                     break;
                     case svString:
-                        xMat->PutString(pToken->GetString(), nC, nR);
+                        xMat->PutString(svl::SharedString(pToken->GetString()), nC, nR);
                     break;
                     default:
                         ;
@@ -1349,9 +1350,9 @@ struct ColumnBatch
 };
 
 template<>
-inline OUString ColumnBatch<OUString>::getValue(ScRefCellValue& raCell) const
+inline svl::SharedString ColumnBatch<svl::SharedString>::getValue(ScRefCellValue& rCell) const
 {
-    return raCell.getString(NULL);
+    return svl::SharedString(rCell.getString(NULL));
 }
 
 template<class T>
@@ -1361,7 +1362,7 @@ inline T ColumnBatch<T>::getValue(ScRefCellValue& raCell) const
 }
 
 template<>
-inline void ColumnBatch<OUString>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
+inline void ColumnBatch<svl::SharedString>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 {
     xMat->PutString(maStorage.data(), maStorage.size(), nCol, mnRowStart);
 }
@@ -1419,8 +1420,8 @@ static ScTokenArray* convertToTokenArray(
             static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
         ScRefCellValue aCell;
-        ColumnBatch<OUString> stringBatch(CELLTYPE_STRING, CELLTYPE_EDIT);
-        ColumnBatch<double> doubleBatch(CELLTYPE_VALUE, CELLTYPE_VALUE);
+        ColumnBatch<svl::SharedString> aStringBatch(CELLTYPE_STRING, CELLTYPE_EDIT);
+        ColumnBatch<double> aDoubleBatch(CELLTYPE_VALUE, CELLTYPE_VALUE);
 
         for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
         {
@@ -1431,8 +1432,8 @@ static ScTokenArray* convertToTokenArray(
 
                 aCell.assign(*pSrcDoc, ScAddress(nCol, nRow, nTab));
 
-                stringBatch.update(aCell, nC, nR, xMat);
-                doubleBatch.update(aCell, nC, nR, xMat);
+                aStringBatch.update(aCell, nC, nR, xMat);
+                aDoubleBatch.update(aCell, nC, nR, xMat);
 
                 if (aCell.hasEmptyValue())
                     // Skip empty cells.  Matrix's default values are empty elements.
@@ -1463,8 +1464,8 @@ static ScTokenArray* convertToTokenArray(
                 }
             }
 
-            stringBatch.flush(nC, xMat);
-            doubleBatch.flush(nC, xMat);
+            aStringBatch.flush(nC, xMat);
+            aDoubleBatch.flush(nC, xMat);
         }
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);

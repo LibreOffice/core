@@ -36,6 +36,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstring.hxx"
 
 #define SC_CHANGE_ID_PREFIX "ct"
 
@@ -293,11 +294,12 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-    if (!rCell.mpString->isEmpty())
+    OUString aStr = rCell.mpString->getString();
+    if (!aStr.isEmpty())
     {
         SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         bool bPrevCharWasSpace(true);
-        rExport.GetTextParagraphExport()->exportText(*rCell.mpString, bPrevCharWasSpace);
+        rExport.GetTextParagraphExport()->exportText(aStr, bPrevCharWasSpace);
     }
 }
 

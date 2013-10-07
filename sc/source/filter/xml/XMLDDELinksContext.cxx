@@ -25,6 +25,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
+#include "svl/sharedstringpool.hxx"
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -142,7 +143,8 @@ void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRowsP)
 
 void ScXMLDDELinkContext::EndElement()
 {
-    if (nPosition > -1 && nColumns && nRows && GetScImport().GetDocument())
+    ScDocument* pDoc = GetScImport().GetDocument();
+    if (nPosition > -1 && nColumns && nRows)
     {
         bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
         OSL_ENSURE( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
@@ -163,6 +165,8 @@ void ScXMLDDELinkContext::EndElement()
         sal_Int32 nIndex(0);
         ScDDELinkCells::iterator aItr(aDDELinkTable.begin());
         ScDDELinkCells::iterator aEndItr(aDDELinkTable.end());
+
+        svl::SharedStringPool& rPool = pDoc->GetCellStringPool();
         while (aItr != aEndItr)
         {
             if (nIndex % nColumns == 0)
@@ -178,7 +182,7 @@ void ScXMLDDELinkContext::EndElement()
             if( aItr->bEmpty )
                 pMatrix->PutEmpty( nScCol, nScRow );
             else if( aItr->bString )
-                pMatrix->PutString( aItr->sValue, nScCol, nScRow );
+                pMatrix->PutString(rPool.intern(aItr->sValue), nScCol, nScRow);
             else
                 pMatrix->PutDouble( aItr->fValue, nScCol, nScRow );
 

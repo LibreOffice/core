@@ -29,6 +29,7 @@
 
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 
@@ -461,7 +462,8 @@ bool ScValidationData::IsDataValid(
         }
         else
         {
-            ScRefCellValue aTmpCell(&rTest);
+            svl::SharedString aSS = mpDoc->GetCellStringPool().intern(rTest);
+            ScRefCellValue aTmpCell(&aSS);
             bRet = IsDataValid(aTmpCell, rPos);
         }
     }
@@ -484,7 +486,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             nVal = rCell.mfValue;
         break;
         case CELLTYPE_STRING:
-            aString = *rCell.mpString;
+            aString = rCell.mpString->getString();
             bIsVal = false;
         break;
         case CELLTYPE_EDIT:

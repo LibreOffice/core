@@ -22,12 +22,15 @@ class SVL_DLLPUBLIC SharedString
 public:
     SharedString();
     SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase );
+    SharedString( const OUString& rStr );
     SharedString( const SharedString& r );
     ~SharedString();
 
     SharedString& operator= ( const SharedString& r );
 
     bool operator== ( const SharedString& r ) const;
+
+    OUString getString() const;
 
     rtl_uString* getData();
     const rtl_uString* getData() const;

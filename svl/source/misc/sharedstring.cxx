@@ -22,6 +22,11 @@ SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase ) :
         rtl_uString_acquire(mpDataIgnoreCase);
 }
 
+SharedString::SharedString( const OUString& rStr ) : mpData(rStr.pData), mpDataIgnoreCase(NULL)
+{
+    rtl_uString_acquire(mpData);
+}
+
 SharedString::SharedString( const SharedString& r ) : mpData(r.mpData), mpDataIgnoreCase(r.mpDataIgnoreCase)
 {
     if (mpData)
@@ -71,6 +76,11 @@ bool SharedString::operator== ( const SharedString& r ) const
     }
 
     return !r.mpData;
+}
+
+OUString SharedString::getString() const
+{
+    return mpData ? OUString(mpData) : OUString();
 }
 
 rtl_uString* SharedString::getData()

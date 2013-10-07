@@ -49,6 +49,7 @@
 #include "scmod.hxx"
 #include "rangeseq.hxx"
 #include "funcdesc.hxx"
+#include "svl/sharedstring.hxx"
 
 using namespace com::sun::star;
 
@@ -1663,13 +1664,17 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                             long nColCount = pRowArr[nRow].getLength();
                             const OUString* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                xMatrix->PutString( pColArr[nCol],
-                                    static_cast<SCSIZE>(nCol),
-                                    static_cast<SCSIZE>(nRow) );
+                            {
+                                xMatrix->PutString(
+                                    svl::SharedString(pColArr[nCol]),
+                                    static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
+                            }
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                xMatrix->PutString( EMPTY_OUSTRING,
-                                        static_cast<SCSIZE>(nCol),
-                                        static_cast<SCSIZE>(nRow) );
+                            {
+                                xMatrix->PutString(
+                                    svl::SharedString(EMPTY_OUSTRING),
+                                    static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
+                            }
                         }
                     }
                 }

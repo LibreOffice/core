@@ -5463,7 +5463,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
             pEngine->SetDefaultLanguage(nCellLang);
 
             if (eType == CELLTYPE_STRING)
-                pEngine->SetText(*pCell->mpString);
+                pEngine->SetText(pCell->mpString->getString());
             else
                 pEngine->SetText(*pCell->mpEditText);
 

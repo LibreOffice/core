@@ -32,6 +32,7 @@
 
 #include <oox/token/tokens.hxx>
 #include <rtl/strbuf.hxx>
+#include "svl/sharedstring.hxx"
 
 using namespace oox;
 
@@ -845,9 +846,9 @@ void XclExpChTrCellContent::GetCellData(
             OUString sCellStr;
             if (rScCell.meType == CELLTYPE_STRING)
             {
-                sCellStr = *rScCell.mpString;
+                sCellStr = rScCell.mpString->getString();
                 rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
-                    rRoot, *rScCell.mpString, NULL);
+                    rRoot, sCellStr, NULL);
             }
             else
             {

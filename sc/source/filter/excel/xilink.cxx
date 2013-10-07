@@ -29,6 +29,7 @@
 #include "tokenarray.hxx"
 #include "externalrefmgr.hxx"
 #include "scmatrix.hxx"
+#include "svl/sharedstring.hxx"
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -296,7 +297,7 @@ XclImpExtName::MOper::MOper(XclImpStream& rStrm) :
                 case 0x02:
                 {
                     OUString aStr = rStrm.ReadUniString();
-                    mxCached->PutString(aStr, nCol, nRow);
+                    mxCached->PutString(svl::SharedString(aStr), nCol, nRow);
                 }
                 break;
                 case 0x04:

@@ -40,6 +40,7 @@
 #include "editutil.hxx"
 #include "tokenarray.hxx"
 #include "refupdatecontext.hxx"
+#include "svl/sharedstring.hxx"
 
 using namespace formula;
 //------------------------------------------------------------------------
@@ -723,7 +724,7 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
         case CELLTYPE_EDIT:
             bVal = false;
             if (rCell.meType == CELLTYPE_STRING)
-                rArgStr = *rCell.mpString;
+                rArgStr = rCell.mpString->getString();
             else if (rCell.mpEditText)
                 rArgStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
         break;

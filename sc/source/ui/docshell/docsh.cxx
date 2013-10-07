@@ -1961,7 +1961,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                 }
                 else
-                    aString = *pCell->mpString;
+                    aString = pCell->mpString->getString();
                 bString = true;
                 break;
             case CELLTYPE_EDIT :

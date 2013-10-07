@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "undocell.hxx"
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <sfx2/app.hxx>
 
-#include "undocell.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
 #include "patattr.hxx"
@@ -481,7 +483,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
         {
             ScSetStringParam aParam;
             aParam.setTextInput();
-            pDoc->SetString(maPos, *rVal.mpString);
+            pDoc->SetString(maPos, rVal.mpString->getString());
         }
         break;
         case CELLTYPE_EDIT:
@@ -668,7 +670,7 @@ ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
     else
     {
         aOldCell.meType = CELLTYPE_STRING;
-        aOldCell.mpString = new OUString(aUndoStr);
+        aOldCell.mpString = new svl::SharedString(pDocShell->GetDocument()->GetCellStringPool().intern(aUndoStr));
     }
     SetChangeTrack(aOldCell);
 }

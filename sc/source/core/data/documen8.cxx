@@ -1407,7 +1407,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     }
                     pEngine->SetDefaults( pDefaults,  true );
                     if (aCell.meType == CELLTYPE_STRING)
-                        pEngine->SetText(*aCell.mpString);
+                        pEngine->SetText(aCell.mpString->getString());
                     else if (aCell.mpEditText)
                         pEngine->SetText(*aCell.mpEditText);
 
@@ -1444,7 +1444,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
                 else if (aCell.meType == CELLTYPE_STRING)
                 {
-                    OUString aOldStr = *aCell.mpString;
+                    OUString aOldStr = aCell.mpString->getString();
                     sal_Int32 nOldLen = aOldStr.getLength();
 
                     if ( bConsiderLanguage )

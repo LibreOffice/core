@@ -406,9 +406,10 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                         // Try string, else use empty as last resort.
 
                         if ( pColArr[nCol] >>= aUStr )
-                            xMatrix->PutString( aUStr,
-                                    static_cast<SCSIZE>(nCol),
-                                    static_cast<SCSIZE>(nRow) );
+                        {
+                            xMatrix->PutString(
+                                svl::SharedString(aUStr), static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
+                        }
                         else
                             xMatrix->PutEmpty(
                                     static_cast<SCSIZE>(nCol),

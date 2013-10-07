@@ -1643,7 +1643,7 @@ void ScChangeActionContent::GetStringOfCell(
             pDoc->GetFormatTable()->GetInputLineString(rCell.mfValue, nFormat, rStr);
         break;
         case CELLTYPE_STRING:
-            rStr = *rCell.mpString;
+            rStr = rCell.mpString->getString();
         break;
         case CELLTYPE_EDIT:
             if (rCell.mpEditText)
@@ -1791,7 +1791,7 @@ void ScChangeActionContent::GetValueString(
     switch (rCell.meType)
     {
         case CELLTYPE_STRING :
-            rStr = *rCell.mpString;
+            rStr = rCell.mpString->getString();
         break;
         case CELLTYPE_EDIT :
             if (rCell.mpEditText)

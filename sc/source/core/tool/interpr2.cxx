@@ -2520,8 +2520,8 @@ void ScInterpreter::ScHyperLink()
                 pResMat->PutDouble( 0.0, 0 );
         }
         else
-            pResMat->PutString( aUrl, 0 );
-        pResMat->PutString( aUrl, 1 );
+            pResMat->PutString(svl::SharedString(aUrl), 0);
+        pResMat->PutString(svl::SharedString(aUrl), 1);
         bMatrixFormula = true;
         PushMatrix(pResMat);
     }

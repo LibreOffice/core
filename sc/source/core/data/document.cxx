@@ -3205,7 +3205,7 @@ OUString ScDocument::GetString( const ScAddress& rPos ) const
     return aStr;
 }
 
-const OUString* ScDocument::GetStringCell( const ScAddress& rPos ) const
+const svl::SharedString* ScDocument::GetStringCell( const ScAddress& rPos ) const
 {
     if (!TableExists(rPos.Tab()))
         return NULL;
