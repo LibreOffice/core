@@ -1088,7 +1088,7 @@ OUString ScUndoRemoveLink::GetComment() const
 void ScUndoRemoveLink::DoChange( sal_Bool bLink ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    String aEmpty;
+    OUString aEmpty;
     for (sal_uInt16 i=0; i<nCount; i++)
         if (bLink)      // establish link
             pDoc->SetLink( pTabs[i], pModes[i], aDocName, aFltName, aOptions, pTabNames[i], nRefreshDelay );
@@ -1475,7 +1475,7 @@ ScUndoRenameObject::~ScUndoRenameObject()
 OUString ScUndoRenameObject::GetComment() const
 {
     //  string resource shared with title for dialog
-    return String( ScResId(SCSTR_RENAMEOBJECT) );
+    return OUString( ScResId(SCSTR_RENAMEOBJECT) );
 }
 
 SdrObject* ScUndoRenameObject::GetObject()

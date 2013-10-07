@@ -998,7 +998,7 @@ void ScUndoReplace::Undo()
     else if (pSearchItem->GetPattern() &&
              pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE)
     {
-        String aTempStr = pSearchItem->GetSearchString();       // toggle
+        OUString aTempStr = pSearchItem->GetSearchString();       // toggle
         pSearchItem->SetSearchString(pSearchItem->GetReplaceString());
         pSearchItem->SetReplaceString(aTempStr);
         pDoc->ReplaceStyle( *pSearchItem,
@@ -1470,9 +1470,9 @@ bool ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDoc,
-                            const String& rFlt, const String& rOpt,
-                            const String& rSrc, const ScRange& rDest )
+static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const OUString& rDoc,
+                            const OUString& rFlt, const OUString& rOpt,
+                            const OUString& rSrc, const ScRange& rDest )
 {
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     sal_uInt16 nCount = pLinkManager->GetLinks().size();

@@ -130,8 +130,8 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
 {
     ScDocument* pDoc = pDocSh->GetDocument();
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
-    String aNewName = rData.GetName();
-    sal_Bool bDelete = ( aNewName.Len() == 0 );         // no new name -> delete style
+    OUString aNewName = rData.GetName();
+    sal_Bool bDelete = aNewName.isEmpty();         // no new name -> delete style
     sal_Bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
 
     SfxStyleSheetBase* pStyle = NULL;
@@ -172,7 +172,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         {
             // modify style
 
-            String aNewParent = rData.GetParent();
+            OUString aNewParent = rData.GetParent();
             if ( aNewParent != pStyle->GetParent() )
                 pStyle->SetParent( aNewParent );
 

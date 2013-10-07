@@ -514,7 +514,7 @@ ScUndoPageBreak::~ScUndoPageBreak()
 OUString ScUndoPageBreak::GetComment() const
 {
     //"Column break" | "Row break"  "insert" | "delete"
-    return String ( bColumn ?
+    return OUString ( bColumn ?
         ( bInsert ?
             ScGlobal::GetRscString( STR_UNDO_INSCOLBREAK ) :
             ScGlobal::GetRscString( STR_UNDO_DELCOLBREAK )
@@ -601,7 +601,7 @@ void ScUndoPrintZoom::DoChange( sal_Bool bUndo )
     sal_uInt16 nPages = bUndo ? nOldPages : nNewPages;
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    String aStyleName = pDoc->GetPageStyle( nTab );
+    OUString aStyleName = pDoc->GetPageStyle( nTab );
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
     OSL_ENSURE( pStyleSheet, "PageStyle not found" );

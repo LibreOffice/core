@@ -1509,7 +1509,7 @@ void ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        String aTemp = aName;
+        OUString aTemp = aName;
         ((ScTabViewTarget&)rTarget).GetViewShell()->UseScenario(aTemp);
     }
 }
@@ -1708,7 +1708,7 @@ void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        String aTemp = aFormula;
+        OUString aTemp = aFormula;
         ScDocument* pDoc = pDocShell->GetDocument();
         ((ScTabViewTarget&)rTarget).GetViewShell()->EnterMatrix(aTemp, pDoc->GetGrammar());
     }
