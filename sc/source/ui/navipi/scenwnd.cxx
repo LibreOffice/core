@@ -253,9 +253,9 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 
         if ( pState->ISA(SfxStringItem) )
         {
-            String aNewEntry( ((const SfxStringItem*)pState)->GetValue() );
+            OUString aNewEntry( ((const SfxStringItem*)pState)->GetValue() );
 
-            if ( aNewEntry.Len() > 0 )
+            if ( !aNewEntry.isEmpty() )
                 aLbScenario.SelectEntry( aNewEntry );
             else
                 aLbScenario.SetNoSelection();

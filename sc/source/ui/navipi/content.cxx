@@ -152,7 +152,7 @@ void ScContentTree::InitRoot( sal_uInt16 nType )
     }
 
     const Image& rImage = aEntryImages.GetImage( nType );
-    String aName( ScResId( SCSTR_CONTENT_ROOT + nType ) );
+    OUString aName( ScResId( SCSTR_CONTENT_ROOT + nType ) );
     // wieder an die richtige Position:
     sal_uInt16 nPos = nRootType ? 0 : pPosList[nType]-1;
     SvTreeListEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, false, nPos );
@@ -278,7 +278,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
         if ( bHiddenDoc )
             return 0;               //! spaeter...
 
-        String aText( GetEntryText( pEntry ) );
+        OUString aText( GetEntryText( pEntry ) );
 
         if ( !aManualDoc.isEmpty() )
             pParentWindow->SetCurrentDoc( aManualDoc );
@@ -299,8 +299,8 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
                 //  bei SID_CURRENTCELL der Bereichsname genommen.
                 //  DB-Bereiche darum direkt ueber die Adresse anspringen.
 
-                String aRangeStr = lcl_GetDBAreaRange( GetSourceDocument(), aText );
-                if (aRangeStr.Len())
+                OUString aRangeStr = lcl_GetDBAreaRange( GetSourceDocument(), aText );
+                if (!aRangeStr.isEmpty())
                     pParentWindow->SetCurrentCellStr( aRangeStr );
             }
             break;
@@ -448,8 +448,8 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 {
                     if ( pSh->ISA(ScDocShell) )
                     {
-                        String aName = pSh->GetTitle();
-                        String aEntry = aName;
+                        OUString aName = pSh->GetTitle();
+                        OUString aEntry = aName;
                         if ( pSh == pCurrentSh )
                             aEntry += pParentWindow->aStrActive;
                         else
@@ -467,7 +467,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 //  verstecktes Dokument
                 if ( !aHiddenTitle.isEmpty() )
                 {
-                    String aEntry = aHiddenTitle;
+                    OUString aEntry = aHiddenTitle;
                     aEntry += pParentWindow->aStrHidden;
                     aDocMenu.InsertItem( ++i, aEntry );
                     if (bHiddenDoc)
@@ -490,7 +490,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
                 else if ( aDocMenu.WasHit() )           //  angezeigtes Dokument
                 {
                     sal_uInt16 nId = aDocMenu.GetSelected();
-                    String aName = aDocMenu.GetItemText(nId);
+                    OUString aName = aDocMenu.GetItemText(nId);
                     SelectDoc( aName );
                 }
             }
@@ -763,8 +763,8 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                 {
                     if ( IsPartOfType( nType, pObject->GetObjIdentifier() ) )
                     {
-                        String aName = ScDrawLayer::GetVisibleName( pObject );
-                        if (aName.Len())
+                        OUString aName = ScDrawLayer::GetVisibleName( pObject );
+                        if (!aName.isEmpty())
                             InsertContent( nType, aName );
                     }
 
@@ -839,12 +839,12 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
     return NULL;
 }
 
-static String lcl_NoteString( const ScPostIt& rNote )
+static OUString lcl_NoteString( const ScPostIt& rNote )
 {
-    String aText = rNote.GetText();
-    xub_StrLen nAt;
-    while ( (nAt = aText.Search( '\n' )) != STRING_NOTFOUND )
-        aText.SetChar( nAt, ' ' );
+    OUString aText = rNote.GetText();
+    sal_Int32 nAt;
+    while ( (nAt = aText.indexOf( '\n' )) != -1 )
+        aText = aText.replaceAt( nAt, 1, " " );
     return aText;
 }
 
@@ -993,7 +993,7 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
     return !bEqual;
 }
 
-static bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRange& rRange )
+static bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const OUString& rName, ScRange& rRange )
 {
     bool bFound = false;
 
@@ -1028,7 +1028,7 @@ static bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rNam
     return bFound;
 }
 
-static void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, sal_uInt16 nType, Window* pWin )
+static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, sal_uInt16 nType, Window* pWin )
 {
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
     ScDrawLayer* pModel = pSrcDoc->GetDrawLayer();
@@ -1117,10 +1117,10 @@ void ScContentTree::DoDrag()
         (nType != SC_CONTENT_NOTE) &&
         (nType != SC_CONTENT_AREALINK) )
     {
-        String aText( GetEntryText( pEntry ) );
+        OUString aText( GetEntryText( pEntry ) );
 
         ScDocument* pLocalDoc = NULL;                   // fuer URL-Drop
-        String aDocName;
+        OUString aDocName;
         if (bHiddenDoc)
             aDocName = aHiddenName;
         else
@@ -1136,21 +1136,19 @@ void ScContentTree::DoDrag()
         }
 
         bool bDoLinkTrans = false;      // use ScLinkTransferObj
-        String aLinkURL;                // for ScLinkTransferObj
-        String aLinkText;
+        OUString aLinkURL;                // for ScLinkTransferObj
+        OUString aLinkText;
 
         sal_uInt16 nDropMode = pParentWindow->GetDropMode();
         switch ( nDropMode )
         {
             case SC_DROPMODE_URL:
                 {
-                    String aUrl = aDocName;
-                    aUrl += '#';
-                    aUrl += aText;
+                    OUString aUrl = aDocName + "#" + aText;
 
                     pScMod->SetDragJump( pLocalDoc, aUrl, aText );
 
-                    if (aDocName.Len())
+                    if (!aDocName.isEmpty())
                     {
                         //  provide URL to outside only if the document has a name
                         //  (without name, only internal D&D via SetDragJump)
@@ -1163,7 +1161,7 @@ void ScContentTree::DoDrag()
                 break;
             case SC_DROPMODE_LINK:
                 {
-                    if ( aDocName.Len() )           // link only to named documents
+                    if ( !aDocName.isEmpty() )           // link only to named documents
                     {
                         // for internal D&D, set flag to insert a link
 
@@ -1236,7 +1234,7 @@ void ScContentTree::DoDrag()
             ScLinkTransferObj* pTransferObj = new ScLinkTransferObj;
             uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-            if ( aLinkURL.Len() )
+            if ( !aLinkURL.isEmpty() )
                 pTransferObj->SetLinkURL( aLinkURL, aLinkText );
 
             //  SetDragJump / SetDragLink has been done above
@@ -1262,10 +1260,10 @@ IMPL_STATIC_LINK(ScContentTree, ExecDragHdl, void*, EMPTYARG)
 
 sal_Bool ScContentTree::LoadFile( const OUString& rUrl )
 {
-    String aDocName = rUrl;
-    xub_StrLen nPos = aDocName.Search('#');
-    if ( nPos != STRING_NOTFOUND )
-        aDocName.Erase(nPos);           // nur der Name, ohne #...
+    OUString aDocName = rUrl;
+    sal_Int32 nPos = aDocName.indexOf('#');
+    if ( nPos != -1 )
+        aDocName = aDocName.copy(0, nPos);           // nur der Name, ohne #...
 
     sal_Bool bReturn = false;
     OUString aURL = aDocName;
@@ -1387,7 +1385,7 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/
 
     //  "aktiv" oder "inaktiv" weglassen
 
-    String aRealName = rName;
+    OUString aRealName = rName;
     xub_StrLen nLen = rName.getLength();
     xub_StrLen nActiveStart = nLen - pParentWindow->aStrActive.getLength();
     if ( rName.copy( nActiveStart ) == pParentWindow->aStrActive )

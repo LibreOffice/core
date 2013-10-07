@@ -358,7 +358,7 @@ void ScDocListBox::Select()
 {
     ScNavigatorDlg::ReleaseFocus();
 
-    String aDocName = GetSelectEntry();
+    OUString aDocName = GetSelectEntry();
     rDlg.aLbEntries.SelectDoc( aDocName );
 }
 
@@ -653,13 +653,13 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     aLbDocuments.SetDropDownLineCount(9);
     OUString aOpen(" (");
     aStrActive = aOpen;
-    aStrActive += String( ScResId( STR_ACTIVE ) );
+    aStrActive += OUString( ScResId( STR_ACTIVE ) );
     aStrActive += ")";                                      // " (aktiv)"
     aStrNotActive = aOpen;
-    aStrNotActive += String( ScResId( STR_NOTACTIVE ) );
+    aStrNotActive += OUString( ScResId( STR_NOTACTIVE ) );
     aStrNotActive += ")";                                   // " (inaktiv)"
     aStrHidden = aOpen;
-    aStrHidden += String( ScResId( STR_HIDDEN ) );
+    aStrHidden += OUString( ScResId( STR_HIDDEN ) );
     aStrHidden += ")";                                      // " (versteckt)"
 
     aTitleBase = GetText();
@@ -1315,14 +1315,14 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
 
     ScDocShell* pCurrentSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
 
-    String aSelEntry;
+    OUString aSelEntry;
     SfxObjectShell* pSh = SfxObjectShell::GetFirst();
     while ( pSh )
     {
         if ( pSh->ISA(ScDocShell) )
         {
-            String aName = pSh->GetTitle();
-            String aEntry = aName;
+            OUString aName = pSh->GetTitle();
+            OUString aEntry = aName;
             if (pSh == pCurrentSh)
                 aEntry += aStrActive;
             else
@@ -1339,10 +1339,10 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
 
     aLbDocuments.InsertEntry( aStrActiveWin );
 
-    String aHidden =  aLbEntries.GetHiddenTitle();
-    if (aHidden.Len())
+    OUString aHidden =  aLbEntries.GetHiddenTitle();
+    if (!aHidden.isEmpty())
     {
-        String aEntry = aHidden;
+        OUString aEntry = aHidden;
         aEntry += aStrHidden;
         aLbDocuments.InsertEntry( aEntry );
 
