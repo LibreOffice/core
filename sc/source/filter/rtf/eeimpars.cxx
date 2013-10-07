@@ -264,7 +264,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     rSet.Put(*pNumFmt);
                 if ( pFont || pHeight || pWeight || pPosture )
                 {
-                    String aStr( mpEngine->GetText( pE->aSel ) );
+                    OUString aStr( mpEngine->GetText( pE->aSel ) );
                     sal_uInt8 nScriptType = mpDoc->GetStringScriptType( aStr );
                     const sal_uInt8 nScripts[3] = { SCRIPTTYPE_LATIN,
                         SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX };
@@ -336,7 +336,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 }
                 else
                 {
-                    String aStr;
+                    OUString aStr;
                     if( pE->bEntirePara )
                     {
                         aStr = mpEngine->GetText( pE->aSel.nStartPara );
@@ -383,8 +383,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
 
                     //  #105460#, #i4180# String cells can't contain tabs or linebreaks
                     //  -> replace with spaces
-                    aStr.SearchAndReplaceAll( (sal_Unicode)'\t', (sal_Unicode)' ' );
-                    aStr.SearchAndReplaceAll( (sal_Unicode)'\n', (sal_Unicode)' ' );
+                    aStr = aStr.replaceAll( "\t", " " );
+                    aStr = aStr.replaceAll( "\n", " " );
 
                     if (bTextFormat)
                     {
