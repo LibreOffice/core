@@ -366,7 +366,8 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
 {
     mpPathObj = mpEffect->createSdrPathObjFromPath();
     mxPolyPoly = mpPathObj->GetPathPoly();
-    maOriginPos = mxOrigin->getPosition();
+    if (mxOrigin.is())
+        maOriginPos = mxOrigin->getPosition();
 
     SdrPage* pPage = mrView.GetSdrPageView()->GetPage();
     if( pPage )
@@ -946,7 +947,9 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 {
     if( mpPathObj )
     {
-        ::com::sun::star::awt::Point aPos( mxOrigin->getPosition() );
+        ::com::sun::star::awt::Point aPos;
+        if (mxOrigin.is())
+            aPos = mxOrigin->getPosition();
         if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
         {
             const basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
