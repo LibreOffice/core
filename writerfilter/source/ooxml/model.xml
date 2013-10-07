@@ -23314,6 +23314,23 @@
       <element name="pPrDefault" tokenid="ooxml:CT_DocDefaults_pPrDefault"/>
       <element name="rPrDefault" tokenid="ooxml:CT_DocDefaults_rPrDefault"/>
     </resource>
+    <resource name="CT_LatentStyles" resource="Properties" tag="document">
+      <attribute name="defLockedState" tokenid="ooxml:CT_LatentStyles_defLockedState"/>
+      <attribute name="defUIPriority" tokenid="ooxml:CT_LatentStyles_defUIPriority"/>
+      <attribute name="defSemiHidden" tokenid="ooxml:CT_LatentStyles_defSemiHidden"/>
+      <attribute name="defUnhideWhenUsed" tokenid="ooxml:CT_LatentStyles_defUnhideWhenUsed"/>
+      <attribute name="defQFormat" tokenid="ooxml:CT_LatentStyles_defQFormat"/>
+      <attribute name="count" tokenid="ooxml:CT_LatentStyles_count"/>
+      <element name="lsdException" tokenid="ooxml:CT_LatentStyles_lsdException"/>
+    </resource>
+    <resource name="CT_LsdException" resource="Properties" tag="document">
+      <attribute name="name" tokenid="ooxml:CT_LsdException_name"/>
+      <attribute name="locked" tokenid="ooxml:CT_LsdException_locked"/>
+      <attribute name="uiPriority" tokenid="ooxml:CT_LsdException_uiPriority"/>
+      <attribute name="semiHidden" tokenid="ooxml:CT_LsdException_semiHidden"/>
+      <attribute name="unhideWhenUsed" tokenid="ooxml:CT_LsdException_unhideWhenUsed"/>
+      <attribute name="qFormat" tokenid="ooxml:CT_LsdException_qFormat"/>
+    </resource>
     <resource name="ST_ColorSchemeIndex" resource="List" generated="yes">
       <value name="dark1" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_dark1">dark1</value>
       <value name="light1" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_light1">light1</value>
@@ -23842,3 +23859,5 @@
     <resource name="CT_OMathPara" resource="Stream" tag="math"/>
   </namespace>
 </model>
+<!-- vim: shiftwidth=2 softtabstop=2 expandtab:
+-->
