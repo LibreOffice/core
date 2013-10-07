@@ -1945,7 +1945,7 @@ OUString SAL_CALL
     ScAccessibleDocument::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    OUString sDescription = String(ScResId(STR_ACC_DOC_DESCR));
+    OUString sDescription = OUString(ScResId(STR_ACC_DOC_DESCR));
     return sDescription;
 }
 
@@ -1955,7 +1955,7 @@ OUString SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    OUString sName = String(ScResId(STR_ACC_DOC_NAME));
+    OUString sName = OUString(ScResId(STR_ACC_DOC_NAME));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += OUString::number(nNumber);
     return sName;

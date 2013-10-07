@@ -68,7 +68,7 @@ typedef std::list< uno::Reference< XAccessible > > ScXAccList;
 
 struct ScAccNote
 {
-    String      maNoteText;
+    OUString    maNoteText;
     Rectangle   maRect;
     ScAddress   maNoteCell;
     ::accessibility::AccessibleTextHelper* mpTextHelper;
@@ -100,7 +100,7 @@ private:
     sal_Int32               mnParagraphs;
     sal_Int32               mnOffset;
 
-    ::accessibility::AccessibleTextHelper* CreateTextHelper(const String& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const;
+    ::accessibility::AccessibleTextHelper* CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const;
     sal_Int32 AddNotes(const ScPreviewLocationData& rData, const Rectangle& rVisRect, sal_Bool bMark, ScAccNotes& rNotes);
 
     sal_Int8 CompareCell(const ScAddress& aCell1, const ScAddress& aCell2);
@@ -135,7 +135,7 @@ ScNotesChildren::~ScNotesChildren()
     std::for_each(maMarks.begin(), maMarks.end(), DeleteAccNote());
 }
 
-::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const String& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const
+::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, sal_Bool bMarkNote, sal_Int32 nChildOffset) const
 {
     ::accessibility::AccessibleTextHelper* pTextHelper = NULL;
 
@@ -1629,14 +1629,14 @@ uno::Sequence<sal_Int8> SAL_CALL
 OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    OUString sDescription = String(ScResId(STR_ACC_PREVIEWDOC_DESCR));
+    OUString sDescription = OUString(ScResId(STR_ACC_PREVIEWDOC_DESCR));
     return sDescription;
 }
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    OUString sName = String(ScResId(STR_ACC_PREVIEWDOC_NAME));
+    OUString sName = OUString(ScResId(STR_ACC_PREVIEWDOC_NAME));
     return sName;
 }
 

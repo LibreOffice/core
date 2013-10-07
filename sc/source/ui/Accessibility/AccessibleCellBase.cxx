@@ -203,7 +203,7 @@ OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    OUString sDescription = String(ScResId(STR_ACC_CELL_DESCR));
+    OUString sDescription = OUString(ScResId(STR_ACC_CELL_DESCR));
 
     return sDescription;
 }

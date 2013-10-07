@@ -788,12 +788,12 @@ void ScAccessibleCsvRuler::SendCaretEvent()
 
 OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleName() throw( RuntimeException )
 {
-    return String( ScResId( STR_ACC_CSVRULER_NAME ) );
+    return OUString( ScResId( STR_ACC_CSVRULER_NAME ) );
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleDescription() throw( RuntimeException )
 {
-    return String( ScResId( STR_ACC_CSVRULER_DESCR ) );
+    return OUString( ScResId( STR_ACC_CSVRULER_DESCR ) );
 }
 
 void ScAccessibleCsvRuler::ensureValidIndex( sal_Int32 nIndex ) const
@@ -1343,12 +1343,12 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
 
 OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleName() throw( RuntimeException )
 {
-    return String( ScResId( STR_ACC_CSVGRID_NAME ) );
+    return OUString( ScResId( STR_ACC_CSVGRID_NAME ) );
 }
 
 OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleDescription() throw( RuntimeException )
 {
-    return String( ScResId( STR_ACC_CSVGRID_DESCR ) );
+    return OUString( ScResId( STR_ACC_CSVGRID_DESCR ) );
 }
 
 void ScAccessibleCsvGrid::ensureValidIndex( sal_Int32 nIndex ) const
@@ -1417,7 +1417,7 @@ OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn
 {
     ScCsvGrid& rGrid = implGetGrid();
     sal_Int32 nLine = nRow + rGrid.GetFirstVisLine() - 1;
-    String aCellStr;
+    OUString aCellStr;
     if( (nColumn > 0) && (nRow > 0) )
         aCellStr = rGrid.GetCellText( lcl_GetGridColumn( nColumn ), nLine );
     else if( nRow > 0 )

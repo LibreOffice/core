@@ -224,13 +224,13 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :
-        sDesc = String(ScResId(STR_ACC_LEFTAREA_DESCR));
+        sDesc = OUString(ScResId(STR_ACC_LEFTAREA_DESCR));
         break;
     case SVX_ADJUST_RIGHT:
-        sDesc = String(ScResId(STR_ACC_RIGHTAREA_DESCR));
+        sDesc = OUString(ScResId(STR_ACC_RIGHTAREA_DESCR));
         break;
     case SVX_ADJUST_CENTER:
-        sDesc = String(ScResId(STR_ACC_CENTERAREA_DESCR));
+        sDesc = OUString(ScResId(STR_ACC_CENTERAREA_DESCR));
         break;
     default:
         OSL_FAIL("wrong adjustment found");
@@ -246,13 +246,13 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :
-        sName = String(ScResId(STR_ACC_LEFTAREA_NAME));
+        sName = OUString(ScResId(STR_ACC_LEFTAREA_NAME));
         break;
     case SVX_ADJUST_RIGHT:
-        sName = String(ScResId(STR_ACC_RIGHTAREA_NAME));
+        sName = OUString(ScResId(STR_ACC_RIGHTAREA_NAME));
         break;
     case SVX_ADJUST_CENTER:
-        sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
+        sName = OUString(ScResId(STR_ACC_CENTERAREA_NAME));
         break;
     default:
         OSL_FAIL("wrong adjustment found");

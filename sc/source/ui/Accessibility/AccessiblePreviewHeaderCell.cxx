@@ -387,13 +387,13 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const throw (uno::Runt
 
 OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException)
 {
-    OUString sDescription = String(ScResId(STR_ACC_HEADERCELL_DESCR));
+    OUString sDescription = OUString(ScResId(STR_ACC_HEADERCELL_DESCR));
     return sDescription;
 }
 
 OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(uno::RuntimeException)
 {
-    OUString sName = String(ScResId(STR_ACC_HEADERCELL_NAME));
+    OUString sName = OUString(ScResId(STR_ACC_HEADERCELL_NAME));
 
     if ( mbColumnHeader )
     {
@@ -430,7 +430,7 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
-            (new ScAccessiblePreviewHeaderCellTextData(mpViewShell, String(getAccessibleName()), maCellPos, mbColumnHeader, mbRowHeader));
+            (new ScAccessiblePreviewHeaderCellTextData(mpViewShell, OUString(getAccessibleName()), maCellPos, mbColumnHeader, mbRowHeader));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
         SAL_WNODEPRECATED_DECLARATIONS_POP
 

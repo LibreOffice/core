@@ -608,8 +608,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    String sDesc(ScResId(STR_ACC_TABLE_DESCR));
-    return OUString(sDesc);
+    OUString sDesc(ScResId(STR_ACC_TABLE_DESCR));
+    return sDesc;
 }
 
 OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName(void)
