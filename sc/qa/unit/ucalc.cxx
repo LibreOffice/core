@@ -1183,9 +1183,9 @@ void Test::testCellBroadcaster()
     // Ensure that the formula cells show correct values, and the referenced
     // cells have broadcasters.
     val = 0.0;
-    for (SCROW i = 0; i < 20; ++i)
+    for (SCROW i = 0; i < 20; ++i, ++val)
     {
-        CPPUNIT_ASSERT_EQUAL(val++, m_pDoc->GetValue(ScAddress(1,i,0)));
+        CPPUNIT_ASSERT_EQUAL(val, m_pDoc->GetValue(ScAddress(1,i,0)));
         pBC = m_pDoc->GetBroadcaster(ScAddress(0,i,0));
         CPPUNIT_ASSERT_MESSAGE("Broadcast should exist here.", pBC);
     }
