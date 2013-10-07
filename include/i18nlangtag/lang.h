@@ -398,21 +398,25 @@ typedef unsigned short LanguageType;
  * 0xFE00 to 0xFFFF with sublanguage ID 0x3F
  *
  * Of which we define reserved blocks:
- * All primary language IDs 0x3E0 to 0x3FF with any sublanguage ID, not to be
+ * All primary language IDs 0x3E0 to 0x3FE with any sublanguage ID, not to be
  * assigned as user-defined IDs:
  *
- * 0x07E0 to 0x07FF with sublanguage ID 0x01, first on-the-fly block
- * 0x0BE0 to 0x0BFF with sublanguage ID 0x02, second on-the-fly block
+ * 0x07E0 to 0x07FE with sublanguage ID 0x01, first on-the-fly block
+ * 0x0BE0 to 0x0BFE with sublanguage ID 0x02, second on-the-fly block
  * ...
- * 0x83E0 to 0x83FF with sublanguage ID 0x20
- * 0x87E0 to 0x87FF with sublanguage ID 0x21
+ * 0x83E0 to 0x83FE with sublanguage ID 0x20
+ * 0x87E0 to 0x87FE with sublanguage ID 0x21
  * ...
- * 0xFBE0 to 0xFBFF with sublanguage ID 0x3E, last on-the-fly block
- * 0xFFE0 to 0xFFFF with sublanguage ID 0x3F, 32 privateuse and specials
+ * 0xFBE0 to 0xFBFE with sublanguage ID 0x3E, last on-the-fly block
+ * 0xFFE0 to 0xFFFE with sublanguage ID 0x3F, 32 privateuse and specials
  *
- * This leaves room for 480 user-defined primary language IDs (instead of 512)
- * with primary bitmask comparability, and 1984 on-the-fly IDs (instead of 0)
- * with arbitrary assignment.
+ * This leaves room for 479 user-defined primary language IDs (instead of 512)
+ * with primary bitmask comparability, and 1922 on-the-fly IDs (instead of 0)
+ * with arbitrary assignment ((0x3E - 0x01 + 1) * (0x3FE - 0x3E0 + 1)).
+ *
+ * The primary ID 0x3FF is reserved and unassigned as it is the same as the
+ * LANGUAGE_MASK_PRIMARY and LANGUAGE_DONTKNOW value, so to not be mistaken as
+ * such.
  *
  * Obsolete OOo user defines now have other values assigned by MS, and
  * different name. Mapping an obsolete value to ISO code should work provided
@@ -590,7 +594,7 @@ typedef unsigned short LanguageType;
 
 /* Primary language ID range for on-the-fly assignment. */
 #define LANGUAGE_ON_THE_FLY_START           0x03E0
-#define LANGUAGE_ON_THE_FLY_END             0x03FF
+#define LANGUAGE_ON_THE_FLY_END             0x03FE
 /* Sublanguage ID range for on-the-fly assignment. */
 #define LANGUAGE_ON_THE_FLY_SUB_START       0x01
 #define LANGUAGE_ON_THE_FLY_SUB_END         0x3E
