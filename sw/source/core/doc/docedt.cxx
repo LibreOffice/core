@@ -2440,7 +2440,8 @@ SetRedlineMode( eOld );
                 }
             }
 
-            *rPam.GetMark() = *aDelPam.GetMark();
+            if (aDelPam.GetMark() != pStt)
+                *rPam.GetPoint() = *aDelPam.GetMark();
 
             ++aPtNd;
             rPam.GetMark()->nNode = aPtNd;
