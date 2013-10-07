@@ -2442,16 +2442,22 @@ SetRedlineMode( eOld );
                 }
             }
 
-            *rPam.GetMark() = *aDelPam.GetMark();
-
+            *rPam.GetPoint() = *aDelPam.GetMark();
             ++aPtNd;
             rPam.GetMark()->nNode = aPtNd;
             rPam.GetMark()->nContent.Assign( aPtNd.GetNode().GetCntntNode(),
                                                 nPtCnt );
 
-            if (bJoinTxt && !bJoinPrev)
+            if (bJoinTxt)
             {
+                assert(rPam.GetPoint() == rPam.End());
+                // move so that SetEnd remembers position after sw_JoinText
                 rPam.Move(fnMoveBackward);
+            }
+            else if (aDelPam.GetPoint() == pStt) // backward selection?
+            {
+                assert(*rPam.GetMark() <= *rPam.GetPoint());
+                rPam.Exchange(); // swap so that rPam is backwards
             }
 
             if( pUndoRpl )
