@@ -2138,7 +2138,7 @@ static bool lcl_GetTokenToParaBreak( OUString& rStr, OUString& rRet, bool bRegEx
             // Has this been escaped?
             if( nPos && '\\' == rStr[nPos-1])
             {
-                nPos += sPara.getLength();
+                ++nPos;
                 if( nPos >= rStr.getLength() )
                 {
                     break;
