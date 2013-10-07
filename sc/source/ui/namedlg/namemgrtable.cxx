@@ -27,13 +27,9 @@
 #define MINSIZE 80
 
 
-String createEntryString(const ScRangeNameLine& rLine)
+static OUString createEntryString(const ScRangeNameLine& rLine)
 {
-    String aRet(rLine.aName);
-    aRet += '\t';
-    aRet += String(rLine.aExpression);
-    aRet += '\t';
-    aRet += String(rLine.aScope);
+    OUString aRet = rLine.aName + "\t" + rLine.aExpression + "\t" + rLine.aScope;
     return aRet;
 }
 
