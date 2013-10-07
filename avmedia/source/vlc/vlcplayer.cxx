@@ -50,7 +50,10 @@ unsigned VLCPlayer::getHeight() const
 void SAL_CALL VLCPlayer::start() throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    mPlayer.play();
+    if (!mPlayer.play())
+    {
+        // TODO: Error
+    }
 }
 
 void SAL_CALL VLCPlayer::stop() throw ( ::com::sun::star::uno::RuntimeException )
@@ -226,6 +229,7 @@ uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabb
      throw ( ::com::sun::star::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
+
     if ( !mrFrameGrabber.is() )
     {
         VLCFrameGrabber *frameGrabber = new VLCFrameGrabber( mEventHandler, mUrl );

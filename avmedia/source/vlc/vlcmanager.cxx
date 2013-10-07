@@ -30,7 +30,13 @@ namespace
 
     const char * const VLC_ARGS[] = {
         "-Vdummy",
-        "--verbose=2"
+#ifdef WNT
+        "--demux",
+        "ffmpeg",
+#endif
+        "--verbose=2"//,
+        //"--file-logging",
+        //"--logfile=C:/home/dev/log/vlc_log"
     };
 }
 
@@ -69,7 +75,9 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
         SAL_WARN("avmedia", "Cannot load symbols");
 
     if (m_is_vlc_found)
+    {
         mEventHandler.create();
+    }
 }
 
 Manager::~Manager()

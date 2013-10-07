@@ -28,10 +28,15 @@ namespace
 
     const char * const VLC_ARGS[] = {
         "-Vdummy",
+        // "--ignore-config"
+        "--demux",
+        "ffmpeg",
         "--snapshot-format=png",
-        "--ffmpeg-threads",
+        "--ffmpeg-threads", /* Is deprecated in 2.1.0 */
         "--verbose=2",
-        "--no-audio"
+        "--no-audio"//,
+        //"--file-logging",
+        //"--logfile=C:/home/dev/log/vlc_log"
     };
 }
 
@@ -64,7 +69,11 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
         mPlayer.pause();
 
         const TimeValue timeout = {2, 0};
+
+        //TODO: Fix this hang on Windows
+#ifndef WNT
         condition.wait(&timeout);
+#endif
 
         if ( !mPlayer.hasVout() )
         {
