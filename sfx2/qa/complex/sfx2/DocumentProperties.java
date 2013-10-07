@@ -199,7 +199,8 @@ public class DocumentProperties
             assertTrue("TemplateURL",
                 xDP.getTemplateURL().endsWith("memmodern.ott"));
             assertEquals("TemplateDate", 17, xDP.getTemplateDate().Hours);
-            assertEquals("AutoloadURL", "../TEST.odt", xDP.getAutoloadURL());
+            assertTrue(
+                "AutoloadURL", xDP.getAutoloadURL().endsWith("/TEST.odt"));
             assertEquals("AutoloadSecs", 0, xDP.getAutoloadSecs());
             assertEquals("DefaultTarget", "_blank", xDP.getDefaultTarget());
             assertEquals("EditingCycles", 3, xDP.getEditingCycles());

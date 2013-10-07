@@ -649,18 +649,25 @@ SfxDocumentMetaData::getURLProperties(
 {
     css::uno::Reference< css::beans::XPropertyBag> xPropArg = css::beans::PropertyBag::createDefault( m_xContext );
     try {
+        css::uno::Any baseUri;
         for (sal_Int32 i = 0; i < i_rMedium.getLength(); ++i) {
             if (i_rMedium[i].Name == "DocumentBaseURL") {
-                xPropArg->addProperty(
-                    OUString("BaseURI"),
-                    css::beans::PropertyAttribute::MAYBEVOID,
-                    i_rMedium[i].Value);
+                baseUri = i_rMedium[i].Value;
+            } else if (i_rMedium[i].Name == "URL") {
+                if (!baseUri.hasValue()) {
+                    baseUri = i_rMedium[i].Value;
+                }
             } else if (i_rMedium[i].Name == "HierarchicalDocumentName") {
                 xPropArg->addProperty(
                     OUString("StreamRelPath"),
                     css::beans::PropertyAttribute::MAYBEVOID,
                     i_rMedium[i].Value);
             }
+        }
+        if (baseUri.hasValue()) {
+            xPropArg->addProperty(
+                "BaseURI", css::beans::PropertyAttribute::MAYBEVOID,
+                baseUri);
         }
         xPropArg->addProperty(OUString("StreamName"),
                 css::beans::PropertyAttribute::MAYBEVOID,
