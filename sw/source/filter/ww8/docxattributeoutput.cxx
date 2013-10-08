@@ -37,6 +37,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 
+#include <editeng/autokernitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -2359,6 +2360,180 @@ void DocxAttributeOutput::StartStyles()
     DocDefaults();
 }
 
+void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
+{
+    bool bMustWrite = true;
+    switch (rHt.Which())
+    {
+        case RES_CHRATR_CASEMAP:
+            bMustWrite = static_cast< const SvxCaseMapItem& >(rHt).GetCaseMap() != SVX_CASEMAP_NOT_MAPPED;
+            break;
+        case RES_CHRATR_COLOR:
+            bMustWrite = static_cast< const SvxColorItem& >(rHt).GetValue().GetColor() != COL_AUTO;
+            break;
+        case RES_CHRATR_CONTOUR:
+            bMustWrite = static_cast< const SvxContourItem& >(rHt).GetValue();
+            break;
+        case RES_CHRATR_CROSSEDOUT:
+            bMustWrite = static_cast< const SvxCrossedOutItem& >(rHt).GetStrikeout() != STRIKEOUT_NONE;
+            break;
+        case RES_CHRATR_ESCAPEMENT:
+            bMustWrite = static_cast< const SvxEscapementItem& >(rHt).GetEscapement() != SVX_ESCAPEMENT_OFF;
+            break;
+        case RES_CHRATR_FONT:
+            bMustWrite = true;
+            break;
+        case RES_CHRATR_FONTSIZE:
+            bMustWrite = static_cast< const SvxFontHeightItem& >(rHt).GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
+            break;
+        case RES_CHRATR_KERNING:
+            bMustWrite = static_cast< const SvxKerningItem& >(rHt).GetValue() != 0;
+            break;
+        case RES_CHRATR_LANGUAGE:
+            bMustWrite = true;
+            break;
+        case RES_CHRATR_POSTURE:
+            bMustWrite = static_cast< const SvxPostureItem& >(rHt).GetPosture() != ITALIC_NONE;
+            break;
+        case RES_CHRATR_SHADOWED:
+            bMustWrite = static_cast< const SvxShadowedItem& >(rHt).GetValue();
+            break;
+        case RES_CHRATR_UNDERLINE:
+            bMustWrite = static_cast< const SvxUnderlineItem& >(rHt).GetLineStyle() != UNDERLINE_NONE;
+            break;
+        case RES_CHRATR_WEIGHT:
+            bMustWrite = static_cast< const SvxWeightItem& >(rHt).GetWeight() != WEIGHT_NORMAL;
+            break;
+        case RES_CHRATR_AUTOKERN:
+            bMustWrite = static_cast< const SvxAutoKernItem& >(rHt).GetValue();
+            break;
+        case RES_CHRATR_BLINK:
+            bMustWrite = static_cast< const SvxBlinkItem& >(rHt).GetValue();
+            break;
+        case RES_CHRATR_BACKGROUND:
+            {
+                const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
+                bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
+                              rBrushItem.GetShadingValue() != sal_uInt32(ShadingPattern::CLEAR) ||
+                              rBrushItem.GetGraphic() != NULL ||
+                              rBrushItem.GetGraphicObject() != NULL);
+            }
+            break;
+
+        case RES_CHRATR_CJK_FONT:
+            bMustWrite = true;
+            break;
+        case RES_CHRATR_CJK_FONTSIZE:
+            bMustWrite = false; // we have written it already as RES_CHRATR_FONTSIZE
+            break;
+        case RES_CHRATR_CJK_LANGUAGE:
+            bMustWrite = true;
+            break;
+        case RES_CHRATR_CJK_POSTURE:
+            bMustWrite = false; // we have written it already as RES_CHRATR_POSTURE
+            break;
+        case RES_CHRATR_CJK_WEIGHT:
+            bMustWrite = false; // we have written it already as RES_CHRATR_WEIGHT
+            break;
+
+        case RES_CHRATR_CTL_FONT:
+            bMustWrite = true;
+            break;
+        case RES_CHRATR_CTL_FONTSIZE:
+            bMustWrite = static_cast< const SvxFontHeightItem& >(rHt).GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
+            break;
+        case RES_CHRATR_CTL_LANGUAGE:
+            bMustWrite = true;
+            break;
+        case RES_CHRATR_CTL_POSTURE:
+            bMustWrite = static_cast< const SvxPostureItem& >(rHt).GetPosture() != ITALIC_NONE;
+            break;
+        case RES_CHRATR_CTL_WEIGHT:
+            bMustWrite = static_cast< const SvxWeightItem& >(rHt).GetWeight() != WEIGHT_NORMAL;
+            break;
+
+        case RES_CHRATR_ROTATE:
+            bMustWrite = static_cast< const SvxCharRotateItem& >(rHt).GetValue() != 0;
+            break;
+        case RES_CHRATR_EMPHASIS_MARK:
+            bMustWrite = static_cast< const SvxEmphasisMarkItem& >(rHt).GetValue() != EMPHASISMARK_NONE;
+            break;
+        case RES_CHRATR_TWO_LINES:
+            bMustWrite = static_cast< const SvxTwoLinesItem& >(rHt).GetValue();
+            break;
+        case RES_CHRATR_SCALEW:
+            bMustWrite = static_cast< const SvxCharScaleWidthItem& >(rHt).GetValue() != 100;
+            break;
+        case RES_CHRATR_RELIEF:
+            bMustWrite = static_cast< const SvxCharReliefItem& >(rHt).GetValue() != RELIEF_NONE;
+            break;
+        case RES_CHRATR_HIDDEN:
+            bMustWrite = static_cast< const SvxCharHiddenItem& >(rHt).GetValue();
+            break;
+        case RES_CHRATR_BOX:
+            {
+                const SvxBoxItem& rBoxItem = static_cast< const SvxBoxItem& >(rHt);
+                bMustWrite = rBoxItem.GetTop() || rBoxItem.GetLeft() ||
+                             rBoxItem.GetBottom() || rBoxItem.GetRight() ||
+                             rBoxItem.GetDistance();
+            }
+            break;
+        case RES_CHRATR_HIGHLIGHT:
+            {
+                const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
+                bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
+                              rBrushItem.GetShadingValue() != sal_uInt32(ShadingPattern::CLEAR) ||
+                              rBrushItem.GetGraphic() != NULL ||
+                              rBrushItem.GetGraphicObject() != NULL);
+            }
+            break;
+
+        case RES_PARATR_LINESPACING:
+            //FIXME ParaLineSpacing( static_cast< const SvxLineSpacingItem& >( rHt ) );
+            break;
+        case RES_PARATR_ADJUST:
+            //FIXME ParaAdjust( static_cast< const SvxAdjustItem& >( rHt ) );
+            break;
+        case RES_PARATR_SPLIT:
+            //FIXME ParaSplit( static_cast< const SvxFmtSplitItem& >( rHt ) );
+            break;
+        case RES_PARATR_WIDOWS:
+            //FIXME ParaWidows( static_cast< const SvxWidowsItem& >( rHt ) );
+            break;
+        case RES_PARATR_TABSTOP:
+            //FIXME ParaTabStop( static_cast< const SvxTabStopItem& >( rHt ) );
+            break;
+        case RES_PARATR_HYPHENZONE:
+            //FIXME ParaHyphenZone( static_cast< const SvxHyphenZoneItem& >( rHt ) );
+            break;
+        case RES_PARATR_NUMRULE:
+            //FIXME ParaNumRule( static_cast< const SwNumRuleItem& >( rHt ) );
+            break;
+        case RES_PARATR_SCRIPTSPACE:
+            //FIXME ParaScriptSpace( static_cast< const SfxBoolItem& >( rHt ) );
+            break;
+        case RES_PARATR_HANGINGPUNCTUATION:
+            //FIXME ParaHangingPunctuation( static_cast< const SfxBoolItem& >( rHt ) );
+            break;
+        case RES_PARATR_FORBIDDEN_RULES:
+            //FIXME ParaForbiddenRules( static_cast< const SfxBoolItem& >( rHt ) );
+            break;
+        case RES_PARATR_VERTALIGN:
+            //FIXME ParaVerticalAlign( static_cast< const SvxParaVertAlignItem& >( rHt ) );
+            break;
+        case RES_PARATR_SNAPTOGRID:
+            //FIXME ParaSnapToGrid( static_cast< const SvxParaGridItem& >( rHt ) );
+            break;
+
+        default:
+            SAL_INFO("sw.ww8", "Unhandled SfxPoolItem with id " << rHt.Which() );
+            break;
+    }
+
+    if (bMustWrite)
+        OutputItem(rHt);
+}
+
 void DocxAttributeOutput::DocDefaults( )
 {
     // Write the '<w:docDefaults>' section here
@@ -2366,21 +2541,30 @@ void DocxAttributeOutput::DocDefaults( )
 
     // Output the default run properties
     m_pSerializer->startElementNS(XML_w, XML_rPrDefault, FSEND);
-    StartRunProperties();
 
-    // TODO find out which run properties do we want to write
-    const RES_CHRATR aDefaultRunProperties[] = {
-        RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT,
-        RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
-    };
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aDefaultRunProperties); ++i)
-        OutputItem(m_rExport.pDoc->GetDefault(aDefaultRunProperties[i]));
+    StartStyleProperties(false, 0);
 
-    EndRunProperties(NULL);
+    for (int i = int(RES_CHRATR_BEGIN); i < int(RES_CHRATR_END); ++i)
+        OutputDefaultItem(m_rExport.pDoc->GetDefault(i));
+
+    EndStyleProperties(false);
+
     m_pSerializer->endElementNS(XML_w, XML_rPrDefault);
 
-    // TODO should we output some paragraph properties too?
-    m_pSerializer->singleElementNS(XML_w, XML_pPrDefault, FSEND);
+    // Output the default paragraph properties
+    m_pSerializer->startElementNS(XML_w, XML_pPrDefault, FSEND);
+
+    /* TODO Paragraph properties still need work.
+    StartStyleProperties(true, 0);
+
+    for (int i = int(RES_PARATR_BEGIN); i < int(RES_PARATR_END); ++i)
+        OutputDefaultItem(m_rExport.pDoc->GetDefault(i));
+
+    EndStyleProperties(true);
+    */
+
+    m_pSerializer->endElementNS(XML_w, XML_pPrDefault);
+
     m_pSerializer->endElementNS(XML_w, XML_docDefaults);
 }
 

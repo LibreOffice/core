@@ -214,6 +214,13 @@ public:
     /// Write Doc Defaults
     void DocDefaults( );
 
+    /** Similar to OutputItem(), but write something only if it is not the default.
+
+        This is to output the docDefaults, and we should write something out
+        only in case it is not what MSO already uses for the document by default.
+    */
+    void OutputDefaultItem(const SfxPoolItem& rHt);
+
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
             sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
