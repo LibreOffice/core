@@ -124,6 +124,7 @@ public:
 //--------------------------------------------------------------------------
 
 SvBaseLink::SvBaseLink()
+    : m_bIsReadOnly(false)
 {
     pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
@@ -135,6 +136,7 @@ SvBaseLink::SvBaseLink()
 //--------------------------------------------------------------------------
 
 SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
+    : m_bIsReadOnly(false)
 {
     pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
@@ -152,6 +154,7 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
 
 SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
     : pImpl(0)
+    , m_bIsReadOnly(false)
 {
     bVisible = bSynchron = bUseCache = sal_True;
     bWasLastEditOK = sal_False;
