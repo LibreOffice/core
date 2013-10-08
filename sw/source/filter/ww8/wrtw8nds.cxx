@@ -2054,7 +2054,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     }
     while ( nAktPos < nEnd );
 
-    AttrOutput().StartParagraphProperties( rNode );
+    AttrOutput().SectionBreaks(rNode);
+
+    AttrOutput().StartParagraphProperties();
 
     AttrOutput().ParagraphStyle( nStyle );
 

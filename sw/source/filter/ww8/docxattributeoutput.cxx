@@ -465,7 +465,7 @@ void DocxAttributeOutput::EmptyParagraph()
     m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
 }
 
-void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
+void DocxAttributeOutput::SectionBreaks(const SwTxtNode& rNode)
 {
     // output page/section breaks
     // Writer can have them at the beginning of a paragraph, or at the end, but
@@ -486,7 +486,10 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
         const SwFrmFmt *pFmt = pTableNode->GetTable().GetFrmFmt();
         m_rExport.OutputSectionBreaks( &(pFmt->GetAttrSet()), *pTableNode );
     }
+}
 
+void DocxAttributeOutput::StartParagraphProperties()
+{
     m_pSerializer->mark( );
 
     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );

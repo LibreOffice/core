@@ -114,8 +114,11 @@ public:
     /// Empty paragraph.
     virtual void EmptyParagraph();
 
+    /// Called in order to output section breaks.
+    virtual void SectionBreaks(const SwTxtNode& rNode);
+
     /// Called before we start outputting the attributes.
-    virtual void StartParagraphProperties( const SwTxtNode& rNode );
+    virtual void StartParagraphProperties();
 
     /// Called after we end outputting the attributes.
     virtual void EndParagraphProperties();

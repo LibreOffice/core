@@ -331,7 +331,7 @@ void RtfAttributeOutput::EmptyParagraph()
     m_rExport.Strm() << m_rExport.sNewLine << OOO_STRING_SVTOOLS_RTF_PAR << ' ';
 }
 
-void RtfAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
+void RtfAttributeOutput::SectionBreaks(const SwTxtNode& rNode)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
@@ -359,6 +359,11 @@ void RtfAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
         m_rExport.OutputSectionBreaks( &(pFmt->GetAttrSet()), *pTableNode );
     }
     m_bBufferSectionBreaks = false;
+}
+
+void RtfAttributeOutput::StartParagraphProperties()
+{
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     OStringBuffer aPar;
     if (!m_rExport.bRTFFlySyntax)
