@@ -735,21 +735,21 @@ void AreaChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
-        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
+        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 
         std::map< sal_Int32, double > aLogicYSumMap;//one for each different nAttachedAxisIndex
         for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
         {
-            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            ::std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
+            const ::std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();
 
             //iterate through all x slots in this category to get 100percent sum
             for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
                 std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
-                std::vector<VDataSeries*>::iterator       aSeriesIter = rSeriesList.begin();
-                const std::vector<VDataSeries*>::iterator aSeriesEnd  = rSeriesList.end();
+                std::vector<VDataSeries*>::iterator aSeriesIter = rSeriesList.begin();
+                std::vector<VDataSeries*>::iterator aSeriesEnd  = rSeriesList.end();
 
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
@@ -779,15 +779,15 @@ void AreaChart::createShapes()
         aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
         {
-            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            ::std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = aZSlotIter->begin();
+            ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             //for the area chart there should be at most one x slot (no side by side stacking available)
             //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
             for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
             {
-                std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
-                std::vector<VDataSeries*>::const_iterator       aSeriesIter = rSeriesList.begin();
+                const std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
+                std::vector<VDataSeries*>::const_iterator aSeriesIter = rSeriesList.begin();
                 const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = rSeriesList.end();
 
                 std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
