@@ -138,7 +138,33 @@ void ScOpenclTest::testSharedFormulaXLS()
         CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
     }
 
+    // AMLOEXT-8
     for (SCROW i = 15; i < 18; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+    }
+
+    // AMLOEXT-10
+    for (SCROW i = 19; i < 22; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+    }
+
+    // AMLOEXT-9
+    for (SCROW i = 23; i < 25; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        //double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        // There seems to be a bug in LibreOffice beta
+        CPPUNIT_ASSERT_EQUAL(/*fExcel*/ 60.0, fLibre);
+    }
+
+    // AMLOEXT-9
+    for (SCROW i = 25; i < 27; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
