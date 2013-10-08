@@ -287,17 +287,17 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     // edit
     void    Insert(SwField &, SwPaM *pCommentRange = NULL);
-    void    Insert(const String &);
+    void    Insert(const OUString &);
     // graphic
-    void    Insert( const String &rPath, const String &rFilter,
+    void    Insert( const OUString &rPath, const OUString &rFilter,
                     const Graphic &, SwFlyFrmAttrMgr * = 0,
                     sal_Bool bRule = sal_False );
 
-    void    InsertByWord( const String & );
-    void    InsertPageBreak(const String *pPageDesc = 0, sal_uInt16 nPgNum = 0 );
+    void    InsertByWord( const OUString & );
+    void    InsertPageBreak(const OUString *pPageDesc = 0, sal_uInt16 nPgNum = 0 );
     void    InsertLineBreak();
     void    InsertColumnBreak();
-    void    InsertFootnote(const String &, sal_Bool bEndNote = sal_False, sal_Bool bEdit = sal_True );
+    void    InsertFootnote(const OUString &, sal_Bool bEndNote = sal_False, sal_Bool bEdit = sal_True );
     void    SplitNode( sal_Bool bAutoFormat = sal_False, sal_Bool bCheckTableStart = sal_True );
     bool    CanInsert();
 
@@ -341,15 +341,15 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
                     GETSTYLE_CREATESOME,        // if on PoolId create mapt
                     GETSTYLE_CREATEANY };       // return standard if applicable
 
-    SwTxtFmtColl*   GetParaStyle(const String &rCollName,
+    SwTxtFmtColl*   GetParaStyle(const OUString &rCollName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
-    SwCharFmt*      GetCharStyle(const String &rFmtName,
+    SwCharFmt*      GetCharStyle(const OUString &rFmtName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
     SwFrmFmt*       GetTblStyle(const OUString &rFmtName);
 
-    void    SetPageStyle(const String &rCollName);
+    void            SetPageStyle(const OUString &rCollName);
 
-    String  GetCurPageStyle( const sal_Bool bCalcFrm = sal_True ) const;
+    OUString        GetCurPageStyle( const sal_Bool bCalcFrm = sal_True ) const;
 
     // change current style using the attributes in effect
     void    QuickUpdateStyle();
@@ -357,8 +357,8 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     enum DoType { UNDO, REDO, REPEAT };
 
     void    Do( DoType eDoType, sal_uInt16 nCnt = 1 );
-    String  GetDoString( DoType eDoType ) const;
-    String  GetRepeatString() const;
+    OUString  GetDoString( DoType eDoType ) const;
+    OUString  GetRepeatString() const;
     sal_uInt16  GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
 
     // search and replace
@@ -368,10 +368,10 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
                          FindRanges eFlags = FND_IN_BODY,
                          int bReplace = sal_False );
 
-    sal_uLong SearchTempl  (const String &rTempl,
+    sal_uLong SearchTempl  (const OUString &rTempl,
                          SwDocPositions eStart, SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
-                         const String* pReplTempl = 0 );
+                         const OUString* pReplTempl = 0 );
 
     sal_uLong SearchAttr   (const SfxItemSet& rFindSet,
                          sal_Bool bNoColls,
@@ -452,34 +452,30 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     bool TryRemoveIndent(); // #i23725#
 
-    String GetSelDescr() const;
+    OUString GetSelDescr() const;
 
     SwNavigationMgr& GetNavigationMgr();
     void addCurrentPosition();
-    sal_Bool GotoFly( const String& rName, FlyCntType eType = FLYCNTTYPE_ALL,
+    sal_Bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
          sal_Bool bSelFrame = sal_True );
     bool GotoINetAttr( const SwTxtINetFmt& rAttr );
     void GotoOutline( sal_uInt16 nIdx );
-    bool GotoOutline( const String& rName );
-    bool GotoRegion( const String& rName );
-    sal_Bool GotoRefMark( const String& rRefMark, sal_uInt16 nSubType = 0,
+    bool GotoOutline( const OUString& rName );
+    bool GotoRegion( const OUString& rName );
+    sal_Bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
         sal_uInt16 nSeqNo = 0 );
     sal_Bool GotoNextTOXBase( const OUString* pName = 0);
-    bool GotoTable( const String& rName );
+    bool GotoTable( const OUString& rName );
     sal_Bool GotoFld( const SwFmtFld& rFld );
     const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
 
-    void ChangeHeaderOrFooter(const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
+    void ChangeHeaderOrFooter(const OUString& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow );
 
 private:
 
     SW_DLLPRIVATE void  OpenMark();
     SW_DLLPRIVATE void  CloseMark( bool bOkFlag );
-
-    SW_DLLPRIVATE String    GetWrdDelim();
-    SW_DLLPRIVATE String    GetSDelim();
-    SW_DLLPRIVATE String    GetBothDelim();
 
     struct ModeStack
     {

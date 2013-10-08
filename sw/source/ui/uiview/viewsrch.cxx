@@ -754,7 +754,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     else if( m_pSrchItem->GetPattern() )
     {
         // Searching (and replacing) templates
-        const String sRplStr( m_pSrchItem->GetReplaceString() );
+        const OUString sRplStr( m_pSrchItem->GetReplaceString() );
         nFound = m_pWrtShell->SearchTempl( m_pSrchItem->GetSearchString(),
             rOptions.eStart,
             rOptions.eEnd,

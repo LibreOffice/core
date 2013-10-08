@@ -589,7 +589,7 @@ void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
 
 }
 
-String  SwScrollNaviPopup::GetQuickHelpText(sal_Bool bNext)
+OUString SwScrollNaviPopup::GetQuickHelpText(sal_Bool bNext)
 {
     sal_uInt16 nResId = STR_IMGBTN_START;
     nResId += SwView::GetMoveType() - NID_START;

@@ -209,9 +209,9 @@ sal_uLong SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, sal_Bool b
 
 // Description: search for templates
 
-sal_uLong SwWrtShell::SearchTempl( const String &rTempl,
+sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
                                SwDocPositions eStt, SwDocPositions eEnd,
-                               FindRanges eFlags, const String* pReplTempl )
+                               FindRanges eFlags, const OUString* pReplTempl )
 {
         // no enhancement of existing selections
     if(!(eFlags & FND_IN_SEL))

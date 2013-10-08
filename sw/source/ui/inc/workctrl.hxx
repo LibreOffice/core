@@ -165,7 +165,7 @@ public:
         SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window *pParent );
         ~SwScrollNaviPopup();
 
-    static String           GetQuickHelpText(sal_Bool bNext);
+    static OUString         GetQuickHelpText(sal_Bool bNext);
 
     virtual SfxPopupWindow* Clone() const;
     void                GrabFocus(){aToolBox.GrabFocus();}

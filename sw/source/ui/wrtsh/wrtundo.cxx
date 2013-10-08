@@ -94,7 +94,7 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
     CallChgLnk();
 }
 
-String SwWrtShell::GetDoString( DoType eDoType ) const
+OUString SwWrtShell::GetDoString( DoType eDoType ) const
 {
     OUString aUndoStr;
     sal_uInt16 nResStr = STR_UNDO;
@@ -139,7 +139,7 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
 }
 
 
-String SwWrtShell::GetRepeatString() const
+OUString SwWrtShell::GetRepeatString() const
 {
     OUString str;
     GetRepeatInfo(& str);

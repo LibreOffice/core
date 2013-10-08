@@ -906,7 +906,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
             SwView* pTargetView = 0;
             std::auto_ptr< utl::TempFile > aTempFile;
-            String sModifiedStartingPageDesc;
+            OUString sModifiedStartingPageDesc;
             String sStartingPageDesc;
             sal_uInt16 nStartingPageNo = 0;
             bool bPageStylesWithHeaderFooter = false;
@@ -2717,7 +2717,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     //save the settings of the first
     rSourceShell.SttEndDoc(sal_True);
     sal_uInt16 nStartingPageNo = rSourceShell.GetVirtPageNum();
-    String sModifiedStartingPageDesc;
+    OUString sModifiedStartingPageDesc;
     String sStartingPageDesc = sModifiedStartingPageDesc = rSourceShell.GetPageDesc(
                                 rSourceShell.GetCurPageDesc()).GetName();
 

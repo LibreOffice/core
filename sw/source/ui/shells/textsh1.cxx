@@ -522,7 +522,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_BREAK_DLG:
         {
             sal_uInt16 nKind=0, nPageNumber=0;
-            String aTemplateName;
+            OUString aTemplateName;
             if ( pItem )
             {
                 nKind = ((SfxInt16Item*)pItem)->GetValue();
@@ -564,7 +564,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 case 3 :
                 {
                     rWrtSh.StartAllAction();
-                    if( aTemplateName.Len() )
+                    if( !aTemplateName.isEmpty() )
                         rWrtSh.InsertPageBreak( &aTemplateName, nPageNumber );
                     else
                         rWrtSh.InsertPageBreak();

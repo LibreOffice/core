@@ -167,27 +167,27 @@ sal_Bool SwWrtShell::IsEndWrd()
 
 // Insert string
 
-void SwWrtShell::InsertByWord( const String & rStr)
+void SwWrtShell::InsertByWord( const OUString & rStr)
 {
-    if( rStr.Len() )
+    if( !rStr.isEmpty() )
     {
         sal_Bool bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
         xub_StrLen nPos = 0, nStt = 0;
-        for( ; nPos < rStr.Len(); nPos++ )
+        for( ; nPos < rStr.getLength(); nPos++ )
            {
             sal_Bool bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
             if( bTmpDelim != bDelim )
             {
-                Insert( rStr.Copy( nStt, nPos - nStt ));
+                Insert( rStr.copy( nStt, nPos - nStt ));
                 nStt = nPos;
             }
         }
         if( nStt != nPos )
-            Insert( rStr.Copy( nStt, nPos - nStt ));
+            Insert( rStr.copy( nStt, nPos - nStt ));
     }
 }
 
-void SwWrtShell::Insert( const String &rStr )
+void SwWrtShell::Insert( const OUString &rStr )
 {
     ResetCursorStack();
     if( !CanInsert() )
@@ -236,7 +236,7 @@ void SwWrtShell::Insert( const String &rStr )
 // Maximum height limit not possible, because the maximum height
 // of the current frame can not be obtained.
 
-void SwWrtShell::Insert( const String &rPath, const String &rFilter,
+void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
                          const Graphic &rGrf, SwFlyFrmAttrMgr *pFrmMgr,
                          sal_Bool bRule )
 {
@@ -824,7 +824,7 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
 // Insert hard page break;
 // Selections will be overwritten
 
-void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
+void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, sal_uInt16 nPgNum )
 {
     ResetCursorStack();
     if( CanInsert() )
@@ -901,7 +901,7 @@ void SwWrtShell::InsertColumnBreak()
 // Insert footnote
 // rStr - optional footnote mark
 
-void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool bEdit )
+void SwWrtShell::InsertFootnote(const OUString &rStr, sal_Bool bEndNote, sal_Bool bEdit )
 {
     ResetCursorStack();
     if( CanInsert() )
@@ -915,7 +915,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool 
         }
         SwPosition aPos = *GetCrsr()->GetPoint();
         SwFmtFtn aFootNote( bEndNote );
-        if(rStr.Len())
+        if(!rStr.isEmpty())
             aFootNote.SetNumStr( rStr );
 
         SetAttr(aFootNote);
@@ -1423,7 +1423,7 @@ SelectionType SwWrtShell::GetSelectionType() const
 //            text collection with this name exists, or
 //            this is a default template.
 
-SwTxtFmtColl *SwWrtShell::GetParaStyle(const String &rCollName, GetStyle eCreate )
+SwTxtFmtColl *SwWrtShell::GetParaStyle(const OUString &rCollName, GetStyle eCreate )
 {
     SwTxtFmtColl* pColl = FindTxtFmtCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
@@ -1440,7 +1440,7 @@ SwTxtFmtColl *SwWrtShell::GetParaStyle(const String &rCollName, GetStyle eCreate
 //            character template with this name exists, or
 //            this is a default template or template is automatic.
 
-SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
+SwCharFmt *SwWrtShell::GetCharStyle(const OUString &rFmtName, GetStyle eCreate )
 {
     SwCharFmt* pFmt = FindCharFmtByName( rFmtName );
     if( !pFmt && GETSTYLE_NOCREATE != eCreate )
@@ -1478,7 +1478,7 @@ void SwWrtShell::addCurrentPosition() {
 
 // Applying templates
 
-void SwWrtShell::SetPageStyle(const String &rCollName)
+void SwWrtShell::SetPageStyle(const OUString &rCollName)
 {
     if( !SwCrsrShell::HasSelection() && !IsSelFrmMode() && !IsObjSelected() )
     {
@@ -1490,7 +1490,7 @@ void SwWrtShell::SetPageStyle(const String &rCollName)
 
 // Access templates
 
-String SwWrtShell::GetCurPageStyle( const sal_Bool bCalcFrm ) const
+OUString SwWrtShell::GetCurPageStyle( const sal_Bool bCalcFrm ) const
 {
     return GetPageDesc(GetCurPageDesc( bCalcFrm )).GetName();
 }
@@ -1656,9 +1656,9 @@ void SwWrtShell::ChgDBData(const SwDBData& aDBData)
     GetView().NotifyDBChanged();
 }
 
-String SwWrtShell::GetSelDescr() const
+OUString SwWrtShell::GetSelDescr() const
 {
-    String aResult;
+    OUString aResult;
 
     int nSelType = GetSelectionType();
     switch (nSelType)
@@ -1705,7 +1705,7 @@ void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
 // given all styles are changed
 
 void SwWrtShell::ChangeHeaderOrFooter(
-    const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
+    const OUString& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
 {
     addCurrentPosition();
     StartAllAction();
@@ -1718,7 +1718,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
         int bChgd = sal_False;
         SwPageDesc aDesc( GetPageDesc( nFrom ));
         String sTmp(aDesc.GetName());
-        if( !rStyleName.Len() || rStyleName == sTmp )
+        if( rStyleName.isEmpty() || rStyleName == sTmp )
         {
             if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
                 ( (bHeader && aDesc.GetMaster().GetHeader().IsActive()) ||
@@ -1764,7 +1764,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                     if ( !IsHeaderFooterEdit() )
                         ToggleHeaderFooterEdit();
                     bCrsrSet = SetCrsrInHdFt(
-                            !rStyleName.Len() ? (sal_uInt16)0xFFFF : nFrom,
+                            rStyleName.isEmpty() ? (sal_uInt16)0xFFFF : nFrom,
                             bHeader );
                 }
             }

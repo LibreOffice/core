@@ -597,7 +597,7 @@ sal_Bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, sal_Bool bS
     return bRet;
 }
 
-sal_Bool SwWrtShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bSelFrame )
+sal_Bool SwWrtShell::GotoFly( const OUString& rName, FlyCntType eType, sal_Bool bSelFrame )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwFEShell::GotoFly(rName, eType, bSelFrame);
@@ -621,7 +621,7 @@ void SwWrtShell::GotoOutline( sal_uInt16 nIdx )
     SwCrsrShell::GotoOutline (nIdx);
 }
 
-bool SwWrtShell::GotoOutline( const String& rName )
+bool SwWrtShell::GotoOutline( const OUString& rName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoOutline (rName);
@@ -630,7 +630,7 @@ bool SwWrtShell::GotoOutline( const String& rName )
     return bRet;
 }
 
-bool SwWrtShell::GotoRegion( const String& rName )
+bool SwWrtShell::GotoRegion( const OUString& rName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoRegion (rName);
@@ -639,7 +639,7 @@ bool SwWrtShell::GotoRegion( const String& rName )
     return bRet;
  }
 
-sal_Bool SwWrtShell::GotoRefMark( const String& rRefMark, sal_uInt16 nSubType,
+sal_Bool SwWrtShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
@@ -658,7 +658,7 @@ sal_Bool SwWrtShell::GotoNextTOXBase( const OUString* pName )
     return bRet;
 }
 
-bool SwWrtShell::GotoTable( const String& rName )
+bool SwWrtShell::GotoTable( const OUString& rName )
 {
    SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoTable(rName);
