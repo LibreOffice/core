@@ -2707,15 +2707,9 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* pEntry 
     Rectangle aBmpRect( CalcBmpRect( pEntry ) );
     Rectangle aTextRect( CalcTextRect( pEntry ) );
     Rectangle aBoundRect( GetEntryBoundRect( pEntry ) );
-    Rectangle aFocusRect( aBoundRect.Left(), aBmpRect.Top() - 1,
-                          aBoundRect.Right() - 4, aTextRect.Bottom() + 1 );
     // the focus rectangle should not touch the text
-    if( aFocusRect.Left() > ::std::numeric_limits<long>::min() && aFocusRect.Left() - 1 >= pEntry->aRect.Left() )
-        aFocusRect.Left()--;
-    if( aFocusRect.Right() < ::std::numeric_limits<long>::max() && aFocusRect.Right() + 1 <= pEntry->aRect.Right() )
-        aFocusRect.Right()++;
-
-    return aFocusRect;
+    return Rectangle( ::std::min( aBoundRect.Left(), aTextRect.Left()), aBmpRect.Top() - 1,
+            ::std::max( aBoundRect.Right() - 4, aTextRect.Right()), aTextRect.Bottom() + 1 );
 }
 
 // the hot spot is the inner 50 % of the rectangle
