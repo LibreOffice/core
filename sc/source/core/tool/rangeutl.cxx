@@ -503,17 +503,17 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
             // This isn't parsed by ScRange, so try to parse the two Addresses then.
             if (!bResult)
             {
-                bResult = ((rRange.aStart.Parse( aUIString.copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
+                bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID) &&
-                          ((rRange.aEnd.Parse( aUIString.copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
+                          ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID);
 
                 ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
                 if (!bResult && eConv != eConvUI)
                 {
-                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
+                    bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument),
                                     eConvUI) & SCA_VALID) == SCA_VALID) &&
-                              ((rRange.aEnd.Parse( aUIString.copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
+                              ((rRange.aEnd.Parse( aUIString.copy(nIndex+1), const_cast<ScDocument*>(pDocument),
                                     eConvUI) & SCA_VALID) == SCA_VALID);
                 }
             }
