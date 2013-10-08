@@ -1418,7 +1418,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     }
     OSL_ENSURE( xDim.is(), "dimension not found" );
     if ( !xDim.is() ) return;
-    String aDimName = xDim->getName();
+    OUString aDimName = xDim->getName();
 
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     sal_Bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
@@ -1497,7 +1497,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     OSL_ENSURE( pModifyData, "no data?" );
     if ( pModifyData )
     {
-        const String aName = rElemDesc.MemberName;
+        const OUString aName = rElemDesc.MemberName;
         pModifyData->GetDimensionByName(aDimName)->
             GetMemberByName(aName)->SetShowDetails( !bShowDetails );    // toggle
 
@@ -2673,7 +2673,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     catch ( const sdbc::SQLException& rError )
     {
         //! store error message
-        InfoBox aInfoBox( 0, String(rError.Message) );
+        InfoBox aInfoBox( 0, OUString(rError.Message) );
         aInfoBox.Execute();
     }
     catch ( uno::Exception& )

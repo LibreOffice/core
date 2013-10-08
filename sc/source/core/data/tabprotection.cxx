@@ -94,7 +94,7 @@ ScPassHashProtectable::~ScPassHashProtectable()
 class ScTableProtectionImpl
 {
 public:
-    static Sequence<sal_Int8> hashPassword(const String& aPassText, ScPasswordHash eHash = PASSHASH_SHA1);
+    static Sequence<sal_Int8> hashPassword(const OUString& aPassText, ScPasswordHash eHash = PASSHASH_SHA1);
     static Sequence<sal_Int8> hashPassword(const Sequence<sal_Int8>& rPassHash, ScPasswordHash eHash = PASSHASH_SHA1);
 
     explicit ScTableProtectionImpl(SCSIZE nOptSize);
@@ -106,19 +106,19 @@ public:
 
     bool isPasswordEmpty() const;
     bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
-    void setPassword(const String& aPassText);
+    void setPassword(const OUString& aPassText);
     ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
     void setPasswordHash(
         const ::com::sun::star::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash = PASSHASH_SHA1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
-    bool verifyPassword(const String& aPassText) const;
+    bool verifyPassword(const OUString& aPassText) const;
 
     bool isOptionEnabled(SCSIZE nOptId) const;
     void setOption(SCSIZE nOptId, bool bEnabled);
 
 private:
-    String maPassText;
+    OUString maPassText;
     ::com::sun::star::uno::Sequence<sal_Int8>   maPassHash;
     ::std::vector<bool> maOptions;
     bool mbEmptyPass;
@@ -127,7 +127,7 @@ private:
     ScPasswordHash meHash2;
 };
 
-Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const String& aPassText, ScPasswordHash eHash)
+Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const OUString& aPassText, ScPasswordHash eHash)
 {
     Sequence<sal_Int8> aHash;
     switch (eHash)
@@ -197,7 +197,7 @@ bool ScTableProtectionImpl::isProtectedWithPass() const
     if (!mbProtected)
         return false;
 
-    return maPassText.Len() || maPassHash.getLength();
+    return !maPassText.isEmpty() || maPassHash.getLength();
 }
 
 void ScTableProtectionImpl::setProtected(bool bProtected)
@@ -207,7 +207,7 @@ void ScTableProtectionImpl::setProtected(bool bProtected)
     // don't erase the password data here.
 }
 
-void ScTableProtectionImpl::setPassword(const String& aPassText)
+void ScTableProtectionImpl::setPassword(const OUString& aPassText)
 {
     // We can't hash it here because we don't know whether this document will
     // get saved to Excel or ODF, depending on which we will need to use a
@@ -215,7 +215,7 @@ void ScTableProtectionImpl::setPassword(const String& aPassText)
     // hash algorithms that we support, and store them all.
 
     maPassText = aPassText;
-    mbEmptyPass = aPassText.Len() == 0;
+    mbEmptyPass = aPassText.isEmpty();
     if (mbEmptyPass)
     {
         maPassHash = Sequence<sal_Int8>();
@@ -232,7 +232,7 @@ bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash
     if (mbEmptyPass)
         return true;
 
-    if (maPassText.Len())
+    if (!maPassText.isEmpty())
         return true;
 
     if (meHash1 == eHash)
@@ -256,7 +256,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::getPasswordHash(
         // Flaged as empty.
         return aPassHash;
 
-    if (maPassText.Len())
+    if (!maPassText.isEmpty())
     {
         // Cleartext password exists.  Hash it.
         aPassHash = hashPassword(maPassText, eHash);
@@ -303,7 +303,7 @@ void ScTableProtectionImpl::setPasswordHash(
 #endif
 }
 
-bool ScTableProtectionImpl::verifyPassword(const String& aPassText) const
+bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
 {
 #if DEBUG_TAB_PROTECTION
     fprintf(stdout, "ScTableProtectionImpl::verifyPassword: input = '%s'\n",
@@ -311,11 +311,11 @@ bool ScTableProtectionImpl::verifyPassword(const String& aPassText) const
 #endif
 
     if (mbEmptyPass)
-        return aPassText.Len() == 0;
+        return aPassText.isEmpty();
 
-    if (maPassText.Len())
+    if (!maPassText.isEmpty())
         // Clear text password exists, and this one takes precedence.
-        return aPassText.Equals(maPassText);
+        return aPassText == maPassText;
 
     Sequence<sal_Int8> aHash = hashPassword(aPassText, meHash1);
     aHash = hashPassword(aHash, meHash2);

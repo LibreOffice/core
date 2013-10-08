@@ -2096,8 +2096,8 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                                     if(pEntry->GetType() != condformat::CONDITION)
                                         continue;
 
-                                    String aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
-                                    if (aStyleName.Len())
+                                    OUString  aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
+                                    if (!aStyleName.isEmpty())
                                     {
                                         SfxStyleSheetBase* pStyleSheet =
                                             pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );

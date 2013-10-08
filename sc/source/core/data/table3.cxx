@@ -138,7 +138,7 @@ bool SplitString( const OUString &sWhole,
     @return Returnes 1 if sInput1 is greater, 0 if sInput1 == sInput2, and -1 if
     sInput2 is greater.
 */
-short Compare( const String &sInput1, const String &sInput2,
+short Compare( const OUString &sInput1, const OUString &sInput2,
                const bool bCaseSens, const ScUserListData* pData, const CollatorWrapper *pCW )
 {
     OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
@@ -940,13 +940,13 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     bool bTestPrevSub = ( nLevelCount > 1 );
 
     OUString  aSubString;
-    String  aOutString;
+    OUString  aOutString;
 
     bool bIgnoreCase = !rParam.bCaseSens;
 
-    String *pCompString[MAXSUBTOTAL];               // Pointer wegen Compiler-Problemen
+    OUString *pCompString[MAXSUBTOTAL];               // Pointer wegen Compiler-Problemen
     for (i=0; i<MAXSUBTOTAL; i++)
-        pCompString[i] = new String;
+        pCompString[i] = new OUString;
 
                                 //! sortieren?
 
@@ -1058,9 +1058,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         else
                         {               // " Ergebnis"
                             aOutString = aSubString;
-                            if (!aOutString.Len())
+                            if (aOutString.isEmpty())
                                 aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
-                            aOutString += ' ';
+                            aOutString += " ";
                             sal_uInt16 nStrId = STR_TABLE_ERGEBNIS;
                             if ( nResCount == 1 )
                                 switch ( eResFunc[0] )
@@ -1503,24 +1503,24 @@ public:
                 else
                 {
                     const OUString& rQueryStr = rItem.maString;
-                    String aCell( mpTransliteration->transliterate(
+                    OUString aCell( mpTransliteration->transliterate(
                         aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
                         NULL ) );
-                    String aQuer( mpTransliteration->transliterate(
+                    OUString aQuer( mpTransliteration->transliterate(
                         rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(),
                         NULL ) );
                     xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
-                        || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
-                    xub_StrLen nStrPos = aCell.Search( aQuer, nIndex );
+                        || rEntry.eOp == SC_DOES_NOT_END_WITH) ? (aCell.getLength()-aQuer.getLength()) : 0;
+                    sal_Int32 nStrPos = aCell.indexOf( aQuer, nIndex );
                     switch (rEntry.eOp)
                     {
                     case SC_EQUAL:
                     case SC_CONTAINS:
-                        bOk = ( nStrPos != STRING_NOTFOUND );
+                        bOk = ( nStrPos != -1 );
                         break;
                     case SC_NOT_EQUAL:
                     case SC_DOES_NOT_CONTAIN:
-                        bOk = ( nStrPos == STRING_NOTFOUND );
+                        bOk = ( nStrPos == -1 );
                         break;
                     case SC_BEGINS_WITH:
                         bOk = ( nStrPos == 0 );
@@ -1529,10 +1529,10 @@ public:
                         bOk = ( nStrPos != 0 );
                         break;
                     case SC_ENDS_WITH:
-                        bOk = ( nStrPos + aQuer.Len() == aCell.Len() );
+                        bOk = ( nStrPos + aQuer.getLength() == aCell.getLength() );
                         break;
                     case SC_DOES_NOT_END_WITH:
-                        bOk = ( nStrPos + aQuer.Len() != aCell.Len() );
+                        bOk = ( nStrPos + aQuer.getLength() != aCell.getLength() );
                         break;
                     default:
                         {

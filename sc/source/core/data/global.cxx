@@ -104,7 +104,7 @@ IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
 OUString*       ScGlobal::pEmptyOUString = NULL;
-String*         ScGlobal::pStrClipDocName = NULL;
+OUString*       ScGlobal::pStrClipDocName = NULL;
 
 SvxBrushItem*   ScGlobal::pEmptyBrushItem = NULL;
 SvxBrushItem*   ScGlobal::pButtonBrushItem = NULL;
@@ -388,9 +388,9 @@ const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
     return *ppRscString[ nIndex ];
 }
 
-String ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
+OUString ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
 {
-    String sResStr;
+    OUString sResStr;
     switch (nErrNumber)
     {
         case NOTAVAILABLE          : nErrNumber = STR_NV_STR; break;
@@ -413,7 +413,7 @@ String ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
     return sResStr;
 }
 
-String ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
+OUString ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
 {
     switch (nErrNumber)
     {
@@ -504,7 +504,7 @@ String ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
             nErrNumber = STR_ERROR_STR;
         break;
     }
-    String aRes( GetRscString( nErrNumber ) );
+    OUString aRes( GetRscString( nErrNumber ) );
     return aRes;
 }
 
@@ -567,8 +567,8 @@ void ScGlobal::Init()
 
     InitAddIns();
 
-    pStrClipDocName = new String( ScResId( SCSTR_NONAME ) );
-    *pStrClipDocName += '1';
+    pStrClipDocName = new OUString( ScResId( SCSTR_NONAME ) );
+    *pStrClipDocName += "1";
 
     //  ScDocumentPool::InitVersionMaps() ist schon vorher gerufen worden
 }
@@ -592,12 +592,12 @@ void ScGlobal::UpdatePPT( OutputDevice* pDev )
     }
 }
 
-const String& ScGlobal::GetClipDocName()
+const OUString& ScGlobal::GetClipDocName()
 {
     return *pStrClipDocName;
 }
 
-void ScGlobal::SetClipDocName( const String& rNew )
+void ScGlobal::SetClipDocName( const OUString& rNew )
 {
     *pStrClipDocName = rNew;
 }
@@ -721,7 +721,7 @@ CharSet ScGlobal::GetCharsetValue( const OUString& rCharSet )
 
 //------------------------------------------------------------------------
 
-String ScGlobal::GetCharsetString( CharSet eVal )
+OUString ScGlobal::GetCharsetString( CharSet eVal )
 {
     const sal_Char* pChar;
     switch ( eVal )
@@ -816,9 +816,9 @@ OUString ScGlobal::addToken(const OUString& rTokenList, const OUString& rToken,
     return aBuf.makeStringAndClear();
 }
 
-bool ScGlobal::IsQuoted( const String& rString, sal_Unicode cQuote )
+bool ScGlobal::IsQuoted( const OUString& rString, sal_Unicode cQuote )
 {
-    return (rString.Len() >= 2) && (rString.GetChar( 0 ) == cQuote) && (rString.GetChar( rString.Len() - 1 ) == cQuote);
+    return (rString.getLength() >= 2) && (rString[0] == cQuote) && (rString[ rString.getLength() - 1 ] == cQuote);
 }
 
 void ScGlobal::AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmbedded )
@@ -927,7 +927,7 @@ sal_Bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
     return false;
 }
 
-void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
+void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
 {
     //  OpenURL wird immer ueber irgendwelche Umwege durch Mausklicks im GridWindow
     //  aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
@@ -951,7 +951,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
     aTarget.SetValue(OUString("_blank"));
     SfxViewFrame* pFrame = NULL;
-    String aReferName;
+    OUString aReferName;
     if ( pScActiveViewShell )
     {
         pFrame = pScActiveViewShell->GetViewFrame();

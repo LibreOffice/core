@@ -968,7 +968,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                     rMatchedRanges.Join(ScRange(nCol, nRow, nTab, nCol, nLastRow, nTab));
                     if (bReplace)
                     {
-                        const String& rNewStr = rSearchItem.GetReplaceString();
+                        const OUString& rNewStr = rSearchItem.GetReplaceString();
                         for (SCROW i = nRow; i <= nLastRow; ++i)
                         {
                             aCol[nCol].SetRawString(i, rNewStr);
@@ -982,7 +982,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                                 pUndoDoc->SetString(ScAddress(nCol, i, nTab), EMPTY_OUSTRING);
                             }
                         }
-                        rUndoStr = String();
+                        rUndoStr = OUString();
                     }
                 }
 

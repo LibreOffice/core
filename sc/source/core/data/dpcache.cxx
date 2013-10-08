@@ -525,7 +525,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                      && pCellData->HasStringData() )
                 )
         {   // by String
-            String  aCellStr = pCellData->GetString();
+            OUString  aCellStr = pCellData->GetString();
 
             bool bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
                                                    || (rEntry.eOp == SC_NOT_EQUAL)));
@@ -533,13 +533,13 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
             if (bRealRegExp || bTestRegExp)
             {
                 sal_Int32 nStart = 0;
-                sal_Int32 nEnd   = aCellStr.Len();
+                sal_Int32 nEnd   = aCellStr.getLength();
 
                 bool bMatch = (bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                               ->SearchForward( aCellStr, &nStart, &nEnd );
                 // from 614 on, nEnd is behind the found text
                 if (bMatch && bMatchWholeCell
-                    && (nStart != 0 || nEnd != aCellStr.Len()))
+                    && (nStart != 0 || nEnd != aCellStr.getLength()))
                     bMatch = false;    // RegExp must match entire cell string
                 if (bRealRegExp)
                     bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
@@ -550,17 +550,17 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 {
                     if (bMatchWholeCell)
                     {
-                        String aStr = rEntry.GetQueryItem().maString;
+                        OUString aStr = rEntry.GetQueryItem().maString;
                         bOk = pTransliteration->isEqual(aCellStr, aStr);
                         bool bHasStar = false;
-                        xub_StrLen nIndex;
-                        if (( nIndex = aStr.Search('*') ) != STRING_NOTFOUND)
+                        sal_Int32 nIndex;
+                        if (( nIndex = aStr.indexOf('*') ) != -1)
                             bHasStar = sal_True;
                         if (bHasStar && (nIndex>0))
                         {
-                            for (i=0;(i<nIndex) && (i< aCellStr.Len()) ; i++)
+                            for (sal_Int32 j=0;(j<nIndex) && (j< aCellStr.getLength()) ; j++)
                             {
-                                if (aCellStr.GetChar( (sal_uInt16)i ) == aStr.GetChar((sal_uInt16) i ))
+                                if (aCellStr[j] == aStr[j])
                                 {
                                     bOk=1;
                                 }
@@ -576,11 +576,11 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     {
                         const OUString& rQueryStr = rEntry.GetQueryItem().maString;
                         ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
-                        String aCell = pTransliteration->transliterate(
-                            aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(), &xOff);
-                        String aQuer = pTransliteration->transliterate(
+                        OUString aCell = pTransliteration->transliterate(
+                            aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(), &xOff);
+                        OUString aQuer = pTransliteration->transliterate(
                             rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(), &xOff);
-                        bOk = (aCell.Search( aQuer ) != STRING_NOTFOUND);
+                        bOk = (aCell.indexOf( aQuer ) != -1);
                     }
                     if (rEntry.eOp == SC_NOT_EQUAL)
                         bOk = !bOk;

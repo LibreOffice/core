@@ -242,7 +242,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     Color           aColGrey    ( COL_LIGHTGRAY );
     OUString        aStr;
     sal_Int32       nStrLen;
-    String          aHelpFile;//XXX JN welcher Text???
+    OUString        aHelpFile;//XXX JN welcher Text???
     SfxItemSet*     pSet            = NULL;
     SfxItemSet*     pHFSet          = NULL;
     SvxSetItem*     pHFSetItem      = NULL;
@@ -257,7 +257,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     SvxBoxItem      aBoxItem        ( ATTR_BORDER );
     SvxBoxInfoItem  aBoxInfoItem    ( ATTR_BORDER_INNER );
 
-    String aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
+    OUString  aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
 
     //==========================================================
     // Zellformatvorlagen:
@@ -492,7 +492,7 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFami
         SfxStyleSheetBase* pStyle = aStyles[n].get();
         if ( pStyle->GetFamily() == eFam )
         {
-            String aUpName = ScGlobal::pCharClass->uppercase(pStyle->GetName());
+            OUString aUpName = ScGlobal::pCharClass->uppercase(pStyle->GetName());
             if (aUpName == aUpSearch)
                 return (ScStyleSheet*)pStyle;
         }

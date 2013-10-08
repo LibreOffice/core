@@ -119,7 +119,7 @@ void ScGlobal::InitAddIns()
 }
 
 
-String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
+OUString ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
 {
     try
     {
@@ -132,13 +132,13 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         if ( aSuffixes.getLength() > 0 )
             return aSuffixes[0];
         else
-            return String();
+            return OUString();
     }
     catch ( Exception& )
     {
         OSL_FAIL( "GetOrdinalSuffix: exception caught during init" );
     }
-    return String();
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

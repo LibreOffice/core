@@ -744,57 +744,56 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-static void lcl_SetSpace( String& rStr, const ESelection& rSel )
+static void lcl_SetSpace( OUString& rStr, const ESelection& rSel )
 {
     // Text replaced by a space to ensure they are positions:
 
     xub_StrLen nLen = rSel.nEndPos-rSel.nStartPos;
-    rStr.Erase( rSel.nStartPos, nLen-1 );
-    rStr.SetChar( rSel.nStartPos, ' ' );
+    rStr = rStr.replaceAt( rSel.nStartPos, nLen, " " );
 }
 
-static bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
+static bool lcl_ConvertFields(EditEngine& rEng, const OUString* pCommands)
 {
     bool bChange = false;
     sal_Int32 nParCnt = rEng.GetParagraphCount();
     for (sal_Int32 nPar = 0; nPar<nParCnt; nPar++)
     {
-        String aStr = rEng.GetText( nPar );
-        xub_StrLen nPos;
+        OUString aStr = rEng.GetText( nPar );
+        sal_Int32 nPos;
 
-        while ((nPos = aStr.Search(pCommands[0])) != STRING_NOTFOUND)
+        while ((nPos = aStr.indexOf(pCommands[0])) != -1)
         {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[0].Len() );
+            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[0].getLength() );
             rEng.QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
-        while ((nPos = aStr.Search(pCommands[1])) != STRING_NOTFOUND)
+        while ((nPos = aStr.indexOf(pCommands[1])) != -1)
         {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[1].Len() );
+            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[1].getLength() );
             rEng.QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
-        while ((nPos = aStr.Search(pCommands[2])) != STRING_NOTFOUND)
+        while ((nPos = aStr.indexOf(pCommands[2])) != -1)
         {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[2].Len() );
+            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[2].getLength() );
             rEng.QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
-        while ((nPos = aStr.Search(pCommands[3])) != STRING_NOTFOUND)
+        while ((nPos = aStr.indexOf(pCommands[3])) != -1)
         {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[3].Len() );
+            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[3].getLength() );
             rEng.QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD ), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
-        while ((nPos = aStr.Search(pCommands[4])) != STRING_NOTFOUND)
+        while ((nPos = aStr.indexOf(pCommands[4])) != -1)
         {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[4].Len() );
+            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[4].getLength() );
             rEng.QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
-        while ((nPos = aStr.Search(pCommands[5])) != STRING_NOTFOUND)
+        while ((nPos = aStr.indexOf(pCommands[5])) != -1)
         {
-            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[5].Len() );
+            ESelection aSel( nPar,nPos, nPar,nPos+pCommands[5].getLength() );
             rEng.QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), aSel );
             lcl_SetSpace(aStr, aSel ); bChange = true;
         }
@@ -841,8 +840,8 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
     if ( nVer < 1 )             //old field command conversions
     {
         sal_uInt16 i;
-        const String& rDel = ScGlobal::GetRscString( STR_HFCMD_DELIMITER );
-        String aCommands[SC_FIELD_COUNT];
+        const OUString& rDel = ScGlobal::GetRscString( STR_HFCMD_DELIMITER );
+        OUString aCommands[SC_FIELD_COUNT];
         for (i=0; i<SC_FIELD_COUNT; i++)
             aCommands[i] = rDel;
         aCommands[0] += ScGlobal::GetRscString(STR_HFCMD_PAGE);

@@ -341,10 +341,10 @@ sal_Bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
                  && (nMode           == r.nMode) );
 }
 
-String ScGlobal::GetAbsDocName( const String& rFileName,
+OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
                                 SfxObjectShell* pShell )
 {
-    String aAbsName;
+    OUString aAbsName;
     if ( !pShell->HasName() )
     {   // maybe relative to document path working directory
         INetURLObject aObj;
@@ -374,20 +374,19 @@ String ScGlobal::GetAbsDocName( const String& rFileName,
     return aAbsName;
 }
 
-String ScGlobal::GetDocTabName( const String& rFileName,
-                                const String& rTabName )
+OUString ScGlobal::GetDocTabName( const OUString& rFileName,
+                                const OUString& rTabName )
 {
-    String aDocTab(OUString('\''));
+    OUString  aDocTab('\'');
     aDocTab += rFileName;
-    xub_StrLen nPos = 1;
-    while( (nPos = aDocTab.Search( '\'', nPos ))
-            != STRING_NOTFOUND )
+    sal_Int32 nPos = 1;
+    while( (nPos = aDocTab.indexOf( '\'', nPos )) != -1 )
     {   // escape Quotes
-        aDocTab.Insert( '\\', nPos );
+        aDocTab = aDocTab.replaceAt( nPos, 0, "\\" );
         nPos += 2;
     }
-    aDocTab += '\'';
-    aDocTab += SC_COMPILER_FILE_TAB_SEP;
+    aDocTab += "'";
+    aDocTab += OUString(SC_COMPILER_FILE_TAB_SEP);
     aDocTab += rTabName;    // "'Doc'#Tab"
     return aDocTab;
 }

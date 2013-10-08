@@ -1650,7 +1650,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             else
                             {
                                 nStringValue = (sal_Int32)nVal;
-                                String aStr;
+                                OUString aStr;
                                 if ( nHeadNoneTail < 0 )
                                 {
                                     setSuffixCell(

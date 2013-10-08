@@ -936,13 +936,13 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
 
     //--------------------------------------------------------
 
-    const String         aStrSrcStyle = pSrcStyle->GetName();
+    const OUString       aStrSrcStyle = pSrcStyle->GetName();
     const SfxStyleFamily eFamily      = pSrcStyle->GetFamily();
     SfxStyleSheetBase*   pDestStyle   = pDestPool->Find( aStrSrcStyle, eFamily );
 
     if ( !pDestStyle )
     {
-        const String  aStrParent = pSrcStyle->GetParent();
+        const OUString   aStrParent = pSrcStyle->GetParent();
         const SfxItemSet& rSrcSet = pSrcStyle->GetItemSet();
 
         pDestStyle = &pDestPool->Make( aStrSrcStyle, eFamily, SFXSTYLEBIT_USERDEF );

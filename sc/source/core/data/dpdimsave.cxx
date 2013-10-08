@@ -174,8 +174,7 @@ OUString ScDPSaveGroupDimension::CreateGroupName(const OUString& rPrefix)
     const sal_Int32 nMaxAdd = nAdd + aGroups.size();    // limit the loop
     while ( nAdd <= nMaxAdd )
     {
-        String aGroupName( rPrefix );
-        aGroupName.Append( OUString::number( nAdd ) );
+        OUString aGroupName = rPrefix + OUString::number( nAdd );
         bool bExists = false;
 
         // look for existing groups

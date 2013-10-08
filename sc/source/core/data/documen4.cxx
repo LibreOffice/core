@@ -372,7 +372,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     aForString.append(ScCompiler::GetNativeSymbol(ocTableOp));
     aForString.append(ScCompiler::GetNativeSymbol( ocOpen));
 
-    const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
+    const OUString& sSep = ScCompiler::GetNativeSymbol( ocSep);
     if (rParam.nMode == 0)                          // nur Spalte
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), true, false, false );

@@ -495,10 +495,10 @@ class ScGlobal
     static ScUnoAddInCollection* pAddInCollection;
     static ScUserList*      pUserList;
     static OUString**       ppRscString;
-    static String*          pStrScDoc;
+    static OUString*        pStrScDoc;
     static String*          pEmptyString;
-    static OUString* pEmptyOUString;
-    static String*          pStrClipDocName;
+    static OUString*        pEmptyOUString;
+    static OUString*        pStrClipDocName;
     static SvxBrushItem*    pEmptyBrushItem;
     static SvxBrushItem*    pButtonBrushItem;
     static SvxBrushItem*    pEmbeddedBrushItem;
@@ -544,8 +544,8 @@ public:
     SC_DLLPUBLIC static LanguageType            eLnge;
     static sal_Unicode          cListDelimiter;
 
-    static const String&        GetClipDocName();
-    static void                 SetClipDocName( const String& rNew );
+    static const OUString&      GetClipDocName();
+    static void                 SetClipDocName( const OUString& rNew );
     SC_DLLPUBLIC static const SvxSearchItem&    GetSearchItem();
     SC_DLLPUBLIC static void                    SetSearchItem( const SvxSearchItem& rNew );
     SC_DLLPUBLIC static ScAutoFormat*       GetAutoFormat();
@@ -556,11 +556,11 @@ public:
     SC_DLLPUBLIC static ScUserList*         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
     SC_DLLPUBLIC static const OUString&       GetRscString( sal_uInt16 nIndex );
-    static void                 OpenURL( const String& rURL, const String& rTarget );
-    SC_DLLPUBLIC static String              GetAbsDocName( const String& rFileName,
+    static void                 OpenURL( const OUString& rURL, const OUString& rTarget );
+    SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
                                                 SfxObjectShell* pShell );
-    SC_DLLPUBLIC static String              GetDocTabName( const String& rFileName,
-                                                const String& rTabName );
+    SC_DLLPUBLIC static OUString            GetDocTabName( const OUString& rFileName,
+                                                const OUString& rTabName );
     SC_DLLPUBLIC static sal_uLong               GetStandardFormat( SvNumberFormatter&,
                                     sal_uLong nFormat, short nType );
     SC_DLLPUBLIC static sal_uLong               GetStandardFormat( double, SvNumberFormatter&,
@@ -591,7 +591,7 @@ public:
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const String&    GetEmptyString();
     SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
-    static const String&    GetScDocString();
+    static const OUString&  GetScDocString();
 
     /** Returns the specified image list with outline symbols. */
     static ImageList*       GetOutlineSymbols();
@@ -601,8 +601,8 @@ public:
     static ScFunctionMgr*   GetStarCalcFunctionMgr();
     static void             ResetFunctionList();
 
-    static String           GetErrorString(sal_uInt16 nErrNumber);
-    static String           GetLongErrorString(sal_uInt16 nErrNumber);
+    static OUString         GetErrorString(sal_uInt16 nErrNumber);
+    static OUString         GetLongErrorString(sal_uInt16 nErrNumber);
     static sal_Bool             EETextObjEqual( const EditTextObject* pObj1,
                                             const EditTextObject* pObj2 );
     static sal_Bool             CheckWidthInvalidate( bool& bNumFormatChanged,
@@ -632,7 +632,7 @@ public:
                                 bool bForceSep = false );
 
     /** Returns true, if the first and last character of the string is cQuote. */
-    SC_DLLPUBLIC static bool             IsQuoted( const String& rString, sal_Unicode cQuote = '\'' );
+    SC_DLLPUBLIC static bool             IsQuoted( const OUString& rString, sal_Unicode cQuote = '\'' );
 
     /** Inserts the character cQuote at beginning and end of rString.
         @param bEscapeEmbedded      If <TRUE/>, embedded quote characters are
@@ -664,7 +664,7 @@ SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const OUString& rString, s
 SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote = '\'' );
 
     static  CharSet         GetCharsetValue( const OUString& rCharSet );
-    static  String          GetCharsetString( CharSet eVal );
+    static  OUString        GetCharsetString( CharSet eVal );
 
     /// a "ReadOnly" formatter for UNO/XML export
     static  SvNumberFormatter*  GetEnglishFormatter();
@@ -682,7 +682,7 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
     SC_DLLPUBLIC static void             AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter );
 
     /** Obtain the ordinal suffix for a number according to the system locale */
-    static String           GetOrdinalSuffix( sal_Int32 nNumber);
+    static OUString         GetOrdinalSuffix( sal_Int32 nNumber);
 
     /** A static instance of ScFieldEditEngine not capable of resolving
         document specific fields, to be used only by ScEditUtil::GetString(). */

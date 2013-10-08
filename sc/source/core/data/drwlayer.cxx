@@ -1499,7 +1499,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                     uno::Reference< chart2::XChartDocument > xNewChart( ScChartHelper::GetChartFromSdrObject( pNewObject ) );
                     if( xNewChart.is() && !xNewChart->hasInternalDataProvider() )
                     {
-                        String aChartName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
+                        OUString aChartName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
                         ::std::vector< ScRangeList > aRangesVector;
                         pDoc->GetChartRanges( aChartName, aRangesVector, pDoc );
                         if( !aRangesVector.empty() )
@@ -1652,7 +1652,7 @@ Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, boo
 
 OUString ScDrawLayer::GetVisibleName( SdrObject* pObj )
 {
-    String aName = pObj->GetName();
+    OUString aName = pObj->GetName();
     if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
     {
         //  For OLE, the user defined name (GetName) is used
@@ -1660,13 +1660,13 @@ OUString ScDrawLayer::GetVisibleName( SdrObject* pObj )
         //  otherwise the persist name is used so every object appears
         //  in the Navigator at all.
 
-        if ( !aName.Len() )
+        if ( aName.isEmpty() )
             aName = static_cast<SdrOle2Obj*>(pObj)->GetPersistName();
     }
     return aName;
 }
 
-inline sal_Bool IsNamedObject( SdrObject* pObj, const String& rName )
+inline sal_Bool IsNamedObject( SdrObject* pObj, const OUString& rName )
 {
     //  sal_True if rName is the object's Name or PersistName
     //  (used to find a named object)
@@ -1710,7 +1710,7 @@ OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
     aBase += " ";
 
     bool bThere = true;
-    String aGraphicName;
+    OUString aGraphicName;
     SCTAB nDummy;
     long nId = pnCounter ? *pnCounter : 0;
     while (bThere)

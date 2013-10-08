@@ -1320,14 +1320,14 @@ void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const 
  * Parse subtotal string and replace all occurrences of '?' with the caption
  * string.  Do ensure that escaped characters are not translated.
  */
-static String lcl_parseSubtotalName(const String& rSubStr, const String& rCaption)
+static OUString lcl_parseSubtotalName(const OUString& rSubStr, const OUString& rCaption)
 {
-    String aNewStr;
-    xub_StrLen n = rSubStr.Len();
+    OUStringBuffer aNewStr;
+    xub_StrLen n = rSubStr.getLength();
     bool bEscaped = false;
     for (xub_StrLen i = 0; i < n; ++i)
     {
-        sal_Unicode c = rSubStr.GetChar(i);
+        sal_Unicode c = rSubStr[i];
         if (!bEscaped && c == sal_Unicode('\\'))
         {
             bEscaped = true;
@@ -1335,12 +1335,12 @@ static String lcl_parseSubtotalName(const String& rSubStr, const String& rCaptio
         }
 
         if (!bEscaped && c == sal_Unicode('?'))
-            aNewStr.Append(rCaption);
+            aNewStr.append(rCaption);
         else
-            aNewStr.Append(c);
+            aNewStr.append(c);
         bEscaped = false;
     }
-    return aNewStr;
+    return aNewStr.makeStringAndClear();
 }
 
 void ScDPResultMember::FillMemberResults(
@@ -2346,7 +2346,7 @@ void ScDPDataMember::UpdateRunningTotals(
                         const ScDPRunningTotalState::IndexArray& rRowVisible = rRunning.GetRowVisible();
                         const ScDPRunningTotalState::IndexArray& rRowSorted = rRunning.GetRowSorted();
 
-                        String aRefFieldName = aReferenceValue.ReferenceField;
+                        OUString aRefFieldName = aReferenceValue.ReferenceField;
 
                         //! aLocalSubState?
                         sal_uInt16 nRefOrient = pResultData->GetMeasureRefOrient( nMemberMeasure );
@@ -3963,7 +3963,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
     for (DimMemberType::const_iterator itr = maDimensions.begin(), itrEnd = maDimensions.end();
           itr != itrEnd; ++itr)
     {
-        const String& rDimName = itr->first;
+        const OUString& rDimName = itr->first;
         ScDPFilteredCache::Criterion aCri;
         FieldNameMapType::const_iterator itrField = aFieldNames.find(rDimName);
         if (itrField == aFieldNames.end())

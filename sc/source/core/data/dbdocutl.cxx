@@ -43,7 +43,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
                                 long nType, sal_Bool bCurrency, StrData* pStrData )
 {
-    String aString;
+    OUString aString;
     double nVal = 0.0;
     sal_Bool bValue = false;
     sal_Bool bEmptyFlag = false;
@@ -85,7 +85,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::VARCHAR:
             case sdbc::DataType::LONGVARCHAR:
                 aString = xRow->getString(nRowPos);
-                bEmptyFlag = ( aString.Len() == 0 ) && xRow->wasNull();
+                bEmptyFlag = ( aString.isEmpty() ) && xRow->wasNull();
                 break;
 
             case sdbc::DataType::DATE:
@@ -171,7 +171,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
     }
     else
     {
-        if (aString.Len())
+        if (!aString.isEmpty())
         {
             if (ScStringUtil::isMultiline(aString))
             {
@@ -189,7 +189,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             }
 
             if (pStrData)
-                pStrData->mnStrLength = aString.Len();
+                pStrData->mnStrLength = aString.getLength();
         }
         else
             pDoc->SetEmptyCell(aPos);
