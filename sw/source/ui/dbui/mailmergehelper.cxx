@@ -88,8 +88,8 @@ bool CheckMailAddress( const OUString& rMailAddress )
 uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         SwMailMergeConfigItem& rConfigItem,
         uno::Reference< mail::XMailService >&  rxInMailService,
-        const String& rInMailServerPassword,
-        const String& rOutMailServerPassword,
+        const OUString& rInMailServerPassword,
+        const OUString& rOutMailServerPassword,
         Window* pDialogParentWindow )
 {
     uno::Reference< mail::XSmtpService > xSmtpServer;
@@ -113,7 +113,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                         mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
             //authenticate at the POP or IMAP server first
             String sPasswd = rConfigItem.GetInServerPassword();
-            if(rInMailServerPassword.Len())
+            if(!rInMailServerPassword.isEmpty())
                 sPasswd = rInMailServerPassword;
             uno::Reference<mail::XAuthenticator> xAuthenticator =
                 new SwAuthenticator(
@@ -137,7 +137,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                 !rConfigItem.GetMailUserName().isEmpty())
         {
             String sPasswd = rConfigItem.GetMailPassword();
-            if(rOutMailServerPassword.Len())
+            if(!rOutMailServerPassword.isEmpty())
                 sPasswd = rOutMailServerPassword;
             xAuthenticator =
                 new SwAuthenticator(rConfigItem.GetMailUserName(),
@@ -467,7 +467,7 @@ void SwAddressPreview::DrawText_Impl(
     }
 }
 
-String SwAddressPreview::FillData(
+OUString SwAddressPreview::FillData(
         const OUString& rAddress,
         SwMailMergeConfigItem& rConfigItem,
         const Sequence< OUString>* pAssignments)
@@ -542,7 +542,7 @@ String SwAddressPreview::FillData(
                             if( !rExcludeCountry.isEmpty() && sReplace != rExcludeCountry )
                                 aItem.sText = sReplace;
                             else
-                                aItem.sText.Erase();
+                                aItem.sText = "";
                         }
                         else
                         {
@@ -571,45 +571,45 @@ SwMergeAddressItem   SwAddressIterator::Next()
     //currently the string may either start with a '<' then it's a column
     //otherwise it's simple text maybe containing a return
     SwMergeAddressItem   aRet;
-    if(sAddress.Len())
+    if(!sAddress.isEmpty())
     {
-        if(sAddress.GetChar(0) == '<')
+        if(sAddress[0] == '<')
         {
             aRet.bIsColumn = true;
-            xub_StrLen nClose = sAddress.Search('>');
-            OSL_ENSURE(nClose != STRING_NOTFOUND, "closing '>' not found");
-            if( nClose != STRING_NOTFOUND )
+            sal_Int32 nClose = sAddress.indexOf('>');
+            OSL_ENSURE(nClose != -1, "closing '>' not found");
+            if( nClose != -1 )
             {
-                aRet.sText = sAddress.Copy(1, nClose - 1);
-                sAddress.Erase(0, nClose + 1);
+                aRet.sText = sAddress.copy(1, nClose - 1);
+                sAddress = sAddress.copy(nClose + 1);
             }
             else
             {
-                aRet.sText = sAddress.Copy(1, 1);
-                sAddress.Erase(0, 1);
+                aRet.sText = sAddress.copy(1, 1);
+                sAddress = sAddress.copy(1);
             }
         }
         else
         {
-            xub_StrLen nOpen = sAddress.Search('<');
-            xub_StrLen nReturn = sAddress.Search('\n');
+            sal_Int32 nOpen = sAddress.indexOf('<');
+            sal_Int32 nReturn = sAddress.indexOf('\n');
             if(nReturn == 0)
             {
                 aRet.bIsReturn = true;
-                aRet.sText = '\n';
-                sAddress.Erase(0, 1);
+                aRet.sText = "\n";
+                sAddress = sAddress.copy(1);
             }
-            else if(STRING_NOTFOUND == nOpen && STRING_NOTFOUND == nReturn)
+            else if(-1 == nOpen && -1 == nReturn)
             {
-                nOpen = sAddress.Len();
+                nOpen = sAddress.getLength();
                 aRet.sText = sAddress;
-                sAddress.Erase();
+                sAddress = "";
             }
             else
             {
                 xub_StrLen nTarget = ::std::min(nOpen, nReturn);
-                aRet.sText = sAddress.Copy(0, nTarget);
-                sAddress.Erase(0, nTarget);
+                aRet.sText = sAddress.copy(0, nTarget);
+                sAddress = sAddress.copy(nTarget);
             }
         }
     }

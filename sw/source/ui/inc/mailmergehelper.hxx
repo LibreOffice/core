@@ -49,8 +49,8 @@ namespace SwMailMergeHelper
     SW_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::mail::XSmtpService >
                          ConnectToSmtpServer( SwMailMergeConfigItem& rConfigItem,
                             com::sun::star::uno::Reference< com::sun::star::mail::XMailService >&  xInMailService,
-                            const String& rInMailServerPassword,
-                            const String& rOutMailServerPassword,
+                            const OUString& rInMailServerPassword,
+                            const OUString& rOutMailServerPassword,
                             Window* pDialogParentWindow = 0 );
 }
 
@@ -114,7 +114,7 @@ public:
     void                    EnableScrollBar(bool bEnable = true);
 
     // fill the actual data into a string (address block or greeting)
-    static String FillData(
+    static OUString FillData(
             const OUString& rAddress,
             SwMailMergeConfigItem& rConfigItem,
             const ::com::sun::star::uno::Sequence< OUString>* pAssignments = 0);
@@ -129,9 +129,9 @@ public:
   -----------------------------------------------------------------------*/
 struct SwMergeAddressItem
 {
-    String  sText;
-    bool    bIsColumn;
-    bool    bIsReturn;
+    OUString  sText;
+    bool      bIsColumn;
+    bool      bIsReturn;
     SwMergeAddressItem() :
         bIsColumn(false),
         bIsReturn(false) {}
@@ -139,13 +139,13 @@ struct SwMergeAddressItem
 
 class SW_DLLPUBLIC   SwAddressIterator
 {
-    String sAddress;
+    OUString sAddress;
 public:
-    SwAddressIterator(const String& rAddress) :
+    SwAddressIterator(const OUString& rAddress) :
         sAddress(rAddress){}
 
     SwMergeAddressItem  Next();
-    bool                HasMore() const{return sAddress.Len() > 0;}
+    bool                HasMore() const{return !sAddress.isEmpty();}
 };
 
 class SW_DLLPUBLIC SwAuthenticator :

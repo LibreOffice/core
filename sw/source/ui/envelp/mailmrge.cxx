@@ -131,8 +131,8 @@ void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeExcepti
 }
 
 SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
-         const String& rSourceName,
-        const String& rTblName,
+        const OUString& rSourceName,
+        const OUString& rTblName,
         sal_Int32 nCommandType,
         const uno::Reference< XConnection>& _xConnection,
         Sequence< Any >* pSelection) :

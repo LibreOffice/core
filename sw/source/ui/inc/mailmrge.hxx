@@ -105,8 +105,8 @@ class SwMailMergeDlg : public SvxStandardDialog
 
     SwWrtShell&     rSh;
     SwModuleOptions* pModOpt;
-    const String&   rDBName;
-    const String&   rTableName;
+    OUString        rDBName;
+    OUString        rTableName;
 
     sal_uInt16          nMergeType;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
@@ -130,8 +130,8 @@ class SwMailMergeDlg : public SvxStandardDialog
 
 public:
      SwMailMergeDlg(Window* pParent, SwWrtShell& rSh,
-         const String& rSourceName,
-        const String& rTblName,
+         const OUString& rSourceName,
+        const OUString& rTblName,
         sal_Int32 nCommandType,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
@@ -141,8 +141,8 @@ public:
 
     bool IsSaveIndividualDocs() const { return aSaveIndividualRB.IsChecked(); }
     bool IsGenerateFromDataBase() const { return aGenerateFromDataBaseCB.IsChecked(); }
-    String GetColumnName() const { return aColumnLB.GetSelectEntry();}
-    String GetPath() const { return aPathED.GetText();}
+    OUString GetColumnName() const { return aColumnLB.GetSelectEntry();}
+    OUString GetPath() const { return aPathED.GetText();}
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}
     inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }

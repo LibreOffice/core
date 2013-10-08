@@ -416,7 +416,7 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
         if(aNext.bIsColumn)
         {
             //the text should be 1 characters long
-            sal_Unicode cChar = aNext.sText.GetChar(0);
+            sal_Unicode cChar = aNext.sText[0];
             if(cChar >= '0' && cChar <= 'c')
             {
                 sBlock += "<";
