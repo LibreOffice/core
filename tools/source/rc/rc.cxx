@@ -33,6 +33,7 @@ void Resource::GetRes( const ResId& rResId )
 {
     if( rResId.GetResMgr() )
         m_pResMgr = rResId.GetResMgr();
+    assert(m_pResMgr);
     m_pResMgr->GetResource( rResId, this );
     IncrementRes( sizeof( RSHEADER_TYPE ) );
 }
